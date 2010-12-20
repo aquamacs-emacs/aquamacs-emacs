@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Examining - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="next" href="Hooks.html#Hooks" title="Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Examining"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hooks.html#Hooks">Hooks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.3.1 Examining and Setting Variables</h4>
+
+<p><a name="index-setting-variables-3979"></a>
+     <dl>
+<dt><kbd>C-h v </kbd><var>var</var><kbd> &lt;RET&gt;</kbd><dd>Display the value and documentation of variable <var>var</var>
+(<code>describe-variable</code>). 
+<br><dt><kbd>M-x set-variable &lt;RET&gt; </kbd><var>var</var><kbd> &lt;RET&gt; </kbd><var>value</var><kbd> &lt;RET&gt;</kbd><dd>Change the value of variable <var>var</var> to <var>value</var>. 
+</dl>
+
+   <p>To examine the value of a single variable, use <kbd>C-h v</kbd>
+(<code>describe-variable</code>), which reads a variable name using the
+minibuffer, with completion.  It displays both the value and the
+documentation of the variable.  For example,
+
+<pre class="example">     C-h v fill-column &lt;RET&gt;
+</pre>
+   <p class="noindent">displays something like this:
+
+<pre class="smallexample">     fill-column is a variable defined in `C source code'.
+     fill-column's value is 70
+     Local in buffer custom.texi; global value is 70
+     Automatically becomes buffer-local when set in any fashion.
+     
+       Automatically becomes buffer-local when set in any fashion.
+       This variable is safe as a file local variable if its value
+       satisfies the predicate `integerp'.
+     
+     Documentation:
+     *Column beyond which automatic line-wrapping should happen.
+     Interactively, you can set the buffer local value using C-x f.
+     
+     You can customize this variable.
+</pre>
+   <p class="noindent">The line that says &ldquo;You can customize the variable&rdquo; indicates that
+this variable is a user option.  <kbd>C-h v</kbd> is not restricted to user
+options; it allows any variable name.
+
+   <p><a name="index-set_002dvariable-3980"></a>  The most convenient way to set a specific user option variable is
+with <kbd>M-x set-variable</kbd>.  This reads the variable name with the
+minibuffer (with completion), and then reads a Lisp expression for the
+new value using the minibuffer a second time (you can insert the old
+value into the minibuffer for editing via <kbd>M-n</kbd>).  For example,
+
+<pre class="example">     M-x set-variable &lt;RET&gt; fill-column &lt;RET&gt; 75 &lt;RET&gt;
+</pre>
+   <p class="noindent">sets <code>fill-column</code> to 75.
+
+   <p><kbd>M-x set-variable</kbd> is limited to user option variables, but you can
+set any variable with a Lisp expression, using the function <code>setq</code>. 
+Here is a <code>setq</code> expression to set <code>fill-column</code>:
+
+<pre class="example">     (setq fill-column 75)
+</pre>
+   <p>To execute an expression like this one, go to the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo;
+buffer, type in the expression, and then type <kbd>C-j</kbd>.  See <a href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>.
+
+   <p>Setting variables, like all means of customizing Emacs except where
+otherwise stated, affects only the current Emacs session.  The only
+way to alter the variable in future sessions is to put something in
+your initialization file to set it those sessions (see <a href="Init-File.html#Init-File">Init File</a>).
+
+   </body></html>
+

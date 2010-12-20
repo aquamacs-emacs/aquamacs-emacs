@@ -281,6 +281,12 @@ If this variable is nil, all regions are treated as small."
   "The key binding for flyspell auto correction."
   :group 'flyspell)
 
+(defcustom flyspell-mode-auto-on t
+  "Non-nil means that executing `flyspell-region' or `flyspell-buffer'
+will automatically turn on `flyspell-mode' for that buffer."
+  :group 'flyspell
+  :type 'boolean)
+
 ;; **********************************************************************
 ;; functions that use NSSpellChecker as the spellchecking
 ;; engine, instead of ispell or aspell
@@ -454,7 +460,9 @@ NOSKIP is non-nil, don't skip the current highlighted word (if any)."
       (goto-char misspell-end)
       (push-mark misspell-beg 'no-msg 'activate)
       (setq word (buffer-substring misspell-beg misspell-end))
-      (ns-spellchecker-show-word word))))  
+      (ns-spellchecker-show-word word)))
+  (if (and flyspell-mode-auto-on (not flyspell-mode))
+      (turn-on-flyspell)))
 
 (defun ns-start-spellchecker ()
   "Show NSSpellChecker spellingPanel, and call
@@ -1033,7 +1041,7 @@ in your .emacs file.
   (flyspell-accept-buffer-local-defs 'force)
   ;; we put the `flyspell-delayed' property on some commands
   (flyspell-delay-commands)
-  ;; we put the `flyspell-deplacement' property on some commands
+  ;; WE put the `flyspell-deplacement' property on some commands
   (flyspell-deplacement-commands)
   ;; we bound flyspell action to post-command hook
   (add-hook 'post-command-hook (function flyspell-post-command-hook) t t)
@@ -1522,36 +1530,36 @@ misspelling and skips redundant spell-checking step."
 	    ;; we setup the cache
 	    (setq flyspell-word-cache-start start)
 	    (setq flyspell-word-cache-end end)
-	    (setq flyspell-word-cache-word word)
+	    (setq flyspell-word-cache-word word) 
 	    ;; now check spelling of word.
 	    (if (string= ispell-program-name "NSSpellChecker")
 		(setq poss (ns-spellchecker-parse-output word))
             (if (not known-misspelling)
                 (progn
-                  (ispell-send-string "%\n")
-                  ;; put in verbose mode
-                  (ispell-send-string (concat "^" word "\n"))
-                  ;; we mark the ispell process so it can be killed
-                  ;; when emacs is exited without query
-                  (set-process-query-on-exit-flag ispell-process nil)
+	      (ispell-send-string "%\n")
+	      ;; put in verbose mode
+	      (ispell-send-string (concat "^" word "\n"))
+	      ;; we mark the ispell process so it can be killed
+	      ;; when emacs is exited without query
+	      (set-process-query-on-exit-flag ispell-process nil)
                   ;; Wait until ispell has processed word.  Since this
                   ;; code is often executed from post-command-hook but
                   ;; the ispell process may not be responsive, it's
                   ;; important to make sure we re-enable C-g.
-                  (with-local-quit
-                    (while (progn
-                             (accept-process-output ispell-process)
+	      (with-local-quit
+		(while (progn
+			 (accept-process-output ispell-process)
                              (not (string= "" (car ispell-filter)))))))
 	      (ispell-send-string "!\n")
-                  ;; back to terse mode.
-                  ;; Remove leading empty element
-                  (setq ispell-filter (cdr ispell-filter))
-                  ;; ispell process should return something after word is sent.
-                  ;; Tag word as valid (i.e., skip) otherwise
-                  (or ispell-filter
-                      (setq ispell-filter '(*)))
-                  (if (consp ispell-filter)
-                      (setq poss (ispell-parse-output (car ispell-filter)))))
+	      ;; back to terse mode.
+	      ;; Remove leading empty element
+	      (setq ispell-filter (cdr ispell-filter))
+	      ;; ispell process should return something after word is sent.
+	      ;; Tag word as valid (i.e., skip) otherwise
+	      (or ispell-filter
+		  (setq ispell-filter '(*)))
+	      (if (consp ispell-filter)
+		  (setq poss (ispell-parse-output (car ispell-filter)))))
               ;; Else, this was a known misspelling to begin with, and
               ;; we should forge an ispell return value.
               (setq poss (list word 0 '() '())))
@@ -2058,9 +2066,11 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	      (ns-flyspell-region beg end))
 	    ;; check for and mark consecutive repeated words
 	    (flyspell-check-region-doublons beg end))
-      (if (and flyspell-large-region (> (- end beg) flyspell-large-region))
-	  (flyspell-large-region beg end)
+	(if (and flyspell-large-region (> (- end beg) flyspell-large-region))
+	    (flyspell-large-region beg end)
 	  (flyspell-small-region beg end))))
+    (if (and flyspell-mode-auto-on (not flyspell-mode))
+	(turn-on-flyspell))
     ))
 
 ;;*---------------------------------------------------------------------*/
@@ -2375,19 +2385,19 @@ This command proposes various successive corrections for the current word."
 	      ;; now check spelling of word.
 	      (if (string= ispell-program-name "NSSpellChecker")
 		  (setq poss (ns-spellchecker-parse-output word))
-	      (ispell-send-string "%\n") ;put in verbose mode
-	      (ispell-send-string (concat "^" word "\n"))
-              ;; wait until ispell has processed word.
-              (while (progn
-                       (accept-process-output ispell-process)
-                       (not (string= "" (car ispell-filter)))))
-	      ;; Remove leading empty element
-	      (setq ispell-filter (cdr ispell-filter))
-	      ;; ispell process should return something after word is sent.
-	      ;; Tag word as valid (i.e., skip) otherwise
-	      (or ispell-filter
-		  (setq ispell-filter '(*)))
-	      (if (consp ispell-filter)
+		(ispell-send-string "%\n") ;put in verbose mode
+		(ispell-send-string (concat "^" word "\n"))
+		;; wait until ispell has processed word.
+		(while (progn
+			 (accept-process-output ispell-process)
+			 (not (string= "" (car ispell-filter)))))
+		;; Remove leading empty element
+		(setq ispell-filter (cdr ispell-filter))
+		;; ispell process should return something after word is sent.
+		;; Tag word as valid (i.e., skip) otherwise
+		(or ispell-filter
+		    (setq ispell-filter '(*)))
+		(if (consp ispell-filter)
 		    (setq poss (ispell-parse-output (car ispell-filter)))))
 	      (cond
 	       ((or (eq poss t) (stringp poss))
@@ -2538,19 +2548,19 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	  ;; now check spelling of word.
 	  (if (string= ispell-program-name "NSSpellChecker")
 	      (setq poss (ns-spellchecker-parse-output word))
-	  (ispell-send-string "%\n")	;put in verbose mode
-	  (ispell-send-string (concat "^" word "\n"))
-	  ;; wait until ispell has processed word
-	  (while (progn
-		   (accept-process-output ispell-process)
-		   (not (string= "" (car ispell-filter)))))
-	  ;; Remove leading empty element
-	  (setq ispell-filter (cdr ispell-filter))
-	  ;; ispell process should return something after word is sent.
-	  ;; Tag word as valid (i.e., skip) otherwise
-	  (or ispell-filter
-	      (setq ispell-filter '(*)))
-	  (if (consp ispell-filter)
+	    (ispell-send-string "%\n")	;put in verbose mode
+	    (ispell-send-string (concat "^" word "\n"))
+	    ;; wait until ispell has processed word
+	    (while (progn
+		     (accept-process-output ispell-process)
+		     (not (string= "" (car ispell-filter)))))
+	    ;; Remove leading empty element
+	    (setq ispell-filter (cdr ispell-filter))
+	    ;; ispell process should return something after word is sent.
+	    ;; Tag word as valid (i.e., skip) otherwise
+	    (or ispell-filter
+		(setq ispell-filter '(*)))
+	    (if (consp ispell-filter)
 		(setq poss (ispell-parse-output (car ispell-filter)))))
 	  (cond
 	   ((or (eq poss t) (stringp poss))
@@ -2584,25 +2594,24 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
          (goto-char save)
 	 (if (string= ispell-program-name "NSSpellChecker")
 	     (ns-spellchecker-learn-word word)
-	 (ispell-send-string (concat "*" word "\n"))
-         ;; This was added only to the XEmacs side in revision 1.18 of
-         ;; flyspell.  I assume its absence on the Emacs side was an
-         ;; oversight.  --Stef
-	 (ispell-send-string "#\n")
+	   (ispell-send-string (concat "*" word "\n"))
+	   ;; This was added only to the XEmacs side in revision 1.18 of
+	   ;; flyspell.  I assume its absence on the Emacs side was an
+	   ;; oversight.  --Stef
+	   (ispell-send-string "#\n")
 	   (setq ispell-pdict-modified-p '(t)))
 	 (flyspell-unhighlight-at cursor-location)
 	 )
 	((or (eq replace 'buffer) (eq replace 'session))
 	 (if (string= ispell-program-name "NSSpellChecker")
 	     (ns-spellchecker-ignore-word word (current-buffer))
-	 (ispell-send-string (concat "@" word "\n"))
-	 (if (null ispell-pdict-modified-p)
-	     (setq ispell-pdict-modified-p
-		   (list ispell-pdict-modified-p)))
-         (goto-char save)
+	   (ispell-send-string (concat "@" word "\n"))
+	   (if (null ispell-pdict-modified-p)
+	       (setq ispell-pdict-modified-p
+		     (list ispell-pdict-modified-p)))
+	   (goto-char save))
 	 (if (eq replace 'buffer)
-	       (ispell-add-per-file-word-list word)
-	     ))
+	     (ispell-add-per-file-word-list word))
 	 (flyspell-unhighlight-at cursor-location)
 	 )
 	(replace
@@ -2666,9 +2675,9 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 			 ;; reverse word order for proper menu display
   	 		 (reverse (sort (car (cdr (cdr poss))) 'string<))
   	 	       (reverse (car (cdr (cdr poss))))))
-	 (affix      (car (cdr (cdr (cdr poss)))))
+  	 (affix      (car (cdr (cdr (cdr poss)))))
   	 show-affix-info)
-
+    
     (setq flyspell-context-menu-map
 	  (make-sparse-keymap
 	   (if (string= ispell-program-name "NSSpellChecker")
@@ -2693,7 +2702,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 					      'mouse-save-then-kill))))
     (define-key flyspell-context-menu-map [buffer]
       `(menu-item (if (string= ispell-program-name "NSSpellChecker")
-		      "Ignore Spelling"
+		      "Ignore Spelling & Comment Buffer"
 		    "Accept (buffer)")
 		  (lambda () (interactive)
 		    (flyspell-do-correct
@@ -2704,9 +2713,11 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 		     ,start
 		     ,end
 		     ,save))
-		  :help "Consider spelling as correct in this buffer"))
+		  :help "Always consider spelling as correct in this buffer"))
     (define-key flyspell-context-menu-map [session]
-      `(menu-item "Accept (session)"
+      `(menu-item (if (string= ispell-program-name "NSSpellChecker")
+		      "Ignore Spelling"
+		    "Accept (session)")
 		  (lambda () (interactive)
 		    (flyspell-do-correct
 		     'session
@@ -2716,8 +2727,9 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 		     ,start
 		     ,end
 		     ,save)) 
-		  :help "Consider spelling correct for buffers in current session"
-		  :visible (not (string= ispell-program-name "NSSpellChecker"))))
+		  :help (if (string= ispell-program-name "NSSpellChecker")
+			    "Consider spelling as correct in this buffer and session"
+			  "Consider spelling correct for buffers in current session")))
     (define-key flyspell-context-menu-map [save]
       `(menu-item (if (string= ispell-program-name "NSSpellChecker")
 		      "Learn Spelling"

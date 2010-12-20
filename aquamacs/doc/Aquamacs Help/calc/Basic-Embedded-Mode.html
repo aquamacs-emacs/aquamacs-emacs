@@ -1,0 +1,197 @@
+<html lang="en">
+<head>
+<title>Basic Embedded Mode - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Embedded-Mode.html#Embedded-Mode" title="Embedded Mode">
+<link rel="prev" href="Embedded-Mode.html#Embedded-Mode" title="Embedded Mode">
+<link rel="next" href="More-About-Embedded-Mode.html#More-About-Embedded-Mode" title="More About Embedded Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Embedded-Mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="More-About-Embedded-Mode.html#More-About-Embedded-Mode">More About Embedded Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>
+<hr>
+</div>
+
+<h3 class="section">17.1 Basic Embedded Mode</h3>
+
+<p class="noindent"><a name="index-C_002dx-_002a-e-2217"></a><a name="index-calc_002dembedded-2218"></a>To enter Embedded mode, position the Emacs point (cursor) on a
+formula in any buffer and press <kbd>C-x * e</kbd> (<code>calc-embedded</code>). 
+Note that <kbd>C-x * e</kbd> is not to be used in the Calc stack buffer
+like most Calc commands, but rather in regular editing buffers that
+are visiting your own files.
+
+   <p>Calc will try to guess an appropriate language based on the major mode
+of the editing buffer. (See <a href="Language-Modes.html#Language-Modes">Language Modes</a>.) If the current buffer is
+in <code>latex-mode</code>, for example, Calc will set its language to LaTeX. 
+Similarly, Calc will use TeX language for <code>tex-mode</code>,
+<code>plain-tex-mode</code> and <code>context-mode</code>, C language for
+<code>c-mode</code> and <code>c++-mode</code>, FORTRAN language for
+<code>fortran-mode</code> and <code>f90-mode</code>, Pascal for <code>pascal-mode</code>,
+and eqn for <code>nroff-mode</code> (see <a href="Customizing-Calc.html#Customizing-Calc">Customizing Calc</a>). 
+These can be overridden with Calc's mode
+changing commands (see <a href="Mode-Settings-in-Embedded-Mode.html#Mode-Settings-in-Embedded-Mode">Mode Settings in Embedded Mode</a>).  If no
+suitable language is available, Calc will continue with its current language.
+
+   <p>Calc normally scans backward and forward in the buffer for the
+nearest opening and closing <dfn>formula delimiters</dfn>.  The simplest
+delimiters are blank lines.  Other delimiters that Embedded mode
+understands are:
+
+     <ol type=1 start=1>
+<li>The TeX and LaTeX math delimiters &lsquo;<samp><span class="samp">$ $</span></samp>&rsquo;, &lsquo;<samp><span class="samp">$$ $$</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">\[ \]</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">\( \)</span></samp>&rsquo;;
+<li>Lines beginning with &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; (except matrix delimiters);
+<li>Lines beginning with &lsquo;<samp><span class="samp">@</span></samp>&rsquo; (Texinfo delimiters). 
+<li>Lines beginning with &lsquo;<samp><span class="samp">.EQ</span></samp>&rsquo; and &lsquo;<samp><span class="samp">.EN</span></samp>&rsquo; (<dfn>eqn</dfn> delimiters);
+<li>Lines containing a single &lsquo;<samp><span class="samp">%</span></samp>&rsquo; or &lsquo;<samp><span class="samp">.\"</span></samp>&rsquo; symbol and nothing else.
+        </ol>
+
+   <p>See <a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">Customizing Embedded Mode</a>, to see how to make Calc recognize
+your own favorite delimiters.  Delimiters like &lsquo;<samp><span class="samp">$ $</span></samp>&rsquo; can appear
+on their own separate lines or in-line with the formula.
+
+   <p>If you give a positive or negative numeric prefix argument, Calc
+instead uses the current point as one end of the formula, and includes
+that many lines forward or backward (respectively, including the current
+line). Explicit delimiters are not necessary in this case.
+
+   <p>With a prefix argument of zero, Calc uses the current region (delimited
+by point and mark) instead of formula delimiters.  With a prefix
+argument of <kbd>C-u</kbd> only, Calc uses the current line as the formula.
+
+   <p><a name="index-C_002dx-_002a-w-2219"></a><a name="index-calc_002dembedded_002dword-2220"></a>The <kbd>C-x * w</kbd> (<code>calc-embedded-word</code>) command will start Embedded
+mode on the current &ldquo;word&rdquo;; in this case Calc will scan for the first
+non-numeric character (i.e., the first character that is not a digit,
+sign, decimal point, or upper- or lower-case &lsquo;<samp><span class="samp">e</span></samp>&rsquo;) forward and
+backward to delimit the formula.
+
+   <p>When you enable Embedded mode for a formula, Calc reads the text
+between the delimiters and tries to interpret it as a Calc formula. 
+Calc can generally identify TeX formulas and
+Big-style formulas even if the language mode is wrong.  If Calc
+can't make sense of the formula, it beeps and refuses to enter
+Embedded mode.  But if the current language is wrong, Calc can
+sometimes parse the formula successfully (but incorrectly);
+for example, the C expression &lsquo;<samp><span class="samp">atan(a[1])</span></samp>&rsquo; can be parsed
+in Normal language mode, but the <code>atan</code> won't correspond to
+the built-in <code>arctan</code> function, and the &lsquo;<samp><span class="samp">a[1]</span></samp>&rsquo; will be
+interpreted as &lsquo;<samp><span class="samp">a</span></samp>&rsquo; times the vector &lsquo;<samp><span class="samp">[1]</span></samp>&rsquo;!
+
+   <p>If you press <kbd>C-x * e</kbd> or <kbd>C-x * w</kbd> to activate an embedded
+formula which is blank, say with the cursor on the space between
+the two delimiters &lsquo;<samp><span class="samp">$ $</span></samp>&rsquo;, Calc will immediately prompt for
+an algebraic entry.
+
+   <p>Only one formula in one buffer can be enabled at a time.  If you
+move to another area of the current buffer and give Calc commands,
+Calc turns Embedded mode off for the old formula and then tries
+to restart Embedded mode at the new position.  Other buffers are
+not affected by Embedded mode.
+
+   <p>When Embedded mode begins, Calc pushes the current formula onto
+the stack.  No Calc stack window is created; however, Calc copies
+the top-of-stack position into the original buffer at all times. 
+You can create a Calc window by hand with <kbd>C-x * o</kbd> if you
+find you need to see the entire stack.
+
+   <p>For example, typing <kbd>C-x * e</kbd> while somewhere in the formula
+&lsquo;<samp><span class="samp">n&gt;2</span></samp>&rsquo; in the following line enables Embedded mode on that
+inequality:
+
+<pre class="example">     We define $F_n = F_(n-1)+F_(n-2)$ for all $n&gt;2$.
+</pre>
+   <p class="noindent">The formula &lsquo;<samp><span class="samp">n&gt;2</span></samp>&rsquo; will be pushed onto the Calc stack, and
+the top of stack will be copied back into the editing buffer. 
+This means that spaces will appear around the &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo; symbol
+to match Calc's usual display style:
+
+<pre class="example">     We define $F_n = F_(n-1)+F_(n-2)$ for all $n &gt; 2$.
+</pre>
+   <p class="noindent">No spaces have appeared around the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; sign because it's
+in a different formula, one which we have not yet touched with
+Embedded mode.
+
+   <p>Now that Embedded mode is enabled, keys you type in this buffer
+are interpreted as Calc commands.  At this point we might use
+the &ldquo;commute&rdquo; command <kbd>j C</kbd> to reverse the inequality. 
+This is a selection-based command for which we first need to
+move the cursor onto the operator (&lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo; in this case) that
+needs to be commuted.
+
+<pre class="example">     We define $F_n = F_(n-1)+F_(n-2)$ for all $2 &lt; n$.
+</pre>
+   <p>The <kbd>C-x * o</kbd> command is a useful way to open a Calc window
+without actually selecting that window.  Giving this command
+verifies that &lsquo;<samp><span class="samp">2 &lt; n</span></samp>&rsquo; is also on the Calc stack.  Typing
+<kbd>17 &lt;RET&gt;</kbd> would produce:
+
+<pre class="example">     We define $F_n = F_(n-1)+F_(n-2)$ for all $17$.
+</pre>
+   <p class="noindent">with &lsquo;<samp><span class="samp">2 &lt; n</span></samp>&rsquo; and &lsquo;<samp><span class="samp">17</span></samp>&rsquo; on the stack; typing &lt;TAB&gt;
+at this point will exchange the two stack values and restore
+&lsquo;<samp><span class="samp">2 &lt; n</span></samp>&rsquo; to the embedded formula.  Even though you can't
+normally see the stack in Embedded mode, it is still there and
+it still operates in the same way.  But, as with old-fashioned
+RPN calculators, you can only see the value at the top of the
+stack at any given time (unless you use <kbd>C-x * o</kbd>).
+
+   <p>Typing <kbd>C-x * e</kbd> again turns Embedded mode off.  The Calc
+window reveals that the formula &lsquo;<samp><span class="samp">2&nbsp;&lt;&nbsp;n</span></samp>&rsquo;<!-- /@w --> is automatically
+removed from the stack, but the &lsquo;<samp><span class="samp">17</span></samp>&rsquo; is not.  Entering
+Embedded mode always pushes one thing onto the stack, and
+leaving Embedded mode always removes one thing.  Anything else
+that happens on the stack is entirely your business as far as
+Embedded mode is concerned.
+
+   <p>If you press <kbd>C-x * e</kbd> in the wrong place by accident, it is
+possible that Calc will be able to parse the nearby text as a
+formula and will mangle that text in an attempt to redisplay it
+&ldquo;properly&rdquo; in the current language mode.  If this happens,
+press <kbd>C-x * e</kbd> again to exit Embedded mode, then give the
+regular Emacs &ldquo;undo&rdquo; command (<kbd>C-_</kbd> or <kbd>C-x u</kbd>) to put
+the text back the way it was before Calc edited it.  Note that Calc's
+own Undo command (typed before you turn Embedded mode back off)
+will not do you any good, because as far as Calc is concerned
+you haven't done anything with this formula yet.
+
+   </body></html>
+

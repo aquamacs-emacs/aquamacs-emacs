@@ -1,0 +1,268 @@
+<html lang="en">
+<head>
+<title>External methods - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Inline-methods.html#Inline-methods" title="Inline methods">
+<link rel="next" href="GVFS-based-methods.html#GVFS-based-methods" title="GVFS based methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="External-methods"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GVFS-based-methods.html#GVFS-based-methods">GVFS based methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inline-methods.html#Inline-methods">Inline methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.3 External methods</h3>
+
+<p><a name="index-methods_002c-external-41"></a><a name="index-external-methods-42"></a>
+The external methods operate through multiple channels, using the
+remote shell connection for many actions while delegating file
+transfers to an external transfer utility.
+
+   <p>This saves the overhead of encoding and decoding that multiplexing the
+transfer through the one connection has with the inline methods.
+
+   <p>Since external methods need their own overhead opening a new channel,
+all files which are smaller than <var>tramp-copy-size-limit</var> are still
+transferred with the corresponding inline method.  It should provide a
+fair trade-off between both approaches.
+
+     <dl>
+<dt><samp><span class="option">rcp</span></samp>  &mdash;  <samp><span class="command">rsh</span></samp> and <samp><span class="command">rcp</span></samp><dd><a name="index-method-rcp-43"></a><a name="index-rcp-method-44"></a><a name="index-rcp-_0028with-rcp-method_0029-45"></a><a name="index-rsh-_0028with-rcp-method_0029-46"></a>
+This method uses the <samp><span class="command">rsh</span></samp> and <samp><span class="command">rcp</span></samp> commands to connect
+to the remote machine and transfer files.  This is probably the fastest
+connection method available.
+
+     <p>The alternative method <samp><span class="option">remcp</span></samp> uses the <samp><span class="command">remsh</span></samp> and
+<samp><span class="command">rcp</span></samp> commands.  It should be applied on machines where
+<samp><span class="command">remsh</span></samp> is used instead of <samp><span class="command">rsh</span></samp>.
+
+     <br><dt><samp><span class="option">scp</span></samp>  &mdash;  <samp><span class="command">ssh</span></samp> and <samp><span class="command">scp</span></samp><dd><a name="index-method-scp-47"></a><a name="index-scp-method-48"></a><a name="index-scp-_0028with-scp-method_0029-49"></a><a name="index-ssh-_0028with-scp-method_0029-50"></a>
+Using <samp><span class="command">ssh</span></samp> to connect to the remote host and <samp><span class="command">scp</span></samp> to
+transfer files between the machines is the best method for securely
+connecting to a remote machine and accessing files.
+
+     <p>The performance of this option is also quite good.  It may be slower than
+the inline methods when you often open and close small files however. 
+The cost of the cryptographic handshake at the start of an <samp><span class="command">scp</span></samp>
+session can begin to absorb the advantage that the lack of encoding and
+decoding presents.
+
+     <p>There are also two variants, <samp><span class="option">scp1</span></samp> and <samp><span class="option">scp2</span></samp>, that
+call &lsquo;<samp><span class="samp">ssh -1</span></samp>&rsquo; and &lsquo;<samp><span class="samp">ssh -2</span></samp>&rsquo;, respectively.  This way, you can
+explicitly select whether you want to use the SSH protocol version 1
+or 2 to connect to the remote host.  (You can also specify in
+<samp><span class="file">~/.ssh/config</span></samp>, the SSH configuration file, which protocol
+should be used, and use the regular <samp><span class="option">scp</span></samp> method.)
+
+     <p>Two other variants, <samp><span class="option">scp1_old</span></samp> and <samp><span class="option">scp2_old</span></samp>, use the
+<samp><span class="command">ssh1</span></samp> and <samp><span class="command">ssh2</span></samp> commands explicitly.  If you don't
+know what these are, you do not need these options.
+
+     <p>All the <samp><span class="command">ssh</span></samp> based methods support the &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; feature
+where you can specify a port number to connect to in the host name. 
+For example, the host name <samp><span class="file">host#42</span></samp> tells <span class="sc">tramp</span> to
+specify &lsquo;<samp><span class="samp">-p 42</span></samp>&rsquo; in the argument list for <samp><span class="command">ssh</span></samp>, and to
+specify &lsquo;<samp><span class="samp">-P 42</span></samp>&rsquo; in the argument list for <samp><span class="command">scp</span></samp>.
+
+     <br><dt><samp><span class="option">sftp</span></samp>  &mdash;  <samp><span class="command">ssh</span></samp> and <samp><span class="command">sftp</span></samp><dd><a name="index-method-sftp-51"></a><a name="index-sftp-method-52"></a><a name="index-sftp-_0028with-sftp-method_0029-53"></a><a name="index-ssh-_0028with-sftp-method_0029-54"></a>
+That is mostly the same method as <samp><span class="option">scp</span></samp>, but using
+<samp><span class="command">sftp</span></samp> as transfer command.  So the same remarks are valid.
+
+     <p>This command does not work like Ange-FTP, where
+<samp><span class="command">ftp</span></samp> is called interactively, and all commands are send from
+within this session.  Instead of, <samp><span class="command">ssh</span></samp> is used for login.
+
+     <p>This method supports the &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; argument.
+
+     <br><dt><samp><span class="option">rsync</span></samp>  &mdash;  <samp><span class="command">ssh</span></samp> and <samp><span class="command">rsync</span></samp><dd><a name="index-method-rsync-55"></a><a name="index-rsync-method-56"></a><a name="index-rsync-_0028with-rsync-method_0029-57"></a><a name="index-ssh-_0028with-rsync-method_0029-58"></a>
+Using the <samp><span class="command">ssh</span></samp> command to connect securely to the remote
+machine and the <samp><span class="command">rsync</span></samp> command to transfer files is almost
+identical to the <samp><span class="option">scp</span></samp> method.
+
+     <p>While <samp><span class="command">rsync</span></samp> performs much better than <samp><span class="command">scp</span></samp> when
+transferring files that exist on both hosts, this advantage is lost if
+the file exists only on one side of the connection.  A file can exists
+on both the remote and local host, when you copy a file from/to a
+remote host.  When you just open a file from the remote host (or write
+a file there), a temporary file on the local side is kept as long as
+the corresponding buffer, visiting this file, is alive.
+
+     <p>This method supports the &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; argument.
+
+     <br><dt><samp><span class="option">scpx</span></samp> &mdash; <samp><span class="command">ssh</span></samp> and <samp><span class="command">scp</span></samp><dd><a name="index-method-scpx-59"></a><a name="index-scpx-method-60"></a><a name="index-scp-_0028with-scpx-method_0029-61"></a><a name="index-ssh-_0028with-scpx-method_0029-62"></a>
+As you would expect, this is similar to <samp><span class="option">scp</span></samp>, only a little
+different.  Whereas <samp><span class="option">scp</span></samp> opens a normal interactive shell on
+the remote host, this option uses &lsquo;<samp><span class="samp">ssh -t -t </span><var>host</var><span class="samp"> -l
+</span><var>user</var><span class="samp"> /bin/sh</span></samp>&rsquo; to open a connection.  This is useful for users
+where the normal login shell is set up to ask them a number of
+questions when logging in.  This procedure avoids these questions, and
+just gives <span class="sc">tramp</span> a more-or-less `standard' login shell to work
+with.
+
+     <p>This is also useful for Windows users where <samp><span class="command">ssh</span></samp>, when
+invoked from an GNU Emacs buffer, tells them that it is not
+allocating a pseudo tty.  When this happens, the login shell is wont
+to not print any shell prompt, which confuses <span class="sc">tramp</span> mightily.
+
+     <p>This method supports the &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; argument.
+
+     <br><dt><samp><span class="option">scpc</span></samp> &mdash; <samp><span class="command">ssh</span></samp> and <samp><span class="command">scp</span></samp><dd><a name="index-method-scpc-63"></a><a name="index-scpc-method-64"></a><a name="index-scp-_0028with-scpc-method_0029-65"></a><a name="index-ssh-_0028with-scpc-method_0029-66"></a>
+Newer versions of <samp><span class="option">ssh</span></samp> (for example OpenSSH 4) offer an option
+<samp><span class="option">ControlMaster</span></samp>.  This allows <samp><span class="option">scp</span></samp> to reuse an existing
+<samp><span class="option">ssh</span></samp> channel, which increases performance.
+
+     <p>Before you use this method, you shall check whether your <samp><span class="option">ssh</span></samp>
+implementation does support this option.  Try from the command line
+
+     <pre class="example">          ssh localhost -o ControlMaster=yes
+</pre>
+     <p>This method supports the &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; argument.
+
+     <br><dt><samp><span class="option">rsyncc</span></samp>  &mdash;  <samp><span class="command">ssh</span></samp> and <samp><span class="command">rsync</span></samp><dd><a name="index-method-rsyncc-67"></a><a name="index-rsyncc-method-68"></a><a name="index-rsync-_0028with-rsyncc-method_0029-69"></a><a name="index-ssh-_0028with-rsyncc-method_0029-70"></a>
+Like the <samp><span class="option">scpc</span></samp> method, <samp><span class="option">rsyncc</span></samp> improves the underlying
+<samp><span class="command">ssh</span></samp> connection by the option <samp><span class="option">ControlMaster</span></samp>.  This
+allows <samp><span class="command">rsync</span></samp> to reuse an existing <samp><span class="command">ssh</span></samp> channel,
+which increases performance.
+
+     <p>This method supports the &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; argument.
+
+     <br><dt><samp><span class="option">pscp</span></samp> &mdash; <samp><span class="command">plink</span></samp> and <samp><span class="command">pscp</span></samp><dd><a name="index-method-pscp-71"></a><a name="index-pscp-method-72"></a><a name="index-pscp-_0028with-pscp-method_0029-73"></a><a name="index-plink-_0028with-pscp-method_0029-74"></a><a name="index-PuTTY-_0028with-pscp-method_0029-75"></a>
+This method is similar to <samp><span class="option">scp</span></samp>, but it uses the
+<samp><span class="command">plink</span></samp> command to connect to the remote host, and it uses
+<samp><span class="command">pscp</span></samp> for transferring the files.  These programs are part
+of PuTTY, an SSH implementation for Windows.
+
+     <p>This method supports the &lsquo;<samp><span class="samp">-P</span></samp>&rsquo; argument.
+
+     <br><dt><samp><span class="option">psftp</span></samp> &mdash; <samp><span class="command">plink</span></samp> and <samp><span class="command">psftp</span></samp><dd><a name="index-method-psftp-76"></a><a name="index-psftp-method-77"></a><a name="index-psftp-_0028with-psftp-method_0029-78"></a><a name="index-plink-_0028with-psftp-method_0029-79"></a><a name="index-PuTTY-_0028with-psftp-method_0029-80"></a>
+As you would expect, this method is similar to <samp><span class="option">sftp</span></samp>, but it
+uses the <samp><span class="command">plink</span></samp> command to connect to the remote host, and it
+uses <samp><span class="command">psftp</span></samp> for transferring the files.  These programs are
+part of PuTTY, an SSH implementation for Windows.
+
+     <p>This method supports the &lsquo;<samp><span class="samp">-P</span></samp>&rsquo; argument.
+
+     <br><dt><samp><span class="option">fcp</span></samp> &mdash; <samp><span class="command">fsh</span></samp> and <samp><span class="command">fcp</span></samp><dd><a name="index-method-fcp-81"></a><a name="index-fcp-method-82"></a><a name="index-fsh-_0028with-fcp-method_0029-83"></a><a name="index-fcp-_0028with-fcp-method_0029-84"></a>
+This method is similar to <samp><span class="option">scp</span></samp>, but it uses the <samp><span class="command">fsh</span></samp>
+command to connect to the remote host, and it uses <samp><span class="command">fcp</span></samp> for
+transferring the files.  <samp><span class="command">fsh/fcp</span></samp> are a front-end for
+<samp><span class="command">ssh</span></samp> which allow for reusing the same <samp><span class="command">ssh</span></samp> session
+for submitting several commands.  This avoids the startup overhead of
+<samp><span class="command">scp</span></samp> (which has to establish a secure connection whenever it
+is called).  Note, however, that you can also use one of the inline
+methods to achieve a similar effect.
+
+     <p>This method uses the command &lsquo;<samp><span class="samp">fsh </span><var>host</var><span class="samp"> -l </span><var>user</var><span class="samp">
+/bin/sh -i</span></samp>&rsquo; to establish the connection, it does not work to just say
+<samp><span class="command">fsh </span><var>host</var><span class="command"> -l </span><var>user</var></samp>.
+
+     <p><a name="index-method-fsh-85"></a><a name="index-fsh-method-86"></a>
+There is no inline method using <samp><span class="command">fsh</span></samp> as the multiplexing
+provided by the program is not very useful in our context.  <span class="sc">tramp</span>
+opens just one connection to the remote host and then keeps it open,
+anyway.
+
+     <br><dt><samp><span class="option">ftp</span></samp><dd><a name="index-method-ftp-87"></a><a name="index-ftp-method-88"></a>
+This is not a native <span class="sc">tramp</span> method.  Instead of, it forwards all
+requests to Ange-FTP.
+
+     <br><dt><samp><span class="option">smb</span></samp> &mdash; <samp><span class="command">smbclient</span></samp><dd><a name="index-method-smb-89"></a><a name="index-smb-method-90"></a>
+This is another not natural <span class="sc">tramp</span> method.  It uses the
+<samp><span class="command">smbclient</span></samp> command on different Unices in order to connect to
+an SMB server.  An SMB server might be a Samba (or CIFS) server on
+another UNIX host or, more interesting, a host running MS Windows.  So
+far, it is tested towards MS Windows NT, MS Windows 2000, and MS
+Windows XP.
+
+     <p>The first directory in the localname must be a share name on the remote
+host.  Remember, that the <code>$</code> character in which default shares
+usually end, must be written <code>$$</code> due to environment variable
+substitution in file names.  If no share name is given (i.e. remote
+directory <code>/</code>), all available shares are listed.
+
+     <p>Since authorization is done on share level, you will be prompted
+always for a password if you access another share on the same host. 
+This can be suppressed by <a href="Password-handling.html#Password-handling">Password handling</a>.
+
+     <p>MS Windows uses for authorization both a user name and a domain name. 
+Because of this, the <span class="sc">tramp</span> syntax has been extended: you can
+specify a user name which looks like <code>user%domain</code> (the real user
+name, then a percent sign, then the domain name).  So, to connect to
+the machine <code>melancholia</code> as user <code>daniel</code> of the domain
+<code>BIZARRE</code>, and edit <samp><span class="file">.emacs</span></samp> in the home directory (share
+<code>daniel$</code>) I would specify the filename <samp><span class="file">/smb<!-- /@w -->:daniel%BIZARRE<!-- /@w -->@melancholia:/daniel$$/.emacs</span></samp>.
+
+     <p>Depending on the Windows domain configuration, a Windows user might be
+considered as domain user per default.  In order to connect as local
+user, the WINS name of that machine must be given as domain name. 
+Usually, it is the machine name in capital letters.  In the example
+above, the local user <code>daniel</code> would be specified as
+<samp><span class="file">/smb<!-- /@w -->:daniel%MELANCHOLIA<!-- /@w -->@melancholia:/daniel$$/.emacs</span></samp>.
+
+     <p>The domain name as well as the user name are optional.  If no user
+name is specified at all, the anonymous user (without password
+prompting) is assumed.  This is different from all other <span class="sc">tramp</span>
+methods, where in such a case the local user name is taken.
+
+     <p>The <samp><span class="option">smb</span></samp> method supports the &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; argument.
+
+     <p><strong>Please note:</strong> If GNU Emacs runs locally under MS
+Windows, this method isn't available.  Instead of, you can use UNC
+file names like <samp><span class="file">//melancholia/daniel$$/.emacs</span></samp>.  The only
+disadvantage is that there's no possibility to specify another user
+name.
+
+     <br><dt><samp><span class="option">imap</span></samp><dd><a name="index-method-imap-91"></a><a name="index-method-imaps-92"></a><a name="index-imap-method-93"></a><a name="index-imaps-method-94"></a>
+Accessing an IMAP mailbox is intended to save files there as encrypted
+message.  It could be used in case there are no other remote file
+storages available.
+
+     <p><span class="sc">tramp</span> supports both <samp><span class="option">imap</span></samp> and <samp><span class="option">imaps</span></samp> methods. 
+The latter one accesses the IMAP server over ssl.
+
+     <p>Both methods support the port number specification.
+
+     <p>Note, that special handling is needed for declaring a passphrase for
+encryption / decryption of the messages (see <a href="Using-an-authentication-file.html#Using-an-authentication-file">Using an authentication file</a>).
+
+   </dl>
+
+   </body></html>
+

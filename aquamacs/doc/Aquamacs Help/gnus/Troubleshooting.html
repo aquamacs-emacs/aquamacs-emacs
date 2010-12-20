@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Troubleshooting - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Appendices.html#Appendices" title="Appendices">
+<link rel="prev" href="Customization.html#Customization" title="Customization">
+<link rel="next" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Troubleshooting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customization.html#Customization">Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Appendices.html#Appendices">Appendices</a>
+<hr>
+</div>
+
+<h3 class="section">10.6 Troubleshooting</h3>
+
+<p><a name="index-troubleshooting-3144"></a>
+Gnus works <em>so</em> well straight out of the box&mdash;I can't imagine any
+problems, really.
+
+   <p>Ahem.
+
+     <ol type=1 start=1>
+
+     <li>Make sure your computer is switched on.
+
+     <li>Make sure that you really load the current Gnus version.  If you have
+been running <span class="sc">gnus</span>, you need to exit Emacs and start it up again before
+Gnus will work.
+
+     <li>Try doing an <kbd>M-x gnus-version</kbd>.  If you get something that looks
+like &lsquo;<samp><span class="samp">Gnus v5.13</span></samp>&rsquo; <!-- Adjust ../Makefile.in if you change this line! -->
+you have the right files loaded.  Otherwise you have some old <samp><span class="file">.el</span></samp>
+files lying around.  Delete these.
+
+     <li>Read the help group (<kbd>G h</kbd> in the group buffer) for a
+<acronym>FAQ</acronym> and a how-to.
+
+     <li><a name="index-max_002dlisp_002deval_002ddepth-3145"></a>Gnus works on many recursive structures, and in some extreme (and very
+rare) cases Gnus may recurse down &ldquo;too deeply&rdquo; and Emacs will beep at
+you.  If this happens to you, set <code>max-lisp-eval-depth</code> to 500 or
+something like that.
+        </ol>
+
+   <p>If all else fails, report the problem as a bug.
+
+   <p><a name="index-bugs-3146"></a><a name="index-reporting-bugs-3147"></a>
+<a name="index-M_002dx-gnus_002dbug-3148"></a><a name="index-gnus_002dbug-3149"></a>If you find a bug in Gnus, you can report it with the <kbd>M-x gnus-bug</kbd>
+command.  <kbd>M-x set-variable RET debug-on-error RET t RET</kbd>, and send
+me the backtrace.  I will fix bugs, but I can only fix them if you send
+me a precise description as to how to reproduce the bug.
+
+   <p>You really can never be too detailed in a bug report.  Always use the
+<kbd>M-x gnus-bug</kbd> command when you make bug reports, even if it creates
+a 10Kb mail each time you use it, and even if you have sent me your
+environment 500 times before.  I don't care.  I want the full info each
+time.
+
+   <p>It is also important to remember that I have no memory whatsoever.  If
+you send a bug report, and I send you a reply, and then you just send
+back &ldquo;No, it's not! Moron!&rdquo;, I will have no idea what you are
+insulting me about.  Always over-explain everything.  It's much easier
+for all of us&mdash;if I don't have all the information I need, I will just
+mail you and ask for more info, and everything takes more time.
+
+   <p>If the problem you're seeing is very visual, and you can't quite explain
+it, copy the Emacs window to a file (with <code>xwd</code>, for instance), put
+it somewhere it can be reached, and include the URL of the picture in
+the bug report.
+
+   <p><a name="index-patches-3150"></a>If you would like to contribute a patch to fix bugs or make
+improvements, please produce the patch using &lsquo;<samp><span class="samp">diff -u</span></samp>&rsquo;.
+
+   <p><a name="index-edebug-3151"></a>If you want to debug your problem further before reporting, possibly
+in order to solve the problem yourself and send a patch, you can use
+edebug.  Debugging Lisp code is documented in the Elisp manual
+(see <a href="../elisp/Debugging.html#Debugging">Debugging Lisp Programs</a>).  To get you started with edebug, consider if
+you discover some weird behavior when pressing <kbd>c</kbd>, the first
+step is to do <kbd>C-h k c</kbd> and click on the hyperlink (Emacs only) in
+the documentation buffer that leads you to the function definition,
+then press <kbd>M-x edebug-defun RET</kbd> with point inside that function,
+return to Gnus and press <kbd>c</kbd> to invoke the code.  You will be
+placed in the lisp buffer and can single step using <kbd>SPC</kbd> and
+evaluate expressions using <kbd>M-:</kbd> or inspect variables using
+<kbd>C-h v</kbd>, abort execution with <kbd>q</kbd>, and resume execution with
+<kbd>c</kbd> or <kbd>g</kbd>.
+
+   <p><a name="index-elp-3152"></a><a name="index-profile-3153"></a><a name="index-slow-3154"></a>Sometimes, a problem do not directly generate an elisp error but
+manifests itself by causing Gnus to be very slow.  In these cases, you
+can use <kbd>M-x toggle-debug-on-quit</kbd> and press <kbd>C-g</kbd> when things are
+slow, and then try to analyze the backtrace (repeating the procedure
+helps isolating the real problem areas).
+
+   <p>A fancier approach is to use the elisp profiler, ELP.  The profiler is
+(or should be) fully documented elsewhere, but to get you started
+there are a few steps that need to be followed.  First, instrument the
+part of Gnus you are interested in for profiling, e.g. <kbd>M-x
+elp-instrument-package RET gnus</kbd> or <kbd>M-x elp-instrument-package
+RET message</kbd>.  Then perform the operation that is slow and press
+<kbd>M-x elp-results</kbd>.  You will then see which operations that takes
+time, and can debug them further.  If the entire operation takes much
+longer than the time spent in the slowest function in the profiler
+output, you probably profiled the wrong part of Gnus.  To reset
+profiling statistics, use <kbd>M-x elp-reset-all</kbd>.  <kbd>M-x
+elp-restore-all</kbd> is supposed to remove profiling, but given the
+complexities and dynamic code generation in Gnus, it might not always
+work perfectly.
+
+   <p><a name="index-gnu_002eemacs_002egnus-3155"></a><a name="index-ding-mailing-list-3156"></a>If you just need help, you are better off asking on
+&lsquo;<samp><span class="samp">gnu.emacs.gnus</span></samp>&rsquo;.  I'm not very helpful.  You can also ask on
+<a href="mailto:ding@gnus.org">the ding mailing list</a>.  Write to
+<a href="mailto:ding-request@gnus.org">ding-request@gnus.org</a> to subscribe.
+
+   </body></html>
+

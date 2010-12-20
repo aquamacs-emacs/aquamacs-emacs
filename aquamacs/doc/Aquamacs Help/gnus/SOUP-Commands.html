@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>SOUP Commands - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SOUP.html#SOUP" title="SOUP">
+<link rel="next" href="SOUP-Groups.html#SOUP-Groups" title="SOUP Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="SOUP-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SOUP-Groups.html#SOUP-Groups">SOUP Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SOUP.html#SOUP">SOUP</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">6.6.4.1 SOUP Commands</h5>
+
+<p>These are commands for creating and manipulating <span class="sc">soup</span> packets.
+
+     <dl>
+<dt><kbd>G s b</kbd><dd><a name="index-G-s-b-_0028Group_0029-2409"></a><a name="index-gnus_002dgroup_002dbrew_002dsoup-2410"></a>Pack all unread articles in the current group
+(<code>gnus-group-brew-soup</code>).  This command understands the
+process/prefix convention.
+
+     <br><dt><kbd>G s w</kbd><dd><a name="index-G-s-w-_0028Group_0029-2411"></a><a name="index-gnus_002dsoup_002dsave_002dareas-2412"></a>Save all <span class="sc">soup</span> data files (<code>gnus-soup-save-areas</code>).
+
+     <br><dt><kbd>G s s</kbd><dd><a name="index-G-s-s-_0028Group_0029-2413"></a><a name="index-gnus_002dsoup_002dsend_002dreplies-2414"></a>Send all replies from the replies packet
+(<code>gnus-soup-send-replies</code>).
+
+     <br><dt><kbd>G s p</kbd><dd><a name="index-G-s-p-_0028Group_0029-2415"></a><a name="index-gnus_002dsoup_002dpack_002dpacket-2416"></a>Pack all files into a <span class="sc">soup</span> packet (<code>gnus-soup-pack-packet</code>).
+
+     <br><dt><kbd>G s r</kbd><dd><a name="index-G-s-r-_0028Group_0029-2417"></a><a name="index-nnsoup_002dpack_002dreplies-2418"></a>Pack all replies into a replies packet (<code>nnsoup-pack-replies</code>).
+
+     <br><dt><kbd>O s</kbd><dd><a name="index-O-s-_0028Summary_0029-2419"></a><a name="index-gnus_002dsoup_002dadd_002darticle-2420"></a>This summary-mode command adds the current article to a <span class="sc">soup</span> packet
+(<code>gnus-soup-add-article</code>).  It understands the process/prefix
+convention (see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).
+
+   </dl>
+
+   <p>There are a few variables to customize where Gnus will put all these
+thingies:
+
+     <dl>
+<dt><code>gnus-soup-directory</code><dd><a name="index-gnus_002dsoup_002ddirectory-2421"></a>Directory where Gnus will save intermediate files while composing
+<span class="sc">soup</span> packets.  The default is <samp><span class="file">~/SoupBrew/</span></samp>.
+
+     <br><dt><code>gnus-soup-replies-directory</code><dd><a name="index-gnus_002dsoup_002dreplies_002ddirectory-2422"></a>This is what Gnus will use as a temporary directory while sending our
+reply packets.  <samp><span class="file">~/SoupBrew/SoupReplies/</span></samp> is the default.
+
+     <br><dt><code>gnus-soup-prefix-file</code><dd><a name="index-gnus_002dsoup_002dprefix_002dfile-2423"></a>Name of the file where Gnus stores the last used prefix.  The default is
+&lsquo;<samp><span class="samp">gnus-prefix</span></samp>&rsquo;.
+
+     <br><dt><code>gnus-soup-packer</code><dd><a name="index-gnus_002dsoup_002dpacker-2424"></a>A format string command for packing a <span class="sc">soup</span> packet.  The default is
+&lsquo;<samp><span class="samp">tar cf - %s | gzip &gt; $HOME/Soupout%d.tgz</span></samp>&rsquo;.
+
+     <br><dt><code>gnus-soup-unpacker</code><dd><a name="index-gnus_002dsoup_002dunpacker-2425"></a>Format string command for unpacking a <span class="sc">soup</span> packet.  The default is
+&lsquo;<samp><span class="samp">gunzip -c %s | tar xvf -</span></samp>&rsquo;.
+
+     <br><dt><code>gnus-soup-packet-directory</code><dd><a name="index-gnus_002dsoup_002dpacket_002ddirectory-2426"></a>Where Gnus will look for reply packets.  The default is <samp><span class="file">~/</span></samp>.
+
+     <br><dt><code>gnus-soup-packet-regexp</code><dd><a name="index-gnus_002dsoup_002dpacket_002dregexp-2427"></a>Regular expression matching <span class="sc">soup</span> reply packets in
+<code>gnus-soup-packet-directory</code>.
+
+   </dl>
+
+   </body></html>
+

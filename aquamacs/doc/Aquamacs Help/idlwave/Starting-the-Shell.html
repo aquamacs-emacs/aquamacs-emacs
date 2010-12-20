@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+<title>Starting the Shell - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" title="The IDLWAVE Shell">
+<link rel="prev" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" title="The IDLWAVE Shell">
+<link rel="next" href="Using-the-Shell.html#Using-the-Shell" title="Using the Shell">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Starting-the-Shell"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a>
+<hr>
+</div>
+
+<h3 class="section">5.1 Starting the Shell</h3>
+
+<p><a name="index-Starting-the-shell-241"></a><a name="index-Shell_002c-starting-242"></a><a name="index-Dedicated-frame_002c-for-shell-buffer-243"></a><a name="index-Frame_002c-for-shell-buffer-244"></a><a name="index-Subprocess-of-Emacs_002c-IDL-245"></a>
+<a name="index-C_002dc-C_002ds-246"></a>The IDLWAVE shell can be started with the command <kbd>M-x
+idlwave-shell</kbd>.  In <code>idlwave-mode</code> the function is bound to
+<kbd>C-c C-s</kbd>.  It creates a buffer <samp><span class="file">*idl*</span></samp> which is used to
+interact with the shell.  If the shell is already running, <kbd>C-c
+C-s</kbd> will simply switch to the shell buffer.  The command <kbd>C-c
+C-l</kbd> (<code>idlwave-shell-recenter-shell-window</code>) displays the shell
+window without selecting it.  The shell can also be started
+automatically when another command tries to send a command to it.  To
+enable auto start, set the variable
+<code>idlwave-shell-automatic-start</code> to <code>t</code>.
+
+   <p>In order to create a separate frame for the IDLWAVE shell buffer, call
+<code>idlwave-shell</code> with a prefix argument: <kbd>C-u C-c C-s</kbd> or
+<kbd>C-u C-c C-l</kbd>.  If you always want a dedicated frame for the shell
+window, configure the variable
+<code>idlwave-shell-use-dedicated-frame</code>.
+
+   <p>To launch a quick IDLWAVE shell directly from a shell prompt without
+an IDLWAVE buffer (e.g., as a replacement for running inside an
+xterm), define a system alias with the following content:
+
+<pre class="example">     emacs -geometry 80x32 -eval "(idlwave-shell 'quick)"
+</pre>
+   <p>Replace the &lsquo;<samp><span class="samp">-geometry 80x32</span></samp>&rsquo; option with &lsquo;<samp><span class="samp">-nw</span></samp>&rsquo; if you prefer
+the Emacs process to run directly inside the terminal window.
+
+   <p><a name="index-ENVI-247"></a><a name="index-IDL_003e-Prompt-248"></a>
+To use IDLWAVE with ENVI or other custom packages which change the
+&lsquo;<samp><span class="samp">IDL&gt; </span></samp>&rsquo; prompt, you must change the
+<code>idlwave-shell-prompt-pattern</code>, which defaults to &lsquo;<samp><span class="samp">"^ ?IDL&gt;
+"</span></samp>&rsquo;.  Normally, you can just replace the &lsquo;<samp><span class="samp">IDL</span></samp>&rsquo; in this expression
+with the prompt you see.  A suitable pattern which matches the prompt
+for both ENVI and IDL simultaneously is &lsquo;<samp><span class="samp">"^ ?\\(ENVI\\|IDL\\)&gt; "</span></samp>&rsquo;.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-explicit-file-name</b> (<samp><span class="file">idl</span></samp>)<var><a name="index-idlwave_002dshell_002dexplicit_002dfile_002dname-249"></a></var><br>
+<blockquote><p>This is the command to run IDL. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-command-line-options</b><var><a name="index-idlwave_002dshell_002dcommand_002dline_002doptions-250"></a></var><br>
+<blockquote><p>A list of command line options for calling the IDL program. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-prompt-pattern</b><var><a name="index-idlwave_002dshell_002dprompt_002dpattern-251"></a></var><br>
+<blockquote><p>Regexp to match IDL prompt at beginning of a line. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-process-name</b><var><a name="index-idlwave_002dshell_002dprocess_002dname-252"></a></var><br>
+<blockquote><p>Name to be associated with the IDL process. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-automatic-start</b> (<code>nil</code>)<var><a name="index-idlwave_002dshell_002dautomatic_002dstart-253"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means attempt to invoke idlwave-shell if not already
+running. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-initial-commands</b><var><a name="index-idlwave_002dshell_002dinitial_002dcommands-254"></a></var><br>
+<blockquote><p>Initial commands, separated by newlines, to send to IDL. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-save-command-history</b> (<code>t</code>)<var><a name="index-idlwave_002dshell_002dsave_002dcommand_002dhistory-255"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means preserve command history between sessions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-command-history-file</b> (<samp><span class="file">~/.idlwave/.idlwhist</span></samp>)<var><a name="index-idlwave_002dshell_002dcommand_002dhistory_002dfile-256"></a></var><br>
+<blockquote><p>The file in which the command history of the idlwave shell is saved. 
+Unless it's an absolute path, it goes in
+<code>idlwave-config-directory</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-use-dedicated-frame</b> (<code>nil</code>)<var><a name="index-idlwave_002dshell_002duse_002ddedicated_002dframe-257"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means IDLWAVE should use a special frame to display the
+shell buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-use-dedicated-window</b> (<code>nil</code>)<var><a name="index-idlwave_002dshell_002duse_002ddedicated_002dwindow-258"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means use a dedicated window for the shell, taking care
+not it replace it with other buffers. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-frame-parameters</b><var><a name="index-idlwave_002dshell_002dframe_002dparameters-259"></a></var><br>
+<blockquote><p>The frame parameters for a dedicated idlwave-shell frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-raise-frame</b> (<code>t</code>)<var><a name="index-idlwave_002dshell_002draise_002dframe-260"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means `idlwave-shell' raises the frame showing the shell
+window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-temp-pro-prefix</b><var><a name="index-idlwave_002dshell_002dtemp_002dpro_002dprefix-261"></a></var><br>
+<blockquote><p>The prefix for temporary IDL files used when compiling regions. 
+</p></blockquote></div>
+
+   <p><a name="index-Hooks-262"></a>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-mode-hook</b><var><a name="index-idlwave_002dshell_002dmode_002dhook-263"></a></var><br>
+<blockquote><p>Hook for customizing <code>idlwave-shell-mode</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

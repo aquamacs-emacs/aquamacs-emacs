@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Caching passphrase - PGG 0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="PGG 0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="How-to-use.html#How-to-use" title="How to use">
+<link rel="prev" href="Selecting-an-implementation.html#Selecting-an-implementation" title="Selecting an implementation">
+<link rel="next" href="Default-user-identity.html#Default-user-identity" title="Default user identity">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes PGG 0.1, an Emacs interface to various
+PGP implementations.
+
+Copyright (C) 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Caching-passphrase"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Default-user-identity.html#Default-user-identity">Default user identity</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selecting-an-implementation.html#Selecting-an-implementation">Selecting an implementation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="How-to-use.html#How-to-use">How to use</a>
+<hr>
+</div>
+
+<h3 class="section">3.3 Caching passphrase</h3>
+
+<p>When using GnuPG (gpg) as the PGP scheme, we recommend using a program
+called <code>gpg-agent</code> for entering and caching
+passphrases<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+<div class="defun">
+&mdash; Variable: <b>pgg-gpg-use-agent</b><var><a name="index-pgg_002dgpg_002duse_002dagent-10"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, attempt to use <code>gpg-agent</code> whenever possible. 
+The default is <code>t</code>.  If <code>gpg-agent</code> is not running, or GnuPG
+is not the current PGP scheme, PGG's own passphrase-caching mechanism
+is used (see below). 
+</p></blockquote></div>
+
+   <p>To use <code>gpg-agent</code> with PGG, you must first ensure that
+<code>gpg-agent</code> is running.  For example, if you are running in the X
+Window System, you can do this by putting the following line in your
+<samp><span class="file">.xsession</span></samp> file:
+
+<pre class="smallexample">     eval "$(gpg-agent --daemon)"
+</pre>
+   <p>For more details on invoking <code>gpg-agent</code>, See <a href="../gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT">Invoking GPG-AGENT</a>.
+
+   <p>Whenever you perform a PGG operation that requires a GnuPG passphrase,
+GnuPG will contact <code>gpg-agent</code>, which prompts you for the
+passphrase.  Furthermore, <code>gpg-agent</code> &ldquo;caches&rdquo; the result, so
+that subsequent uses will not require you to enter the passphrase
+again.  (This cache usually expires after a certain time has passed;
+you can change this using the <code>--default-cache-ttl</code> option when
+invoking <code>gpg-agent</code>.)
+
+   <p>If you are running in a X Window System environment, <code>gpg-agent</code>
+prompts for a passphrase by opening a graphical window.  However, if
+you are running Emacs on a text terminal, <code>gpg-agent</code> has trouble
+receiving input from the terminal, since it is being sent to Emacs. 
+One workaround for this problem is to run <code>gpg-agent</code> on a
+different terminal from Emacs, with the <code>--keep-tty</code> option; this
+tells <code>gpg-agent</code> use its own terminal to prompt for passphrases.
+
+   <p>When <code>gpg-agent</code> is not being used, PGG prompts for a passphrase
+through Emacs.  It also has its own passphrase caching mechanism,
+which is controlled by the variable <code>pgg-cache-passphrase</code> (see
+below).
+
+   <p>There is a security risk in handling passphrases through PGG rather
+than <code>gpg-agent</code>.  When you enter your passphrase into an Emacs
+prompt, it is temporarily stored as a cleartext string in the memory
+of the Emacs executable.  If the executable memory is swapped to disk,
+the root user can, in theory, extract the passphrase from the
+swapfile.  Furthermore, the swapfile containing the cleartext
+passphrase might remain on the disk after the system is discarded or
+stolen.  <code>gpg-agent</code> avoids this problem by using certain tricks,
+such as memory locking, which have not been implemented in Emacs.
+
+<div class="defun">
+&mdash; Variable: <b>pgg-cache-passphrase</b><var><a name="index-pgg_002dcache_002dpassphrase-11"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, store passphrases.  The default value of this
+variable is <code>t</code>.  If you are worried about security issues,
+however, you could stop the caching of passphrases by setting this
+variable to <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>pgg-passphrase-cache-expiry</b><var><a name="index-pgg_002dpassphrase_002dcache_002dexpiry-12"></a></var><br>
+<blockquote><p>Elapsed time for expiration in seconds. 
+</p></blockquote></div>
+
+   <p>If your passphrase contains non-ASCII characters, you might need to
+specify the coding system to be used to encode your passphrases, since
+GnuPG treats them as a byte sequence, not as a character sequence.
+
+<div class="defun">
+&mdash; Variable: <b>pgg-passphrase-coding-system</b><var><a name="index-pgg_002dpassphrase_002dcoding_002dsystem-13"></a></var><br>
+<blockquote><p>Coding system used to encode passphrase. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Actually, <code>gpg-agent</code> does not cache
+passphrases but private keys.  On the other hand, from a user's point
+of view, this technical difference isn't visible.</p>
+
+   <hr></div>
+
+   </body></html>
+

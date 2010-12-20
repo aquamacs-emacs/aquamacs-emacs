@@ -1,0 +1,361 @@
+<html lang="en">
+<head>
+<title>RPN Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Basic-Tutorial.html#Basic-Tutorial" title="Basic Tutorial">
+<link rel="prev" href="Basic-Tutorial.html#Basic-Tutorial" title="Basic Tutorial">
+<link rel="next" href="Algebraic-Tutorial.html#Algebraic-Tutorial" title="Algebraic Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="RPN-Tutorial"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Algebraic-Tutorial.html#Algebraic-Tutorial">Algebraic Tutorial</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Tutorial.html#Basic-Tutorial">Basic Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Tutorial.html#Basic-Tutorial">Basic Tutorial</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.1.1 RPN Calculations and the Stack</h4>
+
+<p><a name="index-RPN-notation-7"></a>Calc normally uses RPN notation.  You may be familiar with the RPN
+system from Hewlett-Packard calculators, FORTH, or PostScript. 
+(Reverse Polish Notation, RPN, is named after the Polish mathematician
+Jan Lukasiewicz.)
+
+   <p>The central component of an RPN calculator is the <dfn>stack</dfn>.  A
+calculator stack is like a stack of dishes.  New dishes (numbers) are
+added at the top of the stack, and numbers are normally only removed
+from the top of the stack.
+
+   <p><a name="index-Operators-8"></a><a name="index-Operands-9"></a>In an operation like &lsquo;<samp><span class="samp">2+3</span></samp>&rsquo;, the 2 and 3 are called the <dfn>operands</dfn>
+and the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; is the <dfn>operator</dfn>.  In an RPN calculator you always
+enter the operands first, then the operator.  Each time you type a
+number, Calc adds or <dfn>pushes</dfn> it onto the top of the Stack. 
+When you press an operator key like <kbd>+</kbd>, Calc <dfn>pops</dfn> the appropriate
+number of operands from the stack and pushes back the result.
+
+   <p>Thus we could add the numbers 2 and 3 in an RPN calculator by typing:
+<kbd>2 &lt;RET&gt; 3 &lt;RET&gt; +</kbd>.  (The &lt;RET&gt; key, Return, corresponds to
+the &lt;ENTER&gt; key on traditional RPN calculators.)  Try this now if
+you wish; type <kbd>C-x * c</kbd> to switch into the Calc window (you can type
+<kbd>C-x * c</kbd> again or <kbd>C-x * o</kbd> to switch back to the Tutorial window). 
+The first four keystrokes &ldquo;push&rdquo; the numbers 2 and 3 onto the stack. 
+The <kbd>+</kbd> key &ldquo;pops&rdquo; the top two numbers from the stack, adds them,
+and pushes the result (5) back onto the stack.  Here's how the stack
+will look at various points throughout the calculation:
+
+<pre class="smallexample">         .          1:  2          2:  2          1:  5              .
+                        .          1:  3              .
+                                       .
+     
+       C-x * c          2 &lt;RET&gt;          3 &lt;RET&gt;            +             &lt;DEL&gt;
+</pre>
+   <p>The &lsquo;<samp><span class="samp">.</span></samp>&rsquo; symbol is a marker that represents the top of the stack. 
+Note that the &ldquo;top&rdquo; of the stack is really shown at the bottom of
+the Stack window.  This may seem backwards, but it turns out to be
+less distracting in regular use.
+
+   <p><a name="index-Stack-levels-10"></a><a name="index-Levels-of-stack-11"></a>The numbers &lsquo;<samp><span class="samp">1:</span></samp>&rsquo; and &lsquo;<samp><span class="samp">2:</span></samp>&rsquo; on the left are <dfn>stack level
+numbers</dfn>.  Old RPN calculators always had four stack levels called
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo;, &lsquo;<samp><span class="samp">y</span></samp>&rsquo;, &lsquo;<samp><span class="samp">z</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">t</span></samp>&rsquo;.  Calc's stack can grow
+as large as you like, so it uses numbers instead of letters.  Some
+stack-manipulation commands accept a numeric argument that says
+which stack level to work on.  Normal commands like <kbd>+</kbd> always
+work on the top few levels of the stack.
+
+<!-- [fix-ref Truncating the Stack] -->
+   <p>The Stack buffer is just an Emacs buffer, and you can move around in
+it using the regular Emacs motion commands.  But no matter where the
+cursor is, even if you have scrolled the &lsquo;<samp><span class="samp">.</span></samp>&rsquo; marker out of
+view, most Calc commands always move the cursor back down to level 1
+before doing anything.  It is possible to move the &lsquo;<samp><span class="samp">.</span></samp>&rsquo; marker
+upwards through the stack, temporarily &ldquo;hiding&rdquo; some numbers from
+commands like <kbd>+</kbd>.  This is called <dfn>stack truncation</dfn> and
+we will not cover it in this tutorial; see <a href="Truncating-the-Stack.html#Truncating-the-Stack">Truncating the Stack</a>,
+if you are interested.
+
+   <p>You don't really need the second &lt;RET&gt; in <kbd>2 &lt;RET&gt; 3
+&lt;RET&gt; +</kbd>.  That's because if you type any operator name or
+other non-numeric key when you are entering a number, the Calculator
+automatically enters that number and then does the requested command. 
+Thus <kbd>2 &lt;RET&gt; 3 +</kbd> will work just as well.
+
+   <p>Examples in this tutorial will often omit &lt;RET&gt; even when the
+stack displays shown would only happen if you did press &lt;RET&gt;:
+
+<pre class="smallexample">     1:  2          2:  2          1:  5
+         .          1:  3              .
+                        .
+     
+       2 &lt;RET&gt;            3              +
+</pre>
+   <p class="noindent">Here, after pressing <kbd>3</kbd> the stack would really show &lsquo;<samp><span class="samp">1:  2</span></samp>&rsquo;
+with &lsquo;<samp><span class="samp">Calc: 3</span></samp>&rsquo; in the minibuffer.  In these situations, you can
+press the optional &lt;RET&gt; to see the stack as the figure shows.
+
+   <p>(&bull;) <strong>Exercise 1.</strong>  (This tutorial will include exercises
+at various points.  Try them if you wish.  Answers to all the exercises
+are located at the end of the Tutorial chapter.  Each exercise will
+include a cross-reference to its particular answer.  If you are
+reading with the Emacs Info system, press <kbd>f</kbd> and the
+exercise number to go to the answer, then the letter <kbd>l</kbd> to
+return to where you were.)
+
+<p class="noindent">Here's the first exercise:  What will the keystrokes <kbd>1 &lt;RET&gt; 2
+&lt;RET&gt; 3 &lt;RET&gt; 4 + * -</kbd> compute?  (&lsquo;<samp><span class="samp">*</span></samp>&rsquo; is the symbol for
+multiplication.)  Figure it out by hand, then try it with Calc to see
+if you're right.  See <a href="RPN-Answer-1.html#RPN-Answer-1">1</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 2.</strong>  Compute
+<!-- @math{(2\times4) + (7\times9.4) + {5\over4}} -->
+&lsquo;<samp><span class="samp">2*4 + 7*9.5 + 5/4</span></samp>&rsquo;
+using the stack.  See <a href="RPN-Answer-2.html#RPN-Answer-2">2</a>. (&bull;)
+
+   <p>The &lt;DEL&gt; key is called Backspace on some keyboards.  It is
+whatever key you would use to correct a simple typing error when
+regularly using Emacs.  The &lt;DEL&gt; key pops and throws away the
+top value on the stack.  (You can still get that value back from
+the Trail if you should need it later on.)  There are many places
+in this tutorial where we assume you have used &lt;DEL&gt; to erase the
+results of the previous example at the beginning of a new example. 
+In the few places where it is really important to use &lt;DEL&gt; to
+clear away old results, the text will remind you to do so.
+
+   <p>(It won't hurt to let things accumulate on the stack, except that
+whenever you give a display-mode-changing command Calc will have to
+spend a long time reformatting such a large stack.)
+
+   <p>Since the <kbd>-</kbd> key is also an operator (it subtracts the top two
+stack elements), how does one enter a negative number?  Calc uses
+the <kbd>_</kbd> (underscore) key to act like the minus sign in a number. 
+So, typing <kbd>-5 &lt;RET&gt;</kbd> won't work because the <kbd>-</kbd> key
+will try to do a subtraction, but <kbd>_5 &lt;RET&gt;</kbd> works just fine.
+
+   <p>You can also press <kbd>n</kbd>, which means &ldquo;change sign.&rdquo;  It changes
+the number at the top of the stack (or the number being entered)
+from positive to negative or vice-versa:  <kbd>5 n &lt;RET&gt;</kbd>.
+
+   <p><a name="index-Duplicating-a-stack-entry-12"></a>If you press &lt;RET&gt; when you're not entering a number, the effect
+is to duplicate the top number on the stack.  Consider this calculation:
+
+<pre class="smallexample">     1:  3          2:  3          1:  9          2:  9          1:  81
+         .          1:  3              .          1:  9              .
+                        .                             .
+     
+       3 &lt;RET&gt;           &lt;RET&gt;             *             &lt;RET&gt;             *
+</pre>
+   <p class="noindent">(Of course, an easier way to do this would be <kbd>3 &lt;RET&gt; 4 ^</kbd>,
+to raise 3 to the fourth power.)
+
+   <p>The space-bar key (denoted &lt;SPC&gt; here) performs the same function
+as &lt;RET&gt;; you could replace all three occurrences of &lt;RET&gt; in
+the above example with &lt;SPC&gt; and the effect would be the same.
+
+   <p><a name="index-Exchanging-stack-entries-13"></a>Another stack manipulation key is &lt;TAB&gt;.  This exchanges the top
+two stack entries.  Suppose you have computed <kbd>2 &lt;RET&gt; 3 +</kbd>
+to get 5, and then you realize what you really wanted to compute
+was &lsquo;<samp><span class="samp">20 / (2+3)</span></samp>&rsquo;.
+
+<pre class="smallexample">     1:  5          2:  5          2:  20         1:  4
+         .          1:  20         1:  5              .
+                        .              .
+     
+      2 &lt;RET&gt; 3 +         20            &lt;TAB&gt;             /
+</pre>
+   <p class="noindent">Planning ahead, the calculation would have gone like this:
+
+<pre class="smallexample">     1:  20         2:  20         3:  20         2:  20         1:  4
+         .          1:  2          2:  2          1:  5              .
+                        .          1:  3              .
+                                       .
+     
+       20 &lt;RET&gt;         2 &lt;RET&gt;            3              +              /
+</pre>
+   <p>A related stack command is <kbd>M-&lt;TAB&gt;</kbd> (hold &lt;META&gt; and type
+&lt;TAB&gt;).  It rotates the top three elements of the stack upward,
+bringing the object in level 3 to the top.
+
+<pre class="smallexample">     1:  10         2:  10         3:  10         3:  20         3:  30
+         .          1:  20         2:  20         2:  30         2:  10
+                        .          1:  30         1:  10         1:  20
+                                       .              .              .
+     
+       10 &lt;RET&gt;         20 &lt;RET&gt;         30 &lt;RET&gt;         M-&lt;TAB&gt;          M-&lt;TAB&gt;
+</pre>
+   <p>(&bull;) <strong>Exercise 3.</strong> Suppose the numbers 10, 20, and 30 are
+on the stack.  Figure out how to add one to the number in level 2
+without affecting the rest of the stack.  Also figure out how to add
+one to the number in level 3.  See <a href="RPN-Answer-3.html#RPN-Answer-3">3</a>. (&bull;)
+
+   <p>Operations like <kbd>+</kbd>, <kbd>-</kbd>, <kbd>*</kbd>, <kbd>/</kbd>, and <kbd>^</kbd> pop two
+arguments from the stack and push a result.  Operations like <kbd>n</kbd> and
+<kbd>Q</kbd> (square root) pop a single number and push the result.  You can
+think of them as simply operating on the top element of the stack.
+
+<pre class="smallexample">     1:  3          1:  9          2:  9          1:  25         1:  5
+         .              .          1:  16             .              .
+                                       .
+     
+       3 &lt;RET&gt;          &lt;RET&gt; *        4 &lt;RET&gt; &lt;RET&gt; *        +              Q
+</pre>
+   <p class="noindent">(Note that capital <kbd>Q</kbd> means to hold down the Shift key while
+typing <kbd>q</kbd>.  Remember, plain unshifted <kbd>q</kbd> is the Quit command.)
+
+   <p><a name="index-Pythagorean-Theorem-14"></a>Here we've used the Pythagorean Theorem to determine the hypotenuse of a
+right triangle.  Calc actually has a built-in command for that called
+<kbd>f h</kbd>, but let's suppose we can't remember the necessary keystrokes. 
+We can still enter it by its full name using <kbd>M-x</kbd> notation:
+
+<pre class="smallexample">     1:  3          2:  3          1:  5
+         .          1:  4              .
+                        .
+     
+       3 &lt;RET&gt;          4 &lt;RET&gt;      M-x calc-hypot
+</pre>
+   <p>All Calculator commands begin with the word &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo;.  Since it
+gets tiring to type this, Calc provides an <kbd>x</kbd> key which is just
+like the regular Emacs <kbd>M-x</kbd> key except that it types the &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo;
+prefix for you:
+
+<pre class="smallexample">     1:  3          2:  3          1:  5
+         .          1:  4              .
+                        .
+     
+       3 &lt;RET&gt;          4 &lt;RET&gt;         x hypot
+</pre>
+   <p>What happens if you take the square root of a negative number?
+
+<pre class="smallexample">     1:  4          1:  -4         1:  (0, 2)
+         .              .              .
+     
+       4 &lt;RET&gt;            n              Q
+</pre>
+   <p class="noindent">The notation &lsquo;<samp><span class="samp">(a, b)</span></samp>&rsquo; represents a complex number. 
+Complex numbers are more traditionally written &lsquo;<samp><span class="samp">a + b i</span></samp>&rsquo;;
+Calc can display in this format, too, but for now we'll stick to the
+&lsquo;<samp><span class="samp">(a, b)</span></samp>&rsquo; notation.
+
+   <p>If you don't know how complex numbers work, you can safely ignore this
+feature.  Complex numbers only arise from operations that would be
+errors in a calculator that didn't have complex numbers.  (For example,
+taking the square root or logarithm of a negative number produces a
+complex result.)
+
+   <p>Complex numbers are entered in the notation shown.  The <kbd>(</kbd> and
+<kbd>,</kbd> and <kbd>)</kbd> keys manipulate &ldquo;incomplete complex numbers.&rdquo;
+
+<pre class="smallexample">     1:  ( ...      2:  ( ...      1:  (2, ...    1:  (2, ...    1:  (2, 3)
+         .          1:  2              .              3              .
+                        .                             .
+     
+         (              2              ,              3              )
+</pre>
+   <p>You can perform calculations while entering parts of incomplete objects. 
+However, an incomplete object cannot actually participate in a calculation:
+
+<pre class="smallexample">     1:  ( ...      2:  ( ...      3:  ( ...      1:  ( ...      1:  ( ...
+         .          1:  2          2:  2              5              5
+                        .          1:  3              .              .
+                                       .
+                                                                  (error)
+         (             2 &lt;RET&gt;           3              +              +
+</pre>
+   <p class="noindent">Adding 5 to an incomplete object makes no sense, so the last command
+produces an error message and leaves the stack the same.
+
+   <p>Incomplete objects can't participate in arithmetic, but they can be
+moved around by the regular stack commands.
+
+<pre class="smallexample">     2:  2          3:  2          3:  3          1:  ( ...      1:  (2, 3)
+     1:  3          2:  3          2:  ( ...          2              .
+         .          1:  ( ...      1:  2              3
+                        .              .              .
+     
+     2 &lt;RET&gt; 3 &lt;RET&gt;        (            M-&lt;TAB&gt;          M-&lt;TAB&gt;            )
+</pre>
+   <p class="noindent">Note that the <kbd>,</kbd> (comma) key did not have to be used here. 
+When you press <kbd>)</kbd> all the stack entries between the incomplete
+entry and the top are collected, so there's never really a reason
+to use the comma.  It's up to you.
+
+   <p>(&bull;) <strong>Exercise 4.</strong>  To enter the complex number &lsquo;<samp><span class="samp">(2, 3)</span></samp>&rsquo;,
+your friend Joe typed <kbd>( 2 , &lt;SPC&gt; 3 )</kbd>.  What happened? 
+(Joe thought of a clever way to correct his mistake in only two
+keystrokes, but it didn't quite work.  Try it to find out why.) 
+See <a href="RPN-Answer-4.html#RPN-Answer-4">4</a>. (&bull;)
+
+   <p>Vectors are entered the same way as complex numbers, but with square
+brackets in place of parentheses.  We'll meet vectors again later in
+the tutorial.
+
+   <p>Any Emacs command can be given a <dfn>numeric prefix argument</dfn> by
+typing a series of &lt;META&gt;-digits beforehand.  If &lt;META&gt; is
+awkward for you, you can instead type <kbd>C-u</kbd> followed by the
+necessary digits.  Numeric prefix arguments can be negative, as in
+<kbd>M-- M-3 M-5</kbd> or <kbd>C-u&nbsp;-&nbsp;3&nbsp;5</kbd><!-- /@w -->.  Calc commands use numeric
+prefix arguments in a variety of ways.  For example, a numeric prefix
+on the <kbd>+</kbd> operator adds any number of stack entries at once:
+
+<pre class="smallexample">     1:  10         2:  10         3:  10         3:  10         1:  60
+         .          1:  20         2:  20         2:  20             .
+                        .          1:  30         1:  30
+                                       .              .
+     
+       10 &lt;RET&gt;         20 &lt;RET&gt;         30 &lt;RET&gt;         C-u 3            +
+</pre>
+   <p>For stack manipulation commands like &lt;RET&gt;, a positive numeric
+prefix argument operates on the top <var>n</var> stack entries at once.  A
+negative argument operates on the entry in level <var>n</var> only.  An
+argument of zero operates on the entire stack.  In this example, we copy
+the second-to-top element of the stack:
+
+<pre class="smallexample">     1:  10         2:  10         3:  10         3:  10         4:  10
+         .          1:  20         2:  20         2:  20         3:  20
+                        .          1:  30         1:  30         2:  30
+                                       .              .          1:  20
+                                                                     .
+     
+       10 &lt;RET&gt;         20 &lt;RET&gt;         30 &lt;RET&gt;         C-u -2          &lt;RET&gt;
+</pre>
+   <p><a name="index-Clearing-the-stack-15"></a><a name="index-Emptying-the-stack-16"></a>Another common idiom is <kbd>M-0 &lt;DEL&gt;</kbd>, which clears the stack. 
+(The <kbd>M-0</kbd> numeric prefix tells &lt;DEL&gt; to operate on the
+entire stack.)
+
+   </body></html>
+

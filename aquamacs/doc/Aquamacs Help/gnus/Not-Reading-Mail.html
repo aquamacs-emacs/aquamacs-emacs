@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>Not Reading Mail - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Mail.html#Getting-Mail" title="Getting Mail">
+<link rel="prev" href="Duplicates.html#Duplicates" title="Duplicates">
+<link rel="next" href="Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End" title="Choosing a Mail Back End">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Not-Reading-Mail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End">Choosing a Mail Back End</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Duplicates.html#Duplicates">Duplicates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Mail.html#Getting-Mail">Getting Mail</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.3.12 Not Reading Mail</h4>
+
+<p>If you start using any of the mail back ends, they have the annoying
+habit of assuming that you want to read mail with them.  This might not
+be unreasonable, but it might not be what you want.
+
+   <p>If you set <code>mail-sources</code> and <code>nnmail-spool-file</code> to
+<code>nil</code>, none of the back ends will ever attempt to read incoming
+mail, which should help.
+
+   <p><a name="index-nnbabyl_002dget_002dnew_002dmail-2218"></a><a name="index-nnmbox_002dget_002dnew_002dmail-2219"></a><a name="index-nnml_002dget_002dnew_002dmail-2220"></a><a name="index-nnmh_002dget_002dnew_002dmail-2221"></a><a name="index-nnfolder_002dget_002dnew_002dmail-2222"></a>This might be too much, if, for instance, you are reading mail quite
+happily with <code>nnml</code> and just want to peek at some old (pre-Emacs
+23) Rmail file you have stashed away with <code>nnbabyl</code>.  All back ends have
+variables called back-end-<code>get-new-mail</code>.  If you want to disable
+the <code>nnbabyl</code> mail reading, you edit the virtual server for the
+group to have a setting where <code>nnbabyl-get-new-mail</code> to <code>nil</code>.
+
+   <p>All the mail back ends will call <code>nn</code>*<code>-prepare-save-mail-hook</code>
+narrowed to the article to be saved before saving it when reading
+incoming mail.
+
+   </body></html>
+

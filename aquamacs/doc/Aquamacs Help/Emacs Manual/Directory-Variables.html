@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Directory Variables - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="File-Variables.html#File-Variables" title="File Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Directory-Variables"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Variables.html#File-Variables">File Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.3.5 Per-Directory Local Variables</h4>
+
+<p><a name="index-local-variables_002c-for-all-files-in-a-directory-4009"></a><a name="index-directory-local-variables-4010"></a><a name="index-per_002ddirectory-local-variables-4011"></a>
+  A <dfn>project</dfn> is a collection of files on which you work together. 
+Usually, the project's files are kept in one or more directories. 
+Occasionally, you may wish to define Emacs settings that are common to
+all the files that belong to the project.
+
+   <p>Emacs provides two ways to specify settings that are applicable to
+files in a specific directory: you can put a special file in that
+directory, or you can define a <dfn>project class</dfn> for that directory.
+
+   <p><a name="index-g_t_0040file_007b_002edir_002dlocals_002eel_007d-file-4012"></a>  If you put a file with a special name <samp><span class="file">.dir-locals.el</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> in a directory, Emacs will read it when it visits any file in that
+directory or any of its subdirectories, and apply the settings it
+specifies to the file's buffer.  Emacs searches for
+<samp><span class="file">.dir-locals.el</span></samp> starting in the directory of the visited file,
+and moving up the directory tree.  (To avoid slowdown, this search is
+skipped for remote files.)
+
+   <p>The <samp><span class="file">.dir-locals.el</span></samp> file should hold a specially-constructed
+list.  This list maps Emacs mode names (symbols) to alists; each alist
+specifies values for variables to use when the respective mode is
+turned on.  The special mode name &lsquo;<samp><span class="samp">nil</span></samp>&rsquo; means that its alist
+applies to any mode.  Instead of a mode name, you can specify a string
+that is a name of a subdirectory of the project's directory; then the
+corresponding alist applies to all the files in that subdirectory.
+
+   <p>Here's an example of a <samp><span class="file">.dir-locals.el</span></samp> file:
+
+<pre class="example">     ((nil . ((indent-tabs-mode . t)
+              (tab-width . 4)
+              (fill-column . 80)))
+      (c-mode . ((c-file-style . "BSD")))
+      (java-mode . ((c-file-style . "BSD")))
+      ("src/imported"
+       . ((nil . ((change-log-default-name . "ChangeLog.local"))))))
+</pre>
+   <p class="noindent">This example shows some settings for a hypothetical project.  It sets
+&lsquo;<samp><span class="samp">indent-tabs-mode</span></samp>&rsquo;, <code>tab-width</code>, and <code>fill-column</code> for
+any file in the project's directory tree, and it sets the indentation
+style for any C or Java source file.  Finally, it specifies a different
+<samp><span class="file">ChangeLog</span></samp> file name for any file in the <samp><span class="file">src/imported</span></samp>
+subdirectory of the directory where you put the <samp><span class="file">.dir-locals.el</span></samp>
+file.
+
+   <p><a name="index-add_002ddir_002dlocal_002dvariable-4013"></a><a name="index-delete_002ddir_002dlocal_002dvariable-4014"></a><a name="index-copy_002dfile_002dlocals_002dto_002ddir_002dlocals-4015"></a>  You can edit the <samp><span class="file">.dir-locals.el</span></samp> file by hand, or use the
+command <code>add-dir-local-variable</code>.  This prompts for a mode (or
+subdirectory), variable and value, and adds an entry to the file. 
+The command <code>delete-dir-local-variable</code> deletes an entry.  The
+command <code>copy-file-locals-to-dir-locals</code> copies file local
+variables (see <a href="File-Variables.html#File-Variables">File Variables</a>) to the <samp><span class="file">.dir-locals.el</span></samp> file.
+
+   <p><a name="index-dir_002dlocals_002dset_002dclass_002dvariables-4016"></a><a name="index-dir_002dlocals_002dset_002ddirectory_002dclass-4017"></a>  Another method of specifying directory-local variables is to explicitly
+define a project class using <code>dir-locals-set-class-variables</code>, and
+then tell Emacs which directories correspond to that class, using
+<code>dir-locals-set-directory-class</code>.  You can put calls to these functions
+in your <samp><span class="file">~/.emacs</span></samp> init file; this can be useful when you can't put
+<samp><span class="file">.dir-locals.el</span></samp> in the directory for some reason, or if you want
+to keep in a single place settings for several directories that don't
+have a common parent.  For example, you could apply settings to an
+unwritable directory this way:
+
+<pre class="example">     (dir-locals-set-class-variables 'unwritable-directory
+        '((nil . ((some-useful-setting . value)))))
+     
+     (dir-locals-set-directory-class
+        "/usr/include/" 'unwritable-directory)
+</pre>
+   <p>Unsafe directory-local variables are handled in the same way as
+unsafe file-local variables (see <a href="Safe-File-Variables.html#Safe-File-Variables">Safe File Variables</a>).
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+On MS-DOS, the name of this file should be <samp><span class="file">_dir-locals.el</span></samp>, due
+to limitations of the DOS filesystems.  If the filesystem is limited
+to 8+3 file names, the name of the file will be truncated by the OS to
+<samp><span class="file">_dir-loc.el</span></samp>. 
+</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Line-Up Functions - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customizing-Indentation.html#Customizing-Indentation" title="Customizing Indentation">
+<link rel="prev" href="Interactive-Customization.html#Interactive-Customization" title="Interactive Customization">
+<link rel="next" href="Custom-Line_002dUp.html#Custom-Line_002dUp" title="Custom Line-Up">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Line-Up-Functions"></a>
+<a name="Line_002dUp-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interactive-Customization.html#Interactive-Customization">Interactive Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">11.3 Line-Up Functions</h3>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p><a name="index-line_002dup-function-495"></a><a name="index-indentation-function-496"></a>Often there are cases when a simple offset setting on a syntactic
+symbol isn't enough to get the desired indentation&mdash;for example, you
+might want to line up a closing parenthesis with the matching opening
+one rather than indenting relative to its &ldquo;anchor point&rdquo;.  CC Mode
+provides this flexibility with <dfn>line-up functions</dfn>.
+
+   <p>The way you associate a line-up function with a syntactic symbol is
+described in <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.  CC Mode comes with many
+predefined line-up functions for common situations.  If none of these
+does what you want, you can write your own.  See <a href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>. 
+Sometimes, it is easier to tweak the standard indentation by adding a
+function to <code>c-special-indent-hook</code> (see <a href="Other-Indentation.html#Other-Indentation">Other Indentation</a>).
+
+   <p>The line-up functions haven't been adapted for AWK buffers or tested
+with them.  Some of them might work serendipitously.  There shouldn't be
+any problems writing custom line-up functions for AWK mode.
+
+   <p>The calling convention for line-up functions is described fully in
+<a href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>.  Roughly speaking, the return value is either an
+offset itself (such as <code>+</code> or <code>[0]</code>) or it's <code>nil</code>,
+meaning &ldquo;this function is inappropriate in this case - try a
+different one&rdquo;.  See <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.
+
+   <p>The subsections below describe all the standard line-up functions,
+categorized by the sort of token the lining-up centers around.  For
+each of these functions there is a &ldquo;works with&rdquo; list that indicates
+which syntactic symbols the function is intended to be used with.
+
+<!-- The TeX backend seems to insert extra spaces around the argument. :P -->
+<ul class="menu">
+<li><a accesskey="1" href="Brace_002fParen-Line_002dUp.html#Brace_002fParen-Line_002dUp">Brace/Paren Line-Up</a>
+<li><a accesskey="2" href="List-Line_002dUp.html#List-Line_002dUp">List Line-Up</a>
+<li><a accesskey="3" href="Operator-Line_002dUp.html#Operator-Line_002dUp">Operator Line-Up</a>
+<li><a accesskey="4" href="Comment-Line_002dUp.html#Comment-Line_002dUp">Comment Line-Up</a>
+<li><a accesskey="5" href="Misc-Line_002dUp.html#Misc-Line_002dUp">Misc Line-Up</a>
+</ul>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

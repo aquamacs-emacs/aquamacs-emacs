@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Association Lists - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Lists-as-Sets.html#Lists-as-Sets" title="Lists as Sets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Association-Lists"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lists-as-Sets.html#Lists-as-Sets">Lists as Sets</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">11.4 Association Lists</h3>
+
+<p class="noindent">An <dfn>association list</dfn> is a list representing a mapping from
+one set of values to another; any list whose elements are cons
+cells is an association list.
+
+<div class="defun">
+&mdash; Function: <b>assoc*</b><var> item a-list </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-assoc_002a-173"></a></var><br>
+<blockquote><p>This function searches the association list <var>a-list</var> for an
+element whose <code>car</code> matches (in the sense of <code>:test</code>,
+<code>:test-not</code>, and <code>:key</code>, or by comparison with <code>eql</code>)
+a given <var>item</var>.  It returns the matching element, if any,
+otherwise <code>nil</code>.  It ignores elements of <var>a-list</var> which
+are not cons cells.  (This corresponds to the behavior of
+<code>assq</code> and <code>assoc</code> in Emacs Lisp; Common Lisp's
+<code>assoc</code> ignores <code>nil</code>s but considers any other non-cons
+elements of <var>a-list</var> to be an error.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>rassoc*</b><var> item a-list </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-rassoc_002a-174"></a></var><br>
+<blockquote><p>This function searches for an element whose <code>cdr</code> matches
+<var>item</var>.  If <var>a-list</var> represents a mapping, this applies
+the inverse of the mapping to <var>item</var>. 
+</p></blockquote></div>
+
+   <p><a name="index-assoc_002dif-175"></a><a name="index-assoc_002dif_002dnot-176"></a><a name="index-rassoc_002dif-177"></a><a name="index-rassoc_002dif_002dnot-178"></a>The <code>assoc-if</code>, <code>assoc-if-not</code>, <code>rassoc-if</code>,
+and <code>rassoc-if-not</code> functions are defined similarly.
+
+   <p>Two simple functions for constructing association lists are:
+
+<div class="defun">
+&mdash; Function: <b>acons</b><var> key value alist<a name="index-acons-179"></a></var><br>
+<blockquote><p>This is equivalent to <code>(cons (cons </code><var>key</var> <var>value</var><code>) </code><var>alist</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>pairlis</b><var> keys values &amp;optional alist<a name="index-pairlis-180"></a></var><br>
+<blockquote><p>This is equivalent to <code>(nconc (mapcar* 'cons </code><var>keys</var> <var>values</var><code>)
+</code><var>alist</var><code>)</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

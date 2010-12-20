@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Advanced Math Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scientific-Functions.html#Scientific-Functions" title="Scientific Functions">
+<link rel="prev" href="Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions" title="Trigonometric and Hyperbolic Functions">
+<link rel="next" href="Branch-Cuts.html#Branch-Cuts" title="Branch Cuts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Advanced-Math-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Branch-Cuts.html#Branch-Cuts">Branch Cuts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions">Trigonometric and Hyperbolic Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scientific-Functions.html#Scientific-Functions">Scientific Functions</a>
+<hr>
+</div>
+
+<h3 class="section">9.3 Advanced Mathematical Functions</h3>
+
+<p class="noindent">Calc can compute a variety of less common functions that arise in
+various branches of mathematics.  All of the functions described in
+this section allow arbitrary complex arguments and, except as noted,
+will work to arbitrarily large precisions.  They can not at present
+handle error forms or intervals as arguments.
+
+   <p>NOTE:  These functions are still experimental.  In particular, their
+accuracy is not guaranteed in all domains.  It is advisable to set the
+current precision comfortably higher than you actually need when
+using these functions.  Also, these functions may be impractically
+slow for some values of the arguments.
+
+   <p><a name="index-f-g-1065"></a><a name="index-calc_002dgamma-1066"></a><a name="index-gamma-1067"></a>The <kbd>f g</kbd> (<code>calc-gamma</code>) [<code>gamma</code>] command computes the Euler
+gamma function.  For positive integer arguments, this is related to the
+factorial function:  &lsquo;<samp><span class="samp">gamma(n+1) = fact(n)</span></samp>&rsquo;.  For general complex
+arguments the gamma function can be defined by the following definite
+integral:
+<!-- @math{\Gamma(a) = \int_0^\infty t^{a-1} e^t dt}. -->
+&lsquo;<samp><span class="samp">gamma(a) = integ(t^(a-1) exp(t), t, 0, inf)</span></samp>&rsquo;. 
+(The actual implementation uses far more efficient computational methods.)
+
+   <p><a name="index-f-G-1068"></a><a name="index-gammaP-1069"></a><a name="index-I-f-G-1070"></a><a name="index-H-f-G-1071"></a><a name="index-H-I-f-G-1072"></a><a name="index-calc_002dinc_002dgamma-1073"></a><a name="index-gammaQ-1074"></a><a name="index-gammag-1075"></a><a name="index-gammaG-1076"></a>The <kbd>f G</kbd> (<code>calc-inc-gamma</code>) [<code>gammaP</code>] command computes
+the incomplete gamma function, denoted &lsquo;<samp><span class="samp">P(a,x)</span></samp>&rsquo;.  This is defined by
+the integral,
+<!-- @math{P(a,x) = \left( \int_0^x t^{a-1} e^t dt \right) / \Gamma(a)}. -->
+&lsquo;<samp><span class="samp">gammaP(a,x) = integ(t^(a-1) exp(t), t, 0, x) / gamma(a)</span></samp>&rsquo;. 
+This implies that &lsquo;<samp><span class="samp">gammaP(a,inf) = 1</span></samp>&rsquo; for any &lsquo;<samp><span class="samp">a</span></samp>&rsquo; (see the
+definition of the normal gamma function).
+
+   <p>Several other varieties of incomplete gamma function are defined. 
+The complement of &lsquo;<samp><span class="samp">P(a,x)</span></samp>&rsquo;, called &lsquo;<samp><span class="samp">Q(a,x) = 1-P(a,x)</span></samp>&rsquo; by
+some authors, is computed by the <kbd>I f G</kbd> [<code>gammaQ</code>] command. 
+You can think of this as taking the other half of the integral, from
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo; to infinity.
+
+   <p>The functions corresponding to the integrals that define &lsquo;<samp><span class="samp">P(a,x)</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">Q(a,x)</span></samp>&rsquo; but without the normalizing &lsquo;<samp><span class="samp">1/gamma(a)</span></samp>&rsquo;
+factor are called &lsquo;<samp><span class="samp">g(a,x)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">G(a,x)</span></samp>&rsquo;, respectively
+(where &lsquo;<samp><span class="samp">g</span></samp>&rsquo; and &lsquo;<samp><span class="samp">G</span></samp>&rsquo; represent the lower- and upper-case Greek
+letter gamma).  You can obtain these using the <kbd>H f G</kbd> [<code>gammag</code>]
+and <kbd>H I f G</kbd> [<code>gammaG</code>] commands.
+
+   <p><a name="index-f-b-1077"></a><a name="index-calc_002dbeta-1078"></a><a name="index-beta-1079"></a>The <kbd>f b</kbd> (<code>calc-beta</code>) [<code>beta</code>] command computes the
+Euler beta function, which is defined in terms of the gamma function as
+<!-- @math{B(a,b) = \Gamma(a) \Gamma(b) / \Gamma(a+b)}, -->
+&lsquo;<samp><span class="samp">beta(a,b) = gamma(a) gamma(b) / gamma(a+b)</span></samp>&rsquo;,
+or by
+<!-- @math{B(a,b) = \int_0^1 t^{a-1} (1-t)^{b-1} dt}. -->
+&lsquo;<samp><span class="samp">beta(a,b) = integ(t^(a-1) (1-t)^(b-1), t, 0, 1)</span></samp>&rsquo;.
+
+   <p><a name="index-f-B-1080"></a><a name="index-H-f-B-1081"></a><a name="index-calc_002dinc_002dbeta-1082"></a><a name="index-betaI-1083"></a><a name="index-betaB-1084"></a>The <kbd>f B</kbd> (<code>calc-inc-beta</code>) [<code>betaI</code>] command computes
+the incomplete beta function &lsquo;<samp><span class="samp">I(x,a,b)</span></samp>&rsquo;.  It is defined by
+<!-- @math{I(x,a,b) = \left( \int_0^x t^{a-1} (1-t)^{b-1} dt \right) / B(a,b)}. -->
+&lsquo;<samp><span class="samp">betaI(x,a,b) = integ(t^(a-1) (1-t)^(b-1), t, 0, x) / beta(a,b)</span></samp>&rsquo;. 
+Once again, the <kbd>H</kbd> (hyperbolic) prefix gives the corresponding
+un-normalized version [<code>betaB</code>].
+
+   <p><a name="index-f-e-1085"></a><a name="index-I-f-e-1086"></a><a name="index-calc_002derf-1087"></a><a name="index-erf-1088"></a><a name="index-erfc-1089"></a>The <kbd>f e</kbd> (<code>calc-erf</code>) [<code>erf</code>] command computes the
+error function
+<!-- @math{\hbox{erf}(x) = {2 \over \sqrt{\pi}} \int_0^x e^{-t^2} dt}. -->
+&lsquo;<samp><span class="samp">erf(x) = 2 integ(exp(-(t^2)), t, 0, x) / sqrt(pi)</span></samp>&rsquo;. 
+The complementary error function <kbd>I f e</kbd> (<code>calc-erfc</code>) [<code>erfc</code>]
+is the corresponding integral from &lsquo;<samp><span class="samp">x</span></samp>&rsquo; to infinity; the sum
+<!-- @math{\hbox{erf}(x) + \hbox{erfc}(x) = 1}. -->
+&lsquo;<samp><span class="samp">erf(x) + erfc(x) = 1</span></samp>&rsquo;.
+
+   <p><a name="index-f-j-1090"></a><a name="index-f-y-1091"></a><a name="index-calc_002dbessel_002dJ-1092"></a><a name="index-calc_002dbessel_002dY-1093"></a><a name="index-besJ-1094"></a><a name="index-besY-1095"></a>The <kbd>f j</kbd> (<code>calc-bessel-J</code>) [<code>besJ</code>] and <kbd>f y</kbd>
+(<code>calc-bessel-Y</code>) [<code>besY</code>] commands compute the Bessel
+functions of the first and second kinds, respectively. 
+In &lsquo;<samp><span class="samp">besJ(n,x)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">besY(n,x)</span></samp>&rsquo; the &ldquo;order&rdquo; parameter
+&lsquo;<samp><span class="samp">n</span></samp>&rsquo; is often an integer, but is not required to be one. 
+Calc's implementation of the Bessel functions currently limits the
+precision to 8 digits, and may not be exact even to that precision. 
+Use with care!
+
+   </body></html>
+

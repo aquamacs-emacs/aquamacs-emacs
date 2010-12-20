@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+<title>Algebraic Definitions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming.html#Programming" title="Programming">
+<link rel="prev" href="Invocation-Macros.html#Invocation-Macros" title="Invocation Macros">
+<link rel="next" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Algebraic-Definitions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Invocation-Macros.html#Invocation-Macros">Invocation Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
+<hr>
+</div>
+
+<h3 class="section">18.4 Programming with Formulas</h3>
+
+<p class="noindent"><a name="index-Z-F-2312"></a><a name="index-calc_002duser_002ddefine_002dformula-2313"></a><a name="index-Programming-with-algebraic-formulas-2314"></a>Another way to create a new Calculator command uses algebraic formulas. 
+The <kbd>Z F</kbd> (<code>calc-user-define-formula</code>) command stores the
+formula at the top of the stack as the definition for a key.  This
+command prompts for five things: The key, the command name, the function
+name, the argument list, and the behavior of the command when given
+non-numeric arguments.
+
+   <p>For example, suppose we type <kbd>' a+2b &lt;RET&gt;</kbd> to push the formula
+&lsquo;<samp><span class="samp">a + 2*b</span></samp>&rsquo; onto the stack.  We now type <kbd>Z F m</kbd> to define this
+formula on the <kbd>z m</kbd> key sequence.  The next prompt is for a command
+name, beginning with &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo;, which should be the long (<kbd>M-x</kbd>) form
+for the new command.  If you simply press &lt;RET&gt;, a default name like
+<code>calc-User-m</code> will be constructed.  In our example, suppose we enter
+<kbd>spam &lt;RET&gt;</kbd> to define the new command as <code>calc-spam</code>.
+
+   <p>If you want to give the formula a long-style name only, you can press
+&lt;SPC&gt; or &lt;RET&gt; when asked which single key to use.  For example
+<kbd>Z F &lt;RET&gt; spam &lt;RET&gt;</kbd> defines the new command as
+<kbd>M-x calc-spam</kbd>, with no keyboard equivalent.
+
+   <p>The third prompt is for an algebraic function name.  The default is to
+use the same name as the command name but without the &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo;
+prefix.  (If this is of the form &lsquo;<samp><span class="samp">User-m</span></samp>&rsquo;, the hyphen is removed so
+it won't be taken for a minus sign in algebraic formulas.) 
+This is the name you will use if you want to enter your
+new function in an algebraic formula.  Suppose we enter <kbd>yow &lt;RET&gt;</kbd>. 
+Then the new function can be invoked by pushing two numbers on the
+stack and typing <kbd>z m</kbd> or <kbd>x spam</kbd>, or by entering the algebraic
+formula &lsquo;<samp><span class="samp">yow(x,y)</span></samp>&rsquo;.
+
+   <p>The fourth prompt is for the function's argument list.  This is used to
+associate values on the stack with the variables that appear in the formula. 
+The default is a list of all variables which appear in the formula, sorted
+into alphabetical order.  In our case, the default would be &lsquo;<samp><span class="samp">(a b)</span></samp>&rsquo;. 
+This means that, when the user types <kbd>z m</kbd>, the Calculator will remove
+two numbers from the stack, substitute these numbers for &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo; (respectively) in the formula, then simplify the formula and
+push the result on the stack.  In other words, <kbd>10 &lt;RET&gt; 100 z m</kbd>
+would replace the 10 and 100 on the stack with the number 210, which is
+&lsquo;<samp><span class="samp">a + 2 b</span></samp>&rsquo; with &lsquo;<samp><span class="samp">a=10</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b=100</span></samp>&rsquo;.  Likewise, the formula
+&lsquo;<samp><span class="samp">yow(10, 100)</span></samp>&rsquo; will be evaluated by substituting &lsquo;<samp><span class="samp">a=10</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">b=100</span></samp>&rsquo; in the definition.
+
+   <p>You can rearrange the order of the names before pressing &lt;RET&gt; to
+control which stack positions go to which variables in the formula.  If
+you remove a variable from the argument list, that variable will be left
+in symbolic form by the command.  Thus using an argument list of &lsquo;<samp><span class="samp">(b)</span></samp>&rsquo;
+for our function would cause <kbd>10 z m</kbd> to replace the 10 on the stack
+with the formula &lsquo;<samp><span class="samp">a + 20</span></samp>&rsquo;.  If we had used an argument list of
+&lsquo;<samp><span class="samp">(b a)</span></samp>&rsquo;, the result with inputs 10 and 100 would have been 120.
+
+   <p>You can also put a nameless function on the stack instead of just a
+formula, as in &lsquo;<samp><span class="samp">&lt;a, b : a + 2 b&gt;</span></samp>&rsquo;.  See <a href="Specifying-Operators.html#Specifying-Operators">Specifying Operators</a>. 
+In this example, the command will be defined by the formula &lsquo;<samp><span class="samp">a + 2 b</span></samp>&rsquo;
+using the argument list &lsquo;<samp><span class="samp">(a b)</span></samp>&rsquo;.
+
+   <p>The final prompt is a y-or-n question concerning what to do if symbolic
+arguments are given to your function.  If you answer <kbd>y</kbd>, then
+executing <kbd>z m</kbd> (using the original argument list &lsquo;<samp><span class="samp">(a b)</span></samp>&rsquo;) with
+arguments &lsquo;<samp><span class="samp">10</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x</span></samp>&rsquo; will leave the function in symbolic
+form, i.e., &lsquo;<samp><span class="samp">yow(10,x)</span></samp>&rsquo;.  On the other hand, if you answer <kbd>n</kbd>,
+then the formula will always be expanded, even for non-constant
+arguments: &lsquo;<samp><span class="samp">10 + 2 x</span></samp>&rsquo;.  If you never plan to feed algebraic
+formulas to your new function, it doesn't matter how you answer this
+question.
+
+   <p>If you answered <kbd>y</kbd> to this question you can still cause a function
+call to be expanded by typing <kbd>a "</kbd> (<code>calc-expand-formula</code>). 
+Also, Calc will expand the function if necessary when you take a
+derivative or integral or solve an equation involving the function.
+
+   <p><a name="index-Z-G-2315"></a><a name="index-calc_002dget_002duser_002ddefn-2316"></a>Once you have defined a formula on a key, you can retrieve this formula
+with the <kbd>Z G</kbd> (<code>calc-user-define-get-defn</code>) command.  Press a
+key, and this command pushes the formula that was used to define that
+key onto the stack.  Actually, it pushes a nameless function that
+specifies both the argument list and the defining formula.  You will get
+an error message if the key is undefined, or if the key was not defined
+by a <kbd>Z F</kbd> command.
+
+   <p>The <kbd>Z E</kbd> (<code>calc-user-define-edit</code>) command on a key that has
+been defined by a formula uses a variant of the <code>calc-edit</code> command
+to edit the defining formula.  Press <kbd>C-c C-c</kbd> to finish editing and
+store the new formula back in the definition, or kill the buffer with
+<kbd>C-x k</kbd> to
+cancel the edit.  (The argument list and other properties of the
+definition are unchanged; to adjust the argument list, you can use
+<kbd>Z G</kbd> to grab the function onto the stack, edit with <kbd>`</kbd>, and
+then re-execute the <kbd>Z F</kbd> command.)
+
+   <p>As usual, the <kbd>Z P</kbd> command records your definition permanently. 
+In this case it will permanently record all three of the relevant
+definitions: the key, the command, and the function.
+
+   <p>You may find it useful to turn off the default simplifications with
+<kbd>m O</kbd> (<code>calc-no-simplify-mode</code>) when entering a formula to be
+used as a function definition.  For example, the formula &lsquo;<samp><span class="samp">deriv(a^2,v)</span></samp>&rsquo;
+which might be used to define a new function &lsquo;<samp><span class="samp">dsqr(a,v)</span></samp>&rsquo; will be
+&ldquo;simplified&rdquo; to 0 immediately upon entry since <code>deriv</code> considers
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo; to be constant with respect to &lsquo;<samp><span class="samp">v</span></samp>&rsquo;.  Turning off
+default simplifications cures this problem:  The definition will be stored
+in symbolic form without ever activating the <code>deriv</code> function.  Press
+<kbd>m D</kbd> to turn the default simplifications back on afterwards.
+
+   </body></html>
+

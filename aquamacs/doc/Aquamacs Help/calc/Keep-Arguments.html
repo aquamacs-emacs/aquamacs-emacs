@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Keep Arguments - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Stack-and-Trail.html#Stack-and-Trail" title="Stack and Trail">
+<link rel="prev" href="Trail-Commands.html#Trail-Commands" title="Trail Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Keep-Arguments"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Trail-Commands.html#Trail-Commands">Trail Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Stack-and-Trail.html#Stack-and-Trail">Stack and Trail</a>
+<hr>
+</div>
+
+<h3 class="section">6.4 Keep Arguments</h3>
+
+<p class="noindent"><a name="index-K-384"></a><a name="index-calc_002dkeep_002dargs-385"></a>The <kbd>K</kbd> (<code>calc-keep-args</code>) command acts like a prefix for
+the following command.  It prevents that command from removing its
+arguments from the stack.  For example, after <kbd>2 &lt;RET&gt; 3 +</kbd>,
+the stack contains the sole number 5, but after <kbd>2 &lt;RET&gt; 3 K +</kbd>,
+the stack contains the arguments and the result: &lsquo;<samp><span class="samp">2 3 5</span></samp>&rsquo;.
+
+   <p>With the exception of keyboard macros, this works for all commands that
+take arguments off the stack. (To avoid potentially unpleasant behavior,
+a <kbd>K</kbd> prefix before a keyboard macro will be ignored.  A <kbd>K</kbd>
+prefix called <em>within</em> the keyboard macro will still take effect.) 
+As another example, <kbd>K a s</kbd> simplifies a formula, pushing the
+simplified version of the formula onto the stack after the original
+formula (rather than replacing the original formula).  Note that you
+could get the same effect by typing <kbd>&lt;RET&gt; a s</kbd>, copying the
+formula and then simplifying the copy. One difference is that for a very
+large formula the time taken to format the intermediate copy in
+<kbd>&lt;RET&gt; a s</kbd> could be noticeable; <kbd>K a s</kbd> would avoid this
+extra work.
+
+   <p>Even stack manipulation commands are affected.  &lt;TAB&gt; works by
+popping two values and pushing them back in the opposite order,
+so <kbd>2 &lt;RET&gt; 3 K &lt;TAB&gt;</kbd> produces &lsquo;<samp><span class="samp">2 3 3 2</span></samp>&rsquo;.
+
+   <p>A few Calc commands provide other ways of doing the same thing. 
+For example, <kbd>' sin($)</kbd> replaces the number on the stack with
+its sine using algebraic entry; to push the sine and keep the
+original argument you could use either <kbd>' sin($1)</kbd> or
+<kbd>K ' sin($)</kbd>.  See <a href="Algebraic-Entry.html#Algebraic-Entry">Algebraic Entry</a>.  Also, the <kbd>s s</kbd>
+command is effectively the same as <kbd>K s t</kbd>.  See <a href="Storing-Variables.html#Storing-Variables">Storing Variables</a>.
+
+   <p>If you execute a command and then decide you really wanted to keep
+the argument, you can press <kbd>M-&lt;RET&gt;</kbd> (<code>calc-last-args</code>). 
+This command pushes the last arguments that were popped by any command
+onto the stack.  Note that the order of things on the stack will be
+different than with <kbd>K</kbd>:  <kbd>2 &lt;RET&gt; 3 + M-&lt;RET&gt;</kbd> leaves
+&lsquo;<samp><span class="samp">5 2 3</span></samp>&rsquo; on the stack instead of &lsquo;<samp><span class="samp">2 3 5</span></samp>&rsquo;.  See <a href="Undo.html#Undo">Undo</a>.
+
+   </body></html>
+

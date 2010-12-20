@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Agent Expiry - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gnus-Unplugged.html#Gnus-Unplugged" title="Gnus Unplugged">
+<link rel="prev" href="Agent-as-Cache.html#Agent-as-Cache" title="Agent as Cache">
+<link rel="next" href="Agent-Regeneration.html#Agent-Regeneration" title="Agent Regeneration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Agent-Expiry"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Agent-Regeneration.html#Agent-Regeneration">Agent Regeneration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Agent-as-Cache.html#Agent-as-Cache">Agent as Cache</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Unplugged.html#Gnus-Unplugged">Gnus Unplugged</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.9.6 Agent Expiry</h4>
+
+<p><a name="index-gnus_002dagent_002dexpire_002ddays-2556"></a><a name="index-gnus_002dagent_002dexpire-2557"></a><a name="index-M_002dx-gnus_002dagent_002dexpire-2558"></a><a name="index-M_002dx-gnus_002dagent_002dexpire_002dgroup-2559"></a><a name="index-gnus_002dagent_002dexpire_002dgroup-2560"></a><a name="index-agent-expiry-2561"></a><a name="index-Gnus-agent-expiry-2562"></a><a name="index-expiry_002c-in-Gnus-agent-2563"></a>
+The Agent back end, <code>nnagent</code>, doesn't handle expiry.  Well, at
+least it doesn't handle it like other back ends.  Instead, there are
+special <code>gnus-agent-expire</code> and <code>gnus-agent-expire-group</code>
+commands that will expire all read articles that are older than
+<code>gnus-agent-expire-days</code> days.  They can be run whenever you feel
+that you're running out of space.  Neither are particularly fast or
+efficient, and it's not a particularly good idea to interrupt them (with
+<kbd>C-g</kbd> or anything else) once you've started one of them.
+
+   <p>Note that other functions, e.g. <code>gnus-request-expire-articles</code>,
+might run <code>gnus-agent-expire</code> for you to keep the agent
+synchronized with the group.
+
+   <p>The agent parameter <code>agent-enable-expiration</code> may be used to
+prevent expiration in selected groups.
+
+   <p><a name="index-gnus_002dagent_002dexpire_002dall-2564"></a>If <code>gnus-agent-expire-all</code> is non-<code>nil</code>, the agent
+expiration commands will expire all articles&mdash;unread, read, ticked
+and dormant.  If <code>nil</code> (which is the default), only read articles
+are eligible for expiry, and unread, ticked and dormant articles will
+be kept indefinitely.
+
+   <p>If you find that some articles eligible for expiry are never expired,
+perhaps some Gnus Agent files are corrupted.  There's are special
+commands, <code>gnus-agent-regenerate</code> and
+<code>gnus-agent-regenerate-group</code>, to fix possible problems.
+
+   </body></html>
+

@@ -1,0 +1,750 @@
+<html lang="en">
+<head>
+<title>Index - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-w<div class="shortcontents">
+<h2>Short Contents</h2>
+<ul>
+<li><a href="index.html#toc_Introduction">1 Introduction</a></li>
+<li><a href="index.html#toc_Table-of-Contents">2 Table of Contents</a></li>
+<li><a href="index.html#toc_Labels-and-References">3 Labels and References</a></li>
+<li><a href="index.html#toc_Citations">4 Citations</a></li>
+<li><a href="index.html#toc_Index-Support">5 Index Support</a></li>
+<li><a href="<ul class="index-cp" compact>
+<li><a href="Table-of-Contents.html#index-g_t_0040file_007b_002atoc_002a_007d-buffer-16"><samp><span class="file">*toc*</span></samp> buffer</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Table-of-Contents.html#index-g_t_0040file_007b_002atoc_002a_007d-buffer_002c-recentering-35"><samp><span class="file">*toc*</span></samp> buffer, recentering</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Referencing-Labels.html#index-g_t_003f-66"><code>?</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Creating-Citations.html#index-g_t_003f-202"><code>?</code></a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-g_t_003f-263"><code>?</code></a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Table-of-Contents.html#index-g_t_003f-21"><code>?</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-g_t_0040code_007b_005cbibitem_007d-286"><code>\bibitem</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Creating-Citations.html#index-g_t_0040code_007b_005cbibliography_007d-198"><code>\bibliography</code></a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Citations.html#index-g_t_0040code_007b_005ccite_007d-191"><code>\cite</code></a>: <a href="Citations.html#Citations">Citations</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-g_t_0040code_007b_005ccite_007d-285"><code>\cite</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007b_005cendnote_007d_002c-LaTeX-macro-110"><code>\endnote</code>, LaTeX macro</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Using-_005ceqref.html#index-g_t_0040code_007b_005ceqref_007d_002c-AMS_002dLaTeX-macro-157"><code>\eqref</code>, AMS-LaTeX macro</a>: <a href="Using-_005ceqref.html#Using-_005ceqref">Using \eqref</a></li>
+<li><a href="xr-_0028LaTeX-package_0029.html#index-g_t_0040code_007b_005cexternaldocument_007d-177"><code>\externaldocument</code></a>: <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007b_005cfootnote_007d_002c-LaTeX-macro-94"><code>\footnote</code>, LaTeX macro</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="fancyref-_0028LaTeX-package_0029.html#index-g_t_0040code_007b_005cfref_007d-186"><code>\fref</code></a>: <a href="fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029">fancyref (LaTeX package)</a></li>
+<li><a href="Referencing-Labels.html#index-g_t_0040code_007b_005cFref_007d-77"><code>\Fref</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Referencing-Labels.html#index-g_t_0040code_007b_005cfref_007d-76"><code>\fref</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="fancyref-_0028LaTeX-package_0029.html#index-g_t_0040code_007b_005cFref_007d-187"><code>\Fref</code></a>: <a href="fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029">fancyref (LaTeX package)</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-g_t_0040code_007b_005cindex_007d-289"><code>\index</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Index-Support.html#index-g_t_0040code_007b_005cindex_007d-232"><code>\index</code></a>: <a href="Index-Support.html#Index-Support">Index Support</a></li>
+<li><a href="Labels-and-References.html#index-g_t_0040code_007b_005clabel_007d-47"><code>\label</code></a>: <a href="Labels-and-References.html#Labels-and-References">Labels and References</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-g_t_0040code_007b_005clabel_007d-283"><code>\label</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Theorem-and-Axiom.html#index-g_t_0040code_007b_005cnewtheorem_007d-147"><code>\newtheorem</code></a>: <a href="Theorem-and-Axiom.html#Theorem-and-Axiom">Theorem and Axiom</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-g_t_0040code_007b_005cref_007d-282"><code>\ref</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Referencing-Labels.html#index-g_t_0040code_007b_005cref_007d-62"><code>\ref</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Referencing-Labels.html#index-g_t_0040code_007b_005cvref_007d-73"><code>\vref</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="varioref-_0028LaTeX-package_0029.html#index-g_t_0040code_007b_005cvref_007d-182"><code>\vref</code></a>: <a href="varioref-_0028LaTeX-package_0029.html#varioref-_0028LaTeX-package_0029">varioref (LaTeX package)</a></li>
+<li><a href="Imprint.html#index-Acknowledgments-407">Acknowledgments</a>: <a href="Imprint.html#Imprint">Imprint</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007balign_007d_002c-AMS_002dLaTeX-environment-100"><code>align</code>, AMS-LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007balignat_007d_002c-AMS_002dLaTeX-environment-104"><code>alignat</code>, AMS-LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Using-_005ceqref.html#index-AMS_002dLaTeX-158">AMS-LaTeX</a>: <a href="Using-_005ceqref.html#Using-_005ceqref">Using \eqref</a></li>
+<li><a href="Builtin-Label-Environments.html#index-AMS_002dLaTeX-97">AMS-LaTeX</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bamsmath_007d_002c-LaTeX-package-98"><code>amsmath</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="AUCTeX.html#index-g_t_0040code_007bAUCTeX_007d_002c-Emacs-package-351"><code>AUCTeX</code>, Emacs package</a>: <a href="AUCTeX.html#AUCTeX">AUCTeX</a></li>
+<li><a href="Optimizations.html#index-Automatic-document-scans-343">Automatic document scans</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Theorem-and-Axiom.html#index-g_t_0040code_007baxiom_007d_002c-newtheorem-146"><code>axiom</code>, newtheorem</a>: <a href="Theorem-and-Axiom.html#Theorem-and-Axiom">Theorem and Axiom</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bBeqnarray_007d_002c-LaTeX-environment-113"><code>Beqnarray</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Bib_002dCite.html#index-g_t_0040code_007bbib_002dcite_007d_002c-Emacs-package-377"><code>bib-cite</code>, Emacs package</a>: <a href="Bib_002dCite.html#Bib_002dCite">Bib-Cite</a></li>
+<li><a href="Bib_002dCite.html#index-bib_002dcite_002duse_002dreftex_002dview_002dcrossref-379"><code>bib-cite-use-reftex-view-crossref</code></a>: <a href="Bib_002dCite.html#Bib_002dCite">Bib-Cite</a></li>
+<li><a href="Installation.html#index-g_t_0040code_007bBIBINPUTS_007d_002c-environment-variable-7"><code>BIBINPUTS</code>, environment variable</a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="Creating-Citations.html#index-g_t_0040code_007bBIBINPUTS_007d_002c-environment-variable-200"><code>BIBINPUTS</code>, environment variable</a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Chapterbib-and-Bibunits.html#index-Bibliographies_002c-multiple-226">Bibliographies, multiple</a>: <a href="Chapterbib-and-Bibunits.html#Chapterbib-and-Bibunits">Chapterbib and Bibunits</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-BibTeX-buffer_002c-viewing-cite-locations-from-287">BibTeX buffer, viewing cite locations from</a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Installation.html#index-BibTeX-database-files_002c-not-found-4">BibTeX database files, not found</a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="BibTeX-Database-Subsets.html#index-BibTeX-database-subsets-229">BibTeX database subsets</a>: <a href="BibTeX-Database-Subsets.html#BibTeX-Database-Subsets">BibTeX Database Subsets</a></li>
+<li><a href="Chapterbib-and-Bibunits.html#index-g_t_0040code_007bbibunits_007d_002c-LaTeX-package-225"><code>bibunits</code>, LaTeX package</a>: <a href="Chapterbib-and-Bibunits.html#Chapterbib-and-Bibunits">Chapterbib and Bibunits</a></li>
+<li><a href="Imprint.html#index-Bug-reports-409">Bug reports</a>: <a href="Imprint.html#Imprint">Imprint</a></li>
+<li><a href="Builtin-Index-Macros.html#index-Builtin-index-macros-268">Builtin index macros</a>: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a></li>
+<li><a href="Builtin-Label-Environments.html#index-Builtin-label-environments-82">Builtin label environments</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Citation-Info.html#index-C_002dc-_0026-220"><code>C-c &amp;</code></a>: <a href="Citation-Info.html#Citation-Info">Citation Info</a></li>
+<li><a href="Reference-Info.html#index-C_002dc-_0026-173"><code>C-c &amp;</code></a>: <a href="Reference-Info.html#Reference-Info">Reference Info</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_0026-299"><code>C-c &amp;</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-C_002dc-_0026-280"><code>C-c &amp;</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Creating-Labels.html#index-C_002dc-_0028-51"><code>C-c (</code></a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_0028-296"><code>C-c (</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_0029-297"><code>C-c )</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Referencing-Labels.html#index-C_002dc-_0029-63"><code>C-c )</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Table-of-Contents.html#index-C_002dc-_002d-37"><code>C-c -</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_002d-295"><code>C-c -</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_002f-301"><code>C-c /</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Creating-Index-Entries.html#index-C_002dc-_002f-237"><code>C-c /</code></a>: <a href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_003c-304"><code>C-c &lt;</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Creating-Index-Entries.html#index-C_002dc-_003c-235"><code>C-c &lt;</code></a>: <a href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-C_002dc-_0040key_007bRET_007d-368"><code>C-c &lt;RET&gt;</code></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_003d-294"><code>C-c =</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Table-of-Contents.html#index-C_002dc-_003d-20"><code>C-c =</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-C_002dc-_003e-261"><code>C-c &gt;</code></a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_003e-305"><code>C-c &gt;</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_005b-298"><code>C-c [</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Creating-Citations.html#index-C_002dc-_005b-195"><code>C-c [</code></a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_005c-302"><code>C-c \</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-c-309"><code>C-c c</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-C_002dc-C_002de-355"><code>C-c C-e</code></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Consistency-Checks.html#index-C_002dc-C_002di-251"><code>C-c C-i</code></a>: <a href="Consistency-Checks.html#Consistency-Checks">Consistency Checks</a></li>
+<li><a href="Consistency-Checks.html#index-C_002dc-C_002ds-250"><code>C-c C-s</code></a>: <a href="Consistency-Checks.html#Consistency-Checks">Consistency Checks</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-C_002dc-C_002ds-356"><code>C-c C-s</code></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Consistency-Checks.html#index-C_002dc-C_002dt-252"><code>C-c C-t</code></a>: <a href="Consistency-Checks.html#Consistency-Checks">Consistency Checks</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-g-312"><code>C-c g</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-l-307"><code>C-c l</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-r-308"><code>C-c r</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-s-311"><code>C-c s</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-t-306"><code>C-c t</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-v-310"><code>C-c v</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Key-Bindings.html#index-C_002dc-_007c-303"><code>C-c |</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="The-Index-Phrases-File.html#index-C_002dc-_007c-241"><code>C-c |</code></a>: <a href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a></li>
+<li><a href="Changes.html#index-Changes-583">Changes</a>: <a href="Changes.html#Changes">Changes</a></li>
+<li><a href="Chapterbib-and-Bibunits.html#index-g_t_0040code_007bchapterbib_007d_002c-LaTeX-package-224"><code>chapterbib</code>, LaTeX package</a>: <a href="Chapterbib-and-Bibunits.html#Chapterbib-and-Bibunits">Chapterbib and Bibunits</a></li>
+<li><a href="Citation-Styles.html#index-g_t_0040code_007bchicago_007d_002c-citation-style-212"><code>chicago</code>, citation style</a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Citation-Info.html#index-Citation-info-218">Citation info</a>: <a href="Citation-Info.html#Citation-Info">Citation Info</a></li>
+<li><a href="Citation-Styles.html#index-Citation-styles-205">Citation styles</a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Citation-Styles.html#index-Citation-styles_002c-_0040code_007bchicago_007d-208">Citation styles, <code>chicago</code></a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Citation-Styles.html#index-Citation-styles_002c-_0040code_007bharvard_007d-207">Citation styles, <code>harvard</code></a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Citation-Styles.html#index-Citation-styles_002c-_0040code_007bjurabib_007d-209">Citation styles, <code>jurabib</code></a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Citation-Styles.html#index-Citation-styles_002c-_0040code_007bnatbib_007d-206">Citation styles, <code>natbib</code></a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Citations.html#index-Citations-190">Citations</a>: <a href="Citations.html#Citations">Citations</a></li>
+<li><a href="Citations-Outside-LaTeX.html#index-Citations-outside-LaTeX-227">Citations outside LaTeX</a>: <a href="Citations-Outside-LaTeX.html#Citations-Outside-LaTeX">Citations Outside LaTeX</a></li>
+<li><a href="Creating-Citations.html#index-Citations_002c-creating-193">Citations, creating</a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Citation-Info.html#index-Citations_002c-displaying-217">Citations, displaying</a>: <a href="Citation-Info.html#Citation-Info">Citation Info</a></li>
+<li><a href="Collecting-Phrases.html#index-Collecting-index-phrases-244">Collecting index phrases</a>: <a href="Collecting-Phrases.html#Collecting-Phrases">Collecting Phrases</a></li>
+<li><a href="Commands.html#index-Commands_002c-list-of-412">Commands, list of</a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Consistency-Checks.html#index-Consistency-check-for-index-phrases-249">Consistency check for index phrases</a>: <a href="Consistency-Checks.html#Consistency-Checks">Consistency Checks</a></li>
+<li><a href="Creating-Citations.html#index-Creating-citations-192">Creating citations</a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-Creating-citations_002c-options-489">Creating citations, options</a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Creating-Index-Entries.html#index-Creating-index-entries-233">Creating index entries</a>: <a href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a></li>
+<li><a href="Creating-Labels.html#index-Creating-labels-48">Creating labels</a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-Creating-labels_002c-options-467">Creating labels, options</a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="xr-_0028LaTeX-package_0029.html#index-Cross_002ddocument-references-180">Cross-document references</a>: <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a></li>
+<li><a href="Reference-Info.html#index-Cross_002dreferences_002c-displaying-169">Cross-references, displaying</a>: <a href="Reference-Info.html#Reference-Info">Reference Info</a></li>
+<li><a href="Defining-Index-Macros.html#index-Defining-Index-Macros-275">Defining Index Macros</a>: <a href="Defining-Index-Macros.html#Defining-Index-Macros">Defining Index Macros</a></li>
+<li><a href="Options-_0028Defining-Label-Environments_0029.html#index-Defining-label-environments_002c-options-460">Defining label environments, options</a>: <a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a></li>
+<li><a href="Citation-Info.html#index-Displaying-citations-216">Displaying citations</a>: <a href="Citation-Info.html#Citation-Info">Citation Info</a></li>
+<li><a href="Reference-Info.html#index-Displaying-cross_002dreferences-171">Displaying cross-references</a>: <a href="Reference-Info.html#Reference-Info">Reference Info</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-Displaying-the-Index-256">Displaying the Index</a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Optimizations.html#index-Document-scanning_002c-automatic-344">Document scanning, automatic</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Optimizations.html#index-Document-scanning_002c-partial-335">Document scanning, partial</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Multifile-Documents.html#index-Documents_002c-spread-over-files-317">Documents, spread over files</a>: <a href="Multifile-Documents.html#Multifile-Documents">Multifile Documents</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-Editing-the-Index-257">Editing the Index</a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="AUCTeX.html#index-Emacs-packages_002c-_0040code_007bAUCTeX_007d-352">Emacs packages, <code>AUCTeX</code></a>: <a href="AUCTeX.html#AUCTeX">AUCTeX</a></li>
+<li><a href="Bib_002dCite.html#index-Emacs-packages_002c-_0040code_007bbib_002dcite_007d-378">Emacs packages, <code>bib-cite</code></a>: <a href="Bib_002dCite.html#Bib_002dCite">Bib-Cite</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Emacs-packages_002c-_0040code_007biso_002dcvt_007d-394">Emacs packages, <code>iso-cvt</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Emacs-packages_002c-_0040code_007bisotex_007d-392">Emacs packages, <code>isotex</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Emacs-packages_002c-_0040code_007bx_002dsymbol_007d-390">Emacs packages, <code>x-symbol</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bendnote_007d_002c-LaTeX-package-108"><code>endnote</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007benumerate_007d_002c-LaTeX-environment-93"><code>enumerate</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Non_002dStandard-Environments.html#index-Environments-without-_0040code_007b_005cbegin_007d-161">Environments without <code>\begin</code></a>: <a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments">Non-Standard Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-Environments_002c-builtin-84">Environments, builtin</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007beqnarray_007d_002c-LaTeX-environment-92"><code>eqnarray</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bequation_007d_002c-LaTeX-environment-91"><code>equation</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="xr-_0028LaTeX-package_0029.html#index-External-documents-178">External documents</a>: <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a></li>
+<li><a href="Faces.html#index-Faces-315">Faces</a>: <a href="Faces.html#Faces">Faces</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bfancybox_007d_002c-LaTeX-package-111"><code>fancybox</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Referencing-Labels.html#index-g_t_0040code_007bfancyref_007d_002c-LaTeX-package-75"><code>fancyref</code>, LaTeX package</a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="fancyref-_0028LaTeX-package_0029.html#index-g_t_0040code_007bfancyref_007d_002c-LaTeX-package-185"><code>fancyref</code>, LaTeX package</a>: <a href="fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029">fancyref (LaTeX package)</a></li>
+<li><a href="Figure-Wrapper.html#index-Figure-wrapping-macro-153">Figure wrapping macro</a>: <a href="Figure-Wrapper.html#Figure-Wrapper">Figure Wrapper</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bfigure_002a_007d_002c-LaTeX-environment-88"><code>figure*</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bfigure_007d_002c-LaTeX-environment-87"><code>figure</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bfigwindow_007d_002c-LaTeX-environment-122"><code>figwindow</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Installation.html#index-Finding-files-3">Finding files</a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="Finding-Files.html#index-Finding-files-327">Finding files</a>: <a href="Finding-Files.html#Finding-Files">Finding Files</a></li>
+<li><a href="Options-_0028Finding-Files_0029.html#index-Finding-files_002c-options-536">Finding files, options</a>: <a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bflalign_007d_002c-AMS_002dLaTeX-environment-103"><code>flalign</code>, AMS-LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bfloatfig_007d_002c-LaTeX-package-114"><code>floatfig</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bfloatingfig_007d_002c-LaTeX-environment-116"><code>floatingfig</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-Fontification_002c-options-555">Fontification, options</a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Imprint.html#index-g_t_0040code_007bftp_007d_002c-_0040b_007bRef_0040TeX_007b_007d_007d-site-411"><code>ftp</code>, <b>RefTeX</b> site</a>: <a href="Imprint.html#Imprint">Imprint</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bgather_007d_002c-AMS_002dLaTeX-environment-101"><code>gather</code>, AMS-LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Adding-Magic-Words.html#index-German-magic-words-155">German magic words</a>: <a href="Adding-Magic-Words.html#Adding-Magic-Words">Adding Magic Words</a></li>
+<li><a href="RefTeX-in-a-Nutshell.html#index-Getting-Started-13">Getting Started</a>: <a href="RefTeX-in-a-Nutshell.html#RefTeX-in-a-Nutshell">RefTeX in a Nutshell</a></li>
+<li><a href="Global-Indexing.html#index-Global-indexing-253">Global indexing</a>: <a href="Global-Indexing.html#Global-Indexing">Global Indexing</a></li>
+<li><a href="Citation-Styles.html#index-g_t_0040code_007bharvard_007d_002c-citation-style-211"><code>harvard</code>, citation style</a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Imprint.html#index-g_t_0040code_007bhttp_007d_002c-_0040b_007bRef_0040TeX_007b_007d_007d-home-page-410"><code>http</code>, <b>RefTeX</b> home page</a>: <a href="Imprint.html#Imprint">Imprint</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Idle-timer-restart-400">Idle timer restart</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Imprint.html#index-Imprint-405">Imprint</a>: <a href="Imprint.html#Imprint">Imprint</a></li>
+<li><a href="Creating-Index-Entries.html#index-Index-entries_002c-creating-234">Index entries, creating</a>: <a href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-Index-entries_002c-creating-258">Index entries, creating</a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Builtin-Index-Macros.html#index-Index-macros_002c-builtin-269">Index macros, builtin</a>: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a></li>
+<li><a href="Defining-Index-Macros.html#index-Index-macros_002c-defining-276">Index macros, defining</a>: <a href="Defining-Index-Macros.html#Defining-Index-Macros">Defining Index Macros</a></li>
+<li><a href="The-Index-Phrases-File.html#index-Index-phrase-file-239">Index phrase file</a>: <a href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a></li>
+<li><a href="Collecting-Phrases.html#index-Index-phrases_002c-collection-245">Index phrases, collection</a>: <a href="Collecting-Phrases.html#Collecting-Phrases">Collecting Phrases</a></li>
+<li><a href="Consistency-Checks.html#index-Index-phrases_002c-consistency-checks-247">Index phrases, consistency checks</a>: <a href="Consistency-Checks.html#Consistency-Checks">Consistency Checks</a></li>
+<li><a href="Index-Support.html#index-Index-Support-231">Index Support</a>: <a href="Index-Support.html#Index-Support">Index Support</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-Index-support_002c-options-504">Index support, options</a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-Index_002c-displaying-259">Index, displaying</a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-Index_002c-editing-260">Index, editing</a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Builtin-Index-Macros.html#index-g_t_0040code_007bindex_007d_002c-LaTeX-package-272"><code>index</code>, LaTeX package</a>: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a></li>
+<li><a href="Global-Indexing.html#index-Indexing_002c-from-_0040file_007bphrases_007d-buffer-255">Indexing, from <samp><span class="file">phrases</span></samp> buffer</a>: <a href="Global-Indexing.html#Global-Indexing">Global Indexing</a></li>
+<li><a href="Global-Indexing.html#index-Indexing_002c-global-254">Indexing, global</a>: <a href="Global-Indexing.html#Global-Indexing">Global Indexing</a></li>
+<li><a href="Installation.html#index-Installation-2">Installation</a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="Introduction.html#index-Introduction-1">Introduction</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-g_t_0040code_007biso_002dcvt_007d_002c-Emacs-package-393"><code>iso-cvt</code>, Emacs package</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-g_t_0040code_007bisotex_007d_002c-Emacs-package-391"><code>isotex</code>, Emacs package</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Citation-Styles.html#index-g_t_0040code_007bjurabib_007d_002c-citation-style-213"><code>jurabib</code>, citation style</a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Key-bindings_002c-problems-with-Viper-mode-403">Key bindings, problems with Viper mode</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Key-Bindings.html#index-Key-Bindings_002c-summary-293">Key Bindings, summary</a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Keymaps-and-Hooks.html#index-Keymaps-579">Keymaps</a>: <a href="Keymaps-and-Hooks.html#Keymaps-and-Hooks">Keymaps and Hooks</a></li>
+<li><a href="Table-of-Contents.html#index-KOMA_002dScript_002c-LaTeX-classes-39">KOMA-Script, LaTeX classes</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Using-_005ceqref.html#index-Label-category-159">Label category</a>: <a href="Using-_005ceqref.html#Using-_005ceqref">Using \eqref</a></li>
+<li><a href="Adding-Magic-Words.html#index-Label-category-156">Label category</a>: <a href="Adding-Magic-Words.html#Adding-Magic-Words">Adding Magic Words</a></li>
+<li><a href="Labels-and-References.html#index-Label-category-45">Label category</a>: <a href="Labels-and-References.html#Labels-and-References">Labels and References</a></li>
+<li><a href="Labels-and-References.html#index-Label-environment-46">Label environment</a>: <a href="Labels-and-References.html#Labels-and-References">Labels and References</a></li>
+<li><a href="Builtin-Label-Environments.html#index-Label-environments_002c-builtin-83">Label environments, builtin</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Defining-Label-Environments.html#index-Label-environments_002c-defining-142">Label environments, defining</a>: <a href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a></li>
+<li><a href="Labels-and-References.html#index-Labels-in-LaTeX-43">Labels in LaTeX</a>: <a href="Labels-and-References.html#Labels-and-References">Labels and References</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Labels_002c-commented-out-382">Labels, commented out</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Creating-Labels.html#index-Labels_002c-creating-49">Labels, creating</a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Creating-Labels.html#index-Labels_002c-deriving-from-context-50">Labels, deriving from context</a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Referencing-Labels.html#index-Labels_002c-referencing-59">Labels, referencing</a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Language-Support.html#index-Language-support-320">Language support</a>: <a href="Language-Support.html#Language-Support">Language Support</a></li>
+<li><a href="Table-of-Contents.html#index-LaTeX-classes_002c-KOMA_002dScript-40">LaTeX classes, KOMA-Script</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Non_002dStandard-Environments.html#index-LaTeX-commands_002c-abbreviated-164">LaTeX commands, abbreviated</a>: <a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments">Non-Standard Environments</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-LaTeX-commands_002c-not-found-381">LaTeX commands, not found</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-core-96">LaTeX core</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-macro-_0040code_007bfootnote_007d-95">LaTeX macro <code>footnote</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bamsmath_007d-99">LaTeX packages, <code>amsmath</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bendnote_007d-109">LaTeX packages, <code>endnote</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bfancybox_007d-112">LaTeX packages, <code>fancybox</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Referencing-Labels.html#index-LaTeX-packages_002c-_0040code_007bfancyref_007d-78">LaTeX packages, <code>fancyref</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="fancyref-_0028LaTeX-package_0029.html#index-LaTeX-packages_002c-_0040code_007bfancyref_007d-188">LaTeX packages, <code>fancyref</code></a>: <a href="fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029">fancyref (LaTeX package)</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bfloatfig_007d-115">LaTeX packages, <code>floatfig</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Index-Macros.html#index-LaTeX-packages_002c-_0040code_007bindex_007d-274">LaTeX packages, <code>index</code></a>: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a></li>
+<li><a href="Non_002dStandard-Environments.html#index-LaTeX-packages_002c-_0040code_007blinguex_007d-166">LaTeX packages, <code>linguex</code></a>: <a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments">Non-Standard Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007blongtable_007d-118">LaTeX packages, <code>longtable</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Index-Macros.html#index-LaTeX-packages_002c-_0040code_007bmultind_007d-273">LaTeX packages, <code>multind</code></a>: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-LaTeX-packages_002c-_0040code_007bpf_007d-399">LaTeX packages, <code>pf</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bpicinpar_007d-121">LaTeX packages, <code>picinpar</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007brotating_007d-129">LaTeX packages, <code>rotating</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Referencing-Labels.html#index-LaTeX-packages_002c-_0040code_007bsaferef_007d-70">LaTeX packages, <code>saferef</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bsidecap_007d-125">LaTeX packages, <code>sidecap</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bsubfigure_007d-133">LaTeX packages, <code>subfigure</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bsupertab_007d-137">LaTeX packages, <code>supertab</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="varioref-_0028LaTeX-package_0029.html#index-LaTeX-packages_002c-_0040code_007bvarioref_007d-183">LaTeX packages, <code>varioref</code></a>: <a href="varioref-_0028LaTeX-package_0029.html#varioref-_0028LaTeX-package_0029">varioref (LaTeX package)</a></li>
+<li><a href="Referencing-Labels.html#index-LaTeX-packages_002c-_0040code_007bvarioref_007d-74">LaTeX packages, <code>varioref</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Builtin-Label-Environments.html#index-LaTeX-packages_002c-_0040code_007bwrapfig_007d-140">LaTeX packages, <code>wrapfig</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="xr-_0028LaTeX-package_0029.html#index-LaTeX-packages_002c-_0040code_007bxr_007d-176">LaTeX packages, <code>xr</code></a>: <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a></li>
+<li><a href="Style-Files.html#index-LaTeX_002dadd_002denvironments_002c-_0040r_007bAUCTeX_007d-373"><code>LaTeX-add-environments, </code><span class="roman">AUCTeX</span></a>: <a href="Style-Files.html#Style-Files">Style Files</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-LaTeX_002dlabel_002dfunction_002c-_0040r_007bAUCTeX_007d-354"><code>LaTeX-label-function, </code><span class="roman">AUCTeX</span></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Installation.html#index-LaTeX_002dmode_002dhook-10"><code>LaTeX-mode-hook</code></a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="Installation.html#index-latex_002dmode_002dhook-11"><code>latex-mode-hook</code></a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-LaTeX_002dsection_002c-_0040r_007bAUCTeX_007d-357"><code>LaTeX-section, </code><span class="roman">AUCTeX</span></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Non_002dStandard-Environments.html#index-g_t_0040code_007blinguex_007d_002c-LaTeX-package-165"><code>linguex</code>, LaTeX package</a>: <a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments">Non-Standard Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007blongtable_007d_002c-LaTeX-environment-119"><code>longtable</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007blongtable_007d_002c-LaTeX-package-117"><code>longtable</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="The-Index-Phrases-File.html#index-Macro-definition-lines_002c-in-phrase-buffer-243">Macro definition lines, in phrase buffer</a>: <a href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a></li>
+<li><a href="Quick-Equation.html#index-Macros-as-environment-wrappers-151">Macros as environment wrappers</a>: <a href="Quick-Equation.html#Quick-Equation">Quick Equation</a></li>
+<li><a href="Figure-Wrapper.html#index-Macros-as-environment-wrappers-152">Macros as environment wrappers</a>: <a href="Figure-Wrapper.html#Figure-Wrapper">Figure Wrapper</a></li>
+<li><a href="Adding-Magic-Words.html#index-Magic-words-154">Magic words</a>: <a href="Adding-Magic-Words.html#Adding-Magic-Words">Adding Magic Words</a></li>
+<li><a href="Imprint.html#index-Maintainer-406">Maintainer</a>: <a href="Imprint.html#Imprint">Imprint</a></li>
+<li><a href="RefTeXs-Menu.html#index-Menu_002c-in-the-menu-bar-292">Menu, in the menu bar</a>: <a href="RefTeXs-Menu.html#RefTeXs-Menu">RefTeXs Menu</a></li>
+<li><a href="Multifile-Documents.html#index-Multifile-documents-316">Multifile documents</a>: <a href="Multifile-Documents.html#Multifile-Documents">Multifile Documents</a></li>
+<li><a href="Builtin-Index-Macros.html#index-g_t_0040code_007bmultind_007d_002c-LaTeX-package-271"><code>multind</code>, LaTeX package</a>: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a></li>
+<li><a href="Optimizations.html#index-Multiple-selection-buffers-346">Multiple selection buffers</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bmultline_007d_002c-AMS_002dLaTeX-environment-102"><code>multline</code>, AMS-LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Citation-Styles.html#index-g_t_0040code_007bnatbib_007d_002c-citation-style-210"><code>natbib</code>, citation style</a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Non_002dStandard-Environments.html#index-Non_002dstandard-environments-160">Non-standard environments</a>: <a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments">Non-Standard Environments</a></li>
+<li><a href="Finding-Files.html#index-Noweb-files-328">Noweb files</a>: <a href="Finding-Files.html#Finding-Files">Finding Files</a></li>
+<li><a href="RefTeX-in-a-Nutshell.html#index-Nutshell_002c-RefTeX-in-a-15">Nutshell, RefTeX in a</a>: <a href="RefTeX-in-a-Nutshell.html#RefTeX-in-a-Nutshell">RefTeX in a Nutshell</a></li>
+<li><a href="Optimizations.html#index-Optimizations-331">Optimizations</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-Optimizations_002c-options-544">Optimizations, options</a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-Options_002c-creating-citations-488">Options, creating citations</a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-Options_002c-creating-labels-466">Options, creating labels</a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="Options-_0028Defining-Label-Environments_0029.html#index-Options_002c-defining-label-environments-459">Options, defining label environments</a>: <a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a></li>
+<li><a href="Options-_0028Finding-Files_0029.html#index-Options_002c-Finding-Files-535">Options, Finding Files</a>: <a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-Options_002c-fontification-554">Options, fontification</a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-Options_002c-Index-support-503">Options, Index support</a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options.html#index-Options_002c-list-of-440">Options, list of</a>: <a href="Options.html#Options">Options</a></li>
+<li><a href="Options-_0028Misc_0029.html#index-Options_002c-misc-574">Options, misc</a>: <a href="Options-_0028Misc_0029.html#Options-_0028Misc_0029">Options (Misc)</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-Options_002c-optimizations-543">Options, optimizations</a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-Options_002c-referencing-labels-475">Options, referencing labels</a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-Options_002c-table-of-contents-441">Options, table of contents</a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#index-Options_002c-viewing-cross_002dreferences-527">Options, viewing cross-references</a>: <a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a></li>
+<li><a href="Optimizations.html#index-Parse-information_002c-saving-to-a-file-338">Parse information, saving to a file</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Non_002dStandard-Environments.html#index-Parser-functions_002c-for-special-environments-163">Parser functions, for special environments</a>: <a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments">Non-Standard Environments</a></li>
+<li><a href="Optimizations.html#index-Partial-documents-scans-334">Partial documents scans</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-g_t_0040code_007bpf_007d_002c-LaTeX-package-398"><code>pf</code>, LaTeX package</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="The-Index-Phrases-File.html#index-Phrase-file-240">Phrase file</a>: <a href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a></li>
+<li><a href="Collecting-Phrases.html#index-Phrases_002c-collecting-246">Phrases, collecting</a>: <a href="Collecting-Phrases.html#Collecting-Phrases">Collecting Phrases</a></li>
+<li><a href="Consistency-Checks.html#index-Phrases_002c-consistency-checks-248">Phrases, consistency checks</a>: <a href="Consistency-Checks.html#Consistency-Checks">Consistency Checks</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bpicinpar_007d_002c-LaTeX-package-120"><code>picinpar</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Problems-and-work_002darounds-380">Problems and work-arounds</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Quick-Equation.html#index-Quick-equation-macro-150">Quick equation macro</a>: <a href="Quick-Equation.html#Quick-Equation">Quick Equation</a></li>
+<li><a href="RefTeX-in-a-Nutshell.html#index-Quick_002dStart-12">Quick-Start</a>: <a href="RefTeX-in-a-Nutshell.html#RefTeX-in-a-Nutshell">RefTeX in a Nutshell</a></li>
+<li><a href="Reference-Info.html#index-Reference-info-170">Reference info</a>: <a href="Reference-Info.html#Reference-Info">Reference Info</a></li>
+<li><a href="Labels-and-References.html#index-References-in-LaTeX-44">References in LaTeX</a>: <a href="Labels-and-References.html#Labels-and-References">Labels and References</a></li>
+<li><a href="xr-_0028LaTeX-package_0029.html#index-References-to-external-documents-179">References to external documents</a>: <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a></li>
+<li><a href="Referencing-Labels.html#index-Referencing-labels-58">Referencing labels</a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-Referencing-labels_002c-options-476">Referencing labels, options</a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="RefTeX-in-a-Nutshell.html#index-RefTeX-in-a-Nutshell-14">RefTeX in a Nutshell</a>: <a href="RefTeX-in-a-Nutshell.html#RefTeX-in-a-Nutshell">RefTeX in a Nutshell</a></li>
+<li><a href="Creating-Labels.html#index-reftex_002dabbrev_002dparameters-56"><code>reftex-abbrev-parameters</code></a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Language-Support.html#index-reftex_002dabbrev_002dparameters-322"><code>reftex-abbrev-parameters</code></a>: <a href="Language-Support.html#Language-Support">Language Support</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-reftex_002dabbrev_002dparameters-474"><code>reftex-abbrev-parameters</code></a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="Style-Files.html#index-reftex_002dadd_002dindex_002dmacros-375"><code>reftex-add-index-macros</code></a>: <a href="Style-Files.html#Style-Files">Style Files</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-reftex_002dadd_002dlabel_002denvironments-386"><code>reftex-add-label-environments</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Style-Files.html#index-reftex_002dadd_002dlabel_002denvironments-371"><code>reftex-add-label-environments</code></a>: <a href="Style-Files.html#Style-Files">Style Files</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-reftex_002dadd_002dsection_002dlevels-388"><code>reftex-add-section-levels</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Style-Files.html#index-reftex_002dadd_002dsection_002dlevels-376"><code>reftex-add-section-levels</code></a>: <a href="Style-Files.html#Style-Files">Style Files</a></li>
+<li><a href="Style-Files.html#index-reftex_002dadd_002dto_002dlabel_002dalist-372"><code>reftex-add-to-label-alist</code></a>: <a href="Style-Files.html#Style-Files">Style Files</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002dallow_002dautomatic_002drescan-551"><code>reftex-allow-automatic-rescan</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Optimizations.html#index-reftex_002dallow_002dautomatic_002drescan-345"><code>reftex-allow-automatic-rescan</code></a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Options-_0028Misc_0029.html#index-reftex_002dallow_002ddetached_002dmacro_002dargs-578"><code>reftex-allow-detached-macro-args</code></a>: <a href="Options-_0028Misc_0029.html#Options-_0028Misc_0029">Options (Misc)</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-reftex_002darg_002dcite-363"><code>reftex-arg-cite</code></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-reftex_002darg_002dindex-365"><code>reftex-arg-index</code></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-reftex_002darg_002dlabel-359"><code>reftex-arg-label</code></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-reftex_002darg_002dref-361"><code>reftex-arg-ref</code></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dauto_002drecenter_002dtoc-448"><code>reftex-auto-recenter-toc</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dauto_002drecenter_002dtoc-33"><code>reftex-auto-recenter-toc</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002dauto_002dupdate_002dselection_002dbuffers-553"><code>reftex-auto-update-selection-buffers</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Optimizations.html#index-reftex_002dauto_002dupdate_002dselection_002dbuffers-350"><code>reftex-auto-update-selection-buffers</code></a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#index-reftex_002dauto_002dview_002dcrossref-530"><code>reftex-auto-view-crossref</code></a>: <a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dbib_002dauthor_002dface-565"><code>reftex-bib-author-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dbib_002dextra_002dface-568"><code>reftex-bib-extra-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dbib_002dtitle_002dface-567"><code>reftex-bib-title-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dbib_002dyear_002dface-566"><code>reftex-bib-year-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dbibfile_002dignore_002dregexps-491"><code>reftex-bibfile-ignore-regexps</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dbibliography_002dcommands-490"><code>reftex-bibliography-commands</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Options-_0028Finding-Files_0029.html#index-reftex_002dbibpath_002denvironment_002dvariables-538"><code>reftex-bibpath-environment-variables</code></a>: <a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a></li>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#index-reftex_002dcache_002dcite_002decho-534"><code>reftex-cache-cite-echo</code></a>: <a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a></li>
+<li><a href="Commands.html#index-reftex_002dchange_002dlabel-431"><code>reftex-change-label</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Commands.html#index-reftex_002dcitation-416"><code>reftex-citation</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Creating-Citations.html#index-reftex_002dcitation-194"><code>reftex-citation</code></a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dcite_002dcleanup_002doptional_002dargs-497"><code>reftex-cite-cleanup-optional-args</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dcite_002dcomment_002dformat-499"><code>reftex-cite-comment-format</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Citation-Styles.html#index-reftex_002dcite_002dformat-214"><code>reftex-cite-format</code></a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dcite_002dformat-494"><code>reftex-cite-format</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Citation-Styles.html#index-reftex_002dcite_002dprompt_002doptional_002dargs-215"><code>reftex-cite-prompt-optional-args</code></a>: <a href="Citation-Styles.html#Citation-Styles">Citation Styles</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dcite_002dprompt_002doptional_002dargs-496"><code>reftex-cite-prompt-optional-args</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dcite_002dpunctuation-500"><code>reftex-cite-punctuation</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Language-Support.html#index-reftex_002dcite_002dpunctuation-326"><code>reftex-cite-punctuation</code></a>: <a href="Language-Support.html#Language-Support">Language Support</a></li>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#index-reftex_002dcite_002dview_002dformat-532"><code>reftex-cite-view-format</code></a>: <a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dcomment_002dcitations-498"><code>reftex-comment-citations</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Commands.html#index-reftex_002dcreate_002dbibtex_002dfile-434"><code>reftex-create-bibtex-file</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="BibTeX-Database-Subsets.html#index-reftex_002dcreate_002dbibtex_002dfile-230"><code>reftex-create-bibtex-file</code></a>: <a href="BibTeX-Database-Subsets.html#BibTeX-Database-Subsets">BibTeX Database Subsets</a></li>
+<li><a href="Commands.html#index-reftex_002dcreate_002dtags_002dfile-425"><code>reftex-create-tags-file</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dcursor_002dselected_002dface-559"><code>reftex-cursor-selected-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Commands.html#index-reftex_002dcustomize-435"><code>reftex-customize</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002ddefault_002dbibliography-492"><code>reftex-default-bibliography</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Citations-Outside-LaTeX.html#index-reftex_002ddefault_002dbibliography-228"><code>reftex-default-bibliography</code></a>: <a href="Citations-Outside-LaTeX.html#Citations-Outside-LaTeX">Citations Outside LaTeX</a></li>
+<li><a href="Options-_0028Defining-Label-Environments_0029.html#index-reftex_002ddefault_002dcontext_002dregexps-464"><code>reftex-default-context-regexps</code></a>: <a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a></li>
+<li><a href="Options-_0028Defining-Label-Environments_0029.html#index-reftex_002ddefault_002dlabel_002dalist_002dentries-461"><code>reftex-default-label-alist-entries</code></a>: <a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-reftex_002dderive_002dlabel_002dparameters-472"><code>reftex-derive-label-parameters</code></a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="Language-Support.html#index-reftex_002dderive_002dlabel_002dparameters-321"><code>reftex-derive-label-parameters</code></a>: <a href="Language-Support.html#Language-Support">Language Support</a></li>
+<li><a href="Creating-Labels.html#index-reftex_002dderive_002dlabel_002dparameters-54"><code>reftex-derive-label-parameters</code></a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002ddisplay_002dcopied_002dcontext_002dhook-484"><code>reftex-display-copied-context-hook</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-reftex_002ddisplay_002dindex-262"><code>reftex-display-index</code></a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Commands.html#index-reftex_002ddisplay_002dindex-422"><code>reftex-display-index</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002denable_002dpartial_002dscans-548"><code>reftex-enable-partial-scans</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Optimizations.html#index-reftex_002denable_002dpartial_002dscans-336"><code>reftex-enable-partial-scans</code></a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002denable_002dpartial_002dscans-30"><code>reftex-enable-partial-scans</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-reftex_002denable_002dpartial_002dscans-384"><code>reftex-enable-partial-scans</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Referencing-Labels.html#index-reftex_002denable_002dpartial_002dscans-80"><code>reftex-enable-partial-scans</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-reftex_002denable_002dpartial_002dscans-267"><code>reftex-enable-partial-scans</code></a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Options-_0028Finding-Files_0029.html#index-reftex_002dexternal_002dfile_002dfinders-542"><code>reftex-external-file-finders</code></a>: <a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a></li>
+<li><a href="Options-_0028Misc_0029.html#index-reftex_002dextra_002dbindings-575"><code>reftex-extra-bindings</code></a>: <a href="Options-_0028Misc_0029.html#Options-_0028Misc_0029">Options (Misc)</a></li>
+<li><a href="Key-Bindings.html#index-reftex_002dextra_002dbindings-313"><code>reftex-extra-bindings</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dfile_002dboundary_002dface-561"><code>reftex-file-boundary-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Finding-Files_0029.html#index-reftex_002dfile_002dextensions-539"><code>reftex-file-extensions</code></a>: <a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a></li>
+<li><a href="Finding-Files.html#index-reftex_002dfile_002dextensions-329"><code>reftex-file-extensions</code></a>: <a href="Finding-Files.html#Finding-Files">Finding Files</a></li>
+<li><a href="Commands.html#index-reftex_002dfind_002dduplicate_002dlabels-433"><code>reftex-find-duplicate-labels</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dformat_002dcite_002dfunction-495"><code>reftex-format-cite-function</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-reftex_002dformat_002dlabel_002dfunction-469"><code>reftex-format-label-function</code></a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dformat_002dref_002dfunction-481"><code>reftex-format-ref-function</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dfref_002dis_002ddefault-480"><code>reftex-fref-is-default</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="fancyref-_0028LaTeX-package_0029.html#index-reftex_002dfref_002dis_002ddefault-189"><code>reftex-fref-is-default</code></a>: <a href="fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029">fancyref (LaTeX package)</a></li>
+<li><a href="Commands.html#index-reftex_002dgoto_002dlabel-430"><code>reftex-goto-label</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Commands.html#index-reftex_002dgrep_002ddocument-426"><code>reftex-grep-document</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dguess_002dlabel_002dtype-483"><code>reftex-guess-label-type</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Referencing-Labels.html#index-reftex_002dhighlight_002dselection-68"><code>reftex-highlight-selection</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dhighlight_002dselection-22"><code>reftex-highlight-selection</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Creating-Citations.html#index-reftex_002dhighlight_002dselection-203"><code>reftex-highlight-selection</code></a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dhighlight_002dselection-558"><code>reftex-highlight-selection</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002didle_002dtime-34"><code>reftex-idle-time</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#index-reftex_002didle_002dtime-531"><code>reftex-idle-time</code></a>: <a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dinclude_002dfile_002dcommands-443"><code>reftex-include-file-commands</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Creating-Index-Entries.html#index-reftex_002dindex-236"><code>reftex-index</code></a>: <a href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a></li>
+<li><a href="Commands.html#index-reftex_002dindex-417"><code>reftex-index</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002ddefault_002dmacro-508"><code>reftex-index-default-macro</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002ddefault_002dtag-509"><code>reftex-index-default-tag</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dindex_002dface-573"><code>reftex-index-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dfollow_002dmode-525"><code>reftex-index-follow-mode</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-reftex_002dindex_002dfollow_002dmode-264"><code>reftex-index-follow-mode</code></a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dindex_002dheader_002dface-570"><code>reftex-index-header-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dinclude_002dcontext-524"><code>reftex-index-include-context</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-reftex_002dindex_002dinclude_002dcontext-266"><code>reftex-index-include-context</code></a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Builtin-Index-Macros.html#index-reftex_002dindex_002dmacros-270"><code>reftex-index-macros</code></a>: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a></li>
+<li><a href="Defining-Index-Macros.html#index-reftex_002dindex_002dmacros-277"><code>reftex-index-macros</code></a>: <a href="Defining-Index-Macros.html#Defining-Index-Macros">Defining Index Macros</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dmacros-507"><code>reftex-index-macros</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dmap-526"><code>reftex-index-map</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dmath_002dformat-510"><code>reftex-index-math-format</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrase_002dfile_002dextension-511"><code>reftex-index-phrase-file-extension</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Commands.html#index-reftex_002dindex_002dphrase_002dselection_002dor_002dword-419"><code>reftex-index-phrase-selection-or-word</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Commands.html#index-reftex_002dindex_002dphrases_002dapply_002dto_002dregion-421"><code>reftex-index-phrases-apply-to-region</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dcase_002dfold_002dsearch-515"><code>reftex-index-phrases-case-fold-search</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dlogical_002dand_002dregexp-512"><code>reftex-index-phrases-logical-and-regexp</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dlogical_002dor_002dregexp-513"><code>reftex-index-phrases-logical-or-regexp</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dmap-521"><code>reftex-index-phrases-map</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dmode_002dhook-522"><code>reftex-index-phrases-mode-hook</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dsearch_002dwhole_002dwords-514"><code>reftex-index-phrases-search-whole-words</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dskip_002dindexed_002dmatches-517"><code>reftex-index-phrases-skip-indexed-matches</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dsort_002din_002dblocks-520"><code>reftex-index-phrases-sort-in-blocks</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dsort_002dprefers_002dentry-519"><code>reftex-index-phrases-sort-prefers-entry</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dphrases_002dwrap_002dlong_002dlines-518"><code>reftex-index-phrases-wrap-long-lines</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dindex_002dsection_002dface-571"><code>reftex-index-section-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dsection_002dletters-523"><code>reftex-index-section-letters</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Commands.html#index-reftex_002dindex_002dselection_002dor_002dword-418"><code>reftex-index-selection-or-word</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Creating-Index-Entries.html#index-reftex_002dindex_002dselection_002dor_002dword-238"><code>reftex-index-selection-or-word</code></a>: <a href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dspecial_002dchars-506"><code>reftex-index-special-chars</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dindex_002dtag_002dface-572"><code>reftex-index-tag-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dindex_002dverify_002dfunction-516"><code>reftex-index-verify-function</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="The-Index-Phrases-File.html#index-reftex_002dindex_002dvisit_002dphrases_002dbuffer-242"><code>reftex-index-visit-phrases-buffer</code></a>: <a href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a></li>
+<li><a href="Commands.html#index-reftex_002dindex_002dvisit_002dphrases_002dbuffer-420"><code>reftex-index-visit-phrases-buffer</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Commands.html#index-reftex_002dinfo-437"><code>reftex-info</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-reftex_002dinitialize_002dtemporary_002dbuffers-396"><code>reftex-initialize-temporary-buffers</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002dinitialize_002dtemporary_002dbuffers-546"><code>reftex-initialize-temporary-buffers</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-reftex_002dinsert_002dlabel_002dflags-468"><code>reftex-insert-label-flags</code></a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="Creating-Labels.html#index-reftex_002dinsert_002dlabel_002dflags-57"><code>reftex-insert-label-flags</code></a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Theorem-and-Axiom.html#index-reftex_002dinsert_002dlabel_002dflags-148"><code>reftex-insert-label-flags</code></a>: <a href="Theorem-and-Axiom.html#Theorem-and-Axiom">Theorem and Axiom</a></li>
+<li><a href="Commands.html#index-reftex_002disearch_002dminor_002dmode-429"><code>reftex-isearch-minor-mode</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-reftex_002dkeep_002dtemporary_002dbuffers-395"><code>reftex-keep-temporary-buffers</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Optimizations.html#index-reftex_002dkeep_002dtemporary_002dbuffers-333"><code>reftex-keep-temporary-buffers</code></a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002dkeep_002dtemporary_002dbuffers-545"><code>reftex-keep-temporary-buffers</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-reftex_002dlabel-353"><code>reftex-label</code></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Commands.html#index-reftex_002dlabel-414"><code>reftex-label</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Creating-Labels.html#index-reftex_002dlabel-52"><code>reftex-label</code></a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Defining-Label-Environments.html#index-reftex_002dlabel_002dalist-143"><code>reftex-label-alist</code></a>: <a href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-reftex_002dlabel_002dalist-85"><code>reftex-label-alist</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-reftex_002dlabel_002dalist-284"><code>reftex-label-alist</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Options-_0028Defining-Label-Environments_0029.html#index-reftex_002dlabel_002dalist-462"><code>reftex-label-alist</code></a>: <a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a></li>
+<li><a href="Defining-Label-Environments.html#index-reftex_002dlabel_002dalist_002dbuiltin-144"><code>reftex-label-alist-builtin</code></a>: <a href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-reftex_002dlabel_002dalist_002dbuiltin-86"><code>reftex-label-alist-builtin</code></a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dlabel_002dface-562"><code>reftex-label-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Language-Support.html#index-reftex_002dlabel_002dillegal_002dre-324"><code>reftex-label-illegal-re</code></a>: <a href="Language-Support.html#Language-Support">Language Support</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-reftex_002dlabel_002dillegal_002dre-473"><code>reftex-label-illegal-re</code></a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="Creating-Labels.html#index-reftex_002dlabel_002dillegal_002dre-55"><code>reftex-label-illegal-re</code></a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Referencing-Labels.html#index-reftex_002dlabel_002dmenu_002dflags-79"><code>reftex-label-menu-flags</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Theorem-and-Axiom.html#index-reftex_002dlabel_002dmenu_002dflags-149"><code>reftex-label-menu-flags</code></a>: <a href="Theorem-and-Axiom.html#Theorem-and-Axiom">Theorem and Axiom</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dlabel_002dmenu_002dflags-477"><code>reftex-label-menu-flags</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dlevel_002dindent-482"><code>reftex-level-indent</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Key-Bindings.html#index-reftex_002dload_002dhook-314"><code>reftex-load-hook</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Keymaps-and-Hooks.html#index-reftex_002dload_002dhook-581"><code>reftex-load-hook</code></a>: <a href="Keymaps-and-Hooks.html#Keymaps-and-Hooks">Keymaps and Hooks</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dmax_002dsection_002ddepth-444"><code>reftex-max-section-depth</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Installation.html#index-reftex_002dmode-9"><code>reftex-mode</code></a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="Keymaps-and-Hooks.html#index-reftex_002dmode_002dhook-582"><code>reftex-mode-hook</code></a>: <a href="Keymaps-and-Hooks.html#Keymaps-and-Hooks">Keymaps and Hooks</a></li>
+<li><a href="Keymaps-and-Hooks.html#index-reftex_002dmode_002dmap-580"><code>reftex-mode-map</code></a>: <a href="Keymaps-and-Hooks.html#Keymaps-and-Hooks">Keymaps and Hooks</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dmouse_002dselected_002dface-560"><code>reftex-mouse-selected-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-reftex_002dmouse_002dview_002dcrossref-279"><code>reftex-mouse-view-crossref</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Reference-Info.html#index-reftex_002dmouse_002dview_002dcrossref-168"><code>reftex-mouse-view-crossref</code></a>: <a href="Reference-Info.html#Reference-Info">Reference Info</a></li>
+<li><a href="Citation-Info.html#index-reftex_002dmouse_002dview_002dcrossref-223"><code>reftex-mouse-view-crossref</code></a>: <a href="Citation-Info.html#Citation-Info">Citation Info</a></li>
+<li><a href="Language-Support.html#index-reftex_002dmultiref_002dpunctuation-325"><code>reftex-multiref-punctuation</code></a>: <a href="Language-Support.html#Language-Support">Language Support</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dmultiref_002dpunctuation-478"><code>reftex-multiref-punctuation</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Referencing-Labels.html#index-reftex_002dmultiref_002dpunctuation-69"><code>reftex-multiref-punctuation</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002dno_002dinclude_002dregexps-547"><code>reftex-no-include-regexps</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Commands.html#index-reftex_002dparse_002ddocument-438"><code>reftex-parse-document</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Optimizations.html#index-reftex_002dparse_002dfile_002dextension-339"><code>reftex-parse-file-extension</code></a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002dparse_002dfile_002dextension-550"><code>reftex-parse-file-extension</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dpart_002dresets_002dchapter-447"><code>reftex-part-resets-chapter</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Options-_0028Misc_0029.html#index-reftex_002dplug_002dinto_002dAUCTeX-576"><code>reftex-plug-into-AUCTeX</code></a>: <a href="Options-_0028Misc_0029.html#Options-_0028Misc_0029">Options (Misc)</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dpre_002drefontification_002dfunctions-485"><code>reftex-pre-refontification-functions</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Commands.html#index-reftex_002dquery_002dreplace_002ddocument-428"><code>reftex-query-replace-document</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Commands.html#index-reftex_002dreference-415"><code>reftex-reference</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Referencing-Labels.html#index-reftex_002dreference-64"><code>reftex-reference</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-reftex_002drefontify_002dcontext-397"><code>reftex-refontify-context</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002drefontify_002dcontext-557"><code>reftex-refontify-context</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Commands.html#index-reftex_002drenumber_002dsimple_002dlabels-432"><code>reftex-renumber-simple-labels</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Commands.html#index-reftex_002dreset_002dmode-439"><code>reftex-reset-mode</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#index-reftex_002drevisit_002dto_002decho-533"><code>reftex-revisit-to-echo</code></a>: <a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002drevisit_002dto_002dfollow-24"><code>reftex-revisit-to-follow</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Misc_0029.html#index-reftex_002drevisit_002dto_002dfollow-577"><code>reftex-revisit-to-follow</code></a>: <a href="Options-_0028Misc_0029.html#Options-_0028Misc_0029">Options (Misc)</a></li>
+<li><a href="Referencing-Labels.html#index-reftex_002drevisit_002dto_002dfollow-67"><code>reftex-revisit-to-follow</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Displaying-and-Editing-the-Index.html#index-reftex_002drevisit_002dto_002dfollow-265"><code>reftex-revisit-to-follow</code></a>: <a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002dsave_002dparse_002dinfo-549"><code>reftex-save-parse-info</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Optimizations.html#index-reftex_002dsave_002dparse_002dinfo-340"><code>reftex-save-parse-info</code></a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Commands.html#index-reftex_002dsearch_002ddocument-427"><code>reftex-search-document</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Finding-Files_0029.html#index-reftex_002dsearch_002dunrecursed_002dpath_002dfirst-540"><code>reftex-search-unrecursed-path-first</code></a>: <a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dsection_002dheading_002dface-563"><code>reftex-section-heading-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dsection_002dlevels-42"><code>reftex-section-levels</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dsection_002dlevels-445"><code>reftex-section-levels</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Options-_0028Defining-Label-Environments_0029.html#index-reftex_002dsection_002dprefixes-463"><code>reftex-section-prefixes</code></a>: <a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dselect_002dbib_002dmap-502"><code>reftex-select-bib-map</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Creating-Citations.html#index-reftex_002dselect_002dbib_002dmap-204"><code>reftex-select-bib-map</code></a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dselect_002dbib_002dmode_002dhook-501"><code>reftex-select-bib-mode-hook</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Referencing-Labels.html#index-reftex_002dselect_002dlabel_002dmap-81"><code>reftex-select-label-map</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dselect_002dlabel_002dmap-487"><code>reftex-select-label-map</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dselect_002dlabel_002dmode_002dhook-486"><code>reftex-select-label-mode-hook</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dselect_002dmark_002dface-569"><code>reftex-select-mark-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Style-Files.html#index-reftex_002dset_002dcite_002dformat-374"><code>reftex-set-cite-format</code></a>: <a href="Style-Files.html#Style-Files">Style Files</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-reftex_002dset_002dcite_002dformat-387"><code>reftex-set-cite-format</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Commands.html#index-reftex_002dshow_002dcommentary-436"><code>reftex-show-commentary</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Creating-Citations_0029.html#index-reftex_002dsort_002dbibtex_002dmatches-493"><code>reftex-sort-bibtex-matches</code></a>: <a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-reftex_002dstring_002dto_002dlabel_002dfunction-470"><code>reftex-string-to-label-function</code></a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="Options-_0028Index-Support_0029.html#index-reftex_002dsupport_002dindex-505"><code>reftex-support-index</code></a>: <a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a></li>
+<li><a href="Options-_0028Finding-Files_0029.html#index-reftex_002dtexpath_002denvironment_002dvariables-537"><code>reftex-texpath-environment-variables</code></a>: <a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a></li>
+<li><a href="Commands.html#index-reftex_002dtoc-413"><code>reftex-toc</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc-19"><code>reftex-toc</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc_002dfollow_002dmode-23"><code>reftex-toc-follow-mode</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dfollow_002dmode-456"><code>reftex-toc-follow-mode</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002dtoc_002dheader_002dface-564"><code>reftex-toc-header-face</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dinclude_002dcontext-455"><code>reftex-toc-include-context</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc_002dinclude_002dcontext-29"><code>reftex-toc-include-context</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dinclude_002dfile_002dboundaries-452"><code>reftex-toc-include-file-boundaries</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc_002dinclude_002dfile_002dboundaries-26"><code>reftex-toc-include-file-boundaries</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc_002dinclude_002dindex_002dentries-28"><code>reftex-toc-include-index-entries</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dinclude_002dindex_002dentries-454"><code>reftex-toc-include-index-entries</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc_002dinclude_002dlabels-27"><code>reftex-toc-include-labels</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dinclude_002dlabels-453"><code>reftex-toc-include-labels</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dkeep_002dother_002dwindows-451"><code>reftex-toc-keep-other-windows</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc_002dmap-31"><code>reftex-toc-map</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dmap-458"><code>reftex-toc-map</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dmax_002dlevel-446"><code>reftex-toc-max-level</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc_002dmax_002dlevel-25"><code>reftex-toc-max-level</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dmode_002dhook-457"><code>reftex-toc-mode-hook</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Table-of-Contents.html#index-reftex_002dtoc_002drecenter-32"><code>reftex-toc-recenter</code></a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dsplit_002dwindows_002dfraction-450"><code>reftex-toc-split-windows-fraction</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-reftex_002dtoc_002dsplit_002dwindows_002dhorizontally-449"><code>reftex-toc-split-windows-horizontally</code></a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Language-Support.html#index-reftex_002dtranslate_002dto_002dascii_002dfunction-323"><code>reftex-translate-to-ascii-function</code></a>: <a href="Language-Support.html#Language-Support">Language Support</a></li>
+<li><a href="Options-_0028Creating-Labels_0029.html#index-reftex_002dtranslate_002dto_002dascii_002dfunction-471"><code>reftex-translate-to-ascii-function</code></a>: <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a></li>
+<li><a href="Creating-Labels.html#index-reftex_002dtranslate_002dto_002dascii_002dfunction-53"><code>reftex-translate-to-ascii-function</code></a>: <a href="Creating-Labels.html#Creating-Labels">Creating Labels</a></li>
+<li><a href="Referencing-Labels.html#index-reftex_002dtrust_002dlabel_002dprefix-65"><code>reftex-trust-label-prefix</code></a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Options-_0028Defining-Label-Environments_0029.html#index-reftex_002dtrust_002dlabel_002dprefix-465"><code>reftex-trust-label-prefix</code></a>: <a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a></li>
+<li><a href="Optimizations.html#index-reftex_002dtrust_002dlabel_002dprefix-342"><code>reftex-trust-label-prefix</code></a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Options-_0028Finding-Files_0029.html#index-reftex_002duse_002dexternal_002dfile_002dfinders-541"><code>reftex-use-external-file-finders</code></a>: <a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a></li>
+<li><a href="Options-_0028Fontification_0029.html#index-reftex_002duse_002dfonts-556"><code>reftex-use-fonts</code></a>: <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-reftex_002duse_002ditimer_002din_002dxemacs-401"><code>reftex-use-itimer-in-xemacs</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Options-_0028Optimizations_0029.html#index-reftex_002duse_002dmultiple_002dselection_002dbuffers-552"><code>reftex-use-multiple-selection-buffers</code></a>: <a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a></li>
+<li><a href="Optimizations.html#index-reftex_002duse_002dmultiple_002dselection_002dbuffers-348"><code>reftex-use-multiple-selection-buffers</code></a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-reftex_002dview_002dcrossref-278"><code>reftex-view-crossref</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Commands.html#index-reftex_002dview_002dcrossref-423"><code>reftex-view-crossref</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Citation-Info.html#index-reftex_002dview_002dcrossref-222"><code>reftex-view-crossref</code></a>: <a href="Citation-Info.html#Citation-Info">Citation Info</a></li>
+<li><a href="Reference-Info.html#index-reftex_002dview_002dcrossref-167"><code>reftex-view-crossref</code></a>: <a href="Reference-Info.html#Reference-Info">Reference Info</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-reftex_002dview_002dcrossref_002dextra-290"><code>reftex-view-crossref-extra</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#index-reftex_002dview_002dcrossref_002dextra-529"><code>reftex-view-crossref-extra</code></a>: <a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a></li>
+<li><a href="Commands.html#index-reftex_002dview_002dcrossref_002dfrom_002dbibtex-424"><code>reftex-view-crossref-from-bibtex</code></a>: <a href="Commands.html#Commands">Commands</a></li>
+<li><a href="Options-_0028Referencing-Labels_0029.html#index-reftex_002dvref_002dis_002ddefault-479"><code>reftex-vref-is-default</code></a>: <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a></li>
+<li><a href="varioref-_0028LaTeX-package_0029.html#index-reftex_002dvref_002dis_002ddefault-184"><code>reftex-vref-is-default</code></a>: <a href="varioref-_0028LaTeX-package_0029.html#varioref-_0028LaTeX-package_0029">varioref (LaTeX package)</a></li>
+<li><a href="RefTeXs-Menu.html#index-RefTeXs-Menu-291">RefTeXs Menu</a>: <a href="RefTeXs-Menu.html#RefTeXs-Menu">RefTeXs Menu</a></li>
+<li><a href="Optimizations.html#index-Removing-lookup-buffers-332">Removing lookup buffers</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007brotating_007d_002c-LaTeX-package-128"><code>rotating</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-S_002dmouse_002d2-281"><code>S-mouse-2</code></a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Citation-Info.html#index-S_002dmouse_002d2-221"><code>S-mouse-2</code></a>: <a href="Citation-Info.html#Citation-Info">Citation Info</a></li>
+<li><a href="Reference-Info.html#index-S_002dmouse_002d2-174"><code>S-mouse-2</code></a>: <a href="Reference-Info.html#Reference-Info">Reference Info</a></li>
+<li><a href="Key-Bindings.html#index-S_002dmouse_002d2-300"><code>S-mouse-2</code></a>: <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a></li>
+<li><a href="Referencing-Labels.html#index-g_t_0040code_007bsaferef_007d_002c-LaTeX-package-71"><code>saferef</code>, LaTeX package</a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Optimizations.html#index-Saving-parser-information-337">Saving parser information</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bSCfigure_007d_002c-LaTeX-environment-126"><code>SCfigure</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bSCtable_007d_002c-LaTeX-environment-127"><code>SCtable</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Section-numbers_002c-wrong-383">Section numbers, wrong</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Table-of-Contents.html#index-Sectioning-commands-38">Sectioning commands</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Creating-Citations.html#index-Selection-buffer_002c-citations-196">Selection buffer, citations</a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Referencing-Labels.html#index-Selection-buffer_002c-labels-60">Selection buffer, labels</a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Optimizations.html#index-Selection-buffers_002c-multiple-347">Selection buffers, multiple</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Optimizations.html#index-Selection-buffers_002c-updating-349">Selection buffers, updating</a>: <a href="Optimizations.html#Optimizations">Optimizations</a></li>
+<li><a href="Creating-Citations.html#index-Selection-process-197">Selection process</a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Referencing-Labels.html#index-Selection-process-61">Selection process</a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Settings_002c-local-385">Settings, local</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsidecap_007d_002c-LaTeX-package-124"><code>sidecap</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsidewaysfigure_007d_002c-LaTeX-environment-130"><code>sidewaysfigure</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsidewaystable_007d_002c-LaTeX-environment-131"><code>sidewaystable</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Non_002dStandard-Environments.html#index-Special-parser-functions-162">Special parser functions</a>: <a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments">Non-Standard Environments</a></li>
+<li><a href="Table-of-Contents.html#index-Structure-editing-17">Structure editing</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Style-Files.html#index-Style-files_002c-AUCTeX-369">Style files, AUCTeX</a>: <a href="Style-Files.html#Style-Files">Style Files</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsubequations_007d_002c-AMS_002dLaTeX-environment-107"><code>subequations</code>, AMS-LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsubfig_007d_002c-LaTeX-package-132"><code>subfig</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsubfigure_002a_007d_002c-LaTeX-environment-135"><code>subfigure*</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsubfigure_007d_002c-LaTeX-environment-134"><code>subfigure</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsupertab_007d_002c-LaTeX-package-136"><code>supertab</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bsupertabular_007d_002c-LaTeX-environment-138"><code>supertabular</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Table-of-Contents.html#index-Table-of-contents-buffer-18">Table of contents buffer</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Table-of-Contents.html#index-Table-of-contents-buffer_002c-recentering-36">Table of contents buffer, recentering</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Options-_0028Table-of-Contents_0029.html#index-Table-of-contents_002c-options-442">Table of contents, options</a>: <a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007btable_002a_007d_002c-LaTeX-environment-90"><code>table*</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007btable_007d_002c-LaTeX-environment-89"><code>table</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007btabwindow_007d_002c-LaTeX-environment-123"><code>tabwindow</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Installation.html#index-TeX-files_002c-not-found-5">TeX files, not found</a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="Style-Files.html#index-TeX_002dadd_002dstyle_002dhook_002c-_0040r_007bAUCTeX_007d-370"><code>TeX-add-style-hook, </code><span class="roman">AUCTeX</span></a>: <a href="Style-Files.html#Style-Files">Style Files</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-TeX_002darg_002dcite_002c-_0040r_007bAUCTeX-function_007d-364"><code>TeX-arg-cite, </code><span class="roman">AUCTeX function</span></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-TeX_002darg_002dindex_002c-_0040r_007bAUCTeX-function_007d-366"><code>TeX-arg-index, </code><span class="roman">AUCTeX function</span></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-TeX_002darg_002dlabel_002c-_0040r_007bAUCTeX-function_007d-360"><code>TeX-arg-label, </code><span class="roman">AUCTeX function</span></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-TeX_002darg_002dref_002c-_0040r_007bAUCTeX-function_007d-362"><code>TeX-arg-ref, </code><span class="roman">AUCTeX function</span></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Finding-Files.html#index-TeX_002dfile_002dextensions-330"><code>TeX-file-extensions</code></a>: <a href="Finding-Files.html#Finding-Files">Finding Files</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-TeX_002dinsert_002dmacro_002c-_0040r_007bAUCTeX_007d-358"><code>TeX-insert-macro, </code><span class="roman">AUCTeX</span></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#index-TeX_002dinsert_002dmacro_002c-_0040r_007bAUCTeX-function_007d-367"><code>TeX-insert-macro, </code><span class="roman">AUCTeX function</span></a>: <a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a></li>
+<li><a href="Multifile-Documents.html#index-tex_002dmain_002dfile-318"><code>tex-main-file</code></a>: <a href="Multifile-Documents.html#Multifile-Documents">Multifile Documents</a></li>
+<li><a href="Multifile-Documents.html#index-TeX_002dmaster-319"><code>TeX-master</code></a>: <a href="Multifile-Documents.html#Multifile-Documents">Multifile Documents</a></li>
+<li><a href="Creating-Citations.html#index-g_t_0040code_007bTEXBIB_007d_002c-environment-variable-201"><code>TEXBIB</code>, environment variable</a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Installation.html#index-g_t_0040code_007bTEXINPUTS_007d_002c-environment-variable-6"><code>TEXINPUTS</code>, environment variable</a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="Imprint.html#index-Thanks-408">Thanks</a>: <a href="Imprint.html#Imprint">Imprint</a></li>
+<li><a href="Creating-Citations.html#index-g_t_0040code_007bthebibliography_007d_002c-LaTeX-environment-199"><code>thebibliography</code>, LaTeX environment</a>: <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a></li>
+<li><a href="Theorem-and-Axiom.html#index-g_t_0040code_007btheorem_007d_002c-newtheorem-145"><code>theorem</code>, newtheorem</a>: <a href="Theorem-and-Axiom.html#Theorem-and-Axiom">Theorem and Axiom</a></li>
+<li><a href="Table-of-Contents.html#index-TOC-entries-for-environments-41">TOC entries for environments</a>: <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a></li>
+<li><a href="Installation.html#index-turn_002don_002dreftex-8"><code>turn-on-reftex</code></a>: <a href="Installation.html#Installation">Installation</a></li>
+<li><a href="Referencing-Labels.html#index-g_t_0040code_007bvarioref_007d_002c-LaTeX-package-72"><code>varioref</code>, LaTeX package</a>: <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a></li>
+<li><a href="varioref-_0028LaTeX-package_0029.html#index-g_t_0040code_007bvarioref_007d_002c-LaTeX-package-181"><code>varioref</code>, LaTeX package</a>: <a href="varioref-_0028LaTeX-package_0029.html#varioref-_0028LaTeX-package_0029">varioref (LaTeX package)</a></li>
+<li><a href="Citation-Info.html#index-Viewing-citations-219">Viewing citations</a>: <a href="Citation-Info.html#Citation-Info">Citation Info</a></li>
+<li><a href="Viewing-Cross_002dReferences.html#index-Viewing-cite-locations-from-BibTeX-buffer-288">Viewing cite locations from BibTeX buffer</a>: <a href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a></li>
+<li><a href="Reference-Info.html#index-Viewing-cross_002dreferences-172">Viewing cross-references</a>: <a href="Reference-Info.html#Reference-Info">Reference Info</a></li>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#index-Viewing-cross_002dreferences_002c-options-528">Viewing cross-references, options</a>: <a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-Viper-mode-402">Viper mode</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-viper_002dharness_002dminor_002dmode-404"><code>viper-harness-minor-mode</code></a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bwrapfig_007d_002c-LaTeX-package-139"><code>wrapfig</code>, LaTeX package</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bwrapfigure_007d_002c-LaTeX-environment-141"><code>wrapfigure</code>, LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="Problems-and-Work_002dArounds.html#index-g_t_0040code_007bx_002dsymbol_007d_002c-Emacs-package-389"><code>x-symbol</code>, Emacs package</a>: <a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">Problems and Work-Arounds</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bxalignat_007d_002c-AMS_002dLaTeX-environment-105"><code>xalignat</code>, AMS-LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+<li><a href="xr-_0028LaTeX-package_0029.html#index-g_t_0040code_007bxr_007d_002c-LaTeX-package-175"><code>xr</code>, LaTeX package</a>: <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a></li>
+<li><a href="Builtin-Label-Environments.html#index-g_t_0040code_007bxxalignat_007d_002c-AMS_002dLaTeX-environment-106"><code>xxalignat</code>, AMS-LaTeX environment</a>: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a></li>
+   </ul>index.html#toc_Viewing-Cross_002dReferences">6 Viewing Cross&ndash;References</a></li>
+<li><a href="index.html#toc_Commands">7 Commands</a></li>
+<li><a href="index.html#toc_Options">8 Options, Keymaps, Hooks</a></li>
+<li><a href="index.html#toc_Changes">9 Changes</a></li>
+<li><a href="index.html#toc_GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a></li>
+<li><a href="index.html#toc_Index">Index</a></li>
+</ul>
+</div>
+
+ei   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Introduction" href="Introduction.html#Introduction">1 Introduction</a>
+<ul>
+<li><a href="Installation.html#Installation">1.1 Installation</a>
+<li><a href="Installation.html#Installation">1.2 Environment</a>
+<li><a href="Installation.html#Installation">1.3 Entering <b>RefTeX</b> Mode</a>
+<li><a href="RefTeX-in-a-Nutshell.html#RefTeX-in-a-Nutshell">1.4 <b>RefTeX</b> in a Nutshell</a>
+</li></ul>
+<li><a name="toc_Table-of-Contents" href="Table-of-Contents.html#Table-of-Contents">2 Table of Contents</a>
+<li><a name="toc_Labels-and-References" href="Labels-and-References.html#Labels-and-References">3 Labels and References</a>
+<ul>
+<li><a href="Creating-Labels.html#Creating-Labels">3.1 Creating Labels</a>
+<li><a href="Referencing-Labels.html#Referencing-Labels">3.2 Referencing Labels</a>
+<li><a href="Builtin-Label-Environments.html#Builtin-Label-Environments">3.3 Builtin Label Environments</a>
+<li><a href="Defining-Label-Environments.html#Defining-Label-Environments">3.4 Defining Label Environments</a>
+<ul>
+<li><a href="Theorem-and-Axiom.html#Theorem-and-Axiom">3.4.1 Theorem and Axiom Environments</a>
+<li><a href="Quick-Equation.html#Quick-Equation">3.4.2 Quick Equation Macro</a>
+<li><a href="Figure-Wrapper.html#Figure-Wrapper">3.4.3 Figure Wrapping Macro</a>
+<li><a href="Adding-Magic-Words.html#Adding-Magic-Words">3.4.4 Adding Magic Words</a>
+<li><a href="Using-_005ceqref.html#Using-_005ceqref">3.4.5 Using <code>\eqref</code></a>
+<li><a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments">3.4.6 Non-standard Environments</a>
+<li><a href="Putting-it-Together.html#Putting-it-Together">3.4.7 Putting it all together</a>
+</li></ul>
+<li><a href="Reference-Info.html#Reference-Info">3.5 Reference Info</a>
+<li><a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">3.6 <code>xr</code>: Cross-Document References</a>
+<li><a href="varioref-_0028LaTeX-package_0029.html#varioref-_0028LaTeX-package_0029">3.7 <code>varioref</code>: Variable Page References</a>
+<li><a href="fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029">3.8 <code>fancyref</code>: Fancy Cross References</a>
+</li></ul>
+<li><a name="toc_Citations" href="Citations.html#Citations">4 Citations</a>
+<ul>
+<li><a href="Creating-Citations.html#Creating-Citations">4.1 Creating Citations</a>
+<li><a href="Citation-Styles.html#Citation-Styles">4.2 Citation Styles</a>
+<li><a href="Citation-Info.html#Citation-Info">4.3 Citation Info</a>
+<li><a href="Chapterbib-and-Bibunits.html#Chapterbib-and-Bibunits">4.4 Chapterbib and Bibunits</a>
+<li><a href="Citations-Outside-LaTeX.html#Citations-Outside-LaTeX">4.5 Citations outside LaTeX</a>
+<li><a href="BibTeX-Database-Subsets.html#BibTeX-Database-Subsets">4.6 Database Subsets</a>
+</li></ul>
+<li><a name="toc_Index-Support" href="Index-Support.html#Index-Support">5 Index Support</a>
+<ul>
+<li><a href="Creating-Index-Entries.html#Creating-Index-Entries">5.1 Creating Index Entries</a>
+<li><a href="The-Index-Phrases-File.html#The-Index-Phrases-File">5.2 The Index Phrases File</a>
+<ul>
+<li><a href="Collecting-Phrases.html#Collecting-Phrases">5.2.1 Collecting Phrases</a>
+<li><a href="Consistency-Checks.html#Consistency-Checks">5.2.2 Consistency Checks</a>
+<li><a href="Global-Indexing.html#Global-Indexing">5.2.3 Global Indexing</a>
+</li></ul>
+<li><a href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">5.3 Displaying and Editing the Index</a>
+<li><a href="Builtin-Index-Macros.html#Builtin-Index-Macros">5.4 Builtin Index Macros</a>
+<li><a href="Defining-Index-Macros.html#Defining-Index-Macros">5.5 Defining Index Macros</a>
+</li></ul>
+<li><a name="toc_Viewing-Cross_002dReferences" href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">6 Viewing Cross&ndash;References</a>
+<ul>
+<li><a href="RefTeXs-Menu.html#RefTeXs-Menu">6.1 <b>RefTeX</b>'s Menu</a>
+<li><a href="Key-Bindings.html#Key-Bindings">6.2 Default Key Bindings</a>
+<li><a href="Faces.html#Faces">6.3 Faces</a>
+<li><a href="Multifile-Documents.html#Multifile-Documents">6.4 Multifile Documents</a>
+<li><a href="Language-Support.html#Language-Support">6.5 Language Support</a>
+<li><a href="Finding-Files.html#Finding-Files">6.6 Finding Files</a>
+<li><a href="Optimizations.html#Optimizations">6.7 Optimizations</a>
+<li><a href="AUCTeX.html#AUCTeX">6.8 AUCTeX</a>
+<ul>
+<li><a href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">6.8.1 The AUCTeX-<b>RefTeX</b> Interface</a>
+<li><a href="Style-Files.html#Style-Files">6.8.2 Style Files</a>
+<li><a href="Bib_002dCite.html#Bib_002dCite">6.8.3 Bib-Cite</a>
+</li></ul>
+<li><a href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds">6.9 Problems and Work-arounds</a>
+<li><a href="Imprint.html#Imprint">6.10 Imprint</a>
+</li></ul>
+<li><a name="toc_Commands" href="Commands.html#Commands">7 Commands</a>
+<li><a name="toc_Options" href="Options.html#Options">8 Options, Keymaps, Hooks</a>
+<ul>
+<li><a href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">8.1 Table of Contents</a>
+<li><a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">8.2 Defining Label Environments</a>
+<li><a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">8.3 Creating Labels</a>
+<li><a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">8.4 Referencing Labels</a>
+<li><a href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">8.5 Creating Citations</a>
+<li><a href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">8.6 Index Support</a>
+<li><a href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">8.7 Viewing Cross-References</a>
+<li><a href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">8.8 Finding Files</a>
+<li><a href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">8.9 Optimizations</a>
+<li><a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">8.10 Fontification</a>
+<li><a href="Options-_0028Misc_0029.html#Options-_0028Misc_0029">8.11 Miscellaneous</a>
+<li><a href="Keymaps-and-Hooks.html#Keymaps-and-Hooks">8.12 Keymaps and Hooks</a>
+</li></ul>
+<li><a name="toc_Changes" href="Changes.html#Changes">9 Changes</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Index" href="Index.html#Index">Index</a>
+</li></ul>
+</div>
+
+ght:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Index"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Index</h2>
+
+</body></html>
+

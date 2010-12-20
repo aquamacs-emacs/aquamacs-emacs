@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Saving Customizations - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
+<link rel="prev" href="Changing-a-Variable.html#Changing-a-Variable" title="Changing a Variable">
+<link rel="next" href="Face-Customization.html#Face-Customization" title="Face Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Saving-Customizations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Face-Customization.html#Face-Customization">Face Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Changing-a-Variable.html#Changing-a-Variable">Changing a Variable</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.2.4 Saving Customizations</h4>
+
+<p><a name="index-custom_002dfile-3956"></a>  Saving customizations from the customization buffer works by writing
+code to a file.  By reading this code, future sessions can set up the
+customizations again.  Normally, the code is saved in your
+initialization file (see <a href="Init-File.html#Init-File">Init File</a>).
+
+   <p>You can choose to save your customizations in a file other than your
+initialization file.  To make this work, you must add a couple of
+lines of code to your initialization file, to set the variable
+<code>custom-file</code> to the name of the desired file, and to load that
+file.  For example:
+
+<pre class="example">     (setq custom-file "~/.emacs-custom.el")
+     (load custom-file)
+</pre>
+   <p>You can use <code>custom-file</code> to specify different customization
+files for different Emacs versions, like this:
+
+<pre class="example">     (cond ((&lt; emacs-major-version 22)
+            ;; <span class="roman">Emacs 21 customization.</span>
+            (setq custom-file "~/.custom-21.el"))
+           ((and (= emacs-major-version 22) (&lt; emacs-minor-version 3))
+            ;; <span class="roman">Emacs 22 customization, before version 22.3.</span>
+            (setq custom-file "~/.custom-22.el"))
+           (t
+            ;; <span class="roman">Emacs version 22.3 or later.</span>
+            (setq custom-file "~/.emacs-custom.el")))
+     
+     (load custom-file)
+</pre>
+   <p>If Emacs was invoked with the <samp><span class="option">-q</span></samp> or <samp><span class="option">--no-init-file</span></samp>
+options (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>), it will not let you save your
+customizations in your initialization file.  This is because saving
+customizations from such a session would wipe out all the other
+customizations you might have on your initialization file.
+
+   </body></html>
+

@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Index Support - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Citations.html#Citations" title="Citations">
+<link rel="next" href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences" title="Viewing Cross-References">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Index-Support"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences">Viewing Cross-References</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Citations.html#Citations">Citations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">5 Index Support</h2>
+
+<p><a name="index-Index-Support-231"></a><a name="index-g_t_0040code_007b_005cindex_007d-232"></a>
+LaTeX has builtin support for creating an Index.  The LaTeX core
+supports two different indices, the standard index and a glossary.  With
+the help of special LaTeX packages (<samp><span class="file">multind.sty</span></samp> or
+<samp><span class="file">index.sty</span></samp>), any number of indices can be supported.
+
+   <p>Index entries are created with the <code>\index{</code><var>entry</var><code>}</code> macro. 
+All entries defined in a document are written out to the <samp><span class="file">.aux</span></samp>
+file.  A separate tool must be used to convert this information into a
+nicely formatted index.  Tools used with LaTeX include <code>MakeIndex</code>
+and <code>xindy</code>.
+
+   <p>Indexing is a very difficult task.  It must follow strict conventions to
+make the index consistent and complete.  There are basically two
+approaches one can follow, and both have their merits.
+
+     <ol type=1 start=1>
+<li>Part of the indexing should already be done with the markup.  The
+document structure should be reflected in the index, so when starting
+new sections, the basic topics of the section should be indexed.  If the
+document contains definitions, theorems or the like, these should all
+correspond to appropriate index entries.  This part of the index can
+very well be developed along with the document.  Often it is worthwhile
+to define special purpose macros which define an item and at the same
+time make an index entry, possibly with special formatting to make the
+reference page in the index bold or underlined.  To make <b>RefTeX</b>
+support for indexing possible, these special macros must be added to
+<b>RefTeX</b>'s configuration (see <a href="Defining-Index-Macros.html#Defining-Index-Macros">Defining Index Macros</a>).
+
+     <li>The rest of the index is often just a collection of where in the
+document certain words or phrases are being used.  This part is
+difficult to develop along with the document, because consistent entries
+for each occurrence are needed and are best selected when the document
+is ready.  <b>RefTeX</b> supports this with an <em>index phrases file</em>
+which collects phrases and helps indexing the phrases globally.
+        </ol>
+
+   <p>Before you start, you need to make sure that <b>RefTeX</b> knows about
+the index style being used in the current document.  <b>RefTeX</b> has
+builtin support for the default <code>\index</code> and <code>\glossary</code>
+macros.  Other LaTeX packages, like the <samp><span class="file">multind</span></samp> or <samp><span class="file">index</span></samp>
+package, redefine the <code>\index</code> macro to have an additional
+argument, and <b>RefTeX</b> needs to be configured for those.  A
+sufficiently new version of AUCTeX (9.10c or later) will do this
+automatically.  If you really don't use AUCTeX (you should!), this
+configuration needs to be done by hand with the menu (<code>Ref-&gt;Index
+Style</code>), or globally for all your documents with
+
+<pre class="lisp">     (setq reftex-index-macros '(multind))     <span class="roman">or</span>
+     (setq reftex-index-macros '(index))
+</pre>
+   <ul class="menu">
+<li><a accesskey="1" href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a>:            Macros and completion of entries. 
+<li><a accesskey="2" href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a>:            A special file for global indexing. 
+<li><a accesskey="3" href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a>:  The index editor. 
+<li><a accesskey="4" href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a>:              The index macros RefTeX knows about. 
+<li><a accesskey="5" href="Defining-Index-Macros.html#Defining-Index-Macros">Defining Index Macros</a>:                 ... and macros it  doesn't. 
+</ul>
+
+   </body></html>
+

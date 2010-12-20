@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>Headers - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
+<link rel="prev" href="Score-File-Syntax.html#Score-File-Syntax" title="Score File Syntax">
+<link rel="next" href="Ranges.html#Ranges" title="Ranges">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Headers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Ranges.html#Ranges">Ranges</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Score-File-Syntax.html#Score-File-Syntax">Score File Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.7.4 Headers</h4>
+
+<p>Internally Gnus uses a format for storing article headers that
+corresponds to the <acronym>NOV</acronym> format in a mysterious fashion.  One could
+almost suspect that the author looked at the <acronym>NOV</acronym> specification and
+just shamelessly <em>stole</em> the entire thing, and one would be right.
+
+   <p><dfn>Header</dfn> is a severely overloaded term.  &ldquo;Header&rdquo; is used in
+RFC 1036 to talk about lines in the head of an article (e.g.,
+<code>From</code>).  It is used by many people as a synonym for
+&ldquo;head&rdquo;&mdash;&ldquo;the header and the body&rdquo;.  (That should be avoided, in my
+opinion.)  And Gnus uses a format internally that it calls &ldquo;header&rdquo;,
+which is what I'm talking about here.  This is a 9-element vector,
+basically, with each header (ouch) having one slot.
+
+   <p>These slots are, in order: <code>number</code>, <code>subject</code>, <code>from</code>,
+<code>date</code>, <code>id</code>, <code>references</code>, <code>chars</code>, <code>lines</code>,
+<code>xref</code>, and <code>extra</code>.  There are macros for accessing and
+setting these slots&mdash;they all have predictable names beginning with
+<code>mail-header-</code> and <code>mail-header-set-</code>, respectively.
+
+   <p>All these slots contain strings, except the <code>extra</code> slot, which
+contains an alist of header/value pairs (see <a href="To-From-Newsgroups.html#To-From-Newsgroups">To From Newsgroups</a>).
+
+   </body></html>
+

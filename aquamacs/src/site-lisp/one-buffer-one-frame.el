@@ -569,7 +569,10 @@ the current window is switched to the new buffer."
 		;; dr 12/2006 - we'll try this again, because
 		;; that's the way display-buffer is supposed to work.
 		  
-		(unless (eq display-buffer-reuse-frames 'select)
+		(unless (or (eq display-buffer-reuse-frames 'select)
+			    ;; re-selecting the old frame would cause a space switch,
+			    ;; assuming the new one is on the active space.
+			    (not (ns-frame-is-on-active-space-p sframe)))
 		  ;; we can't use select-frame-set-input-focus because
 		  ;; that would raise the (main) frame over the newly
 		  ;; opened one, and we don't want that.
@@ -637,6 +640,13 @@ even if it's the only visible frame."
 
 (defvar aquamacs-last-frame-empty-frame nil)
 (defun aquamacs-make-empty-frame (parms)
+  (let ((frame-to-delete
+	 (when (and aquamacs-last-frame-empty-frame
+		    (frame-live-p aquamacs-last-frame-empty-frame)
+		    (not (ns-frame-is-on-active-space-p aquamacs-last-frame-empty-frame)))
+	   (prog1
+	       aquamacs-last-frame-empty-frame
+	     (setq aquamacs-last-frame-empty-frame nil)))))
   (let ((all-parms
 	 (append
 	  '((visibility . nil))
@@ -649,7 +659,9 @@ even if it's the only visible frame."
       (setq aquamacs-last-frame-empty-frame (make-frame all-parms))))
   (select-frame aquamacs-last-frame-empty-frame)
   (raise-frame aquamacs-last-frame-empty-frame)
-  aquamacs-last-frame-empty-frame)    
+  (if frame-to-delete
+      (delete-frame frame-to-delete)))
+  aquamacs-last-frame-empty-frame)
 
 (defvar aquamacs-deleted-frame-position nil)
 (defun aquamacs-delete-frame (&optional frame)
@@ -676,7 +688,10 @@ even if it's the only visible frame."
 	;; do not delete the last visible frame if there are others hidden:
 	;; doing so prevents Aquamacs from receiving keyboard input (NS problem?)
 	(progn 
-	  (delete-frame (or frame (selected-frame)))
+	  (if (equal (ns-visible-frame-list)
+		     (list (or frame (selected-frame))))
+	      (error) ;; create *empty* frame or hide current one
+	    (delete-frame (or frame (selected-frame))))
 	  (unless (visible-frame-list) ;; delete-frame may succeed if iconified frames are around
 	    (error)))
       (error
@@ -955,11 +970,32 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 ;; 	  (setq list))
 ;; 	(setq list (cdr list))))))
 (define-key special-event-map [ns-application-reopen] 'ignore)
-(define-key special-event-map [ns-application-activated] 'ignore)
+(define-key special-event-map [ns-application-activated] 'aquamacs-handle-app-activated)
+(define-key global-map [ns-new-frame] 'new-empty-buffer-other-frame)
 )
 
+(defun aquamacs-handle-app-activated ()
+  "Aquamacs was activated.
+Ensure that there is a (hidden) frame in the current space."
+  (interactive)
+  ;; Must call at idle time.  Frame is not correctly
+  ;; keyed if it is created at this time. (E.g., no blinking cursor,
+  ;; and menu events are ignored.)
+  ;; this is a problem with event handling at the C level
+  ;; To Do: diagnose and fix.  Perhaps related to the way
+  ;; the NS port handles file requests via ns_pending_files
+  ;; (which do not display the behavior.)
+  (run-with-idle-timer 0.1 nil 'aquamacs-handle-app-activated2))
 
-  
+(defun aquamacs-handle-app-activated2 ()
+  (unless (ns-frame-is-on-active-space-p (selected-frame))
+    (let* ((display-buffer-reuse-frames 'select)
+	   (one-buffer-one-frame nil)
+	   (hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
+      (select-window (frame-first-window hf))
+      (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
+      ;; (switch-to-buffer (init-aquamacs-last-frame-empty-buffer) 'norecord)
+      (make-frame-invisible hf t))))
 
 
 ;; FIXES IN VARIOUS PLACES
@@ -971,7 +1007,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 					 (&rest args) activate protect) 
       (let ((one-buffer-one-frame nil))
 	ad-do-it)))
-  
+
 ;; ediff-directories, e.g. uses split-window to create a new window
 ;; in a frame, and then `switch-to-buffer', which should simply show
 ;; another buffer in the newly created window. Problem is, in this

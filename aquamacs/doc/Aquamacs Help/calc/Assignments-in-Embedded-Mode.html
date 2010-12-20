@@ -1,0 +1,251 @@
+<html lang="en">
+<head>
+<title>Assignments in Embedded Mode - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Embedded-Mode.html#Embedded-Mode" title="Embedded Mode">
+<link rel="prev" href="More-About-Embedded-Mode.html#More-About-Embedded-Mode" title="More About Embedded Mode">
+<link rel="next" href="Mode-Settings-in-Embedded-Mode.html#Mode-Settings-in-Embedded-Mode" title="Mode Settings in Embedded Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Assignments-in-Embedded-Mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mode-Settings-in-Embedded-Mode.html#Mode-Settings-in-Embedded-Mode">Mode Settings in Embedded Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="More-About-Embedded-Mode.html#More-About-Embedded-Mode">More About Embedded Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>
+<hr>
+</div>
+
+<h3 class="section">17.3 Assignments in Embedded Mode</h3>
+
+<p class="noindent">The &lsquo;<samp><span class="samp">:=</span></samp>&rsquo; (assignment) and &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; (&ldquo;evaluates-to&rdquo;) operators
+are especially useful in Embedded mode.  They allow you to make
+a definition in one formula, then refer to that definition in
+other formulas embedded in the same buffer.
+
+   <p>An embedded formula which is an assignment to a variable, as in
+
+<pre class="example">     foo := 5
+</pre>
+   <p class="noindent">records &lsquo;<samp><span class="samp">5</span></samp>&rsquo; as the stored value of <code>foo</code> for the
+purposes of Embedded mode operations in the current buffer.  It
+does <em>not</em> actually store &lsquo;<samp><span class="samp">5</span></samp>&rsquo; as the &ldquo;global&rdquo; value
+of <code>foo</code>, however.  Regular Calc operations, and Embedded
+formulas in other buffers, will not see this assignment.
+
+   <p>One way to use this assigned value is simply to create an
+Embedded formula elsewhere that refers to <code>foo</code>, and to press
+<kbd>=</kbd> in that formula.  However, this permanently replaces the
+<code>foo</code> in the formula with its current value.  More interesting
+is to use &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; elsewhere:
+
+<pre class="example">     foo + 7 =&gt; 12
+</pre>
+   <p>See <a href="Evaluates_002dTo-Operator.html#Evaluates_002dTo-Operator">Evaluates-To Operator</a>, for a general discussion of &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;.
+
+   <p>If you move back and change the assignment to <code>foo</code>, any
+&lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; formulas which refer to it are automatically updated.
+
+<pre class="example">     foo := 17
+     
+     foo + 7 =&gt; 24
+</pre>
+   <p>The obvious question then is, <em>how</em> can one easily change the
+assignment to <code>foo</code>?  If you simply select the formula in
+Embedded mode and type 17, the assignment itself will be replaced
+by the 17.  The effect on the other formula will be that the
+variable <code>foo</code> becomes unassigned:
+
+<pre class="example">     17
+     
+     foo + 7 =&gt; foo + 7
+</pre>
+   <p>The right thing to do is first to use a selection command (<kbd>j 2</kbd>
+will do the trick) to select the righthand side of the assignment. 
+Then, <kbd>17 &lt;TAB&gt; &lt;DEL&gt;</kbd> will swap the 17 into place (see <a href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>, to see how this works).
+
+   <p><a name="index-C_002dx-_002a-j-2234"></a><a name="index-calc_002dembedded_002dselect-2235"></a>The <kbd>C-x * j</kbd> (<code>calc-embedded-select</code>) command provides an
+easy way to operate on assignments.  It is just like <kbd>C-x * e</kbd>,
+except that if the enabled formula is an assignment, it uses
+<kbd>j 2</kbd> to select the righthand side.  If the enabled formula
+is an evaluates-to, it uses <kbd>j 1</kbd> to select the lefthand side. 
+A formula can also be a combination of both:
+
+<pre class="example">     bar := foo + 3 =&gt; 20
+</pre>
+   <p class="noindent">in which case <kbd>C-x * j</kbd> will select the middle part (&lsquo;<samp><span class="samp">foo + 3</span></samp>&rsquo;).
+
+   <p>The formula is automatically deselected when you leave Embedded
+mode.
+
+   <p><a name="index-C_002dx-_002a-u-2236"></a><a name="index-calc_002dembedded_002dupdate_002dformula-2237"></a>Another way to change the assignment to <code>foo</code> would simply be
+to edit the number using regular Emacs editing rather than Embedded
+mode.  Then, we have to find a way to get Embedded mode to notice
+the change.  The <kbd>C-x * u</kbd> (<code>calc-embedded-update-formula</code>)
+command is a convenient way to do this.
+
+<pre class="example">     foo := 6
+     
+     foo + 7 =&gt; 13
+</pre>
+   <p>Pressing <kbd>C-x * u</kbd> is much like pressing <kbd>C-x * e = C-x * e</kbd>, that
+is, temporarily enabling Embedded mode for the formula under the
+cursor and then evaluating it with <kbd>=</kbd>.  But <kbd>C-x * u</kbd> does
+not actually use <kbd>C-x * e</kbd>, and in fact another formula somewhere
+else can be enabled in Embedded mode while you use <kbd>C-x * u</kbd> and
+that formula will not be disturbed.
+
+   <p>With a numeric prefix argument, <kbd>C-x * u</kbd> updates all active
+&lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; formulas in the buffer.  Formulas which have not yet
+been activated in Embedded mode, and formulas which do not have
+&lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; as their top-level operator, are not affected by this. 
+(This is useful only if you have used <kbd>m C</kbd>; see below.)
+
+   <p>With a plain <kbd>C-u</kbd> prefix, <kbd>C-u C-x * u</kbd> updates only in the
+region between mark and point rather than in the whole buffer.
+
+   <p><kbd>C-x * u</kbd> is also a handy way to activate a formula, such as an
+&lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; formula that has freshly been typed in or loaded from a
+file.
+
+   <p><a name="index-C_002dx-_002a-a-2238"></a><a name="index-calc_002dembedded_002dactivate-2239"></a>The <kbd>C-x * a</kbd> (<code>calc-embedded-activate</code>) command scans
+through the current buffer and activates all embedded formulas
+that contain &lsquo;<samp><span class="samp">:=</span></samp>&rsquo; or &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; symbols.  This does not mean
+that Embedded mode is actually turned on, but only that the
+formulas' positions are registered with Embedded mode so that
+the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; values can be properly updated as assignments are
+changed.
+
+   <p>It is a good idea to type <kbd>C-x * a</kbd> right after loading a file
+that uses embedded &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operators.  Emacs includes a nifty
+&ldquo;buffer-local variables&rdquo; feature that you can use to do this
+automatically.  The idea is to place near the end of your file
+a few lines that look like this:
+
+<pre class="example">     --- Local Variables: ---
+     --- eval:(calc-embedded-activate) ---
+     --- End: ---
+</pre>
+   <p class="noindent">where the leading and trailing &lsquo;<samp><span class="samp">---</span></samp>&rsquo; can be replaced by
+any suitable strings (which must be the same on all three lines)
+or omitted altogether; in a TeX or LaTeX file, &lsquo;<samp><span class="samp">%</span></samp>&rsquo; would be a good
+leading string and no trailing string would be necessary.  In a
+C program, &lsquo;<samp><span class="samp">/*</span></samp>&rsquo; and &lsquo;<samp><span class="samp">*/</span></samp>&rsquo; would be good leading and
+trailing strings.
+
+   <p>When Emacs loads a file into memory, it checks for a Local Variables
+section like this one at the end of the file.  If it finds this
+section, it does the specified things (in this case, running
+<kbd>C-x * a</kbd> automatically) before editing of the file begins. 
+The Local Variables section must be within 3000 characters of the
+end of the file for Emacs to find it, and it must be in the last
+page of the file if the file has any page separators. 
+See <a href="../emacs/File-Variables.html#File-Variables">Local Variables in Files</a>.
+
+   <p>Note that <kbd>C-x * a</kbd> does not update the formulas it finds. 
+To do this, type, say, <kbd>M-1 C-x * u</kbd> after <kbd>C-x&nbsp;*&nbsp;a</kbd><!-- /@w -->. 
+Generally this should not be a problem, though, because the
+formulas will have been up-to-date already when the file was
+saved.
+
+   <p>Normally, <kbd>C-x * a</kbd> activates all the formulas it finds, but
+any previous active formulas remain active as well.  With a
+positive numeric prefix argument, <kbd>C-x * a</kbd> first deactivates
+all current active formulas, then actives the ones it finds in
+its scan of the buffer.  With a negative prefix argument,
+<kbd>C-x * a</kbd> simply deactivates all formulas.
+
+   <p>Embedded mode has two symbols, &lsquo;<samp><span class="samp">Active</span></samp>&rsquo; and &lsquo;<samp><span class="samp">~Active</span></samp>&rsquo;,
+which it puts next to the major mode name in a buffer's mode line. 
+It puts &lsquo;<samp><span class="samp">Active</span></samp>&rsquo; if it has reason to believe that all
+formulas in the buffer are active, because you have typed <kbd>C-x * a</kbd>
+and Calc has not since had to deactivate any formulas (which can
+happen if Calc goes to update an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; formula somewhere because
+a variable changed, and finds that the formula is no longer there
+due to some kind of editing outside of Embedded mode).  Calc puts
+&lsquo;<samp><span class="samp">~Active</span></samp>&rsquo; in the mode line if some, but probably not all,
+formulas in the buffer are active.  This happens if you activate
+a few formulas one at a time but never use <kbd>C-x * a</kbd>, or if you
+used <kbd>C-x * a</kbd> but then Calc had to deactivate a formula
+because it lost track of it.  If neither of these symbols appears
+in the mode line, no embedded formulas are active in the buffer
+(e.g., before Embedded mode has been used, or after a <kbd>M-- C-x * a</kbd>).
+
+   <p>Embedded formulas can refer to assignments both before and after them
+in the buffer.  If there are several assignments to a variable, the
+nearest preceding assignment is used if there is one, otherwise the
+following assignment is used.
+
+<pre class="example">     x =&gt; 1
+     
+     x := 1
+     
+     x =&gt; 1
+     
+     x := 2
+     
+     x =&gt; 2
+</pre>
+   <p>As well as simple variables, you can also assign to subscript
+expressions of the form &lsquo;<samp><var>var</var><span class="samp">_</span><var>number</var></samp>&rsquo; (as in
+<code>x_0</code>), or &lsquo;<samp><var>var</var><span class="samp">_</span><var>var</var></samp>&rsquo; (as in <code>x_max</code>). 
+Assignments to other kinds of objects can be represented by Calc,
+but the automatic linkage between assignments and references works
+only for plain variables and these two kinds of subscript expressions.
+
+   <p>If there are no assignments to a given variable, the global
+stored value for the variable is used (see <a href="Storing-Variables.html#Storing-Variables">Storing Variables</a>),
+or, if no value is stored, the variable is left in symbolic form. 
+Note that global stored values will be lost when the file is saved
+and loaded in a later Emacs session, unless you have used the
+<kbd>s p</kbd> (<code>calc-permanent-variable</code>) command to save them;
+see <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>.
+
+   <p>The <kbd>m C</kbd> (<code>calc-auto-recompute</code>) command turns automatic
+recomputation of &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; forms on and off.  If you turn automatic
+recomputation off, you will have to use <kbd>C-x * u</kbd> to update these
+formulas manually after an assignment has been changed.  If you
+plan to change several assignments at once, it may be more efficient
+to type <kbd>m C</kbd>, change all the assignments, then use <kbd>M-1 C-x * u</kbd>
+to update the entire buffer afterwards.  The <kbd>m C</kbd> command also
+controls &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; formulas on the stack; see <a href="Evaluates_002dTo-Operator.html#Evaluates_002dTo-Operator">Evaluates-To Operator</a>.  When you turn automatic recomputation back on, the
+stack will be updated but the Embedded buffer will not; you must
+use <kbd>C-x * u</kbd> to update the buffer by hand.
+
+   </body></html>
+

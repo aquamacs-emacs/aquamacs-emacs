@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Dynamic blocks - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hacking.html#Hacking" title="Hacking">
+<link rel="prev" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" title="Tables in arbitrary syntax">
+<link rel="next" href="Special-agenda-views.html#Special-agenda-views" title="Special agenda views">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Dynamic-blocks"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Special-agenda-views.html#Special-agenda-views">Special agenda views</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax">Tables in arbitrary syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hacking.html#Hacking">Hacking</a>
+<hr>
+</div>
+
+<h3 class="section">A.6 Dynamic blocks</h3>
+
+<p><a name="index-dynamic-blocks-1428"></a>
+Org documents can contain <em>dynamic blocks</em>.  These are
+specially marked regions that are updated by some user-written function. 
+A good example for such a block is the clock table inserted by the
+command <kbd>C-c C-x C-r</kbd> (see <a href="Clocking-work-time.html#Clocking-work-time">Clocking work time</a>).
+
+   <p>Dynamic block are enclosed by a BEGIN-END structure that assigns a name
+to the block and can also specify parameters for the function producing
+the content of the block.
+
+   <p>#+BEGIN:dynamic block
+<pre class="example">     #+BEGIN: myblock :parameter1 value1 :parameter2 value2 ...
+     
+     #+END:
+</pre>
+   <p>Dynamic blocks are updated with the following commands
+
+     
+<a name="index-C_002dc-C_002dx-C_002du-1429"></a>
+<dl><dt><kbd>C-c C-x C-u</kbd><dd>Update dynamic block at point. 
+<a name="index-C_002du-C_002dc-C_002dx-C_002du-1430"></a><br><dt><kbd>C-u C-c C-x C-u</kbd><dd>Update all dynamic blocks in the current file. 
+</dl>
+
+   <p>Updating a dynamic block means to remove all the text between BEGIN and
+END, parse the BEGIN line for parameters and then call the specific
+writer function for this block to insert the new content.  If you want
+to use the original content in the writer function, you can use the
+extra parameter <code>:content</code>.
+
+   <p>For a block with name <code>myblock</code>, the writer function is
+<code>org-dblock-write:myblock</code> with as only parameter a property list
+with the parameters given in the begin line.  Here is a trivial example
+of a block that keeps track of when the block update function was last
+run:
+
+<pre class="example">     #+BEGIN: block-update-time :format "on %m/%d/%Y at %H:%M"
+     
+     #+END:
+</pre>
+   <p class="noindent">The corresponding block writer function could look like this:
+
+<pre class="lisp">     (defun org-dblock-write:block-update-time (params)
+        (let ((fmt (or (plist-get params :format) "%d. %m. %Y")))
+          (insert "Last block update at: "
+                  (format-time-string fmt (current-time)))))
+</pre>
+   <p>If you want to make sure that all dynamic blocks are always up-to-date,
+you could add the function <code>org-update-all-dblocks</code> to a hook, for
+example <code>before-save-hook</code>.  <code>org-update-all-dblocks</code> is
+written in a way such that it does nothing in buffers that are not in
+<code>org-mode</code>.
+
+   </body></html>
+

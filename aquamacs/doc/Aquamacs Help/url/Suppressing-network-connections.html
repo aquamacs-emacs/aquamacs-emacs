@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Suppressing network connections - URL Programmer's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="URL Programmer's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gateways-in-general.html#Gateways-in-general" title="Gateways in general">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs Lisp URL loading package.
+
+Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Suppressing-network-connections"></a>
+<p>
+Up:&nbsp;<a rel="up" accesskey="u" href="Gateways-in-general.html#Gateways-in-general">Gateways in general</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.3.1 Suppressing Network Connections</h4>
+
+<p><a name="index-network-connections_002c-suppressing-140"></a><a name="index-suppressing-network-connections-141"></a><a name="index-bugs_002c-HTML-142"></a><a name="index-HTML-_0060bugs_0027-143"></a>In some circumstances it is desirable to suppress making network
+connections.  A typical case is when rendering HTML in a mail user
+agent, when external URLs should not be activated, particularly to
+avoid `bugs' which `call home' by fetch single-pixel images and the
+like.  To arrange this, bind the following variable for the duration
+of such processing.
+
+<div class="defun">
+&mdash; Variable: <b>url-gateway-unplugged</b><var><a name="index-url_002dgateway_002dunplugged-144"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code> new network connections are never
+opened by the URL library. 
+</p></blockquote></div>
+
+<!-- @node Broken hostname resolution -->
+<!-- @subsection Broken Hostname Resolution -->
+<!-- @cindex hostname resolver -->
+<!-- @cindex resolver, hostname -->
+<!-- Some C libraries do not include the hostname resolver routines in -->
+<!-- their static libraries.  If Emacs was linked statically, and was not -->
+<!-- linked with the resolver libraries, it will not be able to get to any -->
+<!-- machines off the local network.  This is characterized by being able -->
+<!-- to reach someplace with a raw ip number, but not its hostname -->
+<!-- (@url{http://129.79.254.191/} works, but -->
+<!-- @url{http://www.cs.indiana.edu/} doesn't).  This used to happen on -->
+<!-- SunOS4 and Ultrix, but is now probably now rare.  If Emacs can't be -->
+<!-- rebuilt linked against the resolver library, it can use the external -->
+<!-- @command{nslookup} program instead. -->
+<!-- @defopt url-gateway-broken-resolution -->
+<!-- @cindex @code{nslookup} program -->
+<!-- @cindex program, @code{nslookup} -->
+<!-- If non-@code{nil}, this variable says to use the program specified by -->
+<!-- @code{url-gateway-nslookup-program} program to do hostname resolution. -->
+<!-- @end defopt -->
+<!-- @defopt url-gateway-nslookup-program -->
+<!-- The name of the program to do hostname lookup if Emacs can't do it -->
+<!-- directly.  This program should expect a single argument on the command -->
+<!-- line-the hostname to resolve-and should produce output similar to -->
+<!-- the standard Unix @command{nslookup} program: -->
+<!-- @example -->
+<!-- Name: www.cs.indiana.edu -->
+<!-- Address: 129.79.254.191 -->
+<!-- @end example -->
+<!-- @end defopt -->
+   </body></html>
+

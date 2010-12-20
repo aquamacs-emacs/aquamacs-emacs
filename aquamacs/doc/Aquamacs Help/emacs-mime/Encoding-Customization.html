@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Encoding Customization - Emacs MIME Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Emacs MIME Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Composing.html#Composing" title="Composing">
+<link rel="prev" href="Advanced-MML-Example.html#Advanced-MML-Example" title="Advanced MML Example">
+<link rel="next" href="Charset-Translation.html#Charset-Translation" title="Charset Translation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs MIME interface functionality.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Encoding-Customization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Charset-Translation.html#Charset-Translation">Charset Translation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Advanced-MML-Example.html#Advanced-MML-Example">Advanced MML Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Composing.html#Composing">Composing</a>
+<hr>
+</div>
+
+<h3 class="section">2.4 Encoding Customization</h3>
+
+     <dl>
+<dt><code>mm-body-charset-encoding-alist</code><dd><a name="index-mm_002dbody_002dcharset_002dencoding_002dalist-65"></a>Mapping from <acronym>MIME</acronym> charset to encoding to use.  This variable is
+usually used except, e.g., when other requirements force a specific
+encoding (digitally signed messages require 7bit encodings).  The
+default is
+
+     <pre class="lisp">          ((iso-2022-jp . 7bit)
+           (iso-2022-jp-2 . 7bit)
+           (utf-16 . base64)
+           (utf-16be . base64)
+           (utf-16le . base64))
+</pre>
+     <p>As an example, if you do not want to have ISO-8859-1 characters
+quoted-printable encoded, you may add <code>(iso-8859-1 . 8bit)</code> to
+this variable.  You can override this setting on a per-message basis
+by using the <code>encoding</code> <acronym>MML</acronym> tag (see <a href="MML-Definition.html#MML-Definition">MML Definition</a>).
+
+     <br><dt><code>mm-coding-system-priorities</code><dd><a name="index-mm_002dcoding_002dsystem_002dpriorities-66"></a>Prioritize coding systems to use for outgoing messages.  The default
+is <code>nil</code>, which means to use the defaults in Emacs, but is
+<code>(iso-8859-1 iso-2022-jp iso-2022-jp-2 shift_jis utf-8)</code> when
+running Emacs in the Japanese language environment.  It is a list of
+coding system symbols (aliases of coding systems are also allowed, use
+<kbd>M-x describe-coding-system</kbd> to make sure you are specifying correct
+coding system names).  For example, if you have configured Emacs
+to prefer UTF-8, but wish that outgoing messages should be sent in
+ISO-8859-1 if possible, you can set this variable to
+<code>(iso-8859-1)</code>.  You can override this setting on a per-message
+basis by using the <code>charset</code> <acronym>MML</acronym> tag (see <a href="MML-Definition.html#MML-Definition">MML Definition</a>).
+
+     <p>As different hierarchies prefer different charsets, you may want to set
+<code>mm-coding-system-priorities</code> according to the hierarchy in Gnus. 
+Here's an example:
+
+     <!-- Corrections about preferred charsets are welcome.  de, fr and fj -->
+     <!-- should be correct, I don't know about the rest (so these are only -->
+     <!-- examples): -->
+     <pre class="lisp">          (add-to-list 'gnus-newsgroup-variables 'mm-coding-system-priorities)
+          (setq gnus-parameters
+                (nconc
+                 ;; Some charsets are just examples!
+                 '(("^cn\\." ;; Chinese
+                    (mm-coding-system-priorities
+                     '(iso-8859-1 cn-big5 chinese-iso-7bit utf-8)))
+                   ("^cz\\.\\|^pl\\." ;; Central and Eastern European
+                    (mm-coding-system-priorities '(iso-8859-2 utf-8)))
+                   ("^de\\." ;; German language
+                    (mm-coding-system-priorities '(iso-8859-1 iso-8859-15 utf-8)))
+                   ("^fr\\." ;; French
+                    (mm-coding-system-priorities '(iso-8859-15 iso-8859-1 utf-8)))
+                   ("^fj\\." ;; Japanese
+                    (mm-coding-system-priorities
+                     '(iso-8859-1 iso-2022-jp iso-2022-jp-2 shift_jis utf-8)))
+                   ("^ru\\." ;; Cyrillic
+                    (mm-coding-system-priorities
+                     '(koi8-r iso-8859-5 iso-8859-1 utf-8))))
+                 gnus-parameters))
+</pre>
+     <br><dt><code>mm-content-transfer-encoding-defaults</code><dd><a name="index-mm_002dcontent_002dtransfer_002dencoding_002ddefaults-67"></a>Mapping from <acronym>MIME</acronym> types to encoding to use.  This variable is usually
+used except, e.g., when other requirements force a safer encoding
+(digitally signed messages require 7bit encoding).  Besides the normal
+<acronym>MIME</acronym> encodings, <code>qp-or-base64</code> may be used to indicate that for
+each case the most efficient of quoted-printable and base64 should be
+used.
+
+     <p><code>qp-or-base64</code> has another effect.  It will fold long lines so that
+MIME parts may not be broken by MTA.  So do <code>quoted-printable</code> and
+<code>base64</code>.
+
+     <p>Note that it affects body encoding only when a part is a raw forwarded
+message (which will be made by <code>gnus-summary-mail-forward</code> with the
+arg 2 for example) or is neither the &lsquo;<samp><span class="samp">text/*</span></samp>&rsquo; type nor the
+&lsquo;<samp><span class="samp">message/*</span></samp>&rsquo; type.  Even though in those cases, you can override
+this setting on a per-message basis by using the <code>encoding</code>
+<acronym>MML</acronym> tag (see <a href="MML-Definition.html#MML-Definition">MML Definition</a>).
+
+     <br><dt><code>mm-use-ultra-safe-encoding</code><dd><a name="index-mm_002duse_002dultra_002dsafe_002dencoding-68"></a>When this is non-<code>nil</code>, it means that textual parts are encoded as
+quoted-printable if they contain lines longer than 76 characters or
+starting with "From " in the body.  Non-7bit encodings (8bit, binary)
+are generally disallowed.  This reduce the probability that a non-8bit
+clean MTA or MDA changes the message.  This should never be set
+directly, but bound by other functions when necessary (e.g., when
+encoding messages that are to be digitally signed).
+
+</dl>
+
+   </body></html>
+

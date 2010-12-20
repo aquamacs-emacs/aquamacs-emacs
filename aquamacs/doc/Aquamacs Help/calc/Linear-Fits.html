@@ -1,0 +1,178 @@
+<html lang="en">
+<head>
+<title>Linear Fits - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Curve-Fitting.html#Curve-Fitting" title="Curve Fitting">
+<link rel="prev" href="Curve-Fitting.html#Curve-Fitting" title="Curve Fitting">
+<link rel="next" href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits" title="Polynomial and Multilinear Fits">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Linear-Fits"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits">Polynomial and Multilinear Fits</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.8.1 Linear Fits</h4>
+
+<p class="noindent"><a name="index-a-F-1800"></a><a name="index-calc_002dcurve_002dfit-1801"></a><a name="index-fit-1802"></a><a name="index-Linear-regression-1803"></a><a name="index-Least_002dsquares-fits-1804"></a>The <kbd>a F</kbd> (<code>calc-curve-fit</code>) [<code>fit</code>] command attempts
+to fit a set of data (&lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo; vectors of numbers) to a
+straight line, polynomial, or other function of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  For the
+moment we will consider only the case of fitting to a line, and we
+will ignore the issue of whether or not the model was in fact a good
+fit for the data.
+
+   <p>In a standard linear least-squares fit, we have a set of &lsquo;<samp><span class="samp">(x,y)</span></samp>&rsquo;
+data points that we wish to fit to the model &lsquo;<samp><span class="samp">y = m x + b</span></samp>&rsquo;
+by adjusting the parameters &lsquo;<samp><span class="samp">m</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; to make the &lsquo;<samp><span class="samp">y</span></samp>&rsquo;
+values calculated from the formula be as close as possible to the actual
+&lsquo;<samp><span class="samp">y</span></samp>&rsquo; values in the data set.  (In a polynomial fit, the model is
+instead, say, &lsquo;<samp><span class="samp">y = a x^3 + b x^2 + c x + d</span></samp>&rsquo;.  In a multilinear fit,
+we have data points of the form &lsquo;<samp><span class="samp">(x_1,x_2,x_3,y)</span></samp>&rsquo; and our model is
+&lsquo;<samp><span class="samp">y = a x_1 + b x_2 + c x_3 + d</span></samp>&rsquo;.  These will be discussed later.)
+
+   <p>In the model formula, variables like &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x_2</span></samp>&rsquo; are called
+the <dfn>independent variables</dfn>, and &lsquo;<samp><span class="samp">y</span></samp>&rsquo; is the <dfn>dependent
+variable</dfn>.  Variables like &lsquo;<samp><span class="samp">m</span></samp>&rsquo;, &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are called
+the <dfn>parameters</dfn> of the model.
+
+   <p>The <kbd>a F</kbd> command takes the data set to be fitted from the stack. 
+By default, it expects the data in the form of a matrix.  For example,
+for a linear or polynomial fit, this would be a
+<!-- @math{2\times N} -->
+2xN
+matrix where the first row is a list of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; values and the second
+row has the corresponding &lsquo;<samp><span class="samp">y</span></samp>&rsquo; values.  For the multilinear fit
+shown above, the matrix would have four rows (&lsquo;<samp><span class="samp">x_1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">x_2</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">x_3</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">y</span></samp>&rsquo;, respectively).
+
+   <p>If you happen to have an
+<!-- @math{N\times2} -->
+Nx2
+matrix instead of a
+<!-- @math{2\times N} -->
+2xN
+matrix, just press <kbd>v t</kbd> first to transpose the matrix.
+
+   <p>After you type <kbd>a F</kbd>, Calc prompts you to select a model.  For a
+linear fit, press the digit <kbd>1</kbd>.
+
+   <p>Calc then prompts for you to name the variables.  By default it chooses
+high letters like &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo; for independent variables and
+low letters like &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; for parameters.  (The dependent
+variable doesn't need a name.)  The two kinds of variables are separated
+by a semicolon.  Since you generally care more about the names of the
+independent variables than of the parameters, Calc also allows you to
+name only those and let the parameters use default names.
+
+   <p>For example, suppose the data matrix
+
+<pre class="example">     [ [ 1, 2, 3, 4,  5  ]
+       [ 5, 7, 9, 11, 13 ] ]
+</pre>
+   <p class="noindent">is on the stack and we wish to do a simple linear fit.  Type
+<kbd>a F</kbd>, then <kbd>1</kbd> for the model, then &lt;RET&gt; to use
+the default names.  The result will be the formula &lsquo;<samp><span class="samp">3. + 2. x</span></samp>&rsquo;
+on the stack.  Calc has created the model expression <kbd>a + b x</kbd>,
+then found the optimal values of &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; to fit the
+data.  (In this case, it was able to find an exact fit.)  Calc then
+substituted those values for &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; in the model
+formula.
+
+   <p>The <kbd>a F</kbd> command puts two entries in the trail.  One is, as
+always, a copy of the result that went to the stack; the other is
+a vector of the actual parameter values, written as equations:
+&lsquo;<samp><span class="samp">[a = 3, b = 2]</span></samp>&rsquo;, in case you'd rather read them in a list
+than pick them out of the formula.  (You can type <kbd>t y</kbd>
+to move this vector to the stack; see <a href="Trail-Commands.html#Trail-Commands">Trail Commands</a>.
+
+   <p>Specifying a different independent variable name will affect the
+resulting formula: <kbd>a F 1 k &lt;RET&gt;</kbd> produces <kbd>3 + 2 k</kbd>. 
+Changing the parameter names (say, <kbd>a F 1 k;b,m &lt;RET&gt;</kbd>) will affect
+the equations that go into the trail.
+
+   <p>To see what happens when the fit is not exact, we could change
+the number 13 in the data matrix to 14 and try the fit again. 
+The result is:
+
+<pre class="example">     2.6 + 2.2 x
+</pre>
+   <p>Evaluating this formula, say with <kbd>v x 5 &lt;RET&gt; &lt;TAB&gt; V M $ &lt;RET&gt;</kbd>, shows
+a reasonably close match to the y-values in the data.
+
+<pre class="example">     [4.8, 7., 9.2, 11.4, 13.6]
+</pre>
+   <p>Since there is no line which passes through all the <var>n</var> data points,
+Calc has chosen a line that best approximates the data points using
+the method of least squares.  The idea is to define the <dfn>chi-square</dfn>
+error measure
+
+<pre class="example">     chi^2 = sum((y_i - (a + b x_i))^2, i, 1, N)
+</pre>
+   <p class="noindent">which is clearly zero if &lsquo;<samp><span class="samp">a + b x</span></samp>&rsquo; exactly fits all data points,
+and increases as various &lsquo;<samp><span class="samp">a + b x_i</span></samp>&rsquo; values fail to match the
+corresponding &lsquo;<samp><span class="samp">y_i</span></samp>&rsquo; values.  There are several reasons why the
+summand is squared, one of them being to ensure that
+<!-- @math{\chi^2 \ge 0}. -->
+&lsquo;<samp><span class="samp">chi^2 &gt;= 0</span></samp>&rsquo;. 
+Least-squares fitting simply chooses the values of &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo;
+for which the error
+<!-- @math{\chi^2} -->
+&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+is as small as possible.
+
+   <p>Other kinds of models do the same thing but with a different model
+formula in place of &lsquo;<samp><span class="samp">a + b x_i</span></samp>&rsquo;.
+
+   <p>A numeric prefix argument causes the <kbd>a F</kbd> command to take the
+data in some other form than one big matrix.  A positive argument <var>n</var>
+will take <var>N</var> items from the stack, corresponding to the <var>n</var> rows
+of a data matrix.  In the linear case, <var>n</var> must be 2 since there
+is always one independent variable and one dependent variable.
+
+   <p>A prefix of zero or plain <kbd>C-u</kbd> is a compromise; Calc takes two
+items from the stack, an <var>n</var>-row matrix of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; values, and a
+vector of &lsquo;<samp><span class="samp">y</span></samp>&rsquo; values.  If there is only one independent variable,
+the &lsquo;<samp><span class="samp">x</span></samp>&rsquo; values can be either a one-row matrix or a plain vector,
+in which case the <kbd>C-u</kbd> prefix is the same as a <kbd>C-u&nbsp;2</kbd><!-- /@w --> prefix.
+
+   </body></html>
+

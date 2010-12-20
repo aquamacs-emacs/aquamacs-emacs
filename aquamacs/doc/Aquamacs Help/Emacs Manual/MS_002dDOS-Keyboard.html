@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>MS-DOS Keyboard - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="MS_002dDOS.html#MS_002dDOS" title="MS-DOS">
+<link rel="next" href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse" title="MS-DOS Mouse">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="MS-DOS-Keyboard"></a>
+<a name="MS_002dDOS-Keyboard"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">MS-DOS Mouse</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>
+<hr>
+</div>
+
+<h4 class="subsection">G.11.1 Keyboard Usage on MS-DOS</h4>
+
+<p><a name="index-DEL-_0040r_007b_0028MS_002dDOS_0029_007d-4409"></a><a name="index-BS-_0040r_007b_0028MS_002dDOS_0029_007d-4410"></a>  The key that is called &lt;DEL&gt; in Emacs (because that's how it is
+designated on most workstations) is known as &lt;BS&gt; (backspace) on a
+PC.  That is why the PC-specific terminal initialization remaps the
+&lt;BS&gt; key to act as &lt;DEL&gt;; the &lt;DELETE&gt; key is remapped to act
+as <kbd>C-d</kbd> for the same reasons.
+
+   <p><a name="index-C_002dg-_0040r_007b_0028MS_002dDOS_0029_007d-4411"></a><a name="index-C_002dBREAK-_0040r_007b_0028MS_002dDOS_0029_007d-4412"></a><a name="index-quitting-on-MS_002dDOS-4413"></a>  Emacs built for MS-DOS recognizes <kbd>C-&lt;BREAK&gt;</kbd> as a quit
+character, just like <kbd>C-g</kbd>.  This is because Emacs cannot detect
+that you have typed <kbd>C-g</kbd> until it is ready for more input.  As a
+consequence, you cannot use <kbd>C-g</kbd> to stop a running command
+(see <a href="Quitting.html#Quitting">Quitting</a>). 
+By contrast, <kbd>C-&lt;BREAK&gt;</kbd> <em>is</em> detected as soon as you
+type it (as <kbd>C-g</kbd> is on other systems), so it can be used to stop
+a running command and for emergency escape
+(see <a href="Emergency-Escape.html#Emergency-Escape">Emergency Escape</a>).
+
+   <p><a name="index-Meta-_0028under-MS_002dDOS_0029-4414"></a><a name="index-Hyper-_0028under-MS_002dDOS_0029-4415"></a><a name="index-Super-_0028under-MS_002dDOS_0029-4416"></a><a name="index-dos_002dsuper_002dkey-4417"></a><a name="index-dos_002dhyper_002dkey-4418"></a>  The PC keyboard maps use the left &lt;ALT&gt; key as the &lt;META&gt; key. 
+You have two choices for emulating the &lt;SUPER&gt; and &lt;HYPER&gt; keys:
+choose either the right &lt;CTRL&gt; key or the right &lt;ALT&gt; key by
+setting the variables <code>dos-hyper-key</code> and <code>dos-super-key</code> to 1
+or 2 respectively.  If neither <code>dos-super-key</code> nor
+<code>dos-hyper-key</code> is 1, then by default the right &lt;ALT&gt; key is
+also mapped to the &lt;META&gt; key.  However, if the MS-DOS international
+keyboard support program <samp><span class="file">KEYB.COM</span></samp> is installed, Emacs will
+<em>not</em> map the right &lt;ALT&gt; to &lt;META&gt;, since it is used for
+accessing characters like <kbd>~</kbd> and <kbd>@</kbd> on non-US keyboard
+layouts; in this case, you may only use the left &lt;ALT&gt; as &lt;META&gt;
+key.
+
+   <p><a name="index-C_002dj-_0040r_007b_0028MS_002dDOS_0029_007d-4419"></a><a name="index-dos_002dkeypad_002dmode-4420"></a>  The variable <code>dos-keypad-mode</code> is a flag variable that controls
+what key codes are returned by keys in the numeric keypad.  You can also
+define the keypad &lt;ENTER&gt; key to act like <kbd>C-j</kbd>, by putting the
+following line into your <samp><span class="file">_emacs</span></samp> file:
+
+<pre class="smallexample">     ;; <span class="roman">Make the &lt;ENTER&gt; key from the numeric keypad act as </span><kbd>C-j</kbd><span class="roman">.</span>
+     (define-key function-key-map [kp-enter] [?\C-j])
+</pre>
+   </body></html>
+

@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+<title>FAQ 5-6 - Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Frequently Asked Questions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages" title="FAQ 5 - Composing messages">
+<link rel="prev" href="FAQ-5_002d5.html#FAQ-5_002d5" title="FAQ 5-5">
+<link rel="next" href="FAQ-5_002d7.html#FAQ-5_002d7" title="FAQ 5-7">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-5-6"></a>
+<a name="FAQ-5_002d6"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-5_002d7.html#FAQ-5_002d7">FAQ 5-7</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-5_002d5.html#FAQ-5_002d5">FAQ 5-5</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages">FAQ 5 - Composing messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 5.6</h5>
+
+<p>Can I set the dictionary based on the group I'm posting to?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>Yes, say something like
+
+<pre class="example">     (add-hook 'gnus-select-group-hook
+               (lambda ()
+                 (cond
+                  ((string-match
+                    "^de\\." (gnus-group-real-name gnus-newsgroup-name))
+                   (ispell-change-dictionary "deutsch8"))
+                  (t
+                   (ispell-change-dictionary "english")))))
+</pre>
+   <p class="noindent">in ~/.gnus.el. Change "^de\\." and "deutsch8" to something
+that suits your needs.
+
+   </body></html>
+

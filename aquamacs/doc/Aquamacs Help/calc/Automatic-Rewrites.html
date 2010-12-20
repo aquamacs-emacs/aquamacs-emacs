@@ -1,0 +1,210 @@
+<html lang="en">
+<head>
+<title>Automatic Rewrites - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
+<link rel="prev" href="Matching-Commands.html#Matching-Commands" title="Matching Commands">
+<link rel="next" href="Debugging-Rewrites.html#Debugging-Rewrites" title="Debugging Rewrites">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Automatic-Rewrites"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Debugging-Rewrites.html#Debugging-Rewrites">Debugging Rewrites</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Matching-Commands.html#Matching-Commands">Matching Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.11.11 Automatic Rewrites</h4>
+
+<p class="noindent"><a name="index-g_t_0040code_007bEvalRules_007d-variable-1946"></a><a name="index-EvalRules-1947"></a>It is possible to get Calc to apply a set of rewrite rules on all
+results, effectively adding to the built-in set of default
+simplifications.  To do this, simply store your rule set in the
+variable <code>EvalRules</code>.  There is a convenient <kbd>s E</kbd> command
+for editing <code>EvalRules</code>; see <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>.
+
+   <p>For example, suppose you want &lsquo;<samp><span class="samp">sin(a + b)</span></samp>&rsquo; to be expanded out
+to &lsquo;<samp><span class="samp">sin(b) cos(a) + cos(b) sin(a)</span></samp>&rsquo; wherever it appears, and
+similarly for &lsquo;<samp><span class="samp">cos(a + b)</span></samp>&rsquo;.  The corresponding rewrite rule
+set would be,
+
+<pre class="smallexample">     [ sin(a + b)  :=  cos(a) sin(b) + sin(a) cos(b),
+       cos(a + b)  :=  cos(a) cos(b) - sin(a) sin(b) ]
+</pre>
+   <p>To apply these manually, you could put them in a variable called
+<code>trigexp</code> and then use <kbd>a r trigexp</kbd> every time you wanted
+to expand trig functions.  But if instead you store them in the
+variable <code>EvalRules</code>, they will automatically be applied to all
+sines and cosines of sums.  Then, with &lsquo;<samp><span class="samp">2 x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">45</span></samp>&rsquo; on
+the stack, typing <kbd>+ S</kbd> will (assuming Degrees mode) result in
+&lsquo;<samp><span class="samp">0.7071 sin(2 x) + 0.7071 cos(2 x)</span></samp>&rsquo; automatically.
+
+   <p>As each level of a formula is evaluated, the rules from
+<code>EvalRules</code> are applied before the default simplifications. 
+Rewriting continues until no further <code>EvalRules</code> apply. 
+Note that this is different from the usual order of application of
+rewrite rules:  <code>EvalRules</code> works from the bottom up, simplifying
+the arguments to a function before the function itself, while <kbd>a r</kbd>
+applies rules from the top down.
+
+   <p>Because the <code>EvalRules</code> are tried first, you can use them to
+override the normal behavior of any built-in Calc function.
+
+   <p>It is important not to write a rule that will get into an infinite
+loop.  For example, the rule set &lsquo;<samp><span class="samp">[f(0) := 1, f(n) := n f(n-1)]</span></samp>&rsquo;
+appears to be a good definition of a factorial function, but it is
+unsafe.  Imagine what happens if &lsquo;<samp><span class="samp">f(2.5)</span></samp>&rsquo; is simplified.  Calc
+will continue to subtract 1 from this argument forever without reaching
+zero.  A safer second rule would be &lsquo;<samp><span class="samp">f(n) := n f(n-1) :: n&gt;0</span></samp>&rsquo;. 
+Another dangerous rule is &lsquo;<samp><span class="samp">g(x, y) := g(y, x)</span></samp>&rsquo;.  Rewriting
+&lsquo;<samp><span class="samp">g(2, 4)</span></samp>&rsquo;, this would bounce back and forth between that and
+&lsquo;<samp><span class="samp">g(4, 2)</span></samp>&rsquo; forever.  If an infinite loop in <code>EvalRules</code>
+occurs, Emacs will eventually stop with a &ldquo;Computation got stuck
+or ran too long&rdquo; message.
+
+   <p>Another subtle difference between <code>EvalRules</code> and regular rewrites
+concerns rules that rewrite a formula into an identical formula.  For
+example, &lsquo;<samp><span class="samp">f(n) := f(floor(n))</span></samp>&rsquo; &ldquo;fails to match&rdquo; when &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is
+already an integer.  But in <code>EvalRules</code> this case is detected only
+if the righthand side literally becomes the original formula before any
+further simplification.  This means that &lsquo;<samp><span class="samp">f(n) := f(floor(n))</span></samp>&rsquo; will
+get into an infinite loop if it occurs in <code>EvalRules</code>.  Calc will
+replace &lsquo;<samp><span class="samp">f(6)</span></samp>&rsquo; with &lsquo;<samp><span class="samp">f(floor(6))</span></samp>&rsquo;, which is different from
+&lsquo;<samp><span class="samp">f(6)</span></samp>&rsquo;, so it will consider the rule to have matched and will
+continue simplifying that formula; first the argument is simplified
+to get &lsquo;<samp><span class="samp">f(6)</span></samp>&rsquo;, then the rule matches again to get &lsquo;<samp><span class="samp">f(floor(6))</span></samp>&rsquo;
+again, ad infinitum.  A much safer rule would check its argument first,
+say, with &lsquo;<samp><span class="samp">f(n) := f(floor(n)) :: !dint(n)</span></samp>&rsquo;.
+
+   <p>(What really happens is that the rewrite mechanism substitutes the
+meta-variables in the righthand side of a rule, compares to see if the
+result is the same as the original formula and fails if so, then uses
+the default simplifications to simplify the result and compares again
+(and again fails if the formula has simplified back to its original
+form).  The only special wrinkle for the <code>EvalRules</code> is that the
+same rules will come back into play when the default simplifications
+are used.  What Calc wants to do is build &lsquo;<samp><span class="samp">f(floor(6))</span></samp>&rsquo;, see that
+this is different from the original formula, simplify to &lsquo;<samp><span class="samp">f(6)</span></samp>&rsquo;,
+see that this is the same as the original formula, and thus halt the
+rewriting.  But while simplifying, &lsquo;<samp><span class="samp">f(6)</span></samp>&rsquo; will again trigger
+the same <code>EvalRules</code> rule and Calc will get into a loop inside
+the rewrite mechanism itself.)
+
+   <p>The <code>phase</code>, <code>schedule</code>, and <code>iterations</code> markers do
+not work in <code>EvalRules</code>.  If the rule set is divided into phases,
+only the phase 1 rules are applied, and the schedule is ignored. 
+The rules are always repeated as many times as possible.
+
+   <p>The <code>EvalRules</code> are applied to all function calls in a formula,
+but not to numbers (and other number-like objects like error forms),
+nor to vectors or individual variable names.  (Though they will apply
+to <em>components</em> of vectors and error forms when appropriate.)  You
+might try to make a variable <code>phihat</code> which automatically expands
+to its definition without the need to press <kbd>=</kbd> by writing the
+rule &lsquo;<samp><span class="samp">quote(phihat) := (1-sqrt(5))/2</span></samp>&rsquo;, but unfortunately this rule
+will not work as part of <code>EvalRules</code>.
+
+   <p>Finally, another limitation is that Calc sometimes calls its built-in
+functions directly rather than going through the default simplifications. 
+When it does this, <code>EvalRules</code> will not be able to override those
+functions.  For example, when you take the absolute value of the complex
+number &lsquo;<samp><span class="samp">(2, 3)</span></samp>&rsquo;, Calc computes &lsquo;<samp><span class="samp">sqrt(2*2 + 3*3)</span></samp>&rsquo; by calling
+the multiplication, addition, and square root functions directly rather
+than applying the default simplifications to this formula.  So an
+<code>EvalRules</code> rule that (perversely) rewrites &lsquo;<samp><span class="samp">sqrt(13) := 6</span></samp>&rsquo;
+would not apply.  (However, if you put Calc into Symbolic mode so that
+&lsquo;<samp><span class="samp">sqrt(13)</span></samp>&rsquo; will be left in symbolic form by the built-in square
+root function, your rule will be able to apply.  But if the complex
+number were &lsquo;<samp><span class="samp">(3,4)</span></samp>&rsquo;, so that &lsquo;<samp><span class="samp">sqrt(25)</span></samp>&rsquo; must be calculated,
+then Symbolic mode will not help because &lsquo;<samp><span class="samp">sqrt(25)</span></samp>&rsquo; can be
+evaluated exactly to 5.)
+
+   <p>One subtle restriction that normally only manifests itself with
+<code>EvalRules</code> is that while a given rewrite rule is in the process
+of being checked, that same rule cannot be recursively applied.  Calc
+effectively removes the rule from its rule set while checking the rule,
+then puts it back once the match succeeds or fails.  (The technical
+reason for this is that compiled pattern programs are not reentrant.) 
+For example, consider the rule &lsquo;<samp><span class="samp">foo(x) := x :: foo(x/2) &gt; 0</span></samp>&rsquo;
+attempting to match &lsquo;<samp><span class="samp">foo(8)</span></samp>&rsquo;.  This rule will be inactive while
+the condition &lsquo;<samp><span class="samp">foo(4) &gt; 0</span></samp>&rsquo; is checked, even though it might be
+an integral part of evaluating that condition.  Note that this is not
+a problem for the more usual recursive type of rule, such as
+&lsquo;<samp><span class="samp">foo(x) := foo(x/2)</span></samp>&rsquo;, because there the rule has succeeded and
+been reactivated by the time the righthand side is evaluated.
+
+   <p>If <code>EvalRules</code> has no stored value (its default state), or if
+anything but a vector is stored in it, then it is ignored.
+
+   <p>Even though Calc's rewrite mechanism is designed to compare rewrite
+rules to formulas as quickly as possible, storing rules in
+<code>EvalRules</code> may make Calc run substantially slower.  This is
+particularly true of rules where the top-level call is a commonly used
+function, or is not fixed.  The rule &lsquo;<samp><span class="samp">f(n) := n f(n-1) :: n&gt;0</span></samp>&rsquo; will
+only activate the rewrite mechanism for calls to the function <code>f</code>,
+but &lsquo;<samp><span class="samp">lg(n) + lg(m) := lg(n m)</span></samp>&rsquo; will check every &lsquo;<samp><span class="samp">+</span></samp>&rsquo; operator.
+
+<pre class="smallexample">     apply(f, [a*b]) := apply(f, [a]) + apply(f, [b]) :: in(f, [ln, log10])
+</pre>
+   <p class="noindent">may seem more &ldquo;efficient&rdquo; than two separate rules for <code>ln</code> and
+<code>log10</code>, but actually it is vastly less efficient because rules
+with <code>apply</code> as the top-level pattern must be tested against
+<em>every</em> function call that is simplified.
+
+   <p><a name="index-g_t_0040code_007bAlgSimpRules_007d-variable-1948"></a><a name="index-AlgSimpRules-1949"></a>Suppose you want &lsquo;<samp><span class="samp">sin(a + b)</span></samp>&rsquo; to be expanded out not all the time,
+but only when <kbd>a s</kbd> is used to simplify the formula.  The variable
+<code>AlgSimpRules</code> holds rules for this purpose.  The <kbd>a s</kbd> command
+will apply <code>EvalRules</code> and <code>AlgSimpRules</code> to the formula, as
+well as all of its built-in simplifications.
+
+   <p>Most of the special limitations for <code>EvalRules</code> don't apply to
+<code>AlgSimpRules</code>.  Calc simply does an <kbd>a r AlgSimpRules</kbd>
+command with an infinite repeat count as the first step of <kbd>a s</kbd>. 
+It then applies its own built-in simplifications throughout the
+formula, and then repeats these two steps (along with applying the
+default simplifications) until no further changes are possible.
+
+   <p><a name="index-g_t_0040code_007bExtSimpRules_007d-variable-1950"></a><a name="index-g_t_0040code_007bUnitSimpRules_007d-variable-1951"></a><a name="index-ExtSimpRules-1952"></a><a name="index-UnitSimpRules-1953"></a>There are also <code>ExtSimpRules</code> and <code>UnitSimpRules</code> variables
+that are used by <kbd>a e</kbd> and <kbd>u s</kbd>, respectively; these commands
+also apply <code>EvalRules</code> and <code>AlgSimpRules</code>.  The variable
+<code>IntegSimpRules</code> contains simplification rules that are used
+only during integration by <kbd>a i</kbd>.
+
+   </body></html>
+

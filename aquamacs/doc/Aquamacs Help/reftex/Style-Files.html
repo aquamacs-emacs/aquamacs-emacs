@@ -1,0 +1,157 @@
+<html lang="en">
+<head>
+<title>Style Files - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="AUCTeX.html#AUCTeX" title="AUCTeX">
+<link rel="prev" href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface" title="AUCTeX-RefTeX Interface">
+<link rel="next" href="Bib_002dCite.html#Bib_002dCite" title="Bib-Cite">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Style-Files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Bib_002dCite.html#Bib_002dCite">Bib-Cite</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="AUCTeX_002dRefTeX-Interface.html#AUCTeX_002dRefTeX-Interface">AUCTeX-RefTeX Interface</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="AUCTeX.html#AUCTeX">AUCTeX</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.8.2 Style Files</h4>
+
+<p><a name="index-Style-files_002c-AUCTeX-369"></a><a name="index-TeX_002dadd_002dstyle_002dhook_002c-_0040r_007bAUCTeX_007d-370"></a>Style files are Emacs Lisp files which are evaluated by AUCTeX in
+association with the <code>\documentclass</code> and <code>\usepackage</code>
+commands of a document (see <a href="../auctex/Style-Files.html#Style-Files">Style Files</a>). Support for
+<b>RefTeX</b> in such a style file is useful when the LaTeX style
+defines macros or environments connected with labels, citations, or the
+index.  Many style files (e.g. <samp><span class="file">amsmath.el</span></samp> or <samp><span class="file">natbib.el</span></samp>)
+distributed with AUCTeX already support <b>RefTeX</b> in this
+way.
+
+   <p>Before calling a <b>RefTeX</b> function, the style hook should always
+test for the availability of the function, so that the style file will
+also work for people who do not use <b>RefTeX</b>.
+
+   <p>Additions made with style files in the way described below remain local
+to the current document.  For example, if one package uses AMSTeX, the
+style file will make <b>RefTeX</b> switch over to <code>\eqref</code>, but
+this will not affect other documents.
+
+   <p><a name="index-reftex_002dadd_002dlabel_002denvironments-371"></a><a name="index-reftex_002dadd_002dto_002dlabel_002dalist-372"></a>A style hook may contain calls to
+<code>reftex-add-label-environments</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  which defines additions to
+<code>reftex-label-alist</code>.  The argument taken by this function must have
+the same format as <code>reftex-label-alist</code>.  The <samp><span class="file">amsmath.el</span></samp>
+style file of AUCTeX for example contains the following:
+
+<pre class="lisp">     (TeX-add-style-hook "amsmath"
+        (lambda ()
+          (if (fboundp 'reftex-add-label-environments)
+              (reftex-add-label-environments '(AMSTeX)))))
+</pre>
+   <p class="noindent"><a name="index-LaTeX_002dadd_002denvironments_002c-_0040r_007bAUCTeX_007d-373"></a>while a package <code>myprop</code> defining a <code>proposition</code> environment
+with <code>\newtheorem</code> might use
+
+<pre class="lisp">     (TeX-add-style-hook "myprop"
+        (lambda ()
+          (LaTeX-add-environments '("proposition" LaTeX-env-label))
+          (if (fboundp 'reftex-add-label-environments)
+              (reftex-add-label-environments
+               '(("proposition" ?p "prop:" "~\\ref{%s}" t
+                                ("Proposition" "Prop.") -3))))))
+</pre>
+   <p><a name="index-reftex_002dset_002dcite_002dformat-374"></a>Similarly, a style hook may contain a call to
+<code>reftex-set-cite-format</code> to set the citation format.  The style
+file <samp><span class="file">natbib.el</span></samp> for the Natbib citation style does switch
+<b>RefTeX</b>'s citation format like this:
+
+<pre class="lisp">     (TeX-add-style-hook "natbib"
+        (lambda ()
+          (if (fboundp 'reftex-set-cite-format)
+              (reftex-set-cite-format 'natbib))))
+</pre>
+   <p><a name="index-reftex_002dadd_002dindex_002dmacros-375"></a>The hook may contain a call to <code>reftex-add-index-macros</code> to
+define additional <code>\index</code>-like macros.  The argument must have
+the same format as <code>reftex-index-macros</code>.  It may be a symbol, to
+trigger support for one of the builtin index packages.  For example,
+the style <samp><span class="file">multind.el</span></samp> contains
+
+<pre class="lisp">     (TeX-add-style-hook "multind"
+       (lambda ()
+         (and (fboundp 'reftex-add-index-macros)
+              (reftex-add-index-macros '(multind)))))
+</pre>
+   <p>If you have your own package <samp><span class="file">myindex</span></samp> which defines the
+following macros to be used with the LaTeX <samp><span class="file">index.sty</span></samp> file
+<pre class="example">     \newcommand{\molec}[1]{#1\index{Molecules!#1}}
+     \newcommand{\aindex}[1]{#1\index[author]{#1}
+</pre>
+   <p>you could write this in the style file <samp><span class="file">myindex.el</span></samp>:
+
+<pre class="lisp">     (TeX-add-style-hook "myindex"
+        (lambda ()
+          (TeX-add-symbols
+           '("molec" TeX-arg-index)
+           '("aindex" TeX-arg-index))
+          (if (fboundp 'reftex-add-index-macros)
+              (reftex-add-index-macros
+               '(("molec{*}" "idx" ?m "Molecules!" nil nil)
+                 ("aindex{*}" "author" ?a "" nil nil))))))
+</pre>
+   <p><a name="index-reftex_002dadd_002dsection_002dlevels-376"></a>Finally the hook may contain a call to <code>reftex-add-section-levels</code>
+to define additional section statements.  For example, the FoilTeX class
+has just two headers, <code>\foilhead</code> and <code>\rotatefoilhead</code>.  Here
+is a style file <samp><span class="file">foils.el</span></samp> that will inform <b>RefTeX</b> about these:
+
+<pre class="lisp">     (TeX-add-style-hook "foils"
+        (lambda ()
+          (if (fboundp 'reftex-add-section-levels)
+              (reftex-add-section-levels '(("foilhead" . 3)
+                                           ("rotatefoilhead" . 3))))))
+</pre>
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This used to be the
+function <code>reftex-add-to-label-alist</code> which is still available as an
+alias for compatibility.</p>
+
+   <hr></div>
+
+   </body></html>
+

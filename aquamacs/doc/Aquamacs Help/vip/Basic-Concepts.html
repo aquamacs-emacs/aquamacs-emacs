@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Basic Concepts - VIP</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="VIP">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Survey.html#Survey" title="Survey">
+<link rel="prev" href="Survey.html#Survey" title="Survey">
+<link rel="next" href="Loading-VIP.html#Loading-VIP" title="Loading VIP">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Concepts"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Loading-VIP.html#Loading-VIP">Loading VIP</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Survey.html#Survey">Survey</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Survey.html#Survey">Survey</a>
+<hr>
+</div>
+
+<h3 class="section">1.1 Basic Concepts</h3>
+
+<p>We begin by explaining some basic concepts of Emacs.  These concepts are
+explained in more detail in the GNU Emacs Manual.
+
+   <p><a name="index-buffer-1"></a><a name="index-point-2"></a><a name="index-mark-3"></a><a name="index-text-4"></a><a name="index-looking-at-5"></a><a name="index-end-_0028of-buffer_0029-6"></a><a name="index-region-7"></a>
+Conceptually, a <dfn>buffer</dfn> is just a string of <acronym>ASCII</acronym> characters and two
+special characters &lt;PNT&gt; (<dfn>point</dfn>) and &lt;MRK&gt; (<dfn>mark</dfn>) such
+that the character &lt;PNT&gt; occurs exactly once and &lt;MRK&gt; occurs at
+most once.  The <dfn>text</dfn> of a buffer is obtained by deleting the
+occurrences of &lt;PNT&gt; and &lt;MRK&gt;.  If, in a buffer, there is a
+character following &lt;PNT&gt; then we say that point is <dfn>looking at</dfn>
+the character; otherwise we say that point is <dfn>at the end of buffer</dfn>. 
+&lt;PNT&gt; and &lt;MRK&gt; are used
+to indicate positions in a buffer and they are not part of the text of the
+buffer.  If a buffer contains a &lt;MRK&gt; then the text between &lt;MRK&gt;
+and &lt;PNT&gt; is called the <dfn>region</dfn> of the buffer.
+
+   <p><a name="index-window-8"></a>
+Emacs provides (multiple) <dfn>windows</dfn> on the screen, and you can see the
+content of a buffer through the window associated with the buffer.  The
+cursor of the screen is always positioned on the character after &lt;PNT&gt;.
+
+   <p><a name="index-mode-9"></a><a name="index-keymap-10"></a><a name="index-local-keymap-11"></a><a name="index-global-keymap-12"></a>
+A <dfn>keymap</dfn> is a table that records the bindings between characters and
+command functions.  There is the <dfn>global keymap</dfn> common to all the
+buffers.  Each buffer has its <dfn>local keymap</dfn> that determines the
+<dfn>mode</dfn> of the buffer.  Local keymap overrides global keymap, so that if
+a function is bound to some key in the local keymap then that function will
+be executed when you type the key.  If no function is bound to a key in the
+local map, however, the function bound to the key in the global map becomes
+in effect.
+
+   </body></html>
+

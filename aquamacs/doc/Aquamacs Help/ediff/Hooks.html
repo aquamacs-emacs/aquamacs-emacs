@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Hooks - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Customization.html#Customization" title="Customization">
+<link rel="next" href="Quick-Help-Customization.html#Quick-Help-Customization" title="Quick Help Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Hooks"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Quick-Help-Customization.html#Quick-Help-Customization">Quick Help Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customization.html#Customization">Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">7.1 Hooks</h3>
+
+<p>The bulk of customization can be done via the following hooks:
+
+     <dl>
+<dt><code>ediff-load-hook</code><dd><a name="index-ediff_002dload_002dhook-119"></a>This hook can be used to change defaults after Ediff is loaded.
+
+     <br><dt><code>ediff-before-setup-hook</code><dd><a name="index-ediff_002dbefore_002dsetup_002dhook-120"></a>Hook that is run just before Ediff rearranges windows to its liking. 
+Can be used to save windows configuration.
+
+     <br><dt><code>ediff-keymap-setup-hook</code><dd><a name="index-ediff_002dkeymap_002dsetup_002dhook-121"></a><a name="index-ediff_002dmode_002dmap-122"></a>This hook can be used to alter bindings in Ediff's keymap,
+<code>ediff-mode-map</code>.  These hooks are
+run right after the default bindings are set but before
+<code>ediff-load-hook</code>.  The regular user needs not be concerned with this
+hook&mdash;it is provided for implementors of other Emacs packages built on top
+of Ediff.
+
+     <br><dt><code>ediff-before-setup-windows-hook</code><dt><code>ediff-after-setup-windows-hook</code><dd><a name="index-ediff_002dbefore_002dsetup_002dwindows_002dhook-123"></a><a name="index-ediff_002dafter_002dsetup_002dwindows_002dhook-124"></a>These two hooks are called before and after Ediff sets up its window
+configuration.  These hooks are run each time Ediff rearranges windows to
+its liking. This happens whenever it detects that the user changed the
+windows setup.
+
+     <br><dt><code>ediff-suspend-hook</code><dt><code>ediff-quit-hook</code><dd><a name="index-ediff_002dsuspend_002dhook-125"></a><a name="index-ediff_002dquit_002dhook-126"></a>These two hooks are run when you suspend or quit Ediff.  They can be
+used to set desired window configurations, delete files Ediff didn't
+want to clean up after exiting, etc.
+
+     <p>By default, <code>ediff-quit-hook</code> holds one hook function,
+<code>ediff-cleanup-mess</code>, which cleans after Ediff, as appropriate in
+most cases.  You probably won't want to change it, but you might
+want to add other hook functions.
+
+     <p>Keep in mind that hooks executing before <code>ediff-cleanup-mess</code> start
+in <code>ediff-control-buffer;</code> they should also leave
+<code>ediff-control-buffer</code> as the current buffer when they finish. 
+Hooks that are executed after <code>ediff-cleanup-mess</code> should expect
+the current buffer be either buffer A or buffer B. 
+<code>ediff-cleanup-mess</code> doesn't kill the buffers being compared or
+merged (see <code>ediff-cleanup-hook</code>, below).
+
+     <br><dt><code>ediff-cleanup-hook</code><dd><a name="index-ediff_002dcleanup_002dhook-127"></a>This hook is run just before <code>ediff-quit-hook</code>.  This is a good
+place to do various cleanups, such as deleting the variant buffers. 
+Ediff provides a function, <code>ediff-janitor</code>, as one such possible
+hook, which you can add to <code>ediff-cleanup-hook</code> with
+<code>add-hooks</code>.
+
+     <p><a name="index-ediff_002djanitor-128"></a>This function kills buffers A, B, and, possibly, C, if these buffers aren't
+modified.  In merge jobs, buffer C is never deleted.  However, the side
+effect of using this function is that you may not be able to compare the
+same buffer in two separate Ediff sessions: quitting one of them will
+delete this buffer in another session as well.
+
+     <br><dt><code>ediff-quit-merge-hook</code><dd><a name="index-ediff_002dquit_002dmerge_002dhook-129"></a><a name="index-ediff_002dautostore_002dmerges-130"></a><a name="index-ediff_002dmaybe_002dsave_002dand_002ddelete_002dmerge-131"></a>This hook is called when Ediff quits a merge job.  By default, the value is
+<code>ediff-maybe-save-and-delete-merge</code>, which is a function that attempts
+to save the merge buffer according to the value of
+<code>ediff-autostore-merges</code>, as described later.
+
+     <br><dt><code>ediff-before-setup-control-frame-hook</code><dt><code>ediff-after-setup-control-frame-hook</code><dd><a name="index-ediff_002dbefore_002dsetup_002dcontrol_002dframe_002dhook-132"></a><a name="index-ediff_002dafter_002dsetup_002dcontrol_002dframe_002dhook-133"></a>These two hooks run before and after Ediff sets up the control frame. 
+They can be used to relocate Ediff control frame when Ediff runs in a
+multiframe mode (i.e., when the control buffer is in its own dedicated
+frame).  Be aware that many variables that drive Ediff are local to
+Ediff Control Panel (<code>ediff-control-buffer</code>), which requires
+special care in writing these hooks.  Take a look at
+<code>ediff-default-suspend-hook</code> and <code>ediff-default-quit-hook</code> to
+see what's involved.
+
+     <br><dt><code>ediff-startup-hook</code><dd><a name="index-ediff_002dstartup_002dhook-134"></a>This hook is run at the end of Ediff startup.
+
+     <br><dt><code>ediff-select-hook</code><dd><a name="index-ediff_002dselect_002dhook-135"></a>This hook is run after Ediff selects the next difference region.
+
+     <br><dt><code>ediff-unselect-hook</code><dd><a name="index-ediff_002dunselect_002dhook-136"></a>This hook is run after Ediff unselects the current difference region.
+
+     <br><dt><code>ediff-prepare-buffer-hook</code><dd><a name="index-ediff_002dprepare_002dbuffer_002dhook-137"></a>This hook is run for each Ediff buffer (A, B, C) right after the buffer
+is arranged.
+
+     <br><dt><code>ediff-display-help-hook</code><dd><a name="index-ediff_002ddisplay_002dhelp_002dhook-138"></a>Ediff runs this hook each time after setting up the help message.  It
+can be used to alter the help message for custom packages that run on
+top of Ediff.
+
+     <br><dt><code>ediff-mode-hook</code><dd><a name="index-ediff_002dmode_002dhook-139"></a>This hook is run just after Ediff mode is set up in the control
+buffer.  This is done before any Ediff window is created.  You can use it to
+set local variables that alter the look of the display.
+
+     <br><dt><code>ediff-registry-setup-hook</code><dd><a name="index-ediff_002dregistry_002dsetup_002dhook-140"></a>Hooks run after setting up the registry for all active Ediff session. 
+See <a href="Session-Groups.html#Session-Groups">Session Groups</a>, for details. 
+<br><dt><code>ediff-before-session-group-setup-hook</code><dd><a name="index-ediff_002dbefore_002dsession_002dgroup_002dsetup_002dhook-141"></a>Hooks run before setting up a control panel for a group of related Ediff
+sessions. Can be used, for example, to save window configuration to restore
+later. 
+<br><dt><code>ediff-after-session-group-setup-hook</code><dd><a name="index-ediff_002dafter_002dsession_002dgroup_002dsetup_002dhook-142"></a>Hooks run after setting up a control panel for a group of related Ediff
+sessions.  See <a href="Session-Groups.html#Session-Groups">Session Groups</a>, for details. 
+<br><dt><code>ediff-quit-session-group-hook</code><dd><a name="index-ediff_002dquit_002dsession_002dgroup_002dhook-143"></a>Hooks run just before exiting a session group. 
+<br><dt><code>ediff-meta-buffer-keymap-setup-hook</code><dd><a name="index-ediff_002dmeta_002dbuffer_002dkeymap_002dsetup_002dhook-144"></a><a name="index-ediff_002dmeta_002dbuffer_002dmap-145"></a>Hooks run just after setting up the <code>ediff-meta-buffer-map</code> &mdash; the
+map that controls key bindings in the meta buffer.  Since
+<code>ediff-meta-buffer-map</code> is a local variable, you can set different
+bindings for different kinds of meta buffers. 
+</dl>
+
+   </body></html>
+

@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Windows Fonts - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Microsoft-Windows.html#Microsoft-Windows" title="Microsoft Windows">
+<link rel="prev" href="Windows-Printing.html#Windows-Printing" title="Windows Printing">
+<link rel="next" href="Windows-Misc.html#Windows-Misc" title="Windows Misc">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Windows-Fonts"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows-Misc.html#Windows-Misc">Windows Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Windows-Printing.html#Windows-Printing">Windows Printing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Windows">Microsoft Windows</a>
+<hr>
+</div>
+
+<h3 class="section">G.9 Specifying Fonts on MS-Windows</h3>
+
+<p><a name="index-font-specification-_0028MS-Windows_0029-4394"></a>
+  Starting with Emacs 23, fonts are specified by their name, size
+and optional properties.  The format for specifying fonts comes from the
+fontconfig library used in modern Free desktops:
+
+<pre class="example">       [Family[-PointSize]][:Option1=Value1[:Option2=Value2[...]]]
+</pre>
+   <p>The old XLFD based format is also supported for backwards compatibility.
+
+   <p>Emacs 23 supports a number of backends.  Currently, the <code>gdi</code>
+and <code>uniscribe</code> font backends are supported on Windows.  The
+<code>gdi</code> font backend is available on all versions of Windows, and
+supports all fonts that are natively supported by Windows.  The
+<code>uniscribe</code> font backend is available on Windows 2000 and later,
+and supports Truetype and Opentype fonts.  Some languages requiring
+complex layout can only be properly supported by the uniscribe
+backend.  By default, both backends are enabled if supported, with
+<code>uniscribe</code> taking priority over <code>gdi</code>.
+
+   <p><a name="index-font-properties-_0028MS-Windows_0029-4395"></a>Optional properties common to all font backends on MS-Windows are:
+
+     
+<a name="index-font_002dweight_002dtable-_0040r_007b_0028MS_002dWindows_0029_007d-4396"></a>
+<dl><dt><code>weight</code><dd>Specifies the weight of the font.  Special values <code>light</code>,
+<code>medium</code>, <code>demibold</code>, <code>bold</code>, and <code>black</code> can be specified
+without <code>weight=</code> (e.g., <kbd>Courier New-12:bold</kbd>).  Otherwise,
+the weight should be a numeric value between 100 and 900, or one of the
+named weights in <code>font-weight-table</code>.  If unspecified, a regular font
+is assumed.
+
+     <p><a name="index-font_002dslant_002dtable-_0040r_007b_0028MS_002dWindows_0029_007d-4397"></a><br><dt><code>slant</code><dd>Specifies whether the font is italic.  Special values
+<code>roman</code>, <code>italic</code> and <code>oblique</code> can be specified
+without <code>slant=</code> (e.g., <kbd>Courier New-12:italic</kbd>). 
+Otherwise, the slant should be a numeric value, or one of the named
+slants in <code>font-slant-table</code>.  On Windows, any slant above 150 is
+treated as italics, and anything below as roman.
+
+     <br><dt><code>family</code><dd>Specifies the font family, but normally this will be specified
+at the start of the font name.
+
+     <br><dt><code>pixelsize</code><dd>Specifies the font size in pixels.  This can be used instead
+of the point size specified after the family name.
+
+     <br><dt><code>adstyle</code><dd>Specifies additional style information for the font. 
+On MS-Windows, the values <code>mono</code>, <code>sans</code>, <code>serif</code>,
+<code>script</code> and <code>decorative</code> are recognized.  These are most useful
+as a fallback with the font family left unspecified.
+
+     <p><a name="index-w32_002dcharset_002dinfo_002dalist-4398"></a><br><dt><code>registry</code><dd>Specifies the character set registry that the font is
+expected to cover.  Most Truetype and Opentype fonts will be unicode fonts
+that cover several national character sets, but you can narrow down the
+selection of fonts to those that support a particular character set by
+using a specific registry from <code>w32-charset-info-alist</code> here.
+
+     <br><dt><code>spacing</code><dd>Specifies how the font is spaced.  The <code>p</code> spacing specifies
+a proportional font, and <code>m</code> or <code>c</code> specify a monospaced font.
+
+     <br><dt><code>foundry</code><dd>Not used on Windows, but for informational purposes and to
+prevent problems with code that expects it to be set, is set internally to
+<code>raster</code> for bitmapped fonts, <code>outline</code> for scalable fonts,
+or <code>unknown</code> if the type cannot be determined as one of those. 
+</dl>
+
+   <p><a name="index-font-properties-_0028MS-Windows-gdi-backend_0029-4399"></a>Options specific to <code>GDI</code> fonts:
+
+     
+<a name="index-font-scripts-_0028MS-Windows_0029-4400"></a>
+<a name="index-font-unicode-subranges-_0028MS-Windows_0029-4401"></a>
+<dl><dt><code>script</code><dd>Specifies a unicode subrange the font should support.
+
+     <p>The following scripts are recognized on Windows: <code>latin</code>, <code>greek</code>,
+<code>coptic</code>, <code>cyrillic</code>, <code>armenian</code>, <code>hebrew</code>, <code>arabic</code>,
+<code>syriac</code>, <code>nko</code>, <code>thaana</code>, <code>devanagari</code>, <code>bengali</code>,
+<code>gurmukhi</code>, <code>gujarati</code>, <code>oriya</code>, <code>tamil</code>, <code>telugu</code>,
+<code>kannada</code>, <code>malayam</code>, <code>sinhala</code>, <code>thai</code>, <code>lao</code>,
+<code>tibetan</code>, <code>myanmar</code>, <code>georgian</code>, <code>hangul</code>,
+<code>ethiopic</code>, <code>cherokee</code>, <code>canadian-aboriginal</code>, <code>ogham</code>,
+<code>runic</code>, <code>khmer</code>, <code>mongolian</code>, <code>symbol</code>, <code>braille</code>,
+<code>han</code>, <code>ideographic-description</code>, <code>cjk-misc</code>, <code>kana</code>,
+<code>bopomofo</code>, <code>kanbun</code>, <code>yi</code>, <code>byzantine-musical-symbol</code>,
+<code>musical-symbol</code>, and <code>mathematical</code>.
+
+     <p><a name="index-font-antialiasing-_0028MS-Windows_0029-4402"></a><br><dt><code>antialias</code><dd>Specifies the antialiasing to use for the font.  The value <code>none</code>
+means no antialiasing, <code>standard</code> means use standard antialiasing,
+<code>subpixel</code> means use subpixel antialiasing (known as Cleartype on Windows),
+and <code>natural</code> means use subpixel antialiasing with adjusted spacing between
+letters.  If unspecified, the font will use the system default antialiasing. 
+</dl>
+
+   </body></html>
+

@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Auto-save and Backup - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Windows-setup-hints.html#Windows-setup-hints" title="Windows setup hints">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Auto-save-and-Backup"></a>
+<a name="Auto_002dsave-and-Backup"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Windows-setup-hints.html#Windows-setup-hints">Windows setup hints</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.16 Auto-save and Backup configuration</h3>
+
+<p><a name="index-auto_002dsave-163"></a><a name="index-backup-164"></a><a name="index-backup_002ddirectory_002dalist-165"></a>
+Normally, GNU Emacs writes backup files to the same directory
+as the original files, but this behavior can be changed via the
+variable
+<code>backup-directory-alist</code>. 
+In connection with <span class="sc">tramp</span>, this can have unexpected side
+effects.  Suppose that you specify that all backups should go to the
+directory <samp><span class="file">~/.emacs.d/backups/</span></samp>, and then you edit the file
+<samp><span class="file">/su<!-- /@w -->:root<!-- /@w -->@localhost:/etc/secretfile</span></samp>.  The effect is
+that the backup file will be owned by you and not by root, thus
+possibly enabling others to see it even if they were not intended to
+see it.
+
+   <p>When
+<code>backup-directory-alist</code>
+is <code>nil</code> (the default), such problems do not occur.
+
+   <p>Therefore, it is useful to set special values for <span class="sc">tramp</span>
+files.  For example, the following statement effectively `turns off'
+the effect of
+<code>backup-directory-alist</code>
+for <span class="sc">tramp</span> files:
+
+<pre class="lisp">     (add-to-list 'backup-directory-alist
+                  (cons tramp-file-name-regexp nil))
+</pre>
+   <p>It is also possible to disable backups depending on the used method. 
+The following code disables backups for the <samp><span class="option">su</span></samp> and
+<samp><span class="option">sudo</span></samp> methods:
+
+<pre class="lisp">     (setq backup-enable-predicate
+           (lambda (name)
+             (and (normal-backup-enable-predicate name)
+                  (not
+                   (let ((method (file-remote-p name 'method)))
+                     (when (stringp method)
+                       (member method '("su" "sudo"))))))))
+</pre>
+   <p>Another possibility is to use the <span class="sc">tramp</span> variable
+<code>tramp-backup-directory-alist</code>. 
+This variable has the same meaning like
+<code>backup-directory-alist</code>. 
+If a <span class="sc">tramp</span> file is backed up, and DIRECTORY is an absolute
+local file name, DIRECTORY is prepended with the <span class="sc">tramp</span> file
+name prefix of the file to be backed up.
+
+<p class="noindent">Example:
+
+<pre class="lisp">     (add-to-list 'backup-directory-alist
+                  (cons "." "~/.emacs.d/backups/"))
+     (setq tramp-backup-directory-alist backup-directory-alist)
+</pre>
+   <p class="noindent">The backup file name of <samp><span class="file">/su<!-- /@w -->:root<!-- /@w -->@localhost:/etc/secretfile</span></samp> would be
+<samp><span class="file">/su<!-- /@w -->:root<!-- /@w -->@localhost:~/.emacs.d/backups/!su:root@localhost:!etc!secretfile~</span></samp>
+
+   <p>The same problem can happen with auto-saving files. 
+The variable <code>auto-save-file-name-transforms</code> keeps information,
+on which directory an auto-saved file should go.  By default, it is
+initialized for <span class="sc">tramp</span> files to the local temporary directory.
+
+   <p>On some versions of GNU Emacs, namely the version built for
+Debian GNU/Linux, the variable <code>auto-save-file-name-transforms</code>
+contains the directory where GNU Emacs was built.  A
+workaround is to manually set the variable to a sane value.
+
+   <p>If auto-saved files should go into the same directory as the original
+files, <code>auto-save-file-name-transforms</code> should be set to <code>nil</code>.
+
+   <p>Another possibility is to set the variable
+<code>tramp-auto-save-directory</code> to a proper value.
+
+   </body></html>
+

@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Canceling and Superseding - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" title="Reply Followup and Post">
+<link rel="prev" href="Summary-Message-Commands.html#Summary-Message-Commands" title="Summary Message Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Canceling-and-Superseding"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Summary-Message-Commands.html#Summary-Message-Commands">Summary Message Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reply-Followup-and-Post.html#Reply-Followup-and-Post">Reply Followup and Post</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.5.4 Canceling Articles</h4>
+
+<p><a name="index-canceling-articles-823"></a><a name="index-superseding-articles-824"></a>
+Have you ever written something, and then decided that you really,
+really, really wish you hadn't posted that?
+
+   <p>Well, you can't cancel mail, but you can cancel posts.
+
+   <p><a name="index-gnus_002dsummary_002dcancel_002darticle-825"></a><a name="index-C-_0028Summary_0029-826"></a><!-- @icon{gnus-summary-cancel-article} -->
+Find the article you wish to cancel (you can only cancel your own
+articles, so don't try any funny stuff).  Then press <kbd>C</kbd> or <kbd>S
+c</kbd> (<code>gnus-summary-cancel-article</code>).  Your article will be
+canceled&mdash;machines all over the world will be deleting your article. 
+This command uses the process/prefix convention (see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).
+
+   <p>Be aware, however, that not all sites honor cancels, so your article may
+live on here and there, while most sites will delete the article in
+question.
+
+   <p>Gnus will use the &ldquo;current&rdquo; select method when canceling.  If you
+want to use the standard posting method, use the &lsquo;<samp><span class="samp">a</span></samp>&rsquo; symbolic
+prefix (see <a href="Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic Prefixes</a>).
+
+   <p>Gnus ensures that only you can cancel your own messages using a
+<code>Cancel-Lock</code> header (see <a href="../message/Canceling-News.html#Canceling-News">Canceling News</a>).
+
+   <p>If you discover that you have made some mistakes and want to do some
+corrections, you can post a <dfn>superseding</dfn> article that will replace
+your original article.
+
+   <p><a name="index-gnus_002dsummary_002dsupersede_002darticle-827"></a><a name="index-S-_0028Summary_0029-828"></a>Go to the original article and press <kbd>S s</kbd>
+(<code>gnus-summary-supersede-article</code>).  You will be put in a buffer
+where you can edit the article all you want before sending it off the
+usual way.
+
+   <p>The same goes for superseding as for canceling, only more so: Some
+sites do not honor superseding.  On those sites, it will appear that you
+have posted almost the same article twice.
+
+   <p>If you have just posted the article, and change your mind right away,
+there is a trick you can use to cancel/supersede the article without
+waiting for the article to appear on your site first.  You simply return
+to the post buffer (which is called <code>*sent ...*</code>).  There you will
+find the article you just posted, with all the headers intact.  Change
+the <code>Message-ID</code> header to a <code>Cancel</code> or <code>Supersedes</code>
+header by substituting one of those words for the word
+<code>Message-ID</code>.  Then just press <kbd>C-c C-c</kbd> to send the article as
+you would do normally.  The previous article will be
+canceled/superseded.
+
+   <p>Just remember, kids: There is no 'c' in 'supersede'.
+
+   </body></html>
+

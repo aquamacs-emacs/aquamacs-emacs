@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Modifying pull-down menus - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Common-requests.html#Common-requests" title="Common requests">
+<link rel="prev" href="Going-to-a-line-by-number.html#Going-to-a-line-by-number" title="Going to a line by number">
+<link rel="next" href="Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options" title="Deleting menus and menu options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Modifying-pull-down-menus"></a>
+<a name="Modifying-pull_002ddown-menus"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options">Deleting menus and menu options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Going-to-a-line-by-number.html#Going-to-a-line-by-number">Going to a line by number</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Common-requests.html#Common-requests">Common requests</a>
+<hr>
+</div>
+
+<h3 class="section">5.42 How can I create or modify new pull-down menu options?</h3>
+
+<p><a name="index-Pull_002ddown-menus_002c-creating-or-modifying-306"></a><a name="index-Menus_002c-creating-or-modifying-307"></a><a name="index-Creating-new-menu-options-308"></a><a name="index-Modifying-pull_002ddown-menus-309"></a><a name="index-Menus-and-keymaps-310"></a><a name="index-Keymaps-and-menus-311"></a>
+Each menu title (e.g., &lsquo;<samp><span class="samp">File</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Edit</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Buffers</span></samp>&rsquo;)
+represents a local or global keymap.  Selecting a menu title with the
+mouse displays that keymap's non-<code>nil</code> contents in the form of a menu.
+
+   <p>So to add a menu option to an existing menu, all you have to do is add a
+new definition to the appropriate keymap.  Adding a &lsquo;<samp><span class="samp">Forward Word</span></samp>&rsquo;
+item to the &lsquo;<samp><span class="samp">Edit</span></samp>&rsquo; menu thus requires the following Lisp code:
+
+<pre class="lisp">     (define-key global-map
+       [menu-bar edit forward]
+       '("Forward word" . forward-word))
+</pre>
+   <p class="noindent">The first line adds the entry to the global keymap, which includes
+global menu bar entries.  Replacing the reference to <code>global-map</code>
+with a local keymap would add this menu option only within a particular
+mode.
+
+   <p>The second line describes the path from the menu-bar to the new entry. 
+Placing this menu entry underneath the &lsquo;<samp><span class="samp">File</span></samp>&rsquo; menu would mean
+changing the word <code>edit</code> in the second line to <code>file</code>.
+
+   <p>The third line is a cons cell whose first element is the title that will
+be displayed, and whose second element is the function that will be
+called when that menu option is invoked.
+
+   <p>To add a new menu, rather than a new option to an existing menu, we must
+define an entirely new keymap:
+
+<pre class="lisp">     (define-key global-map [menu-bar words]
+       (cons "Words" (make-sparse-keymap "Words")))
+</pre>
+   <p>The above code creates a new sparse keymap, gives it the name
+&lsquo;<samp><span class="samp">Words</span></samp>&rsquo;, and attaches it to the global menu bar.  Adding the
+&lsquo;<samp><span class="samp">Forward Word</span></samp>&rsquo; item to this new menu would thus require the
+following code:
+
+<pre class="lisp">     (define-key global-map
+       [menu-bar words forward]
+       '("Forward word" . forward-word))
+</pre>
+   <p class="noindent">Note that because of the way keymaps work, menu options are displayed
+with the more recently defined items at the top.  Thus if you were to
+define menu options &lsquo;<samp><span class="samp">foo</span></samp>&rsquo;, &lsquo;<samp><span class="samp">bar</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">baz</span></samp>&rsquo; (in that
+order), the menu option &lsquo;<samp><span class="samp">baz</span></samp>&rsquo; would appear at the top, and
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; would be at the bottom.
+
+   <p>One way to avoid this problem is to use the function <code>define-key-after</code>,
+which works the same as <code>define-key</code>, but lets you modify where items
+appear.  The following Lisp code would insert the &lsquo;<samp><span class="samp">Forward Word</span></samp>&rsquo;
+item in the &lsquo;<samp><span class="samp">Edit</span></samp>&rsquo; menu immediately following the &lsquo;<samp><span class="samp">Undo</span></samp>&rsquo; item:
+
+<pre class="lisp">     (define-key-after
+       (lookup-key global-map [menu-bar edit])
+       [forward]
+       '("Forward word" . forward-word)
+       'undo)
+</pre>
+   <p>Note how the second and third arguments to <code>define-key-after</code> are
+different from those of <code>define-key</code>, and that we have added a new
+(final) argument, the function after which our new key should be
+defined.
+
+   <p>To move a menu option from one position to another, simply evaluate
+<code>define-key-after</code> with the appropriate final argument.
+
+   <p>More detailed information&mdash;and more examples of how to create and
+modify menu options&mdash;are in the <cite>Emacs Lisp Reference Manual</cite>, under
+&ldquo;Menu Keymaps.&rdquo;  (See <a href="Emacs-Lisp-documentation.html#Emacs-Lisp-documentation">Emacs Lisp documentation</a>, for information on
+this manual.)
+
+   </body></html>
+

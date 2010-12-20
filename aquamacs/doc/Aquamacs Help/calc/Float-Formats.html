@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Float Formats - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Modes.html#Display-Modes" title="Display Modes">
+<link rel="prev" href="Grouping-Digits.html#Grouping-Digits" title="Grouping Digits">
+<link rel="next" href="Complex-Formats.html#Complex-Formats" title="Complex Formats">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Float-Formats"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Complex-Formats.html#Complex-Formats">Complex Formats</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Grouping-Digits.html#Grouping-Digits">Grouping Digits</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Modes.html#Display-Modes">Display Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.7.3 Float Formats</h4>
+
+<p class="noindent">Floating-point quantities are normally displayed in standard decimal
+form, with scientific notation used if the exponent is especially high
+or low.  All significant digits are normally displayed.  The commands
+in this section allow you to choose among several alternative display
+formats for floats.
+
+   <p><a name="index-d-n-499"></a><a name="index-calc_002dnormal_002dnotation-500"></a>The <kbd>d n</kbd> (<code>calc-normal-notation</code>) command selects the normal
+display format.  All significant figures in a number are displayed. 
+With a positive numeric prefix, numbers are rounded if necessary to
+that number of significant digits.  With a negative numerix prefix,
+the specified number of significant digits less than the current
+precision is used.  (Thus <kbd>C-u -2 d n</kbd> displays 10 digits if the
+current precision is 12.)
+
+   <p><a name="index-d-f-501"></a><a name="index-calc_002dfix_002dnotation-502"></a>The <kbd>d f</kbd> (<code>calc-fix-notation</code>) command selects fixed-point
+notation.  The numeric argument is the number of digits after the
+decimal point, zero or more.  This format will relax into scientific
+notation if a nonzero number would otherwise have been rounded all the
+way to zero.  Specifying a negative number of digits is the same as
+for a positive number, except that small nonzero numbers will be rounded
+to zero rather than switching to scientific notation.
+
+   <p><a name="index-d-s-503"></a><a name="index-calc_002dsci_002dnotation-504"></a><a name="index-Scientific-notation_002c-display-of-505"></a>The <kbd>d s</kbd> (<code>calc-sci-notation</code>) command selects scientific
+notation.  A positive argument sets the number of significant figures
+displayed, of which one will be before and the rest after the decimal
+point.  A negative argument works the same as for <kbd>d n</kbd> format. 
+The default is to display all significant digits.
+
+   <p><a name="index-d-e-506"></a><a name="index-calc_002deng_002dnotation-507"></a><a name="index-Engineering-notation_002c-display-of-508"></a>The <kbd>d e</kbd> (<code>calc-eng-notation</code>) command selects engineering
+notation.  This is similar to scientific notation except that the
+exponent is rounded down to a multiple of three, with from one to three
+digits before the decimal point.  An optional numeric prefix sets the
+number of significant digits to display, as for <kbd>d s</kbd>.
+
+   <p>It is important to distinguish between the current <em>precision</em> and
+the current <em>display format</em>.  After the commands <kbd>C-u 10 p</kbd>
+and <kbd>C-u 6 d n</kbd> the Calculator computes all results to ten
+significant figures but displays only six.  (In fact, intermediate
+calculations are often carried to one or two more significant figures,
+but values placed on the stack will be rounded down to ten figures.) 
+Numbers are never actually rounded to the display precision for storage,
+except by commands like <kbd>C-k</kbd> and <kbd>C-x * y</kbd> which operate on the
+actual displayed text in the Calculator buffer.
+
+   <p><a name="index-d-_002e-509"></a><a name="index-calc_002dpoint_002dchar-510"></a>The <kbd>d .</kbd> (<code>calc-point-char</code>) command selects the character used
+as a decimal point.  Normally this is a period; users in some countries
+may wish to change this to a comma.  Note that this is only a display
+style; on entry, periods must always be used to denote floating-point
+numbers, and commas to separate elements in a list.
+
+   </body></html>
+

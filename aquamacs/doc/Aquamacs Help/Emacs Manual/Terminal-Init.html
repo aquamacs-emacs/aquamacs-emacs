@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Terminal Init - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Init-File.html#Init-File" title="Init File">
+<link rel="prev" href="Init-Examples.html#Init-Examples" title="Init Examples">
+<link rel="next" href="Find-Init.html#Find-Init" title="Find Init">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Terminal-Init"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Find-Init.html#Find-Init">Find Init</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Init-Examples.html#Init-Examples">Init Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init-File">Init File</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.6.3 Terminal-specific Initialization</h4>
+
+<p>Each terminal type can have a Lisp library to be loaded into Emacs when
+it is run on that type of terminal.  For a terminal type named
+<var>termtype</var>, the library is called <samp><span class="file">term/</span><var>termtype</var></samp> and it is
+found by searching the directories <code>load-path</code> as usual and trying the
+suffixes &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; and &lsquo;<samp><span class="samp">.el</span></samp>&rsquo;.  Normally it appears in the
+subdirectory <samp><span class="file">term</span></samp> of the directory where most Emacs libraries are
+kept.
+
+   <p>The usual purpose of the terminal-specific library is to map the
+escape sequences used by the terminal's function keys onto more
+meaningful names, using <code>input-decode-map</code> (or
+<code>function-key-map</code> before it).  See the file
+<samp><span class="file">term/lk201.el</span></samp> for an example of how this is done.  Many function
+keys are mapped automatically according to the information in the
+Termcap data base; the terminal-specific library needs to map only the
+function keys that Termcap does not specify.
+
+   <p>When the terminal type contains a hyphen, only the part of the name
+before the first hyphen is significant in choosing the library name. 
+Thus, terminal types &lsquo;<samp><span class="samp">aaa-48</span></samp>&rsquo; and &lsquo;<samp><span class="samp">aaa-30-rv</span></samp>&rsquo; both use
+the library <samp><span class="file">term/aaa</span></samp>.  The code in the library can use
+<code>(getenv "TERM")</code> to find the full terminal type name.
+
+   <p><a name="index-term_002dfile_002dprefix-4078"></a>  The library's name is constructed by concatenating the value of the
+variable <code>term-file-prefix</code> and the terminal type.  Your <samp><span class="file">.emacs</span></samp>
+file can prevent the loading of the terminal-specific library by setting
+<code>term-file-prefix</code> to <code>nil</code>.
+
+   <p><a name="index-term_002dsetup_002dhook-4079"></a>  Emacs runs the hook <code>term-setup-hook</code> at the end of
+initialization, after both your <samp><span class="file">.emacs</span></samp> file and any
+terminal-specific library have been read in.  Add hook functions to this
+hook if you wish to override part of any of the terminal-specific
+libraries and to define initializations for terminals that do not have a
+library.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   </body></html>
+

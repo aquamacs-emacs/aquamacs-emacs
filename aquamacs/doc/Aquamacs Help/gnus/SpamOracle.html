@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+<title>SpamOracle - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Back-Ends.html#Spam-Back-Ends" title="Spam Back Ends">
+<link rel="prev" href="Spam-Statistics-Filtering.html#Spam-Statistics-Filtering" title="Spam Statistics Filtering">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="SpamOracle"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Spam-Statistics-Filtering.html#Spam-Statistics-Filtering">Spam Statistics Filtering</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">8.20.6.11 Using SpamOracle with Gnus</h5>
+
+<p><a name="index-spam-filtering-2985"></a><a name="index-SpamOracle-2986"></a><a name="index-spam-2987"></a>
+An easy way to filter out spam is to use SpamOracle.  SpamOracle is an
+statistical mail filtering tool written by Xavier Leroy and needs to be
+installed separately.
+
+   <p>There are several ways to use SpamOracle with Gnus.  In all cases, your
+mail is piped through SpamOracle in its <em>mark</em> mode.  SpamOracle will
+then enter an &lsquo;<samp><span class="samp">X-Spam</span></samp>&rsquo; header indicating whether it regards the
+mail as a spam mail or not.
+
+   <p>One possibility is to run SpamOracle as a <code>:prescript</code> from the
+See <a href="Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source Specifiers</a>, (see <a href="SpamAssassin.html#SpamAssassin">SpamAssassin</a>).  This method has
+the advantage that the user can see the <em>X-Spam</em> headers.
+
+   <p>The easiest method is to make <samp><span class="file">spam.el</span></samp> (see <a href="Spam-Package.html#Spam-Package">Spam Package</a>)
+call SpamOracle.
+
+   <p><a name="index-spam_002duse_002dspamoracle-2988"></a>To enable SpamOracle usage by <code>spam.el</code>, set the variable
+<code>spam-use-spamoracle</code> to <code>t</code> and configure the
+<code>nnmail-split-fancy</code> or <code>nnimap-split-fancy</code>.  See <a href="Spam-Package.html#Spam-Package">Spam Package</a>.  In this example the &lsquo;<samp><span class="samp">INBOX</span></samp>&rsquo; of an nnimap server is
+filtered using SpamOracle.  Mails recognized as spam mails will be
+moved to <code>spam-split-group</code>, &lsquo;<samp><span class="samp">Junk</span></samp>&rsquo; in this case.  Ham
+messages stay in &lsquo;<samp><span class="samp">INBOX</span></samp>&rsquo;:
+
+<pre class="example">     (setq spam-use-spamoracle t
+           spam-split-group "Junk"
+           nnimap-split-inbox '("INBOX")
+           nnimap-split-rule 'nnimap-split-fancy
+           nnimap-split-fancy '(| (: spam-split) "INBOX"))
+</pre>
+   <div class="defun">
+&mdash; Variable: <b>spam-use-spamoracle</b><var><a name="index-spam_002duse_002dspamoracle-2989"></a></var><br>
+<blockquote><p>Set to <code>t</code> if you want Gnus to enable spam filtering using
+SpamOracle. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>spam-spamoracle-binary</b><var><a name="index-spam_002dspamoracle_002dbinary-2990"></a></var><br>
+<blockquote><p>Gnus uses the SpamOracle binary called <samp><span class="file">spamoracle</span></samp> found in the
+user's PATH.  Using the variable <code>spam-spamoracle-binary</code>, this
+can be customized. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>spam-spamoracle-database</b><var><a name="index-spam_002dspamoracle_002ddatabase-2991"></a></var><br>
+<blockquote><p>By default, SpamOracle uses the file <samp><span class="file">~/.spamoracle.db</span></samp> as a database to
+store its analysis.  This is controlled by the variable
+<code>spam-spamoracle-database</code> which defaults to <code>nil</code>.  That means
+the default SpamOracle database will be used.  In case you want your
+database to live somewhere special, set
+<code>spam-spamoracle-database</code> to this path. 
+</p></blockquote></div>
+
+   <p>SpamOracle employs a statistical algorithm to determine whether a
+message is spam or ham.  In order to get good results, meaning few
+false hits or misses, SpamOracle needs training.  SpamOracle learns
+the characteristics of your spam mails.  Using the <em>add</em> mode
+(training mode) one has to feed good (ham) and spam mails to
+SpamOracle.  This can be done by pressing <kbd>|</kbd> in the Summary
+buffer and pipe the mail to a SpamOracle process or using
+<samp><span class="file">spam.el</span></samp>'s spam- and ham-processors, which is much more
+convenient.  For a detailed description of spam- and ham-processors,
+See <a href="Spam-Package.html#Spam-Package">Spam Package</a>.
+
+<div class="defun">
+&mdash; Variable: <b>gnus-group-spam-exit-processor-spamoracle</b><var><a name="index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dspamoracle-2992"></a></var><br>
+<blockquote><p>Add this symbol to a group's <code>spam-process</code> parameter by
+customizing the group parameter or the
+<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is added
+to a group's <code>spam-process</code> parameter, spam-marked articles will be
+sent to SpamOracle as spam samples.
+
+        <p><em>WARNING</em>
+
+        <p>Instead of the obsolete
+<code>gnus-group-spam-exit-processor-spamoracle</code>, it is recommended
+that you use <code>(spam spam-use-spamoracle)</code>.  Everything will work
+the same way, we promise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-group-ham-exit-processor-spamoracle</b><var><a name="index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dspamoracle-2993"></a></var><br>
+<blockquote><p>Add this symbol to a group's <code>spam-process</code> parameter by
+customizing the group parameter or the
+<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is added
+to a group's <code>spam-process</code> parameter, the ham-marked articles in
+<em>ham</em> groups will be sent to the SpamOracle as samples of ham
+messages.
+
+        <p><em>WARNING</em>
+
+        <p>Instead of the obsolete
+<code>gnus-group-ham-exit-processor-spamoracle</code>, it is recommended
+that you use <code>(ham spam-use-spamoracle)</code>.  Everything will work
+the same way, we promise. 
+</p></blockquote></div>
+
+   <p><em>Example:</em> These are the Group Parameters of a group that has been
+classified as a ham group, meaning that it should only contain ham
+messages.
+<pre class="example">      ((spam-contents gnus-group-spam-classification-ham)
+       (spam-process ((ham spam-use-spamoracle)
+                      (spam spam-use-spamoracle))))
+</pre>
+   <p>For this group the <code>spam-use-spamoracle</code> is installed for both
+ham and spam processing.  If the group contains spam message
+(e.g. because SpamOracle has not had enough sample messages yet) and
+the user marks some messages as spam messages, these messages will be
+processed by SpamOracle.  The processor sends the messages to
+SpamOracle as new samples for spam.
+
+   </body></html>
+

@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Installing Texinfo documentation - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-help.html#Getting-help" title="Getting help">
+<link rel="prev" href="Emacs-Lisp-documentation.html#Emacs-Lisp-documentation" title="Emacs Lisp documentation">
+<link rel="next" href="Printing-a-Texinfo-file.html#Printing-a-Texinfo-file" title="Printing a Texinfo file">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Installing-Texinfo-documentation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Printing-a-Texinfo-file.html#Printing-a-Texinfo-file">Printing a Texinfo file</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Emacs-Lisp-documentation.html#Emacs-Lisp-documentation">Emacs Lisp documentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-help.html#Getting-help">Getting help</a>
+<hr>
+</div>
+
+<h3 class="section">3.5 How do I install a piece of Texinfo documentation?</h3>
+
+<p><a name="index-Texinfo-documentation_002c-installing-90"></a><a name="index-Installing-Texinfo-documentation-91"></a><a name="index-New-Texinfo-files_002c-installing-92"></a><a name="index-Documentation_002c-installing-new-Texinfo-files-93"></a><a name="index-Info-files_002c-how-to-install-94"></a>
+Emacs releases come with pre-built Info files, and the normal install
+process places them in the correct location.  This is true for most
+applications that provide Info files.  The following section is only
+relevant if you want to install extra Info files by hand.
+
+   <p>First, you must turn the Texinfo source files into Info files.  You may
+do this using the stand-alone <samp><span class="file">makeinfo</span></samp> program, available as part
+of the Texinfo package at
+
+   <p><a href="http://www.gnu.org/software/texinfo/">http://www.gnu.org/software/texinfo/</a>
+
+   <p>For information about the Texinfo format, read the Texinfo manual which
+comes with the Texinfo package.  This manual also comes installed in
+Info format, so you can read it from Emacs; type <kbd>C-h i m texinfo
+&lt;RET&gt;</kbd>.
+
+<!-- FIXME is this a complete alternative? -->
+<!-- Probably not, given that we require makeinfo to build Emacs. -->
+   <p>Alternatively, you could use the Emacs command <kbd>M-x
+texinfo-format-buffer</kbd>, after visiting the Texinfo source file of the
+manual you want to convert.
+
+   <p>Neither <code>texinfo-format-buffer</code> nor <samp><span class="file">makeinfo</span></samp> installs the
+resulting Info files in Emacs's Info tree.  To install Info files,
+perform these steps:
+
+     <ol type=1 start=1>
+<li>Move the files to the <samp><span class="file">info</span></samp> directory in the installed Emacs
+distribution.  See <a href="File_002dname-conventions.html#File_002dname-conventions">File-name conventions</a>, if you don't know where that
+is.
+
+     <li>Run the <code>install-info</code> command, which is part of the Texinfo
+distribution, to update the main Info directory menu, like this:
+
+     <pre class="example">           install-info --info-dir=<var>dir-path</var> <var>dir-path</var>/<var>file</var>
+</pre>
+     <p class="noindent">where <var>dir-path</var> is the full path to the directory where you copied
+the produced Info file(s), and <var>file</var> is the name of the Info file
+you produced and want to install.
+
+     <p>If you don't have the <code>install-info</code> command installed, you can
+edit the file <samp><span class="file">info/dir</span></samp> in the installed Emacs distribution, and
+add a line for the top level node in the Info package that you are
+installing.  Follow the examples already in this file.  The format is:
+
+     <pre class="example">          * Topic: (relative-pathname).  Short description of topic.
+</pre>
+        </ol>
+
+   <p>If you want to install Info files and you don't have the necessary
+privileges, you have several options:
+
+     <ul>
+<li>Info files don't actually need to be installed before being used. 
+You can use a prefix argument for the <code>info</code> command and specify
+the name of the Info file in the minibuffer.  This goes to the node
+named &lsquo;<samp><span class="samp">Top</span></samp>&rsquo; in that file.  For example, to view a Info file named
+<samp><var>info-file</var></samp> in your home directory, you can type this:
+
+     <pre class="example">          <kbd>C-u C-h i ~/</kbd><var>info-file</var><kbd> &lt;RET&gt;</kbd>
+</pre>
+     <p>Alternatively, you can feed a file name to the <code>Info-goto-node</code>
+command (invoked by pressing &lt;g&gt; in Info mode) by typing the name
+of the file in parentheses, like this:
+
+     <pre class="example">          <kbd>C-h i g (~/</kbd><var>info-file</var><kbd>) &lt;RET&gt;</kbd>
+</pre>
+     <li>You can create your own Info directory.  You can tell Emacs where that
+Info directory is by adding its pathname to the value of the variable
+<code>Info-default-directory-list</code>.  For example, to use a private Info
+directory which is a subdirectory of your home directory named <samp><span class="file">Info</span></samp>,
+you could put this in your <samp><span class="file">.emacs</span></samp> file:
+
+     <pre class="lisp">          (add-to-list 'Info-default-directory-list "~/Info")
+</pre>
+     <p>You will need a top-level Info file named <samp><span class="file">dir</span></samp> in this directory
+which has everything the system <samp><span class="file">dir</span></samp> file has in it, except it
+should list only entries for Info files in that directory.  You might
+not need it if (fortuitously) all files in this directory were
+referenced by other <samp><span class="file">dir</span></samp> files.  The node lists from all
+<samp><span class="file">dir</span></samp> files in <code>Info-default-directory-list</code> are merged by the
+Info system.
+
+   </ul>
+
+   </body></html>
+

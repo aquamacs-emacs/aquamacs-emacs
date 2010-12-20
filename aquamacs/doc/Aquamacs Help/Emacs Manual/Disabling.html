@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Disabling - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link rel="prev" href="Mouse-Buttons.html#Mouse-Buttons" title="Mouse Buttons">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Disabling"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mouse-Buttons.html#Mouse-Buttons">Mouse Buttons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.4.11 Disabling Commands</h4>
+
+<p><a name="index-disabled-command-4058"></a>
+  Disabling a command means that invoking it interactively asks for
+confirmation from the user.  The purpose of disabling a command is to
+prevent users from executing it by accident; we do this for commands
+that might be confusing to the uninitiated.
+
+   <p>Attempting to invoke a disabled command interactively in Emacs
+displays a window containing the command's name, its documentation,
+and some instructions on what to do immediately; then Emacs asks for
+input saying whether to execute the command as requested, enable it
+and execute it, or cancel.  If you decide to enable the command, you
+must then answer another question&mdash;whether to do this permanently, or
+just for the current session.  (Enabling permanently works by
+automatically editing your <samp><span class="file">.emacs</span></samp> file.)  You can also type
+<kbd>!</kbd> to enable <em>all</em> commands, for the current session only.
+
+   <p>The direct mechanism for disabling a command is to put a
+non-<code>nil</code> <code>disabled</code> property on the Lisp symbol for the
+command.  Here is the Lisp program to do this:
+
+<pre class="example">     (put 'delete-region 'disabled t)
+</pre>
+   <p>If the value of the <code>disabled</code> property is a string, that string
+is included in the message displayed when the command is used:
+
+<pre class="example">     (put 'delete-region 'disabled
+          "It's better to use `kill-region' instead.\n")
+</pre>
+   <p><a name="index-disable_002dcommand-4059"></a><a name="index-enable_002dcommand-4060"></a>  You can make a command disabled either by editing the <samp><span class="file">.emacs</span></samp>
+file directly, or with the command <kbd>M-x disable-command</kbd>, which edits
+the <samp><span class="file">.emacs</span></samp> file for you.  Likewise, <kbd>M-x enable-command</kbd>
+edits <samp><span class="file">.emacs</span></samp> to enable a command permanently.  See <a href="Init-File.html#Init-File">Init File</a>.
+
+   <p>If Emacs was invoked with the <samp><span class="option">-q</span></samp> or <samp><span class="option">--no-init-file</span></samp>
+options (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>), it will not edit your
+<samp><span class="file">~/.emacs</span></samp> init file.  Doing so could lose information
+because Emacs has not read your init file.
+
+   <p>Whether a command is disabled is independent of what key is used to
+invoke it; disabling also applies if the command is invoked using
+<kbd>M-x</kbd>.  However, disabling a command has no effect on calling it
+as a function from Lisp programs.
+
+   </body></html>
+

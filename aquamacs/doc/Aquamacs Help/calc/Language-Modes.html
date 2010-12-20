@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Language Modes - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Settings.html#Mode-Settings" title="Mode Settings">
+<link rel="prev" href="Display-Modes.html#Display-Modes" title="Display Modes">
+<link rel="next" href="Modes-Variable.html#Modes-Variable" title="Modes Variable">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Language-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modes-Variable.html#Modes-Variable">Modes Variable</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Display-Modes.html#Display-Modes">Display Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>
+<hr>
+</div>
+
+<h3 class="section">7.8 Language Modes</h3>
+
+<p class="noindent">The commands in this section change Calc to use a different notation for
+entry and display of formulas, corresponding to the conventions of some
+other common language such as Pascal or LaTeX.  Objects displayed on the
+stack or yanked from the Calculator to an editing buffer will be formatted
+in the current language; objects entered in algebraic entry or yanked from
+another buffer will be interpreted according to the current language.
+
+   <p>The current language has no effect on things written to or read from the
+trail buffer, nor does it affect numeric entry.  Only algebraic entry is
+affected.  You can make even algebraic entry ignore the current language
+and use the standard notation by giving a numeric prefix, e.g., <kbd>C-u '</kbd>.
+
+   <p>For example, suppose the formula &lsquo;<samp><span class="samp">2*a[1] + atan(a[2])</span></samp>&rsquo; occurs in a C
+program; elsewhere in the program you need the derivatives of this formula
+with respect to &lsquo;<samp><span class="samp">a[1]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">a[2]</span></samp>&rsquo;.  First, type <kbd>d C</kbd>
+to switch to C notation.  Now use <code>C-u C-x * g</code> to grab the formula
+into the Calculator, <kbd>a d a[1] &lt;RET&gt;</kbd> to differentiate with respect
+to the first variable, and <kbd>C-x * y</kbd> to yank the formula for the derivative
+back into your C program.  Press <kbd>U</kbd> to undo the differentiation and
+repeat with <kbd>a d a[2] &lt;RET&gt;</kbd> for the other derivative.
+
+   <p>Without being switched into C mode first, Calc would have misinterpreted
+the brackets in &lsquo;<samp><span class="samp">a[1]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">a[2]</span></samp>&rsquo;, would not have known that
+<code>atan</code> was equivalent to Calc's built-in <code>arctan</code> function,
+and would have written the formula back with notations (like implicit
+multiplication) which would not have been valid for a C program.
+
+   <p>As another example, suppose you are maintaining a C program and a LaTeX
+document, each of which needs a copy of the same formula.  You can grab the
+formula from the program in C mode, switch to LaTeX mode, and yank the
+formula into the document in LaTeX math-mode format.
+
+   <p>Language modes are selected by typing the letter <kbd>d</kbd> followed by a
+shifted letter key.
+
+<ul class="menu">
+<li><a accesskey="1" href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>
+<li><a accesskey="2" href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal">C FORTRAN Pascal</a>
+<li><a accesskey="3" href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX and LaTeX Language Modes</a>
+<li><a accesskey="4" href="Eqn-Language-Mode.html#Eqn-Language-Mode">Eqn Language Mode</a>
+<li><a accesskey="5" href="Yacas-Language-Mode.html#Yacas-Language-Mode">Yacas Language Mode</a>
+<li><a accesskey="6" href="Maxima-Language-Mode.html#Maxima-Language-Mode">Maxima Language Mode</a>
+<li><a accesskey="7" href="Giac-Language-Mode.html#Giac-Language-Mode">Giac Language Mode</a>
+<li><a accesskey="8" href="Mathematica-Language-Mode.html#Mathematica-Language-Mode">Mathematica Language Mode</a>
+<li><a accesskey="9" href="Maple-Language-Mode.html#Maple-Language-Mode">Maple Language Mode</a>
+<li><a href="Compositions.html#Compositions">Compositions</a>
+<li><a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,166 @@
+<html lang="en">
+<head>
+<title>Inserting Letter - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Editing-Drafts.html#Editing-Drafts" title="Editing Drafts">
+<link rel="prev" href="Editing-Message.html#Editing-Message" title="Editing Message">
+<link rel="next" href="Inserting-Messages.html#Inserting-Messages" title="Inserting Messages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Inserting-Letter"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Inserting-Messages.html#Inserting-Messages">Inserting Messages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Editing-Message.html#Editing-Message">Editing Message</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>
+<hr>
+</div>
+
+<h3 class="section">9.2 Inserting Letter to Which You're Replying</h3>
+
+<p><a name="index-inserting-messages-1326"></a><a name="index-replying-to-messages-1327"></a><a name="index-yanking-messages-1328"></a><a name="index-mh_002dyank_002dcur_002dmsg-1329"></a><a name="index-C_002dc-C_002dy-1330"></a><a name="index-mh_002dins_002dbuf_002dprefix-1331"></a>
+It is often useful to insert a snippet of text from a letter that
+someone mailed to provide some context for your reply. The command
+<kbd>C-c C-y</kbd> (<code>mh-yank-cur-msg</code>) does this by adding an
+attribution, yanking a portion of text from the message to which
+you're replying, and inserting <code>mh-ins-buf-prefix</code> (&lsquo;<samp><span class="samp">&gt; </span></samp>&rsquo;)
+before each line.
+
+<pre class="smallexample">     Michael W Thelen &lt;thelenm@stop.mail-abuse.org&gt; wrote:
+     
+     &gt; Hopefully this gives you an idea of what I'm currently doing. I'm not
+     &gt; sure yet whether I'm completely satisfied with my setup, but it's
+     &gt; worked okay for me so far.
+</pre>
+   <p><a name="index-mh_002dextract_002dfrom_002dattribution_002dverb-1332"></a>
+The attribution consists of the sender's name and email address
+followed by the content of the option
+<code>mh-extract-from-attribution-verb</code>. This option can be set to
+&lsquo;<samp><span class="samp">wrote:</span></samp>&rsquo;, &lsquo;<samp><span class="samp">a écrit:</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">schrieb:</span></samp>&rsquo;. You can also use
+the &lsquo;<samp><span class="samp">Custom String</span></samp>&rsquo; menu item to enter your own verb.
+
+   <p><a name="index-mail_002dcitation_002dhook-1333"></a><a name="index-mh_002dins_002dbuf_002dprefix-1334"></a><a name="index-mh_002dyank_002dbehavior-1335"></a>
+The prefix <code>"&gt; "</code> is the default setting for the option
+<code>mh-ins-buf-prefix</code>. I suggest that you not modify this option
+since it is used by many mailers and news readers: messages are far
+easier to read if several included messages have all been indented by
+the same string. This prefix is not inserted if you use one of the
+supercite flavors of <code>mh-yank-behavior</code> or you have added a
+<code>mail-citation-hook</code> as described below.
+
+   <p><a name="index-mh_002ddelete_002dyanked_002dmsg_002dwindow_002dflag-1336"></a>
+You can also turn on the <code>mh-delete-yanked-msg-window-flag</code>
+option to delete the window containing the original message after
+yanking it to make more room on your screen for your reply.
+
+   <p><a name="index-Emacs_002c-packages_002c-supercite-1337"></a><a name="index-supercite-package-1338"></a><a name="index-r-1339"></a><a name="index-mail_002dcitation_002dhook-1340"></a><a name="index-mh_002dyank_002dbehavior-1341"></a>
+You can control how the message to which you are replying is yanked
+into your reply using <code>mh-yank-behavior</code>. To include the entire
+message, including the entire header, use &lsquo;<samp><span class="samp">Body and
+Header</span></samp>&rsquo;<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a><a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>. 
+Use &lsquo;<samp><span class="samp">Body</span></samp>&rsquo; to yank just the body without the header. To yank only
+the portion of the message following the point, set this option to
+&lsquo;<samp><span class="samp">Below Point</span></samp>&rsquo;.
+
+   <p>Choose &lsquo;<samp><span class="samp">Invoke supercite</span></samp>&rsquo;<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a> to pass the entire message and header through supercite.
+
+   <p><a name="index-mh_002dextract_002dfrom_002dattribution_002dverb-1342"></a>
+If the &lsquo;<samp><span class="samp">Body With Attribution</span></samp>&rsquo; setting is used, then the message
+minus the header is yanked and a simple attribution line is added at
+the top using the value of the option
+<code>mh-extract-from-attribution-verb</code>. This is the default.
+
+   <p><a name="index-C_002dc-C_002dy-1343"></a><a name="index-mh_002ddelete_002dyanked_002dmsg_002dwindow_002dflag-1344"></a>
+If the &lsquo;<samp><span class="samp">Invoke supercite</span></samp>&rsquo; or &lsquo;<samp><span class="samp">Body With Attribution</span></samp>&rsquo;
+settings are used, the &lsquo;<samp><span class="samp">-noformat</span></samp>&rsquo; argument is passed to the
+<samp><span class="command">repl</span></samp> program to override a &lsquo;<samp><span class="samp">-filter</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-format</span></samp>&rsquo;
+argument. These settings also have &lsquo;<samp><span class="samp">Automatically</span></samp>&rsquo; variants that
+perform the action automatically when you reply so that you don't need
+to use <kbd>C-c C-y</kbd> at all. Note that this automatic action is only
+performed if the show buffer matches the message being replied to. 
+People who use the automatic variants tend to turn on the option
+<code>mh-delete-yanked-msg-window-flag</code> as well so that the show
+window is never displayed.
+
+   <p><a name="index-mh_002dyank_002dbehavior-1345"></a>
+If the show buffer has a region, the option <code>mh-yank-behavior</code> is
+ignored unless its value is one of &lsquo;<samp><span class="samp">Attribution</span></samp>&rsquo; variants in
+which case the attribution is added to the yanked region.
+
+   <p><a name="index-trivial_002dcite-1346"></a><a name="index-mail_002dcitation_002dhook-1347"></a><a name="index-mh_002dins_002dbuf_002dprefix-1348"></a><a name="index-mh_002dyank_002dbehavior-1349"></a>
+If this isn't enough, you can gain full control over the appearance of
+the included text by setting <code>mail-citation-hook</code> to a function
+that modifies it. This hook is ignored if the option
+<code>mh-yank-behavior</code> is set to one of the supercite flavors. 
+Otherwise, this option controls how much of the message is passed to
+the hook. The function can find the citation between point and mark
+and it should leave point and mark around the modified citation text
+for the next hook function. The standard prefix
+<code>mh-ins-buf-prefix</code> is not added if this hook is set.
+
+   <p><a name="index-Emacs_002c-packages_002c-trivial_002dcite-1350"></a><a name="index-trivial_002dcite-package-1351"></a><a name="index-mh_002dyank_002dbehavior-1352"></a>
+For example, if you use the hook function
+<a href="http://shasta.cs.uiuc.edu/~lrclause/tc.html"><code>trivial-cite</code></a> (which is NOT part of Emacs), set
+<code>mh-yank-behavior</code> to &lsquo;<samp><span class="samp">Body and Header</span></samp>&rsquo;.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If you'd rather have the header cleaned up, use
+<kbd>C-u r</kbd> instead of <kbd>r</kbd> when replying
+(see <a href="Replying.html#Replying">Replying</a>).</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> In the past you would use this setting
+and set <code>mail-citation-hook</code> to &lsquo;<samp><span class="samp">supercite</span></samp>&rsquo;, but this usage
+is now deprecated in favor of the &lsquo;<samp><span class="samp">Invoke supercite</span></samp>&rsquo; setting.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> <em>Supercite</em> is a
+full-bodied, full-featured, citation package that comes standard with
+Emacs.</p>
+
+   <hr></div>
+
+   </body></html>
+

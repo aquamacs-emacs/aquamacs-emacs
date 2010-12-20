@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Operations on Variables - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Store-and-Recall.html#Store-and-Recall" title="Store and Recall">
+<link rel="prev" href="Recalling-Variables.html#Recalling-Variables" title="Recalling Variables">
+<link rel="next" href="Let-Command.html#Let-Command" title="Let Command">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Operations-on-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Let-Command.html#Let-Command">Let Command</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Recalling-Variables.html#Recalling-Variables">Recalling Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Store-and-Recall.html#Store-and-Recall">Store and Recall</a>
+<hr>
+</div>
+
+<h3 class="section">13.3 Other Operations on Variables</h3>
+
+<p class="noindent"><a name="index-s-e-2039"></a><a name="index-calc_002dedit_002dvariable-2040"></a>The <kbd>s e</kbd> (<code>calc-edit-variable</code>) command edits the stored
+value of a variable without ever putting that value on the stack
+or simplifying or evaluating the value.  It prompts for the name of
+the variable to edit.  If the variable has no stored value, the
+editing buffer will start out empty.  If the editing buffer is
+empty when you press <kbd>C-c C-c</kbd> to finish, the variable will
+be made void.  See <a href="Editing-Stack-Entries.html#Editing-Stack-Entries">Editing Stack Entries</a>, for a general
+description of editing.
+
+   <p>The <kbd>s e</kbd> command is especially useful for creating and editing
+rewrite rules which are stored in variables.  Sometimes these rules
+contain formulas which must not be evaluated until the rules are
+actually used.  (For example, they may refer to &lsquo;<samp><span class="samp">deriv(x,y)</span></samp>&rsquo;,
+where <code>x</code> will someday become some expression involving <code>y</code>;
+if you let Calc evaluate the rule while you are defining it, Calc will
+replace &lsquo;<samp><span class="samp">deriv(x,y)</span></samp>&rsquo; with 0 because the formula <code>x</code> does
+not itself refer to <code>y</code>.)  By contrast, recalling the variable,
+editing with <kbd>`</kbd>, and storing will evaluate the variable's value
+as a side effect of putting the value on the stack.
+
+   <p><a name="index-s-A-2041"></a><a name="index-s-D-2042"></a><a name="index-s-E-2043"></a><a name="index-s-F-2044"></a><a name="index-s-G-2045"></a><a name="index-s-H-2046"></a><a name="index-s-I-2047"></a><a name="index-s-L-2048"></a><a name="index-s-P-2049"></a><a name="index-s-R-2050"></a><a name="index-s-T-2051"></a><a name="index-s-U-2052"></a><a name="index-s-X-2053"></a><a name="index-calc_002dstore_002dAlgSimpRules-2054"></a><a name="index-calc_002dstore_002dDecls-2055"></a><a name="index-calc_002dstore_002dEvalRules-2056"></a><a name="index-calc_002dstore_002dFitRules-2057"></a><a name="index-calc_002dstore_002dGenCount-2058"></a><a name="index-calc_002dstore_002dHolidays-2059"></a><a name="index-calc_002dstore_002dIntegLimit-2060"></a><a name="index-calc_002dstore_002dLineStyles-2061"></a><a name="index-calc_002dstore_002dPointStyles-2062"></a><a name="index-calc_002dstore_002dPlotRejects-2063"></a><a name="index-calc_002dstore_002dTimeZone-2064"></a><a name="index-calc_002dstore_002dUnits-2065"></a><a name="index-calc_002dstore_002dExtSimpRules-2066"></a>There are several special-purpose variable-editing commands that
+use the <kbd>s</kbd> prefix followed by a shifted letter:
+
+     <dl>
+<dt><kbd>s A</kbd><dd>Edit <code>AlgSimpRules</code>.  See <a href="Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic Simplifications</a>. 
+<br><dt><kbd>s D</kbd><dd>Edit <code>Decls</code>.  See <a href="Declarations.html#Declarations">Declarations</a>. 
+<br><dt><kbd>s E</kbd><dd>Edit <code>EvalRules</code>.  See <a href="Default-Simplifications.html#Default-Simplifications">Default Simplifications</a>. 
+<br><dt><kbd>s F</kbd><dd>Edit <code>FitRules</code>.  See <a href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>. 
+<br><dt><kbd>s G</kbd><dd>Edit <code>GenCount</code>.  See <a href="Solving-Equations.html#Solving-Equations">Solving Equations</a>. 
+<br><dt><kbd>s H</kbd><dd>Edit <code>Holidays</code>.  See <a href="Business-Days.html#Business-Days">Business Days</a>. 
+<br><dt><kbd>s I</kbd><dd>Edit <code>IntegLimit</code>.  See <a href="Calculus.html#Calculus">Calculus</a>. 
+<br><dt><kbd>s L</kbd><dd>Edit <code>LineStyles</code>.  See <a href="Graphics.html#Graphics">Graphics</a>. 
+<br><dt><kbd>s P</kbd><dd>Edit <code>PointStyles</code>.  See <a href="Graphics.html#Graphics">Graphics</a>. 
+<br><dt><kbd>s R</kbd><dd>Edit <code>PlotRejects</code>.  See <a href="Graphics.html#Graphics">Graphics</a>. 
+<br><dt><kbd>s T</kbd><dd>Edit <code>TimeZone</code>.  See <a href="Time-Zones.html#Time-Zones">Time Zones</a>. 
+<br><dt><kbd>s U</kbd><dd>Edit <code>Units</code>.  See <a href="User_002dDefined-Units.html#User_002dDefined-Units">User-Defined Units</a>. 
+<br><dt><kbd>s X</kbd><dd>Edit <code>ExtSimpRules</code>.  See <a href="Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe Simplifications</a>. 
+</dl>
+
+   <p>These commands are just versions of <kbd>s e</kbd> that use fixed variable
+names rather than prompting for the variable name.
+
+   <p><a name="index-s-p-2067"></a><a name="index-calc_002dpermanent_002dvariable-2068"></a><a name="index-Storing-variables-2069"></a><a name="index-Permanent-variables-2070"></a><a name="index-Calc-init-file_002c-variables-2071"></a>The <kbd>s p</kbd> (<code>calc-permanent-variable</code>) command saves a
+variable's value permanently in your Calc init file (the file given by
+the variable <code>calc-settings-file</code>, typically <samp><span class="file">~/.calc.el</span></samp>), so
+that its value will still be available in future Emacs sessions.  You
+can re-execute <kbd>s&nbsp;p</kbd><!-- /@w --> later on to update the saved value, but the
+only way to remove a saved variable is to edit your calc init file
+by hand.  (See <a href="General-Mode-Commands.html#General-Mode-Commands">General Mode Commands</a>, for a way to tell Calc to
+use a different file for the Calc init file.)
+
+   <p>If you do not specify the name of a variable to save (i.e.,
+<kbd>s p &lt;RET&gt;</kbd>), all Calc variables with defined values
+are saved except for the special constants <code>pi</code>, <code>e</code>,
+<code>i</code>, <code>phi</code>, and <code>gamma</code>; the variables <code>TimeZone</code>
+and <code>PlotRejects</code>;
+<code>FitRules</code>, <code>DistribRules</code>, and other built-in rewrite
+rules; and <code>PlotData</code><var>n</var> variables generated
+by the graphics commands.  (You can still save these variables by
+explicitly naming them in an <kbd>s p</kbd> command.)
+
+   <p><a name="index-s-i-2072"></a><a name="index-calc_002dinsert_002dvariables-2073"></a>The <kbd>s i</kbd> (<code>calc-insert-variables</code>) command writes
+the values of all Calc variables into a specified buffer. 
+The variables are written with the prefix <code>var-</code> in the form of
+Lisp <code>setq</code> commands
+which store the values in string form.  You can place these commands
+in your Calc init file (or <samp><span class="file">.emacs</span></samp>) if you wish, though in this case it
+would be easier to use <kbd>s p &lt;RET&gt;</kbd>.  (Note that <kbd>s i</kbd>
+omits the same set of variables as <kbd>s&nbsp;p&nbsp;&lt;RET&gt;</kbd><!-- /@w -->; the difference
+is that <kbd>s i</kbd> will store the variables in any buffer, and it also
+stores in a more human-readable format.)
+
+   </body></html>
+

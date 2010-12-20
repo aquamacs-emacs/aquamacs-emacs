@@ -1,0 +1,201 @@
+<html lang="en">
+<head>
+<title>Remote processes - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Usage.html#Usage" title="Usage">
+<link rel="prev" href="Filename-completion.html#Filename-completion" title="Filename completion">
+<link rel="next" href="Cleanup-remote-connections.html#Cleanup-remote-connections" title="Cleanup remote connections">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Remote-processes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Cleanup-remote-connections.html#Cleanup-remote-connections">Cleanup remote connections</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Filename-completion.html#Filename-completion">Filename completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Usage.html#Usage">Usage</a>
+<hr>
+</div>
+
+<h3 class="section">5.4 Integration with other GNU Emacs packages.</h3>
+
+<p><a name="index-compile-181"></a><a name="index-recompile-182"></a>
+<span class="sc">tramp</span> supports running processes on a remote host.  This
+allows to exploit GNU Emacs packages without modification for
+remote file names.  It does not work for the <samp><span class="option">ftp</span></samp> and
+<samp><span class="option">smb</span></samp> methods.  Association of a pty, as specified in
+<code>start-file-process</code>, is not supported.
+
+   <p>If the remote host is mounted via GVFS (see <a href="GVFS-based-methods.html#GVFS-based-methods">GVFS based methods</a>),
+the remote filesystem is mounted locally.  Therefore, there are no
+remote processes; all processes run still locally on your machine with
+an adapted <code>default-directory</code>.  This section does not apply for
+such connection methods.
+
+   <p>Remote processes are started when a corresponding command is executed
+from a buffer belonging to a remote file or directory.  Up to now, the
+packages <samp><span class="file">compile.el</span></samp> (commands like <code>compile</code> and
+<code>grep</code>) and <samp><span class="file">gud.el</span></samp> (<code>gdb</code> or <code>perldb</code>) have been
+integrated.  Integration of further packages is planned, any help for
+this is welcome!
+
+   <p>When your program is not found in the default search path
+<span class="sc">tramp</span> sets on the remote machine, you should either use an
+absolute path, or extend <code>tramp-remote-path</code> (see <a href="Remote-Programs.html#Remote-Programs">Remote Programs</a>):
+
+<pre class="lisp">     (add-to-list 'tramp-remote-path "~/bin")
+     (add-to-list 'tramp-remote-path "/appli/pub/bin")
+</pre>
+   <p>The environment for your program can be adapted by customizing
+<code>tramp-remote-process-environment</code>.  This variable is a list of
+strings.  It is structured like <code>process-environment</code>.  Each
+element is a string of the form ENVVARNAME=VALUE.  An entry
+ENVVARNAME= disables the corresponding environment variable, which
+might have been set in your init file like <samp><span class="file">~/.profile</span></samp>.
+
+<p class="noindent">Adding an entry can be performed via <code>add-to-list</code>:
+
+<pre class="lisp">     (add-to-list 'tramp-remote-process-environment "JAVA_HOME=/opt/java")
+</pre>
+   <p>Changing or removing an existing entry is not encouraged.  The default
+values are chosen for proper <span class="sc">tramp</span> work.  Nevertheless, if for
+example a paranoid system administrator disallows changing the
+<var>$HISTORY</var> environment variable, you can customize
+<code>tramp-remote-process-environment</code>, or you can apply the
+following code in your <samp><span class="file">.emacs</span></samp>:
+
+<pre class="lisp">     (let ((process-environment tramp-remote-process-environment))
+       (setenv "HISTORY" nil)
+       (setq tramp-remote-process-environment process-environment))
+</pre>
+   <p>If you use other GNU Emacs packages which do not run
+out-of-the-box on a remote host, please let us know.  We will try to
+integrate them as well.  See <a href="Bug-Reports.html#Bug-Reports">Bug Reports</a>.
+
+<h4 class="subsection">5.4.1 Running remote programs that create local X11 windows</h4>
+
+<p>If you want to run a remote program, which shall connect the X11
+server you are using with your local host, you can set the
+<var>$DISPLAY</var> environment variable on the remote host:
+
+<pre class="lisp">     (add-to-list 'tramp-remote-process-environment
+                  (format "DISPLAY=%s" (getenv "DISPLAY")))
+</pre>
+   <p class="noindent"><code>(getenv "DISPLAY")</code> shall return a string containing a host
+name, which can be interpreted on the remote host; otherwise you might
+use a fixed host name.  Strings like <code>:0</code> cannot be used properly
+on the remote host.
+
+   <p>Another trick might be that you put <code>ForwardX11 yes</code> or
+<code>ForwardX11Trusted yes</code> to your <samp><span class="file">~/.ssh/config</span></samp> file for
+that host.
+
+<h4 class="subsection">5.4.2 Running shell-command on a remote host</h4>
+
+<p><a name="index-shell_002dcommand-183"></a>
+<code>shell-command</code> allows to execute commands in a shell, either
+synchronously, either asynchronously.  This works also on remote
+hosts.  Example:
+
+<pre class="example">     <kbd>C-x C-f /sudo<!-- /@w -->:: &lt;RET&gt;</kbd>
+     <kbd>M-! tail -f /var/log/syslog.log &amp; &lt;RET&gt;</kbd>
+</pre>
+   <p>You will see the buffer <samp><span class="file">*Async Shell Command*</span></samp>, containing the
+continuous output of the <samp><span class="command">tail</span></samp> command.
+
+<h4 class="subsection">5.4.3 Running eshell on a remote host</h4>
+
+<p><a name="index-eshell-184"></a>
+<span class="sc">tramp</span> is integrated into <samp><span class="file">eshell.el</span></samp>.  That is, you can
+open an interactive shell on your remote host, and run commands there. 
+After you have started <code>eshell</code>, you could perform commands like
+this:
+
+<pre class="example">     <b>~ $</b> cd /sudo<!-- /@w -->::/etc &lt;RET&gt;
+     <b>/sudo<!-- /@w -->:root<!-- /@w -->@host:/etc $</b> hostname &lt;RET&gt;
+     host
+     <b>/sudo<!-- /@w -->:root<!-- /@w -->@host:/etc $</b> id &lt;RET&gt;
+     uid=0(root) gid=0(root) groups=0(root)
+     <b>/sudo<!-- /@w -->:root<!-- /@w -->@host:/etc $</b> find-file shadow &lt;RET&gt;
+     #&lt;buffer shadow&gt;
+     <b>/sudo<!-- /@w -->:root<!-- /@w -->@host:/etc $</b>
+</pre>
+   <p>Since GNU Emacs 23.2, <code>eshell</code> has also an own
+implementation of the <code>su</code> and <code>sudo</code> commands.  Both
+commands change the default directory of the <samp><span class="file">*eshell*</span></samp> buffer to
+the value related to the user the command has switched to.  This works
+even on remote hosts, adding silently a corresponding entry to the
+variable <code>tramp-default-proxies-alist</code> (see <a href="Multi_002dhops.html#Multi_002dhops">Multi-hops</a>):
+
+<pre class="example">     <b>~ $</b> cd /ssh<!-- /@w -->:user<!-- /@w -->@remotehost:/etc &lt;RET&gt;
+     <b>/ssh<!-- /@w -->:user<!-- /@w -->@remotehost:/etc $</b> find-file shadow &lt;RET&gt;
+     File is not readable: /ssh<!-- /@w -->:user<!-- /@w -->@remotehost:/etc/shadow
+     <b>/ssh<!-- /@w -->:user<!-- /@w -->@remotehost:/etc $</b> sudo find-file shadow &lt;RET&gt;
+     #&lt;buffer shadow&gt;
+     
+     <b>/ssh<!-- /@w -->:user<!-- /@w -->@remotehost:/etc $</b> su - &lt;RET&gt;
+     <b>/su<!-- /@w -->:root<!-- /@w -->@remotehost:/root $</b> id &lt;RET&gt;
+     uid=0(root) gid=0(root) groups=0(root)
+     <b>/su<!-- /@w -->:root<!-- /@w -->@remotehost:/root $</b>
+</pre>
+   <p><a name="Running-a-debugger-on-a-remote-host"></a>
+
+<h4 class="subsection">5.4.4 Running a debugger on a remote host</h4>
+
+<p><a name="index-gud-185"></a><a name="index-gdb-186"></a><a name="index-perldb-187"></a>
+<samp><span class="file">gud.el</span></samp> offers an unified interface to several symbolic
+debuggers
+With <span class="sc">tramp</span>, it is possible to debug programs on
+remote hosts.  You can call <code>gdb</code> with a remote file name:
+
+<pre class="example">     <kbd>M-x gdb &lt;RET&gt;</kbd>
+     <b>Run gdb (like this):</b> gdb --annotate=3 /ssh<!-- /@w -->:host:~/myprog &lt;RET&gt;
+</pre>
+   <p>The file name can also be relative to a remote default directory. 
+Given you are in a buffer that belongs to the remote directory
+/ssh<!-- /@w -->:host:/home/user, you could call
+
+<pre class="example">     <kbd>M-x perldb &lt;RET&gt;</kbd>
+     <b>Run perldb (like this):</b> perl -d myprog.pl &lt;RET&gt;
+</pre>
+   <p>It is not possible to use just the absolute local part of a remote
+file name as program to debug, like <kbd>perl -d
+/home/user/myprog.pl</kbd>, though.
+
+   <p>Arguments of the program to be debugged are taken literally.  That
+means, file names as arguments must be given as ordinary relative or
+absolute file names, without any remote specification.
+
+   </body></html>
+

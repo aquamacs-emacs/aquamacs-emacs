@@ -4148,7 +4148,7 @@ ns_term_init (Lisp_Object display_name)
                            keyEquivalent: @""
                                  atIndex: 0];
     [mainMenu setSubmenu: appMenu forItem: item];
-    [dockMenu insertItemWithTitle: @"New Frame"
+    [dockMenu insertItemWithTitle: @"New Buffer"
 			   action: @selector (newFrame:)
 		    keyEquivalent: @""
 			  atIndex: 0];
@@ -4496,12 +4496,15 @@ ns_term_shutdown (int sig)
   /* The Activated event is actually "reopen" 
    So the following seems questionable. */
   struct frame *emacsframe = SELECTED_FRAME ();
-  
+  NSEvent *theEvent = [NSApp currentEvent];
+
   if (!emacs_event)
     return;
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_APPLICATION_ACTIVATED;
-  EV_TRAILER ((id)nil);
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
+  EV_TRAILER (theEvent);
 
 }
 - (BOOL)applicationOpenUntitledFile:(NSApplication *)theApplication
@@ -4512,6 +4515,8 @@ ns_term_shutdown (int sig)
     return;
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_APPLICATION_OPEN_UNTITLED;
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
   EV_TRAILER ((id)nil);
   return YES; /* we assume this will be handled */
 }

@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Subscription Methods - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="New-Groups.html#New-Groups" title="New Groups">
+<link rel="prev" href="Checking-New-Groups.html#Checking-New-Groups" title="Checking New Groups">
+<link rel="next" href="Filtering-New-Groups.html#Filtering-New-Groups" title="Filtering New Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Subscription-Methods"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Filtering-New-Groups.html#Filtering-New-Groups">Filtering New Groups</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Checking-New-Groups.html#Checking-New-Groups">Checking New Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="New-Groups.html#New-Groups">New Groups</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.5.2 Subscription Methods</h4>
+
+<p><a name="index-gnus_002dsubscribe_002dnewsgroup_002dmethod-27"></a>What Gnus does when it encounters a new group is determined by the
+<code>gnus-subscribe-newsgroup-method</code> variable.
+
+   <p>This variable should contain a function.  This function will be called
+with the name of the new group as the only parameter.
+
+   <p>Some handy pre-fab functions are:
+
+     <dl>
+<dt><code>gnus-subscribe-zombies</code><dd><a name="index-gnus_002dsubscribe_002dzombies-28"></a>Make all new groups zombies.  This is the default.  You can browse the
+zombies later (with <kbd>A z</kbd>) and either kill them all off properly
+(with <kbd>S z</kbd>), or subscribe to them (with <kbd>u</kbd>).
+
+     <br><dt><code>gnus-subscribe-randomly</code><dd><a name="index-gnus_002dsubscribe_002drandomly-29"></a>Subscribe all new groups in arbitrary order.  This really means that all
+new groups will be added at &ldquo;the top&rdquo; of the group buffer.
+
+     <br><dt><code>gnus-subscribe-alphabetically</code><dd><a name="index-gnus_002dsubscribe_002dalphabetically-30"></a>Subscribe all new groups in alphabetical order.
+
+     <br><dt><code>gnus-subscribe-hierarchically</code><dd><a name="index-gnus_002dsubscribe_002dhierarchically-31"></a>Subscribe all new groups hierarchically.  The difference between this
+function and <code>gnus-subscribe-alphabetically</code> is slight. 
+<code>gnus-subscribe-alphabetically</code> will subscribe new groups in a strictly
+alphabetical fashion, while this function will enter groups into its
+hierarchy.  So if you want to have the &lsquo;<samp><span class="samp">rec</span></samp>&rsquo; hierarchy before the
+&lsquo;<samp><span class="samp">comp</span></samp>&rsquo; hierarchy, this function will not mess that configuration
+up.  Or something like that.
+
+     <br><dt><code>gnus-subscribe-interactively</code><dd><a name="index-gnus_002dsubscribe_002dinteractively-32"></a>Subscribe new groups interactively.  This means that Gnus will ask
+you about <strong>all</strong> new groups.  The groups you choose to subscribe
+to will be subscribed hierarchically.
+
+     <br><dt><code>gnus-subscribe-killed</code><dd><a name="index-gnus_002dsubscribe_002dkilled-33"></a>Kill all new groups.
+
+     <br><dt><code>gnus-subscribe-topics</code><dd><a name="index-gnus_002dsubscribe_002dtopics-34"></a>Put the groups into the topic that has a matching <code>subscribe</code> topic
+parameter (see <a href="Topic-Parameters.html#Topic-Parameters">Topic Parameters</a>).  For instance, a <code>subscribe</code>
+topic parameter that looks like
+
+     <pre class="example">          "nnslashdot"
+</pre>
+     <p>will mean that all groups that match that regex will be subscribed under
+that topic.
+
+     <p>If no topics match the groups, the groups will be subscribed in the
+top-level topic.
+
+   </dl>
+
+   <p><a name="index-gnus_002dsubscribe_002dhierarchical_002dinteractive-35"></a>A closely related variable is
+<code>gnus-subscribe-hierarchical-interactive</code>.  (That's quite a
+mouthful.)  If this variable is non-<code>nil</code>, Gnus will ask you in a
+hierarchical fashion whether to subscribe to new groups or not.  Gnus
+will ask you for each sub-hierarchy whether you want to descend the
+hierarchy or not.
+
+   <p>One common mistake is to set the variable a few paragraphs above
+(<code>gnus-subscribe-newsgroup-method</code>) to
+<code>gnus-subscribe-hierarchical-interactive</code>.  This is an error.  This
+will not work.  This is ga-ga.  So don't do it.
+
+   </body></html>
+

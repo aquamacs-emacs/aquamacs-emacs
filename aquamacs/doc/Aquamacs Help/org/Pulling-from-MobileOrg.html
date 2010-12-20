@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Pulling from MobileOrg - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="MobileOrg.html#MobileOrg" title="MobileOrg">
+<link rel="prev" href="Pushing-to-MobileOrg.html#Pushing-to-MobileOrg" title="Pushing to MobileOrg">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Pulling-from-MobileOrg"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Pushing-to-MobileOrg.html#Pushing-to-MobileOrg">Pushing to MobileOrg</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MobileOrg.html#MobileOrg">MobileOrg</a>
+<hr>
+</div>
+
+<h3 class="section">B.3 Pulling from MobileOrg</h3>
+
+<p>When <i>MobileOrg</i> synchronizes with the WebDAV server, it not only pulls the
+Org files for viewing.  It also appends captured entries and pointers to
+flagged and changed entries to the file <samp><span class="file">mobileorg.org</span></samp> on the server. 
+Org has a <em>pull</em> operation that integrates this information into an
+inbox file and operates on the pointers to flagged entries.  Here is how it
+works:
+
+     <ol type=1 start=1>
+<li>Org moves all entries found in
+<samp><span class="file">mobileorg.org</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> and appends them to the file pointed to by the variable
+<code>org-mobile-inbox-for-pull</code>.  Each captured entry and each editing event
+will be a top-level entry in the inbox file. 
+<li>After moving the entries, Org will attempt to implement the changes made in
+<i>MobileOrg</i>.  Some changes are applied directly and without user
+interaction.  Examples are all changes to tags, TODO state, headline and body
+text that can be cleanly applied.  Entries that have been flagged for further
+action will receive a tag <code>:FLAGGED:</code>, so that they can be easily found
+again.  When there is a problem finding an entry or applying the change, the
+pointer entry will remain in the inbox and will be marked with an error
+message.  You need to later resolve these issues by hand. 
+<li>Org will then generate an agenda view with all flagged entries.  The user
+should then go through these entries and do whatever actions are necessary. 
+If a note has been stored while flagging an entry in <i>MobileOrg</i>, that note
+will be displayed in the echo area when the cursor is on the corresponding
+agenda line.
+          
+<a name="index-g_t_003f-1463"></a>
+<dl><dt><kbd>?</kbd><dd>Pressing <kbd>?</kbd> in that special agenda will display the full flagging note in
+another window and also push it onto the kill ring.  So you could use <kbd>? 
+z C-y C-c C-c</kbd> to store that flagging note as a normal note in the entry. 
+Pressing <kbd>?</kbd> twice in succession will offer to remove the
+<code>:FLAGGED:</code> tag along with the recorded flagging note (which is stored
+in a property).  In this way you indicate, that the intended processing for
+this flagged entry is finished. 
+</dl>
+     </ol>
+
+   <p><a name="index-C_002dc-a-_003f-1464"></a>If you are not able to process all flagged entries directly, you can always
+return to this agenda view using <kbd>C-c a ?</kbd>.  Note, however, that there is
+a subtle difference.  The view created automatically by <kbd>M-x
+org-mobile-pull RET</kbd> is guaranteed to search all files that have been
+addressed by the last pull.  This might include a file that is not currently
+in your list of agenda files.  If you later use <kbd>C-c a ?</kbd> to regenerate
+the view, only the current agenda files will be searched.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <samp><span class="file">mobileorg.org</span></samp> will be empty after this
+operation.</p>
+
+   <hr></div>
+
+   </body></html>
+

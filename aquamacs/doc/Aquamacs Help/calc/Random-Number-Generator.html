@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+<title>Random Number Generator - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Random-Numbers.html#Random-Numbers" title="Random Numbers">
+<link rel="prev" href="Random-Numbers.html#Random-Numbers" title="Random Numbers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Random-Number-Generator"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Random-Numbers.html#Random-Numbers">Random Numbers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Random-Numbers.html#Random-Numbers">Random Numbers</a>
+<hr>
+</div>
+
+<h4 class="subsection">9.5.1 Random Number Generator</h4>
+
+<p>Calc's random number generator uses several methods to ensure that
+the numbers it produces are highly random.  Knuth's <em>Art of
+Computer Programming</em>, Volume II, contains a thorough description
+of the theory of random number generators and their measurement and
+characterization.
+
+   <p>If <code>RandSeed</code> has no stored value, Calc calls Emacs' built-in
+<code>random</code> function to get a stream of random numbers, which it
+then treats in various ways to avoid problems inherent in the simple
+random number generators that many systems use to implement <code>random</code>.
+
+   <p>When Calc's random number generator is first invoked, it &ldquo;seeds&rdquo;
+the low-level random sequence using the time of day, so that the
+random number sequence will be different every time you use Calc.
+
+   <p>Since Emacs Lisp doesn't specify the range of values that will be
+returned by its <code>random</code> function, Calc exercises the function
+several times to estimate the range.  When Calc subsequently uses
+the <code>random</code> function, it takes only 10 bits of the result
+near the most-significant end.  (It avoids at least the bottom
+four bits, preferably more, and also tries to avoid the top two
+bits.)  This strategy works well with the linear congruential
+generators that are typically used to implement <code>random</code>.
+
+   <p>If <code>RandSeed</code> contains an integer, Calc uses this integer to
+seed an &ldquo;additive congruential&rdquo; method (Knuth's algorithm 3.2.2A,
+computing
+<!-- @math{X_{n-55} - X_{n-24}}. -->
+&lsquo;<samp><span class="samp">X_n-55 - X_n-24</span></samp>&rsquo;). 
+This method expands the seed
+value into a large table which is maintained internally; the variable
+<code>RandSeed</code> is changed from, e.g., 42 to the vector &lsquo;<samp><span class="samp">[42]</span></samp>&rsquo;
+to indicate that the seed has been absorbed into this table.  When
+<code>RandSeed</code> contains a vector, <kbd>k r</kbd> and related commands
+continue to use the same internal table as last time.  There is no
+way to extract the complete state of the random number generator
+so that you can restart it from any point; you can only restart it
+from the same initial seed value.  A simple way to restart from the
+same seed is to type <kbd>s r RandSeed</kbd> to get the seed vector,
+<kbd>v u</kbd> to unpack it back into a number, then <kbd>s t RandSeed</kbd>
+to reseed the generator with that number.
+
+   <p>Calc uses a &ldquo;shuffling&rdquo; method as described in algorithm 3.2.2B
+of Knuth.  It fills a table with 13 random 10-bit numbers.  Then,
+to generate a new random number, it uses the previous number to
+index into the table, picks the value it finds there as the new
+random number, then replaces that table entry with a new value
+obtained from a call to the base random number generator (either
+the additive congruential generator or the <code>random</code> function
+supplied by the system).  If there are any flaws in the base
+generator, shuffling will tend to even them out.  But if the system
+provides an excellent <code>random</code> function, shuffling will not
+damage its randomness.
+
+   <p>To create a random integer of a certain number of digits, Calc
+builds the integer three decimal digits at a time.  For each group
+of three digits, Calc calls its 10-bit shuffling random number generator
+(which returns a value from 0 to 1023); if the random value is 1000
+or more, Calc throws it out and tries again until it gets a suitable
+value.
+
+   <p>To create a random floating-point number with precision <var>p</var>, Calc
+simply creates a random <var>p</var>-digit integer and multiplies by
+<!-- @math{10^{-p}}. -->
+&lsquo;<samp><span class="samp">10^-p</span></samp>&rsquo;. 
+The resulting random numbers should be very clean, but note
+that relatively small numbers will have few significant random digits. 
+In other words, with a precision of 12, you will occasionally get
+numbers on the order of
+<!-- @math{10^{-9}} -->
+&lsquo;<samp><span class="samp">10^-9</span></samp>&rsquo;
+or
+<!-- @math{10^{-10}}, -->
+&lsquo;<samp><span class="samp">10^-10</span></samp>&rsquo;,
+but those numbers will only have two or three random digits since they
+correspond to small integers times
+<!-- @math{10^{-12}}. -->
+&lsquo;<samp><span class="samp">10^-12</span></samp>&rsquo;.
+
+   <p>To create a random integer in the interval &lsquo;<samp><span class="samp">[0 .. </span><var>m</var><span class="samp">)</span></samp>&rsquo;, Calc
+counts the digits in <var>m</var>, creates a random integer with three
+additional digits, then reduces modulo <var>m</var>.  Unless <var>m</var> is a
+power of ten the resulting values will be very slightly biased toward
+the lower numbers, but this bias will be less than 0.1%.  (For example,
+if <var>m</var> is 42, Calc will reduce a random integer less than 100000
+modulo 42 to get a result less than 42.  It is easy to show that the
+numbers 40 and 41 will be only 2380/2381 as likely to result from this
+modulo operation as numbers 39 and below.)  If <var>m</var> is a power of
+ten, however, the numbers should be completely unbiased.
+
+   <p>The Gaussian random numbers generated by &lsquo;<samp><span class="samp">random(0.0)</span></samp>&rsquo; use the
+&ldquo;polar&rdquo; method described in Knuth section 3.4.1C.  This method
+generates a pair of Gaussian random numbers at a time, so only every
+other call to &lsquo;<samp><span class="samp">random(0.0)</span></samp>&rsquo; will require significant calculations.
+
+   </body></html>
+

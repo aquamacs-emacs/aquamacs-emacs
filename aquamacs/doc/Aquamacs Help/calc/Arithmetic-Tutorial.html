@@ -1,0 +1,356 @@
+<html lang="en">
+<head>
+<title>Arithmetic Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tutorial.html#Tutorial" title="Tutorial">
+<link rel="prev" href="Basic-Tutorial.html#Basic-Tutorial" title="Basic Tutorial">
+<link rel="next" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" title="Vector/Matrix Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Arithmetic-Tutorial"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">Vector/Matrix Tutorial</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Tutorial.html#Basic-Tutorial">Basic Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tutorial.html#Tutorial">Tutorial</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Arithmetic Tutorial</h3>
+
+<p class="noindent">In this section, we explore the arithmetic and scientific functions
+available in the Calculator.
+
+   <p>The standard arithmetic commands are <kbd>+</kbd>, <kbd>-</kbd>, <kbd>*</kbd>, <kbd>/</kbd>,
+and <kbd>^</kbd>.  Each normally takes two numbers from the top of the stack
+and pushes back a result.  The <kbd>n</kbd> and <kbd>&amp;</kbd> keys perform
+change-sign and reciprocal operations, respectively.
+
+<pre class="smallexample">     1:  5          1:  0.2        1:  5.         1:  -5.        1:  5.
+         .              .              .              .              .
+     
+         5              &amp;              &amp;              n              n
+</pre>
+   <p><a name="index-Binary-operators-28"></a>You can apply a &ldquo;binary operator&rdquo; like <kbd>+</kbd> across any number of
+stack entries by giving it a numeric prefix.  You can also apply it
+pairwise to several stack elements along with the top one if you use
+a negative prefix.
+
+<pre class="smallexample">     3:  2          1:  9          3:  2          4:  2          3:  12
+     2:  3              .          2:  3          3:  3          2:  13
+     1:  4                         1:  4          2:  4          1:  14
+         .                             .          1:  10             .
+                                                      .
+     
+     2 &lt;RET&gt; 3 &lt;RET&gt; 4     M-3 +           U              10          M-- M-3 +
+</pre>
+   <p><a name="index-Unary-operators-29"></a>You can apply a &ldquo;unary operator&rdquo; like <kbd>&amp;</kbd> to the top <var>n</var>
+stack entries with a numeric prefix, too.
+
+<pre class="smallexample">     3:  2          3:  0.5                3:  0.5
+     2:  3          2:  0.333333333333     2:  3.
+     1:  4          1:  0.25               1:  4.
+         .              .                      .
+     
+     2 &lt;RET&gt; 3 &lt;RET&gt; 4      M-3 &amp;                  M-2 &amp;
+</pre>
+   <p>Notice that the results here are left in floating-point form. 
+We can convert them back to integers by pressing <kbd>F</kbd>, the
+&ldquo;floor&rdquo; function.  This function rounds down to the next lower
+integer.  There is also <kbd>R</kbd>, which rounds to the nearest
+integer.
+
+<pre class="smallexample">     7:  2.         7:  2          7:  2
+     6:  2.4        6:  2          6:  2
+     5:  2.5        5:  2          5:  3
+     4:  2.6        4:  2          4:  3
+     3:  -2.        3:  -2         3:  -2
+     2:  -2.4       2:  -3         2:  -2
+     1:  -2.6       1:  -3         1:  -3
+         .              .              .
+     
+                       M-7 F        U M-7 R
+</pre>
+   <p>Since dividing-and-flooring (i.e., &ldquo;integer quotient&rdquo;) is such a
+common operation, Calc provides a special command for that purpose, the
+backslash <kbd>\</kbd>.  Another common arithmetic operator is <kbd>%</kbd>, which
+computes the remainder that would arise from a <kbd>\</kbd> operation, i.e.,
+the &ldquo;modulo&rdquo; of two numbers.  For example,
+
+<pre class="smallexample">     2:  1234       1:  12         2:  1234       1:  34
+     1:  100            .          1:  100            .
+         .                             .
+     
+     1234 &lt;RET&gt; 100       \              U              %
+</pre>
+   <p>These commands actually work for any real numbers, not just integers.
+
+<pre class="smallexample">     2:  3.1415     1:  3          2:  3.1415     1:  0.1415
+     1:  1              .          1:  1              .
+         .                             .
+     
+     3.1415 &lt;RET&gt; 1       \              U              %
+</pre>
+   <p>(&bull;) <strong>Exercise 1.</strong>  The <kbd>\</kbd> command would appear to be a
+frill, since you could always do the same thing with <kbd>/ F</kbd>.  Think
+of a situation where this is not true&mdash;<kbd>/ F</kbd> would be inadequate. 
+Now think of a way you could get around the problem if Calc didn't
+provide a <kbd>\</kbd> command.  See <a href="Arithmetic-Answer-1.html#Arithmetic-Answer-1">1</a>. (&bull;)
+
+   <p>We've already seen the <kbd>Q</kbd> (square root) and <kbd>S</kbd> (sine)
+commands.  Other commands along those lines are <kbd>C</kbd> (cosine),
+<kbd>T</kbd> (tangent), <kbd>E</kbd> (&lsquo;<samp><span class="samp">e^x</span></samp>&rsquo;) and <kbd>L</kbd> (natural
+logarithm).  These can be modified by the <kbd>I</kbd> (inverse) and
+<kbd>H</kbd> (hyperbolic) prefix keys.
+
+   <p>Let's compute the sine and cosine of an angle, and verify the
+identity
+<!-- @math{\sin^2x + \cos^2x = 1}. -->
+&lsquo;<samp><span class="samp">sin(x)^2 + cos(x)^2 = 1</span></samp>&rsquo;. 
+We'll arbitrarily pick <i>-64</i> degrees as a good value for &lsquo;<samp><span class="samp">x</span></samp>&rsquo;. 
+With the angular mode set to degrees (type <kbd>m&nbsp;d</kbd><!-- /@w -->), do:
+
+<pre class="smallexample">     2:  -64        2:  -64        2:  -0.89879   2:  -0.89879   1:  1.
+     1:  -64        1:  -0.89879   1:  -64        1:  0.43837        .
+         .              .              .              .
+     
+      64 n &lt;RET&gt; &lt;RET&gt;      S              &lt;TAB&gt;            C              f h
+</pre>
+   <p class="noindent">(For brevity, we're showing only five digits of the results here. 
+You can of course do these calculations to any precision you like.)
+
+   <p>Remember, <kbd>f h</kbd> is the <code>calc-hypot</code>, or square-root of sum
+of squares, command.
+
+   <p>Another identity is
+<!-- @math{\displaystyle\tan x = {\sin x \over \cos x}}. -->
+&lsquo;<samp><span class="samp">tan(x) = sin(x) / cos(x)</span></samp>&rsquo;.
+<pre class="smallexample">     
+     2:  -0.89879   1:  -2.0503    1:  -64.
+     1:  0.43837        .              .
+         .
+     
+         U              /              I T
+</pre>
+   <p>A physical interpretation of this calculation is that if you move
+&lsquo;<samp><span class="samp">0.89879</span></samp>&rsquo; units downward and &lsquo;<samp><span class="samp">0.43837</span></samp>&rsquo; units to the right,
+your direction of motion is <i>-64</i> degrees from horizontal.  Suppose
+we move in the opposite direction, up and to the left:
+
+<pre class="smallexample">     2:  -0.89879   2:  0.89879    1:  -2.0503    1:  -64.
+     1:  0.43837    1:  -0.43837       .              .
+         .              .
+     
+         U U            M-2 n          /              I T
+</pre>
+   <p class="noindent">How can the angle be the same?  The answer is that the <kbd>/</kbd> operation
+loses information about the signs of its inputs.  Because the quotient
+is negative, we know exactly one of the inputs was negative, but we
+can't tell which one.  There is an <kbd>f T</kbd> [<code>arctan2</code>] function which
+computes the inverse tangent of the quotient of a pair of numbers. 
+Since you feed it the two original numbers, it has enough information
+to give you a full 360-degree answer.
+
+<pre class="smallexample">     2:  0.89879    1:  116.       3:  116.       2:  116.       1:  180.
+     1:  -0.43837       .          2:  -0.89879   1:  -64.           .
+         .                         1:  0.43837        .
+                                       .
+     
+         U U            f T         M-&lt;RET&gt; M-2 n       f T            -
+</pre>
+   <p class="noindent">The resulting angles differ by 180 degrees; in other words, they
+point in opposite directions, just as we would expect.
+
+   <p>The &lt;META&gt;-&lt;RET&gt; we used in the third step is the
+&ldquo;last-arguments&rdquo; command.  It is sort of like Undo, except that it
+restores the arguments of the last command to the stack without removing
+the command's result.  It is useful in situations like this one,
+where we need to do several operations on the same inputs.  We could
+have accomplished the same thing by using <kbd>M-2 &lt;RET&gt;</kbd> to duplicate
+the top two stack elements right after the <kbd>U U</kbd>, then a pair of
+<kbd>M-&lt;TAB&gt;</kbd> commands to cycle the 116 up around the duplicates.
+
+   <p>A similar identity is supposed to hold for hyperbolic sines and cosines,
+except that it is the <em>difference</em>
+<!-- @math{\cosh^2x - \sinh^2x} -->
+&lsquo;<samp><span class="samp">cosh(x)^2 - sinh(x)^2</span></samp>&rsquo;
+that always equals one.  Let's try to verify this identity.
+
+<pre class="smallexample">     2:  -64        2:  -64        2:  -64        2:  9.7192e54  2:  9.7192e54
+     1:  -64        1:  -3.1175e27 1:  9.7192e54  1:  -64        1:  9.7192e54
+         .              .              .              .              .
+     
+      64 n &lt;RET&gt; &lt;RET&gt;      H C            2 ^            &lt;TAB&gt;            H S 2 ^
+</pre>
+   <p class="noindent"><a name="index-Roundoff-errors_002c-examples-30"></a>Something's obviously wrong, because when we subtract these numbers
+the answer will clearly be zero!  But if you think about it, if these
+numbers <em>did</em> differ by one, it would be in the 55th decimal
+place.  The difference we seek has been lost entirely to roundoff
+error.
+
+   <p>We could verify this hypothesis by doing the actual calculation with,
+say, 60 decimal places of precision.  This will be slow, but not
+enormously so.  Try it if you wish; sure enough, the answer is
+0.99999, reasonably close to 1.
+
+   <p>Of course, a more reasonable way to verify the identity is to use
+a more reasonable value for &lsquo;<samp><span class="samp">x</span></samp>&rsquo;!
+
+   <p><a name="index-Common-logarithm-31"></a>Some Calculator commands use the Hyperbolic prefix for other purposes. 
+The logarithm and exponential functions, for example, work to the base
+&lsquo;<samp><span class="samp">e</span></samp>&rsquo; normally but use base-10 instead if you use the Hyperbolic
+prefix.
+
+<pre class="smallexample">     1:  1000       1:  6.9077     1:  1000       1:  3
+         .              .              .              .
+     
+         1000           L              U              H L
+</pre>
+   <p class="noindent">First, we mistakenly compute a natural logarithm.  Then we undo
+and compute a common logarithm instead.
+
+   <p>The <kbd>B</kbd> key computes a general base-<var>b</var> logarithm for any
+value of <var>b</var>.
+
+<pre class="smallexample">     2:  1000       1:  3          1:  1000.      2:  1000.      1:  6.9077
+     1:  10             .              .          1:  2.71828        .
+         .                                            .
+     
+      1000 &lt;RET&gt; 10       B              H E            H P            B
+</pre>
+   <p class="noindent">Here we first use <kbd>B</kbd> to compute the base-10 logarithm, then use
+the &ldquo;hyperbolic&rdquo; exponential as a cheap hack to recover the number
+1000, then use <kbd>B</kbd> again to compute the natural logarithm.  Note
+that <kbd>P</kbd> with the hyperbolic prefix pushes the constant &lsquo;<samp><span class="samp">e</span></samp>&rsquo;
+onto the stack.
+
+   <p>You may have noticed that both times we took the base-10 logarithm
+of 1000, we got an exact integer result.  Calc always tries to give
+an exact rational result for calculations involving rational numbers
+where possible.  But when we used <kbd>H E</kbd>, the result was a
+floating-point number for no apparent reason.  In fact, if we had
+computed <kbd>10 &lt;RET&gt; 3 ^</kbd> we <em>would</em> have gotten an
+exact integer 1000.  But the <kbd>H E</kbd> command is rigged to generate
+a floating-point result all of the time so that <kbd>1000 H E</kbd> will
+not waste time computing a thousand-digit integer when all you
+probably wanted was &lsquo;<samp><span class="samp">1e1000</span></samp>&rsquo;.
+
+   <p>(&bull;) <strong>Exercise 2.</strong>  Find a pair of integer inputs to
+the <kbd>B</kbd> command for which Calc could find an exact rational
+result but doesn't.  See <a href="Arithmetic-Answer-2.html#Arithmetic-Answer-2">2</a>. (&bull;)
+
+   <p>The Calculator also has a set of functions relating to combinatorics
+and statistics.  You may be familiar with the <dfn>factorial</dfn> function,
+which computes the product of all the integers up to a given number.
+
+<pre class="smallexample">     1:  100        1:  93326215443...    1:  100.       1:  9.3326e157
+         .              .                     .              .
+     
+         100            !                     U c f          !
+</pre>
+   <p class="noindent">Recall, the <kbd>c f</kbd> command converts the integer or fraction at the
+top of the stack to floating-point format.  If you take the factorial
+of a floating-point number, you get a floating-point result
+accurate to the current precision.  But if you give <kbd>!</kbd> an
+exact integer, you get an exact integer result (158 digits long
+in this case).
+
+   <p>If you take the factorial of a non-integer, Calc uses a generalized
+factorial function defined in terms of Euler's Gamma function
+<!-- @math{\Gamma(n)} -->
+&lsquo;<samp><span class="samp">gamma(n)</span></samp>&rsquo;
+(which is itself available as the <kbd>f g</kbd> command).
+
+<pre class="smallexample">     3:  4.         3:  24.               1:  5.5        1:  52.342777847
+     2:  4.5        2:  52.3427777847         .              .
+     1:  5.         1:  120.
+         .              .
+     
+                        M-3 !              M-0 &lt;DEL&gt; 5.5       f g
+</pre>
+   <p class="noindent">Here we verify the identity
+<!-- @math{n! = \Gamma(n+1)}. -->
+&lsquo;<samp><var>n</var><span class="samp">! = gamma(</span><var>n</var><span class="samp">+1)</span></samp>&rsquo;.
+
+   <p>The binomial coefficient <var>n</var>-choose-<var>m</var>
+<!-- or @math{\displaystyle {n \choose m}} -->
+is defined by
+<!-- @math{\displaystyle {n! \over m! \, (n-m)!}} -->
+&lsquo;<samp><span class="samp">n! / m! (n-m)!</span></samp>&rsquo;
+for all reals &lsquo;<samp><span class="samp">n</span></samp>&rsquo; and &lsquo;<samp><span class="samp">m</span></samp>&rsquo;.  The intermediate results in this
+formula can become quite large even if the final result is small; the
+<kbd>k c</kbd> command computes a binomial coefficient in a way that avoids
+large intermediate values.
+
+   <p>The <kbd>k</kbd> prefix key defines several common functions out of
+combinatorics and number theory.  Here we compute the binomial
+coefficient 30-choose-20, then determine its prime factorization.
+
+<pre class="smallexample">     2:  30         1:  30045015   1:  [3, 3, 5, 7, 11, 13, 23, 29]
+     1:  20             .              .
+         .
+     
+      30 &lt;RET&gt; 20         k c            k f
+</pre>
+   <p class="noindent">You can verify these prime factors by using <kbd>V R *</kbd> to multiply
+together the elements of this vector.  The result is the original
+number, 30045015.
+
+   <p><a name="index-Hash-tables-32"></a>Suppose a program you are writing needs a hash table with at least
+10000 entries.  It's best to use a prime number as the actual size
+of a hash table.  Calc can compute the next prime number after 10000:
+
+<pre class="smallexample">     1:  10000      1:  10007      1:  9973
+         .              .              .
+     
+         10000          k n            I k n
+</pre>
+   <p class="noindent">Just for kicks we've also computed the next prime <em>less</em> than
+10000.
+
+<!-- [fix-ref Financial Functions] -->
+   <p>See <a href="Financial-Functions.html#Financial-Functions">Financial Functions</a>, for a description of the Calculator
+commands that deal with business and financial calculations (functions
+like <code>pv</code>, <code>rate</code>, and <code>sln</code>).
+
+<!-- [fix-ref Binary Number Functions] -->
+   <p>See <a href="Binary-Functions.html#Binary-Functions">Binary Functions</a>, to read about the commands for operating
+on binary numbers (like <code>and</code>, <code>xor</code>, and <code>lsh</code>).
+
+   </body></html>
+

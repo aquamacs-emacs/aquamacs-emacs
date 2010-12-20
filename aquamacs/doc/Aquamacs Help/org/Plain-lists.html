@@ -1,0 +1,187 @@
+<html lang="en">
+<head>
+<title>Plain lists - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Document-Structure.html#Document-Structure" title="Document Structure">
+<link rel="prev" href="Sparse-trees.html#Sparse-trees" title="Sparse trees">
+<link rel="next" href="Drawers.html#Drawers" title="Drawers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Plain-lists"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Drawers.html#Drawers">Drawers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sparse-trees.html#Sparse-trees">Sparse trees</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Document-Structure.html#Document-Structure">Document Structure</a>
+<hr>
+</div>
+
+<h3 class="section">2.7 Plain lists</h3>
+
+<p><a name="index-plain-lists-120"></a><a name="index-lists_002c-plain-121"></a><a name="index-lists_002c-ordered-122"></a><a name="index-ordered-lists-123"></a>
+Within an entry of the outline tree, hand-formatted lists can provide
+additional structure.  They also provide a way to create lists of
+checkboxes (see <a href="Checkboxes.html#Checkboxes">Checkboxes</a>).  Org supports editing such lists,
+and the HTML exporter (see <a href="Exporting.html#Exporting">Exporting</a>) parses and formats them.
+
+   <p>Org knows ordered lists, unordered lists, and description lists.
+     <ul>
+<li><em>Unordered</em> list items start with &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, or
+&lsquo;<samp><span class="samp">*</span></samp>&rsquo;<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+as bullets. 
+<li><em>Ordered</em> list items start with a numeral followed by either a period or
+a right parenthesis, such as &lsquo;<samp><span class="samp">1.</span></samp>&rsquo; or &lsquo;<samp><span class="samp">1)</span></samp>&rsquo;. 
+<li><em>Description</em> list items are unordered list items, and contain the
+separator &lsquo;<samp><span class="samp"> :: </span></samp>&rsquo; to separate the description <em>term</em> from the
+description. 
+</ul>
+
+   <p><a name="index-org_002dempty_002dline_002dterminates_002dplain_002dlists-124"></a>Items belonging to the same list must have the same indentation on the first
+line.  In particular, if an ordered list reaches number &lsquo;<samp><span class="samp">10.</span></samp>&rsquo;, then the
+2&ndash;digit numbers must be written left-aligned with the other numbers in the
+list.  Indentation also determines the end of a list item.  It ends before
+the next line that is indented like the bullet/number, or less.  Empty lines
+are part of the previous item, so you can have several paragraphs in one
+item.  If you would like an empty line to terminate all currently open plain
+lists, configure the variable <code>org-empty-line-terminates-plain-lists</code>. 
+Here is an example:
+
+<pre class="example">     ** Lord of the Rings
+        My favorite scenes are (in this order)
+        1. The attack of the Rohirrim
+        2. Eowyn's fight with the witch king
+           + this was already my favorite scene in the book
+           + I really like Miranda Otto.
+        3. Peter Jackson being shot by Legolas
+            - on DVD only
+           He makes a really funny face when it happens.
+        But in the end, no individual scenes matter but the film as a whole.
+        Important actors in this film are:
+        - <b>Elijah Wood</b> :: He plays Frodo
+        - <b>Sean Austin</b> :: He plays Sam, Frodo's friend.  I still remember
+          him very well from his role as Mikey Walsh in <i>The Goonies</i>.
+</pre>
+   <p>Org supports these lists by tuning filling and wrapping commands to deal with
+them correctly<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>, and by exporting them
+properly (see <a href="Exporting.html#Exporting">Exporting</a>).  Since indentation is what governs the
+structure of these lists, many structural constructs like <code>#+BEGIN_...</code>
+blocks can be indented to signal that they should be part of a list item.
+
+   <p>The following commands act on items when the cursor is in the first line
+of an item (the line with the bullet or number).
+
+     
+<a name="index-g_t_0040key_007bTAB_007d-125"></a>
+<dl><dt><kbd>&lt;TAB&gt;</kbd><dd><a name="index-org_002dcycle_002dinclude_002dplain_002dlists-126"></a>Items can be folded just like headline levels.  Normally this works only if
+the cursor is on a plain list item.  For more details, see the variable
+<code>org-cycle-include-plain-lists</code>. to <code>integrate</code>, plain list items
+will be treated like low-level.  The level of an item is then given by the
+indentation of the bullet/number.  Items are always subordinate to real
+headlines, however; the hierarchies remain completely separated.
+
+     <p>If <code>org-cycle-include-plain-lists</code> has not been set, &lt;TAB&gt;
+fixes the indentation of the current line in a heuristic way. 
+<a name="index-M_002d_0040key_007bRET_007d-127"></a><br><dt><kbd>M-&lt;RET&gt;</kbd><dd><a name="index-org_002dM_002dRET_002dmay_002dsplit_002dline-128"></a>Insert new item at current level.  With a prefix argument, force a new
+heading (see <a href="Structure-editing.html#Structure-editing">Structure editing</a>).  If this command is used in the middle
+of a line, the line is <em>split</em> and the rest of the line becomes the new
+item<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>.  If this command is executed in the
+<em>whitespace before a bullet or number</em>, the new item is created
+<em>before</em> the current item.  If the command is executed in the white
+space before the text that is part of an item but does not contain the
+bullet, a bullet is added to the current line. 
+<a name="index-M_002dS_002d_0040key_007bRET_007d-129"></a><br><dt><kbd>M-S-&lt;RET&gt;</kbd><dd>Insert a new item with a checkbox (see <a href="Checkboxes.html#Checkboxes">Checkboxes</a>). 
+<a name="index-g_t_0040key_007bTAB_007d-130"></a><br><dt><kbd>&lt;TAB&gt; </kbd><span class="roman">in new, empty item</span><dd>In a new item with no text yet, the first &lt;TAB&gt; demotes the item to
+become a child of the previous one.  The next &lt;TAB&gt; makes it a parent,
+and so on, all the way to the left margin.  Yet another &lt;TAB&gt;, and you
+are back to the initial level. 
+<a name="index-S_002d_0040key_007bup_007d-131"></a><a name="index-S_002d_0040key_007bdown_007d-132"></a><br><dt><kbd>S-&lt;up&gt;</kbd><dt><kbd>S-&lt;down&gt;</kbd><dd><a name="index-shift_002dselection_002dmode-133"></a><a name="index-org_002dsupport_002dshift_002dselect-134"></a>Jump to the previous/next item in the current list, but only if
+<code>org-support-shift-select</code> is off.  If not, you can still use paragraph
+jumping commands like <kbd>C-&lt;up&gt;</kbd> and <kbd>C-&lt;down&gt;</kbd> to quite
+similar effect. 
+<a name="index-M_002dS_002d_0040key_007bup_007d-135"></a><a name="index-M_002dS_002d_0040key_007bdown_007d-136"></a><br><dt><kbd>M-S-&lt;up&gt;</kbd><dt><kbd>M-S-&lt;down&gt;</kbd><dd>Move the item including subitems up/down (swap with previous/next item
+of same indentation).  If the list is ordered, renumbering is
+automatic. 
+<a name="index-M_002dS_002d_0040key_007bleft_007d-137"></a><a name="index-M_002dS_002d_0040key_007bright_007d-138"></a><br><dt><kbd>M-S-&lt;left&gt;</kbd><dt><kbd>M-S-&lt;right&gt;</kbd><dd>Decrease/increase the indentation of the item, including subitems. 
+Initially, the item tree is selected based on current indentation. 
+When these commands are executed several times in direct succession,
+the initially selected region is used, even if the new indentation
+would imply a different hierarchy.  To use the new hierarchy, break
+the command chain with a cursor motion or so. 
+<a name="index-C_002dc-C_002dc-139"></a><br><dt><kbd>C-c C-c</kbd><dd>If there is a checkbox (see <a href="Checkboxes.html#Checkboxes">Checkboxes</a>) in the item line, toggle the
+state of the checkbox.  If not, this command makes sure that all the
+items on this list level use the same bullet.  Furthermore, if this is
+an ordered list, make sure the numbering is OK. 
+<a name="index-C_002dc-_002d-140"></a><br><dt><kbd>C-c -</kbd><dd>Cycle the entire list level through the different itemize/enumerate bullets
+(&lsquo;<samp><span class="samp">-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, &lsquo;<samp><span class="samp">1.</span></samp>&rsquo;, &lsquo;<samp><span class="samp">1)</span></samp>&rsquo;).  With a numeric prefix
+argument N, select the Nth bullet from this list.  If there is an active
+region when calling this, all lines will be converted to list items.  If the
+first line already was a list item, any item markers will be removed from the
+list.  Finally, even without an active region, a normal line will be
+converted into a list item. 
+<a name="index-C_002dc-_002a-141"></a><br><dt><kbd>C-c *</kbd><dd>Turn a plain list item into a headline (so that it becomes a subheading at
+its location). See <a href="Structure-editing.html#Structure-editing">Structure editing</a>, for a detailed explanation. 
+<a name="index-S_002d_0040key_007bleft_007d-142"></a><a name="index-S_002d_0040key_007bright_007d-143"></a><br><dt><kbd>S-&lt;left&gt;/&lt;right&gt;</kbd><dd><a name="index-org_002dsupport_002dshift_002dselect-144"></a>This command also cycles bullet styles when the cursor in on the bullet or
+anywhere in an item line, details depending on
+<code>org-support-shift-select</code>. 
+<a name="index-C_002dc-_005e-145"></a><br><dt><kbd>C-c ^</kbd><dd>Sort the plain list.  You will be prompted for the sorting method:
+numerically, alphabetically, by time, or by custom function. 
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> When using &lsquo;<samp><span class="samp">*</span></samp>&rsquo; as a bullet, lines must be indented or
+they will be seen as top-level headlines.  Also, when you are hiding leading
+stars to get a clean outline view, plain list items starting with a star are
+visually indistinguishable from true headlines.  In short: even though
+&lsquo;<samp><span class="samp">*</span></samp>&rsquo; is supported, it may be better to not use it for plain list items.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Org only changes the filling settings for Emacs.  For
+XEmacs, you should use Kyle E. Jones' <samp><span class="file">filladapt.el</span></samp>.  To turn this on,
+put into <samp><span class="file">.emacs</span></samp>: <code>(require 'filladapt)</code></p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> If you do not want the line to be split, customize the variable
+<code>org-M-RET-may-split-line</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

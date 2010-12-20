@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Mail-like Back Ends - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
+<link rel="prev" href="Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus" title="Hooking New Back Ends Into Gnus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mail-like-Back-Ends"></a>
+<a name="Mail_002dlike-Back-Ends"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus">Hooking New Back Ends Into Gnus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.7.2.6 Mail-like Back Ends</h5>
+
+<p>One of the things that separate the mail back ends from the rest of the
+back ends is the heavy dependence by most of the mail back ends on
+common functions in <samp><span class="file">nnmail.el</span></samp>.  For instance, here's the
+definition of <code>nnml-request-scan</code>:
+
+<pre class="lisp">     (deffoo nnml-request-scan (&amp;optional group server)
+       (setq nnml-article-file-alist nil)
+       (nnmail-get-new-mail 'nnml 'nnml-save-nov nnml-directory group))
+</pre>
+   <p>It simply calls <code>nnmail-get-new-mail</code> with a few parameters,
+and <code>nnmail</code> takes care of all the moving and splitting of the
+mail.
+
+   <p>This function takes four parameters.
+
+     <dl>
+<dt><var>method</var><dd>This should be a symbol to designate which back end is responsible for
+the call.
+
+     <br><dt><var>exit-function</var><dd>This function should be called after the splitting has been performed.
+
+     <br><dt><var>temp-directory</var><dd>Where the temporary files should be stored.
+
+     <br><dt><var>group</var><dd>This optional argument should be a group name if the splitting is to be
+performed for one group only. 
+</dl>
+
+   <p><code>nnmail-get-new-mail</code> will call <var>back-end</var><code>-save-mail</code> to
+save each article.  <var>back-end</var><code>-active-number</code> will be called to
+find the article number assigned to this article.
+
+   <p>The function also uses the following variables:
+<var>back-end</var><code>-get-new-mail</code> (to see whether to get new mail for
+this back end); and <var>back-end</var><code>-group-alist</code> and
+<var>back-end</var><code>-active-file</code> to generate the new active file. 
+<var>back-end</var><code>-group-alist</code> should be a group-active alist, like
+this:
+
+<pre class="example">     (("a-group" (1 . 10))
+      ("some-group" (34 . 39)))
+</pre>
+   </body></html>
+

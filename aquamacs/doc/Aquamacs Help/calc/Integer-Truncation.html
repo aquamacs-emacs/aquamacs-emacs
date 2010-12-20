@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Integer Truncation - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Arithmetic.html#Arithmetic" title="Arithmetic">
+<link rel="prev" href="Basic-Arithmetic.html#Basic-Arithmetic" title="Basic Arithmetic">
+<link rel="next" href="Complex-Number-Functions.html#Complex-Number-Functions" title="Complex Number Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Integer-Truncation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Complex-Number-Functions.html#Complex-Number-Functions">Complex Number Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Arithmetic.html#Basic-Arithmetic">Basic Arithmetic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Arithmetic.html#Arithmetic">Arithmetic</a>
+<hr>
+</div>
+
+<h3 class="section">8.2 Integer Truncation</h3>
+
+<p class="noindent">There are four commands for truncating a real number to an integer,
+differing mainly in their treatment of negative numbers.  All of these
+commands have the property that if the argument is an integer, the result
+is the same integer.  An integer-valued floating-point argument is converted
+to integer form.
+
+   <p>If you press <kbd>H</kbd> (<code>calc-hyperbolic</code>) first, the result will be
+expressed as an integer-valued floating-point number.
+
+   <p><a name="index-Integer-part-of-a-number-717"></a><a name="index-F-718"></a><a name="index-calc_002dfloor-719"></a><a name="index-floor-720"></a><a name="index-ffloor-721"></a><a name="index-H-F-722"></a>The <kbd>F</kbd> (<code>calc-floor</code>) [<code>floor</code> or <code>ffloor</code>] command
+truncates a real number to the next lower integer, i.e., toward minus
+infinity.  Thus <kbd>3.6 F</kbd> produces 3, but <kbd>_3.6 F</kbd> produces
+<i>-4</i>.
+
+   <p><a name="index-I-F-723"></a><a name="index-calc_002dceiling-724"></a><a name="index-ceil-725"></a><a name="index-fceil-726"></a><a name="index-H-I-F-727"></a>The <kbd>I F</kbd> (<code>calc-ceiling</code>) [<code>ceil</code> or <code>fceil</code>]
+command truncates toward positive infinity.  Thus <kbd>3.6 I F</kbd> produces
+4, and <kbd>_3.6 I F</kbd> produces <i>-3</i>.
+
+   <p><a name="index-R-728"></a><a name="index-calc_002dround-729"></a><a name="index-round-730"></a><a name="index-fround-731"></a><a name="index-H-R-732"></a>The <kbd>R</kbd> (<code>calc-round</code>) [<code>round</code> or <code>fround</code>] command
+rounds to the nearest integer.  When the fractional part is .5 exactly,
+this command rounds away from zero.  (All other rounding in the
+Calculator uses this convention as well.)  Thus <kbd>3.5 R</kbd> produces 4
+but <kbd>3.4 R</kbd> produces 3; <kbd>_3.5 R</kbd> produces <i>-4</i>.
+
+   <p><a name="index-I-R-733"></a><a name="index-calc_002dtrunc-734"></a><a name="index-trunc-735"></a><a name="index-ftrunc-736"></a><a name="index-H-I-R-737"></a>The <kbd>I R</kbd> (<code>calc-trunc</code>) [<code>trunc</code> or <code>ftrunc</code>]
+command truncates toward zero.  In other words, it &ldquo;chops off&rdquo;
+everything after the decimal point.  Thus <kbd>3.6 I R</kbd> produces 3 and
+<kbd>_3.6 I R</kbd> produces <i>-3</i>.
+
+   <p>These functions may not be applied meaningfully to error forms, but they
+do work for intervals.  As a convenience, applying <code>floor</code> to a
+modulo form floors the value part of the form.  Applied to a vector,
+these functions operate on all elements of the vector one by one. 
+Applied to a date form, they operate on the internal numerical
+representation of dates, converting a date/time form into a pure date.
+
+   <p><a name="index-rounde-738"></a><a name="index-roundu-739"></a><a name="index-frounde-740"></a><a name="index-froundu-741"></a>There are two more rounding functions which can only be entered in
+algebraic notation.  The <code>roundu</code> function is like <code>round</code>
+except that it rounds up, toward plus infinity, when the fractional
+part is .5.  This distinction matters only for negative arguments. 
+Also, <code>rounde</code> rounds to an even number in the case of a tie,
+rounding up or down as necessary.  For example, &lsquo;<samp><span class="samp">rounde(3.5)</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">rounde(4.5)</span></samp>&rsquo; both return 4, but &lsquo;<samp><span class="samp">rounde(5.5)</span></samp>&rsquo; returns 6. 
+The advantage of round-to-even is that the net error due to rounding
+after a long calculation tends to cancel out to zero.  An important
+subtle point here is that the number being fed to <code>rounde</code> will
+already have been rounded to the current precision before <code>rounde</code>
+begins.  For example, &lsquo;<samp><span class="samp">rounde(2.500001)</span></samp>&rsquo; with a current precision
+of 6 will incorrectly, or at least surprisingly, yield 2 because the
+argument will first have been rounded down to &lsquo;<samp><span class="samp">2.5</span></samp>&rsquo; (which
+<code>rounde</code> sees as an exact tie between 2 and 3).
+
+   <p>Each of these functions, when written in algebraic formulas, allows
+a second argument which specifies the number of digits after the
+decimal point to keep.  For example, &lsquo;<samp><span class="samp">round(123.4567, 2)</span></samp>&rsquo; will
+produce the answer 123.46, and &lsquo;<samp><span class="samp">round(123.4567, -1)</span></samp>&rsquo; will
+produce 120 (i.e., the cutoff is one digit to the <em>left</em> of
+the decimal point).  A second argument of zero is equivalent to
+no second argument at all.
+
+   <p><a name="index-Fractional-part-of-a-number-742"></a>To compute the fractional part of a number (i.e., the amount which, when
+added to `<tt>floor(</tt><var>n</var><tt>)</tt>', will produce <var>n</var>) just take <var>n</var>
+modulo 1 using the <code>%</code> command.
+
+   <p>Note also the <kbd>\</kbd> (integer quotient), <kbd>f I</kbd> (integer logarithm),
+and <kbd>f Q</kbd> (integer square root) commands, which are analogous to
+<kbd>/</kbd>, <kbd>B</kbd>, and <kbd>Q</kbd>, respectively, except that they take integer
+arguments and return the result rounded down to an integer.
+
+   </body></html>
+

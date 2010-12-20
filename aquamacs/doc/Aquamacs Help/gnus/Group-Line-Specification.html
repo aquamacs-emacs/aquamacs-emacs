@@ -1,0 +1,184 @@
+<html lang="en">
+<head>
+<title>Group Line Specification - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Group-Buffer-Format.html#Group-Buffer-Format" title="Group Buffer Format">
+<link rel="next" href="Group-Mode-Line-Specification.html#Group-Mode-Line-Specification" title="Group Mode Line Specification">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Group-Line-Specification"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Group-Mode-Line-Specification.html#Group-Mode-Line-Specification">Group Mode Line Specification</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Group-Buffer-Format.html#Group-Buffer-Format">Group Buffer Format</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.1.1 Group Line Specification</h4>
+
+<p><a name="index-group-buffer-format-84"></a>
+The default format of the group buffer is nice and dull, but you can
+make it as exciting and ugly as you feel like.
+
+   <p>Here's a couple of example group lines:
+
+<pre class="example">          25: news.announce.newusers
+      *    0: alt.fan.andrea-dworkin
+</pre>
+   <p>Quite simple, huh?
+
+   <p>You can see that there are 25 unread articles in
+&lsquo;<samp><span class="samp">news.announce.newusers</span></samp>&rsquo;.  There are no unread articles, but some
+ticked articles, in &lsquo;<samp><span class="samp">alt.fan.andrea-dworkin</span></samp>&rsquo; (see that little
+asterisk at the beginning of the line?).
+
+   <p><a name="index-gnus_002dgroup_002dline_002dformat-85"></a>You can change that format to whatever you want by fiddling with the
+<code>gnus-group-line-format</code> variable.  This variable works along the
+lines of a <code>format</code> specification, which is pretty much the same as
+a <code>printf</code> specifications, for those of you who use (feh!) C. 
+See <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>.
+
+   <p>&lsquo;<samp><span class="samp">%M%S%5y:%B%(%g%)\n</span></samp>&rsquo; is the value that produced those lines above.
+
+   <p>There should always be a colon on the line; the cursor always moves to
+the colon after performing an operation.  See <a href="Positioning-Point.html#Positioning-Point">Positioning Point</a>.  Nothing else is required&mdash;not even the group name.  All
+displayed text is just window dressing, and is never examined by Gnus. 
+Gnus stores all real information it needs using text properties.
+
+   <p>(Note that if you make a really strange, wonderful, spreadsheet-like
+layout, everybody will believe you are hard at work with the accounting
+instead of wasting time reading news.)
+
+   <p>Here's a list of all available format characters:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">M</span></samp>&rsquo;<dd>An asterisk if the group only has marked articles.
+
+     <br><dt>&lsquo;<samp><span class="samp">S</span></samp>&rsquo;<dd>Whether the group is subscribed.
+
+     <br><dt>&lsquo;<samp><span class="samp">L</span></samp>&rsquo;<dd>Level of subscribedness.
+
+     <br><dt>&lsquo;<samp><span class="samp">N</span></samp>&rsquo;<dd>Number of unread articles.
+
+     <br><dt>&lsquo;<samp><span class="samp">I</span></samp>&rsquo;<dd>Number of dormant articles.
+
+     <br><dt>&lsquo;<samp><span class="samp">T</span></samp>&rsquo;<dd>Number of ticked articles.
+
+     <br><dt>&lsquo;<samp><span class="samp">R</span></samp>&rsquo;<dd>Number of read articles.
+
+     <br><dt>&lsquo;<samp><span class="samp">U</span></samp>&rsquo;<dd>Number of unseen articles.
+
+     <br><dt>&lsquo;<samp><span class="samp">t</span></samp>&rsquo;<dd>Estimated total number of articles.  (This is really <var>max-number</var>
+minus <var>min-number</var> plus 1.)
+
+     <p>Gnus uses this estimation because the <acronym>NNTP</acronym> protocol provides
+efficient access to <var>max-number</var> and <var>min-number</var> but getting
+the true unread message count is not possible efficiently.  For
+hysterical raisins, even the mail back ends, where the true number of
+unread messages might be available efficiently, use the same limited
+interface.  To remove this restriction from Gnus means that the back
+end interface has to be changed, which is not an easy job.
+
+     <p>The nnml backend (see <a href="Mail-Spool.html#Mail-Spool">Mail Spool</a>) has a feature called &ldquo;group
+compaction&rdquo; which circumvents this deficiency: the idea is to
+renumber all articles from 1, removing all gaps between numbers, hence
+getting a correct total count.  Other backends may support this in the
+future.  In order to keep your total article count relatively up to
+date, you might want to compact your groups (or even directly your
+server) from time to time. See <a href="Misc-Group-Stuff.html#Misc-Group-Stuff">Misc Group Stuff</a>, See <a href="Server-Commands.html#Server-Commands">Server Commands</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">y</span></samp>&rsquo;<dd>Number of unread, unticked, non-dormant articles.
+
+     <br><dt>&lsquo;<samp><span class="samp">i</span></samp>&rsquo;<dd>Number of ticked and dormant articles.
+
+     <br><dt>&lsquo;<samp><span class="samp">g</span></samp>&rsquo;<dd>Full group name.
+
+     <br><dt>&lsquo;<samp><span class="samp">G</span></samp>&rsquo;<dd>Group name.
+
+     <br><dt>&lsquo;<samp><span class="samp">C</span></samp>&rsquo;<dd>Group comment (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) or group name if there is no
+comment element in the group parameters.
+
+     <br><dt>&lsquo;<samp><span class="samp">D</span></samp>&rsquo;<dd>Newsgroup description.  You need to read the group descriptions
+before these will appear, and to do that, you either have to set
+<code>gnus-read-active-file</code> or use the group buffer <kbd>M-d</kbd>
+command.
+
+     <br><dt>&lsquo;<samp><span class="samp">o</span></samp>&rsquo;<dd>&lsquo;<samp><span class="samp">m</span></samp>&rsquo; if moderated.
+
+     <br><dt>&lsquo;<samp><span class="samp">O</span></samp>&rsquo;<dd>&lsquo;<samp><span class="samp">(m)</span></samp>&rsquo; if moderated.
+
+     <br><dt>&lsquo;<samp><span class="samp">s</span></samp>&rsquo;<dd>Select method.
+
+     <br><dt>&lsquo;<samp><span class="samp">B</span></samp>&rsquo;<dd>If the summary buffer for the group is open or not.
+
+     <br><dt>&lsquo;<samp><span class="samp">n</span></samp>&rsquo;<dd>Select from where.
+
+     <br><dt>&lsquo;<samp><span class="samp">z</span></samp>&rsquo;<dd>A string that looks like &lsquo;<samp><span class="samp">&lt;%s:%n&gt;</span></samp>&rsquo; if a foreign select method is
+used.
+
+     <br><dt>&lsquo;<samp><span class="samp">P</span></samp>&rsquo;<dd>Indentation based on the level of the topic (see <a href="Group-Topics.html#Group-Topics">Group Topics</a>).
+
+     <br><dt>&lsquo;<samp><span class="samp">c</span></samp>&rsquo;<dd><a name="index-gnus_002dgroup_002duncollapsed_002dlevels-86"></a>Short (collapsed) group name.  The <code>gnus-group-uncollapsed-levels</code>
+variable says how many levels to leave at the end of the group name. 
+The default is 1&mdash;this will mean that group names like
+&lsquo;<samp><span class="samp">gnu.emacs.gnus</span></samp>&rsquo; will be shortened to &lsquo;<samp><span class="samp">g.e.gnus</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">m</span></samp>&rsquo;<dd><a name="index-gnus_002dnew_002dmail_002dmark-87"></a><a name="index-g_t_0025-88"></a>&lsquo;<samp><span class="samp">%</span></samp>&rsquo; (<code>gnus-new-mail-mark</code>) if there has arrived new mail to
+the group lately.
+
+     <br><dt>&lsquo;<samp><span class="samp">p</span></samp>&rsquo;<dd>&lsquo;<samp><span class="samp">#</span></samp>&rsquo; (<code>gnus-process-mark</code>) if the group is process marked.
+
+     <br><dt>&lsquo;<samp><span class="samp">d</span></samp>&rsquo;<dd>A string that says when you last read the group (see <a href="Group-Timestamp.html#Group-Timestamp">Group Timestamp</a>).
+
+     <br><dt>&lsquo;<samp><span class="samp">F</span></samp>&rsquo;<dd>The disk space used by the articles fetched by both the cache and
+agent.  The value is automatically scaled to bytes(B), kilobytes(K),
+megabytes(M), or gigabytes(G) to minimize the column width.  A format
+of %7F is sufficient for a fixed-width column.
+
+     <br><dt>&lsquo;<samp><span class="samp">u</span></samp>&rsquo;<dd>User defined specifier.  The next character in the format string should
+be a letter.  Gnus will call the function
+<code>gnus-user-format-function-</code>&lsquo;<samp><span class="samp">X</span></samp>&rsquo;, where &lsquo;<samp><span class="samp">X</span></samp>&rsquo; is the letter
+following &lsquo;<samp><span class="samp">%u</span></samp>&rsquo;.  The function will be passed a single dummy
+parameter as argument.  The function should return a string, which will
+be inserted into the buffer just like information from any other
+specifier. 
+</dl>
+
+   <p><a name="index-g_t_002a-89"></a>All the &ldquo;number-of&rdquo; specs will be filled with an asterisk (&lsquo;<samp><span class="samp">*</span></samp>&rsquo;)
+if no info is available&mdash;for instance, if it is a non-activated foreign
+group, or a bogus native group.
+
+   </body></html>
+

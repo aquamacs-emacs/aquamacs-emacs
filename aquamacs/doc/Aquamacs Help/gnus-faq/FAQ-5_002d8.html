@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>FAQ 5-8 - Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Frequently Asked Questions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages" title="FAQ 5 - Composing messages">
+<link rel="prev" href="FAQ-5_002d7.html#FAQ-5_002d7" title="FAQ 5-7">
+<link rel="next" href="FAQ-5_002d9.html#FAQ-5_002d9" title="FAQ 5-9">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-5-8"></a>
+<a name="FAQ-5_002d8"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-5_002d9.html#FAQ-5_002d9">FAQ 5-9</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-5_002d7.html#FAQ-5_002d7">FAQ 5-7</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages">FAQ 5 - Composing messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 5.8</h5>
+
+<p>Sometimes I see little images at the top of article
+buffer. What's that and how can I send one with my
+postings, too?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>Those images are called X-Faces. They are 48*48 pixel b/w
+pictures, encoded in a header line. If you want to include
+one in your posts, you've got to convert some image to a
+X-Face. So fire up some image manipulation program (say
+Gimp), open the image you want to include, cut out the
+relevant part, reduce color depth to 1 bit, resize to
+48*48 and save as bitmap. Now you should get the compface
+package from
+<a href="ftp://ftp.cs.indiana.edu:/pub/faces/">this site</a>. 
+and create the actual X-face by saying
+
+<pre class="example">     cat file.xbm | xbm2ikon | compface &gt; file.face
+     cat file.face | sed 's/\\/\\\\/g;s/\"/\\\"/g;' &gt; file.face.quoted
+</pre>
+   <p class="noindent">If you can't use compface, there's an online X-face converter at
+<a href="http://www.dairiki.org/xface/">http://www.dairiki.org/xface/</a>. 
+If you use MS Windows, you could also use the WinFace program from
+<a href="http://www.xs4all.nl/~walterln/winface/">http://www.xs4all.nl/~walterln/winface/</a>. 
+Now you only have to tell Gnus to include the X-face in your postings by saying
+
+<pre class="example">     (setq message-default-headers
+             (with-temp-buffer
+               (insert "X-Face: ")
+               (insert-file-contents "~/.xface")
+               (buffer-string)))
+</pre>
+   <p class="noindent">in ~/.gnus.el.  If you use Gnus 5.10, you can simply add an entry
+
+<pre class="example">     (x-face-file "~/.xface")
+</pre>
+   <p class="noindent">to gnus-posting-styles.
+
+   </body></html>
+

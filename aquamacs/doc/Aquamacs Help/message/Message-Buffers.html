@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Message Buffers - Message Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Message Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Sending-Variables.html#Sending-Variables" title="Sending Variables">
+<link rel="next" href="Message-Actions.html#Message-Actions" title="Message Actions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Message, the Emacs message composition mode.
+
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Message-Buffers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Message-Actions.html#Message-Actions">Message Actions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sending-Variables.html#Sending-Variables">Sending Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">3.9 Message Buffers</h3>
+
+<p>Message will generate new buffers with unique buffer names when you
+request a message buffer.  When you send the message, the buffer isn't
+normally killed off.  Its name is changed and a certain number of old
+message buffers are kept alive.
+
+     <dl>
+<dt><code>message-generate-new-buffers</code><dd><a name="index-message_002dgenerate_002dnew_002dbuffers-329"></a>Controls whether to create a new message buffer to compose a message. 
+Valid values include:
+
+          <dl>
+<dt><code>nil</code><dd>Generate the buffer name in the Message way (e.g., *mail*, *news*, *mail
+to whom*, *news on group*, etc.) and continue editing in the existing
+buffer of that name.  If there is no such buffer, it will be newly
+created.
+
+          <br><dt><code>unique</code><br><dt><code>t</code><dd>Create the new buffer with the name generated in the Message way.  This
+is the default.
+
+          <br><dt><code>unsent</code><dd>Similar to <code>unique</code> but the buffer name begins with "*unsent ".
+
+          <br><dt><code>standard</code><dd>Similar to <code>nil</code> but the buffer name is simpler like *mail
+message*. 
+</dl>
+
+          <dl>
+<dt><var>function</var><dd>If this is a function, call that function with three parameters: The
+type, the To address and the group name (any of these may be
+<code>nil</code>).  The function should return the new buffer name. 
+</dl>
+
+     <p>The default value is <code>unique</code>.
+
+     <br><dt><code>message-max-buffers</code><dd><a name="index-message_002dmax_002dbuffers-330"></a>This variable says how many old message buffers to keep.  If there are
+more message buffers than this, the oldest buffer will be killed.  The
+default is 10.  If this variable is <code>nil</code>, no old message buffers
+will ever be killed.
+
+     <br><dt><code>message-send-rename-function</code><dd><a name="index-message_002dsend_002drename_002dfunction-331"></a>After sending a message, the buffer is renamed from, for instance,
+&lsquo;<samp><span class="samp">*reply to Lars*</span></samp>&rsquo; to &lsquo;<samp><span class="samp">*sent reply to Lars*</span></samp>&rsquo;.  If you don't
+like this, set this variable to a function that renames the buffer in a
+manner you like.  If you don't want to rename the buffer at all, you can
+say:
+
+     <pre class="lisp">          (setq message-send-rename-function 'ignore)
+</pre>
+     <br><dt><code>message-kill-buffer-on-exit</code><dd><a name="index-message_002dkill_002dbuffer_002don_002dexit-332"></a>If non-<code>nil</code>, kill the buffer immediately on exit.
+
+   </dl>
+
+   </body></html>
+

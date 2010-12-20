@@ -1,0 +1,222 @@
+<html lang="en">
+<head>
+<title>Lesson I -- Development Cycle - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Started.html#Getting-Started" title="Getting Started">
+<link rel="prev" href="Getting-Started.html#Getting-Started" title="Getting Started">
+<link rel="next" href="Lesson-II-_002d_002d-Customization.html#Lesson-II-_002d_002d-Customization" title="Lesson II -- Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Lesson-I----Development-Cycle"></a>
+<a name="Lesson-I-_002d_002d-Development-Cycle"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Lesson-II-_002d_002d-Customization.html#Lesson-II-_002d_002d-Customization">Lesson II -- Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Getting-Started.html#Getting-Started">Getting Started</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Started.html#Getting-Started">Getting Started</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 Lesson I: Development Cycle</h3>
+
+<p>The purpose of this tutorial is to guide you through a very basic
+development cycle using IDLWAVE.  We will paste a simple program into
+a buffer and use the shell to compile, debug and run it.  On the way
+we will use many of the important IDLWAVE commands.  Note, however,
+that IDLWAVE has many more capabilities than covered here, which can
+be discovered by reading the entire manual, or hovering over the
+shoulder of your nearest IDLWAVE guru for a few days.
+
+   <p>It is assumed that you have access to Emacs or XEmacs with the full
+IDLWAVE package including online help.  We also assume that you are
+familiar with Emacs and can read the nomenclature of key presses in
+Emacs (in particular, <kbd>C</kbd> stands for &lt;CONTROL&gt; and <kbd>M</kbd> for
+&lt;META&gt; (often the &lt;ALT&gt; key carries this functionality)).
+
+   <p>Open a new source file by typing:
+
+<pre class="example">     <kbd>C-x C-f tutorial.pro &lt;RET&gt;</kbd>
+</pre>
+   <p>A buffer for this file will pop up, and it should be in IDLWAVE mode,
+indicated in the mode line just below the editing window.  Also, the
+menu bar should contain &lsquo;<samp><span class="samp">IDLWAVE</span></samp>&rsquo;.
+
+   <p>Now cut-and-paste the following code, also available as
+<samp><span class="file">tutorial.pro</span></samp> in the IDLWAVE distribution.
+
+<pre class="example">     function daynr,d,m,y
+       ;; compute a sequence number for a date
+       ;; works 1901-2099.
+       if y lt 100 then y = y+1900
+       if m le 2 then delta = 1 else delta = 0
+       m1 = m + delta*12 + 1
+       y1 = y * delta
+       return, d + floor(m1*30.6)+floor(y1*365.25)+5
+     end
+     
+     function weekday,day,month,year
+       ;; compute weekday number for date
+       nr = daynr(day,month,year)
+       return, nr mod 7
+     end
+     
+     pro plot_wday,day,month
+       ;; Plot the weekday of a date in the first 10 years of this century.
+       years = 2000,+indgen(10)
+       wdays = intarr(10)
+       for i=0,n_elements(wdays)-1 do begin
+           wdays[i] =  weekday(day,month,years[i])
+       end
+       plot,years,wdays,YS=2,YT="Wday (0=Sunday)"
+     end
+</pre>
+   <p>The indentation probably looks funny, since it's different from the
+settings you use, so use the &lt;TAB&gt; key in each line to
+automatically line it up (or, more quickly, <em>select</em> the entire
+buffer with <kbd>C-x h</kbd>, and indent the whole region with
+<kbd>C-M-\</kbd>).  Notice how different syntactical elements are
+highlighted in different colors, if you have set up support for
+font-lock.
+
+   <p>Let's check out two particular editing features of IDLWAVE.  Place the
+cursor after the <code>end</code> statement of the <code>for</code> loop and press
+&lt;SPC&gt;.  IDLWAVE blinks back to the beginning of the block and
+changes the generic <code>end</code> to the specific <code>endfor</code>
+automatically (as long as the variable <code>idlwave-expand-generic-end</code>
+is turned on &mdash; see <a href="Lesson-II-_002d_002d-Customization.html#Lesson-II-_002d_002d-Customization">Lesson II &ndash; Customization</a>).  Now place the
+cursor in any line you would like to split and press <kbd>M-&lt;RET&gt;</kbd>. 
+The line is split at the cursor position, with the continuation &lsquo;<samp><span class="samp">$</span></samp>&rsquo;
+and indentation all taken care of.  Use <kbd>C-/</kbd> to undo the last
+change.
+
+   <p>The procedure <code>plot_wday</code> is supposed to plot the day of the week
+of a given date for the first 10 years of the 21st century.  As in
+most code, there are a few bugs, which we are going to use IDLWAVE to
+help us fix.
+
+   <p>First, let's launch the IDLWAVE shell.  You do this with the command
+<kbd>C-c C-s</kbd>.  The Emacs window will split or another window will popup
+to display IDL running in a shell interaction buffer.  Type a few
+commands like <code>print,!PI</code> to convince yourself that you can work
+there just as well as in a terminal, or the IDLDE.  Use the arrow keys
+to cycle through your command history.  Are we having fun now?
+
+   <p>Now go back to the source window and type <kbd>C-c C-d C-c</kbd> to compile
+the program.  If you watch the shell buffer, you see that IDLWAVE types
+&lsquo;<samp><span class="samp">.run "tutorial.pro"</span></samp>&rsquo; for you.  But the compilation fails because
+there is a comma in the line &lsquo;<samp><span class="samp">years=...</span></samp>&rsquo;.  The line with the error
+is highlighted and the cursor positioned at the error, so remove the
+comma (you should only need to hit <kbd>Delete</kbd>!).  Compile again, using
+the same keystrokes as before.  Notice that the file is automatically
+saved for you.  This time everything should work fine, and you should
+see the three routines compile.
+
+   <p>Now we want to use the command to plot the day of the week on January
+1st.  We could type the full command ourselves, but why do that?  Go
+back to the shell window, type &lsquo;<samp><span class="samp">plot_</span></samp>&rsquo; and hit &lt;TAB&gt;.  After
+a bit of a delay (while IDLWAVE initializes its routine info database,
+if necessary), the window will split to show all procedures it knows
+starting with that string, and <code>plot_wday</code><!-- /@w --> should be one of
+them.  Saving the buffer alerted IDLWAVE about this new routine. 
+Click with the middle mouse button on <code>plot_wday</code> and it will be
+copied to the shell buffer, or if you prefer, add &lsquo;<samp><span class="samp">w</span></samp>&rsquo; to
+&lsquo;<samp><span class="samp">plot_</span></samp>&rsquo; to make it unambiguous (depending on what other routines
+starting with &lsquo;<samp><span class="samp">plot_</span></samp>&rsquo; you have installed on your system), hit
+&lt;TAB&gt; again, and the full routine name will be completed.  Now
+provide the two arguments:
+
+<pre class="example">     plot_wday,1,1
+</pre>
+   <p class="noindent">and press &lt;RET&gt;.  This fails with an error message telling
+you the <code>YT</code> keyword to plot is ambiguous.  What are the allowed
+keywords again?  Go back to the source window and put the cursor into
+the `plot' line and press <kbd>C-c ?</kbd>.  This shows the routine info
+window for the plot routine, which contains a list of keywords, along
+with the argument list.  Oh, we wanted <code>YTITLE</code>.  Fix that up. 
+Recompile with <kbd>C-c C-d C-c</kbd>. Jump back into the shell with
+<kbd>C-c C-s</kbd>, press the &lt;UP&gt; arrow to recall the previous command
+and execute again.
+
+   <p>This time we get a plot, but it is pretty ugly &mdash; the points are all
+connected with a line.  Hmm, isn't there a way for <code>plot</code> to use
+symbols instead?  What was that keyword?  Position the cursor on the
+plot line after a comma (where you'd normally type a keyword), and hit
+<kbd>M-&lt;Tab&gt;</kbd>.  A long list of plot's keywords appears.  Aha,
+there it is, <code>PSYM</code>.  Middle click to insert it.  An &lsquo;<samp><span class="samp">=</span></samp>&rsquo;
+sign is included for you too.  Now what were the values of <code>PSYM</code>
+supposed to be?  With the cursor on or after the keyword, press
+<kbd>M-?</kbd> for online help (alternatively, you could have right clicked
+on the colored keyword itself in the completion list).  A browser will
+pop up showing the HTML documentation for the <code>PYSM</code> keyword. 
+OK, let's use diamonds=4.  Fix this, recompile (you know the command
+by now: <kbd>C-c C-d C-c</kbd>), go back to the shell (if it's vanished,
+you know what to do: <kbd>C-c C-s</kbd>) and execute again.  Now things
+look pretty good.
+
+   <p>Let's try a different day &mdash; how about April fool's day?
+
+<pre class="example">     plot_wday,1,4
+</pre>
+   <p>Oops, this looks very wrong.  All April Fool's days cannot be Fridays! 
+We've got a bug in the program, perhaps in the <code>daynr</code> function. 
+Let's put a breakpoint on the last line there.  Position the cursor on
+the &lsquo;<samp><span class="samp">return, d+...</span></samp>&rsquo; line and press <kbd>C-c C-d C-b</kbd>.  IDL sets a
+breakpoint (as you see in the shell window), and the break line is
+indicated.  Back to the shell buffer, re-execute the previous command. 
+IDL stops at the line with the breakpoint.  Now hold down the SHIFT
+key and click with the middle mouse button on a few variables there:
+&lsquo;<samp><span class="samp">d</span></samp>&rsquo;, &lsquo;<samp><span class="samp">y</span></samp>&rsquo;, &lsquo;<samp><span class="samp">m</span></samp>&rsquo;, &lsquo;<samp><span class="samp">y1</span></samp>&rsquo;, etc.  Maybe <code>d</code> isn't
+the correct type.  CONTROL-SHIFT middle-click on it for help.  Well,
+it's an integer, so that's not the problem.  Aha, &lsquo;<samp><span class="samp">y1</span></samp>&rsquo; is zero,
+but it should be the year, depending on delta.  Shift click
+&lsquo;<samp><span class="samp">delta</span></samp>&rsquo; to see that it's 0.  Below, we see the offending line:
+&lsquo;<samp><span class="samp">y1=y*delta...</span></samp>&rsquo; the multiplication should have been a minus sign! 
+Hit <kbd>q</kbd> to exit the debugging mode, and fix the line to read:
+
+<pre class="example">     y1 = y - delta
+</pre>
+   <p>Now remove all breakpoints: <kbd>C-c C-d C-a</kbd>.  Recompile and rerun the
+command.  Everything should now work fine.  How about those leap years? 
+Change the code to plot 100 years and see that every 28 years, the
+sequence of weekdays repeats.
+
+   </body></html>
+

@@ -1,0 +1,249 @@
+<html lang="en">
+<head>
+<title>TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">TRAMP User Manual</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top"><span class="sc">tramp</span> version 2.1.19 User Manual</a>
+<li><a name="toc_Overview" href="Overview.html#Overview">1 An overview of <span class="sc">tramp</span></a>
+<li><a name="toc_Obtaining-Tramp" href="Obtaining-Tramp.html#Obtaining-Tramp">2 Obtaining Tramp.</a>
+<li><a name="toc_History" href="History.html#History">3 History of <span class="sc">tramp</span></a>
+<li><a name="toc_Configuration" href="Configuration.html#Configuration">4 Configuring <span class="sc">tramp</span> for use</a>
+<ul>
+<li><a href="Connection-types.html#Connection-types">4.1 Types of connections made to remote machines.</a>
+<li><a href="Inline-methods.html#Inline-methods">4.2 Inline methods</a>
+<li><a href="External-methods.html#External-methods">4.3 External methods</a>
+<li><a href="GVFS-based-methods.html#GVFS-based-methods">4.4 GVFS based external methods</a>
+<li><a href="Gateway-methods.html#Gateway-methods">4.5 Gateway methods</a>
+<li><a href="Default-Method.html#Default-Method">4.6 Selecting a default method</a>
+<ul>
+<li><a href="Default-Method.html#Default-Method">4.6.1 Which method is the right one for me?</a>
+</li></ul>
+<li><a href="Default-User.html#Default-User">4.7 Selecting a default user</a>
+<li><a href="Default-Host.html#Default-Host">4.8 Selecting a default host</a>
+<li><a href="Multi_002dhops.html#Multi_002dhops">4.9 Connecting to a remote host using multiple hops</a>
+<li><a href="Customizing-Methods.html#Customizing-Methods">4.10 Using Non-Standard Methods</a>
+<li><a href="Customizing-Completion.html#Customizing-Completion">4.11 Selecting config files for user/host name completion</a>
+<li><a href="Password-handling.html#Password-handling">4.12 Reusing passwords for several connections.</a>
+<ul>
+<li><a href="Password-handling.html#Password-handling">4.12.1 Using an authentication file</a>
+<li><a href="Password-handling.html#Password-handling">4.12.2 Caching passwords</a>
+</li></ul>
+<li><a href="Connection-caching.html#Connection-caching">4.13 Reusing connection related information.</a>
+<li><a href="Remote-Programs.html#Remote-Programs">4.14 How <span class="sc">tramp</span> finds and uses programs on the remote machine.</a>
+<li><a href="Remote-shell-setup.html#Remote-shell-setup">4.15 Remote shell setup hints</a>
+<li><a href="Auto_002dsave-and-Backup.html#Auto_002dsave-and-Backup">4.16 Auto-save and Backup configuration</a>
+<li><a href="Windows-setup-hints.html#Windows-setup-hints">4.17 Issues with Cygwin ssh</a>
+</li></ul>
+<li><a name="toc_Usage" href="Usage.html#Usage">5 Using <span class="sc">tramp</span></a>
+<ul>
+<li><a href="Filename-Syntax.html#Filename-Syntax">5.1 <span class="sc">tramp</span> filename conventions</a>
+<li><a href="Alternative-Syntax.html#Alternative-Syntax">5.2 URL-like filename syntax</a>
+<li><a href="Filename-completion.html#Filename-completion">5.3 Filename completion</a>
+<li><a href="Remote-processes.html#Remote-processes">5.4 Integration with other GNU Emacs packages.</a>
+<ul>
+<li><a href="Remote-processes.html#Remote-processes">5.4.1 Running remote programs that create local X11 windows</a>
+<li><a href="Remote-processes.html#Remote-processes">5.4.2 Running shell-command on a remote host</a>
+<li><a href="Remote-processes.html#Remote-processes">5.4.3 Running eshell on a remote host</a>
+<li><a href="Remote-processes.html#Remote-processes">5.4.4 Running a debugger on a remote host</a>
+</li></ul>
+<li><a href="Cleanup-remote-connections.html#Cleanup-remote-connections">5.5 Cleanup remote connections.</a>
+</li></ul>
+<li><a name="toc_Bug-Reports" href="Bug-Reports.html#Bug-Reports">6 Reporting Bugs and Problems</a>
+<li><a name="toc_Frequently-Asked-Questions" href="Frequently-Asked-Questions.html#Frequently-Asked-Questions">7 Frequently Asked Questions</a>
+<li><a name="toc_Files-directories-and-localnames" href="Files-directories-and-localnames.html#Files-directories-and-localnames">8 How file names, directories and localnames are mangled and managed.</a>
+<ul>
+<li><a href="Localname-deconstruction.html#Localname-deconstruction">8.1 Breaking a localname into its components.</a>
+<li><a href="External-packages.html#External-packages">8.2 Integration with external Lisp packages.</a>
+<ul>
+<li><a href="External-packages.html#External-packages">8.2.1 Filename completion.</a>
+<li><a href="External-packages.html#External-packages">8.2.2 File attributes cache.</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Traces-and-Profiles" href="Traces-and-Profiles.html#Traces-and-Profiles">9 How to Customize Traces</a>
+<li><a name="toc_Issues" href="Issues.html#Issues">10 Debatable Issues and What Was Decided</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Function-Index" href="Function-Index.html#Function-Index">Function Index</a>
+<li><a name="toc_Variable-Index" href="Variable-Index.html#Variable-Index">Variable Index</a>
+<li><a name="toc_Concept-Index" href="Concept-Index.html#Concept-Index">Concept Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Overview.html#Overview">Overview</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="../index.html#dir">(dir)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="unnumbered"><span class="sc">tramp</span> version 2.1.19 User Manual</h2>
+
+<p>This file documents <span class="sc">tramp</span> version 2.1.19, a remote file
+editing package for GNU Emacs.
+
+   <p><span class="sc">tramp</span> stands for `Transparent Remote (file) Access, Multiple
+Protocol'.  This package provides remote file editing, similar to
+Ange-FTP.
+
+   <p>The difference is that Ange-FTP uses FTP to transfer
+files between the local and the remote host, whereas <span class="sc">tramp</span> uses a
+combination of <samp><span class="command">rsh</span></samp> and <samp><span class="command">rcp</span></samp> or other work-alike
+programs, such as <samp><span class="command">ssh</span></samp>/<samp><span class="command">scp</span></samp>.
+
+   <p>You can find the latest version of this document on the web at
+<a href="http://www.gnu.org/software/tramp/">http://www.gnu.org/software/tramp/</a>.
+
+<!-- Pointer to the other Emacs flavor is necessary only in case of -->
+<!-- standalone installation. -->
+   <p>The latest release of <span class="sc">tramp</span> is available for
+<a href="ftp://ftp.gnu.org/gnu/tramp/">download</a>, or you may see
+<a href="Obtaining-Tramp.html#Obtaining-Tramp">Obtaining Tramp</a> for more details, including the CVS server
+details.
+
+   <p><span class="sc">tramp</span> also has a <a href="http://savannah.gnu.org/projects/tramp/">Savannah Project Page</a>.
+
+   <p>There is a mailing list for <span class="sc">tramp</span>, available at
+<a href="mailto:tramp-devel@gnu.org">tramp-devel@gnu.org</a>, and archived at
+<a href="http://lists.gnu.org/archive/html/tramp-devel/">the <span class="sc">tramp</span> Mail Archive</a>. 
+Older archives are located at
+<a href="http://sourceforge.net/mailarchive/forum.php?forum=tramp-devel">SourceForge Mail Archive</a> and
+<a href="http://www.mail-archive.com/emacs-rcp@ls6.cs.uni-dortmund.de/">The Mail Archive</a>. 
+<!-- in HTML output, there's no new paragraph. -->
+<br><br>
+
+   <p>Copyright &copy; 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to
+copy and modify this GNU manual.  Buying copies from the FSF
+supports it in developing GNU and promoting software freedom.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="Overview.html#Overview">Overview</a>:                     What <span class="sc">tramp</span> can and cannot do.
+
+</li></ul>
+<p>For the end user:
+
+</p>
+<ul class="menu">
+<li><a accesskey="2" href="Obtaining-Tramp.html#Obtaining-Tramp">Obtaining Tramp</a>:              How to obtain <span class="sc">tramp</span>. 
+<li><a accesskey="3" href="History.html#History">History</a>:                      History of <span class="sc">tramp</span>. 
+<li><a accesskey="4" href="Configuration.html#Configuration">Configuration</a>:                Configuring <span class="sc">tramp</span> for use. 
+<li><a accesskey="5" href="Usage.html#Usage">Usage</a>:                        An overview of the operation of <span class="sc">tramp</span>. 
+<li><a accesskey="6" href="Bug-Reports.html#Bug-Reports">Bug Reports</a>:                  Reporting Bugs and Problems. 
+<li><a accesskey="7" href="Frequently-Asked-Questions.html#Frequently-Asked-Questions">Frequently Asked Questions</a>:   Questions and answers from the mailing list. 
+<li><a accesskey="8" href="Function-Index.html#Function-Index">Function Index</a>:               <span class="sc">tramp</span> functions. 
+<li><a accesskey="9" href="Variable-Index.html#Variable-Index">Variable Index</a>:               User options and variables. 
+<li><a href="Concept-Index.html#Concept-Index">Concept Index</a>:                An item for each concept.
+
+</li></ul>
+<p>For the developer:
+
+</p>
+<ul class="menu">
+<li><a href="Files-directories-and-localnames.html#Files-directories-and-localnames">Files directories and localnames</a>:   How file names, directories and localnames are mangled and managed. 
+<li><a href="Traces-and-Profiles.html#Traces-and-Profiles">Traces and Profiles</a>:          How to Customize Traces. 
+<li><a href="Issues.html#Issues">Issues</a>:                       Debatable Issues and What Was Decided.
+
+<li><a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation.
+
+</li></ul>
+<p>--- The Detailed Node Listing ---
+
+<p>Configuring <span class="sc">tramp</span> for use
+
+</p>
+<ul class="menu">
+<li><a href="Connection-types.html#Connection-types">Connection types</a>:             Types of connections made to remote machines. 
+<li><a href="Inline-methods.html#Inline-methods">Inline methods</a>:               Inline methods. 
+<li><a href="External-methods.html#External-methods">External methods</a>:             External methods.
+
+<li><a href="GVFS-based-methods.html#GVFS-based-methods">GVFS based methods</a>:           GVFS based external methods.
+
+<li><a href="Gateway-methods.html#Gateway-methods">Gateway methods</a>:              Gateway methods. 
+<li><a href="Default-Method.html#Default-Method">Default Method</a>:               Selecting a default method. 
+<li><a href="Default-User.html#Default-User">Default User</a>:                 Selecting a default user. 
+<li><a href="Default-Host.html#Default-Host">Default Host</a>:                 Selecting a default host. 
+<li><a href="Multi_002dhops.html#Multi_002dhops">Multi-hops</a>:                   Connecting to a remote host using multiple hops. 
+<li><a href="Customizing-Methods.html#Customizing-Methods">Customizing Methods</a>:          Using Non-Standard Methods. 
+<li><a href="Customizing-Completion.html#Customizing-Completion">Customizing Completion</a>:       Selecting config files for user/host name completion. 
+<li><a href="Password-handling.html#Password-handling">Password handling</a>:            Reusing passwords for several connections. 
+<li><a href="Connection-caching.html#Connection-caching">Connection caching</a>:           Reusing connection related information. 
+<li><a href="Remote-Programs.html#Remote-Programs">Remote Programs</a>:              How <span class="sc">tramp</span> finds and uses programs on the remote machine. 
+<li><a href="Remote-shell-setup.html#Remote-shell-setup">Remote shell setup</a>:           Remote shell setup hints. 
+<li><a href="Windows-setup-hints.html#Windows-setup-hints">Windows setup hints</a>:          Issues with Cygwin ssh. 
+<li><a href="Auto_002dsave-and-Backup.html#Auto_002dsave-and-Backup">Auto-save and Backup</a>:         Auto-save and Backup.
+
+</li></ul>
+<p>Using <span class="sc">tramp</span>
+
+</p>
+<ul class="menu">
+<li><a href="Filename-Syntax.html#Filename-Syntax">Filename Syntax</a>:              <span class="sc">tramp</span> filename conventions. 
+<li><a href="Alternative-Syntax.html#Alternative-Syntax">Alternative Syntax</a>:           URL-like filename syntax. 
+<li><a href="Filename-completion.html#Filename-completion">Filename completion</a>:          Filename completion. 
+<li><a href="Remote-processes.html#Remote-processes">Remote processes</a>:             Integration with other GNU Emacs packages. 
+<li><a href="Cleanup-remote-connections.html#Cleanup-remote-connections">Cleanup remote connections</a>:   Cleanup remote connections.
+
+</li></ul>
+<p>How file names, directories and localnames are mangled and managed
+
+</p>
+<ul class="menu">
+<li><a href="Localname-deconstruction.html#Localname-deconstruction">Localname deconstruction</a>:     Breaking a localname into its components.
+
+<li><a href="External-packages.html#External-packages">External packages</a>:            Integration with external Lisp packages.
+
+   </ul>
+
+   </body></html>
+

@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Search options - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hyperlinks.html#Hyperlinks" title="Hyperlinks">
+<link rel="prev" href="Link-abbreviations.html#Link-abbreviations" title="Link abbreviations">
+<link rel="next" href="Custom-searches.html#Custom-searches" title="Custom searches">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Search-options"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-searches.html#Custom-searches">Custom searches</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Link-abbreviations.html#Link-abbreviations">Link abbreviations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinks.html#Hyperlinks">Hyperlinks</a>
+<hr>
+</div>
+
+<h3 class="section">4.7 Search options in file links</h3>
+
+<p><a name="index-search-option-in-file-links-347"></a><a name="index-file-links_002c-searching-348"></a>
+File links can contain additional information to make Emacs jump to a
+particular location in the file when following a link.  This can be a
+line number or a search option after a double<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> colon. For
+example, when the command <kbd>C-c l</kbd> creates a link (see <a href="Handling-links.html#Handling-links">Handling links</a>) to a file, it encodes the words in the current line as a search
+string that can be used to find this line back later when following the
+link with <kbd>C-c C-o</kbd>.
+
+   <p>Here is the syntax of the different ways to attach a search to a file
+link, together with an explanation:
+
+<pre class="example">     [[file:~/code/main.c::255]]
+     [[file:~/xx.org::My Target]]
+     [[file:~/xx.org::*My Target]]
+     [[file:~/xx.org::/regexp/]]
+</pre>
+     <dl>
+<dt><code>255</code><dd>Jump to line 255. 
+<br><dt><code>My Target</code><dd>Search for a link target &lsquo;<samp><span class="samp">&lt;&lt;My Target&gt;&gt;</span></samp>&rsquo;, or do a text search for
+&lsquo;<samp><span class="samp">my target</span></samp>&rsquo;, similar to the search in internal links, see
+<a href="Internal-links.html#Internal-links">Internal links</a>.  In HTML export (see <a href="HTML-export.html#HTML-export">HTML export</a>), such a file
+link will become an HTML reference to the corresponding named anchor in
+the linked file. 
+<br><dt><code>*My Target</code><dd>In an Org file, restrict search to headlines. 
+<br><dt><code>/regexp/</code><dd>Do a regular expression search for <code>regexp</code>.  This uses the Emacs
+command <code>occur</code> to list all matches in a separate window.  If the
+target file is in Org mode, <code>org-occur</code> is used to create a
+sparse tree with the matches. 
+<!-- If the target file is a directory, -->
+<!-- @code{grep} will be used to search all files in the directory. -->
+</dl>
+
+   <p>As a degenerate case, a file link with an empty file name can be used
+to search the current file.  For example, <code>[[file:::find me]]</code> does
+a search for &lsquo;<samp><span class="samp">find me</span></samp>&rsquo; in the current file, just as
+&lsquo;<samp><span class="samp">[[find me]]</span></samp>&rsquo; would.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> For backward
+compatibility, line numbers can also follow a single colon.</p>
+
+   <hr></div>
+
+   </body></html>
+

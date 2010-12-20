@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<title>Argument Qualifiers - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
+<link rel="prev" href="Defining-Stack-Commands.html#Defining-Stack-Commands" title="Defining Stack Commands">
+<link rel="next" href="Example-Definitions.html#Example-Definitions" title="Example Definitions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Argument-Qualifiers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Example-Definitions.html#Example-Definitions">Example Definitions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Stack-Commands.html#Defining-Stack-Commands">Defining Stack Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.5.4 Argument Qualifiers</h4>
+
+<p class="noindent">Anywhere a parameter name can appear in the parameter list you can also use
+an <dfn>argument qualifier</dfn>.  Thus the general form of a definition is:
+
+<pre class="example">     (defmath <var>name</var> (<var>param</var> <var>param...</var>
+                    &amp;optional <var>param</var> <var>param...</var>
+                    &amp;rest <var>param</var>)
+       <var>body</var>)
+</pre>
+   <p class="noindent">where each <var>param</var> is either a symbol or a list of the form
+
+<pre class="example">     (<var>qual</var> <var>param</var>)
+</pre>
+   <p>The following qualifiers are recognized:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">complete</span></samp>&rsquo;<dd><a name="index-complete-2330"></a>The argument must not be an incomplete vector, interval, or complex number. 
+(This is rarely needed since the Calculator itself will never call your
+function with an incomplete argument.  But there is nothing stopping your
+own Lisp code from calling your function with an incomplete argument.)
+
+     <br><dt>&lsquo;<samp><span class="samp">integer</span></samp>&rsquo;<dd><a name="index-integer-2331"></a>The argument must be an integer.  If it is an integer-valued float
+it will be accepted but converted to integer form.  Non-integers and
+formulas are rejected.
+
+     <br><dt>&lsquo;<samp><span class="samp">natnum</span></samp>&rsquo;<dd><a name="index-natnum-2332"></a>Like &lsquo;<samp><span class="samp">integer</span></samp>&rsquo;, but the argument must be non-negative.
+
+     <br><dt>&lsquo;<samp><span class="samp">fixnum</span></samp>&rsquo;<dd><a name="index-fixnum-2333"></a>Like &lsquo;<samp><span class="samp">integer</span></samp>&rsquo;, but the argument must fit into a native Lisp integer,
+which on most systems means less than 2^23 in absolute value.  The
+argument is converted into Lisp-integer form if necessary.
+
+     <br><dt>&lsquo;<samp><span class="samp">float</span></samp>&rsquo;<dd><a name="index-float-2334"></a>The argument is converted to floating-point format if it is a number or
+vector.  If it is a formula it is left alone.  (The argument is never
+actually rejected by this qualifier.)
+
+     <br><dt>&lsquo;<samp><var>pred</var></samp>&rsquo;<dd>The argument must satisfy predicate <var>pred</var>, which is one of the
+standard Calculator predicates.  See <a href="Predicates.html#Predicates">Predicates</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">not-</span><var>pred</var></samp>&rsquo;<dd>The argument must <em>not</em> satisfy predicate <var>pred</var>. 
+</dl>
+
+   <p>For example,
+
+<pre class="example">     (defmath foo (a (constp (not-matrixp b)) &amp;optional (float c)
+                   &amp;rest (integer d))
+       <var>body</var>)
+</pre>
+   <p class="noindent">expands to
+
+<pre class="example">     (defun calcFunc-foo (a b &amp;optional c &amp;rest d)
+       (and (math-matrixp b)
+            (math-reject-arg b 'not-matrixp))
+       (or (math-constp b)
+           (math-reject-arg b 'constp))
+       (and c (setq c (math-check-float c)))
+       (setq d (mapcar 'math-check-integer d))
+       <var>body</var>)
+</pre>
+   <p class="noindent">which performs the necessary checks and conversions before executing the
+body of the function.
+
+   </body></html>
+

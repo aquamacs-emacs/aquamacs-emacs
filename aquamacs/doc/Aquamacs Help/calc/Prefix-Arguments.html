@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Prefix Arguments - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Introduction.html#Introduction" title="Introduction">
+<link rel="prev" href="Quick-Calculator.html#Quick-Calculator" title="Quick Calculator">
+<link rel="next" href="Undo.html#Undo" title="Undo">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Prefix-Arguments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Undo.html#Undo">Undo</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Quick-Calculator.html#Quick-Calculator">Quick Calculator</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
+<hr>
+</div>
+
+<h3 class="section">4.7 Numeric Prefix Arguments</h3>
+
+<p class="noindent">Many Calculator commands use numeric prefix arguments.  Some, such as
+<kbd>d s</kbd> (<code>calc-sci-notation</code>), set a parameter to the value of
+the prefix argument or use a default if you don't use a prefix. 
+Others (like <kbd>d f</kbd> (<code>calc-fix-notation</code>)) require an argument
+and prompt for a number if you don't give one as a prefix.
+
+   <p>As a rule, stack-manipulation commands accept a numeric prefix argument
+which is interpreted as an index into the stack.  A positive argument
+operates on the top <var>n</var> stack entries; a negative argument operates
+on the <var>n</var>th stack entry in isolation; and a zero argument operates
+on the entire stack.
+
+   <p>Most commands that perform computations (such as the arithmetic and
+scientific functions) accept a numeric prefix argument that allows the
+operation to be applied across many stack elements.  For unary operations
+(that is, functions of one argument like absolute value or complex
+conjugate), a positive prefix argument applies that function to the top
+<var>n</var> stack entries simultaneously, and a negative argument applies it
+to the <var>n</var>th stack entry only.  For binary operations (functions of
+two arguments like addition, GCD, and vector concatenation), a positive
+prefix argument &ldquo;reduces&rdquo; the function across the top <var>n</var>
+stack elements (for example, <kbd>C-u 5 +</kbd> sums the top 5 stack entries;
+see <a href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>), and a negative argument maps the next-to-top
+<var>n</var> stack elements with the top stack element as a second argument
+(for example, <kbd>7 c-u -5 +</kbd> adds 7 to the top 5 stack elements). 
+This feature is not available for operations which use the numeric prefix
+argument for some other purpose.
+
+   <p>Numeric prefixes are specified the same way as always in Emacs:  Press
+a sequence of &lt;META&gt;-digits, or press &lt;ESC&gt; followed by digits,
+or press <kbd>C-u</kbd> followed by digits.  Some commands treat plain
+<kbd>C-u</kbd> (without any actual digits) specially.
+
+   <p><a name="index-g_t_007e-199"></a><a name="index-calc_002dnum_002dprefix-200"></a>You can type <kbd>~</kbd> (<code>calc-num-prefix</code>) to pop an integer from the
+top of the stack and enter it as the numeric prefix for the next command. 
+For example, <kbd>C-u 16 p</kbd> sets the precision to 16 digits; an alternate
+(silly) way to do this would be <kbd>2 &lt;RET&gt; 4 ^ ~ p</kbd>, i.e., compute 2
+to the fourth power and set the precision to that value.
+
+   <p>Conversely, if you have typed a numeric prefix argument the <kbd>~</kbd> key
+pushes it onto the stack in the form of an integer.
+
+   </body></html>
+

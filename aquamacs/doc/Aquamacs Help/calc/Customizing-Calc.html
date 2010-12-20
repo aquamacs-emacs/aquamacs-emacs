@@ -1,0 +1,381 @@
+<html lang="en">
+<head>
+<title>Customizing Calc - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link rel="next" href="Reporting-Bugs.html#Reporting-Bugs" title="Reporting Bugs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Customizing-Calc"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reporting-Bugs.html#Reporting-Bugs">Reporting Bugs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix C Customizing Calc</h2>
+
+<p>The usual prefix for Calc is the key sequence <kbd>C-x *</kbd>.  If you wish
+to use a different prefix, you can put
+
+<pre class="example">     (global-set-key "NEWPREFIX" 'calc-dispatch)
+</pre>
+   <p class="noindent">in your .emacs file. 
+(See <a href="../emacs/Key-Bindings.html#Key-Bindings">Customizing Key Bindings</a>, for more information on binding keys.) 
+A convenient way to start Calc is with <kbd>C-x * *</kbd>; to make it equally
+convenient for users who use a different prefix, the prefix can be
+followed by  <kbd>=</kbd>, <kbd>&amp;</kbd>, <kbd>#</kbd>, <kbd>\</kbd>, <kbd>/</kbd>, <kbd>+</kbd> or
+<kbd>-</kbd> as well as <kbd>*</kbd> to start Calc, and so in many cases the last
+character of the prefix can simply be typed twice.
+
+   <p>Calc is controlled by many variables, most of which can be reset
+from within Calc.  Some variables are less involved with actual
+calculation, and can be set outside of Calc using Emacs's
+customization facilities.  These variables are listed below. 
+Typing <kbd>M-x customize-variable RET </kbd><var>variable-name</var><kbd> RET</kbd>
+will bring up a buffer in which the variable's value can be redefined. 
+Typing <kbd>M-x customize-group RET calc RET</kbd> will bring up a buffer which
+contains all of Calc's customizable variables.  (These variables can
+also be reset by putting the appropriate lines in your .emacs file;
+See <a href="../emacs/Init-File.html#Init-File">Init File</a>.)
+
+   <p>Some of the customizable variables are regular expressions.  A regular
+expression is basically a pattern that Calc can search for. 
+See <a href="../emacs/Regexp-Search.html#Regexp-Search">Regular Expression Search</a>
+to see how regular expressions work.
+
+<div class="defun">
+&mdash; Variable: <b>calc-settings-file</b><var><a name="index-calc_002dsettings_002dfile-2568"></a></var><br>
+<blockquote><p>The variable <code>calc-settings-file</code> holds the file name in
+which commands like <kbd>m m</kbd> and <kbd>Z P</kbd> store &ldquo;permanent&rdquo;
+definitions. 
+If <code>calc-settings-file</code> is not your user init file (typically
+<samp><span class="file">~/.emacs</span></samp>) and if the variable <code>calc-loaded-settings-file</code> is
+<code>nil</code>, then Calc will automatically load your settings file (if it
+exists) the first time Calc is invoked.
+
+        <p>The default value for this variable is <code>"~/.calc.el"</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-gnuplot-name</b><var><a name="index-calc_002dgnuplot_002dname-2569"></a></var><br>
+<blockquote><p>See <a href="Graphics.html#Graphics">Graphics</a>.<br>
+The variable <code>calc-gnuplot-name</code> should be the name of the
+GNUPLOT program (a string).  If you have GNUPLOT installed on your
+system but Calc is unable to find it, you may need to set this
+variable.  You may also need to set some Lisp variables to show Calc how
+to run GNUPLOT on your system, see <a href="Devices.html#Devices">Graphical Devices</a> . 
+The default value of <code>calc-gnuplot-name</code> is <code>"gnuplot"</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-gnuplot-plot-command</b><var><a name="index-calc_002dgnuplot_002dplot_002dcommand-2570"></a></var><br>
+&mdash; Variable: <b>calc-gnuplot-print-command</b><var><a name="index-calc_002dgnuplot_002dprint_002dcommand-2571"></a></var><br>
+<blockquote><p>See <a href="Devices.html#Devices">Graphical Devices</a>.<br>
+The variables <code>calc-gnuplot-plot-command</code> and
+<code>calc-gnuplot-print-command</code> represent system commands to
+display and print the output of GNUPLOT, respectively.  These may be
+<code>nil</code> if no command is necessary, or strings which can include
+&lsquo;<samp><span class="samp">%s</span></samp>&rsquo; to signify the name of the file to be displayed or printed. 
+Or, these variables may contain Lisp expressions which are evaluated
+to display or print the output.
+
+        <p>The default value of <code>calc-gnuplot-plot-command</code> is <code>nil</code>,
+and the default value of <code>calc-gnuplot-print-command</code> is
+<code>"lp %s"</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-language-alist</b><var><a name="index-calc_002dlanguage_002dalist-2572"></a></var><br>
+<blockquote><p>See <a href="Basic-Embedded-Mode.html#Basic-Embedded-Mode">Basic Embedded Mode</a>.<br>
+The variable <code>calc-language-alist</code> controls the languages that
+Calc will associate with major modes.  When Calc embedded mode is
+enabled, it will try to use the current major mode to
+determine what language should be used.  (This can be overridden using
+Calc's mode changing commands, See <a href="Mode-Settings-in-Embedded-Mode.html#Mode-Settings-in-Embedded-Mode">Mode Settings in Embedded Mode</a>.) 
+The variable <code>calc-language-alist</code> consists of a list of pairs of
+the form  <code>(</code><var>MAJOR-MODE</var><code> . </code><var>LANGUAGE</var><code>)</code>; for example,
+<code>(latex-mode . latex)</code> is one such pair.  If Calc embedded is
+activated in a buffer whose major mode is <var>MAJOR-MODE</var>, it will set itself
+to use the language <var>LANGUAGE</var>.
+
+        <p>The default value of <code>calc-language-alist</code> is
+     <pre class="example">             ((latex-mode . latex)
+              (tex-mode   . tex)
+              (plain-tex-mode . tex)
+              (context-mode . tex)
+              (nroff-mode . eqn)
+              (pascal-mode . pascal)
+              (c-mode . c)
+              (c++-mode . c)
+              (fortran-mode . fortran)
+              (f90-mode . fortran))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-announce-formula</b><var><a name="index-calc_002dembedded_002dannounce_002dformula-2573"></a></var><br>
+&mdash; Variable: <b>calc-embedded-announce-formula-alist</b><var><a name="index-calc_002dembedded_002dannounce_002dformula_002dalist-2574"></a></var><br>
+<blockquote><p>See <a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">Customizing Embedded Mode</a>.<br>
+The variable <code>calc-embedded-announce-formula</code> helps determine
+what formulas <kbd>C-x * a</kbd> will activate in a buffer.  It is a
+regular expression, and when activating embedded formulas with
+<kbd>C-x * a</kbd>, it will tell Calc that what follows is a formula to be
+activated.  (Calc also uses other patterns to find formulas, such as
+&lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">:=</span></samp>&rsquo;.)
+
+        <p>The default pattern is <code>"%Embed\n\\(% .*\n\\)*"</code>, which checks
+for &lsquo;<samp><span class="samp">%Embed</span></samp>&rsquo; followed by any number of lines beginning with
+&lsquo;<samp><span class="samp">%</span></samp>&rsquo; and a space.
+
+        <p>The variable <code>calc-embedded-announce-formula-alist</code> is used to
+set <code>calc-embedded-announce-formula</code> to different regular
+expressions depending on the major mode of the editing buffer. 
+It consists of a list of pairs of the form <code>(</code><var>MAJOR-MODE</var><code> . 
+</code><var>REGEXP</var><code>)</code>, and its default value is
+     <pre class="example">             ((c++-mode     . "//Embed\n\\(// .*\n\\)*")
+              (c-mode       . "/\\*Embed\\*/\n\\(/\\* .*\\*/\n\\)*")
+              (f90-mode     . "!Embed\n\\(! .*\n\\)*")
+              (fortran-mode . "C Embed\n\\(C .*\n\\)*")
+              (html-helper-mode . "&lt;!-- Embed --&gt;\n\\(&lt;!-- .* --&gt;\n\\)*")
+              (html-mode    . "&lt;!-- Embed --&gt;\n\\(&lt;!-- .* --&gt;\n\\)*")
+              (nroff-mode   . "\\\\\"Embed\n\\(\\\\\" .*\n\\)*")
+              (pascal-mode  . "{Embed}\n\\({.*}\n\\)*")
+              (sgml-mode    . "&lt;!-- Embed --&gt;\n\\(&lt;!-- .* --&gt;\n\\)*")
+              (xml-mode     . "&lt;!-- Embed --&gt;\n\\(&lt;!-- .* --&gt;\n\\)*")
+              (texinfo-mode . "@c Embed\n\\(@c .*\n\\)*"))
+</pre>
+        <p>Any major modes added to <code>calc-embedded-announce-formula-alist</code>
+should also be added to <code>calc-embedded-open-close-plain-alist</code>
+and <code>calc-embedded-open-close-mode-alist</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-open-formula</b><var><a name="index-calc_002dembedded_002dopen_002dformula-2575"></a></var><br>
+&mdash; Variable: <b>calc-embedded-close-formula</b><var><a name="index-calc_002dembedded_002dclose_002dformula-2576"></a></var><br>
+&mdash; Variable: <b>calc-embedded-open-close-formula-alist</b><var><a name="index-calc_002dembedded_002dopen_002dclose_002dformula_002dalist-2577"></a></var><br>
+<blockquote><p>See <a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">Customizing Embedded Mode</a>.<br>
+The variables <code>calc-embedded-open-formula</code> and
+<code>calc-embedded-close-formula</code> control the region that Calc will
+activate as a formula when Embedded mode is entered with <kbd>C-x * e</kbd>. 
+They are regular expressions;
+Calc normally scans backward and forward in the buffer for the
+nearest text matching these regular expressions to be the &ldquo;formula
+delimiters&rdquo;.
+
+        <p>The simplest delimiters are blank lines.  Other delimiters that
+Embedded mode understands by default are:
+          <ol type=1 start=1>
+<li>The TeX and LaTeX math delimiters &lsquo;<samp><span class="samp">$ $</span></samp>&rsquo;, &lsquo;<samp><span class="samp">$$ $$</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">\[ \]</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">\( \)</span></samp>&rsquo;;
+<li>Lines beginning with &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; (except matrix delimiters);
+<li>Lines beginning with &lsquo;<samp><span class="samp">@</span></samp>&rsquo; (Texinfo delimiters). 
+<li>Lines beginning with &lsquo;<samp><span class="samp">.EQ</span></samp>&rsquo; and &lsquo;<samp><span class="samp">.EN</span></samp>&rsquo; (<dfn>eqn</dfn> delimiters);
+<li>Lines containing a single &lsquo;<samp><span class="samp">%</span></samp>&rsquo; or &lsquo;<samp><span class="samp">.\"</span></samp>&rsquo; symbol and nothing else.
+             </ol>
+
+        <p>The variable <code>calc-embedded-open-close-formula-alist</code> is used to
+set <code>calc-embedded-open-formula</code> and
+<code>calc-embedded-close-formula</code> to different regular
+expressions depending on the major mode of the editing buffer. 
+It consists of a list of lists of the form
+<code>(</code><var>MAJOR-MODE</var>  <var>OPEN-FORMULA-REGEXP</var>
+<var>CLOSE-FORMULA-REGEXP</var><code>)</code>, and its default value is
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-word-regexp</b><var><a name="index-calc_002dembedded_002dword_002dregexp-2578"></a></var><br>
+&mdash; Variable: <b>calc-embedded-word-regexp-alist</b><var><a name="index-calc_002dembedded_002dword_002dregexp_002dalist-2579"></a></var><br>
+<blockquote><p>See <a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">Customizing Embedded Mode</a>.<br>
+The variable <code>calc-embedded-word-regexp</code> determines the expression
+that Calc will activate when Embedded mode is entered with <kbd>C-x *
+w</kbd>.  It is a regular expressions.
+
+        <p>The default value of <code>calc-embedded-word-regexp</code> is
+<code>"[-+]?[0-9]+\\(\\.[0-9]+\\)?\\([eE][-+]?[0-9]+\\)?"</code>.
+
+        <p>The variable <code>calc-embedded-word-regexp-alist</code> is used to
+set <code>calc-embedded-word-regexp</code> to a different regular
+expression depending on the major mode of the editing buffer. 
+It consists of a list of lists of the form
+<code>(</code><var>MAJOR-MODE</var>  <var>WORD-REGEXP</var><code>)</code>, and its default value is
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-open-plain</b><var><a name="index-calc_002dembedded_002dopen_002dplain-2580"></a></var><br>
+&mdash; Variable: <b>calc-embedded-close-plain</b><var><a name="index-calc_002dembedded_002dclose_002dplain-2581"></a></var><br>
+&mdash; Variable: <b>calc-embedded-open-close-plain-alist</b><var><a name="index-calc_002dembedded_002dopen_002dclose_002dplain_002dalist-2582"></a></var><br>
+<blockquote><p>See <a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">Customizing Embedded Mode</a>.<br>
+The variables <code>calc-embedded-open-plain</code> and
+<code>calc-embedded-open-plain</code> are used to delimit &ldquo;plain&rdquo;
+formulas.  Note that these are actual strings, not regular
+expressions, because Calc must be able to write these string into a
+buffer as well as to recognize them.
+
+        <p>The default string for <code>calc-embedded-open-plain</code> is
+<code>"%%% "</code>, note the trailing space.  The default string for
+<code>calc-embedded-close-plain</code> is <code>" %%%\n"</code>, without
+the trailing newline here, the first line of a Big mode formula
+that followed might be shifted over with respect to the other lines.
+
+        <p>The variable <code>calc-embedded-open-close-plain-alist</code> is used to
+set <code>calc-embedded-open-plain</code> and
+<code>calc-embedded-close-plain</code> to different strings
+depending on the major mode of the editing buffer. 
+It consists of a list of lists of the form
+<code>(</code><var>MAJOR-MODE</var>  <var>OPEN-PLAIN-STRING</var>
+<var>CLOSE-PLAIN-STRING</var><code>)</code>, and its default value is
+     <pre class="example">             ((c++-mode     "// %% "   " %%\n")
+              (c-mode       "/* %% "   " %% */\n")
+              (f90-mode     "! %% "    " %%\n")
+              (fortran-mode "C %% "    " %%\n")
+              (html-helper-mode "&lt;!-- %% " " %% --&gt;\n")
+              (html-mode "&lt;!-- %% " " %% --&gt;\n")
+              (nroff-mode   "\\\" %% " " %%\n")
+              (pascal-mode  "{%% "    " %%}\n")
+              (sgml-mode     "&lt;!-- %% " " %% --&gt;\n")
+              (xml-mode     "&lt;!-- %% " " %% --&gt;\n")
+              (texinfo-mode "@c %% "   " %%\n"))
+</pre>
+        <p>Any major modes added to <code>calc-embedded-open-close-plain-alist</code>
+should also be added to <code>calc-embedded-announce-formula-alist</code>
+and <code>calc-embedded-open-close-mode-alist</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-open-new-formula</b><var><a name="index-calc_002dembedded_002dopen_002dnew_002dformula-2583"></a></var><br>
+&mdash; Variable: <b>calc-embedded-close-new-formula</b><var><a name="index-calc_002dembedded_002dclose_002dnew_002dformula-2584"></a></var><br>
+&mdash; Variable: <b>calc-embedded-open-close-new-formula-alist</b><var><a name="index-calc_002dembedded_002dopen_002dclose_002dnew_002dformula_002dalist-2585"></a></var><br>
+<blockquote><p>See <a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">Customizing Embedded Mode</a>.<br>
+The variables <code>calc-embedded-open-new-formula</code> and
+<code>calc-embedded-close-new-formula</code> are strings which are
+inserted before and after a new formula when you type <kbd>C-x * f</kbd>.
+
+        <p>The default value of <code>calc-embedded-open-new-formula</code> is
+<code>"\n\n"</code>.  If this string begins with a newline character and the
+<kbd>C-x * f</kbd> is typed at the beginning of a line, <kbd>C-x * f</kbd> will skip
+this first newline to avoid introducing unnecessary blank lines in the
+file.  The default value of <code>calc-embedded-close-new-formula</code> is
+also <code>"\n\n"</code>.  The final newline is omitted by <kbd>C-x&nbsp;*&nbsp;f</kbd><!-- /@w -->
+if typed at the end of a line.  (It follows that if <kbd>C-x * f</kbd> is
+typed on a blank line, both a leading opening newline and a trailing
+closing newline are omitted.)
+
+        <p>The variable <code>calc-embedded-open-close-new-formula-alist</code> is used to
+set <code>calc-embedded-open-new-formula</code> and
+<code>calc-embedded-close-new-formula</code> to different strings
+depending on the major mode of the editing buffer. 
+It consists of a list of lists of the form
+<code>(</code><var>MAJOR-MODE</var>  <var>OPEN-NEW-FORMULA-STRING</var>
+<var>CLOSE-NEW-FORMULA-STRING</var><code>)</code>, and its default value is
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-open-mode</b><var><a name="index-calc_002dembedded_002dopen_002dmode-2586"></a></var><br>
+&mdash; Variable: <b>calc-embedded-close-mode</b><var><a name="index-calc_002dembedded_002dclose_002dmode-2587"></a></var><br>
+&mdash; Variable: <b>calc-embedded-open-close-mode-alist</b><var><a name="index-calc_002dembedded_002dopen_002dclose_002dmode_002dalist-2588"></a></var><br>
+<blockquote><p>See <a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">Customizing Embedded Mode</a>.<br>
+The variables <code>calc-embedded-open-mode</code> and
+<code>calc-embedded-close-mode</code> are strings which Calc will place before
+and after any mode annotations that it inserts.  Calc never scans for
+these strings; Calc always looks for the annotation itself, so it is not
+necessary to add them to user-written annotations.
+
+        <p>The default value of <code>calc-embedded-open-mode</code> is <code>"% "</code>
+and the default value of <code>calc-embedded-close-mode</code> is
+<code>"\n"</code>. 
+If you change the value of <code>calc-embedded-close-mode</code>, it is a good
+idea still to end with a newline so that mode annotations will appear on
+lines by themselves.
+
+        <p>The variable <code>calc-embedded-open-close-mode-alist</code> is used to
+set <code>calc-embedded-open-mode</code> and
+<code>calc-embedded-close-mode</code> to different strings
+expressions depending on the major mode of the editing buffer. 
+It consists of a list of lists of the form
+<code>(</code><var>MAJOR-MODE</var>  <var>OPEN-MODE-STRING</var>
+<var>CLOSE-MODE-STRING</var><code>)</code>, and its default value is
+     <pre class="example">             ((c++-mode     "// "   "\n")
+              (c-mode       "/* "   " */\n")
+              (f90-mode     "! "    "\n")
+              (fortran-mode "C "    "\n")
+              (html-helper-mode "&lt;!-- " " --&gt;\n")
+              (html-mode    "&lt;!-- " " --&gt;\n")
+              (nroff-mode   "\\\" " "\n")
+              (pascal-mode  "{ "    " }\n")
+              (sgml-mode    "&lt;!-- " " --&gt;\n")
+              (xml-mode     "&lt;!-- " " --&gt;\n")
+              (texinfo-mode "@c "   "\n"))
+</pre>
+        <p>Any major modes added to <code>calc-embedded-open-close-mode-alist</code>
+should also be added to <code>calc-embedded-announce-formula-alist</code>
+and <code>calc-embedded-open-close-plain-alist</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-multiplication-has-precedence</b><var><a name="index-calc_002dmultiplication_002dhas_002dprecedence-2589"></a></var><br>
+<blockquote><p>The variable <code>calc-multiplication-has-precedence</code> determines
+whether multiplication has precedence over division in algebraic
+formulas in normal language modes.  If
+<code>calc-multiplication-has-precedence</code> is non-<code>nil</code>, then
+multiplication has precedence (and, for certain obscure reasons, is
+right associative), and so for example &lsquo;<samp><span class="samp">a/b*c</span></samp>&rsquo; will be interpreted
+as &lsquo;<samp><span class="samp">a/(b*c)</span></samp>&rsquo;. If <code>calc-multiplication-has-precedence</code> is
+<code>nil</code>, then multiplication has the same precedence as division
+(and, like division, is left associative), and so for example
+&lsquo;<samp><span class="samp">a/b*c</span></samp>&rsquo; will be interpreted as &lsquo;<samp><span class="samp">(a/b)*c</span></samp>&rsquo;.  The default value
+of <code>calc-multiplication-has-precedence</code> is <code>t</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-undo-length</b><var><a name="index-calc_002dundo_002dlength-2590"></a></var><br>
+<blockquote><p>The variable <code>calc-undo-length</code> determines the number of undo
+steps that Calc will keep track of when <code>calc-quit</code> is called. 
+If <code>calc-undo-length</code> is a non-negative integer, then this is the
+number of undo steps that will be preserved; if
+<code>calc-undo-length</code> has any other value, then all undo steps will
+be preserved.  The default value of <code>calc-undo-length</code> is &lsquo;<samp><span class="samp">100</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+   </body></html>
+

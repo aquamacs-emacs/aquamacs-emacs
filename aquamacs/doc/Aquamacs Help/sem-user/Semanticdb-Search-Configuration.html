@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>Semanticdb Search Configuration - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SemanticDB.html#SemanticDB" title="SemanticDB">
+<link rel="prev" href="Semanticdb-Tag-Storage.html#Semanticdb-Tag-Storage" title="Semanticdb Tag Storage">
+<link rel="next" href="Changing-Backends.html#Changing-Backends" title="Changing Backends">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Semanticdb-Search-Configuration"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Changing-Backends.html#Changing-Backends">Changing Backends</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Semanticdb-Tag-Storage.html#Semanticdb-Tag-Storage">Semanticdb Tag Storage</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SemanticDB.html#SemanticDB">SemanticDB</a>
+<hr>
+</div>
+
+<h4 class="subsection">Semanticdb Search Configuration</h4>
+
+<p>When another part of  (or another Emacs package using
+) queries the SemanticDB library for a source code tag, the
+search need not be limited to tags defined within the current file. 
+It can include tags defined elsewhere, such as <dfn>header files</dfn>
+referenced by the current file (e.g., via the C/C++ <code>#include</code>
+directive).  While performing the search, the SemanticDB library may
+even automatically visit other files and parse them, if necessary.
+
+   <p>The variable <code>semanticdb-find-default-throttle</code> determines how
+aggressively SemanticDB searches for source code tags.  See <a href="Search-Throttle.html#Search-Throttle">Search Throttle</a>.
+
+   <p>The details of SemanticDB searches can vary from language to
+language.  In C/C++ code, for example, SemanticDB distinguishes
+between <dfn>project header files</dfn> and <dfn>system header files</dfn>,
+based on whether the <code>#include</code> directive uses the <code>""</code> or
+<code>&lt;&gt;</code> filename delimiter.  SemanticDB looks for system header in
+the <dfn>system include path</dfn> (see <a href="Include-paths.html#Include-paths">Include paths</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="Search-Throttle.html#Search-Throttle">Search Throttle</a>:      Controlling how semanticdb searches occur. 
+<li><a accesskey="2" href="Semanticdb-Roots.html#Semanticdb-Roots">Semanticdb Roots</a>:     Specifying the root of different projects. 
+<li><a accesskey="3" href="Include-paths.html#Include-paths">Include paths</a>:        Specifying the directories to search. 
+<li><a accesskey="4" href="Semanticdb-search-debugging-commands.html#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a>
+</ul>
+
+   </body></html>
+

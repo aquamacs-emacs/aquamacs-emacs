@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Article Highlighting - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Article-Treatment.html#Article-Treatment" title="Article Treatment">
+<link rel="next" href="Article-Fontisizing.html#Article-Fontisizing" title="Article Fontisizing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Article-Highlighting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Article-Fontisizing.html#Article-Fontisizing">Article Fontisizing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Article-Treatment.html#Article-Treatment">Article Treatment</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.18.1 Article Highlighting</h4>
+
+<p><a name="index-highlighting-1284"></a>
+Not only do you want your article buffer to look like fruit salad, but
+you want it to look like technicolor fruit salad.
+
+     <dl>
+<dt><kbd>W H a</kbd><dd><a name="index-W-H-a-_0028Summary_0029-1285"></a><a name="index-gnus_002darticle_002dhighlight-1286"></a><a name="index-gnus_002darticle_002dmaybe_002dhighlight-1287"></a>Do much highlighting of the current article
+(<code>gnus-article-highlight</code>).  This function highlights header, cited
+text, the signature, and adds buttons to the body and the head.
+
+     <br><dt><kbd>W H h</kbd><dd><a name="index-W-H-h-_0028Summary_0029-1288"></a><a name="index-gnus_002darticle_002dhighlight_002dheaders-1289"></a><a name="index-gnus_002dheader_002dface_002dalist-1290"></a>Highlight the headers (<code>gnus-article-highlight-headers</code>).  The
+highlighting will be done according to the <code>gnus-header-face-alist</code>
+variable, which is a list where each element has the form
+<code>(</code><var>regexp</var> <var>name</var> <var>content</var><code>)</code>. 
+<var>regexp</var> is a regular expression for matching the
+header, <var>name</var> is the face used for highlighting the header name
+(see <a href="Faces-and-Fonts.html#Faces-and-Fonts">Faces and Fonts</a>) and <var>content</var> is the face for highlighting
+the header value.  The first match made will be used.  Note that
+<var>regexp</var> shouldn't have &lsquo;<samp><span class="samp">^</span></samp>&rsquo; prepended&mdash;Gnus will add one.
+
+     <br><dt><kbd>W H c</kbd><dd><a name="index-W-H-c-_0028Summary_0029-1291"></a><a name="index-gnus_002darticle_002dhighlight_002dcitation-1292"></a>Highlight cited text (<code>gnus-article-highlight-citation</code>).
+
+     <p>Some variables to customize the citation highlights:
+
+          
+<a name="index-gnus_002dcite_002dparse_002dmax_002dsize-1293"></a>
+<dl>
+<dt><code>gnus-cite-parse-max-size</code><dd>If the article size in bytes is bigger than this variable (which is
+25000 by default), no citation highlighting will be performed.
+
+          <br><dt><code>gnus-cite-max-prefix</code><dd><a name="index-gnus_002dcite_002dmax_002dprefix-1294"></a>Maximum possible length for a citation prefix (default 20).
+
+          <br><dt><code>gnus-cite-face-list</code><dd><a name="index-gnus_002dcite_002dface_002dlist-1295"></a>List of faces used for highlighting citations (see <a href="Faces-and-Fonts.html#Faces-and-Fonts">Faces and Fonts</a>). 
+When there are citations from multiple articles in the same message,
+Gnus will try to give each citation from each article its own face. 
+This should make it easier to see who wrote what.
+
+          <br><dt><code>gnus-supercite-regexp</code><dd><a name="index-gnus_002dsupercite_002dregexp-1296"></a>Regexp matching normal Supercite attribution lines.
+
+          <br><dt><code>gnus-supercite-secondary-regexp</code><dd><a name="index-gnus_002dsupercite_002dsecondary_002dregexp-1297"></a>Regexp matching mangled Supercite attribution lines.
+
+          <br><dt><code>gnus-cite-minimum-match-count</code><dd><a name="index-gnus_002dcite_002dminimum_002dmatch_002dcount-1298"></a>Minimum number of identical prefixes we have to see before we believe
+that it's a citation.
+
+          <br><dt><code>gnus-cite-attribution-prefix</code><dd><a name="index-gnus_002dcite_002dattribution_002dprefix-1299"></a>Regexp matching the beginning of an attribution line.
+
+          <br><dt><code>gnus-cite-attribution-suffix</code><dd><a name="index-gnus_002dcite_002dattribution_002dsuffix-1300"></a>Regexp matching the end of an attribution line.
+
+          <br><dt><code>gnus-cite-attribution-face</code><dd><a name="index-gnus_002dcite_002dattribution_002dface-1301"></a>Face used for attribution lines.  It is merged with the face for the
+cited text belonging to the attribution.
+
+          <br><dt><code>gnus-cite-ignore-quoted-from</code><dd><a name="index-gnus_002dcite_002dignore_002dquoted_002dfrom-1302"></a>If non-<code>nil</code>, no citation highlighting will be performed on lines
+beginning with &lsquo;<samp><span class="samp">&gt;From </span></samp>&rsquo;.  Those lines may have been quoted by MTAs
+in order not to mix up with the envelope From line.  The default value
+is <code>t</code>.
+
+     </dl>
+
+     <br><dt><kbd>W H s</kbd><dd><a name="index-W-H-s-_0028Summary_0029-1303"></a><a name="index-gnus_002dsignature_002dseparator-1304"></a><a name="index-gnus_002dsignature_002dface-1305"></a><a name="index-gnus_002darticle_002dhighlight_002dsignature-1306"></a>Highlight the signature (<code>gnus-article-highlight-signature</code>). 
+Everything after <code>gnus-signature-separator</code> (see <a href="Article-Signature.html#Article-Signature">Article Signature</a>) in an article will be considered a signature and will be
+highlighted with <code>gnus-signature-face</code>, which is <code>italic</code> by
+default.
+
+   </dl>
+
+   <p>See <a href="Customizing-Articles.html#Customizing-Articles">Customizing Articles</a>, for how to highlight articles automatically.
+
+   </body></html>
+

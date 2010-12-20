@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>MS-DOS File Names - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="MS_002dDOS.html#MS_002dDOS" title="MS-DOS">
+<link rel="prev" href="MS_002dDOS-Display.html#MS_002dDOS-Display" title="MS-DOS Display">
+<link rel="next" href="MS_002dDOS-Printing.html#MS_002dDOS-Printing" title="MS-DOS Printing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="MS-DOS-File-Names"></a>
+<a name="MS_002dDOS-File-Names"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="MS_002dDOS-Printing.html#MS_002dDOS-Printing">MS-DOS Printing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MS_002dDOS-Display.html#MS_002dDOS-Display">MS-DOS Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>
+<hr>
+</div>
+
+<h4 class="subsection">G.11.4 File Names on MS-DOS</h4>
+
+<p><a name="index-file-names-under-MS_002dDOS-4433"></a><a name="index-init-file_002c-default-name-under-MS_002dDOS-4434"></a>
+  On MS-DOS, file names are case-insensitive and limited to eight
+characters, plus optionally a period and three more characters.  Emacs
+knows enough about these limitations to handle file names that were
+meant for other operating systems.  For instance, leading dots
+&lsquo;<samp><span class="samp">.</span></samp>&rsquo;  in file names are invalid in MS-DOS, so Emacs transparently
+converts them to underscores &lsquo;<samp><span class="samp">_</span></samp>&rsquo;; thus your default init file
+(see <a href="Init-File.html#Init-File">Init File</a>)
+is called <samp><span class="file">_emacs</span></samp> on MS-DOS.  Excess characters before or after
+the period are generally ignored by MS-DOS itself; thus, if you visit
+the file <samp><span class="file">LongFileName.EvenLongerExtension</span></samp>, you will silently
+get <samp><span class="file">longfile.eve</span></samp>, but Emacs will still display the long file
+name on the mode line.  Other than that, it's up to you to specify
+file names which are valid under MS-DOS; the transparent conversion as
+described above only works on file names built into Emacs.
+
+   <p><a name="index-backup-file-names-on-MS_002dDOS-4435"></a>  The above restrictions on the file names on MS-DOS make it almost
+impossible to construct the name of a backup file
+(see <a href="Backup-Names.html#Backup-Names">Backup Names</a>)
+without losing some of the original file name characters.  For
+example, the name of a backup file for <samp><span class="file">docs.txt</span></samp> is
+<samp><span class="file">docs.tx~</span></samp> even if single backup is used.
+
+   <p><a name="index-file-names-under-Windows-95_002fNT-4436"></a><a name="index-long-file-names-in-DOS-box-under-Windows-95_002fNT-4437"></a>  If you run Emacs as a DOS application under Windows 9X, Windows ME, or
+Windows 2000/XP, you can turn on support for long file names.  If you do
+that, Emacs doesn't truncate file names or convert them to lower case;
+instead, it uses the file names that you specify, verbatim.  To enable
+long file name support, set the environment variable <samp><span class="env">LFN</span></samp> to
+&lsquo;<samp><span class="samp">y</span></samp>&rsquo; before starting Emacs.  Unfortunately, Windows NT doesn't allow
+DOS programs to access long file names, so Emacs built for MS-DOS will
+only see their short 8+3 aliases.
+
+   <p><a name="index-g_t_0040env_007bHOME_007d-directory-under-MS_002dDOS-4438"></a>  MS-DOS has no notion of home directory, so Emacs on MS-DOS pretends
+that the directory where it is installed is the value of the <samp><span class="env">HOME</span></samp>
+environment variable.  That is, if your Emacs binary,
+<samp><span class="file">emacs.exe</span></samp>, is in the directory <samp><span class="file">c:/utils/emacs/bin</span></samp>, then
+Emacs acts as if <samp><span class="env">HOME</span></samp> were set to &lsquo;<samp><span class="samp">c:/utils/emacs</span></samp>&rsquo;.  In
+particular, that is where Emacs looks for the init file <samp><span class="file">_emacs</span></samp>. 
+With this in mind, you can use &lsquo;<samp><span class="samp">~</span></samp>&rsquo; in file names as an alias for
+the home directory, as you would on GNU or Unix.  You can also set
+<samp><span class="env">HOME</span></samp> variable in the environment before starting Emacs; its
+value will then override the above default behavior.
+
+   <p>Emacs on MS-DOS handles the directory name <samp><span class="file">/dev</span></samp> specially,
+because of a feature in the emulator libraries of DJGPP that pretends
+I/O devices have names in that directory.  We recommend that you avoid
+using an actual directory named <samp><span class="file">/dev</span></samp> on any disk.
+
+   </body></html>
+

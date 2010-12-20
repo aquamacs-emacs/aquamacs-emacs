@@ -1,0 +1,178 @@
+<html lang="en">
+<head>
+<title>Posting Styles - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Composing-Messages.html#Composing-Messages" title="Composing Messages">
+<link rel="prev" href="Archived-Messages.html#Archived-Messages" title="Archived Messages">
+<link rel="next" href="Drafts.html#Drafts" title="Drafts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Posting-Styles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Drafts.html#Drafts">Drafts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Archived-Messages.html#Archived-Messages">Archived Messages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Composing-Messages.html#Composing-Messages">Composing Messages</a>
+<hr>
+</div>
+
+<h3 class="section">5.6 Posting Styles</h3>
+
+<p><a name="index-posting-styles-1957"></a><a name="index-styles-1958"></a>
+All them variables, they make my head swim.
+
+   <p>So what if you want a different <code>Organization</code> and signature based
+on what groups you post to?  And you post both from your home machine
+and your work machine, and you want different <code>From</code> lines, and so
+on?
+
+   <p><a name="index-gnus_002dposting_002dstyles-1959"></a>One way to do stuff like that is to write clever hooks that change the
+variables you need to have changed.  That's a bit boring, so somebody
+came up with the bright idea of letting the user specify these things in
+a handy alist.  Here's an example of a <code>gnus-posting-styles</code>
+variable:
+
+<pre class="lisp">     ((".*"
+       (signature "Peace and happiness")
+       (organization "What me?"))
+      ("^comp"
+       (signature "Death to everybody"))
+      ("comp.emacs.i-love-it"
+       (organization "Emacs is it")))
+</pre>
+   <p>As you might surmise from this example, this alist consists of several
+<dfn>styles</dfn>.  Each style will be applicable if the first element
+&ldquo;matches&rdquo;, in some form or other.  The entire alist will be iterated
+over, from the beginning towards the end, and each match will be
+applied, which means that attributes in later styles that match override
+the same attributes in earlier matching styles.  So
+&lsquo;<samp><span class="samp">comp.programming.literate</span></samp>&rsquo; will have the &lsquo;<samp><span class="samp">Death to everybody</span></samp>&rsquo;
+signature and the &lsquo;<samp><span class="samp">What me?</span></samp>&rsquo; <code>Organization</code> header.
+
+   <p>The first element in each style is called the <code>match</code>.  If it's a
+string, then Gnus will try to regexp match it against the group name. 
+If it is the form <code>(header </code><var>match</var> <var>regexp</var><code>)</code>, then Gnus
+will look in the original article for a header whose name is
+<var>match</var> and compare that <var>regexp</var>.  <var>match</var> and
+<var>regexp</var> are strings.  (The original article is the one you are
+replying or following up to.  If you are not composing a reply or a
+followup, then there is nothing to match against.)  If the
+<code>match</code> is a function symbol, that function will be called with
+no arguments.  If it's a variable symbol, then the variable will be
+referenced.  If it's a list, then that list will be <code>eval</code>ed.  In
+any case, if this returns a non-<code>nil</code> value, then the style is
+said to <dfn>match</dfn>.
+
+   <p>Each style may contain an arbitrary amount of <dfn>attributes</dfn>.  Each
+attribute consists of a <code>(</code><var>name</var> <var>value</var><code>)</code> pair.  In
+addition, you can also use the <code>(</code><var>name</var><code> :file </code><var>value</var><code>)</code>
+form or the <code>(</code><var>name</var><code> :value </code><var>value</var><code>)</code> form.  Where
+<code>:file</code> signifies <var>value</var> represents a file name and its
+contents should be used as the attribute value, <code>:value</code> signifies
+<var>value</var> does not represent a file name explicitly.  The attribute
+name can be one of:
+
+     <ul>
+<li><code>signature</code>
+<li><code>signature-file</code>
+<li><code>x-face-file</code>
+<li><code>address</code>, overriding <code>user-mail-address</code>
+<li><code>name</code>, overriding <code>(user-full-name)</code>
+<li><code>body</code>
+</ul>
+
+   <p>Note that the <code>signature-file</code> attribute honors the variable
+<code>message-signature-directory</code>.
+
+   <p>The attribute name can also be a string or a symbol.  In that case,
+this will be used as a header name, and the value will be inserted in
+the headers of the article; if the value is <code>nil</code>, the header
+name will be removed.  If the attribute name is <code>eval</code>, the form
+is evaluated, and the result is thrown away.
+
+   <p>The attribute value can be a string (used verbatim), a function with
+zero arguments (the return value will be used), a variable (its value
+will be used) or a list (it will be <code>eval</code>ed and the return value
+will be used).  The functions and sexps are called/<code>eval</code>ed in the
+message buffer that is being set up.  The headers of the current article
+are available through the <code>message-reply-headers</code> variable, which
+is a vector of the following headers: number subject from date id
+references chars lines xref extra.
+
+   <p><a name="index-message_002dreply_002dheaders-1960"></a>
+If you wish to check whether the message you are about to compose is
+meant to be a news article or a mail message, you can check the values
+of the <code>message-news-p</code> and <code>message-mail-p</code> functions.
+
+   <p><a name="index-message_002dmail_002dp-1961"></a><a name="index-message_002dnews_002dp-1962"></a>
+So here's a new example:
+
+<pre class="lisp">     (setq gnus-posting-styles
+           '((".*"
+              (signature-file "~/.signature")
+              (name "User Name")
+              (x-face-file "~/.xface")
+              (x-url (getenv "WWW_HOME"))
+              (organization "People's Front Against MWM"))
+             ("^rec.humor"
+              (signature my-funny-signature-randomizer))
+             ((equal (system-name) "gnarly")  ;; <span class="roman">A form</span>
+              (signature my-quote-randomizer))
+             (message-news-p        ;; <span class="roman">A function symbol</span>
+              (signature my-news-signature))
+             (window-system         ;; <span class="roman">A value symbol</span>
+              ("X-Window-System" (format "%s" window-system)))
+             ;; <span class="roman">If I'm replying to Larsi, set the Organization header.</span>
+             ((header "from" "larsi.*org")
+              (Organization "Somewhere, Inc."))
+             ((posting-from-work-p) ;; <span class="roman">A user defined function</span>
+              (signature-file "~/.work-signature")
+              (address "user@bar.foo")
+              (body "You are fired.\n\nSincerely, your boss.")
+              (organization "Important Work, Inc"))
+             ("nnml:.*"
+              (From (with-current-buffer gnus-article-buffer
+                      (message-fetch-field "to"))))
+             ("^nn.+:"
+              (signature-file "~/.mail-signature"))))
+</pre>
+   <p>The &lsquo;<samp><span class="samp">nnml:.*</span></samp>&rsquo; rule means that you use the <code>To</code> address as the
+<code>From</code> address in all your outgoing replies, which might be handy
+if you fill many roles. 
+You may also use <code>message-alternative-emails</code> instead. 
+See <a href="../message/Message-Headers.html#Message-Headers">Message Headers</a>.
+
+   </body></html>
+

@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>Context-sensitive commands - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hacking.html#Hacking" title="Hacking">
+<link rel="prev" href="Adding-hyperlink-types.html#Adding-hyperlink-types" title="Adding hyperlink types">
+<link rel="next" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" title="Tables in arbitrary syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Context-sensitive-commands"></a>
+<a name="Context_002dsensitive-commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax">Tables in arbitrary syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Adding-hyperlink-types.html#Adding-hyperlink-types">Adding hyperlink types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hacking.html#Hacking">Hacking</a>
+<hr>
+</div>
+
+<h3 class="section">A.4 Context-sensitive commands</h3>
+
+<p><a name="index-context_002dsensitive-commands_002c-hooks-1412"></a><a name="index-add_002dons_002c-context_002dsensitive-commands-1413"></a><a name="index-org_002dctrl_002dc_002dctrl_002dc_002dhook-1414"></a>
+Org has several commands that act differently depending on context.  The most
+important example it the <kbd>C-c C-c</kbd> (see <a href="The-very-busy-C_002dc-C_002dc-key.html#The-very-busy-C_002dc-C_002dc-key">The very busy C-c C-c key</a>). 
+Also the <kbd>M-cursor</kbd> and <kbd>M-S-cursor</kbd> keys have this property.
+
+   <p>Add-ons can tap into this functionality by providing a function that detects
+special context for that add-on and executes functionality appropriate for
+the context.  Here is an example from Dan Davison's <samp><span class="file">org-R.el</span></samp> which
+allows you to evaluate commands based on the <samp><span class="file">R</span></samp> programming language.  For
+this package, special contexts are lines that start with <code>#+R:</code> or
+<code>#+RR:</code>.
+
+<pre class="lisp">     (defun org-R-apply-maybe ()
+       "Detect if this is context for org-R and execute R commands."
+       (if (save-excursion
+             (beginning-of-line 1)
+             (looking-at "#\\+RR?:"))
+           (progn (call-interactively 'org-R-apply)
+                  t) ;; to signal that we took action
+         nil)) ;; to signal that we did not
+     
+     (add-hook 'org-ctrl-c-ctrl-c-hook 'org-R-apply-maybe)
+</pre>
+   <p>The function first checks if the cursor is in such a line.  If that is the
+case, <code>org-R-apply</code> is called and the function returns <code>t</code> to
+signal that action was taken, and <kbd>C-c C-c</kbd> will stop looking for other
+contexts.  If the function finds it should do nothing locally, it returns <code>nil</code> so that other, similar functions can have a try.
+
+   </body></html>
+

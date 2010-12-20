@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Using the document's URI to locate a schema - nXML Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="nXML Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Schema-locating-files.html#Schema-locating-files" title="Schema locating files">
+<link rel="prev" href="Schema-locating-file-syntax-basics.html#Schema-locating-file-syntax-basics" title="Schema locating file syntax basics">
+<link rel="next" href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema" title="Using the document element to locate a schema">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents nxml-mode, an Emacs major mode for editing
+XML with RELAX NG support.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Using-the-document's-URI-to-locate-a-schema"></a>
+<a name="Using-the-document_0027s-URI-to-locate-a-schema"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema">Using the document element to locate a schema</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Schema-locating-file-syntax-basics.html#Schema-locating-file-syntax-basics">Schema locating file syntax basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Schema-locating-files.html#Schema-locating-files">Schema locating files</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.2 Using the document's URI to locate a schema</h4>
+
+<p>A &lsquo;<samp><span class="samp">uri</span></samp>&rsquo; rule locates a schema based on the URI of the
+document.  The &lsquo;<samp><span class="samp">uri</span></samp>&rsquo; attribute specifies the URI of the
+schema.  The &lsquo;<samp><span class="samp">resource</span></samp>&rsquo; attribute can be used to specify
+the schema for a particular document.  For example,
+
+<pre class="example">     &lt;uri resource="spec.xml" uri="docbook.rnc"/&gt;
+</pre>
+   <p class="noindent">specifies that the schema for &lsquo;<samp><span class="samp">spec.xml</span></samp>&rsquo; is
+&lsquo;<samp><span class="samp">docbook.rnc</span></samp>&rsquo;.
+
+   <p>The &lsquo;<samp><span class="samp">pattern</span></samp>&rsquo; attribute can be used instead of the
+&lsquo;<samp><span class="samp">resource</span></samp>&rsquo; attribute to specify the schema for any document
+whose URI matches a pattern.  The pattern has the same syntax as an
+absolute or relative URI except that the path component of the URI can
+use a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; character to stand for zero or more characters
+within a path segment (i.e. any character other &lsquo;<samp><span class="samp">/</span></samp>&rsquo;). 
+Typically, the URI pattern looks like a relative URI, but, whereas a
+relative URI in the &lsquo;<samp><span class="samp">resource</span></samp>&rsquo; attribute is resolved into a
+particular absolute URI using the base URI of the schema locating
+file, a relative URI pattern matches if it matches some number of
+complete path segments of the document's URI ending with the last path
+segment of the document's URI. For example,
+
+<pre class="example">     &lt;uri pattern="*.xsl" uri="xslt.rnc"/&gt;
+</pre>
+   <p class="noindent">specifies that the schema for documents with a URI whose path ends
+with &lsquo;<samp><span class="samp">.xsl</span></samp>&rsquo; is &lsquo;<samp><span class="samp">xslt.rnc</span></samp>&rsquo;.
+
+   <p>A &lsquo;<samp><span class="samp">transformURI</span></samp>&rsquo; rule locates a schema by
+transforming the URI of the document. The &lsquo;<samp><span class="samp">fromPattern</span></samp>&rsquo;
+attribute specifies a URI pattern with the same meaning as the
+&lsquo;<samp><span class="samp">pattern</span></samp>&rsquo; attribute of the &lsquo;<samp><span class="samp">uri</span></samp>&rsquo; element.  The
+&lsquo;<samp><span class="samp">toPattern</span></samp>&rsquo; attribute is a URI pattern that is used to
+generate the URI of the schema.  Each &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in the
+&lsquo;<samp><span class="samp">toPattern</span></samp>&rsquo; is replaced by the string that matched the
+corresponding &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in the &lsquo;<samp><span class="samp">fromPattern</span></samp>&rsquo;.  The
+resulting string is appended to the initial part of the document's URI
+that was not explicitly matched by the &lsquo;<samp><span class="samp">fromPattern</span></samp>&rsquo;.  The
+rule matches only if the transformed URI identifies an existing
+resource.  For example, the rule
+
+<pre class="example">     &lt;transformURI fromPattern="*.xml" toPattern="*.rnc"/&gt;
+</pre>
+   <p class="noindent">would transform the URI &lsquo;<samp><span class="samp">file:///home/jjc/docs/spec.xml</span></samp>&rsquo;
+into the URI &lsquo;<samp><span class="samp">file:///home/jjc/docs/spec.rnc</span></samp>&rsquo;.  Thus, this
+rule specifies that to locate a schema for a document
+&lsquo;<samp><var>foo</var><span class="samp">.xml</span></samp>&rsquo;, Emacs should test whether a file
+&lsquo;<samp><var>foo</var><span class="samp">.rnc</span></samp>&rsquo; exists in the same directory as
+&lsquo;<samp><var>foo</var><span class="samp">.xml</span></samp>&rsquo;, and, if so, should use it as the
+schema.
+
+   </body></html>
+

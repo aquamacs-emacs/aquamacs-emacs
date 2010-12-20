@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Faces - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Font-Locking.html#Font-Locking" title="Font Locking">
+<link rel="prev" href="Font-Locking-Preliminaries.html#Font-Locking-Preliminaries" title="Font Locking Preliminaries">
+<link rel="next" href="Doc-Comments.html#Doc-Comments" title="Doc Comments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Faces"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Doc-Comments.html#Doc-Comments">Doc Comments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Font-Locking-Preliminaries.html#Font-Locking-Preliminaries">Font Locking Preliminaries</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Font-Locking.html#Font-Locking">Font Locking</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">5.2 Faces</h3>
+
+<p><a name="index-faces-236"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>CC Mode attempts to use the standard faces for programming languages
+in accordance with their intended purposes as far as possible.  No extra
+faces are currently provided, with the exception of a replacement face
+<code>c-invalid-face</code> for emacsen that don't provide
+<code>font-lock-warning-face</code>.
+
+     <ul>
+<li><a name="index-font_002dlock_002dcomment_002dface-237"></a>Normal comments are fontified in <code>font-lock-comment-face</code>.
+
+     <li><a name="index-font_002dlock_002ddoc_002dface-238"></a><a name="index-font_002dlock_002ddoc_002dstring_002dface-239"></a><a name="index-font_002dlock_002dcomment_002dface-240"></a>Comments that are recognized as documentation (see <a href="Doc-Comments.html#Doc-Comments">Doc Comments</a>)
+get <code>font-lock-doc-face</code> (Emacs) or
+<code>font-lock-doc-string-face</code> (XEmacs) if those faces exist.  If
+they don't then <code>font-lock-comment-face</code> is used.
+
+     <li><a name="index-font_002dlock_002dstring_002dface-241"></a>String and character literals are fontified in
+<code>font-lock-string-face</code>.
+
+     <li><a name="index-font_002dlock_002dkeyword_002dface-242"></a>Keywords are fontified with <code>font-lock-keyword-face</code>.
+
+     <li><a name="index-font_002dlock_002dfunction_002dname_002dface-243"></a><code>font-lock-function-name-face</code> is used for function names in
+declarations and definitions, and classes in those contexts.  It's also
+used for preprocessor defines with arguments.
+
+     <li><a name="index-font_002dlock_002dvariable_002dname_002dface-244"></a>Variables in declarations and definitions, and other identifiers in such
+variable contexts, get <code>font-lock-variable-name-face</code>.  It's also
+used for preprocessor defines without arguments.
+
+     <li><a name="index-font_002dlock_002dconstant_002dface-245"></a><a name="index-font_002dlock_002dreference_002dface-246"></a>Builtin constants are fontified in <code>font-lock-constant-face</code> if it
+exists, <code>font-lock-reference-face</code> otherwise.  As opposed to the
+preceding two faces, this is used on the names in expressions, and it's
+not used in declarations, even if there happen to be a &lsquo;<samp><span class="samp">const</span></samp>&rsquo; in
+them somewhere.
+
+     <li><a name="index-font_002dlock_002dtype_002dface-247"></a><code>font-lock-type-face</code> is put on types (both predefined and user
+defined) and classes in type contexts.
+
+     <li><a name="index-font_002dlock_002dconstant_002dface-248"></a><a name="index-font_002dlock_002dreference_002dface-249"></a>Label identifiers get <code>font-lock-constant-face</code> if it exists,
+<code>font-lock-reference-face</code> otherwise.
+
+     <li>Name qualifiers and identifiers for scope constructs are fontified like
+labels.
+
+     <li>Special markup inside documentation comments are also fontified like
+labels.
+
+     <li><a name="index-font_002dlock_002dpreprocessor_002dface-250"></a><a name="index-font_002dlock_002dbuiltin_002dface-251"></a><a name="index-font_002dlock_002dreference_002dface-252"></a>Preprocessor directives get <code>font-lock-preprocessor-face</code> if it
+exists (i.e. XEmacs).  In Emacs they get <code>font-lock-builtin-face</code>
+or <code>font-lock-reference-face</code>, for lack of a closer equivalent.
+
+     <li><a name="index-font_002dlock_002dwarning_002dface-253"></a><a name="index-c_002dinvalid_002dface-254"></a><a name="index-invalid_002dface-_0028c_002d_0029-255"></a>Some kinds of syntactic errors are fontified with
+<code>font-lock-warning-face</code> in Emacs.  In older XEmacs versions
+there's no corresponding standard face, so there a special
+<code>c-invalid-face</code> is used, which is defined to stand out sharply by
+default.
+
+     <p>Note that it's not used for &lsquo;<samp><span class="samp">#error</span></samp>&rsquo; or &lsquo;<samp><span class="samp">#warning</span></samp>&rsquo; directives,
+since those aren't syntactic errors in themselves. 
+</ul>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

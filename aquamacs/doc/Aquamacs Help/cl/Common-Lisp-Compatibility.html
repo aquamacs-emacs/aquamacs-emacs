@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Common Lisp Compatibility - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Efficiency-Concerns.html#Efficiency-Concerns" title="Efficiency Concerns">
+<link rel="next" href="Old-CL-Compatibility.html#Old-CL-Compatibility" title="Old CL Compatibility">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Common-Lisp-Compatibility"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Old-CL-Compatibility.html#Old-CL-Compatibility">Old CL Compatibility</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Efficiency-Concerns.html#Efficiency-Concerns">Efficiency Concerns</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix B Common Lisp Compatibility</h2>
+
+<p class="noindent">Following is a list of all known incompatibilities between this
+package and Common Lisp as documented in Steele (2nd edition).
+
+   <p>Certain function names, such as <code>member</code>, <code>assoc</code>, and
+<code>floor</code>, were already taken by (incompatible) Emacs Lisp
+functions; this package appends &lsquo;<samp><span class="samp">*</span></samp>&rsquo; to the names of its
+Common Lisp versions of these functions.
+
+   <p>The word <code>defun*</code> is required instead of <code>defun</code> in order
+to use extended Common Lisp argument lists in a function.  Likewise,
+<code>defmacro*</code> and <code>function*</code> are versions of those forms
+which understand full-featured argument lists.  The <code>&amp;whole</code>
+keyword does not work in <code>defmacro</code> argument lists (except
+inside recursive argument lists).
+
+   <p>The <code>equal</code> predicate does not distinguish
+between IEEE floating-point plus and minus zero.  The <code>equalp</code>
+predicate has several differences with Common Lisp; see <a href="Predicates.html#Predicates">Predicates</a>.
+
+   <p>The <code>setf</code> mechanism is entirely compatible, except that
+setf-methods return a list of five values rather than five
+values directly.  Also, the new &ldquo;<code>setf</code> function&rdquo; concept
+(typified by <code>(defun (setf foo) ...)</code>) is not implemented.
+
+   <p>The <code>do-all-symbols</code> form is the same as <code>do-symbols</code>
+with no <var>obarray</var> argument.  In Common Lisp, this form would
+iterate over all symbols in all packages.  Since Emacs obarrays
+are not a first-class package mechanism, there is no way for
+<code>do-all-symbols</code> to locate any but the default obarray.
+
+   <p>The <code>loop</code> macro is complete except that <code>loop-finish</code>
+and type specifiers are unimplemented.
+
+   <p>The multiple-value return facility treats lists as multiple
+values, since Emacs Lisp cannot support multiple return values
+directly.  The macros will be compatible with Common Lisp if
+<code>values</code> or <code>values-list</code> is always used to return to
+a <code>multiple-value-bind</code> or other multiple-value receiver;
+if <code>values</code> is used without <code>multiple-value-...</code>
+or vice-versa the effect will be different from Common Lisp.
+
+   <p>Many Common Lisp declarations are ignored, and others match
+the Common Lisp standard in concept but not in detail.  For
+example, local <code>special</code> declarations, which are purely
+advisory in Emacs Lisp, do not rigorously obey the scoping rules
+set down in Steele's book.
+
+   <p>The variable <code>*gensym-counter*</code> starts out with a pseudo-random
+value rather than with zero.  This is to cope with the fact that
+generated symbols become interned when they are written to and
+loaded back from a file.
+
+   <p>The <code>defstruct</code> facility is compatible, except that structures
+are of type <code>:type vector :named</code> by default rather than some
+special, distinct type.  Also, the <code>:type</code> slot option is ignored.
+
+   <p>The second argument of <code>check-type</code> is treated differently.
+
+   </body></html>
+

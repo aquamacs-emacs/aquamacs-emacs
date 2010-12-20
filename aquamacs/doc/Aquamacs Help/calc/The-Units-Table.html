@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>The Units Table - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Units.html#Units" title="Units">
+<link rel="prev" href="Basic-Operations-on-Units.html#Basic-Operations-on-Units" title="Basic Operations on Units">
+<link rel="next" href="Predefined-Units.html#Predefined-Units" title="Predefined Units">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="The-Units-Table"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Predefined-Units.html#Predefined-Units">Predefined Units</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Operations-on-Units.html#Basic-Operations-on-Units">Basic Operations on Units</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Units.html#Units">Units</a>
+<hr>
+</div>
+
+<h3 class="section">12.2 The Units Table</h3>
+
+<p class="noindent"><a name="index-u-v-1972"></a><a name="index-calc_002denter_002dunits_002dtable-1973"></a>The <kbd>u v</kbd> (<code>calc-enter-units-table</code>) command displays the units table
+in another buffer called <code>*Units Table*</code>.  Each entry in this table
+gives the unit name as it would appear in an expression, the definition
+of the unit in terms of simpler units, and a full name or description of
+the unit.  Fundamental units are defined as themselves; these are the
+units produced by the <kbd>u b</kbd> command.  The fundamental units are
+meters, seconds, grams, kelvins, amperes, candelas, moles, radians,
+and steradians.
+
+   <p>The Units Table buffer also displays the Unit Prefix Table.  Note that
+two prefixes, &ldquo;kilo&rdquo; and &ldquo;hecto,&rdquo; accept either upper- or lower-case
+prefix letters.  &lsquo;<samp><span class="samp">Meg</span></samp>&rsquo; is also accepted as a synonym for the &lsquo;<samp><span class="samp">M</span></samp>&rsquo;
+prefix.  Whenever a unit name can be interpreted as either a built-in name
+or a prefix followed by another built-in name, the former interpretation
+wins.  For example, &lsquo;<samp><span class="samp">2 pt</span></samp>&rsquo; means two pints, not two pico-tons.
+
+   <p>The Units Table buffer, once created, is not rebuilt unless you define
+new units.  To force the buffer to be rebuilt, give any numeric prefix
+argument to <kbd>u v</kbd>.
+
+   <p><a name="index-u-V-1974"></a><a name="index-calc_002dview_002dunits_002dtable-1975"></a>The <kbd>u V</kbd> (<code>calc-view-units-table</code>) command is like <kbd>u v</kbd> except
+that the cursor is not moved into the Units Table buffer.  You can
+type <kbd>u V</kbd> again to remove the Units Table from the display.  To
+return from the Units Table buffer after a <kbd>u v</kbd>, type <kbd>C-x * c</kbd>
+again or use the regular Emacs <kbd>C-x&nbsp;o</kbd><!-- /@w --> (<code>other-window</code>)
+command.  You can also kill the buffer with <kbd>C-x k</kbd> if you wish;
+the actual units table is safely stored inside the Calculator.
+
+   <p><a name="index-u-g-1976"></a><a name="index-calc_002dget_002dunit_002ddefinition-1977"></a>The <kbd>u g</kbd> (<code>calc-get-unit-definition</code>) command retrieves a unit's
+defining expression and pushes it onto the Calculator stack.  For example,
+<kbd>u g in</kbd> will produce the expression &lsquo;<samp><span class="samp">2.54 cm</span></samp>&rsquo;.  This is the
+same definition for the unit that would appear in the Units Table buffer. 
+Note that this command works only for actual unit names; <kbd>u g km</kbd>
+will report that no such unit exists, for example, because <code>km</code> is
+really the unit <code>m</code> with a <code>k</code> (&ldquo;kilo&rdquo;) prefix.  To see a
+definition of a unit in terms of base units, it is easier to push the
+unit name on the stack and then reduce it to base units with <kbd>u b</kbd>.
+
+   <p><a name="index-u-e-1978"></a><a name="index-calc_002dexplain_002dunits-1979"></a>The <kbd>u e</kbd> (<code>calc-explain-units</code>) command displays an English
+description of the units of the expression on the stack.  For example,
+for the expression &lsquo;<samp><span class="samp">62 km^2 g / s^2 mol K</span></samp>&rsquo;, the description is
+&ldquo;Square-Kilometer Gram per (Second-squared Mole Degree-Kelvin).&rdquo;  This
+command uses the English descriptions that appear in the righthand
+column of the Units Table.
+
+   </body></html>
+

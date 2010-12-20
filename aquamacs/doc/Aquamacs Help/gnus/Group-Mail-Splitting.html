@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+<title>Group Mail Splitting - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Mail.html#Getting-Mail" title="Getting Mail">
+<link rel="prev" href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting" title="Fancy Mail Splitting">
+<link rel="next" href="Incorporating-Old-Mail.html#Incorporating-Old-Mail" title="Incorporating Old Mail">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Group-Mail-Splitting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Incorporating-Old-Mail.html#Incorporating-Old-Mail">Incorporating Old Mail</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Mail.html#Getting-Mail">Getting Mail</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.3.7 Group Mail Splitting</h4>
+
+<p><a name="index-mail-splitting-2177"></a><a name="index-group-mail-splitting-2178"></a>
+<a name="index-gnus_002dgroup_002dsplit-2179"></a>If you subscribe to dozens of mailing lists but you don't want to
+maintain mail splitting rules manually, group mail splitting is for you. 
+You just have to set <code>to-list</code> and/or <code>to-address</code> in group
+parameters or group customization and set <code>nnmail-split-methods</code> to
+<code>gnus-group-split</code>.  This splitting function will scan all groups
+for those parameters and split mail accordingly, i.e., messages posted
+from or to the addresses specified in the parameters <code>to-list</code> or
+<code>to-address</code> of a mail group will be stored in that group.
+
+   <p>Sometimes, mailing lists have multiple addresses, and you may want mail
+splitting to recognize them all: just set the <code>extra-aliases</code> group
+parameter to the list of additional addresses and it's done.  If you'd
+rather use a regular expression, set <code>split-regexp</code>.
+
+   <p>All these parameters in a group will be used to create an
+<code>nnmail-split-fancy</code> split, in which the <var>field</var> is &lsquo;<samp><span class="samp">any</span></samp>&rsquo;,
+the <var>value</var> is a single regular expression that matches
+<code>to-list</code>, <code>to-address</code>, all of <code>extra-aliases</code> and all
+matches of <code>split-regexp</code>, and the <var>split</var> is the name of the
+group.  <var>restrict</var>s are also supported: just set the
+<code>split-exclude</code> parameter to a list of regular expressions.
+
+   <p>If you can't get the right split to be generated using all these
+parameters, or you just need something fancier, you can set the
+parameter <code>split-spec</code> to an <code>nnmail-split-fancy</code> split.  In
+this case, all other aforementioned parameters will be ignored by
+<code>gnus-group-split</code>.  In particular, <code>split-spec</code> may be set to
+<code>nil</code>, in which case the group will be ignored by
+<code>gnus-group-split</code>.
+
+   <p><a name="index-gnus_002dgroup_002dsplit_002ddefault_002dcatch_002dall_002dgroup-2180"></a><code>gnus-group-split</code> will do cross-posting on all groups that match,
+by defining a single <code>&amp;</code> fancy split containing one split for each
+group.  If a message doesn't match any split, it will be stored in the
+group named in <code>gnus-group-split-default-catch-all-group</code>, unless
+some group has <code>split-spec</code> set to <code>catch-all</code>, in which case
+that group is used as the catch-all group.  Even though this variable is
+often used just to name a group, it may also be set to an arbitrarily
+complex fancy split (after all, a group name is a fancy split), and this
+may be useful to split mail that doesn't go to any mailing list to
+personal mail folders.  Note that this fancy split is added as the last
+element of a <code>|</code> split list that also contains a <code>&amp;</code> split
+with the rules extracted from group parameters.
+
+   <p>It's time for an example.  Assume the following group parameters have
+been defined:
+
+<pre class="example">     nnml:mail.bar:
+     ((to-address . "bar@femail.com")
+      (split-regexp . ".*@femail\\.com"))
+     nnml:mail.foo:
+     ((to-list . "foo@nowhere.gov")
+      (extra-aliases "foo@localhost" "foo-redist@home")
+      (split-exclude "bugs-foo" "rambling-foo")
+      (admin-address . "foo-request@nowhere.gov"))
+     nnml:mail.others:
+     ((split-spec . catch-all))
+</pre>
+   <p>Setting <code>nnmail-split-methods</code> to <code>gnus-group-split</code> will
+behave as if <code>nnmail-split-fancy</code> had been selected and variable
+<code>nnmail-split-fancy</code> had been set as follows:
+
+<pre class="lisp">     (| (&amp; (any "\\(bar@femail\\.com\\|.*@femail\\.com\\)" "mail.bar")
+           (any "\\(foo@nowhere\\.gov\\|foo@localhost\\|foo-redist@home\\)"
+                - "bugs-foo" - "rambling-foo" "mail.foo"))
+        "mail.others")
+</pre>
+   <p><a name="index-gnus_002dgroup_002dsplit_002dfancy-2181"></a>If you'd rather not use group splitting for all your mail groups, you
+may use it for only some of them, by using <code>nnmail-split-fancy</code>
+splits like this:
+
+<pre class="lisp">     (: gnus-group-split-fancy <var>groups</var> <var>no-crosspost</var> <var>catch-all</var>)
+</pre>
+   <p><var>groups</var> may be a regular expression or a list of group names whose
+parameters will be scanned to generate the output split. 
+<var>no-crosspost</var> can be used to disable cross-posting; in this case, a
+single <code>|</code> split will be output.  <var>catch-all</var> is the fall back
+fancy split, used like <code>gnus-group-split-default-catch-all-group</code>. 
+If <var>catch-all</var> is <code>nil</code>, or if <code>split-regexp</code> matches the
+empty string in any selected group, no catch-all split will be issued. 
+Otherwise, if some group has <code>split-spec</code> set to <code>catch-all</code>,
+this group will override the value of the <var>catch-all</var> argument.
+
+   <p><a name="index-gnus_002dgroup_002dsplit_002dsetup-2182"></a>Unfortunately, scanning all groups and their parameters can be quite
+slow, especially considering that it has to be done for every message. 
+But don't despair!  The function <code>gnus-group-split-setup</code> can be
+used to enable <code>gnus-group-split</code> in a much more efficient way.  It
+sets <code>nnmail-split-methods</code> to <code>nnmail-split-fancy</code> and sets
+<code>nnmail-split-fancy</code> to the split produced by
+<code>gnus-group-split-fancy</code>.  Thus, the group parameters are only
+scanned once, no matter how many messages are split.
+
+   <p><a name="index-gnus_002dgroup_002dsplit_002dupdate-2183"></a>However, if you change group parameters, you'd have to update
+<code>nnmail-split-fancy</code> manually.  You can do it by running
+<code>gnus-group-split-update</code>.  If you'd rather have it updated
+automatically, just tell <code>gnus-group-split-setup</code> to do it for
+you.  For example, add to your <samp><span class="file">~/.gnus.el</span></samp>:
+
+<pre class="lisp">     (gnus-group-split-setup <var>auto-update</var> <var>catch-all</var>)
+</pre>
+   <p>If <var>auto-update</var> is non-<code>nil</code>, <code>gnus-group-split-update</code>
+will be added to <code>nnmail-pre-get-new-mail-hook</code>, so you won't ever
+have to worry about updating <code>nnmail-split-fancy</code> again.  If you
+don't omit <var>catch-all</var> (it's optional, equivalent to <code>nil</code>),
+<code>gnus-group-split-default-catch-all-group</code> will be set to its
+value.
+
+   <p><a name="index-gnus_002dgroup_002dsplit_002dupdated_002dhook-2184"></a>Because you may want to change <code>nnmail-split-fancy</code> after it is set
+by <code>gnus-group-split-update</code>, this function will run
+<code>gnus-group-split-updated-hook</code> just before finishing.
+
+   </body></html>
+

@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>What nnmairix does - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="nnmairix.html#nnmairix" title="nnmairix">
+<link rel="prev" href="nnmairix-requirements.html#nnmairix-requirements" title="nnmairix requirements">
+<link rel="next" href="Setting-up-mairix.html#Setting-up-mairix" title="Setting up mairix">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="What-nnmairix-does"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Setting-up-mairix.html#Setting-up-mairix">Setting up mairix</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="nnmairix-requirements.html#nnmairix-requirements">nnmairix requirements</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="nnmairix.html#nnmairix">nnmairix</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.18.2.3 What nnmairix does</h5>
+
+<p>The back end <code>nnmairix</code> enables you to call mairix from within Gnus,
+either to query mairix with a search term or to update the
+database.  While visiting a message in the summary buffer, you can use
+several pre-defined shortcuts for calling mairix, e.g. to quickly
+search for all mails from the sender of the current message or to
+display the whole thread associated with the message, even if the
+mails are in different folders.
+
+   <p>Additionally, you can create permanent <code>nnmairix</code> groups which are bound
+to certain mairix searches.  This way, you can easily create a group
+containing mails from a certain sender, with a certain subject line or
+even for one specific thread based on the Message-ID.  If you check for
+new mail in these folders (e.g. by pressing <kbd>g</kbd> or <kbd>M-g</kbd>), they
+automatically update themselves by calling mairix.
+
+   <p>You might ask why you need <code>nnmairix</code> at all, since mairix already
+creates the group, populates it with links to the mails so that you can
+then access it with Gnus, right?  Well, this <em>might</em> work, but often
+does not&mdash;at least not without problems.  Most probably you will get
+strange article counts, and sometimes you might see mails which Gnus
+claims have already been canceled and are inaccessible.  This is due to
+the fact that Gnus isn't really amused when things are happening behind
+its back.  Another problem can be the mail back end itself, e.g. if you
+use mairix with an <acronym>IMAP</acronym> server (I had Dovecot complaining
+about corrupt index files when mairix changed the contents of the search
+group).  Using <code>nnmairix</code> should circumvent these problems.
+
+   <p><code>nnmairix</code> is not really a mail back end&mdash;it's actually more like
+a wrapper, sitting between a &ldquo;real&rdquo; mail back end where mairix stores
+the searches and the Gnus front end.  You can choose between three
+different mail back ends for the mairix folders: <code>nnml</code>,
+<code>nnmaildir</code> or <code>nnimap</code>.  <code>nnmairix</code> will call the mairix
+binary so that the search results are stored in folders named
+<code>zz_mairix-&lt;NAME&gt;-&lt;NUMBER&gt;</code> on this mail back end, but it will
+present these folders in the Gnus front end only with <code>&lt;NAME&gt;</code>. 
+You can use an existing mail back end where you already store your mail,
+but if you're uncomfortable with <code>nnmairix</code> creating new mail
+groups alongside your other mail, you can also create e.g. a new
+<code>nnmaildir</code> or <code>nnml</code> server exclusively for mairix, but then
+make sure those servers do not accidentally receive your new mail
+(see <a href="nnmairix-caveats.html#nnmairix-caveats">nnmairix caveats</a>).  A special case exists if you want to use
+mairix remotely on an IMAP server with <code>nnimap</code>&mdash;here the mairix
+folders and your other mail must be on the same <code>nnimap</code> back end.
+
+   </body></html>
+

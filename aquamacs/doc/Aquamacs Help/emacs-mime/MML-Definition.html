@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+<title>MML Definition - Emacs MIME Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Emacs MIME Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Composing.html#Composing" title="Composing">
+<link rel="prev" href="Simple-MML-Example.html#Simple-MML-Example" title="Simple MML Example">
+<link rel="next" href="Advanced-MML-Example.html#Advanced-MML-Example" title="Advanced MML Example">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs MIME interface functionality.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="MML-Definition"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Advanced-MML-Example.html#Advanced-MML-Example">Advanced MML Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-MML-Example.html#Simple-MML-Example">Simple MML Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Composing.html#Composing">Composing</a>
+<hr>
+</div>
+
+<h3 class="section">2.2 MML Definition</h3>
+
+<p>The <acronym>MML</acronym> language is very simple.  It looks a bit like an SGML
+application, but it's not.
+
+   <p>The main concept of <acronym>MML</acronym> is the <dfn>part</dfn>.  Each part can be of a
+different type or use a different charset.  The way to delineate a part
+is with a &lsquo;<samp><span class="samp">&lt;#part ...&gt;</span></samp>&rsquo; tag.  Multipart parts can be introduced
+with the &lsquo;<samp><span class="samp">&lt;#multipart ...&gt;</span></samp>&rsquo; tag.  Parts are ended by the
+&lsquo;<samp><span class="samp">&lt;#/part&gt;</span></samp>&rsquo; or &lsquo;<samp><span class="samp">&lt;#/multipart&gt;</span></samp>&rsquo; tags.  Parts started with the
+&lsquo;<samp><span class="samp">&lt;#part ...&gt;</span></samp>&rsquo; tags are also closed by the next open tag.
+
+   <p>There's also the &lsquo;<samp><span class="samp">&lt;#external ...&gt;</span></samp>&rsquo; tag.  These introduce
+&lsquo;<samp><span class="samp">external/message-body</span></samp>&rsquo; parts.
+
+   <p>Each tag can contain zero or more parameters on the form
+&lsquo;<samp><span class="samp">parameter=value</span></samp>&rsquo;.  The values may be enclosed in quotation marks,
+but that's not necessary unless the value contains white space.  So
+&lsquo;<samp><span class="samp">filename=/home/user/#hello$^yes</span></samp>&rsquo; is perfectly valid.
+
+   <p>The following parameters have meaning in <acronym>MML</acronym>; parameters that have no
+meaning are ignored.  The <acronym>MML</acronym> parameter names are the same as the
+<acronym>MIME</acronym> parameter names; the things in the parentheses say which
+header it will be used in.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">type</span></samp>&rsquo;<dd>The <acronym>MIME</acronym> type of the part (<code>Content-Type</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">filename</span></samp>&rsquo;<dd>Use the contents of the file in the body of the part
+(<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">charset</span></samp>&rsquo;<dd>The contents of the body of the part are to be encoded in the character
+set specified (<code>Content-Type</code>). See <a href="Charset-Translation.html#Charset-Translation">Charset Translation</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">name</span></samp>&rsquo;<dd>Might be used to suggest a file name if the part is to be saved
+to a file (<code>Content-Type</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">disposition</span></samp>&rsquo;<dd>Valid values are &lsquo;<samp><span class="samp">inline</span></samp>&rsquo; and &lsquo;<samp><span class="samp">attachment</span></samp>&rsquo;
+(<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">encoding</span></samp>&rsquo;<dd>Valid values are &lsquo;<samp><span class="samp">7bit</span></samp>&rsquo;, &lsquo;<samp><span class="samp">8bit</span></samp>&rsquo;, &lsquo;<samp><span class="samp">quoted-printable</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">base64</span></samp>&rsquo; (<code>Content-Transfer-Encoding</code>). See <a href="Charset-Translation.html#Charset-Translation">Charset Translation</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">description</span></samp>&rsquo;<dd>A description of the part (<code>Content-Description</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">creation-date</span></samp>&rsquo;<dd>RFC822 date when the part was created (<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">modification-date</span></samp>&rsquo;<dd>RFC822 date when the part was modified (<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">read-date</span></samp>&rsquo;<dd>RFC822 date when the part was read (<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">recipients</span></samp>&rsquo;<dd>Who to encrypt/sign the part to.  This field is used to override any
+auto-detection based on the To/CC headers.
+
+     <br><dt>&lsquo;<samp><span class="samp">sender</span></samp>&rsquo;<dd>Identity used to sign the part.  This field is used to override the
+default key used.
+
+     <br><dt>&lsquo;<samp><span class="samp">size</span></samp>&rsquo;<dd>The size (in octets) of the part (<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">sign</span></samp>&rsquo;<dd>What technology to sign this <acronym>MML</acronym> part with (<code>smime</code>, <code>pgp</code>
+or <code>pgpmime</code>)
+
+     <br><dt>&lsquo;<samp><span class="samp">encrypt</span></samp>&rsquo;<dd>What technology to encrypt this <acronym>MML</acronym> part with (<code>smime</code>,
+<code>pgp</code> or <code>pgpmime</code>)
+
+   </dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">format</span></samp>&rsquo;<dd>Formatting parameter for the text, valid values include &lsquo;<samp><span class="samp">fixed</span></samp>&rsquo;
+(the default) and &lsquo;<samp><span class="samp">flowed</span></samp>&rsquo;.  Normally you do not specify this
+manually, since it requires the textual body to be formatted in a
+special way described in RFC 2646.  See <a href="Flowed-text.html#Flowed-text">Flowed text</a>. 
+</dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">application/octet-stream</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">type</span></samp>&rsquo;<dd>Type of the part; informal&mdash;meant for human readers
+(<code>Content-Type</code>). 
+</dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">message/external-body</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">access-type</span></samp>&rsquo;<dd>A word indicating the supported access mechanism by which the file may
+be obtained.  Values include &lsquo;<samp><span class="samp">ftp</span></samp>&rsquo;, &lsquo;<samp><span class="samp">anon-ftp</span></samp>&rsquo;, &lsquo;<samp><span class="samp">tftp</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">localfile</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">mailserver</span></samp>&rsquo;.  (<code>Content-Type</code>.)
+
+     <br><dt>&lsquo;<samp><span class="samp">expiration</span></samp>&rsquo;<dd>The RFC822 date after which the file may no longer be fetched. 
+(<code>Content-Type</code>.)
+
+     <br><dt>&lsquo;<samp><span class="samp">size</span></samp>&rsquo;<dd>The size (in octets) of the file.  (<code>Content-Type</code>.)
+
+     <br><dt>&lsquo;<samp><span class="samp">permission</span></samp>&rsquo;<dd>Valid values are &lsquo;<samp><span class="samp">read</span></samp>&rsquo; and &lsquo;<samp><span class="samp">read-write</span></samp>&rsquo;
+(<code>Content-Type</code>).
+
+   </dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">sign=smime</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">keyfile</span></samp>&rsquo;<dd>File containing key and certificate for signer.
+
+   </dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">encrypt=smime</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">certfile</span></samp>&rsquo;<dd>File containing certificate for recipient.
+
+   </dl>
+
+   </body></html>
+

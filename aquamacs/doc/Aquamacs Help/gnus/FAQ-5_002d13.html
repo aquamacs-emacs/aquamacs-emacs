@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>FAQ 5-13 - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages" title="FAQ 5 - Composing messages">
+<link rel="prev" href="FAQ-5_002d12.html#FAQ-5_002d12" title="FAQ 5-12">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-5-13"></a>
+<a name="FAQ-5_002d13"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-5_002d12.html#FAQ-5_002d12">FAQ 5-12</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages">FAQ 5 - Composing messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 5.13</h5>
+
+<p>People tell me my Message-IDs are not correct, why
+aren't they and how to fix it?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>The message-ID is an unique identifier for messages you
+send. To make it unique, Gnus need to know which machine
+name to put after the "@". If the name of the machine
+where Gnus is running isn't suitable (it probably isn't
+at most private machines) you can tell Gnus what to use
+by saying:
+
+<pre class="example">     (setq message-user-fqdn "yourmachine.yourdomain.tld")
+</pre>
+   <p class="noindent">in ~/.gnus.el.  If you use Gnus 5.9 or earlier, you can use this
+instead (works for newer versions as well):
+
+<pre class="example">     (eval-after-load "message"
+       '(let ((fqdn "yourmachine.yourdomain.tld"));; &lt;-- Edit this!
+          (if (boundp 'message-user-fqdn)
+              (setq message-user-fqdn fqdn)
+            (gnus-message 1 "Redefining `message-make-fqdn'.")
+            (defun message-make-fqdn ()
+              "Return user's fully qualified domain name."
+              fqdn))))
+</pre>
+   <p class="noindent">If you have no idea what to insert for
+"yourmachine.yourdomain.tld", you've got several
+choices. You can either ask your provider if he allows
+you to use something like
+yourUserName.userfqdn.provider.net, or you can use
+somethingUnique.yourdomain.tld if you own the domain
+yourdomain.tld, or you can register at a service which
+gives private users a FQDN for free.
+
+   <p>Finally you can tell Gnus not to generate a Message-ID
+for News at all (and letting the server do the job) by saying
+
+<pre class="example">     (setq message-required-news-headers
+       (remove' Message-ID message-required-news-headers))
+</pre>
+   <p class="noindent">you can also tell Gnus not to generate Message-IDs for mail by saying
+
+<pre class="example">     (setq message-required-mail-headers
+       (remove' Message-ID message-required-mail-headers))
+</pre>
+   <p class="noindent">, however some mail servers don't generate proper
+Message-IDs, too, so test if your Mail Server behaves
+correctly by sending yourself a Mail and looking at the Message-ID.
+
+   </body></html>
+

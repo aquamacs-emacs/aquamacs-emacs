@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>radio-button-choice - The Emacs Widget Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Emacs Widget Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Basic-Types.html#Basic-Types" title="Basic Types">
+<link rel="prev" href="menu_002dchoice.html#menu_002dchoice" title="menu-choice">
+<link rel="next" href="item.html#item" title="item">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="radio-button-choice"></a>
+<a name="radio_002dbutton_002dchoice"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="item.html#item">item</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="menu_002dchoice.html#menu_002dchoice">menu-choice</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Types.html#Basic-Types">Basic Types</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h4 class="subsection">The <code>radio-button-choice</code> Widget</h4>
+
+<p><a name="index-radio_002dbutton_002dchoice_0040r_007b-widget_007d-77"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (radio-button-choice [<var>keyword</var> <var>argument</var>]...  <var>type</var> ... )
+</pre>
+   <p>The component types specify the choices, with one radio button for
+each.  The widget's value will be that of the chosen <var>type</var>
+argument.  This widget matches any value that matches at least one of
+the specified <var>type</var> arguments.
+
+   <p>The following extra properties are recognized.
+
+     
+<a name="index-entry_002dformat_0040r_007b-keyword_007d-78"></a>
+<dl><dt><code>:entry-format</code><dd>This string will be inserted for each entry in the list. 
+The following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes are available:
+          <dl>
+<dt>&lsquo;<samp><span class="samp">%v</span></samp>&rsquo;<dd>Replace with the buffer representation of the <var>type</var> widget. 
+<br><dt>&lsquo;<samp><span class="samp">%b</span></samp>&rsquo;<dd>Replace with the radio button. 
+<br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>Insert a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
+</dl>
+
+     <p><a name="index-button_002dargs_0040r_007b-keyword_007d-79"></a><br><dt><code>:button-args</code><dd>A list of keywords to pass to the radio buttons.  Useful for setting
+e.g. the &lsquo;<samp><span class="samp">:help-echo</span></samp>&rsquo; for each button.
+
+     <p><a name="index-buttons_0040r_007b-keyword_007d-80"></a><br><dt><code>:buttons</code><dd>The widgets representing the radio buttons.
+
+     <p><a name="index-children_0040r_007b-keyword_007d-81"></a><br><dt><code>:children</code><dd>The widgets representing each type.
+
+     <p><a name="index-choice_0040r_007b-keyword_007d-82"></a><br><dt><code>:choice</code><dd>The current chosen type
+
+     <p><a name="index-args_0040r_007b-keyword_007d-83"></a><br><dt><code>:args</code><dd>The list of types. 
+</dl>
+
+   <p>You can add extra radio button items to a <code>radio-button-choice</code>
+widget after it has been created with the function
+<code>widget-radio-add-item</code>.
+
+<div class="defun">
+&mdash; Function: <b>widget-radio-add-item</b><var> widget type<a name="index-widget_002dradio_002dadd_002ditem-84"></a></var><br>
+<blockquote><p>Add to <code>radio-button-choice</code> widget <var>widget</var> a new radio button
+item of type <var>type</var>. 
+</p></blockquote></div>
+
+   <p>Please note that such items added after the <code>radio-button-choice</code>
+widget has been created will <strong>not</strong> be properly destructed when
+you call <code>widget-delete</code>.
+
+   </body></html>
+

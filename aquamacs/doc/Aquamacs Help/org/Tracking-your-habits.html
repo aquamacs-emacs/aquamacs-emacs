@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+<title>Tracking your habits - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Progress-logging.html#Progress-logging" title="Progress logging">
+<link rel="prev" href="Tracking-TODO-state-changes.html#Tracking-TODO-state-changes" title="Tracking TODO state changes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Tracking-your-habits"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tracking-TODO-state-changes.html#Tracking-TODO-state-changes">Tracking TODO state changes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Progress-logging.html#Progress-logging">Progress logging</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.3.3 Tracking your habits</h4>
+
+<p><a name="index-habits-413"></a>
+Org has the ability to track the consistency of a special category of TODOs,
+called &ldquo;habits&rdquo;.  A habit has the following properties:
+
+     <ol type=1 start=1>
+<li>You have enabled the <code>habits</code> module by customizing the variable
+<code>org-modules</code>. 
+<li>The habit is a TODO, with a TODO keyword representing an open state. 
+<li>The property <code>STYLE</code> is set to the value <code>habit</code>. 
+<li>The TODO has a scheduled date, with a <code>.+</code> style repeat interval. 
+<li>The TODO may also have minimum and maximum ranges specified by using the
+syntax &lsquo;<samp><span class="samp">.+2d/3d</span></samp>&rsquo;, which says that you want to do the task at least every
+three days, but at most every two days. 
+<li>You must also have state logging for the <code>DONE</code> state enabled, in order
+for historical data to be represented in the consistency graph.  If it's not
+enabled it's not an error, but the consistency graphs will be largely
+meaningless.
+        </ol>
+
+   <p>To give you an idea of what the above rules look like in action, here's an
+actual habit with some history:
+
+<pre class="example">     ** TODO Shave
+        SCHEDULED: &lt;2009-10-17 Sat .+2d/4d&gt;
+        - State "DONE"       from "TODO"       [2009-10-15 Thu]
+        - State "DONE"       from "TODO"       [2009-10-12 Mon]
+        - State "DONE"       from "TODO"       [2009-10-10 Sat]
+        - State "DONE"       from "TODO"       [2009-10-04 Sun]
+        - State "DONE"       from "TODO"       [2009-10-02 Fri]
+        - State "DONE"       from "TODO"       [2009-09-29 Tue]
+        - State "DONE"       from "TODO"       [2009-09-25 Fri]
+        - State "DONE"       from "TODO"       [2009-09-19 Sat]
+        - State "DONE"       from "TODO"       [2009-09-16 Wed]
+        - State "DONE"       from "TODO"       [2009-09-12 Sat]
+        :PROPERTIES:
+        :STYLE:    habit
+        :LAST_REPEAT: [2009-10-19 Mon 00:36]
+        :END:
+</pre>
+   <p>What this habit says is: I want to shave at most every 2 days (given by the
+<code>SCHEDULED</code> date and repeat interval) and at least every 4 days.  If
+today is the 15th, then the habit first appears in the agenda on Oct 17,
+after the minimum of 2 days has elapsed, and will appear overdue on Oct 19,
+after four days have elapsed.
+
+   <p>What's really useful about habits is that they are displayed along with a
+consistency graph, to show how consistent you've been at getting that task
+done in the past.  This graph shows every day that the task was done over the
+past three weeks, with colors for each day.  The colors used are:
+
+     <dl>
+<dt><code>Blue</code><dd>If the task wasn't to be done yet on that day. 
+<br><dt><code>Green</code><dd>If the task could have been done on that day. 
+<br><dt><code>Yellow</code><dd>If the task was going to be overdue the next day. 
+<br><dt><code>Red</code><dd>If the task was overdue on that day. 
+</dl>
+
+   <p>In addition to coloring each day, the day is also marked with an asterix if
+the task was actually done that day, and an exclamation mark to show where
+the current day falls in the graph.
+
+   <p>There are several configuration variables that can be used to change the way
+habits are displayed in the agenda.
+
+     <dl>
+<dt><code>org-habit-graph-column</code><dd>The buffer column at which the consistency graph should be drawn.  This will
+overwrite any text in that column, so it's a good idea to keep your habits'
+titles brief and to the point. 
+<br><dt><code>org-habit-preceding-days</code><dd>The amount of history, in days before today, to appear in consistency graphs. 
+<br><dt><code>org-habit-following-days</code><dd>The number of days after today that will appear in consistency graphs. 
+<br><dt><code>org-habit-show-habits-only-for-today</code><dd>If non-nil, only show habits in today's agenda view.  This is set to true by
+default. 
+</dl>
+
+   <p>Lastly, pressing <kbd>K</kbd> in the agenda buffer will cause habits to
+temporarily be disabled and they won't appear at all.  Press <kbd>K</kbd> again to
+bring them back.  They are also subject to tag filtering, if you have habits
+which should only be done in certain contexts, for example.
+
+   </body></html>
+

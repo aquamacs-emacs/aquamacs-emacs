@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Interval Forms - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Data-Types.html#Data-Types" title="Data Types">
+<link rel="prev" href="Error-Forms.html#Error-Forms" title="Error Forms">
+<link rel="next" href="Incomplete-Objects.html#Incomplete-Objects" title="Incomplete Objects">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Interval-Forms"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Incomplete-Objects.html#Incomplete-Objects">Incomplete Objects</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Error-Forms.html#Error-Forms">Error Forms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Data-Types.html#Data-Types">Data Types</a>
+<hr>
+</div>
+
+<h3 class="section">5.12 Interval Forms</h3>
+
+<p class="noindent"><a name="index-Interval-forms-286"></a>An <dfn>interval</dfn> is a subset of consecutive real numbers.  For example,
+the interval &lsquo;<samp><span class="samp">[2 .. 4]</span></samp>&rsquo; represents all the numbers from 2 to 4,
+inclusive.  If you multiply it by the interval &lsquo;<samp><span class="samp">[0.5 .. 2]</span></samp>&rsquo; you
+obtain &lsquo;<samp><span class="samp">[1 .. 8]</span></samp>&rsquo;.  This calculation represents the fact that if
+you multiply some number in the range &lsquo;<samp><span class="samp">[2 .. 4]</span></samp>&rsquo; by some other
+number in the range &lsquo;<samp><span class="samp">[0.5 .. 2]</span></samp>&rsquo;, your result will lie in the range
+from 1 to 8.  Interval arithmetic is used to get a worst-case estimate
+of the possible range of values a computation will produce, given the
+set of possible values of the input.
+
+   <p>Calc supports several varieties of intervals, including <dfn>closed</dfn>
+intervals of the type shown above, <dfn>open</dfn> intervals such as
+&lsquo;<samp><span class="samp">(2 .. 4)</span></samp>&rsquo;, which represents the range of numbers from 2 to 4
+<em>exclusive</em>, and <dfn>semi-open</dfn> intervals in which one end
+uses a round parenthesis and the other a square bracket.  In mathematical
+terms,
+&lsquo;<samp><span class="samp">[2 .. 4]</span></samp>&rsquo; means &lsquo;<samp><span class="samp">2 &lt;= x &lt;= 4</span></samp>&rsquo;, whereas
+&lsquo;<samp><span class="samp">[2 .. 4)</span></samp>&rsquo; represents &lsquo;<samp><span class="samp">2 &lt;= x &lt; 4</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">(2 .. 4]</span></samp>&rsquo; represents &lsquo;<samp><span class="samp">2 &lt; x &lt;= 4</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">(2 .. 4)</span></samp>&rsquo; represents &lsquo;<samp><span class="samp">2 &lt; x &lt; 4</span></samp>&rsquo;.
+
+   <p>The lower and upper limits of an interval must be either real numbers
+(or HMS or date forms), or symbolic expressions which are assumed to be
+real-valued, or &lsquo;<samp><span class="samp">-inf</span></samp>&rsquo; and &lsquo;<samp><span class="samp">inf</span></samp>&rsquo;.  In general the lower limit
+must be less than the upper limit.  A closed interval containing only
+one value, &lsquo;<samp><span class="samp">[3 .. 3]</span></samp>&rsquo;, is converted to a plain number (3)
+automatically.  An interval containing no values at all (such as
+&lsquo;<samp><span class="samp">[3 .. 2]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">[2 .. 2)</span></samp>&rsquo;) can be represented but is not
+guaranteed to behave well when used in arithmetic.  Note that the
+interval &lsquo;<samp><span class="samp">[3 .. inf)</span></samp>&rsquo; represents all real numbers greater than
+or equal to 3, and &lsquo;<samp><span class="samp">(-inf .. inf)</span></samp>&rsquo; represents all real numbers. 
+In fact, &lsquo;<samp><span class="samp">[-inf .. inf]</span></samp>&rsquo; represents all real numbers including
+the real infinities.
+
+   <p>Intervals are entered in the notation shown here, either as algebraic
+formulas, or using incomplete forms.  (See <a href="Incomplete-Objects.html#Incomplete-Objects">Incomplete Objects</a>.) 
+In algebraic formulas, multiple periods in a row are collected from
+left to right, so that &lsquo;<samp><span class="samp">1...1e2</span></samp>&rsquo; is interpreted as &lsquo;<samp><span class="samp">1.0 .. 1e2</span></samp>&rsquo;
+rather than &lsquo;<samp><span class="samp">1 .. 0.1e2</span></samp>&rsquo;.  Add spaces or zeros if you want to
+get the other interpretation.  If you omit the lower or upper limit,
+a default of &lsquo;<samp><span class="samp">-inf</span></samp>&rsquo; or &lsquo;<samp><span class="samp">inf</span></samp>&rsquo; (respectively) is furnished.
+
+   <p>Infinite mode also affects operations on intervals
+(see <a href="Infinities.html#Infinities">Infinities</a>).  Calc will always introduce an open infinity,
+as in &lsquo;<samp><span class="samp">1 / (0 .. 2] = [0.5 .. inf)</span></samp>&rsquo;.  But closed infinities,
+&lsquo;<samp><span class="samp">1&nbsp;/&nbsp;[0&nbsp;..&nbsp;2]&nbsp;=&nbsp;[0.5&nbsp;..&nbsp;inf]</span></samp>&rsquo;<!-- /@w -->, arise only in Infinite mode;
+otherwise they are left unevaluated.  Note that the &ldquo;direction&rdquo; of
+a zero is not an issue in this case since the zero is always assumed
+to be continuous with the rest of the interval.  For intervals that
+contain zero inside them Calc is forced to give the result,
+&lsquo;<samp><span class="samp">1 / (-2 .. 2) = [-inf .. inf]</span></samp>&rsquo;.
+
+   <p>While it may seem that intervals and error forms are similar, they are
+based on entirely different concepts of inexact quantities.  An error
+form
+<!-- `@var{x} @tfn{+/-} @math{\sigma}' -->
+`<var>x</var> <tt>+/-</tt> <var>sigma</var>'
+means a variable is random, and its value could
+be anything but is &ldquo;probably&rdquo; within one
+<!-- @math{\sigma} -->
+<var>sigma</var>
+of the mean value &lsquo;<samp><span class="samp">x</span></samp>&rsquo;. An interval
+`<tt>[</tt><var>a</var> <tt>..</tt> <var>b</var><tt>]</tt>' means a
+variable's value is unknown, but guaranteed to lie in the specified
+range.  Error forms are statistical or &ldquo;average case&rdquo; approximations;
+interval arithmetic tends to produce &ldquo;worst case&rdquo; bounds on an
+answer.
+
+   <p>Intervals may not contain complex numbers, but they may contain
+HMS forms or date forms.
+
+   <p>See <a href="Set-Operations.html#Set-Operations">Set Operations</a>, for commands that interpret interval forms
+as subsets of the set of real numbers.
+
+   <p><a name="index-intv-287"></a>The algebraic function &lsquo;<samp><span class="samp">intv(n, a, b)</span></samp>&rsquo; builds an interval form
+from &lsquo;<samp><span class="samp">a</span></samp>&rsquo; to &lsquo;<samp><span class="samp">b</span></samp>&rsquo;; &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is an integer code which must
+be 0 for &lsquo;<samp><span class="samp">(..)</span></samp>&rsquo;, 1 for &lsquo;<samp><span class="samp">(..]</span></samp>&rsquo;, 2 for &lsquo;<samp><span class="samp">[..)</span></samp>&rsquo;, or
+3 for &lsquo;<samp><span class="samp">[..]</span></samp>&rsquo;.
+
+   <p>Please note that in fully rigorous interval arithmetic, care would be
+taken to make sure that the computation of the lower bound rounds toward
+minus infinity, while upper bound computations round toward plus
+infinity.  Calc's arithmetic always uses a round-to-nearest mode,
+which means that roundoff errors could creep into an interval
+calculation to produce intervals slightly smaller than they ought to
+be.  For example, entering &lsquo;<samp><span class="samp">[1..2]</span></samp>&rsquo; and pressing <kbd>Q 2 ^</kbd>
+should yield the interval &lsquo;<samp><span class="samp">[1..2]</span></samp>&rsquo; again, but in fact it yields the
+(slightly too small) interval &lsquo;<samp><span class="samp">[1..1.9999999]</span></samp>&rsquo; due to roundoff
+error.
+
+   </body></html>
+

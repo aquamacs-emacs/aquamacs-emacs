@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Options (Viewing Cross-References) - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Options.html#Options" title="Options">
+<link rel="prev" href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029" title="Options (Index Support)">
+<link rel="next" href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029" title="Options (Finding Files)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Options-(Viewing-Cross-References)"></a>
+<a name="Options-_0028Viewing-Cross_002dReferences_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options-_0028Finding-Files_0029.html#Options-_0028Finding-Files_0029">Options (Finding Files)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Options-_0028Index-Support_0029.html#Options-_0028Index-Support_0029">Options (Index Support)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Options.html#Options">Options</a>
+<hr>
+</div>
+
+<h3 class="section">8.7 Viewing Cross-References</h3>
+
+<p><a name="index-Options_002c-viewing-cross_002dreferences-527"></a><a name="index-Viewing-cross_002dreferences_002c-options-528"></a>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-view-crossref-extra</b><var><a name="index-reftex_002dview_002dcrossref_002dextra-529"></a></var><br>
+<blockquote><p>Macros which can be used for the display of cross references. 
+This is used when `reftex-view-crossref' is called with point in an
+argument of a macro.  Note that crossref viewing for citations,
+references (both ways) and index entries is hard-coded.  This variable
+is only to configure additional structures for which crossreference
+viewing can be useful.  Each entry has the structure
+     <pre class="example">          (<var>macro-re</var> <var>search-re</var> <var>highlight</var>).
+</pre>
+        <p><var>macro-re</var> is matched against the macro.  <var>search-re</var> is the
+regexp used to search for cross references.  &lsquo;<samp><span class="samp">%s</span></samp>&rsquo; in this regexp is
+replaced with the macro argument at point.  <var>highlight</var> is an
+integer indicating which subgroup of the match should be highlighted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-auto-view-crossref</b><var><a name="index-reftex_002dauto_002dview_002dcrossref-530"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, initially turn automatic viewing of crossref info
+on.  Automatic viewing of crossref info normally uses the echo area. 
+Whenever point is idle for more than <code>reftex-idle-time</code> seconds on
+the argument of a <code>\ref</code> or <code>\cite</code> macro, and no other
+message is being displayed, the echo area will display information about
+that cross reference.  You can also set the variable to the symbol
+<code>window</code>.  In this case a small temporary window is used for the
+display.  This feature can be turned on and off from the menu
+(Ref-&gt;Options). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-idle-time</b><var><a name="index-reftex_002didle_002dtime-531"></a></var><br>
+<blockquote><p>Time (secs) Emacs has to be idle before automatic crossref display
+or toc recentering is done. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-cite-view-format</b><var><a name="index-reftex_002dcite_002dview_002dformat-532"></a></var><br>
+<blockquote><p>Citation format used to display citation info in the message area.  See
+the variable <code>reftex-cite-format</code> for possible percent
+escapes. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-revisit-to-echo</b><var><a name="index-reftex_002drevisit_002dto_002decho-533"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, automatic citation display will revisit files if
+necessary.  When nil, citation display in echo area will only be active
+for cached echo strings (see <code>reftex-cache-cite-echo</code>), or for
+BibTeX database files which are already visited by a live associated
+buffers. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-cache-cite-echo</b><var><a name="index-reftex_002dcache_002dcite_002decho-534"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, the information displayed in the echo area for
+cite macros (see variable <code>reftex-auto-view-crossref</code>) is cached and
+saved along with the parsing information.  The cache survives document
+scans.  In order to clear it, use <kbd>M-x reftex-reset-mode</kbd>. 
+</p></blockquote></div>
+
+   </body></html>
+

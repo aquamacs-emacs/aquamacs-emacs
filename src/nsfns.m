@@ -1391,6 +1391,49 @@ arg nil means cycle forwards.  */)
 }
 
 
+DEFUN ("ns-visible-frame-list", Fns_visible_frame_list, Sns_visible_frame_list,
+       0, 0, 0,
+       doc: /* Return a list of all visible NS frames on the current space.  */)
+  ()
+{
+  Lisp_Object tail, frame;
+  struct frame *f;
+  Lisp_Object value;
+
+  value = Qnil;
+  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+    {
+      frame = XCAR (tail);
+      if (!FRAMEP (frame))
+	continue;
+      f = XFRAME (frame);
+      if (FRAME_VISIBLE_P (f)
+	  && FRAME_NS_P (f)
+	  && (! ([[FRAME_NS_VIEW (f) window] respondsToSelector:@selector(isOnActiveSpace)]) // (NSAppKitVersionNumber 
+	      || [[FRAME_NS_VIEW (f) window] isOnActiveSpace]))
+	value = Fcons (frame, value);
+    }
+  return value;
+}
+
+DEFUN ("ns-frame-is-on-active-space-p", Fns_frame_is_on_active_space_p, Sns_frame_is_on_active_space_p,
+       0, 1, 0,
+       doc: /* Return non-nil if FRAME is on active space.
+OS X 10.6 only; returns non-nil prior to 10.5 or for non-NS frames.*/)
+  (frame)
+     Lisp_Object frame;
+{
+  struct frame *f;
+  check_ns ();
+  CHECK_LIVE_FRAME (frame);
+  f = XFRAME (frame);
+  NSWindow *win = [FRAME_NS_VIEW (f) window];
+  if (! ([win respondsToSelector:@selector(isOnActiveSpace)]) // (NSAppKitVersionNumber 
+      || [win isOnActiveSpace])
+    return Qt;
+  return Qnil;
+}
+
 /* Spelling */
 
 DEFUN ("ns-popup-spellchecker-panel", Fns_popup_spellchecker_panel, Sns_popup_spellchecker_panel,
@@ -3337,6 +3380,8 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_convert_utf8_nfd_to_nfc);
   defsubr (&Sx_focus_frame);
   defsubr (&Sns_cycle_frame);
+  defsubr (&Sns_visible_frame_list);
+  defsubr (&Sns_frame_is_on_active_space_p);
   defsubr (&Sns_popup_spellchecker_panel);
   defsubr (&Sns_close_spellchecker_panel);
   defsubr (&Sns_spellchecker_panel_visible_p);

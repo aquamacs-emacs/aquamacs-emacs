@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Move Commands - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Handling.html#Text-Handling" title="Text Handling">
+<link rel="next" href="Marking.html#Marking" title="Marking">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Move-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Marking.html#Marking">Marking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Handling.html#Text-Handling">Text Handling</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.2.1 Move Commands</h4>
+
+<p><a name="index-movement-commands-313"></a><a name="index-searching-314"></a><a name="index-textmarkers-315"></a><a name="index-markers-316"></a><a name="index-column-movement-317"></a><a name="index-paragraphs-318"></a><a name="index-headings-319"></a><a name="index-sections-320"></a><a name="index-sentences-321"></a><a name="index-matching-parens-322"></a><a name="index-paren-matching-323"></a>
+     <dl>
+<dt><kbd>&lt;count&gt;  h  C-h</kbd><dd>&lt;count&gt; chars to the left. 
+<br><dt><kbd>&lt;count&gt;  j  &lt;lf&gt; C-n</kbd><dd>&lt;count&gt; lines downward. 
+<br><dt><kbd>&lt;count&gt;  l  &lt;sp&gt;</kbd><dd>&lt;count&gt; chars to the right. 
+<br><dt><kbd>&lt;count&gt;  k  C-p</kbd><dd>&lt;count&gt; lines upward. 
+<br><dt><kbd>&lt;count&gt;  $</kbd><dd>To the end of line &lt;count&gt; from the cursor. 
+<br><dt><kbd>&lt;count&gt;  ^</kbd><dd>To the first CHAR &lt;count&gt; - 1 lines lower. 
+<br><dt><kbd>&lt;count&gt;  -</kbd><dd>To the first CHAR &lt;count&gt; lines higher. 
+<br><dt><kbd>&lt;count&gt;  +  &lt;cr&gt;</kbd><dd>To the first CHAR &lt;count&gt; lines lower. 
+<br><dt><kbd>0</kbd><dd>To the first char of the line. 
+<br><dt><kbd>&lt;count&gt; |</kbd><dd>To column &lt;count&gt;
+<br><dt><kbd>&lt;count&gt;  f&lt;char&gt;</kbd><dd>&lt;count&gt; &lt;char&gt;s to the right (find). 
+<br><dt><kbd>&lt;count&gt;  t&lt;char&gt;</kbd><dd>Till before &lt;count&gt; &lt;char&gt;s to the right. 
+<br><dt><kbd>&lt;count&gt;  F&lt;char&gt;</kbd><dd>&lt;count&gt; &lt;char&gt;s to the left. 
+<br><dt><kbd>&lt;count&gt;  T&lt;char&gt;</kbd><dd>Till after &lt;count&gt; &lt;char&gt;s to the left. 
+<br><dt><kbd>&lt;count&gt;  ;</kbd><dd>Repeat latest <kbd>f t F T</kbd> &lt;count&gt; times. 
+<br><dt><kbd>&lt;count&gt;  ,</kbd><dd>Repeat latest <kbd>f t F T</kbd>
+&lt;count&gt; times in opposite direction. 
+<br><dt><kbd>&lt;count&gt;  w</kbd><dd>&lt;count&gt; words forward. 
+<br><dt><kbd>&lt;count&gt;  W</kbd><dd>&lt;count&gt; WORDS forward. 
+<br><dt><kbd>&lt;count&gt;  b</kbd><dd>&lt;count&gt; words backward. 
+<br><dt><kbd>&lt;count&gt;  B</kbd><dd>&lt;count&gt; WORDS backward. 
+<br><dt><kbd>&lt;count&gt;  e</kbd><dd>To the end of word &lt;count&gt; forward. 
+<br><dt><kbd>&lt;count&gt;  E</kbd><dd>To the end of WORD &lt;count&gt; forward. 
+<br><dt><kbd>&lt;count&gt;  G</kbd><dd>Go to line &lt;count&gt; (default end-of-file). 
+<br><dt><kbd>&lt;count&gt;  H</kbd><dd>To line &lt;count&gt; from top of the screen (home). 
+<br><dt><kbd>&lt;count&gt;  L</kbd><dd>To line &lt;count&gt; from bottom of the screen (last). 
+<br><dt><kbd>M</kbd><dd>To the middle line of the screen. 
+<br><dt><kbd>&lt;count&gt;  )</kbd><dd>&lt;count&gt; sentences forward. 
+<br><dt><kbd>&lt;count&gt;  (</kbd><dd>&lt;count&gt; sentences backward. 
+<br><dt><kbd>&lt;count&gt;  }</kbd><dd>&lt;count&gt; paragraphs forward. 
+<br><dt><kbd>&lt;count&gt;  {</kbd><dd>&lt;count&gt; paragraphs backward. 
+<br><dt><kbd>&lt;count&gt;  ]]</kbd><dd>To the &lt;count&gt;th heading. 
+<br><dt><kbd>&lt;count&gt;  [[</kbd><dd>To the &lt;count&gt;th previous heading. 
+<br><dt><kbd>&lt;count&gt;  []</kbd><dd>To the end of &lt;count&gt;th heading. 
+<br><dt><kbd>m&lt;a-z&gt;</kbd><dd>Mark the cursor position with a letter. 
+<br><dt><kbd>`&lt;a-z&gt;</kbd><dd>To the mark. 
+<br><dt><kbd>'&lt;a-z&gt;</kbd><dd>To the first CHAR of the line with the mark. 
+<br><dt><kbd>[&lt;a-z&gt;</kbd><dd>Show contents of textmarker. 
+<br><dt><kbd>]&lt;a-z&gt;</kbd><dd>Show contents of register. 
+<br><dt><kbd>``</kbd><dd>To the cursor position before the latest absolute
+jump (of which are examples <kbd>/</kbd> and <kbd>G</kbd>). 
+<br><dt><kbd>''</kbd><dd>To the first CHAR of the line on which the cursor
+was placed before the latest absolute jump. 
+<br><dt><kbd>&lt;count&gt;  /&lt;string&gt;</kbd><dd>To the &lt;count&gt;th occurrence of &lt;string&gt;. 
+<br><dt><kbd>&lt;count&gt;  /&lt;cr&gt;</kbd><dd>To the &lt;count&gt;th occurrence of &lt;string&gt; from previous <kbd>/ or ?</kbd>. 
+<br><dt><kbd>&lt;count&gt;  ?&lt;string&gt;</kbd><dd>To the &lt;count&gt;th previous occurrence of &lt;string&gt;. 
+<br><dt><kbd>&lt;count&gt;  ?&lt;cr&gt;</kbd><dd>To the &lt;count&gt;th previous occurrence of &lt;string&gt; from previous <kbd>? or /</kbd>. 
+<br><dt><kbd>n</kbd><dd>Repeat latest <kbd>/</kbd> <kbd>?</kbd> (next). 
+<br><dt><kbd>N</kbd><dd>Repeat latest search in opposite direction. 
+<br><dt><kbd>C-c /</kbd><dd>Without a prefix argument, this command toggles
+case-sensitive/case-insensitive search modes and plain vanilla/regular
+expression search.  With the prefix argument 1, i.e.,
+<kbd>1 C-c /</kbd>, this toggles case-sensitivity; with the prefix argument 2,
+toggles plain vanilla search and search using
+regular expressions.  See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for alternative ways to invoke
+this function. 
+<a name="index-vanilla-search-324"></a><a name="index-case_002dsensitive-search-325"></a><a name="index-case_002dinsensitive-search-326"></a><br><dt><kbd>%</kbd><dd>Find the next bracket/parenthesis/brace and go to its match. 
+By default, Viper ignores brackets/parentheses/braces that occur inside
+parentheses.  You can change this by setting
+<code>viper-parse-sexp-ignore-comments</code> to <code>nil</code> in your <samp><span class="file">.viper</span></samp> file. 
+This option can also be toggled interactively if you quickly hit <kbd>%%%</kbd>.
+
+     <p>This latter feature is implemented as a vi-style keyboard macro.  If you
+don't want this macro, put
+
+     <pre class="example">          (viper-set-parsing-style-toggling-macro 'undefine)
+</pre>
+     <p><a name="index-g_t_0040code_007bviper_002dset_002dparsing_002dstyle_002dtoggling_002dmacro_007d-327"></a>
+in your <samp><span class="file">~/.viper</span></samp> file.
+
+   </dl>
+   <a name="index-g_t_0040kbd_007b_0025_007d-328"></a><a name="index-g_t_0040kbd_007bC_002dc-_002f_007d-329"></a><a name="index-g_t_0040kbd_007bN_007d-330"></a><a name="index-g_t_0040kbd_007bn_007d-331"></a><a name="index-g_t_0040kbd_007b_003f_003ccr_003e_007d-332"></a><a name="index-g_t_0040kbd_007b_002f_003ccr_003e_007d-333"></a><a name="index-g_t_0040kbd_007b_003f_003cstring_003e_007d-334"></a><a name="index-g_t_0040kbd_007b_002f_003cstring_003e_007d-335"></a><a name="index-g_t_0040kbd_007b_0027_0027_007d-336"></a><a name="index-g_t_0040kbd_007b_0060_0060_007d-337"></a><a name="index-g_t_0040kbd_007b_005d_003ca_002dz_003e_007d-338"></a><a name="index-g_t_0040kbd_007b_005b_003ca_002dz_003e_007d-339"></a><a name="index-g_t_0040kbd_007b_0027_003ca_002dz_003e_007d-340"></a><a name="index-g_t_0040kbd_007b_0060_003ca_002dz_003e_007d-341"></a><a name="index-g_t_0040kbd_007bm_003ca_002dz_003e_007d-342"></a><a name="index-g_t_0040kbd_007b_005b_005d_007d-343"></a><a name="index-g_t_0040kbd_007b_005b_005b_007d-344"></a><a name="index-g_t_0040kbd_007b_005d_005d_007d-345"></a><a name="index-g_t_0040kbd_007b_0040_007b_007d-346"></a><a name="index-g_t_0040kbd_007b_0040_007d_007d-347"></a><a name="index-g_t_0040kbd_007b_0028_007d-348"></a><a name="index-g_t_0040kbd_007b_0029_007d-349"></a><a name="index-g_t_0040kbd_007bM_007d-350"></a><a name="index-g_t_0040kbd_007bL_007d-351"></a><a name="index-g_t_0040kbd_007bH_007d-352"></a><a name="index-g_t_0040kbd_007bG_007d-353"></a><a name="index-g_t_0040kbd_007bE_007d-354"></a><a name="index-g_t_0040kbd_007be_007d-355"></a><a name="index-g_t_0040kbd_007bB_007d-356"></a><a name="index-g_t_0040kbd_007bb_007d-357"></a><a name="index-g_t_0040kbd_007bW_007d-358"></a><a name="index-g_t_0040kbd_007bw_007d-359"></a><a name="index-g_t_0040kbd_007b_002c_007d-360"></a><a name="index-g_t_0040kbd_007b_003b_007d-361"></a><a name="index-g_t_0040kbd_007bT_003cchar_003e_007d-362"></a><a name="index-g_t_0040kbd_007bF_003cchar_003e_007d-363"></a><a name="index-g_t_0040kbd_007bt_003cchar_003e_007d-364"></a><a name="index-g_t_0040kbd_007bf_003cchar_003e_007d-365"></a><a name="index-g_t_0040kbd_007b_007c_007d-366"></a><a name="index-g_t_0040kbd_007b0_007d-367"></a><a name="index-g_t_0040kbd_007b_003ccr_003e_007d-368"></a><a name="index-g_t_0040kbd_007b_002b_007d-369"></a><a name="index-g_t_0040kbd_007b_002d_007d-370"></a><a name="index-g_t_0040kbd_007b_005e_007d-371"></a><a name="index-g_t_0040kbd_007b_0024_007d-372"></a><a name="index-g_t_0040kbd_007bC_002dp_007d-373"></a><a name="index-g_t_0040kbd_007b_003clf_003e_007d-374"></a><a name="index-g_t_0040kbd_007b_003csp_003e_007d-375"></a><a name="index-g_t_0040kbd_007bC_002dn_007d-376"></a><a name="index-g_t_0040kbd_007bC_002dh_007d-377"></a><a name="index-g_t_0040kbd_007bh_007d-378"></a><a name="index-g_t_0040kbd_007bj_007d-379"></a><a name="index-g_t_0040kbd_007bk_007d-380"></a><a name="index-g_t_0040kbd_007bl_007d-381"></a><a name="index-g_t_0040code_007bviper_002dparse_002dsexp_002dignore_002dcomments_007d-382"></a>
+
+   </body></html>
+

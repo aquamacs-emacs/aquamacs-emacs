@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Mail and Post - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Composing-Messages.html#Composing-Messages" title="Composing Messages">
+<link rel="prev" href="POP-before-SMTP.html#POP-before-SMTP" title="POP before SMTP">
+<link rel="next" href="Archived-Messages.html#Archived-Messages" title="Archived Messages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mail-and-Post"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Archived-Messages.html#Archived-Messages">Archived Messages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="POP-before-SMTP.html#POP-before-SMTP">POP before SMTP</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Composing-Messages.html#Composing-Messages">Composing Messages</a>
+<hr>
+</div>
+
+<h3 class="section">5.4 Mail and Post</h3>
+
+<p>Here's a list of variables relevant to both mailing and
+posting:
+
+     <dl>
+<dt><code>gnus-mailing-list-groups</code><dd><a name="index-gnus_002dmailing_002dlist_002dgroups-1941"></a><a name="index-mailing-lists-1942"></a>
+If your news server offers groups that are really mailing lists
+gatewayed to the <acronym>NNTP</acronym> server, you can read those groups without
+problems, but you can't post/followup to them without some difficulty. 
+One solution is to add a <code>to-address</code> to the group parameters
+(see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>).  An easier thing to do is set the
+<code>gnus-mailing-list-groups</code> to a regexp that matches the groups that
+really are mailing lists.  Then, at least, followups to the mailing
+lists will work most of the time.  Posting to these groups (<kbd>a</kbd>) is
+still a pain, though.
+
+     <br><dt><code>gnus-user-agent</code><dd><a name="index-gnus_002duser_002dagent-1943"></a><a name="index-User_002dAgent-1944"></a>
+This variable controls which information should be exposed in the
+User-Agent header.  It can be a list of symbols or a string.  Valid
+symbols are <code>gnus</code> (show Gnus version) and <code>emacs</code> (show Emacs
+version).  In addition to the Emacs version, you can add <code>codename</code>
+(show (S)XEmacs codename) or either <code>config</code> (show system
+configuration) or <code>type</code> (show system type).  If you set it to a
+string, be sure to use a valid format, see RFC 2616.
+
+   </dl>
+
+   <p>You may want to do spell-checking on messages that you send out.  Or, if
+you don't want to spell-check by hand, you could add automatic
+spell-checking via the <code>ispell</code> package:
+
+   <p><a name="index-ispell-1945"></a><a name="index-ispell_002dmessage-1946"></a>
+<pre class="lisp">     (add-hook 'message-send-hook 'ispell-message)
+</pre>
+   <p>If you want to change the <code>ispell</code> dictionary based on what group
+you're in, you could say something like the following:
+
+<pre class="lisp">     (add-hook 'gnus-select-group-hook
+               (lambda ()
+                 (cond
+                  ((string-match
+                    "^de\\." (gnus-group-real-name gnus-newsgroup-name))
+                   (ispell-change-dictionary "deutsch"))
+                  (t
+                   (ispell-change-dictionary "english")))))
+</pre>
+   <p>Modify to suit your needs.
+
+   <p><a name="index-gnus_002dmessage_002dhighlight_002dcitation-1947"></a>If <code>gnus-message-highlight-citation</code> is t, different levels of
+citations are highlighted like in Gnus article buffers also in message
+mode buffers.
+
+   </body></html>
+

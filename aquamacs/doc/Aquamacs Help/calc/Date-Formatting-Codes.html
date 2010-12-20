@@ -1,0 +1,171 @@
+<html lang="en">
+<head>
+<title>Date Formatting Codes - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Date-Formats.html#Date-Formats" title="Date Formats">
+<link rel="prev" href="Date-Formats.html#Date-Formats" title="Date Formats">
+<link rel="next" href="Free_002dForm-Dates.html#Free_002dForm-Dates" title="Free-Form Dates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Date-Formatting-Codes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Free_002dForm-Dates.html#Free_002dForm-Dates">Free-Form Dates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Date-Formats.html#Date-Formats">Date Formats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Date-Formats.html#Date-Formats">Date Formats</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">7.7.7.1 Date Formatting Codes</h5>
+
+<p class="noindent">When displaying a date, the current date format is used.  All
+characters except for letters and &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo; are
+copied literally when dates are formatted.  The portion between
+&lsquo;<samp><span class="samp">&lt; &gt;</span></samp>&rsquo; markers is omitted for pure dates, or included for
+date/time forms.  Letters are interpreted according to the table
+below.
+
+   <p>When dates are read in during algebraic entry, Calc first tries to
+match the input string to the current format either with or without
+the time part.  The punctuation characters (including spaces) must
+match exactly; letter fields must correspond to suitable text in
+the input.  If this doesn't work, Calc checks if the input is a
+simple number; if so, the number is interpreted as a number of days
+since Jan 1, 1 AD.  Otherwise, Calc tries a much more relaxed and
+flexible algorithm which is described in the next section.
+
+   <p>Weekday names are ignored during reading.
+
+   <p>Two-digit year numbers are interpreted as lying in the range
+from 1941 to 2039.  Years outside that range are always
+entered and displayed in full.  Year numbers with a leading
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; sign are always interpreted exactly, allowing the
+entry and display of the years 1 through 99 AD.
+
+   <p>Here is a complete list of the formatting codes for dates:
+
+     <dl>
+<dt>Y<dd>Year:  &ldquo;91&rdquo; for 1991, &ldquo;7&rdquo; for 2007, &ldquo;+23&rdquo; for 23 AD. 
+<br><dt>YY<dd>Year:  &ldquo;91&rdquo; for 1991, &ldquo;07&rdquo; for 2007, &ldquo;+23&rdquo; for 23 AD. 
+<br><dt>BY<dd>Year:  &ldquo;91&rdquo; for 1991, &ldquo; 7&rdquo; for 2007, &ldquo;+23&rdquo; for 23 AD. 
+<br><dt>YYY<dd>Year:  &ldquo;1991&rdquo; for 1991, &ldquo;23&rdquo; for 23 AD. 
+<br><dt>YYYY<dd>Year:  &ldquo;1991&rdquo; for 1991, &ldquo;+23&rdquo; for 23 AD. 
+<br><dt>aa<dd>Year:  &ldquo;ad&rdquo; or blank. 
+<br><dt>AA<dd>Year:  &ldquo;AD&rdquo; or blank. 
+<br><dt>aaa<dd>Year:  &ldquo;ad &rdquo; or blank.  (Note trailing space.) 
+<br><dt>AAA<dd>Year:  &ldquo;AD &rdquo; or blank. 
+<br><dt>aaaa<dd>Year:  &ldquo;a.d.&rdquo; or blank. 
+<br><dt>AAAA<dd>Year:  &ldquo;A.D.&rdquo; or blank. 
+<br><dt>bb<dd>Year:  &ldquo;bc&rdquo; or blank. 
+<br><dt>BB<dd>Year:  &ldquo;BC&rdquo; or blank. 
+<br><dt>bbb<dd>Year:  &ldquo; bc&rdquo; or blank.  (Note leading space.) 
+<br><dt>BBB<dd>Year:  &ldquo; BC&rdquo; or blank. 
+<br><dt>bbbb<dd>Year:  &ldquo;b.c.&rdquo; or blank. 
+<br><dt>BBBB<dd>Year:  &ldquo;B.C.&rdquo; or blank. 
+<br><dt>M<dd>Month:  &ldquo;8&rdquo; for August. 
+<br><dt>MM<dd>Month:  &ldquo;08&rdquo; for August. 
+<br><dt>BM<dd>Month:  &ldquo; 8&rdquo; for August. 
+<br><dt>MMM<dd>Month:  &ldquo;AUG&rdquo; for August. 
+<br><dt>Mmm<dd>Month:  &ldquo;Aug&rdquo; for August. 
+<br><dt>mmm<dd>Month:  &ldquo;aug&rdquo; for August. 
+<br><dt>MMMM<dd>Month:  &ldquo;AUGUST&rdquo; for August. 
+<br><dt>Mmmm<dd>Month:  &ldquo;August&rdquo; for August. 
+<br><dt>D<dd>Day:  &ldquo;7&rdquo; for 7th day of month. 
+<br><dt>DD<dd>Day:  &ldquo;07&rdquo; for 7th day of month. 
+<br><dt>BD<dd>Day:  &ldquo; 7&rdquo; for 7th day of month. 
+<br><dt>W<dd>Weekday:  &ldquo;0&rdquo; for Sunday, &ldquo;6&rdquo; for Saturday. 
+<br><dt>WWW<dd>Weekday:  &ldquo;SUN&rdquo; for Sunday. 
+<br><dt>Www<dd>Weekday:  &ldquo;Sun&rdquo; for Sunday. 
+<br><dt>www<dd>Weekday:  &ldquo;sun&rdquo; for Sunday. 
+<br><dt>WWWW<dd>Weekday:  &ldquo;SUNDAY&rdquo; for Sunday. 
+<br><dt>Wwww<dd>Weekday:  &ldquo;Sunday&rdquo; for Sunday. 
+<br><dt>d<dd>Day of year:  &ldquo;34&rdquo; for Feb. 3. 
+<br><dt>ddd<dd>Day of year:  &ldquo;034&rdquo; for Feb. 3. 
+<br><dt>bdd<dd>Day of year:  &ldquo; 34&rdquo; for Feb. 3. 
+<br><dt>h<dd>Hour:  &ldquo;5&rdquo; for 5 AM; &ldquo;17&rdquo; for 5 PM. 
+<br><dt>hh<dd>Hour:  &ldquo;05&rdquo; for 5 AM; &ldquo;17&rdquo; for 5 PM. 
+<br><dt>bh<dd>Hour:  &ldquo; 5&rdquo; for 5 AM; &ldquo;17&rdquo; for 5 PM. 
+<br><dt>H<dd>Hour:  &ldquo;5&rdquo; for 5 AM and 5 PM. 
+<br><dt>HH<dd>Hour:  &ldquo;05&rdquo; for 5 AM and 5 PM. 
+<br><dt>BH<dd>Hour:  &ldquo; 5&rdquo; for 5 AM and 5 PM. 
+<br><dt>p<dd>AM/PM:  &ldquo;a&rdquo; or &ldquo;p&rdquo;. 
+<br><dt>P<dd>AM/PM:  &ldquo;A&rdquo; or &ldquo;P&rdquo;. 
+<br><dt>pp<dd>AM/PM:  &ldquo;am&rdquo; or &ldquo;pm&rdquo;. 
+<br><dt>PP<dd>AM/PM:  &ldquo;AM&rdquo; or &ldquo;PM&rdquo;. 
+<br><dt>pppp<dd>AM/PM:  &ldquo;a.m.&rdquo; or &ldquo;p.m.&rdquo;. 
+<br><dt>PPPP<dd>AM/PM:  &ldquo;A.M.&rdquo; or &ldquo;P.M.&rdquo;. 
+<br><dt>m<dd>Minutes:  &ldquo;7&rdquo; for 7. 
+<br><dt>mm<dd>Minutes:  &ldquo;07&rdquo; for 7. 
+<br><dt>bm<dd>Minutes:  &ldquo; 7&rdquo; for 7. 
+<br><dt>s<dd>Seconds:  &ldquo;7&rdquo; for 7;  &ldquo;7.23&rdquo; for 7.23. 
+<br><dt>ss<dd>Seconds:  &ldquo;07&rdquo; for 7;  &ldquo;07.23&rdquo; for 7.23. 
+<br><dt>bs<dd>Seconds:  &ldquo; 7&rdquo; for 7;  &ldquo; 7.23&rdquo; for 7.23. 
+<br><dt>SS<dd>Optional seconds:  &ldquo;07&rdquo; for 7;  blank for 0. 
+<br><dt>BS<dd>Optional seconds:  &ldquo; 7&rdquo; for 7;  blank for 0. 
+<br><dt>N<dd>Numeric date/time:  &ldquo;726842.25&rdquo; for 6:00am Wed Jan 9, 1991. 
+<br><dt>n<dd>Numeric date:  &ldquo;726842&rdquo; for any time on Wed Jan 9, 1991. 
+<br><dt>J<dd>Julian date/time:  &ldquo;2448265.75&rdquo; for 6:00am Wed Jan 9, 1991. 
+<br><dt>j<dd>Julian date:  &ldquo;2448266&rdquo; for any time on Wed Jan 9, 1991. 
+<br><dt>U<dd>Unix time:  &ldquo;663400800&rdquo; for 6:00am Wed Jan 9, 1991. 
+<br><dt>X<dd>Brackets suppression.  An &ldquo;X&rdquo; at the front of the format
+causes the surrounding &lsquo;<samp><span class="samp">&lt;&nbsp;&gt;</span></samp>&rsquo;<!-- /@w --> delimiters to be omitted
+when formatting dates.  Note that the brackets are still
+required for algebraic entry. 
+</dl>
+
+   <p>If &ldquo;SS&rdquo; or &ldquo;BS&rdquo; (optional seconds) is preceded by a colon, the
+colon is also omitted if the seconds part is zero.
+
+   <p>If &ldquo;bb,&rdquo; &ldquo;bbb&rdquo; or &ldquo;bbbb&rdquo; or their upper-case equivalents
+appear in the format, then negative year numbers are displayed
+without a minus sign.  Note that &ldquo;aa&rdquo; and &ldquo;bb&rdquo; are mutually
+exclusive.  Some typical usages would be &lsquo;<samp><span class="samp">YYYY AABB</span></samp>&rsquo;;
+&lsquo;<samp><span class="samp">AAAYYYYBBB</span></samp>&rsquo;; &lsquo;<samp><span class="samp">YYYYBBB</span></samp>&rsquo;.
+
+   <p>The formats &ldquo;YY,&rdquo; &ldquo;YYYY,&rdquo; &ldquo;MM,&rdquo; &ldquo;DD,&rdquo; &ldquo;ddd,&rdquo; &ldquo;hh,&rdquo; &ldquo;HH,&rdquo;
+&ldquo;mm,&rdquo; &ldquo;ss,&rdquo; and &ldquo;SS&rdquo; actually match any number of digits during
+reading unless several of these codes are strung together with no
+punctuation in between, in which case the input must have exactly as
+many digits as there are letters in the format.
+
+   <p>The &ldquo;j,&rdquo; &ldquo;J,&rdquo; and &ldquo;U&rdquo; formats do not make any time zone
+adjustment.  They effectively use &lsquo;<samp><span class="samp">julian(x,0)</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">unixtime(x,0)</span></samp>&rsquo; to make the conversion; see <a href="Date-Arithmetic.html#Date-Arithmetic">Date Arithmetic</a>.
+
+   </body></html>
+

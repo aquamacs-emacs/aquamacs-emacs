@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Functions for Declarations - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Declarations.html#Declarations" title="Declarations">
+<link rel="prev" href="Kinds-of-Declarations.html#Kinds-of-Declarations" title="Kinds of Declarations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Functions-for-Declarations"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Kinds-of-Declarations.html#Kinds-of-Declarations">Kinds of Declarations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Declarations.html#Declarations">Declarations</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.6.3 Functions for Declarations</h4>
+
+<p class="noindent">Calc has a set of functions for accessing the current declarations
+in a convenient manner.  These functions return 1 if the argument
+can be shown to have the specified property, or 0 if the argument
+can be shown <em>not</em> to have that property; otherwise they are
+left unevaluated.  These functions are suitable for use with rewrite
+rules (see <a href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules">Conditional Rewrite Rules</a>) or programming constructs
+(see <a href="Conditionals-in-Macros.html#Conditionals-in-Macros">Conditionals in Macros</a>).  They can be entered only using
+algebraic notation.  See <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>, for functions
+that perform other tests not related to declarations.
+
+   <p>For example, &lsquo;<samp><span class="samp">dint(17)</span></samp>&rsquo; returns 1 because 17 is an integer, as
+do &lsquo;<samp><span class="samp">dint(n)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">dint(2 n - 3)</span></samp>&rsquo; if <code>n</code> has been declared
+<code>int</code>, but &lsquo;<samp><span class="samp">dint(2.5)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">dint(n + 0.5)</span></samp>&rsquo; return 0. 
+Calc consults knowledge of its own built-in functions as well as your
+own declarations: &lsquo;<samp><span class="samp">dint(floor(x))</span></samp>&rsquo; returns 1.
+
+   <p><a name="index-dint-462"></a><a name="index-dnumint-463"></a><a name="index-dnatnum-464"></a>The <code>dint</code> function checks if its argument is an integer. 
+The <code>dnatnum</code> function checks if its argument is a natural
+number, i.e., a nonnegative integer.  The <code>dnumint</code> function
+checks if its argument is numerically an integer, i.e., either an
+integer or an integer-valued float.  Note that these and the other
+data type functions also accept vectors or matrices composed of
+suitable elements, and that real infinities &lsquo;<samp><span class="samp">inf</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-inf</span></samp>&rsquo;
+are considered to be integers for the purposes of these functions.
+
+   <p><a name="index-drat-465"></a>The <code>drat</code> function checks if its argument is rational, i.e.,
+an integer or fraction.  Infinities count as rational, but intervals
+and error forms do not.
+
+   <p><a name="index-dreal-466"></a>The <code>dreal</code> function checks if its argument is real.  This
+includes integers, fractions, floats, real error forms, and intervals.
+
+   <p><a name="index-dimag-467"></a>The <code>dimag</code> function checks if its argument is imaginary,
+i.e., is mathematically equal to a real number times &lsquo;<samp><span class="samp">i</span></samp>&rsquo;.
+
+   <p><a name="index-dpos-468"></a><a name="index-dneg-469"></a><a name="index-dnonneg-470"></a>The <code>dpos</code> function checks for positive (but nonzero) reals. 
+The <code>dneg</code> function checks for negative reals.  The <code>dnonneg</code>
+function checks for nonnegative reals, i.e., reals greater than or
+equal to zero.  Note that the <kbd>a s</kbd> command can simplify an
+expression like &lsquo;<samp><span class="samp">x &gt; 0</span></samp>&rsquo; to 1 or 0 using <code>dpos</code>, and that
+<kbd>a s</kbd> is effectively applied to all conditions in rewrite rules,
+so the actual functions <code>dpos</code>, <code>dneg</code>, and <code>dnonneg</code>
+are rarely necessary.
+
+   <p><a name="index-dnonzero-471"></a>The <code>dnonzero</code> function checks that its argument is nonzero. 
+This includes all nonzero real or complex numbers, all intervals that
+do not include zero, all nonzero modulo forms, vectors all of whose
+elements are nonzero, and variables or formulas whose values can be
+deduced to be nonzero.  It does not include error forms, since they
+represent values which could be anything including zero.  (This is
+also the set of objects considered &ldquo;true&rdquo; in conditional contexts.)
+
+   <p><a name="index-deven-472"></a><a name="index-dodd-473"></a>The <code>deven</code> function returns 1 if its argument is known to be
+an even integer (or integer-valued float); it returns 0 if its argument
+is known not to be even (because it is known to be odd or a non-integer). 
+The <kbd>a s</kbd> command uses this to simplify a test of the form
+&lsquo;<samp><span class="samp">x % 2 = 0</span></samp>&rsquo;.  There is also an analogous <code>dodd</code> function.
+
+   <p><a name="index-drange-474"></a>The <code>drange</code> function returns a set (an interval or a vector
+of intervals and/or numbers; see <a href="Set-Operations.html#Set-Operations">Set Operations</a>) that describes
+the set of possible values of its argument.  If the argument is
+a variable or a function with a declaration, the range is copied
+from the declaration.  Otherwise, the possible signs of the
+expression are determined using a method similar to <code>dpos</code>,
+etc., and a suitable set like &lsquo;<samp><span class="samp">[0 .. inf]</span></samp>&rsquo; is returned.  If
+the expression is not provably real, the <code>drange</code> function
+remains unevaluated.
+
+   <p><a name="index-dscalar-475"></a>The <code>dscalar</code> function returns 1 if its argument is provably
+scalar, or 0 if its argument is provably non-scalar.  It is left
+unevaluated if this cannot be determined.  (If Matrix mode or Scalar
+mode is in effect, this function returns 1 or 0, respectively,
+if it has no other information.)  When Calc interprets a condition
+(say, in a rewrite rule) it considers an unevaluated formula to be
+&ldquo;false.&rdquo;  Thus, &lsquo;<samp><span class="samp">dscalar(a)</span></samp>&rsquo; is &ldquo;true&rdquo; only if <code>a</code> is
+provably scalar, and &lsquo;<samp><span class="samp">!dscalar(a)</span></samp>&rsquo; is &ldquo;true&rdquo; only if <code>a</code>
+is provably non-scalar; both are &ldquo;false&rdquo; if there is insufficient
+information to tell.
+
+   </body></html>
+

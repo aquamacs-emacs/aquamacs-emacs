@@ -1,0 +1,431 @@
+<html lang="en">
+<head>
+<title>Modes Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Basic-Tutorial.html#Basic-Tutorial" title="Basic Tutorial">
+<link rel="prev" href="Undo-Tutorial.html#Undo-Tutorial" title="Undo Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Modes-Tutorial"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Undo-Tutorial.html#Undo-Tutorial">Undo Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Tutorial.html#Basic-Tutorial">Basic Tutorial</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.1.4 Mode-Setting Commands</h4>
+
+<p class="noindent">Calc has many types of <dfn>modes</dfn> that affect the way it interprets
+your commands or the way it displays data.  We have already seen one
+mode, namely Algebraic mode.  There are many others, too; we'll
+try some of the most common ones here.
+
+   <p>Perhaps the most fundamental mode in Calc is the current <dfn>precision</dfn>. 
+Notice the &lsquo;<samp><span class="samp">12</span></samp>&rsquo; on the Calc window's mode line:
+
+<pre class="smallexample">     --%*-Calc: 12 Deg       (Calculator)----All------
+</pre>
+   <p class="noindent">Most of the symbols there are Emacs things you don't need to worry
+about, but the &lsquo;<samp><span class="samp">12</span></samp>&rsquo; and the &lsquo;<samp><span class="samp">Deg</span></samp>&rsquo; are mode indicators. 
+The &lsquo;<samp><span class="samp">12</span></samp>&rsquo; means that calculations should always be carried to
+12 significant figures.  That is why, when we type <kbd>1 &lt;RET&gt; 7 /</kbd>,
+we get &lsquo;<samp><span class="samp">0.142857142857</span></samp>&rsquo; with exactly 12 digits, not counting
+leading and trailing zeros.
+
+   <p>You can set the precision to anything you like by pressing <kbd>p</kbd>,
+then entering a suitable number.  Try pressing <kbd>p 30 &lt;RET&gt;</kbd>,
+then doing <kbd>1 &lt;RET&gt; 7 /</kbd> again:
+
+<pre class="smallexample">     1:  0.142857142857
+     2:  0.142857142857142857142857142857
+         .
+</pre>
+   <p>Although the precision can be set arbitrarily high, Calc always
+has to have <em>some</em> value for the current precision.  After
+all, the true value &lsquo;<samp><span class="samp">1/7</span></samp>&rsquo; is an infinitely repeating decimal;
+Calc has to stop somewhere.
+
+   <p>Of course, calculations are slower the more digits you request. 
+Press <kbd>p&nbsp;12</kbd><!-- /@w --> now to set the precision back down to the default.
+
+   <p>Calculations always use the current precision.  For example, even
+though we have a 30-digit value for &lsquo;<samp><span class="samp">1/7</span></samp>&rsquo; on the stack, if
+we use it in a calculation in 12-digit mode it will be rounded
+down to 12 digits before it is used.  Try it; press &lt;RET&gt; to
+duplicate the number, then <kbd>1&nbsp;+</kbd><!-- /@w -->.  Notice that the &lt;RET&gt;
+key didn't round the number, because it doesn't do any calculation. 
+But the instant we pressed <kbd>+</kbd>, the number was rounded down.
+
+<pre class="smallexample">     1:  0.142857142857
+     2:  0.142857142857142857142857142857
+     3:  1.14285714286
+         .
+</pre>
+   <p class="noindent">In fact, since we added a digit on the left, we had to lose one
+digit on the right from even the 12-digit value of &lsquo;<samp><span class="samp">1/7</span></samp>&rsquo;.
+
+   <p>How did we get more than 12 digits when we computed &lsquo;<samp><span class="samp">2^3^4</span></samp>&rsquo;?  The
+answer is that Calc makes a distinction between <dfn>integers</dfn> and
+<dfn>floating-point</dfn> numbers, or <dfn>floats</dfn>.  An integer is a number
+that does not contain a decimal point.  There is no such thing as an
+&ldquo;infinitely repeating fraction integer,&rdquo; so Calc doesn't have to limit
+itself.  If you asked for &lsquo;<samp><span class="samp">2^10000</span></samp>&rsquo; (don't try this!), you would
+have to wait a long time but you would eventually get an exact answer. 
+If you ask for &lsquo;<samp><span class="samp">2.^10000</span></samp>&rsquo;, you will quickly get an answer which is
+correct only to 12 places.  The decimal point tells Calc that it should
+use floating-point arithmetic to get the answer, not exact integer
+arithmetic.
+
+   <p>You can use the <kbd>F</kbd> (<code>calc-floor</code>) command to convert a
+floating-point value to an integer, and <kbd>c f</kbd> (<code>calc-float</code>)
+to convert an integer to floating-point form.
+
+   <p>Let's try entering that last calculation:
+
+<pre class="smallexample">     1:  2.         2:  2.         1:  1.99506311689e3010
+         .          1:  10000          .
+                        .
+     
+       2.0 &lt;RET&gt;          10000 &lt;RET&gt;      ^
+</pre>
+   <p class="noindent"><a name="index-Scientific-notation_002c-entry-of-18"></a>Notice the letter &lsquo;<samp><span class="samp">e</span></samp>&rsquo; in there.  It represents &ldquo;times ten to the
+power of,&rdquo; and is used by Calc automatically whenever writing the
+number out fully would introduce more extra zeros than you probably
+want to see.  You can enter numbers in this notation, too.
+
+<pre class="smallexample">     1:  2.         2:  2.         1:  1.99506311678e3010
+         .          1:  10000.         .
+                        .
+     
+       2.0 &lt;RET&gt;          1e4 &lt;RET&gt;        ^
+</pre>
+   <p><a name="index-Round_002doff-errors-19"></a>Hey, the answer is different!  Look closely at the middle columns
+of the two examples.  In the first, the stack contained the
+exact integer &lsquo;<samp><span class="samp">10000</span></samp>&rsquo;, but in the second it contained
+a floating-point value with a decimal point.  When you raise a
+number to an integer power, Calc uses repeated squaring and
+multiplication to get the answer.  When you use a floating-point
+power, Calc uses logarithms and exponentials.  As you can see,
+a slight error crept in during one of these methods.  Which
+one should we trust?  Let's raise the precision a bit and find
+out:
+
+<pre class="smallexample">         .          1:  2.         2:  2.         1:  1.995063116880828e3010
+                        .          1:  10000.         .
+                                       .
+     
+      p 16 &lt;RET&gt;        2. &lt;RET&gt;           1e4            ^    p 12 &lt;RET&gt;
+</pre>
+   <p class="noindent"><a name="index-Guard-digits-20"></a>Presumably, it doesn't matter whether we do this higher-precision
+calculation using an integer or floating-point power, since we
+have added enough &ldquo;guard digits&rdquo; to trust the first 12 digits
+no matter what.  And the verdict is<small class="dots">...</small>  Integer powers were more
+accurate; in fact, the result was only off by one unit in the
+last place.
+
+   <p><a name="index-Guard-digits-21"></a>Calc does many of its internal calculations to a slightly higher
+precision, but it doesn't always bump the precision up enough. 
+In each case, Calc added about two digits of precision during
+its calculation and then rounded back down to 12 digits
+afterward.  In one case, it was enough; in the other, it
+wasn't.  If you really need <var>x</var> digits of precision, it
+never hurts to do the calculation with a few extra guard digits.
+
+   <p>What if we want guard digits but don't want to look at them? 
+We can set the <dfn>float format</dfn>.  Calc supports four major
+formats for floating-point numbers, called <dfn>normal</dfn>,
+<dfn>fixed-point</dfn>, <dfn>scientific notation</dfn>, and <dfn>engineering
+notation</dfn>.  You get them by pressing <kbd>d&nbsp;n</kbd><!-- /@w -->, <kbd>d f</kbd>,
+<kbd>d s</kbd>, and <kbd>d e</kbd>, respectively.  In each case, you can
+supply a numeric prefix argument which says how many digits
+should be displayed.  As an example, let's put a few numbers
+onto the stack and try some different display modes.  First,
+use <kbd>M-0 &lt;DEL&gt;</kbd> to clear the stack, then enter the four
+numbers shown here:
+
+<pre class="smallexample">     4:  12345      4:  12345      4:  12345      4:  12345      4:  12345
+     3:  12345.     3:  12300.     3:  1.2345e4   3:  1.23e4     3:  12345.000
+     2:  123.45     2:  123.       2:  1.2345e2   2:  1.23e2     2:  123.450
+     1:  12.345     1:  12.3       1:  1.2345e1   1:  1.23e1     1:  12.345
+         .              .              .              .              .
+     
+        d n          M-3 d n          d s          M-3 d s        M-3 d f
+</pre>
+   <p class="noindent">Notice that when we typed <kbd>M-3 d n</kbd>, the numbers were rounded down
+to three significant digits, but then when we typed <kbd>d s</kbd> all
+five significant figures reappeared.  The float format does not
+affect how numbers are stored, it only affects how they are
+displayed.  Only the current precision governs the actual rounding
+of numbers in the Calculator's memory.
+
+   <p>Engineering notation, not shown here, is like scientific notation
+except the exponent (the power-of-ten part) is always adjusted to be
+a multiple of three (as in &ldquo;kilo,&rdquo; &ldquo;micro,&rdquo; etc.).  As a result
+there will be one, two, or three digits before the decimal point.
+
+   <p>Whenever you change a display-related mode, Calc redraws everything
+in the stack.  This may be slow if there are many things on the stack,
+so Calc allows you to type shift-<kbd>H</kbd> before any mode command to
+prevent it from updating the stack.  Anything Calc displays after the
+mode-changing command will appear in the new format.
+
+<pre class="smallexample">     4:  12345      4:  12345      4:  12345      4:  12345      4:  12345
+     3:  12345.000  3:  12345.000  3:  12345.000  3:  1.2345e4   3:  12345.
+     2:  123.450    2:  123.450    2:  1.2345e1   2:  1.2345e1   2:  123.45
+     1:  12.345     1:  1.2345e1   1:  1.2345e2   1:  1.2345e2   1:  12.345
+         .              .              .              .              .
+     
+         H d s          &lt;DEL&gt; U          &lt;TAB&gt;            d &lt;SPC&gt;          d n
+</pre>
+   <p class="noindent">Here the <kbd>H d s</kbd> command changes to scientific notation but without
+updating the screen.  Deleting the top stack entry and undoing it back
+causes it to show up in the new format; swapping the top two stack
+entries reformats both entries.  The <kbd>d &lt;SPC&gt;</kbd> command refreshes the
+whole stack.  The <kbd>d n</kbd> command changes back to the normal float
+format; since it doesn't have an <kbd>H</kbd> prefix, it also updates all
+the stack entries to be in <kbd>d n</kbd> format.
+
+   <p>Notice that the integer &lsquo;<samp><span class="samp">12345</span></samp>&rsquo; was not affected by any
+of the float formats.  Integers are integers, and are always
+displayed exactly.
+
+   <p><a name="index-Large-numbers_002c-readability-22"></a>Large integers have their own problems.  Let's look back at
+the result of <kbd>2^3^4</kbd>.
+
+<pre class="example">     2417851639229258349412352
+</pre>
+   <p class="noindent">Quick&mdash;how many digits does this have?  Try typing <kbd>d g</kbd>:
+
+<pre class="example">     2,417,851,639,229,258,349,412,352
+</pre>
+   <p class="noindent">Now how many digits does this have?  It's much easier to tell! 
+We can actually group digits into clumps of any size.  Some
+people prefer <kbd>M-5 d g</kbd>:
+
+<pre class="example">     24178,51639,22925,83494,12352
+</pre>
+   <p>Let's see what happens to floating-point numbers when they are grouped. 
+First, type <kbd>p 25 &lt;RET&gt;</kbd> to make sure we have enough precision
+to get ourselves into trouble.  Now, type <kbd>1e13 /</kbd>:
+
+<pre class="example">     24,17851,63922.9258349412352
+</pre>
+   <p class="noindent">The integer part is grouped but the fractional part isn't.  Now try
+<kbd>M-- M-5 d g</kbd> (that's meta-minus-sign, meta-five):
+
+<pre class="example">     24,17851,63922.92583,49412,352
+</pre>
+   <p>If you find it hard to tell the decimal point from the commas, try
+changing the grouping character to a space with <kbd>d , &lt;SPC&gt;</kbd>:
+
+<pre class="example">     24 17851 63922.92583 49412 352
+</pre>
+   <p>Type <kbd>d , ,</kbd> to restore the normal grouping character, then
+<kbd>d g</kbd> again to turn grouping off.  Also, press <kbd>p 12</kbd> to
+restore the default precision.
+
+   <p>Press <kbd>U</kbd> enough times to get the original big integer back. 
+(Notice that <kbd>U</kbd> does not undo each mode-setting command; if
+you want to undo a mode-setting command, you have to do it yourself.) 
+Now, type <kbd>d r 16 &lt;RET&gt;</kbd>:
+
+<pre class="example">     16#200000000000000000000
+</pre>
+   <p class="noindent">The number is now displayed in <dfn>hexadecimal</dfn>, or &ldquo;base-16&rdquo; form. 
+Suddenly it looks pretty simple; this should be no surprise, since we
+got this number by computing a power of two, and 16 is a power of 2. 
+In fact, we can use <kbd>d&nbsp;r&nbsp;2&nbsp;&lt;RET&gt;</kbd><!-- /@w --> to see it in actual binary
+form:
+
+<pre class="example">     2#1000000000000000000000000000000000000000000000000000000 ...
+</pre>
+   <p class="noindent">We don't have enough space here to show all the zeros!  They won't
+fit on a typical screen, either, so you will have to use horizontal
+scrolling to see them all.  Press <kbd>&lt;</kbd> and <kbd>&gt;</kbd> to scroll the
+stack window left and right by half its width.  Another way to view
+something large is to press <kbd>`</kbd> (back-quote) to edit the top of
+stack in a separate window.  (Press <kbd>C-c C-c</kbd> when you are done.)
+
+   <p>You can enter non-decimal numbers using the <kbd>#</kbd> symbol, too. 
+Let's see what the hexadecimal number &lsquo;<samp><span class="samp">5FE</span></samp>&rsquo; looks like in
+binary.  Type <kbd>16#5FE</kbd> (the letters can be typed in upper or
+lower case; they will always appear in upper case).  It will also
+help to turn grouping on with <kbd>d g</kbd>:
+
+<pre class="example">     2#101,1111,1110
+</pre>
+   <p>Notice that <kbd>d g</kbd> groups by fours by default if the display radix
+is binary or hexadecimal, but by threes if it is decimal, octal, or any
+other radix.
+
+   <p>Now let's see that number in decimal; type <kbd>d r 10</kbd>:
+
+<pre class="example">     1,534
+</pre>
+   <p>Numbers are not <em>stored</em> with any particular radix attached.  They're
+just numbers; they can be entered in any radix, and are always displayed
+in whatever radix you've chosen with <kbd>d r</kbd>.  The current radix applies
+to integers, fractions, and floats.
+
+   <p><a name="index-Roundoff-errors_002c-in-non_002ddecimal-numbers-23"></a>(&bull;) <strong>Exercise 1.</strong>  Your friend Joe tried to enter one-third
+as &lsquo;<samp><span class="samp">3#0.1</span></samp>&rsquo; in <kbd>d r 3</kbd> mode with a precision of 12.  He got
+&lsquo;<samp><span class="samp">3#0.0222222...</span></samp>&rsquo; (with 25 2's) in the display.  When he multiplied
+that by three, he got &lsquo;<samp><span class="samp">3#0.222222...</span></samp>&rsquo; instead of the expected
+&lsquo;<samp><span class="samp">3#1</span></samp>&rsquo;.  Next, Joe entered &lsquo;<samp><span class="samp">3#0.2</span></samp>&rsquo; and, to his great relief,
+saw &lsquo;<samp><span class="samp">3#0.2</span></samp>&rsquo; on the screen.  But when he typed <kbd>2 /</kbd>, he got
+&lsquo;<samp><span class="samp">3#0.10000001</span></samp>&rsquo; (some zeros omitted).  What's going on here? 
+See <a href="Modes-Answer-1.html#Modes-Answer-1">1</a>. (&bull;)
+
+   <p><a name="index-Scientific-notation_002c-in-non_002ddecimal-numbers-24"></a>(&bull;) <strong>Exercise 2.</strong>  Scientific notation works in non-decimal
+modes in the natural way (the exponent is a power of the radix instead of
+a power of ten, although the exponent itself is always written in decimal). 
+Thus &lsquo;<samp><span class="samp">8#1.23e3 = 8#1230.0</span></samp>&rsquo;.  Suppose we have the hexadecimal number
+&lsquo;<samp><span class="samp">f.e8f</span></samp>&rsquo; times 16 to the 15th power:  We write &lsquo;<samp><span class="samp">16#f.e8fe15</span></samp>&rsquo;. 
+What is wrong with this picture?  What could we write instead that would
+work better?  See <a href="Modes-Answer-2.html#Modes-Answer-2">2</a>. (&bull;)
+
+   <p>The <kbd>m</kbd> prefix key has another set of modes, relating to the way
+Calc interprets your inputs and does computations.  Whereas <kbd>d</kbd>-prefix
+modes generally affect the way things look, <kbd>m</kbd>-prefix modes affect
+the way they are actually computed.
+
+   <p>The most popular <kbd>m</kbd>-prefix mode is the <dfn>angular mode</dfn>.  Notice
+the &lsquo;<samp><span class="samp">Deg</span></samp>&rsquo; indicator in the mode line.  This means that if you use
+a command that interprets a number as an angle, it will assume the
+angle is measured in degrees.  For example,
+
+<pre class="smallexample">     1:  45         1:  0.707106781187   1:  0.500000000001    1:  0.5
+         .              .                    .                     .
+     
+         45             S                    2 ^                   c 1
+</pre>
+   <p class="noindent">The shift-<kbd>S</kbd> command computes the sine of an angle.  The sine
+of 45 degrees is
+<!-- @math{\sqrt{2}/2}; -->
+&lsquo;<samp><span class="samp">sqrt(2)/2</span></samp>&rsquo;;
+squaring this yields &lsquo;<samp><span class="samp">2/4 = 0.5</span></samp>&rsquo;.  However, there has been a slight
+roundoff error because the representation of
+<!-- @math{\sqrt{2}/2} -->
+&lsquo;<samp><span class="samp">sqrt(2)/2</span></samp>&rsquo;
+wasn't exact.  The <kbd>c 1</kbd> command is a handy way to clean up numbers
+in this case; it temporarily reduces the precision by one digit while it
+re-rounds the number on the top of the stack.
+
+   <p><a name="index-Roundoff-errors_002c-examples-25"></a>(&bull;) <strong>Exercise 3.</strong>  Your friend Joe computed the sine
+of 45 degrees as shown above, then, hoping to avoid an inexact
+result, he increased the precision to 16 digits before squaring. 
+What happened?  See <a href="Modes-Answer-3.html#Modes-Answer-3">3</a>. (&bull;)
+
+   <p>To do this calculation in radians, we would type <kbd>m r</kbd> first. 
+(The indicator changes to &lsquo;<samp><span class="samp">Rad</span></samp>&rsquo;.)  45 degrees corresponds to
+&lsquo;<samp><span class="samp">pi/4</span></samp>&rsquo; radians.  To get &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;, press the <kbd>P</kbd> key.  (Once
+again, this is a shifted capital <kbd>P</kbd>.  Remember, unshifted
+<kbd>p</kbd> sets the precision.)
+
+<pre class="smallexample">     1:  3.14159265359   1:  0.785398163398   1:  0.707106781187
+         .                   .                .
+     
+         P                   4 /       m r    S
+</pre>
+   <p>Likewise, inverse trigonometric functions generate results in
+either radians or degrees, depending on the current angular mode.
+
+<pre class="smallexample">     1:  0.707106781187   1:  0.785398163398   1:  45.
+         .                    .                    .
+     
+         .5 Q        m r      I S        m d       U I S
+</pre>
+   <p class="noindent">Here we compute the Inverse Sine of
+<!-- @math{\sqrt{0.5}}, -->
+&lsquo;<samp><span class="samp">sqrt(0.5)</span></samp>&rsquo;,
+first in radians, then in degrees.
+
+   <p>Use <kbd>c d</kbd> and <kbd>c r</kbd> to convert a number from radians to degrees
+and vice-versa.
+
+<pre class="smallexample">     1:  45         1:  0.785398163397     1:  45.
+         .              .                      .
+     
+         45             c r                    c d
+</pre>
+   <p>Another interesting mode is <dfn>Fraction mode</dfn>.  Normally,
+dividing two integers produces a floating-point result if the
+quotient can't be expressed as an exact integer.  Fraction mode
+causes integer division to produce a fraction, i.e., a rational
+number, instead.
+
+<pre class="smallexample">     2:  12         1:  1.33333333333    1:  4:3
+     1:  9              .                    .
+         .
+     
+      12 &lt;RET&gt; 9          /          m f       U /      m f
+</pre>
+   <p class="noindent">In the first case, we get an approximate floating-point result. 
+In the second case, we get an exact fractional result (four-thirds).
+
+   <p>You can enter a fraction at any time using <kbd>:</kbd> notation. 
+(Calc uses <kbd>:</kbd> instead of <kbd>/</kbd> as the fraction separator
+because <kbd>/</kbd> is already used to divide the top two stack
+elements.)  Calculations involving fractions will always
+produce exact fractional results; Fraction mode only says
+what to do when dividing two integers.
+
+   <p><a name="index-Fractions-vs_002e-floats-26"></a><a name="index-Floats-vs_002e-fractions-27"></a>(&bull;) <strong>Exercise 4.</strong>  If fractional arithmetic is exact,
+why would you ever use floating-point numbers instead? 
+See <a href="Modes-Answer-4.html#Modes-Answer-4">4</a>. (&bull;)
+
+   <p>Typing <kbd>m f</kbd> doesn't change any existing values in the stack. 
+In the above example, we had to Undo the division and do it over
+again when we changed to Fraction mode.  But if you use the
+evaluates-to operator you can get commands like <kbd>m f</kbd> to
+recompute for you.
+
+<pre class="smallexample">     1:  12 / 9 =&gt; 1.33333333333    1:  12 / 9 =&gt; 1.333    1:  12 / 9 =&gt; 4:3
+         .                              .                      .
+     
+        ' 12/9 =&gt; &lt;RET&gt;                   p 4 &lt;RET&gt;                m f
+</pre>
+   <p class="noindent">In this example, the righthand side of the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operator
+on the stack is recomputed when we change the precision, then
+again when we change to Fraction mode.  All &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; expressions
+on the stack are recomputed every time you change any mode that
+might affect their values.
+
+   </body></html>
+

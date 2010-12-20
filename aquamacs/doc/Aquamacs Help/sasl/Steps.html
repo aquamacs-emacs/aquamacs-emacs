@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Steps - Emacs SASL Library 0.2</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs SASL Library 0.2">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Data-types.html#Data-types" title="Data types">
+<link rel="prev" href="Clients.html#Clients" title="Clients">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes the Emacs SASL library, version 0.2.
+
+Copyright (C) 2000, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Steps"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Clients.html#Clients">Clients</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Data-types.html#Data-types">Data types</a>
+<hr>
+</div>
+
+<h3 class="section">3.3 Steps</h3>
+
+<p>A step (<code>sasl-step</code> object) is an abstraction of authentication
+&ldquo;step&rdquo; which holds the response value and the next entry point for the
+authentication process (the latter is not accessible).
+
+<div class="defun">
+&mdash; Function: <b>sasl-step-data</b><var> step<a name="index-sasl_002dstep_002ddata-14"></a></var><br>
+<blockquote><p>Return the data which <var>step</var> holds, a string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>sasl-step-set-data</b><var> step data<a name="index-sasl_002dstep_002dset_002ddata-15"></a></var><br>
+<blockquote><p>Store <var>data</var> string to <var>step</var>. 
+</p></blockquote></div>
+
+   <p>To get the initial response, you should call the function
+<code>sasl-next-step</code> with the second argument <code>nil</code>.
+
+<pre class="example">     (setq name (sasl-mechanism-name mechanism))
+</pre>
+   <p>At this point we could send the command which starts a SASL
+authentication protocol exchange.  For example,
+
+<pre class="example">     (process-send-string
+      process
+      (if (sasl-step-data step)              ;initial response
+          (format "AUTH %s %s\r\n" name (base64-encode-string (sasl-step-data step) t))
+        (format "AUTH %s\r\n" name)))
+</pre>
+   <p>To go on with the authentication process, all you have to do is call
+<code>sasl-next-step</code> consecutively.
+
+<div class="defun">
+&mdash; Function: <b>sasl-next-step</b><var> client step<a name="index-sasl_002dnext_002dstep-16"></a></var><br>
+<blockquote><p>Perform the authentication step. 
+At the first time <var>step</var> should be set to <code>nil</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

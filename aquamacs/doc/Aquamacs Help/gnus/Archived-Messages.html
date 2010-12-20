@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+<title>Archived Messages - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Composing-Messages.html#Composing-Messages" title="Composing Messages">
+<link rel="prev" href="Mail-and-Post.html#Mail-and-Post" title="Mail and Post">
+<link rel="next" href="Posting-Styles.html#Posting-Styles" title="Posting Styles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Archived-Messages"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Posting-Styles.html#Posting-Styles">Posting Styles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-and-Post.html#Mail-and-Post">Mail and Post</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Composing-Messages.html#Composing-Messages">Composing Messages</a>
+<hr>
+</div>
+
+<h3 class="section">5.5 Archived Messages</h3>
+
+<p><a name="index-archived-messages-1948"></a><a name="index-sent-messages-1949"></a>
+Gnus provides a few different methods for storing the mail and news you
+send.  The default method is to use the <dfn>archive virtual server</dfn> to
+store the messages.  If you want to disable this completely, the
+<code>gnus-message-archive-group</code> variable should be <code>nil</code>, which
+is the default.
+
+   <p>For archiving interesting messages in a group you read, see the
+<kbd>B c</kbd> (<code>gnus-summary-copy-article</code>) command (see <a href="Mail-Group-Commands.html#Mail-Group-Commands">Mail Group Commands</a>).
+
+   <p><a name="index-gnus_002dmessage_002darchive_002dmethod-1950"></a><code>gnus-message-archive-method</code> says what virtual server Gnus is to
+use to store sent messages.  The default is <code>"archive"</code>, and when
+actually being used it is expanded into:
+
+<pre class="lisp">     (nnfolder "archive"
+               (nnfolder-directory   "~/Mail/archive")
+               (nnfolder-active-file "~/Mail/archive/active")
+               (nnfolder-get-new-mail nil)
+               (nnfolder-inhibit-expiry t))
+</pre>
+   <blockquote>
+<a name="index-gnus_002dupdate_002dmessage_002darchive_002dmethod-1951"></a>Note: a server like this is saved in the <samp><span class="file">~/.newsrc.eld</span></samp> file first
+so that it may be used as a real method of the server which is named
+<code>"archive"</code> (that is, for the case where
+<code>gnus-message-archive-method</code> is set to <code>"archive"</code>) ever
+since.  If it once has been saved, it will never be updated by default
+even if you change the value of <code>gnus-message-archive-method</code>
+afterward.  Therefore, the server <code>"archive"</code> doesn't necessarily
+mean the <code>nnfolder</code> server like this at all times.  If you want the
+saved method to reflect always the value of
+<code>gnus-message-archive-method</code>, set the
+<code>gnus-update-message-archive-method</code> variable to a non-<code>nil</code>
+value.  The default value of this variable is <code>nil</code>. 
+</blockquote>
+
+   <p>You can, however, use any mail select method (<code>nnml</code>,
+<code>nnmbox</code>, etc.).  <code>nnfolder</code> is a quite likable select method
+for doing this sort of thing, though.  If you don't like the default
+directory chosen, you could say something like:
+
+<pre class="lisp">     (setq gnus-message-archive-method
+           '(nnfolder "archive"
+                      (nnfolder-inhibit-expiry t)
+                      (nnfolder-active-file "~/News/sent-mail/active")
+                      (nnfolder-directory "~/News/sent-mail/")))
+</pre>
+   <p><a name="index-gnus_002dmessage_002darchive_002dgroup-1952"></a><a name="index-Gcc-1953"></a>Gnus will insert <code>Gcc</code> headers in all outgoing messages that point
+to one or more group(s) on that server.  Which group to use is
+determined by the <code>gnus-message-archive-group</code> variable.
+
+   <p>This variable can be used to do the following:
+
+     <dl>
+<dt>a string<dd>Messages will be saved in that group.
+
+     <p>Note that you can include a select method in the group name, then the
+message will not be stored in the select method given by
+<code>gnus-message-archive-method</code>, but in the select method specified
+by the group name, instead.  Suppose <code>gnus-message-archive-method</code>
+has the default value shown above.  Then setting
+<code>gnus-message-archive-group</code> to <code>"foo"</code> means that outgoing
+messages are stored in &lsquo;<samp><span class="samp">nnfolder+archive:foo</span></samp>&rsquo;, but if you use the
+value <code>"nnml:foo"</code>, then outgoing messages will be stored in
+&lsquo;<samp><span class="samp">nnml:foo</span></samp>&rsquo;.
+
+     <br><dt>a list of strings<dd>Messages will be saved in all those groups.
+
+     <br><dt>an alist of regexps, functions and forms<dd>When a key &ldquo;matches&rdquo;, the result is used.
+
+     <br><dt><code>nil</code><dd>No message archiving will take place.  This is the default. 
+</dl>
+
+   <p>Let's illustrate:
+
+   <p>Just saving to a single group called &lsquo;<samp><span class="samp">MisK</span></samp>&rsquo;:
+<pre class="lisp">     (setq gnus-message-archive-group "MisK")
+</pre>
+   <p>Saving to two groups, &lsquo;<samp><span class="samp">MisK</span></samp>&rsquo; and &lsquo;<samp><span class="samp">safe</span></samp>&rsquo;:
+<pre class="lisp">     (setq gnus-message-archive-group '("MisK" "safe"))
+</pre>
+   <p>Save to different groups based on what group you are in:
+<pre class="lisp">     (setq gnus-message-archive-group
+           '(("^alt" "sent-to-alt")
+             ("mail" "sent-to-mail")
+             (".*" "sent-to-misc")))
+</pre>
+   <p>More complex stuff:
+<pre class="lisp">     (setq gnus-message-archive-group
+           '((if (message-news-p)
+                 "misc-news"
+               "misc-mail")))
+</pre>
+   <p>How about storing all news messages in one file, but storing all mail
+messages in one file per month:
+
+<pre class="lisp">     (setq gnus-message-archive-group
+           '((if (message-news-p)
+                 "misc-news"
+               (concat "mail." (format-time-string "%Y-%m")))))
+</pre>
+   <!-- (XEmacs 19.13 doesn't have @code{format-time-string}, so you'll have to -->
+<!-- use a different value for @code{gnus-message-archive-group} there.) -->
+   <p>Now, when you send a message off, it will be stored in the appropriate
+group.  (If you want to disable storing for just one particular message,
+you can just remove the <code>Gcc</code> header that has been inserted.)  The
+archive group will appear in the group buffer the next time you start
+Gnus, or the next time you press <kbd>F</kbd> in the group buffer.  You can
+enter it and read the articles in it just like you'd read any other
+group.  If the group gets really big and annoying, you can simply rename
+if (using <kbd>G r</kbd> in the group buffer) to something
+nice&mdash;&lsquo;<samp><span class="samp">misc-mail-september-1995</span></samp>&rsquo;, or whatever.  New messages will
+continue to be stored in the old (now empty) group.
+
+   <p>That's the default method of archiving sent messages.  Gnus offers a
+different way for the people who don't like the default method.  In that
+case you should set <code>gnus-message-archive-group</code> to <code>nil</code>;
+this will disable archiving.
+
+     <dl>
+<dt><code>gnus-outgoing-message-group</code><dd><a name="index-gnus_002doutgoing_002dmessage_002dgroup-1954"></a>All outgoing messages will be put in this group.  If you want to store
+all your outgoing mail and articles in the group &lsquo;<samp><span class="samp">nnml:archive</span></samp>&rsquo;,
+you set this variable to that value.  This variable can also be a list of
+group names.
+
+     <p>If you want to have greater control over what group to put each
+message in, you can set this variable to a function that checks the
+current newsgroup name and then returns a suitable group name (or list
+of names).
+
+     <p>This variable can be used instead of <code>gnus-message-archive-group</code>,
+but the latter is the preferred method.
+
+     <br><dt><code>gnus-gcc-mark-as-read</code><dd><a name="index-gnus_002dgcc_002dmark_002das_002dread-1955"></a>If non-<code>nil</code>, automatically mark <code>Gcc</code> articles as read.
+
+     <br><dt><code>gnus-gcc-externalize-attachments</code><dd><a name="index-gnus_002dgcc_002dexternalize_002dattachments-1956"></a>If <code>nil</code>, attach files as normal parts in Gcc copies; if a regexp
+and matches the Gcc group name, attach files as external parts; if it is
+<code>all</code>, attach local files as external parts; if it is other
+non-<code>nil</code>, the behavior is the same as <code>all</code>, but it may be
+changed in the future.
+
+   </dl>
+
+   </body></html>
+

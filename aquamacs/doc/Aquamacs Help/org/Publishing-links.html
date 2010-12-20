@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Publishing links - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Publishing-options.html#Publishing-options" title="Publishing options">
+<link rel="next" href="Project-page-index.html#Project-page-index" title="Project page index">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Publishing-links"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Project-page-index.html#Project-page-index">Project page index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Publishing-options.html#Publishing-options">Publishing options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h4 class="subsection">13.1.6 Links between published files</h4>
+
+<p><a name="index-links_002c-publishing-1264"></a>
+To create a link from one Org file to another, you would use
+something like &lsquo;<samp><span class="samp">[[file:foo.org][The foo]]</span></samp>&rsquo; or simply
+&lsquo;<samp><span class="samp">file:foo.org.</span></samp>&rsquo; (see <a href="Hyperlinks.html#Hyperlinks">Hyperlinks</a>).  When published, this link
+becomes a link to <samp><span class="file">foo.html</span></samp>.  In this way, you can interlink the
+pages of your "org web" project and the links will work as expected when
+you publish them to HTML.  If you also publish the Org source file and want
+to link to that, use an <code>http:</code> link instead of a <code>file:</code> link,
+because <code>file:</code> links are converted to link to the corresponding
+<samp><span class="file">html</span></samp> file.
+
+   <p>You may also link to related files, such as images. Provided you are careful
+with relative file names, and provided you have also configured Org to upload
+the related files, these links will work too. See <a href="Complex-example.html#Complex-example">Complex example</a>, for
+an example of this usage.
+
+   <p>Sometimes an Org file to be published may contain links that are
+only valid in your production environment, but not in the publishing
+location.  In this case, use the property
+
+   <p><table summary=""><tr align="left"><td valign="top" width="40%"><code>:link-validation-function</code>
+</td><td valign="top" width="60%">Function to validate links
+   <br></td></tr></table>
+
+<p class="noindent">to define a function for checking link validity.  This function must
+accept two arguments, the file name and a directory relative to which
+the file name is interpreted in the production environment.  If this
+function returns <code>nil</code>, then the HTML generator will only insert a
+description into the HTML file, but no link.  One option for this
+function is <code>org-publish-validate-link</code> which checks if the given
+file is part of any project in <code>org-publish-project-alist</code>.
+
+   </body></html>
+

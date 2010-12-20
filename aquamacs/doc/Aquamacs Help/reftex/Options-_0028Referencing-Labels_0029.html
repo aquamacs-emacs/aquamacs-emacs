@@ -1,0 +1,180 @@
+<html lang="en">
+<head>
+<title>Options (Referencing Labels) - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Options.html#Options" title="Options">
+<link rel="prev" href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029" title="Options (Creating Labels)">
+<link rel="next" href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029" title="Options (Creating Citations)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Options-(Referencing-Labels)"></a>
+<a name="Options-_0028Referencing-Labels_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Options.html#Options">Options</a>
+<hr>
+</div>
+
+<h3 class="section">8.4 Referencing Labels</h3>
+
+<p><a name="index-Options_002c-referencing-labels-475"></a><a name="index-Referencing-labels_002c-options-476"></a>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-label-menu-flags</b><var><a name="index-reftex_002dlabel_002dmenu_002dflags-477"></a></var><br>
+<blockquote><p>List of flags governing the label menu makeup. The flags are:
+          <dl>
+<dt><var>table-of-contents</var><dd>Show the labels embedded in a table of context. 
+<br><dt><var>section-numbers</var><dd>Include section numbers (like 4.1.3) in table of contents. 
+<br><dt><var>counters</var><dd>Show counters.  This just numbers the labels in the menu. 
+<br><dt><var>no-context</var><dd>Non-<code>nil</code> means do <em>not</em> show the short context. 
+<br><dt><var>follow</var><dd>Follow full context in other window. 
+<br><dt><var>show-commented</var><dd>Show labels from regions which are commented out. 
+<br><dt><var>match-everywhere</var><dd>Obsolete flag. 
+<br><dt><var>show-files</var><dd>Show begin and end of included files. 
+</dl>
+
+        <p>Each of these flags can be set to <code>t</code> or <code>nil</code>, or to a string
+of type letters indicating the label types for which it should be true. 
+These strings work like character classes in regular expressions.  Thus,
+setting one of the flags to &lsquo;<samp><span class="samp">"sf"</span></samp>&rsquo; makes the flag true for section
+and figure labels, <code>nil</code> for everything else.  Setting it to
+&lsquo;<samp><span class="samp">"^sf"</span></samp>&rsquo; makes it the other way round.
+
+        <p>The available label types are: <code>s</code> (section), <code>f</code> (figure),
+<code>t</code> (table), <code>i</code> (item), <code>e</code> (equation), <code>n</code>
+(footnote), plus any definitions in <code>reftex-label-alist</code>.
+
+        <p>Most options can also be switched from the label menu itself - so if you
+decide here to not have a table of contents in the label menu, you can
+still get one interactively during selection from the label menu. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-multiref-punctuation</b><var><a name="index-reftex_002dmultiref_002dpunctuation-478"></a></var><br>
+<blockquote><p>Punctuation strings for multiple references.  When marking is used in
+the selection buffer to select several references, this variable
+associates the 3 marking characters &lsquo;<samp><span class="samp">,-+</span></samp>&rsquo; with prefix strings to be
+inserted into the buffer before the corresponding <code>\ref</code> macro. 
+This is used to string together whole reference sets, like
+&lsquo;<samp><span class="samp">eqs. 1,2,3-5,6 and 7</span></samp>&rsquo; in a single call to
+<code>reftex-reference</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-vref-is-default</b><var><a name="index-reftex_002dvref_002dis_002ddefault-479"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, the varioref macro <code>\vref</code> is used as
+default.  In the selection buffer, the <kbd>v</kbd> key toggles the reference
+macro between <code>\ref</code> and <code>\vref</code>.  The value of this variable
+determines the default which is active when entering the selection
+process.  Instead of <code>nil</code> or <code>t</code>, this may also be a string
+of type letters indicating the label types for which it should be
+true. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-fref-is-default</b><var><a name="index-reftex_002dfref_002dis_002ddefault-480"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, the fancyref macro <code>\fref</code> is used as
+default.  In the selection buffer, the <kbd>V</kbd> key toggles the reference
+macro between <code>\ref</code>, <code>\fref</code> and <code>\Fref</code>.  The value of
+this variable determines the default which is active when entering the
+selection process.  Instead of <code>nil</code> or <code>t</code>, this may also be
+a string of type letters indicating the label types for which it should
+be true. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Hook: <b>reftex-format-ref-function</b><var><a name="index-reftex_002dformat_002dref_002dfunction-481"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, should be a function which produces the string to
+insert as a reference.  Note that the insertion format can also be
+changed with <code>reftex-label-alist</code>.  This hook also is used by the
+special commands to insert <code>\vref</code> and <code>\fref</code> references, so
+even if you set this, your setting will be ignored by the special
+commands.  The function will be called with two arguments, the
+<var>label</var> and the <var>default-format</var> (usually &lsquo;<samp><span class="samp">~\ref{%s}</span></samp>&rsquo;). 
+It should return the string to insert into the buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-level-indent</b><var><a name="index-reftex_002dlevel_002dindent-482"></a></var><br>
+<blockquote><p>Number of spaces to be used for indentation per section level. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-guess-label-type</b><var><a name="index-reftex_002dguess_002dlabel_002dtype-483"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, <code>reftex-reference</code> will try to guess the
+label type.  To do that, <b>RefTeX</b> will look at the word before the
+cursor and compare it with the magic words given in
+<code>reftex-label-alist</code>.  When it finds a match, <b>RefTeX</b> will
+immediately offer the correct label menu - otherwise it will prompt you
+for a label type.  If you set this variable to <code>nil</code>, <b>RefTeX</b>
+will always prompt for a label type. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Normal Hook: <b>reftex-display-copied-context-hook</b><var><a name="index-reftex_002ddisplay_002dcopied_002dcontext_002dhook-484"></a></var><br>
+<blockquote><p>Normal Hook which is run before context is displayed anywhere.  Designed
+for <code>X-Symbol</code><!-- /@w -->, but may have other uses as well. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Hook: <b>reftex-pre-refontification-functions</b><var><a name="index-reftex_002dpre_002drefontification_002dfunctions-485"></a></var><br>
+<blockquote><p><code>X-Symbol</code> specific hook.  Probably not useful for other purposes. 
+The functions get two arguments, the buffer from where the command
+started and a symbol indicating in what context the hook is
+called. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Normal Hook: <b>reftex-select-label-mode-hook</b><var><a name="index-reftex_002dselect_002dlabel_002dmode_002dhook-486"></a></var><br>
+<blockquote><p>Normal hook which is run when a selection buffer enters
+<code>reftex-select-label-mode</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Keymap: <b>reftex-select-label-map</b><var><a name="index-reftex_002dselect_002dlabel_002dmap-487"></a></var><br>
+<blockquote><p>The keymap which is active in the labels selection process
+(see <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

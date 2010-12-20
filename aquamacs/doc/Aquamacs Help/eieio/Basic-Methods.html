@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Basic Methods - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Default-Superclass.html#Default-Superclass" title="Default Superclass">
+<link rel="prev" href="Initialization.html#Initialization" title="Initialization">
+<link rel="next" href="Signal-Handling.html#Signal-Handling" title="Signal Handling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Methods"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Signal-Handling.html#Signal-Handling">Signal Handling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Initialization.html#Initialization">Initialization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Default-Superclass.html#Default-Superclass">Default Superclass</a>
+<hr>
+</div>
+
+<h3 class="section">14.2 Basic Methods</h3>
+
+<p>Additional useful methods defined on the base subclass are:
+
+<div class="defun">
+&mdash; Function: <b>clone</b><var> obj &amp;rest params<a name="index-clone-78"></a></var><br>
+<blockquote><p><a name="clone"></a>Make a copy of <var>obj</var>, and then apply <var>params</var>. 
+<var>params</var> is a parameter list of the same form as <var>initialize-instance</var>
+which are applied to change the object.  When overloading <dfn>clone</dfn>, be
+sure to call <dfn>call-next-method</dfn> first and modify the returned object. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-print</b><var> this &amp;rest strings<a name="index-object_002dprint-79"></a></var><br>
+<blockquote><p><a name="object_002dprint"></a>Pretty printer for object <var>this</var>.  Call function <dfn>object-name</dfn> with <var>strings</var>. 
+The default method for printing object <var>this</var> is to use the
+function <dfn>object-name</dfn>.
+
+        <p>It is sometimes useful to put a summary of the object into the
+default #&lt;notation&gt; string when using eieio browsing tools.
+
+        <p>Implement this function and specify <var>strings</var> in a call to
+<dfn>call-next-method</dfn> to provide additional summary information. 
+When passing in extra strings from child classes, always remember
+to prepend a space.
+
+     <pre class="example">          (defclass data-object ()
+             (value)
+             "Object containing one data slot.")
+          
+          (defmethod object-print ((this data-object) &amp;optional strings)
+            "Return a string with a summary of the data object as part of the name."
+            (apply 'call-next-method this
+                   (cons (format " value: %s" (render this)) strings)))
+</pre>
+        <p>Here is what some output could look like:
+     <pre class="example">          (object-print test-object)
+             =&gt; #&lt;data-object test-object value: 3&gt;
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-write</b><var> obj &amp;optional comment<a name="index-object_002dwrite-80"></a></var><br>
+<blockquote><p>Write <var>obj</var> onto a stream in a readable fashion.  The resulting
+output will be Lisp code which can be used with <code>read</code> and
+<code>eval</code> to recover the object.  Only slots with <code>:initarg</code>s
+are written to the stream. 
+</p></blockquote></div>
+
+   </body></html>
+

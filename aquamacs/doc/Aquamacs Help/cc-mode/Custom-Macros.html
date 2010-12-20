@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Custom Macros - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Customizing-Indentation.html#Customizing-Indentation" title="Customizing Indentation">
+<link rel="next" href="Odds-and-Ends.html#Odds-and-Ends" title="Odds and Ends">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Custom-Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Odds-and-Ends.html#Odds-and-Ends">Odds and Ends</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h2 class="chapter">12 Customizing Macros</h2>
+
+<p><a name="index-macros-581"></a><a name="index-preprocessor-directives-582"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>Normally, the lines in a multi-line macro are indented relative to
+each other as though they were code.  You can suppress this behavior
+by setting the following user option:
+
+<div class="defun">
+&mdash; User Option: <b>c-syntactic-indentation-in-macros</b><var><a name="index-c_002dsyntactic_002dindentation_002din_002dmacros-583"></a></var><br>
+<blockquote><p><a name="index-syntactic_002dindentation_002din_002dmacros-_0028c_002d_0029-584"></a>Enable syntactic analysis inside macros, which is the default.  If this
+is <code>nil</code>, all lines inside macro definitions are analyzed as
+<code>cpp-macro-cont</code>. 
+</p></blockquote></div>
+
+   <p>CC Mode provides some tools to help keep the line continuation
+backslashes in macros neat and tidy.  Their precise action is
+customized with these variables:
+
+<div class="defun">
+&mdash; User Option: <b>c-backslash-column</b><var><a name="index-c_002dbackslash_002dcolumn-585"></a></var><br>
+<blockquote><p><a name="index-backslash_002dcolumn-_0028c_002d_0029-586"></a>
+
+   &mdash; User Option: <b>c-backslash-max-column</b><var><a name="index-c_002dbackslash_002dmax_002dcolumn-587"></a></var><br>
+<blockquote><p><a name="index-backslash_002dmax_002dcolumn-_0028c_002d_0029-588"></a>These variables control the alignment columns for line continuation
+backslashes in multiline macros.  They are used by the functions that
+automatically insert or align such backslashes,
+e.g. <code>c-backslash-region</code> and <code>c-context-line-break</code>.
+
+        <p><code>c-backslash-column</code> specifies the minimum column for the
+backslashes.  If any line in the macro goes past this column, then the
+next tab stop (i.e. next multiple of <code>tab-width</code>) in that line is
+used as the alignment column for all the backslashes, so that they
+remain in a single column.  However, if any lines go past
+<code>c-backslash-max-column</code> then the backslashes in the rest of the
+macro will be kept at that column, so that the lines which are too
+long &ldquo;stick out&rdquo; instead.
+
+        <p>Don't ever set these variables to <code>nil</code>.  If you want to disable
+the automatic alignment of backslashes, use
+<code>c-auto-align-backslashes</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>c-auto-align-backslashes</b><var><a name="index-c_002dauto_002dalign_002dbackslashes-589"></a></var><br>
+<blockquote><p><a name="index-auto_002dalign_002dbackslashes-_0028c_002d_0029-590"></a>Align automatically inserted line continuation backslashes if
+non-<code>nil</code>.  When line continuation backslashes are inserted
+automatically for line breaks in multiline macros, e.g. by
+<code>c-context-line-break</code>, they are aligned with the other
+backslashes in the same macro if this flag is set.
+
+        <p>If <code>c-auto-align-backslashes</code> is <code>nil</code>, automatically
+inserted backslashes are preceded by a single space, and backslashes
+get aligned only when you explicitly invoke the command
+<code>c-backslash-region</code> (<kbd>C-c C-\</kbd>). 
+</p></blockquote></div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

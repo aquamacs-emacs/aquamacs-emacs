@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Slow/Expensive Connection - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="next" href="Slow-Terminal-Connection.html#Slow-Terminal-Connection" title="Slow Terminal Connection">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Slow%2fExpensive-Connection"></a>
+<a name="Slow_002fExpensive-Connection"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Slow-Terminal-Connection.html#Slow-Terminal-Connection">Slow Terminal Connection</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.5.1 Slow/Expensive Connection</h4>
+
+<p>If you run Emacs on a machine locally, and get your news from a machine
+over some very thin strings, you want to cut down on the amount of data
+Gnus has to get from the server.
+
+     <dl>
+<dt><code>gnus-read-active-file</code><dd>Set this to <code>nil</code>, which will inhibit Gnus from requesting the
+entire active file from the server.  This file is often very large.  You
+also have to set <code>gnus-check-new-newsgroups</code> and
+<code>gnus-check-bogus-newsgroups</code> to <code>nil</code> to make sure that Gnus
+doesn't suddenly decide to fetch the active file anyway.
+
+     <br><dt><code>gnus-nov-is-evil</code><dd><a name="index-gnus_002dnov_002dis_002devil-3141"></a>Usually this one must <em>always</em> be <code>nil</code> (which is the
+default).  If, for example, you wish to not use <acronym>NOV</acronym>
+(see <a href="Terminology.html#Terminology">Terminology</a>) with the <code>nntp</code> back end (see <a href="Crosspost-Handling.html#Crosspost-Handling">Crosspost Handling</a>), set <code>nntp-nov-is-evil</code> to a non-<code>nil</code> value
+instead of setting this.  But you normally do not need to set
+<code>nntp-nov-is-evil</code> since Gnus by itself will detect whether the
+<acronym>NNTP</acronym> server supports <acronym>NOV</acronym>.  Anyway, grabbing article
+headers from the <acronym>NNTP</acronym> server will not be very fast if you tell
+Gnus not to use <acronym>NOV</acronym>.
+
+     <p>As the variables for the other back ends, there are
+<code>nndiary-nov-is-evil</code>, <code>nndir-nov-is-evil</code>,
+<code>nnfolder-nov-is-evil</code>, <code>nnimap-nov-is-evil</code>,
+<code>nnml-nov-is-evil</code>, <code>nnspool-nov-is-evil</code>, and
+<code>nnwarchive-nov-is-evil</code>.  Note that a non-<code>nil</code> value for
+<code>gnus-nov-is-evil</code> overrides all those variables.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Although
+the back ends <code>nnkiboze</code>, <code>nnslashdot</code>, <code>nnultimate</code>, and
+<code>nnwfm</code> don't have their own nn*-nov-is-evil.</p>
+
+   <hr></div>
+
+   </body></html>
+

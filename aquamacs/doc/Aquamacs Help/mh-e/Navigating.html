@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Navigating - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reading-Mail.html#Reading-Mail" title="Reading Mail">
+<link rel="prev" href="Files-and-Pipes.html#Files-and-Pipes" title="Files and Pipes">
+<link rel="next" href="Miscellaneous-Commands-and-Options.html#Miscellaneous-Commands-and-Options" title="Miscellaneous Commands and Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Navigating"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Miscellaneous-Commands-and-Options.html#Miscellaneous-Commands-and-Options">Miscellaneous Commands and Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Files-and-Pipes.html#Files-and-Pipes">Files and Pipes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Mail.html#Reading-Mail">Reading Mail</a>
+<hr>
+</div>
+
+<h3 class="section">6.8 Navigating</h3>
+
+<p><a name="index-moving-between-messages-716"></a><a name="index-navigation-717"></a><a name="index-mh_002dfirst_002dmsg-718"></a><a name="index-mh_002dgoto_002dmsg-719"></a><a name="index-mh_002dlast_002dmsg-720"></a><a name="index-mh_002dnext_002dundeleted_002dmsg-721"></a><a name="index-mh_002dnext_002dunread_002dmsg-722"></a><a name="index-mh_002dprevious_002dundeleted_002dmsg-723"></a><a name="index-mh_002dprevious_002dunread_002dmsg-724"></a><a name="index-g-725"></a><a name="index-M_002d_003c-726"></a><a name="index-M_002d_003e-727"></a><a name="index-M_002dn-728"></a><a name="index-M_002dp-729"></a><a name="index-n-730"></a><a name="index-p-731"></a>
+To move on to the next message, use the command <kbd>n</kbd>
+(<code>mh-next-undeleted-msg</code>); use <kbd>p</kbd>
+(<code>mh-previous-undeleted-msg</code>) to read the previous message. To
+move to the next unread message, use <kbd>M-n</kbd>
+(<code>mh-next-unread-msg</code>); use <kbd>M-p</kbd>
+(<code>mh-previous-unread-msg</code>) to move to the previous unread
+message. These commands can be given a prefix argument to specify how
+many messages to skip (for example, <kbd>5 n</kbd>). You can also move to a
+specific message with <kbd>g</kbd> (<code>mh-goto-msg</code>). You can enter the
+message number either before or after typing <kbd>g</kbd>. In the latter
+case, Emacs prompts you. Finally, you can go to the first or last
+message with <kbd>M-&lt;</kbd> (<code>mh-first-msg</code>) and <kbd>M-&gt;</kbd>
+(<code>mh-last-msg</code>) respectively.
+
+   <p><a name="index-MH_002dFolder-mode-732"></a><a name="index-modes_002c-MH_002dFolder-733"></a><a name="index-next_002dline-734"></a><a name="index-previous_002dline-735"></a><a name="index-C_002dn-736"></a><a name="index-C_002dp-737"></a><a name="index-g_t_0040key_007bRET_007d-738"></a>
+You can also use the Emacs commands <kbd>C-p</kbd> (<code>previous-line</code>)
+and <kbd>C-n</kbd> (<code>next-line</code>) to move up and down the scan lines in
+the MH-Folder window. These commands can be used in conjunction with
+&lt;RET&gt; to look at deleted or refiled messages.
+
+   <p><a name="index-deleting-messages-739"></a><a name="index-mh_002ddelete_002dmsg-740"></a><a name="index-d-741"></a><a name="index-n-742"></a><a name="index-p-743"></a>
+To mark a message for deletion, use the command <kbd>d</kbd>
+(<code>mh-delete-msg</code>). A &lsquo;<samp><span class="samp">D</span></samp>&rsquo; is placed by the message in the
+scan window, and the next undeleted message is displayed. If the
+previous command had been <kbd>p</kbd>, then the next message displayed is
+the first undeleted message previous to the message just deleted. Use
+<kbd>n</kbd> to force subsequent <kbd>d</kbd> commands to move forward to the
+next undeleted message after deleting the message under the cursor. 
+You may also specify a range (for example, <kbd>C-u d 1 3 5-7 last:5
+frombob &lt;RET&gt;</kbd>, see <a href="Ranges.html#Ranges">Ranges</a>).
+
+   <p><a name="index-mh_002ddelete_002dmsg_002dno_002dmotion-744"></a><a name="index-C_002dd-745"></a>
+The command <kbd>C-d</kbd> (<code>mh-delete-msg-no-motion</code>) marks the
+message (or messages in range) for deletion but leaves the cursor at
+the current message in case you wish to perform other operations on
+the message.
+
+   <p><a name="index-mh_002ddelete_002dsubject-746"></a><a name="index-mh_002ddelete_002dsubject_002dor_002dthread-747"></a><a name="index-mh_002dthread_002ddelete-748"></a><a name="index-mh_002dundo-749"></a><a name="index-k-750"></a><a name="index-T-d-751"></a><a name="index-u-752"></a>
+And to delete more messages faster, you can use <kbd>k</kbd>
+(<code>mh-delete-subject-or-thread</code>) to delete all the messages with
+the same subject as the current message. This command puts these
+messages in a sequence named &lsquo;<samp><span class="samp">subject</span></samp>&rsquo;. You can undo this action
+by using <kbd>u</kbd> (<code>mh-undo</code>) with a prefix argument and then
+specifying the &lsquo;<samp><span class="samp">subject</span></samp>&rsquo; sequence. However, if the buffer is
+displaying a threaded view of the folder then <kbd>k</kbd> behaves like
+<kbd>T d</kbd> (<code>mh-thread-delete</code>). See <a href="Threading.html#Threading">Threading</a>.
+
+   <p><a name="index-mh_002dexecute_002dcommands-753"></a><a name="index-x-754"></a>
+However you mark a message for deletion, the command <kbd>x</kbd>
+(<code>mh-execute-commands</code>) actually carries out the deletion
+(see <a href="Folders.html#Folders">Folders</a>).
+
+   <p><a name="index-mh_002ddelete_002dmsg_002dhook-755"></a>
+The hook <code>mh-delete-msg-hook</code> is called after you mark a message
+for deletion. For example, a past maintainer of MH-E used this once
+when he kept statistics on his mail usage.
+
+   </body></html>
+

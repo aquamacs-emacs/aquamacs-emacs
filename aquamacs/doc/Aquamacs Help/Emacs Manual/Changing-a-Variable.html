@@ -1,0 +1,213 @@
+<html lang="en">
+<head>
+<title>Changing a Variable - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
+<link rel="prev" href="Browsing-Custom.html#Browsing-Custom" title="Browsing Custom">
+<link rel="next" href="Saving-Customizations.html#Saving-Customizations" title="Saving Customizations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Changing-a-Variable"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Saving-Customizations.html#Saving-Customizations">Saving Customizations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Browsing-Custom.html#Browsing-Custom">Browsing Custom</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.2.3 Changing a Variable</h4>
+
+<p>Here is an example of what a variable (a user option) looks like in
+the customization buffer:
+
+<pre class="smallexample">     Kill Ring Max: [Hide Value] 60
+        [State]: STANDARD.
+     Maximum length of kill ring before oldest elements are thrown away.
+</pre>
+   <p>The text following &lsquo;<samp><span class="samp">[Hide Value]</span></samp>&rsquo;, &lsquo;<samp><span class="samp">60</span></samp>&rsquo; in this case, indicates
+the current value of the variable.  If you see &lsquo;<samp><span class="samp">[Show Value]</span></samp>&rsquo; instead of
+&lsquo;<samp><span class="samp">[Hide Value]</span></samp>&rsquo;, it means that the value is hidden; the customization
+buffer initially hides values that take up several lines.  Invoke
+&lsquo;<samp><span class="samp">[Show Value]</span></samp>&rsquo; to show the value.
+
+   <p>The line after the variable name indicates the <dfn>customization
+state</dfn> of the variable: in the example above, it says you have not
+changed the option yet.  The &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; button at the beginning of
+this line gives you a menu of various operations for customizing the
+variable.
+
+   <p>The line after the &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; line displays the beginning of the
+variable's documentation string.  If there are more lines of
+documentation, this line ends with a &lsquo;<samp><span class="samp">[More]</span></samp>&rsquo; button; invoke that
+to show the full documentation string.
+
+   <p>To enter a new value for &lsquo;<samp><span class="samp">Kill Ring Max</span></samp>&rsquo;, move point to the
+value and edit it textually.  For example, you can type <kbd>M-d</kbd>,
+then insert another number.  As you begin to alter the text, you will
+see the &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; line change to say that you have edited the
+value:
+
+<pre class="smallexample">     [State]: EDITED, shown value does not take effect until you set or <span class="roman">...</span>
+                                                                save it.
+</pre>
+   <p><a name="index-user-options_002c-how-to-set-3943"></a><a name="index-variables_002c-how-to-set-3944"></a><a name="index-settings_002c-how-to-set-3945"></a>  Editing the value does not actually set the variable.  To do that,
+you must <dfn>set</dfn> the variable.  To do this, invoke the
+&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; button and choose &lsquo;<samp><span class="samp">Set for Current Session</span></samp>&rsquo;.
+
+   <p>The state of the variable changes visibly when you set it:
+
+<pre class="smallexample">     [State]: SET for current session only.
+</pre>
+   <p>You don't have to worry about specifying a value that is not valid;
+the &lsquo;<samp><span class="samp">Set for Current Session</span></samp>&rsquo; operation checks for validity and
+will not install an unacceptable value.
+
+   <p><a name="index-M_002dTAB-_0040r_007b_0028customization-buffer_0029_007d-3946"></a><a name="index-widget_002dcomplete-3947"></a>  While editing a field that is a file name, directory name,
+command name, or anything else for which completion is defined, you
+can type <kbd>M-&lt;TAB&gt;</kbd> (<code>widget-complete</code>) to do completion. 
+(<kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd> and <kbd>C-M-i</kbd> do the same thing.)
+
+   <p>Some variables have a small fixed set of possible legitimate values. 
+These variables don't let you edit the value textually.  Instead, a
+&lsquo;<samp><span class="samp">[Value Menu]</span></samp>&rsquo; button appears before the value; invoke this
+button to change the value.  For a boolean &ldquo;on or off&rdquo; value, the
+button says &lsquo;<samp><span class="samp">[Toggle]</span></samp>&rsquo;, and it changes to the other value. 
+&lsquo;<samp><span class="samp">[Value Menu]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[Toggle]</span></samp>&rsquo; simply edit the buffer; the
+changes take real effect when you use the &lsquo;<samp><span class="samp">Set for Current
+Session</span></samp>&rsquo; operation.
+
+   <p>Some variables have values with complex structure.  For example, the
+value of <code>file-coding-system-alist</code> is an association list.  Here
+is how it appears in the customization buffer:
+
+<pre class="smallexample">     File Coding System Alist: [Hide Value]
+     [INS] [DEL] File regexp: \.elc\'
+                 Choice: [Value Menu] Encoding/decoding pair:
+                 Decoding: emacs-mule
+                 Encoding: emacs-mule
+     [INS] [DEL] File regexp: \(\`\|/\)loaddefs.el\'
+                 Choice: [Value Menu] Encoding/decoding pair:
+                 Decoding: raw-text
+                 Encoding: raw-text-unix
+     [INS] [DEL] File regexp: \.tar\'
+                 Choice: [Value Menu] Encoding/decoding pair:
+                 Decoding: no-conversion
+                 Encoding: no-conversion
+     [INS] [DEL] File regexp:
+                 Choice: [Value Menu] Encoding/decoding pair:
+                 Decoding: undecided
+                 Encoding: nil
+     [INS]
+        [State]: STANDARD.
+     Alist to decide a coding system to use for a file I/O <span class="roman">...</span>
+                                     operation. [Hide Rest]
+     The format is ((PATTERN . VAL) ...),
+     where PATTERN is a regular expression matching a file name,
+     <span class="roman">[...more lines of documentation...]</span>
+</pre>
+   <p class="noindent">Each association in the list appears on four lines, with several
+editable fields and/or buttons.  You can edit the regexps and coding
+systems using ordinary editing commands.  You can also invoke
+&lsquo;<samp><span class="samp">[Value Menu]</span></samp>&rsquo; to switch to a different kind of value&mdash;for
+instance, to specify a function instead of a pair of coding systems.
+
+   <p>To delete an association from the list, invoke the &lsquo;<samp><span class="samp">[DEL]</span></samp>&rsquo; button
+for that item.  To add an association, invoke &lsquo;<samp><span class="samp">[INS]</span></samp>&rsquo; at the
+position where you want to add it.  There is an &lsquo;<samp><span class="samp">[INS]</span></samp>&rsquo; button
+between each pair of associations, another at the beginning and another
+at the end, so you can add a new association at any position in the
+list.
+
+   <p><a name="index-TAB-_0040r_007b_0028customization-buffer_0029_007d-3948"></a><a name="index-S_002dTAB-_0040r_007b_0028customization-buffer_0029_007d-3949"></a><a name="index-widget_002dforward-3950"></a><a name="index-widget_002dbackward-3951"></a>  Two special commands, &lt;TAB&gt; and <kbd>S-&lt;TAB&gt;</kbd>, are useful
+for moving through the customization buffer.  &lt;TAB&gt;
+(<code>widget-forward</code>) moves forward to the next button or editable
+field; <kbd>S-&lt;TAB&gt;</kbd> (<code>widget-backward</code>) moves backward to
+the previous button or editable field.
+
+   <p>Typing &lt;RET&gt; on an editable field also moves forward, just like
+&lt;TAB&gt;.  You can thus type &lt;RET&gt; when you are finished editing
+a field, to move on to the next button or field.  To insert a newline
+within an editable field, use <kbd>C-o</kbd> or <kbd>C-q C-j</kbd>.
+
+   <p><a name="index-saving-a-setting-3952"></a><a name="index-settings_002c-how-to-save-3953"></a>  Setting the variable changes its value in the current Emacs session;
+<dfn>saving</dfn> the value changes it for future sessions as well.  To
+save the variable, invoke &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; and select the &lsquo;<samp><span class="samp">Save for
+Future Sessions</span></samp>&rsquo; operation.  This works by writing code so as to set
+the variable again, each time you start Emacs (see <a href="Saving-Customizations.html#Saving-Customizations">Saving Customizations</a>).
+
+   <p>You can also restore the variable to its standard value by invoking
+&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; and selecting the &lsquo;<samp><span class="samp">Erase Customization</span></samp>&rsquo; operation. 
+There are actually four reset operations:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">Undo Edits</span></samp>&rsquo;<dd>If you have made some modifications and not yet set the variable,
+this restores the text in the customization buffer to match
+the actual value.
+
+     <br><dt>&lsquo;<samp><span class="samp">Reset to Saved</span></samp>&rsquo;<dd>This restores the value of the variable to the last saved value,
+and updates the text accordingly.
+
+     <br><dt>&lsquo;<samp><span class="samp">Erase Customization</span></samp>&rsquo;<dd>This sets the variable to its standard value, and updates the text
+accordingly.  This also eliminates any saved value for the variable,
+so that you will get the standard value in future Emacs sessions.
+
+     <br><dt>&lsquo;<samp><span class="samp">Set to Backup Value</span></samp>&rsquo;<dd>This sets the variable to a previous value that was set in the
+customization buffer in this session.  If you customize a variable
+and then reset it, which discards the customized value,
+you can get the discarded value back again with this operation. 
+</dl>
+
+   <p><a name="index-comments-on-customized-settings-3954"></a>  Sometimes it is useful to record a comment about a specific
+customization.  Use the &lsquo;<samp><span class="samp">Add Comment</span></samp>&rsquo; item from the
+&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; menu to create a field for entering the comment.  The
+comment you enter will be saved, and displayed again if you again view
+the same variable in a customization buffer, even in another session.
+
+   <p>The state of a group indicates whether anything in that group has been
+edited, set or saved.
+
+   <p>Near the top of the customization buffer there are two lines of buttons:
+
+<pre class="smallexample">      [Set for Current Session] [Save for Future Sessions]
+      [Undo Edits] [Reset to Saved] [Erase Customization]   [Finish]
+</pre>
+   <p><a name="index-custom_002dbuffer_002ddone_002dfunction-3955"></a>Invoking &lsquo;<samp><span class="samp">[Finish]</span></samp>&rsquo; either buries or kills this customization
+buffer according to the setting of the option
+<code>custom-buffer-done-kill</code>; the default is to bury the buffer. 
+Each of the other buttons performs an operation&mdash;set, save or
+reset&mdash;on each of the settings in the buffer that could meaningfully
+be set, saved or reset.  They do not operate on settings whose values
+are hidden, nor on subgroups which are hidden or not visible in the buffer.
+
+   </body></html>
+

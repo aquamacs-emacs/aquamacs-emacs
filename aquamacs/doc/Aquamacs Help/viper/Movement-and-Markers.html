@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Movement and Markers - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Improvements-over-Vi.html#Improvements-over-Vi" title="Improvements over Vi">
+<link rel="prev" href="Abbreviation-Facilities.html#Abbreviation-Facilities" title="Abbreviation Facilities">
+<link rel="next" href="New-Commands.html#New-Commands" title="New Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Movement-and-Markers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="New-Commands.html#New-Commands">New Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbreviation-Facilities.html#Abbreviation-Facilities">Abbreviation Facilities</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Improvements-over-Vi.html#Improvements-over-Vi">Improvements over Vi</a>
+<hr>
+</div>
+
+<h3 class="section">2.8 Movement and Markers</h3>
+
+<p><a name="index-Ex-style-motion-95"></a><a name="index-line-editor-motion-96"></a>
+Viper can be set free from the line&ndash;limited movements in Vi, such as <kbd>l</kbd>
+refusing to move beyond the line, &lt;ESC&gt; moving one character back,
+etc.  These derive from Ex, which is a line editor.  If your <samp><span class="file">.viper</span></samp>
+contains
+
+<pre class="example">     <code>(setq viper-ex-style-motion nil)</code>
+</pre>
+   <p class="noindent">the motion will be a true screen editor motion.  One thing you must then
+watch out for is that it is possible to be on the end-of-line character. 
+The keys <kbd>x</kbd> and <kbd>%</kbd> will still work correctly, i.e., as if they
+were on the last character.
+
+   <p><a name="index-g_t_0040code_007bviper_002dsyntax_002dpreference_007d-97"></a><a name="index-syntax-table-98"></a>
+The word-movement commands <kbd>w</kbd>, <kbd>e</kbd>, etc., and the associated
+deletion/yanking commands, <kbd>dw</kbd>, <kbd>yw</kbd>, etc., can be made to
+understand Emacs syntax tables.  If the variable
+<code>viper-syntax-preference</code> is set to <code>strict-vi</code> then
+the meaning of <em>word</em> is the same as in
+Vi.  However, if the value is <code>reformed-vi</code> (the default) then the
+alphanumeric symbols will be those specified by the current Emacs syntax
+table (which may be different for different major modes) plus the
+underscore symbol <kbd>_</kbd>, minus some non-word symbols, like '.;,|, etc. 
+Both <code>strict-vi</code> and <code>reformed-vi</code> work close to Vi in
+traditional cases, but <code>reformed-vi</code> does a better job when editing
+text in non-Latin alphabets.
+
+   <p>The user can also specify the value <code>emacs</code>, which would
+make Viper use exactly the Emacs notion of word.  In particular, the
+underscore may not be part of a word.  Finally, if
+<code>viper-syntax-preference</code> is set to <code>extended</code>, Viper words would
+consist of characters that are classified as alphanumeric <em>or</em> as
+parts of symbols.  This is convenient for writing programs and in many other
+situations.
+
+   <p><code>viper-syntax-preference</code> is a local variable, so it can have different
+values for different major modes.  For instance, in programming modes it can
+have the value <code>extended</code>.  In text modes where words contain special
+characters, such as European (non-English) letters, Cyrillic letters, etc.,
+the value can be <code>reformed-vi</code> or <code>emacs</code>.
+
+   <p>Changes to <code>viper-syntax-preference</code> should be done in the hooks to
+various major modes by executing <code>viper-set-syntax-preference</code> as in
+the following example:
+
+<pre class="example">     (viper-set-syntax-preference nil "emacs")
+</pre>
+   <p><a name="index-g_t_0040code_007bviper_002dset_002dsyntax_002dpreference_007d-99"></a>
+The above discussion of the meaning of Viper's words concerns only Viper's
+movement commands.  In regular expressions, words remain the same as in
+Emacs.  That is, the expressions <code>\w</code>, <code>\&gt;</code>, <code>\&lt;</code>, etc., use
+Emacs' idea of what is a word, and they don't look into the value of
+variable <code>viper-syntax-preference</code>.  This is because Viper doesn't change
+syntax tables in fear of upsetting the various major modes that set these
+tables.
+
+   <p><a name="index-textmarkers-100"></a>
+Textmarkers in Viper remember the file and the position, so that you can
+switch files by simply doing <kbd>'a</kbd>.  If you set up a regimen for using
+Textmarkers, this is very useful.  Contents of textmarkers can be viewed
+by <kbd>[marker</kbd>.  (Contents of registers can be viewed by <kbd>]register</kbd>).
+
+   </body></html>
+

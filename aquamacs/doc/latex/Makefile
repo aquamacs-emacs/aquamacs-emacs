@@ -40,7 +40,7 @@ html: aquamacs.tex *.pdf
 	echo "HTML conversion completed."		     ; \
 	echo $(phrase) ; \
 	mv $(newdir)/index2.html $(newdir)/index.html 
-	sed 's|<BODY >|<BODY ><a name="index"></a>|' <$(newdir)/index.html >$(newdir)/index2.html; \
+	sed 's|<BODY >|<BODY ><a name="AquamacsIndex"></a>|' <$(newdir)/index.html >$(newdir)/index2.html; \
 	mv $(newdir)/index2.html $(newdir)/index.html ; \
 	(cd $(newdir); \
 	echo newdir=$(newdir) ; \
@@ -56,7 +56,7 @@ html: aquamacs.tex *.pdf
 	mv $(destdir) $(destdir2) ; \
 	cp -r "$(srcdir)/../Emacs Manual" $(destdir2)/ ; \
 	cp -r "$(srcdir)/../Emacs Lisp Reference" $(destdir2)/ ; \
-	cp -rv "$(srcdir)/../misc/"* $(destdir2)/ ; \
+	cp -r "$(srcdir)/../misc/"* $(destdir2)/ ; \
 	find $(destdir2) -name *.helpindex -delete ; \
 	echo "Help files copied." ; \
 # Before 10.6, use the Help Indexer application instead of hiutil:

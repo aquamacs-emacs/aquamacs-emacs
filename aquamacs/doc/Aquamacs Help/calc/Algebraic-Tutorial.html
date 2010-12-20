@@ -1,0 +1,299 @@
+<html lang="en">
+<head>
+<title>Algebraic Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Basic-Tutorial.html#Basic-Tutorial" title="Basic Tutorial">
+<link rel="prev" href="RPN-Tutorial.html#RPN-Tutorial" title="RPN Tutorial">
+<link rel="next" href="Undo-Tutorial.html#Undo-Tutorial" title="Undo Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Algebraic-Tutorial"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Undo-Tutorial.html#Undo-Tutorial">Undo Tutorial</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="RPN-Tutorial.html#RPN-Tutorial">RPN Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Tutorial.html#Basic-Tutorial">Basic Tutorial</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.1.2 Algebraic-Style Calculations</h4>
+
+<p class="noindent">If you are not used to RPN notation, you may prefer to operate the
+Calculator in Algebraic mode, which is closer to the way
+non-RPN calculators work.  In Algebraic mode, you enter formulas
+in traditional &lsquo;<samp><span class="samp">2+3</span></samp>&rsquo; notation.
+
+   <p><strong>Notice:</strong> Calc gives &lsquo;<samp><span class="samp">/</span></samp>&rsquo; lower precedence than &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, so
+that &lsquo;<samp><span class="samp">a/b*c</span></samp>&rsquo; is interpreted as &lsquo;<samp><span class="samp">a/(b*c)</span></samp>&rsquo;; this is not
+standard across all computer languages.  See below for details.
+
+   <p>You don't really need any special &ldquo;mode&rdquo; to enter algebraic formulas. 
+You can enter a formula at any time by pressing the apostrophe (<kbd>'</kbd>)
+key.  Answer the prompt with the desired formula, then press &lt;RET&gt;. 
+The formula is evaluated and the result is pushed onto the RPN stack. 
+If you don't want to think in RPN at all, you can enter your whole
+computation as a formula, read the result from the stack, then press
+&lt;DEL&gt; to delete it from the stack.
+
+   <p>Try pressing the apostrophe key, then <kbd>2+3+4</kbd>, then &lt;RET&gt;. 
+The result should be the number 9.
+
+   <p>Algebraic formulas use the operators &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">*</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">/</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">^</span></samp>&rsquo;.  You can use parentheses to make the order
+of evaluation clear.  In the absence of parentheses, &lsquo;<samp><span class="samp">^</span></samp>&rsquo; is
+evaluated first, then &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, then &lsquo;<samp><span class="samp">/</span></samp>&rsquo;, then finally
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  For example, the expression
+
+<pre class="example">     2 + 3*4*5 / 6*7^8 - 9
+</pre>
+   <p class="noindent">is equivalent to
+
+<pre class="example">     2 + ((3*4*5) / (6*(7^8)) - 9
+</pre>
+   <p class="noindent">or, in large mathematical notation,
+
+<pre class="example">         3 * 4 * 5
+     2 + --------- - 9
+               8
+          6 * 7
+</pre>
+   <p class="noindent">The result of this expression will be the number <i>-6.99999826533</i>.
+
+   <p>Calc's order of evaluation is the same as for most computer languages,
+except that &lsquo;<samp><span class="samp">*</span></samp>&rsquo; binds more strongly than &lsquo;<samp><span class="samp">/</span></samp>&rsquo;, as the above
+example shows.  As in normal mathematical notation, the &lsquo;<samp><span class="samp">*</span></samp>&rsquo; symbol
+can often be omitted:  &lsquo;<samp><span class="samp">2 a</span></samp>&rsquo; is the same as &lsquo;<samp><span class="samp">2*a</span></samp>&rsquo;.
+
+   <p>Operators at the same level are evaluated from left to right, except
+that &lsquo;<samp><span class="samp">^</span></samp>&rsquo; is evaluated from right to left.  Thus, &lsquo;<samp><span class="samp">2-3-4</span></samp>&rsquo; is
+equivalent to &lsquo;<samp><span class="samp">(2-3)-4</span></samp>&rsquo; or <i>-5</i>, whereas &lsquo;<samp><span class="samp">2^3^4</span></samp>&rsquo; is equivalent
+to &lsquo;<samp><span class="samp">2^(3^4)</span></samp>&rsquo; (a very large integer; try it!).
+
+   <p>If you tire of typing the apostrophe all the time, there is
+Algebraic mode, where Calc automatically senses
+when you are about to type an algebraic expression.  To enter this
+mode, press the two letters <kbd>m&nbsp;a</kbd><!-- /@w -->.  (An &lsquo;<samp><span class="samp">Alg</span></samp>&rsquo; indicator
+should appear in the Calc window's mode line.)
+
+   <p>Press <kbd>m a</kbd>, then <kbd>2+3+4</kbd> with no apostrophe, then &lt;RET&gt;.
+
+   <p>In Algebraic mode, when you press any key that would normally begin
+entering a number (such as a digit, a decimal point, or the <kbd>_</kbd>
+key), or if you press <kbd>(</kbd> or <kbd>[</kbd>, Calc automatically begins
+an algebraic entry.
+
+   <p>Functions which do not have operator symbols like &lsquo;<samp><span class="samp">+</span></samp>&rsquo; and &lsquo;<samp><span class="samp">*</span></samp>&rsquo;
+must be entered in formulas using function-call notation.  For example,
+the function name corresponding to the square-root key <kbd>Q</kbd> is
+<code>sqrt</code>.  To compute a square root in a formula, you would use
+the notation &lsquo;<samp><span class="samp">sqrt(</span><var>x</var><span class="samp">)</span></samp>&rsquo;.
+
+   <p>Press the apostrophe, then type <kbd>sqrt(5*2) - 3</kbd>.  The result should
+be &lsquo;<samp><span class="samp">0.16227766017</span></samp>&rsquo;.
+
+   <p>Note that if the formula begins with a function name, you need to use
+the apostrophe even if you are in Algebraic mode.  If you type <kbd>arcsin</kbd>
+out of the blue, the <kbd>a r</kbd> will be taken as an Algebraic Rewrite
+command, and the <kbd>csin</kbd> will be taken as the name of the rewrite
+rule to use!
+
+   <p>Some people prefer to enter complex numbers and vectors in algebraic
+form because they find RPN entry with incomplete objects to be too
+distracting, even though they otherwise use Calc as an RPN calculator.
+
+   <p>Still in Algebraic mode, type:
+
+<pre class="smallexample">     1:  (2, 3)     2:  (2, 3)     1:  (8, -1)    2:  (8, -1)    1:  (9, -1)
+         .          1:  (1, -2)        .          1:  1              .
+                        .                             .
+     
+      (2,3) &lt;RET&gt;      (1,-2) &lt;RET&gt;        *              1 &lt;RET&gt;          +
+</pre>
+   <p>Algebraic mode allows us to enter complex numbers without pressing
+an apostrophe first, but it also means we need to press &lt;RET&gt;
+after every entry, even for a simple number like &lsquo;<samp><span class="samp">1</span></samp>&rsquo;.
+
+   <p>(You can type <kbd>C-u m a</kbd> to enable a special Incomplete Algebraic
+mode in which the <kbd>(</kbd> and <kbd>[</kbd> keys use algebraic entry even
+though regular numeric keys still use RPN numeric entry.  There is also
+Total Algebraic mode, started by typing <kbd>m t</kbd>, in which all
+normal keys begin algebraic entry.  You must then use the &lt;META&gt; key
+to type Calc commands:  <kbd>M-m t</kbd> to get back out of Total Algebraic
+mode, <kbd>M-q</kbd> to quit, etc.)
+
+   <p>If you're still in Algebraic mode, press <kbd>m a</kbd> again to turn it off.
+
+   <p>Actual non-RPN calculators use a mixture of algebraic and RPN styles. 
+In general, operators of two numbers (like <kbd>+</kbd> and <kbd>*</kbd>)
+use algebraic form, but operators of one number (like <kbd>n</kbd> and <kbd>Q</kbd>)
+use RPN form.  Also, a non-RPN calculator allows you to see the
+intermediate results of a calculation as you go along.  You can
+accomplish this in Calc by performing your calculation as a series
+of algebraic entries, using the <kbd>$</kbd> sign to tie them together. 
+In an algebraic formula, <kbd>$</kbd> represents the number on the top
+of the stack.  Here, we perform the calculation
+<!-- @math{\sqrt{2\times4+1}}, -->
+&lsquo;<samp><span class="samp">sqrt(2*4+1)</span></samp>&rsquo;,
+which on a traditional calculator would be done by pressing
+<kbd>2 * 4 + 1 =</kbd> and then the square-root key.
+
+<pre class="smallexample">     1:  8          1:  9          1:  3
+         .              .              .
+     
+       ' 2*4 &lt;RET&gt;        $+1 &lt;RET&gt;        Q
+</pre>
+   <p class="noindent">Notice that we didn't need to press an apostrophe for the <kbd>$+1</kbd>,
+because the dollar sign always begins an algebraic entry.
+
+   <p>(&bull;) <strong>Exercise 1.</strong>  How could you get the same effect as
+pressing <kbd>Q</kbd> but using an algebraic entry instead?  How about
+if the <kbd>Q</kbd> key on your keyboard were broken? 
+See <a href="Algebraic-Answer-1.html#Algebraic-Answer-1">1</a>. (&bull;)
+
+   <p>The notations <kbd>$$</kbd>, <kbd>$$$</kbd>, and so on stand for higher stack
+entries.  For example, <kbd>' $$+$ &lt;RET&gt;</kbd> is just like typing <kbd>+</kbd>.
+
+   <p>Algebraic formulas can include <dfn>variables</dfn>.  To store in a
+variable, press <kbd>s s</kbd>, then type the variable name, then press
+&lt;RET&gt;.  (There are actually two flavors of store command:
+<kbd>s s</kbd> stores a number in a variable but also leaves the number
+on the stack, while <kbd>s&nbsp;t</kbd><!-- /@w --> removes a number from the stack and
+stores it in the variable.)  A variable name should consist of one
+or more letters or digits, beginning with a letter.
+
+<pre class="smallexample">     1:  17             .          1:  a + a^2    1:  306
+         .                             .              .
+     
+         17          s t a &lt;RET&gt;      ' a+a^2 &lt;RET&gt;       =
+</pre>
+   <p class="noindent">The <kbd>=</kbd> key <dfn>evaluates</dfn> a formula by replacing all its
+variables by the values that were stored in them.
+
+   <p>For RPN calculations, you can recall a variable's value on the
+stack either by entering its name as a formula and pressing <kbd>=</kbd>,
+or by using the <kbd>s r</kbd> command.
+
+<pre class="smallexample">     1:  17         2:  17         3:  17         2:  17         1:  306
+         .          1:  17         2:  17         1:  289            .
+                        .          1:  2              .
+                                       .
+     
+       s r a &lt;RET&gt;     ' a &lt;RET&gt; =         2              ^              +
+</pre>
+   <p>If you press a single digit for a variable name (as in <kbd>s t 3</kbd>, you
+get one of ten <dfn>quick variables</dfn> <code>q0</code> through <code>q9</code>. 
+They are &ldquo;quick&rdquo; simply because you don't have to type the letter
+<code>q</code> or the &lt;RET&gt; after their names.  In fact, you can type
+simply <kbd>s 3</kbd> as a shorthand for <kbd>s s 3</kbd>, and likewise for
+<kbd>t 3</kbd> and <kbd>r&nbsp;3</kbd><!-- /@w -->.
+
+   <p>Any variables in an algebraic formula for which you have not stored
+values are left alone, even when you evaluate the formula.
+
+<pre class="smallexample">     1:  2 a + 2 b     1:  34 + 2 b
+         .                 .
+     
+      ' 2a+2b &lt;RET&gt;          =
+</pre>
+   <p>Calls to function names which are undefined in Calc are also left
+alone, as are calls for which the value is undefined.
+
+<pre class="smallexample">     1:  2 + log10(0) + log10(x) + log10(5, 6) + foo(3)
+         .
+     
+      ' log10(100) + log10(0) + log10(x) + log10(5,6) + foo(3) &lt;RET&gt;
+</pre>
+   <p class="noindent">In this example, the first call to <code>log10</code> works, but the other
+calls are not evaluated.  In the second call, the logarithm is
+undefined for that value of the argument; in the third, the argument
+is symbolic, and in the fourth, there are too many arguments.  In the
+fifth case, there is no function called <code>foo</code>.  You will see a
+&ldquo;Wrong number of arguments&rdquo; message referring to &lsquo;<samp><span class="samp">log10(5,6)</span></samp>&rsquo;. 
+Press the <kbd>w</kbd> (&ldquo;why&rdquo;) key to see any other messages that may
+have arisen from the last calculation.  In this case you will get
+&ldquo;logarithm of zero,&rdquo; then &ldquo;number expected: <code>x</code>&rdquo;.  Calc
+automatically displays the first message only if the message is
+sufficiently important; for example, Calc considers &ldquo;wrong number
+of arguments&rdquo; and &ldquo;logarithm of zero&rdquo; to be important enough to
+report automatically, while a message like &ldquo;number expected: <code>x</code>&rdquo;
+will only show up if you explicitly press the <kbd>w</kbd> key.
+
+   <p>(&bull;) <strong>Exercise 2.</strong>  Joe entered the formula &lsquo;<samp><span class="samp">2 x y</span></samp>&rsquo;,
+stored 5 in <code>x</code>, pressed <kbd>=</kbd>, and got the expected result,
+&lsquo;<samp><span class="samp">10 y</span></samp>&rsquo;.  He then tried the same for the formula &lsquo;<samp><span class="samp">2 x (1+y)</span></samp>&rsquo;,
+expecting &lsquo;<samp><span class="samp">10 (1+y)</span></samp>&rsquo;, but it didn't work.  Why not? 
+See <a href="Algebraic-Answer-2.html#Algebraic-Answer-2">2</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 3.</strong>  What result would you expect
+<kbd>1 &lt;RET&gt; 0 /</kbd> to give?  What if you then type <kbd>0 *</kbd>? 
+See <a href="Algebraic-Answer-3.html#Algebraic-Answer-3">3</a>. (&bull;)
+
+   <p>One interesting way to work with variables is to use the
+<dfn>evaluates-to</dfn> (&lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;) operator.  It works like this:
+Enter a formula algebraically in the usual way, but follow
+the formula with an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; symbol.  (There is also an <kbd>s =</kbd>
+command which builds an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; formula using the stack.)  On
+the stack, you will see two copies of the formula with an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;
+between them.  The lefthand formula is exactly like you typed it;
+the righthand formula has been evaluated as if by typing <kbd>=</kbd>.
+
+<pre class="smallexample">     2:  2 + 3 =&gt; 5                     2:  2 + 3 =&gt; 5
+     1:  2 a + 2 b =&gt; 34 + 2 b          1:  2 a + 2 b =&gt; 20 + 2 b
+         .                                  .
+     
+     ' 2+3 =&gt; &lt;RET&gt;  ' 2a+2b &lt;RET&gt; s =          10 s t a &lt;RET&gt;
+</pre>
+   <p class="noindent">Notice that the instant we stored a new value in <code>a</code>, all
+&lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operators already on the stack that referred to &lsquo;<samp><span class="samp">a</span></samp>&rsquo;
+were updated to use the new value.  With &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;, you can push a
+set of formulas on the stack, then change the variables experimentally
+to see the effects on the formulas' values.
+
+   <p>You can also &ldquo;unstore&rdquo; a variable when you are through with it:
+
+<pre class="smallexample">     2:  2 + 5 =&gt; 5
+     1:  2 a + 2 b =&gt; 2 a + 2 b
+         .
+     
+         s u a &lt;RET&gt;
+</pre>
+   <p>We will encounter formulas involving variables and functions again
+when we discuss the algebra and calculus features of the Calculator.
+
+   </body></html>
+

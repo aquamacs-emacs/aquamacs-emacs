@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+<title>Extracting agenda information - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hacking.html#Hacking" title="Hacking">
+<link rel="prev" href="Special-agenda-views.html#Special-agenda-views" title="Special agenda views">
+<link rel="next" href="Using-the-property-API.html#Using-the-property-API" title="Using the property API">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Extracting-agenda-information"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-the-property-API.html#Using-the-property-API">Using the property API</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Special-agenda-views.html#Special-agenda-views">Special agenda views</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hacking.html#Hacking">Hacking</a>
+<hr>
+</div>
+
+<h3 class="section">A.8 Extracting agenda information</h3>
+
+<p><a name="index-agenda_002c-pipe-1435"></a><a name="index-Scripts_002c-for-agenda-processing-1436"></a>
+<a name="index-org_002dagenda_002dcustom_002dcommands-1437"></a>Org provides commands to access agenda information for the command
+line in Emacs batch mode.  This extracted information can be sent
+directly to a printer, or it can be read by a program that does further
+processing of the data.  The first of these commands is the function
+<code>org-batch-agenda</code>, that produces an agenda view and sends it as
+ASCII text to STDOUT.  The command takes a single string as parameter. 
+If the string has length 1, it is used as a key to one of the commands
+you have configured in <code>org-agenda-custom-commands</code>, basically any
+key you can use after <kbd>C-c a</kbd>.  For example, to directly print the
+current TODO list, you could use
+
+<pre class="example">     emacs -batch -l ~/.emacs -eval '(org-batch-agenda "t")' | lpr
+</pre>
+   <p>If the parameter is a string with 2 or more characters, it is used as a
+tags/TODO match string.  For example, to print your local shopping list
+(all items with the tag &lsquo;<samp><span class="samp">shop</span></samp>&rsquo;, but excluding the tag
+&lsquo;<samp><span class="samp">NewYork</span></samp>&rsquo;), you could use
+
+<pre class="example">     emacs -batch -l ~/.emacs                                      \
+           -eval '(org-batch-agenda "+shop-NewYork")' | lpr
+</pre>
+   <p class="noindent">You may also modify parameters on the fly like this:
+
+<pre class="example">     emacs -batch -l ~/.emacs                                      \
+        -eval '(org-batch-agenda "a"                               \
+                 org-agenda-ndays 30                               \
+                 org-agenda-include-diary nil                      \
+                 org-agenda-files (quote ("~/org/project.org")))'  \
+        | lpr
+</pre>
+   <p class="noindent">which will produce a 30-day agenda, fully restricted to the Org file
+<samp><span class="file">~/org/projects.org</span></samp>, not even including the diary.
+
+   <p>If you want to process the agenda data in more sophisticated ways, you
+can use the command <code>org-batch-agenda-csv</code> to get a comma-separated
+list of values for each agenda item.  Each line in the output will
+contain a number of fields separated by commas.  The fields in a line
+are:
+
+<pre class="example">     category     <span class="roman">The category of the item</span>
+     head         <span class="roman">The headline, without TODO keyword, TAGS and PRIORITY</span>
+     type         <span class="roman">The type of the agenda entry, can be</span>
+                     todo               <span class="roman">selected in TODO match</span>
+                     tagsmatch          <span class="roman">selected in tags match</span>
+                     diary              <span class="roman">imported from diary</span>
+                     deadline           <span class="roman">a deadline</span>
+                     scheduled          <span class="roman">scheduled</span>
+                     timestamp          <span class="roman">appointment, selected by timestamp</span>
+                     closed             <span class="roman">entry was closed on date</span>
+                     upcoming-deadline  <span class="roman">warning about nearing deadline</span>
+                     past-scheduled     <span class="roman">forwarded scheduled item</span>
+                     block              <span class="roman">entry has date block including date</span>
+     todo         <span class="roman">The TODO keyword, if any</span>
+     tags         <span class="roman">All tags including inherited ones, separated by colons</span>
+     date         <span class="roman">The relevant date, like 2007-2-14</span>
+     time         <span class="roman">The time, like 15:00-16:50</span>
+     extra        <span class="roman">String with extra planning info</span>
+     priority-l   <span class="roman">The priority letter if any was given</span>
+     priority-n   <span class="roman">The computed numerical priority</span>
+</pre>
+   <p class="noindent">Time and date will only be given if a timestamp (or deadline/scheduled)
+led to the selection of the item.
+
+   <p>A CSV list like this is very easy to use in a post-processing script. 
+For example, here is a Perl program that gets the TODO list from
+Emacs/Org and prints all the items, preceded by a checkbox:
+
+<pre class="example">     #!/usr/bin/perl
+     
+     # define the Emacs command to run
+     $cmd = "emacs -batch -l ~/.emacs -eval '(org-batch-agenda-csv \"t\")'";
+     
+     # run it and capture the output
+     $agenda = qx{$cmd 2&gt;/dev/null};
+     
+     # loop over all lines
+     foreach $line (split(/\n/,$agenda)) {
+       # get the individual values
+       ($category,$head,$type,$todo,$tags,$date,$time,$extra,
+        $priority_l,$priority_n) = split(/,/,$line);
+       # process and print
+       print "[ ] $head\n";
+     }
+</pre>
+   </body></html>
+

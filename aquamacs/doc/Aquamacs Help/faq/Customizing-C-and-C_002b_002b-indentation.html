@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Customizing C and C++ indentation - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Common-requests.html#Common-requests" title="Common requests">
+<link rel="prev" href="Indenting-switch-statements.html#Indenting-switch-statements" title="Indenting switch statements">
+<link rel="next" href="Horizontal-scrolling.html#Horizontal-scrolling" title="Horizontal scrolling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Customizing-C-and-C++-indentation"></a>
+<a name="Customizing-C-and-C_002b_002b-indentation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Horizontal-scrolling.html#Horizontal-scrolling">Horizontal scrolling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Indenting-switch-statements.html#Indenting-switch-statements">Indenting switch statements</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Common-requests.html#Common-requests">Common requests</a>
+<hr>
+</div>
+
+<h3 class="section">5.21 How to customize indentation in C, C<tt>++</tt>, and Java buffers?</h3>
+
+<p><a name="index-Indentation_002c-how-to-customize-234"></a><a name="index-Customize-indentation-235"></a>
+The Emacs <code>cc-mode</code> features an interactive procedure for
+customizing the indentation style, which is fully explained in the
+<cite>CC Mode</cite> manual that is part of the Emacs distribution, see
+<a href="../ccmode/Customizing-Indentation.html#Customizing-Indentation">Customization Indentation</a>.  Here's a short summary of the procedure:
+
+     <ol type=1 start=1>
+<li>Go to the beginning of the first line where you don't like the
+indentation and type <kbd>C-c C-o</kbd>.  Emacs will prompt you for the
+syntactic symbol; type &lt;RET&gt; to accept the default it suggests.
+
+     <li>Emacs now prompts for the offset of this syntactic symbol, showing the
+default (the current definition) inside parentheses.  You can choose
+one of these:
+
+          <dl>
+<dt><code>0</code><dd>No extra indentation. 
+<br><dt><code>+</code><dd>Indent one basic offset. 
+<br><dt><code>-</code><dd>Outdent one basic offset. 
+<br><dt><code>++</code><dd>Indent two basic offsets
+<br><dt><code>--</code><dd>Outdent two basic offsets. 
+<br><dt><code>*</code><dd>Indent half basic offset. 
+<br><dt><code>/</code><dd>Outdent half basic offset. 
+</dl>
+
+     <li>After choosing one of these symbols, type <kbd>C-c C-q</kbd> to reindent
+the line or the block according to what you just specified.
+
+     <li>If you don't like the result, go back to step 1.  Otherwise, add the
+following line to your <samp><span class="file">.emacs</span></samp>:
+
+     <pre class="lisp">          (c-set-offset '<var>syntactic-symbol</var> <var>offset</var>)
+</pre>
+     <p class="noindent">where <var>syntactic-symbol</var> is the name Emacs shows in the minibuffer
+when you type <kbd>C-c C-o</kbd> at the beginning of the line, and
+<var>offset</var> is one of the indentation symbols listed above (<code>+</code>,
+<code>/</code>, <code>0</code>, etc.) that you've chosen during the interactive
+procedure.
+
+     <li>Go to the next line whose indentation is not to your liking and repeat
+the process there.
+        </ol>
+
+   <p>It is recommended to put all the resulting <code>(c-set-offset ...)</code>
+customizations inside a C mode hook, like this:
+
+<pre class="lisp">     (defun my-c-mode-hook ()
+       (c-set-offset ...)
+       (c-set-offset ...))
+     (add-hook 'c-mode-hook 'my-c-mode-hook)
+</pre>
+   <p class="noindent">Using <code>c-mode-hook</code> avoids the need to put a <code>(require&nbsp;'cc-mode)</code><!-- /@w --> into your <samp><span class="file">.emacs</span></samp> file, because <code>c-set-offset</code>
+might be unavailable when <code>cc-mode</code> is not loaded.
+
+   <p>Note that <code>c-mode-hook</code> runs for C source files only; use
+<code>c++-mode-hook</code> for C<tt>++</tt> sources, <code>java-mode-hook</code> for
+Java sources, etc.  If you want the same customizations to be in
+effect in <em>all</em> languages supported by <code>cc-mode</code>, use
+<code>c-mode-common-hook</code>.
+
+   </body></html>
+

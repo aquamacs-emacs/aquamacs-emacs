@@ -1,0 +1,254 @@
+<html lang="en">
+<head>
+<title>Viewing - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reading-Mail.html#Reading-Mail" title="Reading Mail">
+<link rel="prev" href="Reading-Mail.html#Reading-Mail" title="Reading Mail">
+<link rel="next" href="Viewing-Attachments.html#Viewing-Attachments" title="Viewing Attachments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Viewing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Viewing-Attachments.html#Viewing-Attachments">Viewing Attachments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-Mail.html#Reading-Mail">Reading Mail</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Mail.html#Reading-Mail">Reading Mail</a>
+<hr>
+</div>
+
+<h3 class="section">6.1 Viewing Your Mail</h3>
+
+<p><a name="index-mh_002dheader_002ddisplay-480"></a><a name="index-mh_002dpage_002dmsg-481"></a><a name="index-mh_002dprevious_002dpage-482"></a><a name="index-mh_002dshow-483"></a><a name="index-mh_002dshow_002dmouse-484"></a><a name="index-g_t_002c-_0028comma_0029-485"></a><a name="index-g_t_002e-_0028period_0029-486"></a><a name="index-g_t_0040key_007bBS_007d-487"></a><a name="index-g_t_0040key_007bRET_007d-488"></a><a name="index-g_t_0040key_007bSPC_007d-489"></a><a name="index-Mouse_002d2-490"></a>
+The command &lt;RET&gt; (<code>mh-show</code>) displays the message that the
+cursor is on while <kbd>Mouse-2</kbd> (<code>mh-show-mouse</code>) displays the
+message that the mouse cursor is on. If the message is already
+displayed, it scrolls to the beginning of the message. Use &lt;SPC&gt;
+(<code>mh-page-msg</code>) and &lt;BS&gt; (<code>mh-previous-page</code>) to move
+forwards and backwards one page at a time through the message. You can
+give either of these commands a prefix argument that specifies the
+number of lines to scroll (such as <kbd>10 &lt;SPC&gt;</kbd>). The &lt;SPC&gt;
+command will also show the next undeleted message if it is used at the
+bottom of a message. MH-E normally hides a lot of the superfluous
+header fields that mailers add to a message, but if you wish to see
+all of them, use the command <kbd>,</kbd> (comma;
+<code>mh-header-display</code>).
+
+   <p><a name="index-mh_002dshow_002dmaximum_002dsize-491"></a>
+The option <code>mh-show-maximum-size</code> provides an opportunity to skip
+over large messages which may be slow to load. The default value of 0
+means that all message are shown regardless of size.
+
+   <p>A litany of options control what displayed messages look like.
+
+   <p><a name="index-mh_002dshow_002dcc-492"></a><a name="index-mh_002dshow_002ddate-493"></a><a name="index-mh_002dshow_002dfrom-494"></a><a name="index-mh_002dshow_002dheader-495"></a><a name="index-mh_002dshow_002dsubject-496"></a><a name="index-mh_002dshow_002dto-497"></a>
+First, the appearance of the header fields can be modified by
+customizing the associated face: <code>mh-show-to</code>, <code>mh-show-cc</code>,
+<code>mh-show-from</code>, <code>mh-show-date</code>, and <code>mh-show-subject</code>. 
+The face <code>mh-show-header</code> is used to deemphasize the other, less
+interesting, header fields.
+
+   <p><a name="index-regular-expressions_002c-_0040code_007bmh_002dinvisible_002dheader_002dfields_007d-498"></a><a name="index-mh_002dclean_002dmessage_002dheader_002dflag-499"></a><a name="index-mh_002dinvisible_002dheader_002dfields-500"></a><a name="index-mh_002dinvisible_002dheader_002dfields_002ddefault-501"></a>
+Normally messages are delivered with a handful of uninteresting header
+fields. These are hidden by turning on the option
+<code>mh-clean-message-header-flag</code> (which it is by default). The
+header fields listed in the option
+<code>mh-invisible-header-fields-default</code> are hidden, although you can
+check off any field that you would like to see. Header fields that you
+would like to hide that aren't listed can be added to the option
+<code>mh-invisible-header-fields</code> with a couple of caveats. Regular
+expressions are not allowed. Unique fields should have a &lsquo;<samp><span class="samp">:</span></samp>&rsquo;
+suffix; otherwise, the element can be used to render invisible an
+entire class of fields that start with the same prefix. If you think a
+header field should be generally ignored, please update
+<a href="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1916032&amp;group_id=13357&amp;atid=113357">SF #1916032</a>.
+
+   <p><a name="index-header-field_002c-_0040samp_007bFace_003a_007d-502"></a><a name="index-header-field_002c-_0040samp_007bX_002dFace_003a_007d-503"></a><a name="index-header-field_002c-_0040samp_007bX_002dImage_002dURL_003a_007d-504"></a><a name="index-g_t_0040samp_007bFace_003a_007d-header-field-505"></a><a name="index-g_t_0040samp_007bX_002dFace_003a_007d-header-field-506"></a><a name="index-g_t_0040samp_007bX_002dImage_002dURL_003a_007d-header-field-507"></a><a name="index-mh_002dshow_002duse_002dxface_002dflag-508"></a>
+MH-E can display the content of &lsquo;<samp><span class="samp">Face:</span></samp>&rsquo;, &lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">X-Image-URL:</span></samp>&rsquo; header fields. If any of these fields occur in the
+header of your message, the sender's face will appear in the
+&lsquo;<samp><span class="samp">From:</span></samp>&rsquo; header field. If more than one of these fields appear,
+then the first field found in the order &lsquo;<samp><span class="samp">Face:</span></samp>&rsquo;, &lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">X-Image-URL:</span></samp>&rsquo; will be used. The option
+<code>mh-show-use-xface-flag</code> is used to turn this feature on and off. 
+This feature will be turned on by default if your system supports it.
+
+   <p>The first header field used, if present, is the Gnus-specific
+&lsquo;<samp><span class="samp">Face:</span></samp>&rsquo; field<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p><a name="index-g_t_0040command_007buncompface_007d-509"></a><a name="index-Emacs_002c-packages_002c-x_002dface-510"></a><a name="index-Unix-commands_002c-_0040command_007buncompface_007d-511"></a><a name="index-x_002dface-package-512"></a><a name="index-mh_002dshow_002dxface-513"></a>
+Next is the traditional &lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo; header field<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>. MH-E
+renders the foreground and background of the image using the
+associated attributes of the face <code>mh-show-xface</code>.
+
+   <p><a name="index-g_t_0040command_007bconvert_007d-514"></a><a name="index-g_t_0040command_007bwget_007d-515"></a><a name="index-ImageMagick-516"></a><a name="index-Unix-commands_002c-_0040command_007bconvert_007d-517"></a><a name="index-Unix-commands_002c-_0040command_007bwget_007d-518"></a><a name="index-mh_002dfetch_002dx_002dimage_002durl-519"></a>
+Finally, MH-E will display images referenced by the
+&lsquo;<samp><span class="samp">X-Image-URL:</span></samp>&rsquo; header field if neither the &lsquo;<samp><span class="samp">Face:</span></samp>&rsquo; nor the
+&lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo; fields are present<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>. Of the three header fields this is the most efficient in
+terms of network usage since the image doesn't need to be transmitted
+with every single mail. The option <code>mh-fetch-x-image-url</code>
+controls the fetching of the &lsquo;<samp><span class="samp">X-Image-URL:</span></samp>&rsquo; header field image
+with the following values:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">Ask Before Fetching</span></samp>&rsquo;<dd>You are prompted before the image is fetched. MH-E will remember your
+reply and will either use the already fetched image the next time the
+same URL is encountered or silently skip it if you didn't fetch it the
+first time. This is a good setting. 
+<!--  -->
+<br><dt>&lsquo;<samp><span class="samp">Never Fetch</span></samp>&rsquo;<dd>Images are never fetched and only displayed if they are already
+present in the cache. This is the default. 
+</dl>
+
+   <p>There isn't a value of &lsquo;<samp><span class="samp">Always Fetch</span></samp>&rsquo; for privacy and DOS (denial
+of service) reasons. For example, fetching a URL can tip off a spammer
+that you've read his email (which is why you shouldn't blindly answer
+yes if you've set this option to &lsquo;<samp><span class="samp">Ask Before Fetching</span></samp>&rsquo;). Someone
+may also flood your network and fill your disk drive by sending a
+torrent of messages, each specifying a unique URL to a very large
+file.
+
+   <p><a name="index-g_t_0040file_007b_002emhe_002dx_002dimage_002dcache_007d-520"></a><a name="index-files_002c-_0040file_007b_002emhe_002dx_002dimage_002dcache_007d-521"></a>
+The cache of images is found in the directory
+<samp><span class="file">.mhe-x-image-cache</span></samp> within your MH directory. You can add your
+own face to the &lsquo;<samp><span class="samp">From:</span></samp>&rsquo; field too. See <a href="Picture.html#Picture">Picture</a>.
+
+   <p><a name="index-g_t_0040command_007bmhl_007d-522"></a><a name="index-MH-commands_002c-_0040command_007bmhl_007d-523"></a><a name="index-mh_002dmhl_002dformat_002dfile-524"></a>
+Normally MH-E takes care of displaying messages itself (rather than
+calling an MH program to do the work). If you'd rather have
+<samp><span class="command">mhl</span></samp> display the message (within MH-E), change the option
+<code>mh-mhl-format-file</code> from its default value of &lsquo;<samp><span class="samp">Use Default
+mhl Format (Printing Only)</span></samp>&rsquo;. You can set this option to &lsquo;<samp><span class="samp">Use
+Default mhl Format</span></samp>&rsquo; to get the same output as you would get if you ran
+<samp><span class="command">mhl</span></samp> from the shell. If you have a format file that you want
+MH-E to use, you can set this option to &lsquo;<samp><span class="samp">Specify an mhl Format
+File</span></samp>&rsquo; and enter the name of your format file (<samp><span class="command">mhl</span></samp>(1) or
+section <a href="http://rand-mh.sourceforge.net/book/mh/shomes.html#Usisho">Using mhl</a> in
+the MH book tells you how to write one). Your format file should
+specify a non-zero value for &lsquo;<samp><span class="samp">overflowoffset</span></samp>&rsquo; to allow MH-E to
+parse the header. Note that <samp><span class="command">mhl</span></samp> is always used for printing
+and forwarding; in this case, the value of <code>mh-mhl-format-file</code>
+is consulted if you have specified a format file.
+
+   <p><a name="index-citations_002c-highlighting-525"></a><a name="index-highlighting-citations-526"></a><a name="index-mh_002dhighlight_002dcitation_002dstyle-527"></a>
+If the sender of the message has cited other messages in his message,
+then MH-E will highlight these citations to emphasize the sender's
+actual response. The option <code>mh-highlight-citation-style</code> can be
+customized to change the highlighting style. The &lsquo;<samp><span class="samp">Multicolor</span></samp>&rsquo;
+method uses a different color for each indentation while the
+&lsquo;<samp><span class="samp">Monotone</span></samp>&rsquo; method highlights all citations in red. To disable
+highlighting of citations entirely, choose &lsquo;<samp><span class="samp">None</span></samp>&rsquo;.
+
+   <p><a name="index-URLs_002c-highlighting-528"></a><a name="index-email-addresses_002c-highlighting-529"></a><a name="index-highlighting-URLs-530"></a><a name="index-highlighting-email-addresses-531"></a><a name="index-links_002c-following-532"></a><a name="index-goto_002daddress_002dat_002dpoint-533"></a><a name="index-C_002dc-_0040key_007bRET_007d-534"></a><a name="index-Mouse_002d2-535"></a><a name="index-goto_002daddress_002dhighlight_002dp-536"></a>
+Email addresses and URLs in the message are highlighted if the option
+<code>goto-address-highlight-p</code> is on, which it is by default. To view
+the web page for a highlighted URL or to send a message using a
+highlighted email address, use <kbd>Mouse-2</kbd> or <kbd>C-c &lt;RET&gt;</kbd>
+(<code>goto-address-at-point</code>). See <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>, to see how to
+configure Emacs to send the message using MH-E.
+
+   <p><a name="index-boldface_002c-showing-537"></a><a name="index-emphasis-538"></a><a name="index-italics_002c-showing-539"></a><a name="index-smileys-540"></a><a name="index-typesetting-541"></a><a name="index-underline_002c-showing-542"></a><a name="index-gnus_002demphasis_002dalist-543"></a><a name="index-mh_002ddecode_002dmime_002dflag-544"></a><a name="index-mh_002dgraphical_002demphasis_002dflag-545"></a><a name="index-mh_002dgraphical_002dsmileys_002dflag-546"></a>
+It is a long standing custom to inject body language using a
+cornucopia of punctuation, also known as the <dfn>smileys</dfn>. MH-E can
+render these as graphical widgets if the option
+<code>mh-graphical-smileys-flag</code> is turned on, which it is by default. 
+Smileys include patterns such as :-) and ;-). Similarly, a few
+typesetting features are indicated in ASCII text with certain
+characters. If your terminal supports it, MH-E can render these
+typesetting directives naturally if the option
+<code>mh-graphical-emphasis-flag</code> is turned on, which it is by
+default. For example, _underline_ will be
+<u>underlined</u>,*bold* will appear in <b>bold</b>, /italics/ will appear in <i>italics</i>,
+and so on. See the option <code>gnus-emphasis-alist</code> for the whole
+list. Both of these options are disabled if the option
+<code>mh-decode-mime-flag</code> is turned off. See <a href="Viewing-Attachments.html#Viewing-Attachments">Viewing Attachments</a>.
+
+   <p><a name="index-signature-separator-547"></a><a name="index-vCard-548"></a><a name="index-mh_002dshow_002dsignature-549"></a>
+MH-E normally renders signatures and vCards in italics so that the
+body of the message stands out more. MH-E depends on the presence of
+the <dfn>signature separator</dfn> (<code>"-- "</code>) to do this. You can also
+customize the face <code>mh-show-signature</code> so the appearance of the
+signature block is more to your liking.
+
+   <p><a name="index-mh_002dshow_002dhook-550"></a><a name="index-mh_002dshow_002dmode_002dhook-551"></a>
+Two hooks can be used to control how messages are displayed. The first
+hook, <code>mh-show-mode-hook</code>, is called early on in the process of
+the message display. It is usually used to perform some action on the
+message's content. The second hook, <code>mh-show-hook</code>, is the last
+thing called after messages are displayed. It's used to affect the
+behavior of MH-E in general or when <code>mh-show-mode-hook</code> is too
+early.
+
+   <p><a name="index-MH_002dShow-mode-552"></a><a name="index-modes_002c-MH_002dShow-553"></a><a name="index-mh_002dshow_002dbuffer_002dmode_002dline_002dbuffer_002did-554"></a>
+For those who like to modify their mode lines, use
+<code>mh-show-buffer-mode-line-buffer-id</code> to modify the mode line in
+the MH-Show buffers. Place the two escape strings &lsquo;<samp><span class="samp">%s</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">%d</span></samp>&rsquo;, which will display the folder name and the message number,
+respectively, somewhere in the string in that order. The default value
+of <code>"{show-%s} %d"</code> yields a mode line of
+
+<pre class="smallexample">     -----{show-+inbox} 4      (MH-Show)--Bot--------------------------------
+</pre>
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The &lsquo;<samp><span class="samp">Face:</span></samp>&rsquo; field appeared in GNU
+Emacs 21 and XEmacs. For more information, see
+<a href="http://quimby.gnus.org/circus/face/">http://quimby.gnus.org/circus/face/</a>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The
+display of this field requires the
+<a href="ftp://ftp.cs.indiana.edu/pub/faces/compface/compface.tar.Z"><samp><span class="command">uncompface</span></samp> program</a>. Recent versions of XEmacs have internal
+support for &lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo; images. If your version of XEmacs does not,
+then you'll need both <samp><span class="command">uncompface</span></samp> and the
+<a href="ftp://ftp.jpl.org/pub/elisp/">&lsquo;<samp><span class="samp">x-face</span></samp>&rsquo; package</a>.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> The display of the images
+requires the <a href="http://www.gnu.org/software/wget/wget.html"><samp><span class="command">wget</span></samp> program</a> to fetch the image and the <samp><span class="command">convert</span></samp>
+program from the <a href="http://www.imagemagick.org/">ImageMagick suite</a>.</p>
+
+   <hr></div>
+
+   </body></html>
+

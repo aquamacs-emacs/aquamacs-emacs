@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Finding the Parent - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Summary-Sorting.html#Summary-Sorting" title="Summary Sorting">
+<link rel="next" href="Alternative-Approaches.html#Alternative-Approaches" title="Alternative Approaches">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Finding-the-Parent"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Alternative-Approaches.html#Alternative-Approaches">Alternative Approaches</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Summary-Sorting.html#Summary-Sorting">Summary Sorting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.23 Finding the Parent</h3>
+
+<p><a name="index-parent-articles-1598"></a><a name="index-referring-articles-1599"></a>
+     <dl>
+<dt><kbd>^</kbd><dd><a name="index-g_t_005e-_0028Summary_0029-1600"></a><a name="index-gnus_002dsummary_002drefer_002dparent_002darticle-1601"></a>If you'd like to read the parent of the current article, and it is not
+displayed in the summary buffer, you might still be able to.  That is,
+if the current group is fetched by <acronym>NNTP</acronym>, the parent hasn't expired
+and the <code>References</code> in the current article are not mangled, you
+can just press <kbd>^</kbd> or <kbd>A r</kbd>
+(<code>gnus-summary-refer-parent-article</code>).  If everything goes well,
+you'll get the parent.  If the parent is already displayed in the
+summary buffer, point will just move to this article.
+
+     <p>If given a positive numerical prefix, fetch that many articles back into
+the ancestry.  If given a negative numerical prefix, fetch just that
+ancestor.  So if you say <kbd>3 ^</kbd>, Gnus will fetch the parent, the
+grandparent and the grandgrandparent of the current article.  If you say
+<kbd>-3 ^</kbd>, Gnus will only fetch the grandgrandparent of the current
+article.
+
+     <br><dt><kbd>A R (Summary)</kbd><dd><a name="index-gnus_002dsummary_002drefer_002dreferences-1602"></a><a name="index-A-R-_0028Summary_0029-1603"></a>Fetch all articles mentioned in the <code>References</code> header of the
+article (<code>gnus-summary-refer-references</code>).
+
+     <br><dt><kbd>A T (Summary)</kbd><dd><a name="index-gnus_002dsummary_002drefer_002dthread-1604"></a><a name="index-A-T-_0028Summary_0029-1605"></a>Display the full thread where the current article appears
+(<code>gnus-summary-refer-thread</code>).  This command has to fetch all the
+headers in the current group to work, so it usually takes a while.  If
+you do it often, you may consider setting <code>gnus-fetch-old-headers</code>
+to <code>invisible</code> (see <a href="Filling-In-Threads.html#Filling-In-Threads">Filling In Threads</a>).  This won't have any
+visible effects normally, but it'll make this command work a whole lot
+faster.  Of course, it'll make group entry somewhat slow.
+
+     <p><a name="index-gnus_002drefer_002dthread_002dlimit-1606"></a>The <code>gnus-refer-thread-limit</code> variable says how many old (i. e.,
+articles before the first displayed in the current group) headers to
+fetch when doing this command.  The default is 200.  If <code>t</code>, all
+the available headers will be fetched.  This variable can be overridden
+by giving the <kbd>A T</kbd> command a numerical prefix.
+
+     <br><dt><kbd>M-^ (Summary)</kbd><dd><a name="index-gnus_002dsummary_002drefer_002darticle-1607"></a><a name="index-M_002d_005e-_0028Summary_0029-1608"></a><a name="index-Message_002dID-1609"></a><a name="index-fetching-by-Message_002dID-1610"></a>You can also ask Gnus for an arbitrary article, no matter what group it
+belongs to.  <kbd>M-^</kbd> (<code>gnus-summary-refer-article</code>) will ask you
+for a <code>Message-ID</code>, which is one of those long, hard-to-read
+thingies that look something like &lsquo;<samp><span class="samp">&lt;38o6up$6f2@hymir.ifi.uio.no&gt;</span></samp>&rsquo;. 
+You have to get it all exactly right.  No fuzzy searches, I'm afraid.
+
+     <p>Gnus looks for the <code>Message-ID</code> in the headers that have already
+been fetched, but also tries all the select methods specified by
+<code>gnus-refer-article-method</code> if it is not found. 
+</dl>
+
+   <p><a name="index-gnus_002drefer_002darticle_002dmethod-1611"></a>If the group you are reading is located on a back end that does not
+support fetching by <code>Message-ID</code> very well (like <code>nnspool</code>),
+you can set <code>gnus-refer-article-method</code> to an <acronym>NNTP</acronym> method.  It
+would, perhaps, be best if the <acronym>NNTP</acronym> server you consult is the one
+updating the spool you are reading from, but that's not really
+necessary.
+
+   <p>It can also be a list of select methods, as well as the special symbol
+<code>current</code>, which means to use the current select method.  If it
+is a list, Gnus will try all the methods in the list until it finds a
+match.
+
+   <p>Here's an example setting that will first try the current method, and
+then ask Google if that fails:
+
+<pre class="lisp">     (setq gnus-refer-article-method
+           '(current
+             (nnweb "google" (nnweb-type google))))
+</pre>
+   <p>Most of the mail back ends support fetching by <code>Message-ID</code>, but
+do not do a particularly excellent job at it.  That is, <code>nnmbox</code>,
+<code>nnbabyl</code>, <code>nnmaildir</code>, <code>nnml</code>, are able to locate
+articles from any groups, while <code>nnfolder</code>, and <code>nnimap</code> are
+only able to locate articles that have been posted to the current
+group.  (Anything else would be too time consuming.)  <code>nnmh</code> does
+not support this at all.
+
+   </body></html>
+

@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Windows Files - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Microsoft-Windows.html#Microsoft-Windows" title="Microsoft Windows">
+<link rel="prev" href="Text-and-Binary.html#Text-and-Binary" title="Text and Binary">
+<link rel="next" href="ls-in-Lisp.html#ls-in-Lisp" title="ls in Lisp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Windows-Files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ls-in-Lisp.html#ls-in-Lisp">ls in Lisp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-and-Binary.html#Text-and-Binary">Text and Binary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Windows">Microsoft Windows</a>
+<hr>
+</div>
+
+<h3 class="section">G.2 File Names on MS-Windows</h3>
+
+<p><a name="index-file-names-on-MS_002dWindows-4325"></a>
+  MS-Windows and MS-DOS normally use a backslash, &lsquo;<samp><span class="samp">\</span></samp>&rsquo;, to
+separate name units within a file name, instead of the slash used on
+other systems.  Emacs on MS-DOS/MS-Windows permits use of either slash or
+backslash, and also knows about drive letters in file names.
+
+   <p><a name="index-file_002dname-completion_002c-on-MS_002dWindows-4326"></a>  On MS-DOS/MS-Windows, file names are case-insensitive, so Emacs by
+default ignores letter-case in file names during completion.
+
+   <p><a name="index-w32_002dget_002dtrue_002dfile_002dattributes-4327"></a>  The variable <code>w32-get-true-file-attributes</code> controls whether
+Emacs should issue additional system calls to determine more
+accurately file attributes in primitives like <code>file-attributes</code>
+and <code>directory-files-and-attributes</code>.  These additional calls are
+needed to report correct file ownership, link counts and file types
+for special files such as pipes.  Without these system calls, file
+ownership will be attributed to the current user, link counts will be
+always reported as 1, and special files will be reported as regular
+files.
+
+   <p>If the value of this variable is <code>local</code> (the default), Emacs
+will issue these additional system calls only for files on local fixed
+drives.  Any other non-<code>nil</code> value means do this even for
+removable and remote volumes, where this could potentially slow down
+Dired and other related features.  The value of <code>nil</code> means never
+issue those system calls.  Non-<code>nil</code> values are more useful on
+NTFS volumes, which support hard links and file security, than on FAT,
+FAT32, and XFAT volumes.
+
+   </body></html>
+

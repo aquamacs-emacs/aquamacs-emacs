@@ -1,0 +1,221 @@
+<html lang="en">
+<head>
+<title>User Interface - The Emacs Widget Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Emacs Widget Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Introduction.html#Introduction" title="Introduction">
+<link rel="next" href="Programming-Example.html#Programming-Example" title="Programming Example">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="User-Interface"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Programming-Example.html#Programming-Example">Programming Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Introduction.html#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">User Interface</h3>
+
+<p>A form consists of read only text for documentation and some fields,
+where each field contains two parts, a tag and a value.  The tags are
+used to identify the fields, so the documentation can refer to the
+&lsquo;<samp><span class="samp">foo field</span></samp>&rsquo;, meaning the field tagged with &lsquo;<samp><span class="samp">Foo</span></samp>&rsquo;. Here is an
+example form:
+
+<pre class="example">     Here is some documentation.
+     
+     Name: <i>My Name</i>     <strong>Choose</strong>: This option
+     Address:  <i>Some Place
+     In some City
+     Some country.</i>
+     
+     See also <b>_other work_</b> for more information.
+     
+     Numbers: count to three below
+     <b>[INS]</b> <b>[DEL]</b> <i>One</i>
+     <b>[INS]</b> <b>[DEL]</b> <i>Eh, two?</i>
+     <b>[INS]</b> <b>[DEL]</b> <i>Five!</i>
+     <b>[INS]</b>
+     
+     Select multiple:
+     
+     <b>[X]</b> This
+     <b>[ ]</b> That
+     <b>[X]</b> Thus
+     
+     Select one:
+     
+     <b>(*)</b> One
+     <b>( )</b> Another One.
+     <b>( )</b> A Final One.
+     
+     <b>[Apply Form]</b> <b>[Reset Form]</b>
+</pre>
+   <p>The top level widgets in this example are tagged &lsquo;<samp><span class="samp">Name</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Choose</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Address</span></samp>&rsquo;, &lsquo;<samp><span class="samp">_other work_</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Numbers</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Select multiple</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Select one</span></samp>&rsquo;, &lsquo;<samp><span class="samp">[Apply Form]</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">[Reset Form]</span></samp>&rsquo;.  There are basically two things the user can do
+within a form, namely editing the editable text fields and activating
+the buttons.
+
+<h4 class="subsection">Editable Text Fields</h4>
+
+<p>In the example, the value for the &lsquo;<samp><span class="samp">Name</span></samp>&rsquo; is most likely displayed
+in an editable text field, and so are values for each of the members of
+the &lsquo;<samp><span class="samp">Numbers</span></samp>&rsquo; list.  All the normal Emacs editing operations are
+available for editing these fields.  The only restriction is that each
+change you make must be contained within a single editable text field. 
+For example, capitalizing all text from the middle of one field to the
+middle of another field is prohibited.
+
+   <p>Editable text fields are created by the <code>editable-field</code> widget.
+
+   <p><strong>Warning:</strong> In an <code>editable-field</code> widget, the editable
+field must not be adjacent to another widget&mdash;that won't work. 
+You must put some text in between.  Either make this text part of
+the <code>editable-field</code> widget itself, or insert it with
+<code>widget-insert</code>.
+
+   <p>The <code>:format</code> keyword is useful for generating the necessary
+text; for instance, if you give it a value of <code>"Name: %v "</code>,
+the &lsquo;<samp><span class="samp">Name: </span></samp>&rsquo; part will provide the necessary separating text
+before the field and the trailing space will provide the
+separating text after the field.  If you don't include the
+<code>:size</code> keyword, the field will extend to the end of the
+line, and the terminating newline will provide separation after.
+
+   <p><strong>Warning:</strong> In an <code>editable-field</code> widget, the &lsquo;<samp><span class="samp">%v</span></samp>&rsquo; escape
+must be preceded by some other text in the <code>:format</code> string
+(if specified).
+
+   <p>The editing text fields are highlighted with the
+<code>widget-field-face</code> face, making them easy to find.
+
+<div class="defun">
+&mdash; Face: <b>widget-field-face</b><var><a name="index-widget_002dfield_002dface-4"></a></var><br>
+<blockquote><p>Face used for other editing fields. 
+</p></blockquote></div>
+
+<h4 class="subsection">Buttons</h4>
+
+<p><a name="index-widget-buttons-5"></a><a name="index-button-widgets-6"></a>Some portions of the buffer have an associated <dfn>action</dfn>, which can
+be <dfn>invoked</dfn> by a standard key or mouse command.  These portions
+are called <dfn>buttons</dfn>.  The default commands for activating a button
+are:
+
+     <dl>
+<dt><kbd>&lt;RET&gt;</kbd><dd>
+
+     <div class="defun">
+&mdash; Command: <b>widget-button-press</b><var> pos &amp;optional event<a name="index-widget_002dbutton_002dpress-7"></a></var><br>
+<blockquote> <p>Invoke the button at <var>pos</var>, defaulting to point. 
+If point is not located on a button, invoke the binding in
+<code>widget-global-map</code> (by default the global map). 
+</p></blockquote></div>
+
+     <p><a name="index-Mouse_002d2-_0040r_007b_0028on-button-widgets_007d_0029-8"></a><br><dt><kbd>Mouse-2</kbd><dd>
+
+     <div class="defun">
+&mdash; Command: <b>widget-button-click</b><var> event<a name="index-widget_002dbutton_002dclick-9"></a></var><br>
+<blockquote> <p>Invoke the button at the location of the mouse pointer.  If the mouse
+pointer is located in an editable text field, invoke the binding in
+<code>widget-global-map</code> (by default the global map). 
+</p></blockquote></div>
+     </dl>
+
+   <p>There are several different kind of buttons, all of which are present in
+the example:
+
+     
+<a name="index-option-field-tag-10"></a>
+<dl><dt><em>The Option Field Tags</em><dd>When you invoke one of these buttons, you will be asked to choose
+between a number of different options.  This is how you edit an option
+field.  Option fields are created by the <code>menu-choice</code> widget.  In
+the example, &lsquo;<samp><b>Choose</b></samp>&rsquo; is an option field tag. 
+<br><dt><em>The &lsquo;</em><samp><b>[INS]</b></samp><em>&rsquo; and &lsquo;</em><samp><b>[DEL]</b></samp><em>&rsquo; buttons</em><dd>Activating these will insert or delete elements from an editable list. 
+The list is created by the <code>editable-list</code> widget. 
+<a name="index-embedded-buttons-11"></a><br><dt><em>Embedded Buttons</em><dd>The &lsquo;<samp><b>_other work_</b></samp>&rsquo; is an example of an embedded
+button.  Embedded buttons are not associated with any fields, but can serve
+any purpose, such as implementing hypertext references.  They are
+usually created by the <code>link</code> widget. 
+<br><dt><em>The &lsquo;</em><samp><b>[ ]</b></samp><em>&rsquo; and &lsquo;</em><samp><b>[X]</b></samp><em>&rsquo; buttons</em><dd>Activating one of these will convert it to the other.  This is useful
+for implementing multiple-choice fields.  You can create them with the
+<code>checkbox</code> widget. 
+<br><dt><em>The &lsquo;</em><samp><b>( )</b></samp><em>&rsquo; and &lsquo;</em><samp><b>(*)</b></samp><em>&rsquo; buttons</em><dd>Only one radio button in a <code>radio-button-choice</code> widget can be
+selected at any time.  When you invoke one of the unselected radio
+buttons, it will be selected and the previous selected radio button will
+become unselected. 
+<br><dt><em>The &lsquo;</em><samp><b>[Apply Form]</b></samp><em>&rsquo; and &lsquo;</em><samp><b>[Reset Form]</b></samp><em>&rsquo; buttons</em><dd>These are explicit buttons made with the <code>push-button</code> widget.  The
+main difference from the <code>link</code> widget is that the buttons will be
+displayed as GUI buttons when possible. 
+</dl>
+
+   <p>To make them easier to locate, buttons are emphasized in the buffer.
+
+<div class="defun">
+&mdash; Face: <b>widget-button-face</b><var><a name="index-widget_002dbutton_002dface-12"></a></var><br>
+<blockquote><p>Face used for buttons. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>widget-mouse-face</b><var><a name="index-widget_002dmouse_002dface-13"></a></var><br>
+<blockquote><p>Face used for highlighting a button when the mouse pointer moves across
+it. 
+</p></blockquote></div>
+
+<h4 class="subsection">Navigation</h4>
+
+<p>You can use all the normal Emacs commands to move around in a form
+buffer, plus you will have these additional commands:
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd><dd>
+
+     <div class="defun">
+&mdash; Command: <b>widget-forward</b><var> &amp;optional count<a name="index-widget_002dforward-14"></a></var><br>
+<blockquote> <p>Move point <var>count</var> buttons or editing fields forward. 
+</p></blockquote></div>
+     <br><dt><kbd>M-&lt;TAB&gt;</kbd><dt><kbd>S-&lt;TAB&gt;</kbd><dd>
+
+     <div class="defun">
+&mdash; Command: <b>widget-backward</b><var> &amp;optional count<a name="index-widget_002dbackward-15"></a></var><br>
+<blockquote> <p>Move point <var>count</var> buttons or editing fields backward. 
+</p></blockquote></div>
+     </dl>
+
+   </body></html>
+

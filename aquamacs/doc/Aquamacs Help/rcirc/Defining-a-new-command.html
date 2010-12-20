@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>Defining a new command - rcirc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="rcirc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hacking-and-Tweaking.html#Hacking-and-Tweaking" title="Hacking and Tweaking">
+<link rel="prev" href="Changing-the-time-stamp-format.html#Changing-the-time-stamp-format" title="Changing the time stamp format">
+<link rel="next" href="Reconnecting-after-you-have-lost-the-connection.html#Reconnecting-after-you-have-lost-the-connection" title="Reconnecting after you have lost the connection">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Defining-a-new-command"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reconnecting-after-you-have-lost-the-connection.html#Reconnecting-after-you-have-lost-the-connection">Reconnecting after you have lost the connection</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Changing-the-time-stamp-format.html#Changing-the-time-stamp-format">Changing the time stamp format</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hacking-and-Tweaking.html#Hacking-and-Tweaking">Hacking and Tweaking</a>
+<hr>
+</div>
+
+<h3 class="section">4.5 Defining a new command</h3>
+
+<p><a name="index-defining-commands-210"></a><a name="index-commands_002c-defining-211"></a><a name="index-new-commands_002c-defining-212"></a>
+Here's a simple new command, <code>/sv</code>.  With it, you can boast about
+your IRC client.  It shows how you can use <code>defun-rcirc-command</code> to
+define new commands.
+
+   <p>We're waiting for the definition of this command until <code>rcirc</code> is loaded
+because <code>defun-rcirc-command</code> is not yet available, and without
+<code>rcirc</code> loaded, the command wouldn't do us much good anyway.
+
+<pre class="smallexample">     (eval-after-load 'rcirc
+       '(defun-rcirc-command sv (arg)
+          "Boast about rcirc."
+          (interactive "i")
+          (rcirc-send-message process target
+                              (concat "I use " rcirc-id-string))))
+</pre>
+   </body></html>
+

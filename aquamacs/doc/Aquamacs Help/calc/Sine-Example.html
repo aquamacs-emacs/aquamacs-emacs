@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Sine Example - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Example-Definitions.html#Example-Definitions" title="Example Definitions">
+<link rel="prev" href="Bit-Counting-Example.html#Bit-Counting-Example" title="Bit Counting Example">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sine-Example"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Bit-Counting-Example.html#Bit-Counting-Example">Bit Counting Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Example-Definitions.html#Example-Definitions">Example Definitions</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.5.2 The Sine Function</h5>
+
+<p class="noindent"><a name="index-mysin-2336"></a>A somewhat limited sine function could be defined as follows, using the
+well-known Taylor series expansion for
+<!-- @math{\sin x}: -->
+&lsquo;<samp><span class="samp">sin(x)</span></samp>&rsquo;:
+
+<pre class="smallexample">     (defmath mysin ((float (anglep x)))
+       (interactive 1 "mysn")
+       (setq x (to-radians x))    ; Convert from current angular mode.
+       (let ((sum x)              ; Initial term of Taylor expansion of sin.
+             newsum
+             (nfact 1)            ; "nfact" equals "n" factorial at all times.
+             (xnegsqr :"-(x^2)")) ; "xnegsqr" equals -x^2.
+         (for ((n 3 100 2))       ; Upper limit of 100 is a good precaution.
+           (working "mysin" sum)  ; Display "Working" message, if enabled.
+           (setq nfact (* nfact (1- n) n)
+                 x (* x xnegsqr)
+                 newsum (+ sum (/ x nfact)))
+           (if (~= newsum sum)    ; If newsum is "nearly equal to" sum,
+               (break))           ;  then we are done.
+           (setq sum newsum))
+         sum))
+</pre>
+   <p>The actual <code>sin</code> function in Calc works by first reducing the problem
+to a sine or cosine of a nonnegative number less than &lsquo;<samp><span class="samp">pi/4</span></samp>&rsquo;.  This
+ensures that the Taylor series will converge quickly.  Also, the calculation
+is carried out with two extra digits of precision to guard against cumulative
+round-off in &lsquo;<samp><span class="samp">sum</span></samp>&rsquo;.  Finally, complex arguments are allowed and handled
+by a separate algorithm.
+
+<pre class="smallexample">     (defmath mysin ((float (scalarp x)))
+       (interactive 1 "mysn")
+       (setq x (to-radians x))    ; Convert from current angular mode.
+       (with-extra-prec 2         ; Evaluate with extra precision.
+         (cond ((complexp x)
+                (mysin-complex x))
+               ((&lt; x 0)
+                (- (mysin-raw (- x)))    ; Always call mysin-raw with x &gt;= 0.
+               (t (mysin-raw x))))))
+     
+     (defmath mysin-raw (x)
+       (cond ((&gt;= x 7)
+              (mysin-raw (% x (two-pi))))     ; Now x &lt; 7.
+             ((&gt; x (pi-over-2))
+              (- (mysin-raw (- x (pi)))))     ; Now -pi/2 &lt;= x &lt;= pi/2.
+             ((&gt; x (pi-over-4))
+              (mycos-raw (- x (pi-over-2))))  ; Now -pi/2 &lt;= x &lt;= pi/4.
+             ((&lt; x (- (pi-over-4)))
+              (- (mycos-raw (+ x (pi-over-2)))))  ; Now -pi/4 &lt;= x &lt;= pi/4,
+             (t (mysin-series x))))           ; so the series will be efficient.
+</pre>
+   <p class="noindent">where <code>mysin-complex</code> is an appropriate function to handle complex
+numbers, <code>mysin-series</code> is the routine to compute the sine Taylor
+series as before, and <code>mycos-raw</code> is a function analogous to
+<code>mysin-raw</code> for cosines.
+
+   <p>The strategy is to ensure that &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is nonnegative before calling
+<code>mysin-raw</code>.  This function then recursively reduces its argument
+to a suitable range, namely, plus-or-minus &lsquo;<samp><span class="samp">pi/4</span></samp>&rsquo;.  Note that each
+test, and particularly the first comparison against 7, is designed so
+that small roundoff errors cannot produce an infinite loop.  (Suppose
+we compared with &lsquo;<samp><span class="samp">(two-pi)</span></samp>&rsquo; instead; if due to roundoff problems
+the modulo operator ever returned &lsquo;<samp><span class="samp">(two-pi)</span></samp>&rsquo; exactly, an infinite
+recursion could result!)  We use modulo only for arguments that will
+clearly get reduced, knowing that the next rule will catch any reductions
+that this rule misses.
+
+   <p>If a program is being written for general use, it is important to code
+it carefully as shown in this second example.  For quick-and-dirty programs,
+when you know that your own use of the sine function will never encounter
+a large argument, a simpler program like the first one shown is fine.
+
+   </body></html>
+

@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>FAQ 3-8 - Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Frequently Asked Questions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-3-_002d-Getting-Messages.html#FAQ-3-_002d-Getting-Messages" title="FAQ 3 - Getting Messages">
+<link rel="prev" href="FAQ-3_002d7.html#FAQ-3_002d7" title="FAQ 3-7">
+<link rel="next" href="FAQ-3_002d9.html#FAQ-3_002d9" title="FAQ 3-9">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-3-8"></a>
+<a name="FAQ-3_002d8"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-3_002d9.html#FAQ-3_002d9">FAQ 3-9</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-3_002d7.html#FAQ-3_002d7">FAQ 3-7</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-3-_002d-Getting-Messages.html#FAQ-3-_002d-Getting-Messages">FAQ 3 - Getting Messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 3.8</h5>
+
+<p>OK, reading news works now, but I want to be able to read my mail
+with Gnus, too. How to do it?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>That's a bit harder since there are many possible sources
+for mail, many possible ways for storing mail and many
+different ways for sending mail. The most common cases are
+these: 1: You want to read your mail from a pop3 server and
+send them directly to a SMTP Server 2: Some program like
+fetchmail retrieves your mail and stores it on disk from
+where Gnus shall read it. Outgoing mail is sent by
+Sendmail, Postfix or some other MTA. Sometimes, you even
+need a combination of the above cases.
+
+   <p>However, the first thing to do is to tell Gnus in which way
+it should store the mail, in Gnus terminology which back end
+to use. Gnus supports many different back ends, the most
+commonly used one is nnml. It stores every mail in one file
+and is therefor quite fast. However you might prefer a one
+file per group approach if your file system has problems with
+many small files, the nnfolder back end is then probably the
+choice for you.  To use nnml add the following to ~/.gnus.el:
+
+<pre class="example">     (add-to-list 'gnus-secondary-select-methods '(nnml ""))
+</pre>
+   <p class="noindent">As you might have guessed, if you want nnfolder, it's
+
+<pre class="example">     (add-to-list 'gnus-secondary-select-methods '(nnfolder ""))
+</pre>
+   <p class="noindent">Now we need to tell Gnus, where to get it's mail from. If
+it's a POP3 server, then you need something like this:
+
+<pre class="example">     (eval-after-load "mail-source"
+       '(add-to-list 'mail-sources '(pop :server "pop.YourProvider.net"
+                                         :user "yourUserName"
+                                         :password "yourPassword")))
+</pre>
+   <p class="noindent">Make sure ~/.gnus.el isn't readable to others if you store
+your password there. If you want to read your mail from a
+traditional spool file on your local machine, it's
+
+<pre class="example">     (eval-after-load "mail-source"
+       '(add-to-list 'mail-sources '(file :path "/path/to/spool/file"))
+</pre>
+   <p class="noindent">If it's a Maildir, with one file per message as used by
+postfix, Qmail and (optionally) fetchmail it's
+
+<pre class="example">     (eval-after-load "mail-source"
+       '(add-to-list 'mail-sources '(maildir :path "/path/to/Maildir/"
+                                             :subdirs ("cur" "new")))
+</pre>
+   <p class="noindent">And finally if you want to read your mail from several files
+in one directory, for example because procmail already split your
+mail, it's
+
+<pre class="example">     (eval-after-load "mail-source"
+       '(add-to-list 'mail-sources
+                     '(directory :path "/path/to/procmail-dir/"
+                                 :suffix ".prcml")))
+</pre>
+   <p class="noindent">Where :suffix ".prcml" tells Gnus only to use files with the
+suffix .prcml.
+
+   <p>OK, now you only need to tell Gnus how to send mail. If you
+want to send mail via sendmail (or whichever MTA is playing
+the role of sendmail on your system), you don't need to do
+anything. However, if you want to send your mail to an
+SMTP Server you need the following in your ~/.gnus.el
+
+<pre class="example">     (setq send-mail-function 'smtpmail-send-it)
+     (setq message-send-mail-function 'smtpmail-send-it)
+     (setq smtpmail-default-smtp-server "smtp.yourProvider.net")
+</pre>
+   <p class="noindent">
+
+   </body></html>
+

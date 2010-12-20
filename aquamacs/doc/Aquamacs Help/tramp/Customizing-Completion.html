@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Customizing Completion - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Customizing-Methods.html#Customizing-Methods" title="Customizing Methods">
+<link rel="next" href="Password-handling.html#Password-handling" title="Password handling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Customizing-Completion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Password-handling.html#Password-handling">Password handling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customizing-Methods.html#Customizing-Methods">Customizing Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.11 Selecting config files for user/host name completion</h3>
+
+<p><a name="index-customizing-completion-127"></a><a name="index-selecting-config-files-128"></a><a name="index-tramp_002dcompletion_002dfunction_002dalist-129"></a>
+The variable <code>tramp-completion-function-alist</code> is intended to
+customize which files are taken into account for user and host name
+completion (see <a href="Filename-completion.html#Filename-completion">Filename completion</a>).  For every method, it keeps
+a set of configuration files, accompanied by a Lisp function able to
+parse that file.  Entries in <code>tramp-completion-function-alist</code>
+have the form (<var>method</var> <var>pair1</var> <var>pair2</var> ...).
+
+   <p>Each <var>pair</var> is composed of (<var>function</var> <var>file</var>). 
+<var>function</var> is responsible to extract user names and host names
+from <var>file</var> for completion.  There are two functions which access
+this variable:
+
+<div class="defun">
+&mdash; Function: <b>tramp-get-completion-function</b><var> method<a name="index-tramp_002dget_002dcompletion_002dfunction-130"></a></var><br>
+<blockquote><p>This function returns the list of completion functions for <var>method</var>.
+
+        <p>Example:
+     <pre class="example">          (tramp-get-completion-function "rsh")
+          
+               &rArr; ((tramp-parse-rhosts "/etc/hosts.equiv")
+                   (tramp-parse-rhosts "~/.rhosts"))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>tramp-set-completion-function</b><var> method function-list<a name="index-tramp_002dset_002dcompletion_002dfunction-131"></a></var><br>
+<blockquote><p>This function sets <var>function-list</var> as list of completion functions
+for <var>method</var>.
+
+        <p>Example:
+     <pre class="example">          (tramp-set-completion-function "ssh"
+           '((tramp-parse-sconfig "/etc/ssh_config")
+             (tramp-parse-sconfig "~/.ssh/config")))
+          
+               &rArr; ((tramp-parse-sconfig "/etc/ssh_config")
+                   (tramp-parse-sconfig "~/.ssh/config"))
+</pre>
+        </blockquote></div>
+
+   <p>The following predefined functions parsing configuration files exist:
+
+     <dl>
+<dt><code>tramp-parse-rhosts</code><dd><a name="index-tramp_002dparse_002drhosts-132"></a>
+This function parses files which are syntactical equivalent to
+<samp><span class="file">~/.rhosts</span></samp>.  It returns both host names and user names, if
+specified.
+
+     <br><dt><code>tramp-parse-shosts</code><dd><a name="index-tramp_002dparse_002dshosts-133"></a>
+This function parses files which are syntactical equivalent to
+<samp><span class="file">~/.ssh/known_hosts</span></samp>.  Since there are no user names specified
+in such files, it can return host names only.
+
+     <br><dt><code>tramp-parse-sconfig</code><dd><a name="index-tramp_002dparse_002dshosts-134"></a>
+This function returns the host nicknames defined by <code>Host</code> entries
+in <samp><span class="file">~/.ssh/config</span></samp> style files.
+
+     <br><dt><code>tramp-parse-shostkeys</code><dd><a name="index-tramp_002dparse_002dshostkeys-135"></a>
+SSH2 parsing of directories <samp><span class="file">/etc/ssh2/hostkeys/*</span></samp> and
+<samp><span class="file">~/ssh2/hostkeys/*</span></samp>.  Hosts are coded in file names
+<samp><span class="file">hostkey_</span><var>portnumber</var><span class="file">_</span><var>host-name</var><span class="file">.pub</span></samp>.  User names
+are always <code>nil</code>.
+
+     <br><dt><code>tramp-parse-sknownhosts</code><dd><a name="index-tramp_002dparse_002dshostkeys-136"></a>
+Another SSH2 style parsing of directories like
+<samp><span class="file">/etc/ssh2/knownhosts/*</span></samp> and <samp><span class="file">~/ssh2/knownhosts/*</span></samp>.  This
+case, hosts names are coded in file names
+<samp><var>host-name</var><span class="file">.</span><var>algorithm</var><span class="file">.pub</span></samp>.  User names are always <code>nil</code>.
+
+     <br><dt><code>tramp-parse-hosts</code><dd><a name="index-tramp_002dparse_002dhosts-137"></a>
+A function dedicated to <samp><span class="file">/etc/hosts</span></samp> style files.  It returns
+host names only.
+
+     <br><dt><code>tramp-parse-passwd</code><dd><a name="index-tramp_002dparse_002dpasswd-138"></a>
+A function which parses <samp><span class="file">/etc/passwd</span></samp> like files.  Obviously, it
+can return user names only.
+
+     <br><dt><code>tramp-parse-netrc</code><dd><a name="index-tramp_002dparse_002dnetrc-139"></a>
+Finally, a function which parses <samp><span class="file">~/.netrc</span></samp> like files. 
+</dl>
+
+   <p>If you want to keep your own data in a file, with your own structure,
+you might provide such a function as well.  This function must meet
+the following conventions:
+
+<div class="defun">
+&mdash; Function: <b>my-tramp-parse</b><var> file<a name="index-my_002dtramp_002dparse-140"></a></var><br>
+<blockquote><p><var>file</var> must be either a file name on your host, or <code>nil</code>. 
+The function must return a list of (<var>user</var> <var>host</var>), which are
+taken as candidates for user and host name completion.
+
+        <p>Example:
+     <pre class="example">          (my-tramp-parse "~/.my-tramp-hosts")
+          
+               &rArr; ((nil "toto") ("daniel" "melancholia"))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

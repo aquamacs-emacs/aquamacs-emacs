@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Paging the Article - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Choosing-Articles.html#Choosing-Articles" title="Choosing Articles">
+<link rel="next" href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" title="Reply Followup and Post">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Paging-the-Article"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reply-Followup-and-Post.html#Reply-Followup-and-Post">Reply Followup and Post</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Choosing-Articles.html#Choosing-Articles">Choosing Articles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.4 Scrolling the Article</h3>
+
+<p><a name="index-article-scrolling-728"></a>
+     <dl>
+<dt><kbd>SPACE</kbd><dd><a name="index-SPACE-_0028Summary_0029-729"></a><a name="index-gnus_002dsummary_002dnext_002dpage-730"></a>Pressing <kbd>SPACE</kbd> will scroll the current article forward one page,
+or, if you have come to the end of the current article, will choose the
+next article (<code>gnus-summary-next-page</code>).
+
+     <p><a name="index-gnus_002darticle_002dboring_002dfaces-731"></a><a name="index-gnus_002darticle_002dskip_002dboring-732"></a>If <code>gnus-article-skip-boring</code> is non-<code>nil</code> and the rest of
+the article consists only of citations and signature, then it will be
+skipped; the next article will be shown instead.  You can customize
+what is considered uninteresting with
+<code>gnus-article-boring-faces</code>.  You can manually view the article's
+pages, no matter how boring, using <kbd>C-M-v</kbd>.
+
+     <br><dt><kbd>DEL</kbd><dd><a name="index-DEL-_0028Summary_0029-733"></a><a name="index-gnus_002dsummary_002dprev_002dpage-734"></a>Scroll the current article back one page (<code>gnus-summary-prev-page</code>).
+
+     <br><dt><kbd>RET</kbd><dd><a name="index-RET-_0028Summary_0029-735"></a><a name="index-gnus_002dsummary_002dscroll_002dup-736"></a>Scroll the current article one line forward
+(<code>gnus-summary-scroll-up</code>).
+
+     <br><dt><kbd>M-RET</kbd><dd><a name="index-M_002dRET-_0028Summary_0029-737"></a><a name="index-gnus_002dsummary_002dscroll_002ddown-738"></a>Scroll the current article one line backward
+(<code>gnus-summary-scroll-down</code>).
+
+     <br><dt><kbd>A g</kbd><dt><kbd>g</kbd><dd><a name="index-A-g-_0028Summary_0029-739"></a><a name="index-g-_0028Summary_0029-740"></a><a name="index-gnus_002dsummary_002dshow_002darticle-741"></a><a name="index-gnus_002dsummary_002dshow_002darticle_002dcharset_002dalist-742"></a>(Re)fetch the current article (<code>gnus-summary-show-article</code>).  If
+given a prefix, fetch the current article, but don't run any of the
+article treatment functions.  This will give you a &ldquo;raw&rdquo; article, just
+the way it came from the server.
+
+     <p><a name="index-charset_002c-view-article-with-different-charset-743"></a>If given a numerical prefix, you can do semi-manual charset stuff. 
+<kbd>C-u 0 g cn-gb-2312 RET</kbd> will decode the message as if it were
+encoded in the <code>cn-gb-2312</code> charset.  If you have
+
+     <pre class="lisp">          (setq gnus-summary-show-article-charset-alist
+                '((1 . cn-gb-2312)
+                  (2 . big5)))
+</pre>
+     <p>then you can say <kbd>C-u 1 g</kbd> to get the same effect.
+
+     <br><dt><kbd>A &lt;</kbd><dt><kbd>&lt;</kbd><dd><a name="index-g_t_003c-_0028Summary_0029-744"></a><a name="index-A-_003c-_0028Summary_0029-745"></a><a name="index-gnus_002dsummary_002dbeginning_002dof_002darticle-746"></a>Scroll to the beginning of the article
+(<code>gnus-summary-beginning-of-article</code>).
+
+     <br><dt><kbd>A &gt;</kbd><dt><kbd>&gt;</kbd><dd><a name="index-g_t_003e-_0028Summary_0029-747"></a><a name="index-A-_003e-_0028Summary_0029-748"></a><a name="index-gnus_002dsummary_002dend_002dof_002darticle-749"></a>Scroll to the end of the article (<code>gnus-summary-end-of-article</code>).
+
+     <br><dt><kbd>A s</kbd><dt><kbd>s</kbd><dd><a name="index-A-s-_0028Summary_0029-750"></a><a name="index-s-_0028Summary_0029-751"></a><a name="index-gnus_002dsummary_002disearch_002darticle-752"></a>Perform an isearch in the article buffer
+(<code>gnus-summary-isearch-article</code>).
+
+     <br><dt><kbd>h</kbd><dd><a name="index-h-_0028Summary_0029-753"></a><a name="index-gnus_002dsummary_002dselect_002darticle_002dbuffer-754"></a>Select the article buffer (<code>gnus-summary-select-article-buffer</code>).
+
+   </dl>
+
+   </body></html>
+

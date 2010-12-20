@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>AWK Mode Font Locking - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Font-Locking.html#Font-Locking" title="Font Locking">
+<link rel="prev" href="Doc-Comments.html#Doc-Comments" title="Doc Comments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="AWK-Mode-Font-Locking"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Doc-Comments.html#Doc-Comments">Doc Comments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Font-Locking.html#Font-Locking">Font Locking</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">5.4 AWK Mode Font Locking</h3>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>The general appearance of font-locking in AWK mode is much like in any
+other programming mode.  See <a href="../elisp/Faces-For-Font-Lock.html#Faces-For-Font-Lock">Faces For Font Lock</a>.
+
+   <p>The following faces are, however, used in a non-standard fashion in
+AWK mode:
+
+     <dl>
+<dt><code>font-lock-variable-name-face</code><dd>This face was intended for variable declarations.  Since variables are
+not declared in AWK, this face is used instead for AWK system
+variables (such as <code>NF</code>) and &ldquo;Special File Names&rdquo; (such as
+<code>"/dev/stderr"</code>).
+
+     <br><dt><code>font-lock-builtin-face</code> (Emacs)/<code>font-lock-preprocessor-face</code> (XEmacs)<dd>This face is normally used for preprocessor directives in CC Mode. 
+There are no such things in AWK, so this face is used instead for
+standard functions (such as <code>match</code>).
+
+     <br><dt><code>font-lock-string-face</code><dd>As well as being used for strings, including localizable strings,
+(delimited by &lsquo;<samp><span class="samp">"</span></samp>&rsquo; and &lsquo;<samp><span class="samp">_"</span></samp>&rsquo;), this face is also used for AWK
+regular expressions (delimited by &lsquo;<samp><span class="samp">/</span></samp>&rsquo;).
+
+     <br><dt><code>font-lock-warning-face</code> (Emacs)/<code>c-invalid-face</code> (XEmacs)<dd>This face highlights the following syntactically invalid AWK
+constructs:
+
+          <ul>
+<li>An unterminated string or regular expression.  Here the opening
+delimiter (&lsquo;<samp><span class="samp">"</span></samp>&rsquo; or &lsquo;<samp><span class="samp">/</span></samp>&rsquo; or &lsquo;<samp><span class="samp">_"</span></samp>&rsquo;) is displayed in
+<code>font-lock-warning-face</code>.  This is most noticeable when typing in a
+new string/regular expression into a buffer, when the warning-face
+serves as a continual reminder to terminate the construct.
+
+          <p>AWK mode fontifies unterminated strings/regular expressions
+differently from other modes: Only the text up to the end of the line
+is fontified as a string (escaped newlines being handled correctly),
+rather than the text up to the next string quote.
+
+          <li>A space between the function name and opening parenthesis when calling
+a user function.  The last character of the function name and the
+opening parenthesis are highlighted.  This font-locking rule will
+spuriously highlight a valid concatenation expression where an
+identifier precedes a parenthesised expression.  Unfortunately.
+
+          <li>Whitespace following the &lsquo;<samp><span class="samp">\</span></samp>&rsquo; in what otherwise looks like an
+escaped newline.  The &lsquo;<samp><span class="samp">\</span></samp>&rsquo; is highlighted. 
+</ul>
+     </dl>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>FAQ 4-9 - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages" title="FAQ 4 - Reading messages">
+<link rel="prev" href="FAQ-4_002d8.html#FAQ-4_002d8" title="FAQ 4-8">
+<link rel="next" href="FAQ-4_002d10.html#FAQ-4_002d10" title="FAQ 4-10">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-4-9"></a>
+<a name="FAQ-4_002d9"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-4_002d10.html#FAQ-4_002d10">FAQ 4-10</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-4_002d8.html#FAQ-4_002d8">FAQ 4-8</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages">FAQ 4 - Reading messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 4.9</h5>
+
+<p>Is there a way to automatically ignore posts by specific
+authors or with specific words in the subject? And can I
+highlight more interesting ones in some way?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>You want Scoring. Scoring means, that you define rules
+which assign each message an integer value. Depending on
+the value the message is highlighted in summary buffer (if
+it's high, say +2000) or automatically marked read (if the
+value is low, say -800) or some other action happens.
+
+   <p>There are basically three ways of setting up rules which assign
+the scoring-value to messages. The first and easiest way is to set
+up rules based on the article you are just reading. Say you're
+reading a message by a guy who always writes nonsense and you want
+to ignore his messages in the future. Hit
+&lsquo;<samp><span class="samp">L</span></samp>&rsquo;, to set up a rule which lowers the score. 
+Now Gnus asks you which the criteria for lowering the Score shall
+be. Hit &lsquo;<samp><span class="samp">?</span></samp>&rsquo; twice to see all possibilities,
+we want &lsquo;<samp><span class="samp">a</span></samp>&rsquo; which means the author (the from
+header). Now Gnus wants to know which kind of matching we want. 
+Hit either &lsquo;<samp><span class="samp">e</span></samp>&rsquo; for an exact match or
+&lsquo;<samp><span class="samp">s</span></samp>&rsquo; for substring-match and delete afterwards
+everything but the name to score down all authors with the given
+name no matter which email address is used. Now you need to tell
+Gnus when to apply the rule and how long it should last, hit e.g. 
+&lsquo;<samp><span class="samp">p</span></samp>&rsquo; to apply the rule now and let it last
+forever. If you want to raise the score instead of lowering it say
+&lsquo;<samp><span class="samp">I</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">L</span></samp>&rsquo;.
+
+   <p>You can also set up rules by hand. To do this say &lsquo;<samp><span class="samp">V
+f</span></samp>&rsquo; in summary buffer. Then you are asked for the name
+of the score file, it's name.of.group.SCORE for rules valid in
+only one group or all.Score for rules valid in all groups. See the
+Gnus manual for the exact syntax, basically it's one big list
+whose elements are lists again. the first element of those lists
+is the header to score on, then one more list with what to match,
+which score to assign, when to expire the rule and how to do the
+matching. If you find me very interesting, you could e.g. add the
+following to your all.Score:
+
+<pre class="example">     (("references" ("hschmi22.userfqdn.rz-online.de" 500 nil s))
+      ("message-id" ("hschmi22.userfqdn.rz-online.de" 999 nil s)))
+</pre>
+   <p class="noindent">This would add 999 to the score of messages written by me
+and 500 to the score of messages which are a (possibly
+indirect) answer to a message written by me. Of course
+nobody with a sane mind would do this :-)
+
+   <p>The third alternative is adaptive scoring. This means Gnus
+watches you and tries to find out what you find
+interesting and what annoying and sets up rules
+which reflect this. Adaptive scoring can be a huge help
+when reading high traffic groups. If you want to activate
+adaptive scoring say
+
+<pre class="example">     (setq gnus-use-adaptive-scoring t)
+</pre>
+   <p class="noindent">in ~/.gnus.el.
+
+   </body></html>
+

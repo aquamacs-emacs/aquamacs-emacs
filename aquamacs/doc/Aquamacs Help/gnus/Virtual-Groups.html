@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Virtual Groups - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Combined-Groups.html#Combined-Groups" title="Combined Groups">
+<link rel="next" href="Kibozed-Groups.html#Kibozed-Groups" title="Kibozed Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Virtual-Groups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Kibozed-Groups.html#Kibozed-Groups">Kibozed Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Combined-Groups.html#Combined-Groups">Combined Groups</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.7.1 Virtual Groups</h4>
+
+<p><a name="index-nnvirtual-2447"></a><a name="index-virtual-groups-2448"></a><a name="index-merging-groups-2449"></a>
+An <dfn>nnvirtual group</dfn> is really nothing more than a collection of
+other groups.
+
+   <p>For instance, if you are tired of reading many small groups, you can
+put them all in one big group, and then grow tired of reading one
+big, unwieldy group.  The joys of computing!
+
+   <p>You specify <code>nnvirtual</code> as the method.  The address should be a
+regexp to match component groups.
+
+   <p>All marks in the virtual group will stick to the articles in the
+component groups.  So if you tick an article in a virtual group, the
+article will also be ticked in the component group from whence it
+came.  (And vice versa&mdash;marks from the component groups will also be
+shown in the virtual group.).  To create an empty virtual group, run
+<kbd>G V</kbd> (<code>gnus-group-make-empty-virtual</code>) in the group buffer
+and edit the method regexp with <kbd>M-e</kbd>
+(<code>gnus-group-edit-group-method</code>)
+
+   <p>Here's an example <code>nnvirtual</code> method that collects all Andrea Dworkin
+newsgroups into one, big, happy newsgroup:
+
+<pre class="lisp">     (nnvirtual "^alt\\.fan\\.andrea-dworkin$\\|^rec\\.dworkin.*")
+</pre>
+   <p>The component groups can be native or foreign; everything should work
+smoothly, but if your computer explodes, it was probably my fault.
+
+   <p>Collecting the same group from several servers might actually be a good
+idea if users have set the Distribution header to limit distribution. 
+If you would like to read &lsquo;<samp><span class="samp">soc.motss</span></samp>&rsquo; both from a server in Japan
+and a server in Norway, you could use the following as the group regexp:
+
+<pre class="example">     "^nntp\\+server\\.jp:soc\\.motss$\\|^nntp\\+server\\.no:soc\\.motss$"
+</pre>
+   <p>(Remember, though, that if you're creating the group with <kbd>G m</kbd>, you
+shouldn't double the backslashes, and you should leave off the quote
+characters at the beginning and the end of the string.)
+
+   <p>This should work kinda smoothly&mdash;all articles from both groups should
+end up in this one, and there should be no duplicates.  Threading (and
+the rest) will still work as usual, but there might be problems with the
+sequence of articles.  Sorting on date might be an option here
+(see <a href="Selecting-a-Group.html#Selecting-a-Group">Selecting a Group</a>).
+
+   <p>One limitation, however&mdash;all groups included in a virtual
+group have to be alive (i.e., subscribed or unsubscribed).  Killed or
+zombie groups can't be component groups for <code>nnvirtual</code> groups.
+
+   <p><a name="index-nnvirtual_002dalways_002drescan-2450"></a>If the <code>nnvirtual-always-rescan</code> variable is non-<code>nil</code> (which
+is the default), <code>nnvirtual</code> will always scan groups for unread
+articles when entering a virtual group.  If this variable is <code>nil</code>
+and you read articles in a component group after the virtual group has
+been activated, the read articles from the component group will show up
+when you enter the virtual group.  You'll also see this effect if you
+have two virtual groups that have a component group in common.  If
+that's the case, you should set this variable to <code>t</code>.  Or you can
+just tap <code>M-g</code> on the virtual group every time before you enter
+it&mdash;it'll have much the same effect.
+
+   <p><code>nnvirtual</code> can have both mail and news groups as component groups. 
+When responding to articles in <code>nnvirtual</code> groups, <code>nnvirtual</code>
+has to ask the back end of the component group the article comes from
+whether it is a news or mail back end.  However, when you do a <kbd>^</kbd>,
+there is typically no sure way for the component back end to know this,
+and in that case <code>nnvirtual</code> tells Gnus that the article came from a
+not-news back end.  (Just to be on the safe side.)
+
+   <p><kbd>C-c C-n</kbd> in the message buffer will insert the <code>Newsgroups</code>
+line from the article you respond to in these cases.
+
+   <p><code>nnvirtual</code> groups do not inherit anything but articles and marks
+from component groups&mdash;group parameters, for instance, are not
+inherited.
+
+   </body></html>
+

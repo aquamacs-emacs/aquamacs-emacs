@@ -1,0 +1,299 @@
+<html lang="en">
+<head>
+<title>For Clauses - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Loop-Facility.html#Loop-Facility" title="Loop Facility">
+<link rel="prev" href="Loop-Examples.html#Loop-Examples" title="Loop Examples">
+<link rel="next" href="Iteration-Clauses.html#Iteration-Clauses" title="Iteration Clauses">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="For-Clauses"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Iteration-Clauses.html#Iteration-Clauses">Iteration Clauses</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Loop-Examples.html#Loop-Examples">Loop Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Loop-Facility.html#Loop-Facility">Loop Facility</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.7.3 For Clauses</h4>
+
+<p class="noindent">Most loops are governed by one or more <code>for</code> clauses. 
+A <code>for</code> clause simultaneously describes variables to be
+bound, how those variables are to be stepped during the loop,
+and usually an end condition based on those variables.
+
+   <p>The word <code>as</code> is a synonym for the word <code>for</code>.  This
+word is followed by a variable name, then a word like <code>from</code>
+or <code>across</code> that describes the kind of iteration desired. 
+In Common Lisp, the phrase <code>being the</code> sometimes precedes
+the type of iteration; in this package both <code>being</code> and
+<code>the</code> are optional.  The word <code>each</code> is a synonym
+for <code>the</code>, and the word that follows it may be singular
+or plural:  &lsquo;<samp><span class="samp">for x being the elements of y</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">for x being each element of y</span></samp>&rsquo;.  Which form you use
+is purely a matter of style.
+
+   <p>The variable is bound around the loop as if by <code>let</code>:
+
+<pre class="example">     (setq i 'happy)
+     (loop for i from 1 to 10 do (do-something-with i))
+     i
+          &rArr; happy
+</pre>
+     <dl>
+<dt><code>for </code><var>var</var><code> from </code><var>expr1</var><code> to </code><var>expr2</var><code> by </code><var>expr3</var><dd>This type of <code>for</code> clause creates a counting loop.  Each of
+the three sub-terms is optional, though there must be at least one
+term so that the clause is marked as a counting clause.
+
+     <p>The three expressions are the starting value, the ending value, and
+the step value, respectively, of the variable.  The loop counts
+upwards by default (<var>expr3</var> must be positive), from <var>expr1</var>
+to <var>expr2</var> inclusively.  If you omit the <code>from</code> term, the
+loop counts from zero; if you omit the <code>to</code> term, the loop
+counts forever without stopping (unless stopped by some other
+loop clause, of course); if you omit the <code>by</code> term, the loop
+counts in steps of one.
+
+     <p>You can replace the word <code>from</code> with <code>upfrom</code> or
+<code>downfrom</code> to indicate the direction of the loop.  Likewise,
+you can replace <code>to</code> with <code>upto</code> or <code>downto</code>. 
+For example, &lsquo;<samp><span class="samp">for x from 5 downto 1</span></samp>&rsquo; executes five times
+with <code>x</code> taking on the integers from 5 down to 1 in turn. 
+Also, you can replace <code>to</code> with <code>below</code> or <code>above</code>,
+which are like <code>upto</code> and <code>downto</code> respectively except
+that they are exclusive rather than inclusive limits:
+
+     <pre class="example">          (loop for x to 10 collect x)
+               &rArr; (0 1 2 3 4 5 6 7 8 9 10)
+          (loop for x below 10 collect x)
+               &rArr; (0 1 2 3 4 5 6 7 8 9)
+</pre>
+     <p>The <code>by</code> value is always positive, even for downward-counting
+loops.  Some sort of <code>from</code> value is required for downward
+loops; &lsquo;<samp><span class="samp">for x downto 5</span></samp>&rsquo; is not a valid loop clause all by
+itself.
+
+     <br><dt><code>for </code><var>var</var><code> in </code><var>list</var><code> by </code><var>function</var><dd>This clause iterates <var>var</var> over all the elements of <var>list</var>,
+in turn.  If you specify the <code>by</code> term, then <var>function</var>
+is used to traverse the list instead of <code>cdr</code>; it must be a
+function taking one argument.  For example:
+
+     <pre class="example">          (loop for x in '(1 2 3 4 5 6) collect (* x x))
+               &rArr; (1 4 9 16 25 36)
+          (loop for x in '(1 2 3 4 5 6) by 'cddr collect (* x x))
+               &rArr; (1 9 25)
+</pre>
+     <br><dt><code>for </code><var>var</var><code> on </code><var>list</var><code> by </code><var>function</var><dd>This clause iterates <var>var</var> over all the cons cells of <var>list</var>.
+
+     <pre class="example">          (loop for x on '(1 2 3 4) collect x)
+               &rArr; ((1 2 3 4) (2 3 4) (3 4) (4))
+</pre>
+     <p>With <code>by</code>, there is no real reason that the <code>on</code> expression
+must be a list.  For example:
+
+     <pre class="example">          (loop for x on first-animal by 'next-animal collect x)
+</pre>
+     <p class="noindent">where <code>(next-animal x)</code> takes an &ldquo;animal&rdquo; <var>x</var> and returns
+the next in the (assumed) sequence of animals, or <code>nil</code> if
+<var>x</var> was the last animal in the sequence.
+
+     <br><dt><code>for </code><var>var</var><code> in-ref </code><var>list</var><code> by </code><var>function</var><dd>This is like a regular <code>in</code> clause, but <var>var</var> becomes
+a <code>setf</code>-able &ldquo;reference&rdquo; onto the elements of the list
+rather than just a temporary variable.  For example,
+
+     <pre class="example">          (loop for x in-ref my-list do (incf x))
+</pre>
+     <p class="noindent">increments every element of <code>my-list</code> in place.  This clause
+is an extension to standard Common Lisp.
+
+     <br><dt><code>for </code><var>var</var><code> across </code><var>array</var><dd>This clause iterates <var>var</var> over all the elements of <var>array</var>,
+which may be a vector or a string.
+
+     <pre class="example">          (loop for x across "aeiou"
+                do (use-vowel (char-to-string x)))
+</pre>
+     <br><dt><code>for </code><var>var</var><code> across-ref </code><var>array</var><dd>This clause iterates over an array, with <var>var</var> a <code>setf</code>-able
+reference onto the elements; see <code>in-ref</code> above.
+
+     <br><dt><code>for </code><var>var</var><code> being the elements of </code><var>sequence</var><dd>This clause iterates over the elements of <var>sequence</var>, which may
+be a list, vector, or string.  Since the type must be determined
+at run-time, this is somewhat less efficient than <code>in</code> or
+<code>across</code>.  The clause may be followed by the additional term
+&lsquo;<samp><span class="samp">using (index </span><var>var2</var><span class="samp">)</span></samp>&rsquo; to cause <var>var2</var> to be bound to
+the successive indices (starting at 0) of the elements.
+
+     <p>This clause type is taken from older versions of the <code>loop</code> macro,
+and is not present in modern Common Lisp.  The &lsquo;<samp><span class="samp">using (sequence ...)</span></samp>&rsquo;
+term of the older macros is not supported.
+
+     <br><dt><code>for </code><var>var</var><code> being the elements of-ref </code><var>sequence</var><dd>This clause iterates over a sequence, with <var>var</var> a <code>setf</code>-able
+reference onto the elements; see <code>in-ref</code> above.
+
+     <br><dt><code>for </code><var>var</var><code> being the symbols [of </code><var>obarray</var><code>]</code><dd>This clause iterates over symbols, either over all interned symbols
+or over all symbols in <var>obarray</var>.  The loop is executed with
+<var>var</var> bound to each symbol in turn.  The symbols are visited in
+an unspecified order.
+
+     <p>As an example,
+
+     <pre class="example">          (loop for sym being the symbols
+                when (fboundp sym)
+                when (string-match "^map" (symbol-name sym))
+                collect sym)
+</pre>
+     <p class="noindent">returns a list of all the functions whose names begin with &lsquo;<samp><span class="samp">map</span></samp>&rsquo;.
+
+     <p>The Common Lisp words <code>external-symbols</code> and <code>present-symbols</code>
+are also recognized but are equivalent to <code>symbols</code> in Emacs Lisp.
+
+     <p>Due to a minor implementation restriction, it will not work to have
+more than one <code>for</code> clause iterating over symbols, hash tables,
+keymaps, overlays, or intervals in a given <code>loop</code>.  Fortunately,
+it would rarely if ever be useful to do so.  It <em>is</em> valid to mix
+one of these types of clauses with other clauses like <code>for ... to</code>
+or <code>while</code>.
+
+     <br><dt><code>for </code><var>var</var><code> being the hash-keys of </code><var>hash-table</var><dd>This clause iterates over the entries in <var>hash-table</var>.  For each
+hash table entry, <var>var</var> is bound to the entry's key.  If you write
+&lsquo;<samp><span class="samp">the hash-values</span></samp>&rsquo; instead, <var>var</var> is bound to the values
+of the entries.  The clause may be followed by the additional
+term &lsquo;<samp><span class="samp">using (hash-values </span><var>var2</var><span class="samp">)</span></samp>&rsquo; (where <code>hash-values</code>
+is the opposite word of the word following <code>the</code>) to cause
+<var>var</var> and <var>var2</var> to be bound to the two parts of each
+hash table entry.
+
+     <br><dt><code>for </code><var>var</var><code> being the key-codes of </code><var>keymap</var><dd>This clause iterates over the entries in <var>keymap</var>. 
+The iteration does not enter nested keymaps but does enter inherited
+(parent) keymaps. 
+You can use &lsquo;<samp><span class="samp">the key-bindings</span></samp>&rsquo; to access the commands bound to
+the keys rather than the key codes, and you can add a <code>using</code>
+clause to access both the codes and the bindings together.
+
+     <br><dt><code>for </code><var>var</var><code> being the key-seqs of </code><var>keymap</var><dd>This clause iterates over all key sequences defined by <var>keymap</var>
+and its nested keymaps, where <var>var</var> takes on values which are
+vectors.  The strings or vectors
+are reused for each iteration, so you must copy them if you wish to keep
+them permanently.  You can add a &lsquo;<samp><span class="samp">using (key-bindings ...)</span></samp>&rsquo;
+clause to get the command bindings as well.
+
+     <br><dt><code>for </code><var>var</var><code> being the overlays [of </code><var>buffer</var><code>] ...</code><dd>This clause iterates over the &ldquo;overlays&rdquo; of a buffer
+(the clause <code>extents</code> is synonymous
+with <code>overlays</code>).  If the <code>of</code> term is omitted, the current
+buffer is used. 
+This clause also accepts optional &lsquo;<samp><span class="samp">from </span><var>pos</var></samp>&rsquo; and
+&lsquo;<samp><span class="samp">to </span><var>pos</var></samp>&rsquo; terms, limiting the clause to overlays which
+overlap the specified region.
+
+     <br><dt><code>for </code><var>var</var><code> being the intervals [of </code><var>buffer</var><code>] ...</code><dd>This clause iterates over all intervals of a buffer with constant
+text properties.  The variable <var>var</var> will be bound to conses
+of start and end positions, where one start position is always equal
+to the previous end position.  The clause allows <code>of</code>,
+<code>from</code>, <code>to</code>, and <code>property</code> terms, where the latter
+term restricts the search to just the specified property.  The
+<code>of</code> term may specify either a buffer or a string.
+
+     <br><dt><code>for </code><var>var</var><code> being the frames</code><dd>This clause iterates over all frames, i.e., X window system windows
+open on Emacs files.  The
+clause <code>screens</code> is a synonym for <code>frames</code>.  The frames
+are visited in <code>next-frame</code> order starting from
+<code>selected-frame</code>.
+
+     <br><dt><code>for </code><var>var</var><code> being the windows [of </code><var>frame</var><code>]</code><dd>This clause iterates over the windows (in the Emacs sense) of
+the current frame, or of the specified <var>frame</var>.
+
+     <br><dt><code>for </code><var>var</var><code> being the buffers</code><dd>This clause iterates over all buffers in Emacs.  It is equivalent
+to &lsquo;<samp><span class="samp">for </span><var>var</var><span class="samp"> in (buffer-list)</span></samp>&rsquo;.
+
+     <br><dt><code>for </code><var>var</var><code> = </code><var>expr1</var><code> then </code><var>expr2</var><dd>This clause does a general iteration.  The first time through
+the loop, <var>var</var> will be bound to <var>expr1</var>.  On the second
+and successive iterations it will be set by evaluating <var>expr2</var>
+(which may refer to the old value of <var>var</var>).  For example,
+these two loops are effectively the same:
+
+     <pre class="example">          (loop for x on my-list by 'cddr do ...)
+          (loop for x = my-list then (cddr x) while x do ...)
+</pre>
+     <p>Note that this type of <code>for</code> clause does not imply any sort
+of terminating condition; the above example combines it with a
+<code>while</code> clause to tell when to end the loop.
+
+     <p>If you omit the <code>then</code> term, <var>expr1</var> is used both for
+the initial setting and for successive settings:
+
+     <pre class="example">          (loop for x = (random) when (&gt; x 0) return x)
+</pre>
+     <p class="noindent">This loop keeps taking random numbers from the <code>(random)</code>
+function until it gets a positive one, which it then returns. 
+</dl>
+
+   <p>If you include several <code>for</code> clauses in a row, they are
+treated sequentially (as if by <code>let*</code> and <code>setq</code>). 
+You can instead use the word <code>and</code> to link the clauses,
+in which case they are processed in parallel (as if by <code>let</code>
+and <code>psetq</code>).
+
+<pre class="example">     (loop for x below 5 for y = nil then x collect (list x y))
+          &rArr; ((0 nil) (1 1) (2 2) (3 3) (4 4))
+     (loop for x below 5 and y = nil then x collect (list x y))
+          &rArr; ((0 nil) (1 0) (2 1) (3 2) (4 3))
+</pre>
+   <p class="noindent">In the first loop, <code>y</code> is set based on the value of <code>x</code>
+that was just set by the previous clause; in the second loop,
+<code>x</code> and <code>y</code> are set simultaneously so <code>y</code> is set
+based on the value of <code>x</code> left over from the previous time
+through the loop.
+
+   <p>Another feature of the <code>loop</code> macro is <dfn>destructuring</dfn>,
+similar in concept to the destructuring provided by <code>defmacro</code>. 
+The <var>var</var> part of any <code>for</code> clause can be given as a list
+of variables instead of a single variable.  The values produced
+during loop execution must be lists; the values in the lists are
+stored in the corresponding variables.
+
+<pre class="example">     (loop for (x y) in '((2 3) (4 5) (6 7)) collect (+ x y))
+          &rArr; (5 9 13)
+</pre>
+   <p>In loop destructuring, if there are more values than variables
+the trailing values are ignored, and if there are more variables
+than values the trailing variables get the value <code>nil</code>. 
+If <code>nil</code> is used as a variable name, the corresponding
+values are ignored.  Destructuring may be nested, and dotted
+lists of variables like <code>(x . y)</code> are allowed.
+
+   </body></html>
+

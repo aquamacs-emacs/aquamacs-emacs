@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Finding the News - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
+<link rel="next" href="The-First-Time.html#The-First-Time" title="The First Time">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Finding-the-News"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-First-Time.html#The-First-Time">The First Time</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
+<hr>
+</div>
+
+<h3 class="section">1.1 Finding the News</h3>
+
+<p><a name="index-finding-news-6"></a>
+<a name="index-gnus_002dselect_002dmethod-7"></a><!-- @head -->
+The <code>gnus-select-method</code> variable says where Gnus should look for
+news.  This variable should be a list where the first element says
+<dfn>how</dfn> and the second element says <dfn>where</dfn>.  This method is your
+native method.  All groups not fetched with this method are
+foreign groups.
+
+   <p>For instance, if the &lsquo;<samp><span class="samp">news.somewhere.edu</span></samp>&rsquo; <acronym>NNTP</acronym> server is where
+you want to get your daily dosage of news from, you'd say:
+
+<pre class="lisp">     (setq gnus-select-method '(nntp "news.somewhere.edu"))
+</pre>
+   <p>If you want to read directly from the local spool, say:
+
+<pre class="lisp">     (setq gnus-select-method '(nnspool ""))
+</pre>
+   <p>If you can use a local spool, you probably should, as it will almost
+certainly be much faster.  But do not use the local spool if your
+server is running Leafnode (which is a simple, standalone private news
+server); in this case, use <code>(nntp "localhost")</code>.
+
+   <p><a name="index-gnus_002dnntpserver_002dfile-8"></a><a name="index-NNTPSERVER-9"></a><a name="index-g_t_0040acronym_007bNNTP_007d-server-10"></a>If this variable is not set, Gnus will take a look at the
+<samp><span class="env">NNTPSERVER</span></samp> environment variable.  If that variable isn't set,
+Gnus will see whether <code>gnus-nntpserver-file</code>
+(<samp><span class="file">/etc/nntpserver</span></samp> by default) has any opinions on the matter. 
+If that fails as well, Gnus will try to use the machine running Emacs
+as an <acronym>NNTP</acronym> server.  That's a long shot, though.
+
+   <p><a name="index-gnus_002dnntp_002dserver-11"></a>If <code>gnus-nntp-server</code> is set, this variable will override
+<code>gnus-select-method</code>.  You should therefore set
+<code>gnus-nntp-server</code> to <code>nil</code>, which is what it is by default.
+
+   <p><a name="index-gnus_002dsecondary_002dservers-12"></a><a name="index-gnus_002dnntp_002dserver-13"></a>You can also make Gnus prompt you interactively for the name of an
+<acronym>NNTP</acronym> server.  If you give a non-numerical prefix to <code>gnus</code>
+(i.e., <kbd>C-u M-x gnus</kbd>), Gnus will let you choose between the servers
+in the <code>gnus-secondary-servers</code> list (if any).  You can also just
+type in the name of any server you feel like visiting.  (Note that this
+will set <code>gnus-nntp-server</code>, which means that if you then <kbd>M-x
+gnus</kbd> later in the same Emacs session, Gnus will contact the same
+server.)
+
+   <p><a name="index-gnus_002dgroup_002dbrowse_002dforeign_002dserver-14"></a><a name="index-B-_0028Group_0029-15"></a>However, if you use one <acronym>NNTP</acronym> server regularly and are just
+interested in a couple of groups from a different server, you would be
+better served by using the <kbd>B</kbd> command in the group buffer.  It will
+let you have a look at what groups are available, and you can subscribe
+to any of the groups you want to.  This also makes <samp><span class="file">.newsrc</span></samp>
+maintenance much tidier.  See <a href="Foreign-Groups.html#Foreign-Groups">Foreign Groups</a>.
+
+   <p><a name="index-gnus_002dsecondary_002dselect_002dmethods-16"></a><!-- @head -->
+A slightly different approach to foreign groups is to set the
+<code>gnus-secondary-select-methods</code> variable.  The select methods
+listed in this variable are in many ways just as native as the
+<code>gnus-select-method</code> server.  They will also be queried for active
+files during startup (if that's required), and new newsgroups that
+appear on these servers will be subscribed (or not) just as native
+groups are.
+
+   <p>For instance, if you use the <code>nnmbox</code> back end to read your mail,
+you would typically set this variable to
+
+<pre class="lisp">     (setq gnus-secondary-select-methods '((nnmbox "")))
+</pre>
+   <p>Note: the <acronym>NNTP</acronym> back end stores marks in marks files
+(see <a href="NNTP-marks.html#NNTP-marks">NNTP marks</a>).  This feature makes it easy to share marks between
+several Gnus installations, but may slow down things a bit when fetching
+new articles.  See <a href="NNTP-marks.html#NNTP-marks">NNTP marks</a>, for more information.
+
+   </body></html>
+

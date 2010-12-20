@@ -1,0 +1,217 @@
+<html lang="en">
+<head>
+<title>Properties and Annotations - Using of D-Bus</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Using of D-Bus">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Inspection.html#Inspection" title="Inspection">
+<link rel="prev" href="Methods-and-Signal.html#Methods-and-Signal" title="Methods and Signal">
+<link rel="next" href="Arguments-and-Signatures.html#Arguments-and-Signatures" title="Arguments and Signatures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Properties-and-Annotations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Arguments-and-Signatures.html#Arguments-and-Signatures">Arguments and Signatures</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Methods-and-Signal.html#Methods-and-Signal">Methods and Signal</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Inspection.html#Inspection">Inspection</a>
+<hr>
+</div>
+
+<h3 class="section">2.5 What else to know about interfaces.</h3>
+
+<p>Interfaces can have properties.  These can be exposed via the
+&lsquo;<samp><span class="samp">org.freedesktop.DBus.Properties</span></samp>&rsquo; interface<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
+That is, properties can be retrieved and changed during lifetime of an
+element.
+
+   <p>Annotations, on the other hand, are static values for an element. 
+Often, they are used to instruct generators, how to generate code from
+the interface for a given language binding.
+
+<div class="defun">
+&mdash; Function: <b>dbus-introspect-get-property-names</b><var> bus service path interface<a name="index-dbus_002dintrospect_002dget_002dproperty_002dnames-21"></a></var><br>
+<blockquote><p>Return a list of strings with all property names of <var>interface</var> of
+<var>service</var> in D-Bus <var>bus</var> at object path <var>path</var>.  Example:
+
+     <pre class="lisp">          (dbus-introspect-get-property-names
+            :session "org.kde.kded" "/modules/networkstatus"
+            "org.kde.Solid.Networking.Client")
+          
+          &rArr; ("Status")
+</pre>
+        <p>If an interface declares properties, the corresponding element supports
+also the &lsquo;<samp><span class="samp">org.freedesktop.DBus.Properties</span></samp>&rsquo; interface. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-introspect-get-property</b><var> bus service path interface property<a name="index-dbus_002dintrospect_002dget_002dproperty-22"></a></var><br>
+<blockquote><p>This function returns <var>property</var> of <var>interface</var> as XML element. 
+It must be located at <var>service</var> in D-Bus <var>bus</var> at object path
+<var>path</var>.  <var>property</var> must be a string, element of the list
+returned by <code>dbus-introspect-get-property-names</code>.
+
+        <p>A <var>property</var> value can be retrieved by the function
+<code>dbus-introspect-get-attribute</code>.  Example:
+
+     <pre class="lisp">          (dbus-introspect-get-property
+            :session "org.kde.kded" "/modules/networkstatus"
+            "org.kde.Solid.Networking.Client" "Status")
+          
+          &rArr; (property ((access . "read") (type . "u") (name . "Status")))
+          
+          (dbus-introspect-get-attribute
+            (dbus-introspect-get-property
+              :session "org.kde.kded" "/modules/networkstatus"
+              "org.kde.Solid.Networking.Client" "Status")
+            "access")
+          
+          &rArr; "read"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-get-property</b><var> bus service path interface property<a name="index-dbus_002dget_002dproperty-23"></a></var><br>
+<blockquote><p>This function returns the value of <var>property</var> of <var>interface</var>. 
+It will be checked at <var>bus</var>, <var>service</var>, <var>path</var>.  The
+result can be any valid D-Bus value, or nil if there is no
+<var>property</var>.  Example:
+
+     <pre class="lisp">          (dbus-get-property
+            :session "org.kde.kded" "/modules/networkstatus"
+            "org.kde.Solid.Networking.Client" "Status")
+          
+          &rArr; 4
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-set-property</b><var> bus service path interface property value<a name="index-dbus_002dset_002dproperty-24"></a></var><br>
+<blockquote><p>Set value of <var>property</var> of <var>interface</var> to <var>value</var>.  It
+will be checked at <var>bus</var>, <var>service</var>, <var>path</var>.  When the
+value has been set successful, the result is <var>value</var>.  Otherwise,
+<code>nil</code> is returned.  Example:
+
+     <pre class="lisp">          (dbus-set-property
+            :session "org.kde.kaccess" "/MainApplication"
+            "com.trolltech.Qt.QApplication" "doubleClickInterval" 500)
+          
+          &rArr; 500
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-get-all-properties</b><var> bus service path interface<a name="index-dbus_002dget_002dall_002dproperties-25"></a></var><br>
+<blockquote><p>This function returns all properties of <var>interface</var>.  It will be
+checked at <var>bus</var>, <var>service</var>, <var>path</var>.  The result is a list
+of cons.  Every cons contains the name of the property, and its value. 
+If there are no properties, <code>nil</code> is returned.  Example:
+
+     <pre class="lisp">          (dbus-get-all-properties
+            :session "org.kde.kaccess" "/MainApplication"
+            "com.trolltech.Qt.QApplication")
+          
+          &rArr; (("cursorFlashTime" . 1000) ("doubleClickInterval" . 500)
+              ("keyboardInputInterval" . 400) ("wheelScrollLines" . 3)
+              ("globalStrut" 0 0) ("startDragTime" . 500)
+              ("startDragDistance" . 4) ("quitOnLastWindowClosed" . t)
+              ("styleSheet" . ""))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-introspect-get-annotation-names</b><var> bus service path interface &amp;optional name<a name="index-dbus_002dintrospect_002dget_002dannotation_002dnames-26"></a></var><br>
+<blockquote><p>Return a list of all annotation names as list of strings.  If
+<var>name</var> is <code>nil</code>, the annotations are children of
+<var>interface</var>, otherwise <var>name</var> must be a <code>method</code>,
+<code>signal</code>, or <code>property</code> XML element, where the annotations
+belong to.  Example:
+
+     <pre class="lisp">          (dbus-introspect-get-annotation-names
+            :session "de.berlios.Pinot" "/de/berlios/Pinot"
+            "de.berlios.Pinot" "GetStatistics")
+          
+          &rArr; ("de.berlios.Pinot.GetStatistics")
+</pre>
+        <p>Default annotation names<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>
+are
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">org.freedesktop.DBus.Deprecated</span></samp>&rsquo;<dd>Whether or not the entity is deprecated; defaults to <code>nil</code>
+
+          <br><dt>&lsquo;<samp><span class="samp">org.freedesktop.DBus.GLib.CSymbol</span></samp>&rsquo;<dd>The C symbol; may be used for <code>methods</code> and <code>interfaces</code>
+
+          <br><dt>&lsquo;<samp><span class="samp">org.freedesktop.DBus.Method.NoReply</span></samp>&rsquo;<dd>If set, don't expect a reply to the <code>method</code> call; defaults to <code>nil</code>
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-introspect-get-annotation</b><var> bus service path interface name annotation<a name="index-dbus_002dintrospect_002dget_002dannotation-27"></a></var><br>
+<blockquote><p>Return annotation <var>ANNOTATION</var> as XML object.  If <var>name</var> is
+<code>nil</code>, <var>ANNOTATION</var> is a child of <var>interface</var>, otherwise
+<var>name</var> must be the name of a <code>method</code>, <code>signal</code>, or
+<code>property</code> XML element, where the <var>ANNOTATION</var> belongs to.
+
+        <p>An attribute value can be retrieved by
+<code>dbus-introspect-get-attribute</code>.  Example:
+
+     <pre class="lisp">          (dbus-introspect-get-annotation
+            :session "de.berlios.Pinot" "/de/berlios/Pinot"
+            "de.berlios.Pinot" "GetStatistics"
+            "de.berlios.Pinot.GetStatistics")
+          
+          &rArr; (annotation ((name . "de.berlios.Pinot.GetStatistics")
+                          (value . "pinotDBus")))
+          
+          (dbus-introspect-get-attribute
+            (dbus-introspect-get-annotation
+              :session "de.berlios.Pinot" "/de/berlios/Pinot"
+              "de.berlios.Pinot" "GetStatistics"
+              "de.berlios.Pinot.GetStatistics")
+            "value")
+          
+          &rArr; "pinotDBus"
+</pre>
+        </blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See
+<a href="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties</a></p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> See
+<a href="http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format">http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format</a></p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Recursive Edit - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Saving-Emacs-Sessions.html#Saving-Emacs-Sessions" title="Saving Emacs Sessions">
+<link rel="next" href="Emulation.html#Emulation" title="Emulation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Recursive-Edit"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Emulation.html#Emulation">Emulation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs Sessions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">52 Recursive Editing Levels</h2>
+
+<p><a name="index-recursive-editing-level-3817"></a><a name="index-editing-level_002c-recursive-3818"></a>
+  A <dfn>recursive edit</dfn> is a situation in which you are using Emacs
+commands to perform arbitrary editing while in the middle of another
+Emacs command.  For example, when you type <kbd>C-r</kbd> inside of a
+<code>query-replace</code>, you enter a recursive edit in which you can change
+the current buffer.  On exiting from the recursive edit, you go back to
+the <code>query-replace</code>.
+
+   <p><a name="index-C_002dM_002dc-3819"></a><a name="index-exit_002drecursive_002dedit-3820"></a><a name="index-exiting-recursive-edit-3821"></a>  <dfn>Exiting</dfn> the recursive edit means returning to the unfinished
+command, which continues execution.  The command to exit is <kbd>C-M-c</kbd>
+(<code>exit-recursive-edit</code>).
+
+   <p>You can also <dfn>abort</dfn> the recursive edit.  This is like exiting,
+but also quits the unfinished command immediately.  Use the command
+<kbd>C-]</kbd> (<code>abort-recursive-edit</code>) to do this.  See <a href="Quitting.html#Quitting">Quitting</a>.
+
+   <p>The mode line shows you when you are in a recursive edit by displaying
+square brackets around the parentheses that always surround the major and
+minor mode names.  Every window's mode line shows this in the same way,
+since being in a recursive edit is true of Emacs as a whole rather than
+any particular window or buffer.
+
+   <p>It is possible to be in recursive edits within recursive edits.  For
+example, after typing <kbd>C-r</kbd> in a <code>query-replace</code>, you may type a
+command that enters the debugger.  This begins a recursive editing level
+for the debugger, within the recursive editing level for <kbd>C-r</kbd>. 
+Mode lines display a pair of square brackets for each recursive editing
+level currently in progress.
+
+   <p>Exiting the inner recursive edit (such as with the debugger <kbd>c</kbd>
+command) resumes the command running in the next level up.  When that
+command finishes, you can then use <kbd>C-M-c</kbd> to exit another recursive
+editing level, and so on.  Exiting applies to the innermost level only. 
+Aborting also gets out of only one level of recursive edit; it returns
+immediately to the command level of the previous recursive edit.  If you
+wish, you can then abort the next recursive editing level.
+
+   <p>Alternatively, the command <kbd>M-x top-level</kbd> aborts all levels of
+recursive edits, returning immediately to the top-level command
+reader.  It also exits the minibuffer, if it is active.
+
+   <p>The text being edited inside the recursive edit need not be the same text
+that you were editing at top level.  It depends on what the recursive edit
+is for.  If the command that invokes the recursive edit selects a different
+buffer first, that is the buffer you will edit recursively.  In any case,
+you can switch buffers within the recursive edit in the normal manner (as
+long as the buffer-switching keys have not been rebound).  You could
+probably do all the rest of your editing inside the recursive edit,
+visiting files and all.  But this could have surprising effects (such as
+stack overflow) from time to time.  So remember to exit or abort the
+recursive edit when you no longer need it.
+
+   <p>In general, we try to minimize the use of recursive editing levels in
+GNU Emacs.  This is because they constrain you to &ldquo;go back&rdquo; in a
+particular order&mdash;from the innermost level toward the top level.  When
+possible, we present different activities in separate buffers so that
+you can switch between them as you please.  Some commands switch to a
+new major mode which provides a command to switch back.  These
+approaches give you more flexibility to go back to unfinished tasks in
+the order you choose.
+
+   </body></html>
+

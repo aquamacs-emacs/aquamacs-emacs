@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Vector and Matrix Arithmetic - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Matrix-Functions.html#Matrix-Functions" title="Matrix Functions">
+<link rel="prev" href="Manipulating-Vectors.html#Manipulating-Vectors" title="Manipulating Vectors">
+<link rel="next" href="Set-Operations.html#Set-Operations" title="Set Operations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Vector-and-Matrix-Arithmetic"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Set-Operations.html#Set-Operations">Set Operations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Manipulating-Vectors.html#Manipulating-Vectors">Manipulating Vectors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>
+<hr>
+</div>
+
+<h3 class="section">10.5 Vector and Matrix Arithmetic</h3>
+
+<p class="noindent">Basic arithmetic operations like addition and multiplication are defined
+for vectors and matrices as well as for numbers.  Division of matrices, in
+the sense of multiplying by the inverse, is supported.  (Division by a
+matrix actually uses LU-decomposition for greater accuracy and speed.) 
+See <a href="Basic-Arithmetic.html#Basic-Arithmetic">Basic Arithmetic</a>.
+
+   <p>The following functions are applied element-wise if their arguments are
+vectors or matrices: <code>change-sign</code>, <code>conj</code>, <code>arg</code>,
+<code>re</code>, <code>im</code>, <code>polar</code>, <code>rect</code>, <code>clean</code>,
+<code>float</code>, <code>frac</code>.  See <a href="Function-Index.html#Function-Index">Function Index</a>.
+
+   <p><a name="index-v-J-1333"></a><a name="index-V-J-1334"></a><a name="index-calc_002dconj_002dtranspose-1335"></a><a name="index-ctrn-1336"></a>The <kbd>V J</kbd> (<code>calc-conj-transpose</code>) [<code>ctrn</code>] command computes
+the conjugate transpose of its argument, i.e., &lsquo;<samp><span class="samp">conj(trn(x))</span></samp>&rsquo;.
+
+   <p><a name="index-A-_0028vectors_0029-1337"></a><a name="index-calc_002dabs-_0028vectors_0029-1338"></a><a name="index-abs-_0028vectors_0029-1339"></a>The <kbd>A</kbd> (<code>calc-abs</code>) [<code>abs</code>] command computes the
+Frobenius norm of a vector or matrix argument.  This is the square
+root of the sum of the squares of the absolute values of the
+elements of the vector or matrix.  If the vector is interpreted as
+a point in two- or three-dimensional space, this is the distance
+from that point to the origin.
+
+   <p><a name="index-v-n-1340"></a><a name="index-V-n-1341"></a><a name="index-calc_002drnorm-1342"></a><a name="index-rnorm-1343"></a>The <kbd>v n</kbd> (<code>calc-rnorm</code>) [<code>rnorm</code>] command computes the
+infinity-norm of a vector, or the row norm of a matrix.  For a plain
+vector, this is the maximum of the absolute values of the elements.  For
+a matrix, this is the maximum of the row-absolute-value-sums, i.e., of
+the sums of the absolute values of the elements along the various rows.
+
+   <p><a name="index-v-N-1344"></a><a name="index-V-N-1345"></a><a name="index-calc_002dcnorm-1346"></a><a name="index-cnorm-1347"></a>The <kbd>V N</kbd> (<code>calc-cnorm</code>) [<code>cnorm</code>] command computes
+the one-norm of a vector, or column norm of a matrix.  For a plain
+vector, this is the sum of the absolute values of the elements. 
+For a matrix, this is the maximum of the column-absolute-value-sums. 
+General &lsquo;<samp><span class="samp">k</span></samp>&rsquo;-norms for &lsquo;<samp><span class="samp">k</span></samp>&rsquo; other than one or infinity are
+not provided.  However, the 2-norm (or Frobenius norm) is provided for
+vectors by the <kbd>A</kbd> (<code>calc-abs</code>) command.
+
+   <p><a name="index-v-C-1348"></a><a name="index-V-C-1349"></a><a name="index-calc_002dcross-1350"></a><a name="index-cross-1351"></a>The <kbd>V C</kbd> (<code>calc-cross</code>) [<code>cross</code>] command computes the
+right-handed cross product of two vectors, each of which must have
+exactly three elements.
+
+   <p><a name="index-g_t_0026-_0028matrices_0029-1352"></a><a name="index-calc_002dinv-_0028matrices_0029-1353"></a><a name="index-inv-_0028matrices_0029-1354"></a>The <kbd>&amp;</kbd> (<code>calc-inv</code>) [<code>inv</code>] command computes the
+inverse of a square matrix.  If the matrix is singular, the inverse
+operation is left in symbolic form.  Matrix inverses are recorded so
+that once an inverse (or determinant) of a particular matrix has been
+computed, the inverse and determinant of the matrix can be recomputed
+quickly in the future.
+
+   <p>If the argument to <kbd>&amp;</kbd> is a plain number &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, this
+command simply computes &lsquo;<samp><span class="samp">1/x</span></samp>&rsquo;.  This is okay, because the
+&lsquo;<samp><span class="samp">/</span></samp>&rsquo; operator also does a matrix inversion when dividing one
+by a matrix.
+
+   <p><a name="index-v-D-1355"></a><a name="index-V-D-1356"></a><a name="index-calc_002dmdet-1357"></a><a name="index-det-1358"></a>The <kbd>V D</kbd> (<code>calc-mdet</code>) [<code>det</code>] command computes the
+determinant of a square matrix.
+
+   <p><a name="index-v-L-1359"></a><a name="index-V-L-1360"></a><a name="index-calc_002dmlud-1361"></a><a name="index-lud-1362"></a>The <kbd>V L</kbd> (<code>calc-mlud</code>) [<code>lud</code>] command computes the
+LU decomposition of a matrix.  The result is a list of three matrices
+which, when multiplied together left-to-right, form the original matrix. 
+The first is a permutation matrix that arises from pivoting in the
+algorithm, the second is lower-triangular with ones on the diagonal,
+and the third is upper-triangular.
+
+   <p><a name="index-v-T-1363"></a><a name="index-V-T-1364"></a><a name="index-calc_002dmtrace-1365"></a><a name="index-tr-1366"></a>The <kbd>V T</kbd> (<code>calc-mtrace</code>) [<code>tr</code>] command computes the
+trace of a square matrix.  This is defined as the sum of the diagonal
+elements of the matrix.
+
+   <p><a name="index-v-K-1367"></a><a name="index-V-K-1368"></a><a name="index-calc_002dkron-1369"></a><a name="index-kron-1370"></a>The <kbd>V K</kbd> (<code>calc-kron</code>) [<code>kron</code>] command computes
+the Kronecker product of two matrices.
+
+   </body></html>
+

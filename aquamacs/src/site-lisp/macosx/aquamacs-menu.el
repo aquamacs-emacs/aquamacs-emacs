@@ -1,3 +1,4 @@
+;; utf-8-emacs
 ;; aquamacs-menu
 ;; redefines and modifies the menu bar
 
@@ -185,6 +186,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
     (javascript-mode . "JavaScript")
     (html-mode . "HTML")
     (html-helper-mode . "HTML (Helper)")
+    (nxhtml-mode . "nXhtml")
     (latex-mode . "LaTeX")
     lisp-interaction-mode 
     emacs-lisp-mode 

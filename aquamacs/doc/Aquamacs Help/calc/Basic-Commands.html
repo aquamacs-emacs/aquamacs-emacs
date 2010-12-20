@@ -1,0 +1,172 @@
+<html lang="en">
+<head>
+<title>Basic Commands - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Introduction.html#Introduction" title="Introduction">
+<link rel="prev" href="Introduction.html#Introduction" title="Introduction">
+<link rel="next" href="Help-Commands.html#Help-Commands" title="Help Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Help-Commands.html#Help-Commands">Help Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Introduction.html#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 Basic Commands</h3>
+
+<p class="noindent"><a name="index-calc-86"></a><a name="index-calc_002dmode-87"></a><a name="index-Starting-the-Calculator-88"></a><a name="index-Running-the-Calculator-89"></a>To start the Calculator in its standard interface, type <kbd>M-x calc</kbd>. 
+By default this creates a pair of small windows, &lsquo;<samp><span class="samp">*Calculator*</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">*Calc Trail*</span></samp>&rsquo;.  The former displays the contents of the
+Calculator stack and is manipulated exclusively through Calc commands. 
+It is possible (though not usually necessary) to create several Calc
+mode buffers each of which has an independent stack, undo list, and
+mode settings.  There is exactly one Calc Trail buffer; it records a
+list of the results of all calculations that have been done.  The
+Calc Trail buffer uses a variant of Calc mode, so Calculator commands
+still work when the trail buffer's window is selected.  It is possible
+to turn the trail window off, but the &lsquo;<samp><span class="samp">*Calc Trail*</span></samp>&rsquo; buffer itself
+still exists and is updated silently.  See <a href="Trail-Commands.html#Trail-Commands">Trail Commands</a>.
+
+   <p><a name="index-C_002dx-_002a-c-90"></a><a name="index-C_002dx-_002a-_002a-91"></a>In most installations, the <kbd>C-x * c</kbd> key sequence is a more
+convenient way to start the Calculator.  Also, <kbd>C-x * *</kbd>
+is a synonym for <kbd>C-x * c</kbd> unless you last used Calc
+in its Keypad mode.
+
+   <p><a name="index-x-92"></a><a name="index-M_002dx-93"></a><a name="index-calc_002dexecute_002dextended_002dcommand-94"></a>Most Calc commands use one or two keystrokes.  Lower- and upper-case
+letters are distinct.  Commands may also be entered in full <kbd>M-x</kbd> form;
+for some commands this is the only form.  As a convenience, the <kbd>x</kbd>
+key (<code>calc-execute-extended-command</code>)
+is like <kbd>M-x</kbd> except that it enters the initial string &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo;
+for you.  For example, the following key sequences are equivalent:
+<kbd>S</kbd>, <kbd>M-x calc-sin &lt;RET&gt;</kbd>, <kbd>x sin &lt;RET&gt;</kbd>.
+
+   <p>Although Calc is designed to be used from the keyboard, some of
+Calc's more common commands are available from a menu.  In the menu, the
+arguments to the functions are given by referring to their stack level
+numbers.
+
+   <p><a name="index-Extensions-module-95"></a><a name="index-g_t_0040file_007bcalc_002dext_007d-module-96"></a>The Calculator exists in many parts.  When you type <kbd>C-x * c</kbd>, the
+Emacs &ldquo;auto-load&rdquo; mechanism will bring in only the first part, which
+contains the basic arithmetic functions.  The other parts will be
+auto-loaded the first time you use the more advanced commands like trig
+functions or matrix operations.  This is done to improve the response time
+of the Calculator in the common case when all you need to do is a
+little arithmetic.  If for some reason the Calculator fails to load an
+extension module automatically, you can force it to load all the
+extensions by using the <kbd>C-x * L</kbd> (<code>calc-load-everything</code>)
+command.  See <a href="Mode-Settings.html#Mode-Settings">Mode Settings</a>.
+
+   <p>If you type <kbd>M-x calc</kbd> or <kbd>C-x * c</kbd> with any numeric prefix argument,
+the Calculator is loaded if necessary, but it is not actually started. 
+If the argument is positive, the <samp><span class="file">calc-ext</span></samp> extensions are also
+loaded if necessary.  User-written Lisp code that wishes to make use
+of Calc's arithmetic routines can use &lsquo;<samp><span class="samp">(calc 0)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">(calc 1)</span></samp>&rsquo;
+to auto-load the Calculator.
+
+   <p><a name="index-C_002dx-_002a-b-97"></a><a name="index-full_002dcalc-98"></a>If you type <kbd>C-x * b</kbd>, then next time you use <kbd>C-x * c</kbd> you
+will get a Calculator that uses the full height of the Emacs screen. 
+When full-screen mode is on, <kbd>C-x * c</kbd> runs the <code>full-calc</code>
+command instead of <code>calc</code>.  From the Unix shell you can type
+&lsquo;<samp><span class="samp">emacs -f full-calc</span></samp>&rsquo; to start a new Emacs specifically for use
+as a calculator.  When Calc is started from the Emacs command line
+like this, Calc's normal &ldquo;quit&rdquo; commands actually quit Emacs itself.
+
+   <p><a name="index-C_002dx-_002a-o-99"></a><a name="index-calc_002dother_002dwindow-100"></a>The <kbd>C-x * o</kbd> command is like <kbd>C-x * c</kbd> except that the Calc
+window is not actually selected.  If you are already in the Calc
+window, <kbd>C-x * o</kbd> switches you out of it.  (The regular Emacs
+<kbd>C-x o</kbd> command would also work for this, but it has a
+tendency to drop you into the Calc Trail window instead, which
+<kbd>C-x * o</kbd> takes care not to do.)
+
+   <p>For one quick calculation, you can type <kbd>C-x * q</kbd> (<code>quick-calc</code>)
+which prompts you for a formula (like &lsquo;<samp><span class="samp">2+3/4</span></samp>&rsquo;).  The result is
+displayed at the bottom of the Emacs screen without ever creating
+any special Calculator windows.  See <a href="Quick-Calculator.html#Quick-Calculator">Quick Calculator</a>.
+
+   <p>Finally, if you are using the X window system you may want to try
+<kbd>C-x * k</kbd> (<code>calc-keypad</code>) which runs Calc with a
+&ldquo;calculator keypad&rdquo; picture as well as a stack display.  Click on
+the keys with the mouse to operate the calculator.  See <a href="Keypad-Mode.html#Keypad-Mode">Keypad Mode</a>.
+
+   <p><a name="index-q-101"></a><a name="index-calc_002dquit-102"></a><a name="index-Quitting-the-Calculator-103"></a><a name="index-Exiting-the-Calculator-104"></a>The <kbd>q</kbd> key (<code>calc-quit</code>) exits Calc mode and closes the
+Calculator's window(s).  It does not delete the Calculator buffers. 
+If you type <kbd>M-x calc</kbd> again, the Calculator will reappear with the
+contents of the stack intact.  Typing <kbd>C-x * c</kbd> or <kbd>C-x * *</kbd>
+again from inside the Calculator buffer is equivalent to executing
+<code>calc-quit</code>; you can think of <kbd>C-x * *</kbd> as toggling the
+Calculator on and off.
+
+   <p><a name="index-C_002dx-_002a-x-105"></a>The <kbd>C-x * x</kbd> command also turns the Calculator off, no matter which
+user interface (standard, Keypad, or Embedded) is currently active. 
+It also cancels <code>calc-edit</code> mode if used from there.
+
+   <p><a name="index-d-_0040key_007bSPC_007d-106"></a><a name="index-calc_002drefresh-107"></a><a name="index-Refreshing-a-garbled-display-108"></a><a name="index-Garbled-displays_002c-refreshing-109"></a>The <kbd>d &lt;SPC&gt;</kbd> key sequence (<code>calc-refresh</code>) redraws the contents
+of the Calculator buffer from memory.  Use this if the contents of the
+buffer have been damaged somehow.
+
+   <p>The <kbd>o</kbd> key (<code>calc-realign</code>) moves the cursor back to its
+&ldquo;home&rdquo; position at the bottom of the Calculator buffer.
+
+   <p><a name="index-g_t_003c-110"></a><a name="index-g_t_003e-111"></a><a name="index-calc_002dscroll_002dleft-112"></a><a name="index-calc_002dscroll_002dright-113"></a><a name="index-Horizontal-scrolling-114"></a><a name="index-Scrolling-115"></a><a name="index-Wide-text_002c-scrolling-116"></a>The <kbd>&lt;</kbd> and <kbd>&gt;</kbd> keys are bound to <code>calc-scroll-left</code> and
+<code>calc-scroll-right</code>.  These are just like the normal horizontal
+scrolling commands except that they scroll one half-screen at a time by
+default.  (Calc formats its output to fit within the bounds of the
+window whenever it can.)
+
+   <p><a name="index-g_t_0040_007b-117"></a><a name="index-g_t_0040_007d-118"></a><a name="index-calc_002dscroll_002ddown-119"></a><a name="index-calc_002dscroll_002dup-120"></a><a name="index-Vertical-scrolling-121"></a>The <kbd>{</kbd> and <kbd>}</kbd> keys are bound to <code>calc-scroll-down</code>
+and <code>calc-scroll-up</code>.  They scroll up or down by one-half the
+height of the Calc window.
+
+   <p><a name="index-C_002dx-_002a-0-122"></a><a name="index-calc_002dreset-123"></a>The <kbd>C-x * 0</kbd> command (<code>calc-reset</code>; that's <kbd>C-x *</kbd> followed
+by a zero) resets the Calculator to its initial state.  This clears
+the stack, resets all the modes to their initial values (the values
+that were saved with <kbd>m m</kbd> (<code>calc-save-modes</code>)), clears the
+caches (see <a href="Caches.html#Caches">Caches</a>), and so on.  (It does <em>not</em> erase the
+values of any variables.) With an argument of 0, Calc will be reset to
+its default state; namely, the modes will be given their default values. 
+With a positive prefix argument, <kbd>C-x * 0</kbd> preserves the contents of
+the stack but resets everything else to its initial state; with a
+negative prefix argument, <kbd>C-x * 0</kbd> preserves the contents of the
+stack but resets everything else to its default state.
+
+   </body></html>
+

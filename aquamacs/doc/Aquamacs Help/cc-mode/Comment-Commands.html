@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Comment Commands - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Indentation-Commands.html#Indentation-Commands" title="Indentation Commands">
+<link rel="next" href="Movement-Commands.html#Movement-Commands" title="Movement Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Comment-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Movement-Commands.html#Movement-Commands">Movement Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Indentation-Commands.html#Indentation-Commands">Indentation Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">4.2 Comment Commands</h3>
+
+<p><a name="index-comments-_0028insertion-of_0029-42"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+     <dl>
+<dt><kbd>C-c C-c</kbd> (<code>comment-region</code>)<dd><a name="index-C_002dc-C_002dc-43"></a><a name="index-comment_002dregion-44"></a>This command comments out the lines that start in the region.  With a
+negative argument, it does the opposite - it deletes the comment
+delimiters from these lines.  See <a href="../emacs/Multi_002dLine-Comments.html#Multi_002dLine-Comments">Multi-Line Comments</a>, for fuller details.  <code>comment-region</code> isn't
+actually part of CC Mode - it is given a CC Mode binding for
+convenience.
+
+     <br><dt><kbd>M-;</kbd> (<code>comment-dwim</code> or <code>indent-for-comment</code> <a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>)<dd><a name="index-M_002d_003b-45"></a><a name="index-comment_002ddwim-46"></a><a name="index-indent_002dfor_002dcomment-47"></a>Insert a comment at the end of the current line, if none is there
+already.  Then reindent the comment according to <code>comment-column</code>
+(see <a href="../emacs/Options-for-Comments.html#Options-for-Comments">Options for Comments</a>)
+and the variables below.  Finally, position the point after the
+comment starter.  <kbd>C-u M-;</kbd> kills any comment on the current line,
+together with any whitespace before it.  This is a standard Emacs
+command, but CC Mode enhances it a bit with two variables:
+
+     <div class="defun">
+&mdash; User Option: <b>c-indent-comment-alist</b><var><a name="index-c_002dindent_002dcomment_002dalist-48"></a></var><br>
+<blockquote> <p><a name="index-indent_002dcomment_002dalist-_0028c_002d_0029-49"></a><a name="index-comment_002dcolumn-50"></a>This style variable allows you to vary the column that <kbd>M-;</kbd> puts
+the comment at, depending on what sort of code is on the line, and
+possibly the indentation of any similar comment on the preceding line. 
+It is an association list that maps different types of lines to
+actions describing how they should be handled.  If a certain line type
+isn't present on the list then the line is indented to the column
+specified by <code>comment-column</code>.
+
+             <p>See the documentation string for a full description of this
+variable (use <kbd>C-h v c-indent-comment-alist</kbd>). 
+</p></blockquote></div>
+
+     <div class="defun">
+&mdash; User Option: <b>c-indent-comments-syntactically-p</b><var><a name="index-c_002dindent_002dcomments_002dsyntactically_002dp-51"></a></var><br>
+<blockquote> <p><a name="index-indent_002dcomments_002dsyntactically_002dp-_0028c_002d_0029-52"></a>Normally, when this style variable is <code>nil</code>, <kbd>M-;</kbd> will
+indent comment-only lines according to <code>c-indent-comment-alist</code>,
+just as it does with lines where other code precede the comments. 
+However, if you want it to act just like &lt;TAB&gt; for comment-only
+lines you can get that by setting
+<code>c-indent-comments-syntactically-p</code> to non-<code>nil</code>.
+
+             <p>If <code>c-indent-comments-syntactically-p</code> is non-<code>nil</code> then
+<code>c-indent-comment-alist</code> won't be consulted at all for comment-only
+lines. 
+</p></blockquote></div>
+     </dl>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The name of this command varies between (X)Emacs versions.</p>
+
+   <hr></div>
+
+   </body></html>
+

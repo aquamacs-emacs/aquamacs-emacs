@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Quick Calculator - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Introduction.html#Introduction" title="Introduction">
+<link rel="prev" href="Algebraic-Entry.html#Algebraic-Entry" title="Algebraic Entry">
+<link rel="next" href="Prefix-Arguments.html#Prefix-Arguments" title="Prefix Arguments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Quick-Calculator"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Prefix-Arguments.html#Prefix-Arguments">Prefix Arguments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebraic-Entry.html#Algebraic-Entry">Algebraic Entry</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
+<hr>
+</div>
+
+<h3 class="section">4.6 &ldquo;Quick Calculator&rdquo; Mode</h3>
+
+<p class="noindent"><a name="index-C_002dx-_002a-q-196"></a><a name="index-quick_002dcalc-197"></a><a name="index-Quick-Calculator-198"></a>There is another way to invoke the Calculator if all you need to do
+is make one or two quick calculations.  Type <kbd>C-x * q</kbd> (or
+<kbd>M-x quick-calc</kbd>), then type any formula as an algebraic entry. 
+The Calculator will compute the result and display it in the echo
+area, without ever actually putting up a Calc window.
+
+   <p>You can use the <kbd>$</kbd> character in a Quick Calculator formula to
+refer to the previous Quick Calculator result.  Older results are
+not retained; the Quick Calculator has no effect on the full
+Calculator's stack or trail.  If you compute a result and then
+forget what it was, just run <code>C-x * q</code> again and enter
+&lsquo;<samp><span class="samp">$</span></samp>&rsquo; as the formula.
+
+   <p>If this is the first time you have used the Calculator in this Emacs
+session, the <kbd>C-x * q</kbd> command will create the <code>*Calculator*</code>
+buffer and perform all the usual initializations; it simply will
+refrain from putting that buffer up in a new window.  The Quick
+Calculator refers to the <code>*Calculator*</code> buffer for all mode
+settings.  Thus, for example, to set the precision that the Quick
+Calculator uses, simply run the full Calculator momentarily and use
+the regular <kbd>p</kbd> command.
+
+   <p>If you use <code>C-x * q</code> from inside the Calculator buffer, the
+effect is the same as pressing the apostrophe key (algebraic entry).
+
+   <p>The result of a Quick calculation is placed in the Emacs &ldquo;kill ring&rdquo;
+as well as being displayed.  A subsequent <kbd>C-y</kbd> command will
+yank the result into the editing buffer.  You can also use this
+to yank the result into the next <kbd>C-x * q</kbd> input line as a more
+explicit alternative to <kbd>$</kbd> notation, or to yank the result
+into the Calculator stack after typing <kbd>C-x * c</kbd>.
+
+   <p>If you finish your formula by typing &lt;LFD&gt; (or <kbd>C-j</kbd>) instead
+of &lt;RET&gt;, the result is inserted immediately into the current
+buffer rather than going into the kill ring.
+
+   <p>Quick Calculator results are actually evaluated as if by the <kbd>=</kbd>
+key (which replaces variable names by their stored values, if any). 
+If the formula you enter is an assignment to a variable using the
+&lsquo;<samp><span class="samp">:=</span></samp>&rsquo; operator, say, &lsquo;<samp><span class="samp">foo := 2 + 3</span></samp>&rsquo; or &lsquo;<samp><span class="samp">foo := foo + 1</span></samp>&rsquo;,
+then the result of the evaluation is stored in that Calc variable. 
+See <a href="Store-and-Recall.html#Store-and-Recall">Store and Recall</a>.
+
+   <p>If the result is an integer and the current display radix is decimal,
+the number will also be displayed in hex, octal and binary formats.  If
+the integer is in the range from 1 to 126, it will also be displayed as
+an ASCII character.
+
+   <p>For example, the quoted character &lsquo;<samp><span class="samp">"x"</span></samp>&rsquo; produces the vector
+result &lsquo;<samp><span class="samp">[120]</span></samp>&rsquo; (because 120 is the ASCII code of the lower-case
+`x'; see <a href="Strings.html#Strings">Strings</a>).  Since this is a vector, not an integer, it
+is displayed only according to the current mode settings.  But
+running Quick Calc again and entering &lsquo;<samp><span class="samp">120</span></samp>&rsquo; will produce the
+result &lsquo;<samp><span class="samp">120 (16#78, 8#170, x)</span></samp>&rsquo; which shows the number in its
+decimal, hexadecimal, octal, and ASCII forms.
+
+   <p>Please note that the Quick Calculator is not any faster at loading
+or computing the answer than the full Calculator; the name &ldquo;quick&rdquo;
+merely refers to the fact that it's much less hassle to use for
+small calculations.
+
+   </body></html>
+

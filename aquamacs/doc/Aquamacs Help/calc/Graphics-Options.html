@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+<title>Graphics Options - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Graphics.html#Graphics" title="Graphics">
+<link rel="prev" href="Managing-Curves.html#Managing-Curves" title="Managing Curves">
+<link rel="next" href="Devices.html#Devices" title="Devices">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Graphics-Options"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Devices.html#Devices">Devices</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Managing-Curves.html#Managing-Curves">Managing Curves</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Graphics.html#Graphics">Graphics</a>
+<hr>
+</div>
+
+<h3 class="section">14.4 Graphics Options</h3>
+
+<p class="noindent"><a name="index-g-g-2117"></a><a name="index-calc_002dgraph_002dgrid-2118"></a>The <kbd>g g</kbd> (<code>calc-graph-grid</code>) command turns the &ldquo;grid&rdquo;
+on and off.  It is off by default; tick marks appear only at the
+edges of the graph.  With the grid turned on, dotted lines appear
+across the graph at each tick mark.  Note that this command only
+changes the setting in &lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo;; to see the effects
+of the change you must give another <kbd>g p</kbd> command.
+
+   <p><a name="index-g-b-2119"></a><a name="index-calc_002dgraph_002dborder-2120"></a>The <kbd>g b</kbd> (<code>calc-graph-border</code>) command turns the border
+(the box that surrounds the graph) on and off.  It is on by default. 
+This command will only work with GNUPLOT 3.0 and later versions.
+
+   <p><a name="index-g-k-2121"></a><a name="index-calc_002dgraph_002dkey-2122"></a>The <kbd>g k</kbd> (<code>calc-graph-key</code>) command turns the &ldquo;key&rdquo;
+on and off.  The key is a chart in the corner of the graph that
+shows the correspondence between curves and line styles.  It is
+off by default, and is only really useful if you have several
+curves on the same graph.
+
+   <p><a name="index-g-N-2123"></a><a name="index-calc_002dgraph_002dnum_002dpoints-2124"></a>The <kbd>g N</kbd> (<code>calc-graph-num-points</code>) command allows you
+to select the number of data points in the graph.  This only affects
+curves where neither &ldquo;x&rdquo; nor &ldquo;y&rdquo; is specified as a vector. 
+Enter a blank line to revert to the default value (initially 15). 
+With no prefix argument, this command affects only the current graph. 
+With a positive prefix argument this command changes or, if you enter
+a blank line, displays the default number of points used for all
+graphs created by <kbd>g a</kbd> that don't specify the resolution explicitly. 
+With a negative prefix argument, this command changes or displays
+the default value (initially 5) used for 3D graphs created by <kbd>g A</kbd>. 
+Note that a 3D setting of 5 means that a total of &lsquo;<samp><span class="samp">5^2 = 25</span></samp>&rsquo; points
+will be computed for the surface.
+
+   <p>Data values in the graph of a function are normally computed to a
+precision of five digits, regardless of the current precision at the
+time. This is usually more than adequate, but there are cases where
+it will not be.  For example, plotting &lsquo;<samp><span class="samp">1 + x</span></samp>&rsquo; with &lsquo;<samp><span class="samp">x</span></samp>&rsquo; in the
+interval &lsquo;<samp><span class="samp">[0 .. 1e-6]</span></samp>&rsquo; will round all the data points down
+to 1.0!  Putting the command &lsquo;<samp><span class="samp">set precision </span><var>n</var></samp>&rsquo; in the
+&lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo; buffer will cause the data to be computed
+at precision <var>n</var> instead of 5.  Since this is such a rare case,
+there is no keystroke-based command to set the precision.
+
+   <p><a name="index-g-h-2125"></a><a name="index-calc_002dgraph_002dheader-2126"></a>The <kbd>g h</kbd> (<code>calc-graph-header</code>) command sets the title
+for the graph.  This will show up centered above the graph. 
+The default title is blank (no title).
+
+   <p><a name="index-g-n-2127"></a><a name="index-calc_002dgraph_002dname-2128"></a>The <kbd>g n</kbd> (<code>calc-graph-name</code>) command sets the title of an
+individual curve.  Like the other curve-manipulating commands, it
+affects the most recently added curve, i.e., the last curve on the
+list in the &lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo; buffer.  To set the title of
+the other curves you must first juggle them to the end of the list
+with <kbd>g j</kbd>, or edit the &lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo; buffer by hand. 
+Curve titles appear in the key; if the key is turned off they are
+not used.
+
+   <p><a name="index-g-t-2129"></a><a name="index-g-T-2130"></a><a name="index-calc_002dgraph_002dtitle_002dx-2131"></a><a name="index-calc_002dgraph_002dtitle_002dy-2132"></a>The <kbd>g t</kbd> (<code>calc-graph-title-x</code>) and <kbd>g T</kbd>
+(<code>calc-graph-title-y</code>) commands set the titles on the &ldquo;x&rdquo;
+and &ldquo;y&rdquo; axes, respectively.  These titles appear next to the
+tick marks on the left and bottom edges of the graph, respectively. 
+Calc does not have commands to control the tick marks themselves,
+but you can edit them into the &lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo; buffer if
+you wish.  See the GNUPLOT documentation for details.
+
+   <p><a name="index-g-r-2133"></a><a name="index-g-R-2134"></a><a name="index-calc_002dgraph_002drange_002dx-2135"></a><a name="index-calc_002dgraph_002drange_002dy-2136"></a>The <kbd>g r</kbd> (<code>calc-graph-range-x</code>) and <kbd>g R</kbd>
+(<code>calc-graph-range-y</code>) commands set the range of values on the
+&ldquo;x&rdquo; and &ldquo;y&rdquo; axes, respectively.  You are prompted to enter a
+suitable range.  This should be either a pair of numbers of the
+form, &lsquo;<samp><var>min</var><span class="samp">:</span><var>max</var></samp>&rsquo;, or a blank line to revert to the
+default behavior of setting the range based on the range of values
+in the data, or &lsquo;<samp><span class="samp">$</span></samp>&rsquo; to take the range from the top of the stack. 
+Ranges on the stack can be represented as either interval forms or
+vectors:  &lsquo;<samp><span class="samp">[</span><var>min</var><span class="samp"> .. </span><var>max</var><span class="samp">]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">[</span><var>min</var><span class="samp">, </span><var>max</var><span class="samp">]</span></samp>&rsquo;.
+
+   <p><a name="index-g-l-2137"></a><a name="index-g-L-2138"></a><a name="index-calc_002dgraph_002dlog_002dx-2139"></a><a name="index-calc_002dgraph_002dlog_002dy-2140"></a>The <kbd>g l</kbd> (<code>calc-graph-log-x</code>) and <kbd>g L</kbd> (<code>calc-graph-log-y</code>)
+commands allow you to set either or both of the axes of the graph to
+be logarithmic instead of linear.
+
+   <p><a name="index-g-C_002dl-2141"></a><a name="index-g-C_002dr-2142"></a><a name="index-g-C_002dt-2143"></a><a name="index-calc_002dgraph_002dlog_002dz-2144"></a><a name="index-calc_002dgraph_002drange_002dz-2145"></a><a name="index-calc_002dgraph_002dtitle_002dz-2146"></a>For 3D plots, <kbd>g C-t</kbd>, <kbd>g C-r</kbd>, and <kbd>g C-l</kbd> (those are
+letters with the Control key held down) are the corresponding commands
+for the &ldquo;z&rdquo; axis.
+
+   <p><a name="index-g-z-2147"></a><a name="index-g-Z-2148"></a><a name="index-calc_002dgraph_002dzero_002dx-2149"></a><a name="index-calc_002dgraph_002dzero_002dy-2150"></a>The <kbd>g z</kbd> (<code>calc-graph-zero-x</code>) and <kbd>g Z</kbd>
+(<code>calc-graph-zero-y</code>) commands control whether a dotted line is
+drawn to indicate the &ldquo;x&rdquo; and/or &ldquo;y&rdquo; zero axes.  (These are the same
+dotted lines that would be drawn there anyway if you used <kbd>g g</kbd> to
+turn the &ldquo;grid&rdquo; feature on.)  Zero-axis lines are on by default, and
+may be turned off only in GNUPLOT 3.0 and later versions.  They are
+not available for 3D plots.
+
+   <p><a name="index-g-s-2151"></a><a name="index-calc_002dgraph_002dline_002dstyle-2152"></a>The <kbd>g s</kbd> (<code>calc-graph-line-style</code>) command turns the connecting
+lines on or off for the most recently added curve, and optionally selects
+the style of lines to be used for that curve.  Plain <kbd>g s</kbd> simply
+toggles the lines on and off.  With a numeric prefix argument, <kbd>g s</kbd>
+turns lines on and sets a particular line style.  Line style numbers
+start at one and their meanings vary depending on the output device. 
+GNUPLOT guarantees that there will be at least six different line styles
+available for any device.
+
+   <p><a name="index-g-S-2153"></a><a name="index-calc_002dgraph_002dpoint_002dstyle-2154"></a>The <kbd>g S</kbd> (<code>calc-graph-point-style</code>) command similarly turns
+the symbols at the data points on or off, or sets the point style. 
+If you turn both lines and points off, the data points will show as
+tiny dots.  If the &ldquo;y&rdquo; values being plotted contain error forms and
+the connecting lines are turned off, then this command will also turn
+the error bars on or off.
+
+   <p><a name="index-g_t_0040code_007bLineStyles_007d-variable-2155"></a><a name="index-g_t_0040code_007bPointStyles_007d-variable-2156"></a><a name="index-LineStyles-2157"></a><a name="index-PointStyles-2158"></a>Another way to specify curve styles is with the <code>LineStyles</code> and
+<code>PointStyles</code> variables.  These variables initially have no stored
+values, but if you store a vector of integers in one of these variables,
+the <kbd>g a</kbd> and <kbd>g f</kbd> commands will use those style numbers
+instead of the defaults for new curves that are added to the graph. 
+An entry should be a positive integer for a specific style, or 0 to let
+the style be chosen automatically, or <i>-1</i> to turn off lines or points
+altogether.  If there are more curves than elements in the vector, the
+last few curves will continue to have the default styles.  Of course,
+you can later use <kbd>g s</kbd> and <kbd>g S</kbd> to change any of these styles.
+
+   <p>For example, <kbd>'[2 -1 3] &lt;RET&gt; s t LineStyles</kbd> causes the first curve
+to have lines in style number 2, the second curve to have no connecting
+lines, and the third curve to have lines in style 3.  Point styles will
+still be assigned automatically, but you could store another vector in
+<code>PointStyles</code> to define them, too.
+
+   </body></html>
+

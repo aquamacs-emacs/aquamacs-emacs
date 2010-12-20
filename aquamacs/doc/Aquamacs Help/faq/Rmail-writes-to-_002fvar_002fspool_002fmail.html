@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Rmail writes to /var/spool/mail - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mail-and-news.html#Mail-and-news" title="Mail and news">
+<link rel="prev" href="Sorting-the-messages-in-an-Rmail-folder.html#Sorting-the-messages-in-an-Rmail-folder" title="Sorting the messages in an Rmail folder">
+<link rel="next" href="Replying-to-the-sender-of-a-message.html#Replying-to-the-sender-of-a-message" title="Replying to the sender of a message">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Rmail-writes-to-%2fvar%2fspool%2fmail"></a>
+<a name="Rmail-writes-to-_002fvar_002fspool_002fmail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Replying-to-the-sender-of-a-message.html#Replying-to-the-sender-of-a-message">Replying to the sender of a message</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sorting-the-messages-in-an-Rmail-folder.html#Sorting-the-messages-in-an-Rmail-folder">Sorting the messages in an Rmail folder</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mail-and-news.html#Mail-and-news">Mail and news</a>
+<hr>
+</div>
+
+<h3 class="section">12.5 Why does Rmail need to write to <samp><span class="file">/var/spool/mail</span></samp>?</h3>
+
+<p><a name="index-Rmail-and-_0040file_007b_002fvar_002fspool_002fmail_007d-515"></a><a name="index-g_t_0040file_007b_002fvar_002fspool_002fmail_007d-and-Rmail-516"></a>
+This is the behavior of the <code>movemail</code> program which Rmail uses. 
+This indicates that <code>movemail</code> is configured to use lock files.
+
+   <p>RMS writes:
+
+   <blockquote>
+Certain systems require lock files to interlock access to mail files. 
+On these systems, <code>movemail</code> must write lock files, or you risk losing
+mail.  You simply must arrange to let <code>movemail</code> write them.
+
+   <p>Other systems use the <code>flock</code> system call to interlock access.  On
+these systems, you should configure <code>movemail</code> to use <code>flock</code>. 
+</blockquote>
+
+   </body></html>
+

@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Figure Wrapper - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Defining-Label-Environments.html#Defining-Label-Environments" title="Defining Label Environments">
+<link rel="prev" href="Quick-Equation.html#Quick-Equation" title="Quick Equation">
+<link rel="next" href="Adding-Magic-Words.html#Adding-Magic-Words" title="Adding Magic Words">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Figure-Wrapper"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Adding-Magic-Words.html#Adding-Magic-Words">Adding Magic Words</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Quick-Equation.html#Quick-Equation">Quick Equation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.4.3 Figure Wrapping Macro</h4>
+
+<p><a name="index-Macros-as-environment-wrappers-152"></a><a name="index-Figure-wrapping-macro-153"></a>
+Suppose you want to make figures not directly with the figure
+environment, but with a macro like
+
+<pre class="example">     \newcommand{\myfig}[5][tbp]{%
+       \begin{figure}[#1]
+         \epsimp[#5]{#2}
+         \caption{#3}
+         \label{#4}
+       \end{figure}}
+</pre>
+   <p class="noindent">which would be called like
+
+<pre class="example">     \myfig[htp]{filename}{caption text}{label}{1}
+</pre>
+   <p>Now we need to tell <b>RefTeX</b> that the 4th argument of the
+<code>\myfig</code> macro <em>is itself</em> a figure label, and where to find
+the context.
+
+<pre class="lisp">     (setq reftex-label-alist
+           '(("\\myfig[]{}{}{*}{}" ?f nil nil 3)))
+</pre>
+   <p>The empty pairs of brackets indicate the different arguments of the
+<code>\myfig</code> macro. The &lsquo;<samp><span class="samp">*</span></samp>&rsquo; marks the label argument.  <code>?f</code>
+indicates that this is a figure label which will be listed together with
+labels from normal figure environments.  The <code>nil</code> entries for
+prefix and reference format mean to use the defaults for figure labels. 
+The &lsquo;<samp><span class="samp">3</span></samp>&rsquo; for the context method means to grab the 3rd macro argument
+- the caption.
+
+   <p>As a side effect of this configuration, <code>reftex-label</code> will now
+insert the required naked label (without the <code>\label</code> macro) when
+point is directly after the opening parenthesis of a <code>\myfig</code> macro
+argument.
+
+   <p>Again, here the configuration in the customization buffer:
+
+<pre class="example">     [INS] [DEL] Package or Detailed   : [Value Menu] Detailed:
+                 Environment or \macro : [Value Menu] String: \myfig[]{}{}{*}{}
+                 Type specification    : [Value Menu] Char  : f
+                 Label prefix string   : [Value Menu] Default
+                 Label reference format: [Value Menu] Default
+                 Context method        : [Value Menu] Macro arg nr: 3
+                 Magic words:
+                   [INS]
+                 [ ] Make TOC entry    : [Value Menu] No entry
+</pre>
+   </body></html>
+

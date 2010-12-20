@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Running NNDiary - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-NNDiary-Back-End.html#The-NNDiary-Back-End" title="The NNDiary Back End">
+<link rel="prev" href="Diary-Messages.html#Diary-Messages" title="Diary Messages">
+<link rel="next" href="Customizing-NNDiary.html#Customizing-NNDiary" title="Customizing NNDiary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Running-NNDiary"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customizing-NNDiary.html#Customizing-NNDiary">Customizing NNDiary</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Diary-Messages.html#Diary-Messages">Diary Messages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-NNDiary-Back-End.html#The-NNDiary-Back-End">The NNDiary Back End</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">6.8.1.2 Running NNDiary</h5>
+
+<p><a name="index-running-nndiary-2464"></a><a name="index-nndiary-operation-modes-2465"></a>
+<code>nndiary</code> has two modes of operation: &ldquo;traditional&rdquo; (the default)
+and &ldquo;autonomous&rdquo;.  In traditional mode, <code>nndiary</code> does not get new
+mail by itself.  You have to move (<kbd>B m</kbd>) or copy (<kbd>B c</kbd>) mails
+from your primary mail back end to nndiary groups in order to handle them
+as diary messages.  In autonomous mode, <code>nndiary</code> retrieves its own
+mail and handles it independently from your primary mail back end.
+
+   <p>One should note that Gnus is not inherently designed to allow several
+&ldquo;master&rdquo; mail back ends at the same time.  However, this does make
+sense with <code>nndiary</code>: you really want to send and receive diary
+messages to your diary groups directly.  So, <code>nndiary</code> supports
+being sort of a &ldquo;second primary mail back end&rdquo; (to my knowledge, it is
+the only back end offering this feature).  However, there is a limitation
+(which I hope to fix some day): respooling doesn't work in autonomous
+mode.
+
+   <p>In order to use <code>nndiary</code> in autonomous mode, you have several
+things to do:
+
+     <ul>
+<li>Allow <code>nndiary</code> to retrieve new mail by itself.  Put the following
+line in your <samp><span class="file">~/.gnus.el</span></samp> file:
+
+     <pre class="lisp">          (setq nndiary-get-new-mail t)
+</pre>
+     <li>You must arrange for diary messages (those containing <code>X-Diary-*</code>
+headers) to be split in a private folder <em>before</em> Gnus treat them. 
+Again, this is needed because Gnus cannot (yet ?) properly handle
+multiple primary mail back ends.  Getting those messages from a separate
+source will compensate this misfeature to some extent.
+
+     <p>As an example, here's my procmailrc entry to store diary files in
+<samp><span class="file">~/.nndiary</span></samp> (the default <code>nndiary</code> mail source file):
+
+     <pre class="example">          :0 HD :
+          * ^X-Diary
+          .nndiary
+</pre>
+     </ul>
+
+   <p>Once this is done, you might want to customize the following two options
+that affect the diary mail retrieval and splitting processes:
+
+<div class="defun">
+&mdash; Variable: <b>nndiary-mail-sources</b><var><a name="index-nndiary_002dmail_002dsources-2466"></a></var><br>
+<blockquote><p>This is the diary-specific replacement for the standard
+<code>mail-sources</code> variable.  It obeys the same syntax, and defaults to
+<code>(file :path "~/.nndiary")</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>nndiary-split-methods</b><var><a name="index-nndiary_002dsplit_002dmethods-2467"></a></var><br>
+<blockquote><p>This is the diary-specific replacement for the standard
+<code>nnmail-split-methods</code> variable.  It obeys the same syntax. 
+</p></blockquote></div>
+
+   <p>Finally, you may add a permanent <code>nndiary</code> virtual server
+(something like <code>(nndiary "diary")</code> should do) to your
+<code>gnus-secondary-select-methods</code>.
+
+   <p>Hopefully, almost everything (see the TODO section in
+<samp><span class="file">nndiary.el</span></samp>) will work as expected when you restart Gnus: in
+autonomous mode, typing <kbd>g</kbd> and <kbd>M-g</kbd> in the group buffer, will
+also get your new diary mails and split them according to your
+diary-specific rules, <kbd>F</kbd> will find your new diary groups etc.
+
+   </body></html>
+

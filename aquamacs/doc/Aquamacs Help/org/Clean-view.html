@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Clean view - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Miscellaneous.html#Miscellaneous" title="Miscellaneous">
+<link rel="prev" href="The-very-busy-C_002dc-C_002dc-key.html#The-very-busy-C_002dc-C_002dc-key" title="The very busy C-c C-c key">
+<link rel="next" href="TTY-keys.html#TTY-keys" title="TTY keys">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Clean-view"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="TTY-keys.html#TTY-keys">TTY keys</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-very-busy-C_002dc-C_002dc-key.html#The-very-busy-C_002dc-C_002dc-key">The very busy C-c C-c key</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>
+<hr>
+</div>
+
+<h3 class="section">14.6 A cleaner outline view</h3>
+
+<p><a name="index-hiding-leading-stars-1365"></a><a name="index-dynamic-indentation-1366"></a><a name="index-odd_002dlevels_002donly-outlines-1367"></a><a name="index-clean-outline-view-1368"></a>
+Some people find it noisy and distracting that the Org headlines start with a
+potentially large number of stars, and that text below the headlines is not
+indented.  While this is no problem when writing a <em>book-like</em> document
+where the outline headings are really section headings, in a more
+<em>list-oriented</em> outline, indented structure is a lot cleaner:
+
+<pre class="example">     * Top level headline             |    * Top level headline
+     ** Second level                  |      * Second level
+     *** 3rd level                    |        * 3rd level
+     some text                        |          some text
+     *** 3rd level                    |        * 3rd level
+     more text                        |          more text
+     * Another top level headline     |    * Another top level headline
+</pre>
+   <p class="noindent">If you are using at least Emacs 23.1.50.3 and version 6.29 of Org, this kind
+of view can be achieved dynamically at display time using
+<code>org-indent-mode</code>.  In this minor mode, all lines are prefixed for
+display with the necessary amount of space.  Also headlines are prefixed with
+additional stars, so that the amount of indentation shifts by
+two<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+spaces per level.  All headline stars but the last one are made invisible
+using the <code>org-hide</code> face<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> - see below under &lsquo;<samp><span class="samp">2.</span></samp>&rsquo; for
+more information on how this works.  You can turn on <code>org-indent-mode</code>
+for all files by customizing the variable <code>org-startup-indented</code>, or you
+can turn it on for individual files using
+
+<pre class="example">     #+STARTUP: indent
+</pre>
+   <p>If you want a similar effect in earlier version of Emacs and/or Org, or if
+you want the indentation to be hard space characters so that the plain text
+file looks as similar as possible to the Emacs display, Org supports you in
+the following way:
+
+     <ol type=1 start=1>
+<li><em>Indentation of text below headlines</em><br>
+You may indent text below each headline to make the left boundary line up
+with the headline, like
+
+     <pre class="example">          *** 3rd level
+              more text, now indented
+</pre>
+     <p><a name="index-org_002dadapt_002dindentation-1369"></a>Org supports this with paragraph filling, line wrapping, and structure
+editing<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>,
+preserving or adapting the indentation as appropriate.
+
+     <li><a name="index-org_002dhide_002dleading_002dstars-1370"></a><em>Hiding leading stars</em><br> You can modify the display in such a way that
+all leading stars become invisible.  To do this in a global way, configure
+the variable <code>org-hide-leading-stars</code> or change this on a per-file basis
+with
+
+     <pre class="example">          #+STARTUP: hidestars
+          #+STARTUP: showstars
+</pre>
+     <p>With hidden stars, the tree becomes:
+
+     <pre class="example">          * Top level headline
+           * Second level
+            * 3rd level
+            ...
+</pre>
+     <p class="noindent"><a name="index-org_002dhide-_0040r_007b_0028face_0029_007d-1371"></a>The leading stars are not truly replaced by whitespace, they are only
+fontified with the face <code>org-hide</code> that uses the background color as
+font color.  If you are not using either white or black background, you may
+have to customize this face to get the wanted effect.  Another possibility is
+to set this font such that the extra stars are <i>almost</i> invisible, for
+example using the color <code>grey90</code> on a white background.
+
+     <li><a name="index-org_002dodd_002dlevels_002donly-1372"></a>Things become cleaner still if you skip all the even levels and use only odd
+levels 1, 3, 5..., effectively adding two stars to go from one outline level
+to the next<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a>.  In this
+way we get the outline view shown at the beginning of this section.  In order
+to make the structure editing and export commands handle this convention
+correctly, configure the variable <code>org-odd-levels-only</code>, or set this on
+a per-file basis with one of the following lines:
+
+     <pre class="example">          #+STARTUP: odd
+          #+STARTUP: oddeven
+</pre>
+     <p>You can convert an Org file from single-star-per-level to the
+double-star-per-level convention with <kbd>M-x org-convert-to-odd-levels
+RET</kbd> in that file.  The reverse operation is <kbd>M-x
+org-convert-to-oddeven-levels</kbd>.
+        </ol>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the variable <code>org-indent-indentation-per-level</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Turning on <code>org-indent-mode</code>
+sets <code>org-hide-leading-stars</code> to <code>t</code> and
+<code>org-adapt-indentation</code> to <code>nil</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> See also the variable <code>org-adapt-indentation</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> When you need to specify a level for a property search
+or refile targets, &lsquo;<samp><span class="samp">LEVEL=2</span></samp>&rsquo; will correspond to 3 stars, etc.</p>
+
+   <hr></div>
+
+   </body></html>
+

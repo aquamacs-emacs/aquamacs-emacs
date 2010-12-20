@@ -1,0 +1,275 @@
+<html lang="en">
+<head>
+<title>Fancy Mail Splitting - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Mail.html#Getting-Mail" title="Getting Mail">
+<link rel="prev" href="Mail-Back-End-Variables.html#Mail-Back-End-Variables" title="Mail Back End Variables">
+<link rel="next" href="Group-Mail-Splitting.html#Group-Mail-Splitting" title="Group Mail Splitting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Fancy-Mail-Splitting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Group-Mail-Splitting.html#Group-Mail-Splitting">Group Mail Splitting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Back-End-Variables.html#Mail-Back-End-Variables">Mail Back End Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Mail.html#Getting-Mail">Getting Mail</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.3.6 Fancy Mail Splitting</h4>
+
+<p><a name="index-mail-splitting-2166"></a><a name="index-fancy-mail-splitting-2167"></a>
+<a name="index-nnmail_002dsplit_002dfancy-2168"></a><a name="index-nnmail_002dsplit_002dfancy-2169"></a>If the rather simple, standard method for specifying how to split mail
+doesn't allow you to do what you want, you can set
+<code>nnmail-split-methods</code> to <code>nnmail-split-fancy</code>.  Then you can
+play with the <code>nnmail-split-fancy</code> variable.
+
+   <p>Let's look at an example value of this variable first:
+
+<pre class="lisp">     ;; <span class="roman">Messages from the mailer daemon are not crossposted to any of</span>
+     ;; <span class="roman">the ordinary groups.  Warnings are put in a separate group</span>
+     ;; <span class="roman">from real errors.</span>
+     (| ("from" mail (| ("subject" "warn.*" "mail.warning")
+                        "mail.misc"))
+        ;; <span class="roman">Non-error messages are crossposted to all relevant</span>
+        ;; <span class="roman">groups, but we don't crosspost between the group for the</span>
+        ;; <span class="roman">(ding) list and the group for other (ding) related mail.</span>
+        (&amp; (| (any "ding@ifi\\.uio\\.no" "ding.list")
+              ("subject" "ding" "ding.misc"))
+           ;; <span class="roman">Other mailing lists...</span>
+           (any "procmail@informatik\\.rwth-aachen\\.de" "procmail.list")
+           (any "SmartList@informatik\\.rwth-aachen\\.de" "SmartList.list")
+           ;; <span class="roman">Both lists below have the same suffix, so prevent</span>
+           ;; <span class="roman">cross-posting to mkpkg.list of messages posted only to</span>
+           ;; <span class="roman">the bugs- list, but allow cross-posting when the</span>
+           ;; <span class="roman">message was really cross-posted.</span>
+           (any "bugs-mypackage@somewhere" "mypkg.bugs")
+           (any "mypackage@somewhere" - "bugs-mypackage" "mypkg.list")
+           ;; <span class="roman">People...</span>
+           (any "larsi@ifi\\.uio\\.no" "people.Lars_Magne_Ingebrigtsen"))
+        ;; <span class="roman">Unmatched mail goes to the catch all group.</span>
+        "misc.misc")
+</pre>
+   <p>This variable has the format of a <dfn>split</dfn>.  A split is a
+(possibly) recursive structure where each split may contain other
+splits.  Here are the possible split syntaxes:
+
+     <dl>
+<dt><code>group</code><dd>If the split is a string, that will be taken as a group name.  Normal
+regexp match expansion will be done.  See below for examples.
+
+     <!-- Don't fold this line. -->
+     <br><dt><code>(</code><var>field</var> <var>value</var><code> [- </code><var>restrict</var><code> [...] ] </code><var>split</var><code> [</code><var>invert-partial</var><code>])</code><dd>The split can be a list containing at least three elements.  If the
+first element <var>field</var> (a regexp matching a header) contains
+<var>value</var> (also a regexp) then store the message as specified by
+<var>split</var>.
+
+     <p>If <var>restrict</var> (yet another regexp) matches some string after
+<var>field</var> and before the end of the matched <var>value</var>, the
+<var>split</var> is ignored.  If none of the <var>restrict</var> clauses match,
+<var>split</var> is processed.
+
+     <p>The last element <var>invert-partial</var> is optional.  If it is
+non-<code>nil</code>, the match-partial-words behavior controlled by the
+variable <code>nnmail-split-fancy-match-partial-words</code> (see below) is
+be inverted.  (New in Gnus 5.10.7)
+
+     <br><dt><code>(| </code><var>split</var><code> ...)</code><dd>If the split is a list, and the first element is <code>|</code> (vertical
+bar), then process each <var>split</var> until one of them matches.  A
+<var>split</var> is said to match if it will cause the mail message to be
+stored in one or more groups.
+
+     <br><dt><code>(&amp; </code><var>split</var><code> ...)</code><dd>If the split is a list, and the first element is <code>&amp;</code>, then
+process all <var>split</var>s in the list.
+
+     <br><dt><code>junk</code><dd>If the split is the symbol <code>junk</code>, then don't save (i.e., delete)
+this message.  Use with extreme caution.
+
+     <br><dt><code>(: </code><var>function</var> <var>arg1</var> <var>arg2</var><code> ...)</code><dd>If the split is a list, and the first element is &lsquo;<samp><span class="samp">:</span></samp>&rsquo;, then the
+second element will be called as a function with <var>args</var> given as
+arguments.  The function should return a <var>split</var>.
+
+     <p><a name="index-body-split-2170"></a>For instance, the following function could be used to split based on the
+body of the messages:
+
+     <pre class="lisp">          (defun split-on-body ()
+            (save-excursion
+              (save-restriction
+                (widen)
+                (goto-char (point-min))
+                (when (re-search-forward "Some.*string" nil t)
+                  "string.group"))))
+</pre>
+     <p>The buffer is narrowed to the header of the message in question when
+<var>function</var> is run.  That's why <code>(widen)</code> needs to be called
+after <code>save-excursion</code> and <code>save-restriction</code> in the example
+above.  Also note that with the nnimap backend, message bodies will
+not be downloaded by default.  You need to set
+<code>nnimap-split-download-body</code> to <code>t</code> to do that
+(see <a href="Splitting-in-IMAP.html#Splitting-in-IMAP">Splitting in IMAP</a>).
+
+     <br><dt><code>(! </code><var>func</var> <var>split</var><code>)</code><dd>If the split is a list, and the first element is <code>!</code>, then
+<var>split</var> will be processed, and <var>func</var> will be called as a
+function with the result of <var>split</var> as argument.  <var>func</var>
+should return a split.
+
+     <br><dt><code>nil</code><dd>If the split is <code>nil</code>, it is ignored.
+
+   </dl>
+
+   <p>In these splits, <var>field</var> must match a complete field name.
+
+   <p>Normally, <var>value</var> in these splits must match a complete <em>word</em>
+according to the fundamental mode syntax table.  In other words, all
+<var>value</var>'s will be implicitly surrounded by <code>\&lt;...\&gt;</code> markers,
+which are word delimiters.  Therefore, if you use the following split,
+for example,
+
+<pre class="example">     (any "joe" "joemail")
+</pre>
+   <p class="noindent">messages sent from &lsquo;<samp><span class="samp">joedavis@foo.org</span></samp>&rsquo; will normally not be filed
+in &lsquo;<samp><span class="samp">joemail</span></samp>&rsquo;.  If you want to alter this behavior, you can use any
+of the following three ways:
+
+     <ol type=1 start=1>
+<li><a name="index-nnmail_002dsplit_002dfancy_002dmatch_002dpartial_002dwords-2171"></a>You can set the <code>nnmail-split-fancy-match-partial-words</code> variable
+to non-<code>nil</code> in order to ignore word boundaries and instead the
+match becomes more like a grep.  This variable controls whether partial
+words are matched during fancy splitting.  The default value is
+<code>nil</code>.
+
+     <p>Note that it influences all <var>value</var>'s in your split rules.
+
+     <li><var>value</var> beginning with <code>.*</code> ignores word boundaries in front of
+a word.  Similarly, if <var>value</var> ends with <code>.*</code>, word boundaries
+in the rear of a word will be ignored.  For example, the <var>value</var>
+<code>"@example\\.com"</code> does not match &lsquo;<samp><span class="samp">foo@example.com</span></samp>&rsquo; but
+<code>".*@example\\.com"</code> does.
+
+     <li>You can set the <var>invert-partial</var> flag in your split rules of the
+&lsquo;<samp><span class="samp">(</span><var>field</var> <var>value</var><span class="samp"> ...)</span></samp>&rsquo; types, aforementioned in this
+section.  If the flag is set, word boundaries on both sides of a word
+are ignored even if <code>nnmail-split-fancy-match-partial-words</code> is
+<code>nil</code>.  Contrarily, if the flag is set, word boundaries are not
+ignored even if <code>nnmail-split-fancy-match-partial-words</code> is
+non-<code>nil</code>.  (New in Gnus 5.10.7)
+        </ol>
+
+   <p><a name="index-nnmail_002dsplit_002dabbrev_002dalist-2172"></a><var>field</var> and <var>value</var> can also be Lisp symbols, in that case
+they are expanded as specified by the variable
+<code>nnmail-split-abbrev-alist</code>.  This is an alist of cons cells,
+where the <span class="sc">car</span> of a cell contains the key, and the <span class="sc">cdr</span>
+contains the associated value.  Predefined entries in
+<code>nnmail-split-abbrev-alist</code> include:
+
+     <dl>
+<dt><code>from</code><dd>Matches the &lsquo;<samp><span class="samp">From</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Sender</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Resent-From</span></samp>&rsquo; fields. 
+<br><dt><code>to</code><dd>Matches the &lsquo;<samp><span class="samp">To</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Cc</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Apparently-To</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Resent-To</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Resent-Cc</span></samp>&rsquo; fields. 
+<br><dt><code>any</code><dd>Is the union of the <code>from</code> and <code>to</code> entries. 
+</dl>
+
+   <p><a name="index-nnmail_002dsplit_002dfancy_002dsyntax_002dtable-2173"></a><code>nnmail-split-fancy-syntax-table</code> is the syntax table in effect
+when all this splitting is performed.
+
+   <p>If you want to have Gnus create groups dynamically based on some
+information in the headers (i.e., do <code>replace-match</code>-like
+substitutions in the group names), you can say things like:
+
+<pre class="example">     (any "debian-\\b\\(\\w+\\)@lists.debian.org" "mail.debian.\\1")
+</pre>
+   <p>In this example, messages sent to &lsquo;<samp><span class="samp">debian-foo@lists.debian.org</span></samp>&rsquo;
+will be filed in &lsquo;<samp><span class="samp">mail.debian.foo</span></samp>&rsquo;.
+
+   <p>If the string contains the element &lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo;, then the previously
+matched string will be substituted.  Similarly, the elements &lsquo;<samp><span class="samp">\\1</span></samp>&rsquo;
+up to &lsquo;<samp><span class="samp">\\9</span></samp>&rsquo; will be substituted with the text matched by the
+groupings 1 through 9.
+
+   <p><a name="index-nnmail_002dsplit_002dlowercase_002dexpanded-2174"></a>Where <code>nnmail-split-lowercase-expanded</code> controls whether the
+lowercase of the matched string should be used for the substitution. 
+Setting it as non-<code>nil</code> is useful to avoid the creation of multiple
+groups when users send to an address using different case
+(i.e. mailing-list@domain vs Mailing-List@Domain).  The default value
+is <code>t</code>.
+
+   <p><a name="index-nnmail_002dsplit_002dfancy_002dwith_002dparent-2175"></a><code>nnmail-split-fancy-with-parent</code> is a function which allows you to
+split followups into the same groups their parents are in.  Sometimes
+you can't make splitting rules for all your mail.  For example, your
+boss might send you personal mail regarding different projects you are
+working on, and as you can't tell your boss to put a distinguishing
+string into the subject line, you have to resort to manually moving the
+messages into the right group.  With this function, you only have to do
+it once per thread.
+
+   <p>To use this feature, you have to set <code>nnmail-treat-duplicates</code>
+and <code>nnmail-cache-accepted-message-ids</code> to a non-<code>nil</code>
+value.  And then you can include <code>nnmail-split-fancy-with-parent</code>
+using the colon feature, like so:
+<pre class="lisp">     (setq nnmail-treat-duplicates 'warn     ; <span class="roman">or </span><code>delete</code>
+           nnmail-cache-accepted-message-ids t
+           nnmail-split-fancy
+           '(| (: nnmail-split-fancy-with-parent)
+               ;; <span class="roman">other splits go here</span>
+             ))
+</pre>
+   <p>This feature works as follows: when <code>nnmail-treat-duplicates</code> is
+non-<code>nil</code>, Gnus records the message id of every message it sees
+in the file specified by the variable
+<code>nnmail-message-id-cache-file</code>, together with the group it is in
+(the group is omitted for non-mail messages).  When mail splitting is
+invoked, the function <code>nnmail-split-fancy-with-parent</code> then looks
+at the References (and In-Reply-To) header of each message to split
+and searches the file specified by <code>nnmail-message-id-cache-file</code>
+for the message ids.  When it has found a parent, it returns the
+corresponding group name unless the group name matches the regexp
+<code>nnmail-split-fancy-with-parent-ignore-groups</code>.  It is
+recommended that you set <code>nnmail-message-id-cache-length</code> to a
+somewhat higher number than the default so that the message ids are
+still in the cache.  (A value of 5000 appears to create a file some
+300 kBytes in size.) 
+<a name="index-nnmail_002dcache_002daccepted_002dmessage_002dids-2176"></a>When <code>nnmail-cache-accepted-message-ids</code> is non-<code>nil</code>, Gnus
+also records the message ids of moved articles, so that the followup
+messages goes into the new group.
+
+   <p>Also see the variable <code>nnmail-cache-ignore-groups</code> if you don't
+want certain groups to be recorded in the cache.  For example, if all
+outgoing messages are written to an &ldquo;outgoing&rdquo; group, you could set
+<code>nnmail-cache-ignore-groups</code> to match that group name. 
+Otherwise, answers to all your messages would end up in the
+&ldquo;outgoing&rdquo; group.
+
+   </body></html>
+

@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>nnmairix tips and tricks - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="nnmairix.html#nnmairix" title="nnmairix">
+<link rel="prev" href="Propagating-marks.html#Propagating-marks" title="Propagating marks">
+<link rel="next" href="nnmairix-caveats.html#nnmairix-caveats" title="nnmairix caveats">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="nnmairix-tips-and-tricks"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="nnmairix-caveats.html#nnmairix-caveats">nnmairix caveats</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Propagating-marks.html#Propagating-marks">Propagating marks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="nnmairix.html#nnmairix">nnmairix</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.18.2.8 nnmairix tips and tricks</h5>
+
+     <ul>
+<li>Checking Mail
+
+     <p><a name="index-nnmairix_002dupdate_002dgroups-558"></a>I put all my important mail groups at group level 1. The mairix groups
+have group level 5, so they do not get checked at start up (see <a href="Group-Levels.html#Group-Levels">Group Levels</a>).
+
+     <p>I use the following to check for mails:
+
+     <pre class="lisp">          (defun my-check-mail-mairix-update (level)
+            (interactive "P")
+            ;; if no prefix given, set level=1
+            (gnus-group-get-new-news (or level 1))
+            (nnmairix-update-groups "mairixsearch" t t)
+            (gnus-group-list-groups))
+          
+          (define-key gnus-group-mode-map "g" 'my-check-mail-mairix-update)
+</pre>
+     <p>Instead of &lsquo;<samp><span class="samp">"mairixsearch"</span></samp>&rsquo; use the name of your <code>nnmairix</code>
+server. See the doc string for <code>nnmairix-update-groups</code> for
+details.
+
+     <li>Example: search group for ticked articles
+
+     <p>For example, you can create a group for all ticked articles, where the
+articles always stay unread:
+
+     <p>Hit <kbd>G b g</kbd>, enter group name (e.g. &lsquo;<samp><span class="samp">important</span></samp>&rsquo;), use
+&lsquo;<samp><span class="samp">F:f</span></samp>&rsquo; as query and do not include threads.
+
+     <p>Now activate marks propagation for this group by using <kbd>G b p</kbd>. Then
+activate the always-unread feature by using <kbd>G b r</kbd> twice.
+
+     <p>So far so good&mdash;but how do you remove the tick marks in the <code>nnmairix</code>
+group?  There are two options: You may simply use
+<code>nnmairix-remove-tick-mark-original-article</code> (bound to <kbd>$ u</kbd>) to remove
+tick marks from the original article. The other possibility is to set
+<code>nnmairix-propagate-marks-to-nnmairix-groups</code> to <code>t</code>, but see the above
+comments about this option.  If it works for you, the tick marks should
+also exist in the <code>nnmairix</code> group and you can remove them as usual,
+e.g. by marking an article as read.
+
+     <p>When you have removed a tick mark from the original article, this
+article should vanish from the <code>nnmairix</code> group after you have updated the
+mairix database and updated the group.  Fortunately, there is a function
+for doing exactly that: <code>nnmairix-update-groups</code>. See the previous code
+snippet and the doc string for details.
+
+     <li>Dealing with auto-subscription of mail groups
+
+     <p>As described before, all <code>nnmairix</code> groups are in fact stored on
+the mail back end in the form &lsquo;<samp><span class="samp">zz_mairix-&lt;NAME&gt;-&lt;NUMBER&gt;</span></samp>&rsquo;. You can
+see them when you enter the back end server in the server buffer. You
+should not subscribe these groups! Unfortunately, these groups will
+usually get <em>auto-subscribed</em> when you use <code>nnmaildir</code> or
+<code>nnml</code>, i.e. you will suddenly see groups of the form
+&lsquo;<samp><span class="samp">zz_mairix*</span></samp>&rsquo; pop up in your group buffer. If this happens to you,
+simply kill these groups with C-k.  For avoiding this, turn off
+auto-subscription completely by setting the variable
+<code>gnus-auto-subscribed-groups</code> to <code>nil</code> (see <a href="Filtering-New-Groups.html#Filtering-New-Groups">Filtering New Groups</a>), or if you like to keep this feature use the following kludge
+for turning it off for all groups beginning with &lsquo;<samp><span class="samp">zz_</span></samp>&rsquo;:
+
+     <pre class="lisp">          (setq gnus-auto-subscribed-groups
+                "^\\(nnml\\|nnfolder\\|nnmbox\\|nnmh\\|nnbabyl\\|nnmaildir\\).*:\\([^z]\\|z$\\|\\z[^z]\\|zz$\\|zz[^_]\\|zz_$\\).*")
+</pre>
+     </ul>
+
+   </body></html>
+

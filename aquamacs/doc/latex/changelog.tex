@@ -1,15 +1,30 @@
 % Choose C-x RET f Latin-1 to save this file in Emacs
 \section{Aquamacs Emacs: What's New in This Release}
 
-\subsection{Changes--- after 2.1}
+\subsection{Changes--- 2.2}
 
 \begin{itemize}
 \item Improved fullscreen mode: addresses rare display issues (related to scrollbars), crashes after switching back from fullscreen mode, and empty menus during fullscreen mode.  Note that multiple frames may be shown in fullscreen mode (switch with, e.g.,  A-`).
 Code by Daisuke Murase and David Reitter.  Suggested by many.
+
+\item  \emph{Improvements to working with Frames and Spaces:}
+\begin{itemize}
 \item Repeated cycling between frames (forwards with A-`) now cycles through all frames rather than just the two most recent ones.
 Suggested by many Aquamacs users.
+\item When deleting a frame in one space, Aquamacs no longer switches to another space if there is one (10.6 only). 
+\item When opening a frame via drag\&drop or the terminal command-line, Aquamacs now shows the frame in the currently active space if `one-buffer-one-frame' or `tabbar-mode' are on (10.6 only). 
+\item No more unnecessarily space switches away from a new frame created after drag\&drop, Finder or terminal-based opening of files in certain situations.
+Patch by Ted Middleton.
+\item The menu bar works again after switching away to a space without an Aquamacs frame on it.
+\end{itemize}
+\item \emph{Spell-checking improvements:}
+\begin{itemize}
+\item Ability to ignore misspellings on a per-buffer basis, using buffer comments, has been added to the spelling context menu: ``Ignore Spelling \& Comment Buffer''.  Suggested by Konrad Podczeck.
+\item ``Check Spelling While Typing'' (`flyspell-mode') is now automatically activated when ``Spellcheck Now'' (`flyspell-buffer' or `flyspell-region') is run with the default OS X spellchecker.  Customize via variable `flyspell-mode-auto-on'.
+\end{itemize}
 \item There is a function in the Help / Diagnose menu now to debug one's preferences (init) files such as {\tt Preferences.el} or {\tt .emacs}.  This starts a new Aquamacs process, which, as the one started without customizations using its own menu entry, is no longer dependent on the primary one.
 Code by Ze'ev Celementson.
+\item The manuals have been unified in order to provide cross-manual keyword search (Help menu).  Also (reported by Joseph van Andel), links to separate manuals (such as Tramp, CC Mode and many others) now work: those manuals are now included as Apple Help variants.
 \item Users can now edit all existing user-editable preferences files ({\tt Preferences.el} in various places, and {\tt .emacs}) using a new menu entry in the Help/Diagnose menu.
 \item In case Aquamacs crashes, a detailed bug report can usually be sent upon the next program start.
 \item The Copy as HTML function (Edit menu) now copies the region with all formatting such that the formatting is preserved in other (Cocoa) applications.
@@ -19,12 +34,13 @@ Reported by Stephen T.
 Reported by Marcin Koziej.
 \item Find-file (C-x C-f) with a file that is already visible in another window now switches to that window again (`one-buffer-one-frame-mode' being on).
 Reported by Dan Coe.
-\irem Cursor movement (up/down) is more precise in terms of horizontal placement.
+\item Cursor movement (up/down) is more precise in terms of horizontal placement.
 Reported by Matt Crawford.
 \item Improved compatibility of the language-layout specific keyboard emulation modes.
 Reported by Santiago Gaviria.
 \item Html Helper Mode: Improve recognition/update of time stamps in files.
 Patch by Dave Mason.
+\item nXhtml Mode is now included (to use, type {\tt M-x nxhtml-mode}.  Version 2.08 (04/2010).  This also provides \emph{Multiple Major Modes}.
 \end{itemize}
 
 \subsection{Changes--- 2.1}

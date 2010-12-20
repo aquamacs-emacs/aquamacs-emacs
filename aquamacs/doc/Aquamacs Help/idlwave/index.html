@@ -1,0 +1,545 @@
+<html lang="en">
+<head>
+<title>Index - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-we<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Introduction" href="Introduction.html#Introduction">1 Introduction</a>
+<li><a name="toc_IDLWAVE-in-a-Nutshell" href="IDLWAVE-in-a-Nutshell.html#IDLWAVE-in-a-Nutshell">2 IDLWAVE in a Nutshell</a>
+<li><a name="toc_Getting-Started" href="Getting-Started.html#Getting-Started">3 Getting Started (Tutorial)</a>
+<ul>
+<li><a href="Lesson-I-_002d_002d-Develop<ul class="index-cp" compact>
+<li><a href="User-Catalog.html#index-g_t_0040code_007b_0021DIR_007d_002c-IDL-variable-373"><code>!DIR</code>, IDL variable</a>: <a href="User-Catalog.html#User-Catalog">User Catalog</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-g_t_0040code_007b_0021DIR_007d_002c-IDL-variable-385"><code>!DIR</code>, IDL variable</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Routine-Info.html#index-g_t_0040code_007b_0021DIR_007d_002c-IDL-variable-78"><code>!DIR</code>, IDL variable</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Info.html#index-g_t_0040code_007b_0021PATH_007d_002c-IDL-variable-76"><code>!PATH</code>, IDL variable</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Definitions.html#index-g_t_0040code_007b_0021PATH_007d_002c-IDL-variable-345"><code>!PATH</code>, IDL variable</a>: <a href="Routine-Definitions.html#Routine-Definitions">Routine Definitions</a></li>
+<li><a href="Electric-Debug-Mode.html#index-g_t_0040samp_007b_002aDebugging_002a_007d-314">&lsquo;<samp><span class="samp">*Debugging*</span></samp>&rsquo;</a>: <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-g_t_0040code_007b_002d_003e_007d-155"><code>-&gt;</code></a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Configuration-Examples.html#index-g_t_0040file_007b_002eemacs_007d-393"><samp><span class="file">.emacs</span></samp></a>: <a href="Configuration-Examples.html#Configuration-Examples">Configuration Examples</a></li>
+<li><a href="Library-Catalogs.html#index-g_t_0040file_007b_002eidlwave_005fcatalog_007d-364"><samp><span class="file">.idlwave_catalog</span></samp></a>: <a href="Library-Catalogs.html#Library-Catalogs">Library Catalogs</a></li>
+<li><a href="Abbreviations.html#index-Abbreviations-180">Abbreviations</a>: <a href="Abbreviations.html#Abbreviations">Abbreviations</a></li>
+<li><a href="Acknowledgements.html#index-Acknowledgements-336">Acknowledgements</a>: <a href="Acknowledgements.html#Acknowledgements">Acknowledgements</a></li>
+<li><a href="Actions.html#index-Actions-183">Actions</a>: <a href="Actions.html#Actions">Actions</a></li>
+<li><a href="Actions.html#index-Actions_002c-applied-to-foreign-code-186">Actions, applied to foreign code</a>: <a href="Actions.html#Actions">Actions</a></li>
+<li><a href="Routine-Info.html#index-Active-text_002c-in-routine-info-84">Active text, in routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-Application_002c-testing-for-shadowing-380">Application, testing for shadowing</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Acknowledgements.html#index-Authors_002c-of-IDLWAVE-338">Authors, of IDLWAVE</a>: <a href="Acknowledgements.html#Acknowledgements">Acknowledgements</a></li>
+<li><a href="Continuation-Lines.html#index-g_t_0040code_007bauto_002dfill_002dmode_007d-46"><code>auto-fill-mode</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Block-Boundary-Check.html#index-Block-boundary-check-188">Block boundary check</a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Block-Boundary-Check.html#index-Block_002c-closing-192">Block, closing</a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-Breakpoints-294">Breakpoints</a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="HTML-Help-Browser-Tips.html#index-Browser-Tips-390">Browser Tips</a>: <a href="HTML-Help-Browser-Tips.html#HTML-Help-Browser-Tips">HTML Help Browser Tips</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-Buffer_002c-testing-for-shadowing-381">Buffer, testing for shadowing</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Routine-Source.html#index-Buffers_002c-killing-173">Buffers, killing</a>: <a href="Routine-Source.html#Routine-Source">Routine Source</a></li>
+<li><a href="Routine-Info.html#index-Buffers_002c-scanning-for-routine-info-64">Buffers, scanning for routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Information-Sources.html#index-Buffers_002c-scanning-for-routine-info-353">Buffers, scanning for routine info</a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Routine-Information-Sources.html#index-Builtin-list-of-routines-350">Builtin list of routines</a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Routine-Info.html#index-C_002dc-_003f-67"><code>C-c ?</code></a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Debug-Key-Bindings.html#index-C_002dc-C_002dd-289"><code>C-c C-d</code></a>: <a href="Debug-Key-Bindings.html#Debug-Key-Bindings">Debug Key Bindings</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-C_002dc-C_002dd-C_002db-297"><code>C-c C-d C-b</code></a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Compiling-Programs.html#index-C_002dc-C_002dd-C_002dc-309"><code>C-c C-d C-c</code></a>: <a href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a></li>
+<li><a href="Compiling-Programs.html#index-C_002dc-C_002dd-C_002de-310"><code>C-c C-d C-e</code></a>: <a href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a></li>
+<li><a href="Examining-Variables.html#index-C_002dc-C_002dd-C_002dp-325"><code>C-c C-d C-p</code></a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Doc-Header.html#index-C_002dc-C_002dh-213"><code>C-c C-h</code></a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Routine-Info.html#index-C_002dc-C_002di-66"><code>C-c C-i</code></a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Completion.html#index-C_002dc-C_002di-131"><code>C-c C-i</code></a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Doc-Header.html#index-C_002dc-C_002dm-214"><code>C-c C-m</code></a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Starting-the-Shell.html#index-C_002dc-C_002ds-246"><code>C-c C-s</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Routine-Source.html#index-C_002dc-C_002dv-172"><code>C-c C-v</code></a>: <a href="Routine-Source.html#Routine-Source">Routine Source</a></li>
+<li><a href="Code-Indentation.html#index-C_002dM_002d_005c-24"><code>C-M-\</code></a>: <a href="Code-Indentation.html#Code-Indentation">Code Indentation</a></li>
+<li><a href="Routine-Definitions.html#index-g_t_0040code_007bCALL_005fEXTERNAL_007d_002c-IDL-routine-346"><code>CALL_EXTERNAL</code>, IDL routine</a>: <a href="Routine-Definitions.html#Routine-Definitions">Routine Definitions</a></li>
+<li><a href="Routine-Info.html#index-Calling-sequences-69">Calling sequences</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Walking-the-Calling-Stack.html#index-Calling-stack_002c-walking-312">Calling stack, walking</a>: <a href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack">Walking the Calling Stack</a></li>
+<li><a href="Completion.html#index-Cancelling-completion-139">Cancelling completion</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Case-Changes.html#index-Case-changes-202">Case changes</a>: <a href="Case-Changes.html#Case-Changes">Case Changes</a></li>
+<li><a href="Case-of-Completed-Words.html#index-Case-of-completed-words-144">Case of completed words</a>: <a href="Case-of-Completed-Words.html#Case-of-Completed-Words">Case of Completed Words</a></li>
+<li><a href="Catalogs.html#index-Catalogs-359">Catalogs</a>: <a href="Catalogs.html#Catalogs">Catalogs</a></li>
+<li><a href="Routine-Info.html#index-Categories_002c-of-routines-72">Categories, of routines</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Introduction.html#index-cc_002dmode_002eel-5">cc-mode.el</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Doc-Header.html#index-Changelog_002c-in-doc-header_002e-212">Changelog, in doc header.</a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Using-the-Shell.html#index-Character-input-mode-_0028Shell_0029-274">Character input mode (Shell)</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-Class-ambiguity-150">Class ambiguity</a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Completion.html#index-Class-name-completion-127">Class name completion</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-Class-query_002c-forcing-153">Class query, forcing</a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Help-with-Source.html#index-Class-tags_002c-in-online-help-114">Class tags, in online help</a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Block-Boundary-Check.html#index-Closing-a-block-193">Closing a block</a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Code-Formatting.html#index-Code-formatting-18">Code formatting</a>: <a href="Code-Formatting.html#Code-Formatting">Code Formatting</a></li>
+<li><a href="Code-Indentation.html#index-Code-indentation-20">Code indentation</a>: <a href="Code-Indentation.html#Code-Indentation">Code Indentation</a></li>
+<li><a href="Motion-Commands.html#index-Code-structure_002c-moving-through-223">Code structure, moving through</a>: <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a></li>
+<li><a href="Code-Templates.html#index-Code-templates-178">Code templates</a>: <a href="Code-Templates.html#Code-Templates">Code Templates</a></li>
+<li><a href="Actions.html#index-Coding-standards_002c-enforcing-184">Coding standards, enforcing</a>: <a href="Actions.html#Actions">Actions</a></li>
+<li><a href="Using-the-Shell.html#index-Comint-264">Comint</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="The-IDLWAVE-Shell.html#index-Comint_002c-Emacs-package-238">Comint, Emacs package</a>: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a></li>
+<li><a href="Commands-Sent-to-the-Shell.html#index-Commands-in-shell_002c-showing-280">Commands in shell, showing</a>: <a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell">Commands Sent to the Shell</a></li>
+<li><a href="Comment-Indentation.html#index-Comment-indentation-33">Comment indentation</a>: <a href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a></li>
+<li><a href="Resolving-Routines.html#index-Compiling-library-modules-176">Compiling library modules</a>: <a href="Resolving-Routines.html#Resolving-Routines">Resolving Routines</a></li>
+<li><a href="Compiling-Programs.html#index-Compiling-programs-305">Compiling programs</a>: <a href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a></li>
+<li><a href="Compiling-Programs.html#index-Compiling-regions-311">Compiling regions</a>: <a href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a></li>
+<li><a href="Completion.html#index-Completion-123">Completion</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Completion.html#index-Completion_002c-ambiguity-132">Completion, ambiguity</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Completion.html#index-Completion_002c-cancelling-138">Completion, cancelling</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Completion.html#index-Completion_002c-forcing-function-name-133">Completion, forcing function name</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Using-the-Shell.html#index-Completion_002c-in-the-shell-266">Completion, in the shell</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Completion.html#index-Completion_002c-Online-Help-136">Completion, Online Help</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Completion.html#index-Completion_002c-scrolling-135">Completion, scrolling</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Structure-Tag-Completion.html#index-Completion_002c-structure-tag-167">Completion, structure tag</a>: <a href="Structure-Tag-Completion.html#Structure-Tag-Completion">Structure Tag Completion</a></li>
+<li><a href="Configuration-Examples.html#index-Configuration-examples-391">Configuration examples</a>: <a href="Configuration-Examples.html#Configuration-Examples">Configuration Examples</a></li>
+<li><a href="Online-Help.html#index-Context_002c-for-online-help-98">Context, for online help</a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Continuation-Lines.html#index-Continuation-lines-40">Continuation lines</a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Continued-Statement-Indentation.html#index-Continued-statement-indentation-29">Continued statement indentation</a>: <a href="Continued-Statement-Indentation.html#Continued-Statement-Indentation">Continued Statement Indentation</a></li>
+<li><a href="Acknowledgements.html#index-Contributors_002c-to-IDLWAVE-339">Contributors, to IDLWAVE</a>: <a href="Acknowledgements.html#Acknowledgements">Acknowledgements</a></li>
+<li><a href="Introduction.html#index-CORBA-_0028Common-Object-Request-Broker-Architecture_0029-2">CORBA (Common Object Request Broker Architecture)</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Custom-Expression-Examination.html#index-Custom-expression-examination-334">Custom expression examination</a>: <a href="Custom-Expression-Examination.html#Custom-Expression-Examination">Custom Expression Examination</a></li>
+<li><a href="Debugging-IDL-Programs.html#index-Debugging-283">Debugging</a>: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a></li>
+<li><a href="A-Tale-of-Two-Modes.html#index-Debugging-Interface-288">Debugging Interface</a>: <a href="A-Tale-of-Two-Modes.html#A-Tale-of-Two-Modes">A Tale of Two Modes</a></li>
+<li><a href="Starting-the-Shell.html#index-Dedicated-frame_002c-for-shell-buffer-243">Dedicated frame, for shell buffer</a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Compiling-Programs.html#index-Default-command-line_002c-executing-307">Default command line, executing</a>: <a href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a></li>
+<li><a href="Routine-Info.html#index-Default-routine_002c-for-info-and-help-68">Default routine, for info and help</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Configuration-Examples.html#index-Default-settings_002c-of-options-394">Default settings, of options</a>: <a href="Configuration-Examples.html#Configuration-Examples">Configuration Examples</a></li>
+<li><a href="Doc-Header.html#index-DocLib-header-208">DocLib header</a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Help-with-Source.html#index-DocLib-header_002c-as-online-help-112">DocLib header, as online help</a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Doc-Header.html#index-Documentation-header-207">Documentation header</a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Case-Changes.html#index-Downcase_002c-enforcing-for-reserved-words-204">Downcase, enforcing for reserved words</a>: <a href="Case-Changes.html#Case-Changes">Case Changes</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-Duplicate-routines-377">Duplicate routines</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Routine-Info.html#index-Duplicate-routines-80">Duplicate routines</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Electric-Debug-Mode.html#index-Electric-Debug-Mode-313">Electric Debug Mode</a>: <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a></li>
+<li><a href="A-Tale-of-Two-Modes.html#index-Electric-Debug-Mode-287">Electric Debug Mode</a>: <a href="A-Tale-of-Two-Modes.html#A-Tale-of-Two-Modes">A Tale of Two Modes</a></li>
+<li><a href="Acknowledgements.html#index-Email-address_002c-of-Maintainer-340">Email address, of Maintainer</a>: <a href="Acknowledgements.html#Acknowledgements">Acknowledgements</a></li>
+<li><a href="Block-Boundary-Check.html#index-g_t_0040code_007bEND_007d-type-checking-189"><code>END</code> type checking</a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Block-Boundary-Check.html#index-g_t_0040code_007bEND_007d_002c-automatic-insertion-190"><code>END</code>, automatic insertion</a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Block-Boundary-Check.html#index-g_t_0040code_007bEND_007d_002c-expanding-191"><code>END</code>, expanding</a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Starting-the-Shell.html#index-ENVI-247">ENVI</a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Examining-Variables.html#index-Examining-expressions-322">Examining expressions</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Configuration-Examples.html#index-Example-configuration-392">Example configuration</a>: <a href="Configuration-Examples.html#Configuration-Examples">Configuration Examples</a></li>
+<li><a href="Compiling-Programs.html#index-Executing-a-default-command-line-308">Executing a default command line</a>: <a href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-Execution_002c-controlled-296">Execution, controlled</a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Custom-Expression-Examination.html#index-Expressions_002c-custom-examination-333">Expressions, custom examination</a>: <a href="Custom-Expression-Examination.html#Custom-Expression-Examination">Custom Expression Examination</a></li>
+<li><a href="Examining-Variables.html#index-Expressions_002c-printing-_0026-help-321">Expressions, printing &amp; help</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Routine-Definitions.html#index-External-routines-348">External routines</a>: <a href="Routine-Definitions.html#Routine-Definitions">Routine Definitions</a></li>
+<li><a href="Introduction.html#index-Feature-overview-8">Feature overview</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Continuation-Lines.html#index-Filling-45">Filling</a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Routine-Info.html#index-Flags_002c-in-routine-info-79">Flags, in routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Syntax-Highlighting.html#index-Font-lock-57">Font lock</a>: <a href="Syntax-Highlighting.html#Syntax-Highlighting">Syntax Highlighting</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-Forcing-class-query_002e-152">Forcing class query.</a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Code-Indentation.html#index-Foreign-code_002c-adapting-22">Foreign code, adapting</a>: <a href="Code-Indentation.html#Code-Indentation">Code Indentation</a></li>
+<li><a href="Actions.html#index-Foreign-code_002c-adapting-185">Foreign code, adapting</a>: <a href="Actions.html#Actions">Actions</a></li>
+<li><a href="Code-Formatting.html#index-Formatting_002c-of-code-19">Formatting, of code</a>: <a href="Code-Formatting.html#Code-Formatting">Code Formatting</a></li>
+<li><a href="Starting-the-Shell.html#index-Frame_002c-for-shell-buffer-244">Frame, for shell buffer</a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Motion-Commands.html#index-g_t_0040file_007bFunc_002dmenu_007d_002c-XEmacs-package-224"><samp><span class="file">Func-menu</span></samp>, XEmacs package</a>: <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a></li>
+<li><a href="Motion-Commands.html#index-Function-definitions_002c-jumping-to-226">Function definitions, jumping to</a>: <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a></li>
+<li><a href="Completion.html#index-Function-name-completion-128">Function name completion</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Documentation-Scan.html#index-g_t_0040file_007bget_005fhtml_005frinfo_007d-386"><samp><span class="file">get_html_rinfo</span></samp></a>: <a href="Documentation-Scan.html#Documentation-Scan">Documentation Scan</a></li>
+<li><a href="Getting-Started.html#index-Getting-Started-15">Getting Started</a>: <a href="Getting-Started.html#Getting-Started">Getting Started</a></li>
+<li><a href="Comment-Indentation.html#index-Hanging-paragraphs-34">Hanging paragraphs</a>: <a href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a></li>
+<li><a href="Continuation-Lines.html#index-Hanging-paragraphs-47">Hanging paragraphs</a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Doc-Header.html#index-Header_002c-for-file-documentation-210">Header, for file documentation</a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-Help-using-HTML-manuals-101">Help using HTML manuals</a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="Help-with-Source.html#index-Help-using-routine-source-110">Help using routine source</a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Examining-Variables.html#index-g_t_0040code_007bHELP_007d_002c-on-expressions-320"><code>HELP</code>, on expressions</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Syntax-Highlighting.html#index-Highlighting-of-syntax-56">Highlighting of syntax</a>: <a href="Syntax-Highlighting.html#Syntax-Highlighting">Syntax Highlighting</a></li>
+<li><a href="Octals-and-Highlighting.html#index-Highlighting-of-syntax_002c-Octals-60">Highlighting of syntax, Octals</a>: <a href="Octals-and-Highlighting.html#Octals-and-Highlighting">Octals and Highlighting</a></li>
+<li><a href="Starting-the-Shell.html#index-Hooks-262">Hooks</a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Misc-Options.html#index-Hooks-229">Hooks</a>: <a href="Misc-Options.html#Misc-Options">Misc Options</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-HTML-Help-100">HTML Help</a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-IDL-Assistant-103">IDL Assistant</a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="User-Catalog.html#index-IDL-library-routine-info-369">IDL library routine info</a>: <a href="User-Catalog.html#User-Catalog">User Catalog</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-IDL-manual_002c-HTML-version-102">IDL manual, HTML version</a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="User-Catalog.html#index-IDL-variable-_0040code_007b_0021DIR_007d-372">IDL variable <code>!DIR</code></a>: <a href="User-Catalog.html#User-Catalog">User Catalog</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-IDL-variable-_0040code_007b_0021DIR_007d-384">IDL variable <code>!DIR</code></a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Routine-Info.html#index-IDL-variable-_0040code_007b_0021DIR_007d-77">IDL variable <code>!DIR</code></a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Definitions.html#index-IDL-variable-_0040code_007b_0021PATH_007d-344">IDL variable <code>!PATH</code></a>: <a href="Routine-Definitions.html#Routine-Definitions">Routine Definitions</a></li>
+<li><a href="Routine-Info.html#index-IDL-variable-_0040code_007b_0021PATH_007d-75">IDL variable <code>!PATH</code></a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="The-IDLWAVE-Shell.html#index-IDL_002c-as-Emacs-subprocess-236">IDL, as Emacs subprocess</a>: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a></li>
+<li><a href="Introduction.html#index-g_t_0040file_007bidl_002dshell_002eel_007d-7"><samp><span class="file">idl-shell.el</span></samp></a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Introduction.html#index-g_t_0040file_007bidl_002eel_007d-6"><samp><span class="file">idl.el</span></samp></a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Starting-the-Shell.html#index-IDL_003e-Prompt-248">IDL&gt; Prompt</a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Online-Help.html#index-g_t_0040file_007bidlw_002dhelp_002eel_007d-92"><samp><span class="file">idlw-help.el</span></samp></a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Online-Help.html#index-g_t_0040file_007bidlw_002dhelp_002etxt_007d-91"><samp><span class="file">idlw-help.txt</span></samp></a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Documentation-Scan.html#index-g_t_0040file_007bidlw_002drinfo_002eel_007d-387"><samp><span class="file">idlw-rinfo.el</span></samp></a>: <a href="Documentation-Scan.html#Documentation-Scan">Documentation Scan</a></li>
+<li><a href="IDLWAVE-in-a-Nutshell.html#index-IDLWAVE-in-a-Nutshell-11">IDLWAVE in a Nutshell</a>: <a href="IDLWAVE-in-a-Nutshell.html#IDLWAVE-in-a-Nutshell">IDLWAVE in a Nutshell</a></li>
+<li><a href="The-IDLWAVE-Major-Mode.html#index-IDLWAVE-major-mode-16">IDLWAVE major mode</a>: <a href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a></li>
+<li><a href="The-IDLWAVE-Shell.html#index-IDLWAVE-shell-234">IDLWAVE shell</a>: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a></li>
+<li><a href="Case-Changes.html#index-idlwave_002dabbrev_002dchange_002dcase-205"><code>idlwave-abbrev-change-case</code></a>: <a href="Case-Changes.html#Case-Changes">Case Changes</a></li>
+<li><a href="Abbreviations.html#index-idlwave_002dabbrev_002dmove-182"><code>idlwave-abbrev-move</code></a>: <a href="Abbreviations.html#Abbreviations">Abbreviations</a></li>
+<li><a href="Abbreviations.html#index-idlwave_002dabbrev_002dstart_002dchar-181"><code>idlwave-abbrev-start-char</code></a>: <a href="Abbreviations.html#Abbreviations">Abbreviations</a></li>
+<li><a href="Continuation-Lines.html#index-idlwave_002dauto_002dfill_002dsplit_002dstring-50"><code>idlwave-auto-fill-split-string</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Routine-Information-Sources.html#index-idlwave_002dauto_002droutine_002dinfo_002dupdates-358"><code>idlwave-auto-routine-info-updates</code></a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Catalogs.html#index-idlwave_002dauto_002dwrite_002dpath-360"><code>idlwave-auto-write-path</code></a>: <a href="Catalogs.html#Catalogs">Catalogs</a></li>
+<li><a href="Comment-Indentation.html#index-idlwave_002dbegin_002dline_002dcomment-38"><code>idlwave-begin-line-comment</code></a>: <a href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a></li>
+<li><a href="Code-Indentation.html#index-idlwave_002dblock_002dindent-26"><code>idlwave-block-indent</code></a>: <a href="Code-Indentation.html#Code-Indentation">Code Indentation</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-idlwave_002dclass_002darrow_002dface-160"><code>idlwave-class-arrow-face</code></a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Comment-Indentation.html#index-idlwave_002dcode_002dcomment-39"><code>idlwave-code-comment</code></a>: <a href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a></li>
+<li><a href="Case-of-Completed-Words.html#index-idlwave_002dcomplete_002dempty_002dstring_002das_002dlower_002dcase-148"><code>idlwave-complete-empty-string-as-lower-case</code></a>: <a href="Case-of-Completed-Words.html#Case-of-Completed-Words">Case of Completed Words</a></li>
+<li><a href="Case-of-Completed-Words.html#index-idlwave_002dcompletion_002dcase-146"><code>idlwave-completion-case</code></a>: <a href="Case-of-Completed-Words.html#Case-of-Completed-Words">Case of Completed Words</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-idlwave_002dcompletion_002dfontify_002dclasses-157"><code>idlwave-completion-fontify-classes</code></a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Case-of-Completed-Words.html#index-idlwave_002dcompletion_002dforce_002ddefault_002dcase-147"><code>idlwave-completion-force-default-case</code></a>: <a href="Case-of-Completed-Words.html#Case-of-Completed-Words">Case of Completed Words</a></li>
+<li><a href="Completion.html#index-idlwave_002dcompletion_002drestore_002dwindow_002dconfiguration-142"><code>idlwave-completion-restore-window-configuration</code></a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-idlwave_002dcompletion_002dshow_002dclasses-156"><code>idlwave-completion-show-classes</code></a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Catalogs.html#index-idlwave_002dconfig_002ddirectory-363"><code>idlwave-config-directory</code></a>: <a href="Catalogs.html#Catalogs">Catalogs</a></li>
+<li><a href="Continued-Statement-Indentation.html#index-idlwave_002dcontinuation_002dindent-30"><code>idlwave-continuation-indent</code></a>: <a href="Continued-Statement-Indentation.html#Continued-Statement-Indentation">Continued Statement Indentation</a></li>
+<li><a href="Syntax-Highlighting.html#index-idlwave_002ddefault_002dfont_002dlock_002ditems-58"><code>idlwave-default-font-lock-items</code></a>: <a href="Syntax-Highlighting.html#Syntax-Highlighting">Syntax Highlighting</a></li>
+<li><a href="Actions.html#index-idlwave_002ddo_002dactions-187"><code>idlwave-do-actions</code></a>: <a href="Actions.html#Actions">Actions</a></li>
+<li><a href="Doc-Header.html#index-idlwave_002ddoc_002dmodifications_002dkeyword-218"><code>idlwave-doc-modifications-keyword</code></a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Doc-Header.html#index-idlwave_002ddoclib_002dend-220"><code>idlwave-doclib-end</code></a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Doc-Header.html#index-idlwave_002ddoclib_002dstart-219"><code>idlwave-doclib-start</code></a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Code-Indentation.html#index-idlwave_002dend_002doffset-27"><code>idlwave-end-offset</code></a>: <a href="Code-Indentation.html#Code-Indentation">Code Indentation</a></li>
+<li><a href="Block-Boundary-Check.html#index-idlwave_002dexpand_002dgeneric_002dend-195"><code>idlwave-expand-generic-end</code></a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Help-with-Source.html#index-idlwave_002dextra_002dhelp_002dfunction-118"><code>idlwave-extra-help-function</code></a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Doc-Header.html#index-idlwave_002dfile_002dheader-215"><code>idlwave-file-header</code></a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Continuation-Lines.html#index-idlwave_002dfill_002dcomment_002dline_002donly-49"><code>idlwave-fill-comment-line-only</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Completion.html#index-idlwave_002dfunction_002dcompletion_002dadds_002dparen-141"><code>idlwave-function-completion-adds-paren</code></a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Continuation-Lines.html#index-idlwave_002dhang_002dindent_002dregexp-53"><code>idlwave-hang-indent-regexp</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Continuation-Lines.html#index-idlwave_002dhanging_002dindent-52"><code>idlwave-hanging-indent</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Doc-Header.html#index-idlwave_002dheader_002dto_002dbeginning_002dof_002dfile-216"><code>idlwave-header-to-beginning-of-file</code></a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Misc-Options.html#index-idlwave_002dhelp_002dapplication-230"><code>idlwave-help-application</code></a>: <a href="Misc-Options.html#Misc-Options">Misc Options</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-idlwave_002dhelp_002dbrowser_002dfunction-107"><code>idlwave-help-browser-function</code></a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-idlwave_002dhelp_002dbrowser_002dis_002dlocal-108"><code>idlwave-help-browser-is-local</code></a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="Help-with-Source.html#index-idlwave_002dhelp_002ddoclib_002dkeyword-122"><code>idlwave-help-doclib-keyword</code></a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Help-with-Source.html#index-idlwave_002dhelp_002ddoclib_002dname-121"><code>idlwave-help-doclib-name</code></a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Help-with-Source.html#index-idlwave_002dhelp_002dfontify_002dsource_002dcode-119"><code>idlwave-help-fontify-source-code</code></a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Help-with-Source.html#index-idlwave_002dhelp_002dframe_002dparameters-116"><code>idlwave-help-frame-parameters</code></a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-idlwave_002dhelp_002dlink_002dface-109"><code>idlwave-help-link-face</code></a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="Help-with-Source.html#index-idlwave_002dhelp_002dsource_002dtry_002dheader-120"><code>idlwave-help-source-try-header</code></a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-idlwave_002dhelp_002duse_002dassistant-106"><code>idlwave-help-use-assistant</code></a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="Help-with-Source.html#index-idlwave_002dhelp_002duse_002ddedicated_002dframe-115"><code>idlwave-help-use-dedicated-frame</code></a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Completion.html#index-idlwave_002dhighlight_002dhelp_002dlinks_002din_002dcompletion-143"><code>idlwave-highlight-help-links-in-completion</code></a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-idlwave_002dhtml_002dhelp_002dlocation-105"><code>idlwave-html-help-location</code></a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="Help-with-HTML-Documentation.html#index-idlwave_002dhtml_002dsystem_002dhelp_002dlocation-104"><code>idlwave-html-system-help-location</code></a>: <a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a></li>
+<li><a href="Continued-Statement-Indentation.html#index-idlwave_002dindent_002dto_002dopen_002dparen-32"><code>idlwave-indent-to-open-paren</code></a>: <a href="Continued-Statement-Indentation.html#Continued-Statement-Indentation">Continued Statement Indentation</a></li>
+<li><a href="Routine-Information-Sources.html#index-idlwave_002dinit_002drinfo_002dwhen_002didle_002dafter-355"><code>idlwave-init-rinfo-when-idle-after</code></a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Class-and-Keyword-Inheritance.html#index-idlwave_002dkeyword_002dclass_002dinheritance-166"><code>idlwave-keyword-class-inheritance</code></a>: <a href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance">Class and Keyword Inheritance</a></li>
+<li><a href="Completion.html#index-idlwave_002dkeyword_002dcompletion_002dadds_002dequal-140"><code>idlwave-keyword-completion-adds-equal</code></a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Catalogs.html#index-idlwave_002dlibrary_002dpath-361"><code>idlwave-library-path</code></a>: <a href="Catalogs.html#Catalogs">Catalogs</a></li>
+<li><a href="Misc-Options.html#index-idlwave_002dload_002dhook-233"><code>idlwave-load-hook</code></a>: <a href="Misc-Options.html#Misc-Options">Misc Options</a></li>
+<li><a href="Code-Indentation.html#index-idlwave_002dmain_002dblock_002dindent-25"><code>idlwave-main-block-indent</code></a>: <a href="Code-Indentation.html#Code-Indentation">Code Indentation</a></li>
+<li><a href="Continued-Statement-Indentation.html#index-idlwave_002dmax_002dextra_002dcontinuation_002dindent-31"><code>idlwave-max-extra-continuation-indent</code></a>: <a href="Continued-Statement-Indentation.html#Continued-Statement-Indentation">Continued Statement Indentation</a></li>
+<li><a href="Help-with-Source.html#index-idlwave_002dmax_002dpopup_002dmenu_002ditems-117"><code>idlwave-max-popup-menu-items</code></a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Misc-Options.html#index-idlwave_002dmode_002dhook-232"><code>idlwave-mode-hook</code></a>: <a href="Misc-Options.html#Misc-Options">Misc Options</a></li>
+<li><a href="Comment-Indentation.html#index-idlwave_002dno_002dchange_002dcomment-37"><code>idlwave-no-change-comment</code></a>: <a href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a></li>
+<li><a href="Padding-Operators.html#index-idlwave_002dpad_002dkeyword-201"><code>idlwave-pad-keyword</code></a>: <a href="Padding-Operators.html#Padding-Operators">Padding Operators</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-idlwave_002dquery_002dclass-158"><code>idlwave-query-class</code></a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Routine-Information-Sources.html#index-idlwave_002dquery_002dshell_002dfor_002droutine_002dinfo-357"><code>idlwave-query-shell-for-routine-info</code></a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Block-Boundary-Check.html#index-idlwave_002dreindent_002dend-196"><code>idlwave-reindent-end</code></a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Case-Changes.html#index-idlwave_002dreserved_002dword_002dupcase-206"><code>idlwave-reserved-word-upcase</code></a>: <a href="Case-Changes.html#Case-Changes">Case Changes</a></li>
+<li><a href="Routine-Info.html#index-idlwave_002dresize_002droutine_002dhelp_002dwindow-87"><code>idlwave-resize-routine-help-window</code></a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Info.html#index-idlwave_002drinfo_002dmax_002dsource_002dlines-89"><code>idlwave-rinfo-max-source-lines</code></a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Information-Sources.html#index-idlwave_002dscan_002dall_002dbuffers_002dfor_002droutine_002dinfo-356"><code>idlwave-scan-all-buffers-for-routine-info</code></a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Debug-Key-Bindings.html#index-idlwave_002dshell_002dactivate_002dprefix_002dkeybindings-292"><code>idlwave-shell-activate-prefix-keybindings</code></a>: <a href="Debug-Key-Bindings.html#Debug-Key-Bindings">Debug Key Bindings</a></li>
+<li><a href="Using-the-Shell.html#index-idlwave_002dshell_002darrows_002ddo_002dhistory-269"><code>idlwave-shell-arrows-do-history</code></a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Electric-Debug-Mode.html#index-idlwave_002dshell_002dautomatic_002delectric_002ddebug-315"><code>idlwave-shell-automatic-electric-debug</code></a>: <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dautomatic_002dstart-253"><code>idlwave-shell-automatic-start</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-idlwave_002dshell_002dbreakpoint_002dface-300"><code>idlwave-shell-breakpoint-face</code></a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-idlwave_002dshell_002dbreakpoint_002dpopup_002dmenu-301"><code>idlwave-shell-breakpoint-popup-menu</code></a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Using-the-Shell.html#index-idlwave_002dshell_002dcomint_002dsettings-270"><code>idlwave-shell-comint-settings</code></a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dcommand_002dhistory_002dfile-256"><code>idlwave-shell-command-history-file</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dcommand_002dline_002doptions-250"><code>idlwave-shell-command-line-options</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Debug-Key-Bindings.html#index-idlwave_002dshell_002ddebug_002dmodifiers-293"><code>idlwave-shell-debug-modifiers</code></a>: <a href="Debug-Key-Bindings.html#Debug-Key-Bindings">Debug Key Bindings</a></li>
+<li><a href="Electric-Debug-Mode.html#index-idlwave_002dshell_002delectric_002dstop_002dcolor-316"><code>idlwave-shell-electric-stop-color</code></a>: <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a></li>
+<li><a href="Electric-Debug-Mode.html#index-idlwave_002dshell_002delectric_002dstop_002dline_002dface-317"><code>idlwave-shell-electric-stop-line-face</code></a>: <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a></li>
+<li><a href="Electric-Debug-Mode.html#index-idlwave_002dshell_002delectric_002dzap_002dto_002dfile-318"><code>idlwave-shell-electric-zap-to-file</code></a>: <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a></li>
+<li><a href="Custom-Expression-Examination.html#index-idlwave_002dshell_002dexamine_002dalist-335"><code>idlwave-shell-examine-alist</code></a>: <a href="Custom-Expression-Examination.html#Custom-Expression-Examination">Custom Expression Examination</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dexplicit_002dfile_002dname-249"><code>idlwave-shell-explicit-file-name</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Examining-Variables.html#index-idlwave_002dshell_002dexpression_002dface-329"><code>idlwave-shell-expression-face</code></a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Using-the-Shell.html#index-idlwave_002dshell_002dfile_002dname_002dchars-271"><code>idlwave-shell-file-name-chars</code></a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dframe_002dparameters-259"><code>idlwave-shell-frame-parameters</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Using-the-Shell.html#index-idlwave_002dshell_002dgraphics_002dwindow_002dsize-272"><code>idlwave-shell-graphics-window-size</code></a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dinitial_002dcommands-254"><code>idlwave-shell-initial-commands</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Using-the-Shell.html#index-idlwave_002dshell_002dinput_002dmode_002dspells-279"><code>idlwave-shell-input-mode-spells</code></a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-idlwave_002dshell_002dmark_002dbreakpoints-299"><code>idlwave-shell-mark-breakpoints</code></a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-idlwave_002dshell_002dmark_002dstop_002dline-302"><code>idlwave-shell-mark-stop-line</code></a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Examining-Variables.html#index-idlwave_002dshell_002dmax_002dprint_002dlength-332"><code>idlwave-shell-max-print-length</code></a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dmode_002dhook-263"><code>idlwave-shell-mode-hook</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Examining-Variables.html#index-idlwave_002dshell_002doutput_002dface-330"><code>idlwave-shell-output-face</code></a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-idlwave_002dshell_002doverlay_002darrow-303"><code>idlwave-shell-overlay-arrow</code></a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Debug-Key-Bindings.html#index-idlwave_002dshell_002dprefix_002dkey-291"><code>idlwave-shell-prefix-key</code></a>: <a href="Debug-Key-Bindings.html#Debug-Key-Bindings">Debug Key Bindings</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dprocess_002dname-252"><code>idlwave-shell-process-name</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dprompt_002dpattern-251"><code>idlwave-shell-prompt-pattern</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002draise_002dframe-260"><code>idlwave-shell-raise-frame</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dsave_002dcommand_002dhistory-255"><code>idlwave-shell-save-command-history</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Examining-Variables.html#index-idlwave_002dshell_002dseparate_002dexamine_002doutput-331"><code>idlwave-shell-separate-examine-output</code></a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Commands-Sent-to-the-Shell.html#index-idlwave_002dshell_002dshow_002dcommands-282"><code>idlwave-shell-show-commands</code></a>: <a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell">Commands Sent to the Shell</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-idlwave_002dshell_002dstop_002dline_002dface-304"><code>idlwave-shell-stop-line-face</code></a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002dtemp_002dpro_002dprefix-261"><code>idlwave-shell-temp-pro-prefix</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002duse_002ddedicated_002dframe-257"><code>idlwave-shell-use-dedicated-frame</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Starting-the-Shell.html#index-idlwave_002dshell_002duse_002ddedicated_002dwindow-258"><code>idlwave-shell-use-dedicated-window</code></a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Using-the-Shell.html#index-idlwave_002dshell_002duse_002dinput_002dmode_002dmagic-278"><code>idlwave-shell-use-input-mode-magic</code></a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Debugging-IDL-Programs.html#index-idlwave_002dshell_002duse_002dtoolbar-286"><code>idlwave-shell-use-toolbar</code></a>: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a></li>
+<li><a href="Block-Boundary-Check.html#index-idlwave_002dshow_002dblock-194"><code>idlwave-show-block</code></a>: <a href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a></li>
+<li><a href="Routine-Info.html#index-idlwave_002dspecial_002dlib_002dalist-88"><code>idlwave-special-lib-alist</code></a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="User-Catalog.html#index-idlwave_002dspecial_002dlib_002dalist-374"><code>idlwave-special-lib-alist</code></a>: <a href="User-Catalog.html#User-Catalog">User Catalog</a></li>
+<li><a href="Continuation-Lines.html#index-idlwave_002dsplit_002dline_002dstring-51"><code>idlwave-split-line-string</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Misc-Options.html#index-idlwave_002dstartup_002dmessage-231"><code>idlwave-startup-message</code></a>: <a href="Misc-Options.html#Misc-Options">Misc Options</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-idlwave_002dstore_002dinquired_002dclass-159"><code>idlwave-store-inquired-class</code></a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Class-and-Keyword-Inheritance.html#index-idlwave_002dsupport_002dinheritance-165"><code>idlwave-support-inheritance</code></a>: <a href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance">Class and Keyword Inheritance</a></li>
+<li><a href="Padding-Operators.html#index-idlwave_002dsurround_002dby_002dblank-200"><code>idlwave-surround-by-blank</code></a>: <a href="Padding-Operators.html#Padding-Operators">Padding Operators</a></li>
+<li><a href="Catalogs.html#index-idlwave_002dsystem_002ddirectory-362"><code>idlwave-system-directory</code></a>: <a href="Catalogs.html#Catalogs">Catalogs</a></li>
+<li><a href="Doc-Header.html#index-idlwave_002dtimestamp_002dhook-217"><code>idlwave-timestamp-hook</code></a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Continuation-Lines.html#index-idlwave_002duse_002dlast_002dhang_002dindent-54"><code>idlwave-use-last-hang-indent</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Library-Catalogs.html#index-idlwave_002duse_002dlibrary_002dcatalogs-367"><code>idlwave-use-library-catalogs</code></a>: <a href="Library-Catalogs.html#Library-Catalogs">Library Catalogs</a></li>
+<li><a href="Library-Catalogs.html#index-g_t_0040code_007bidlwave_005fcatalog_007d-366"><code>idlwave_catalog</code></a>: <a href="Library-Catalogs.html#Library-Catalogs">Library Catalogs</a></li>
+<li><a href="Motion-Commands.html#index-g_t_0040file_007bImenu_007d_002c-Emacs-package-225"><samp><span class="file">Imenu</span></samp>, Emacs package</a>: <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a></li>
+<li><a href="Code-Indentation.html#index-Indentation-21">Indentation</a>: <a href="Code-Indentation.html#Code-Indentation">Code Indentation</a></li>
+<li><a href="Continued-Statement-Indentation.html#index-Indentation_002c-continued-statement-28">Indentation, continued statement</a>: <a href="Continued-Statement-Indentation.html#Continued-Statement-Indentation">Continued Statement Indentation</a></li>
+<li><a href="Code-Indentation.html#index-Indentation_002c-of-foreign-code-23">Indentation, of foreign code</a>: <a href="Code-Indentation.html#Code-Indentation">Code Indentation</a></li>
+<li><a href="Class-and-Keyword-Inheritance.html#index-Inheritance_002c-class-162">Inheritance, class</a>: <a href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance">Class and Keyword Inheritance</a></li>
+<li><a href="Class-and-Keyword-Inheritance.html#index-Inheritance_002c-keyword-164">Inheritance, keyword</a>: <a href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance">Class and Keyword Inheritance</a></li>
+<li><a href="Using-the-Shell.html#index-Input-mode-273">Input mode</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Routine-Info.html#index-Inserting-keywords_002c-from-routine-info-85">Inserting keywords, from routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Online-Help.html#index-Installing-online-help-93">Installing online help</a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Introduction.html#index-Interactive-Data-Language-4">Interactive Data Language</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Introduction.html#index-Interface-Definition-Language-3">Interface Definition Language</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Configuration-Examples.html#index-Interview_002c-with-the-maintainer-395">Interview, with the maintainer</a>: <a href="Configuration-Examples.html#Configuration-Examples">Configuration Examples</a></li>
+<li><a href="Introduction.html#index-Introduction-1">Introduction</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Debug-Key-Bindings.html#index-Key-bindings-290">Key bindings</a>: <a href="Debug-Key-Bindings.html#Debug-Key-Bindings">Debug Key Bindings</a></li>
+<li><a href="Debugging-IDL-Programs.html#index-Keybindings-for-debugging-284">Keybindings for debugging</a>: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a></li>
+<li><a href="Completion.html#index-Keyword-completion-124">Keyword completion</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Class-and-Keyword-Inheritance.html#index-Keyword-inheritance-163">Keyword inheritance</a>: <a href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance">Class and Keyword Inheritance</a></li>
+<li><a href="Routine-Info.html#index-Keywords-of-a-routine-70">Keywords of a routine</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Source.html#index-Killing-autoloaded-buffers-174">Killing autoloaded buffers</a>: <a href="Routine-Source.html#Routine-Source">Routine Source</a></li>
+<li><a href="Library-Catalogs.html#index-Library-catalogs-365">Library catalogs</a>: <a href="Library-Catalogs.html#Library-Catalogs">Library Catalogs</a></li>
+<li><a href="Using-the-Shell.html#index-Line-input-mode-_0028Shell_0029-275">Line input mode (Shell)</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Continuation-Lines.html#index-Line-splitting-41">Line splitting</a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Routine-Definitions.html#index-g_t_0040code_007bLINKIMAGE_007d_002c-IDL-routine-347"><code>LINKIMAGE</code>, IDL routine</a>: <a href="Routine-Definitions.html#Routine-Definitions">Routine Definitions</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-Load_002dpath-shadows-375">Load-path shadows</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Routine-Info.html#index-Load_002dpath-shadows-73">Load-path shadows</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Continuation-Lines.html#index-M_002d_0040key_007bRET_007d-44"><code>M-&lt;RET&gt;</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Completion.html#index-M_002d_0040key_007bTAB_007d-130"><code>M-&lt;TAB&gt;</code></a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Online-Help.html#index-M_002d_003f-97"><code>M-?</code></a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Continuation-Lines.html#index-M_002dq-48"><code>M-q</code></a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="The-IDLWAVE-Shell.html#index-MacOS-240">MacOS</a>: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-MacOS-383">MacOS</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="User-Catalog.html#index-MacOS-371">MacOS</a>: <a href="User-Catalog.html#User-Catalog">User Catalog</a></li>
+<li><a href="Windows-and-MacOS.html#index-MacOS-397">MacOS</a>: <a href="Windows-and-MacOS.html#Windows-and-MacOS">Windows and MacOS</a></li>
+<li><a href="Windows-and-MacOS.html#index-MacOSX-398">MacOSX</a>: <a href="Windows-and-MacOS.html#Windows-and-MacOS">Windows and MacOS</a></li>
+<li><a href="Using-the-Shell.html#index-Magic-spells_002c-for-input-mode-276">Magic spells, for input mode</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Acknowledgements.html#index-Maintainer_002c-of-IDLWAVE-337">Maintainer, of IDLWAVE</a>: <a href="Acknowledgements.html#Acknowledgements">Acknowledgements</a></li>
+<li><a href="The-IDLWAVE-Major-Mode.html#index-Major-mode_002c-_0040code_007bidlwave_002dmode_007d-17">Major mode, <code>idlwave-mode</code></a>: <a href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a></li>
+<li><a href="The-IDLWAVE-Shell.html#index-Major-mode_002c-_0040code_007bidlwave_002dshell_002dmode_007d-235">Major mode, <code>idlwave-shell-mode</code></a>: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a></li>
+<li><a href="Completion.html#index-Method-completion-125">Method completion</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Object-Method-Completion-in-the-Shell.html#index-Method-Completion-in-Shell-161">Method Completion in Shell</a>: <a href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell">Object Method Completion in the Shell</a></li>
+<li><a href="Case-of-Completed-Words.html#index-Mixed-case-completion-145">Mixed case completion</a>: <a href="Case-of-Completed-Words.html#Case-of-Completed-Words">Case of Completed Words</a></li>
+<li><a href="Doc-Header.html#index-Modification-timestamp-209">Modification timestamp</a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Routine-Source.html#index-Module-source-file-170">Module source file</a>: <a href="Routine-Source.html#Routine-Source">Routine Source</a></li>
+<li><a href="Motion-Commands.html#index-Motion-commands-221">Motion commands</a>: <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a></li>
+<li><a href="Examining-Variables.html#index-Mouse-binding-to-print-expressions-324">Mouse binding to print expressions</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-Multiply-defined-routines-378">Multiply defined routines</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Routine-Info.html#index-Multiply-defined-routines-81">Multiply defined routines</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="IDLWAVE-in-a-Nutshell.html#index-Nutshell_002c-IDLWAVE-in-a-12">Nutshell, IDLWAVE in a</a>: <a href="IDLWAVE-in-a-Nutshell.html#IDLWAVE-in-a-Nutshell">IDLWAVE in a Nutshell</a></li>
+<li><a href="Online-Help.html#index-g_t_0040code_007bOBJ_005fNEW_007d_002c-special-online-help-99"><code>OBJ_NEW</code>, special online help</a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Completion.html#index-Object-method-completion-126">Object method completion</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-Object-methods-149">Object methods</a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Online-Help.html#index-Online-Help-90">Online Help</a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Routine-Info.html#index-Online-Help-from-the-routine-info-buffer-83">Online Help from the routine info buffer</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Completion.html#index-Online-Help-in-_0040file_007b_002aCompletions_002a_007d-buffer-137">Online Help in <samp><span class="file">*Completions*</span></samp> buffer</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Using-the-Shell.html#index-Online-Help_002c-in-the-shell-268">Online Help, in the shell</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Online-Help.html#index-Online-Help_002c-Installation-94">Online Help, Installation</a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Padding-Operators.html#index-Operators_002c-padding-with-spaces-198">Operators, padding with spaces</a>: <a href="Padding-Operators.html#Padding-Operators">Padding Operators</a></li>
+<li><a href="Padding-Operators.html#index-Padding-operators-with-spaces-197">Padding operators with spaces</a>: <a href="Padding-Operators.html#Padding-Operators">Padding Operators</a></li>
+<li><a href="Comment-Indentation.html#index-Paragraphs_002c-filling-35">Paragraphs, filling</a>: <a href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a></li>
+<li><a href="Comment-Indentation.html#index-Paragraphs_002c-hanging-36">Paragraphs, hanging</a>: <a href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a></li>
+<li><a href="Documentation-Scan.html#index-Perl-program_002c-to-create-_0040file_007bidlw_002drinfo_002eel_007d-389">Perl program, to create <samp><span class="file">idlw-rinfo.el</span></samp></a>: <a href="Documentation-Scan.html#Documentation-Scan">Documentation Scan</a></li>
+<li><a href="Examining-Variables.html#index-g_t_0040code_007bPRINT_007d-expressions-319"><code>PRINT</code> expressions</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Examining-Variables.html#index-Printing-expressions-323">Printing expressions</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Examining-Variables.html#index-Printing-expressions_002c-on-calling-stack-326">Printing expressions, on calling stack</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Motion-Commands.html#index-Procedure-definitions_002c-jumping-to-227">Procedure definitions, jumping to</a>: <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a></li>
+<li><a href="Completion.html#index-Procedure-name-completion-129">Procedure name completion</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Motion-Commands.html#index-Program-structure_002c-moving-through-222">Program structure, moving through</a>: <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a></li>
+<li><a href="Compiling-Programs.html#index-Programs_002c-compiling-306">Programs, compiling</a>: <a href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a></li>
+<li><a href="Getting-Started.html#index-Quick_002dStart-13">Quick-Start</a>: <a href="Getting-Started.html#Getting-Started">Getting Started</a></li>
+<li><a href="Resolving-Routines.html#index-g_t_0040code_007bRESOLVE_005fROUTINE_007d-175"><code>RESOLVE_ROUTINE</code></a>: <a href="Resolving-Routines.html#Resolving-Routines">Resolving Routines</a></li>
+<li><a href="Examining-Variables.html#index-Restrictions-for-expression-printing-327">Restrictions for expression printing</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Routine-Definitions.html#index-Routine-definitions-343">Routine definitions</a>: <a href="Routine-Definitions.html#Routine-Definitions">Routine Definitions</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-Routine-definitions_002c-multiple-379">Routine definitions, multiple</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Routine-Info.html#index-Routine-definitions_002c-multiple-82">Routine definitions, multiple</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Info.html#index-Routine-info-61">Routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Information-Sources.html#index-Routine-info-sources-349">Routine info sources</a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Using-the-Shell.html#index-Routine-info_002c-in-the-shell-267">Routine info, in the shell</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Routine-Source.html#index-Routine-source-file-169">Routine source file</a>: <a href="Routine-Source.html#Routine-Source">Routine Source</a></li>
+<li><a href="Routine-Info.html#index-Routine-source-information-71">Routine source information</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Examining-Variables.html#index-ROUTINE_005fNAMES_002c-IDL-procedure-328">ROUTINE_NAMES, IDL procedure</a>: <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a></li>
+<li><a href="Resolving-Routines.html#index-Routines_002c-resolving-177">Routines, resolving</a>: <a href="Resolving-Routines.html#Resolving-Routines">Resolving Routines</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-Saving-object-class-on-_0040code_007b_002d_003e_007d-154">Saving object class on <code>-&gt;</code></a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Routine-Information-Sources.html#index-Scanning-buffers-for-routine-info-352">Scanning buffers for routine info</a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Routine-Info.html#index-Scanning-buffers-for-routine-info-63">Scanning buffers for routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Documentation-Scan.html#index-Scanning-the-documentation-388">Scanning the documentation</a>: <a href="Documentation-Scan.html#Documentation-Scan">Documentation Scan</a></li>
+<li><a href="Introduction.html#index-Screenshots-9">Screenshots</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Completion.html#index-Scrolling-the-_0040file_007b_002aCompletions_002a_007d-window-134">Scrolling the <samp><span class="file">*Completions*</span></samp> window</a>: <a href="Completion.html#Completion">Completion</a></li>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#index-g_t_0040code_007bself_007d-object_002c-default-class-151"><code>self</code> object, default class</a>: <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-Shadows_002c-load_002dpath-376">Shadows, load-path</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="Routine-Info.html#index-Shadows_002c-load_002dpath-74">Shadows, load-path</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Using-the-Shell.html#index-Shell_002c-basic-commands-265">Shell, basic commands</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Routine-Information-Sources.html#index-Shell_002c-querying-for-routine-info-354">Shell, querying for routine info</a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Routine-Info.html#index-Shell_002c-querying-for-routine-info-65">Shell, querying for routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Starting-the-Shell.html#index-Shell_002c-starting-242">Shell, starting</a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Commands-Sent-to-the-Shell.html#index-Showing-commands-in-shell-281">Showing commands in shell</a>: <a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell">Commands Sent to the Shell</a></li>
+<li><a href="Help-with-Source.html#index-Source-code_002c-as-online-help-111">Source code, as online help</a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Routine-Info.html#index-Source-file_002c-access-from-routine-info-86">Source file, access from routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="Routine-Source.html#index-Source-file_002c-of-a-routine-171">Source file, of a routine</a>: <a href="Routine-Source.html#Routine-Source">Routine Source</a></li>
+<li><a href="Sources-of-Routine-Info.html#index-Sources-of-routine-information-342">Sources of routine information</a>: <a href="Sources-of-Routine-Info.html#Sources-of-Routine-Info">Sources of Routine Info</a></li>
+<li><a href="Padding-Operators.html#index-Space_002c-around-operators-199">Space, around operators</a>: <a href="Padding-Operators.html#Padding-Operators">Padding Operators</a></li>
+<li><a href="Online-Help.html#index-Speed_002c-of-online-help-95">Speed, of online help</a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+<li><a href="Motion-Commands.html#index-g_t_0040file_007bSpeedbar_007d_002c-Emacs-package-228"><samp><span class="file">Speedbar</span></samp>, Emacs package</a>: <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a></li>
+<li><a href="Using-the-Shell.html#index-Spells_002c-magic-277">Spells, magic</a>: <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a></li>
+<li><a href="Continuation-Lines.html#index-Splitting_002c-of-lines-43">Splitting, of lines</a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Starting-the-Shell.html#index-Starting-the-shell-241">Starting the shell</a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="Breakpoints-and-Stepping.html#index-Stepping-295">Stepping</a>: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a></li>
+<li><a href="Continuation-Lines.html#index-String-splitting-42">String splitting</a>: <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a></li>
+<li><a href="Structure-Tag-Completion.html#index-Structure-tag-completion-168">Structure tag completion</a>: <a href="Structure-Tag-Completion.html#Structure-Tag-Completion">Structure Tag Completion</a></li>
+<li><a href="Help-with-Source.html#index-Structure-tags_002c-in-online-help-113">Structure tags, in online help</a>: <a href="Help-with-Source.html#Help-with-Source">Help with Source</a></li>
+<li><a href="Starting-the-Shell.html#index-Subprocess-of-Emacs_002c-IDL-245">Subprocess of Emacs, IDL</a>: <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a></li>
+<li><a href="The-IDLWAVE-Shell.html#index-Subprocess-of-Emacs_002c-IDL-237">Subprocess of Emacs, IDL</a>: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a></li>
+<li><a href="IDLWAVE-in-a-Nutshell.html#index-Summary-of-important-commands-10">Summary of important commands</a>: <a href="IDLWAVE-in-a-Nutshell.html#IDLWAVE-in-a-Nutshell">IDLWAVE in a Nutshell</a></li>
+<li><a href="Syntax-Highlighting.html#index-Syntax-highlighting-55">Syntax highlighting</a>: <a href="Syntax-Highlighting.html#Syntax-Highlighting">Syntax Highlighting</a></li>
+<li><a href="Octals-and-Highlighting.html#index-Syntax-highlighting_002c-Octals-59">Syntax highlighting, Octals</a>: <a href="Octals-and-Highlighting.html#Octals-and-Highlighting">Octals and Highlighting</a></li>
+<li><a href="Code-Templates.html#index-Templates-179">Templates</a>: <a href="Code-Templates.html#Code-Templates">Code Templates</a></li>
+<li><a href="Acknowledgements.html#index-Thanks-341">Thanks</a>: <a href="Acknowledgements.html#Acknowledgements">Acknowledgements</a></li>
+<li><a href="Doc-Header.html#index-Timestamp_002c-in-doc-header_002e-211">Timestamp, in doc header.</a>: <a href="Doc-Header.html#Doc-Header">Doc Header</a></li>
+<li><a href="Debugging-IDL-Programs.html#index-Toolbar-285">Toolbar</a>: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a></li>
+<li><a href="Troubleshooting.html#index-Troubleshooting-399">Troubleshooting</a>: <a href="Troubleshooting.html#Troubleshooting">Troubleshooting</a></li>
+<li><a href="Getting-Started.html#index-Tutorial-14">Tutorial</a>: <a href="Getting-Started.html#Getting-Started">Getting Started</a></li>
+<li><a href="Case-Changes.html#index-Upcase_002c-enforcing-for-reserved-words-203">Upcase, enforcing for reserved words</a>: <a href="Case-Changes.html#Case-Changes">Case Changes</a></li>
+<li><a href="Routine-Information-Sources.html#index-Updating-routine-info-351">Updating routine info</a>: <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a></li>
+<li><a href="Routine-Info.html#index-Updating-routine-info-62">Updating routine info</a>: <a href="Routine-Info.html#Routine-Info">Routine Info</a></li>
+<li><a href="User-Catalog.html#index-User-catalog-368">User catalog</a>: <a href="User-Catalog.html#User-Catalog">User Catalog</a></li>
+<li><a href="Windows-and-MacOS.html#index-Windows-396">Windows</a>: <a href="Windows-and-MacOS.html#Windows-and-MacOS">Windows and MacOS</a></li>
+<li><a href="Load_002dPath-Shadows.html#index-Windows-382">Windows</a>: <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a></li>
+<li><a href="User-Catalog.html#index-Windows-370">Windows</a>: <a href="User-Catalog.html#User-Catalog">User Catalog</a></li>
+<li><a href="The-IDLWAVE-Shell.html#index-Windows-239">Windows</a>: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a></li>
+<li><a href="Online-Help.html#index-XML-Help-Catalog-96">XML Help Catalog</a>: <a href="Online-Help.html#Online-Help">Online Help</a></li>
+   </ul>ment-Cycle.html#Lesson-I-_002d_002d-Development-Cycle">3.1 Lesson I: Development Cycle</a>
+<li><a href="Lesson-II-_002d_002d-Customization.html#Lesson-II-_002d_002d-Customization">3.2 Lesson II: Customization</a>
+<li><a href="Lesson-III-_002d_002d-User-Catalog.html#Lesson-III-_002d_002d-User-Catalog">3.3 Lesson III: User and Library Catalogs</a>
+</li></ul>
+<li><a name="toc_The-IDLWAVE-Major-Mode" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">4 The IDLWAVE Major Mode</a>
+<ul>
+<li><a href="Code-Formatting.html#Code-Formatting">4.1 Code Formatting</a>
+<ul>
+<li><a href="Code-Indentation.html#Code-Indentation">4.1.1 Code Indentation</a>
+<li><a href="Continued-Statement-Indentation.html#Continued-Statement-Indentation">4.1.2 Continued Statement Indentation</a>
+<li><a href="Comment-Indentation.html#Comment-Indentation">4.1.3 Comment Indentation</a>
+<li><a href="Continuation-Lines.html#Continuation-Lines">4.1.4 Continuation Lines and Filling</a>
+<li><a href="Syntax-Highlighting.html#Syntax-Highlighting">4.1.5 Syntax Highlighting</a>
+<li><a href="Octals-and-Highlighting.html#Octals-and-Highlighting">4.1.6 Octals and Highlighting</a>
+</li></ul>
+<li><a href="Routine-Info.html#Routine-Info">4.2 Routine Info</a>
+<li><a href="Online-Help.html#Online-Help">4.3 Online Help</a>
+<ul>
+<li><a href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">4.3.1 Help with HTML Documentation</a>
+<li><a href="Help-with-Source.html#Help-with-Source">4.3.2 Help with Source</a>
+</li></ul>
+<li><a href="Completion.html#Completion">4.4 Completion</a>
+<ul>
+<li><a href="Case-of-Completed-Words.html#Case-of-Completed-Words">4.4.1 Case of Completed Words</a>
+<li><a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">4.4.2 Object Method Completion and Class Ambiguity</a>
+<li><a href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell">4.4.3 Object Method Completion in the Shell</a>
+<li><a href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance">4.4.4 Class and Keyword Inheritance</a>
+<li><a href="Structure-Tag-Completion.html#Structure-Tag-Completion">4.4.5 Structure Tag Completion</a>
+</li></ul>
+<li><a href="Routine-Source.html#Routine-Source">4.5 Routine Source</a>
+<li><a href="Resolving-Routines.html#Resolving-Routines">4.6 Resolving Routines</a>
+<li><a href="Code-Templates.html#Code-Templates">4.7 Code Templates</a>
+<li><a href="Abbreviations.html#Abbreviations">4.8 Abbreviations</a>
+<li><a href="Actions.html#Actions">4.9 Actions</a>
+<ul>
+<li><a href="Block-Boundary-Check.html#Block-Boundary-Check">4.9.1 Block Boundary Check</a>
+<li><a href="Padding-Operators.html#Padding-Operators">4.9.2 Padding Operators</a>
+<li><a href="Case-Changes.html#Case-Changes">4.9.3 Case Changes</a>
+</li></ul>
+<li><a href="Doc-Header.html#Doc-Header">4.10 Documentation Header</a>
+<li><a href="Motion-Commands.html#Motion-Commands">4.11 Motion Commands</a>
+<li><a href="Misc-Options.html#Misc-Options">4.12 Miscellaneous Options</a>
+</li></ul>
+<li><a name="toc_The-IDLWAVE-Shell" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">5 The IDLWAVE Shell</a>
+<ul>
+<li><a href="Starting-the-Shell.html#Starting-the-Shell">5.1 Starting the Shell</a>
+<li><a href="Using-the-Shell.html#Using-the-Shell">5.2 Using the Shell</a>
+<li><a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell">5.3 Commands Sent to the Shell</a>
+<li><a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">5.4 Debugging IDL Programs</a>
+<ul>
+<li><a href="A-Tale-of-Two-Modes.html#A-Tale-of-Two-Modes">5.4.1 A Tale of Two Modes</a>
+<li><a href="Debug-Key-Bindings.html#Debug-Key-Bindings">5.4.2 Debug Key Bindings</a>
+<li><a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">5.4.3 Breakpoints and Stepping</a>
+<li><a href="Compiling-Programs.html#Compiling-Programs">5.4.4 Compiling Programs</a>
+<li><a href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack">5.4.5 Walking the Calling Stack</a>
+<li><a href="Electric-Debug-Mode.html#Electric-Debug-Mode">5.4.6 Electric Debug Mode</a>
+</li></ul>
+<li><a href="Examining-Variables.html#Examining-Variables">5.5 Examining Variables</a>
+<li><a href="Custom-Expression-Examination.html#Custom-Expression-Examination">5.6 Custom Expression Examination</a>
+</li></ul>
+<li><a name="toc_Acknowledgements" href="Acknowledgements.html#Acknowledgements">6 Acknowledgements</a>
+<li><a name="toc_Sources-of-Routine-Info" href="Sources-of-Routine-Info.html#Sources-of-Routine-Info">Appendix A Sources of Routine Info</a>
+<ul>
+<li><a href="Routine-Definitions.html#Routine-Definitions">A.1 Routine Definitions</a>
+<li><a href="Routine-Information-Sources.html#Routine-Information-Sources">A.2 Routine Information Sources</a>
+<li><a href="Catalogs.html#Catalogs">A.3 Catalogs</a>
+<ul>
+<li><a href="Library-Catalogs.html#Library-Catalogs">A.3.1 Library Catalogs</a>
+<li><a href="User-Catalog.html#User-Catalog">A.3.2 User Catalog</a>
+</li></ul>
+<li><a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">A.4 Load-Path Shadows</a>
+<li><a href="Documentation-Scan.html#Documentation-Scan">A.5 Documentation Scan</a>
+</li></ul>
+<li><a name="toc_HTML-Help-Browser-Tips" href="HTML-Help-Browser-Tips.html#HTML-Help-Browser-Tips">Appendix B HTML Help Browser Tips</a>
+<li><a name="toc_Configuration-Examples" href="Configuration-Examples.html#Configuration-Examples">Appendix C Configuration Examples</a>
+<li><a name="toc_Windows-and-MacOS" href="Windows-and-MacOS.html#Windows-and-MacOS">Appendix D Windows and MacOS</a>
+<li><a name="toc_Troubleshooting" href="Troubleshooting.html#Troubleshooting">Appendix E Troubleshooting</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix F GNU Free Documentation License</a>
+<li><a name="toc_Index" href="Index.html#Index">Index</a>
+</li></ul>
+</div>
+
+ight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Index"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Index</h2>
+
+</body></html>
+

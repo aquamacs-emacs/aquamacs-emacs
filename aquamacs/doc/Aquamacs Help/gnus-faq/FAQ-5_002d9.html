@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>FAQ 5-9 - Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Frequently Asked Questions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages" title="FAQ 5 - Composing messages">
+<link rel="prev" href="FAQ-5_002d8.html#FAQ-5_002d8" title="FAQ 5-8">
+<link rel="next" href="FAQ-5_002d10.html#FAQ-5_002d10" title="FAQ 5-10">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-5-9"></a>
+<a name="FAQ-5_002d9"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-5_002d10.html#FAQ-5_002d10">FAQ 5-10</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-5_002d8.html#FAQ-5_002d8">FAQ 5-8</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages">FAQ 5 - Composing messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 5.9</h5>
+
+<p>Sometimes I accidentally hit r instead of f in
+newsgroups. Can Gnus warn me, when I'm replying by mail in
+newsgroups?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>Put this in ~/.gnus.el:
+
+<pre class="example">     (setq gnus-confirm-mail-reply-to-news t)
+</pre>
+   <p class="noindent">if you already use Gnus 5.10, if you still use 5.8.8 or
+5.9 try this instead:
+
+<pre class="example">     (eval-after-load "gnus-msg"
+       '(unless (boundp 'gnus-confirm-mail-reply-to-news)
+          (defadvice gnus-summary-reply (around reply-in-news activate)
+            "Request confirmation when replying to news."
+            (interactive)
+            (when (or (not (gnus-news-group-p gnus-newsgroup-name))
+                      (y-or-n-p "Really reply by mail to article author? "))
+              ad-do-it))))
+</pre>
+   <p class="noindent">
+
+   </body></html>
+

@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+<title>Filename completion - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Usage.html#Usage" title="Usage">
+<link rel="prev" href="Alternative-Syntax.html#Alternative-Syntax" title="Alternative Syntax">
+<link rel="next" href="Remote-processes.html#Remote-processes" title="Remote processes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Filename-completion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Remote-processes.html#Remote-processes">Remote processes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Alternative-Syntax.html#Alternative-Syntax">Alternative Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Usage.html#Usage">Usage</a>
+<hr>
+</div>
+
+<h3 class="section">5.3 Filename completion</h3>
+
+<p><a name="index-filename-completion-179"></a>
+Filename completion works with <span class="sc">tramp</span> for completion of method
+names, of user names and of machine names as well as for completion of
+file names on remote machines. 
+In order to enable this, partial completion must be activated in your
+<samp><span class="file">.emacs</span></samp>.
+
+   <p>If you, for example, type <kbd>C-x C-f /t
+&lt;TAB&gt;</kbd>, <span class="sc">tramp</span> might give you as result the choice for
+
+<pre class="example">
+     <p><table summary=""><tr align="left"><td valign="top">telnet: </td><td valign="top">tmp/
+     <br></td></tr><tr align="left"><td valign="top">toto: </td><td valign="top">
+     <br></td></tr></table>
+</pre>
+   <p>&lsquo;<samp><span class="samp">telnet:</span></samp>&rsquo;
+is a possible completion for the respective method,
+&lsquo;<samp><span class="samp">tmp/</span></samp>&rsquo; stands for the directory <samp><span class="file">/tmp</span></samp> on your local
+machine,
+and &lsquo;<samp><span class="samp">toto:</span></samp>&rsquo;
+might be a host <span class="sc">tramp</span> has detected in your <samp><span class="file">~/.ssh/known_hosts</span></samp>
+file (given you're using default method <samp><span class="option">ssh</span></samp>).
+
+   <p>If you go on to type <kbd>e &lt;TAB&gt;</kbd>, the minibuffer is completed to
+&lsquo;<samp><span class="samp">/telnet:</span></samp>&rsquo;. 
+Next <kbd>&lt;TAB&gt;</kbd> brings you all machine names <span class="sc">tramp</span> detects in
+your <samp><span class="file">/etc/hosts</span></samp> file, let's say
+
+<pre class="example">
+     <p><table summary=""><tr align="left"><td valign="top">/telnet<!-- /@w -->:127.0.0.1: </td><td valign="top">/telnet<!-- /@w -->:192.168.0.1:
+     <br></td></tr><tr align="left"><td valign="top">/telnet<!-- /@w -->:[::1]: </td><td valign="top">/telnet<!-- /@w -->:localhost:
+     <br></td></tr><tr align="left"><td valign="top">/telnet<!-- /@w -->:melancholia.danann.net: </td><td valign="top">/telnet<!-- /@w -->:melancholia:
+     <br></td></tr></table>
+</pre>
+   <p>Now you can choose the desired machine, and you can continue to
+complete file names on that machine.
+
+   <p>If the configuration files (see <a href="Customizing-Completion.html#Customizing-Completion">Customizing Completion</a>), which
+<span class="sc">tramp</span> uses for analysis of completion, offer user names, those user
+names will be taken into account as well.
+
+   <p>Remote machines, which have been visited in the past and kept
+persistently (see <a href="Connection-caching.html#Connection-caching">Connection caching</a>), will be offered too.
+
+   <p>Once the remote machine identification is completed, it comes to
+filename completion on the remote host.  This works pretty much like
+for files on the local host, with the exception that minibuffer
+killing via a double-slash works only on the filename part, except
+that filename part starts with <samp><span class="file">//</span></samp>. 
+A triple-slash stands for the default behavior.
+
+<p class="noindent">Example:
+
+<pre class="example">     <kbd>C-x C-f /telnet<!-- /@w -->:melancholia:/usr/local/bin//etc &lt;TAB&gt;</kbd>
+          -| /telnet<!-- /@w -->:melancholia:/etc
+     
+     <kbd>C-x C-f /telnet<!-- /@w -->:melancholia://etc &lt;TAB&gt;</kbd>
+          -| /etc
+     
+     <kbd>C-x C-f /telnet<!-- /@w -->:melancholia:/usr/local/bin///etc &lt;TAB&gt;</kbd>
+          -| /etc
+     
+</pre>
+   <p>A remote directory might have changed its contents out of
+GNU Emacs control, for example by creation or deletion of
+files by other processes.  Therefore, during filename completion the
+remote directory contents is reread regularly in order to detect such
+changes, which would be invisible otherwise (see <a href="Connection-caching.html#Connection-caching">Connection caching</a>).
+
+<div class="defun">
+&mdash; User Option: <b>tramp-completion-reread-directory-timeout</b><var><a name="index-tramp_002dcompletion_002dreread_002ddirectory_002dtimeout-180"></a></var><br>
+<blockquote><p>This variable defines the number of seconds since last remote command
+before rereading a directory contents.  A value of 0 would require an
+immediate reread during filename completion, <code>nil</code> means to use
+always cached values for the directory contents. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Unsafe Simplifications - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Simplifying-Formulas.html#Simplifying-Formulas" title="Simplifying Formulas">
+<link rel="prev" href="Algebraic-Simplifications.html#Algebraic-Simplifications" title="Algebraic Simplifications">
+<link rel="next" href="Simplification-of-Units.html#Simplification-of-Units" title="Simplification of Units">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Unsafe-Simplifications"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Simplification-of-Units.html#Simplification-of-Units">Simplification of Units</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic Simplifications</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Simplifying-Formulas.html#Simplifying-Formulas">Simplifying Formulas</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.3.3 &ldquo;Unsafe&rdquo; Simplifications</h4>
+
+<p class="noindent"><a name="index-Unsafe-simplifications-1693"></a><a name="index-Extended-simplification-1694"></a><a name="index-a-e-1695"></a><a name="index-calc_002dsimplify_002dextended-1696"></a><a name="index-esimplify-1697"></a>The <kbd>a e</kbd> (<code>calc-simplify-extended</code>) [<code>esimplify</code>] command
+is like <kbd>a s</kbd>
+except that it applies some additional simplifications which are not
+&ldquo;safe&rdquo; in all cases.  Use this only if you know the values in your
+formula lie in the restricted ranges for which these simplifications
+are valid.  The symbolic integrator uses <kbd>a e</kbd>;
+one effect of this is that the integrator's results must be used with
+caution.  Where an integral table will often attach conditions like
+&ldquo;for positive &lsquo;<samp><span class="samp">a</span></samp>&rsquo; only,&rdquo; Calc (like most other symbolic
+integration programs) will simply produce an unqualified result.
+
+   <p>Because <kbd>a e</kbd>'s simplifications are unsafe, it is sometimes better
+to type <kbd>C-u -3 a v</kbd>, which does extended simplification only
+on the top level of the formula without affecting the sub-formulas. 
+In fact, <kbd>C-u -3 j v</kbd> allows you to target extended simplification
+to any specific part of a formula.
+
+   <p>The variable <code>ExtSimpRules</code> contains rewrites to be applied by
+the <kbd>a e</kbd> command.  These are applied in addition to
+<code>EvalRules</code> and <code>AlgSimpRules</code>.  (The <kbd>a r AlgSimpRules</kbd>
+step described above is simply followed by an <kbd>a r ExtSimpRules</kbd> step.)
+
+   <p>Following is a complete list of &ldquo;unsafe&rdquo; simplifications performed
+by <kbd>a e</kbd>.
+
+   <p>Inverse trigonometric or hyperbolic functions, called with their
+corresponding non-inverse functions as arguments, are simplified
+by <kbd>a e</kbd>.  For example, &lsquo;<samp><tt>arcsin</tt><span class="samp">(</span><tt>sin</tt><span class="samp">(x))</span></samp>&rsquo; changes
+to &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  Also, &lsquo;<samp><tt>arcsin</tt><span class="samp">(</span><tt>cos</tt><span class="samp">(x))</span></samp>&rsquo; and
+&lsquo;<samp><tt>arccos</tt><span class="samp">(</span><tt>sin</tt><span class="samp">(x))</span></samp>&rsquo; both change to &lsquo;<samp><tt>pi</tt><span class="samp">/2 - x</span></samp>&rsquo;. 
+These simplifications are unsafe because they are valid only for
+values of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; in a certain range; outside that range, values
+are folded down to the 360-degree range that the inverse trigonometric
+functions always produce.
+
+   <p>Powers of powers &lsquo;<samp><span class="samp">(x^a)^b</span></samp>&rsquo; are simplified to
+<!-- @math{x^{a b}} -->
+&lsquo;<samp><span class="samp">x^(a b)</span></samp>&rsquo;
+for all &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.  These results will be valid only
+in a restricted range of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;; for example, in
+<!-- @math{(x^2)^{1:2}} -->
+&lsquo;<samp><span class="samp">(x^2)^1:2</span></samp>&rsquo;
+the powers cancel to get &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, which is valid for positive values
+of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; but not for negative or complex values.
+
+   <p>Similarly, &lsquo;<samp><tt>sqrt</tt><span class="samp">(x^a)</span></samp>&rsquo; and &lsquo;<samp><tt>sqrt</tt><span class="samp">(x)^a</span></samp>&rsquo; are both
+simplified (possibly unsafely) to
+<!-- @math{x^{a/2}}. -->
+&lsquo;<samp><span class="samp">x^(a/2)</span></samp>&rsquo;.
+
+   <p>Forms like &lsquo;<samp><tt>sqrt</tt><span class="samp">(1 - sin(x)^2)</span></samp>&rsquo; are simplified to, e.g.,
+&lsquo;<samp><tt>cos</tt><span class="samp">(x)</span></samp>&rsquo;.  Calc has identities of this sort for <code>sin</code>,
+<code>cos</code>, <code>tan</code>, <code>sinh</code>, and <code>cosh</code>.
+
+   <p>Arguments of square roots are partially factored to look for
+squared terms that can be extracted.  For example,
+&lsquo;<samp><tt>sqrt</tt><span class="samp">(a^2 b^3 + a^3 b^2)</span></samp>&rsquo; simplifies to
+&lsquo;<samp><span class="samp">a b </span><tt>sqrt</tt><span class="samp">(a+b)</span></samp>&rsquo;.
+
+   <p>The simplifications of &lsquo;<samp><tt>ln</tt><span class="samp">(</span><tt>exp</tt><span class="samp">(x))</span></samp>&rsquo;,
+&lsquo;<samp><tt>ln</tt><span class="samp">(</span><tt>e</tt><span class="samp">^x)</span></samp>&rsquo;, and &lsquo;<samp><tt>log10</tt><span class="samp">(10^x)</span></samp>&rsquo; to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; are also
+unsafe because of problems with principal values (although these
+simplifications are safe if &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is known to be real).
+
+   <p>Common factors are cancelled from products on both sides of an
+equation, even if those factors may be zero:  &lsquo;<samp><span class="samp">a x / b x</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">a / b</span></samp>&rsquo;.  Such factors are never cancelled from
+inequalities:  Even <kbd>a e</kbd> is not bold enough to reduce
+&lsquo;<samp><span class="samp">a x &lt; b x</span></samp>&rsquo; to &lsquo;<samp><span class="samp">a &lt; b</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">a &gt; b</span></samp>&rsquo;, depending
+on whether you believe &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is positive or negative). 
+The <kbd>a M /</kbd> command can be used to divide a factor out of
+both sides of an inequality.
+
+   </body></html>
+

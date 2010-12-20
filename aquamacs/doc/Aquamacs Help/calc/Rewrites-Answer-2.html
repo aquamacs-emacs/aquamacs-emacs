@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Rewrites Answer 2 - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link rel="prev" href="Rewrites-Answer-1.html#Rewrites-Answer-1" title="Rewrites Answer 1">
+<link rel="next" href="Rewrites-Answer-3.html#Rewrites-Answer-3" title="Rewrites Answer 3">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Rewrites-Answer-2"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rewrites-Answer-3.html#Rewrites-Answer-3">Rewrites Answer 3</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rewrites-Answer-1.html#Rewrites-Answer-1">Rewrites Answer 1</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.7.53 Rewrites Tutorial Exercise 2</h4>
+
+<p class="noindent">Here is the rule set:
+
+<pre class="smallexample">     [ fib(n) := fib(n, 1, 1) :: integer(n) :: n &gt;= 1,
+       fib(1, x, y) := x,
+       fib(n, x, y) := fib(n-1, y, x+y) ]
+</pre>
+   <p class="noindent">The first rule turns a one-argument <code>fib</code> that people like to write
+into a three-argument <code>fib</code> that makes computation easier.  The
+second rule converts back from three-argument form once the computation
+is done.  The third rule does the computation itself.  It basically
+says that if &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo; are two consecutive Fibonacci numbers,
+then &lsquo;<samp><span class="samp">y</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x+y</span></samp>&rsquo; are the next (overlapping) pair of Fibonacci
+numbers.
+
+   <p>Notice that because the number &lsquo;<samp><span class="samp">n</span></samp>&rsquo; was &ldquo;validated&rdquo; by the
+conditions on the first rule, there is no need to put conditions on
+the other rules because the rule set would never get that far unless
+the input were valid.  That further speeds computation, since no
+extra conditions need to be checked at every step.
+
+   <p>Actually, a user with a nasty sense of humor could enter a bad
+three-argument <code>fib</code> call directly, say, &lsquo;<samp><span class="samp">fib(0, 1, 1)</span></samp>&rsquo;,
+which would get the rules into an infinite loop.  One thing that would
+help keep this from happening by accident would be to use something like
+&lsquo;<samp><span class="samp">ZzFib</span></samp>&rsquo; instead of <code>fib</code> as the name of the three-argument
+function.
+
+   </body></html>
+

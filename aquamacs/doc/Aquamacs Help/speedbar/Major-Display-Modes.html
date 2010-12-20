@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Major Display Modes - Speedbar: File/Tag summarizing utility</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Speedbar: File/Tag summarizing utility">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Extending.html#Extending" title="Extending">
+<link rel="prev" href="Minor-Display-Modes.html#Minor-Display-Modes" title="Minor Display Modes">
+<link rel="next" href="Tagging-Extensions.html#Tagging-Extensions" title="Tagging Extensions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Major-Display-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Tagging-Extensions.html#Tagging-Extensions">Tagging Extensions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minor-Display-Modes.html#Minor-Display-Modes">Minor Display Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Extending.html#Extending">Extending</a>
+<hr>
+</div>
+
+<h3 class="section">7.2 Major Display Modes</h3>
+
+<p><a name="index-create-major-display-mode-68"></a>
+Creating a <dfn>Major Display Mode</dfn> for speedbar requires authoring a keymap,
+an easy-menu segment, and writing several functions.  These items can be
+given any name, and are made the same way as in a minor display mode
+(see <a href="Minor-Display-Modes.html#Minor-Display-Modes">Minor Display Modes</a>).  Once this is done, these items need to be
+registered.
+
+   <p>Because this setup activity may or may not have speedbar available when
+it is being loaded, it is necessary to create an install function.  This
+function should create and initialize the keymap, and add your
+expansions into the customization tables.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dmake_002dspecialized_002dkeymap_007d-69"></a>When creating the keymap, use the function
+<code>speedbar-make-specialized-keymap</code> instead of other keymap making
+functions.  This will provide you with the initial bindings needed. 
+Some common speedbar functions you might want to bind are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002dedit_002dline_007d-70"></a>
+<dl><dt><code>speedbar-edit-line</code><dd>Edit the item on the current line. 
+<a name="index-g_t_0040code_007bspeedbar_002dexpand_002dline_007d-71"></a><br><dt><code>speedbar-expand-line</code><dd>Expand the item under the cursor. 
+With a numeric argument (<kbd>C-u</kbd>), flush cached data before expanding. 
+<a name="index-g_t_0040code_007bspeedbar_002dcontract_002dline_007d-72"></a><br><dt><code>speedbar-contract-line</code><dd>Contract the item under the cursor. 
+</dl>
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dline_002dpath_007d-73"></a>These function require that function <code>speedbar-line-path</code> be
+correctly overloaded to work.
+
+   <p>Next, register your extension like this;
+
+<pre class="example">       (speedbar-add-expansion-list '("MyExtension"
+                                      MyExtension-speedbar-menu-items
+                                      MyExtension-speedbar-key-map
+                                      MyExtension-speedbar-buttons))
+</pre>
+   <p>There are no limitations to the names you use.
+
+   <p>The first parameter is the string representing your display mode. 
+The second parameter is a variable name containing an easymenu compatible
+menu definition.  This will be stuck in the middle of speedbar's menu. 
+The third parameter is the variable name containing the keymap we
+discussed earlier. 
+The last parameter is a function which draws buttons for your mode. 
+This function must take two parameters.  The directory currently being
+displayed, and the depth at which you should start rendering buttons. 
+The function will then draw (starting at the current cursor position)
+any buttons deemed necessary based on the input parameters. 
+See <a href="Creating-a-display.html#Creating-a-display">Creating a display</a>.
+
+   <p>Next, you need to register function overrides.  This may look something
+like this:
+
+<pre class="example">     (speedbar-add-mode-functions-list
+      '("MYEXTENSION"
+        (speedbar-item-info . MyExtension-speedbar-item-info)
+        (speedbar-line-path . MyExtension-speedbar-line-path)))
+</pre>
+   <p>The first element in the list is the name of you extension.  The second
+is an alist of functions to overload.  The function to overload is
+first, followed by what you want called instead.
+
+   <p>For <code>speedbar-line-path</code> your function should take an optional DEPTH
+parameter.  This is the starting depth for heavily indented lines.  If
+it is not provided, you can derive it like this:
+
+<pre class="example">     (save-match-data
+       (if (not depth)
+           (progn
+             (beginning-of-line)
+             (looking-at "^\\([0-9]+\\):")
+             (setq depth (string-to-int (match-string 1)))))
+</pre>
+   <p class="noindent">where the depth is stored as invisible text at the beginning of each
+line.
+
+   <p>The path returned should be the full path name of the file associated
+with that line.  If the cursor is on a tag, then the file containing
+that tag should be returned.  This is critical for built in file based
+functions to work (meaning less code for you to write).  If your display
+does not deal in files, you do not need to overload this function.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002ditem_002dinfo_007d-74"></a>The function <code>speedbar-item-info</code>, however, is very likely to need
+overloading.  This function takes no parameters and must derive a text
+summary to display in the minibuffer.
+
+   <p>There are several helper functions you can use if you are going to use
+built in tagging.  These functions can be <code>or</code>ed since each one
+returns non-<code>nil</code> if it displays a message.  They are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002ditem_002dinfo_002dfile_002dhelper_007d-75"></a>
+<dl><dt><code>speedbar-item-info-file-helper</code><dd>This takes an optional <var>filename</var> parameter.  You can derive your own
+filename, or it will derive it using a (possibly overloaded) function
+<code>speedbar-line-file</code>.  It shows details about a file. 
+<a name="index-g_t_0040code_007bspeedbar_002ditem_002dinfo_002dtag_002dhelper_007d-76"></a><br><dt><code>speedbar-item-info-tag-helper</code><dd>If the current line is a tag, then display information about that tag,
+such as its parent file, and location. 
+</dl>
+
+   <p>Your custom function might look like this:
+
+<pre class="example">     (defun MyExtension-item-info ()
+       "Display information about the current line."
+       (or (speedbar-item-info-tag-helper)
+           (message "Interesting detail.")))
+</pre>
+   <p>Once you have done all this, speedbar will show an entry in the
+&lsquo;<samp><span class="samp">Displays</span></samp>&rsquo; menu declaring that your extension is available.
+
+   </body></html>
+

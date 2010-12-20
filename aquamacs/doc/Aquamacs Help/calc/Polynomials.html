@@ -1,0 +1,235 @@
+<html lang="en">
+<head>
+<title>Polynomials - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Algebra.html#Algebra" title="Algebra">
+<link rel="prev" href="Simplifying-Formulas.html#Simplifying-Formulas" title="Simplifying Formulas">
+<link rel="next" href="Calculus.html#Calculus" title="Calculus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Polynomials"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Calculus.html#Calculus">Calculus</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Simplifying-Formulas.html#Simplifying-Formulas">Simplifying Formulas</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Algebra.html#Algebra">Algebra</a>
+<hr>
+</div>
+
+<h3 class="section">11.4 Polynomials</h3>
+
+<p>A <dfn>polynomial</dfn> is a sum of terms which are coefficients times
+various powers of a &ldquo;base&rdquo; variable.  For example, &lsquo;<samp><span class="samp">2 x^2 + 3 x - 4</span></samp>&rsquo;
+is a polynomial in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  Some formulas can be considered
+polynomials in several different variables:  &lsquo;<samp><span class="samp">1 + 2 x + 3 y + 4 x y^2</span></samp>&rsquo;
+is a polynomial in both &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo;.  Polynomial coefficients
+are often numbers, but they may in general be any formulas not
+involving the base variable.
+
+   <p><a name="index-a-f-1698"></a><a name="index-calc_002dfactor-1699"></a><a name="index-factor-1700"></a>The <kbd>a f</kbd> (<code>calc-factor</code>) [<code>factor</code>] command factors a
+polynomial into a product of terms.  For example, the polynomial
+&lsquo;<samp><span class="samp">x^3 + 2 x^2 + x</span></samp>&rsquo; is factored into &lsquo;<samp><span class="samp">x*(x+1)^2</span></samp>&rsquo;.  As another
+example, &lsquo;<samp><span class="samp">a c + b d + b c + a d</span></samp>&rsquo; is factored into the product
+&lsquo;<samp><span class="samp">(a + b) (c + d)</span></samp>&rsquo;.
+
+   <p>Calc currently has three algorithms for factoring.  Formulas which are
+linear in several variables, such as the second example above, are
+merged according to the distributive law.  Formulas which are
+polynomials in a single variable, with constant integer or fractional
+coefficients, are factored into irreducible linear and/or quadratic
+terms.  The first example above factors into three linear terms
+(&lsquo;<samp><span class="samp">x</span></samp>&rsquo;, &lsquo;<samp><span class="samp">x+1</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">x+1</span></samp>&rsquo; again).  Finally, formulas
+which do not fit the above criteria are handled by the algebraic
+rewrite mechanism.
+
+   <p>Calc's polynomial factorization algorithm works by using the general
+root-finding command (<kbd>a&nbsp;P</kbd><!-- /@w -->) to solve for the roots of the
+polynomial.  It then looks for roots which are rational numbers
+or complex-conjugate pairs, and converts these into linear and
+quadratic terms, respectively.  Because it uses floating-point
+arithmetic, it may be unable to find terms that involve large
+integers (whose number of digits approaches the current precision). 
+Also, irreducible factors of degree higher than quadratic are not
+found, and polynomials in more than one variable are not treated. 
+(A more robust factorization algorithm may be included in a future
+version of Calc.)
+
+   <p><a name="index-FactorRules-1701"></a><a name="index-thecoefs-1702"></a><a name="index-thefactors-1703"></a>The rewrite-based factorization method uses rules stored in the variable
+<code>FactorRules</code>.  See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>, for a discussion of the
+operation of rewrite rules.  The default <code>FactorRules</code> are able
+to factor quadratic forms symbolically into two linear terms,
+&lsquo;<samp><span class="samp">(a x + b) (c x + d)</span></samp>&rsquo;.  You can edit these rules to include other
+cases if you wish.  To use the rules, Calc builds the formula
+&lsquo;<samp><span class="samp">thecoefs(x, [a, b, c, ...])</span></samp>&rsquo; where <code>x</code> is the polynomial
+base variable and <code>a</code>, <code>b</code>, etc., are polynomial coefficients
+(which may be numbers or formulas).  The constant term is written first,
+i.e., in the <code>a</code> position.  When the rules complete, they should have
+changed the formula into the form &lsquo;<samp><span class="samp">thefactors(x, [f1, f2, f3, ...])</span></samp>&rsquo;
+where each <code>fi</code> should be a factored term, e.g., &lsquo;<samp><span class="samp">x - ai</span></samp>&rsquo;. 
+Calc then multiplies these terms together to get the complete
+factored form of the polynomial.  If the rules do not change the
+<code>thecoefs</code> call to a <code>thefactors</code> call, <kbd>a f</kbd> leaves the
+polynomial alone on the assumption that it is unfactorable.  (Note that
+the function names <code>thecoefs</code> and <code>thefactors</code> are used only
+as placeholders; there are no actual Calc functions by those names.)
+
+   <p><a name="index-H-a-f-1704"></a><a name="index-factors-1705"></a>The <kbd>H a f</kbd> [<code>factors</code>] command also factors a polynomial,
+but it returns a list of factors instead of an expression which is the
+product of the factors.  Each factor is represented by a sub-vector
+of the factor, and the power with which it appears.  For example,
+&lsquo;<samp><span class="samp">x^5 + x^4 - 33 x^3 + 63 x^2</span></samp>&rsquo; factors to &lsquo;<samp><span class="samp">(x + 7) x^2 (x - 3)^2</span></samp>&rsquo;
+in <kbd>a f</kbd>, or to &lsquo;<samp><span class="samp">[ [x, 2], [x+7, 1], [x-3, 2] ]</span></samp>&rsquo; in <kbd>H a f</kbd>. 
+If there is an overall numeric factor, it always comes first in the list. 
+The functions <code>factor</code> and <code>factors</code> allow a second argument
+when written in algebraic form; &lsquo;<samp><span class="samp">factor(x,v)</span></samp>&rsquo; factors &lsquo;<samp><span class="samp">x</span></samp>&rsquo; with
+respect to the specific variable &lsquo;<samp><span class="samp">v</span></samp>&rsquo;.  The default is to factor with
+respect to all the variables that appear in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.
+
+   <p><a name="index-a-c-1706"></a><a name="index-calc_002dcollect-1707"></a><a name="index-collect-1708"></a>The <kbd>a c</kbd> (<code>calc-collect</code>) [<code>collect</code>] command rearranges a
+formula as a
+polynomial in a given variable, ordered in decreasing powers of that
+variable.  For example, given &lsquo;<samp><span class="samp">1 + 2 x + 3 y + 4 x y^2</span></samp>&rsquo; on
+the stack, <kbd>a c x</kbd> would produce &lsquo;<samp><span class="samp">(2 + 4 y^2) x + (1 + 3 y)</span></samp>&rsquo;,
+and <kbd>a c y</kbd> would produce &lsquo;<samp><span class="samp">(4 x) y^2 + 3 y + (1 + 2 x)</span></samp>&rsquo;. 
+The polynomial will be expanded out using the distributive law as
+necessary:  Collecting &lsquo;<samp><span class="samp">x</span></samp>&rsquo; in &lsquo;<samp><span class="samp">(x - 1)^3</span></samp>&rsquo; produces
+&lsquo;<samp><span class="samp">x^3 - 3 x^2 + 3 x - 1</span></samp>&rsquo;.  Terms not involving &lsquo;<samp><span class="samp">x</span></samp>&rsquo; will
+not be expanded.
+
+   <p>The &ldquo;variable&rdquo; you specify at the prompt can actually be any
+expression: <kbd>a c ln(x+1)</kbd> will collect together all terms multiplied
+by &lsquo;<samp><span class="samp">ln(x+1)</span></samp>&rsquo; or integer powers thereof.  If &lsquo;<samp><span class="samp">x</span></samp>&rsquo; also appears
+in the formula in a context other than &lsquo;<samp><span class="samp">ln(x+1)</span></samp>&rsquo;, <kbd>a c</kbd> will
+treat those occurrences as unrelated to &lsquo;<samp><span class="samp">ln(x+1)</span></samp>&rsquo;, i.e., as constants.
+
+   <p><a name="index-a-x-1709"></a><a name="index-calc_002dexpand-1710"></a><a name="index-expand-1711"></a>The <kbd>a x</kbd> (<code>calc-expand</code>) [<code>expand</code>] command expands an
+expression by applying the distributive law everywhere.  It applies to
+products, quotients, and powers involving sums.  By default, it fully
+distributes all parts of the expression.  With a numeric prefix argument,
+the distributive law is applied only the specified number of times, then
+the partially expanded expression is left on the stack.
+
+   <p>The <kbd>a x</kbd> and <kbd>j D</kbd> commands are somewhat redundant.  Use
+<kbd>a x</kbd> if you want to expand all products of sums in your formula. 
+Use <kbd>j D</kbd> if you want to expand a particular specified term of
+the formula.  There is an exactly analogous correspondence between
+<kbd>a f</kbd> and <kbd>j M</kbd>.  (The <kbd>j D</kbd> and <kbd>j M</kbd> commands
+also know many other kinds of expansions, such as
+&lsquo;<samp><span class="samp">exp(a + b) = exp(a) exp(b)</span></samp>&rsquo;, which <kbd>a x</kbd> and <kbd>a f</kbd>
+do not do.)
+
+   <p>Calc's automatic simplifications will sometimes reverse a partial
+expansion.  For example, the first step in expanding &lsquo;<samp><span class="samp">(x+1)^3</span></samp>&rsquo; is
+to write &lsquo;<samp><span class="samp">(x+1) (x+1)^2</span></samp>&rsquo;.  If <kbd>a x</kbd> stops there and tries
+to put this formula onto the stack, though, Calc will automatically
+simplify it back to &lsquo;<samp><span class="samp">(x+1)^3</span></samp>&rsquo; form.  The solution is to turn
+simplification off first (see <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>), or to run
+<kbd>a x</kbd> without a numeric prefix argument so that it expands all
+the way in one step.
+
+   <p><a name="index-a-a-1712"></a><a name="index-calc_002dapart-1713"></a><a name="index-apart-1714"></a>The <kbd>a a</kbd> (<code>calc-apart</code>) [<code>apart</code>] command expands a
+rational function by partial fractions.  A rational function is the
+quotient of two polynomials; <code>apart</code> pulls this apart into a
+sum of rational functions with simple denominators.  In algebraic
+notation, the <code>apart</code> function allows a second argument that
+specifies which variable to use as the &ldquo;base&rdquo;; by default, Calc
+chooses the base variable automatically.
+
+   <p><a name="index-a-n-1715"></a><a name="index-calc_002dnormalize_002drat-1716"></a><a name="index-nrat-1717"></a>The <kbd>a n</kbd> (<code>calc-normalize-rat</code>) [<code>nrat</code>] command
+attempts to arrange a formula into a quotient of two polynomials. 
+For example, given &lsquo;<samp><span class="samp">1 + (a + b/c) / d</span></samp>&rsquo;, the result would be
+&lsquo;<samp><span class="samp">(b + a c + c d) / c d</span></samp>&rsquo;.  The quotient is reduced, so that
+<kbd>a n</kbd> will simplify &lsquo;<samp><span class="samp">(x^2 + 2x + 1) / (x^2 - 1)</span></samp>&rsquo; by dividing
+out the common factor &lsquo;<samp><span class="samp">x + 1</span></samp>&rsquo;, yielding &lsquo;<samp><span class="samp">(x + 1) / (x - 1)</span></samp>&rsquo;.
+
+   <p><a name="index-a-_005c-1718"></a><a name="index-calc_002dpoly_002ddiv-1719"></a><a name="index-pdiv-1720"></a>The <kbd>a \</kbd> (<code>calc-poly-div</code>) [<code>pdiv</code>] command divides
+two polynomials &lsquo;<samp><span class="samp">u</span></samp>&rsquo; and &lsquo;<samp><span class="samp">v</span></samp>&rsquo;, yielding a new polynomial
+&lsquo;<samp><span class="samp">q</span></samp>&rsquo;.  If several variables occur in the inputs, the inputs are
+considered multivariate polynomials.  (Calc divides by the variable
+with the largest power in &lsquo;<samp><span class="samp">u</span></samp>&rsquo; first, or, in the case of equal
+powers, chooses the variables in alphabetical order.)  For example,
+dividing &lsquo;<samp><span class="samp">x^2 + 3 x + 2</span></samp>&rsquo; by &lsquo;<samp><span class="samp">x + 2</span></samp>&rsquo; yields &lsquo;<samp><span class="samp">x + 1</span></samp>&rsquo;. 
+The remainder from the division, if any, is reported at the bottom
+of the screen and is also placed in the Trail along with the quotient.
+
+   <p>Using <code>pdiv</code> in algebraic notation, you can specify the particular
+variable to be used as the base: <code>pdiv(</code><var>a</var><code>,</code><var>b</var><code>,</code><var>x</var><code>)</code>. 
+If <code>pdiv</code> is given only two arguments (as is always the case with
+the <kbd>a \</kbd> command), then it does a multivariate division as outlined
+above.
+
+   <p><a name="index-a-_0025-1721"></a><a name="index-calc_002dpoly_002drem-1722"></a><a name="index-prem-1723"></a>The <kbd>a %</kbd> (<code>calc-poly-rem</code>) [<code>prem</code>] command divides
+two polynomials and keeps the remainder &lsquo;<samp><span class="samp">r</span></samp>&rsquo;.  The quotient
+&lsquo;<samp><span class="samp">q</span></samp>&rsquo; is discarded.  For any formulas &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, the
+results of <kbd>a \</kbd> and <kbd>a %</kbd> satisfy &lsquo;<samp><span class="samp">a = q b + r</span></samp>&rsquo;. 
+(This is analogous to plain <kbd>\</kbd> and <kbd>%</kbd>, which compute the
+integer quotient and remainder from dividing two numbers.)
+
+   <p><a name="index-a-_002f-1724"></a><a name="index-H-a-_002f-1725"></a><a name="index-calc_002dpoly_002ddiv_002drem-1726"></a><a name="index-pdivrem-1727"></a><a name="index-pdivide-1728"></a>The <kbd>a /</kbd> (<code>calc-poly-div-rem</code>) [<code>pdivrem</code>] command
+divides two polynomials and reports both the quotient and the
+remainder as a vector &lsquo;<samp><span class="samp">[q, r]</span></samp>&rsquo;.  The <kbd>H a /</kbd> [<code>pdivide</code>]
+command divides two polynomials and constructs the formula
+&lsquo;<samp><span class="samp">q + r/b</span></samp>&rsquo; on the stack.  (Naturally if the remainder is zero,
+this will immediately simplify to &lsquo;<samp><span class="samp">q</span></samp>&rsquo;.)
+
+   <p><a name="index-a-g-1729"></a><a name="index-calc_002dpoly_002dgcd-1730"></a><a name="index-pgcd-1731"></a>The <kbd>a g</kbd> (<code>calc-poly-gcd</code>) [<code>pgcd</code>] command computes
+the greatest common divisor of two polynomials.  (The GCD actually
+is unique only to within a constant multiplier; Calc attempts to
+choose a GCD which will be unsurprising.)  For example, the <kbd>a n</kbd>
+command uses <kbd>a g</kbd> to take the GCD of the numerator and denominator
+of a quotient, then divides each by the result using <kbd>a \</kbd>.  (The
+definition of GCD ensures that this division can take place without
+leaving a remainder.)
+
+   <p>While the polynomials used in operations like <kbd>a /</kbd> and <kbd>a g</kbd>
+often have integer coefficients, this is not required.  Calc can also
+deal with polynomials over the rationals or floating-point reals. 
+Polynomials with modulo-form coefficients are also useful in many
+applications; if you enter &lsquo;<samp><span class="samp">(x^2 + 3 x - 1) mod 5</span></samp>&rsquo;, Calc
+automatically transforms this into a polynomial over the field of
+integers mod 5:  &lsquo;<samp><span class="samp">(1 mod 5) x^2 + (3 mod 5) x + (4 mod 5)</span></samp>&rsquo;.
+
+   <p>Congratulations and thanks go to Ove Ewerlid
+(<code>ewerlid@mizar.DoCS.UU.SE</code>), who contributed many of the
+polynomial routines used in the above commands.
+
+   <p>See <a href="Decomposing-Polynomials.html#Decomposing-Polynomials">Decomposing Polynomials</a>, for several useful functions for
+extracting the individual coefficients of a polynomial.
+
+   </body></html>
+

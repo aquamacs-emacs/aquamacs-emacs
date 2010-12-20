@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Differentiation - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Calculus.html#Calculus" title="Calculus">
+<link rel="prev" href="Calculus.html#Calculus" title="Calculus">
+<link rel="next" href="Integration.html#Integration" title="Integration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Differentiation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Integration.html#Integration">Integration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Calculus.html#Calculus">Calculus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Calculus.html#Calculus">Calculus</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.5.1 Differentiation</h4>
+
+<p class="noindent"><a name="index-a-d-1732"></a><a name="index-H-a-d-1733"></a><a name="index-calc_002dderivative-1734"></a><a name="index-deriv-1735"></a><a name="index-tderiv-1736"></a>The <kbd>a d</kbd> (<code>calc-derivative</code>) [<code>deriv</code>] command computes
+the derivative of the expression on the top of the stack with respect to
+some variable, which it will prompt you to enter.  Normally, variables
+in the formula other than the specified differentiation variable are
+considered constant, i.e., &lsquo;<samp><span class="samp">deriv(y,x)</span></samp>&rsquo; is reduced to zero.  With
+the Hyperbolic flag, the <code>tderiv</code> (total derivative) operation is used
+instead, in which derivatives of variables are not reduced to zero
+unless those variables are known to be &ldquo;constant,&rdquo; i.e., independent
+of any other variables.  (The built-in special variables like <code>pi</code>
+are considered constant, as are variables that have been declared
+<code>const</code>; see <a href="Declarations.html#Declarations">Declarations</a>.)
+
+   <p>With a numeric prefix argument <var>n</var>, this command computes the
+<var>n</var>th derivative.
+
+   <p>When working with trigonometric functions, it is best to switch to
+Radians mode first (with <kbd>m&nbsp;r</kbd><!-- /@w -->).  The derivative of &lsquo;<samp><span class="samp">sin(x)</span></samp>&rsquo;
+in degrees is &lsquo;<samp><span class="samp">(pi/180) cos(x)</span></samp>&rsquo;, probably not the expected
+answer!
+
+   <p>If you use the <code>deriv</code> function directly in an algebraic formula,
+you can write &lsquo;<samp><span class="samp">deriv(f,x,x0)</span></samp>&rsquo; which represents the derivative
+of &lsquo;<samp><span class="samp">f</span></samp>&rsquo; with respect to &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, evaluated at the point
+<!-- @math{x=x_0}. -->
+&lsquo;<samp><span class="samp">x=x0</span></samp>&rsquo;.
+
+   <p>If the formula being differentiated contains functions which Calc does
+not know, the derivatives of those functions are produced by adding
+primes (apostrophe characters).  For example, &lsquo;<samp><span class="samp">deriv(f(2x), x)</span></samp>&rsquo;
+produces &lsquo;<samp><span class="samp">2 f'(2 x)</span></samp>&rsquo;, where the function <code>f'</code> represents the
+derivative of <code>f</code>.
+
+   <p>For functions you have defined with the <kbd>Z F</kbd> command, Calc expands
+the functions according to their defining formulas unless you have
+also defined <code>f'</code> suitably.  For example, suppose we define
+&lsquo;<samp><span class="samp">sinc(x) = sin(x)/x</span></samp>&rsquo; using <kbd>Z F</kbd>.  If we then differentiate
+the formula &lsquo;<samp><span class="samp">sinc(2 x)</span></samp>&rsquo;, the formula will be expanded to
+&lsquo;<samp><span class="samp">sin(2 x) / (2 x)</span></samp>&rsquo; and differentiated.  However, if we also
+define &lsquo;<samp><span class="samp">sinc'(x) = dsinc(x)</span></samp>&rsquo;, say, then Calc will write the
+result as &lsquo;<samp><span class="samp">2 dsinc(2 x)</span></samp>&rsquo;.  See <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>.
+
+   <p>For multi-argument functions &lsquo;<samp><span class="samp">f(x,y,z)</span></samp>&rsquo;, the derivative with respect
+to the first argument is written &lsquo;<samp><span class="samp">f'(x,y,z)</span></samp>&rsquo;; derivatives with
+respect to the other arguments are &lsquo;<samp><span class="samp">f'2(x,y,z)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">f'3(x,y,z)</span></samp>&rsquo;. 
+Various higher-order derivatives can be formed in the obvious way, e.g.,
+&lsquo;<samp><span class="samp">f'</span><span class="samp">'(x)</span></samp>&rsquo; (the second derivative of <code>f</code>) or
+&lsquo;<samp><span class="samp">f'</span><span class="samp">'2'3(x,y,z)</span></samp>&rsquo; (<code>f</code> differentiated with respect to each
+argument once).
+
+   </body></html>
+

@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>User-Defined Units - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Units.html#Units" title="Units">
+<link rel="prev" href="Predefined-Units.html#Predefined-Units" title="Predefined Units">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="User-Defined-Units"></a>
+<a name="User_002dDefined-Units"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Predefined-Units.html#Predefined-Units">Predefined Units</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Units.html#Units">Units</a>
+<hr>
+</div>
+
+<h3 class="section">12.4 User-Defined Units</h3>
+
+<p class="noindent">Calc provides ways to get quick access to your selected &ldquo;favorite&rdquo;
+units, as well as ways to define your own new units.
+
+   <p><a name="index-u-0_002d9-1980"></a><a name="index-calc_002dquick_002dunits-1981"></a><a name="index-Units-1982"></a><a name="index-g_t_0040code_007bUnits_007d-variable-1983"></a><a name="index-Quick-units-1984"></a>To select your favorite units, store a vector of unit names or
+expressions in the Calc variable <code>Units</code>.  The <kbd>u 1</kbd>
+through <kbd>u 9</kbd> commands (<code>calc-quick-units</code>) provide access
+to these units.  If the value on the top of the stack is a plain
+number (with no units attached), then <kbd>u 1</kbd> gives it the
+specified units.  (Basically, it multiplies the number by the
+first item in the <code>Units</code> vector.)  If the number on the
+stack <em>does</em> have units, then <kbd>u 1</kbd> converts that number
+to the new units.  For example, suppose the vector &lsquo;<samp><span class="samp">[in, ft]</span></samp>&rsquo;
+is stored in <code>Units</code>.  Then <kbd>30 u 1</kbd> will create the
+expression &lsquo;<samp><span class="samp">30 in</span></samp>&rsquo;, and <kbd>u 2</kbd> will convert that expression
+to &lsquo;<samp><span class="samp">2.5 ft</span></samp>&rsquo;.
+
+   <p>The <kbd>u 0</kbd> command accesses the tenth element of <code>Units</code>. 
+Only ten quick units may be defined at a time.  If the <code>Units</code>
+variable has no stored value (the default), or if its value is not
+a vector, then the quick-units commands will not function.  The
+<kbd>s U</kbd> command is a convenient way to edit the <code>Units</code>
+variable; see <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>.
+
+   <p><a name="index-u-d-1985"></a><a name="index-calc_002ddefine_002dunit-1986"></a><a name="index-User_002ddefined-units-1987"></a>The <kbd>u d</kbd> (<code>calc-define-unit</code>) command records the units
+expression on the top of the stack as the definition for a new,
+user-defined unit.  For example, putting &lsquo;<samp><span class="samp">16.5 ft</span></samp>&rsquo; on the stack and
+typing <kbd>u d rod</kbd> defines the new unit &lsquo;<samp><span class="samp">rod</span></samp>&rsquo; to be equivalent to
+16.5 feet.  The unit conversion and simplification commands will now
+treat <code>rod</code> just like any other unit of length.  You will also be
+prompted for an optional English description of the unit, which will
+appear in the Units Table.  If you wish the definition of this unit to
+be displayed in a special way in the Units Table buffer (such as with an
+asterisk to indicate an approximate value), then you can call this
+command with an argument, <kbd>C-u u d</kbd>; you will then also be prompted
+for a string that will be used to display the definition.
+
+   <p><a name="index-u-u-1988"></a><a name="index-calc_002dundefine_002dunit-1989"></a>The <kbd>u u</kbd> (<code>calc-undefine-unit</code>) command removes a user-defined
+unit.  It is not possible to remove one of the predefined units,
+however.
+
+   <p>If you define a unit with an existing unit name, your new definition
+will replace the original definition of that unit.  If the unit was a
+predefined unit, the old definition will not be replaced, only
+&ldquo;shadowed.&rdquo;  The built-in definition will reappear if you later use
+<kbd>u u</kbd> to remove the shadowing definition.
+
+   <p>To create a new fundamental unit, use either 1 or the unit name itself
+as the defining expression.  Otherwise the expression can involve any
+other units that you like (except for composite units like &lsquo;<samp><span class="samp">mfi</span></samp>&rsquo;). 
+You can create a new composite unit with a sum of other units as the
+defining expression.  The next unit operation like <kbd>u c</kbd> or <kbd>u v</kbd>
+will rebuild the internal unit table incorporating your modifications. 
+Note that erroneous definitions (such as two units defined in terms of
+each other) will not be detected until the unit table is next rebuilt;
+<kbd>u v</kbd> is a convenient way to force this to happen.
+
+   <p>Temperature units are treated specially inside the Calculator; it is not
+possible to create user-defined temperature units.
+
+   <p><a name="index-u-p-1990"></a><a name="index-calc_002dpermanent_002dunits-1991"></a><a name="index-Calc-init-file_002c-user_002ddefined-units-1992"></a>The <kbd>u p</kbd> (<code>calc-permanent-units</code>) command stores the user-defined
+units in your Calc init file (the file given by the variable
+<code>calc-settings-file</code>, typically <samp><span class="file">~/.calc.el</span></samp>), so that the
+units will still be available in subsequent Emacs sessions.  If there
+was already a set of user-defined units in your Calc init file, it
+is replaced by the new set.  (See <a href="General-Mode-Commands.html#General-Mode-Commands">General Mode Commands</a>, for a way to
+tell Calc to use a different file for the Calc init file.)
+
+   </body></html>
+

@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Caches - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Troubleshooting-Commands.html#Troubleshooting-Commands" title="Troubleshooting Commands">
+<link rel="prev" href="Recursion-Depth.html#Recursion-Depth" title="Recursion Depth">
+<link rel="next" href="Debugging-Calc.html#Debugging-Calc" title="Debugging Calc">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Caches"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Debugging-Calc.html#Debugging-Calc">Debugging Calc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Recursion-Depth.html#Recursion-Depth">Recursion Depth</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Troubleshooting-Commands.html#Troubleshooting-Commands">Troubleshooting Commands</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.11.3 Caches</h4>
+
+<p class="noindent"><a name="index-Caches-231"></a><a name="index-Flushing-caches-232"></a>Calc saves certain values after they have been computed once.  For
+example, the <kbd>P</kbd> (<code>calc-pi</code>) command initially &ldquo;knows&rdquo; the
+constant &lsquo;<samp><span class="samp">pi</span></samp>&rsquo; to about 20 decimal places; if the current precision
+is greater than this, it will recompute &lsquo;<samp><span class="samp">pi</span></samp>&rsquo; using a series
+approximation.  This value will not need to be recomputed ever again
+unless you raise the precision still further.  Many operations such as
+logarithms and sines make use of similarly cached values such as
+&lsquo;<samp><span class="samp">pi/4</span></samp>&rsquo; and
+<!-- @math{\ln 2}. -->
+&lsquo;<samp><span class="samp">ln(2)</span></samp>&rsquo;. 
+The visible effect of caching is that
+high-precision computations may seem to do extra work the first time. 
+Other things cached include powers of two (for the binary arithmetic
+functions), matrix inverses and determinants, symbolic integrals, and
+data points computed by the graphing commands.
+
+   <p><a name="index-calc_002dflush_002dcaches-233"></a>If you suspect a Calculator cache has become corrupt, you can use the
+<code>calc-flush-caches</code> command to reset all caches to the empty state. 
+(This should only be necessary in the event of bugs in the Calculator.) 
+The <kbd>C-x * 0</kbd> (with the zero key) command also resets caches along
+with all other aspects of the Calculator's state.
+
+   </body></html>
+

@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>rcirc commands - rcirc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="rcirc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reference.html#Reference" title="Reference">
+<link rel="prev" href="Reference.html#Reference" title="Reference">
+<link rel="next" href="Useful-IRC-commands.html#Useful-IRC-commands" title="Useful IRC commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="rcirc-commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Useful-IRC-commands.html#Useful-IRC-commands">Useful IRC commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reference.html#Reference">Reference</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reference.html#Reference">Reference</a>
+<hr>
+</div>
+
+<h3 class="section">2.1 rcirc commands</h3>
+
+<p><a name="index-rcirc-commands-40"></a><a name="index-commands-41"></a>
+<a name="index-C_002dh-m-42"></a>This is a list of commands that you may use in <code>rcirc</code>.  It is not
+complete.  For a complete listing, press <kbd>C-h m</kbd> in an <code>rcirc</code>
+buffer.
+
+   <p>In addition to using regular Emacs key bindings, you can call them by
+typing them into an <code>rcirc</code> buffer.
+
+   <p><a name="index-call-commands-43"></a><a name="index-typing-commands-44"></a><a name="index-commands-45"></a>For instance, instead of using the command <kbd>C-c C-j</kbd> to join a new
+channel, you may type this in an <code>rcirc</code> buffer, and press &lt;RET&gt;:
+
+<pre class="example">     /join #emacs
+</pre>
+   <p><a name="index-g_t_002f-starts-a-command-46"></a><a name="index-messages-starting-with-a-slash-disappear-47"></a><a name="index-disappearing-messages-if-starting-with-a-slash-48"></a><a name="index-slash-hides-message-49"></a>This is why you cannot start a message with a slash.  You will have to
+precede the command with a space, or rewrite your message in order to
+send it to a channel.
+
+   <p><a name="index-multiple-words-as-parameters-50"></a><a name="index-string-delimiters-51"></a><a name="index-quotes-52"></a><a name="index-double_002dquotes-53"></a>Many commands take parameters.  IRC commands usually ignore string
+delimiters.  Neither quote nor double-quote have special meanings in
+IRC.
+
+<pre class="example">     /nick "alex schroeder"
+</pre>
+   <p>This will try to change your nick to <code>"alex</code>.  Usually this will
+fail because the double quote character is not a valid character for
+nicks.
+
+   <p><a name="index-case-insensitive-commands-54"></a>These commands are case insensitive.
+
+   <p><a name="index-new-command-55"></a><a name="index-unknown-command-56"></a><a name="index-command-unknown-57"></a>If a command isn't known by <code>rcirc</code>, it will simply be sent along to the
+server.  There is a list of some useful commands like that in the next
+section.
+
+     <dl>
+<dt><kbd>C-c C-j</kbd><dd><a name="index-C_002dc-C_002dj-58"></a><a name="index-g_t_002fjoin-59"></a><a name="index-join-channels-60"></a><a name="index-other-channels-61"></a><a name="index-rooms_002c-joining-62"></a><a name="index-discussion_002c-joining-63"></a>This joins a channel such as <code>#rcirc</code> or <code>#emacs</code>.  On most
+networks, anybody can create new channels.  If you want to talk with
+some friends, for example, all you have to do is agree on a valid
+channel name and join that channel.  (Also <code>/join #emacs</code>.)
+
+     <br><dt><kbd>C-c C-p</kbd><dd><a name="index-C_002dc-C_002dp-64"></a><a name="index-g_t_002fpart-65"></a><a name="index-part-a-channel-66"></a><a name="index-leave-a-channel-67"></a><a name="index-disconnect-from-a-channel-68"></a><a name="index-stop-talking-on-a-channel-69"></a><a name="index-kill-channel-buffer-70"></a>This leaves the current channel.  You can optionally provide a reason
+for parting.  When you kill a channel buffer, you automatically part the
+corresponding channel.  (Also <code>/part you are too weird!</code>.)
+
+     <br><dt><kbd>C-c C-r</kbd><dd><a name="index-C_002dc-C_002dr-71"></a><a name="index-g_t_002fnick-72"></a><a name="index-change-name-73"></a><a name="index-nick-changing-74"></a><a name="index-rename-yourself-75"></a><a name="index-other-name-76"></a>This changes your nick to some other name.  Your nick must be unique
+across the network.  Most networks don't allow too many nick changes in
+quick succession, and have restrictions on the valid characters in nick
+names.  (Also <code>/nick alex-test</code>)
+
+     <br><dt><kbd>C-c C-w</kbd><dd><a name="index-C_002dc-C_002dw-77"></a><a name="index-g_t_002fwhois-78"></a><a name="index-who-are-these-people-79"></a><a name="index-identifying-people-80"></a><a name="index-channels-other-people-are-on-81"></a><a name="index-what-channels-people-are-on-82"></a>Gives you some basic information about a nick.  This often includes what
+other channels people are on.  (Also <code>/whois fsbot</code>.)
+
+     <br><dt><kbd>C-c C-q</kbd><dd><a name="index-C_002dc-C_002dq-83"></a><a name="index-g_t_002fquery-84"></a><a name="index-starting-a-private-conversation-85"></a><a name="index-one_002dto_002done-conversation-86"></a><a name="index-talk-privately-87"></a><a name="index-private-conversation-88"></a><a name="index-contact-one-person-only-89"></a><a name="index-query-a-person-90"></a>Starts a one-to-one conversation with another person on the same
+network.  A new buffer will be created for this conversation.  It works
+like a channel with only two members.  (Also <code>/query fsbot</code>.)
+
+     <br><dt><kbd>C-c &lt;RET&gt;</kbd><dd><a name="index-C_002dc-RET-91"></a><a name="index-g_t_002fmsg-92"></a><a name="index-single-message-93"></a><a name="index-message-sending-94"></a>This sends a single message to a nick.  Like with <kbd>C-c C-q</kbd>, a new
+buffer is created, where the response from the other party will show
+up.  (Also <code>/msg nickserv identify secret</code>.)
+
+     <br><dt><kbd>C-c C-x</kbd><dd><a name="index-C_002dc-C_002dx-95"></a><a name="index-g_t_002fquit-96"></a><a name="index-quit-97"></a><a name="index-disconnect-98"></a><a name="index-kill-connection-99"></a><a name="index-connection-end-100"></a><a name="index-part-all-channels-101"></a><a name="index-end-connection-102"></a><a name="index-server-buffer-killing-103"></a><a name="index-reason-for-quitting-104"></a>This disconnects from the server and parts all channels.  You can
+optionally provide a reason for quitting.  When you kill the server
+buffer, you automatically quit the server and part all channels.  (Also
+<code>/quit ZZZzzz...</code>.) 
+</dl>
+
+   </body></html>
+

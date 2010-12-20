@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Sieve Commands - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Misc-Group-Stuff.html#Misc-Group-Stuff" title="Misc Group Stuff">
+<link rel="prev" href="File-Commands.html#File-Commands" title="File Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sieve-Commands"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Commands.html#File-Commands">File Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Misc-Group-Stuff.html#Misc-Group-Stuff">Misc Group Stuff</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.19.5 Sieve Commands</h4>
+
+<p><a name="index-group-sieve-commands-633"></a>
+Sieve is a server-side mail filtering language.  In Gnus you can use
+the <code>sieve</code> group parameter (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) to specify
+sieve rules that should apply to each group.  Gnus provides two
+commands to translate all these group parameters into a proper Sieve
+script that can be transfered to the server somehow.
+
+   <p><a name="index-gnus_002dsieve_002dfile-634"></a><a name="index-gnus_002dsieve_002dregion_002dstart-635"></a><a name="index-gnus_002dsieve_002dregion_002dend-636"></a>The generated Sieve script is placed in <code>gnus-sieve-file</code> (by
+default <samp><span class="file">~/.sieve</span></samp>).  The Sieve code that Gnus generate is placed
+between two delimiters, <code>gnus-sieve-region-start</code> and
+<code>gnus-sieve-region-end</code>, so you may write additional Sieve code
+outside these delimiters that will not be removed the next time you
+regenerate the Sieve script.
+
+   <p><a name="index-gnus_002dsieve_002dcrosspost-637"></a>The variable <code>gnus-sieve-crosspost</code> controls how the Sieve script
+is generated.  If it is non-<code>nil</code> (the default) articles is
+placed in all groups that have matching rules, otherwise the article
+is only placed in the group with the first matching rule.  For
+example, the group parameter &lsquo;<samp><span class="samp">(sieve address "sender"
+"owner-ding@hpc.uh.edu")</span></samp>&rsquo; will generate the following piece of Sieve
+code if <code>gnus-sieve-crosspost</code> is <code>nil</code>.  (When
+<code>gnus-sieve-crosspost</code> is non-<code>nil</code>, it looks the same
+except that the line containing the call to <code>stop</code> is removed.)
+
+<pre class="example">     if address "sender" "owner-ding@hpc.uh.edu" {
+             fileinto "INBOX.ding";
+             stop;
+     }
+</pre>
+   <p>See <a href="../sieve/index.html#Top">Emacs Sieve</a>.
+
+     <dl>
+<dt><kbd>D g</kbd><dd><a name="index-D-g-_0028Group_0029-638"></a><a name="index-gnus_002dsieve_002dgenerate-639"></a><a name="index-gnus_002dsieve_002dfile-640"></a><a name="index-generating-sieve-script-641"></a>Regenerate a Sieve script from the <code>sieve</code> group parameters and
+put you into the <code>gnus-sieve-file</code> without saving it.
+
+     <br><dt><kbd>D u</kbd><dd><a name="index-D-u-_0028Group_0029-642"></a><a name="index-gnus_002dsieve_002dupdate-643"></a><a name="index-gnus_002dsieve_002dfile-644"></a><a name="index-updating-sieve-script-645"></a>Regenerates the Gnus managed part of <code>gnus-sieve-file</code> using the
+<code>sieve</code> group parameters, save the file and upload it to the
+server using the <code>sieveshell</code> program.
+
+   </dl>
+
+   </body></html>
+

@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+<title>Filtering Incoming Mail - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Package.html#Spam-Package" title="Spam Package">
+<link rel="prev" href="Spam-Package-Introduction.html#Spam-Package-Introduction" title="Spam Package Introduction">
+<link rel="next" href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups" title="Detecting Spam in Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Filtering-Incoming-Mail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups">Detecting Spam in Groups</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Spam-Package-Introduction.html#Spam-Package-Introduction">Spam Package Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Package.html#Spam-Package">Spam Package</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.20.2 Filtering Incoming Mail</h4>
+
+<p><a name="index-spam-filtering-2886"></a><a name="index-spam-filtering-incoming-mail-2887"></a><a name="index-spam-2888"></a>
+To use the Spam package to filter incoming mail, you must first set up
+fancy mail splitting.  See <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>.  The Spam package
+defines a special splitting function that you can add to your fancy
+split variable (either <code>nnmail-split-fancy</code> or
+<code>nnimap-split-fancy</code>, depending on your mail back end):
+
+<pre class="example">     (: spam-split)
+</pre>
+   <p><a name="index-spam_002dsplit_002dgroup-2889"></a>The <code>spam-split</code> function scans incoming mail according to your
+chosen spam back end(s), and sends messages identified as spam to a
+spam group.  By default, the spam group is a group named &lsquo;<samp><span class="samp">spam</span></samp>&rsquo;,
+but you can change this by customizing <code>spam-split-group</code>.  Make
+sure the contents of <code>spam-split-group</code> are an unqualified group
+name.  For instance, in an <code>nnimap</code> server &lsquo;<samp><span class="samp">your-server</span></samp>&rsquo;,
+the value &lsquo;<samp><span class="samp">spam</span></samp>&rsquo; means &lsquo;<samp><span class="samp">nnimap+your-server:spam</span></samp>&rsquo;.  The value
+&lsquo;<samp><span class="samp">nnimap+server:spam</span></samp>&rsquo; is therefore wrong&mdash;it gives the group
+&lsquo;<samp><span class="samp">nnimap+your-server:nnimap+server:spam</span></samp>&rsquo;.
+
+   <p><code>spam-split</code> does not modify the contents of messages in any way.
+
+   <p><a name="index-nnimap_002dsplit_002ddownload_002dbody-2890"></a>Note for IMAP users: if you use the <code>spam-check-bogofilter</code>,
+<code>spam-check-ifile</code>, and <code>spam-check-stat</code> spam back ends,
+you should also set the variable <code>nnimap-split-download-body</code>
+to <code>t</code>.  These spam back ends are most useful when they can
+&ldquo;scan&rdquo; the full message body.  By default, the nnimap back end only
+retrieves the message headers; <code>nnimap-split-download-body</code> tells
+it to retrieve the message bodies as well.  We don't set this by
+default because it will slow <acronym>IMAP</acronym> down, and that is not an
+appropriate decision to make on behalf of the user.  See <a href="Splitting-in-IMAP.html#Splitting-in-IMAP">Splitting in IMAP</a>.
+
+   <p>You have to specify one or more spam back ends for <code>spam-split</code>
+to use, by setting the <code>spam-use-*</code> variables.  See <a href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>.  Normally, <code>spam-split</code> simply uses all the spam back ends
+you enabled in this way.  However, you can tell <code>spam-split</code> to
+use only some of them.  Why this is useful?  Suppose you are using the
+<code>spam-use-regex-headers</code> and <code>spam-use-blackholes</code> spam back
+ends, and the following split rule:
+
+<pre class="example">      nnimap-split-fancy '(|
+                           (any "ding" "ding")
+                           (: spam-split)
+                           ;; <span class="roman">default mailbox</span>
+                           "mail")
+</pre>
+   <p class="noindent">The problem is that you want all ding messages to make it to the ding
+folder.  But that will let obvious spam (for example, spam detected by
+SpamAssassin, and <code>spam-use-regex-headers</code>) through, when it's
+sent to the ding list.  On the other hand, some messages to the ding
+list are from a mail server in the blackhole list, so the invocation
+of <code>spam-split</code> can't be before the ding rule.
+
+   <p>The solution is to let SpamAssassin headers supersede ding rules, and
+perform the other <code>spam-split</code> rules (including a second
+invocation of the regex-headers check) after the ding rule.  This is
+done by passing a parameter to <code>spam-split</code>:
+
+<pre class="example">     nnimap-split-fancy
+           '(|
+             ;; <span class="roman">spam detected by </span><code>spam-use-regex-headers</code><span class="roman"> goes to &lsquo;</span><samp><span class="samp">regex-spam</span></samp><span class="roman">&rsquo;</span>
+             (: spam-split "regex-spam" 'spam-use-regex-headers)
+             (any "ding" "ding")
+             ;; <span class="roman">all other spam detected by spam-split goes to </span><code>spam-split-group</code>
+             (: spam-split)
+             ;; <span class="roman">default mailbox</span>
+             "mail")
+</pre>
+   <p class="noindent">This lets you invoke specific <code>spam-split</code> checks depending on
+your particular needs, and target the results of those checks to a
+particular spam group.  You don't have to throw all mail into all the
+spam tests.  Another reason why this is nice is that messages to
+mailing lists you have rules for don't have to have resource-intensive
+blackhole checks performed on them.  You could also specify different
+spam checks for your nnmail split vs. your nnimap split.  Go crazy.
+
+   <p>You should set the <code>spam-use-*</code> variables for whatever spam back
+ends you intend to use.  The reason is that when loading
+<samp><span class="file">spam.el</span></samp>, some conditional loading is done depending on what
+<code>spam-use-xyz</code> variables you have set.  See <a href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>.
+
+<!-- @emph{TODO: spam.el needs to provide a uniform way of training all the -->
+<!-- statistical databases.  Some have that functionality built-in, others -->
+<!-- don't.} -->
+   </body></html>
+

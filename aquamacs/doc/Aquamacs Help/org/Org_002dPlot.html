@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Org-Plot - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tables.html#Tables" title="Tables">
+<link rel="prev" href="The-spreadsheet.html#The-spreadsheet" title="The spreadsheet">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Org-Plot"></a>
+<a name="Org_002dPlot"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tables.html#Tables">Tables</a>
+<hr>
+</div>
+
+<h3 class="section">3.6 Org-Plot</h3>
+
+<p><a name="index-graph_002c-in-tables-282"></a><a name="index-plot-tables-using-gnuplot-283"></a><a name="index-g_t_0023_002bPLOT-284"></a>
+Org-Plot can produce 2D and 3D graphs of information stored in org tables
+using <samp><span class="file">Gnuplot</span></samp> <a href="http://www.gnuplot.info/">http://www.gnuplot.info/</a> and <samp><span class="file">gnuplot-mode</span></samp>
+<a href="http://cars9.uchicago.edu/~ravel/software/gnuplot-mode.html">http://cars9.uchicago.edu/~ravel/software/gnuplot-mode.html</a>.  To see
+this in action, ensure that you have both Gnuplot and Gnuplot mode installed
+on your system, then call <code>org-plot/gnuplot</code> on the following table.
+
+<pre class="example">     #+PLOT: title:"Citas" ind:1 deps:(3) type:2d with:histograms set:"yrange [0:]"
+     | Sede      | Max cites | H-index |
+     |-----------+-----------+---------|
+     | Chile     |    257.72 |   21.39 |
+     | Leeds     |    165.77 |   19.68 |
+     | Sao Paolo |     71.00 |   11.50 |
+     | Stockholm |    134.19 |   14.33 |
+     | Morelia   |    257.56 |   17.67 |
+</pre>
+   <p>Notice that Org Plot is smart enough to apply the table's headers as labels. 
+Further control over the labels, type, content, and appearance of plots can
+be exercised through the <code>#+PLOT:</code> lines preceding a table.  See below
+for a complete list of Org-plot options.  For more information and examples
+see the Org-plot tutorial at
+<a href="http://orgmode.org/worg/org-tutorials/org-plot.php">http://orgmode.org/worg/org-tutorials/org-plot.php</a>.
+
+<h5 class="subsubheading">Plot Options</h5>
+
+     <dl>
+<dt><code>set</code><dd>Specify any <samp><span class="command">gnuplot</span></samp> option to be set when graphing.
+
+     <br><dt><code>title</code><dd>Specify the title of the plot.
+
+     <br><dt><code>ind</code><dd>Specify which column of the table to use as the <code>x</code> axis.
+
+     <br><dt><code>deps</code><dd>Specify the columns to graph as a Lisp style list, surrounded by parentheses
+and separated by spaces for example <code>dep:(3 4)</code> to graph the third and
+fourth columns (defaults to graphing all other columns aside from the <code>ind</code>
+column).
+
+     <br><dt><code>type</code><dd>Specify whether the plot will be <code>2d</code>, <code>3d</code>, or <code>grid</code>.
+
+     <br><dt><code>with</code><dd>Specify a <code>with</code> option to be inserted for every col being plotted
+(e.g. <code>lines</code>, <code>points</code>, <code>boxes</code>, <code>impulses</code>, etc...). 
+Defaults to <code>lines</code>.
+
+     <br><dt><code>file</code><dd>If you want to plot to a file, specify <code>"</code><var>path/to/desired/output-file</var><code>"</code>.
+
+     <br><dt><code>labels</code><dd>List of labels to be used for the deps (defaults to the column headers if
+they exist).
+
+     <br><dt><code>line</code><dd>Specify an entire line to be inserted in the Gnuplot script.
+
+     <br><dt><code>map</code><dd>When plotting <code>3d</code> or <code>grid</code> types, set this to <code>t</code> to graph a
+flat mapping rather than a <code>3d</code> slope.
+
+     <br><dt><code>timefmt</code><dd>Specify format of Org-mode timestamps as they will be parsed by Gnuplot. 
+Defaults to &lsquo;<samp><span class="samp">%Y-%m-%d-%H:%M:%S</span></samp>&rsquo;.
+
+     <br><dt><code>script</code><dd>If you want total control, you can specify a script file (place the file name
+between double-quotes) which will be used to plot.  Before plotting, every
+instance of <code>$datafile</code> in the specified script will be replaced with
+the path to the generated data file.  Note: even if you set this option, you
+may still want to specify the plot type, as that can impact the content of
+the data file. 
+</dl>
+
+   </body></html>
+

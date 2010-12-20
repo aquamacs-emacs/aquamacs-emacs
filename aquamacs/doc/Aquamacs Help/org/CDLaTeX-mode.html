@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>CDLaTeX mode - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Embedded-LaTeX.html#Embedded-LaTeX" title="Embedded LaTeX">
+<link rel="prev" href="Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments" title="Previewing LaTeX fragments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="CDLaTeX-mode"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments">Previewing LaTeX fragments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Embedded-LaTeX.html#Embedded-LaTeX">Embedded LaTeX</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.6.5 Using CDLaTeX to enter math</h4>
+
+<p><a name="index-CDLa_0040TeX_007b_007d-1016"></a>
+CDLaTeX mode is a minor mode that is normally used in combination with a
+major LaTeX mode like AUCTeX in order to speed-up insertion of
+environments and math templates.  Inside Org mode, you can make use of
+some of the features of CDLaTeX mode.  You need to install
+<samp><span class="file">cdlatex.el</span></samp> and <samp><span class="file">texmathp.el</span></samp> (the latter comes also with
+AUCTeX) from <a href="http://www.astro.uva.nl/~dominik/Tools/cdlatex">http://www.astro.uva.nl/~dominik/Tools/cdlatex</a>. 
+Don't use CDLaTeX mode itself under Org mode, but use the light
+version <code>org-cdlatex-mode</code> that comes as part of Org mode.  Turn it
+on for the current buffer with <code>M-x org-cdlatex-mode</code>, or for all
+Org files with
+
+<pre class="lisp">     (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+</pre>
+   <p>When this mode is enabled, the following features are present (for more
+details see the documentation of CDLaTeX mode):
+     
+<a name="index-C_002dc-_0040_007b-1017"></a>
+<ul><li>Environment templates can be inserted with <kbd>C-c {</kbd>. 
+<li><a name="index-g_t_0040key_007bTAB_007d-1018"></a>The &lt;TAB&gt; key will do template expansion if the cursor is inside a
+LaTeX fragment<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  For example, &lt;TAB&gt; will
+expand <code>fr</code> to <code>\frac{}{}</code> and position the cursor
+correctly inside the first brace.  Another &lt;TAB&gt; will get you into
+the second brace.  Even outside fragments, &lt;TAB&gt; will expand
+environment abbreviations at the beginning of a line.  For example, if
+you write &lsquo;<samp><span class="samp">equ</span></samp>&rsquo; at the beginning of a line and press &lt;TAB&gt;,
+this abbreviation will be expanded to an <code>equation</code> environment. 
+To get a list of all abbreviations, type <kbd>M-x cdlatex-command-help</kbd>. 
+<li><a name="index-g_t_005f-1019"></a><a name="index-g_t_005e-1020"></a><a name="index-cdlatex_002dsimplify_002dsub_002dsuper_002dscripts-1021"></a>Pressing <kbd>_</kbd> and <kbd>^</kbd> inside a LaTeX fragment will insert these
+characters together with a pair of braces.  If you use &lt;TAB&gt; to move
+out of the braces, and if the braces surround only a single character or
+macro, they are removed again (depending on the variable
+<code>cdlatex-simplify-sub-super-scripts</code>). 
+<li><a name="index-g_t_0060-1022"></a>Pressing the backquote <kbd>`</kbd> followed by a character inserts math
+macros, also outside LaTeX fragments.  If you wait more than 1.5 seconds
+after the backquote, a help window will pop up. 
+<li><a name="index-g_t_0027-1023"></a>Pressing the single-quote <kbd>'</kbd> followed by another character modifies
+the symbol before point with an accent or a font.  If you wait more than
+1.5 seconds after the backquote, a help window will pop up.  Character
+modification will work only inside LaTeX fragments, outside the quote
+is normal. 
+</ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Org mode has a method to test if the cursor is
+inside such a fragment, see the documentation of the function
+<code>org-inside-LaTeX-fragment-p</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

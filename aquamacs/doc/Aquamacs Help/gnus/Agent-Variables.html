@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+<title>Agent Variables - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gnus-Unplugged.html#Gnus-Unplugged" title="Gnus Unplugged">
+<link rel="prev" href="Outgoing-Messages.html#Outgoing-Messages" title="Outgoing Messages">
+<link rel="next" href="Example-Setup.html#Example-Setup" title="Example Setup">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Agent-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Example-Setup.html#Example-Setup">Example Setup</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Outgoing-Messages.html#Outgoing-Messages">Outgoing Messages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Unplugged.html#Gnus-Unplugged">Gnus Unplugged</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.9.11 Agent Variables</h4>
+
+     <dl>
+<dt><code>gnus-agent</code><dd><a name="index-gnus_002dagent-2573"></a>Is the agent enabled?  The default is <code>t</code>.  When first enabled,
+the agent will use <code>gnus-agent-auto-agentize-methods</code> to
+automatically mark some back ends as agentized.  You may change which
+back ends are agentized using the agent commands in the server buffer.
+
+     <p>To enter the server buffer, use the <kbd>^</kbd>
+(<code>gnus-group-enter-server-mode</code>) command in the group buffer.
+
+     <br><dt><code>gnus-agent-directory</code><dd><a name="index-gnus_002dagent_002ddirectory-2574"></a>Where the Gnus Agent will store its files.  The default is
+<samp><span class="file">~/News/agent/</span></samp>.
+
+     <br><dt><code>gnus-agent-handle-level</code><dd><a name="index-gnus_002dagent_002dhandle_002dlevel-2575"></a>Groups on levels (see <a href="Group-Levels.html#Group-Levels">Group Levels</a>) higher than this variable will
+be ignored by the Agent.  The default is <code>gnus-level-subscribed</code>,
+which means that only subscribed group will be considered by the Agent
+by default.
+
+     <br><dt><code>gnus-agent-plugged-hook</code><dd><a name="index-gnus_002dagent_002dplugged_002dhook-2576"></a>Hook run when connecting to the network.
+
+     <br><dt><code>gnus-agent-unplugged-hook</code><dd><a name="index-gnus_002dagent_002dunplugged_002dhook-2577"></a>Hook run when disconnecting from the network.
+
+     <br><dt><code>gnus-agent-fetched-hook</code><dd><a name="index-gnus_002dagent_002dfetched_002dhook-2578"></a>Hook run when finished fetching articles.
+
+     <br><dt><code>gnus-agent-cache</code><dd><a name="index-gnus_002dagent_002dcache-2579"></a>Variable to control whether use the locally stored <acronym>NOV</acronym> and
+articles when plugged, e.g. essentially using the Agent as a cache. 
+The default is non-<code>nil</code>, which means to use the Agent as a cache.
+
+     <br><dt><code>gnus-agent-go-online</code><dd><a name="index-gnus_002dagent_002dgo_002donline-2580"></a>If <code>gnus-agent-go-online</code> is <code>nil</code>, the Agent will never
+automatically switch offline servers into online status.  If it is
+<code>ask</code>, the default, the Agent will ask if you wish to switch
+offline servers into online status when you re-connect.  If it has any
+other value, all offline servers will be automatically switched into
+online status.
+
+     <br><dt><code>gnus-agent-mark-unread-after-downloaded</code><dd><a name="index-gnus_002dagent_002dmark_002dunread_002dafter_002ddownloaded-2581"></a>If <code>gnus-agent-mark-unread-after-downloaded</code> is non-<code>nil</code>,
+mark articles as unread after downloading.  This is usually a safe
+thing to do as the newly downloaded article has obviously not been
+read.  The default is <code>t</code>.
+
+     <br><dt><code>gnus-agent-synchronize-flags</code><dd><a name="index-gnus_002dagent_002dsynchronize_002dflags-2582"></a>If <code>gnus-agent-synchronize-flags</code> is <code>nil</code>, the Agent will
+never automatically synchronize flags.  If it is <code>ask</code>, which is
+the default, the Agent will check if you made any changes and if so
+ask if you wish to synchronize these when you re-connect.  If it has
+any other value, all flags will be synchronized automatically.
+
+     <br><dt><code>gnus-agent-consider-all-articles</code><dd><a name="index-gnus_002dagent_002dconsider_002dall_002darticles-2583"></a>If <code>gnus-agent-consider-all-articles</code> is non-<code>nil</code>, the
+agent will let the agent predicate decide whether articles need to be
+downloaded or not, for all articles.  When <code>nil</code>, the default,
+the agent will only let the predicate decide whether unread articles
+are downloaded or not.  If you enable this, you may also want to look
+into the agent expiry settings (see <a href="Category-Variables.html#Category-Variables">Category Variables</a>), so that
+the agent doesn't download articles which the agent will later expire,
+over and over again.
+
+     <br><dt><code>gnus-agent-max-fetch-size</code><dd><a name="index-gnus_002dagent_002dmax_002dfetch_002dsize-2584"></a>The agent fetches articles into a temporary buffer prior to parsing
+them into individual files.  To avoid exceeding the max. buffer size,
+the agent alternates between fetching and parsing until all articles
+have been fetched.  <code>gnus-agent-max-fetch-size</code> provides a size
+limit to control how often the cycling occurs.  A large value improves
+performance.  A small value minimizes the time lost should the
+connection be lost while fetching (You may need to run
+<code>gnus-agent-regenerate-group</code> to update the group's state. 
+However, all articles parsed prior to loosing the connection will be
+available while unplugged).  The default is 10M so it is unusual to
+see any cycling.
+
+     <br><dt><code>gnus-server-unopen-status</code><dd><a name="index-gnus_002dserver_002dunopen_002dstatus-2585"></a>Perhaps not an Agent variable, but closely related to the Agent, this
+variable says what will happen if Gnus cannot open a server.  If the
+Agent is enabled, the default, <code>nil</code>, makes Gnus ask the user
+whether to deny the server or whether to unplug the agent.  If the
+Agent is disabled, Gnus always simply deny the server.  Other choices
+for this variable include <code>denied</code> and <code>offline</code> the latter
+is only valid if the Agent is used.
+
+     <br><dt><code>gnus-auto-goto-ignores</code><dd><a name="index-gnus_002dauto_002dgoto_002dignores-2586"></a>Another variable that isn't an Agent variable, yet so closely related
+that most will look for it here, this variable tells the summary
+buffer how to maneuver around undownloaded (only headers stored in the
+agent) and unfetched (neither article nor headers stored) articles.
+
+     <p>The valid values are <code>nil</code> (maneuver to any article),
+<code>undownloaded</code> (maneuvering while unplugged ignores articles that
+have not been fetched), <code>always-undownloaded</code> (maneuvering always
+ignores articles that have not been fetched), <code>unfetched</code>
+(maneuvering ignores articles whose headers have not been fetched).
+
+     <br><dt><code>gnus-agent-queue-mail</code><dd><a name="index-gnus_002dagent_002dqueue_002dmail-2587"></a>When <code>gnus-agent-queue-mail</code> is <code>always</code>, Gnus will always
+queue mail rather than sending it straight away.  When <code>t</code>, Gnus
+will queue mail when unplugged only.  When <code>nil</code>, never queue
+mail.  The default is <code>t</code>.
+
+     <br><dt><code>gnus-agent-prompt-send-queue</code><dd><a name="index-gnus_002dagent_002dprompt_002dsend_002dqueue-2588"></a>When <code>gnus-agent-prompt-send-queue</code> is non-<code>nil</code> Gnus will
+prompt you to confirm that you really wish to proceed if you hit
+<kbd>J S</kbd> while unplugged.  The default is <code>nil</code>.
+
+     <br><dt><code>gnus-agent-auto-agentize-methods</code><dd><a name="index-gnus_002dagent_002dauto_002dagentize_002dmethods-2589"></a>If you have never used the Agent before (or more technically, if
+<samp><span class="file">~/News/agent/lib/servers</span></samp> does not exist), Gnus will
+automatically agentize a few servers for you.  This variable control
+which back ends should be auto-agentized.  It is typically only useful
+to agentize remote back ends.  The auto-agentizing has the same effect
+as running <kbd>J a</kbd> on the servers (see <a href="Server-Agent-Commands.html#Server-Agent-Commands">Server Agent Commands</a>). 
+If the file exist, you must manage the servers manually by adding or
+removing them, this variable is only applicable the first time you
+start Gnus.  The default is &lsquo;<samp><span class="samp">(nntp nnimap)</span></samp>&rsquo;.
+
+</dl>
+
+   </body></html>
+

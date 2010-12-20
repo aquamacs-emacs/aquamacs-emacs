@@ -1,0 +1,157 @@
+<html lang="en">
+<head>
+<title>Ex Command Reference - VIP</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="VIP">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Ex-Commands.html#Ex-Commands" title="Ex Commands">
+<link rel="prev" href="Ex-Commands.html#Ex-Commands" title="Ex Commands">
+<link rel="next" href="Customization.html#Customization" title="Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Ex-Command-Reference"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customization.html#Customization">Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Ex-Commands.html#Ex-Commands">Ex Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Ex-Commands.html#Ex-Commands">Ex Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 Ex Command Reference</h3>
+
+<p>In this section we briefly explain all the Ex commands supported by VIP. 
+Most Ex commands expect <var>address</var> as their argument, and they use
+default addresses if they are not explicitly given.  In the following, such
+default addresses will be shown in parentheses.
+
+   <p>Most command names can and preferably be given in abbreviated forms.  In
+the following, optional parts of command names will be enclosed in
+brackets.  For example, &lsquo;<samp><span class="samp">co[py]</span></samp>&rsquo; will mean that copy command can be
+give as &lsquo;<samp><span class="samp">co</span></samp>&rsquo; or &lsquo;<samp><span class="samp">cop</span></samp>&rsquo; or &lsquo;<samp><span class="samp">copy</span></samp>&rsquo;.
+
+   <p>If <var>command</var> is empty, point will move to the beginning of the line
+specified by the <var>address</var>.  If <var>address</var> is also empty, point will
+move to the beginning of the current line.
+
+   <p><a name="index-flag-262"></a>
+Some commands accept <dfn>flags</dfn> which are one of <kbd>p</kbd>, <kbd>l</kbd> and
+<kbd>#</kbd>.  If <var>flags</var> are given, the text affected by the commands will
+be displayed on a temporary window, and you will be asked to hit return to
+continue.  In this way, you can see the text affected by the commands
+before the commands will be executed.  If you hit <kbd>C-g</kbd> instead of
+&lt;RET&gt; then the commands will be aborted.  Note that the meaning of
+<var>flags</var> is different in VIP from that in Vi/Ex.
+
+     <dl>
+<dt><kbd>(.,.) co[py] </kbd><var>addr</var> <var>flags</var><dt><kbd>(.,.) t </kbd><var>addr</var> <var>flags</var><dd>Place a copy of specified lines after <var>addr</var>.  If <var>addr</var> is
+<kbd>0</kbd>, it will be placed before the first line. 
+<br><dt><kbd>(.,.) d[elete] </kbd><var>register</var> <var>count</var> <var>flags</var><dd>Delete specified lines.  Text will be saved in a named <var>register</var> if a
+lower-case letter is given, and appended to a register if a capital letter is
+given. 
+<br><dt><kbd>e[dit] ! +</kbd><var>addr</var> <var>file</var><dt><kbd>e[x] ! +</kbd><var>addr</var> <var>file</var><dt><kbd>vi[sual] ! +</kbd><var>addr</var> <var>file</var><dd>Edit a new file <var>file</var> in the current window.  The command will abort
+if current buffer is modified, which you can override by giving <kbd>!</kbd>. 
+If <kbd>+</kbd><var>addr</var> is given, <var>addr</var> becomes the current line. 
+<br><dt><kbd>file</kbd><dd>Give information about the current file. 
+<br><dt><kbd>(1,$) g[lobal] ! /</kbd><var>pat</var><kbd>/ </kbd><var>cmds</var><dt><kbd>(1,$) v /</kbd><var>pat</var><kbd>/ </kbd><var>cmds</var><dd>Among specified lines first mark each line which matches the regular
+expression <var>pat</var>, and then execute <var>cmds</var> on each marked line. 
+If <kbd>!</kbd> is given, <var>cmds</var> will be executed on each line not matching
+<var>pat</var>.  <kbd>v</kbd> is same as <kbd>g!</kbd>. 
+<br><dt><kbd>(.,.+1) j[oin] ! </kbd><var>count</var> <var>flags</var><dd>Join specified lines into a line.  Without <kbd>!</kbd>, a space character will
+be inserted at each junction. 
+<br><dt><kbd>(.) k </kbd><var>ch</var><dt><kbd>(.) mar[k] </kbd><var>ch</var><dd>Mark specified line by a lower-case character <var>ch</var>.  Then the
+addressing form <kbd>'</kbd><var>ch</var> will refer to this line.  No white space is
+required between <kbd>k</kbd> and <var>ch</var>.  A white space is necessary between
+<kbd>mark</kbd> and <var>ch</var>, however. 
+<br><dt><kbd>map </kbd><var>ch</var> <var>rhs</var><dd>Define a macro for vi mode.  After this command, the character <var>ch</var>
+will be expanded to <var>rhs</var> in vi mode. 
+<br><dt><kbd>(.,.) m[ove] </kbd><var>addr</var><dd>Move specified lines after <var>addr</var>. 
+<br><dt><kbd>(.) pu[t] </kbd><var>register</var><dd>Put back previously deleted or yanked text.  If <var>register</var> is given,
+the text saved in the register will be put back; otherwise, last deleted or
+yanked text will be put back. 
+<br><dt><kbd>q[uit] !</kbd><dd>Quit from Emacs.  If modified buffers with associated files exist, you will
+be asked whether you wish to save each of them.  At this point, you may
+choose not to quit, by hitting <kbd>C-g</kbd>.  If <kbd>!</kbd> is given, exit from
+Emacs without saving modified buffers. 
+<br><dt><kbd>(.) r[ead] </kbd><var>file</var><dd>Read in the content of the file <var>file</var> after the specified line. 
+<br><dt><kbd>(.) r[ead] ! </kbd><var>command</var><dd>Read in the output of the shell command <var>command</var> after the specified
+line. 
+<br><dt><kbd>se[t]</kbd><dd>Set a variable's value.  See <a href="Customizing-Constants.html#Customizing-Constants">Customizing Constants</a>, for the list of variables
+you can set. 
+<br><dt><kbd>sh[ell]</kbd><dd>Run a subshell in a window. 
+<br><dt><kbd>(.,.) s[ubstitute] /</kbd><var>pat</var><kbd>/</kbd><var>repl</var><kbd>/ </kbd><var>options</var> <var>count</var> <var>flags</var><dt><kbd>(.,.) &amp; </kbd><var>options</var> <var>count</var> <var>flags</var><dd>On each specified line, the first occurrence of string matching regular
+expression <var>pat</var> is replaced by replacement pattern <var>repl</var>.  Option
+characters are <kbd>g</kbd> and <kbd>c</kbd>.  If global option character <kbd>g</kbd>
+appears as part of <var>options</var>, all occurrences are substituted.  If
+confirm option character <kbd>c</kbd> appears, you will be asked to give
+confirmation before each substitution.  If <kbd>/</kbd><var>pat</var><kbd>/</kbd><var>repl</var><kbd>/</kbd> is
+missing, the last substitution is repeated. 
+<br><dt><kbd>st[op]</kbd><dd>Suspend Emacs. 
+<br><dt><kbd>ta[g] </kbd><var>tag</var><dd><a name="index-tag-263"></a><a name="index-selected-tags-table-264"></a>Find first definition of <var>tag</var>.  If no <var>tag</var> is given, previously
+given <var>tag</var> is used and next alternate definition is find.  By default,
+the file <samp><span class="file">TAGS</span></samp> in the current directory becomes the <dfn>selected tags
+table</dfn>.  You can select another tags table by <kbd>set</kbd> command. 
+See <a href="Customizing-Constants.html#Customizing-Constants">Customizing Constants</a>, for details. 
+<br><dt><kbd>und[o]</kbd><dd>Undo the last change. 
+<br><dt><kbd>unm[ap] </kbd><var>ch</var><dd>The macro expansion associated with <var>ch</var> is removed. 
+<br><dt><kbd>ve[rsion]</kbd><dd>Tell the version number of VIP. 
+<br><dt><kbd>(1,$) w[rite] ! </kbd><var>file</var><dd>Write out specified lines into file <var>file</var>.  If no <var>file</var> is given,
+text will be written to the file associated to the current buffer.  Unless
+<kbd>!</kbd> is given, if <var>file</var> is different from the file associated to
+the current buffer and if the file <var>file</var> exists, the command will not
+be executed.  Unlike Ex, <var>file</var> becomes the file associated to the
+current buffer. 
+<br><dt><kbd>(1,$) w[rite]&gt;&gt; </kbd><var>file</var><dd>Write out specified lines at the end of file <var>file</var>.  <var>file</var>
+becomes the file associated to the current buffer. 
+<br><dt><kbd>(1,$) wq ! </kbd><var>file</var><dd>Same as <kbd>write</kbd> and then <kbd>quit</kbd>.  If <kbd>!</kbd> is given, same as
+<kbd>write !</kbd> then <kbd>quit</kbd>. 
+<br><dt><kbd>(.,.) y[ank] </kbd><var>register</var> <var>count</var><dd>Save specified lines into register <var>register</var>.  If no register is
+specified, text will be saved in an anonymous register. 
+<br><dt><var>addr</var><kbd> ! </kbd><var>command</var><dd>Execute shell command <var>command</var>.  The output will be shown in a new
+window.  If <var>addr</var> is given, specified lines will be used as standard
+input to <var>command</var>. 
+<br><dt><kbd>($) =</kbd><dd>Print the line number of the addressed line. 
+<br><dt><kbd>(.,.) &gt; </kbd><var>count</var> <var>flags</var><dd>Shift specified lines to the right.  The variable <code>vip-shift-width</code>
+(default value is 8) determines the amount of shift. 
+<br><dt><kbd>(.,.) &lt; </kbd><var>count</var> <var>flags</var><dd>Shift specified lines to the left.  The variable <code>vip-shift-width</code>
+(default value is 8) determines the amount of shift. 
+<br><dt><kbd>(.,.) ~ </kbd><var>options</var> <var>count</var> <var>flags</var><dd>Repeat the previous <kbd>substitute</kbd> command using previous search pattern
+as <var>pat</var> for matching. 
+</dl>
+
+   <p>The following Ex commands are available in Vi, but not implemented in VIP.
+<pre class="example">     <kbd>abbreviate</kbd>, <kbd>list</kbd>, <kbd>next</kbd>, <kbd>print</kbd>, <kbd>preserve</kbd>, <kbd>recover</kbd>, <kbd>rewind</kbd>, <kbd>source</kbd>,
+     <kbd>unabbreviate</kbd>, <kbd>xit</kbd>, <kbd>z</kbd>
+</pre>
+   </body></html>
+

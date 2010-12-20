@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Emulation - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Recursive-Edit.html#Recursive-Edit" title="Recursive Edit">
+<link rel="next" href="Hyperlinking.html#Hyperlinking" title="Hyperlinking">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Emulation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hyperlinking.html#Hyperlinking">Hyperlinking</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Recursive-Edit.html#Recursive-Edit">Recursive Edit</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">53 Emulation</h2>
+
+<p><a name="index-emulating-other-editors-3822"></a><a name="index-other-editors-3823"></a><a name="index-EDT-3824"></a><a name="index-vi-3825"></a><a name="index-PC-key-bindings-3826"></a><a name="index-scrolling-all-windows-3827"></a><a name="index-PC-selection-3828"></a><a name="index-Motif-key-bindings-3829"></a><a name="index-Macintosh-key-bindings-3830"></a><a name="index-WordStar-3831"></a>
+  GNU Emacs can be programmed to emulate (more or less) most other
+editors.  Standard facilities can emulate these:
+
+     <dl>
+<dt>CRiSP/Brief (PC editor)<dd><a name="index-crisp_002dmode-3832"></a><a name="index-crisp_002doverride_002dmeta_002dx-3833"></a><a name="index-scroll_002dall_002dmode-3834"></a><a name="index-CRiSP-mode-3835"></a><a name="index-Brief-emulation-3836"></a><a name="index-emulation-of-Brief-3837"></a><a name="index-mode_002c-CRiSP-3838"></a>You can turn on key bindings to emulate the CRiSP/Brief editor with
+<kbd>M-x crisp-mode</kbd>.  Note that this rebinds <kbd>M-x</kbd> to exit Emacs
+unless you set the variable <code>crisp-override-meta-x</code>.  You can
+also use the command <kbd>M-x scroll-all-mode</kbd> or set the variable
+<code>crisp-load-scroll-all</code> to emulate CRiSP's scroll-all feature
+(scrolling all windows together).
+
+     <br><dt>EDT (DEC VMS editor)<dd><a name="index-edt_002demulation_002don-3839"></a><a name="index-edt_002demulation_002doff-3840"></a>Turn on EDT emulation with the command <kbd>M-x edt-emulation-on</kbd>,
+while <kbd>M-x edt-emulation-off</kbd> restores normal Emacs command
+bindings.
+
+     <p>Most of the EDT emulation commands are keypad keys, and most standard
+Emacs key bindings are still available.  The EDT emulation rebindings
+are done in the global keymap, so there is no problem switching
+buffers or major modes while in EDT emulation.
+
+     <br><dt>TPU (DEC VMS editor)<dd><a name="index-tpu_002dedt_002don-3841"></a><a name="index-TPU-3842"></a><kbd>M-x tpu-edt-on</kbd> turns on emulation of the TPU editor emulating EDT.
+
+     <br><dt>vi (Berkeley editor)<dd><a name="index-viper_002dmode-3843"></a>Viper is the newest emulator for vi.  It implements several levels of
+emulation; level 1 is closest to vi itself, while level 5 departs
+somewhat from strict emulation to take advantage of the capabilities of
+Emacs.  To invoke Viper, type <kbd>M-x viper-mode</kbd>; it will guide you
+the rest of the way and ask for the emulation level.  see <a href="../viper/index.html#Top">Viper</a>.
+
+     <br><dt>vi (another emulator)<dd><a name="index-vi_002dmode-3844"></a><kbd>M-x vi-mode</kbd> enters a major mode that replaces the previously
+established major mode.  All of the vi commands that, in real vi, enter
+&ldquo;input&rdquo; mode are programmed instead to return to the previous major
+mode.  Thus, ordinary Emacs serves as vi's &ldquo;input&rdquo; mode.
+
+     <p>Because vi emulation works through major modes, it does not work
+to switch buffers during emulation.  Return to normal Emacs first.
+
+     <p>If you plan to use vi emulation much, you probably want to bind a key
+to the <code>vi-mode</code> command.
+
+     <br><dt>vi (alternate emulator)<dd><a name="index-vip_002dmode-3845"></a><kbd>M-x vip-mode</kbd> invokes another vi emulator, said to resemble real vi
+more thoroughly than <kbd>M-x vi-mode</kbd>.  &ldquo;Input&rdquo; mode in this emulator
+is changed from ordinary Emacs so you can use &lt;ESC&gt; to go back to
+emulated vi command mode.  To get from emulated vi command mode back to
+ordinary Emacs, type <kbd>C-z</kbd>.
+
+     <p>This emulation does not work through major modes, and it is possible
+to switch buffers in various ways within the emulator.  It is not
+so necessary to assign a key to the command <code>vip-mode</code> as
+it is with <code>vi-mode</code> because terminating insert mode does
+not use it.
+
+     <p>see <a href="../vip/index.html#Top">VIP</a>, for full information.
+
+     <br><dt>WordStar (old wordprocessor)<dd><a name="index-wordstar_002dmode-3846"></a><kbd>M-x wordstar-mode</kbd> provides a major mode with WordStar-like
+key bindings. 
+</dl>
+
+   </body></html>
+

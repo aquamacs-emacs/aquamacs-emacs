@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Auto-newlines - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Electric-Keys.html#Electric-Keys" title="Electric Keys">
+<link rel="next" href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" title="Hungry WS Deletion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Auto-newlines"></a>
+<a name="Auto_002dnewlines"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hungry-WS-Deletion.html#Hungry-WS-Deletion">Hungry WS Deletion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Electric-Keys.html#Electric-Keys">Electric Keys</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">4.7 Auto-newline Insertion</h3>
+
+<p><a name="index-auto_002dnewline-156"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>When you have <dfn>Auto-newline minor mode</dfn> enabled (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>), CC Mode inserts newlines for you automatically (in certain
+syntactic contexts) when you type a left or right brace, a colon, a
+semicolon, or a comma.  Sometimes a newline appears before the
+character you type, sometimes after it, sometimes both.
+
+   <p>Auto-newline only triggers when the following conditions hold:
+
+     <ul>
+<li>Auto-newline minor mode is enabled, as evidenced by the indicator
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo; after the mode name on the modeline (e.g. &lsquo;<samp><span class="samp">C/a</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">C/la</span></samp>&rsquo;).
+
+     <li>The character was typed at the end of a line, or with only whitespace
+after it, and possibly a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; escaping the newline.
+
+     <li>The character is not on its own line already.  (This applies only to
+insertion of a newline <em>before</em> the character.)
+
+     <li><a name="index-literal-157"></a><a name="index-syntactic-whitespace-158"></a>The character was not typed inside of a literal <a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+     <li>No numeric argument was supplied to the command (i.e. it was typed as
+normal, with no <kbd>C-u</kbd> prefix). 
+</ul>
+
+   <p>You can configure the precise circumstances in which newlines get
+inserted (see see <a href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>).  Typically, the style
+system (see <a href="Styles.html#Styles">Styles</a>) will have set this up for you, so you probably
+won't have to bother.
+
+   <p>Sometimes CC Mode inserts an auto-newline where you don't want one,
+such as after a &lsquo;<samp><span class="samp">}</span></samp>&rsquo; when you're about to type a &lsquo;<samp><span class="samp">;</span></samp>&rsquo;. 
+Hungry deletion can help here (see <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion">Hungry WS Deletion</a>), or you can
+activate an appropriate <dfn>clean-up</dfn>, which will remove the excess
+whitespace after you've typed the &lsquo;<samp><span class="samp">;</span></samp>&rsquo;.  See <a href="Clean_002dups.html#Clean_002dups">Clean-ups</a> for a
+full description.  See also <a href="Electric-Keys.html#Electric-Keys">Electric Keys</a> for a summary of
+clean-ups listed by key.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> A
+<dfn>literal</dfn> is defined as any comment, string, or preprocessor macro
+definition.  These constructs are also known as <dfn>syntactic
+whitespace</dfn> since they are usually ignored when scanning C code.</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Customization - PCL-CVS -- Emacs Front-End to CVS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="PCL-CVS -- Emacs Front-End to CVS">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Log-View-Mode.html#Log-View-Mode" title="Log View Mode">
+<link rel="next" href="Bugs.html#Bugs" title="Bugs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Customization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Bugs.html#Bugs">Bugs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Log-View-Mode.html#Log-View-Mode">Log View Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">8 Customization</h2>
+
+<p><a name="index-log_002dedit_002dchangelog_002dfull_002dparagraphs_0040r_007b-_0028variable_0029_007d-175"></a><a name="index-cvs_002dauto_002dremove_002dhandled_0040r_007b-_0028variable_0029_007d-176"></a><a name="index-cvs_002dauto_002dremove_002ddirectories_0040r_007b-_0028variable_0029_007d-177"></a><a name="index-cvs_002dupdate_002dprog_002doutput_002dskip_002dregexp_0040r_007b-_0028variable_0029_007d-178"></a><a name="index-cvs_002dcvsroot_0040r_007b-_0028variable_0029_007d-179"></a><a name="index-cvs_002dauto_002drevert_0040r_007b-_0028variable_0029_007d-180"></a><a name="index-log_002dedit_002drequire_002dfinal_002dnewline_0040r_007b-_0028variable_0029_007d-181"></a><a name="index-cvs_002dsort_002dignore_002dfile_0040r_007b-_0028variable_0029_007d-182"></a><a name="index-Customization-183"></a><a name="index-Variables_002c-list-of-all-184"></a><a name="index-Erasing-input-buffer-185"></a><a name="index-Context-diff_002c-how-to-get-186"></a><a name="index-Unidiff_002c-how-to-get-187"></a><a name="index-Automatically-remove-handled-files-188"></a><a name="index-g_t_0040samp_007b_002du_007d-option-in-modules-file-189"></a><a name="index-Modules-file-_0028_0040samp_007b_002du_007d-option_0029-190"></a><a name="index-Update-program-_0028_0040samp_007b_002du_007d-option-in-modules-file_0029-191"></a><a name="index-Reverting-buffers-after-commit-192"></a><a name="index-Require-final-newline-193"></a><a name="index-Automatically-inserting-newline-194"></a><a name="index-Commit-message_002c-inserting-newline-195"></a><a name="index-Sorting-_0040file_007b_002ecvsignore_007d-file-196"></a><a name="index-g_t_0040file_007b_002ecvsignore_007d-file_002c-sorting-197"></a><a name="index-Automatically-sorting-_0040file_007b_002ecvsignore_007d-198"></a><a name="index-g_t_0040samp_007bCVSROOT_007d_002c-overriding-199"></a>
+If you have an idea about any customization that would be handy but
+isn't present in this list, please tell us! 
+For info on how to reach us, see <a href="Bugs.html#Bugs">Bugs</a>.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">cvs-auto-remove-handled</span></samp>&rsquo;<dd>If this variable is set to any non-<code>nil</code> value,
+&lsquo;<samp><span class="samp">cvs-mode-remove-handled</span></samp>&rsquo; will be called every time you check in
+files, after the check-in is ready.  See <a href="Removing-handled-entries.html#Removing-handled-entries">Removing handled entries</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">cvs-auto-remove-directories</span></samp>&rsquo;<dd>If this variable is set to any non-<code>nil</code> value, directories that do
+not contain any files to be checked in will not be listed in the
+&lsquo;<samp><span class="samp">*cvs*</span></samp>&rsquo; buffer.
+
+     <br><dt>&lsquo;<samp><span class="samp">cvs-auto-revert</span></samp>&rsquo;<dd>If this variable is set to any non-&lsquo;<samp><span class="samp">nil</span></samp>&rsquo; value any buffers you have
+that visit a file that is committed will be automatically reverted. 
+This variable defaults to &lsquo;<samp><span class="samp">t</span></samp>&rsquo;. See <a href="Committing-changes.html#Committing-changes">Committing changes</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">cvs-update-prog-output-skip-regexp</span></samp>&rsquo;<dd>The &lsquo;<samp><span class="samp">-u</span></samp>&rsquo; flag in the <samp><span class="file">modules</span></samp> file can be used to run a command
+whenever a &lsquo;<samp><span class="samp">cvs update</span></samp>&rsquo; is performed (see <code>cvs(5)</code>).  This regexp
+is used to search for the last line in that output.  It is normally set
+to &lsquo;<samp><span class="samp">$</span></samp>&rsquo;.  That setting is only correct if the command outputs
+nothing.  Note that PCL-CVS will get very confused if the command
+outputs <em>anything</em> to <code>stderr</code>.
+
+     <br><dt>&lsquo;<samp><span class="samp">cvs-cvsroot</span></samp>&rsquo;<dd>This variable can be set to override &lsquo;<samp><span class="samp">CVSROOT</span></samp>&rsquo;.  It should be a
+string.  If it is set, then every time a <code>cvs</code> command is run, it
+will be called as &lsquo;<samp><span class="samp">cvs -d </span><var>cvs-cvsroot</var><span class="samp">...</span></samp>&rsquo;.  This can be
+useful if your site has several repositories.
+
+     <br><dt>&lsquo;<samp><span class="samp">log-edit-require-final-newline</span></samp>&rsquo;<dd><!-- wordy to avoid unhderfull hbox -->
+When you enter a log message by typing into the
+&lsquo;<samp><span class="samp">*cvs-commit-message*</span></samp>&rsquo; buffer, PCL-CVS normally automatically
+inserts a trailing newline, unless there already is one.  This behavior
+can be controlled via &lsquo;<samp><span class="samp">cvs-commit-buffer-require-final-newline</span></samp>&rsquo;. 
+If it is &lsquo;<samp><span class="samp">t</span></samp>&rsquo; (the default behavior), a newline will always be
+appended.  If it is &lsquo;<samp><span class="samp">nil</span></samp>&rsquo;, newlines will never be appended.  Any
+other value causes PCL-CVS to ask the user whenever there is no trailing
+newline in the commit message buffer.
+
+     <p><a name="index-cvs_002dmode_002dchangelog_002dcommit-200"></a><br><dt>&lsquo;<samp><span class="samp">log-edit-changelog-full-paragraphs</span></samp>&rsquo;<dd>If this variable is non-<code>nil</code>, include full <samp><span class="file">ChangeLog</span></samp>
+paragraphs in the CVS log created by &lsquo;<samp><span class="samp">cvs-mode-changelog-commit</span></samp>&rsquo;. 
+This may be set in the local variables section of a <samp><span class="file">ChangeLog</span></samp>
+file, to indicate the policy for that <samp><span class="file">ChangeLog</span></samp>.
+
+     <p><a name="index-g_t_0040file_007bChangeLog_007d-paragraphs-201"></a>A <samp><span class="file">ChangeLog</span></samp><dfn> paragraph</dfn> is a bunch of log text containing no
+blank lines; a paragraph usually describes a set of changes with a
+single purpose, but perhaps spanning several functions in several files. 
+Changes in different paragraphs are unrelated.
+
+     <p>You could argue that the CVS log entry for a file should contain the
+full <samp><span class="file">ChangeLog</span></samp> paragraph mentioning the change to the file, even though
+it may mention other files, because that gives you the full context you
+need to understand the change.  This is the behavior you get when this
+variable is set to <code>t</code>, the default.
+
+     <p>On the other hand, you could argue that the CVS log entry for a change
+should contain only the text for the changes which occurred in that
+file, because the CVS log is per-file.  This is the behavior you get
+when this variable is set to <code>nil</code>.
+
+     <p><a name="index-cvs_002dmode_002dignore_0040r_007b_002c-and-_0040file_007b_002ecvsignore_007d-sorting_007d-202"></a><br><dt>&lsquo;<samp><span class="samp">cvs-sort-ignore-file</span></samp>&rsquo;<dd>If this variable is set to any non-&lsquo;<samp><span class="samp">nil</span></samp>&rsquo; value, the
+<samp><span class="file">.cvsignore</span></samp> file will always be sorted whenever you use
+&lsquo;<samp><span class="samp">cvs-mode-ignore</span></samp>&rsquo; to add a file to it.  This option is on by
+default. 
+</dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="Customizing-Faces.html#Customizing-Faces">Customizing Faces</a>
+</ul>
+
+   </body></html>
+

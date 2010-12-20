@@ -1,0 +1,227 @@
+<html lang="en">
+<head>
+<title>TeX and LaTeX Language Modes - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Language-Modes.html#Language-Modes" title="Language Modes">
+<link rel="prev" href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal" title="C FORTRAN Pascal">
+<link rel="next" href="Eqn-Language-Mode.html#Eqn-Language-Mode" title="Eqn Language Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="TeX-and-LaTeX-Language-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Eqn-Language-Mode.html#Eqn-Language-Mode">Eqn Language Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal">C FORTRAN Pascal</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Language-Modes.html#Language-Modes">Language Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.8.3 TeX and LaTeX Language Modes</h4>
+
+<p class="noindent"><a name="index-d-T-565"></a><a name="index-calc_002dtex_002dlanguage-566"></a><a name="index-TeX-language-567"></a><a name="index-d-L-568"></a><a name="index-calc_002dlatex_002dlanguage-569"></a><a name="index-LaTeX-language-570"></a>The <kbd>d T</kbd> (<code>calc-tex-language</code>) command selects the conventions
+of &ldquo;math mode&rdquo; in Donald Knuth's TeX typesetting language,
+and the <kbd>d L</kbd> (<code>calc-latex-language</code>) command selects the
+conventions of &ldquo;math mode&rdquo; in LaTeX, a typesetting language that
+uses TeX as its formatting engine.  Calc's LaTeX language mode can
+read any formula that the TeX language mode can, although LaTeX
+mode may display it differently.
+
+   <p>Formulas are entered and displayed in the appropriate notation;
+<!-- @math{\sin(a/b)} -->
+&lsquo;<samp><span class="samp">sin(a/b)</span></samp>&rsquo;
+will appear as &lsquo;<samp><span class="samp">\sin\left( {a \over b} \right)</span></samp>&rsquo; in TeX mode and
+&lsquo;<samp><span class="samp">\sin\left(\frac{a}{b}\right)</span></samp>&rsquo; in LaTeX mode. 
+Math formulas are often enclosed by &lsquo;<samp><span class="samp">$ $</span></samp>&rsquo; signs in TeX and
+LaTeX; these should be omitted when interfacing with Calc.  To Calc,
+the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; sign has the same meaning it always does in algebraic
+formulas (a reference to an existing entry on the stack).
+
+   <p>Complex numbers are displayed as in &lsquo;<samp><span class="samp">3 + 4i</span></samp>&rsquo;.  Fractions and
+quotients are written using <code>\over</code> in TeX mode (as in
+<code>{a \over b}</code>) and <code>\frac</code> in LaTeX mode (as in
+<code>\frac{a}{b}</code>);  binomial coefficients are written with
+<code>\choose</code> in TeX mode (as in <code>{a \choose b}</code>) and
+<code>\binom</code> in LaTeX mode (as in <code>\binom{a}{b}</code>). 
+Interval forms are written with <code>\ldots</code>, and error forms are
+written with <code>\pm</code>. Absolute values are written as in
+&lsquo;<samp><span class="samp">|x + 1|</span></samp>&rsquo;, and the floor and ceiling functions are written with
+<code>\lfloor</code>, <code>\rfloor</code>, etc. The words <code>\left</code> and
+<code>\right</code> are ignored when reading formulas in TeX and LaTeX
+modes.  Both <code>inf</code> and <code>uinf</code> are written as <code>\infty</code>;
+when read, <code>\infty</code> always translates to <code>inf</code>.
+
+   <p>Function calls are written the usual way, with the function name followed
+by the arguments in parentheses.  However, functions for which TeX
+and LaTeX have special names (like <code>\sin</code>) will use curly braces
+instead of parentheses for very simple arguments.  During input, curly
+braces and parentheses work equally well for grouping, but when the
+document is formatted the curly braces will be invisible.  Thus the
+printed result is
+<!-- @math{\sin{2 x}} -->
+&lsquo;<samp><span class="samp">sin 2x</span></samp>&rsquo;
+but
+<!-- @math{\sin(2 + x)}. -->
+&lsquo;<samp><span class="samp">sin(2 + x)</span></samp>&rsquo;.
+
+   <p>Function and variable names not treated specially by TeX and LaTeX
+are simply written out as-is, which will cause them to come out in
+italic letters in the printed document.  If you invoke <kbd>d T</kbd> or
+<kbd>d L</kbd> with a positive numeric prefix argument, names of more than
+one character will instead be enclosed in a protective commands that
+will prevent them from being typeset in the math italics; they will be
+written &lsquo;<samp><span class="samp">\hbox{</span><var>name</var><span class="samp">}</span></samp>&rsquo; in TeX mode and
+&lsquo;<samp><span class="samp">\text{</span><var>name</var><span class="samp">}</span></samp>&rsquo; in LaTeX mode.  The
+&lsquo;<samp><span class="samp">\hbox{ }</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\text{ }</span></samp>&rsquo; notations are ignored during
+reading.  If you use a negative prefix argument, such function names are
+written &lsquo;<samp><span class="samp">\</span><var>name</var></samp>&rsquo;, and function names that begin with <code>\</code> during
+reading have the <code>\</code> removed.  (Note that in this mode, long
+variable names are still written with <code>\hbox</code> or <code>\text</code>. 
+However, you can always make an actual variable name like <code>\bar</code> in
+any TeX mode.)
+
+   <p>During reading, text of the form &lsquo;<samp><span class="samp">\matrix{ ... }</span></samp>&rsquo; is replaced
+by &lsquo;<samp><span class="samp">[ ... ]</span></samp>&rsquo;.  The same also applies to <code>\pmatrix</code> and
+<code>\bmatrix</code>.  In LaTeX mode this also applies to
+&lsquo;<samp><span class="samp">\begin{matrix} ... \end{matrix}</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">\begin{bmatrix} ... \end{bmatrix}</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">\begin{pmatrix} ... \end{pmatrix}</span></samp>&rsquo;, as well as
+&lsquo;<samp><span class="samp">\begin{smallmatrix} ... \end{smallmatrix}</span></samp>&rsquo;. 
+The symbol &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo; is interpreted as a comma,
+and the symbols &lsquo;<samp><span class="samp">\cr</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\\</span></samp>&rsquo; are interpreted as semicolons. 
+During output, matrices are displayed in &lsquo;<samp><span class="samp">\matrix{ a &amp; b \\ c &amp; d}</span></samp>&rsquo;
+format in TeX mode and in
+&lsquo;<samp><span class="samp">\begin{pmatrix} a &amp; b \\ c &amp; d \end{pmatrix}</span></samp>&rsquo; format in
+LaTeX mode; you may need to edit this afterwards to change to your
+preferred matrix form.  If you invoke <kbd>d T</kbd> or <kbd>d L</kbd> with an
+argument of 2 or -2, then matrices will be displayed in two-dimensional
+form, such as
+
+<pre class="example">     \begin{pmatrix}
+     a &amp; b \\
+     c &amp; d
+     \end{pmatrix}
+</pre>
+   <p class="noindent">This may be convenient for isolated matrices, but could lead to
+expressions being displayed like
+
+<pre class="example">     \begin{pmatrix} \times x
+     a &amp; b \\
+     c &amp; d
+     \end{pmatrix}
+</pre>
+   <p class="noindent">While this wouldn't bother Calc, it is incorrect LaTeX. 
+(Similarly for TeX.)
+
+   <p>Accents like <code>\tilde</code> and <code>\bar</code> translate into function
+calls internally (&lsquo;<samp><span class="samp">tilde(x)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">bar(x)</span></samp>&rsquo;).  The <code>\underline</code>
+sequence is treated as an accent.  The <code>\vec</code> accent corresponds
+to the function name <code>Vec</code>, because <code>vec</code> is the name of
+a built-in Calc function.  The following table shows the accents
+in Calc, TeX, LaTeX and <dfn>eqn</dfn> (described in the next section):
+
+   <p><a name="index-acute-571"></a><a name="index-Acute-572"></a><a name="index-bar-573"></a><a name="index-Bar-574"></a><a name="index-breve-575"></a><a name="index-Breve-576"></a><a name="index-check-577"></a><a name="index-Check-578"></a><a name="index-dddot-579"></a><a name="index-ddddot-580"></a><a name="index-dot-581"></a><a name="index-Dot-582"></a><a name="index-dotdot-583"></a><a name="index-DotDot-584"></a><a name="index-dyad-585"></a><a name="index-grave-586"></a><a name="index-Grave-587"></a><a name="index-hat-588"></a><a name="index-Hat-589"></a><a name="index-Prime-590"></a><a name="index-tilde-591"></a><a name="index-Tilde-592"></a><a name="index-under-593"></a><a name="index-Vec-594"></a><a name="index-VEC-595"></a>
+<pre class="example">     Calc      TeX           LaTeX         eqn
+     ----      ---           -----         ---
+     acute     \acute        \acute
+     Acute                   \Acute
+     bar       \bar          \bar          bar
+     Bar                     \Bar
+     breve     \breve        \breve
+     Breve                   \Breve
+     check     \check        \check
+     Check                   \Check
+     dddot                   \dddot
+     ddddot                  \ddddot
+     dot       \dot          \dot          dot
+     Dot                     \Dot
+     dotdot    \ddot         \ddot         dotdot
+     DotDot                  \Ddot
+     dyad                                  dyad
+     grave     \grave        \grave
+     Grave                   \Grave
+     hat       \hat          \hat          hat
+     Hat                     \Hat
+     Prime                                 prime
+     tilde     \tilde        \tilde        tilde
+     Tilde                   \Tilde
+     under     \underline    \underline    under
+     Vec       \vec          \vec          vec
+     VEC                     \Vec
+</pre>
+   <p>The &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; (evaluates-to) operator appears as a <code>\to</code> symbol:
+&lsquo;<samp><span class="samp">{</span><var>a</var><span class="samp"> \to </span><var>b</var><span class="samp">}</span></samp>&rsquo;.  TeX defines <code>\to</code> as an
+alias for <code>\rightarrow</code>.  However, if the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; is the
+top-level expression being formatted, a slightly different notation
+is used:  &lsquo;<samp><span class="samp">\evalto </span><var>a</var><span class="samp"> \to </span><var>b</var></samp>&rsquo;.  The <code>\evalto</code>
+word is ignored by Calc's input routines, and is undefined in TeX. 
+You will typically want to include one of the following definitions
+at the top of a TeX file that uses <code>\evalto</code>:
+
+<pre class="example">     \def\evalto{}
+     \def\evalto#1\to{}
+</pre>
+   <p>The first definition formats evaluates-to operators in the usual
+way.  The second causes only the <var>b</var> part to appear in the
+printed document; the <var>a</var> part and the arrow are hidden. 
+Another definition you may wish to use is &lsquo;<samp><span class="samp">\let\to=\Rightarrow</span></samp>&rsquo;
+which causes <code>\to</code> to appear more like Calc's &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; symbol. 
+See <a href="Evaluates_002dTo-Operator.html#Evaluates_002dTo-Operator">Evaluates-To Operator</a>, for a discussion of <code>evalto</code>.
+
+   <p>The complete set of TeX control sequences that are ignored during
+reading is:
+
+<pre class="example">     \hbox  \mbox  \text  \left  \right
+     \,  \&gt;  \:  \;  \!  \quad  \qquad  \hfil  \hfill
+     \displaystyle  \textstyle  \dsize  \tsize
+     \scriptstyle  \scriptscriptstyle  \ssize  \ssize
+     \rm  \bf  \it  \sl  \roman  \bold  \italic  \slanted
+     \cal  \mit  \Cal  \Bbb  \frak  \goth
+     \evalto
+</pre>
+   <p>Note that, because these symbols are ignored, reading a TeX or
+LaTeX formula into Calc and writing it back out may lose spacing and
+font information.
+
+   <p>Also, the &ldquo;discretionary multiplication sign&rdquo; &lsquo;<samp><span class="samp">\*</span></samp>&rsquo; is read
+the same as &lsquo;<samp><span class="samp">*</span></samp>&rsquo;.
+
+   <p>The TeX version of this manual includes some printed examples at the
+end of this section.
+
+   </body></html>
+

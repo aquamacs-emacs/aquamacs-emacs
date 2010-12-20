@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Setup - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Gnus-Registry.html#The-Gnus-Registry" title="The Gnus Registry">
+<link rel="next" href="Fancy-splitting-to-parent.html#Fancy-splitting-to-parent" title="Fancy splitting to parent">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Setup"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fancy-splitting-to-parent.html#Fancy-splitting-to-parent">Fancy splitting to parent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Gnus-Registry.html#The-Gnus-Registry">The Gnus Registry</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.21.1 Setup</h4>
+
+<p>Fortunately, setting up the Gnus registry is pretty easy:
+
+<pre class="lisp">     (setq gnus-registry-max-entries 2500
+           gnus-registry-use-long-group-names t)
+     
+     (gnus-registry-initialize)
+</pre>
+   <p>This adds registry saves to Gnus newsrc saves (which happen on exit
+and when you press <kbd>s</kbd> from the <code>*Group*</code> buffer.  It also
+adds registry calls to article actions in Gnus (copy, move, etc.)  so
+it's not easy to undo the initialization.  See
+<code>gnus-registry-initialize</code> for the gory details.
+
+   <p>Here are other settings used by the author of the registry (understand
+what they do before you copy them blindly).
+
+<pre class="lisp">     (setq
+      gnus-registry-split-strategy 'majority
+      gnus-registry-ignored-groups '(("nntp" t)
+                                     ("nnrss" t)
+                                     ("spam" t)
+                                     ("train" t))
+      gnus-registry-max-entries 500000
+      gnus-registry-use-long-group-names t
+      gnus-registry-track-extra '(sender subject))
+</pre>
+   <p>They say: keep a lot of messages around, use long group names, track
+messages by sender and subject (not just parent Message-ID), and when
+the registry splits incoming mail, use a majority rule to decide where
+messages should go if there's more than one possibility.  In addition,
+the registry should ignore messages in groups that match &ldquo;nntp&rdquo;,
+&ldquo;nnrss&rdquo;, &ldquo;spam&rdquo;, or &ldquo;train.&rdquo;
+
+   <p>You are doubtless impressed by all this, but you ask: &ldquo;I am a Gnus
+user, I customize to live.  Give me more.&rdquo;  Here you go, these are
+the general settings.
+
+<div class="defun">
+&mdash; Variable: <b>gnus-registry-unfollowed-groups</b><var><a name="index-gnus_002dregistry_002dunfollowed_002dgroups-3022"></a></var><br>
+<blockquote><p>The groups that will not be followed by
+<code>gnus-registry-split-fancy-with-parent</code>.  They will still be
+remembered by the registry.  This is a list of regular expressions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-registry-ignored-groups</b><var><a name="index-gnus_002dregistry_002dignored_002dgroups-3023"></a></var><br>
+<blockquote><p>The groups that will not be remembered by the registry.  This is a
+list of regular expressions, also available through Group/Topic
+customization (so you can ignore or keep a specific group or a whole
+topic). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-registry-use-long-group-names</b><var><a name="index-gnus_002dregistry_002duse_002dlong_002dgroup_002dnames-3024"></a></var><br>
+<blockquote><p>Whether the registry will use long group names.  It's recommended to
+set this to <code>t</code>, although everything works if you don't.  Future
+functionality will require it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-registry-max-entries</b><var><a name="index-gnus_002dregistry_002dmax_002dentries-3025"></a></var><br>
+<blockquote><p>The number (an integer or <code>nil</code> for unlimited) of entries the
+registry will keep. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-registry-cache-file</b><var><a name="index-gnus_002dregistry_002dcache_002dfile-3026"></a></var><br>
+<blockquote><p>The file where the registry will be stored between Gnus sessions. 
+</p></blockquote></div>
+
+   </body></html>
+

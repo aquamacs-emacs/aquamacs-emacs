@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+<title>Defining Simple Commands - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
+<link rel="prev" href="Defining-Functions.html#Defining-Functions" title="Defining Functions">
+<link rel="next" href="Defining-Stack-Commands.html#Defining-Stack-Commands" title="Defining Stack Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Defining-Simple-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Stack-Commands.html#Defining-Stack-Commands">Defining Stack Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Functions.html#Defining-Functions">Defining Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.5.2 Defining New Simple Commands</h4>
+
+<p class="noindent"><a name="index-interactive-2320"></a>If a <code>defmath</code> form contains an <code>interactive</code> clause, it defines
+a Calculator command.  Actually such a <code>defmath</code> results in <em>two</em>
+function definitions:  One, a &lsquo;<samp><span class="samp">calcFunc-</span></samp>&rsquo; function as was just described,
+with the <code>interactive</code> clause removed.  Two, a &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo; function
+with a suitable <code>interactive</code> clause and some sort of wrapper to make
+the command work in the Calc environment.
+
+   <p>In the simple case, the <code>interactive</code> clause has the same form as
+for normal Emacs Lisp commands:
+
+<pre class="smallexample">     (defmath increase-precision (delta)
+       "Increase precision by DELTA."     ; This is the "documentation string"
+       (interactive "p")                  ; Register this as a M-x-able command
+       (setq calc-internal-prec (+ calc-internal-prec delta)))
+</pre>
+   <p>This expands to the pair of definitions,
+
+<pre class="smallexample">     (defun calc-increase-precision (delta)
+       "Increase precision by DELTA."
+       (interactive "p")
+       (calc-wrapper
+        (setq calc-internal-prec (math-add calc-internal-prec delta))))
+     
+     (defun calcFunc-increase-precision (delta)
+       "Increase precision by DELTA."
+       (setq calc-internal-prec (math-add calc-internal-prec delta)))
+</pre>
+   <p class="noindent">where in this case the latter function would never really be used!  Note
+that since the Calculator stores small integers as plain Lisp integers,
+the <code>math-add</code> function will work just as well as the native
+<code>+</code> even when the intent is to operate on native Lisp integers.
+
+   <p><a name="index-calc_002dwrapper-2321"></a>The &lsquo;<samp><span class="samp">calc-wrapper</span></samp>&rsquo; call invokes a macro which surrounds the body of
+the function with code that looks roughly like this:
+
+<pre class="smallexample">     (let ((calc-command-flags nil))
+       (unwind-protect
+           (save-current-buffer
+             (calc-select-buffer)
+             <em>body of function</em>
+             <em>renumber stack</em>
+             <em>clear</em> Working <em>message</em>)
+         <em>realign cursor and window</em>
+         <em>clear Inverse, Hyperbolic, and Keep Args flags</em>
+         <em>update Emacs mode line</em>))
+</pre>
+   <p><a name="index-calc_002dselect_002dbuffer-2322"></a>The <code>calc-select-buffer</code> function selects the &lsquo;<samp><span class="samp">*Calculator*</span></samp>&rsquo;
+buffer if necessary, say, because the command was invoked from inside
+the &lsquo;<samp><span class="samp">*Calc Trail*</span></samp>&rsquo; window.
+
+   <p><a name="index-calc_002dset_002dcommand_002dflag-2323"></a>You can call, for example, <code>(calc-set-command-flag 'no-align)</code> to
+set the above-mentioned command flags.  Calc routines recognize the
+following command flags:
+
+     <dl>
+<dt><code>renum-stack</code><dd>Stack line numbers &lsquo;<samp><span class="samp">1:</span></samp>&rsquo;, &lsquo;<samp><span class="samp">2:</span></samp>&rsquo;, and so on must be renumbered
+after this command completes.  This is set by routines like
+<code>calc-push</code>.
+
+     <br><dt><code>clear-message</code><dd>Calc should call &lsquo;<samp><span class="samp">(message "")</span></samp>&rsquo; if this command completes normally
+(to clear a &ldquo;Working<small class="dots">...</small>&rdquo; message out of the echo area).
+
+     <br><dt><code>no-align</code><dd>Do not move the cursor back to the &lsquo;<samp><span class="samp">.</span></samp>&rsquo; top-of-stack marker.
+
+     <br><dt><code>position-point</code><dd>Use the variables <code>calc-position-point-line</code> and
+<code>calc-position-point-column</code> to position the cursor after
+this command finishes.
+
+     <br><dt><code>keep-flags</code><dd>Do not clear <code>calc-inverse-flag</code>, <code>calc-hyperbolic-flag</code>,
+and <code>calc-keep-args-flag</code> at the end of this command.
+
+     <br><dt><code>do-edit</code><dd>Switch to buffer &lsquo;<samp><span class="samp">*Calc Edit*</span></samp>&rsquo; after this command.
+
+     <br><dt><code>hold-trail</code><dd>Do not move trail pointer to end of trail when something is recorded
+there. 
+</dl>
+
+   <p><a name="index-Y-2324"></a><a name="index-Y-_003f-2325"></a><a name="index-calc_002dY_002dhelp_002dmsgs-2326"></a>Calc reserves a special prefix key, shift-<kbd>Y</kbd>, for user-written
+extensions to Calc.  There are no built-in commands that work with
+this prefix key; you must call <code>define-key</code> from Lisp (probably
+from inside a <code>calc-define</code> property) to add to it.  Initially only
+<kbd>Y ?</kbd> is defined; it takes help messages from a list of strings
+(initially <code>nil</code>) in the variable <code>calc-Y-help-msgs</code>.  All
+other undefined keys except for <kbd>Y</kbd> are reserved for use by
+future versions of Calc.
+
+   <p>If you are writing a Calc enhancement which you expect to give to
+others, it is best to minimize the number of <kbd>Y</kbd>-key sequences
+you use.  In fact, if you have more than one key sequence you should
+consider defining three-key sequences with a <kbd>Y</kbd>, then a key that
+stands for your package, then a third key for the particular command
+within your package.
+
+   <p>Users may wish to install several Calc enhancements, and it is possible
+that several enhancements will choose to use the same key.  In the
+example below, a variable <code>inc-prec-base-key</code> has been defined
+to contain the key that identifies the <code>inc-prec</code> package.  Its
+value is initially <code>"P"</code>, but a user can change this variable
+if necessary without having to modify the file.
+
+   <p>Here is a complete file, <samp><span class="file">inc-prec.el</span></samp>, which makes a <kbd>Y P I</kbd>
+command that increases the precision, and a <kbd>Y P D</kbd> command that
+decreases the precision.
+
+<pre class="smallexample">     ;;; Increase and decrease Calc precision.  Dave Gillespie, 5/31/91.
+     ;; (Include copyright or copyleft stuff here.)
+     
+     (defvar inc-prec-base-key "P"
+       "Base key for inc-prec.el commands.")
+     
+     (put 'calc-define 'inc-prec '(progn
+     
+     (define-key calc-mode-map (format "Y%sI" inc-prec-base-key)
+                 'increase-precision)
+     (define-key calc-mode-map (format "Y%sD" inc-prec-base-key)
+                 'decrease-precision)
+     
+     (setq calc-Y-help-msgs
+           (cons (format "%s + Inc-prec, Dec-prec" inc-prec-base-key)
+                 calc-Y-help-msgs))
+     
+     (defmath increase-precision (delta)
+       "Increase precision by DELTA."
+       (interactive "p")
+       (setq calc-internal-prec (+ calc-internal-prec delta)))
+     
+     (defmath decrease-precision (delta)
+       "Decrease precision by DELTA."
+       (interactive "p")
+       (setq calc-internal-prec (- calc-internal-prec delta)))
+     
+     ))  ; end of calc-define property
+     
+     (run-hooks 'calc-check-defines)
+</pre>
+   </body></html>
+

@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+<title>NoCeM - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Various.html#Various" title="Various">
+<link rel="prev" href="Daemons.html#Daemons" title="Daemons">
+<link rel="next" href="Undo.html#Undo" title="Undo">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="NoCeM"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Undo.html#Undo">Undo</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Daemons.html#Daemons">Daemons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
+<hr>
+</div>
+
+<h3 class="section">8.12 NoCeM</h3>
+
+<p><a name="index-nocem-2790"></a><a name="index-spam-2791"></a>
+<dfn>Spamming</dfn> is posting the same article lots and lots of times. 
+Spamming is bad.  Spamming is evil.
+
+   <p>Spamming is usually canceled within a day or so by various anti-spamming
+agencies.  These agencies usually also send out <dfn>NoCeM</dfn> messages. 
+NoCeM is pronounced &ldquo;no see-'em&rdquo;, and means what the name
+implies&mdash;these are messages that make the offending articles, like, go
+away.
+
+   <p>What use are these NoCeM messages if the articles are canceled anyway? 
+Some sites do not honor cancel messages and some sites just honor cancels
+from a select few people.  Then you may wish to make use of the NoCeM
+messages, which are distributed in the newsgroups
+&lsquo;<samp><span class="samp">news.lists.filters</span></samp>&rsquo;, &lsquo;<samp><span class="samp">alt.nocem.misc</span></samp>&rsquo;, etc.
+
+   <p>Gnus can read and parse the messages in this group automatically, and
+this will make spam disappear.
+
+   <p>There are some variables to customize, of course:
+
+     <dl>
+<dt><code>gnus-use-nocem</code><dd><a name="index-gnus_002duse_002dnocem-2792"></a>Set this variable to <code>t</code> to set the ball rolling.  It is <code>nil</code>
+by default.
+
+     <p>You can also set this variable to a positive number as a group level. 
+In that case, Gnus scans NoCeM messages when checking new news if this
+value is not exceeding a group level that you specify as the prefix
+argument to some commands, e.g. <code>gnus</code>,
+<code>gnus-group-get-new-news</code>, etc.  Otherwise, Gnus does not scan
+NoCeM messages if you specify a group level that is smaller than this
+value to those commands.  For example, if you use 1 or 2 on the mail
+groups and the levels on the news groups remain the default, 3 is the
+best choice.
+
+     <br><dt><code>gnus-nocem-groups</code><dd><a name="index-gnus_002dnocem_002dgroups-2793"></a>Gnus will look for NoCeM messages in the groups in this list.  The
+default is
+     <pre class="lisp">          ("news.lists.filters" "alt.nocem.misc")
+</pre>
+     <br><dt><code>gnus-nocem-issuers</code><dd><a name="index-gnus_002dnocem_002dissuers-2794"></a>There are many people issuing NoCeM messages.  This list says what
+people you want to listen to.  The default is:
+
+     <pre class="lisp">          ("Adri Verhoef"
+           "alba-nocem@albasani.net"
+           "bleachbot@httrack.com"
+           "news@arcor-online.net"
+           "news@uni-berlin.de"
+           "nocem@arcor.de"
+           "pgpmoose@killfile.org"
+           "xjsppl@gmx.de")
+</pre>
+     <p>Known despammers that you can put in this list are listed at<br>
+<a href="http://www.xs4all.nl/~rosalind/nocemreg/nocemreg.html">http://www.xs4all.nl/~rosalind/nocemreg/nocemreg.html</a>.
+
+     <p>You do not have to heed NoCeM messages from all these people&mdash;just the
+ones you want to listen to.  You also don't have to accept all NoCeM
+messages from the people you like.  Each NoCeM message has a <dfn>type</dfn>
+header that gives the message a (more or less, usually less) rigorous
+definition.  Common types are &lsquo;<samp><span class="samp">spam</span></samp>&rsquo;, &lsquo;<samp><span class="samp">spew</span></samp>&rsquo;, &lsquo;<samp><span class="samp">mmf</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">binary</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">troll</span></samp>&rsquo;.  To specify this, you have to use
+<code>(</code><var>issuer</var> <var>conditions</var><code> ...)</code> elements in the list. 
+Each condition is either a string (which is a regexp that matches types
+you want to use) or a list on the form <code>(not </code><var>string</var><code>)</code>, where
+<var>string</var> is a regexp that matches types you don't want to use.
+
+     <p>For instance, if you want all NoCeM messages from Chris Lewis except his
+&lsquo;<samp><span class="samp">troll</span></samp>&rsquo; messages, you'd say:
+
+     <pre class="lisp">          ("clewis@ferret.ocunix.on.ca" ".*" (not "troll"))
+</pre>
+     <p>On the other hand, if you just want nothing but his &lsquo;<samp><span class="samp">spam</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">spew</span></samp>&rsquo; messages, you'd say:
+
+     <pre class="lisp">          ("clewis@ferret.ocunix.on.ca" (not ".*") "spew" "spam")
+</pre>
+     <p>The specs are applied left-to-right.
+
+     <br><dt><code>gnus-nocem-verifyer</code><dd><a name="index-gnus_002dnocem_002dverifyer-2795"></a><a name="index-gnus_002dnocem_002depg_002dverify-2796"></a><a name="index-pgg_002dverify-2797"></a>This should be a function for verifying that the NoCeM issuer is who she
+says she is.  This variable defaults to <code>gnus-nocem-epg-verify</code> if
+EasyPG is available, otherwise defaults to <code>pgg-verify</code>.  The
+function should return non-<code>nil</code> if the verification is successful,
+otherwise (including the case the NoCeM message was not signed) should
+return <code>nil</code>.  If this is too slow and you don't care for
+verification (which may be dangerous), you can set this variable to
+<code>nil</code>.
+
+     <p>Formerly the default was <code>mc-verify</code>, which is a Mailcrypt
+function.  While you can still use it, you can change it into
+<code>gnus-nocem-epg-verify</code> or <code>pgg-verify</code> running with GnuPG if
+you are willing to add the <acronym>PGP</acronym> public keys to GnuPG's keyring.
+
+     <br><dt><code>gnus-nocem-directory</code><dd><a name="index-gnus_002dnocem_002ddirectory-2798"></a>This is where Gnus will store its NoCeM cache files.  The default is<br>
+<samp><span class="file">~/News/NoCeM/</span></samp>.
+
+     <br><dt><code>gnus-nocem-expiry-wait</code><dd><a name="index-gnus_002dnocem_002dexpiry_002dwait-2799"></a>The number of days before removing old NoCeM entries from the cache. 
+The default is 15.  If you make it shorter Gnus will be faster, but you
+might then see old spam.
+
+     <br><dt><code>gnus-nocem-check-from</code><dd><a name="index-gnus_002dnocem_002dcheck_002dfrom-2800"></a>Non-<code>nil</code> means check for valid issuers in message bodies. 
+Otherwise don't bother fetching articles unless their author matches a
+valid issuer; that is much faster if you are selective about the
+issuers.
+
+     <br><dt><code>gnus-nocem-check-article-limit</code><dd><a name="index-gnus_002dnocem_002dcheck_002darticle_002dlimit-2801"></a>If non-<code>nil</code>, the maximum number of articles to check in any NoCeM
+group.  <code>nil</code> means no restriction.  NoCeM groups can be huge and
+very slow to process.
+
+   </dl>
+
+   <p>Using NoCeM could potentially be a memory hog.  If you have many living
+(i. e., subscribed or unsubscribed groups), your Emacs process will grow
+big.  If this is a problem, you should kill off all (or most) of your
+unsubscribed groups (see <a href="Subscription-Commands.html#Subscription-Commands">Subscription Commands</a>).
+
+   </body></html>
+

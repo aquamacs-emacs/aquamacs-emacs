@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Viewing Cross-References - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Index-Support.html#Index-Support" title="Index Support">
+<link rel="next" href="RefTeXs-Menu.html#RefTeXs-Menu" title="RefTeXs Menu">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Viewing-Cross-References"></a>
+<a name="Viewing-Cross_002dReferences"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="RefTeXs-Menu.html#RefTeXs-Menu">RefTeXs Menu</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Index-Support.html#Index-Support">Index Support</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">6 Viewing Cross&ndash;References</h2>
+
+<p><a name="index-reftex_002dview_002dcrossref-278"></a><a name="index-reftex_002dmouse_002dview_002dcrossref-279"></a><a name="index-C_002dc-_0026-280"></a><a name="index-S_002dmouse_002d2-281"></a>
+<b>RefTeX</b> can display cross&ndash;referencing information.  This means,
+if two document locations are linked, <b>RefTeX</b> can display the
+matching location(s) in another window.  The <code>\label</code> and <code>\ref</code>
+macros are one way of establishing such a link.  Also, a <code>\cite</code>
+macro is linked to the corresponding <code>\bibitem</code> macro or a BibTeX
+database entry.
+
+   <p>The feature is invoked by pressing <kbd>C-c &amp;</kbd>
+(<code>reftex-view-crossref</code>) while point is on the <var>key</var> argument
+of a macro involved in cross&ndash;referencing.  You can also click with
+<kbd>S-mouse-2</kbd> on the macro argument.  Here is what will happen for
+individual classes of macros:
+
+     <dl>
+<dt><code>\ref</code><dd><a name="index-g_t_0040code_007b_005cref_007d-282"></a>Display the corresponding label definition.  All usual
+variants<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> of the <code>\ref</code> macro are active for
+cross&ndash;reference display.  This works also for labels defined in an
+external document when the current document refers to them through the
+<code>xr</code> interface (see <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a>).
+
+     <br><dt><code>\label</code><dd><a name="index-g_t_0040code_007b_005clabel_007d-283"></a><a name="index-reftex_002dlabel_002dalist-284"></a>Display a document location which references this label.  Pressing
+<kbd>C-c &amp;</kbd> several times moves through the entire document and finds
+all locations.  Not only the <code>\label</code> macro but also other macros
+with label arguments (as configured with <code>reftex-label-alist</code>) are
+active for cross&ndash;reference display.
+
+     <br><dt><code>\cite</code><dd><a name="index-g_t_0040code_007b_005ccite_007d-285"></a>Display the corresponding BibTeX database entry or <code>\bibitem</code>. 
+All usual variants<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> of the <code>\cite</code> macro are active for cross&ndash;reference
+display.
+
+     <br><dt><code>\bibitem</code><dd><a name="index-g_t_0040code_007b_005cbibitem_007d-286"></a>Display a document location which cites this article. Pressing
+<kbd>C-c &amp;</kbd> several times moves through the entire document and finds
+all locations.
+
+     <br><dt>BibTeX<dd><a name="index-BibTeX-buffer_002c-viewing-cite-locations-from-287"></a><a name="index-Viewing-cite-locations-from-BibTeX-buffer-288"></a><kbd>C-c &amp;</kbd> is also active in BibTeX buffers.  All locations in a
+document where the database entry at point is cited will be displayed. 
+On first use, <b>RefTeX</b> will prompt for a buffer which belongs to
+the document you want to search.  Subsequent calls will use the same
+document, until you break this link with a prefix argument to <kbd>C-c
+&amp;</kbd>.
+
+     <br><dt><code>\index</code><dd><a name="index-g_t_0040code_007b_005cindex_007d-289"></a>Display other locations in the document which are marked by an index
+macro with the same key argument.  Along with the standard <code>\index</code>
+and <code>\glossary</code> macros, all macros configured in
+<code>reftex-index-macros</code> will be recognized. 
+</dl>
+
+   <p><a name="index-reftex_002dview_002dcrossref_002dextra-290"></a>While the display of cross referencing information for the above
+mentioned macros is hard&ndash;coded, you can configure additional relations
+in the variable <code>reftex-view-crossref-extra</code>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> all macros that start with &lsquo;<samp><span class="samp">ref</span></samp>&rsquo; or end with
+&lsquo;<samp><span class="samp">ref</span></samp>&rsquo; or &lsquo;<samp><span class="samp">refrange</span></samp>&rsquo;</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> all macros that either start or end with
+&lsquo;<samp><span class="samp">cite</span></samp>&rsquo;</p>
+
+   <hr></div>
+
+   </body></html>
+

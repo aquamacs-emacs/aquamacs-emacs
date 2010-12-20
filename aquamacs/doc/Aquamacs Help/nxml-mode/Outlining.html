@@ -1,0 +1,199 @@
+<html lang="en">
+<head>
+<title>Outlining - nXML Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="nXML Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Paragraphs.html#Paragraphs" title="Paragraphs">
+<link rel="next" href="Locating-a-schema.html#Locating-a-schema" title="Locating a schema">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents nxml-mode, an Emacs major mode for editing
+XML with RELAX NG support.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Outlining"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Locating-a-schema.html#Locating-a-schema">Locating a schema</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Paragraphs.html#Paragraphs">Paragraphs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Outlining</h2>
+
+<p>nXML mode allows you to display all or part of a buffer as an
+outline, in a similar way to Emacs' outline mode.  An outline in nXML
+mode is based on recognizing two kinds of element: sections and
+headings.  There is one heading for every section and one section for
+every heading.  A section contains its heading as or within its first
+child element.  A section also contains its subordinate sections (its
+subsections).  The text content of a section consists of anything in a
+section that is neither a subsection nor a heading.
+
+   <p>Note that this is a different model from that used by XHTML. 
+nXML mode's outline support will not be useful for XHTML unless you
+adopt a convention of adding a <code>div</code> to enclose each
+section, rather than having sections implicitly delimited by different
+<code>h</code><var>n</var> elements.  This limitation may be removed
+in a future version.
+
+   <p>The variable <code>nxml-section-element-name-regexp</code> gives
+a regexp for the local names (i.e. the part of the name following any
+prefix) of section elements. The variable
+<code>nxml-heading-element-name-regexp</code> gives a regexp for the
+local names of heading elements. For an element to be recognized
+as a section
+
+     <ul>
+<li>its start-tag must occur at the beginning of a line
+(possibly indented);
+<li>its local name must match
+<code>nxml-section-element-name-regexp</code>;
+<li>either its first child element or a descendant of that
+first child element must have a local name that matches
+<code>nxml-heading-element-name-regexp</code>; the first such element
+is treated as the section's heading. 
+</ul>
+
+<p class="noindent">You can customize these variables using <kbd>M-x
+customize-variable</kbd>.
+
+   <p>There are three possible outline states for a section:
+
+     <ul>
+<li>normal, showing everything, including its heading, text
+content and subsections; each subsection is displayed according to the
+state of that subsection;
+<li>showing just its heading, with both its text content and
+its subsections hidden; all subsections are hidden regardless of their
+state;
+<li>showing its heading and its subsections, with its text
+content hidden; each subsection is displayed according to the state of
+that subsection. 
+</ul>
+
+   <p>In the last two states, where the text content is hidden, the
+heading is displayed specially, in an abbreviated form. An element
+like this:
+
+<pre class="example">     &lt;section&gt;
+     &lt;title&gt;Food&lt;/title&gt;
+     &lt;para&gt;There are many kinds of food.&lt;/para&gt;
+     &lt;/section&gt;
+</pre>
+   <p class="noindent">would be displayed on a single line like this:
+
+<pre class="example">     &lt;-section&gt;Food...&lt;/&gt;
+</pre>
+   <p class="noindent">If there are hidden subsections, then a <code>+</code> will be used
+instead of a <code>-</code> like this:
+
+<pre class="example">     &lt;+section&gt;Food...&lt;/&gt;
+</pre>
+   <p class="noindent">If there are non-hidden subsections, then the section will instead be
+displayed like this:
+
+<pre class="example">     &lt;-section&gt;Food...
+       &lt;-section&gt;Delicious Food...&lt;/&gt;
+       &lt;-section&gt;Distasteful Food...&lt;/&gt;
+     &lt;/-section&gt;
+</pre>
+   <p class="noindent">The heading is always displayed with an indent that corresponds to its
+depth in the outline, even it is not actually indented in the buffer. 
+The variable <code>nxml-outline-child-indent</code> controls how much
+a subheading is indented with respect to its parent heading when the
+heading is being displayed specially.
+
+   <p>Commands to change the outline state of sections are bound to
+key sequences that start with <kbd>C-c C-o</kbd> (<kbd>o</kbd> is
+mnemonic for outline).  The third and final key has been chosen to be
+consistent with outline mode.  In the following descriptions
+current section means the section containing point, or, more precisely,
+the innermost section containing the character immediately following
+point.
+
+     <ul>
+<li><kbd>C-c C-o C-a</kbd> shows all sections in the buffer
+normally. 
+<li><kbd>C-c C-o C-t</kbd> hides the text content
+of all sections in the buffer. 
+<li><kbd>C-c C-o C-c</kbd> hides the text content
+of the current section. 
+<li><kbd>C-c C-o C-e</kbd> shows the text content
+of the current section. 
+<li><kbd>C-c C-o C-d</kbd> hides the text content
+and subsections of the current section. 
+<li><kbd>C-c C-o C-s</kbd> shows the current section
+and all its direct and indirect subsections normally. 
+<li><kbd>C-c C-o C-k</kbd> shows the headings of the
+direct and indirect subsections of the current section. 
+<li><kbd>C-c C-o C-l</kbd> hides the text content of the
+current section and of its direct and indirect
+subsections. 
+<li><kbd>C-c C-o C-i</kbd> shows the headings of the
+direct subsections of the current section. 
+<li><kbd>C-c C-o C-o</kbd> hides as much as possible without
+hiding the current section's text content; the headings of ancestor
+sections of the current section and their child section sections will
+not be hidden. 
+</ul>
+
+   <p>When a heading is displayed specially, you can use
+&lt;RET&gt; in that heading to show the text content of the section
+in the same way as <kbd>C-c C-o C-e</kbd>.
+
+   <p>You can also use the mouse to change the outline state:
+<kbd>S-mouse-2</kbd> hides the text content of a section in the same
+way as<kbd>C-c C-o C-c</kbd>; <kbd>mouse-2</kbd> on a specially
+displayed heading shows the text content of the section in the same
+way as <kbd>C-c C-o C-e</kbd>; <kbd>mouse-1</kbd> on a specially
+displayed start-tag toggles the display of subheadings on and
+off.
+
+   <p>The outline state for each section is stored with the first
+character of the section (as a text property). Every command that
+changes the outline state of any section updates the display of the
+buffer so that each section is displayed correctly according to its
+outline state.  If the section structure is subsequently changed, then
+it is possible for the display to no longer correctly reflect the
+stored outline state. <kbd>C-c C-o C-r</kbd> can be used to refresh
+the display so it is correct again.
+
+   </body></html>
+

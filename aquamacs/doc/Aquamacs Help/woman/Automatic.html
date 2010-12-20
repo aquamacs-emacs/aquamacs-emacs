@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Automatic - WoMan: Browse Unix Manual Pages &quot;W.O. (without) Man&quot;</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="WoMan: Browse Unix Manual Pages &quot;W.O. (without) Man&quot;">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Finding.html#Finding" title="Finding">
+<link rel="prev" href="Filename.html#Filename" title="Filename">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents WoMan: A program to browse Unix manual pages `W.O.
+(without) man'.
+
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Automatic"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Filename.html#Filename">Filename</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Finding.html#Finding">Finding</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">3.3 Automatic Interface</h3>
+
+<p><a name="index-automatic-interface-21"></a>
+Emacs provides an interface to detect automatically the format of a file
+and decode it when it is visited.  It is used primarily by the
+facilities for editing rich (i.e. formatted) text, as a way to store
+formatting information transparently as <acronym>ASCII</acronym> markup.  WoMan can in
+principle use this interface, but it must be configured explicitly.
+
+<p>This use of WoMan does not seem to be particularly advantageous, so it
+is not really supported.  It originated during early experiments on how
+best to implement WoMan, before I implemented the current topic
+interface, and I subsequently stopped using it.  I might revive it as a
+mechanism for storing pre-formatted WoMan files, somewhat analogous to
+the standard Unix <code>catman</code> facility.  In the meantime, it exists
+for anyone who wants to experiment with it.  Once it is set up it is
+simply a question of visiting the file and there is no WoMan-specific
+user interface!
+
+<p>To use it, put something like this in your <samp><span class="file">.emacs</span></samp> file.  [The
+call to <code>set-visited-file-name</code> is to avoid font-locking triggered
+by automatic major mode selection.]
+
+<pre class="lisp">     (autoload 'woman-decode-region "woman")
+     
+     (add-to-list 'format-alist
+                  '(man "Unix man-page source format" "\\.\\(TH\\|ig\\) "
+                        woman-decode-region nil nil
+                        (lambda (arg)
+                          set-visited-file-name
+                          (file-name-sans-extension buffer-file-name))))
+</pre>
+<!-- =================================================================== -->
+</body></html>
+

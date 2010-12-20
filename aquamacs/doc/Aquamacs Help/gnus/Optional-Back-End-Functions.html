@@ -1,0 +1,254 @@
+<html lang="en">
+<head>
+<title>Optional Back End Functions - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
+<link rel="prev" href="Required-Back-End-Functions.html#Required-Back-End-Functions" title="Required Back End Functions">
+<link rel="next" href="Error-Messaging.html#Error-Messaging" title="Error Messaging">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Optional-Back-End-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Error-Messaging.html#Error-Messaging">Error Messaging</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Required-Back-End-Functions.html#Required-Back-End-Functions">Required Back End Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.7.2.2 Optional Back End Functions</h5>
+
+     <dl>
+<dt><code>(nnchoke-retrieve-groups GROUPS &amp;optional SERVER)</code><dd>
+<var>groups</var> is a list of groups, and this function should request data
+on all those groups.  How it does it is of no concern to Gnus, but it
+should attempt to do this in a speedy fashion.
+
+     <p>The return value of this function can be either <code>active</code> or
+<code>group</code>, which says what the format of the result data is.  The
+former is in the same format as the data from
+<code>nnchoke-request-list</code>, while the latter is a buffer full of lines
+in the same format as <code>nnchoke-request-group</code> gives.
+
+     <pre class="example">          group-buffer = *active-line / *group-status
+</pre>
+     <br><dt><code>(nnchoke-request-update-info GROUP INFO &amp;optional SERVER)</code><dd>
+A Gnus group info (see <a href="Group-Info.html#Group-Info">Group Info</a>) is handed to the back end for
+alterations.  This comes in handy if the back end really carries all
+the information (as is the case with virtual and imap groups).  This
+function should destructively alter the info to suit its needs, and
+should return a non-<code>nil</code> value (exceptionally,
+<code>nntp-request-update-info</code> always returns <code>nil</code> not to waste
+the network resources).
+
+     <p>There should be no result data from this function.
+
+     <br><dt><code>(nnchoke-request-type GROUP &amp;optional ARTICLE)</code><dd>
+When the user issues commands for &ldquo;sending news&rdquo; (<kbd>F</kbd> in the
+summary buffer, for instance), Gnus has to know whether the article the
+user is following up on is news or mail.  This function should return
+<code>news</code> if <var>article</var> in <var>group</var> is news, <code>mail</code> if it
+is mail and <code>unknown</code> if the type can't be decided.  (The
+<var>article</var> parameter is necessary in <code>nnvirtual</code> groups which
+might very well combine mail groups and news groups.)  Both <var>group</var>
+and <var>article</var> may be <code>nil</code>.
+
+     <p>There should be no result data from this function.
+
+     <br><dt><code>(nnchoke-request-set-mark GROUP ACTION &amp;optional SERVER)</code><dd>
+Set/remove/add marks on articles.  Normally Gnus handles the article
+marks (such as read, ticked, expired etc) internally, and store them in
+<samp><span class="file">~/.newsrc.eld</span></samp>.  Some back ends (such as <acronym>IMAP</acronym>) however carry
+all information about the articles on the server, so Gnus need to
+propagate the mark information to the server.
+
+     <p><var>action</var> is a list of mark setting requests, having this format:
+
+     <pre class="example">          (RANGE ACTION MARK)
+</pre>
+     <p><var>range</var> is a range of articles you wish to update marks on. 
+<var>action</var> is <code>add</code> or <code>del</code>, used to add marks or remove
+marks (preserving all marks not mentioned).  <var>mark</var> is a list of
+marks; where each mark is a symbol.  Currently used marks are
+<code>read</code>, <code>tick</code>, <code>reply</code>, <code>expire</code>, <code>killed</code>,
+<code>dormant</code>, <code>save</code>, <code>download</code>, <code>unsend</code>,
+<code>forward</code> and <code>recent</code>, but your back end should, if
+possible, not limit itself to these.
+
+     <p>Given contradictory actions, the last action in the list should be the
+effective one.  That is, if your action contains a request to add the
+<code>tick</code> mark on article 1 and, later in the list, a request to
+remove the mark on the same article, the mark should in fact be removed.
+
+     <p>An example action list:
+
+     <pre class="example">          (((5 12 30) 'del '(tick))
+           ((10 . 90) 'add '(read expire))
+           ((92 94) 'del '(read)))
+</pre>
+     <p>The function should return a range of articles it wasn't able to set the
+mark on (currently not used for anything).
+
+     <p>There should be no result data from this function.
+
+     <br><dt><code>(nnchoke-request-update-mark GROUP ARTICLE MARK)</code><dd>
+If the user tries to set a mark that the back end doesn't like, this
+function may change the mark.  Gnus will use whatever this function
+returns as the mark for <var>article</var> instead of the original
+<var>mark</var>.  If the back end doesn't care, it must return the original
+<var>mark</var>, and not <code>nil</code> or any other type of garbage.
+
+     <p>The only use for this I can see is what <code>nnvirtual</code> does with
+it&mdash;if a component group is auto-expirable, marking an article as read
+in the virtual group should result in the article being marked as
+expirable.
+
+     <p>There should be no result data from this function.
+
+     <br><dt><code>(nnchoke-request-scan &amp;optional GROUP SERVER)</code><dd>
+This function may be called at any time (by Gnus or anything else) to
+request that the back end check for incoming articles, in one way or
+another.  A mail back end will typically read the spool file or query
+the <acronym>POP</acronym> server when this function is invoked.  The
+<var>group</var> doesn't have to be heeded&mdash;if the back end decides that
+it is too much work just scanning for a single group, it may do a
+total scan of all groups.  It would be nice, however, to keep things
+local if that's practical.
+
+     <p>There should be no result data from this function.
+
+     <br><dt><code>(nnchoke-request-group-description GROUP &amp;optional SERVER)</code><dd>
+The result data from this function should be a description of
+<var>group</var>.
+
+     <pre class="example">          description-line = name &lt;TAB&gt; description eol
+          name             = &lt;string&gt;
+          description      = &lt;text&gt;
+</pre>
+     <br><dt><code>(nnchoke-request-list-newsgroups &amp;optional SERVER)</code><dd>
+The result data from this function should be the description of all
+groups available on the server.
+
+     <pre class="example">          description-buffer = *description-line
+</pre>
+     <br><dt><code>(nnchoke-request-newgroups DATE &amp;optional SERVER)</code><dd>
+The result data from this function should be all groups that were
+created after &lsquo;<samp><span class="samp">date</span></samp>&rsquo;, which is in normal human-readable date format
+(i.e., the date format used in mail and news headers, and returned by
+the function <code>message-make-date</code> by default).  The data should be
+in the active buffer format.
+
+     <p>It is okay for this function to return &ldquo;too many&rdquo; groups; some back ends
+might find it cheaper to return the full list of groups, rather than
+just the new groups.  But don't do this for back ends with many groups. 
+Normally, if the user creates the groups herself, there won't be too
+many groups, so <code>nnml</code> and the like are probably safe.  But for
+back ends like <code>nntp</code>, where the groups have been created by the
+server, it is quite likely that there can be many groups.
+
+     <br><dt><code>(nnchoke-request-create-group GROUP &amp;optional SERVER)</code><dd>
+This function should create an empty group with name <var>group</var>.
+
+     <p>There should be no return data.
+
+     <br><dt><code>(nnchoke-request-expire-articles ARTICLES &amp;optional GROUP SERVER FORCE)</code><dd>
+This function should run the expiry process on all articles in the
+<var>articles</var> range (which is currently a simple list of article
+numbers.)  It is left up to the back end to decide how old articles
+should be before they are removed by this function.  If <var>force</var> is
+non-<code>nil</code>, all <var>articles</var> should be deleted, no matter how new
+they are.
+
+     <p>This function should return a list of articles that it did not/was not
+able to delete.
+
+     <p>There should be no result data returned.
+
+     <br><dt><code>(nnchoke-request-move-article ARTICLE GROUP SERVER ACCEPT-FORM &amp;optional LAST)</code><dd>
+This function should move <var>article</var> (which is a number) from
+<var>group</var> by calling <var>accept-form</var>.
+
+     <p>This function should ready the article in question for moving by
+removing any header lines it has added to the article, and generally
+should &ldquo;tidy up&rdquo; the article.  Then it should <code>eval</code>
+<var>accept-form</var> in the buffer where the &ldquo;tidy&rdquo; article is.  This
+will do the actual copying.  If this <code>eval</code> returns a
+non-<code>nil</code> value, the article should be removed.
+
+     <p>If <var>last</var> is <code>nil</code>, that means that there is a high likelihood
+that there will be more requests issued shortly, so that allows some
+optimizations.
+
+     <p>The function should return a cons where the <code>car</code> is the group name and
+the <code>cdr</code> is the article number that the article was entered as.
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-request-accept-article GROUP &amp;optional SERVER LAST)</code><dd>
+This function takes the current buffer and inserts it into <var>group</var>. 
+If <var>last</var> in <code>nil</code>, that means that there will be more calls to
+this function in short order.
+
+     <p>The function should return a cons where the <code>car</code> is the group name and
+the <code>cdr</code> is the article number that the article was entered as.
+
+     <p>The group should exist before the back end is asked to accept the
+article for that group.
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-request-replace-article ARTICLE GROUP BUFFER)</code><dd>
+This function should remove <var>article</var> (which is a number) from
+<var>group</var> and insert <var>buffer</var> there instead.
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-request-delete-group GROUP FORCE &amp;optional SERVER)</code><dd>
+This function should delete <var>group</var>.  If <var>force</var>, it should
+really delete all the articles in the group, and then delete the group
+itself.  (If there is such a thing as &ldquo;the group itself&rdquo;.)
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-request-rename-group GROUP NEW-NAME &amp;optional SERVER)</code><dd>
+This function should rename <var>group</var> into <var>new-name</var>.  All
+articles in <var>group</var> should move to <var>new-name</var>.
+
+     <p>There should be no data returned.
+
+</dl>
+
+   </body></html>
+

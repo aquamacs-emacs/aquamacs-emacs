@@ -1,0 +1,220 @@
+<html lang="en">
+<head>
+<title>Terminology - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Appendices.html#Appendices" title="Appendices">
+<link rel="prev" href="On-Writing-Manuals.html#On-Writing-Manuals" title="On Writing Manuals">
+<link rel="next" href="Customization.html#Customization" title="Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Terminology"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customization.html#Customization">Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="On-Writing-Manuals.html#On-Writing-Manuals">On Writing Manuals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Appendices.html#Appendices">Appendices</a>
+<hr>
+</div>
+
+<h3 class="section">10.4 Terminology</h3>
+
+<p><a name="index-terminology-3099"></a>
+     <dl>
+<dt><dfn>news</dfn><dd><a name="index-news-3100"></a>This is what you are supposed to use this thing for&mdash;reading news. 
+News is generally fetched from a nearby <acronym>NNTP</acronym> server, and is
+generally publicly available to everybody.  If you post news, the entire
+world is likely to read just what you have written, and they'll all
+snigger mischievously.  Behind your back.
+
+     <br><dt><dfn>mail</dfn><dd><a name="index-mail-3101"></a>Everything that's delivered to you personally is mail.  Some news/mail
+readers (like Gnus) blur the distinction between mail and news, but
+there is a difference.  Mail is private.  News is public.  Mailing is
+not posting, and replying is not following up.
+
+     <br><dt><dfn>reply</dfn><dd><a name="index-reply-3102"></a>Send a mail to the person who has written what you are reading.
+
+     <br><dt><dfn>follow up</dfn><dd><a name="index-follow-up-3103"></a>Post an article to the current newsgroup responding to the article you
+are reading.
+
+     <br><dt><dfn>back end</dfn><dd><a name="index-back-end-3104"></a>Gnus considers mail and news to be mostly the same, really.  The only
+difference is how to access the actual articles.  News articles are
+commonly fetched via the protocol <acronym>NNTP</acronym>, whereas mail
+messages could be read from a file on the local disk.  The internal
+architecture of Gnus thus comprises a &ldquo;front end&rdquo; and a number of
+&ldquo;back ends&rdquo;.  Internally, when you enter a group (by hitting
+&lt;RET&gt;, say), you thereby invoke a function in the front end in
+Gnus.  The front end then &ldquo;talks&rdquo; to a back end and says things like
+&ldquo;Give me the list of articles in the foo group&rdquo; or &ldquo;Show me article
+number 4711&rdquo;.
+
+     <p>So a back end mainly defines either a protocol (the <code>nntp</code> back
+end accesses news via <acronym>NNTP</acronym>, the <code>nnimap</code> back end
+accesses mail via <acronym>IMAP</acronym>) or a file format and directory
+layout (the <code>nnspool</code> back end accesses news via the common
+&ldquo;spool directory&rdquo; format, the <code>nnml</code> back end access mail via a
+file format and directory layout that's quite similar).
+
+     <p>Gnus does not handle the underlying media, so to speak&mdash;this is all
+done by the back ends.  A back end is a collection of functions to
+access the articles.
+
+     <p>However, sometimes the term &ldquo;back end&rdquo; is also used where &ldquo;server&rdquo;
+would have been more appropriate.  And then there is the term &ldquo;select
+method&rdquo; which can mean either.  The Gnus terminology can be quite
+confusing.
+
+     <br><dt><dfn>native</dfn><dd><a name="index-native-3105"></a>Gnus will always use one method (and back end) as the <dfn>native</dfn>, or
+default, way of getting news.
+
+     <br><dt><dfn>foreign</dfn><dd><a name="index-foreign-3106"></a>You can also have any number of foreign groups active at the same time. 
+These are groups that use non-native non-secondary back ends for getting
+news.
+
+     <br><dt><dfn>secondary</dfn><dd><a name="index-secondary-3107"></a>Secondary back ends are somewhere half-way between being native and being
+foreign, but they mostly act like they are native.
+
+     <br><dt><dfn>article</dfn><dd><a name="index-article-3108"></a>A message that has been posted as news.
+
+     <br><dt><dfn>mail message</dfn><dd><a name="index-mail-message-3109"></a>A message that has been mailed.
+
+     <br><dt><dfn>message</dfn><dd><a name="index-message-3110"></a>A mail message or news article
+
+     <br><dt><dfn>head</dfn><dd><a name="index-head-3111"></a>The top part of a message, where administrative information (etc.) is
+put.
+
+     <br><dt><dfn>body</dfn><dd><a name="index-body-3112"></a>The rest of an article.  Everything not in the head is in the
+body.
+
+     <br><dt><dfn>header</dfn><dd><a name="index-header-3113"></a>A line from the head of an article.
+
+     <br><dt><dfn>headers</dfn><dd><a name="index-headers-3114"></a>A collection of such lines, or a collection of heads.  Or even a
+collection of <acronym>NOV</acronym> lines.
+
+     <br><dt><dfn><acronym>NOV</acronym></dfn><dd><a name="index-g_t_0040acronym_007bNOV_007d-3115"></a><acronym>NOV</acronym> stands for News OverView, which is a type of news server
+header which provide datas containing the condensed header information
+of articles.  They are produced by the server itself; in the <code>nntp</code>
+back end Gnus uses the ones that the <acronym>NNTP</acronym> server makes, but
+Gnus makes them by itself for some backends (in particular, <code>nnml</code>).
+
+     <p>When Gnus enters a group, it asks the back end for the headers of all
+unread articles in the group.  Most servers support the News OverView
+format, which is more compact and much faster to read and parse than the
+normal <span class="sc">head</span> format.
+
+     <p>The <acronym>NOV</acronym> data consist of one or more text lines (see <a href="../elisp/Text-Lines.html#Text-Lines">Motion by Text Lines</a>)
+where each line has the header information of one article.  The header
+information is a tab-separated series of the header's contents including
+an article number, a subject, an author, a date, a message-id,
+references, etc.
+
+     <p>Those data enable Gnus to generate summary lines quickly.  However, if
+the server does not support <acronym>NOV</acronym> or you disable it purposely or
+for some reason, Gnus will try to generate the header information by
+parsing each article's headers one by one.  It will take time. 
+Therefore, it is not usually a good idea to set nn*-nov-is-evil
+(see <a href="Slow_002fExpensive-Connection.html#Slow_002fExpensive-Connection">Slow/Expensive Connection</a>) to a non-<code>nil</code> value unless you
+know that the server makes wrong <acronym>NOV</acronym> data.
+
+     <br><dt><dfn>level</dfn><dd><a name="index-levels-3116"></a>Each group is subscribed at some <dfn>level</dfn> or other (1-9).  The ones
+that have a lower level are &ldquo;more&rdquo; subscribed than the groups with a
+higher level.  In fact, groups on levels 1-5 are considered
+<dfn>subscribed</dfn>; 6-7 are <dfn>unsubscribed</dfn>; 8 are <dfn>zombies</dfn>; and 9
+are <dfn>killed</dfn>.  Commands for listing groups and scanning for new
+articles will all use the numeric prefix as <dfn>working level</dfn>.
+
+     <br><dt><dfn>killed groups</dfn><dd><a name="index-killed-groups-3117"></a>No information on killed groups is stored or updated, which makes killed
+groups much easier to handle than subscribed groups.
+
+     <br><dt><dfn>zombie groups</dfn><dd><a name="index-zombie-groups-3118"></a>Just like killed groups, only slightly less dead.
+
+     <br><dt><dfn>active file</dfn><dd><a name="index-active-file-3119"></a>The news server has to keep track of what articles it carries, and what
+groups exist.  All this information in stored in the active file, which
+is rather large, as you might surmise.
+
+     <br><dt><dfn>bogus groups</dfn><dd><a name="index-bogus-groups-3120"></a>A group that exists in the <samp><span class="file">.newsrc</span></samp> file, but isn't known to the
+server (i.e.,  it isn't in the active file), is a <em>bogus group</em>. 
+This means that the group probably doesn't exist (any more).
+
+     <br><dt><dfn>activating</dfn><dd><a name="index-activating-groups-3121"></a>The act of asking the server for info on a group and computing the
+number of unread articles is called <dfn>activating the group</dfn>. 
+Un-activated groups are listed with &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in the group buffer.
+
+     <br><dt><dfn>spool</dfn><dd><a name="index-spool-3122"></a>News servers store their articles locally in one fashion or other. 
+One old-fashioned storage method is to have just one file per
+article.  That's called a &ldquo;traditional spool&rdquo;.
+
+     <br><dt><dfn>server</dfn><dd><a name="index-server-3123"></a>A machine one can connect to and get news (or mail) from.
+
+     <br><dt><dfn>select method</dfn><dd><a name="index-select-method-3124"></a>A structure that specifies the back end, the server and the virtual
+server settings.
+
+     <br><dt><dfn>virtual server</dfn><dd><a name="index-virtual-server-3125"></a>A named select method.  Since a select method defines all there is to
+know about connecting to a (physical) server, taking the thing as a
+whole is a virtual server.
+
+     <br><dt><dfn>washing</dfn><dd><a name="index-washing-3126"></a>Taking a buffer and running it through a filter of some sort.  The
+result will (more often than not) be cleaner and more pleasing than the
+original.
+
+     <br><dt><dfn>ephemeral groups</dfn><dd><a name="index-ephemeral-groups-3127"></a><a name="index-temporary-groups-3128"></a>Most groups store data on what articles you have read.  <dfn>Ephemeral</dfn>
+groups are groups that will have no data stored&mdash;when you exit the
+group, it'll disappear into the aether.
+
+     <br><dt><dfn>solid groups</dfn><dd><a name="index-solid-groups-3129"></a>This is the opposite of ephemeral groups.  All groups listed in the
+group buffer are solid groups.
+
+     <br><dt><dfn>sparse articles</dfn><dd><a name="index-sparse-articles-3130"></a>These are article placeholders shown in the summary buffer when
+<code>gnus-build-sparse-threads</code> has been switched on.
+
+     <br><dt><dfn>threading</dfn><dd><a name="index-threading-3131"></a>To put responses to articles directly after the articles they respond
+to&mdash;in a hierarchical fashion.
+
+     <br><dt><dfn>root</dfn><dd><a name="index-root-3132"></a><a name="index-thread-root-3133"></a>The first article in a thread is the root.  It is the ancestor of all
+articles in the thread.
+
+     <br><dt><dfn>parent</dfn><dd><a name="index-parent-3134"></a>An article that has responses.
+
+     <br><dt><dfn>child</dfn><dd><a name="index-child-3135"></a>An article that responds to a different article&mdash;its parent.
+
+     <br><dt><dfn>digest</dfn><dd><a name="index-digest-3136"></a>A collection of messages in one file.  The most common digest format is
+specified by RFC 1153.
+
+     <br><dt><dfn>splitting</dfn><dd><a name="index-splitting_002c-terminology-3137"></a><a name="index-mail-sorting-3138"></a><a name="index-mail-filtering-_0028splitting_0029-3139"></a>The action of sorting your emails according to certain rules. Sometimes
+incorrectly called mail filtering.
+
+   </dl>
+
+   </body></html>
+

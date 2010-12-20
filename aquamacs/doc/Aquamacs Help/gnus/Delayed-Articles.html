@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Delayed Articles - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" title="Reply Followup and Post">
+<link rel="next" href="Marking-Articles.html#Marking-Articles" title="Marking Articles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Delayed-Articles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Marking-Articles.html#Marking-Articles">Marking Articles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reply-Followup-and-Post.html#Reply-Followup-and-Post">Reply Followup and Post</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.6 Delayed Articles</h3>
+
+<p><a name="index-delayed-sending-829"></a><a name="index-send-delayed-830"></a>
+Sometimes, you might wish to delay the sending of a message.  For
+example, you might wish to arrange for a message to turn up just in time
+to remind your about the birthday of your Significant Other.  For this,
+there is the <code>gnus-delay</code> package.  Setup is simple:
+
+<pre class="lisp">     (gnus-delay-initialize)
+</pre>
+   <p><a name="index-gnus_002ddelay_002darticle-831"></a>Normally, to send a message you use the <kbd>C-c C-c</kbd> command from
+Message mode.  To delay a message, use <kbd>C-c C-j</kbd>
+(<code>gnus-delay-article</code>) instead.  This will ask you for how long the
+message should be delayed.  Possible answers are:
+
+     <ul>
+<li>A time span.  Consists of an integer and a letter.  For example,
+<code>42d</code> means to delay for 42 days.  Available letters are <code>m</code>
+(minutes), <code>h</code> (hours), <code>d</code> (days), <code>w</code> (weeks), <code>M</code>
+(months) and <code>Y</code> (years).
+
+     <li>A specific date.  Looks like <code>YYYY-MM-DD</code>.  The message will be
+delayed until that day, at a specific time (eight o'clock by default). 
+See also <code>gnus-delay-default-hour</code>.
+
+     <li>A specific time of day.  Given in <code>hh:mm</code> format, 24h, no am/pm
+stuff.  The deadline will be at that time today, except if that time has
+already passed, then it's at the given time tomorrow.  So if it's ten
+o'clock in the morning and you specify <code>11:15</code>, then the deadline
+is one hour and fifteen minutes hence.  But if you specify <code>9:20</code>,
+that means a time tomorrow. 
+</ul>
+
+   <p>The action of the <code>gnus-delay-article</code> command is influenced by a
+couple of variables:
+
+     <dl>
+<dt><code>gnus-delay-default-hour</code><dd><a name="index-gnus_002ddelay_002ddefault_002dhour-832"></a>When you specify a specific date, the message will be due on that hour
+on the given date.  Possible values are integers 0 through 23.
+
+     <br><dt><code>gnus-delay-default-delay</code><dd><a name="index-gnus_002ddelay_002ddefault_002ddelay-833"></a>This is a string and gives the default delay.  It can be of any of the
+formats described above.
+
+     <br><dt><code>gnus-delay-group</code><dd><a name="index-gnus_002ddelay_002dgroup-834"></a>Delayed articles will be kept in this group on the drafts server until
+they are due.  You probably don't need to change this.  The default
+value is <code>"delayed"</code>.
+
+     <br><dt><code>gnus-delay-header</code><dd><a name="index-gnus_002ddelay_002dheader-835"></a>The deadline for each article will be stored in a header.  This variable
+is a string and gives the header name.  You probably don't need to
+change this.  The default value is <code>"X-Gnus-Delayed"</code>. 
+</dl>
+
+   <p>The way delaying works is like this: when you use the
+<code>gnus-delay-article</code> command, you give a certain delay.  Gnus
+calculates the deadline of the message and stores it in the
+<code>X-Gnus-Delayed</code> header and puts the message in the
+<code>nndraft:delayed</code> group.
+
+   <p><a name="index-gnus_002ddelay_002dsend_002dqueue-836"></a>And whenever you get new news, Gnus looks through the group for articles
+which are due and sends them.  It uses the <code>gnus-delay-send-queue</code>
+function for this.  By default, this function is added to the hook
+<code>gnus-get-new-news-hook</code>.  But of course, you can change this. 
+Maybe you want to use the demon to send drafts?  Just tell the demon to
+execute the <code>gnus-delay-send-queue</code> function.
+
+     <dl>
+<dt><code>gnus-delay-initialize</code><dd><a name="index-gnus_002ddelay_002dinitialize-837"></a>By default, this function installs <code>gnus-delay-send-queue</code> in
+<code>gnus-get-new-news-hook</code>.  But it accepts the optional second
+argument <code>no-check</code>.  If it is non-<code>nil</code>,
+<code>gnus-get-new-news-hook</code> is not changed.  The optional first
+argument is ignored.
+
+     <p>For example, <code>(gnus-delay-initialize nil t)</code> means to do nothing. 
+Presumably, you want to use the demon for sending due delayed articles. 
+Just don't forget to set that up :-)
+</dl>
+
+   </body></html>
+

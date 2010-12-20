@@ -1,0 +1,210 @@
+<html lang="en">
+<head>
+<title>GTK styles - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GTK-resources.html#GTK-resources" title="GTK resources">
+<link rel="prev" href="GTK-Names-in-Emacs.html#GTK-Names-in-Emacs" title="GTK Names in Emacs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="GTK-styles"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GTK-Names-in-Emacs.html#GTK-Names-in-Emacs">GTK Names in Emacs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GTK-resources.html#GTK-resources">GTK resources</a>
+<hr>
+</div>
+
+<h4 class="appendixsubsec">D.6.3 GTK styles</h4>
+
+<p><a name="index-GTK-styles-4307"></a>
+  In a GTK style you specify the appearance widgets shall have.  You
+can specify foreground and background color, background pixmap and
+font.  The edit widget (where you edit the text) in Emacs is a GTK
+widget, but trying to specify a style for the edit widget will have no
+effect.  This is so that Emacs compiled for GTK is compatible with
+Emacs compiled for other X toolkits.  The settings for foreground,
+background and font for the edit widget is taken from the X resources;
+see <a href="Resources.html#Resources">Resources</a>.  Here is an example of two style declarations,
+&lsquo;<samp><span class="samp">default</span></samp>&rsquo; and &lsquo;<samp><span class="samp">ruler</span></samp>&rsquo;:
+
+<pre class="smallexample">     pixmap_path "/usr/share/pixmaps:/usr/include/X11/pixmaps"
+     
+     style "default"
+     {
+       font_name = "helvetica 12"
+     
+       bg[NORMAL] = { 0.83, 0.80, 0.73 }
+       bg[SELECTED] = { 0.0, 0.55, 0.55 }
+       bg[INSENSITIVE] = { 0.77, 0.77, 0.66 }
+       bg[ACTIVE] = { 0.0, 0.55, 0.55 }
+       bg[PRELIGHT] = { 0.0, 0.55, 0.55 }
+     
+       fg[NORMAL] = "black"
+       fg[SELECTED] = { 0.9, 0.9, 0.9 }
+       fg[ACTIVE] = "black"
+       fg[PRELIGHT] = { 0.9, 0.9, 0.9 }
+     
+       base[INSENSITIVE] = "#777766"
+       text[INSENSITIVE] = { 0.60, 0.65, 0.57 }
+     
+       bg_pixmap[NORMAL] = "background.xpm"
+       bg_pixmap[INSENSITIVE] = "background.xpm"
+       bg_pixmap[ACTIVE] = "background.xpm"
+       bg_pixmap[PRELIGHT] = "&lt;none&gt;"
+     
+     }
+     
+     style "ruler" = "default"
+     {
+       font_name = "helvetica 8"
+     }
+     
+</pre>
+   <p>The style &lsquo;<samp><span class="samp">ruler</span></samp>&rsquo; inherits from &lsquo;<samp><span class="samp">default</span></samp>&rsquo;.  This way you can build
+on existing styles.  The syntax for fonts and colors is described below.
+
+   <p>As this example shows, it is possible to specify several values for
+foreground and background depending on the widget's <dfn>state</dfn>.  The
+possible states are:
+
+     <dl>
+<dt><code>NORMAL</code><dd>This is the default state for widgets. 
+<br><dt><code>ACTIVE</code><dd>This is the state for a widget that is ready to do something.  It is
+also for the trough of a scroll bar, i.e.  <code>bg[ACTIVE] = "red"</code>
+sets the scroll bar trough to red.  Buttons that have been pressed but
+not released yet (&ldquo;armed&rdquo;) are in this state. 
+<br><dt><code>PRELIGHT</code><dd>This is the state for a widget that can be manipulated, when the mouse
+pointer is over it&mdash;for example when the mouse is over the thumb in
+the scroll bar or over a menu item.  When the mouse is over a button
+that is not pressed, the button is in this state. 
+<br><dt><code>SELECTED</code><dd>This is the state for data that has been selected by the user.  It can
+be selected text or items selected in a list.  This state is not used
+in Emacs. 
+<br><dt><code>INSENSITIVE</code><dd>This is the state for widgets that are visible, but they can not be
+manipulated in the usual way&mdash;for example, buttons that can't be
+pressed, and disabled menu items.  To display disabled menu items in
+yellow, use <code>fg[INSENSITIVE] = "yellow"</code>. 
+</dl>
+
+   <p>Here are the things that can go in a style declaration:
+
+     <dl>
+<dt><code>bg[</code><var>state</var><code>] = </code><var>color</var><dd>This specifies the background color for the widget.  Note that
+editable text doesn't use <code>bg</code>; it uses <code>base</code> instead.
+
+     <br><dt><code>base[</code><var>state</var><code>] = </code><var>color</var><dd>This specifies the background color for editable text.  In Emacs, this
+color is used for the background of the text fields in the file
+dialog.
+
+     <br><dt><code>bg_pixmap[</code><var>state</var><code>] = "</code><var>pixmap</var><code>"</code><dd>This specifies an image background (instead of a background color). 
+<var>pixmap</var> should be the image file name.  GTK can use a number of
+image file formats, including XPM, XBM, GIF, JPEG and PNG.  If you
+want a widget to use the same image as its parent, use
+&lsquo;<samp><span class="samp">&lt;parent&gt;</span></samp>&rsquo;.  If you don't want any image, use &lsquo;<samp><span class="samp">&lt;none&gt;</span></samp>&rsquo;. 
+&lsquo;<samp><span class="samp">&lt;none&gt;</span></samp>&rsquo; is the way to cancel a background image inherited from a
+parent style.
+
+     <p>You can't specify the file by its absolute file name.  GTK looks for
+the pixmap file in directories specified in <code>pixmap_path</code>. 
+<code>pixmap_path</code> is a colon-separated list of directories within
+double quotes, specified at the top level in a <samp><span class="file">gtkrc</span></samp> file
+(i.e. not inside a style definition; see example above):
+
+     <pre class="smallexample">          pixmap_path "/usr/share/pixmaps:/usr/include/X11/pixmaps"
+</pre>
+     <br><dt><code>fg[</code><var>state</var><code>] = </code><var>color</var><dd>This specifies the foreground color for widgets to use.  It is the
+color of text in menus and buttons, and the color for the arrows in
+the scroll bar.  For editable text, use <code>text</code>.
+
+     <br><dt><code>text[</code><var>state</var><code>] = </code><var>color</var><dd>This is the color for editable text.  In Emacs, this color is used for the
+text fields in the file dialog.
+
+     <br><dt><code>font_name = "</code><var>font</var><code>"</code><dd>This specifies the font for text in the widget.  <var>font</var> is a
+Pango font name, for example &lsquo;<samp><span class="samp">Sans Italic 10</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Helvetica
+Bold 12</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Courier 14</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Times 18</span></samp>&rsquo;.  See below for exact
+syntax.  The names are case insensitive. 
+</dl>
+
+   <p>There are three ways to specify a color: by name, in hexadecimal
+form, and with an RGB triplet.
+
+<p class="noindent">A color name is written within double quotes, for example <code>"red"</code>.
+
+<p class="noindent">Hexadecimal form is the same as in X:
+<code>#</code><var>rrrr</var><var>gggg</var><var>bbbb</var>, where all three color specs
+must have the same number of hex digits (1, 2, 3 or 4).
+
+<p class="noindent">An RGB triplet looks like <code>{ </code><var>r</var><code>, </code><var>g</var><code>, </code><var>b</var><code> }</code>,
+where <var>r</var>, <var>g</var> and <var>b</var> are either integers in the range
+0-65535 or floats in the range 0.0-1.0.
+
+   <p>Pango font names have the form &ldquo;<var>family-list</var> <var>style-options</var>
+<var>size</var>.&rdquo;
+<a name="index-Pango-font-name-4308"></a><var>family-list</var> is a comma separated list of font families optionally
+terminated by a comma.  This way you can specify several families and the
+first one found will be used.  <var>family</var> corresponds to the second part in
+an X font name, for example in
+
+<pre class="smallexample">     -adobe-times-medium-r-normal--12-120-75-75-p-64-iso10646-1
+</pre>
+   <p class="noindent">the family name is &lsquo;<samp><span class="samp">times</span></samp>&rsquo;.
+
+<p class="noindent"><var>style-options</var> is a whitespace separated list of words where each word
+is a style, variant, weight, or stretch.  The default value for all of
+these is <code>normal</code>.
+
+<p class="noindent">A `style' corresponds to the fourth part of an X font name.  In X font
+names it is the character &lsquo;<samp><span class="samp">r</span></samp>&rsquo;, &lsquo;<samp><span class="samp">i</span></samp>&rsquo; or &lsquo;<samp><span class="samp">o</span></samp>&rsquo;; in Pango
+font names the corresponding values are <code>normal</code>, <code>italic</code>,
+or <code>oblique</code>.
+
+<p class="noindent">A `variant' is either <code>normal</code> or <code>small-caps</code>. 
+Small caps is a font with the lower case characters replaced by
+smaller variants of the capital characters.
+
+<p class="noindent">Weight describes the &ldquo;boldness&rdquo; of a font.  It corresponds to the third
+part of an X font name.  It is one of <code>ultra-light</code>, <code>light</code>,
+<code>normal</code>, <code>bold</code>, <code>ultra-bold</code>, or <code>heavy</code>.
+
+<p class="noindent">Stretch gives the width of the font relative to other designs within a
+family.  It corresponds to the fifth part of an X font name.  It is one of
+<code>ultra-condensed</code>, <code>extra-condensed</code>, <code>condensed</code>,
+<code>semi-condensed</code>, <code>normal</code>, <code>semi-expanded</code>,
+<code>expanded</code>, <code>extra-expanded</code>, or <code>ultra-expanded</code>.
+
+<p class="noindent"><var>size</var> is a decimal number that describes the font size in points.
+
+<!-- This is part of the Emacs manual. -->
+<!-- Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc. -->
+<!-- See file emacs.texi for copying conditions. -->
+</body></html>
+

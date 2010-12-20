@@ -1,0 +1,193 @@
+<html lang="en">
+<head>
+<title>Adaptive Scoring - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scoring.html#Scoring" title="Scoring">
+<link rel="prev" href="Score-File-Editing.html#Score-File-Editing" title="Score File Editing">
+<link rel="next" href="Home-Score-File.html#Home-Score-File" title="Home Score File">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Adaptive-Scoring"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Home-Score-File.html#Home-Score-File">Home Score File</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Score-File-Editing.html#Score-File-Editing">Score File Editing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
+<hr>
+</div>
+
+<h3 class="section">7.6 Adaptive Scoring</h3>
+
+<p><a name="index-adaptive-scoring-2661"></a>
+If all this scoring is getting you down, Gnus has a way of making it all
+happen automatically&mdash;as if by magic.  Or rather, as if by artificial
+stupidity, to be precise.
+
+   <p><a name="index-gnus_002duse_002dadaptive_002dscoring-2662"></a>When you read an article, or mark an article as read, or kill an
+article, you leave marks behind.  On exit from the group, Gnus can sniff
+these marks and add score elements depending on what marks it finds. 
+You turn on this ability by setting <code>gnus-use-adaptive-scoring</code> to
+<code>t</code> or <code>(line)</code>.  If you want score adaptively on separate
+words appearing in the subjects, you should set this variable to
+<code>(word)</code>.  If you want to use both adaptive methods, set this
+variable to <code>(word line)</code>.
+
+   <p><a name="index-gnus_002ddefault_002dadaptive_002dscore_002dalist-2663"></a>To give you complete control over the scoring process, you can customize
+the <code>gnus-default-adaptive-score-alist</code> variable.  For instance, it
+might look something like this:
+
+<pre class="lisp">     (setq gnus-default-adaptive-score-alist
+       '((gnus-unread-mark)
+         (gnus-ticked-mark (from 4))
+         (gnus-dormant-mark (from 5))
+         (gnus-del-mark (from -4) (subject -1))
+         (gnus-read-mark (from 4) (subject 2))
+         (gnus-expirable-mark (from -1) (subject -1))
+         (gnus-killed-mark (from -1) (subject -3))
+         (gnus-kill-file-mark)
+         (gnus-ancient-mark)
+         (gnus-low-score-mark)
+         (gnus-catchup-mark (from -1) (subject -1))))
+</pre>
+   <p>As you see, each element in this alist has a mark as a key (either a
+variable name or a &ldquo;real&rdquo; mark&mdash;a character).  Following this key is
+a arbitrary number of header/score pairs.  If there are no header/score
+pairs following the key, no adaptive scoring will be done on articles
+that have that key as the article mark.  For instance, articles with
+<code>gnus-unread-mark</code> in the example above will not get adaptive score
+entries.
+
+   <p>Each article can have only one mark, so just a single of these rules
+will be applied to each article.
+
+   <p>To take <code>gnus-del-mark</code> as an example&mdash;this alist says that all
+articles that have that mark (i.e., are marked with &lsquo;<samp><span class="samp">e</span></samp>&rsquo;) will have a
+score entry added to lower based on the <code>From</code> header by -4, and
+lowered by <code>Subject</code> by -1.  Change this to fit your prejudices.
+
+   <p>If you have marked 10 articles with the same subject with
+<code>gnus-del-mark</code>, the rule for that mark will be applied ten times. 
+That means that that subject will get a score of ten times -1, which
+should be, unless I'm much mistaken, -10.
+
+   <p>If you have auto-expirable (mail) groups (see <a href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>), all
+the read articles will be marked with the &lsquo;<samp><span class="samp">E</span></samp>&rsquo; mark.  This'll
+probably make adaptive scoring slightly impossible, so auto-expiring and
+adaptive scoring doesn't really mix very well.
+
+   <p>The headers you can score on are <code>from</code>, <code>subject</code>,
+<code>message-id</code>, <code>references</code>, <code>xref</code>, <code>lines</code>,
+<code>chars</code> and <code>date</code>.  In addition, you can score on
+<code>followup</code>, which will create an adaptive score entry that matches
+on the <code>References</code> header using the <code>Message-ID</code> of the
+current article, thereby matching the following thread.
+
+   <p>If you use this scheme, you should set the score file atom <code>mark</code>
+to something small&mdash;like -300, perhaps, to avoid having small random
+changes result in articles getting marked as read.
+
+   <p>After using adaptive scoring for a week or so, Gnus should start to
+become properly trained and enhance the authors you like best, and kill
+the authors you like least, without you having to say so explicitly.
+
+   <p>You can control what groups the adaptive scoring is to be performed on
+by using the score files (see <a href="Score-File-Format.html#Score-File-Format">Score File Format</a>).  This will also
+let you use different rules in different groups.
+
+   <p><a name="index-gnus_002dadaptive_002dfile_002dsuffix-2664"></a>The adaptive score entries will be put into a file where the name is the
+group name with <code>gnus-adaptive-file-suffix</code> appended.  The default
+is <samp><span class="file">ADAPT</span></samp>.
+
+   <p><a name="index-gnus_002dadaptive_002dpretty_002dprint-2665"></a>Adaptive score files can get huge and are not meant to be edited by
+human hands.  If <code>gnus-adaptive-pretty-print</code> is <code>nil</code> (the
+deafult) those files will not be written in a human readable way.
+
+   <p><a name="index-gnus_002dscore_002dexact_002dadapt_002dlimit-2666"></a>When doing adaptive scoring, substring or fuzzy matching would probably
+give you the best results in most cases.  However, if the header one
+matches is short, the possibility for false positives is great, so if
+the length of the match is less than
+<code>gnus-score-exact-adapt-limit</code>, exact matching will be used.  If
+this variable is <code>nil</code>, exact matching will always be used to avoid
+this problem.
+
+   <p><a name="index-gnus_002ddefault_002dadaptive_002dword_002dscore_002dalist-2667"></a>As mentioned above, you can adapt either on individual words or entire
+headers.  If you adapt on words, the
+<code>gnus-default-adaptive-word-score-alist</code> variable says what score
+each instance of a word should add given a mark.
+
+<pre class="lisp">     (setq gnus-default-adaptive-word-score-alist
+           `((,gnus-read-mark . 30)
+             (,gnus-catchup-mark . -10)
+             (,gnus-killed-mark . -20)
+             (,gnus-del-mark . -15)))
+</pre>
+   <p>This is the default value.  If you have adaption on words enabled, every
+word that appears in subjects of articles marked with
+<code>gnus-read-mark</code> will result in a score rule that increase the
+score with 30 points.
+
+   <p><a name="index-gnus_002ddefault_002dignored_002dadaptive_002dwords-2668"></a><a name="index-gnus_002dignored_002dadaptive_002dwords-2669"></a>Words that appear in the <code>gnus-default-ignored-adaptive-words</code> list
+will be ignored.  If you wish to add more words to be ignored, use the
+<code>gnus-ignored-adaptive-words</code> list instead.
+
+   <p><a name="index-gnus_002dadaptive_002dword_002dlength_002dlimit-2670"></a>Some may feel that short words shouldn't count when doing adaptive
+scoring.  If so, you may set <code>gnus-adaptive-word-length-limit</code> to
+an integer.  Words shorter than this number will be ignored.  This
+variable defaults to <code>nil</code>.
+
+   <p><a name="index-gnus_002dadaptive_002dword_002dsyntax_002dtable-2671"></a>When the scoring is done, <code>gnus-adaptive-word-syntax-table</code> is the
+syntax table in effect.  It is similar to the standard syntax table, but
+it considers numbers to be non-word-constituent characters.
+
+   <p><a name="index-gnus_002dadaptive_002dword_002dminimum-2672"></a>If <code>gnus-adaptive-word-minimum</code> is set to a number, the adaptive
+word scoring process will never bring down the score of an article to
+below this number.  The default is <code>nil</code>.
+
+   <p><a name="index-gnus_002dadaptive_002dword_002dno_002dgroup_002dwords-2673"></a>If <code>gnus-adaptive-word-no-group-words</code> is set to <code>t</code>, gnus
+won't adaptively word score any of the words in the group name.  Useful
+for groups like &lsquo;<samp><span class="samp">comp.editors.emacs</span></samp>&rsquo;, where most of the subject
+lines contain the word &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo;.
+
+   <p>After using this scheme for a while, it might be nice to write a
+<code>gnus-psychoanalyze-user</code> command to go through the rules and see
+what words you like and what words you don't like.  Or perhaps not.
+
+   <p>Note that the adaptive word scoring thing is highly experimental and is
+likely to change in the future.  Initial impressions seem to indicate
+that it's totally useless as it stands.  Some more work (involving more
+rigorous statistical methods) will have to be done to make this useful.
+
+   </body></html>
+

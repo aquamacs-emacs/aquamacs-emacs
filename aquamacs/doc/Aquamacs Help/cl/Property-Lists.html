@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+<title>Property Lists - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Symbols.html#Symbols" title="Symbols">
+<link rel="prev" href="Symbols.html#Symbols" title="Symbols">
+<link rel="next" href="Creating-Symbols.html#Creating-Symbols" title="Creating Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Property-Lists"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Symbols.html#Symbols">Symbols</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Symbols.html#Symbols">Symbols</a>
+<hr>
+</div>
+
+<h3 class="section">8.1 Property Lists</h3>
+
+<p class="noindent">These functions augment the standard Emacs Lisp functions <code>get</code>
+and <code>put</code> for operating on properties attached to symbols. 
+There are also functions for working with property lists as
+first-class data structures not attached to particular symbols.
+
+<div class="defun">
+&mdash; Function: <b>get*</b><var> symbol property &amp;optional default<a name="index-get_002a-63"></a></var><br>
+<blockquote><p>This function is like <code>get</code>, except that if the property is
+not found, the <var>default</var> argument provides the return value. 
+(The Emacs Lisp <code>get</code> function always uses <code>nil</code> as
+the default; this package's <code>get*</code> is equivalent to Common
+Lisp's <code>get</code>.)
+
+        <p>The <code>get*</code> function is <code>setf</code>-able; when used in this
+fashion, the <var>default</var> argument is allowed but ignored. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>remprop</b><var> symbol property<a name="index-remprop-64"></a></var><br>
+<blockquote><p>This function removes the entry for <var>property</var> from the property
+list of <var>symbol</var>.  It returns a true value if the property was
+indeed found and removed, or <code>nil</code> if there was no such property. 
+(This function was probably omitted from Emacs originally because,
+since <code>get</code> did not allow a <var>default</var>, it was very difficult
+to distinguish between a missing property and a property whose value
+was <code>nil</code>; thus, setting a property to <code>nil</code> was close
+enough to <code>remprop</code> for most purposes.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>getf</b><var> place property &amp;optional default<a name="index-getf-65"></a></var><br>
+<blockquote><p>This function scans the list <var>place</var> as if it were a property
+list, i.e., a list of alternating property names and values.  If
+an even-numbered element of <var>place</var> is found which is <code>eq</code>
+to <var>property</var>, the following odd-numbered element is returned. 
+Otherwise, <var>default</var> is returned (or <code>nil</code> if no default
+is given).
+
+        <p>In particular,
+
+     <pre class="example">          (get sym prop)  ==  (getf (symbol-plist sym) prop)
+</pre>
+        <p>It is valid to use <code>getf</code> as a <code>setf</code> place, in which case
+its <var>place</var> argument must itself be a valid <code>setf</code> place. 
+The <var>default</var> argument, if any, is ignored in this context. 
+The effect is to change (via <code>setcar</code>) the value cell in the
+list that corresponds to <var>property</var>, or to cons a new property-value
+pair onto the list if the property is not yet present.
+
+     <pre class="example">          (put sym prop val)  ==  (setf (getf (symbol-plist sym) prop) val)
+</pre>
+        <p>The <code>get</code> and <code>get*</code> functions are also <code>setf</code>-able. 
+The fact that <code>default</code> is ignored can sometimes be useful:
+
+     <pre class="example">          (incf (get* 'foo 'usage-count 0))
+</pre>
+        <p>Here, symbol <code>foo</code>'s <code>usage-count</code> property is incremented
+if it exists, or set to 1 (an incremented 0) otherwise.
+
+        <p>When not used as a <code>setf</code> form, <code>getf</code> is just a regular
+function and its <var>place</var> argument can actually be any Lisp
+expression. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>remf</b><var> place property<a name="index-remf-66"></a></var><br>
+<blockquote><p>This macro removes the property-value pair for <var>property</var> from
+the property list stored at <var>place</var>, which is any <code>setf</code>-able
+place expression.  It returns true if the property was found.  Note
+that if <var>property</var> happens to be first on the list, this will
+effectively do a <code>(setf </code><var>place</var><code> (cddr </code><var>place</var><code>))</code>,
+whereas if it occurs later, this simply uses <code>setcdr</code> to splice
+out the property and value cells. 
+</p></blockquote></div>
+
+   </body></html>
+

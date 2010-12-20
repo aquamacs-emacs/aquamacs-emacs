@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Horizontal Compositions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Compositions.html#Compositions" title="Compositions">
+<link rel="prev" href="Composition-Basics.html#Composition-Basics" title="Composition Basics">
+<link rel="next" href="Vertical-Compositions.html#Vertical-Compositions" title="Vertical Compositions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Horizontal-Compositions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Vertical-Compositions.html#Vertical-Compositions">Vertical Compositions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Composition-Basics.html#Composition-Basics">Composition Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Compositions.html#Compositions">Compositions</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">7.8.10.2 Horizontal Compositions</h5>
+
+<p class="noindent"><a name="index-choriz-615"></a>The <code>choriz</code> function takes a vector of objects and composes
+them horizontally.  For example, &lsquo;<samp><span class="samp">choriz([17, a b/c, d])</span></samp>&rsquo; formats
+as &lsquo;<samp><span class="samp">17a&nbsp;b&nbsp;/&nbsp;cd</span></samp>&rsquo;<!-- /@w --> in Normal language mode, or as
+
+<pre class="example">       a b
+     17---d
+        c
+</pre>
+   <p class="noindent">in Big language mode.  This is actually one case of the general
+function &lsquo;<samp><span class="samp">choriz(</span><var>vec</var><span class="samp">, </span><var>sep</var><span class="samp">, </span><var>prec</var><span class="samp">)</span></samp>&rsquo;, where
+either or both of <var>sep</var> and <var>prec</var> may be omitted. 
+<var>Prec</var> gives the <dfn>precedence</dfn> to use when formatting
+each of the components of <var>vec</var>.  The default precedence is
+the precedence from the surrounding environment.
+
+   <p><var>Sep</var> is a string (i.e., a vector of character codes as might
+be entered with <code>" "</code> notation) which should separate components
+of the composition.  Also, if <var>sep</var> is given, the line breaker
+will allow lines to be broken after each occurrence of <var>sep</var>. 
+If <var>sep</var> is omitted, the composition will not be breakable
+(unless any of its component compositions are breakable).
+
+   <p>For example, &lsquo;<samp><span class="samp">2 choriz([a, b c, d = e], " + ", 180)</span></samp>&rsquo; is
+formatted as &lsquo;<samp><span class="samp">2 a + b c + (d = e)</span></samp>&rsquo;.  To get the <code>choriz</code>
+to have precedence 180 &ldquo;outwards&rdquo; as well as &ldquo;inwards,&rdquo;
+enclose it in a <code>cprec</code> form:  &lsquo;<samp><span class="samp">2 cprec(choriz(...), 180)</span></samp>&rsquo;
+formats as &lsquo;<samp><span class="samp">2 (a + b c + (d = e))</span></samp>&rsquo;.
+
+   <p>The baseline of a horizontal composition is the same as the
+baselines of the component compositions, which are all aligned.
+
+   </body></html>
+

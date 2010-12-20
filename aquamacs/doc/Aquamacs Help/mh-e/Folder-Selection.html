@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Folder Selection - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Using-This-Manual.html#Using-This-Manual" title="Using This Manual">
+<link rel="prev" href="Ranges.html#Ranges" title="Ranges">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Folder-Selection"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Ranges.html#Ranges">Ranges</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Using-This-Manual.html#Using-This-Manual">Using This Manual</a>
+<hr>
+</div>
+
+<h3 class="section">4.3 Folder Selection</h3>
+
+<p><a name="index-completion_002c-folders-244"></a><a name="index-folders_002c-completion-245"></a><a name="index-folders_002c-selecting-246"></a>
+When you choose a folder in MH-E via a command such as <kbd>o</kbd>
+(<code>mh-refile-msg</code>), completion is used to enter the folder
+(see the section
+<a href="http://www.gnu.org/software/emacs/manual/html_node/Completion.html">Completion</a> in <cite>The GNU Emacs Manual</cite>). 
+In addition, MH-E has several ways of choosing a suitable default so
+that the folder can often be selected with a single &lt;RET&gt; key.
+
+   <p><a name="index-customization-group_002c-_0040samp_007bmh_002dfolder_002dselection_007d-247"></a><a name="index-g_t_0040samp_007bmh_002dfolder_002dselection_007d-customization-group-248"></a>
+The &lsquo;<samp><span class="samp">mh-folder-selection</span></samp>&rsquo; customization group contains some
+options which are used to help with this.
+
+     <dl>
+<dt><code>mh-default-folder-for-message-function</code><a name="index-mh_002ddefault_002dfolder_002dfor_002dmessage_002dfunction-249"></a><dd>Function to select a default folder for refiling or &lsquo;<samp><span class="samp">Fcc:</span></samp>&rsquo;
+(default: <code>nil</code>). 
+<!--  -->
+<br><dt><code>mh-default-folder-list</code><a name="index-mh_002ddefault_002dfolder_002dlist-250"></a><dd>List of addresses and folders (default: <code>nil</code>). 
+<!--  -->
+<br><dt><code>mh-default-folder-must-exist-flag</code><a name="index-mh_002ddefault_002dfolder_002dmust_002dexist_002dflag-251"></a><dd>On means guessed folder name must exist to be used (default:
+&lsquo;<samp><span class="samp">on</span></samp>&rsquo;). 
+<!--  -->
+<br><dt><code>mh-default-folder-prefix</code><a name="index-mh_002ddefault_002dfolder_002dprefix-252"></a><dd>Prefix used for folder names generated from aliases (default: <code>""</code>). 
+</dl>
+
+   <p><a name="index-mh_002ddefault_002dfolder_002dfor_002dmessage_002dfunction-253"></a>
+You can set the option <code>mh-default-folder-for-message-function</code>
+to a function that provides a default folder for the message to be
+refiled. When this function is called, the current buffer contains the
+message being refiled and point is at the start of the message. This
+function should return the default folder as a string with a leading
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; sign. It can also return <code>nil</code> so that the last folder
+name is used as the default, or an empty string to suppress the
+default entirely.
+
+   <p>Otherwise, the name of the destination folder is derived from the
+sender as follows:
+
+     <ol type=1 start=1>
+<a name="index-mh_002ddefault_002dfolder_002dlist-254"></a><li>The folder name associated with the first address found in the list
+<code>mh-default-folder-list</code> is used. Each element in this list
+contains a &lsquo;<samp><span class="samp">Check Recipient</span></samp>&rsquo; item. If this item is turned on,
+then the address is checked against the recipient instead of the
+sender. This is useful for mailing lists. 
+<!--  -->
+<a name="index-mh_002ddefault_002dfolder_002dprefix-255"></a><li>An alias prefixed by <code>mh-default-folder-prefix</code> corresponding to
+the address is used. The prefix is used to prevent clutter in your
+mail directory. See <a href="Aliases.html#Aliases">Aliases</a>.
+        </ol>
+
+   <p><a name="index-mh_002ddefault_002dfolder_002dmust_002dexist_002dflag-256"></a>
+If the derived folder does not exist, and
+<code>mh-default-folder-must-exist-flag</code> is <code>t</code>, then the last
+folder name used is suggested. This is useful if you get mail from
+various people for whom you have an alias, but file them all in the
+same project folder.
+
+   </body></html>
+

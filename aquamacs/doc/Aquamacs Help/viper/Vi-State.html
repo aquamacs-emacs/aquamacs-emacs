@@ -1,0 +1,183 @@
+<html lang="en">
+<head>
+<title>Vi State - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="States-in-Viper.html#States-in-Viper" title="States in Viper">
+<link rel="prev" href="Emacs-State.html#Emacs-State" title="Emacs State">
+<link rel="next" href="Insert-State.html#Insert-State" title="Insert State">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Vi-State"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Insert-State.html#Insert-State">Insert State</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Emacs-State.html#Emacs-State">Emacs State</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="States-in-Viper.html#States-in-Viper">States in Viper</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.3.2 Vi State</h4>
+
+<p><a name="index-Vi-state-37"></a>
+This is the Vi command mode.  When Viper is in Vi state, you will see the sign
+&lt;V&gt; in the mode line.  Most keys will work as in Vi.  The notable
+exceptions are:
+
+     <dl>
+<dt><kbd>C-x</kbd><dd><a name="index-g_t_0040kbd_007bC_002dx_007d-38"></a><kbd>C-x</kbd> is used to invoke Emacs commands, mainly those that do window
+management.  <kbd>C-x 2</kbd> will split a window, <kbd>C-x 0</kbd> will close a
+window.  <kbd>C-x 1</kbd> will close all other windows.  <kbd>C-xb</kbd> is used to
+switch buffers in a window, and <kbd>C-xo</kbd> to move through windows. 
+These are about the only necessary keystrokes. 
+For the rest, see the GNU Emacs Manual.
+
+     <br><dt><kbd>C-c</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc_007d-39"></a>For user levels 2 and higher, this key serves as a prefix key for the key
+sequences used by various major modes.  For users at Viper level 1, <kbd>C-c</kbd>
+simply beeps.
+
+     <br><dt><kbd>C-g and C-]</kbd><dd><a name="index-g_t_0040kbd_007bC_002dg_007d-40"></a><a name="index-g_t_0040kbd_007bC_002d_005d_007d-41"></a>
+These are the Emacs &lsquo;<samp><span class="samp">quit</span></samp>&rsquo; keys. 
+There will be cases where you will have to
+use <kbd>C-g</kbd> to quit.  Similarly, <kbd>C-]</kbd> is used to exit
+&lsquo;<samp><span class="samp">Recursive Edits</span></samp>&rsquo; in Emacs for which there is no comparable Vi
+functionality and no key-binding.  Recursive edits are indicated by
+&lsquo;<samp><span class="samp">[]</span></samp>&rsquo; brackets framing the modes on the mode line. 
+See <a href="../emacs/Recursive-Edit.html#Recursive-Edit">Recursive Edit</a>. 
+At user level 1, <kbd>C-g</kbd> is bound to <code>viper-info-on-file</code>
+function instead.
+
+     <br><dt><kbd>C-\</kbd><dd><a name="index-g_t_0040kbd_007bC_002d_005c_007d-42"></a><a name="index-Meta-key-43"></a>
+Viper uses &lt;ESC&gt; as a switch between Insert and Vi states.  Emacs uses
+&lt;ESC&gt; for Meta.  The Meta key is very important in Emacs since many
+functions are accessible only via that key as <kbd>M-x function-name</kbd>. 
+Therefore, we need to simulate it somehow.  In Viper's Vi, Insert, and
+Replace states, the meta key is set to be <kbd>C-\</kbd>.  Thus, to get
+<kbd>M-x</kbd>, you should type <kbd>C-\ x</kbd> (if the keyboard has no Meta key,
+which is rare these days). 
+This works both in the Vi command state and in the Insert and Replace
+states.  In Vi command state, you can also use <kbd>\ &lt;ESC&gt;</kbd> as the
+meta key.
+
+     <p>Note: Emacs binds <kbd>C-\</kbd> to a function that offers to change the
+keyboard input method in the multilingual environment.  Viper overrides this
+binding.  However, it is still possible to switch the input method by typing
+<kbd>\ C-\</kbd> in the Vi command state and <kbd>C-z \ C-\</kbd> in the Insert state. 
+Or you can use the MULE menu in the menubar. 
+</dl>
+   Other differences are mostly improvements.  The ones you should know
+about are:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">Undo</span></samp>&rsquo;<dd><a name="index-g_t_0040kbd_007bu_007d-44"></a><kbd>u</kbd> will undo.  Undo can be repeated by the <kbd>.</kbd> key.  Undo itself
+can be undone.  Another <kbd>u</kbd> will change the direction.  The presence
+of repeatable undo means that <kbd>U</kbd>, undoing lines, is not very
+important.  Therefore, <kbd>U</kbd> also calls <code>viper-undo</code>. 
+<a name="index-multiple-undo-45"></a><a name="index-undo-46"></a>
+
+     <br><dt>&lsquo;<samp><span class="samp">Counts</span></samp>&rsquo;<dd>Most commands, <kbd>~</kbd>, <kbd>[[</kbd>, <kbd>p</kbd>, <kbd>/</kbd>, <small class="dots">...</small>, etc., take counts.
+
+     <!-- ]] Just to balance parens -->
+     <br><dt>&lsquo;<samp><span class="samp">Regexps</span></samp>&rsquo;<dd>Viper uses Emacs Regular Expressions for searches.  These are a superset of
+Vi regular
+expressions, excepting the change-of-case escapes &lsquo;<samp><span class="samp">\u</span></samp>&rsquo;, &lsquo;<samp><span class="samp">\L</span></samp>&rsquo;,
+<small class="dots">...</small>, etc.  See <a href="../emacs/Regexps.html#Regexps">Syntax of Regular Expressions</a>, for details. 
+Files specified to <kbd>:e</kbd> use <code>csh</code> regular expressions
+(globbing, wildcards, what have you). 
+However, the function <code>viper-toggle-search-style</code>, bound to <kbd>C-c /</kbd>,
+lets the user switch from search with regular expressions to plain vanilla
+search and vice versa.  It also lets one switch from case-sensitive search
+to case-insensitive and back. 
+See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for more details. 
+<a name="index-regular-expressions-47"></a><a name="index-vanilla-search-48"></a><a name="index-case_002dsensitive-search-49"></a><a name="index-case_002dinsensitive-search-50"></a><a name="index-g_t_0040kbd_007bC_002dc-_002f_007d-51"></a>
+<br><dt>&lsquo;<samp><span class="samp">Ex commands</span></samp>&rsquo;<dd><a name="index-Ex-commands-52"></a>The current working directory of a buffer is automatically inserted in the
+minibuffer if you type <kbd>:e</kbd> then space.  Absolute filenames are
+required less often in Viper.  For file names, Emacs uses a convention that
+is slightly different from other programs.  It is designed to minimize the
+need for deleting file names that Emacs provides in its prompts.  (This is
+usually convenient, but occasionally the prompt may suggest a wrong file
+name for you.)  If you see a prompt <kbd>/usr/foo/</kbd> and you wish to edit the
+file <kbd>~/.viper</kbd>, you don't have to erase the prompt.  Instead, simply
+continue typing what you need.  Emacs will interpret <kbd>/usr/foo/~/.viper</kbd>
+correctly.  Similarly, if the prompt is <kbd>~/foo/</kbd> and you need to get to
+<kbd>/bar/file</kbd>, keep typing.  Emacs interprets <kbd>~/foo//bar/</kbd> as
+<kbd>/bar/file</kbd>, since when it sees &lsquo;<samp><span class="samp">//</span></samp>&rsquo;, it understands that
+<kbd>~/foo/</kbd> is to be discarded.
+
+     <p>The command <kbd>:cd</kbd> will change the default directory for the
+current buffer.  The command <kbd>:e</kbd> will interpret the
+filename argument in <code>csh</code>.  See <a href="Customization.html#Customization">Customization</a>, if you
+want to change the default shell. 
+The command <kbd>:next</kbd> takes counts from
+<kbd>:args</kbd>, so that <kbd>:rew</kbd> is obsolete.  Also, <kbd>:args</kbd> will show only
+the invisible files (i.e., those that are not currently seen in Emacs
+windows).
+
+     <p>When applicable, Ex commands support file completion and history.  This
+means that by typing a partial file name and then &lt;TAB&gt;, Emacs will try
+to complete the name or it will offer a menu of possible completions. 
+This works similarly to Tcsh and extends the behavior of Csh.  While Emacs
+is waiting for a file name, you can type <kbd>M-p</kbd> to get the previous file
+name you typed.  Repeatedly typing <kbd>M-p</kbd> and <kbd>M-n</kbd> will let you
+browse through the file history.
+
+     <p>Like file names, partially typed Ex commands can be completed by typing
+&lt;TAB&gt;, and Viper keeps the history of Ex commands.  After typing
+<kbd>:</kbd>, you can browse through the previously entered Ex commands by
+typing <kbd>M-p</kbd> and <kbd>M-n</kbd>.  Viper tries to rationalize when it puts Ex
+commands on the history list.  For instance, if you typed <kbd>:w! foo</kbd>,
+only <kbd>:w!</kbd> will be placed on the history list.  This is because the
+last history element is the default that can be invoked simply by typing
+<kbd>: &lt;RET&gt;</kbd>.  If <kbd>:w! foo</kbd> were placed on the list, it would be all to
+easy to override valuable data in another file.  Reconstructing the full
+command, <kbd>:w! foo</kbd>, from the history is still not that hard, since Viper
+has a separate history for file names.  By typing <kbd>: M-p</kbd>, you will get
+<kbd>:w!</kbd> in the minibuffer.  Then, repeated <kbd>M-p</kbd> will get you through
+the file history, inserting one file name after another.
+
+     <p>In contrast to <kbd>:w! foo</kbd>, if the command were <kbd>:r foo</kbd>, the entire
+command will appear in the history list.  This is because having <kbd>:r</kbd>
+alone as a default is meaningless, since this command requires a file
+argument.
+
+   </dl>
+   As in Vi, Viper's destructive commands can be re-executed by typing `<kbd>.</kbd>'. 
+However, in addition, Viper keeps track of the history of such commands.  This
+history can be perused by typing <kbd>C-c M-p</kbd> and <kbd>C-c M-n</kbd>. 
+Having found the appropriate command, it can be then executed by typing
+`<kbd>.</kbd>'. 
+See <a href="Improvements-over-Vi.html#Improvements-over-Vi">Improvements over Vi</a>, for more information.
+
+   </body></html>
+

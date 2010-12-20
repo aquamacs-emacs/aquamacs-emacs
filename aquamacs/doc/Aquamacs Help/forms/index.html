@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Index - Forms Mode User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Forms Mode User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Credits.html#Credits" title="Credits">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Forms mode, a form-editing major mode for GNU Emacs.
+
+Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:nor<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">Forms Mode</a>
+<li><a name="toc_Forms-Example" href="Forms-Example.html#Forms-Example">1 Forms Example</a>
+<li><a name="toc_Entering-and-Exiting-Forms-Mode" href="Entering-and-Exiti<ul class="index-cp" compact>
+<li><a href="Forms-Commands.html#index-begin-33"><code>begin</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-_003c-11"><code>C-c &lt;</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-_003e-13"><code>C-c &gt;</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-C_002dk-22"><code>C-c C-k</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-C_002dl-9"><code>C-c C-l</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-C_002dn-5"><code>C-c C-n</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-C_002do-20"><code>C-c C-o</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-C_002dp-7"><code>C-c C-p</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-C_002dq-18"><code>C-c C-q</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-C_002dr-_0040var_007bregexp_007d-_0040key_007bRET_007d-26"><code>C-c C-r </code><var>regexp</var><code> &lt;RET&gt;</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-C_002ds-_0040var_007bregexp_007d-_0040key_007bRET_007d-24"><code>C-c C-s </code><var>regexp</var><code> &lt;RET&gt;</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dc-TAB-16"><code>C-c TAB</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-C_002dx-C_002ds-29"><code>C-x C-s</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Control-File-Format.html#index-control-file-44">control file</a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Forms-Commands.html#index-end-34"><code>end</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Data-File-Format.html#index-field-38">field</a>: <a href="Data-File-Format.html#Data-File-Format">Data File Format</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dcheck_002dnumber_002dof_002dfields-56"><code>forms-check-number-of-fields</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Forms-Commands.html#index-forms_002ddelete_002drecord-21"><code>forms-delete-record</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Miscellaneous.html#index-forms_002denumerate-60"><code>forms-enumerate</code></a>: <a href="Miscellaneous.html#Miscellaneous">Miscellaneous</a></li>
+<li><a href="Data-File-Format.html#index-forms_002dfield_002dsep-39"><code>forms-field-sep</code></a>: <a href="Data-File-Format.html#Data-File-Format">Data File Format</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dfield_002dsep-48"><code>forms-field-sep</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Format-Description.html#index-forms_002dfields-58"><code>forms-fields</code></a>: <a href="Format-Description.html#Format-Description">Format Description</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dfile-45"><code>forms-file</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Entering-and-Exiting-Forms-Mode.html#index-forms_002dfind_002dfile-1"><code>forms-find-file</code></a>: <a href="Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode">Entering and Exiting Forms Mode</a></li>
+<li><a href="Entering-and-Exiting-Forms-Mode.html#index-forms_002dfind_002dfile_002dother_002dwindow-2"><code>forms-find-file-other-window</code></a>: <a href="Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode">Entering and Exiting Forms Mode</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dfirst_002drecord-10"><code>forms-first-record</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dformat_002dlist-46"><code>forms-format-list</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Format-Description.html#index-forms_002dformat_002dlist-57"><code>forms-format-list</code></a>: <a href="Format-Description.html#Format-Description">Format Description</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dinsert_002dafter-55"><code>forms-insert-after</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dinsert_002drecord-19"><code>forms-insert-record</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-forms_002djump_002drecord-8"><code>forms-jump-record</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dlast_002drecord-12"><code>forms-last-record</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Miscellaneous.html#index-forms_002dmode-61"><code>forms-mode</code></a>: <a href="Miscellaneous.html#Miscellaneous">Miscellaneous</a></li>
+<li><a href="Entering-and-Exiting-Forms-Mode.html#index-forms_002dmode_002dhooks-3"><code>forms-mode-hooks</code></a>: <a href="Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode">Entering and Exiting Forms Mode</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dmodified_002drecord_002dfilter-54"><code>forms-modified-record-filter</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Data-File-Format.html#index-forms_002dmulti_002dline-43"><code>forms-multi-line</code></a>: <a href="Data-File-Format.html#Data-File-Format">Data File Format</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dmulti_002dline-50"><code>forms-multi-line</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dnew_002drecord_002dfilter-53"><code>forms-new-record-filter</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dnext_002dfield-14"><code>forms-next-field</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dnext_002drecord-4"><code>forms-next-record</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dnumber_002dof_002dfields-47"><code>forms-number-of-fields</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dprev_002dfield-27"><code>forms-prev-field</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dprev_002drecord-6"><code>forms-prev-record</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dprint-30"><code>forms-print</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Data-File-Format.html#index-forms_002dread_002dfile_002dfilter-40"><code>forms-read-file-filter</code></a>: <a href="Data-File-Format.html#Data-File-Format">Data File Format</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dread_002dfile_002dfilter-51"><code>forms-read-file-filter</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dread_002donly-49"><code>forms-read-only</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dsave_002dbuffer-28"><code>forms-save-buffer</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dsearch_002dbackward-25"><code>forms-search-backward</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dsearch_002dforward-23"><code>forms-search-forward</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-forms_002dtoggle_002dread_002donly-17"><code>forms-toggle-read-only</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Miscellaneous.html#index-forms_002dversion-59"><code>forms-version</code></a>: <a href="Miscellaneous.html#Miscellaneous">Miscellaneous</a></li>
+<li><a href="Control-File-Format.html#index-forms_002dwrite_002dfile_002dfilter-52"><code>forms-write-file-filter</code></a>: <a href="Control-File-Format.html#Control-File-Format">Control File Format</a></li>
+<li><a href="Data-File-Format.html#index-forms_002dwrite_002dfile_002dfilter-41"><code>forms-write-file-filter</code></a>: <a href="Data-File-Format.html#Data-File-Format">Data File Format</a></li>
+<li><a href="Forms-Commands.html#index-next-31"><code>next</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-prior-32"><code>prior</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Data-File-Format.html#index-pseudo_002dnewline-42">pseudo-newline</a>: <a href="Data-File-Format.html#Data-File-Format">Data File Format</a></li>
+<li><a href="Data-File-Format.html#index-record-37">record</a>: <a href="Data-File-Format.html#Data-File-Format">Data File Format</a></li>
+<li><a href="Forms-Commands.html#index-S_002dTab-35"><code>S-Tab</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+<li><a href="Forms-Commands.html#index-TAB-15"><code>TAB</code></a>: <a href="Forms-Commands.html#Forms-Commands">Forms Commands</a></li>
+   </ul>ng-Forms-Mode.html#Entering-and-Exiting-Forms-Mode">2 Entering and Exiting Forms Mode</a>
+<li><a name="toc_Forms-Commands" href="Forms-Commands.html#Forms-Commands">3 Forms Commands</a>
+<li><a name="toc_Data-File-Format" href="Data-File-Format.html#Data-File-Format">4 Data File Format</a>
+<li><a name="toc_Control-File-Format" href="Control-File-Format.html#Control-File-Format">5 Control File Format</a>
+<li><a name="toc_Format-Description" href="Format-Description.html#Format-Description">6 The Format Description</a>
+<li><a name="toc_Modifying-Forms-Contents" href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">7 Modifying The Forms Contents</a>
+<li><a name="toc_Miscellaneous" href="Miscellaneous.html#Miscellaneous">8 Miscellaneous</a>
+<li><a name="toc_Error-Messages" href="Error-Messages.html#Error-Messages">9 Error Messages</a>
+<li><a name="toc_Long-Example" href="Long-Example.html#Long-Example">10 Long Example</a>
+<li><a name="toc_Credits" href="Credits.html#Credits">11 Credits</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Index" href="Index.html#Index">Index</a>
+</li></ul>
+</div>
+
+mal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Index"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Credits.html#Credits">Credits</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Index</h2>
+
+</body></html>
+

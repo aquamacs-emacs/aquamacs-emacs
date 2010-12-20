@@ -1,0 +1,212 @@
+<html lang="en">
+<head>
+<title>Slot Options - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Building-Classes.html#Building-Classes" title="Building Classes">
+<link rel="prev" href="Inheritance.html#Inheritance" title="Inheritance">
+<link rel="next" href="Class-Options.html#Class-Options" title="Class Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Slot-Options"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Class-Options.html#Class-Options">Class Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inheritance.html#Inheritance">Inheritance</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building-Classes.html#Building-Classes">Building Classes</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Slot Options</h3>
+
+<p>The <var>slot-list</var> argument to <code>defclass</code> is a list of elements
+where each element defines one slot.  Each slot is a list of the form
+
+<pre class="example">       (SLOT-NAME :TAG1 ATTRIB-VALUE1
+                  :TAG2 ATTRIB-VALUE2
+                  :TAGN ATTRIB-VALUEN)
+</pre>
+   <p class="noindent">where <var>SLOT-NAME</var> is a symbol that will be used to refer to the
+slot.  <var>:TAG</var> is a symbol that describes a feature to be set
+on the slot.  <var>ATTRIB-VALUE</var> is a lisp expression that will be
+used for <var>:TAG</var>.
+
+   <p>Valid tags are:
+
+     <dl>
+<dt><code>:initarg</code><dd>A symbol that can be used in the argument list of the constructor to
+specify a value for the new instance being created.
+
+     <p>A good symbol to use for initarg is one that starts with a colon <code>:</code>.
+
+     <p>The slot specified like this:
+     <pre class="example">            (myslot :initarg :myslot)
+</pre>
+     <p>could then be initialized to the number 1 like this:
+     <pre class="example">            (myobject "name" :myslot 1)
+</pre>
+     <p>See <a href="Making-New-Objects.html#Making-New-Objects">Making New Objects</a>.
+
+     <br><dt><code>:initform</code><dd>A expression used as the default value for this slot.
+
+     <p>If <code>:initform</code> is left out, that slot defaults to being unbound. 
+It is an error to reference an unbound slot, so if you need
+slots to always be in a bound state, you should always use an
+<code>:initform</code> specifier.
+
+     <p>Use <code>slot-boundp</code> to test if a slot is unbound
+(see <a href="Predicates.html#Predicates">Predicates</a>).  Use <code>slot-makeunbound</code> to set a slot to
+being unbound after giving it a value (see <a href="Accessing-Slots.html#Accessing-Slots">Accessing Slots</a>).
+
+     <p>The value passed to initform is automatically quoted.  Thus,
+     <pre class="example">          :initform (1 2 3)
+</pre>
+     <p>appears as the specified list in the default object. 
+A symbol that is a function like this:
+     <pre class="example">          :initform +
+</pre>
+     <p>will set the initial value as that symbol. 
+A function that is a lambda expression, like this:
+     <pre class="example">          :initform (lambda () some-variablename)
+</pre>
+     <p>will be evaluated at instantiation time to the value of
+<code>some-variablename</code>. 
+<!-- This feature was more annoying than useful.  Use the -->
+<!-- `initialize-instance' function to do this. -->
+<!-- On the other hand, if you need code to be -->
+<!-- executed at instantiation time as the initform, code like this: -->
+<!-- @example -->
+<!-- :initform (lambda () (+ 1 some-global-var)) -->
+<!-- @end example -->
+<!-- will be identified as a function call, and be executed in place. -->
+
+     <p><a name="index-lambda_002ddefault-5"></a>
+
+     <p>Lastly, using the function <code>lambda-default</code> instead of
+<code>lambda</code> will let you specify a lambda expression to use as the
+value, without evaluation, thus:
+     <pre class="example">          :initform (lambda-default () some-variablename)
+</pre>
+     <!-- @@TODO - This will be deleted after fair warning. -->
+     <p>will not be evaluated at instantiation time, and the value in this
+slot will instead be <code>(lambda () some-variablename)</code>.
+
+     <p>After a class has been created with <code>defclass</code>, you can change
+that default value with <code>oset-default</code>.  <a href="Accessing-Slots.html#Accessing-Slots">Accessing Slots</a>.
+
+     <br><dt><code>:type</code><dd>An unquoted type specifier used to validate data set into this slot. 
+See <a href="../cl/Type-Predicates.html#g_t_0028cl_0029Type-Predicates">(cl)Type Predicates</a>. 
+Here are some examples:
+          <dl>
+ <dt><code>symbol</code><dd> A symbol. 
+ <br><dt><code>number</code><dd> A number type
+ <br><dt><code>my-class-name</code><dd> An object of your class type. 
+ <br><dt><code>(or null symbol)</code><dd> A symbol, or nil. 
+ <br><dt><code>function</code><dd> A function symbol, or a <code>lambda-default</code> expression.
+
+     </dl>
+
+     <br><dt><code>:allocation</code><dd>Either :class or :instance (defaults to :instance) used to
+specify how data is stored.  Slots stored per instance have unique
+values for each object.  Slots stored per class have shared values for
+each object.  If one object changes a :class allocated slot, then all
+objects for that class gain the new value.
+
+     <br><dt><code>:documentation</code><dd>Documentation detailing the use of this slot.  This documentation is
+exposed when the user describes a class, and during customization of an
+object.
+
+     <br><dt><code>:accessor</code><dd>Name of a generic function which can be used to fetch the value of this slot. 
+You can call this function later on your object and retrieve the value
+of the slot.
+
+     <p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
+
+     <br><dt><code>:writer</code><dd>Name of a generic function which will write this slot.
+
+     <p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
+
+     <br><dt><code>:reader</code><dd>Name of a generic function which will read this slot.
+
+     <p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
+
+     <br><dt><code>:custom</code><dd>A custom :type specifier used when editing an object of this type. 
+See documentation for <code>defcustom</code> for details.  This specifier is
+equivalent to the :type spec of a <code>defcustom</code> call.
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:label</code><dd>When customizing an object, the value of :label will be used instead
+of the slot name.  This enables better descriptions of the data than
+would usually be afforded.
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:group</code><dd>Similar to <code>defcustom</code>'s :group command, this organizes different
+slots in an object into groups.  When customizing an object, only the
+slots belonging to a specific group need be worked with, simplifying the
+size of the display.
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:printer</code><dd>This routine takes a symbol which is a function name.  The function
+should accept one argument.  The argument is the value from the slot
+to be printed.  The function in <code>object-write</code> will write the
+slot value out to a printable form on <code>standard-output</code>.
+
+     <p>The output format MUST be something that could in turn be interpreted
+with <code>read</code> such that the object can be brought back in from the
+output stream.  Thus, if you wanted to output a symbol, you would need
+to quote the symbol.  If you wanted to run a function on load, you
+can output the code to do the construction of the value.
+
+     <br><dt><code>:protection</code><dd>When using a slot referencing function such as <code>slot-value</code>, and
+the value behind <var>slot</var> is private or protected, then the current
+scope of operation must be within a method of the calling object.
+
+     <p>Valid values are:
+
+          <dl>
+<dt><code>:public</code><dd>Access this slot from any scope. 
+<br><dt><code>:protected</code><dd>Access this slot only from methods of the same class or a child class. 
+<br><dt><code>:private</code><dd>Access this slot only from methods of the same class. 
+</dl>
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+   </dl>
+
+   </body></html>
+

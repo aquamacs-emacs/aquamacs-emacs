@@ -1,0 +1,202 @@
+<html lang="en">
+<head>
+<title>Configuration Examples - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="HTML-Help-Browser-Tips.html#HTML-Help-Browser-Tips" title="HTML Help Browser Tips">
+<link rel="next" href="Windows-and-MacOS.html#Windows-and-MacOS" title="Windows and MacOS">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Configuration-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows-and-MacOS.html#Windows-and-MacOS">Windows and MacOS</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="HTML-Help-Browser-Tips.html#HTML-Help-Browser-Tips">HTML Help Browser Tips</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix C Configuration Examples</h2>
+
+<p><a name="index-Configuration-examples-391"></a><a name="index-Example-configuration-392"></a><a name="index-g_t_0040file_007b_002eemacs_007d-393"></a><a name="index-Default-settings_002c-of-options-394"></a><a name="index-Interview_002c-with-the-maintainer-395"></a>
+<b>Question:</b> You have all these complicated configuration options in
+your package, but which ones do <em>you</em> as the maintainer actually
+set in your own configuration?
+
+<p class="noindent"><b>Answer:</b> Not many, beyond custom key bindings.  I set most defaults
+the way that seems best.  However, the default settings do not turn on
+features which:
+
+     <ul>
+<li>are not self-evident (i.e. too magic) when used by an unsuspecting user. 
+<li>are too intrusive. 
+<li>will not work properly on all Emacs installations. 
+<li>break with widely used standards. 
+<li>use function or other non-standard keys. 
+<li>are purely personal customizations, like additional key bindings, and
+library names. 
+</ul>
+
+<p class="noindent">To see what I mean, here is the <em>entire</em> configuration
+the old maintainer had in his <samp><span class="file">.emacs</span></samp>:
+
+<pre class="lisp">     (setq idlwave-shell-debug-modifiers '(control shift)
+           idlwave-store-inquired-class t
+           idlwave-shell-automatic-start t
+           idlwave-main-block-indent 2
+           idlwave-init-rinfo-when-idle-after 2
+           idlwave-help-dir "~/lib/emacs/idlwave"
+           idlwave-special-lib-alist '(("/idl-astro/" . "AstroLib")
+                                       ("/jhuapl/" . "JHUAPL-Lib")
+                                       ("/dominik/lib/idl/" . "MyLib")))
+</pre>
+   <p>However, if you are an Emacs power-user and want IDLWAVE to work
+completely differently, you can change almost every aspect of it.  Here
+is an example of a much more extensive configuration of IDLWAVE.  The
+user is King!
+
+<pre class="example">     ;;; Settings for IDLWAVE mode
+     
+     (setq idlwave-block-indent 3)           ; Indentation settings
+     (setq idlwave-main-block-indent 3)
+     (setq idlwave-end-offset -3)
+     (setq idlwave-continuation-indent 1)
+     (setq idlwave-begin-line-comment "^;[^;]")  ; Leave ";" but not ";;"
+                                                 ; anchored at start of line.
+     (setq idlwave-surround-by-blank t)      ; Turn on padding ops =,&lt;,&gt;
+     (setq idlwave-pad-keyword nil)          ; Remove spaces for keyword '='
+     (setq idlwave-expand-generic-end t)     ; convert END to ENDIF etc...
+     (setq idlwave-reserved-word-upcase t)   ; Make reserved words upper case
+                                             ; (with abbrevs only)
+     (setq idlwave-abbrev-change-case nil)   ; Don't force case of expansions
+     (setq idlwave-hang-indent-regexp ": ")  ; Change from "- " for auto-fill
+     (setq idlwave-show-block nil)           ; Turn off blinking to begin
+     (setq idlwave-abbrev-move t)            ; Allow abbrevs to move point
+     (setq idlwave-query-class '((method-default . nil) ; No query for method
+                                 (keyword-default . nil); or keyword completion
+                                 ("INIT" . t)           ; except for these
+                                 ("CLEANUP" . t)
+                                 ("SETPROPERTY" .t)
+                                 ("GETPROPERTY" .t)))
+     
+     ;; Using w3m for help (must install w3m and emacs-w3m)
+     (autoload 'w3m-browse-url "w3m" "Interface for w3m on Emacs." t)
+     (setq idlwave-help-browser-function 'w3m-browse-url
+           w3m-use-tab nil ; no tabs, location line, or toolbar
+           w3m-use-header-line nil
+           w3m-use-toolbar nil)
+     
+     ;; Close my help window or frame when w3m closes with `q'
+     (defadvice w3m-close-window (after idlwave-close activate)
+       (if (boundp 'idlwave-help-frame)
+           (idlwave-help-quit)))
+     
+     ;; Some setting can only be done from a mode hook.  Here is an example:
+     (add-hook 'idlwave-mode-hook
+       (lambda ()
+         (setq case-fold-search nil)          ; Make searches case sensitive
+         ;; Run other functions here
+         (font-lock-mode 1)                   ; Turn on font-lock mode
+         (idlwave-auto-fill-mode 0)           ; Turn off auto filling
+         (setq idlwave-help-browser-function 'browse-url-w3)
+     
+         ;; Pad with 1 space (if -n is used then make the
+         ;; padding a minimum of n spaces.)  The defaults use -1
+         ;; instead of 1.
+         (idlwave-action-and-binding "=" '(idlwave-expand-equal 1 1))
+         (idlwave-action-and-binding "&lt;" '(idlwave-surround 1 1))
+         (idlwave-action-and-binding "&gt;" '(idlwave-surround 1 1 '(?-)))
+         (idlwave-action-and-binding "&amp;" '(idlwave-surround 1 1))
+     
+         ;; Only pad after comma and with exactly 1 space
+         (idlwave-action-and-binding "," '(idlwave-surround nil 1))
+         (idlwave-action-and-binding "&amp;" '(idlwave-surround 1 1))
+     
+         ;; Pad only after `-&gt;', remove any space before the arrow
+         (idlwave-action-and-binding "-&gt;"  '(idlwave-surround 0 -1 nil 2))
+     
+         ;; Set some personal bindings
+         ;; (In this case, makes `,' have the normal self-insert behavior.)
+         (local-set-key "," 'self-insert-command)
+         (local-set-key [f5] 'idlwave-shell-break-here)
+         (local-set-key [f6] 'idlwave-shell-clear-current-bp)
+     
+         ;; Create a newline, indenting the original and new line.
+         ;; A similar function that does _not_ reindent the original
+         ;; line is on "\C-j" (The default for emacs programming modes).
+         (local-set-key "\n" 'idlwave-newline)
+         ;; (local-set-key "\C-j" 'idlwave-newline) ; My preference.
+     
+         ;; Some personal abbreviations
+         (define-abbrev idlwave-mode-abbrev-table
+           (concat idlwave-abbrev-start-char "wb") "widget_base()"
+           (idlwave-keyword-abbrev 1))
+         (define-abbrev idlwave-mode-abbrev-table
+           (concat idlwave-abbrev-start-char "on") "obj_new()"
+           (idlwave-keyword-abbrev 1))
+         ))
+     
+     ;;; Settings for IDLWAVE SHELL mode
+     
+     (setq idlwave-shell-overlay-arrow "=&gt;")        ; default is "&gt;"
+     (setq idlwave-shell-use-dedicated-frame t)     ; Make a dedicated frame
+     (setq idlwave-shell-prompt-pattern "^WAVE&gt; ")  ; default is "^IDL&gt; "
+     (setq idlwave-shell-explicit-file-name "wave")
+     (setq idlwave-shell-process-name "wave")
+     (setq idlwave-shell-use-toolbar nil)           ; No toolbar
+     
+     ;; Most shell interaction settings can be done from the shell-mode-hook.
+     (add-hook 'idlwave-shell-mode-hook
+               (lambda ()
+                 ;; Set up some custom key and mouse examine commands
+                 (idlwave-shell-define-key-both [s-down-mouse-2]
+                                      (idlwave-shell-mouse-examine
+                                       "print, size(___,/DIMENSIONS)"))
+                 (idlwave-shell-define-key-both [f9] (idlwave-shell-examine
+                                            "print, size(___,/DIMENSIONS)"))
+                 (idlwave-shell-define-key-both [f10] (idlwave-shell-examine
+                                             "print,size(___,/TNAME)"))
+                 (idlwave-shell-define-key-both [f11] (idlwave-shell-examine
+                                             "help,___,/STRUCTURE"))))
+</pre>
+   <p><A NAME="WIN_MAC"></A>
+
+   </body></html>
+

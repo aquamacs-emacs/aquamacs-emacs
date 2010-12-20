@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>MS-DOS Display - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="MS_002dDOS.html#MS_002dDOS" title="MS-DOS">
+<link rel="prev" href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse" title="MS-DOS Mouse">
+<link rel="next" href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names" title="MS-DOS File Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="MS-DOS-Display"></a>
+<a name="MS_002dDOS-Display"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names">MS-DOS File Names</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">MS-DOS Mouse</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>
+<hr>
+</div>
+
+<h4 class="subsection">G.11.3 Display on MS-DOS</h4>
+
+<p><a name="index-faces-under-MS_002dDOS-4426"></a><a name="index-fonts_002c-emulating-under-MS_002dDOS-4427"></a>
+  Display on MS-DOS cannot use font variants, like bold or italic, but
+it does support multiple faces, each of which can specify a foreground
+and a background color.  Therefore, you can get the full functionality
+of Emacs packages that use fonts (such as <code>font-lock</code>, Enriched
+Text mode, and others) by defining the relevant faces to use different
+colors.  Use the <code>list-colors-display</code> command
+(see <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>)
+and the <code>list-faces-display</code> command
+(see <a href="Faces.html#Faces">Faces</a>)
+to see what colors and faces are available and what they look like.
+
+   <p>See <a href="MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE">MS-DOS and MULE</a>, later in this chapter, for information on
+how Emacs displays glyphs and characters that aren't supported by the
+native font built into the DOS display.
+
+   <p><a name="index-cursor-shape-on-MS_002dDOS-4428"></a>  When Emacs starts, it changes the cursor shape to a solid box.  This
+is for compatibility with other systems, where the box cursor is the
+default in Emacs.  This default shape can be changed to a bar by
+specifying the <code>cursor-type</code> parameter in the variable
+<code>default-frame-alist</code>
+(see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>). 
+The MS-DOS terminal doesn't support a vertical-bar cursor,
+so the bar cursor is horizontal, and the <var>width</var> parameter,
+if specified by the frame parameters, actually determines its height. 
+For this reason, the <code>bar</code> and <code>hbar</code> cursor types produce
+the same effect on MS-DOS.  As an extension, the bar cursor
+specification can include the starting scan line of the cursor as well
+as its width, like this:
+
+<pre class="example">      '(cursor-type bar <var>width</var> . <var>start</var>)
+</pre>
+   <p class="noindent">In addition, if the <var>width</var> parameter is negative, the cursor bar
+begins at the top of the character cell.
+
+   <p><a name="index-frames-on-MS_002dDOS-4429"></a>  The MS-DOS terminal can only display a single frame at a time.  The
+Emacs frame facilities work on MS-DOS much as they do on text-only
+terminals
+(see <a href="Frames.html#Frames">Frames</a>). 
+When you run Emacs from a DOS window on MS-Windows, you can make the
+visible frame smaller than the full screen, but Emacs still cannot
+display more than a single frame at a time.
+
+   <p><a name="index-frame-size-under-MS_002dDOS-4430"></a><a name="index-mode4350-4431"></a><a name="index-mode25-4432"></a>  The <code>mode4350</code> command switches the display to 43 or 50
+lines, depending on your hardware; the <code>mode25</code> command switches
+to the default 80x25 screen size.
+
+   <p>By default, Emacs only knows how to set screen sizes of 80 columns by
+25, 28, 35, 40, 43 or 50 rows.  However, if your video adapter has
+special video modes that will switch the display to other sizes, you can
+have Emacs support those too.  When you ask Emacs to switch the frame to
+<var>n</var> rows by <var>m</var> columns dimensions, it checks if there is a
+variable called <code>screen-dimensions-</code><var>n</var><code>x</code><var>m</var>, and if so,
+uses its value (which must be an integer) as the video mode to switch
+to.  (Emacs switches to that video mode by calling the BIOS <code>Set
+Video Mode</code> function with the value of
+<code>screen-dimensions-</code><var>n</var><code>x</code><var>m</var> in the <code>AL</code> register.) 
+For example, suppose your adapter will switch to 66x80 dimensions when
+put into video mode 85.  Then you can make Emacs support this screen
+size by putting the following into your <samp><span class="file">_emacs</span></samp> file:
+
+<pre class="example">     (setq screen-dimensions-66x80 85)
+</pre>
+   <p>Since Emacs on MS-DOS can only set the frame size to specific
+supported dimensions, it cannot honor every possible frame resizing
+request.  When an unsupported size is requested, Emacs chooses the next
+larger supported size beyond the specified size.  For example, if you
+ask for 36x80 frame, you will get 40x80 instead.
+
+   <p>The variables <code>screen-dimensions-</code><var>n</var><code>x</code><var>m</var> are used only
+when they exactly match the specified size; the search for the next
+larger supported size ignores them.  In the above example, even if your
+VGA supports 38x80 dimensions and you define a variable
+<code>screen-dimensions-38x80</code> with a suitable value, you will still get
+40x80 screen when you ask for a 36x80 frame.  If you want to get the
+38x80 size in this case, you can do it by setting the variable named
+<code>screen-dimensions-36x80</code> with the same video mode value as
+<code>screen-dimensions-38x80</code>.
+
+   <p>Changing frame dimensions on MS-DOS has the effect of changing all the
+other frames to the new dimensions.
+
+   </body></html>
+

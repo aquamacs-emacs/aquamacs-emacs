@@ -1,0 +1,154 @@
+<html lang="en">
+<head>
+<title>Advanced Syntax Patterns - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
+<link rel="prev" href="Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables" title="Precedence in Syntax Tables">
+<link rel="next" href="Conditional-Syntax-Rules.html#Conditional-Syntax-Rules" title="Conditional Syntax Rules">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Advanced-Syntax-Patterns"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Conditional-Syntax-Rules.html#Conditional-Syntax-Rules">Conditional Syntax Rules</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables">Precedence in Syntax Tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">7.8.11.3 Advanced Syntax Patterns</h5>
+
+<p class="noindent">To match a function with a variable number of arguments, you could
+write
+
+<pre class="example">     foo ( # ) := myfunc(#1)
+     foo ( # , # ) := myfunc(#1,#2)
+     foo ( # , # , # ) := myfunc(#1,#2,#3)
+</pre>
+   <p class="noindent">but this isn't very elegant.  To match variable numbers of items,
+Calc uses some notations inspired regular expressions and the
+&ldquo;extended BNF&rdquo; style used by some language designers.
+
+<pre class="example">     foo ( { # }*, ) := apply(myfunc,#1)
+</pre>
+   <p>The token &lsquo;<samp><span class="samp">{</span></samp>&rsquo; introduces a repeated or optional portion. 
+One of the three tokens &lsquo;<samp><span class="samp">}*</span></samp>&rsquo;, &lsquo;<samp><span class="samp">}+</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">}?</span></samp>&rsquo;
+ends the portion.  These will match zero or more, one or more,
+or zero or one copies of the enclosed pattern, respectively. 
+In addition, &lsquo;<samp><span class="samp">}*</span></samp>&rsquo; and &lsquo;<samp><span class="samp">}+</span></samp>&rsquo; can be followed by a
+separator token (with no space in between, as shown above). 
+Thus &lsquo;<samp><span class="samp">{ # }*,</span></samp>&rsquo; matches nothing, or one expression, or
+several expressions separated by commas.
+
+   <p>A complete &lsquo;<samp><span class="samp">{ ... }</span></samp>&rsquo; item matches as a vector of the
+items that matched inside it.  For example, the above rule will
+match &lsquo;<samp><span class="samp">foo(1,2,3)</span></samp>&rsquo; to get &lsquo;<samp><span class="samp">apply(myfunc,[1,2,3])</span></samp>&rsquo;. 
+The Calc <code>apply</code> function takes a function name and a vector
+of arguments and builds a call to the function with those
+arguments, so the net result is the formula &lsquo;<samp><span class="samp">myfunc(1,2,3)</span></samp>&rsquo;.
+
+   <p>If the body of a &lsquo;<samp><span class="samp">{ ... }</span></samp>&rsquo; contains several &lsquo;<samp><span class="samp">#</span></samp>&rsquo;s
+(or nested &lsquo;<samp><span class="samp">{ ... }</span></samp>&rsquo; constructs), then the items will be
+strung together into the resulting vector.  If the body
+does not contain anything but literal tokens, the result will
+always be an empty vector.
+
+<pre class="example">     foo ( { # , # }+, ) := bar(#1)
+     foo ( { { # }*, }*; ) := matrix(#1)
+</pre>
+   <p class="noindent">will parse &lsquo;<samp><span class="samp">foo(1, 2, 3, 4)</span></samp>&rsquo; as &lsquo;<samp><span class="samp">bar([1, 2, 3, 4])</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">foo(1, 2; 3, 4)</span></samp>&rsquo; as &lsquo;<samp><span class="samp">matrix([[1, 2], [3, 4]])</span></samp>&rsquo;.  Also, after
+some thought it's easy to see how this pair of rules will parse
+&lsquo;<samp><span class="samp">foo(1, 2, 3)</span></samp>&rsquo; as &lsquo;<samp><span class="samp">matrix([[1, 2, 3]])</span></samp>&rsquo;, since the first
+rule will only match an even number of arguments.  The rule
+
+<pre class="example">     foo ( # { , # , # }? ) := bar(#1,#2)
+</pre>
+   <p class="noindent">will parse &lsquo;<samp><span class="samp">foo(2,3,4)</span></samp>&rsquo; as &lsquo;<samp><span class="samp">bar(2,[3,4])</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">foo(2)</span></samp>&rsquo; as &lsquo;<samp><span class="samp">bar(2,[])</span></samp>&rsquo;.
+
+   <p>The notation &lsquo;<samp><span class="samp">{ ... }?.</span></samp>&rsquo; (note the trailing period) works
+just the same as regular &lsquo;<samp><span class="samp">{ ... }?</span></samp>&rsquo;, except that it does not
+count as an argument; the following two rules are equivalent:
+
+<pre class="example">     foo ( # , { also }? # ) := bar(#1,#3)
+     foo ( # , { also }?. # ) := bar(#1,#2)
+</pre>
+   <p class="noindent">Note that in the first case the optional text counts as &lsquo;<samp><span class="samp">#2</span></samp>&rsquo;,
+which will always be an empty vector, but in the second case no
+empty vector is produced.
+
+   <p>Another variant is &lsquo;<samp><span class="samp">{ ... }?$</span></samp>&rsquo;, which means the body is
+optional only at the end of the input formula.  All built-in syntax
+rules in Calc use this for closing delimiters, so that during
+algebraic entry you can type <kbd>[sqrt(2), sqrt(3 &lt;RET&gt;</kbd>, omitting
+the closing parenthesis and bracket.  Calc does this automatically
+for trailing &lsquo;<samp><span class="samp">)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">]</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo; tokens in syntax
+rules, but you can use &lsquo;<samp><span class="samp">{ ... }?$</span></samp>&rsquo; explicitly to get
+this effect with any token (such as &lsquo;<samp><span class="samp">"}"</span></samp>&rsquo; or &lsquo;<samp><span class="samp">end</span></samp>&rsquo;). 
+Like &lsquo;<samp><span class="samp">{ ... }?.</span></samp>&rsquo;, this notation does not count as an
+argument.  Conversely, you can use quotes, as in &lsquo;<samp><span class="samp">")"</span></samp>&rsquo;, to
+prevent a closing-delimiter token from being automatically treated
+as optional.
+
+   <p>Calc's parser does not have full backtracking, which means some
+patterns will not work as you might expect:
+
+<pre class="example">     foo ( { # , }? # , # ) := bar(#1,#2,#3)
+</pre>
+   <p class="noindent">Here we are trying to make the first argument optional, so that
+&lsquo;<samp><span class="samp">foo(2,3)</span></samp>&rsquo; parses as &lsquo;<samp><span class="samp">bar([],2,3)</span></samp>&rsquo;.  Unfortunately, Calc
+first tries to match &lsquo;<samp><span class="samp">2,</span></samp>&rsquo; against the optional part of the
+pattern, finds a match, and so goes ahead to match the rest of the
+pattern.  Later on it will fail to match the second comma, but it
+doesn't know how to go back and try the other alternative at that
+point.  One way to get around this would be to use two rules:
+
+<pre class="example">     foo ( # , # , # ) := bar([#1],#2,#3)
+     foo ( # , # ) := bar([],#1,#2)
+</pre>
+   <p>More precisely, when Calc wants to match an optional or repeated
+part of a pattern, it scans forward attempting to match that part. 
+If it reaches the end of the optional part without failing, it
+&ldquo;finalizes&rdquo; its choice and proceeds.  If it fails, though, it
+backs up and tries the other alternative.  Thus Calc has &ldquo;partial&rdquo;
+backtracking.  A fully backtracking parser would go on to make sure
+the rest of the pattern matched before finalizing the choice.
+
+   </body></html>
+
