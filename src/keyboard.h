@@ -490,6 +490,9 @@ extern unsigned long last_event_timestamp;
 
 extern int quit_char;
 
+extern int timers_run;
+
+extern int menu_separator_name_p (const char *);
 extern int parse_menu_item (Lisp_Object, int);
 
 extern void echo_now (void);
@@ -524,7 +527,7 @@ extern void poll_for_input_1 (void);
 extern void show_help_echo (Lisp_Object, Lisp_Object, Lisp_Object,
                             Lisp_Object, int);
 extern void gen_help_event (Lisp_Object, Lisp_Object, Lisp_Object,
-                            Lisp_Object, int);
+                            Lisp_Object, EMACS_INT);
 extern void kbd_buffer_store_help_event (Lisp_Object, Lisp_Object);
 extern Lisp_Object menu_item_eval_property (Lisp_Object);
 extern int  kbd_buffer_events_waiting (int);
@@ -534,5 +537,3 @@ extern int tty_read_avail_input (struct terminal *, int,
                                  struct input_event *);
 extern EMACS_TIME timer_check (int);
 
-/* arch-tag: 769cbade-1ba9-4950-b886-db265b061aa3
-   (do not change this comment) */

@@ -1,0 +1,198 @@
+<html lang="en">
+<head>
+<title>September Gnus - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="New-Features.html#New-Features" title="New Features">
+<link rel="prev" href="ding-Gnus.html#ding-Gnus" title="ding Gnus">
+<link rel="next" href="Red-Gnus.html#Red-Gnus" title="Red Gnus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="September-Gnus"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Red-Gnus.html#Red-Gnus">Red Gnus</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ding-Gnus.html#ding-Gnus">ding Gnus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="New-Features.html#New-Features">New Features</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.2.9.2 September Gnus</h5>
+
+<p>New features in Gnus 5.2/5.3:
+
+     <ul>
+<li>A new message composition mode is used.  All old customization variables
+for <code>mail-mode</code>, <code>rnews-reply-mode</code> and <code>gnus-msg</code> are
+now obsolete.
+
+     <li>Gnus is now able to generate <dfn>sparse</dfn> threads&mdash;threads where
+missing articles are represented by empty nodes (see <a href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>).
+
+     <pre class="lisp">          (setq gnus-build-sparse-threads 'some)
+</pre>
+     <li>Outgoing articles are stored on a special archive server
+(see <a href="Archived-Messages.html#Archived-Messages">Archived Messages</a>).
+
+     <li>Partial thread regeneration now happens when articles are
+referred.
+
+     <li>Gnus can make use of GroupLens predictions.
+
+     <li>Picons (personal icons) can be displayed under XEmacs (see <a href="Picons.html#Picons">Picons</a>).
+
+     <li>A <code>trn</code>-like tree buffer can be displayed (see <a href="Tree-Display.html#Tree-Display">Tree Display</a>).
+
+     <pre class="lisp">          (setq gnus-use-trees t)
+</pre>
+     <li>An <code>nn</code>-like pick-and-read minor mode is available for the summary
+buffers (see <a href="Pick-and-Read.html#Pick-and-Read">Pick and Read</a>).
+
+     <pre class="lisp">          (add-hook 'gnus-summary-mode-hook 'gnus-pick-mode)
+</pre>
+     <li>In binary groups you can use a special binary minor mode (see <a href="Binary-Groups.html#Binary-Groups">Binary Groups</a>).
+
+     <li>Groups can be grouped in a folding topic hierarchy (see <a href="Group-Topics.html#Group-Topics">Group Topics</a>).
+
+     <pre class="lisp">          (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+</pre>
+     <li>Gnus can re-send and bounce mail (see <a href="Summary-Mail-Commands.html#Summary-Mail-Commands">Summary Mail Commands</a>).
+
+     <li>Groups can now have a score, and bubbling based on entry frequency
+is possible (see <a href="Group-Score.html#Group-Score">Group Score</a>).
+
+     <pre class="lisp">          (add-hook 'gnus-summary-exit-hook 'gnus-summary-bubble-group)
+</pre>
+     <li>Groups can be process-marked, and commands can be performed on
+groups of groups (see <a href="Marking-Groups.html#Marking-Groups">Marking Groups</a>).
+
+     <li>Caching is possible in virtual groups.
+
+     <li><code>nndoc</code> now understands all kinds of digests, mail boxes, rnews
+news batches, ClariNet briefs collections, and just about everything
+else (see <a href="Document-Groups.html#Document-Groups">Document Groups</a>).
+
+     <li>Gnus has a new back end (<code>nnsoup</code>) to create/read SOUP packets
+(see <a href="SOUP.html#SOUP">SOUP</a>).
+
+     <li>The Gnus cache is much faster.
+
+     <li>Groups can be sorted according to many criteria (see <a href="Sorting-Groups.html#Sorting-Groups">Sorting Groups</a>).
+
+     <li>New group parameters have been introduced to set list-addresses and
+expiry times (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>).
+
+     <li>All formatting specs allow specifying faces to be used
+(see <a href="Formatting-Fonts.html#Formatting-Fonts">Formatting Fonts</a>).
+
+     <li>There are several more commands for setting/removing/acting on process
+marked articles on the <kbd>M P</kbd> submap (see <a href="Setting-Process-Marks.html#Setting-Process-Marks">Setting Process Marks</a>).
+
+     <li>The summary buffer can be limited to show parts of the available
+articles based on a wide range of criteria.  These commands have been
+bound to keys on the <kbd>/</kbd> submap (see <a href="Limiting.html#Limiting">Limiting</a>).
+
+     <li>Articles can be made persistent with the <kbd>*</kbd> command
+(see <a href="Persistent-Articles.html#Persistent-Articles">Persistent Articles</a>).
+
+     <li>All functions for hiding article elements are now toggles.
+
+     <li>Article headers can be buttonized (see <a href="Article-Washing.html#Article-Washing">Article Washing</a>).
+
+     <li>All mail back ends support fetching articles by <code>Message-ID</code>.
+
+     <li>Duplicate mail can now be treated properly (see <a href="Duplicates.html#Duplicates">Duplicates</a>).
+
+     <li>All summary mode commands are available directly from the article
+buffer (see <a href="Article-Keymap.html#Article-Keymap">Article Keymap</a>).
+
+     <li>Frames can be part of <code>gnus-buffer-configuration</code> (see <a href="Window-Layout.html#Window-Layout">Window Layout</a>).
+
+     <li>Mail can be re-scanned by a daemonic process (see <a href="Daemons.html#Daemons">Daemons</a>).
+
+     <li>Gnus can make use of NoCeM files to weed out spam (see <a href="NoCeM.html#NoCeM">NoCeM</a>).
+
+     <pre class="lisp">          (setq gnus-use-nocem t)
+</pre>
+     <li>Groups can be made permanently visible (see <a href="Listing-Groups.html#Listing-Groups">Listing Groups</a>).
+
+     <pre class="lisp">          (setq gnus-permanently-visible-groups "^nnml:")
+</pre>
+     <li>Many new hooks have been introduced to make customizing easier.
+
+     <li>Gnus respects the <code>Mail-Copies-To</code> header.
+
+     <li>Threads can be gathered by looking at the <code>References</code> header
+(see <a href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>).
+
+     <pre class="lisp">          (setq gnus-summary-thread-gathering-function
+                'gnus-gather-threads-by-references)
+</pre>
+     <li>Read articles can be stored in a special backlog buffer to avoid
+refetching (see <a href="Article-Backlog.html#Article-Backlog">Article Backlog</a>).
+
+     <pre class="lisp">          (setq gnus-keep-backlog 50)
+</pre>
+     <li>A clean copy of the current article is always stored in a separate
+buffer to allow easier treatment.
+
+     <li>Gnus can suggest where to save articles (see <a href="Saving-Articles.html#Saving-Articles">Saving Articles</a>).
+
+     <li>Gnus doesn't have to do as much prompting when saving (see <a href="Saving-Articles.html#Saving-Articles">Saving Articles</a>).
+
+     <pre class="lisp">          (setq gnus-prompt-before-saving t)
+</pre>
+     <li><code>gnus-uu</code> can view decoded files asynchronously while fetching
+articles (see <a href="Other-Decode-Variables.html#Other-Decode-Variables">Other Decode Variables</a>).
+
+     <pre class="lisp">          (setq gnus-uu-grabbed-file-functions 'gnus-uu-grab-view)
+</pre>
+     <li>Filling in the article buffer now works properly on cited text
+(see <a href="Article-Washing.html#Article-Washing">Article Washing</a>).
+
+     <li>Hiding cited text adds buttons to toggle hiding, and how much
+cited text to hide is now customizable (see <a href="Article-Hiding.html#Article-Hiding">Article Hiding</a>).
+
+     <pre class="lisp">          (setq gnus-cited-lines-visible 2)
+</pre>
+     <li>Boring headers can be hidden (see <a href="Article-Hiding.html#Article-Hiding">Article Hiding</a>).
+
+     <li>Default scoring values can now be set from the menu bar.
+
+     <li>Further syntax checking of outgoing articles have been added.
+
+   </ul>
+
+   </body></html>
+

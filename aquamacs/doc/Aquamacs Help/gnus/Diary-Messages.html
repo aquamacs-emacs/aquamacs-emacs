@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Diary Messages - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-NNDiary-Back-End.html#The-NNDiary-Back-End" title="The NNDiary Back End">
+<link rel="next" href="Running-NNDiary.html#Running-NNDiary" title="Running NNDiary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Diary-Messages"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Running-NNDiary.html#Running-NNDiary">Running NNDiary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-NNDiary-Back-End.html#The-NNDiary-Back-End">The NNDiary Back End</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">6.8.1.1 Diary Messages</h5>
+
+<p><a name="index-nndiary-messages-2462"></a><a name="index-nndiary-mails-2463"></a>
+<code>nndiary</code> messages are just normal ones, except for the mandatory
+presence of 7 special headers.  These headers are of the form
+<code>X-Diary-&lt;something&gt;</code>, <code>&lt;something&gt;</code> being one of
+<code>Minute</code>, <code>Hour</code>, <code>Dom</code>, <code>Month</code>, <code>Year</code>,
+<code>Time-Zone</code> and <code>Dow</code>.  <code>Dom</code> means &ldquo;Day of Month&rdquo;, and
+<code>dow</code> means &ldquo;Day of Week&rdquo;.  These headers actually behave like
+crontab specifications and define the event date(s):
+
+     <ul>
+<li>For all headers except the <code>Time-Zone</code> one, a header value is
+either a star (meaning all possible values), or a list of fields
+(separated by a comma). 
+<li>A field is either an integer, or a range. 
+<li>A range is two integers separated by a dash. 
+<li>Possible integer values are 0&ndash;59 for <code>Minute</code>, 0&ndash;23 for
+<code>Hour</code>, 1&ndash;31 for <code>Dom</code>, 1&ndash;12 for <code>Month</code>, above 1971
+for <code>Year</code> and 0&ndash;6 for <code>Dow</code> (0 meaning Sunday). 
+<li>As a special case, a star in either <code>Dom</code> or <code>Dow</code> doesn't
+mean &ldquo;all possible values&rdquo;, but &ldquo;use only the other field&rdquo;.  Note
+that if both are star'ed, the use of either one gives the same result. 
+<li>The <code>Time-Zone</code> header is special in that it can only have one
+value (<code>GMT</code>, for instance).  A star doesn't mean &ldquo;all possible
+values&rdquo; (because it makes no sense), but &ldquo;the current local time
+zone&rdquo;.  Most of the time, you'll be using a star here.  However, for a
+list of available time zone values, see the variable
+<code>nndiary-headers</code>. 
+</ul>
+
+   <p>As a concrete example, here are the diary headers to add to your message
+for specifying &ldquo;Each Monday and each 1st of month, at 12:00, 20:00,
+21:00, 22:00, 23:00 and 24:00, from 1999 to 2010&rdquo; (I'll let you find
+what to do then):
+
+<pre class="example">     X-Diary-Minute: 0
+     X-Diary-Hour: 12, 20-24
+     X-Diary-Dom: 1
+     X-Diary-Month: *
+     X-Diary-Year: 1999-2010
+     X-Diary-Dow: 1
+     X-Diary-Time-Zone: *
+</pre>
+   </body></html>
+

@@ -1,0 +1,188 @@
+<html lang="en">
+<head>
+<title>Remember templates - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Remember.html#Remember" title="Remember">
+<link rel="prev" href="Setting-up-Remember-for-Org.html#Setting-up-Remember-for-Org" title="Setting up Remember for Org">
+<link rel="next" href="Storing-notes.html#Storing-notes" title="Storing notes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Remember-templates"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Storing-notes.html#Storing-notes">Storing notes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Setting-up-Remember-for-Org.html#Setting-up-Remember-for-Org">Setting up Remember for Org</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Remember.html#Remember">Remember</a>
+<hr>
+</div>
+
+<h4 class="subsection">9.1.2 Remember templates</h4>
+
+<p><a name="index-templates_002c-for-Remember-657"></a>
+In combination with Org, you can use templates to generate
+different types of Remember notes.  For example, if you would like
+to use one template to create general TODO entries, another one for
+journal entries, and a third one for collecting random ideas, you could
+use:
+
+<pre class="example">     (setq org-remember-templates
+      '(("Todo" ?t "* TODO %?\n  %i\n  %a" "~/org/TODO.org" "Tasks")
+        ("Journal" ?j "* %U %?\n\n  %i\n  %a" "~/org/JOURNAL.org")
+        ("Idea" ?i "* %^{Title}\n  %i\n  %a" "~/org/JOURNAL.org" "New Ideas")))
+</pre>
+   <p><a name="index-org_002dremember_002ddefault_002dheadline-658"></a><a name="index-org_002ddirectory-659"></a>In these entries, the first string is just a name, and the
+character specifies how to select the template.  It is useful if the
+character is also the first letter of the name.  The next string specifies
+the template.  Two more (optional) strings give the file in which, and the
+headline under which, the new note should be stored.  The file (if not
+present or <code>nil</code>) defaults to <code>org-default-notes-file</code>, the heading
+to <code>org-remember-default-headline</code>.  If the file name is not an absolute
+path, it will be interpreted relative to <code>org-directory</code>.
+
+   <p>The heading can also be the symbols <code>top</code> or <code>bottom</code> to send notes
+as level 1 entries to the beginning or end of the file, respectively.  It may
+also be the symbol <code>date-tree</code>.  Then, a tree with year on level 1,
+month on level 2 and day on level three will be build in the file, and the
+entry will be filed into the tree under the current date<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+   <p>An optional sixth element specifies the contexts in which the user can select
+the template.  This element can be a list of major modes or a function. 
+<code>org-remember</code> will first check whether the function returns <code>t</code> or
+if we are in any of the listed major modes, and exclude templates for which
+this condition is not fulfilled.  Templates that do not specify this element
+at all, or that use <code>nil</code> or <code>t</code> as a value will always be
+selectable.
+
+   <p>So for example:
+
+<pre class="example">     (setq org-remember-templates
+      '(("Bug" ?b "* BUG %?\n  %i\n  %a" "~/org/BUGS.org" "Bugs" (emacs-lisp-mode))
+        ("Journal" ?j "* %U %?\n\n  %i\n  %a" "~/org/JOURNAL.org" "X" my-check)
+        ("Idea" ?i "* %^{Title}\n  %i\n  %a" "~/org/JOURNAL.org" "New Ideas")))
+</pre>
+   <p class="noindent">The first template will only be available when invoking <code>org-remember</code>
+from an buffer in <code>emacs-lisp-mode</code>.  The second template will only be
+available when the function <code>my-check</code> returns <code>t</code>.  The third
+template will be proposed in any context.
+
+   <p>When you call <kbd>M-x org-remember</kbd> (or <kbd>M-x remember</kbd>) to remember
+something, Org will prompt for a key to select the template (if you have
+more than one template) and then prepare the buffer like
+<pre class="example">     * TODO
+       [[file:<var>link to where you called remember</var>]]
+</pre>
+   <p class="noindent">During expansion of the template, special <kbd>%</kbd>-escapes<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>
+allow dynamic insertion of content:
+<pre class="example">     %^{<var>prompt</var>}  <span class="roman">prompt the user for a string and replace this sequence with it.</span>
+                 <span class="roman">You may specify a default value and a completion table with</span>
+                 <span class="roman">%^{prompt|default|completion2|completion3...}</span>
+                 <span class="roman">The arrow keys access a prompt-specific history.</span>
+     %a          <span class="roman">annotation, normally the link created with </span><code>org-store-link</code>
+     %A          <span class="roman">like </span><code>%a</code><span class="roman">, but prompt for the description part</span>
+     %i          <span class="roman">initial content, the region when remember is called with C-u.</span>
+                 <span class="roman">The entire text will be indented like </span><code>%i</code><span class="roman"> itself.</span>
+     %t          <span class="roman">timestamp, date only</span>
+     %T          <span class="roman">timestamp with date and time</span>
+     %u, %U      <span class="roman">like the above, but inactive timestamps</span>
+     %^t         <span class="roman">like </span><code>%t</code><span class="roman">, but prompt for date.  Similarly </span><code>%^T</code><span class="roman">, </span><code>%^u</code><span class="roman">, </span><code>%^U</code>
+                 <span class="roman">You may define a prompt like </span><code>%^{Birthday}t</code>
+     %n          <span class="roman">user name (taken from </span><code>user-full-name</code><span class="roman">)</span>
+     %c          <span class="roman">Current kill ring head.</span>
+     %x          <span class="roman">Content of the X clipboard.</span>
+     %^C         <span class="roman">Interactive selection of which kill or clip to use.</span>
+     %^L         <span class="roman">Like </span><code>%^C</code><span class="roman">, but insert as link.</span>
+     %^g         <span class="roman">prompt for tags, with completion on tags in target file.</span>
+     %k          <span class="roman">title of currently clocked task</span>
+     %K          <span class="roman">link to currently clocked task</span>
+     %^G         <span class="roman">prompt for tags, with completion all tags in all agenda files.</span>
+     %^{<var>prop</var>}p   <span class="roman">Prompt the user for a value for property </span><var>prop</var>
+     %:keyword   <span class="roman">specific information for certain link types, see below</span>
+     %[<var>file</var>]     <span class="roman">insert the contents of the file given by </span><var>file</var>
+     %(<var>sexp</var>)     <span class="roman">evaluate Elisp </span><var>sexp</var><span class="roman"> and replace with the result</span>
+     %!          <span class="roman">immediately store note after completing the template</span>
+                 <span class="roman">(skipping the </span><kbd>C-c C-c</kbd><span class="roman"> that normally triggers storing)</span>
+     %&amp;          <span class="roman">jump to target location immediately after storing note</span>
+</pre>
+   <p class="noindent">For specific link types, the following keywords will be
+defined<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>:
+
+   <p><a name="index-org_002dfrom_002dis_002duser_002dregexp-660"></a>
+<pre class="example">     Link type          |  Available keywords
+     -------------------+----------------------------------------------
+     bbdb               |  %:name %:company
+     bbdb               |  %::server %:port %:nick
+     vm, wl, mh, rmail  |  %:type %:subject %:message-id
+                        |  %:from %:fromname %:fromaddress
+                        |  %:to   %:toname   %:toaddress
+                        |  %:fromto <span class="roman">(either "to NAME" or "from NAME")<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a></span>
+     gnus               |  %:group, <span class="roman">for messages also all email fields</span>
+     w3, w3m            |  %:url
+     info               |  %:file %:node
+     calendar           |  %:date"
+</pre>
+   <p class="noindent">To place the cursor after template expansion use:
+
+<pre class="example">     %?          <span class="roman">After completing the template, position cursor here.</span>
+</pre>
+   <p class="noindent">If you change your mind about which template to use, call
+<code>org-remember</code> in the remember buffer.  You may then select a new
+template that will be filled with the previous context information.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If the file
+contains an entry with a <code>DATE_TREE</code> property, the entire date tree will
+be build under that entry.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> If you
+need one of these sequences literally, escape the <kbd>%</kbd> with a backslash.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> If you define your own link types (see <a href="Adding-hyperlink-types.html#Adding-hyperlink-types">Adding hyperlink types</a>), any property you store with
+<code>org-store-link-props</code> can be accessed in remember templates in a
+similar way.</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> This will always be the other, not the user.  See the variable <code>org-from-is-user-regexp</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

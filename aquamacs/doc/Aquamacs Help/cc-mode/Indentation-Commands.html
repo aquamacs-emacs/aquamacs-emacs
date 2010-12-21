@@ -1,0 +1,205 @@
+<html lang="en">
+<head>
+<title>Indentation Commands - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Commands.html#Commands" title="Commands">
+<link rel="next" href="Comment-Commands.html#Comment-Commands" title="Comment Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Indentation-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Comment-Commands.html#Comment-Commands">Comment Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Commands.html#Commands">Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous,up -->
+<h3 class="section">4.1 Indentation Commands</h3>
+
+<p><a name="index-indentation-15"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>The following commands reindent C constructs.  Note that when you
+change your coding style, either interactively or through some other
+means, your file does <em>not</em> automatically get reindented.  You
+will need to execute one of the following commands to see the effects
+of your changes.
+
+   <p><a name="index-GNU-indent-program-16"></a>Also, variables like <code>c-hanging-*</code> and <code>c-cleanup-list</code>
+(see <a href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>) only affect how on-the-fly code is
+formatted.  Changing the &ldquo;hanginess&rdquo; of a brace and then
+reindenting, will not move the brace to a different line.  For this,
+you're better off getting an external program like GNU <code>indent</code>,
+which will rearrange brace location, amongst other things.
+
+   <p>Preprocessor directives are handled as syntactic whitespace from other
+code, i.e. they can be interspersed anywhere without affecting the
+indentation of the surrounding code, just like comments.
+
+   <p>The code inside macro definitions is, by default, still analyzed
+syntactically so that you get relative indentation there just as you'd
+get if the same code was outside a macro.  However, since there is no
+hint about the syntactic context, i.e. whether the macro expands to an
+expression, to some statements, or perhaps to whole functions, the
+syntactic recognition can be wrong.  CC Mode manages to figure it
+out correctly most of the time, though.
+
+   <p>Reindenting large sections of code can take a long time.  When
+CC Mode reindents a region of code, it is essentially equivalent to
+hitting &lt;TAB&gt; on every line of the region.
+
+   <p>These commands indent code:
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd> (<code>c-indent-command</code>)<dd><a name="index-TAB-17"></a><a name="index-c_002dindent_002dcommand-18"></a><a name="index-indent_002dcommand-_0028c_002d_0029-19"></a>This command indents the current line.  That is all you need to know
+about it for normal use.
+
+     <p><code>c-indent-command</code> does different things, depending on the
+setting of <code>c-syntactic-indentation</code> (see <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>):
+
+          <ul>
+<li>When it's non-<code>nil</code> (which it normally is), the command indents
+the line according to its syntactic context.  With a prefix argument
+(<kbd>C-u &lt;TAB&gt;</kbd>), it will re-indent the entire
+expression<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+that begins at the line's left margin.
+
+          <li>When it's <code>nil</code>, the command indents the line by an extra
+<code>c-basic-offset</code> columns.  A prefix argument acts as a
+multiplier.  A bare prefix (<kbd>C-u &lt;TAB&gt;</kbd>) is equivalent to -1,
+removing <code>c-basic-offset</code> columns from the indentation. 
+</ul>
+
+     <p>The precise behavior is modified by several variables: With
+<code>c-tab-always-indent</code>, you can make &lt;TAB&gt; insert whitespace
+in some circumstances&mdash;<code>c-insert-tab-function</code> then defines
+precisely what sort of &ldquo;whitespace&rdquo; this will be.  Set the standard
+Emacs variable <code>indent-tabs-mode</code> to <code>t</code> if you want real
+&lsquo;<samp><span class="samp">tab</span></samp>&rsquo; characters to be used in the indentation, to <code>nil</code> if
+you want only spaces.  See <a href="../emacs/Just-Spaces.html#Just-Spaces">Just Spaces</a>.
+
+     <div class="defun">
+&mdash; User Option: <b>c-tab-always-indent</b><var><a name="index-c_002dtab_002dalways_002dindent-20"></a></var><br>
+<blockquote> <p><a name="index-tab_002dalways_002dindent-_0028c_002d_0029-21"></a><a name="index-literal-22"></a>This variable modifies how &lt;TAB&gt; operates.
+               <ul>
+<li>When it is <code>t</code> (the default), &lt;TAB&gt; simply indents the
+current line. 
+<li>When it is <code>nil</code>, &lt;TAB&gt; (re)indents the line only if point is
+to the left of the first non-whitespace character on the line. 
+Otherwise it inserts some whitespace (a tab or an equivalent number of
+spaces - see below) at point. 
+<li>With some other value, the line is reindented.  Additionally, if point
+is within a string or comment, some whitespace is inserted. 
+</ul>
+             </p></blockquote></div>
+
+     <div class="defun">
+&mdash; User Option: <b>c-insert-tab-function</b><var><a name="index-c_002dinsert_002dtab_002dfunction-23"></a></var><br>
+<blockquote> <p><a name="index-insert_002dtab_002dfunction-_0028c_002d_0029-24"></a><a name="index-tab_002dto_002dtab_002dstop-25"></a>When &ldquo;some whitespace&rdquo; is inserted as described above, what actually
+happens is that the function stored in <code>c-insert-tab-function</code> is
+called.  Normally, this is <code>insert-tab</code>, which inserts a real tab
+character or the equivalent number of spaces (depending on
+<code>indent-tabs-mode</code>).  Some people, however, set
+<code>c-insert-tab-function</code> to <code>tab-to-tab-stop</code> so as to get
+hard tab stops when indenting. 
+</p></blockquote></div>
+     </dl>
+
+<p class="noindent">The kind of indentation the next five commands do depends on the
+setting of <code>c-syntactic-indentation</code> (see <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>):
+     <ul>
+<li>when it is non-<code>nil</code> (the default), the commands indent lines
+according to their syntactic context;
+<li>when it is <code>nil</code>, they just indent each line the same amount as
+the previous non-blank line.  The commands that indent a region aren't
+very useful in this case. 
+</ul>
+
+     <dl>
+<dt><kbd>C-j</kbd> (<code>newline-and-indent</code>)<dd><a name="index-C_002dj-26"></a><a name="index-newline_002dand_002dindent-27"></a>Inserts a newline and indents the new blank line, ready to start
+typing.  This is a standard (X)Emacs command.
+
+     <br><dt><kbd>C-M-q</kbd> (<code>c-indent-exp</code>)<dd><a name="index-C_002dM_002dq-28"></a><a name="index-c_002dindent_002dexp-29"></a><a name="index-indent_002dexp-_0028c_002d_0029-30"></a>Indents an entire balanced brace or parenthesis expression.  Note that
+point must be on the opening brace or parenthesis of the expression
+you want to indent.
+
+     <br><dt><kbd>C-c C-q</kbd> (<code>c-indent-defun</code>)<dd><a name="index-C_002dc-C_002dq-31"></a><a name="index-c_002dindent_002ddefun-32"></a><a name="index-indent_002ddefun-_0028c_002d_0029-33"></a>Indents the entire top-level function, class or macro definition
+encompassing point.  It leaves point unchanged.  This function can't be
+used to reindent a nested brace construct, such as a nested class or
+function, or a Java method.  The top-level construct being reindented
+must be complete, i.e. it must have both a beginning brace and an ending
+brace.
+
+     <br><dt><kbd>C-M-\</kbd> (<code>indent-region</code>)<dd><a name="index-C_002dM_002d_005c-34"></a><a name="index-indent_002dregion-35"></a>Indents an arbitrary region of code.  This is a standard Emacs command,
+tailored for C code in a CC Mode buffer.  Note, of course, that point
+and mark must delineate the region you want to indent.
+
+     <br><dt><kbd>C-M-h</kbd> (<code>c-mark-function</code>)<dd><a name="index-C_002dM_002dh-36"></a><a name="index-c_002dmark_002dfunction-37"></a><a name="index-mark_002dfunction-_0028c_002d_0029-38"></a>While not strictly an indentation command, this is useful for marking
+the current top-level function or class definition as the current
+region.  As with <code>c-indent-defun</code>, this command operates on
+top-level constructs, and can't be used to mark say, a Java method. 
+</dl>
+
+   <p>These variables are also useful when indenting code:
+
+<div class="defun">
+&mdash; User Option: <b>indent-tabs-mode</b><var><a name="index-indent_002dtabs_002dmode-39"></a></var><br>
+<blockquote><p>This is a standard Emacs variable that controls how line indentation
+is composed.  When it's non-<code>nil</code>, tabs can be used in a line's
+indentation, otherwise only spaces are used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>c-progress-interval</b><var><a name="index-c_002dprogress_002dinterval-40"></a></var><br>
+<blockquote><p><a name="index-progress_002dinterval-_0028c_002d_0029-41"></a>When indenting large regions of code, this variable controls how often a
+progress message is displayed.  Set this variable to <code>nil</code> to
+inhibit the progress messages, or set it to an integer which is how
+often (in seconds) progress messages are to be displayed. 
+</p></blockquote></div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> this is only useful for a line starting with a
+comment opener or an opening brace, parenthesis, or string quote.</p>
+
+   <hr></div>
+
+   </body></html>
+

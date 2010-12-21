@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Present Value - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Financial-Functions.html#Financial-Functions" title="Financial Functions">
+<link rel="prev" href="Future-Value.html#Future-Value" title="Future Value">
+<link rel="next" href="Related-Financial-Functions.html#Related-Financial-Functions" title="Related Financial Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Present-Value"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Related-Financial-Functions.html#Related-Financial-Functions">Related Financial Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Future-Value.html#Future-Value">Future Value</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Financial-Functions.html#Financial-Functions">Financial Functions</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.6.3 Present Value</h4>
+
+<p class="noindent"><a name="index-b-P-876"></a><a name="index-calc_002dfin_002dpv-877"></a><a name="index-pv-878"></a>The <kbd>b P</kbd> (<code>calc-fin-pv</code>) [<code>pv</code>] command computes
+the present value of an investment.  Like <code>fv</code>, it takes
+three arguments:  <code>pv(</code><var>rate</var><code>, </code><var>n</var><code>, </code><var>payment</var><code>)</code>. 
+It computes the present value of a series of regular payments. 
+Suppose you have the chance to make an investment that will
+pay $2000 per year over the next four years; as you receive
+these payments you can put them in the bank at 9% interest. 
+You want to know whether it is better to make the investment, or
+to keep the money in the bank where it earns 9% interest right
+from the start.  The calculation <code>pv(9%, 4, 2000)</code> gives the
+result 6479.44.  If your initial investment must be less than this,
+say, $6000, then the investment is worthwhile.  But if you had to
+put up $7000, then it would be better just to leave it in the bank.
+
+   <p>Here is the interpretation of the result of <code>pv</code>:  You are
+trying to compare the return from the investment you are
+considering, which is <code>fv(9%, 4, 2000) = 9146.26</code>, with
+the return from leaving the money in the bank, which is
+<code>fvl(9%, 4, </code><var>x</var><code>)</code> where <var>x</var> is the amount of money
+you would have to put up in advance.  The <code>pv</code> function
+finds the break-even point, &lsquo;<samp><span class="samp">x = 6479.44</span></samp>&rsquo;, at which
+<code>fvl(9%, 4, 6479.44)</code> is also equal to 9146.26.  This is
+the largest amount you should be willing to invest.
+
+   <p><a name="index-I-b-P-879"></a><a name="index-pvb-880"></a>The <kbd>I b P</kbd> [<code>pvb</code>] command solves the same problem,
+but with payments occurring at the beginning of each interval. 
+It has the same relationship to <code>fvb</code> as <code>pv</code> has
+to <code>fv</code>.  For example <code>pvb(9%, 4, 2000) = 7062.59</code>,
+a larger number than <code>pv</code> produced because we get to start
+earning interest on the return from our investment sooner.
+
+   <p><a name="index-H-b-P-881"></a><a name="index-pvl-882"></a>The <kbd>H b P</kbd> [<code>pvl</code>] command computes the present value of
+an investment that will pay off in one lump sum at the end of the
+period.  For example, if we get our $8000 all at the end of the
+four years, <code>pvl(9%, 4, 8000) = 5667.40</code>.  This is much
+less than <code>pv</code> reported, because we don't earn any interest
+on the return from this investment.  Note that <code>pvl</code> and
+<code>fvl</code> are simple inverses:  <code>fvl(9%, 4, 5667.40) = 8000</code>.
+
+   <p>You can give an optional fourth lump-sum argument to <code>pv</code>
+and <code>pvb</code>; this is handled in exactly the same way as the
+fourth argument for <code>fv</code> and <code>fvb</code>.
+
+   <p><a name="index-b-N-883"></a><a name="index-calc_002dfin_002dnpv-884"></a><a name="index-npv-885"></a>The <kbd>b N</kbd> (<code>calc-fin-npv</code>) [<code>npv</code>] command computes
+the net present value of a series of irregular investments. 
+The first argument is the interest rate.  The second argument is
+a vector which represents the expected return from the investment
+at the end of each interval.  For example, if the rate represents
+a yearly interest rate, then the vector elements are the return
+from the first year, second year, and so on.
+
+   <p>Thus, <code>npv(9%, [2000,2000,2000,2000]) = pv(9%, 4, 2000) = 6479.44</code>. 
+Obviously this function is more interesting when the payments are
+not all the same!
+
+   <p>The <code>npv</code> function can actually have two or more arguments. 
+Multiple arguments are interpreted in the same way as for the
+vector statistical functions like <code>vsum</code>. 
+See <a href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics">Single-Variable Statistics</a>.  Basically, if there are several
+payment arguments, each either a vector or a plain number, all these
+values are collected left-to-right into the complete list of payments. 
+A numeric prefix argument on the <kbd>b N</kbd> command says how many
+payment values or vectors to take from the stack.
+
+   <p><a name="index-I-b-N-886"></a><a name="index-npvb-887"></a>The <kbd>I b N</kbd> [<code>npvb</code>] command computes the net present
+value where payments occur at the beginning of each interval
+rather than at the end.
+
+   </body></html>
+

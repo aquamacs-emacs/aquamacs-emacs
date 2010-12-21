@@ -1,0 +1,246 @@
+<html lang="en">
+<head>
+<title>Key Bindings - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Rudimentary-Changes.html#Rudimentary-Changes" title="Rudimentary Changes">
+<link rel="next" href="Packages-that-Change-Keymaps.html#Packages-that-Change-Keymaps" title="Packages that Change Keymaps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Key-Bindings"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Packages-that-Change-Keymaps.html#Packages-that-Change-Keymaps">Packages that Change Keymaps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rudimentary-Changes.html#Rudimentary-Changes">Rudimentary Changes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Key Bindings</h3>
+
+<p><a name="index-key-bindings-220"></a><a name="index-keymaps-221"></a>
+Viper lets you define hot keys, i.e., you can associate keyboard keys
+such as F1, Help, PgDn, etc., with Emacs Lisp functions (that may already
+exist or that you will write).  Each key has a "preferred form" in
+Emacs.  For instance, the Up key's preferred form is [up], the Help key's
+preferred form is [help], and the Undo key has the preferred form [f14]. 
+You can find out the preferred form of a key by typing <kbd>M-x
+describe-key-briefly</kbd> and then typing the key you want to know about.
+
+   <p>Under the X Window System, every keyboard key emits its preferred form,
+so you can just type
+
+<pre class="lisp">     (global-set-key [f11] 'calendar)                        ; L1, Stop
+     (global-set-key [f14] 'undo)                            ; L4, Undo
+</pre>
+   <p class="noindent">to bind L1 (a key that exists on some SUN workstations) so it will invoke
+the Emacs Calendar and to bind L4 so it will undo changes. 
+However, on a dumb terminal or in an Xterm window, even the standard arrow
+keys may
+not emit the right signals for Emacs to understand.  To let Emacs know about
+those keys, you will have to find out which key sequences they emit
+by typing <kbd>C-q</kbd> and then the key (you should switch to Emacs state
+first).  Then you can bind those sequences to their preferred forms using
+<code>input-decode-map</code> as follows:
+
+<pre class="lisp">     (cond ((string= (getenv "TERM") "xterm")
+     (define-key input-decode-map "\e[192z" [f11])    ; L1
+     (define-key input-decode-map "\e[195z" [f14])    ; L4, Undo
+</pre>
+   <p>The above illustrates how to do this for Xterm.  On VT100, you would have to
+replace "xterm" with "vt100" and also change the key sequences (the same
+key may emit different sequences on different types of terminals).
+
+   <p>The above keys are global, so they are overwritten by the local maps
+defined by the major modes and by Viper itself.  Therefore, if you wish to
+change a binding set by a major mode or by Viper, read this.
+
+   <p>Viper users who wish to specify their own key bindings should be concerned
+only with the following three keymaps:
+<code>viper-vi-global-user-map</code> for Vi state commands,
+<code>viper-insert-global-user-map</code> for Insert state commands,
+and <code>viper-emacs-global-user-map</code> for Emacs state commands (note:
+customized bindings for Emacs state made to <code>viper-emacs-global-user-map</code>
+are <em>not</em> inherited by Insert state).
+
+   <p>For more information on Viper keymaps, see the header of the file
+<samp><span class="file">viper.el</span></samp>. 
+If you wish to change a Viper binding, you can use the
+<code>define-key</code> command, to modify <code>viper-vi-global-user-map</code>,
+<code>viper-insert-global-user-map</code>, and <code>viper-emacs-global-user-map</code>, as
+explained below.  Each of these key maps affects the corresponding Viper state. 
+The keymap <code>viper-insert-global-user-map</code> also affects Viper's Replace
+state.
+
+<p class="noindent">If you want to
+bind a key, say <kbd>C-v</kbd>, to the function that scrolls
+page down and to make <kbd>0</kbd> display information on the current buffer,
+putting this in <samp><span class="file">.viper</span></samp> will do the trick in Vi state:
+<pre class="example">     (define-key viper-vi-global-user-map "\C-v" 'scroll-down)
+</pre>
+   <p class="noindent">To set a key globally,
+<pre class="example">     (define-key viper-emacs-global-user-map "\C-c m" 'smail)
+     (define-key viper-vi-global-user-map "0" 'viper-info-on-file)
+</pre>
+   <p class="noindent">Note, however, that this binding may be overwritten by other keymaps, since
+the global keymap has the lowest priority. 
+To make sure that nothing will override a binding in Emacs state, you
+can write this:
+<pre class="example">     (define-key viper-emacs-global-user-map "\C-c m" 'smail)
+</pre>
+   <p class="noindent">To customize the binding for <kbd>C-h</kbd> in Insert state:
+<pre class="example">     (define-key viper-insert-global-user-map "\C-h" 'my-del-backwards-function)
+</pre>
+   <p class="noindent">Each Emacs command key calls some Lisp function.  If you have enabled the
+Help, (see <a href="Rudimentary-Changes.html#Rudimentary-Changes">Rudimentary Changes</a>) <kbd>C-h k</kbd> will show you the function
+for each specific key; <kbd>C-h b</kbd> will show all bindings, and <kbd>C-h m</kbd>
+will provide information on the major mode in effect.  If Help is not
+enabled, you can still get help in Vi state by prefixing the above commands
+with <kbd>\</kbd>, e.g., <kbd>\ C-h k</kbd> (or you can use the Help menu in the
+menu bar, if Emacs runs under X).
+
+   <p>Viper users can also change bindings on a per major mode basis.  As with
+global bindings, this can be done separately for each of the three main Viper
+states.  To this end, Viper provides the function
+<code>viper-modify-major-mode</code>. 
+<a name="index-g_t_0040code_007bviper_002dmodify_002dmajor_002dmode_007d-222"></a>
+To modify keys in Emacs state for <code>my-favorite-major-mode</code>, the user
+needs to create a sparse keymap, say, <code>my-fancy-map</code>, bind whatever
+keys necessary in that keymap, and put
+
+<pre class="example">     (viper-modify-major-mode 'dired-mode 'emacs-state my-fancy-map)
+</pre>
+   <p class="noindent">in <samp><span class="file">~/.viper</span></samp>.  To do the same in Vi and Insert states, you should use
+<code>vi-state</code> and <code>insert-state</code>.  Changes in Insert state are also
+in effect in Replace state.  For instance, suppose that the user wants to
+use <kbd>dd</kbd> in Vi state under Dired mode to delete files, <kbd>u</kbd> to unmark
+files, etc.  The following code in <samp><span class="file">~/.viper</span></samp> will then do the job:
+
+<pre class="example">     (setq my-dired-modifier-map (make-sparse-keymap))
+     (define-key my-dired-modifier-map "dd" 'dired-flag-file-deletion)
+     (define-key my-dired-modifier-map "u" 'dired-unmark)
+     (viper-modify-major-mode 'dired-mode 'vi-state my-dired-modifier-map)
+</pre>
+   <p>A Vi purist may want to modify Emacs state under Dired mode so that
+<kbd>k</kbd>, <kbd>l</kbd>, etc., will move around in directory buffers, as in
+Vi.  Although this is not recommended, as these keys are bound to useful
+Dired functions, the trick can be accomplished via the following code:
+
+<pre class="example">     (setq my-dired-vi-purist-map (make-sparse-keymap))
+     (define-key my-dired-vi-purist-map "k" 'viper-previous-line)
+     (define-key my-dired-vi-purist-map "l" 'viper-forward-char)
+     (viper-modify-major-mode 'dired-mode 'emacs-state my-dired-vi-purist-map)
+</pre>
+   <p>Yet another way to customize key bindings in a major mode is to edit the
+list <code>viper-major-mode-modifier-list</code> using the customization widget. 
+<a name="index-g_t_0040code_007bviper_002dmajor_002dmode_002dmodifier_002dlist_007d-223"></a>(This variable is in the Viper-misc customization group.) 
+The elements of this list are triples of the form: (major-mode viper-state
+keymap), where the keymap contains bindings that are supposed to be active
+in the given major mode and the given viper-state.
+
+   <p>Effects similar to key binding changes can be achieved by defining Vi
+keyboard macros using the Ex commands <kbd>:map</kbd> and <kbd>:map!</kbd>.  The
+difference is that multi-key Vi macros do not override the keys they are
+bound to, unless these keys are typed in quick succession.  So, with macros,
+one can use the normal keys alongside with the macros.  If per-mode
+modifications are needed, the user can try both ways and see which one is
+more convenient. 
+<a name="index-g_t_0040kbd_007b_003amap_007d-224"></a>See <a href="Vi-Macros.html#Vi-Macros">Vi Macros</a>, for details.
+
+   <p>Note: in major modes that come up in <em>Emacs state</em> by default, the
+aforesaid modifications may not take place immediately (but only after the
+buffer switches to some other Viper state and then back to Emacs state).  To
+avoid this, one should add <code>viper-change-state-to-emacs</code> to an
+appropriate hook of that major mode.  (Check the function
+<code>viper-set-hooks</code> in <samp><span class="file">viper.el</span></samp> for examples.)  However, if you
+did not set <code>viper-always</code> to <code>nil</code>, chances are that you won't
+need to perform the above procedure, because Viper will take care of most
+useful defaults.
+
+   <p>Finally, Viper has a facility that lets the user define per-buffer
+bindings, i.e., bindings that are in effect in some specific buffers
+only.  Unlike per-mode bindings described above, per-buffer bindings can be
+defined based on considerations other than the major mode.  This is done
+via the function <code>viper-add-local-keys</code>, which lets one specify bindings
+that should be in effect in the current buffer only and for a specific Viper
+state.  For instance,
+<pre class="lisp">     (viper-add-local-keys 'vi-state '(("ZZ" . TeX-command-master)
+                                      ("ZQ" . viper-save-kill-buffer)))
+</pre>
+   <p class="noindent">redefines <kbd>ZZ</kbd> to invoke <code>TeX-command-master</code> in <code>vi-state</code>
+and <kbd>ZQ</kbd> to save-then-kill the current buffer.  These bindings take
+effect only in the buffer where this command is executed.  The typical use
+of this function is to execute the above expression from within a function
+that is included in a hook to some major mode.  For instance, the above
+expression
+could be called from a function, <code>my-tex-init</code>, which may be added to
+<code>tex-mode-hook</code> as follows:
+<pre class="lisp">     (add-hook 'tex-mode-hook 'my-tex-init)
+</pre>
+   <p class="noindent">When TeX mode starts, the hook is executed and the above Lisp expression is
+evaluated.  Then, the bindings for <kbd>ZZ</kbd> and <kbd>ZQ</kbd> are changed in Vi
+command mode for all buffers in TeX mode.
+
+   <p>Another useful application is to bind <kbd>ZZ</kbd> to <code>send-mail</code>
+in the Mail mode buffers (the specifics of this depend on which mail
+package you are using, <code>rmail</code>, <code>mh-e</code>, <code>vm</code>, etc. 
+For instance, here is how to do this for <code>mh-e</code>, the Emacs interface
+to MH:
+<pre class="lisp">     (defun mh-add-vi-keys ()
+       "Set up ZZ for MH-e and XMH."
+       (viper-add-local-keys 'vi-state '(("ZZ" . mh-send-letter))))
+     (add-hook 'mh-letter-mode-hook 'mh-add-vi-keys)
+</pre>
+   <p>You can also use <code>viper-add-local-keys</code> to set per buffer
+bindings in Insert state and Emacs state by passing as a parameter the
+symbols <code>insert-state</code> and <code>emacs-state</code>, respectively. 
+As with global bindings, customized local bindings done to Emacs state
+are not inherited by Insert state.
+
+   <p>On rare occasions, local keys may be added by mistake.  Usually this is done
+indirectly, by invoking a major mode that adds local keys (e.g.,
+<code>shell-mode</code> redefines &lt;RET&gt;).  In such a case, exiting the wrong
+major mode won't rid you from unwanted local keys, since these keys are
+local to Viper state and the current buffer, not to the major mode. 
+In such situations, the remedy is to type <kbd>M-x viper-zap-local-keys</kbd>.
+
+   <p>So much about Viper-specific bindings. 
+See <a href="../emacs/Customization.html#Customization">Customization</a>, and the Emacs quick reference card for the general info on key
+bindings in Emacs.
+
+   <p><a name="index-g_t_0040code_007binput_002ddecode_002dmap_007d-225"></a><a name="index-g_t_0040code_007bfunction_002dkey_002dmap_007d-226"></a><a name="index-g_t_0040code_007bviper_002dvi_002dglobal_002duser_002dmap_007d-227"></a><a name="index-g_t_0040code_007bviper_002dinsert_002dglobal_002duser_002dmap_007d-228"></a><a name="index-g_t_0040code_007bviper_002demacs_002dglobal_002duser_002dmap_007d-229"></a><a name="index-g_t_0040code_007bviper_002dadd_002dlocal_002dkeys_007d-230"></a><a name="index-g_t_0040code_007bviper_002dzap_002dlocal_002dkeys_007d-231"></a>
+
+   </body></html>
+

@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Radio tables - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" title="Tables in arbitrary syntax">
+<link rel="prev" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" title="Tables in arbitrary syntax">
+<link rel="next" href="A-LaTeX-example.html#A-LaTeX-example" title="A LaTeX example">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Radio-tables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="A-LaTeX-example.html#A-LaTeX-example">A LaTeX example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax">Tables in arbitrary syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax">Tables in arbitrary syntax</a>
+<hr>
+</div>
+
+<h4 class="subsection">A.5.1 Radio tables</h4>
+
+<p><a name="index-radio-tables-1418"></a>
+To define the location of the target table, you first need to create two
+lines that are comments in the current mode, but contain magic words for
+Orgtbl mode to find.  Orgtbl mode will insert the translated table
+between these lines, replacing whatever was there before.  For example:
+
+<pre class="example">     /* BEGIN RECEIVE ORGTBL table_name */
+     /* END RECEIVE ORGTBL table_name */
+</pre>
+   <p class="noindent">Just above the source table, we put a special line that tells
+Orgtbl mode how to translate this table and where to install it.  For
+example:
+<a name="index-g_t_0023_002bORGTBL-1419"></a>
+<pre class="example">     #+ORGTBL: SEND table_name translation_function arguments....
+</pre>
+   <p class="noindent"><code>table_name</code> is the reference name for the table that is also used
+in the receiver lines. <code>translation_function</code> is the Lisp function
+that does the translation.  Furthermore, the line can contain a list of
+arguments (alternating key and value) at the end.  The arguments will be
+passed as a property list to the translation function for
+interpretation.  A few standard parameters are already recognized and
+acted upon before the translation function is called:
+
+     <dl>
+<dt><code>:skip N</code><dd>Skip the first N lines of the table.  Hlines do count as separate lines for
+this parameter!
+
+     <br><dt><code>:skipcols (n1 n2 ...)</code><dd>List of columns that should be skipped.  If the table has a column with
+calculation marks, that column is automatically discarded as well. 
+Please note that the translator function sees the table <em>after</em> the
+removal of these columns, the function never knows that there have been
+additional columns. 
+</dl>
+
+<p class="noindent">The one problem remaining is how to keep the source table in the buffer
+without disturbing the normal workings of the file, for example during
+compilation of a C file or processing of a LaTeX file.  There are a
+number of different solutions:
+
+     <ul>
+<li>The table could be placed in a block comment if that is supported by the
+language.  For example, in C mode you could wrap the table between
+&lsquo;<samp><span class="samp">/*</span></samp>&rsquo; and &lsquo;<samp><span class="samp">*/</span></samp>&rsquo; lines. 
+<li>Sometimes it is possible to put the table after some kind of <i>END</i>
+statement, for example &lsquo;<samp><span class="samp">\bye</span></samp>&rsquo; in TeX and &lsquo;<samp><span class="samp">\end{document}</span></samp>&rsquo;
+in LaTeX. 
+<li>You can just comment the table line-by-line whenever you want to process
+the file, and uncomment it whenever you need to edit the table.  This
+only sounds tedious&mdash;the command <kbd>M-x orgtbl-toggle-comment</kbd>
+makes this comment-toggling very easy, in particular if you bind it to a
+key. 
+</ul>
+
+   </body></html>
+

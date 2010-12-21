@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+<title>Synchronous Methods - Using of D-Bus</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Using of D-Bus">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Type-Conversion.html#Type-Conversion" title="Type Conversion">
+<link rel="next" href="Asynchronous-Methods.html#Asynchronous-Methods" title="Asynchronous Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Synchronous-Methods"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Asynchronous-Methods.html#Asynchronous-Methods">Asynchronous Methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Type-Conversion.html#Type-Conversion">Type Conversion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Calling methods in a blocking way.</h2>
+
+<p><a name="index-method-calls_002c-synchronous-36"></a><a name="index-synchronous-method-calls-37"></a>
+Methods can be called synchronously (<dfn>blocking</dfn>) or asynchronously
+(<dfn>non-blocking</dfn>).
+
+   <p>At D-Bus level, a method call consist of two messages: one message
+which carries the input parameters to the object owning the method to
+be called, and a reply message returning the resulting output
+parameters from the object.
+
+<div class="defun">
+&mdash; Function: <b>dbus-call-method</b><var> bus service path interface method &amp;optional :timeout timeout &amp;rest args<a name="index-dbus_002dcall_002dmethod-38"></a></var><br>
+<blockquote><p>This function calls <var>method</var> on the D-Bus <var>bus</var>.  <var>bus</var> is
+either the symbol <code>:system</code> or the symbol <code>:session</code>.
+
+        <p><var>service</var> is the D-Bus service name to be used.  <var>path</var> is the
+D-Bus object path, <var>service</var> is registered at.  <var>interface</var> is
+an interface offered by <var>service</var>.  It must provide <var>method</var>.
+
+        <p>If the parameter <code>:timeout</code> is given, the following integer
+<var>timeout</var> specifies the maximum number of milliseconds the method
+call must return.  The default value is 25,000.  If the method call
+doesn't return in time, a D-Bus error is raised (see <a href="Errors-and-Events.html#Errors-and-Events">Errors and Events</a>).
+
+        <p>All other arguments args are passed to <var>method</var> as arguments. 
+They are converted into D-Bus types as described in <a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.
+
+        <p>The function returns the resulting values of <var>method</var> as a list of
+Lisp objects, according to the type conversion rules described in
+<a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.  Example:
+
+     <pre class="lisp">          (dbus-call-method
+            :session "org.gnome.seahorse" "/org/gnome/seahorse/keys/openpgp"
+            "org.gnome.seahorse.Keys" "GetKeyField"
+            "openpgp:657984B8C7A966DD" "simple-name")
+          
+          &rArr; (t ("Philip R. Zimmermann"))
+</pre>
+        <p>If the result of the method call is just one value, the converted Lisp
+object is returned instead of a list containing this single Lisp
+object.  Example:
+
+     <pre class="lisp">          (dbus-call-method
+            :system "org.freedesktop.Hal"
+            "/org/freedesktop/Hal/devices/computer"
+            "org.freedesktop.Hal.Device" "GetPropertyString"
+            "system.kernel.machine")
+          
+          &rArr; "i686"
+</pre>
+        <p>With the <code>dbus-introspect</code> function it is possible to explore the
+interfaces of &lsquo;<samp><span class="samp">org.freedesktop.Hal</span></samp>&rsquo; service. It offers the
+interfaces &lsquo;<samp><span class="samp">org.freedesktop.Hal.Manager</span></samp>&rsquo; for the object at the
+path &lsquo;<samp><span class="samp">/org/freedesktop/Hal/Manager</span></samp>&rsquo; as well as the interface
+&lsquo;<samp><span class="samp">org.freedesktop.Hal.Device</span></samp>&rsquo; for all objects prefixed with the
+path &lsquo;<samp><span class="samp">/org/freedesktop/Hal/devices</span></samp>&rsquo;.  With the methods
+&lsquo;<samp><span class="samp">GetAllDevices</span></samp>&rsquo; and &lsquo;<samp><span class="samp">GetAllProperties</span></samp>&rsquo;, it is simple to
+emulate the <code>lshal</code> command on GNU/Linux systems:
+
+     <pre class="lisp">          (dolist (device
+                    (dbus-call-method
+                      :system "org.freedesktop.Hal"
+                      "/org/freedesktop/Hal/Manager"
+                      "org.freedesktop.Hal.Manager" "GetAllDevices"))
+            (message "\nudi = %s" device)
+            (dolist (properties
+                      (dbus-call-method
+                        :system "org.freedesktop.Hal" device
+                        "org.freedesktop.Hal.Device" "GetAllProperties"))
+              (message "  %s = %S"
+                       (car properties) (or (caar (cdr properties)) ""))))
+          
+          -| "udi = /org/freedesktop/Hal/devices/computer
+                info.addons = (\"hald-addon-acpi\")
+                info.bus = \"unknown\"
+                info.product = \"Computer\"
+                info.subsystem = \"unknown\"
+                info.udi = \"/org/freedesktop/Hal/devices/computer\"
+                linux.sysfs_path_device = \"(none)\"
+                power_management.acpi.linux.version = \"20051216\"
+                power_management.can_suspend_to_disk = t
+                power_management.can_suspend_to_ram = \"\"
+                power_management.type = \"acpi\"
+                smbios.bios.release_date = \"11/07/2001\"
+                system.chassis.manufacturer = \"COMPAL\"
+                system.chassis.type = \"Notebook\"
+                system.firmware.release_date = \"03/19/2005\"
+                ..."
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-call-method-non-blocking</b><var> bus service path interface method &amp;optional :timeout timeout &amp;rest args<a name="index-dbus_002dcall_002dmethod_002dnon_002dblocking-39"></a></var><br>
+<blockquote><p>Call <var>method</var> on the D-Bus <var>bus</var>, but don't block the event queue. 
+This is necessary for communicating to registered D-Bus methods,
+which are running in the same Emacs process.
+
+        <p>The arguments are the same as in <code>dbus-call-method</code>.  Example:
+
+     <pre class="lisp">          (dbus-call-method-non-blocking
+            :system "org.freedesktop.Hal"
+            "/org/freedesktop/Hal/devices/computer"
+            "org.freedesktop.Hal.Device" "GetPropertyString"
+            "system.kernel.machine")
+          
+          &rArr; "i686"
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

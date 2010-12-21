@@ -267,7 +267,9 @@ union Lisp_Object
 
     struct
       {
-	EMACS_INT val  : VALBITS;
+	/* Use explict signed, the signedness of a bit-field of type
+	   int is implementation defined.  */
+	signed EMACS_INT val  : VALBITS;
 	enum Lisp_Type type : GCTYPEBITS;
       } s;
     struct
@@ -290,7 +292,9 @@ union Lisp_Object
     struct
       {
 	enum Lisp_Type type : GCTYPEBITS;
-	EMACS_INT val  : VALBITS;
+	/* Use explict signed, the signedness of a bit-field of type
+	   int is implementation defined.  */
+	signed EMACS_INT val  : VALBITS;
       } s;
     struct
       {
@@ -447,20 +451,8 @@ enum pvec_type
 #endif
 
 #define XHASH(a) ((a).i)
-
 #define XTYPE(a) ((enum Lisp_Type) (a).u.type)
-
-#ifdef EXPLICIT_SIGN_EXTEND
-/* Make sure we sign-extend; compilers have been known to fail to do so.
-   We additionally cast to EMACS_INT since it seems that some compilers
-   have been known to fail to do so, even though the bitfield is declared
-   as EMACS_INT already.  */
-#define XINT(a) ((((EMACS_INT) (a).s.val) << (BITS_PER_EMACS_INT - VALBITS)) \
-		 >> (BITS_PER_EMACS_INT - VALBITS))
-#else
 #define XINT(a) ((a).s.val)
-#endif /* EXPLICIT_SIGN_EXTEND */
-
 #define XUINT(a) ((a).u.val)
 
 #ifdef USE_LSB_TAG
@@ -739,7 +731,7 @@ struct Lisp_Cons
 #ifdef GC_CHECK_STRING_BYTES
 
 struct Lisp_String;
-extern int string_bytes (struct Lisp_String *);
+extern EMACS_INT string_bytes (struct Lisp_String *);
 #define STRING_BYTES(S) string_bytes ((S))
 
 #else /* not GC_CHECK_STRING_BYTES */
@@ -1563,6 +1555,41 @@ typedef struct {
 /* The ID of the mode line highlighting face.  */
 #define GLYPH_MODE_LINE_FACE 1
 
+/* Structure to hold mouse highlight data.  This is here because other
+   header files need it for defining struct x_output etc.  */
+typedef struct {
+  /* These variables describe the range of text currently shown in its
+     mouse-face, together with the window they apply to.  As long as
+     the mouse stays within this range, we need not redraw anything on
+     its account.  Rows and columns are glyph matrix positions in
+     MOUSE_FACE_WINDOW.  */
+  int mouse_face_beg_row, mouse_face_beg_col;
+  int mouse_face_beg_x, mouse_face_beg_y;
+  int mouse_face_end_row, mouse_face_end_col;
+  int mouse_face_end_x, mouse_face_end_y;
+  int mouse_face_past_end;
+  Lisp_Object mouse_face_window;
+  int mouse_face_face_id;
+  Lisp_Object mouse_face_overlay;
+
+  /* 1 if a mouse motion event came and we didn't handle it right away because
+     gc was in progress.  */
+  int mouse_face_deferred_gc;
+
+  /* FRAME and X, Y position of mouse when last checked for
+     highlighting.  X and Y can be negative or out of range for the frame.  */
+  struct frame *mouse_face_mouse_frame;
+  int mouse_face_mouse_x, mouse_face_mouse_y;
+
+  /* Nonzero means defer mouse-motion highlighting.  */
+  int mouse_face_defer;
+
+  /* Nonzero means that the mouse highlight should not be shown.  */
+  int mouse_face_hidden;
+
+  int mouse_face_image_state;
+} Mouse_HLInfo;
+
 /* Data type checking */
 
 #define NILP(x)  EQ (x, Qnil)
@@ -1877,11 +1904,11 @@ struct specbinding
 
 extern struct specbinding *specpdl;
 extern struct specbinding *specpdl_ptr;
-extern int specpdl_size;
+extern EMACS_INT specpdl_size;
 
 extern EMACS_INT max_specpdl_size;
 
-#define SPECPDL_INDEX()	(specpdl_ptr - specpdl)
+#define SPECPDL_INDEX()	((int) (specpdl_ptr - specpdl))
 
 /* Everything needed to describe an active condition case.  */
 struct handler
@@ -2495,7 +2522,8 @@ EXFUN (Fstring_as_unibyte, 1);
 EXFUN (Fstring_to_multibyte, 1);
 EXFUN (Fstring_to_unibyte, 1);
 EXFUN (Fsubstring, 3);
-extern Lisp_Object substring_both (Lisp_Object, int, int, int, int);
+extern Lisp_Object substring_both (Lisp_Object, EMACS_INT, EMACS_INT,
+				   EMACS_INT, EMACS_INT);
 EXFUN (Fnth, 2);
 EXFUN (Fnthcdr, 2);
 EXFUN (Fmemq, 2);
@@ -2638,11 +2666,15 @@ extern Lisp_Object Qimage, Qtext, Qboth, Qboth_horiz, Qtext_image_horiz;
 extern Lisp_Object Qspace, Qcenter, QCalign_to;
 extern Lisp_Object Qbar, Qhbar, Qbox, Qhollow;
 extern Lisp_Object Qleft_margin, Qright_margin;
+extern Lisp_Object Qglyphless_char;
 extern Lisp_Object Vmessage_log_max;
 extern Lisp_Object QCdata, QCfile;
 extern Lisp_Object QCmap;
 extern Lisp_Object Qrisky_local_variable;
 extern Lisp_Object Vinhibit_redisplay;
+extern struct frame *last_glyphless_glyph_frame;
+extern unsigned last_glyphless_glyph_face_id;
+extern int last_glyphless_glyph_merged_face_id;
 extern int message_enable_multibyte;
 extern int noninteractive_need_newline;
 extern EMACS_INT scroll_margin;
@@ -2656,24 +2688,24 @@ extern Lisp_Object restore_message_unwind (Lisp_Object);
 extern void pop_message (void);
 extern void restore_message (void);
 extern Lisp_Object current_message (void);
-extern void set_message (const char *s, Lisp_Object, int, int);
+extern void set_message (const char *s, Lisp_Object, EMACS_INT, int);
 extern void clear_message (int, int);
 extern void message (const char *, ...);
 extern void message_nolog (const char *, ...);
 extern void message1 (const char *);
 extern void message1_nolog (const char *);
-extern void message2 (const char *, int, int);
-extern void message2_nolog (const char *, int, int);
-extern void message3 (Lisp_Object, int, int);
-extern void message3_nolog (Lisp_Object, int, int);
-extern void message_dolog (const char *, int, int, int);
+extern void message2 (const char *, EMACS_INT, int);
+extern void message2_nolog (const char *, EMACS_INT, int);
+extern void message3 (Lisp_Object, EMACS_INT, int);
+extern void message3_nolog (Lisp_Object, EMACS_INT, int);
+extern void message_dolog (const char *, EMACS_INT, int, int);
 extern void message_with_string (const char *, Lisp_Object, int);
 extern void message_log_maybe_newline (void);
 extern void update_echo_area (void);
-extern void truncate_echo_area (int);
+extern void truncate_echo_area (EMACS_INT);
 extern void redisplay (void);
 extern int check_point_in_composition
-        (struct buffer *, int, struct buffer *, int);
+        (struct buffer *, EMACS_INT, struct buffer *, EMACS_INT);
 extern void redisplay_preserve_echo_area (int);
 extern void prepare_menu_bars (void);
 
@@ -2681,7 +2713,7 @@ void set_frame_cursor_types (struct frame *, Lisp_Object);
 extern void syms_of_xdisp (void);
 extern void init_xdisp (void);
 extern Lisp_Object safe_eval (Lisp_Object);
-extern int pos_visible_p (struct window *, int, int *,
+extern int pos_visible_p (struct window *, EMACS_INT, int *,
                           int *, int *, int *, int *, int *);
 
 /* Defined in xsettings.c */
@@ -2692,7 +2724,7 @@ extern void memory_warnings (POINTER_TYPE *, void (*warnfun) (const char *));
 
 /* Defined in alloc.c */
 extern void check_pure_size (void);
-extern void allocate_string_data (struct Lisp_String *, int, int);
+extern void allocate_string_data (struct Lisp_String *, EMACS_INT, EMACS_INT);
 extern void reset_malloc_hooks (void);
 extern void uninterrupt_malloc (void);
 extern void malloc_warning (const char *);
@@ -2700,6 +2732,8 @@ extern void memory_full (void) NO_RETURN;
 extern void buffer_memory_full (void) NO_RETURN;
 extern int survives_gc_p (Lisp_Object);
 extern void mark_object (Lisp_Object);
+extern void refill_memory_reserve (void);
+extern const char *pending_malloc_warning;
 extern Lisp_Object Vpurify_flag;
 extern Lisp_Object Vmemory_full;
 extern Lisp_Object *stack_base;
@@ -2718,16 +2752,17 @@ EXFUN (Fmake_symbol, 1);
 EXFUN (Fmake_marker, 0);
 EXFUN (Fmake_string, 2);
 extern Lisp_Object build_string (const char *);
-extern Lisp_Object make_string (const char *, int);
-extern Lisp_Object make_unibyte_string (const char *, int);
-extern Lisp_Object make_multibyte_string (const char *, int, int);
+extern Lisp_Object make_string (const char *, EMACS_INT);
+extern Lisp_Object make_unibyte_string (const char *, EMACS_INT);
+extern Lisp_Object make_multibyte_string (const char *, EMACS_INT, EMACS_INT);
 extern Lisp_Object make_event_array (int, Lisp_Object *);
-extern Lisp_Object make_uninit_string (int);
-extern Lisp_Object make_uninit_multibyte_string (int, int);
-extern Lisp_Object make_string_from_bytes (const char *, int, int);
-extern Lisp_Object make_specified_string (const char *, int, int, int);
+extern Lisp_Object make_uninit_string (EMACS_INT);
+extern Lisp_Object make_uninit_multibyte_string (EMACS_INT, EMACS_INT);
+extern Lisp_Object make_string_from_bytes (const char *, EMACS_INT, EMACS_INT);
+extern Lisp_Object make_specified_string (const char *,
+					  EMACS_INT, EMACS_INT, int);
 EXFUN (Fpurecopy, 1);
-extern Lisp_Object make_pure_string (const char *, int, int, int);
+extern Lisp_Object make_pure_string (const char *, EMACS_INT, EMACS_INT, int);
 extern Lisp_Object make_pure_c_string (const char *data);
 extern Lisp_Object pure_cons (Lisp_Object, Lisp_Object);
 extern Lisp_Object make_pure_vector (EMACS_INT);
@@ -2793,7 +2828,8 @@ extern void syms_of_chartab (void);
 /* Defined in print.c */
 extern Lisp_Object Vprin1_to_string_buffer;
 extern Lisp_Object Vprint_level, Vprint_length;
-extern void debug_print (Lisp_Object);
+extern void debug_print (Lisp_Object) EXTERNALLY_VISIBLE;
+extern void safe_debug_print (Lisp_Object) EXTERNALLY_VISIBLE;
 EXFUN (Fprin1, 2);
 EXFUN (Fprin1_to_string, 2);
 EXFUN (Fprinc, 2);
@@ -2815,7 +2851,7 @@ extern void float_to_string (unsigned char *, double);
 extern void syms_of_print (void);
 
 /* Defined in doprnt.c */
-extern int doprnt (char *, int, const char *, const char *, va_list);
+extern EMACS_INT doprnt (char *, int, const char *, const char *, va_list);
 
 /* Defined in lread.c */
 extern Lisp_Object Vafter_load_alist;
@@ -2838,7 +2874,7 @@ extern Lisp_Object check_obarray (Lisp_Object);
 extern Lisp_Object intern (const char *);
 extern Lisp_Object intern_c_string (const char *);
 extern Lisp_Object make_symbol (const char *);
-extern Lisp_Object oblookup (Lisp_Object, const char *, int, int);
+extern Lisp_Object oblookup (Lisp_Object, const char *, EMACS_INT, EMACS_INT);
 #define LOADHIST_ATTACH(x) \
   do {									\
     if (initialized) Vcurrent_load_list = Fcons (x, Vcurrent_load_list); \
@@ -2990,9 +3026,10 @@ EXFUN (Fwiden, 0);
 EXFUN (Fuser_login_name, 1);
 EXFUN (Fsystem_name, 0);
 EXFUN (Fcurrent_time, 0);
-extern int clip_to_bounds (int, int, int);
-extern Lisp_Object make_buffer_string (int, int, int);
-extern Lisp_Object make_buffer_string_both (int, int, int, int, int);
+extern EMACS_INT clip_to_bounds (EMACS_INT, EMACS_INT, EMACS_INT);
+extern Lisp_Object make_buffer_string (EMACS_INT, EMACS_INT, int);
+extern Lisp_Object make_buffer_string_both (EMACS_INT, EMACS_INT, EMACS_INT,
+					    EMACS_INT, int);
 extern void init_editfns (void);
 extern void syms_of_editfns (void);
 EXFUN (Fconstrain_to_field, 5);
@@ -3012,10 +3049,10 @@ EXFUN (Foverlay_end, 1);
 EXFUN (Foverlay_buffer, 1);
 extern void adjust_overlays_for_insert (EMACS_INT, EMACS_INT);
 extern void adjust_overlays_for_delete (EMACS_INT, EMACS_INT);
-extern void fix_start_end_in_overlays (int, int);
+extern void fix_start_end_in_overlays (EMACS_INT, EMACS_INT);
 extern void report_overlay_modification (Lisp_Object, Lisp_Object, int,
                                          Lisp_Object, Lisp_Object, Lisp_Object);
-extern int overlay_touches_p (int);
+extern int overlay_touches_p (EMACS_INT);
 extern Lisp_Object Vbuffer_alist, Vinhibit_read_only;
 EXFUN (Fbuffer_list, 1);
 EXFUN (Fget_buffer, 1);
@@ -3052,17 +3089,17 @@ EXFUN (Fmarker_position, 1);
 EXFUN (Fmarker_buffer, 1);
 EXFUN (Fcopy_marker, 2);
 EXFUN (Fset_marker, 3);
-extern int marker_position (Lisp_Object);
-extern int marker_byte_position (Lisp_Object);
+extern EMACS_INT marker_position (Lisp_Object);
+extern EMACS_INT marker_byte_position (Lisp_Object);
 extern void clear_charpos_cache (struct buffer *);
-extern int charpos_to_bytepos (int);
-extern int buf_charpos_to_bytepos (struct buffer *, int);
-extern int buf_bytepos_to_charpos (struct buffer *, int);
+extern EMACS_INT charpos_to_bytepos (EMACS_INT);
+extern EMACS_INT buf_charpos_to_bytepos (struct buffer *, EMACS_INT);
+extern EMACS_INT buf_bytepos_to_charpos (struct buffer *, EMACS_INT);
 extern void unchain_marker (struct Lisp_Marker *marker);
 extern Lisp_Object set_marker_restricted (Lisp_Object, Lisp_Object, Lisp_Object);
-extern Lisp_Object set_marker_both (Lisp_Object, Lisp_Object, int, int);
+extern Lisp_Object set_marker_both (Lisp_Object, Lisp_Object, EMACS_INT, EMACS_INT);
 extern Lisp_Object set_marker_restricted_both (Lisp_Object, Lisp_Object,
-                                               int, int);
+                                               EMACS_INT, EMACS_INT);
 extern void syms_of_marker (void);
 
 /* Defined in fileio.c */
@@ -3120,12 +3157,13 @@ extern int fast_c_string_match_ignore_case (Lisp_Object, const char *);
 extern int fast_string_match_ignore_case (Lisp_Object, Lisp_Object);
 extern EMACS_INT fast_looking_at (Lisp_Object, EMACS_INT, EMACS_INT,
                                   EMACS_INT, EMACS_INT, Lisp_Object);
-extern int scan_buffer (int, EMACS_INT, EMACS_INT, int, int *, int);
-extern int scan_newline (EMACS_INT, EMACS_INT, EMACS_INT, EMACS_INT,
-                         int, int);
-extern int find_next_newline (EMACS_INT, int);
-extern int find_next_newline_no_quit (EMACS_INT, int);
-extern int find_before_next_newline (EMACS_INT, EMACS_INT, int);
+extern EMACS_INT scan_buffer (int, EMACS_INT, EMACS_INT, EMACS_INT,
+			      int *, int);
+extern EMACS_INT scan_newline (EMACS_INT, EMACS_INT, EMACS_INT, EMACS_INT,
+			       EMACS_INT, int);
+extern EMACS_INT find_next_newline (EMACS_INT, int);
+extern EMACS_INT find_next_newline_no_quit (EMACS_INT, EMACS_INT);
+extern EMACS_INT find_before_next_newline (EMACS_INT, EMACS_INT, EMACS_INT);
 extern void syms_of_search (void);
 extern void clear_regexp_cache (void);
 
@@ -3194,6 +3232,8 @@ extern Lisp_Object Qdisabled, QCfilter;
 extern Lisp_Object Qabove_handle, Qhandle, Qbelow_handle;
 extern Lisp_Object Qup, Qdown, Qbottom, Qend_scroll;
 extern Lisp_Object Qtop, Qratio;
+extern Lisp_Object Vsaved_region_selection;
+extern Lisp_Object Vselect_active_regions;
 extern Lisp_Object Vtty_erase_char, Vhelp_form, Vtop_level;
 extern Lisp_Object Vthrow_on_input;
 extern int input_pending;
@@ -3237,7 +3277,7 @@ EXFUN (Fcurrent_column, 0);
 EXFUN (Fmove_to_column, 2);
 extern double current_column (void);
 extern void invalidate_current_column (void);
-extern int indented_beyond_p (int, int, double);
+extern int indented_beyond_p (EMACS_INT, EMACS_INT, double);
 extern void syms_of_indent (void);
 
 /* Defined in frame.c */
@@ -3296,6 +3336,7 @@ extern Lisp_Object Vbefore_init_time, Vafter_init_time;
 extern Lisp_Object Vinstallation_directory;
 extern Lisp_Object empty_unibyte_string, empty_multibyte_string;
 extern Lisp_Object Qfile_name_handler_alist;
+extern Lisp_Object Vdynamic_library_alist;
 extern void (*fatal_error_signal_hook) (void);
 EXFUN (Fkill_emacs, 1) NO_RETURN;
 #if HAVE_SETLOCALE
@@ -3392,12 +3433,13 @@ extern Lisp_Object Qapply;
 extern Lisp_Object Qinhibit_read_only;
 EXFUN (Fundo_boundary, 0);
 extern void truncate_undo_list (struct buffer *);
-extern void record_marker_adjustment (Lisp_Object, int);
-extern void record_insert (int, int);
-extern void record_delete (int, Lisp_Object);
+extern void record_marker_adjustment (Lisp_Object, EMACS_INT);
+extern void record_insert (EMACS_INT, EMACS_INT);
+extern void record_delete (EMACS_INT, Lisp_Object);
 extern void record_first_change (void);
-extern void record_change (int, int);
-extern void record_property_change (int, int, Lisp_Object, Lisp_Object,
+extern void record_change (EMACS_INT, EMACS_INT);
+extern void record_property_change (EMACS_INT, EMACS_INT,
+				    Lisp_Object, Lisp_Object,
                                     Lisp_Object);
 extern void syms_of_undo (void);
 extern Lisp_Object Vundo_outer_limit;
@@ -3559,7 +3601,6 @@ extern void syms_of_xfns (void);
 extern void syms_of_xsmfns (void);
 
 /* Defined in xselect.c */
-EXFUN (Fx_send_client_event, 6);
 extern void syms_of_xselect (void);
 
 /* Defined in xterm.c */
@@ -3588,8 +3629,6 @@ extern int have_menus_p (void);
 
 #ifdef HAVE_DBUS
 /* Defined in dbusbind.c */
-int xd_pending_messages (void);
-void xd_read_queued_messages (void);
 void syms_of_dbusbind (void);
 #endif
 
@@ -3722,7 +3761,7 @@ extern void init_system_name (void);
 extern Lisp_Object safe_alloca_unwind (Lisp_Object);
 
 #define USE_SAFE_ALLOCA			\
-  int sa_count = SPECPDL_INDEX (), sa_must_free = 0
+  int sa_count = (int) SPECPDL_INDEX (), sa_must_free = 0
 
 /* SAFE_ALLOCA allocates a simple buffer.  */
 

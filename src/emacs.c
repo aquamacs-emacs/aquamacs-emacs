@@ -1,7 +1,8 @@
 /* Fully extensible Emacs, running on Unix, intended for GNU.
-   Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 1998, 1999,
-                 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-                 2010  Free Software Foundation, Inc.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 1998, 1999,
+  2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -32,10 +33,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <unistd.h>
 #endif
 
-#ifdef HAVE_SYS_IOCTL_H
-#include <sys/ioctl.h>
-#endif
-
 #ifdef WINDOWSNT
 #include <fcntl.h>
 #include <windows.h> /* just for w32.h */
@@ -62,6 +59,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "termhooks.h"
 #include "keyboard.h"
 #include "keymap.h"
+
+#ifdef HAVE_GNUTLS
+#include "gnutls.h"
+#endif
 
 #ifdef HAVE_NS
 #include "nsterm.h"
@@ -99,27 +100,27 @@ static const char emacs_version[] = "24.0.50";
 /* Make these values available in GDB, which doesn't see macros.  */
 
 #ifdef USE_LSB_TAG
-int gdb_use_lsb = 1;
+int gdb_use_lsb EXTERNALLY_VISIBLE = 1;
 #else
-int gdb_use_lsb = 0;
+int gdb_use_lsb EXTERNALLY_VISIBLE = 0;
 #endif
 #ifndef USE_LISP_UNION_TYPE
-int gdb_use_union = 0;
+int gdb_use_union EXTERNALLY_VISIBLE  = 0;
 #else
-int gdb_use_union = 1;
+int gdb_use_union EXTERNALLY_VISIBLE = 1;
 #endif
-EMACS_INT gdb_valbits = VALBITS;
-EMACS_INT gdb_gctypebits = GCTYPEBITS;
+EMACS_INT gdb_valbits EXTERNALLY_VISIBLE = VALBITS;
+EMACS_INT gdb_gctypebits EXTERNALLY_VISIBLE = GCTYPEBITS;
 #if defined (DATA_SEG_BITS) && ! defined (USE_LSB_TAG)
-EMACS_INT gdb_data_seg_bits = DATA_SEG_BITS;
+EMACS_INT gdb_data_seg_bits EXTERNALLY_VISIBLE = DATA_SEG_BITS;
 #else
-EMACS_INT gdb_data_seg_bits = 0;
+EMACS_INT gdb_data_seg_bits EXTERNALLY_VISIBLE = 0;
 #endif
-EMACS_INT PVEC_FLAG = PSEUDOVECTOR_FLAG;
-EMACS_INT gdb_array_mark_flag = ARRAY_MARK_FLAG;
+EMACS_INT PVEC_FLAG EXTERNALLY_VISIBLE = PSEUDOVECTOR_FLAG;
+EMACS_INT gdb_array_mark_flag EXTERNALLY_VISIBLE = ARRAY_MARK_FLAG;
 /* GDB might say "No enum type named pvec_type" if we don't have at
    least one symbol with that type, and then xbacktrace could fail.  */
-enum pvec_type gdb_pvec_type = PVEC_TYPE_MASK;
+enum pvec_type gdb_pvec_type EXTERNALLY_VISIBLE = PVEC_TYPE_MASK;
 
 /* Command line args from shell, as list of strings.  */
 Lisp_Object Vcommand_line_args;
@@ -187,14 +188,12 @@ Lisp_Object Vprevious_system_time_locale;
    Lisp code.  */
 Lisp_Object Vemacs_copyright, Vemacs_version;
 
+/* Alist of external libraries and files implementing them.  */
+Lisp_Object Vdynamic_library_alist;
+
 /* If non-zero, emacs should not attempt to use a window-specific code,
    but instead should use the virtual terminal under which it was started.  */
 int inhibit_window_system;
-
-/* If nonzero, set Emacs to run at this priority.  This is also used
-   in child_setup and sys_suspend to make sure subshells run at normal
-   priority; those functions have their own extern declaration.  */
-EMACS_INT emacs_priority;
 
 /* If non-zero, a filter or a sentinel is running.  Tested to save the match
    data on the first attempt to change it inside asynchronous code.  */
@@ -378,7 +377,7 @@ fatal_error_signal (int sig)
     {
       fatal_error_in_progress = 1;
 
-      if (sig == SIGTERM || sig == SIGHUP)
+      if (sig == SIGTERM || sig == SIGHUP || sig == SIGINT)
         Fkill_emacs (make_number (sig));
 
       shut_down_emacs (sig, 0, Qnil);
@@ -826,13 +825,14 @@ main (int argc, char **argv)
       printf ("see the file named COPYING.\n");
       exit (0);
     }
-  if (argmatch (argv, argc, "-chdir", "--chdir", 2, &ch_to_dir, &skip_args))
-      if (chdir (ch_to_dir) == -1)
-        {
-          fprintf (stderr, "%s: Can't chdir to %s: %s\n",
-                   argv[0], ch_to_dir, strerror (errno));
-          exit (1);
-        }
+
+  if (argmatch (argv, argc, "-chdir", "--chdir", 4, &ch_to_dir, &skip_args))
+    if (chdir (ch_to_dir) == -1)
+      {
+	fprintf (stderr, "%s: Can't chdir to %s: %s\n",
+		 argv[0], ch_to_dir, strerror (errno));
+	exit (1);
+      }
 
 
 #ifdef HAVE_PERSONALITY_LINUX32
@@ -1240,6 +1240,12 @@ main (int argc, char **argv)
 #ifdef SIGSYS
       signal (SIGSYS, fatal_error_signal);
 #endif
+      /*  May need special treatment on MS-Windows. See
+          http://lists.gnu.org/archive/html/emacs-devel/2010-09/msg01062.html
+          Please update the doc of kill-emacs, kill-emacs-hook, and
+          NEWS if you change this.
+      */
+      if (noninteractive) signal (SIGINT, fatal_error_signal);
       signal (SIGTERM, fatal_error_signal);
 #ifdef SIGXCPU
       signal (SIGXCPU, fatal_error_signal);
@@ -1499,9 +1505,7 @@ main (int argc, char **argv)
       syms_of_doc ();
       syms_of_editfns ();
       syms_of_emacs ();
-#ifdef CLASH_DETECTION
       syms_of_filelock ();
-#endif /* CLASH_DETECTION */
       syms_of_indent ();
       syms_of_insdel ();
       /* syms_of_keymap (); */
@@ -1572,6 +1576,10 @@ main (int argc, char **argv)
       syms_of_nsselect ();
       syms_of_fontset ();
 #endif /* HAVE_NS */
+
+#ifdef HAVE_GNUTLS
+      syms_of_gnutls ();
+#endif
 
 #ifdef HAVE_DBUS
       syms_of_dbusbind ();
@@ -1984,6 +1992,9 @@ DEFUN ("kill-emacs", Fkill_emacs, Skill_emacs, 0, 1, "P",
 If ARG is an integer, return ARG as the exit program code.
 If ARG is a string, stuff it as keyboard input.
 
+This function is called upon receipt of the signals SIGTERM
+or SIGHUP, and upon SIGINT in batch mode.
+
 The value of `kill-emacs-hook', if not void,
 is a list of functions (of no args),
 all of which are called before Emacs is actually killed.  */)
@@ -1996,7 +2007,7 @@ all of which are called before Emacs is actually killed.  */)
   if (feof (stdin))
     arg = Qt;
 
-  if (!NILP (Vrun_hooks) && !noninteractive)
+  if (!NILP (Vrun_hooks))
     call1 (Vrun_hooks, intern ("kill-emacs-hook"));
 
   UNGCPRO;
@@ -2037,10 +2048,8 @@ shut_down_emacs (int sig, int no_x, Lisp_Object stuff)
 #ifndef DOS_NT
   {
     int pgrp = EMACS_GETPGRP (0);
-
-    int tpgrp;
-    if (EMACS_GET_TTY_PGRP (0, &tpgrp) != -1
-	&& tpgrp == pgrp)
+    int tpgrp = tcgetpgrp (0);
+    if ((tpgrp != -1) && tpgrp == pgrp)
       {
 	reset_all_sys_modes ();
 	if (sig && sig != SIGTERM)
@@ -2104,6 +2113,10 @@ shut_down_emacs (int sig, int no_x, Lisp_Object stuff)
 
 
 #ifndef CANNOT_DUMP
+
+/* FIXME: maybe this should go into header file, config.h seems the
+   only one appropriate. */
+extern int unexec (const char *, const char *);
 
 DEFUN ("dump-emacs", Fdump_emacs, Sdump_emacs, 2, 2, 0,
        doc: /* Dump current state of Emacs into executable file FILENAME.
@@ -2172,13 +2185,13 @@ You must run Emacs in batch mode in order to dump it.  */)
      Meanwhile, my_edata is not valid on Windows.  */
   memory_warnings (my_edata, malloc_warning);
 #endif /* not WINDOWSNT */
-#endif
-#if !defined (SYSTEM_MALLOC) && defined (HAVE_GTK_AND_PTHREAD) && !defined SYNC_INPUT
+#if defined (HAVE_GTK_AND_PTHREAD) && !defined SYNC_INPUT
   /* Pthread may call malloc before main, and then we will get an endless
      loop, because pthread_self (see alloc.c) calls malloc the first time
      it is called on some systems.  */
   reset_malloc_hooks ();
 #endif
+#endif /* not SYSTEM_MALLOC */
 #ifdef DOUG_LEA_MALLOC
   malloc_state_ptr = malloc_get_state ();
 #endif
@@ -2186,8 +2199,7 @@ You must run Emacs in batch mode in order to dump it.  */)
 #ifdef USE_MMAP_FOR_BUFFERS
   mmap_set_vars (0);
 #endif
-  unexec (SDATA (filename),
-	  !NILP (symfile) ? SDATA (symfile) : 0, my_edata, 0, 0);
+  unexec (SDATA (filename), !NILP (symfile) ? SDATA (symfile) : 0);
 #ifdef USE_MMAP_FOR_BUFFERS
   mmap_set_vars (1);
 #endif
@@ -2393,9 +2405,10 @@ Special values:
   `ms-dos'       compiled as an MS-DOS application.
   `windows-nt'   compiled as a native W32 application.
   `cygwin'       compiled using the Cygwin library.
-Anything else (in Emacs 23.1, the possibilities are: aix, berkeley-unix,
-hpux, irix, lynxos 3.0.1, usg-unix-v) indicates some sort of Unix system.  */);
+Anything else (in Emacs 24.1, the possibilities are: aix, berkeley-unix,
+hpux, irix, usg-unix-v) indicates some sort of Unix system.  */);
   Vsystem_type = intern_c_string (SYSTEM_TYPE);
+  /* Above values are from SYSTEM_TYPE in src/s/*.h.  */
 
   DEFVAR_LISP ("system-configuration", &Vsystem_configuration,
 	       doc: /* Value is string indicating configuration Emacs was built for.
@@ -2417,17 +2430,9 @@ in other similar situations), functions placed on this hook should not
 expect to be able to interact with the user.  To ask for confirmation,
 see `kill-emacs-query-functions' instead.
 
-The hook is not run in batch mode, i.e., if `noninteractive' is non-nil.  */);
+Before Emacs 24.1, the hook was not run in batch mode, i.e., if
+`noninteractive' was non-nil.  */);
   Vkill_emacs_hook = Qnil;
-
-  DEFVAR_INT ("emacs-priority", &emacs_priority,
-	      doc: /* Priority for Emacs to run at.
-This value is effective only if set before Emacs is dumped,
-and only if the Emacs executable is installed with setuid to permit
-it to change priority.  (Emacs sets its uid back to the real uid.)
-Currently, you need to define SET_EMACS_PRIORITY in `config.h'
-before you compile Emacs, to enable the code for this feature.  */);
-  emacs_priority = 0;
 
   DEFVAR_LISP ("path-separator", &Vpath_separator,
 	       doc: /* String containing the character that separates directories in
@@ -2490,9 +2495,25 @@ This is nil during initialization.  */);
 	       doc: /* Version numbers of this version of Emacs.  */);
   Vemacs_version = build_string (emacs_version);
 
+  DEFVAR_LISP ("dynamic-library-alist", &Vdynamic_library_alist,
+    doc: /* Alist of dynamic libraries vs external files implementing them.
+Each element is a list (LIBRARY FILE...), where the car is a symbol
+representing a supported external library, and the rest are strings giving
+alternate filenames for that library.
+
+Emacs tries to load the library from the files in the order they appear on
+the list; if none is loaded, the running session of Emacs won't have access
+to that library.
+
+Note that image types `pbm' and `xbm' do not need entries in this variable
+because they do not depend on external libraries and are always available.
+
+Also note that this is not a generic facility for accessing external
+libraries; only those already known by Emacs will be loaded.  */);
+  Vdynamic_library_alist = Qnil;
+  Fput (intern_c_string ("dynamic-library-alist"), Qrisky_local_variable, Qt);
+
   /* Make sure IS_DAEMON starts up as false.  */
   daemon_pipe[1] = 0;
 }
 
-/* arch-tag: 7bfd356a-c720-4612-8ab6-aa4222931c2e
-   (do not change this comment) */

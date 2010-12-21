@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Information Keys and the Info Alist - Supercite User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Supercite User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Miscellaneous-Commands.html#Miscellaneous-Commands" title="Miscellaneous Commands">
+<link rel="next" href="Reference-Headers.html#Reference-Headers" title="Reference Headers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This document describes Supercite, an Emacs package for citing and
+attributing replies to mail and news messages.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Information-Keys-and-the-Info-Alist"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reference-Headers.html#Reference-Headers">Reference Headers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Miscellaneous-Commands.html#Miscellaneous-Commands">Miscellaneous Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+   <p><a name="index-information-keys-45"></a><a name="index-Info-Alist-46"></a><a name="index-information-extracted-from-mail-fields-47"></a><a name="index-sc_002dmail_002dfield-48"></a><a name="index-mail_002dfield-_0028sc_002d_0029-49"></a>
+
+<h2 class="chapter">3 Information Keys and the Info Alist</h2>
+
+<p><dfn>Mail header information keys</dfn> are nuggets of information that
+Supercite extracts from the various mail headers of the original
+message, placed in the reply buffer by the MUA.  Information is kept in
+the <dfn>Info Alist</dfn> as key-value pairs, and can be retrieved for use in
+various places within Supercite, such as in header rewrite functions and
+attribution selection.  Other bits of data, composed and created by
+Supercite, are also kept as key-value pairs in this alist. In the case
+of mail fields, the key is the name of the field, omitting the trailing
+colon.  Info keys are always case insensitive (as are mail headers), and
+the value for a corresponding key can be retrieved from the alist with
+the <code>sc-mail-field</code> function.  Thus, if the following fields were
+present in the original article:
+
+<pre class="example">     Date: 08 April 1991, 17:32:09 EST
+     Subject: Better get out your asbestos suit
+</pre>
+   <p><a name="index-sc_002dmumble-50"></a><a name="index-mumble-_0028sc_002d_0029-51"></a>then, the following lisp constructs return:
+
+<pre class="example">     (sc-mail-field "date")
+     ==&gt; "08 April 1991, 17:32:09 EST"
+     
+     (sc-mail-field "subject")
+     ==&gt; "Better get out your asbestos suit"
+</pre>
+   <p>Since the argument to <code>sc-mail-field</code> can be any string, it is
+possible that the mail field will not be present on the info alist
+(possibly because the mail header was not present in the original
+message). In this case, <code>sc-mail-field</code> will return the value of
+the variable <code>sc-mumble</code>.
+
+   <p>Supercite always places all mail fields found in the yanked original
+article into the info alist.  If possible, Supercite will also places
+the following keys into the info alist:
+
+     
+<a name="index-sc_002dattribution-info-field-52"></a>
+<a name="index-attribution-info-field-_0028sc_002d_0029-53"></a>
+<dl><dt><code>"sc-attribution"</code><dd>the selected attribution string.
+
+     <p><a name="index-sc_002dcitation-info-field-54"></a><a name="index-citation-info-field-_0028sc_002d_0029-55"></a><br><dt><code>"sc-citation"</code><dd>the non-nested citation string.
+
+     <p><a name="index-sc_002dfrom_002daddress-info-field-56"></a><a name="index-from_002daddress-info-field-_0028sc_002d_0029-57"></a><br><dt><code>"sc-from-address"</code><dd>email address extracted from the &lsquo;<samp><span class="samp">From:</span></samp>&rsquo; field.
+
+     <p><a name="index-sc_002dreply_002daddress-info-field-58"></a><a name="index-reply_002daddress-info-field-_0028sc_002d_0029-59"></a><br><dt><code>"sc-reply-address"</code><dd>email address extracted from the &lsquo;<samp><span class="samp">Reply-To:</span></samp>&rsquo; field.
+
+     <p><a name="index-sc_002dsender_002daddress-info-field-60"></a><a name="index-sender_002daddress-info-field-_0028sc_002d_0029-61"></a><br><dt><code>"sc-sender-address"</code><dd>email address extracted from the &lsquo;<samp><span class="samp">Sender:</span></samp>&rsquo; field.
+
+     <p><a name="index-sc_002demailname-info-field-62"></a><a name="index-emailname-info-field-_0028sc_002d_0029-63"></a><br><dt><code>"sc-emailname"</code><dd>email terminus extracted from the &lsquo;<samp><span class="samp">From:</span></samp>&rsquo; field.
+
+     <p><a name="index-sc_002dinitials-info-field-64"></a><a name="index-initials-info-field-_0028sc_002d_0029-65"></a><br><dt><code>"sc-initials"</code><dd>the author's initials.
+
+     <p><a name="index-sc_002dauthor-info-field-66"></a><a name="index-author-info-field-_0028sc_002d_0029-67"></a><br><dt><code>"sc-author"</code><dd>the author's full name.
+
+     <p><a name="index-sc_002dfirstname-info-field-68"></a><a name="index-firstname-info-field-_0028sc_002d_0029-69"></a><br><dt><code>"sc-firstname"</code><dd>the author's first name.
+
+     <p><a name="index-sc_002dlastname-info-field-70"></a><a name="index-lastname-info-field-_0028sc_002d_0029-71"></a><br><dt><code>"sc-lastname"</code><dd>the author's last name.
+
+     <p><a name="index-sc_002dmiddlename_002d1-info-field-72"></a><a name="index-middlename_002d1-info-field-_0028sc_002d_0029-73"></a><br><dt><code>"sc-middlename-1"</code><dd>the author's first middle name. 
+</dl>
+
+   <p>If the author's name has more than one middle name, they will appear as
+info keys with the appropriate index (e.g., <code>"sc-middlename-2"</code>,
+<small class="dots">...</small>).  See <a href="Selecting-an-Attribution.html#Selecting-an-Attribution">Selecting an Attribution</a>.
+
+   </body></html>
+

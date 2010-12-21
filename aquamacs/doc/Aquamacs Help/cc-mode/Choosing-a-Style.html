@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Choosing a Style - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Styles.html#Styles" title="Styles">
+<link rel="prev" href="Built_002din-Styles.html#Built_002din-Styles" title="Built-in Styles">
+<link rel="next" href="Adding-Styles.html#Adding-Styles" title="Adding Styles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Choosing-a-Style"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Adding-Styles.html#Adding-Styles">Adding Styles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Built_002din-Styles.html#Built_002din-Styles">Built-in Styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Styles.html#Styles">Styles</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">6.3.2 Choosing a Style</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>When you create a new buffer, its style will be set from
+<code>c-default-style</code>.  The factory default is the style <code>gnu</code>,
+except in Java and AWK modes where it's <code>java</code> and <code>awk</code>.
+
+   <p>Remember that if you set a style variable with the Customization
+interface or at the top level of your <samp><span class="file">.emacs</span></samp> file before the
+style system is initialized (see <a href="Config-Basics.html#Config-Basics">Config Basics</a>), this setting will
+override the one that the style system would have given the variable.
+
+   <p>To set a buffer's style interactively, use the command <kbd>C-c .</kbd>
+(see <a href="Other-Commands.html#Other-Commands">Other Commands</a>).  To set it from a file's local variable
+list, <a href="File-Styles.html#File-Styles">File Styles</a>.
+
+<div class="defun">
+&mdash; User Option: <b>c-default-style</b><var><a name="index-c_002ddefault_002dstyle-295"></a></var><br>
+<blockquote><p><a name="index-default_002dstyle-_0028c_002d_0029-296"></a>This variable specifies which style to install by default in new
+buffers.  It takes either a style name string, or an association list
+of major mode symbols to style names:
+
+          <ol type=1 start=1>
+<li>When <code>c-default-style</code> is a string, it must be an existing style
+name.  This style is then used for all modes.
+
+          <li>When <code>c-default-style</code> is an association list, the mode language
+is looked up to find a style name string.
+
+          <li>If <code>c-default-style</code> is an association list where the mode
+language mode isn't found then the special symbol &lsquo;<samp><span class="samp">other</span></samp>&rsquo; is
+looked up.  If it's found then the associated style is used.
+
+          <li>If &lsquo;<samp><span class="samp">other</span></samp>&rsquo; is not found then the &lsquo;<samp><span class="samp">gnu</span></samp>&rsquo; style is used.
+             </ol>
+
+        <p>In all cases, the style described in <code>c-default-style</code> is installed
+<em>before</em> the language hooks are run, so you can always override
+this setting by including an explicit call to <code>c-set-style</code> in your
+language mode hook, or in <code>c-mode-common-hook</code>.
+
+        <p>The standard value of <code>c-default-style</code> is <code>((java-mode&nbsp;.&nbsp;"java")&nbsp;(awk-mode&nbsp;.&nbsp;"awk")&nbsp;(other&nbsp;.&nbsp;"gnu"))</code><!-- /@w -->. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>c-indentation-style</b><var><a name="index-c_002dindentation_002dstyle-297"></a></var><br>
+<blockquote><p><a name="index-indentation_002dstyle-_0028c_002d_0029-298"></a>This variable always contains the buffer's current style name, as a
+string. 
+</p></blockquote></div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

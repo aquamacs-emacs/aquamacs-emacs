@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Activation - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Introduction.html#Introduction" title="Introduction">
+<link rel="prev" href="Installation.html#Installation" title="Installation">
+<link rel="next" href="Feedback.html#Feedback" title="Feedback">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Activation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Feedback.html#Feedback">Feedback</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Installation.html#Installation">Installation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
+<hr>
+</div>
+
+<h3 class="section">1.3 Activation</h3>
+
+<p><a name="index-activation-7"></a><a name="index-autoload-8"></a><a name="index-global-key-bindings-9"></a><a name="index-key-bindings_002c-global-10"></a>
+
+   <p>Add the following lines to your <samp><span class="file">.emacs</span></samp> file.  The last three lines
+define <em>global</em> keys for the commands <samp><span class="command">org-store-link</span></samp>,
+<samp><span class="command">org-agenda</span></samp>, and <samp><span class="command">org-iswitchb</span></samp>&mdash;please choose suitable
+keys yourself.
+
+<pre class="lisp">     ;; The following lines are always needed.  Choose your own keys.
+     (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+     (global-set-key "\C-cl" 'org-store-link)
+     (global-set-key "\C-ca" 'org-agenda)
+     (global-set-key "\C-cb" 'org-iswitchb)
+</pre>
+   <p>Furthermore, you must activate <code>font-lock-mode</code> in Org
+buffers, because significant functionality depends on font-locking being
+active.  You can do this with either one of the following two lines
+(XEmacs users must use the second option):
+<pre class="lisp">     (global-font-lock-mode 1)                     ; for all buffers
+     (add-hook 'org-mode-hook 'turn-on-font-lock)  ; Org buffers only
+</pre>
+   <p><a name="index-Org-mode_002c-turning-on-11"></a>With this setup, all files with extension &lsquo;<samp><span class="samp">.org</span></samp>&rsquo; will be put
+into Org mode.  As an alternative, make the first line of a file look
+like this:
+
+<pre class="example">     MY PROJECTS    -*- mode: org; -*-
+</pre>
+   <p><a name="index-org_002dinsert_002dmode_002dline_002din_002dempty_002dfile-12"></a>which will select Org mode for this buffer no matter what
+the file's name is.  See also the variable
+<code>org-insert-mode-line-in-empty-file</code>.
+
+   <p>Many commands in Org work on the region if the region is <i>active</i>.  To make
+use of this, you need to have <code>transient-mark-mode</code>
+(<code>zmacs-regions</code> in XEmacs) turned on.  In Emacs 23 this is the default,
+in Emacs 22 you need to do this yourself with
+<pre class="lisp">     (transient-mark-mode 1)
+</pre>
+   <p class="noindent">If you do not like <code>transient-mark-mode</code>, you can create an
+active region by using the mouse to select a region, or pressing
+<kbd>C-&lt;SPC&gt;</kbd> twice before moving the cursor.
+
+   </body></html>
+

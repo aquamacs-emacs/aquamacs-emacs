@@ -445,31 +445,34 @@ specified in `shell-file-name'."
   ;; This assumes that book name and book folder are same
   ;; Alternatively, we could read our own Info.plist
   ;; or have the Makefile store this somewhere in loadefs.
-  (let ((manual-version
-	 (with-temp-buffer
-	   (insert-file-contents-literally
-	    (concat aquamacs-mac-application-bundle-directory
-		    (format "/Contents/Resources/%s/VERSION"
-			    manual)))
-	   (buffer-substring (point-min) (1- (point-max))))))
-  (format "%s (%s)"
-	  manual
-	  manual-version)))
+  ;; (let ((manual-version
+  ;; 	 (with-temp-buffer
+  ;; 	   (insert-file-contents-literally
+  ;; 	    (concat aquamacs-mac-application-bundle-directory
+  ;; 		    (format "/Contents/Resources/English.lproj/%s/VERSION"
+  ;; 			    manual)))
+  ;; 	   (buffer-substring (point-min) (1- (point-max))))))
+  ;; (format "%s (%s)"
+  ;; 	  manual
+  ;; 	  manual-version))
+
+  ;; There is only one Help Book
+  (aquamacs-help-book-name))
 
 (defun aquamacs-user-help ()
   "Show the Aquamacs Help."
   (interactive)
-  (ns-open-help-anchor "index" (aquamacs-help-book-name)))
+  (ns-open-help-anchor "AquamacsIndex" (aquamacs-help-book-name)))
 
 (defun aquamacs-emacs-manual ()
   "Show the Emacs Manual"
   (interactive)
-  (ns-open-help-anchor "index" (aquamacs-manual-name "Emacs Manual")))
+  (ns-open-help-anchor "EmacsManualIndex" (aquamacs-manual-name "Emacs Manual")))
 
 (defun aquamacs-elisp-reference ()
   "Show the Emacs Lisp Reference"
   (interactive)
-  (ns-open-help-anchor "index" (aquamacs-manual-name "Emacs Lisp Reference")))
+  (ns-open-help-anchor "EmacsLispReferenceIndex" (aquamacs-manual-name "Emacs Lisp Reference")))
 
 
 ;; it's imporant to make sure that the following are in the Info.plist file:

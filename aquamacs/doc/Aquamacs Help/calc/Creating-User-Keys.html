@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Creating User Keys - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming.html#Programming" title="Programming">
+<link rel="prev" href="Programming.html#Programming" title="Programming">
+<link rel="next" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Creating-User-Keys"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Programming.html#Programming">Programming</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
+<hr>
+</div>
+
+<h3 class="section">18.1 Creating User Keys</h3>
+
+<p class="noindent"><a name="index-Z-D-2253"></a><a name="index-calc_002duser_002ddefine-2254"></a>Any Calculator command may be bound to a key using the <kbd>Z D</kbd>
+(<code>calc-user-define</code>) command.  Actually, it is bound to a two-key
+sequence beginning with the lower-case <kbd>z</kbd> prefix.
+
+   <p>The <kbd>Z D</kbd> command first prompts for the key to define.  For example,
+press <kbd>Z D a</kbd> to define the new key sequence <kbd>z a</kbd>.  You are then
+prompted for the name of the Calculator command that this key should
+run.  For example, the <code>calc-sincos</code> command is not normally
+available on a key.  Typing <kbd>Z D s sincos &lt;RET&gt;</kbd> programs the
+<kbd>z s</kbd> key sequence to run <code>calc-sincos</code>.  This definition will remain
+in effect for the rest of this Emacs session, or until you redefine
+<kbd>z s</kbd> to be something else.
+
+   <p>You can actually bind any Emacs command to a <kbd>z</kbd> key sequence by
+backspacing over the &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo; when you are prompted for the command name.
+
+   <p>As with any other prefix key, you can type <kbd>z ?</kbd> to see a list of
+all the two-key sequences you have defined that start with <kbd>z</kbd>. 
+Initially, no <kbd>z</kbd> sequences (except <kbd>z ?</kbd> itself) are defined.
+
+   <p>User keys are typically letters, but may in fact be any key. 
+(&lt;META&gt;-keys are not permitted, nor are a terminal's special
+function keys which generate multi-character sequences when pressed.) 
+You can define different commands on the shifted and unshifted versions
+of a letter if you wish.
+
+   <p><a name="index-Z-U-2255"></a><a name="index-calc_002duser_002dundefine-2256"></a>The <kbd>Z U</kbd> (<code>calc-user-undefine</code>) command unbinds a user key. 
+For example, the key sequence <kbd>Z U s</kbd> will undefine the <code>sincos</code>
+key we defined above.
+
+   <p><a name="index-Z-P-2257"></a><a name="index-calc_002duser_002ddefine_002dpermanent-2258"></a><a name="index-Storing-user-definitions-2259"></a><a name="index-Permanent-user-definitions-2260"></a><a name="index-Calc-init-file_002c-user_002ddefined-commands-2261"></a>The <kbd>Z P</kbd> (<code>calc-user-define-permanent</code>) command makes a key
+binding permanent so that it will remain in effect even in future Emacs
+sessions.  (It does this by adding a suitable bit of Lisp code into
+your Calc init file; that is, the file given by the variable
+<code>calc-settings-file</code>, typically <samp><span class="file">~/.calc.el</span></samp>.)  For example,
+<kbd>Z P s</kbd> would register our <code>sincos</code> command permanently.  If
+you later wish to unregister this command you must edit your Calc init
+file by hand.  (See <a href="General-Mode-Commands.html#General-Mode-Commands">General Mode Commands</a>, for a way to tell Calc to
+use a different file for the Calc init file.)
+
+   <p>The <kbd>Z P</kbd> command also saves the user definition, if any, for the
+command bound to the key.  After <kbd>Z F</kbd> and <kbd>Z C</kbd>, a given user
+key could invoke a command, which in turn calls an algebraic function,
+which might have one or more special display formats.  A single <kbd>Z P</kbd>
+command will save all of these definitions. 
+To save an algebraic function, type <kbd>'</kbd> (the apostrophe)
+when prompted for a key, and type the function name.  To save a command
+without its key binding, type <kbd>M-x</kbd> and enter a function name.  (The
+&lsquo;<samp><span class="samp">calc-</span></samp>&rsquo; prefix will automatically be inserted for you.) 
+(If the command you give implies a function, the function will be saved,
+and if the function has any display formats, those will be saved, but
+not the other way around:  Saving a function will not save any commands
+or key bindings associated with the function.)
+
+   <p><a name="index-Z-E-2262"></a><a name="index-calc_002duser_002ddefine_002dedit-2263"></a><a name="index-Editing-user-definitions-2264"></a>The <kbd>Z E</kbd> (<code>calc-user-define-edit</code>) command edits the definition
+of a user key.  This works for keys that have been defined by either
+keyboard macros or formulas; further details are contained in the relevant
+following sections.
+
+   </body></html>
+

@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+<title>Business Days - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Date-Arithmetic.html#Date-Arithmetic" title="Date Arithmetic">
+<link rel="prev" href="Date-Functions.html#Date-Functions" title="Date Functions">
+<link rel="next" href="Time-Zones.html#Time-Zones" title="Time Zones">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Business-Days"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Time-Zones.html#Time-Zones">Time Zones</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Date-Functions.html#Date-Functions">Date Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Date-Arithmetic.html#Date-Arithmetic">Date Arithmetic</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.5.3 Business Days</h4>
+
+<p class="noindent">Often time is measured in &ldquo;business days&rdquo; or &ldquo;working days,&rdquo;
+where weekends and holidays are skipped.  Calc's normal date
+arithmetic functions use calendar days, so that subtracting two
+consecutive Mondays will yield a difference of 7 days.  By contrast,
+subtracting two consecutive Mondays would yield 5 business days
+(assuming two-day weekends and the absence of holidays).
+
+   <p><a name="index-t-_002b-840"></a><a name="index-t-_002d-841"></a><a name="index-badd-842"></a><a name="index-bsub-843"></a><a name="index-calc_002dbusiness_002ddays_002dplus-844"></a><a name="index-calc_002dbusiness_002ddays_002dminus-845"></a>The <kbd>t +</kbd> (<code>calc-business-days-plus</code>) [<code>badd</code>]
+and <kbd>t -</kbd> (<code>calc-business-days-minus</code>) [<code>bsub</code>]
+commands perform arithmetic using business days.  For <kbd>t +</kbd>,
+one argument must be a date form and the other must be a real
+number (positive or negative).  If the number is not an integer,
+then a certain amount of time is added as well as a number of
+days; for example, adding 0.5 business days to a time in Friday
+evening will produce a time in Monday morning.  It is also
+possible to add an HMS form; adding &lsquo;<samp><span class="samp">12@ 0' 0"</span></samp>&rsquo; also adds
+half a business day.  For <kbd>t -</kbd>, the arguments are either a
+date form and a number or HMS form, or two date forms, in which
+case the result is the number of business days between the two
+dates.
+
+   <p><a name="index-g_t_0040code_007bHolidays_007d-variable-846"></a><a name="index-Holidays-847"></a>By default, Calc considers any day that is not a Saturday or
+Sunday to be a business day.  You can define any number of
+additional holidays by editing the variable <code>Holidays</code>. 
+(There is an <kbd>s&nbsp;H</kbd><!-- /@w --> convenience command for editing this
+variable.)  Initially, <code>Holidays</code> contains the vector
+&lsquo;<samp><span class="samp">[sat, sun]</span></samp>&rsquo;.  Entries in the <code>Holidays</code> vector may
+be any of the following kinds of objects:
+
+     <ul>
+<li>Date forms (pure dates, not date/time forms).  These specify
+particular days which are to be treated as holidays.
+
+     <li>Intervals of date forms.  These specify a range of days, all of
+which are holidays (e.g., Christmas week).  See <a href="Interval-Forms.html#Interval-Forms">Interval Forms</a>.
+
+     <li>Nested vectors of date forms.  Each date form in the vector is
+considered to be a holiday.
+
+     <li>Any Calc formula which evaluates to one of the above three things. 
+If the formula involves the variable &lsquo;<samp><span class="samp">y</span></samp>&rsquo;, it stands for a
+yearly repeating holiday; &lsquo;<samp><span class="samp">y</span></samp>&rsquo; will take on various year
+numbers like 1992.  For example, &lsquo;<samp><span class="samp">date(y, 12, 25)</span></samp>&rsquo; specifies
+Christmas day, and &lsquo;<samp><span class="samp">newweek(date(y, 11, 7), 4) + 21</span></samp>&rsquo; specifies
+Thanksgiving (which is held on the fourth Thursday of November). 
+If the formula involves the variable &lsquo;<samp><span class="samp">m</span></samp>&rsquo;, that variable
+takes on month numbers from 1 to 12:  &lsquo;<samp><span class="samp">date(y, m, 15)</span></samp>&rsquo; is
+a holiday that takes place on the 15th of every month.
+
+     <li>A weekday name, such as <code>sat</code> or <code>sun</code>.  This is really
+a variable whose name is a three-letter, lower-case day name.
+
+     <li>An interval of year numbers (integers).  This specifies the span of
+years over which this holiday list is to be considered valid.  Any
+business-day arithmetic that goes outside this range will result
+in an error message.  Use this if you are including an explicit
+list of holidays, rather than a formula to generate them, and you
+want to make sure you don't accidentally go beyond the last point
+where the holidays you entered are complete.  If there is no
+limiting interval in the <code>Holidays</code> vector, the default
+&lsquo;<samp><span class="samp">[1 .. 2737]</span></samp>&rsquo; is used.  (This is the absolute range of years
+for which Calc's business-day algorithms will operate.)
+
+     <li>An interval of HMS forms.  This specifies the span of hours that
+are to be considered one business day.  For example, if this
+range is &lsquo;<samp><span class="samp">[9@ 0' 0" .. 17@ 0' 0"]</span></samp>&rsquo; (i.e., 9am to 5pm), then
+the business day is only eight hours long, so that <kbd>1.5 t +</kbd>
+on &lsquo;<samp><span class="samp">&lt;4:00pm Fri Dec 13, 1991&gt;</span></samp>&rsquo; will add one business day and
+four business hours to produce &lsquo;<samp><span class="samp">&lt;12:00pm Tue Dec 17, 1991&gt;</span></samp>&rsquo;. 
+Likewise, <kbd>t -</kbd> will now express differences in time as
+fractions of an eight-hour day.  Times before 9am will be treated
+as 9am by business date arithmetic, and times at or after 5pm will
+be treated as 4:59:59pm.  If there is no HMS interval in <code>Holidays</code>,
+the full 24-hour day &lsquo;<samp><span class="samp">[0 0' 0" .. 24 0' 0"]</span></samp>&rsquo; is assumed. 
+(Regardless of the type of bounds you specify, the interval is
+treated as inclusive on the low end and exclusive on the high end,
+so that the work day goes from 9am up to, but not including, 5pm.) 
+</ul>
+
+   <p>If the <code>Holidays</code> vector is empty, then <kbd>t +</kbd> and
+<kbd>t -</kbd> will act just like <kbd>+</kbd> and <kbd>-</kbd> because there will
+then be no difference between business days and calendar days.
+
+   <p>Calc expands the intervals and formulas you give into a complete
+list of holidays for internal use.  This is done mainly to make
+sure it can detect multiple holidays.  (For example,
+&lsquo;<samp><span class="samp">&lt;Jan 1, 1989&gt;</span></samp>&rsquo; is both New Year's Day and a Sunday, but
+Calc's algorithms take care to count it only once when figuring
+the number of holidays between two dates.)
+
+   <p>Since the complete list of holidays for all the years from 1 to
+2737 would be huge, Calc actually computes only the part of the
+list between the smallest and largest years that have been involved
+in business-day calculations so far.  Normally, you won't have to
+worry about this.  Keep in mind, however, that if you do one
+calculation for 1992, and another for 1792, even if both involve
+only a small range of years, Calc will still work out all the
+holidays that fall in that 200-year span.
+
+   <p>If you add a (positive) number of days to a date form that falls on a
+weekend or holiday, the date form is treated as if it were the most
+recent business day.  (Thus adding one business day to a Friday,
+Saturday, or Sunday will all yield the following Monday.)  If you
+subtract a number of days from a weekend or holiday, the date is
+effectively on the following business day.  (So subtracting one business
+day from Saturday, Sunday, or Monday yields the preceding Friday.)  The
+difference between two dates one or both of which fall on holidays
+equals the number of actual business days between them.  These
+conventions are consistent in the sense that, if you add <var>n</var>
+business days to any date, the difference between the result and the
+original date will come out to <var>n</var> business days.  (It can't be
+completely consistent though; a subtraction followed by an addition
+might come out a bit differently, since <kbd>t +</kbd> is incapable of
+producing a date that falls on a weekend or holiday.)
+
+   <p><a name="index-holiday-848"></a>There is a <code>holiday</code> function, not on any keys, that takes
+any date form and returns 1 if that date falls on a weekend or
+holiday, as defined in <code>Holidays</code>, or 0 if the date is a
+business day.
+
+   </body></html>
+

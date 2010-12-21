@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Comment Line-Up - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Line_002dUp-Functions.html#Line_002dUp-Functions" title="Line-Up Functions">
+<link rel="prev" href="Operator-Line_002dUp.html#Operator-Line_002dUp" title="Operator Line-Up">
+<link rel="next" href="Misc-Line_002dUp.html#Misc-Line_002dUp" title="Misc Line-Up">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Comment-Line-Up"></a>
+<a name="Comment-Line_002dUp"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Misc-Line_002dUp.html#Misc-Line_002dUp">Misc Line-Up</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Operator-Line_002dUp.html#Operator-Line_002dUp">Operator Line-Up</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">11.3.4 Comment Line-Up Functions</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>The lineup functions here calculate the indentation for several types
+of comment structure.
+
+<div class="defun">
+&mdash; Function: <b>c-lineup-C-comments</b><var><a name="index-c_002dlineup_002dC_002dcomments-545"></a></var><br>
+<blockquote><p><a name="index-lineup_002dC_002dcomments-_0028c_002d_0029-546"></a>Line up C block comment continuation lines.  Various heuristics are used
+to handle most of the common comment styles.  Some examples:
+
+     <pre class="example">          /*                 /**               /*
+           * text             * text             text
+           */                 */               */
+</pre>
+        <pre class="example">          /* text            /*                /**
+             text            ** text            ** text
+          */                 */                 */
+</pre>
+        <pre class="example">          /**************************************************
+           * text
+           *************************************************/
+</pre>
+        <p><a name="index-comment_002dstart_002dskip-547"></a>
+     <pre class="example">          /**************************************************
+              Free form text comments:
+           In comments with a long delimiter line at the
+           start, the indentation is kept unchanged for lines
+           that start with an empty comment line prefix.  The
+           delimiter line is whatever matches the
+           <code>comment-start-skip</code> regexp.
+          **************************************************/
+</pre>
+        <p>The style variable <code>c-comment-prefix-regexp</code> is used to recognize
+the comment line prefix, e.g. the &lsquo;<samp><span class="samp">*</span></samp>&rsquo; that usually starts every
+line inside a comment.
+
+        <p><em>Works with: </em> The <code>c</code> syntactic symbol. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-comment</b><var><a name="index-c_002dlineup_002dcomment-548"></a></var><br>
+<blockquote><p><a name="index-lineup_002dcomment-_0028c_002d_0029-549"></a>Line up a comment-only line according to the style variable
+<code>c-comment-only-line-offset</code>.  If the comment is lined up with a
+comment starter on the previous line, that alignment is preserved.
+
+     <div class="defun">
+&mdash; User Option: <b>c-comment-only-line-offset</b><var><a name="index-c_002dcomment_002donly_002dline_002doffset-550"></a></var><br>
+<blockquote> <p><a name="index-comment_002donly_002dline_002doffset-_0028c_002d_0029-551"></a>This style variable specifies the extra offset for the line.  It can
+contain an integer or a cons cell of the form
+
+          <pre class="example">               (<var>non-anchored-offset</var> . <var>anchored-offset</var>)
+</pre>
+             <p class="noindent">where <var>non-anchored-offset</var> is the amount of offset given to
+non-column-zero anchored lines, and <var>anchored-offset</var> is the amount
+of offset to give column-zero anchored lines.  Just an integer as value
+is equivalent to <code>(</code><var>value</var><code> . -1000)</code>. 
+</p></blockquote></div>
+
+        <p><em>Works with: </em> <code>comment-intro</code>. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-knr-region-comment</b><var><a name="index-c_002dlineup_002dknr_002dregion_002dcomment-552"></a></var><br>
+<blockquote><p><a name="index-lineup_002dknr_002dregion_002dcomment-_0028c_002d_0029-553"></a>Line up a comment in the &ldquo;K&amp;R region&rdquo; with the declaration.  That is
+the region between the function or class header and the beginning of the
+block.  E.g:
+
+     <pre class="example">          int main()
+          /* Called at startup. */  &lt;- <i>c-lineup-knr-region-comment</i>
+          {
+            return 0;
+          }
+</pre>
+        <p>Return <code>nil</code> if called in any other situation, to be useful in list
+expressions.
+
+        <p><em>Works with: </em> <code>comment-intro</code>. 
+</p></blockquote></div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

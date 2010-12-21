@@ -1,7 +1,7 @@
 ;;; ede-pmake.el --- EDE Generic Project Makefile code generator.
 
-;;; Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;; 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
+;;   2008, 2009, 2010  Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: project, make
@@ -262,6 +262,18 @@ Execute BODY in a location where a value can be placed."
      (goto-char (point-max))))
 (put 'ede-pmake-insert-variable-shared 'lisp-indent-function 1)
 
+(defmacro ede-pmake-insert-variable-once (varname &rest body)
+  "Add VARNAME into the current Makefile if it doesn't exist.
+Execute BODY in a location where a value can be placed."
+  `(let ((addcr t) (v ,varname))
+     (unless (re-search-backward (concat "^" v "\\s-*=") nil t)
+       (insert v "=")
+       ,@body
+       (if addcr (insert "\n"))
+       (goto-char (point-max)))
+     ))
+(put 'ede-pmake-insert-variable-once 'lisp-indent-function 1)
+
 ;;; SOURCE VARIABLE NAME CONSTRUCTION
 
 (defsubst ede-pmake-varname (obj)
@@ -369,10 +381,14 @@ NOTE: Not yet in use!  This is part of an SRecode conversion of
 	  conf-table))
   (let* ((top "")
 	 (tmp this))
+    ;; Use relative paths for subdirs.
     (while (ede-parent-project tmp)
       (setq tmp (ede-parent-project tmp)
 	    top (concat "../" top)))
-    (insert "\ntop=" top))
+    ;; If this is the top, then use CURDIR.
+    (if (and (not (oref this metasubproject)) (string= top ""))
+	(insert "\ntop=\"$(CURDIR)\"/")
+      (insert "\ntop=" top)))
   (insert "\nede_FILES=" (file-name-nondirectory (oref this file)) " "
 	  (file-name-nondirectory (ede-proj-dist-makefile this)) "\n"))
 
@@ -425,14 +441,13 @@ sources variable."
 	(link (ede-proj-linkers this))
 	(name (ede-proj-makefile-target-name this))
 	(src (oref this source)))
+    (ede-proj-makefile-insert-object-variables (car comp) name src)
     (dolist (obj comp)
       (ede-compiler-only-once obj
 			      (ede-proj-makefile-insert-variables obj)))
-    (ede-proj-makefile-insert-object-variables (car comp) name src)
-    (while link
-      (ede-linker-only-once (car link)
-	(ede-proj-makefile-insert-variables (car link)))
-      (setq link (cdr link)))))
+    (dolist (linker link)
+      (ede-linker-only-once linker
+			    (ede-proj-makefile-insert-variables linker)))))
 
 (defmethod ede-proj-makefile-insert-automake-pre-variables
   ((this ede-proj-target))
@@ -550,10 +565,7 @@ Argument THIS is the target that should insert stuff."
 	    (cond ((eq (cdr sv) 'share)
 		   ;; This variable may be shared between multiple targets.
 		   (if (re-search-backward (concat "\\$(" (car sv) ")")
-					   (save-excursion
-					     (beginning-of-line)
-					     (point))
-					   t)
+					   (point-at-bol) t)
 		       ;; If its already in the dist target, then skip it.
 		       nil
 		     (setq sv (car sv))))
@@ -678,5 +690,4 @@ Argument TARGETS are the targets we should depend on for TAGS."
 
 (provide 'ede/pmake)
 
-;; arch-tag: 7ad8e19f-cdee-484c-8caf-f15cb0fc4df2
 ;;; ede/pmake.el ends here

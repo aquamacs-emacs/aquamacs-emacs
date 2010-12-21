@@ -135,21 +135,6 @@ args_out_of_range_3 (Lisp_Object a1, Lisp_Object a2, Lisp_Object a3)
   xsignal3 (Qargs_out_of_range, a1, a2, a3);
 }
 
-/* On some machines, XINT needs a temporary location.
-   Here it is, in case it is needed.  */
-
-int sign_extend_temp;
-
-/* On a few machines, XINT can only be done by calling this.  */
-
-int
-sign_extend_lisp_int (EMACS_INT num)
-{
-  if (num & (((EMACS_INT) 1) << (VALBITS - 1)))
-    return num | (((EMACS_INT) (-1)) << VALBITS);
-  else
-    return num & ((((EMACS_INT) 1) << VALBITS) - 1);
-}
 
 /* Data type predicates */
 
@@ -2082,13 +2067,14 @@ ARRAY may be a vector, a string, a char-table, a bool-vector,
 or a byte-code object.  IDX starts at 0.  */)
   (register Lisp_Object array, Lisp_Object idx)
 {
-  register int idxval;
+  register EMACS_INT idxval;
 
   CHECK_NUMBER (idx);
   idxval = XINT (idx);
   if (STRINGP (array))
     {
-      int c, idxval_byte;
+      int c;
+      EMACS_INT idxval_byte;
 
       if (idxval < 0 || idxval >= SCHARS (array))
 	args_out_of_range (array, idx);
@@ -2136,7 +2122,7 @@ Return NEWELT.  ARRAY may be a vector, a string, a char-table or a
 bool-vector.  IDX starts at 0.  */)
   (register Lisp_Object array, Lisp_Object idx, Lisp_Object newelt)
 {
-  register int idxval;
+  register EMACS_INT idxval;
 
   CHECK_NUMBER (idx);
   idxval = XINT (idx);
@@ -2171,7 +2157,7 @@ bool-vector.  IDX starts at 0.  */)
     }
   else if (STRING_MULTIBYTE (array))
     {
-      int idxval_byte, prev_bytes, new_bytes, nbytes;
+      EMACS_INT idxval_byte, prev_bytes, new_bytes, nbytes;
       unsigned char workbuf[MAX_MULTIBYTE_LENGTH], *p0 = workbuf, *p1;
 
       if (idxval < 0 || idxval >= SCHARS (array))
@@ -2187,7 +2173,7 @@ bool-vector.  IDX starts at 0.  */)
       if (prev_bytes != new_bytes)
 	{
 	  /* We must relocate the string data.  */
-	  int nchars = SCHARS (array);
+	  EMACS_INT nchars = SCHARS (array);
 	  unsigned char *str;
 	  USE_SAFE_ALLOCA;
 

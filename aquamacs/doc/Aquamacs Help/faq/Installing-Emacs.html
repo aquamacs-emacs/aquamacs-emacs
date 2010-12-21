@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Installing Emacs - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Compiling-and-installing-Emacs.html#Compiling-and-installing-Emacs" title="Compiling and installing Emacs">
+<link rel="next" href="Problems-building-Emacs.html#Problems-building-Emacs" title="Problems building Emacs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Installing-Emacs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Problems-building-Emacs.html#Problems-building-Emacs">Problems building Emacs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Compiling-and-installing-Emacs.html#Compiling-and-installing-Emacs">Compiling and installing Emacs</a>
+<hr>
+</div>
+
+<h3 class="section">7.1 How do I install Emacs?</h3>
+
+<p><a name="index-Installing-Emacs-371"></a><a name="index-Unix-systems_002c-installing-Emacs-on-372"></a><a name="index-Downloading-and-installing-Emacs-373"></a><a name="index-Building-Emacs-from-source-374"></a><a name="index-Source-code_002c-building-Emacs-from-375"></a>
+This answer is meant for users of Unix and Unix-like systems.  Users of
+other operating systems should see the series of questions beginning
+with <a href="Emacs-for-MS_002dDOS.html#Emacs-for-MS_002dDOS">Emacs for MS-DOS</a>, which describe where to get non-Unix source
+and binaries, and how to install Emacs on those systems.
+
+   <p>Most GNU/Linux distributions provide pre-built Emacs packages. 
+If Emacs is not installed already, you can install it by running (as
+root) a command such as &lsquo;<samp><span class="samp">yum install emacs</span></samp>&rsquo; (Red Hat and
+derivatives) or &lsquo;<samp><span class="samp">apt-get install emacs</span></samp>&rsquo; (Debian and derivatives).
+
+   <p>If you want to compile Emacs yourself, read the file <samp><span class="file">INSTALL</span></samp> in
+the source distribution.  In brief:
+
+     <ul>
+<li>First download the Emacs sources.  See <a href="Current-GNU-distributions.html#Current-GNU-distributions">Current GNU distributions</a>, for
+a list of ftp sites that make them available.  On <samp><span class="file">ftp.gnu.org</span></samp>,
+the main GNU distribution site, sources are available as
+
+     <!-- Don't include VER in the file name, because pretests are not there. -->
+     <p><a href="ftp://ftp.gnu.org/pub/gnu/emacs/emacs-VERSION.tar.gz">ftp://ftp.gnu.org/pub/gnu/emacs/emacs-VERSION.tar.gz</a>
+
+     <p>(Replace &lsquo;<samp><span class="samp">VERSION</span></samp>&rsquo; with the relevant version number, e.g. &lsquo;<samp><span class="samp">23.1</span></samp>&rsquo;.)
+
+     <li>Next uncompress and extract the source files.  This requires
+the <code>gzip</code> and <code>tar</code> programs, which are standard utilities. 
+If your system does not have them, these can also be downloaded from
+<samp><span class="file">ftp.gnu.org</span></samp>.
+
+     <p>GNU <code>tar</code> can uncompress and extract in a single-step:
+
+     <pre class="example">          tar -zxvf emacs-VERSION.tar.gz
+</pre>
+     <li>At this point, the Emacs sources should be sitting in a directory called
+<samp><span class="file">emacs-VERSION</span></samp>.  On most common Unix and Unix-like systems,
+you should be able to compile Emacs with the following commands:
+
+     <pre class="example">          cd emacs-VERSION
+          ./configure         # configure Emacs for your particular system
+          make                # use Makefile to build components, then Emacs
+</pre>
+     <p>If the <code>make</code> completes successfully, the odds are fairly good that
+the build has gone well.  (See <a href="Problems-building-Emacs.html#Problems-building-Emacs">Problems building Emacs</a>, if you weren't
+successful.)
+
+     <li>By default, Emacs is installed in <samp><span class="file">/usr/local</span></samp>.  To actually
+install files, become the superuser and type
+
+     <pre class="example">          make install
+</pre>
+     <p>Note that &lsquo;<samp><span class="samp">make install</span></samp>&rsquo; will overwrite <samp><span class="file">/usr/local/bin/emacs</span></samp>
+and any Emacs Info files that might be in <samp><span class="file">/usr/local/share/info/</span></samp>.
+
+   </ul>
+
+   </body></html>
+

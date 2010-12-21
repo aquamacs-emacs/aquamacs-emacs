@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Topic Topology - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Group-Topics.html#Group-Topics" title="Group Topics">
+<link rel="prev" href="Topic-Sorting.html#Topic-Sorting" title="Topic Sorting">
+<link rel="next" href="Topic-Parameters.html#Topic-Parameters" title="Topic Parameters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Topic-Topology"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Topic-Parameters.html#Topic-Parameters">Topic Parameters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Topic-Sorting.html#Topic-Sorting">Topic Sorting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Group-Topics.html#Group-Topics">Group Topics</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.16.4 Topic Topology</h4>
+
+<p><a name="index-topic-topology-501"></a><a name="index-topology-502"></a>
+So, let's have a look at an example group buffer:
+
+<pre class="example">     Gnus
+       Emacs -- I wuw it!
+          3: comp.emacs
+          2: alt.religion.emacs
+         Naughty Emacs
+          452: alt.sex.emacs
+            0: comp.talk.emacs.recovery
+       Misc
+          8: comp.binaries.fractals
+         13: comp.sources.unix
+</pre>
+   <p>So, here we have one top-level topic (&lsquo;<samp><span class="samp">Gnus</span></samp>&rsquo;), two topics under
+that, and one sub-topic under one of the sub-topics.  (There is always
+just one (1) top-level topic).  This topology can be expressed as
+follows:
+
+<pre class="lisp">     (("Gnus" visible)
+      (("Emacs -- I wuw it!" visible)
+       (("Naughty Emacs" visible)))
+      (("Misc" visible)))
+</pre>
+   <p><a name="index-gnus_002dtopic_002dtopology-503"></a>This is in fact how the variable <code>gnus-topic-topology</code> would look
+for the display above.  That variable is saved in the <samp><span class="file">.newsrc.eld</span></samp>
+file, and shouldn't be messed with manually&mdash;unless you really want
+to.  Since this variable is read from the <samp><span class="file">.newsrc.eld</span></samp> file,
+setting it in any other startup files will have no effect.
+
+   <p>This topology shows what topics are sub-topics of what topics (right),
+and which topics are visible.  Two settings are currently
+allowed&mdash;<code>visible</code> and <code>invisible</code>.
+
+   </body></html>
+

@@ -56,9 +56,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* BEGIN: Non Windows Includes */
 #ifndef WINDOWSNT
 
-#ifndef MSDOS
 #include <sys/ioctl.h>
-#endif
 
 /* FreeBSD has machine/soundcard.h.  Voxware sound driver docs mention
    sys/soundcard.h.  So, let's try whatever's there.  */
@@ -86,8 +84,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* BEGIN: Windows Specific Includes */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <limits.h>
 #include <windows.h>
 #include <mmsystem.h>

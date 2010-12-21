@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+<title>Type Predicates - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Predicates.html#Predicates" title="Predicates">
+<link rel="prev" href="Predicates.html#Predicates" title="Predicates">
+<link rel="next" href="Equality-Predicates.html#Equality-Predicates" title="Equality Predicates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Type-Predicates"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Predicates.html#Predicates">Predicates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Predicates.html#Predicates">Predicates</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 Type Predicates</h3>
+
+<p class="noindent">The <dfn>CL</dfn> package defines a version of the Common Lisp <code>typep</code>
+predicate.
+
+<div class="defun">
+&mdash; Function: <b>typep</b><var> object type<a name="index-typep-8"></a></var><br>
+<blockquote><p>Check if <var>object</var> is of type <var>type</var>, where <var>type</var> is a
+(quoted) type name of the sort used by Common Lisp.  For example,
+<code>(typep foo 'integer)</code> is equivalent to <code>(integerp foo)</code>. 
+</p></blockquote></div>
+
+   <p>The <var>type</var> argument to the above function is either a symbol
+or a list beginning with a symbol.
+
+     <ul>
+<li>If the type name is a symbol, Emacs appends &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; to the
+symbol name to form the name of a predicate function for testing
+the type.  (Built-in predicates whose names end in &lsquo;<samp><span class="samp">p</span></samp>&rsquo; rather
+than &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; are used when appropriate.)
+
+     <li>The type symbol <code>t</code> stands for the union of all types. 
+<code>(typep </code><var>object</var><code> t)</code> is always true.  Likewise, the
+type symbol <code>nil</code> stands for nothing at all, and
+<code>(typep </code><var>object</var><code> nil)</code> is always false.
+
+     <li>The type symbol <code>null</code> represents the symbol <code>nil</code>. 
+Thus <code>(typep </code><var>object</var><code> 'null)</code> is equivalent to
+<code>(null </code><var>object</var><code>)</code>.
+
+     <li>The type symbol <code>atom</code> represents all objects that are not cons
+cells. Thus <code>(typep </code><var>object</var><code> 'atom)</code> is equivalent to
+<code>(atom </code><var>object</var><code>)</code>.
+
+     <li>The type symbol <code>real</code> is a synonym for <code>number</code>, and
+<code>fixnum</code> is a synonym for <code>integer</code>.
+
+     <li>The type symbols <code>character</code> and <code>string-char</code> match
+integers in the range from 0 to 255.
+
+     <li>The type symbol <code>float</code> uses the <code>floatp-safe</code> predicate
+defined by this package rather than <code>floatp</code>, so it will work
+correctly even in Emacs versions without floating-point support.
+
+     <li>The type list <code>(integer </code><var>low</var> <var>high</var><code>)</code> represents all
+integers between <var>low</var> and <var>high</var>, inclusive.  Either bound
+may be a list of a single integer to specify an exclusive limit,
+or a <code>*</code> to specify no limit.  The type <code>(integer * *)</code>
+is thus equivalent to <code>integer</code>.
+
+     <li>Likewise, lists beginning with <code>float</code>, <code>real</code>, or
+<code>number</code> represent numbers of that type falling in a particular
+range.
+
+     <li>Lists beginning with <code>and</code>, <code>or</code>, and <code>not</code> form
+combinations of types.  For example, <code>(or integer (float 0 *))</code>
+represents all objects that are integers or non-negative floats.
+
+     <li>Lists beginning with <code>member</code> or <code>member*</code> represent
+objects <code>eql</code> to any of the following values.  For example,
+<code>(member 1 2 3 4)</code> is equivalent to <code>(integer 1 4)</code>,
+and <code>(member nil)</code> is equivalent to <code>null</code>.
+
+     <li>Lists of the form <code>(satisfies </code><var>predicate</var><code>)</code> represent
+all objects for which <var>predicate</var> returns true when called
+with that object as an argument. 
+</ul>
+
+   <p>The following function and macro (not technically predicates) are
+related to <code>typep</code>.
+
+<div class="defun">
+&mdash; Function: <b>coerce</b><var> object type<a name="index-coerce-9"></a></var><br>
+<blockquote><p>This function attempts to convert <var>object</var> to the specified
+<var>type</var>.  If <var>object</var> is already of that type as determined by
+<code>typep</code>, it is simply returned.  Otherwise, certain types of
+conversions will be made:  If <var>type</var> is any sequence type
+(<code>string</code>, <code>list</code>, etc.) then <var>object</var> will be
+converted to that type if possible.  If <var>type</var> is
+<code>character</code>, then strings of length one and symbols with
+one-character names can be coerced.  If <var>type</var> is <code>float</code>,
+then integers can be coerced in versions of Emacs that support
+floats.  In all other circumstances, <code>coerce</code> signals an
+error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>deftype</b><var> name arglist forms...<a name="index-deftype-10"></a></var><br>
+<blockquote><p>This macro defines a new type called <var>name</var>.  It is similar
+to <code>defmacro</code> in many ways; when <var>name</var> is encountered
+as a type name, the body <var>forms</var> are evaluated and should
+return a type specifier that is equivalent to the type.  The
+<var>arglist</var> is a Common Lisp argument list of the sort accepted
+by <code>defmacro*</code>.  The type specifier &lsquo;<samp><span class="samp">(</span><var>name</var> <var>args</var><span class="samp">...)</span></samp>&rsquo;
+is expanded by calling the expander with those arguments; the type
+symbol &lsquo;<samp><var>name</var></samp>&rsquo; is expanded by calling the expander with
+no arguments.  The <var>arglist</var> is processed the same as for
+<code>defmacro*</code> except that optional arguments without explicit
+defaults use <code>*</code> instead of <code>nil</code> as the &ldquo;default&rdquo;
+default.  Some examples:
+
+     <pre class="example">          (deftype null () '(satisfies null))    ; predefined
+          (deftype list () '(or null cons))      ; predefined
+          (deftype unsigned-byte (&amp;optional bits)
+            (list 'integer 0 (if (eq bits '*) bits (1- (lsh 1 bits)))))
+          (unsigned-byte 8)  ==  (integer 0 255)
+          (unsigned-byte)  ==  (integer 0 *)
+          unsigned-byte  ==  (integer 0 *)
+</pre>
+        <p class="noindent">The last example shows how the Common Lisp <code>unsigned-byte</code>
+type specifier could be implemented if desired; this package does
+not implement <code>unsigned-byte</code> by default. 
+</p></blockquote></div>
+
+   <p>The <code>typecase</code> and <code>check-type</code> macros also use type
+names.  See <a href="Conditionals.html#Conditionals">Conditionals</a>.  See <a href="Assertions.html#Assertions">Assertions</a>.  The <code>map</code>,
+<code>concatenate</code>, and <code>merge</code> functions take type-name
+arguments to specify the type of sequence to return.  See <a href="Sequences.html#Sequences">Sequences</a>.
+
+   </body></html>
+

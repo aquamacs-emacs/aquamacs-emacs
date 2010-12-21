@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Quassia Gnus - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="New-Features.html#New-Features" title="New Features">
+<link rel="prev" href="Red-Gnus.html#Red-Gnus" title="Red Gnus">
+<link rel="next" href="Pterodactyl-Gnus.html#Pterodactyl-Gnus" title="Pterodactyl Gnus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Quassia-Gnus"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Pterodactyl-Gnus.html#Pterodactyl-Gnus">Pterodactyl Gnus</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Red-Gnus.html#Red-Gnus">Red Gnus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="New-Features.html#New-Features">New Features</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.2.9.4 Quassia Gnus</h5>
+
+<p>New features in Gnus 5.6:
+
+     <ul>
+<li>New functionality for using Gnus as an offline newsreader has been
+added.  A plethora of new commands and modes have been added. 
+See <a href="Gnus-Unplugged.html#Gnus-Unplugged">Gnus Unplugged</a>, for the full story.
+
+     <li>The <code>nndraft</code> back end has returned, but works differently than
+before.  All Message buffers are now also articles in the <code>nndraft</code>
+group, which is created automatically.
+
+     <li><code>gnus-alter-header-function</code> can now be used to alter header
+values.
+
+     <li><code>gnus-summary-goto-article</code> now accept Message-ID's.
+
+     <li>A new Message command for deleting text in the body of a message
+outside the region: <kbd>C-c C-v</kbd>.
+
+     <li>You can now post to component group in <code>nnvirtual</code> groups with
+<kbd>C-u C-c C-c</kbd>.
+
+     <li> <code>nntp-rlogin-program</code>&mdash;new variable to ease customization.
+
+     <li><code>C-u C-c C-c</code> in <code>gnus-article-edit-mode</code> will now inhibit
+re-highlighting of the article buffer.
+
+     <li>New element in <code>gnus-boring-article-headers</code>&mdash;<code>long-to</code>.
+
+     <li><kbd>M-i</kbd> symbolic prefix command.  See <a href="Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic Prefixes</a>, for
+details.
+
+     <li><kbd>L</kbd> and <kbd>I</kbd> in the summary buffer now take the symbolic prefix
+<kbd>a</kbd> to add the score rule to the <samp><span class="file">all.SCORE</span></samp> file.
+
+     <li><code>gnus-simplify-subject-functions</code> variable to allow greater
+control over simplification.
+
+     <li><kbd>A T</kbd>&mdash;new command for fetching the current thread.
+
+     <li><kbd>/ T</kbd>&mdash;new command for including the current thread in the
+limit.
+
+     <li><kbd>M-RET</kbd> is a new Message command for breaking cited text.
+
+     <li>&lsquo;<samp><span class="samp">\\1</span></samp>&rsquo;-expressions are now valid in <code>nnmail-split-methods</code>.
+
+     <li>The <code>custom-face-lookup</code> function has been removed. 
+If you used this function in your initialization files, you must
+rewrite them to use <code>face-spec-set</code> instead.
+
+     <li>Canceling now uses the current select method.  Symbolic prefix
+<kbd>a</kbd> forces normal posting method.
+
+     <li>New command to translate M******** sm*rtq**t*s into proper
+text&mdash;<kbd>W d</kbd>.
+
+     <li>For easier debugging of <code>nntp</code>, you can set
+<code>nntp-record-commands</code> to a non-<code>nil</code> value.
+
+     <li><code>nntp</code> now uses <samp><span class="file">~/.authinfo</span></samp>, a <samp><span class="file">.netrc</span></samp>-like file, for
+controlling where and how to send <span class="sc">authinfo</span> to <acronym>NNTP</acronym> servers.
+
+     <li>A command for editing group parameters from the summary buffer
+has been added.
+
+     <li>A history of where mails have been split is available.
+
+     <li>A new article date command has been added&mdash;<code>article-date-iso8601</code>.
+
+     <li>Subjects can be simplified when threading by setting
+<code>gnus-score-thread-simplify</code>.
+
+     <li>A new function for citing in Message has been
+added&mdash;<code>message-cite-original-without-signature</code>.
+
+     <li><code>article-strip-all-blank-lines</code>&mdash;new article command.
+
+     <li>A new Message command to kill to the end of the article has
+been added.
+
+     <li>A minimum adaptive score can be specified by using the
+<code>gnus-adaptive-word-minimum</code> variable.
+
+     <li>The &ldquo;lapsed date&rdquo; article header can be kept continually
+updated by the <code>gnus-start-date-timer</code> command.
+
+     <li>Web listserv archives can be read with the <code>nnlistserv</code> back end.
+
+     <li>Old dejanews archives can now be read by <code>nnweb</code>.
+
+   </ul>
+
+   </body></html>
+

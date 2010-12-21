@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Rebinding - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link rel="prev" href="Minibuffer-Maps.html#Minibuffer-Maps" title="Minibuffer Maps">
+<link rel="next" href="Init-Rebinding.html#Init-Rebinding" title="Init Rebinding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Rebinding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-Maps.html#Minibuffer-Maps">Minibuffer Maps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.4.5 Changing Key Bindings Interactively</h4>
+
+<p><a name="index-key-rebinding_002c-this-session-4036"></a><a name="index-redefining-keys_002c-this-session-4037"></a><a name="index-binding-keys-4038"></a>
+  The way to redefine an Emacs key is to change its entry in a keymap. 
+You can change the global keymap, in which case the change is
+effective in all major modes (except those that have their own
+overriding local bindings for the same key).  Or you can change a
+local keymap, which affects all buffers using the same major mode.
+
+   <p>In this section, we describe how to rebind keys for the present
+Emacs session.  See <a href="Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>, for a description of how to
+make key rebindings affect future Emacs sessions.
+
+   <p><a name="index-global_002dset_002dkey-4039"></a><a name="index-local_002dset_002dkey-4040"></a><a name="index-global_002dunset_002dkey-4041"></a><a name="index-local_002dunset_002dkey-4042"></a>
+     <dl>
+<dt><kbd>M-x global-set-key &lt;RET&gt; </kbd><var>key</var> <var>cmd</var><kbd> &lt;RET&gt;</kbd><dd>Define <var>key</var> globally to run <var>cmd</var>. 
+<br><dt><kbd>M-x local-set-key &lt;RET&gt; </kbd><var>key</var> <var>cmd</var><kbd> &lt;RET&gt;</kbd><dd>Define <var>key</var> locally (in the major mode now in effect) to run
+<var>cmd</var>. 
+<br><dt><kbd>M-x global-unset-key &lt;RET&gt; </kbd><var>key</var><dd>Make <var>key</var> undefined in the global map. 
+<br><dt><kbd>M-x local-unset-key &lt;RET&gt; </kbd><var>key</var><dd>Make <var>key</var> undefined locally (in the major mode now in effect). 
+</dl>
+
+   <p>For example, the following binds <kbd>C-z</kbd> to the <code>shell</code>
+command (see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>), replacing the normal global
+definition of <kbd>C-z</kbd>:
+
+<pre class="example">     M-x global-set-key &lt;RET&gt; C-z shell &lt;RET&gt;
+</pre>
+   <p class="noindent">The <code>global-set-key</code> command reads the command name after the
+key.  After you press the key, a message like this appears so that you
+can confirm that you are binding the key you want:
+
+<pre class="example">     Set key C-z to command:
+</pre>
+   <p>You can redefine function keys and mouse events in the same way; just
+type the function key or click the mouse when it's time to specify the
+key to rebind.
+
+   <p>You can rebind a key that contains more than one event in the same
+way.  Emacs keeps reading the key to rebind until it is a complete key
+(that is, not a prefix key).  Thus, if you type <kbd>C-f</kbd> for
+<var>key</var>, that's the end; it enters the minibuffer immediately to
+read <var>cmd</var>.  But if you type <kbd>C-x</kbd>, since that's a prefix, it
+reads another character; if that is <kbd>4</kbd>, another prefix character,
+it reads one more character, and so on.  For example,
+
+<pre class="example">     M-x global-set-key &lt;RET&gt; C-x 4 $ spell-other-window &lt;RET&gt;
+</pre>
+   <p class="noindent">redefines <kbd>C-x 4 $</kbd> to run the (fictitious) command
+<code>spell-other-window</code>.
+
+   <p>You can remove the global definition of a key with
+<code>global-unset-key</code>.  This makes the key <dfn>undefined</dfn>; if you
+type it, Emacs will just beep.  Similarly, <code>local-unset-key</code> makes
+a key undefined in the current major mode keymap, which makes the global
+definition (or lack of one) come back into effect in that major mode.
+
+   <p>If you have redefined (or undefined) a key and you subsequently wish
+to retract the change, undefining the key will not do the job&mdash;you need
+to redefine the key with its standard definition.  To find the name of
+the standard definition of a key, go to a Fundamental mode buffer in a
+fresh Emacs and use <kbd>C-h c</kbd>.  The documentation of keys in this
+manual also lists their command names.
+
+   <p>If you want to prevent yourself from invoking a command by mistake, it
+is better to disable the command than to undefine the key.  A disabled
+command is less work to invoke when you really want to. 
+See <a href="Disabling.html#Disabling">Disabling</a>.
+
+   </body></html>
+

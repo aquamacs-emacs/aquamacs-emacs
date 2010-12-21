@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Depreciation Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Financial-Functions.html#Financial-Functions" title="Financial Functions">
+<link rel="prev" href="Related-Financial-Functions.html#Related-Financial-Functions" title="Related Financial Functions">
+<link rel="next" href="Definitions-of-Financial-Functions.html#Definitions-of-Financial-Functions" title="Definitions of Financial Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Depreciation-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Definitions-of-Financial-Functions.html#Definitions-of-Financial-Functions">Definitions of Financial Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Related-Financial-Functions.html#Related-Financial-Functions">Related Financial Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Financial-Functions.html#Financial-Functions">Financial Functions</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.6.5 Depreciation Functions</h4>
+
+<p class="noindent">The functions in this section calculate <dfn>depreciation</dfn>, which is
+the amount of value that a possession loses over time.  These functions
+are characterized by three parameters:  <var>cost</var>, the original cost
+of the asset; <var>salvage</var>, the value the asset will have at the end
+of its expected &ldquo;useful life&rdquo;; and <var>life</var>, the number of years
+(or other periods) of the expected useful life.
+
+   <p>There are several methods for calculating depreciation that differ in
+the way they spread the depreciation over the lifetime of the asset.
+
+   <p><a name="index-b-S-913"></a><a name="index-calc_002dfin_002dsln-914"></a><a name="index-sln-915"></a>The <kbd>b S</kbd> (<code>calc-fin-sln</code>) [<code>sln</code>] command computes the
+&ldquo;straight-line&rdquo; depreciation.  In this method, the asset depreciates
+by the same amount every year (or period).  For example,
+&lsquo;<samp><span class="samp">sln(12000, 2000, 5)</span></samp>&rsquo; returns 2000.  The asset costs $12000
+initially and will be worth $2000 after five years; it loses $2000
+per year.
+
+   <p><a name="index-b-Y-916"></a><a name="index-calc_002dfin_002dsyd-917"></a><a name="index-syd-918"></a>The <kbd>b Y</kbd> (<code>calc-fin-syd</code>) [<code>syd</code>] command computes the
+accelerated &ldquo;sum-of-years'-digits&rdquo; depreciation.  Here the depreciation
+is higher during the early years of the asset's life.  Since the
+depreciation is different each year, <kbd>b Y</kbd> takes a fourth <var>period</var>
+parameter which specifies which year is requested, from 1 to <var>life</var>. 
+If <var>period</var> is outside this range, the <code>syd</code> function will
+return zero.
+
+   <p><a name="index-b-D-919"></a><a name="index-calc_002dfin_002dddb-920"></a><a name="index-ddb-921"></a>The <kbd>b D</kbd> (<code>calc-fin-ddb</code>) [<code>ddb</code>] command computes an
+accelerated depreciation using the double-declining balance method. 
+It also takes a fourth <var>period</var> parameter.
+
+   <p>For symmetry, the <code>sln</code> function will accept a <var>period</var>
+parameter as well, although it will ignore its value except that the
+return value will as usual be zero if <var>period</var> is out of range.
+
+   <p>For example, pushing the vector &lsquo;<samp><span class="samp">[1,2,3,4,5]</span></samp>&rsquo; (perhaps with <kbd>v x 5</kbd>)
+and then mapping <kbd>V M ' [sln(12000,2000,5,$), syd(12000,2000,5,$),
+ddb(12000,2000,5,$)] &lt;RET&gt;</kbd> produces a matrix that allows us to compare
+the three depreciation methods:
+
+<pre class="example">     [ [ 2000, 3333, 4800 ]
+       [ 2000, 2667, 2880 ]
+       [ 2000, 2000, 1728 ]
+       [ 2000, 1333,  592 ]
+       [ 2000,  667,   0  ] ]
+</pre>
+   <p class="noindent">(Values have been rounded to nearest integers in this figure.) 
+We see that <code>sln</code> depreciates by the same amount each year,
+<kbd>syd</kbd> depreciates more at the beginning and less at the end,
+and <kbd>ddb</kbd> weights the depreciation even more toward the beginning.
+
+   <p>Summing columns with <kbd>V R : +</kbd> yields &lsquo;<samp><span class="samp">[10000, 10000, 10000]</span></samp>&rsquo;;
+the total depreciation in any method is (by definition) the
+difference between the cost and the salvage value.
+
+   </body></html>
+

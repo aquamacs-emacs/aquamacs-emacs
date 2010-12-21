@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Document Groups - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Other-Sources.html#Other-Sources" title="Other Sources">
+<link rel="prev" href="Anything-Groups.html#Anything-Groups" title="Anything Groups">
+<link rel="next" href="SOUP.html#SOUP" title="SOUP">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Document-Groups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SOUP.html#SOUP">SOUP</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Anything-Groups.html#Anything-Groups">Anything Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Other-Sources.html#Other-Sources">Other Sources</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.6.3 Document Groups</h4>
+
+<p><a name="index-nndoc-2396"></a><a name="index-documentation-group-2397"></a><a name="index-help-group-2398"></a>
+<code>nndoc</code> is a cute little thing that will let you read a single file
+as a newsgroup.  Several files types are supported:
+
+     
+<a name="index-Babyl-2399"></a>
+<dl><dt><code>babyl</code><dd>The Babyl format.
+
+     <p><a name="index-mbox-2400"></a><a name="index-Unix-mbox-2401"></a><br><dt><code>mbox</code><dd>The standard Unix mbox file.
+
+     <p><a name="index-MMDF-mail-box-2402"></a><br><dt><code>mmdf</code><dd>The MMDF mail box format.
+
+     <br><dt><code>news</code><dd>Several news articles appended into a file.
+
+     <p><a name="index-rnews-batch-files-2403"></a><br><dt><code>rnews</code><dd>The rnews batch transport format.
+
+     <br><dt><code>nsmail</code><dd>Netscape mail boxes.
+
+     <br><dt><code>mime-parts</code><dd><acronym>MIME</acronym> multipart messages.
+
+     <br><dt><code>standard-digest</code><dd>The standard (RFC 1153) digest format.
+
+     <br><dt><code>mime-digest</code><dd>A <acronym>MIME</acronym> digest of messages.
+
+     <br><dt><code>lanl-gov-announce</code><dd>Announcement messages from LANL Gov Announce.
+
+     <p><a name="index-forwarded-messages-2404"></a><br><dt><code>rfc822-forward</code><dd>A message forwarded according to RFC822.
+
+     <br><dt><code>outlook</code><dd>The Outlook mail box.
+
+     <br><dt><code>oe-dbx</code><dd>The Outlook Express dbx mail box.
+
+     <br><dt><code>exim-bounce</code><dd>A bounce message from the Exim MTA.
+
+     <br><dt><code>forward</code><dd>A message forwarded according to informal rules.
+
+     <br><dt><code>rfc934</code><dd>An RFC934-forwarded message.
+
+     <br><dt><code>mailman</code><dd>A mailman digest.
+
+     <br><dt><code>clari-briefs</code><dd>A digest of Clarinet brief news items.
+
+     <br><dt><code>slack-digest</code><dd>Non-standard digest format&mdash;matches most things, but does it badly.
+
+     <br><dt><code>mail-in-mail</code><dd>The last resort. 
+</dl>
+
+   <p>You can also use the special &ldquo;file type&rdquo; <code>guess</code>, which means
+that <code>nndoc</code> will try to guess what file type it is looking at. 
+<code>digest</code> means that <code>nndoc</code> should guess what digest type the
+file is.
+
+   <p><code>nndoc</code> will not try to change the file or insert any extra headers into
+it&mdash;it will simply, like, let you use the file as the basis for a
+group.  And that's it.
+
+   <p>If you have some old archived articles that you want to insert into your
+new &amp; spiffy Gnus mail back end, <code>nndoc</code> can probably help you with
+that.  Say you have an old <samp><span class="file">RMAIL</span></samp> file with mail that you now want
+to split into your new <code>nnml</code> groups.  You look at that file using
+<code>nndoc</code> (using the <kbd>G f</kbd> command in the group buffer
+(see <a href="Foreign-Groups.html#Foreign-Groups">Foreign Groups</a>)), set the process mark on all the articles in
+the buffer (<kbd>M P b</kbd>, for instance), and then re-spool (<kbd>B r</kbd>)
+using <code>nnml</code>.  If all goes well, all the mail in the <samp><span class="file">RMAIL</span></samp>
+file is now also stored in lots of <code>nnml</code> directories, and you can
+delete that pesky <samp><span class="file">RMAIL</span></samp> file.  If you have the guts!
+
+   <p>Virtual server variables:
+
+     <dl>
+<dt><code>nndoc-article-type</code><dd><a name="index-nndoc_002darticle_002dtype-2405"></a>This should be one of <code>mbox</code>, <code>babyl</code>, <code>digest</code>,
+<code>news</code>, <code>rnews</code>, <code>mmdf</code>, <code>forward</code>, <code>rfc934</code>,
+<code>rfc822-forward</code>, <code>mime-parts</code>, <code>standard-digest</code>,
+<code>slack-digest</code>, <code>clari-briefs</code>, <code>nsmail</code>, <code>outlook</code>,
+<code>oe-dbx</code>, <code>mailman</code>, and <code>mail-in-mail</code> or <code>guess</code>.
+
+     <br><dt><code>nndoc-post-type</code><dd><a name="index-nndoc_002dpost_002dtype-2406"></a>This variable says whether Gnus is to consider the group a news group or
+a mail group.  There are two valid values:  <code>mail</code> (the default)
+and <code>news</code>. 
+</dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="Document-Server-Internals.html#Document-Server-Internals">Document Server Internals</a>:    How to add your own document types. 
+</ul>
+
+   </body></html>
+

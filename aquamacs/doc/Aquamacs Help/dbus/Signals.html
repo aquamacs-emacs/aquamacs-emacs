@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Signals - Using of D-Bus</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Using of D-Bus">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Receiving-Method-Calls.html#Receiving-Method-Calls" title="Receiving Method Calls">
+<link rel="next" href="Errors-and-Events.html#Errors-and-Events" title="Errors and Events">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Signals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Errors-and-Events.html#Errors-and-Events">Errors and Events</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Receiving-Method-Calls.html#Receiving-Method-Calls">Receiving Method Calls</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">7 Sending and receiving signals.</h2>
+
+<p><a name="index-signals-51"></a>
+Signals are broadcast messages.  They carry input parameters, which
+are received by all objects which have registered for such a signal.
+
+<div class="defun">
+&mdash; Function: <b>dbus-send-signal</b><var> bus service path interface signal &amp;rest args<a name="index-dbus_002dsend_002dsignal-52"></a></var><br>
+<blockquote><p>This function is similar to <code>dbus-call-method</code>.  The difference
+is, that there are no returning output parameters.
+
+        <p>The function emits <var>signal</var> on the D-Bus <var>bus</var>.  <var>bus</var> is
+either the symbol <code>:system</code> or the symbol <code>:session</code>.  It
+doesn't matter whether another object has registered for <var>signal</var>.
+
+        <p><var>service</var> is the D-Bus service name of the object the signal is
+emitted from.  <var>path</var> is the corresponding D-Bus object path,
+<var>service</var> is registered at.  <var>interface</var> is an interface
+offered by <var>service</var>.  It must provide <var>signal</var>.
+
+        <p>All other arguments args are passed to <var>signal</var> as arguments. 
+They are converted into D-Bus types as described in <a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.  Example:
+
+     <pre class="lisp">          (dbus-send-signal
+            :session dbus-service-emacs dbus-path-emacs
+            (concat dbus-service-emacs ".FileManager") "FileModified"
+            "/home/albinus/.emacs")
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-register-signal</b><var> bus service path interface signal handler &amp;rest args<a name="index-dbus_002dregister_002dsignal-53"></a></var><br>
+<blockquote><p>With this function, an application registers for <var>signal</var> on the
+D-Bus <var>bus</var>.
+
+        <p><var>bus</var> is either the symbol <code>:system</code> or the symbol
+<code>:session</code>.
+
+        <p><var>service</var> is the D-Bus service name used by the sending D-Bus
+object.  It can be either a known name or the unique name of the D-Bus
+object sending the signal.  In case of a unique name, signals won't be
+received any longer once the object owning this unique name has
+disappeared, and a new queued object has replaced it.
+
+        <p>When <var>service</var> is <code>nil</code>, related signals from all D-Bus
+objects shall be accepted.
+
+        <p><var>path</var> is the corresponding D-Bus object path, <var>service</var> is
+registered at.  It can also be <code>nil</code> if the path name of incoming
+signals shall not be checked.
+
+        <p><var>interface</var> is an interface offered by <var>service</var>.  It must
+provide <var>signal</var>.
+
+        <p><var>handler</var> is a Lisp function to be called when the <var>signal</var> is
+received.  It must accept as arguments the output parameters
+<var>signal</var> is sending.
+
+        <p>All other arguments <var>args</var>, if specified, must be strings.  They
+stand for the respective arguments of <var>signal</var> in their order, and
+are used for filtering as well.  A <code>nil</code> argument might be used
+to preserve the order.
+
+        <p><code>dbus-register-signal</code> returns a Lisp object, which can be used
+as argument in <code>dbus-unregister-object</code> for removing the
+registration for <var>signal</var>.  Example:
+
+     <pre class="lisp">          (defun my-dbus-signal-handler (device)
+            (message "Device %s added" device))
+          
+          &rArr; my-dbus-signal-handler
+          
+          (dbus-register-signal
+            :system "org.freedesktop.Hal" "/org/freedesktop/Hal/Manager"
+            "org.freedesktop.Hal.Manager" "DeviceAdded"
+            'my-dbus-signal-handler)
+          
+          &rArr; ((:system "org.freedesktop.Hal.Manager" "DeviceAdded")
+              ("org.freedesktop.Hal" "/org/freedesktop/Hal/Manager"
+               my-signal-handler))
+</pre>
+        <p>As we know from the introspection data of interface
+&lsquo;<samp><span class="samp">org.freedesktop.Hal.Manager</span></samp>&rsquo;, the signal &lsquo;<samp><span class="samp">DeviceAdded</span></samp>&rsquo;
+provides one single parameter, which is mapped into a Lisp string. 
+The callback function <code>my-dbus-signal-handler</code> must define one
+single string argument therefore.  Plugging an USB device to your
+machine, when registered for signal &lsquo;<samp><span class="samp">DeviceAdded</span></samp>&rsquo;, will show you
+which objects the GNU/Linux <code>hal</code> daemon adds. 
+</p></blockquote></div>
+
+   </body></html>
+

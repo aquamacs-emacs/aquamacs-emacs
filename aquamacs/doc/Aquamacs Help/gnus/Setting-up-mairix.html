@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Setting up mairix - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="nnmairix.html#nnmairix" title="nnmairix">
+<link rel="prev" href="What-nnmairix-does.html#What-nnmairix-does" title="What nnmairix does">
+<link rel="next" href="Configuring-nnmairix.html#Configuring-nnmairix" title="Configuring nnmairix">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Setting-up-mairix"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Configuring-nnmairix.html#Configuring-nnmairix">Configuring nnmairix</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="What-nnmairix-does.html#What-nnmairix-does">What nnmairix does</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="nnmairix.html#nnmairix">nnmairix</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.18.2.4 Setting up mairix</h5>
+
+<p>First: create a backup of your mail folders (see <a href="nnmairix-caveats.html#nnmairix-caveats">nnmairix caveats</a>).
+
+   <p>Setting up mairix is easy: simply create a <samp><span class="file">.mairixrc</span></samp> file with
+(at least) the following entries:
+
+<pre class="example">     # Your Maildir/MH base folder
+     base=~/Maildir
+</pre>
+   <p>This is the base folder for your mails.  All the following directories
+are relative to this base folder.  If you want to use <code>nnmairix</code>
+with <code>nnimap</code>, this base directory has to point to the mail
+directory where the <acronym>IMAP</acronym> server stores the mail folders!
+
+<pre class="example">     maildir= ... your maildir folders which should be indexed ...
+     mh= ... your nnml/mh folders which should be indexed ...
+     mbox = ... your mbox files which should be indexed ...
+</pre>
+   <p>This specifies all your mail folders and mbox files (relative to the
+base directory!) you want to index with mairix.  Note that the
+<code>nnml</code> back end saves mails in MH format, so you have to put those
+directories in the <code>mh</code> line.  See the example at the end of this
+section and mairixrc's man-page for further details.
+
+<pre class="example">     omit=zz_mairix-*
+</pre>
+   <p><a name="index-nnmairix_002dgroup_002dprefix-514"></a>This should make sure that you don't accidentally index the mairix
+search results.  You can change the prefix of these folders with the
+variable <code>nnmairix-group-prefix</code>.
+
+<pre class="example">     mformat= ... 'maildir' or 'mh' ...
+     database= ... location of database file ...
+</pre>
+   <p>The <code>format</code> setting specifies the output format for the mairix
+search folder.  Set this to <code>mh</code> if you want to access search results
+with <code>nnml</code>.  Otherwise choose <code>maildir</code>.
+
+   <p>To summarize, here is my shortened <samp><span class="file">.mairixrc</span></samp> file as an example:
+
+<pre class="example">     base=~/Maildir
+     maildir=.personal:.work:.logcheck:.sent
+     mh=../Mail/nnml/*...
+     mbox=../mboxmail/mailarchive_year*
+     mformat=maildir
+     omit=zz_mairix-*
+     database=~/.mairixdatabase
+</pre>
+   <p>In this case, the base directory is <samp><span class="file">~/Maildir</span></samp>, where all my Maildir
+folders are stored.  As you can see, the folders are separated by
+colons.  If you wonder why every folder begins with a dot: this is
+because I use Dovecot as <acronym>IMAP</acronym> server, which again uses
+<code>Maildir++</code> folders.  For testing nnmairix, I also have some
+<code>nnml</code> mail, which is saved in <samp><span class="file">~/Mail/nnml</span></samp>.  Since this has
+to be specified relative to the <code>base</code> directory, the <code>../Mail</code>
+notation is needed.  Note that the line ends in <code>*...</code>, which means
+to recursively scan all files under this directory.  Without the three
+dots, the wildcard <code>*</code> will not work recursively.  I also have some
+old mbox files with archived mail lying around in <samp><span class="file">~/mboxmail</span></samp>. 
+The other lines should be obvious.
+
+   <p>See the man page for <code>mairixrc</code> for details and further options,
+especially regarding wildcard usage, which may be a little different
+than you are used to.
+
+   <p>Now simply call <code>mairix</code> to create the index for the first time. 
+Note that this may take a few minutes, but every following index will do
+the updates incrementally and hence is very fast.
+
+   </body></html>
+

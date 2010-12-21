@@ -1,0 +1,226 @@
+<html lang="en">
+<head>
+<title>Basic Operations on Units - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Units.html#Units" title="Units">
+<link rel="prev" href="Units.html#Units" title="Units">
+<link rel="next" href="The-Units-Table.html#The-Units-Table" title="The Units Table">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Operations-on-Units"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Units-Table.html#The-Units-Table">The Units Table</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Units.html#Units">Units</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Units.html#Units">Units</a>
+<hr>
+</div>
+
+<h3 class="section">12.1 Basic Operations on Units</h3>
+
+<p class="noindent">A <dfn>units expression</dfn> is a formula which is basically a number
+multiplied and/or divided by one or more <dfn>unit names</dfn>, which may
+optionally be raised to integer powers.  Actually, the value part need not
+be a number; any product or quotient involving unit names is a units
+expression.  Many of the units commands will also accept any formula,
+where the command applies to all units expressions which appear in the
+formula.
+
+   <p>A unit name is a variable whose name appears in the <dfn>unit table</dfn>,
+or a variable whose name is a prefix character like &lsquo;<samp><span class="samp">k</span></samp>&rsquo; (for &ldquo;kilo&rdquo;)
+or &lsquo;<samp><span class="samp">u</span></samp>&rsquo; (for &ldquo;micro&rdquo;) followed by a name in the unit table. 
+A substantial table of built-in units is provided with Calc;
+see <a href="Predefined-Units.html#Predefined-Units">Predefined Units</a>.  You can also define your own unit names;
+see <a href="User_002dDefined-Units.html#User_002dDefined-Units">User-Defined Units</a>.
+
+   <p>Note that if the value part of a units expression is exactly &lsquo;<samp><span class="samp">1</span></samp>&rsquo;,
+it will be removed by the Calculator's automatic algebra routines:  The
+formula &lsquo;<samp><span class="samp">1 mm</span></samp>&rsquo; is &ldquo;simplified&rdquo; to &lsquo;<samp><span class="samp">mm</span></samp>&rsquo;.  This is only a
+display anomaly, however; &lsquo;<samp><span class="samp">mm</span></samp>&rsquo; will work just fine as a
+representation of one millimeter.
+
+   <p>You may find that Algebraic mode (see <a href="Algebraic-Entry.html#Algebraic-Entry">Algebraic Entry</a>) makes working
+with units expressions easier.  Otherwise, you will have to remember
+to hit the apostrophe key every time you wish to enter units.
+
+   <p><a name="index-u-s-1955"></a><a name="index-calc_002dsimplify_002dunits-1956"></a><a name="index-usimplify-1957"></a>The <kbd>u s</kbd> (<code>calc-simplify-units</code>) [<code>usimplify</code>] command
+simplifies a units
+expression.  It uses <kbd>a s</kbd> (<code>calc-simplify</code>) to simplify the
+expression first as a regular algebraic formula; it then looks for
+features that can be further simplified by converting one object's units
+to be compatible with another's.  For example, &lsquo;<samp><span class="samp">5 m + 23 mm</span></samp>&rsquo; will
+simplify to &lsquo;<samp><span class="samp">5.023 m</span></samp>&rsquo;.  When different but compatible units are
+added, the righthand term's units are converted to match those of the
+lefthand term.  See <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>, for a way to have this done
+automatically at all times.
+
+   <p>Units simplification also handles quotients of two units with the same
+dimensionality, as in &lsquo;<samp><span class="samp">2&nbsp;in&nbsp;s/L&nbsp;cm</span></samp>&rsquo;<!-- /@w --> to &lsquo;<samp><span class="samp">5.08 s/L</span></samp>&rsquo;; fractional
+powers of unit expressions, as in &lsquo;<samp><span class="samp">sqrt(9 mm^2)</span></samp>&rsquo; to &lsquo;<samp><span class="samp">3 mm</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">sqrt(9 acre)</span></samp>&rsquo; to a quantity in meters; and <code>floor</code>,
+<code>ceil</code>, <code>round</code>, <code>rounde</code>, <code>roundu</code>, <code>trunc</code>,
+<code>float</code>, <code>frac</code>, <code>abs</code>, and <code>clean</code>
+applied to units expressions, in which case
+the operation in question is applied only to the numeric part of the
+expression.  Finally, trigonometric functions of quantities with units
+of angle are evaluated, regardless of the current angular mode.
+
+   <p><a name="index-u-c-1958"></a><a name="index-calc_002dconvert_002dunits-1959"></a>The <kbd>u c</kbd> (<code>calc-convert-units</code>) command converts a units
+expression to new, compatible units.  For example, given the units
+expression &lsquo;<samp><span class="samp">55 mph</span></samp>&rsquo;, typing <kbd>u c m/s &lt;RET&gt;</kbd> produces
+&lsquo;<samp><span class="samp">24.5872 m/s</span></samp>&rsquo;.  If you have previously converted a units expression
+with the same type of units (in this case, distance over time), you will
+be offered the previous choice of new units as a default.  Continuing
+the above example, entering the units expression &lsquo;<samp><span class="samp">100 km/hr</span></samp>&rsquo; and
+typing <kbd>u c &lt;RET&gt;</kbd> (without specifying new units) produces
+&lsquo;<samp><span class="samp">27.7777777778 m/s</span></samp>&rsquo;.
+
+   <p>While many of Calc's conversion factors are exact, some are necessarily
+approximate.  If Calc is in fraction mode (see <a href="Fraction-Mode.html#Fraction-Mode">Fraction Mode</a>), then
+unit conversions will try to give exact, rational conversions, but it
+isn't always possible.  Given &lsquo;<samp><span class="samp">55 mph</span></samp>&rsquo; in fraction mode, typing
+<kbd>u c m/s &lt;RET&gt;</kbd> produces  &lsquo;<samp><span class="samp">15367:625 m/s</span></samp>&rsquo;, for example,
+while typing <kbd>u c au/yr &lt;RET&gt;</kbd> produces
+&lsquo;<samp><span class="samp">5.18665819999e-3 au/yr</span></samp>&rsquo;.
+
+   <p>If the units you request are inconsistent with the original units, the
+number will be converted into your units times whatever &ldquo;remainder&rdquo;
+units are left over.  For example, converting &lsquo;<samp><span class="samp">55 mph</span></samp>&rsquo; into acres
+produces &lsquo;<samp><span class="samp">6.08e-3 acre / m s</span></samp>&rsquo;.  (Recall that multiplication binds
+more strongly than division in Calc formulas, so the units here are
+acres per meter-second.)  Remainder units are expressed in terms of
+&ldquo;fundamental&rdquo; units like &lsquo;<samp><span class="samp">m</span></samp>&rsquo; and &lsquo;<samp><span class="samp">s</span></samp>&rsquo;, regardless of the
+input units.
+
+   <p>One special exception is that if you specify a single unit name, and
+a compatible unit appears somewhere in the units expression, then
+that compatible unit will be converted to the new unit and the
+remaining units in the expression will be left alone.  For example,
+given the input &lsquo;<samp><span class="samp">980 cm/s^2</span></samp>&rsquo;, the command <kbd>u c ms</kbd> will
+change the &lsquo;<samp><span class="samp">s</span></samp>&rsquo; to &lsquo;<samp><span class="samp">ms</span></samp>&rsquo; to get &lsquo;<samp><span class="samp">9.8e-4 cm/ms^2</span></samp>&rsquo;. 
+The &ldquo;remainder unit&rdquo; &lsquo;<samp><span class="samp">cm</span></samp>&rsquo; is left alone rather than being
+changed to the base unit &lsquo;<samp><span class="samp">m</span></samp>&rsquo;.
+
+   <p>You can use explicit unit conversion instead of the <kbd>u s</kbd> command
+to gain more control over the units of the result of an expression. 
+For example, given &lsquo;<samp><span class="samp">5 m + 23 mm</span></samp>&rsquo;, you can type <kbd>u c m</kbd> or
+<kbd>u c mm</kbd> to express the result in either meters or millimeters. 
+(For that matter, you could type <kbd>u c fath</kbd> to express the result
+in fathoms, if you preferred!)
+
+   <p>In place of a specific set of units, you can also enter one of the
+units system names <code>si</code>, <code>mks</code> (equivalent), or <code>cgs</code>. 
+For example, <kbd>u c si &lt;RET&gt;</kbd> converts the expression into
+International System of Units (SI) base units.  Also, <kbd>u c base</kbd>
+converts to Calc's base units, which are the same as <code>si</code> units
+except that <code>base</code> uses &lsquo;<samp><span class="samp">g</span></samp>&rsquo; as the fundamental unit of mass
+whereas <code>si</code> uses &lsquo;<samp><span class="samp">kg</span></samp>&rsquo;.
+
+   <p><a name="index-Composite-units-1960"></a>The <kbd>u c</kbd> command also accepts <dfn>composite units</dfn>, which
+are expressed as the sum of several compatible unit names.  For
+example, converting &lsquo;<samp><span class="samp">30.5 in</span></samp>&rsquo; to units &lsquo;<samp><span class="samp">mi+ft+in</span></samp>&rsquo; (miles,
+feet, and inches) produces &lsquo;<samp><span class="samp">2 ft + 6.5 in</span></samp>&rsquo;.  Calc first
+sorts the unit names into order of decreasing relative size. 
+It then accounts for as much of the input quantity as it can
+using an integer number times the largest unit, then moves on
+to the next smaller unit, and so on.  Only the smallest unit
+may have a non-integer amount attached in the result.  A few
+standard unit names exist for common combinations, such as
+<code>mfi</code> for &lsquo;<samp><span class="samp">mi+ft+in</span></samp>&rsquo;, and <code>tpo</code> for &lsquo;<samp><span class="samp">ton+lb+oz</span></samp>&rsquo;. 
+Composite units are expanded as if by <kbd>a x</kbd>, so that
+&lsquo;<samp><span class="samp">(ft+in)/hr</span></samp>&rsquo; is first converted to &lsquo;<samp><span class="samp">ft/hr+in/hr</span></samp>&rsquo;.
+
+   <p>If the value on the stack does not contain any units, <kbd>u c</kbd> will
+prompt first for the old units which this value should be considered
+to have, then for the new units.  Assuming the old and new units you
+give are consistent with each other, the result also will not contain
+any units.  For example, <kbd>u&nbsp;c<!-- /@w --> cm &lt;RET&gt; in &lt;RET&gt;</kbd>
+converts the number 2 on the stack to 5.08.
+
+   <p><a name="index-u-b-1961"></a><a name="index-calc_002dbase_002dunits-1962"></a>The <kbd>u b</kbd> (<code>calc-base-units</code>) command is shorthand for
+<kbd>u c base</kbd>; it converts the units expression on the top of the
+stack into <code>base</code> units.  If <kbd>u s</kbd> does not simplify a
+units expression as far as you would like, try <kbd>u b</kbd>.
+
+   <p>The <kbd>u c</kbd> and <kbd>u b</kbd> commands treat temperature units (like
+&lsquo;<samp><span class="samp">degC</span></samp>&rsquo; and &lsquo;<samp><span class="samp">K</span></samp>&rsquo;) as relative temperatures.  For example,
+<kbd>u c</kbd> converts &lsquo;<samp><span class="samp">10 degC</span></samp>&rsquo; to &lsquo;<samp><span class="samp">18 degF</span></samp>&rsquo;: A change of 10
+degrees Celsius corresponds to a change of 18 degrees Fahrenheit.
+
+   <p><a name="index-u-t-1963"></a><a name="index-calc_002dconvert_002dtemperature-1964"></a><a name="index-Temperature-conversion-1965"></a>The <kbd>u t</kbd> (<code>calc-convert-temperature</code>) command converts
+absolute temperatures.  The value on the stack must be a simple units
+expression with units of temperature only.  This command would convert
+&lsquo;<samp><span class="samp">10 degC</span></samp>&rsquo; to &lsquo;<samp><span class="samp">50 degF</span></samp>&rsquo;, the equivalent temperature on the
+Fahrenheit scale.
+
+   <p><a name="index-u-r-1966"></a><a name="index-calc_002dremove_002dunits-1967"></a><a name="index-u-x-1968"></a><a name="index-calc_002dextract_002dunits-1969"></a>The <kbd>u r</kbd> (<code>calc-remove-units</code>) command removes units from the
+formula at the top of the stack.  The <kbd>u x</kbd>
+(<code>calc-extract-units</code>) command extracts only the units portion of a
+formula.  These commands essentially replace every term of the formula
+that does or doesn't (respectively) look like a unit name by the
+constant 1, then resimplify the formula.
+
+   <p><a name="index-u-a-1970"></a><a name="index-calc_002dautorange_002dunits-1971"></a>The <kbd>u a</kbd> (<code>calc-autorange-units</code>) command turns on and off a
+mode in which unit prefixes like <code>k</code> (&ldquo;kilo&rdquo;) are automatically
+applied to keep the numeric part of a units expression in a reasonable
+range.  This mode affects <kbd>u s</kbd> and all units conversion commands
+except <kbd>u b</kbd>.  For example, with autoranging on, &lsquo;<samp><span class="samp">12345 Hz</span></samp>&rsquo;
+will be simplified to &lsquo;<samp><span class="samp">12.345 kHz</span></samp>&rsquo;.  Autoranging is useful for
+some kinds of units (like <code>Hz</code> and <code>m</code>), but is probably
+undesirable for non-metric units like <code>ft</code> and <code>tbsp</code>. 
+(Composite units are more appropriate for those; see above.)
+
+   <p>Autoranging always applies the prefix to the leftmost unit name. 
+Calc chooses the largest prefix that causes the number to be greater
+than or equal to 1.0.  Thus an increasing sequence of adjusted times
+would be &lsquo;<samp><span class="samp">1 ms, 10 ms, 100 ms, 1 s, 10 s, 100 s, 1 ks</span></samp>&rsquo;. 
+Generally the rule of thumb is that the number will be adjusted
+to be in the interval &lsquo;<samp><span class="samp">[1 .. 1000)</span></samp>&rsquo;, although there are several
+exceptions to this rule.  First, if the unit has a power then this
+is not possible; &lsquo;<samp><span class="samp">0.1 s^2</span></samp>&rsquo; simplifies to &lsquo;<samp><span class="samp">100000 ms^2</span></samp>&rsquo;. 
+Second, the &ldquo;centi-&rdquo; prefix is allowed to form <code>cm</code> (centimeters),
+but will not apply to other units.  The &ldquo;deci-,&rdquo; &ldquo;deka-,&rdquo; and
+&ldquo;hecto-&rdquo; prefixes are never used.  Thus the allowable interval is
+&lsquo;<samp><span class="samp">[1 .. 10)</span></samp>&rsquo; for millimeters and &lsquo;<samp><span class="samp">[1 .. 100)</span></samp>&rsquo; for centimeters. 
+Finally, a prefix will not be added to a unit if the resulting name
+is also the actual name of another unit; &lsquo;<samp><span class="samp">1e-15 t</span></samp>&rsquo; would normally
+be considered a &ldquo;femto-ton,&rdquo; but it is written as &lsquo;<samp><span class="samp">1000 at</span></samp>&rsquo;
+(1000 atto-tons) instead because <code>ft</code> would be confused with feet.
+
+   </body></html>
+

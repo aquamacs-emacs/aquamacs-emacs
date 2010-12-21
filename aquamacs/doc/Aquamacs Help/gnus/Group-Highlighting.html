@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Group Highlighting - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Group-Buffer-Format.html#Group-Buffer-Format" title="Group Buffer Format">
+<link rel="prev" href="Group-Mode-Line-Specification.html#Group-Mode-Line-Specification" title="Group Mode Line Specification">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Group-Highlighting"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Group-Mode-Line-Specification.html#Group-Mode-Line-Specification">Group Mode Line Specification</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Group-Buffer-Format.html#Group-Buffer-Format">Group Buffer Format</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.1.3 Group Highlighting</h4>
+
+<p><a name="index-highlighting-92"></a><a name="index-group-highlighting-93"></a>
+<a name="index-gnus_002dgroup_002dhighlight-94"></a>Highlighting in the group buffer is controlled by the
+<code>gnus-group-highlight</code> variable.  This is an alist with elements
+that look like <code>(</code><var>form</var><code> . </code><var>face</var><code>)</code>.  If <var>form</var> evaluates to
+something non-<code>nil</code>, the <var>face</var> will be used on the line.
+
+   <p>Here's an example value for this variable that might look nice if the
+background is dark:
+
+<pre class="lisp">     (cond (window-system
+            (setq custom-background-mode 'light)
+            (defface my-group-face-1
+              '((t (:foreground "Red" :bold t))) "First group face")
+            (defface my-group-face-2
+              '((t (:foreground "DarkSeaGreen4" :bold t)))
+              "Second group face")
+            (defface my-group-face-3
+              '((t (:foreground "Green4" :bold t))) "Third group face")
+            (defface my-group-face-4
+              '((t (:foreground "SteelBlue" :bold t))) "Fourth group face")
+            (defface my-group-face-5
+              '((t (:foreground "Blue" :bold t))) "Fifth group face")))
+     
+     (setq gnus-group-highlight
+           '(((&gt; unread 200) . my-group-face-1)
+             ((and (&lt; level 3) (zerop unread)) . my-group-face-2)
+             ((&lt; level 3) . my-group-face-3)
+             ((zerop unread) . my-group-face-4)
+             (t . my-group-face-5)))
+</pre>
+   <p>Also see <a href="Faces-and-Fonts.html#Faces-and-Fonts">Faces and Fonts</a>.
+
+   <p>Variables that are dynamically bound when the forms are evaluated
+include:
+
+     <dl>
+<dt><code>group</code><dd>The group name. 
+<br><dt><code>unread</code><dd>The number of unread articles in the group. 
+<br><dt><code>method</code><dd>The select method. 
+<br><dt><code>mailp</code><dd>Whether the group is a mail group. 
+<br><dt><code>level</code><dd>The level of the group. 
+<br><dt><code>score</code><dd>The score of the group. 
+<br><dt><code>ticked</code><dd>The number of ticked articles in the group. 
+<br><dt><code>total</code><dd>The total number of articles in the group.  Or rather,
+<var>max-number</var> minus <var>min-number</var> plus one. 
+<br><dt><code>topic</code><dd>When using the topic minor mode, this variable is bound to the current
+topic being inserted. 
+</dl>
+
+   <p>When the forms are <code>eval</code>ed, point is at the beginning of the line
+of the group in question, so you can use many of the normal Gnus
+functions for snarfing info on the group.
+
+   <p><a name="index-gnus_002dgroup_002dupdate_002dhook-95"></a><a name="index-gnus_002dgroup_002dhighlight_002dline-96"></a><code>gnus-group-update-hook</code> is called when a group line is changed. 
+It will not be called when <code>gnus-visual</code> is <code>nil</code>.  This hook
+calls <code>gnus-group-highlight-line</code> by default.
+
+   </body></html>
+

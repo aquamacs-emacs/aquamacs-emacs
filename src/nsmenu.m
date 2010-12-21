@@ -23,7 +23,7 @@ Carbon version by Yamamoto Mitsuharu. */
 
 /* This should be the first include, as it may set up #defines affecting
    interpretation of even the system includes. */
-#include "config.h"
+#include <config.h>
 #include <setjmp.h>
 
 #include "lisp.h"
@@ -526,10 +526,10 @@ set_frame_menubar (struct frame *f, int first_time, int deep_p)
   ns_update_menubar (f, deep_p, nil);
 }
 
-
 /* Utility (from macmenu.c): is this item a separator? */
 static int
-name_is_separator ( const char *name)
+name_is_separator (name)
+     const char *name;
 {
   const char *start = name;
 
@@ -686,7 +686,7 @@ static int trackingMenu = 0;
   NSMenuItem *item;
   widget_value *wv = (widget_value *)wvptr;
 
-  if (name_is_separator (wv->name))
+  if (menu_separator_name_p (wv->name))
     {
       item = [NSMenuItem separatorItem];
       [self addItem: item];
@@ -1219,10 +1219,15 @@ update_frame_tool_bar (FRAME_PTR f)
         {
           idx = -1;
         }
+      helpObj = TOOLPROP (TOOL_BAR_ITEM_HELP);
+      if (NILP (helpObj))
+        helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
+      helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
+
       /* Ignore invalid image specifications.  */
       if (!valid_image_p (image))
         {
-          NSLog (@"Invalid image for toolbar item");
+          /* Don't log anything, GNUS makes invalid images all the time.  */
           continue;
         }
 
@@ -2117,7 +2122,7 @@ This variable only takes effect for newly created tool bars.*/);
   defsubr (&Sns_reset_menu);
   defsubr (&Smenu_or_popup_active_p);
 
-  Qdebug_on_next_call = intern ("debug-on-next-call");
+  Qdebug_on_next_call = intern_c_string ("debug-on-next-call");
   staticpro (&Qdebug_on_next_call);
   Vcancel_special_indicator_flag = Fcons(Qnil, Qnil);
 }

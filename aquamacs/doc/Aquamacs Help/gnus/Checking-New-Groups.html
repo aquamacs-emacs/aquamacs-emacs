@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Checking New Groups - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="New-Groups.html#New-Groups" title="New Groups">
+<link rel="next" href="Subscription-Methods.html#Subscription-Methods" title="Subscription Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Checking-New-Groups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Subscription-Methods.html#Subscription-Methods">Subscription Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="New-Groups.html#New-Groups">New Groups</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.5.1 Checking New Groups</h4>
+
+<p>Gnus normally determines whether a group is new or not by comparing the
+list of groups from the active file(s) with the lists of subscribed and
+dead groups.  This isn't a particularly fast method.  If
+<code>gnus-check-new-newsgroups</code> is <code>ask-server</code>, Gnus will ask the
+server for new groups since the last time.  This is both faster and
+cheaper.  This also means that you can get rid of the list of killed
+groups altogether, so you may set <code>gnus-save-killed-list</code> to
+<code>nil</code>, which will save time both at startup, at exit, and all over. 
+Saves disk space, too.  Why isn't this the default, then? 
+Unfortunately, not all servers support this command.
+
+   <p>I bet I know what you're thinking now: How do I find out whether my
+server supports <code>ask-server</code>?  No?  Good, because I don't have a
+fail-safe answer.  I would suggest just setting this variable to
+<code>ask-server</code> and see whether any new groups appear within the next
+few days.  If any do, then it works.  If none do, then it doesn't
+work.  I could write a function to make Gnus guess whether the server
+supports <code>ask-server</code>, but it would just be a guess.  So I won't. 
+You could <code>telnet</code> to the server and say <code>HELP</code> and see
+whether it lists &lsquo;<samp><span class="samp">NEWGROUPS</span></samp>&rsquo; among the commands it understands.  If
+it does, then it might work.  (But there are servers that lists
+&lsquo;<samp><span class="samp">NEWGROUPS</span></samp>&rsquo; without supporting the function properly.)
+
+   <p>This variable can also be a list of select methods.  If so, Gnus will
+issue an <code>ask-server</code> command to each of the select methods, and
+subscribe them (or not) using the normal methods.  This might be handy
+if you are monitoring a few servers for new groups.  A side effect is
+that startup will take much longer, so you can meditate while waiting. 
+Use the mantra &ldquo;dingnusdingnusdingnus&rdquo; to achieve permanent bliss.
+
+   </body></html>
+

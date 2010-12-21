@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Compiling Programs - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" title="Debugging IDL Programs">
+<link rel="prev" href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping" title="Breakpoints and Stepping">
+<link rel="next" href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" title="Walking the Calling Stack">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Compiling-Programs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack">Walking the Calling Stack</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping">Breakpoints and Stepping</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.4.4 Compiling Programs</h4>
+
+<p><a name="index-Compiling-programs-305"></a><a name="index-Programs_002c-compiling-306"></a><a name="index-Default-command-line_002c-executing-307"></a><a name="index-Executing-a-default-command-line-308"></a>
+<a name="index-C_002dc-C_002dd-C_002dc-309"></a>In order to compile the current buffer under the IDLWAVE shell, press
+<kbd>C-c C-d C-c</kbd> (<code>idlwave-save-and-run</code>).  This first saves the
+current buffer and then sends the command &lsquo;<samp><span class="samp">.run path/to/file</span></samp>&rsquo; to the
+shell.  You can also execute <kbd>C-c C-d C-c</kbd> from the shell buffer, in
+which case the most recently compiled buffer will be saved and
+re-compiled.
+
+   <p>When developing or debugging a program, it is often necessary to execute
+the same command line many times.  A convenient way to do this is
+<kbd>C-c C-d C-y</kbd> (<code>idlwave-shell-execute-default-command-line</code>). 
+This command first resets IDL from a state of interrupted execution by
+closing all files and returning to the main interpreter level.  Then a
+default command line is send to the shell.  To edit the default command
+line, call <code>idlwave-shell-execute-default-command-line</code> with a
+prefix argument: <kbd>C-u C-c C-d C-y</kbd>.  If no default command line has
+been set (or you give two prefix arguments), the last command on the
+<code>comint</code> input history is sent.
+
+   <p><a name="index-C_002dc-C_002dd-C_002de-310"></a><a name="index-Compiling-regions-311"></a>For quickly compiling and running the currently marked region as a main
+level program <kbd>C-c C-d C-e</kbd> (<code>idlwave-shell-run-region</code>) is
+very useful.  A temporary file is created holding the contents of the
+current region (with <code>END</code> appended), and run from the shell.
+
+   </body></html>
+

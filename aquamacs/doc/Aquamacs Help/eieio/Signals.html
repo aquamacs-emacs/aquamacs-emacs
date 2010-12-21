@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Signals - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Default-Superclass.html#Default-Superclass" title="Default Superclass">
+<link rel="next" href="Naming-Conventions.html#Naming-Conventions" title="Naming Conventions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Signals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Naming-Conventions.html#Naming-Conventions">Naming Conventions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Default-Superclass.html#Default-Superclass">Default Superclass</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">15 Signals</h2>
+
+<p>There are new condition names (signals) that can be caught when using
+<i>EIEIO</i>.
+
+<div class="defun">
+&mdash; Signal: <b>invalid-slot-name</b><var> obj-or-class slot<a name="index-invalid_002dslot_002dname-85"></a></var><br>
+<blockquote><p>This signal is called when an attempt to reference a slot in an
+<var>obj-or-class</var> is made, and the <var>slot</var> is not defined for
+it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Signal: <b>no-method-definition</b><var> method arguments<a name="index-no_002dmethod_002ddefinition-86"></a></var><br>
+<blockquote><p>This signal is called when <var>method</var> is called, with <var>arguments</var>
+and nothing is resolved.  This occurs when <var>method</var> has been
+defined, but the arguments make it impossible for <i>EIEIO</i> to determine
+which method body to run.
+
+        <p>To prevent this signal from occurring in your class, implement the
+method <code>no-applicable-method</code> for your class.  This method is
+called when to throw this signal, so implementing this for your class
+allows you block the signal, and perform some work. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Signal: <b>no-next-method</b><var> class arguments<a name="index-no_002dnext_002dmethod-87"></a></var><br>
+<blockquote><p>This signal is called if the function <code>call-next-method</code> is called
+and there is no next method to be called.
+
+        <p>Overload the method <code>no-next-method</code> to protect against this signal. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Signal: <b>invalid-slot-type</b><var> slot spec value<a name="index-invalid_002dslot_002dtype-88"></a></var><br>
+<blockquote><p>This signal is called when an attempt to set <var>slot</var> is made, and
+<var>value</var> doesn't match the specified type <var>spec</var>.
+
+        <p>In <i>EIEIO</i>, this is also used if a slot specifier has an invalid value
+during a <code>defclass</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Signal: <b>unbound-slot</b><var> object class slot<a name="index-unbound_002dslot-89"></a></var><br>
+<blockquote><p>This signal is called when an attempt to reference <var>slot</var> in
+<var>object</var> is made, and that instance is currently unbound. 
+</p></blockquote></div>
+
+   </body></html>
+

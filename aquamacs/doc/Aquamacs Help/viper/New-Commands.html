@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+<title>New Commands - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Improvements-over-Vi.html#Improvements-over-Vi" title="Improvements over Vi">
+<link rel="prev" href="Movement-and-Markers.html#Movement-and-Markers" title="Movement and Markers">
+<link rel="next" href="Useful-Packages.html#Useful-Packages" title="Useful Packages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="New-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Useful-Packages.html#Useful-Packages">Useful Packages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Movement-and-Markers.html#Movement-and-Markers">Movement and Markers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Improvements-over-Vi.html#Improvements-over-Vi">Improvements over Vi</a>
+<hr>
+</div>
+
+<h3 class="section">2.9 New Commands</h3>
+
+<p>These commands have no Vi analogs.
+
+     <dl>
+<dt><kbd>C-x, C-c</kbd><dd><a name="index-g_t_0040kbd_007bC_002dx_007d-101"></a><a name="index-g_t_0040kbd_007bC_002dc_007d-102"></a>These two keys invoke many important Emacs functions.  For example, if you
+hit <kbd>C-x</kbd> followed by <kbd>2</kbd>, then the current window will be split
+into 2.  Except for novice users, <kbd>C-c</kbd> is also set to execute an Emacs
+command from the current major mode.  &lt;ESC&gt; will do the same, if you
+configure &lt;ESC&gt; as Meta by setting <code>viper-no-multiple-ESC</code> to <code>nil</code>
+in <samp><span class="file">.viper</span></samp>.  See <a href="Customization.html#Customization">Customization</a>.  <kbd>C-\</kbd> in Insert, Replace, or Vi
+states will make Emacs think <kbd>Meta</kbd> has been hit. 
+<br><dt><kbd>\</kbd><dd><a name="index-g_t_0040kbd_007b_005c_007d-103"></a>Escape to Emacs to execute a single Emacs command.  For instance,
+<kbd>\ &lt;ESC&gt;</kbd> will act like a Meta key. 
+<br><dt><kbd>Q</kbd><dd><a name="index-g_t_0040kbd_007bQ_007d-104"></a><a name="index-query-replace-105"></a><kbd>Q</kbd> is for query replace.  By default,
+each string to be replaced is treated as a regular expression.  You can use
+<code>(setq viper-re-query-replace nil)</code> in your <samp><span class="file">.emacs</span></samp> file to
+turn this off.  (For normal searches, <kbd>:se nomagic</kbd> will work.  Note
+that <kbd>:se nomagic</kbd> turns Regexps off completely, unlike Vi). 
+<br><dt><kbd>v</kbd><dt><kbd>V</kbd><dt><kbd>C-v</kbd><dd><a name="index-g_t_0040kbd_007bv_007d-106"></a><a name="index-g_t_0040kbd_007bV_007d-107"></a><a name="index-g_t_0040kbd_007bC_002dv_007d-108"></a>These keys are used to visit files.  <kbd>v</kbd> will switch to a buffer
+visiting file whose name can be entered in the minibuffer.  <kbd>V</kbd> is
+similar, but will use a window different from the current window. 
+<kbd>C-v</kbd> is like <kbd>V</kbd>, except that a new frame (X window) will be used
+instead of a new Emacs window. 
+<br><dt><kbd>#</kbd><dd><a name="index-g_t_0040kbd_007b_0023_007d-109"></a>If followed by a certain character <var>ch</var>, it becomes an operator whose
+argument is the region determined by the motion command that follows
+(indicated as &lt;move&gt;). 
+Currently, <var>ch</var> can be one of <kbd>c</kbd>, <kbd>C</kbd>, <kbd>g</kbd>, <kbd>q</kbd>, and
+<kbd>s</kbd>.  For instance, <kbd>#qr</kbd> will prompt you for a string and then
+prepend this string to each line in the buffer. 
+<br><dt><kbd># c</kbd><dd><a name="index-g_t_0040kbd_007b_0023c_003cmove_003e_007d-110"></a><a name="index-changing-case-111"></a>Change upper-case characters in the region to lower-case
+(<code>downcase-region</code>). 
+Emacs command <kbd>M-l</kbd> does the same for words. 
+<br><dt><kbd># C</kbd><dd><a name="index-g_t_0040kbd_007b_0023C_003cmove_003e_007d-112"></a>Change lower-case characters in the region to upper-case.  For instance,
+<kbd># C 3 w</kbd> will capitalize 3 words from the current point
+(<code>upcase-region</code>). 
+Emacs command <kbd>M-u</kbd> does the same for words. 
+<br><dt><kbd># g</kbd><dd><a name="index-g_t_0040kbd_007b_0023g_003cmove_003e_007d-113"></a>Execute last keyboard macro for each line in the region
+(<code>viper-global-execute</code>). 
+<br><dt><kbd># q</kbd><dd><a name="index-g_t_0040kbd_007b_0023q_003cmove_003e_007d-114"></a>Insert specified string at the beginning of each line in the region
+(<code>viper-quote-region</code>).  The default string is composed of the comment
+character(s) appropriate for the current major mode. 
+<br><dt><kbd># s</kbd><dd><a name="index-g_t_0040kbd_007b_0023s_003cmove_003e_007d-115"></a>Check spelling of words in the region (<code>spell-region</code>). 
+The function used for spelling is determined from the variable
+<code>viper-spell-function</code>. 
+<a name="index-g_t_0040code_007bviper_002dspell_002dfunction_007d-116"></a><br><dt><kbd>*</kbd><dd><a name="index-g_t_0040kbd_007b_002a_007d-117"></a>Call last keyboard macro. 
+<br><dt><kbd>m .</kbd><dd>Set mark at point and push old mark off the ring
+<br><dt><kbd>m&lt;</kbd><br><dt><kbd>m&gt;</kbd><dd>Set mark at beginning and end of buffer, respectively. 
+<br><dt><kbd>m,</kbd><dd>Jump to mark and pop mark off the ring.  See <a href="../emacs/Mark.html#Mark">Mark</a>, for more info. 
+<br><dt><kbd>] register</kbd><dd><a name="index-g_t_0040kbd_007b_005d_003ca_002dz_003e_007d-118"></a>View contents of register
+<br><dt><kbd>[ textmarker</kbd><dd><a name="index-g_t_0040kbd_007b_005b_003ca_002dz_003e_007d-119"></a>View filename and position of textmarker
+<br><dt><kbd>@#</kbd><br><dt><kbd>@register</kbd><br><dt><kbd>@!</kbd><dd><a name="index-g_t_0040kbd_007b_0040_0040_0023_007d-120"></a><a name="index-g_t_0040kbd_007b_0040_0040_003ca_002dz_003e_007d-121"></a><a name="index-g_t_0040kbd_007b_0040_0040_0021_007d-122"></a><a name="index-keyboard-macros-123"></a><a name="index-register-execution-124"></a>
+Begin/end keyboard macro.  @register has a different meaning when used after
+a <kbd>@#</kbd>.  See <a href="Macros-and-Registers.html#Macros-and-Registers">Macros and Registers</a>, for details
+<br><dt><kbd>[]</kbd><dd><a name="index-g_t_0040kbd_007b_005b_005d_007d-125"></a>Go to end of heading. 
+<br><dt><kbd>g &lt;</kbd><em>movement command</em><kbd>&gt;</kbd><dd>Search buffer for text delimited by movement command.  The canonical
+example is <kbd>gw</kbd> to search for the word under the cursor. 
+See <a href="Improved-Search.html#Improved-Search">Improved Search</a>, for details. 
+<br><dt><kbd>C-g and C-]</kbd><dd><a name="index-g_t_0040kbd_007bC_002dg_007d-126"></a><a name="index-g_t_0040kbd_007bC_002d_005d_007d-127"></a>Quit and Abort Recursive edit.  These may be necessary on occasion. 
+See <a href="Vi-State.html#Vi-State">Vi State</a>, for a reason. 
+<br><dt><kbd>C-c C-g</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002dg_007d-128"></a>Hitting <kbd>C-c</kbd> followed by <kbd>C-g</kbd> will display the information on the
+current buffer.  This is the same as hitting <kbd>C-g</kbd> in Vi, but, as
+explained above, <kbd>C-g</kbd> is needed for other purposes in Emacs. 
+<br><dt><kbd>C-c /</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-_002f_007d-129"></a>Without a prefix argument, this command toggles
+case-sensitive/case-insensitive search modes and plain vanilla/regular
+expression search.  With the prefix argument 1, i.e.,
+<kbd>1 C-c /</kbd>, this toggles case-sensitivity; with the prefix argument 2,
+toggles plain vanilla search and search using
+regular expressions.  See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for alternative ways to invoke
+this function. 
+<a name="index-vanilla-search-130"></a><a name="index-case_002dsensitive-search-131"></a><a name="index-case_002dinsensitive-search-132"></a>
+<br><dt><kbd>M-p and M-n</kbd><dd><a name="index-g_t_0040kbd_007bM_002dp_007d-133"></a><a name="index-g_t_0040kbd_007bM_002dn_007d-134"></a>In the minibuffer, these commands navigate through the minibuffer
+histories, such as the history of search strings, Ex commands, etc.
+
+     <br><dt><kbd>C-s</kbd><dd><a name="index-g_t_0040kbd_007bC_002ds_007d-135"></a>If the minibuffer is entered via a Viper search commands <kbd>/</kbd> or <kbd>?</kbd>,
+then typing this key inserts the last search string used by the
+Emacs incremental search command (that is bound to <kbd>C-s</kbd> everywhere
+except in this case).
+
+     <br><dt><kbd>C-c M-p and C-c M-n</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-M_002dp_007d-136"></a><a name="index-g_t_0040kbd_007bC_002dc-M_002dn_007d-137"></a><a name="index-Insertion-history-138"></a><a name="index-Insertion-ring-139"></a><a name="index-Command-history-140"></a><a name="index-Command-ring-141"></a>
+In Insert or Replace state, these commands let  the user
+peruse the history of insertion strings used in previous insert or replace
+commands.  Try to hit <kbd>C-c M-p</kbd> or <kbd>C-c M-n</kbd> repeatedly and see what
+happens.  See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for more.
+
+     <p>In Vi state, these commands let the user peruse the history of Vi-style
+destructive commands, such as <kbd>dw</kbd>, <kbd>J</kbd>, <kbd>a</kbd>, etc. 
+By repeatedly typing <kbd>C-c M-p</kbd> or <kbd>C-c M-n</kbd> you will cycle Viper
+through the recent history of Vi commands, displaying the commands one by
+one.  Once
+an appropriate command is found, it can be executed by typing `<kbd>.</kbd>'.
+
+     <p>Since typing <kbd>C-c M-p</kbd> is tedious, it is more convenient to bind an
+appropriate function to a function key on the keyboard and use that key. 
+See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for details.
+
+     <br><dt><kbd>Ex commands</kbd><dd><a name="index-g_t_0040kbd_007b_003aargs_007d-142"></a><a name="index-g_t_0040kbd_007b_003an_007d-143"></a><a name="index-g_t_0040kbd_007b_003apwd_007d-144"></a><a name="index-g_t_0040kbd_007b_003apre_007d-145"></a>The commands <kbd>:args</kbd>, <kbd>:next</kbd>, <kbd>:pre</kbd> behave
+differently.  <kbd>:pwd</kbd> exists to get current directory. 
+The commands <kbd>:b</kbd> and <kbd>:B</kbd> switch buffers around.  See <a href="File-and-Buffer-Handling.html#File-and-Buffer-Handling">File and Buffer Handling</a>, for details. 
+There are also the new commands <kbd>:RelatedFile</kbd> and
+<kbd>PreviousRelatedFile</kbd> (which abbreviate to <kbd>R</kbd> and <kbd>P</kbd>,
+respectively.  See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for details. 
+<a name="index-g_t_0040kbd_007b_003aRelatedFile_007d-146"></a><a name="index-g_t_0040kbd_007b_003aPreviousRelatedFile_007d-147"></a></dl>
+
+   <p>Apart from the new commands, many old commands have been enhanced.  Most
+notably, Vi style macros are much more powerful in Viper than in Vi.  See <a href="Vi-Macros.html#Vi-Macros">Vi Macros</a>, for details.
+
+   </body></html>
+

@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>FAQ 4-15 - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages" title="FAQ 4 - Reading messages">
+<link rel="prev" href="FAQ-4_002d14.html#FAQ-4_002d14" title="FAQ 4-14">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-4-15"></a>
+<a name="FAQ-4_002d15"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-4_002d14.html#FAQ-4_002d14">FAQ 4-14</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages">FAQ 4 - Reading messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 4.15</h5>
+
+<p>How to split incoming mails in several groups?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>Gnus offers two possibilities for splitting mail, the easy
+nnmail-split-methods and the more powerful Fancy Mail
+Splitting. I'll only talk about the first one, refer to
+the manual, node "Fancy Mail Splitting" for the latter.
+
+   <p>The value of nnmail-split-methods is a list, each element
+is a list which stands for a splitting rule. Each rule has
+the form "group where matching articles should go to",
+"regular expression which has to be matched", the first
+rule which matches wins. The last rule must always be a
+general rule (regular expression .*) which denotes where
+articles should go which don't match any other rule. If
+the folder doesn't exist yet, it will be created as soon
+as an article lands there.  By default the mail will be
+send to all groups whose rules match. If you
+don't want that (you probably don't want), say
+
+<pre class="example">     (setq nnmail-crosspost nil)
+</pre>
+   <p class="noindent">in ~/.gnus.el.
+
+   <p>An example might be better than thousand words, so here's
+my nnmail-split-methods. Note that I send duplicates in a
+special group and that the default group is spam, since I
+filter all mails out which are from some list I'm
+subscribed to or which are addressed directly to me
+before. Those rules kill about 80% of the Spam which
+reaches me (Email addresses are changed to prevent spammers
+from using them):
+
+<pre class="example">     (setq nnmail-split-methods
+       '(("duplicates" "^Gnus-Warning:.*duplicate")
+         ("XEmacs-NT" "^\\(To:\\|CC:\\).*localpart@xemacs.invalid.*")
+         ("Gnus-Tut" "^\\(To:\\|CC:\\).*localpart@socha.invalid.*")
+         ("tcsh" "^\\(To:\\|CC:\\).*localpart@mx.gw.invalid.*")
+         ("BAfH" "^\\(To:\\|CC:\\).*localpart@.*uni-muenchen.invalid.*")
+         ("Hamster-src" "^\\(CC:\\|To:\\).*hamster-sourcen@yahoogroups.\\(de\\|com\\).*")
+         ("Tagesschau" "^From: tagesschau &lt;localpart@www.tagesschau.invalid&gt;$")
+         ("Replies" "^\\(CC:\\|To:\\).*localpart@Frank-Schmitt.invalid.*")
+         ("EK" "^From:.*\\(localpart@privateprovider.invalid\\|localpart@workplace.invalid\\).*")
+         ("Spam" "^Content-Type:.*\\(ks_c_5601-1987\\|EUC-KR\\|big5\\|iso-2022-jp\\).*")
+         ("Spam" "^Subject:.*\\(This really work\\|XINGA\\|ADV:\\|XXX\\|adult\\|sex\\).*")
+         ("Spam" "^Subject:.*\\(\=\?ks_c_5601-1987\?\\|\=\?euc-kr\?\\|\=\?big5\?\\).*")
+         ("Spam" "^X-Mailer:\\(.*BulkMailer.*\\|.*MIME::Lite.*\\|\\)")
+         ("Spam" "^X-Mailer:\\(.*CyberCreek Avalanche\\|.*http\:\/\/GetResponse\.com\\)")
+         ("Spam" "^From:.*\\(verizon\.net\\|prontomail\.com\\|money\\|ConsumerDirect\\).*")
+         ("Spam" "^Delivered-To: GMX delivery to spamtrap@gmx.invalid$")
+         ("Spam" "^Received: from link2buy.com")
+         ("Spam" "^CC: .*azzrael@t-online.invalid")
+         ("Spam" "^X-Mailer-Version: 1.50 BETA")
+         ("Uni" "^\\(CC:\\|To:\\).*localpart@uni-koblenz.invalid.*")
+         ("Inbox" "^\\(CC:\\|To:\\).*\\(my\ name\\|address@one.invalid\\|adress@two.invalid\\)")
+         ("Spam" "")))
+</pre>
+   <p class="noindent">
+
+   </body></html>
+

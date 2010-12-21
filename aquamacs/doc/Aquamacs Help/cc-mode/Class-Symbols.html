@@ -1,0 +1,178 @@
+<html lang="en">
+<head>
+<title>Class Symbols - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntactic-Symbols.html#Syntactic-Symbols" title="Syntactic Symbols">
+<link rel="prev" href="Function-Symbols.html#Function-Symbols" title="Function Symbols">
+<link rel="next" href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols" title="Conditional Construct Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Class-Symbols"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Function-Symbols.html#Function-Symbols">Function Symbols</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">10.2.2 Class related Symbols</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>Here's an example which illustrates some C++ class syntactic symbols:
+
+<pre class="example">      1: class Bass
+      2:     : public Guitar,
+      3:       public Amplifiable
+      4: {
+      5: public:
+      6:     Bass()
+      7:         : eString( new BassString( 0.105 )),
+      8:           aString( new BassString( 0.085 )),
+      9:           dString( new BassString( 0.065 )),
+     10:           gString( new BassString( 0.045 ))
+     11:     {
+     12:         eString.tune( 'E' );
+     13:         aString.tune( 'A' );
+     14:         dString.tune( 'D' );
+     15:         gString.tune( 'G' );
+     16:     }
+     17:     friend class Luthier;
+     18: };
+</pre>
+   <p><a name="index-class_002dopen-407"></a><a name="index-class_002dclose-408"></a>As in the previous example, line 1 has the <code>topmost-intro</code> syntax. 
+Here however, the brace that opens a C++ class definition on line 4 is
+assigned the <code>class-open</code> syntax.  Note that in C++, classes,
+structs, and unions are essentially equivalent syntactically (and are
+very similar semantically), so replacing the <code>class</code> keyword in the
+example above with <code>struct</code> or <code>union</code> would still result in a
+syntax of <code>class-open</code> for line 4 <a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
+Similarly, line 18 is assigned <code>class-close</code> syntax.
+
+   <p><a name="index-inher_002dintro-409"></a><a name="index-inher_002dcont-410"></a>Line 2 introduces the inheritance list for the class so it is assigned
+the <code>inher-intro</code> syntax, and line 3, which continues the
+inheritance list is given <code>inher-cont</code> syntax.
+
+   <p><a name="index-access_002dlabel-411"></a><a name="index-inclass-412"></a>Hitting <kbd>C-c C-s</kbd> on line 5 shows the following analysis:
+
+<pre class="example">     ((inclass 58) (access-label 58))
+</pre>
+   <p class="noindent">The primary syntactic symbol for this line is <code>access-label</code> as
+this a label keyword that specifies access protection in C++.  However,
+because this line is also a top-level construct inside a class
+definition, the analysis actually shows two syntactic symbols.  The
+other syntactic symbol assigned to this line is <code>inclass</code>. 
+Similarly, line 6 is given both <code>inclass</code> and <code>topmost-intro</code>
+syntax:
+
+<pre class="example">     ((inclass 58) (topmost-intro 60))
+</pre>
+   <p><a name="index-member_002dinit_002dintro-413"></a><a name="index-member_002dinit_002dcont-414"></a>Line 7 introduces a C++ member initialization list and as such is given
+<code>member-init-intro</code> syntax.  Note that in this case it is
+<em>not</em> assigned <code>inclass</code> since this is not considered a
+top-level construct.  Lines 8 through 10 are all assigned
+<code>member-init-cont</code> since they continue the member initialization
+list started on line 7.
+
+   <p><a name="index-in_002dclass-inline-methods-415"></a><a name="index-inline_002dopen-416"></a><a name="index-inline_002dclose-417"></a>Line 11's analysis is a bit more complicated:
+
+<pre class="example">     ((inclass 58) (inline-open))
+</pre>
+   <p>This line is assigned a syntax of both <code>inline-open</code> and
+<code>inclass</code> because it opens an <dfn>in-class</dfn> C++ inline method
+definition.  This is distinct from, but related to, the C++ notion of an
+inline function in that its definition occurs inside an enclosing class
+definition, which in C++ implies that the function should be inlined. 
+However, if the definition of the <code>Bass</code> constructor appeared
+outside the class definition, the construct would be given the
+<code>defun-open</code> syntax, even if the keyword <code>inline</code> appeared
+before the method name, as in:
+
+<pre class="example">      1: class Bass
+      2:     : public Guitar,
+      3:       public Amplifiable
+      4: {
+      5: public:
+      6:     Bass();
+      7: };
+      8:
+      9: inline
+     10: Bass::Bass()
+     11:     : eString( new BassString( 0.105 )),
+     12:       aString( new BassString( 0.085 )),
+     13:       dString( new BassString( 0.065 )),
+     14:       gString( new BassString( 0.045 ))
+     15: {
+     16:     eString.tune( 'E' );
+     17:     aString.tune( 'A' );
+     18:     dString.tune( 'D' );
+     19:     gString.tune( 'G' );
+     20: }
+</pre>
+   <p><a name="index-friend-418"></a>Returning to the previous example, line 16 is given <code>inline-close</code>
+syntax, while line 12 is given <code>defun-block-open</code> syntax, and lines
+13 through 15 are all given <code>statement</code> syntax.  Line 17 is
+interesting in that its syntactic analysis list contains three
+elements:
+
+<pre class="example">     ((inclass 58) (topmost-intro 380) (friend))
+</pre>
+   <p>The <code>friend</code> and <code>inline-open</code> syntactic symbols are
+modifiers that do not have anchor positions.
+
+   <p><a name="index-template_002dargs_002dcont-419"></a>Template definitions introduce yet another syntactic symbol:
+
+<pre class="example">      1: ThingManager &lt;int,
+      2:    Framework::Callback *,
+      3:    Mutex&gt; framework_callbacks;
+</pre>
+   <p>Here, line 1 is analyzed as a <code>topmost-intro</code>, but lines 2 and 3
+are both analyzed as <code>template-args-cont</code> lines.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This is the case even
+for C and Objective-C.  For consistency, structs in all supported
+languages are syntactically equivalent to classes.  Note however that
+the keyword <code>class</code> is meaningless in C and Objective-C.</p>
+
+   <hr></div>
+
+   </body></html>
+

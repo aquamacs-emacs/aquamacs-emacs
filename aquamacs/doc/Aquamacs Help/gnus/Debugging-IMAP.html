@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Debugging IMAP - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="IMAP.html#IMAP" title="IMAP">
+<link rel="prev" href="A-note-on-namespaces.html#A-note-on-namespaces" title="A note on namespaces">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Debugging-IMAP"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="A-note-on-namespaces.html#A-note-on-namespaces">A note on namespaces</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="IMAP.html#IMAP">IMAP</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.5.6 Debugging IMAP</h4>
+
+<p><a name="index-IMAP-debugging-2386"></a><a name="index-protocol-dump-_0028IMAP_0029-2387"></a>
+<acronym>IMAP</acronym> is a complex protocol, more so than <acronym>NNTP</acronym> or
+<acronym>POP3</acronym>.  Implementation bugs are not unlikely, and we do our
+best to fix them right away.  If you encounter odd behavior, chances
+are that either the server or Gnus is buggy.
+
+   <p>If you are familiar with network protocols in general, you will
+probably be able to extract some clues from the protocol dump of the
+exchanges between Gnus and the server.  Even if you are not familiar
+with network protocols, when you include the protocol dump in
+<acronym>IMAP</acronym>-related bug reports you are helping us with data
+critical to solving the problem.  Therefore, we strongly encourage you
+to include the protocol dump when reporting IMAP bugs in Gnus.
+
+   <p><a name="index-imap_002dlog-2388"></a>Because the protocol dump, when enabled, generates lots of data, it is
+disabled by default.  You can enable it by setting <code>imap-log</code> as
+follows:
+
+<pre class="lisp">     (setq imap-log t)
+</pre>
+   <p>This instructs the <code>imap.el</code> package to log any exchanges with
+the server.  The log is stored in the buffer &lsquo;<samp><span class="samp">*imap-log*</span></samp>&rsquo;.  Look
+for error messages, which sometimes are tagged with the keyword
+<code>BAD</code>&mdash;but when submitting a bug, make sure to include all the
+data.
+
+   </body></html>
+

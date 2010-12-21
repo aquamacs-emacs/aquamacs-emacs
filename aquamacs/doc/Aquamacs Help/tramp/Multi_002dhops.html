@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+<title>Multi-hops - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Default-Host.html#Default-Host" title="Default Host">
+<link rel="next" href="Customizing-Methods.html#Customizing-Methods" title="Customizing Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multi-hops"></a>
+<a name="Multi_002dhops"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customizing-Methods.html#Customizing-Methods">Customizing Methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Default-Host.html#Default-Host">Default Host</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.9 Connecting to a remote host using multiple hops</h3>
+
+<p><a name="index-multi_002dhop-121"></a><a name="index-proxy-hosts-122"></a>
+Sometimes, the methods described before are not sufficient.  Sometimes,
+it is not possible to connect to a remote host using a simple command. 
+For example, if you are in a secured network, you might have to log in
+to a `bastion host' first before you can connect to the outside world. 
+Of course, the target host may also require a bastion host.
+
+   <p><a name="index-tramp_002ddefault_002dproxies_002dalist-123"></a>In order to specify such multiple hops, it is possible to define a proxy
+host to pass through, via the variable
+<code>tramp-default-proxies-alist</code>.  This variable keeps a list of
+triples (<var>host</var> <var>user</var> <var>proxy</var>).
+
+   <p>The first matching item specifies the proxy host to be passed for a
+file name located on a remote target matching <var>user</var>@<var>host</var>. 
+<var>host</var> and <var>user</var> are regular expressions or <code>nil</code>, which
+is interpreted as a regular expression which always matches.
+
+   <p><var>proxy</var> must be a Tramp filename which localname part is ignored. 
+Method and user name on <var>proxy</var> are optional, which is interpreted
+with the default values. 
+The method must be an inline or gateway method (see <a href="Inline-methods.html#Inline-methods">Inline methods</a>, see <a href="Gateway-methods.html#Gateway-methods">Gateway methods</a>). 
+If <var>proxy</var> is <code>nil</code>, no additional hop is required reaching
+<var>user</var>@<var>host</var>.
+
+   <p>If you, for example, must pass the host &lsquo;<samp><span class="samp">bastion.your.domain</span></samp>&rsquo; as
+user &lsquo;<samp><span class="samp">bird</span></samp>&rsquo; for any remote host which is not located in your local
+domain, you can set
+
+<pre class="lisp">     (add-to-list 'tramp-default-proxies-alist
+                  '("\\." nil "/ssh<!-- /@w -->:bird<!-- /@w -->@bastion.your.domain:"))
+     (add-to-list 'tramp-default-proxies-alist
+                  '("\\.your\\.domain\\'" nil nil))
+</pre>
+   <p>Please note the order of the code.  <code>add-to-list</code> adds elements at the
+beginning of a list.  Therefore, most relevant rules must be added last.
+
+   <p>Proxy hosts can be cascaded.  If there is another host called
+&lsquo;<samp><span class="samp">jump.your.domain</span></samp>&rsquo;, which is the only one in your local domain who
+is allowed connecting &lsquo;<samp><span class="samp">bastion.your.domain</span></samp>&rsquo;, you can add another
+rule:
+
+<pre class="lisp">     (add-to-list 'tramp-default-proxies-alist
+                  '("\\`bastion\\.your\\.domain\\'"
+                    "\\`bird\\'"
+                    "/ssh<!-- /@w -->:jump.your.domain:"))
+</pre>
+   <p><var>proxy</var> can contain the patterns <code>%h</code> or <code>%u</code>.  These
+patterns are replaced by the strings matching <var>host</var> or
+<var>user</var>, respectively.
+
+   <p>If you, for example, wants to work as &lsquo;<samp><span class="samp">root</span></samp>&rsquo; on hosts in the
+domain &lsquo;<samp><span class="samp">your.domain</span></samp>&rsquo;, but login as &lsquo;<samp><span class="samp">root</span></samp>&rsquo; is disabled for
+non-local access, you might add the following rule:
+
+<pre class="lisp">     (add-to-list 'tramp-default-proxies-alist
+                  '("\\.your\\.domain\\'" "\\`root\\'" "/ssh<!-- /@w -->:%h:"))
+</pre>
+   <p>Opening <samp><span class="file">/sudo<!-- /@w -->:randomhost.your.domain:</span></samp> would connect
+first &lsquo;<samp><span class="samp">randomhost.your.domain</span></samp>&rsquo; via <code>ssh</code> under your account
+name, and perform <code>sudo -u root</code> on that host afterwards.  It is
+important to know that the given method is applied on the host which
+has been reached so far.  <code>sudo -u root</code>, applied on your local
+host, wouldn't be useful here.
+
+   <p><var>host</var>, <var>user</var> and <var>proxy</var> can also be Lisp forms.  These
+forms are evaluated, and must return a string, or <code>nil</code>.  The
+previous example could be generalized then: For all hosts except my
+local one connect via <code>ssh</code> first, and apply <code>sudo -u root</code>
+afterwards:
+
+<pre class="lisp">     (add-to-list 'tramp-default-proxies-alist
+                  '(nil "\\`root\\'" "/ssh<!-- /@w -->:%h:"))
+     (add-to-list 'tramp-default-proxies-alist
+                  '((regexp-quote (system-name)) nil nil))
+</pre>
+   <p>This is the recommended configuration to work as &lsquo;<samp><span class="samp">root</span></samp>&rsquo; on remote
+Ubuntu hosts.
+
+   <p>Finally, <code>tramp-default-proxies-alist</code> can be used to pass
+firewalls or proxy servers.  Imagine your local network has a host
+&lsquo;<samp><span class="samp">proxy.your.domain</span></samp>&rsquo; which is used on port 3128 as HTTP proxy to
+the outer world.  Your friendly administrator has granted you access
+under your user name to &lsquo;<samp><span class="samp">host.other.domain</span></samp>&rsquo; on that proxy
+server.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  You would need to add the
+following rule:
+
+<pre class="lisp">     (add-to-list 'tramp-default-proxies-alist
+                  '("\\`host\\.other\\.domain\\'" nil
+                    "/tunnel<!-- /@w -->:proxy.your.domain#3128:"))
+</pre>
+   <p>Gateway methods can be declared as first hop only in a multiple hop
+chain.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> HTTP tunnels are intended for secure SSL/TLS
+communication.  Therefore, many proxy server restrict the tunnels to
+related target ports.  You might need to run your ssh server on your
+target host &lsquo;<samp><span class="samp">host.other.domain</span></samp>&rsquo; on such a port, like 443 (https). 
+See <a href="http://savannah.gnu.org/maintenance/CvsFromBehindFirewall">http://savannah.gnu.org/maintenance/CvsFromBehindFirewall</a>
+for discussion of ethical issues.</p>
+
+   <hr></div>
+
+   </body></html>
+

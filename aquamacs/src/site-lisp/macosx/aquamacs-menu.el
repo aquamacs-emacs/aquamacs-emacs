@@ -1,3 +1,4 @@
+;; utf-8-emacs
 ;; aquamacs-menu
 ;; redefines and modifies the menu bar
 
@@ -185,6 +186,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
     (javascript-mode . "JavaScript")
     (html-mode . "HTML")
     (html-helper-mode . "HTML (Helper)")
+    (nxhtml-mode . "nXhtml")
     (latex-mode . "LaTeX")
     lisp-interaction-mode 
     emacs-lisp-mode 
@@ -292,7 +294,7 @@ customization buffer."
 	      :help "Copy selected text in region"))
  
 (define-key-after menu-bar-edit-menu [copy-html]
-  `(menu-item "Copy as HTML" 
+  `(menu-item "Copy Styled as HTML" 
 	      aquamacs-copy-as-html
 	      :enable mark-active
 	      :help "Copy selected text in region as formatted HTML")

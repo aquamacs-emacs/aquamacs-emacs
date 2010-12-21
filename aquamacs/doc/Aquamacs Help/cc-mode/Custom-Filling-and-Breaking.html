@@ -1,0 +1,230 @@
+<html lang="en">
+<head>
+<title>Custom Filling and Breaking - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Config-Basics.html#Config-Basics" title="Config Basics">
+<link rel="next" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines" title="Custom Auto-newlines">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Custom-Filling-and-Breaking"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Config-Basics.html#Config-Basics">Config Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h2 class="chapter">7 Customizing Filling and Line Breaking</h2>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>Since there's a lot of normal text in comments and string literals,
+CC Mode provides features to edit these like in text mode.  It does
+this by hooking in on the different line breaking functions and tuning
+relevant variables as necessary.
+
+   <p><a name="index-c_002dcomment_002dprefix_002dregexp-310"></a><a name="index-comment_002dprefix_002dregexp-_0028c_002d_0029-311"></a><a name="index-comment-line-prefix-312"></a><a name="index-comment_002dstart-313"></a><a name="index-comment_002dend-314"></a><a name="index-comment_002dstart_002dskip-315"></a><a name="index-paragraph_002dstart-316"></a><a name="index-paragraph_002dseparate-317"></a><a name="index-paragraph_002dignore_002dfill_002dprefix-318"></a><a name="index-adaptive_002dfill_002dmode-319"></a><a name="index-adaptive_002dfill_002dregexp-320"></a><a name="index-adaptive_002dfill_002dfirst_002dline_002dregexp-321"></a>To make Emacs recognize comments and treat text in them as normal
+paragraphs, CC Mode makes several standard
+variables<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> buffer-local and modifies them
+according to the language syntax and the comment line prefix.
+
+<div class="defun">
+&mdash; User Option: <b>c-comment-prefix-regexp</b><var><a name="index-c_002dcomment_002dprefix_002dregexp-322"></a></var><br>
+<blockquote><p><a name="index-comment_002dprefix_002dregexp-_0028c_002d_0029-323"></a>This style variable contains the regexp used to recognize the
+<dfn>comment line prefix</dfn>, which is the line decoration that starts
+every line in a comment.  The variable is either the comment line
+prefix itself, or (more usually) an association list with different
+values for different languages.  The symbol for the major mode is
+looked up in the alist to get the regexp for the language, and if it
+isn't found then the special symbol &lsquo;<samp><span class="samp">other</span></samp>&rsquo; is looked up instead.
+
+        <p>When a comment line gets divided by <kbd>M-j</kbd> or the like, CC Mode
+inserts the comment line prefix from a neighboring line at the start
+of the new line.  The default value of c-comment-prefix-regexp is
+&lsquo;<samp><span class="samp">//+\\|\\**</span></samp>&rsquo;, which matches C++ style line comments like
+
+     <pre class="example">          // blah blah
+</pre>
+        <p class="noindent">with two or more slashes in front of them, and the second and
+subsequent lines of C style block comments like
+
+     <pre class="example">          /*
+           * blah blah
+           */
+</pre>
+        <p class="noindent">with zero or more stars at the beginning of every line.  If you change
+this variable, please make sure it still matches the comment starter
+(i.e. <code>//</code>) of line comments <em>and</em> the line prefix inside
+block comments.
+
+        <p><a name="index-c_002dsetup_002dparagraph_002dvariables-324"></a><a name="index-setup_002dparagraph_002dvariables-_0028c_002d_0029-325"></a>Also note that since CC Mode uses the value of
+<code>c-comment-prefix-regexp</code> to set up several other variables at
+mode initialization, there won't be any effect if you just change it
+inside a CC Mode buffer.  You need to call the command
+<code>c-setup-paragraph-variables</code> too, to update those other
+variables.  That's also the case if you modify
+<code>c-comment-prefix-regexp</code> in a mode hook, since CC Mode will
+already have set up these variables before calling the hook. 
+</p></blockquote></div>
+
+   <p>In comments, CC Mode uses <code>c-comment-prefix-regexp</code> to adapt
+the line prefix from the other lines in the comment.
+
+   <p><a name="index-adaptive_002dfill_002dmode-326"></a><a name="index-Adaptive-Fill-mode-327"></a>CC Mode uses adaptive fill mode (see <a href="../emacs/Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>) to make Emacs correctly keep the line prefix when
+filling paragraphs.  That also makes Emacs preserve the text
+indentation <em>inside</em> the comment line prefix.  E.g. in the
+following comment, both paragraphs will be filled with the left
+margins of the texts kept intact:
+
+<pre class="example">     /* Make a balanced b-tree of the nodes in the incoming
+      * stream.  But, to quote the famous words of Donald E.
+      * Knuth,
+      *
+      *     Beware of bugs in the above code; I have only
+      *     proved it correct, not tried it.
+      */
+</pre>
+   <p><a name="index-c_002dsetup_002dfilladapt-328"></a><a name="index-setup_002dfilladapt-_0028c_002d_0029-329"></a><a name="index-filladapt_002dmode-330"></a><a name="index-filladapt_002dmode-331"></a><a name="index-Filladapt-mode-332"></a>It's also possible to use other adaptive filling packages, notably Kyle
+E. Jones' Filladapt package<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>,
+<!-- 2005/11/22:  The above is still believed to be the case. -->
+which handles things like bulleted lists nicely.  There's a convenience
+function <code>c-setup-filladapt</code> that tunes the relevant variables in
+Filladapt for use in CC Mode.  Call it from a mode hook, e.g. with
+something like this in your <samp><span class="file">.emacs</span></samp>:
+
+<pre class="example">     (defun my-c-mode-common-hook ()
+       (c-setup-filladapt)
+       (filladapt-mode 1))
+     (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+</pre>
+   <div class="defun">
+&mdash; User Option: <b>c-block-comment-prefix</b><var><a name="index-c_002dblock_002dcomment_002dprefix-333"></a></var><br>
+<blockquote><p><a name="index-block_002dcomment_002dprefix-_0028c_002d_0029-334"></a><a name="index-c_002dcomment_002dcontinuation_002dstars-335"></a><a name="index-comment_002dcontinuation_002dstars-_0028c_002d_0029-336"></a>Normally the comment line prefix inserted for a new line inside a
+comment is deduced from other lines in it.  However there's one
+situation when there's no hint about what the prefix should look like,
+namely when a block comment is broken for the first time.  This style
+variable<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a> is used
+then as the comment prefix.  It defaults to &lsquo;<samp><span class="samp">*
+</span></samp>&rsquo;<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a>, which makes a comment
+
+     <pre class="example">          /* Got O(n^2) here, which is a Bad Thing. */
+</pre>
+        <p class="noindent">break into
+
+     <pre class="example">          /* Got O(n^2) here, which
+           * is a Bad Thing. */
+</pre>
+        <p>Note that it won't work to adjust the indentation by putting leading
+spaces in <code>c-block-comment-prefix</code>, since CC Mode still uses the
+normal indentation engine to indent the line.  Thus, the right way to
+fix the indentation is by customizing the <code>c</code> syntactic symbol.  It
+defaults to <code>c-lineup-C-comments</code>, which handles the indentation of
+most common comment styles, see <a href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>c-ignore-auto-fill</b><var><a name="index-c_002dignore_002dauto_002dfill-337"></a></var><br>
+<blockquote><p><a name="index-ignore_002dauto_002dfill-_0028c_002d_0029-338"></a>When auto fill mode is enabled, CC Mode can selectively ignore it
+depending on the context the line break would occur in, e.g. to never
+break a line automatically inside a string literal.  This variable
+takes a list of symbols for the different contexts where auto-filling
+never should occur:
+
+          <dl>
+<dt><code>string</code><dd>Inside a string or character literal. 
+<br><dt><code>c</code><dd>Inside a C style block comment. 
+<br><dt><code>c++</code><dd>Inside a C++ style line comment. 
+<br><dt><code>cpp</code><dd>Inside a preprocessor directive. 
+<br><dt><code>code</code><dd>Anywhere else, i.e. in normal code. 
+</dl>
+
+        <p>By default, <code>c-ignore-auto-fill</code> is set to <code>(string cpp
+code)</code>, which means that when auto-fill mode is activated,
+auto-filling only occurs in comments.  In literals, it's often
+desirable to have explicit control over newlines.  In preprocessor
+directives, the necessary &lsquo;<samp><span class="samp">\</span></samp>&rsquo; escape character before the newline
+is not automatically inserted, so an automatic line break would
+produce invalid code.  In normal code, line breaks are normally
+dictated by some logical structure in the code rather than the last
+whitespace character, so automatic line breaks there will produce poor
+results in the current implementation. 
+</p></blockquote></div>
+
+   <p><a name="index-comment_002dmulti_002dline-339"></a>If inside a comment and <code>comment-multi-line</code> (see <a href="../emacs/Auto-Fill.html#Auto-Fill">Auto Fill</a> is non-<code>nil</code>, the indentation and
+line prefix are preserved.  If inside a comment and
+<code>comment-multi-line</code> is <code>nil</code>, a new comment of the same
+type is started on the next line and indented as appropriate for
+comments.
+
+   <p>Note that CC Mode sets <code>comment-multi-line</code> to <code>t</code> at
+startup.  The reason is that <kbd>M-j</kbd> could otherwise produce sequences
+of single line block comments for texts that should logically be treated
+as one comment, and the rest of the paragraph handling code
+(e.g. <kbd>M-q</kbd> and <kbd>M-a</kbd>) can't cope with that, which would lead to
+inconsistent behavior.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <code>comment-start</code>, <code>comment-end</code>,
+<code>comment-start-skip</code>, <code>paragraph-start</code>,
+<code>paragraph-separate</code>, <code>paragraph-ignore-fill-prefix</code>,
+<code>adaptive-fill-mode</code>, <code>adaptive-fill-regexp</code>, and
+<code>adaptive-fill-first-line-regexp</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> It's available from
+<a href="http://www.wonderworks.com/">http://www.wonderworks.com/</a>.  As of version 2.12, it does however
+lack a feature that makes it work suboptimally when
+<code>c-comment-prefix-regexp</code> matches the empty string (which it does
+by default).  A patch for that is available from
+<a href="http://cc-mode.sourceforge.net/">the CC Mode web site</a>.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> In versions before 5.26, this variable was called
+<code>c-comment-continuation-stars</code>.  As a compatibility measure,
+CC Mode still uses the value on that variable if it's set.</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> Actually, this default setting of
+<code>c-block-comment-prefix</code> typically gets overridden by the default
+style <code>gnu</code>, which sets it to blank.  You can see the line
+splitting effect described here by setting a different style,
+e.g. <code>k&amp;r</code> See <a href="Choosing-a-Style.html#Choosing-a-Style">Choosing a Style</a>.</p>
+
+   <hr></div>
+
+   </body></html>
+

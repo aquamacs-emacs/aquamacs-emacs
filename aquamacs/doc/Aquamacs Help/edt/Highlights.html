@@ -1,0 +1,202 @@
+<html lang="en">
+<head>
+<title>Highlights - EDT Emulation for Emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="EDT Emulation for Emacs">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Differences.html#Differences" title="Differences">
+<link rel="next" href="Customizing.html#Customizing" title="Customizing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the EDT emulation package for Emacs.
+
+Copyright (C) 1986, 1992, 1994, 1995, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Highlights"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customizing.html#Customizing">Customizing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Differences.html#Differences">Differences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">6 Some Highlights, and Comparisons to the Original Emacs EDT Emulation</h2>
+
+     <ol type=1 start=1>
+
+     <li>The EDT define key command is supported (<code>edt-define-key</code>) and is
+bound to <kbd>C-k</kbd> in the default EDT mode when EDT control sequence
+bindings are enabled, or when the sample <samp><span class="file">edt-user.el</span></samp>
+customization file is used.  The TPU/EVE learn command is supported but
+not bound to a key in the default EDT mode but is bound in the sample
+<samp><span class="file">edt-user.el</span></samp> file.
+
+     <p>Unlike the TPU/EVE learn command, which uses one key to begin the learn
+sequence, <kbd>C-l</kbd>, and another command to remember the sequence,
+<kbd>C-r</kbd>, this version of the learn command (<code>edt-learn</code>) serves
+as a toggle to both begin and to remember the learn sequence.
+
+     <p>Many users who change the meaning of a key with the define key and the
+learn commands, would like to be able to restore the original key
+binding without having to quit and restart emacs.  So a restore key
+command is provided to do just that.  When invoked, it prompts you to
+press the key to which you wish the last replaced key definition
+restored.  It is bound to <kbd>GOLD C-k</kbd> in the default EDT mode when
+EDT control sequence bindings are enabled or the sample
+<samp><span class="file">edt-user.el</span></samp> customization file is used.
+
+     <li>Direction support is fully supported.
+
+     <li>All original Emacs bindings are fully restored when EDT emulation is
+turned off.  So, if a fellow worker comes over to your terminal to help
+you with a software problem, for example, and is completely confused by
+your EDT emulation bindings, just enter the command,
+<code>edt-emulation-off</code>, at the &lsquo;<samp><span class="samp">M-x</span></samp>&rsquo; prompt and the original
+Emacs bindings will be restored.  To resume the EDT emulation, just
+enter <code>edt-emulation-on</code>.
+
+     <li>User custom EDT bindings are kept separate from the default EDT
+bindings.  One can toggle back and forth between the custom EDT bindings
+and default EDT bindings.
+
+     <li>The Emacs functions in <samp><span class="file">edt.el</span></samp> attempt to emulate, where
+practical, the exact behavior of the corresponding EDT keypad mode
+commands.  In a few cases, the emulation is not exact, but we hope you
+will agree it is close enough.  In a very few cases, we chose to use the
+Emacs way of handling things.  As mentioned earlier, we do not emulate
+the EDT &lsquo;<samp><span class="samp">SUBS</span></samp>&rsquo; command.  Instead, we chose to use the Emacs
+<code>query-replace</code> function, which we find to be easier to use.
+
+     <li>Emacs uses the regexp assigned to <code>page-delimiter</code> to determine
+what marks a page break.  This is normally &lsquo;<samp><span class="samp">^\f</span></samp>&rsquo;, which causes the
+<code>edt-page</code> command to ignore form feeds not located at the
+beginning of a line.  To emulate the EDT &lsquo;<samp><span class="samp">PAGE</span></samp>&rsquo; command exactly,
+page-delimiter is set to &lsquo;<samp><span class="samp">\f</span></samp>&rsquo; when EDT emulation is turned on, and
+restored to &lsquo;<samp><span class="samp">^\f</span></samp>&rsquo; when EDT emulation is turned off.  But, since
+some users prefer the Emacs definition of a page break, or may wish to
+preserve a customized definition of page break, one can override the EDT
+definition by placing
+
+     <pre class="example">          (setq edt-keep-current-page-delimiter t)
+</pre>
+     <p class="noindent">in your <samp><span class="file">.emacs</span></samp> file.  Or, you can used the Emacs customize
+command to change its setting.
+
+     <li>The EDT definition of a section of a terminal window is hardwired to be
+16 lines of its one-and-only 24-line window (the EDT &lsquo;<samp><span class="samp">SECT</span></samp>&rsquo; command
+bound to &lt;KP8&gt;).  That's two-thirds of the window at a time.  Since
+Emacs, like TPU/EVE, can handle multiple windows of sizes of other than
+24 lines, the definition of section used here has been modified to
+two-thirds of the current window.  (There is also an
+<code>edt-scroll-window</code> function which you may prefer over the
+&lsquo;<samp><span class="samp">SECT</span></samp>&rsquo; emulation.)
+
+     <li>Cursor movement and deletion involving word entities is identical to
+EDT.  This, above all else, gives the die-hard EDT user a sense of being
+at home.  Also, an emulation of EDT's &lsquo;<samp><span class="samp">SET ENTITY WORD</span></samp>&rsquo; command is
+provided, for those users who like to customize movement by a word at a
+time to their own liking.
+
+     <li>EDT's &lsquo;<samp><span class="samp">FIND</span></samp>&rsquo; and &lsquo;<samp><span class="samp">FNDNXT</span></samp>&rsquo; are supported.
+
+     <li>EDT's &lsquo;<samp><span class="samp">APPEND</span></samp>&rsquo;, &lsquo;<samp><span class="samp">REPLACE</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">SUBS</span></samp>&rsquo; commands are supported.
+
+     <li>&lsquo;<samp><span class="samp">CHNGCASE</span></samp>&rsquo; is supported.  It works on individual characters or
+selected text, if &lsquo;<samp><span class="samp">SELECT</span></samp>&rsquo; is active.  In addition, two new
+commands are provided: <code>edt-lowercase</code> and <code>edt-uppercase</code>. 
+They work on individual <strong>words</strong> or selected text, if
+&lsquo;<samp><span class="samp">SELECT</span></samp>&rsquo; is active.
+
+     <li>Form feed and tab insert commands are supported.
+
+     <li>A new command, <code>edt-duplicate-word</code>, is provided.  If you
+experiment with it, you might find it to be surprisingly useful and may
+wonder how you ever got along without it!  It is assigned to <kbd>C-j</kbd>
+in the sample <samp><span class="file">edt-user.el</span></samp> customization file.
+
+     <li>TPU/EVE's Rectangular Cut and Paste functions (originally from the
+EVE-Plus package) are supported.  But unlike the TPU/EVE versions, these
+here support both insert and overwrite modes.  The seven rectangular
+functions are bound to &lt;F7&gt;, &lt;F8&gt;, <kbd>GOLD-F8</kbd>, &lt;F9&gt;,
+<kbd>GOLD-F9</kbd>, &lt;F10&gt;, and <kbd>GOLD-F10</kbd> in the default EDT mode.
+
+     <li>The original EDT emulation package set up many default regular and GOLD
+bindings.  We tried to preserve most (but not all!) of these, so users
+of the original emulation package will feel more at home.
+
+     <p>Nevertheless, there are still many GOLD key sequences which are not
+bound to any functions.  These are prime candidates to use for your own
+customizations.
+
+     <p>Also, there are several commands in <samp><span class="file">edt.el</span></samp> not bound to any key. 
+So, you will find it worthwhile to look through <samp><span class="file">edt.el</span></samp> for
+functions you may wish to add to your personal customized bindings.
+
+     <li>The VT200/VT300 series terminals steal the function keys &lt;F1&gt; to
+&lt;F5&gt; for their own use.  These do not generate signals which are
+sent to the host.  So, <samp><span class="file">edt.el</span></samp> does not assign any default
+bindings to &lt;F1&gt; through &lt;F5&gt;.
+
+     <p>In addition, our VT220 terminals generate an interrupt when the &lt;F6&gt;
+key is pressed (&lsquo;<samp><span class="samp">^C</span></samp>&rsquo; or &lsquo;<samp><span class="samp">^Y</span></samp>&rsquo;, can't remember which) and not
+the character sequence documented in the manual.  So, binding Emacs
+commands to &lt;F6&gt; will not work if your terminal behaves the same
+way.
+
+     <li>The VT220 terminal has no &lt;ESC&gt;, &lt;BS&gt;, nor &lt;LF&gt; keys, as
+does a VT100.  So the default EDT bindings adopt the standard DEC
+convention of having the &lt;F11&gt;, &lt;F12&gt;, and &lt;F13&gt; keys, on a
+VT200 series (and above) terminal, assigned to the same EDT functions
+that are bound to &lt;ESC&gt;, &lt;BS&gt;, and &lt;LF&gt; on a VT100 terminal.
+
+     <li>Each user, through the use of a private <samp><span class="file">edt-user.el</span></samp> file, can
+customize, very easily, personal EDT emulation bindings.
+
+     <li>The EDT &lsquo;<samp><span class="samp">SELECT</span></samp>&rsquo; and &lsquo;<samp><span class="samp">RESET</span></samp>&rsquo; functions are supported. 
+However, unlike EDT, pressing &lsquo;<samp><span class="samp">RESET</span></samp>&rsquo; to cancel text selection does
+<strong>not</strong> reset the existing setting of the current direction.
+
+     <p>We also provide a TPU/EVE like version of the single &lsquo;<samp><span class="samp">SELECT/RESET</span></samp>&rsquo;
+function, called <code>edt-toggle-select</code>, which makes the EDT
+&lsquo;<samp><span class="samp">SELECT</span></samp>&rsquo; function into a toggle on/off switch.  That is, if
+selection is on, pressing &lsquo;<samp><span class="samp">SELECT</span></samp>&rsquo; again turns selection off
+(cancels selection).  This function is used in the sample
+<samp><span class="file">edt-user.el</span></samp> customization file.
+
+     <li>EDT scroll margins are supported, but are disabled by default. 
+(<a href="Scroll-margins.html#Scroll-margins">Scroll margins</a> for instructions on how to enable them.)
+
+     </ol>
+
+   </body></html>
+

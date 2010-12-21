@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Case Changes - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Actions.html#Actions" title="Actions">
+<link rel="prev" href="Padding-Operators.html#Padding-Operators" title="Padding Operators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Case-Changes"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Padding-Operators.html#Padding-Operators">Padding Operators</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Actions.html#Actions">Actions</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.9.3 Case Changes</h4>
+
+<p><a name="index-Case-changes-202"></a><a name="index-Upcase_002c-enforcing-for-reserved-words-203"></a><a name="index-Downcase_002c-enforcing-for-reserved-words-204"></a>
+Actions can be used to change the case of reserved words or expanded
+abbreviations by customizing the variables
+<code>idlwave-abbrev-change-case</code> and
+<code>idlwave-reserved-word-upcase</code>.  If you want to change the case of
+additional words automatically, put something like the following into
+your <samp><span class="file">.emacs</span></samp> file:
+
+<pre class="lisp">     (add-hook 'idlwave-mode-hook
+       (lambda ()
+          ;;  Capitalize system vars
+          (idlwave-action-and-binding idlwave-sysvar '(capitalize-word 1) t)
+          ;;  Capitalize procedure name
+          (idlwave-action-and-binding "\\&lt;\\(pro\\|function\\)\\&gt;[ \t]*\\&lt;"
+                                      '(capitalize-word 1) t)
+          ;;  Capitalize common block name
+          (idlwave-action-and-binding "\\&lt;common\\&gt;[ \t]+\\&lt;"
+                                      '(capitalize-word 1) t)))
+</pre>
+   <p>For more information, see the documentation string for the function
+<code>idlwave-action-and-binding</code>.  For information on controlling the
+case of routines, keywords, classes, and methods as they are completed, see
+<a href="Completion.html#Completion">Completion</a>.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-abbrev-change-case</b> (<code>nil</code>)<var><a name="index-idlwave_002dabbrev_002dchange_002dcase-205"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means all abbrevs will be forced to either upper or lower
+case.  Valid values are <code>nil</code>, <code>t</code>, and <code>down</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-reserved-word-upcase</b> (<code>nil</code>)<var><a name="index-idlwave_002dreserved_002dword_002dupcase-206"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means reserved words will be made upper case via abbrev
+expansion. 
+</p></blockquote></div>
+
+   </body></html>
+

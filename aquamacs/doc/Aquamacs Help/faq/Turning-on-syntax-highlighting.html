@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Turning on syntax highlighting - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Common-requests.html#Common-requests" title="Common requests">
+<link rel="prev" href="Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options" title="Deleting menus and menu options">
+<link rel="next" href="Scrolling-only-one-line.html#Scrolling-only-one-line" title="Scrolling only one line">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Turning-on-syntax-highlighting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Scrolling-only-one-line.html#Scrolling-only-one-line">Scrolling only one line</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options">Deleting menus and menu options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Common-requests.html#Common-requests">Common requests</a>
+<hr>
+</div>
+
+<h3 class="section">5.44 How do I turn on syntax highlighting?</h3>
+
+<p><a name="index-Syntax-highlighting-314"></a><a name="index-g_t_0040code_007bfont_002dlock_002dmode_007d-315"></a><a name="index-Highlighting-based-on-syntax-316"></a><a name="index-Colorizing-text-317"></a><a name="index-FAQ_002c-_0040code_007bfont_002dlock_002dmode_007d-318"></a>
+<code>font-lock-mode</code> is the standard way to have Emacs perform syntax
+highlighting in the current buffer.  It is enabled by default in Emacs
+22.1 and later.
+
+   <p>With <code>font-lock-mode</code> turned on, different types of text will
+appear in different colors.  For instance, in a programming mode,
+variables will appear in one face, keywords in a second, and comments in
+a third.
+
+   <p>To turn <code>font-lock-mode</code> off within an existing buffer, use
+<kbd>M-x font-lock-mode &lt;RET&gt;</kbd>.
+
+   <p>In Emacs 21 and earlier versions, you could use the following code in
+your <samp><span class="file">.emacs</span></samp> file to turn on <code>font-lock-mode</code> globally:
+
+<pre class="lisp">     (global-font-lock-mode 1)
+</pre>
+   <p>Highlighting a buffer with <code>font-lock-mode</code> can take quite a while,
+and cause an annoying delay in display, so several features exist to
+work around this.
+
+   <p><a name="index-Just_002dIn_002dTime-syntax-highlighting-319"></a>In Emacs 21 and later, turning on <code>font-lock-mode</code> automatically
+activates the new <dfn>Just-In-Time fontification</dfn> provided by
+<code>jit-lock-mode</code>.  <code>jit-lock-mode</code> defers the fontification of
+portions of buffer until you actually need to see them, and can also
+fontify while Emacs is idle.  This makes display of the visible portion
+of a buffer almost instantaneous.  For details about customizing
+<code>jit-lock-mode</code>, type <kbd>C-h f jit-lock-mode &lt;RET&gt;</kbd>.
+
+   <p><a name="index-Levels-of-syntax-highlighting-320"></a><a name="index-Decoration-level_002c-in-_0040code_007bfont_002dlock_002dmode_007d-321"></a>In versions of Emacs before 21, different levels of decoration are
+available, from slight to gaudy.  More decoration means you need to wait
+more time for a buffer to be fontified (or a faster machine).  To
+control how decorated your buffers should become, set the value of
+<code>font-lock-maximum-decoration</code> in your <samp><span class="file">.emacs</span></samp> file, with a
+<code>nil</code> value indicating default (usually minimum) decoration, and a
+<code>t</code> value indicating the maximum decoration.  For the gaudiest
+possible look, then, include the line
+
+<pre class="lisp">     (setq font-lock-maximum-decoration t)
+</pre>
+   <p class="noindent">in your <samp><span class="file">.emacs</span></samp> file.  You can also set this variable such that
+different modes are highlighted in a different ways; for more
+information, see the documentation for
+<code>font-lock-maximum-decoration</code> with <kbd>C-h v</kbd> (or <kbd>M-x
+describe-variable &lt;RET&gt;</kbd>).
+
+   <p>Also see the documentation for the function <code>font-lock-mode</code>,
+available by typing <kbd>C-h f font-lock-mode</kbd> (<kbd>M-x
+describe-function &lt;RET&gt; font-lock-mode &lt;RET&gt;</kbd>).
+
+   <p>To print buffers with the faces (i.e., colors and fonts) intact, use
+<kbd>M-x ps-print-buffer-with-faces</kbd> or <kbd>M-x
+ps-print-region-with-faces</kbd>.  You will need a way to send text to a
+PostScript printer, or a PostScript interpreter such as Ghostscript;
+consult the documentation of the variables <code>ps-printer-name</code>,
+<code>ps-lpr-command</code>, and <code>ps-lpr-switches</code> for more details.
+
+   </body></html>
+

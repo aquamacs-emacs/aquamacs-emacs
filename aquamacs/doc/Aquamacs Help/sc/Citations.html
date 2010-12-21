@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Citations - Supercite User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Supercite User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="What-Supercite-Does.html#What-Supercite-Does" title="What Supercite Does">
+<link rel="next" href="Citation-Elements.html#Citation-Elements" title="Citation Elements">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This document describes Supercite, an Emacs package for citing and
+attributing replies to mail and news messages.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Citations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Citation-Elements.html#Citation-Elements">Citation Elements</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="What-Supercite-Does.html#What-Supercite-Does">What Supercite Does</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+   <p><a name="index-nested-citations-19"></a><a name="index-citation-20"></a>
+
+<h2 class="chapter">2 Citations</h2>
+
+<p>A <dfn>citation</dfn> is the acknowledgement of the original author of a mail
+message in the body of the reply.  There are two basic citation styles
+which Supercite supports.  The first, called <dfn>nested citations</dfn> is
+an anonymous form of citation; in other words, an indication is made
+that the cited line was written by someone <em>other</em> that the current
+message author (i.e., other than you, the person composing the reply),
+but no reference is made as to the identity of the original author. 
+This style should look familiar since its use on the net is widespread. 
+Here's an example of what a message buffer would look like using nested
+citations after multiple replies:
+
+<pre class="example">     &gt;&gt; John originally wrote this
+     &gt;&gt; and this as well
+     &gt; Jane said that John didn't know
+     &gt; what he was talking about
+     And that's what I think too.
+</pre>
+   <p>Note that multiple inclusions of the original messages result in a
+nesting of the &lsquo;<samp><code>&gt;</code></samp>&rsquo; characters.  This can sometimes be quite
+confusing when many levels of citations are included since it may be
+difficult or impossible to figure out who actually participated in the
+thread, and multiple nesting of &lsquo;<samp><code>&gt;</code></samp>&rsquo; characters can sometimes
+make the message very difficult for the eye to scan.
+
+   <p><a name="index-non_002dnested-citations-21"></a>In <dfn>non-nested citations</dfn>, each cited line begins with an
+informative string attributing that line to the original author. Only
+the first level of attribution will be shown; subsequent citations don't
+nest the citation strings. The above dialog might look like this when
+non-nested citations are used:
+
+<pre class="example">     John&gt; John originally wrote this
+     John&gt; and this as well
+     Jane&gt; Jane said that John didn't know
+     Jane&gt; what he was talking about
+     And that's what I think too.
+</pre>
+   <p>Notice here that my inclusion of Jane's inclusion of John's original
+message did not result in a line cited with &lsquo;<samp><span class="samp">Jane&gt;John&gt;</span></samp>&rsquo;.
+
+   <p><a name="index-sc_002dnested_002dcitation_002dp-22"></a><a name="index-nested_002dcitation_002dp-_0028sc_002d_0029-23"></a>Supercite supports both styles of citation, and the variable
+<code>sc-nested-citation-p</code> controls which style it will use when citing
+previously uncited text. When this variable is <code>nil</code> (the default),
+non-nested citations are used.  When non-<code>nil</code>, nested citations
+are used.
+
+   </body></html>
+

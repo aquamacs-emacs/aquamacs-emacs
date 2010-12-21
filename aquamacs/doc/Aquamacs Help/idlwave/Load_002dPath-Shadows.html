@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Load-Path Shadows - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sources-of-Routine-Info.html#Sources-of-Routine-Info" title="Sources of Routine Info">
+<link rel="prev" href="Catalogs.html#Catalogs" title="Catalogs">
+<link rel="next" href="Documentation-Scan.html#Documentation-Scan" title="Documentation Scan">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Load-Path-Shadows"></a>
+<a name="Load_002dPath-Shadows"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Documentation-Scan.html#Documentation-Scan">Documentation Scan</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Catalogs.html#Catalogs">Catalogs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sources-of-Routine-Info.html#Sources-of-Routine-Info">Sources of Routine Info</a>
+<hr>
+</div>
+
+<h3 class="appendixsec">A.4 Load-Path Shadows</h3>
+
+<p><a name="index-Load_002dpath-shadows-375"></a><a name="index-Shadows_002c-load_002dpath-376"></a><a name="index-Duplicate-routines-377"></a><a name="index-Multiply-defined-routines-378"></a><a name="index-Routine-definitions_002c-multiple-379"></a><a name="index-Application_002c-testing-for-shadowing-380"></a><a name="index-Buffer_002c-testing-for-shadowing-381"></a>
+IDLWAVE can compile a list of routines which are (re-)defined in more
+than one file.  Since one definition will hide (shadow) the others
+depending on which file is compiled first, such multiple definitions are
+called "load-path shadows".  IDLWAVE has several routines to scan for
+load path shadows.  The output is placed into the special buffer
+<samp><span class="file">*Shadows*</span></samp>.  The format of the output is identical to the source
+section of the routine info buffer (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>).  The
+different definitions of a routine are ordered by <em>likelihood of
+use</em>.  So the first entry will be most likely the one you'll get if an
+unsuspecting command uses that routine.  Before listing shadows, you
+should make sure that routine info is up-to-date by pressing <kbd>C-c
+C-i</kbd>.  Here are the different routines (also available in the Menu
+&lsquo;<samp><span class="samp">IDLWAVE-&gt;Routine Info</span></samp>&rsquo;):
+
+     <dl>
+<dt><kbd>M-x idlwave-list-buffer-load-path-shadows</kbd><dd>This command checks the names of all routines defined in the current
+buffer for shadowing conflicts with other routines accessible to
+IDLWAVE.  The command also has a key binding: <kbd>C-c C-b</kbd>
+<br><dt><kbd>M-x idlwave-list-shell-load-path-shadows</kbd>.<dd>Checks all routines compiled under the shell for shadowing.  This is
+very useful when you have written a complete application.  Just compile
+the application, use <code>RESOLVE_ALL</code> to compile any routines used by
+your code, update the routine info inside IDLWAVE with <kbd>C-c C-i</kbd> and
+then check for shadowing. 
+<br><dt><kbd>M-x idlwave-list-all-load-path-shadows</kbd><dd>This command checks all routines accessible to IDLWAVE for conflicts. 
+</dl>
+
+   <p>For these commands to work fully you need to scan the entire load path
+in either a user or library catalog.  Also, IDLWAVE should be able to
+distinguish between the system library files (normally installed in
+<samp><span class="file">/usr/local/rsi/idl/lib</span></samp>) and any site specific or user specific
+files.  Therefore, such local files should not be installed inside the
+<samp><span class="file">lib</span></samp> directory of the IDL directory.  This is also advisable for
+many other reasons.
+
+   <p><a name="index-Windows-382"></a><a name="index-MacOS-383"></a><a name="index-IDL-variable-_0040code_007b_0021DIR_007d-384"></a><a name="index-g_t_0040code_007b_0021DIR_007d_002c-IDL-variable-385"></a>Users of Windows and MacOS (not X) also must set the variable
+<code>idlwave-system-directory</code> to the value of the <code>!DIR</code> system
+variable in IDL.  IDLWAVE appends <samp><span class="file">lib</span></samp> to the value of this
+variable and assumes that all files found on that path are system
+routines.
+
+   <p>Another way to find out if a specific routine has multiple definitions
+on the load path is routine info display (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>).
+
+   </body></html>
+

@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Expanding aliases when sending mail - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mail-and-news.html#Mail-and-news" title="Mail and news">
+<link rel="prev" href="Saving-a-copy-of-outgoing-mail.html#Saving-a-copy-of-outgoing-mail" title="Saving a copy of outgoing mail">
+<link rel="next" href="Sorting-the-messages-in-an-Rmail-folder.html#Sorting-the-messages-in-an-Rmail-folder" title="Sorting the messages in an Rmail folder">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Expanding-aliases-when-sending-mail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sorting-the-messages-in-an-Rmail-folder.html#Sorting-the-messages-in-an-Rmail-folder">Sorting the messages in an Rmail folder</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Saving-a-copy-of-outgoing-mail.html#Saving-a-copy-of-outgoing-mail">Saving a copy of outgoing mail</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mail-and-news.html#Mail-and-news">Mail and news</a>
+<hr>
+</div>
+
+<h3 class="section">12.3 Why doesn't Emacs expand my aliases when sending mail?</h3>
+
+<p><a name="index-Expanding-aliases-when-sending-mail-509"></a><a name="index-Mail-alias-expansion-510"></a><a name="index-Sending-mail-with-aliases-511"></a>
+See <a href="../emacs/Mail-Aliases.html#Mail-Aliases">The Emacs Manual</a>.
+
+     <ul>
+<li>Normally, Emacs expands aliases when you send the message. 
+To expand them before this, use <kbd>M-x expand-mail-aliases</kbd>.
+
+     <!-- FIXME there should be an interactive rebuild command for this. -->
+     <li>Emacs normally only reads the <samp><span class="file">.mailrc</span></samp> file once per session,
+when you start to compose your first mail message.  If you edit
+<samp><span class="file">.mailrc</span></samp>, you can type <kbd>M-: (build-mail-aliases) &lt;RET&gt;</kbd> to
+make Emacs reread <samp><span class="file">~/.mailrc</span></samp>.
+
+     <li>If you like, you can expand mail aliases as abbrevs, as soon as you
+type them in.  To enable this feature, execute the following:
+
+     <pre class="lisp">          (add-hook 'mail-mode-hook 'mail-abbrevs-setup)
+</pre>
+     <p>Note that the aliases are expanded automatically only after you type
+a word-separator character (e.g. &lt;RET&gt; or <kbd>,</kbd>).  You can force their
+expansion by moving point to the end of the alias and typing <kbd>C-x a e</kbd>
+(<kbd>M-x expand-abbrev</kbd>). 
+</ul>
+
+   </body></html>
+

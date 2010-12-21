@@ -1,0 +1,418 @@
+<html lang="en">
+<head>
+<title>Scan Line Formats - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Miscellaneous.html#Miscellaneous" title="Miscellaneous">
+<link rel="next" href="Procmail.html#Procmail" title="Procmail">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Scan-Line-Formats"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Procmail.html#Procmail">Procmail</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix A Scan Line Formats</h2>
+
+<p><a name="index-scan-line-formats-2094"></a>
+This appendix discusses how MH-E creates, parses, and manipulates scan
+lines. If you have your own MH scan or inc format files, you
+<strong>can</strong> teach MH-E how to handle them, but it isn't easy as
+you'll see.
+
+   <p><a name="index-g_t_0040samp_007bmh_002dscan_002dline_002dformats_007d-customization-group-2095"></a><a name="index-customization-group_002c-_0040samp_007bmh_002dscan_002dline_002dformats_007d-2096"></a>
+This table lists the options in the &lsquo;<samp><span class="samp">mh-scan-line-formats</span></samp>&rsquo;
+customization group.
+
+     <dl>
+<dt><code>mh-adaptive-cmd-note-flag</code><a name="index-mh_002dadaptive_002dcmd_002dnote_002dflag-2097"></a><dd>On means that the message number width is determined dynamically
+(default: &lsquo;<samp><span class="samp">on</span></samp>&rsquo;). 
+<!--  -->
+<br><dt><code>mh-scan-format-file</code><a name="index-mh_002dscan_002dformat_002dfile-2098"></a><dd>Specifies the format file to pass to the scan program (default:
+&lsquo;<samp><span class="samp">Use MH-E scan Format</span></samp>&rsquo;). 
+<!--  -->
+<br><dt><code>mh-scan-prog</code><a name="index-mh_002dscan_002dprog-2099"></a><dd>Program used to scan messages (default: <code>"scan"</code>). 
+</dl>
+
+   <p><a name="index-mh_002dadaptive_002dcmd_002dnote_002dflag-2100"></a>
+There are a couple of caveats when creating your own scan format file. 
+First, MH-E will not work if your scan lines do not include message
+numbers. It will work poorly if you don't dedicate a column for
+showing the current message and notations. It is also best to keep the
+first column empty to make room for the cursor and so that text isn't
+obscured by the current message's overlay arrow when running in a
+terminal. You won't be able to use the option
+<code>mh-adaptive-cmd-note-flag</code> or the threading features
+(see <a href="Threading.html#Threading">Threading</a>).
+
+   <p><a name="index-message-numbers-2101"></a><a name="index-mh_002dset_002dcmd_002dnote-2102"></a><a name="index-mh_002dadaptive_002dcmd_002dnote_002dflag-2103"></a><a name="index-mh_002dscan_002dformat_002dfile-2104"></a>
+If you've created your own format to handle long message numbers,
+you'll be pleased to know you no longer need it since MH-E adapts its
+internal format based upon the largest message number if
+<code>mh-adaptive-cmd-note-flag</code> is on (the default). If you prefer
+fixed-width message numbers, turn off <code>mh-adaptive-cmd-note-flag</code>
+and call <code>mh-set-cmd-note</code> with the width specified by your
+format file (see <code>mh-scan-format-file</code>). For example, the default
+width is 4, so you would use &lsquo;<samp><span class="samp">(mh-set-cmd-note 4)</span></samp>&rsquo;.
+
+   <p><a name="index-mh_002dadaptive_002dcmd_002dnote_002dflag-2105"></a><a name="index-mh_002dscan_002dformat_002dfile-2106"></a><a name="index-mh_002dscan_002dformat_002dmh-2107"></a><a name="index-mh_002dscan_002dformat_002dnmh-2108"></a>
+The default setting for <code>mh-scan-format-file</code> is &lsquo;<samp><span class="samp">Use MH-E
+scan Format</span></samp>&rsquo;. This means that the format string will be taken from the
+either <code>mh-scan-format-mh</code> or <code>mh-scan-format-nmh</code> depending
+on whether MH or nmh (or GNU mailutils MH) is in use. This setting
+also enables you to turn on the option
+<code>mh-adaptive-cmd-note-flag</code>. You can also set this option to
+&lsquo;<samp><span class="samp">Use Default scan Format</span></samp>&rsquo; to get the same output as you would get
+if you ran <samp><span class="command">scan</span></samp> from the shell. If you have a format file
+that you want MH-E to use but not MH, you can set this option to
+&lsquo;<samp><span class="samp">Specify a scan Format File</span></samp>&rsquo; and enter the name of your format
+file.
+
+   <p><a name="index-mh_002dscan_002dformat_002dfile-2109"></a><a name="index-mh_002dscan_002dformat_002dmh-2110"></a><a name="index-mh_002dscan_002dformat_002dnmh-2111"></a>
+The scan format that MH-E uses when <code>mh-scan-format-file</code> is set
+to its default of &lsquo;<samp><span class="samp">Use MH-E scan Format</span></samp>&rsquo; is held in the variables
+<code>mh-scan-format-nmh</code> and <code>mh-scan-format-mh</code> depending on
+whether you are using nmh (or GNU mailutils MH) or not. Typically, you
+create your own format files rather than modifying these variables. 
+The value of <code>mh-scan-format-nmh</code> is:
+
+<pre class="smallexample">     (concat
+      "%4(msg)"
+      "%&lt;(cur)+%| %&gt;"
+      "%&lt;{replied}-"
+      "%?(nonnull(comp{to}))%&lt;(mymbox{to})t%&gt;"
+      "%?(nonnull(comp{cc}))%&lt;(mymbox{cc})c%&gt;"
+      "%?(nonnull(comp{bcc}))%&lt;(mymbox{bcc})b%&gt;"
+      "%?(nonnull(comp{newsgroups}))n%&gt;"
+      "%&lt;(zero) %&gt;"
+      "%02(mon{date})/%02(mday{date})%&lt;{date} %|*%&gt;"
+      "%&lt;(mymbox{from})%&lt;{to}To:%14(decode(friendly{to}))%&gt;%&gt;"
+      "%&lt;(zero)%17(decode(friendly{from}))%&gt;  "
+      "%(decode{subject})%&lt;{body}&lt;&lt;%{body}%&gt;")
+</pre>
+   <p><a name="index-decoding-RFC-2047-2112"></a><a name="index-RFC-2047_002c-decoding-2113"></a><a name="index-mh_002dscan_002dformat_002dmh-2114"></a>
+The setting for <code>mh-scan-format-mh</code> is similar, except that MH
+doesn't have the function <code>decode</code> (which is used to decode RFC
+2047 encodings).
+
+   <p><a name="index-notations_002c-scan-line-2115"></a><a name="index-scan-line-notations-2116"></a>
+These strings are passed to the <samp><span class="command">scan</span></samp> program via the
+<samp><span class="option">-format</span></samp> argument. The formats are identical to the defaults
+except that additional hints for fontification have been added to the
+existing notations in the fifth column (remember that in Emacs, the
+columns start at 0). The values of the fifth column, in priority
+order, are: &lsquo;<samp><span class="samp">-</span></samp>&rsquo; if the message has been replied to, &lsquo;<samp><span class="samp">t</span></samp>&rsquo; if
+an address in the &lsquo;<samp><span class="samp">To:</span></samp>&rsquo; field matches one of the mailboxes of the
+current user, &lsquo;<samp><span class="samp">c</span></samp>&rsquo; if the &lsquo;<samp><span class="samp">Cc:</span></samp>&rsquo; field matches, &lsquo;<samp><span class="samp">b</span></samp>&rsquo; if
+the &lsquo;<samp><span class="samp">Bcc:</span></samp>&rsquo; field matches, and &lsquo;<samp><span class="samp">n</span></samp>&rsquo; if a non-empty
+&lsquo;<samp><span class="samp">Newsgroups:</span></samp>&rsquo; field is present.
+
+   <p><a name="index-g_t_0040command_007bscan_007d-2117"></a><a name="index-MH-commands_002c-_0040command_007bscan_007d-2118"></a><a name="index-mh_002dprogs-2119"></a><a name="index-mh_002dscan_002dprog-2120"></a>
+The name of the program that generates a listing of one line per
+message is held in <code>mh-scan-prog</code> (default: <code>"scan"</code>). 
+Unless this variable contains an absolute pathname, it is assumed to
+be in the <code>mh-progs</code> directory (see <a href="Getting-Started.html#Getting-Started">Getting Started</a>). You may
+link another program to <samp><span class="command">scan</span></samp> (see &lsquo;<samp><span class="samp">mh-profile</span></samp>&rsquo;(5)) to
+produce a different type of listing<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p><a name="index-regular-expressions_002c-scan-line-formats-2121"></a><a name="index-mh_002dset_002dcmd_002dnote-2122"></a><a name="index-setq-2123"></a>
+If you change the format of the scan lines you'll need to tell MH-E
+how to parse the new format. As you will see, quite a lot of variables
+are involved to do that. Use <kbd>M-x apropos &lt;RET&gt;
+mh-scan.*regexp &lt;RET&gt;</kbd> to obtain a list of these variables. You
+will also have to call <code>mh-set-cmd-note</code> if your notations are
+not in column 4 (columns in Emacs start with 0). Note that unlike most
+of the user options described in this manual, these are variables and
+must be set with <code>setq</code> instead of in a customization buffer. For
+help with regular expressions, see
+section
+<a href="http://www.gnu.org/software/emacs/manual/html_node/Regexps.html">Syntax of Regular Expressions</a> in <cite>The GNU Emacs Manual</cite>.
+
+   <p>The first variable has to do with pruning out garbage.
+
+     
+<a name="index-g_t_0040command_007binc_007d-2124"></a>
+<a name="index-MH-commands_002c-_0040command_007binc_007d-2125"></a>
+<a name="index-g_t_0040command_007bscan_007d-2126"></a>
+<a name="index-MH-commands_002c-_0040command_007bscan_007d-2127"></a>
+<dl><dt><code>mh-scan-valid-regexp</code><a name="index-mh_002dscan_002dvalid_002dregexp-2128"></a><dd>This regular expression describes a valid scan line. This is used to
+eliminate error messages that are occasionally produced by
+<samp><span class="command">inc</span></samp><a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> or <samp><span class="command">scan</span></samp> (default: <code>"^ *[0-9]"</code>). 
+</dl>
+
+   <p>Next, many variables control how the scan lines are parsed.
+
+     
+<a name="index-mh_002dfolder_002dbody-2129"></a>
+<a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2130"></a>
+<dl><dt><code>mh-scan-body-regexp</code><a name="index-mh_002dscan_002dbody_002dregexp-2131"></a><dd>This regular expression matches the message body fragment. Note that
+the default setting of <code>mh-folder-font-lock-keywords</code> expects
+this expression to contain at least one parenthesized expression which
+matches the body text as in the default of
+<code>"\\(&lt;&lt;\\([^\n]+\\)?\\)"</code>. If this regular expression is not
+correct, the body fragment will not be highlighted with the face
+<code>mh-folder-body</code>. 
+<!--  -->
+<a name="index-mh_002dfolder_002dcur_002dmsg_002dnumber-2132"></a><a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2133"></a><a name="index-mh_002dnote_002dcur-2134"></a><br><dt><code>mh-scan-cur-msg-number-regexp</code><a name="index-mh_002dscan_002dcur_002dmsg_002dnumber_002dregexp-2135"></a><dd>This regular expression matches the current message. It must match
+from the beginning of the line. Note that the default setting of
+<code>mh-folder-font-lock-keywords</code> expects this expression to contain
+at least one parenthesized expression which matches the message number
+as in the default of <code>"^\\(&nbsp;*[0-9]+\\+\\).*"</code><!-- /@w -->. This
+expression includes the leading space and current message marker
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; within the parenthesis since it looks better to highlight
+these items as well. The highlighting is done with the face
+<code>mh-folder-cur-msg-number</code>. This regular expression should be
+correct as it is needed by non-fontification functions. See also
+<code>mh-note-cur</code>. 
+<!--  -->
+<a name="index-mh_002dfolder_002ddate-2136"></a><a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2137"></a><a name="index-mh_002dscan_002dsent_002dto_002dme_002dsender_002dregexp-2138"></a><br><dt><code>mh-scan-date-regexp</code><a name="index-mh_002dscan_002ddate_002dregexp-2139"></a><dd>This regular expression matches a valid date. It must <strong>not</strong> be
+anchored to the beginning or the end of the line. Note that the
+default setting of <code>mh-folder-font-lock-keywords</code> expects this
+expression to contain only one parenthesized expression which matches
+the date field as in the default of
+<code>"\\([0-9][0-9]/[0-9][0-9]\\)"</code>. If this regular expression is
+not correct, the date will not be highlighted with the face
+<code>mh-folder-date</code>. 
+<!--  -->
+<a name="index-mh_002dfolder_002ddeleted-2140"></a><a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2141"></a><a name="index-mh_002dnote_002ddeleted-2142"></a><br><dt><code>mh-scan-deleted-msg-regexp</code><a name="index-mh_002dscan_002ddeleted_002dmsg_002dregexp-2143"></a><dd>This regular expression matches deleted messages. It must match from
+the beginning of the line. Note that the default setting of
+<code>mh-folder-font-lock-keywords</code> expects this expression to contain
+at least one parenthesized expression which matches the message number
+as in the default of <code>"^\\( *[0-9]+\\)D"</code>. This expression
+includes the leading space within the parenthesis since it looks
+better to highlight it as well. The highlighting is done with the face
+<code>mh-folder-deleted</code>. This regular expression should be correct as
+it is needed by non-fontification functions. See also
+<code>mh-note-deleted</code>. 
+<!--  -->
+<a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2144"></a><a name="index-mh_002dfolder_002dmsg_002dnumber-2145"></a><br><dt><code>mh-scan-good-msg-regexp</code><a name="index-mh_002dscan_002dgood_002dmsg_002dregexp-2146"></a><dd>This regular expression matches &ldquo;good&rdquo; messages. It must match from
+the beginning of the line. Note that the default setting of
+<code>mh-folder-font-lock-keywords</code> expects this expression to contain
+at least one parenthesized expression which matches the message number
+as in the default of <code>"^\\(&nbsp;*[0-9]+\\)[^D^0-9]"</code><!-- /@w -->. This
+expression includes the leading space within the parenthesis since it
+looks better to highlight it as well. The highlighting is done with
+the face <code>mh-folder-msg-number</code>. This regular expression should
+be correct as it is needed by non-fontification functions. 
+<!--  -->
+<a name="index-mh_002dscan_002dformat_002dfile-2147"></a><br><dt><code>mh-scan-msg-format-regexp</code><a name="index-mh_002dscan_002dmsg_002dformat_002dregexp-2148"></a><dd>This regular expression finds the message number width in a scan
+format. Note that the message number must be placed in a parenthesized
+expression as in the default of <code>"%\\([0-9]*\\)(msg)"</code>. This
+variable is only consulted if <code>mh-scan-format-file</code> is set to
+&lsquo;<samp><span class="samp">Use MH-E scan Format</span></samp>&rsquo;. 
+<!--  -->
+<a name="index-mh_002dscan_002dformat_002dfile-2149"></a><br><dt><code>mh-scan-msg-format-string</code><a name="index-mh_002dscan_002dmsg_002dformat_002dstring-2150"></a><dd>This is a format string for the width of the message number in a scan
+format. Use &lsquo;<samp><span class="samp">0%d</span></samp>&rsquo; for zero-filled message numbers. This variable
+is only consulted if <code>mh-scan-format-file</code> is set to &lsquo;<samp><span class="samp">Use
+MH-E scan Format</span></samp>&rsquo; (default: <code>"%d"</code>). 
+<!--  -->
+<br><dt><code>mh-scan-msg-number-regexp</code><a name="index-mh_002dscan_002dmsg_002dnumber_002dregexp-2151"></a><dd>This regular expression extracts the message number. It must match
+from the beginning of the line. Note that the message number must be
+placed in a parenthesized expression as in the default of <code>"^&nbsp;*\\([0-9]+\\)"</code><!-- /@w -->. 
+<!--  -->
+<br><dt><code>mh-scan-msg-overflow-regexp</code><a name="index-mh_002dscan_002dmsg_002doverflow_002dregexp-2152"></a><dd>This regular expression matches overflowed message numbers (default:
+<code>"^[?0-9][0-9]"</code>). 
+<!--  -->
+<br><dt><code>mh-scan-msg-search-regexp</code><a name="index-mh_002dscan_002dmsg_002dsearch_002dregexp-2153"></a><dd>This regular expression matches a particular message. It is a format
+string; use &lsquo;<samp><span class="samp">%d</span></samp>&rsquo; to represent the location of the message number
+within the expression as in the default of <code>"^[^0-9]*%d[^0-9]"</code>. 
+<!--  -->
+<a name="index-mh_002dfolder_002daddress-2154"></a><a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2155"></a><a name="index-mh_002dfolder_002dto-2156"></a><br><dt><code>mh-scan-rcpt-regexp</code><a name="index-mh_002dscan_002drcpt_002dregexp-2157"></a><dd>This regular expression specifies the recipient in messages you sent. 
+Note that the default setting of <code>mh-folder-font-lock-keywords</code>
+expects this expression to contain two parenthesized expressions. The
+first is expected to match the &lsquo;<samp><span class="samp">To:</span></samp>&rsquo; that the default scan format
+file generates. The second is expected to match the recipient's name
+as in the default of <code>"\\(To:\\)\\(..............\\)"</code>. If this
+regular expression is not correct, the &lsquo;<samp><span class="samp">To:</span></samp>&rsquo; string will not be
+highlighted with the face <code>mh-folder-to</code> and the recipient will not be
+highlighted with the face <code>mh-folder-address</code>. 
+<!--  -->
+<a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2158"></a><a name="index-mh_002dfolder_002drefiled-2159"></a><a name="index-mh_002dnote_002drefiled-2160"></a><br><dt><code>mh-scan-refiled-msg-regexp</code><a name="index-mh_002dscan_002drefiled_002dmsg_002dregexp-2161"></a><dd>This regular expression matches refiled messages. It must match from
+the beginning of the line. Note that the default setting of
+<code>mh-folder-font-lock-keywords</code> expects this expression to contain
+at least one parenthesized expression which matches the message number
+as in the default of <code>"^\\(&nbsp;*[0-9]+\\)\\^"</code><!-- /@w -->. This expression
+includes the leading space within the parenthesis since it looks
+better to highlight it as well. The highlighting is done with the face
+<code>mh-folder-refiled</code>. This regular expression should be correct as
+it is needed by non-fontification functions. See also
+<code>mh-note-refiled</code>. 
+<!--  -->
+<a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2162"></a><a name="index-mh_002dfolder_002dsent_002dto_002dme_002dsender-2163"></a><a name="index-mh_002dmh_002dfolder_002dsent_002dto_002dme_002dhint-2164"></a><a name="index-mh_002dscan_002dformat_002dnmh-2165"></a><br><dt><code>mh-scan-sent-to-me-sender-regexp</code><a name="index-mh_002dscan_002dsent_002dto_002dme_002dsender_002dregexp-2166"></a><dd>This regular expression matches messages sent to us. Note that the
+default setting of <code>mh-folder-font-lock-keywords</code> expects this
+expression to contain at least two parenthesized expressions. The
+first should match the fontification hint (see
+<code>mh-scan-format-nmh</code>) and the second should match the user name
+as in the default of
+<code>"^&nbsp;*[0-9]+.\\([bct]\\).....[&nbsp;]*\\(..................\\)"</code><!-- /@w -->. 
+If this regular expression is not correct, the notation hints will not
+be highlighted with the face <code>mh-mh-folder-sent-to-me-hint</code> and
+the sender will not be highlighted with the face
+<code>mh-folder-sent-to-me-sender</code>. 
+<!--  -->
+<a name="index-mh_002dfolder_002dfollowup-2167"></a><a name="index-mh_002dfolder_002dfont_002dlock_002dkeywords-2168"></a><a name="index-mh_002dfolder_002dsubject-2169"></a><br><dt><code>mh-scan-subject-regexp</code><a name="index-mh_002dscan_002dsubject_002dregexp-2170"></a><dd>This regular expression matches the subject. It must match from the
+beginning of the line. Note that the default setting of
+&lsquo;<samp><span class="samp">mh-folder-font-lock-keywords</span></samp>&rsquo; expects this expression to contain
+at least three parenthesized expressions. The first is expected to
+match the &lsquo;<samp><span class="samp">Re:</span></samp>&rsquo; string, if any, and is highlighted with the face
+<code>mh-folder-followup</code>. The second matches an optional bracketed
+number after &lsquo;<samp><span class="samp">Re:</span></samp>&rsquo;, such as in &lsquo;<samp><span class="samp">Re[2]:</span></samp>&rsquo; (and is thus a
+sub-expression of the first expression). The third is expected to
+match the subject line itself which is highlighted with the face
+<code>mh-folder-subject</code>. For example, the default is
+<code>"^&nbsp;*[0-9]+........[&nbsp;]*...................</code><!-- /@w --><br>
+<code>\\([Rr][Ee]\\(\\[[0-9]+\\]\\)?:\\s-*\\)*\\([^&lt;\n]*\\)"</code><!-- /@w -->. 
+This regular expression should be correct as it is needed by
+non-fontification functions. Note that this example is broken up on
+two lines for readability, but is actually a single string. 
+</dl>
+
+   <p>Finally, there are a slew of variables that control how MH-E annotates
+the scan lines.
+
+     
+<a name="index-mh_002dset_002dcmd_002dnote-2171"></a>
+<a name="index-mh_002dadaptive_002dcmd_002dnote_002dflag-2172"></a>
+<dl><dt><code>mh-cmd-note</code><a name="index-mh_002dcmd_002dnote-2173"></a><dd>Column for notations (default: 4). This variable should be set with
+the function <code>mh-set-cmd-note</code>. This variable may be updated
+dynamically if <code>mh-adaptive-cmd-note-flag</code> is on. The following
+variables contain the notational characters. Note that columns in
+Emacs start with 0. 
+<!--  -->
+<br><dt><code>mh-note-copied</code><a name="index-mh_002dnote_002dcopied-2174"></a><dd>Messages that have been copied are marked by this character (default:
+<code>?C</code>). 
+<!--  -->
+<a name="index-mh_002dscan_002dcur_002dmsg_002dnumber_002dregexp-2175"></a><br><dt><code>mh-note-cur</code><a name="index-mh_002dnote_002dcur-2176"></a><dd>The current message (in MH, not in MH-E) is marked by this character
+(default: <code>?+</code>). See also <code>mh-scan-cur-msg-number-regexp</code>. 
+<!--  -->
+<a name="index-mh_002dscan_002ddeleted_002dmsg_002dregexp-2177"></a><br><dt><code>mh-note-deleted</code><a name="index-mh_002dnote_002ddeleted-2178"></a><dd>Messages that have been deleted are marked by this character (default:
+<code>?D</code>). See also <code>mh-scan-deleted-msg-regexp</code>. 
+<!--  -->
+<br><dt><code>mh-note-dist</code><a name="index-mh_002dnote_002ddist-2179"></a><dd>Messages that have been redistributed are marked by this character
+(default: <code>?R</code>). 
+<!--  -->
+<br><dt><code>mh-note-forw</code><a name="index-mh_002dnote_002dforw-2180"></a><dd>Messages that have been forwarded are marked by this character
+(default: <code>?F</code>). 
+<!--  -->
+<br><dt><code>mh-note-printed</code><a name="index-mh_002dnote_002dprinted-2181"></a><dd>Messages that have been printed are marked by this character (default:
+<code>?P</code>). 
+<!--  -->
+<a name="index-mh_002dscan_002drefiled_002dmsg_002dregexp-2182"></a><br><dt><code>mh-note-refiled</code><a name="index-mh_002dnote_002drefiled-2183"></a><dd>Messages that have been refiled are marked by this character (default:
+<code>?^</code>). See also <code>mh-scan-refiled-msg-regexp</code>. 
+<!--  -->
+<br><dt><code>mh-note-repl</code><a name="index-mh_002dnote_002drepl-2184"></a><dd>Messages that have been replied to are marked by this character
+(default: <code>?-</code>). 
+<!--  -->
+<br><dt><code>mh-note-seq</code><a name="index-mh_002dnote_002dseq-2185"></a><dd>Messages in a user-defined sequence are marked by this character
+(default: <code>?%</code>). Messages in the &lsquo;<samp><span class="samp">search</span></samp>&rsquo; sequence are
+marked by this character as well. 
+</dl>
+
+   <p>For example, let's say I have the following in <samp><span class="file">scan.format</span></samp>
+which displays the sender, the subject, and the message number. This
+format places a &lsquo;<samp><span class="samp">+</span></samp>&rsquo; after the message number for the current
+message according to MH; it also uses that column for notations.
+
+<pre class="smallexample">     %20(decode(friendly{from})) %50(decode{subject})  %4(msg)%&lt;(cur)+%| %&gt;
+</pre>
+   <p><a name="index-mh_002dadaptive_002dcmd_002dnote_002dflag-2186"></a><a name="index-mh_002dscan_002dformat_002dfile-2187"></a><a name="index-mh_002dscan_002dformat_002dfile_002c-example-2188"></a>
+The first thing you have to do is tell MH-E to use this file. 
+Customize <code>mh-scan-format-file</code> and set its value to &lsquo;<samp><span class="samp">Use
+Default scan Format</span></samp>&rsquo;. If you didn't get already turn off
+<code>mh-adaptive-cmd-note-flag</code>, you'll need to do that first.
+
+   <p>Next, tell MH-E what a valid scan line looks like so that you can at
+least display the output of scan in your MH-Folder buffer.
+
+   <p><a name="index-mh_002dscan_002dvalid_002dregexp_002c-example-2189"></a>
+<pre class="smalllisp">     (setq mh-scan-valid-regexp "[0-9]+[+D^ ]$")
+</pre>
+   <p>Now, in order to get rid of the &lsquo;<samp><span class="samp">Cursor not pointing to message</span></samp>&rsquo;
+message, you need to tell MH-E how to access the message number. You
+should also see why MH-E requires that you include a message number in
+the first place.
+
+   <p><a name="index-mh_002dscan_002dmsg_002dnumber_002dregexp_002c-example-2190"></a><a name="index-mh_002dscan_002dmsg_002dsearch_002dregexp_002c-example-2191"></a>
+<pre class="smalllisp">     (setq mh-scan-msg-number-regexp "^.* \\([0-9]+\\)[+D^ ]$")
+     (setq mh-scan-msg-search-regexp " %d[+D^ ]$")
+</pre>
+   <p>In order to get the next and previous commands working, add this.
+
+   <p><a name="index-mh_002dscan_002dgood_002dmsg_002dregexp_002c-example-2192"></a>
+<pre class="smalllisp">     (setq mh-scan-good-msg-regexp "^.* \\([0-9]+\\)[+D^ ]$")
+</pre>
+   <p>Note that the current message isn't marked with a &lsquo;<samp><span class="samp">+</span></samp>&rsquo; when moving
+between the next and previous messages. Here is the code required to
+get this working.
+
+   <p><a name="index-set_002dmh_002dcmd_002dnote_002c-example-2193"></a><a name="index-mh_002dscan_002dcur_002dmsg_002dnumber_002dregexp_002c-example-2194"></a>
+<pre class="smalllisp">     (set-mh-cmd-note 76)
+     (setq mh-scan-cur-msg-number-regexp "^.* \\([0-9]+\\)\\+$")
+</pre>
+   <p>Finally, add the following to delete and refile messages.
+
+   <p><a name="index-mh_002dscan_002ddeleted_002dmsg_002dregexp_002c-example-2195"></a><a name="index-mh_002dscan_002drefiled_002dmsg_002dregexp_002c-example-2196"></a>
+<pre class="smalllisp">     (setq mh-scan-deleted-msg-regexp "^.* \\([0-9]+\\)D$")
+     (setq mh-scan-refiled-msg-regexp "^.* \\([0-9]+\\)\\^$")
+</pre>
+   <p>This is just a bare minimum; it's best to adjust all of the regular
+expressions to ensure that MH-E and highlighting perform well.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/faswsprs.html">Find and Specify with scan pick Ranges Sequences</a> in the MH book.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/reapre.html">Reading Mail: inc show next prev</a> in the MH book.</p>
+
+   <hr></div>
+
+   </body></html>
+

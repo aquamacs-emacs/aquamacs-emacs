@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Custom Braces - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hanging-Braces.html#Hanging-Braces" title="Hanging Braces">
+<link rel="prev" href="Hanging-Braces.html#Hanging-Braces" title="Hanging Braces">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Custom-Braces"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">8.1.1 Custom Brace Hanging</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p><a name="index-c_002dhanging_002dbraces_002dalist-343"></a><a name="index-hanging_002dbraces_002dalist-_0028c_002d_0029-344"></a><a name="index-action-functions-345"></a>Syntactic symbols aren't the only place where you can customize
+CC Mode with the lisp equivalent of callback functions.  Remember
+that <var>action</var>s are usually a list containing some combination of
+the symbols <code>before</code> and <code>after</code> (see <a href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a>). 
+For more flexibility, you can instead specify brace &ldquo;hanginess&rdquo; by
+giving a syntactic symbol an <dfn>action function</dfn> in
+<code>c-hanging-braces-alist</code>; this function determines the
+&ldquo;hanginess&rdquo; of a brace, usually by looking at the code near it.
+
+   <p><a name="index-customization_002c-brace-hanging-346"></a>An action function is called with two arguments: the syntactic symbol
+for the brace (e.g. <code>substatement-open</code>), and the buffer position
+where the brace has been inserted.  Point is undefined on entry to an
+action function, but the function must preserve it (e.g. by using
+<code>save-excursion</code>).  The return value should be a list containing
+some combination of <code>before</code> and <code>after</code>, including neither
+of them (i.e. <code>nil</code>).
+
+<div class="defun">
+&mdash; Variable: <b>c-syntactic-context</b><var><a name="index-c_002dsyntactic_002dcontext-347"></a></var><br>
+<blockquote><p><a name="index-syntactic_002dcontext-_0028c_002d_0029-348"></a>During the call to the indentation or brace hanging <var>action</var>
+function, this variable is bound to the full syntactic analysis list. 
+This might be, for example, &lsquo;<samp><span class="samp">((block-close 73))</span></samp>&rsquo;.  Don't ever
+give <code>c-syntactic-context</code> a value yourself&mdash;this would disrupt
+the proper functioning of CC Mode.
+
+        <p>This variable is also bound in three other circumstances:
+(i)&nbsp;<!-- /@w -->when calling a c-hanging-semi&amp;comma-criteria function
+(see <a href="Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">Hanging Semicolons and Commas</a>); (ii)&nbsp;<!-- /@w -->when calling a
+line-up function (see <a href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>); (iii)&nbsp;<!-- /@w -->when calling a
+c-special-indent-hook function (see <a href="Other-Indentation.html#Other-Indentation">Other Indentation</a>). 
+</p></blockquote></div>
+
+   <p>As an example, CC Mode itself uses this feature to dynamically
+determine the hanginess of braces which close &ldquo;do-while&rdquo;
+constructs:
+
+<pre class="example">     void do_list( int count, char** atleast_one_string )
+     {
+         int i=0;
+         do {
+             handle_string( atleast_one_string[i] );
+             i++;
+         } while( i &lt; count );
+     }
+</pre>
+   <p>CC Mode assigns the <code>block-close</code> syntactic symbol to the
+brace that closes the <code>do</code> construct, and normally we'd like the
+line that follows a <code>block-close</code> brace to begin on a separate
+line.  However, with &ldquo;do-while&rdquo; constructs, we want the
+<code>while</code> clause to follow the closing brace.  To do this, we
+associate the <code>block-close</code> symbol with the <var>action</var> function
+<code>c-snug-do-while</code>:
+
+<pre class="example">     (defun c-snug-do-while (syntax pos)
+       "Dynamically calculate brace hanginess for do-while statements."
+       (save-excursion
+         (let (langelem)
+           (if (and (eq syntax 'block-close)
+                    (setq langelem (assq 'block-close c-syntactic-context))
+                    (progn (goto-char (cdr langelem))
+                           (if (= (following-char) ?{)
+                               (forward-sexp -1))
+                           (looking-at "\\&lt;do\\&gt;[^_]")))
+               '(before)
+             '(before after)))))
+</pre>
+   <p><a name="index-c_002dsnug_002ddo_002dwhile-349"></a><a name="index-snug_002ddo_002dwhile-_0028c_002d_0029-350"></a>This function simply looks to see if the brace closes a &ldquo;do-while&rdquo;
+clause and if so, returns the list &lsquo;<samp><span class="samp">(before)</span></samp>&rsquo; indicating
+that a newline should be inserted before the brace, but not after it. 
+In all other cases, it returns the list &lsquo;<samp><span class="samp">(before after)</span></samp>&rsquo; so
+that the brace appears on a line by itself.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Case of Completed Words - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Completion.html#Completion" title="Completion">
+<link rel="next" href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity" title="Object Method Completion and Class Ambiguity">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Case-of-Completed-Words"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion.html#Completion">Completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.4.1 Case of Completed Words</h4>
+
+<p><a name="index-Case-of-completed-words-144"></a><a name="index-Mixed-case-completion-145"></a>IDL is a case-insensitive language, so casing is a matter of style
+only.  IDLWAVE helps maintain a consistent casing style for completed
+items.  The case of the completed words is determined by what is
+already in the buffer.  As an exception, when the partial word being
+completed is all lower case, the completion will be lower case as
+well.  If at least one character is upper case, the string will be
+completed in upper case or mixed case, depending on the value of the
+variable <code>idlwave-completion-case</code>.  The default is to use upper
+case for procedures, functions and keywords, and mixed case for object
+class names and methods, similar to the conventions in the IDL
+manuals.  For instance, to enable mixed-case completion for routines
+in addition to classes and methods, you need an entry such as
+<code>(routine . preserve)</code> in that variable.  To enable total control
+over the case of completed items, independent of buffer context, set
+<code>idlwave-completion-force-default-case</code> to non-<code>nil</code>.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-completion-case</b><var><a name="index-idlwave_002dcompletion_002dcase-146"></a></var><br>
+<blockquote><p>Association list setting the case (UPPER/lower/Capitalized/MixedCase...) 
+of completed words. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-completion-force-default-case</b> (<code>nil</code>)<var><a name="index-idlwave_002dcompletion_002dforce_002ddefault_002dcase-147"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means completion will always honor the settings in
+<code>idlwave-completion-case</code>.  When nil (the default), entirely lower
+case strings will always be completed to lower case, no matter what the
+settings in <code>idlwave-completion-case</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-complete-empty-string-as-lower-case</b> (<code>nil</code>)<var><a name="index-idlwave_002dcomplete_002dempty_002dstring_002das_002dlower_002dcase-148"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means the empty string is considered lower case for
+completion. 
+</p></blockquote></div>
+
+   </body></html>
+

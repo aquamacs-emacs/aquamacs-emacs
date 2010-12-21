@@ -1,0 +1,204 @@
+<html lang="en">
+<head>
+<title>Handling links - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hyperlinks.html#Hyperlinks" title="Hyperlinks">
+<link rel="prev" href="External-links.html#External-links" title="External links">
+<link rel="next" href="Using-links-outside-Org.html#Using-links-outside-Org" title="Using links outside Org">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Handling-links"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-links-outside-Org.html#Using-links-outside-Org">Using links outside Org</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="External-links.html#External-links">External links</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinks.html#Hyperlinks">Hyperlinks</a>
+<hr>
+</div>
+
+<h3 class="section">4.4 Handling links</h3>
+
+<p><a name="index-links_002c-handling-313"></a>
+Org provides methods to create a link in the correct syntax, to
+insert it into an Org file, and to follow the link.
+
+     
+<a name="index-C_002dc-l-314"></a>
+<a name="index-storing-links-315"></a>
+<dl><dt><kbd>C-c l</kbd><dd>Store a link to the current location.  This is a <em>global</em> command (you
+must create the key binding yourself) which can be used in any buffer to
+create a link.  The link will be stored for later insertion into an Org
+buffer (see below).  What kind of link will be created depends on the current
+buffer:
+
+     <p><b>Org-mode buffers</b><br>
+For Org files, if there is a &lsquo;<samp><span class="samp">&lt;&lt;target&gt;&gt;</span></samp>&rsquo; at the cursor, the link points
+to the target.  Otherwise it points to the current headline, which will also
+be the description.
+
+     <p><a name="index-org_002dlink_002dto_002dorg_002duse_002did-316"></a><a name="index-property_002c-CUSTOM_005fID-317"></a><a name="index-property_002c-ID-318"></a>If the headline has a <code>CUSTOM_ID</code> property, a link to this custom ID
+will be stored.  In addition or alternatively (depending on the value of
+<code>org-link-to-org-use-id</code>), a globally unique <code>ID</code> property will be
+created and/or used to construct a link.  So using this command in Org
+buffers will potentially create two links: a human-readable from the custom
+ID, and one that is globally unique and works even if the entry is moved from
+file to file.  Later, when inserting the link, you need to decide which one
+to use.
+
+     <p><b>Email/News clients: VM, Rmail, Wanderlust, MH-E, Gnus</b><br>
+Pretty much all Emacs mail clients are supported.  The link will point to the
+current article, or, in some GNUS buffers, to the group.  The description is
+constructed from the author and the subject.
+
+     <p><b>Web browsers: W3 and W3M</b><br>
+Here the link will be the current URL, with the page title as description.
+
+     <p><b>Contacts: BBDB</b><br>
+Links created in a BBDB buffer will point to the current entry.
+
+     <p><b>Chat: IRC</b><br>
+<a name="index-org_002dirc_002dlink_002dto_002dlogs-319"></a>For IRC links, if you set the variable <code>org-irc-link-to-logs</code> to
+<code>t</code>, a &lsquo;<samp><span class="samp">file:/</span></samp>&rsquo; style link to the relevant point in the logs for
+the current conversation is created.  Otherwise an &lsquo;<samp><span class="samp">irc:/</span></samp>&rsquo; style link to
+the user/channel/server under the point will be stored.
+
+     <p><b>Other files</b><br>
+For any other files, the link will point to the file, with a search string
+(see <a href="Search-options.html#Search-options">Search options</a>) pointing to the contents of the current line.  If
+there is an active region, the selected words will form the basis of the
+search string.  If the automatically created link is not working correctly or
+accurately enough, you can write custom functions to select the search string
+and to do the search for particular file types&mdash;see <a href="Custom-searches.html#Custom-searches">Custom searches</a>. 
+The key binding <kbd>C-c l</kbd> is only a suggestion&mdash;see <a href="Installation.html#Installation">Installation</a>.
+
+     <p><b>Agenda view</b><br>
+When the cursor is in an agenda view, the created link points to the
+entry referenced by the current line.
+
+     <p><a name="index-C_002dc-C_002dl-320"></a><a name="index-link-completion-321"></a><a name="index-completion_002c-of-links-322"></a><a name="index-inserting-links-323"></a><br><dt><kbd>C-c C-l</kbd><dd><a name="index-org_002dkeep_002dstored_002dlink_002dafter_002dinsertion-324"></a>Insert a link<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This prompts for a link to be inserted into the buffer. 
+You can just type a link, using text for an internal link, or one of the link
+type prefixes mentioned in the examples above.  The link will be inserted
+into the buffer<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>, along with a descriptive text. 
+If some text was selected when this command is called, the selected text
+becomes the default description.
+
+     <p><b>Inserting stored links</b><br>
+All links stored during the
+current session are part of the history for this prompt, so you can access
+them with &lt;up&gt; and &lt;down&gt; (or <kbd>M-p/n</kbd>).
+
+     <p><b>Completion support</b><br> Completion with &lt;TAB&gt; will help you to insert
+valid link prefixes like &lsquo;<samp><span class="samp">http:</span></samp>&rsquo; or &lsquo;<samp><span class="samp">ftp:</span></samp>&rsquo;, including the prefixes
+defined through link abbreviations (see <a href="Link-abbreviations.html#Link-abbreviations">Link abbreviations</a>).  If you
+press &lt;RET&gt; after inserting only the <var>prefix</var>, Org will offer
+specific completion support for some link types<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>  For
+example, if you type <kbd>file &lt;RET&gt;</kbd>, file name completion (alternative
+access: <kbd>C-u C-c C-l</kbd>, see below) will be offered, and after <kbd>bbdb
+&lt;RET&gt;</kbd> you can complete contact names. 
+<a name="index-C_002du-C_002dc-C_002dl-325"></a><a name="index-file-name-completion-326"></a><a name="index-completion_002c-of-file-names-327"></a><br><dt><kbd>C-u C-c C-l</kbd><dd>When <kbd>C-c C-l</kbd> is called with a <kbd>C-u</kbd> prefix argument, a link to
+a file will be inserted and you may use file name completion to select
+the name of the file.  The path to the file is inserted relative to the
+directory of the current Org file, if the linked file is in the current
+directory or in a sub-directory of it, or if the path is written relative
+to the current directory using &lsquo;<samp><span class="samp">../</span></samp>&rsquo;.  Otherwise an absolute path
+is used, if possible with &lsquo;<samp><span class="samp">~/</span></samp>&rsquo; for your home directory.  You can
+force an absolute path with two <kbd>C-u</kbd> prefixes. 
+<br><dt><kbd>C-c C-l </kbd><span class="roman">(with cursor on existing link)</span><dd>When the cursor is on an existing link, <kbd>C-c C-l</kbd> allows you to edit the
+link and description parts of the link. 
+<a name="index-following-links-328"></a><a name="index-C_002dc-C_002do-329"></a><a name="index-RET-330"></a><br><dt><kbd>C-c C-o </kbd><span class="roman">or</span><kbd> &lt;RET&gt;</kbd><dd><a name="index-org_002dfile_002dapps-331"></a>Open link at point.  This will launch a web browser for URLs (using
+<samp><span class="command">browse-url-at-point</span></samp>), run VM/MH-E/Wanderlust/Rmail/Gnus/BBDB for
+the corresponding links, and execute the command in a shell link.  When the
+cursor is on an internal link, this command runs the corresponding search. 
+When the cursor is on a TAG list in a headline, it creates the corresponding
+TAGS view.  If the cursor is on a timestamp, it compiles the agenda for that
+date.  Furthermore, it will visit text and remote files in &lsquo;<samp><span class="samp">file:</span></samp>&rsquo; links
+with Emacs and select a suitable application for local non-text files. 
+Classification of files is based on file extension only.  See option
+<code>org-file-apps</code>.  If you want to override the default application and
+visit the file with Emacs, use a <kbd>C-u</kbd> prefix.  If you want to avoid
+opening in Emacs, use a <kbd>C-u C-u</kbd> prefix.<br>
+If the cursor is on a headline, but not on a link, offer all links in the
+headline and entry text. 
+<a name="index-mouse_002d2-332"></a><a name="index-mouse_002d1-333"></a><br><dt><kbd>mouse-2</kbd><dt><kbd>mouse-1</kbd><dd>On links, <kbd>mouse-2</kbd> will open the link just as <kbd>C-c C-o</kbd>
+would.  Under Emacs 22, <kbd>mouse-1</kbd> will also follow a link. 
+<a name="index-mouse_002d3-334"></a><br><dt><kbd>mouse-3</kbd><dd><a name="index-org_002ddisplay_002dinternal_002dlink_002dwith_002dindirect_002dbuffer-335"></a>Like <kbd>mouse-2</kbd>, but force file links to be opened with Emacs, and
+internal links to be displayed in another window<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a>. 
+<a name="index-mark-ring-336"></a><a name="index-C_002dc-_0025-337"></a><br><dt><kbd>C-c %</kbd><dd>Push the current position onto the mark ring, to be able to return
+easily. Commands following an internal link do this automatically. 
+<a name="index-links_002c-returning-to-338"></a><a name="index-C_002dc-_0026-339"></a><br><dt><kbd>C-c &amp;</kbd><dd>Jump back to a recorded position.  A position is recorded by the
+commands following internal links, and by <kbd>C-c %</kbd>.  Using this
+command several times in direct succession moves through a ring of
+previously recorded positions. 
+<a name="index-C_002dc-C_002dx-C_002dn-340"></a><a name="index-C_002dc-C_002dx-C_002dp-341"></a><a name="index-links_002c-finding-next_002fprevious-342"></a><br><dt><kbd>C-c C-x C-n</kbd><dt><kbd>C-c C-x C-p</kbd><dd>Move forward/backward to the next link in the buffer.  At the limit of
+the buffer, the search fails once, and then wraps around.  The key
+bindings for this are really too long, you might want to bind this also
+to <kbd>C-n</kbd> and <kbd>C-p</kbd>
+     <pre class="lisp">          (add-hook 'org-load-hook
+            (lambda ()
+              (define-key 'org-mode-map "\C-n" 'org-next-link)
+              (define-key 'org-mode-map "\C-p" 'org-previous-link)))
+</pre>
+     </dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small>  Note that you don't have to use this command to
+insert a link.  Links in Org are plain text, and you can type or paste them
+straight into the buffer.  By using this command, the links are automatically
+enclosed in double brackets, and you will be asked for the optional
+descriptive text.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> After insertion of a stored link, the link will be
+removed from the list of stored links.  To keep it in the list later use, use
+a triple <kbd>C-u</kbd> prefix argument to <kbd>C-c C-l</kbd>, or configure the option
+<code>org-keep-stored-link-after-insertion</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> This works by
+calling a special function <code>org-PREFIX-complete-link</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> See the
+variable <code>org-display-internal-link-with-indirect-buffer</code></p>
+
+   <hr></div>
+
+   </body></html>
+

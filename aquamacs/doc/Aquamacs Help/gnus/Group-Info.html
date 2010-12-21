@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+<title>Group Info - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
+<link rel="prev" href="Ranges.html#Ranges" title="Ranges">
+<link rel="next" href="Extended-Interactive.html#Extended-Interactive" title="Extended Interactive">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Group-Info"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Extended-Interactive.html#Extended-Interactive">Extended Interactive</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Ranges.html#Ranges">Ranges</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.7.6 Group Info</h4>
+
+<p>Gnus stores all permanent info on groups in a <dfn>group info</dfn> list. 
+This list is from three to six elements (or more) long and exhaustively
+describes the group.
+
+   <p>Here are two example group infos; one is a very simple group while the
+second is a more complex one:
+
+<pre class="example">     ("no.group" 5 ((1 . 54324)))
+     
+     ("nnml:my.mail" 3 ((1 . 5) 9 (20 . 55))
+                     ((tick (15 . 19)) (replied 3 6 (19 . 3)))
+                     (nnml "")
+                     ((auto-expire . t) (to-address . "ding@gnus.org")))
+</pre>
+   <p>The first element is the <dfn>group name</dfn>&mdash;as Gnus knows the group,
+anyway.  The second element is the <dfn>subscription level</dfn>, which
+normally is a small integer.  (It can also be the <dfn>rank</dfn>, which is a
+cons cell where the <code>car</code> is the level and the <code>cdr</code> is the
+score.)  The third element is a list of ranges of read articles.  The
+fourth element is a list of lists of article marks of various kinds. 
+The fifth element is the select method (or virtual server, if you like). 
+The sixth element is a list of <dfn>group parameters</dfn>, which is what
+this section is about.
+
+   <p>Any of the last three elements may be missing if they are not required. 
+In fact, the vast majority of groups will normally only have the first
+three elements, which saves quite a lot of cons cells.
+
+   <p>Here's a BNF definition of the group info format:
+
+<pre class="example">     info          = "(" group space ralevel space read
+                     [ "" / [ space marks-list [ "" / [ space method [ "" /
+                     space parameters ] ] ] ] ] ")"
+     group         = quote &lt;string&gt; quote
+     ralevel       = rank / level
+     level         = &lt;integer in the range of 1 to inf&gt;
+     rank          = "(" level "." score ")"
+     score         = &lt;integer in the range of 1 to inf&gt;
+     read          = range
+     marks-lists   = nil / "(" *marks ")"
+     marks         = "(" &lt;string&gt; range ")"
+     method        = "(" &lt;string&gt; *elisp-forms ")"
+     parameters    = "(" *elisp-forms ")"
+</pre>
+   <p>Actually that &lsquo;<samp><span class="samp">marks</span></samp>&rsquo; rule is a fib.  A &lsquo;<samp><span class="samp">marks</span></samp>&rsquo; is a
+&lsquo;<samp><span class="samp">&lt;string&gt;</span></samp>&rsquo; consed on to a &lsquo;<samp><span class="samp">range</span></samp>&rsquo;, but that's a bitch to say
+in pseudo-BNF.
+
+   <p>If you have a Gnus info and want to access the elements, Gnus offers a
+series of macros for getting/setting these elements.
+
+     <dl>
+<dt><code>gnus-info-group</code><dt><code>gnus-info-set-group</code><dd><a name="index-gnus_002dinfo_002dgroup-3190"></a><a name="index-gnus_002dinfo_002dset_002dgroup-3191"></a>Get/set the group name.
+
+     <br><dt><code>gnus-info-rank</code><dt><code>gnus-info-set-rank</code><dd><a name="index-gnus_002dinfo_002drank-3192"></a><a name="index-gnus_002dinfo_002dset_002drank-3193"></a>Get/set the group rank (see <a href="Group-Score.html#Group-Score">Group Score</a>).
+
+     <br><dt><code>gnus-info-level</code><dt><code>gnus-info-set-level</code><dd><a name="index-gnus_002dinfo_002dlevel-3194"></a><a name="index-gnus_002dinfo_002dset_002dlevel-3195"></a>Get/set the group level.
+
+     <br><dt><code>gnus-info-score</code><dt><code>gnus-info-set-score</code><dd><a name="index-gnus_002dinfo_002dscore-3196"></a><a name="index-gnus_002dinfo_002dset_002dscore-3197"></a>Get/set the group score (see <a href="Group-Score.html#Group-Score">Group Score</a>).
+
+     <br><dt><code>gnus-info-read</code><dt><code>gnus-info-set-read</code><dd><a name="index-gnus_002dinfo_002dread-3198"></a><a name="index-gnus_002dinfo_002dset_002dread-3199"></a>Get/set the ranges of read articles.
+
+     <br><dt><code>gnus-info-marks</code><dt><code>gnus-info-set-marks</code><dd><a name="index-gnus_002dinfo_002dmarks-3200"></a><a name="index-gnus_002dinfo_002dset_002dmarks-3201"></a>Get/set the lists of ranges of marked articles.
+
+     <br><dt><code>gnus-info-method</code><dt><code>gnus-info-set-method</code><dd><a name="index-gnus_002dinfo_002dmethod-3202"></a><a name="index-gnus_002dinfo_002dset_002dmethod-3203"></a>Get/set the group select method.
+
+     <br><dt><code>gnus-info-params</code><dt><code>gnus-info-set-params</code><dd><a name="index-gnus_002dinfo_002dparams-3204"></a><a name="index-gnus_002dinfo_002dset_002dparams-3205"></a>Get/set the group parameters. 
+</dl>
+
+   <p>All the getter functions take one parameter&mdash;the info list.  The setter
+functions take two parameters&mdash;the info list and the new value.
+
+   <p>The last three elements in the group info aren't mandatory, so it may be
+necessary to extend the group info before setting the element.  If this
+is necessary, you can just pass on a non-<code>nil</code> third parameter to
+the three final setter functions to have this happen automatically.
+
+   </body></html>
+

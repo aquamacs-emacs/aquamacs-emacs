@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+<title>Keypad Main Menu - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keypad-Mode.html#Keypad-Mode" title="Keypad Mode">
+<link rel="prev" href="Keypad-Mode.html#Keypad-Mode" title="Keypad Mode">
+<link rel="next" href="Keypad-Functions-Menu.html#Keypad-Functions-Menu" title="Keypad Functions Menu">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Keypad-Main-Menu"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Keypad-Functions-Menu.html#Keypad-Functions-Menu">Keypad Functions Menu</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Keypad-Mode.html#Keypad-Mode">Keypad Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keypad-Mode.html#Keypad-Mode">Keypad Mode</a>
+<hr>
+</div>
+
+<h3 class="section">16.1 Main Menu</h3>
+
+<pre class="smallexample">     |----+----+--Calc---+----+----1
+     |FLR |CEIL|RND |TRNC|CLN2|FLT |
+     |----+----+----+----+----+----|
+     | LN |EXP |    |ABS |IDIV|MOD |
+     |----+----+----+----+----+----|
+     |SIN |COS |TAN |SQRT|y^x |1/x |
+     |----+----+----+----+----+----|
+     |  ENTER  |+/- |EEX |UNDO| &lt;- |
+     |-----+---+-+--+--+-+---++----|
+     | INV |  7  |  8  |  9  |  /  |
+     |-----+-----+-----+-----+-----|
+     | HYP |  4  |  5  |  6  |  *  |
+     |-----+-----+-----+-----+-----|
+     |EXEC |  1  |  2  |  3  |  -  |
+     |-----+-----+-----+-----+-----|
+     | OFF |  0  |  .  | PI  |  +  |
+     |-----+-----+-----+-----+-----+
+</pre>
+<p class="noindent">This is the menu that appears the first time you start Keypad mode. 
+It will show up in a vertical window on the right side of your screen. 
+Above this menu is the traditional Calc stack display.  On a 24-line
+screen you will be able to see the top three stack entries.
+
+   <p>The ten digit keys, decimal point, and &lt;EEX&gt; key are used for
+entering numbers in the obvious way.  &lt;EEX&gt; begins entry of an
+exponent in scientific notation.  Just as with regular Calc, the
+number is pushed onto the stack as soon as you press &lt;ENTER&gt;
+or any other function key.
+
+   <p>The &lt;+/-&gt; key corresponds to normal Calc's <kbd>n</kbd> key.  During
+numeric entry it changes the sign of the number or of the exponent. 
+At other times it changes the sign of the number on the top of the
+stack.
+
+   <p>The &lt;INV&gt; and &lt;HYP&gt; keys modify other keys.  As well as
+having the effects described elsewhere in this manual, Keypad mode
+defines several other &ldquo;inverse&rdquo; operations.  These are described
+below and in the following sections.
+
+   <p>The &lt;ENTER&gt; key finishes the current numeric entry, or otherwise
+duplicates the top entry on the stack.
+
+   <p>The &lt;UNDO&gt; key undoes the most recent Calc operation. 
+<kbd>INV UNDO</kbd> is the &ldquo;redo&rdquo; command, and <kbd>HYP UNDO</kbd> is
+&ldquo;last arguments&rdquo; (<kbd>M-&lt;RET&gt;</kbd>).
+
+   <p>The &lt;&lt;-&gt; key acts as a &ldquo;backspace&rdquo; during numeric entry. 
+At other times it removes the top stack entry.  <kbd>INV &lt;-</kbd>
+clears the entire stack.  <kbd>HYP &lt;-</kbd> takes an integer from
+the stack, then removes that many additional stack elements.
+
+   <p>The &lt;EXEC&gt; key prompts you to enter any keystroke sequence
+that would normally work in Calc mode.  This can include a
+numeric prefix if you wish.  It is also possible simply to
+switch into the Calc window and type commands in it; there is
+nothing &ldquo;magic&rdquo; about this window when Keypad mode is active.
+
+   <p>The other keys in this display perform their obvious calculator
+functions.  &lt;CLN2&gt; rounds the top-of-stack by temporarily
+reducing the precision by 2 digits.  &lt;FLT&gt; converts an
+integer or fraction on the top of the stack to floating-point.
+
+   <p>The &lt;INV&gt; and &lt;HYP&gt; keys combined with several of these keys
+give you access to some common functions even if the appropriate menu
+is not displayed.  Obviously you don't need to learn these keys
+unless you find yourself wasting time switching among the menus.
+
+     <dl>
+<dt><kbd>INV +/-</kbd><dd>is the same as &lt;1/x&gt;. 
+<br><dt><kbd>INV +</kbd><dd>is the same as &lt;SQRT&gt;. 
+<br><dt><kbd>INV -</kbd><dd>is the same as &lt;CONJ&gt;. 
+<br><dt><kbd>INV *</kbd><dd>is the same as &lt;y^x&gt;. 
+<br><dt><kbd>INV /</kbd><dd>is the same as &lt;INV y^x&gt; (the &lsquo;<samp><span class="samp">x</span></samp>&rsquo;th root of &lsquo;<samp><span class="samp">y</span></samp>&rsquo;). 
+<br><dt><kbd>HYP/INV 1</kbd><dd>are the same as &lt;SIN&gt; / <kbd>INV SIN</kbd>. 
+<br><dt><kbd>HYP/INV 2</kbd><dd>are the same as &lt;COS&gt; / <kbd>INV COS</kbd>. 
+<br><dt><kbd>HYP/INV 3</kbd><dd>are the same as &lt;TAN&gt; / <kbd>INV TAN</kbd>. 
+<br><dt><kbd>INV/HYP 4</kbd><dd>are the same as &lt;LN&gt; / <kbd>HYP LN</kbd>. 
+<br><dt><kbd>INV/HYP 5</kbd><dd>are the same as &lt;EXP&gt; / <kbd>HYP EXP</kbd>. 
+<br><dt><kbd>INV 6</kbd><dd>is the same as &lt;ABS&gt;. 
+<br><dt><kbd>INV 7</kbd><dd>is the same as &lt;RND&gt; (<code>calc-round</code>). 
+<br><dt><kbd>INV 8</kbd><dd>is the same as &lt;CLN2&gt;. 
+<br><dt><kbd>INV 9</kbd><dd>is the same as &lt;FLT&gt; (<code>calc-float</code>). 
+<br><dt><kbd>INV 0</kbd><dd>is the same as &lt;IMAG&gt;. 
+<br><dt><kbd>INV .</kbd><dd>is the same as &lt;PREC&gt;. 
+<br><dt><kbd>INV ENTER</kbd><dd>is the same as &lt;SWAP&gt;. 
+<br><dt><kbd>HYP ENTER</kbd><dd>is the same as &lt;RLL3&gt;. 
+<br><dt><kbd>INV HYP ENTER</kbd><dd>is the same as &lt;OVER&gt;. 
+<br><dt><kbd>HYP +/-</kbd><dd>packs the top two stack entries as an error form. 
+<br><dt><kbd>HYP EEX</kbd><dd>packs the top two stack entries as a modulo form. 
+<br><dt><kbd>INV EEX</kbd><dd>creates an interval form; this removes an integer which is one
+of 0 &lsquo;<samp><span class="samp">[]</span></samp>&rsquo;, 1 &lsquo;<samp><span class="samp">[)</span></samp>&rsquo;, 2 &lsquo;<samp><span class="samp">(]</span></samp>&rsquo; or 3 &lsquo;<samp><span class="samp">()</span></samp>&rsquo;, followed
+by the two limits of the interval. 
+</dl>
+
+   <p>The <kbd>OFF</kbd> key turns Calc off; typing <kbd>C-x * k</kbd> or <kbd>C-x * *</kbd>
+again has the same effect.  This is analogous to typing <kbd>q</kbd> or
+hitting <kbd>C-x * c</kbd> again in the normal calculator.  If Calc is
+running standalone (the <code>full-calc-keypad</code> command appeared in the
+command line that started Emacs), then <kbd>OFF</kbd> is replaced with
+<kbd>EXIT</kbd>; clicking on this actually exits Emacs itself.
+
+   </body></html>
+

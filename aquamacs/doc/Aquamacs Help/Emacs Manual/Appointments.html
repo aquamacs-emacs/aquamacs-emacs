@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Appointments - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Calendar_002fDiary.html#Calendar_002fDiary" title="Calendar/Diary">
+<link rel="prev" href="Diary.html#Diary" title="Diary">
+<link rel="next" href="Importing-Diary.html#Importing-Diary" title="Importing Diary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Appointments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Importing-Diary.html#Importing-Diary">Importing Diary</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Diary.html#Diary">Diary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Calendar_002fDiary.html#Calendar_002fDiary">Calendar/Diary</a>
+<hr>
+</div>
+
+<h3 class="section">38.11 Appointments</h3>
+
+<p><a name="index-appointment-notification-3368"></a>
+<a name="index-appt_002ddisplay_002dformat-3369"></a><a name="index-appt_002daudible-3370"></a><a name="index-appt_002ddisplay_002dmode_002dline-3371"></a>  If you have a diary entry for an appointment, and that diary entry
+begins with a recognizable time of day, Emacs can warn you several
+minutes beforehand that that appointment is pending.  Emacs alerts you
+to the appointment by displaying a message in your chosen format, as
+specified by the variable <code>appt-display-format</code>.  If the value of
+<code>appt-audible</code> is non-<code>nil</code>, the warning includes an audible
+reminder.  In addition, if <code>appt-display-mode-line</code> is
+non-<code>nil</code>, Emacs displays the number of minutes to the
+appointment on the mode line.
+
+   <p><a name="index-appt_002ddisplay_002dduration-3372"></a><a name="index-appt_002ddisp_002dwindow_002dfunction-3373"></a><a name="index-appt_002ddelete_002dwindow_002dfunction-3374"></a>  If <code>appt-display-format</code> has the value <code>window</code>, then the
+variable <code>appt-display-duration</code> controls how long the reminder
+window is visible for; and the variables
+<code>appt-disp-window-function</code> and <code>appt-delete-window-function</code>
+give the names of functions used to create and destroy the window,
+respectively.
+
+   <p><a name="index-appt_002dactivate-3375"></a>  To enable appointment notification, use the command <kbd>M-x
+appt-activate</kbd>.  With a positive argument, it enables notification;
+with a negative argument, it disables notification; with no argument,
+it toggles.  Enabling notification also sets up an appointment list
+for today from the diary file, giving all diary entries found with
+recognizable times of day, and reminds you just before each of them.
+
+   <p>For example, suppose the diary file contains these lines:
+
+<pre class="example">     Monday
+       9:30am Coffee break
+      12:00pm Lunch
+</pre>
+   <p><a name="index-appt_002dmessage_002dwarning_002dtime-3376"></a>Then on Mondays, you will be reminded at around 9:20am about your
+coffee break and at around 11:50am about lunch.  The variable
+<code>appt-message-warning-time</code> specifies how many minutes (default 12)
+in advance to warn you.
+
+   <p>You can write times in am/pm style (with &lsquo;<samp><span class="samp">12:00am</span></samp>&rsquo; standing
+for midnight and &lsquo;<samp><span class="samp">12:00pm</span></samp>&rsquo; standing for noon), or 24-hour
+European/military style.  You need not be consistent; your diary file
+can have a mixture of the two styles.  Times must be at the beginning of
+diary entries if they are to be recognized.
+
+   <p><a name="index-appt_002ddisplay_002ddiary-3377"></a>  Emacs updates the appointments list from the diary file
+automatically just after midnight.  You can force an update at any
+time by re-enabling appointment notification.  Both these actions also
+display the day's diary buffer, unless you set
+<code>appt-display-diary</code> to <code>nil</code>.  The appointments list is
+also updated whenever the diary file (or a file it includes; see
+<a href="Fancy-Diary-Display.html#Fancy-Diary-Display">Fancy Diary Display</a>)
+is saved.
+
+   <p><a name="index-appt_002dadd-3378"></a><a name="index-appt_002ddelete-3379"></a><a name="index-alarm-clock-3380"></a>  You can also use the appointment notification facility like an alarm
+clock.  The command <kbd>M-x appt-add</kbd> adds entries to the appointment
+list without affecting your diary file.  You delete entries from the
+appointment list with <kbd>M-x appt-delete</kbd>.
+
+   </body></html>
+

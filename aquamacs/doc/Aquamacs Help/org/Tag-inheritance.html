@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Tag inheritance - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tags.html#Tags" title="Tags">
+<link rel="prev" href="Tags.html#Tags" title="Tags">
+<link rel="next" href="Setting-tags.html#Setting-tags" title="Setting tags">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Tag-inheritance"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Setting-tags.html#Setting-tags">Setting tags</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tags.html#Tags">Tags</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
+<hr>
+</div>
+
+<h3 class="section">6.1 Tag inheritance</h3>
+
+<p><a name="index-tag-inheritance-448"></a><a name="index-inheritance_002c-of-tags-449"></a><a name="index-sublevels_002c-inclusion-into-tags-match-450"></a>
+<i>Tags</i> make use of the hierarchical structure of outline trees.  If a
+heading has a certain tag, all subheadings will inherit the tag as
+well.  For example, in the list
+
+<pre class="example">     * Meeting with the French group      :work:
+     ** Summary by Frank                  :boss:notes:
+     *** TODO Prepare slides for him      :action:
+</pre>
+   <p class="noindent">the final heading will have the tags &lsquo;<samp><span class="samp">:work:</span></samp>&rsquo;, &lsquo;<samp><span class="samp">:boss:</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">:notes:</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">:action:</span></samp>&rsquo; even though the final heading is not
+explicitly marked with those tags.  You can also set tags that all entries in
+a file should inherit just as if these tags were defined in a hypothetical
+level zero that surrounds the entire file.  Use a line like this<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>:
+
+   <p><a name="index-g_t_0023_002bFILETAGS-451"></a>
+<pre class="example">     #+FILETAGS: :Peter:Boss:Secret:
+</pre>
+   <p class="noindent"><a name="index-org_002duse_002dtag_002dinheritance-452"></a><a name="index-org_002dtags_002dexclude_002dfrom_002dinheritance-453"></a>To limit tag inheritance to specific tags, or to turn it off entirely, use
+the variables <code>org-use-tag-inheritance</code> and
+<code>org-tags-exclude-from-inheritance</code>.
+
+   <p><a name="index-org_002dtags_002dmatch_002dlist_002dsublevels-454"></a>When a headline matches during a tags search while tag inheritance is turned
+on, all the sublevels in the same tree will (for a simple match form) match
+as well<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  The list
+of matches may then become very long.  If you only want to see the first tags
+match in a subtree, configure the variable
+<code>org-tags-match-list-sublevels</code> (not recommended).
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> As
+with all these in-buffer settings, pressing <kbd>C-c C-c</kbd> activates any
+changes in the line.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> This is only true if the search does not involve more
+complex tests including properties (see <a href="Property-searches.html#Property-searches">Property searches</a>).</p>
+
+   <hr></div>
+
+   </body></html>
+

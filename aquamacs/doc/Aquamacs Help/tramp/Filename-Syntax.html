@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Filename Syntax - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Usage.html#Usage" title="Usage">
+<link rel="next" href="Alternative-Syntax.html#Alternative-Syntax" title="Alternative Syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Filename-Syntax"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Alternative-Syntax.html#Alternative-Syntax">Alternative Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Usage.html#Usage">Usage</a>
+<hr>
+</div>
+
+<h3 class="section">5.1 <span class="sc">tramp</span> filename conventions</h3>
+
+<p><a name="index-filename-syntax-175"></a><a name="index-filename-examples-176"></a>
+To access the file <var>localname</var> on the remote machine <var>machine</var>
+you would specify the filename <samp><span class="file">/machine:localname</span></samp>.  This will connect to <var>machine</var> and transfer the file
+using the default method.  See <a href="Default-Method.html#Default-Method">Default Method</a>.
+
+   <p>Some examples of <span class="sc">tramp</span> filenames are shown below.
+
+     <dl>
+<dt><samp><span class="file">/melancholia:.emacs</span></samp><dd>Edit the file <samp><span class="file">.emacs</span></samp> in your home directory on the machine
+<code>melancholia</code>.
+
+     <br><dt><samp><span class="file">/melancholia.danann.net:.emacs</span></samp><dd>This edits the same file, using the fully qualified domain name of
+the machine.
+
+     <br><dt><samp><span class="file">/melancholia:~/.emacs</span></samp><dd>This also edits the same file &mdash; the <samp><span class="file">~</span></samp> is expanded to your
+home directory on the remote machine, just like it is locally.
+
+     <br><dt><samp><span class="file">/melancholia:~daniel/.emacs</span></samp><dd>This edits the file <samp><span class="file">.emacs</span></samp> in the home directory of the user
+<code>daniel</code> on the machine <code>melancholia</code>.  The <samp><span class="file">~&lt;user&gt;</span></samp>
+construct is expanded to the home directory of that user on the remote
+machine.
+
+     <br><dt><samp><span class="file">/melancholia:/etc/squid.conf</span></samp><dd>This edits the file <samp><span class="file">/etc/squid.conf</span></samp> on the machine
+<code>melancholia</code>.
+
+   </dl>
+
+   <p><var>machine</var> can also be an IPv4 or IPv6 address, like in
+<samp><span class="file">/127.0.0.1:.emacs</span></samp> or <samp><span class="file">/[::1]:.emacs</span></samp>. 
+For syntactical reasons, IPv6 addresses must be embedded in square
+brackets <samp><span class="file">[</span></samp> and <samp><span class="file">]</span></samp>.
+
+   <p>Unless you specify a different name to use, <span class="sc">tramp</span> will use the
+current local user name as the remote user name to log in with.  If you
+need to log in as a different user, you can specify the user name as
+part of the filename.
+
+   <p>To log in to the remote machine as a specific user, you use the syntax
+<samp><span class="file">/user<!-- /@w -->@machine:path/to.file</span></samp>.  That means that
+connecting to <code>melancholia</code> as <code>daniel</code> and editing
+<samp><span class="file">.emacs</span></samp> in your home directory you would specify
+<samp><span class="file">/daniel<!-- /@w -->@melancholia:.emacs</span></samp>.
+
+   <p>It is also possible to specify other file transfer methods
+(see <a href="Inline-methods.html#Inline-methods">Inline methods</a>, see <a href="External-methods.html#External-methods">External methods</a>) as part of the
+filename. 
+This is done by putting the method before the user and host name, as
+in <samp><span class="file">/</span><var>method</var><span class="file">:</span></samp> (Note the
+trailing colon). 
+The user, machine and file specification remain the same.
+
+   <p>So, to connect to the machine <code>melancholia</code> as <code>daniel</code>,
+using the <samp><span class="option">ssh</span></samp> method to transfer files, and edit
+<samp><span class="file">.emacs</span></samp> in my home directory I would specify the filename
+<samp><span class="file">/ssh<!-- /@w -->:daniel<!-- /@w -->@melancholia:.emacs</span></samp>.
+
+   <p>Finally, for some methods it is possible to specify a different port
+number than the default one, given by the method.  This is specified
+by adding <samp><span class="file">#&lt;port&gt;</span></samp> to the host name, like in <samp><span class="file">/ssh<!-- /@w -->:daniel<!-- /@w -->@melancholia#42:.emacs</span></samp>.
+
+   </body></html>
+

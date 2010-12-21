@@ -1,0 +1,183 @@
+<html lang="en">
+<head>
+<title>Date Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Date-Arithmetic.html#Date-Arithmetic" title="Date Arithmetic">
+<link rel="prev" href="Date-Conversions.html#Date-Conversions" title="Date Conversions">
+<link rel="next" href="Business-Days.html#Business-Days" title="Business Days">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Date-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Business-Days.html#Business-Days">Business Days</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Date-Conversions.html#Date-Conversions">Date Conversions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Date-Arithmetic.html#Date-Arithmetic">Date Arithmetic</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.5.2 Date Functions</h4>
+
+<p class="noindent"><a name="index-t-N-812"></a><a name="index-calc_002dnow-813"></a><a name="index-now-814"></a>The <kbd>t N</kbd> (<code>calc-now</code>) [<code>now</code>] command pushes the
+current date and time on the stack as a date form.  The time is
+reported in terms of the specified time zone; with no numeric prefix
+argument, <kbd>t N</kbd> reports for the current time zone.
+
+   <p><a name="index-t-P-815"></a><a name="index-calc_002ddate_002dpart-816"></a>The <kbd>t P</kbd> (<code>calc-date-part</code>) command extracts one part
+of a date form.  The prefix argument specifies the part; with no
+argument, this command prompts for a part code from 1 to 9. 
+The various part codes are described in the following paragraphs.
+
+   <p><a name="index-year-817"></a>The <kbd>M-1 t P</kbd> [<code>year</code>] function extracts the year number
+from a date form as an integer, e.g., 1991.  This and the
+following functions will also accept a real number for an
+argument, which is interpreted as a standard Calc day number. 
+Note that this function will never return zero, since the year
+1 BC immediately precedes the year 1 AD.
+
+   <p><a name="index-month-818"></a>The <kbd>M-2 t P</kbd> [<code>month</code>] function extracts the month number
+from a date form as an integer in the range 1 to 12.
+
+   <p><a name="index-day-819"></a>The <kbd>M-3 t P</kbd> [<code>day</code>] function extracts the day number
+from a date form as an integer in the range 1 to 31.
+
+   <p><a name="index-hour-820"></a>The <kbd>M-4 t P</kbd> [<code>hour</code>] function extracts the hour from
+a date form as an integer in the range 0 (midnight) to 23.  Note
+that 24-hour time is always used.  This returns zero for a pure
+date form.  This function (and the following two) also accept
+HMS forms as input.
+
+   <p><a name="index-minute-821"></a>The <kbd>M-5 t P</kbd> [<code>minute</code>] function extracts the minute
+from a date form as an integer in the range 0 to 59.
+
+   <p><a name="index-second-822"></a>The <kbd>M-6 t P</kbd> [<code>second</code>] function extracts the second
+from a date form.  If the current precision is 12 or less,
+the result is an integer in the range 0 to 59.  For higher
+precisions, the result may instead be a floating-point number.
+
+   <p><a name="index-weekday-823"></a>The <kbd>M-7 t P</kbd> [<code>weekday</code>] function extracts the weekday
+number from a date form as an integer in the range 0 (Sunday)
+to 6 (Saturday).
+
+   <p><a name="index-yearday-824"></a>The <kbd>M-8 t P</kbd> [<code>yearday</code>] function extracts the day-of-year
+number from a date form as an integer in the range 1 (January 1)
+to 366 (December 31 of a leap year).
+
+   <p><a name="index-time-825"></a>The <kbd>M-9 t P</kbd> [<code>time</code>] function extracts the time portion
+of a date form as an HMS form.  This returns &lsquo;<samp><span class="samp">0@ 0' 0"</span></samp>&rsquo;
+for a pure date form.
+
+   <p><a name="index-t-M-826"></a><a name="index-calc_002dnew_002dmonth-827"></a><a name="index-newmonth-828"></a>The <kbd>t M</kbd> (<code>calc-new-month</code>) [<code>newmonth</code>] command
+computes a new date form that represents the first day of the month
+specified by the input date.  The result is always a pure date
+form; only the year and month numbers of the input are retained. 
+With a numeric prefix argument <var>n</var> in the range from 1 to 31,
+<kbd>t M</kbd> computes the <var>n</var>th day of the month.  (If <var>n</var>
+is greater than the actual number of days in the month, or if
+<var>n</var> is zero, the last day of the month is used.)
+
+   <p><a name="index-t-Y-829"></a><a name="index-calc_002dnew_002dyear-830"></a><a name="index-newyear-831"></a>The <kbd>t Y</kbd> (<code>calc-new-year</code>) [<code>newyear</code>] command
+computes a new pure date form that represents the first day of
+the year specified by the input.  The month, day, and time
+of the input date form are lost.  With a numeric prefix argument
+<var>n</var> in the range from 1 to 366, <kbd>t Y</kbd> computes the
+<var>n</var>th day of the year (366 is treated as 365 in non-leap
+years).  A prefix argument of 0 computes the last day of the
+year (December 31).  A negative prefix argument from <i>-1</i> to
+<i>-12</i> computes the first day of the <var>n</var>th month of the year.
+
+   <p><a name="index-t-W-832"></a><a name="index-calc_002dnew_002dweek-833"></a><a name="index-newweek-834"></a>The <kbd>t W</kbd> (<code>calc-new-week</code>) [<code>newweek</code>] command
+computes a new pure date form that represents the Sunday on or before
+the input date.  With a numeric prefix argument, it can be made to
+use any day of the week as the starting day; the argument must be in
+the range from 0 (Sunday) to 6 (Saturday).  This function always
+subtracts between 0 and 6 days from the input date.
+
+   <p>Here's an example use of <code>newweek</code>:  Find the date of the next
+Wednesday after a given date.  Using <kbd>M-3 t W</kbd> or &lsquo;<samp><span class="samp">newweek(d, 3)</span></samp>&rsquo;
+will give you the <em>preceding</em> Wednesday, so &lsquo;<samp><span class="samp">newweek(d+7, 3)</span></samp>&rsquo;
+will give you the following Wednesday.  A further look at the definition
+of <code>newweek</code> shows that if the input date is itself a Wednesday,
+this formula will return the Wednesday one week in the future.  An
+exercise for the reader is to modify this formula to yield the same day
+if the input is already a Wednesday.  Another interesting exercise is
+to preserve the time-of-day portion of the input (<code>newweek</code> resets
+the time to midnight; hint: how can <code>newweek</code> be defined in terms
+of the <code>weekday</code> function?).
+
+   <p><a name="index-pwday-835"></a>The &lsquo;<samp><span class="samp">pwday(</span><var>date</var><span class="samp">)</span></samp>&rsquo; function (not on any key) computes the
+day-of-month number of the Sunday on or before <var>date</var>.  With
+two arguments, &lsquo;<samp><span class="samp">pwday(</span><var>date</var><span class="samp">, </span><var>day</var><span class="samp">)</span></samp>&rsquo; computes the day
+number of the Sunday on or before day number <var>day</var> of the month
+specified by <var>date</var>.  The <var>day</var> must be in the range from
+7 to 31; if the day number is greater than the actual number of days
+in the month, the true number of days is used instead.  Thus
+&lsquo;<samp><span class="samp">pwday(</span><var>date</var><span class="samp">, 7)</span></samp>&rsquo; finds the first Sunday of the month, and
+&lsquo;<samp><span class="samp">pwday(</span><var>date</var><span class="samp">, 31)</span></samp>&rsquo; finds the last Sunday of the month. 
+With a third <var>weekday</var> argument, <code>pwday</code> can be made to look
+for any day of the week instead of Sunday.
+
+   <p><a name="index-t-I-836"></a><a name="index-calc_002dinc_002dmonth-837"></a><a name="index-incmonth-838"></a>The <kbd>t I</kbd> (<code>calc-inc-month</code>) [<code>incmonth</code>] command
+increases a date form by one month, or by an arbitrary number of
+months specified by a numeric prefix argument.  The time portion,
+if any, of the date form stays the same.  The day also stays the
+same, except that if the new month has fewer days the day
+number may be reduced to lie in the valid range.  For example,
+&lsquo;<samp><span class="samp">incmonth(&lt;Jan 31, 1991&gt;)</span></samp>&rsquo; produces &lsquo;<samp><span class="samp">&lt;Feb 28, 1991&gt;</span></samp>&rsquo;. 
+Because of this, <kbd>t I t I</kbd> and <kbd>M-2 t I</kbd> do not always give
+the same results (&lsquo;<samp><span class="samp">&lt;Mar 28, 1991&gt;</span></samp>&rsquo; versus &lsquo;<samp><span class="samp">&lt;Mar 31, 1991&gt;</span></samp>&rsquo;
+in this case).
+
+   <p><a name="index-incyear-839"></a>The &lsquo;<samp><span class="samp">incyear(</span><var>date</var><span class="samp">, </span><var>step</var><span class="samp">)</span></samp>&rsquo; function increases
+a date form by the specified number of years, which may be
+any positive or negative integer.  Note that &lsquo;<samp><span class="samp">incyear(d, n)</span></samp>&rsquo;
+is equivalent to &lsquo;<samp><span class="samp">incmonth(d,&nbsp;12*n)</span></samp>&rsquo;<!-- /@w -->, but these do not have
+simple equivalents in terms of day arithmetic because
+months and years have varying lengths.  If the <var>step</var>
+argument is omitted, 1 year is assumed.  There is no keyboard
+command for this function; use <kbd>C-u 12 t I</kbd> instead.
+
+   <p>There is no <code>newday</code> function at all because <kbd>F</kbd> [<code>floor</code>]
+serves this purpose.  Similarly, instead of <code>incday</code> and
+<code>incweek</code> simply use &lsquo;<samp><span class="samp">d + n</span></samp>&rsquo; or &lsquo;<samp><span class="samp">d + 7 n</span></samp>&rsquo;.
+
+   <p>See <a href="Basic-Arithmetic.html#Basic-Arithmetic">Basic Arithmetic</a>, for the <kbd>f ]</kbd> [<code>incr</code>] command
+which can adjust a date/time form by a certain number of seconds.
+
+   </body></html>
+

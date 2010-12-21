@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>LaTeX fragments - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Embedded-LaTeX.html#Embedded-LaTeX" title="Embedded LaTeX">
+<link rel="prev" href="Subscripts-and-superscripts.html#Subscripts-and-superscripts" title="Subscripts and superscripts">
+<link rel="next" href="Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments" title="Previewing LaTeX fragments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="LaTeX-fragments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments">Previewing LaTeX fragments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Subscripts-and-superscripts.html#Subscripts-and-superscripts">Subscripts and superscripts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Embedded-LaTeX.html#Embedded-LaTeX">Embedded LaTeX</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.6.3 LaTeX fragments</h4>
+
+<p><a name="index-La_0040TeX_007b_007d-fragments-1009"></a>
+<a name="index-org_002dformat_002dlatex_002dheader-1010"></a>With symbols, sub- and superscripts, HTML is pretty much at its end when
+it comes to representing mathematical formulas<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. More complex expressions need a dedicated
+formula processor. To this end, Org mode can contain arbitrary LaTeX
+fragments. It provides commands to preview the typeset result of these
+fragments, and upon export to HTML, all fragments will be converted to
+images and inlined into the HTML document<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>. For this to work you
+need to be on a system with a working LaTeX installation. You also
+need the <samp><span class="file">dvipng</span></samp> program, available at
+<a href="http://sourceforge.net/projects/dvipng/">http://sourceforge.net/projects/dvipng/</a>. The LaTeX header that
+will be used when processing a fragment can be configured with the
+variable <code>org-format-latex-header</code>.
+
+   <p>LaTeX fragments don't need any special marking at all.  The following
+snippets will be identified as LaTeX source code:
+     <ul>
+<li>Environments of any kind.  The only requirement is that the
+<code>\begin</code> statement appears on a new line, preceded by only
+whitespace. 
+<li>Text within the usual LaTeX math delimiters.  To avoid conflicts with
+currency specifications, single &lsquo;<samp><span class="samp">$</span></samp>&rsquo; characters are only recognized as
+math delimiters if the enclosed text contains at most two line breaks, is
+directly attached to the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; characters with no whitespace in between,
+and if the closing &lsquo;<samp><span class="samp">$</span></samp>&rsquo; is followed by whitespace, punctuation or a dash. 
+For the other delimiters, there is no such restriction, so when in doubt, use
+&lsquo;<samp><span class="samp">\(...\)</span></samp>&rsquo; as inline math delimiters. 
+</ul>
+
+<p class="noindent">For example:
+
+<pre class="example">     \begin{equation}                          % arbitrary environments,
+     x=\sqrt{b}                                % even tables, figures
+     \end{equation}                            % etc
+     
+     If $a^2=b$ and \( b=2 \), then the solution must be
+     either $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \].
+</pre>
+   <p class="noindent"><a name="index-org_002dformat_002dlatex_002doptions-1011"></a>If you need any of the delimiter ASCII sequences for other purposes, you
+can configure the option <code>org-format-latex-options</code> to deselect the
+ones you do not wish to have interpreted by the LaTeX converter.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Yes, there is
+MathML, but that is not yet fully supported by many browsers, and there
+is no decent converter for turning LaTeX or ASCII representations of
+formulas into MathML. So for the time being, converting formulas into
+images seems the way to go.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The LaTeX export
+will not use images for displaying LaTeX fragments but include these
+fragments directly into the LaTeX code.</p>
+
+   <hr></div>
+
+   </body></html>
+

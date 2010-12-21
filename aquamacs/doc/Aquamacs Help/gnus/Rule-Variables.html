@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>Rule Variables - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Decoding-Variables.html#Decoding-Variables" title="Decoding Variables">
+<link rel="next" href="Other-Decode-Variables.html#Other-Decode-Variables" title="Other Decode Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Rule-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Decode-Variables.html#Other-Decode-Variables">Other Decode Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Decoding-Variables.html#Decoding-Variables">Decoding Variables</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.17.5.1 Rule Variables</h5>
+
+<p><a name="index-rule-variables-1251"></a>
+Gnus uses <dfn>rule variables</dfn> to decide how to view a file.  All these
+variables are of the form
+
+<pre class="lisp">           (list '(regexp1 command2)
+                 '(regexp2 command2)
+                 ...)
+</pre>
+     <dl>
+<dt><code>gnus-uu-user-view-rules</code><dd><a name="index-gnus_002duu_002duser_002dview_002drules-1252"></a><a name="index-sox-1253"></a>This variable is consulted first when viewing files.  If you wish to use,
+for instance, <code>sox</code> to convert an <samp><span class="file">.au</span></samp> sound file, you could
+say something like:
+     <pre class="lisp">          (setq gnus-uu-user-view-rules
+                (list '("\\\\.au$" "sox %s -t .aiff &gt; /dev/audio")))
+</pre>
+     <br><dt><code>gnus-uu-user-view-rules-end</code><dd><a name="index-gnus_002duu_002duser_002dview_002drules_002dend-1254"></a>This variable is consulted if Gnus couldn't make any matches from the
+user and default view rules.
+
+     <br><dt><code>gnus-uu-user-archive-rules</code><dd><a name="index-gnus_002duu_002duser_002darchive_002drules-1255"></a>This variable can be used to say what commands should be used to unpack
+archives. 
+</dl>
+
+   </body></html>
+

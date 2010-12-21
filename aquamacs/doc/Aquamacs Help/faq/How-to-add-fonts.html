@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>How to add fonts - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Alternate-character-sets.html#Alternate-character-sets" title="Alternate character sets">
+<link rel="prev" href="Right_002dto_002dleft-alphabets.html#Right_002dto_002dleft-alphabets" title="Right-to-left alphabets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="How-to-add-fonts"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Right_002dto_002dleft-alphabets.html#Right_002dto_002dleft-alphabets">Right-to-left alphabets</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Alternate-character-sets.html#Alternate-character-sets">Alternate character sets</a>
+<hr>
+</div>
+
+<h3 class="section">11.4 How do I add fonts for use with Emacs?</h3>
+
+<p><a name="index-add-fonts-for-use-with-Emacs-495"></a><a name="index-intlfonts-496"></a>
+First, download and install the BDF font files and any auxiliary
+packages they need.  The GNU Intlfonts distribution can be found on
+<a href="http://directory.fsf.org/localization/intlfonts.html">the GNU Software Directory Web site</a>.
+
+   <p>Next, if you are on X Window system, issue the following two commands
+from the shell's prompt:
+
+<pre class="example">       xset +fp /usr/local/share/emacs/fonts
+       xset fp rehash
+</pre>
+   <p class="noindent">(Modify the first command if you installed the fonts in a directory
+that is not <samp><span class="file">/usr/local/share/emacs/fonts</span></samp>.)  You also need to
+arrange for these two commands to run whenever you log in, e.g., by
+adding them to your window-system startup file, such as
+<samp><span class="file">~/.xsessionrc</span></samp> or <samp><span class="file">~/.gnomerc</span></samp>.
+
+   <p>Now, add the following line to your <samp><span class="file">~/.emacs</span></samp> init file:
+
+<pre class="lisp">       (add-to-list 'bdf-directory-list "/usr/share/emacs/fonts/bdf")
+</pre>
+   <p class="noindent">(Again, modify the file name if you installed the fonts elsewhere.)
+
+   <p>Finally, if you wish to use the installed fonts with <code>ps-print</code>,
+add the following line to your <samp><span class="file">~/.emacs</span></samp>:
+
+<pre class="lisp">       (setq ps-multibyte-buffer 'bdf-font-except-latin)
+</pre>
+   <p>A few additional steps are necessary for MS-Windows; they are listed
+below.
+
+   <p>First, make sure <em>all</em> the directories with BDF font files are
+mentioned in <code>bdf-directory-list</code>.  On Unix and GNU/Linux
+systems, one normally runs <kbd>make install</kbd> to install the BDF fonts
+in the same directory.  By contrast, Windows users typically don't run
+the Intlfonts installation command, but unpack the distribution in
+some directory, which leaves the BDF fonts in its subdirectories.  For
+example, assume that you unpacked Intlfonts in <samp><span class="file">C:/Intlfonts</span></samp>;
+then you should set <code>bdf-directory-list</code> as follows:
+
+<pre class="lisp">       (setq bdf-directory-list
+         '("C:/Intlfonts/Asian"
+           "C:/Intlfonts/Chinese" "C:/Intlfonts/Chinese.X"
+           "C:/Intlfonts/Chinese.BIG" "C:/Intlfonts/Ethiopic"
+           "C:/Intlfonts/European" "C:/Intlfonts/European.BIG"
+           "C:/Intlfonts/Japanese" "C:/Intlfonts/Japanese.X"
+           "C:/Intlfonts/Japanese.BIG" "C:/Intlfonts/Korean.X"
+           "C:/Intlfonts/Misc"))
+</pre>
+   <p><a name="index-g_t_0040code_007bw32_002dbdf_002dfilename_002dalist_007d-497"></a><a name="index-g_t_0040code_007bw32_002dfind_002dbdf_002dfonts_007d-498"></a>Next, you need to set up the variable <code>w32-bdf-filename-alist</code> to
+an alist of the BDF fonts and their corresponding file names. 
+Assuming you have set <code>bdf-directory-list</code> to name all the
+directories with the BDF font files, the following Lisp snippet will
+set up <code>w32-bdf-filename-alist</code>:
+
+<pre class="lisp">       (setq w32-bdf-filename-alist
+          (w32-find-bdf-fonts bdf-directory-list))
+</pre>
+   <p>Now, create fontsets for the BDF fonts:
+
+<pre class="lisp">       (create-fontset-from-fontset-spec
+        "-*-fixed-medium-r-normal-*-16-*-*-*-c-*-fontset-bdf,
+        japanese-jisx0208:-*-*-medium-r-normal-*-16-*-*-*-c-*-jisx0208.1983-*,
+        katakana-jisx0201:-*-*-medium-r-normal-*-16-*-*-*-c-*-jisx0201*-*,
+        latin-jisx0201:-*-*-medium-r-normal-*-16-*-*-*-c-*-jisx0201*-*,
+        japanese-jisx0208-1978:-*-*-medium-r-normal-*-16-*-*-*-c-*-jisx0208.1978-*,
+        thai-tis620:-misc-fixed-medium-r-normal--16-160-72-72-m-80-tis620.2529-1,
+        lao:-misc-fixed-medium-r-normal--16-160-72-72-m-80-MuleLao-1,
+        tibetan-1-column:-TibMdXA-fixed-medium-r-normal--16-160-72-72-m-80-MuleTibetan-1,
+        ethiopic:-Admas-Ethiomx16f-Medium-R-Normal--16-150-100-100-M-160-Ethiopic-Unicode,
+        tibetan:-TibMdXA-fixed-medium-r-normal--16-160-72-72-m-160-MuleTibetan-0")
+</pre>
+   <p>Many of the international bdf fonts from Intlfonts are type 0, and
+therefore need to be added to font-encoding-alist:
+
+<pre class="lisp">       (setq font-encoding-alist
+             (append '(("MuleTibetan-0" (tibetan . 0))
+                       ("GB2312"        (chinese-gb2312 . 0))
+                       ("JISX0208"      (japanese-jisx0208 . 0))
+                       ("JISX0212"      (japanese-jisx0212 . 0))
+                       ("VISCII"        (vietnamese-viscii-lower . 0))
+                       ("KSC5601"       (korean-ksc5601 . 0))
+                       ("MuleArabic-0"  (arabic-digit . 0))
+                       ("MuleArabic-1"  (arabic-1-column . 0))
+                       ("MuleArabic-2"  (arabic-2-column . 0)))
+                     font-encoding-alist))
+</pre>
+   <p>You can now use the Emacs font menu to select the &lsquo;<samp><span class="samp">bdf: 16-dot medium</span></samp>&rsquo;
+fontset, or you can select it by setting the default font in your
+<samp><span class="file">~/.emacs</span></samp>:
+
+<pre class="lisp">       (set-default-font "fontset-bdf")
+</pre>
+   <!--  -->
+   </body></html>
+

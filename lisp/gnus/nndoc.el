@@ -64,9 +64,6 @@ from the document.")
      (body-end . "")
      (file-end . "")
      (subtype digest guess))
-    (mime-parts
-     (generate-head-function . nndoc-generate-mime-parts-head)
-     (article-transform-function . nndoc-transform-mime-parts))
     (nsmail
      (article-begin .  "^From - "))
     (news
@@ -82,6 +79,9 @@ from the document.")
      (body-end . "\^_")
      (body-begin-function . nndoc-babyl-body-begin)
      (head-begin-function . nndoc-babyl-head-begin))
+    (mime-parts
+     (generate-head-function . nndoc-generate-mime-parts-head)
+     (article-transform-function . nndoc-transform-mime-parts))
     (exim-bounce
      (article-begin . "^------ This is a copy of the message, including all the headers. ------\n\n")
      (body-end-function . nndoc-exim-bounce-body-end-function))
@@ -138,6 +138,14 @@ from the document.")
      (generate-head-function . nndoc-generate-lanl-gov-head)
      (article-transform-function . nndoc-transform-lanl-gov-announce)
      (subtype preprints guess))
+    (git
+     (file-begin . "\n- Log ---.*")
+     (article-begin . "^commit ")
+     (head-begin . "^Author: ")
+     (body-begin . "^$")
+     (file-end . "\n-----------------------------------------------------------------------")
+     (article-transform-function . nndoc-transform-git-article)
+     (header-transform-function . nndoc-transform-git-headers))
     (rfc822-forward
      (article-begin . "^\n+")
      (body-end-function . nndoc-rfc822-forward-body-end-function)
@@ -193,6 +201,7 @@ from the document.")
 (defvoo nndoc-prepare-body-function nil)
 (defvoo nndoc-generate-head-function nil)
 (defvoo nndoc-article-transform-function nil)
+(defvoo nndoc-header-transform-function nil)
 (defvoo nndoc-article-begin-function nil)
 (defvoo nndoc-generate-article-function nil)
 (defvoo nndoc-dissection-function nil)
@@ -215,8 +224,7 @@ from the document.")
 
 (deffoo nndoc-retrieve-headers (articles &optional newsgroup server fetch-old)
   (when (nndoc-possibly-change-buffer newsgroup server)
-    (save-excursion
-      (set-buffer nntp-server-buffer)
+    (with-current-buffer nntp-server-buffer
       (erase-buffer)
       (let (article entry)
 	(if (stringp (car articles))
@@ -224,17 +232,22 @@ from the document.")
 	  (while articles
 	    (when (setq entry (cdr (assq (setq article (pop articles))
 					 nndoc-dissection-alist)))
-	      (insert (format "221 %d Article retrieved.\n" article))
-	      (if nndoc-generate-head-function
-		  (funcall nndoc-generate-head-function article)
-		(insert-buffer-substring
-		 nndoc-current-buffer (car entry) (nth 1 entry)))
-	      (goto-char (point-max))
-	      (unless (eq (char-after (1- (point))) ?\n)
-		(insert "\n"))
-	      (insert (format "Lines: %d\n" (nth 4 entry)))
-	      (insert ".\n")))
-
+	      (let ((start (point)))
+		(insert (format "221 %d Article retrieved.\n" article))
+		(if nndoc-generate-head-function
+		    (funcall nndoc-generate-head-function article)
+		  (insert-buffer-substring
+		   nndoc-current-buffer (car entry) (nth 1 entry)))
+		(goto-char (point-max))
+		(unless (eq (char-after (1- (point))) ?\n)
+		  (insert "\n"))
+		(insert (format "Lines: %d\n" (nth 4 entry)))
+		(insert ".\n")
+		(when nndoc-header-transform-function
+		  (save-excursion
+		    (save-restriction
+		      (narrow-to-region start (point))
+		      (funcall nndoc-header-transform-function entry)))))))
 	  (nnheader-fold-continuation-lines)
 	  'headers)))))
 
@@ -265,7 +278,7 @@ from the document.")
 	    (funcall nndoc-article-transform-function article))
 	  t))))))
 
-(deffoo nndoc-request-group (group &optional server dont-check)
+(deffoo nndoc-request-group (group &optional server dont-check info)
   "Select news GROUP."
   (let (number)
     (cond
@@ -280,6 +293,11 @@ from the document.")
       (nnheader-report 'nndoc "No articles in group %s" group))
      (t
       (nnheader-insert "211 %d %d %d %s\n" number 1 number group)))))
+
+(deffoo nndoc-retrieve-groups (groups &optional server)
+  (dolist (group groups)
+    (nndoc-request-group group server))
+  t)
 
 (deffoo nndoc-request-type (group &optional article)
   (cond ((not article) 'unknown)
@@ -299,7 +317,7 @@ from the document.")
   t)
 
 (deffoo nndoc-request-list (&optional server)
-  nil)
+  t)
 
 (deffoo nndoc-request-newgroups (date &optional server)
   nil)
@@ -333,8 +351,7 @@ from the document.")
 			       (concat " *nndoc " group "*"))))
 	    nndoc-group-alist)
       (setq nndoc-dissection-alist nil)
-      (save-excursion
-	(set-buffer nndoc-current-buffer)
+      (with-current-buffer nndoc-current-buffer
 	(erase-buffer)
 	(if (and (stringp nndoc-address)
 		 (string-match nndoc-binary-file-names nndoc-address))
@@ -347,8 +364,7 @@ from the document.")
     ;; Initialize the nndoc structures according to this new document.
     (when (and nndoc-current-buffer
 	       (not nndoc-dissection-alist))
-      (save-excursion
-	(set-buffer nndoc-current-buffer)
+      (with-current-buffer nndoc-current-buffer
 	(nndoc-set-delims)
 	(if (eq nndoc-article-type 'mime-parts)
 	    (nndoc-dissect-mime-parts)
@@ -371,6 +387,7 @@ from the document.")
 		nndoc-file-end nndoc-article-begin
 		nndoc-body-begin nndoc-body-end-function nndoc-body-end
 		nndoc-prepare-body-function nndoc-article-transform-function
+		nndoc-header-transform-function
 		nndoc-generate-head-function nndoc-body-begin-function
 		nndoc-head-begin-function
 		nndoc-generate-article-function
@@ -588,8 +605,7 @@ from the document.")
 (defun nndoc-generate-clari-briefs-head (article)
   (let ((entry (cdr (assq article nndoc-dissection-alist)))
 	subject from)
-    (save-excursion
-      (set-buffer nndoc-current-buffer)
+    (with-current-buffer nndoc-current-buffer
       (save-restriction
 	(narrow-to-region (car entry) (nth 3 entry))
 	(goto-char (point-min))
@@ -648,6 +664,30 @@ from the document.")
 (defun nndoc-slack-digest-type-p ()
   0)
 
+(defun nndoc-git-type-p ()
+  (and (search-forward "\n- Log ---" nil t)
+       (search-forward "\ncommit " nil t)
+       (search-forward "\nAuthor: " nil t)))
+
+(defun nndoc-transform-git-article (article)
+  (goto-char (point-min))
+  (when (re-search-forward "^Author: " nil t)
+    (replace-match "From: " t t)))
+
+(defun nndoc-transform-git-headers (entry)
+  (goto-char (point-min))
+  (when (re-search-forward "^Author: " nil t)
+    (replace-match "From: " t t))
+  (let (subject)
+    (with-current-buffer nndoc-current-buffer
+      (goto-char (car entry))
+      (when (search-forward "\n\n" nil t)
+	(setq subject (buffer-substring (point) (line-end-position)))))
+    (when subject
+      (goto-char (point-min))
+      (forward-line 1)
+      (insert (format "Subject: %s\n" subject)))))
+
 (defun nndoc-lanl-gov-announce-type-p ()
   (when (let ((case-fold-search nil))
 	  (re-search-forward "^\\\\\\\\\n\\(Paper\\( (\\*cross-listing\\*)\\)?: [a-zA-Z-\\.]+/[0-9]+\\|arXiv:\\)" nil t))
@@ -677,8 +717,7 @@ from the document.")
   (let ((entry (cdr (assq article nndoc-dissection-alist)))
 	(from "<no address given>")
 	subject date)
-    (save-excursion
-      (set-buffer nndoc-current-buffer)
+    (with-current-buffer nndoc-current-buffer
       (save-restriction
 	(narrow-to-region (car entry) (nth 1 entry))
 	(goto-char (point-min))
@@ -829,8 +868,7 @@ from the document.")
 	(first t)
 	art-begin head-begin head-end body-begin body-end)
     (setq nndoc-dissection-alist nil)
-    (save-excursion
-      (set-buffer nndoc-current-buffer)
+    (with-current-buffer nndoc-current-buffer
       (goto-char (point-min))
       ;; Remove blank lines.
       (while (eq (following-char) ?\n)
@@ -880,7 +918,8 @@ from the document.")
 	    (setq body-end (point))
 	    (push (list (incf i) head-begin head-end body-begin body-end
 			(count-lines body-begin body-end))
-		  nndoc-dissection-alist)))))))
+		  nndoc-dissection-alist)))))
+    (setq nndoc-dissection-alist (nreverse nndoc-dissection-alist))))
 
 (defun nndoc-article-begin ()
   (if nndoc-article-begin-function
@@ -902,8 +941,7 @@ When a MIME entity contains sub-entities, dissection produces one article for
 the header of this entity, and one article per sub-entity."
   (setq nndoc-dissection-alist nil
 	nndoc-mime-split-ordinal 0)
-  (save-excursion
-    (set-buffer nndoc-current-buffer)
+  (with-current-buffer nndoc-current-buffer
     (nndoc-dissect-mime-parts-sub (point-min) (point-max) nil nil nil)))
 
 (defun nndoc-dissect-mime-parts-sub (head-begin body-end article-insert
@@ -1040,7 +1078,7 @@ as the last checked definition, if t or `first', add as the
 first definition, and if any other symbol, add after that
 symbol in the alist."
   ;; First remove any old instances.
-  (gnus-pull (car definition) nndoc-type-alist)
+  (gnus-alist-pull (car definition) nndoc-type-alist)
   ;; Then enter the new definition in the proper place.
   (cond
    ((or (null position) (eq position 'last))

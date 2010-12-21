@@ -380,8 +380,7 @@ all.  This may very well take some time.")
 
 (deffoo nndiary-retrieve-headers (sequence &optional group server fetch-old)
   (when (nndiary-possibly-change-directory group server)
-    (save-excursion
-      (set-buffer nntp-server-buffer)
+    (with-current-buffer nntp-server-buffer
       (erase-buffer)
       (let* ((file nil)
 	     (number (length sequence))
@@ -483,7 +482,7 @@ all.  This may very well take some time.")
       (cons (if group-num (car group-num) group)
 	    (string-to-number (file-name-nondirectory path)))))))
 
-(deffoo nndiary-request-group (group &optional server dont-check)
+(deffoo nndiary-request-group (group &optional server dont-check info)
   (let ((file-name-coding-system nnmail-pathname-coding-system))
     (cond
      ((not (nndiary-possibly-change-directory group server))
@@ -615,8 +614,7 @@ all.  This may very well take some time.")
      (let (nndiary-current-directory
 	   nndiary-current-group
 	   nndiary-article-file-alist)
-       (save-excursion
-	 (set-buffer buf)
+       (with-current-buffer buf
 	 (insert-buffer-substring nntp-server-buffer)
 	 (setq result (eval accept-form))
 	 (kill-buffer (current-buffer))
@@ -672,8 +670,7 @@ all.  This may very well take some time.")
 
 (deffoo nndiary-request-replace-article (article group buffer)
   (nndiary-possibly-change-directory group)
-  (save-excursion
-    (set-buffer buffer)
+  (with-current-buffer buffer
     (nndiary-possibly-create-directory group)
     (let ((chars (nnmail-insert-lines))
 	  (art (concat (int-to-string article) "\t"))
@@ -688,8 +685,7 @@ all.  This may very well take some time.")
 	      t)
 	(setq headers (nndiary-parse-head chars article))
 	;; Replace the NOV line in the NOV file.
-	(save-excursion
-	  (set-buffer (nndiary-open-nov group))
+	(with-current-buffer (nndiary-open-nov group)
 	  (goto-char (point-min))
 	  (if (or (looking-at art)
 		  (search-forward (concat "\n" art) nil t))
@@ -842,8 +838,7 @@ all.  This may very well take some time.")
 
 ;; Find an article number in the current group given the Message-ID.
 (defun nndiary-find-group-number (id)
-  (save-excursion
-    (set-buffer (get-buffer-create " *nndiary id*"))
+  (with-current-buffer (get-buffer-create " *nndiary id*")
     (let ((alist nndiary-group-alist)
 	  number)
       ;; We want to look through all .overview files, but we want to
@@ -888,8 +883,7 @@ all.  This may very well take some time.")
     (let ((nov (expand-file-name nndiary-nov-file-name
 				 nndiary-current-directory)))
       (when (file-exists-p nov)
-	(save-excursion
-	  (set-buffer nntp-server-buffer)
+	(with-current-buffer nntp-server-buffer
 	  (erase-buffer)
 	  (nnheader-insert-file-contents nov)
 	  (if (and fetch-old
@@ -989,8 +983,7 @@ all.  This may very well take some time.")
 
 (defun nndiary-add-nov (group article headers)
   "Add a nov line for the GROUP base."
-  (save-excursion
-    (set-buffer (nndiary-open-nov group))
+  (with-current-buffer (nndiary-open-nov group)
     (goto-char (point-max))
     (mail-header-set-number headers article)
     (nnheader-insert-nov headers)))
@@ -1015,8 +1008,7 @@ all.  This may very well take some time.")
   (or (cdr (assoc group nndiary-nov-buffer-alist))
       (let ((buffer (get-buffer-create (format " *nndiary overview %s*"
 					       group))))
-	(save-excursion
-	  (set-buffer buffer)
+	(with-current-buffer buffer
 	  (set (make-local-variable 'nndiary-nov-buffer-file-name)
 	       (expand-file-name
 		nndiary-nov-file-name
@@ -1069,9 +1061,9 @@ all.  This may very well take some time.")
 		   (file-directory-p dir))
 	  (nndiary-generate-nov-databases-1 dir seen))))
     ;; Do this directory.
-    (let ((files (sort (nnheader-article-to-file-alist dir)
+    (let ((nndiary-files (sort (nnheader-article-to-file-alist dir)
 		       'car-less-than-car)))
-      (if (not files)
+      (if (not nndiary-files)
 	  (let* ((group (nnheader-file-to-group
 			 (directory-file-name dir) nndiary-directory))
 		 (info (cadr (assoc group nndiary-group-alist))))
@@ -1079,11 +1071,11 @@ all.  This may very well take some time.")
 	      (setcar info (1+ (cdr info)))))
 	(funcall nndiary-generate-active-function dir)
 	;; Generate the nov file.
-	(nndiary-generate-nov-file dir files)
+	(nndiary-generate-nov-file dir nndiary-files)
 	(unless no-active
 	  (nnmail-save-active nndiary-group-alist nndiary-active-file))))))
 
-(defvar files)
+(defvar nndiary-files) ; dynamically bound in nndiary-generate-nov-databases-1
 (defun nndiary-generate-active-info (dir)
   ;; Update the active info for this group.
   (let* ((group (nnheader-file-to-group
@@ -1092,9 +1084,9 @@ all.  This may very well take some time.")
 	 (last (or (caadr entry) 0)))
     (setq nndiary-group-alist (delq entry nndiary-group-alist))
     (push (list group
-		(cons (or (caar files) (1+ last))
+		(cons (or (caar nndiary-files) (1+ last))
 		      (max last
-			   (or (caar (last files))
+			   (or (caar (last nndiary-files))
 			       0))))
 	  nndiary-group-alist)))
 
@@ -1103,9 +1095,8 @@ all.  This may very well take some time.")
 	 (nov (concat dir nndiary-nov-file-name))
 	 (nov-buffer (get-buffer-create " *nov*"))
 	 chars file headers)
-    (save-excursion
-      ;; Init the nov buffer.
-      (set-buffer nov-buffer)
+    ;; Init the nov buffer.
+    (with-current-buffer nov-buffer
       (buffer-disable-undo)
       (erase-buffer)
       (set-buffer nntp-server-buffer)
@@ -1125,20 +1116,17 @@ all.  This may very well take some time.")
 	  (unless (zerop (buffer-size))
 	    (goto-char (point-min))
 	    (setq headers (nndiary-parse-head chars (caar files)))
-	    (save-excursion
-	      (set-buffer nov-buffer)
+	    (with-current-buffer nov-buffer
 	      (goto-char (point-max))
 	      (nnheader-insert-nov headers)))
 	  (widen))
 	(setq files (cdr files)))
-      (save-excursion
-	(set-buffer nov-buffer)
+      (with-current-buffer nov-buffer
 	(nnmail-write-region 1 (point-max) nov nil 'nomesg)
 	(kill-buffer (current-buffer))))))
 
 (defun nndiary-nov-delete-article (group article)
-  (save-excursion
-    (set-buffer (nndiary-open-nov group))
+  (with-current-buffer (nndiary-open-nov group)
     (when (nnheader-find-nov-line article)
       (delete-region (point) (progn (forward-line 1) (point)))
       (when (bobp)

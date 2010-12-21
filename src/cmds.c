@@ -37,7 +37,7 @@ Lisp_Object Qkill_forward_chars, Qkill_backward_chars;
 /* A possible value for a buffer's overwrite-mode variable.  */
 Lisp_Object Qoverwrite_mode_binary;
 
-static int internal_self_insert (int, int);
+static int internal_self_insert (int, EMACS_INT);
 
 DEFUN ("forward-point", Fforward_point, Sforward_point, 1, 1, 0,
        doc: /* Return buffer position N characters after (before if N negative) point.  */)
@@ -68,7 +68,7 @@ right or to the left on the screen.  This is in contrast with
      hooks, etcetera), that's not a good approach.  So we validate the
      proposed position, then set point.  */
   {
-    int new_point = PT + XINT (n);
+    EMACS_INT new_point = PT + XINT (n);
 
     if (new_point < BEGV)
       {
@@ -116,9 +116,9 @@ With positive N, a non-empty line at the end counts as one line
 successfully moved (for the return value).  */)
   (Lisp_Object n)
 {
-  int opoint = PT, opoint_byte = PT_BYTE;
-  int pos, pos_byte;
-  int count, shortage;
+  EMACS_INT opoint = PT, opoint_byte = PT_BYTE;
+  EMACS_INT pos, pos_byte;
+  EMACS_INT count, shortage;
 
   if (NILP (n))
     count = 1;
@@ -188,7 +188,7 @@ not move.  To ignore field boundaries bind `inhibit-field-text-motion'
 to t.  */)
   (Lisp_Object n)
 {
-  int newpos;
+  EMACS_INT newpos;
 
   if (NILP (n))
     XSETFASTINT (n, 1);
@@ -230,10 +230,10 @@ Optional second arg KILLFLAG non-nil means kill instead (save in kill ring).
 Interactively, N is the prefix arg, and KILLFLAG is set if
 N was explicitly specified.
 
-The command `delete-forward' is preferable for interactive use.  */)
+The command `delete-forward-char' is preferable for interactive use.  */)
   (Lisp_Object n, Lisp_Object killflag)
 {
-  int pos;
+  EMACS_INT pos;
 
   CHECK_NUMBER (n);
 
@@ -276,7 +276,7 @@ After insertion, the value of `auto-fill-function' is called if the
   (Lisp_Object n)
 {
   int remove_boundary = 1;
-  CHECK_NUMBER (n);
+  CHECK_NATNUM (n);
 
   if (!EQ (Vthis_command, current_kboard->Vlast_command))
     nonundocount = 0;
@@ -303,7 +303,7 @@ After insertion, the value of `auto-fill-function' is called if the
     bitch_at_user ();
   {
     int character = translate_char (Vtranslation_table_for_input,
-				    XINT (last_command_event));
+				    (int) XINT (last_command_event));
     int val = internal_self_insert (character, XFASTINT (n));
     if (val == 2)
       nonundocount = 0;
@@ -323,7 +323,7 @@ static Lisp_Object Qexpand_abbrev;
 static Lisp_Object Qpost_self_insert_hook, Vpost_self_insert_hook;
 
 static int
-internal_self_insert (int c, int n)
+internal_self_insert (int c, EMACS_INT n)
 {
   int hairy = 0;
   Lisp_Object tem;
@@ -333,8 +333,8 @@ internal_self_insert (int c, int n)
   int len;
   /* Working buffer and pointer for multi-byte form of C.  */
   unsigned char str[MAX_MULTIBYTE_LENGTH];
-  int chars_to_delete = 0;
-  int spaces_to_insert = 0;
+  EMACS_INT chars_to_delete = 0;
+  EMACS_INT spaces_to_insert = 0;
 
   overwrite = current_buffer->overwrite_mode;
   if (!NILP (Vbefore_change_functions) || !NILP (Vafter_change_functions))
@@ -380,12 +380,12 @@ internal_self_insert (int c, int n)
 	chars_to_delete = n;
       else if (c != '\n' && c2 != '\n')
 	{
-	  int pos = PT;
-	  int pos_byte = PT_BYTE;
+	  EMACS_INT pos = PT;
+	  EMACS_INT pos_byte = PT_BYTE;
 	  /* Column the cursor should be placed at after this insertion.
 	     The correct value should be calculated only when necessary.  */
 	  int target_clm = ((int) current_column () /* iftc */
-			    + n * XINT (Fchar_width (make_number (c))));
+			    + n * (int) XINT (Fchar_width (make_number (c))));
 
 	      /* The actual cursor position after the trial of moving
 		 to column TARGET_CLM.  It is greater than TARGET_CLM
@@ -393,7 +393,8 @@ internal_self_insert (int c, int n)
 		 character.  In that case, the new point is set after
 		 that character.  */
 	      int actual_clm
-		= XFASTINT (Fmove_to_column (make_number (target_clm), Qnil));
+		= (int) XFASTINT (Fmove_to_column (make_number (target_clm),
+						   Qnil));
 
 	      chars_to_delete = PT - pos;
 
@@ -452,7 +453,7 @@ internal_self_insert (int c, int n)
 		 && SINGLE_BYTE_CHAR_P (c))
 		? UNIBYTE_TO_CHAR (c) : c);
       Lisp_Object string = Fmake_string (make_number (n), make_number (mc));
-					  
+
       if (spaces_to_insert)
 	{
 	  tem = Fmake_string (make_number (spaces_to_insert),
@@ -473,7 +474,7 @@ internal_self_insert (int c, int n)
       insert_and_inherit (strn, p - strn);
       SAFE_FREE ();
     }
-  else
+  else if (n > 0)
     insert_and_inherit (str, len);
 
   if ((CHAR_TABLE_P (Vauto_fill_chars)

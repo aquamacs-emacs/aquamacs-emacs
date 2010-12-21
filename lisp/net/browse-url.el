@@ -1,7 +1,8 @@
 ;;; browse-url.el --- pass a URL to a WWW browser
 
-;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
-;;   2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+;;   2004, 2005, 2006, 2007, 2008, 2009, 2010
+;;   Free Software Foundation, Inc.
 
 ;; Author: Denis Howe <dbh@doc.ic.ac.uk>
 ;; Maintainer: FSF
@@ -204,12 +205,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
 
-(eval-when-compile (require 'cl)
-		   (require 'thingatpt)
-                   (require 'term)
-		   (require 'dired)
-                   (require 'executable)
-		   (require 'w3-auto nil t))
+(eval-when-compile (require 'cl))
 
 (defgroup browse-url nil
   "Use a web browser to look at a URL."
@@ -223,8 +219,10 @@
   (cond
    ((memq system-type '(windows-nt ms-dos cygwin))
     'browse-url-default-windows-browser)
-   ((memq system-type '(darwin)) 'browse-url-default-macosx-browser)
-   (t 'browse-url-default-browser))
+   ((memq system-type '(darwin))
+    'browse-url-default-macosx-browser)
+   (t
+    'browse-url-default-browser))
   "Function to display the current buffer in a WWW browser.
 This is used by the `browse-url-at-point', `browse-url-at-mouse', and
 `browse-url-of-file' commands.
@@ -264,7 +262,19 @@ regexp should probably be \".\" to specify a default browser."
 	  (function :tag "Your own function")
 	  (alist :tag "Regexp/function association list"
 		 :key-type regexp :value-type function))
-  :version "21.1"
+  :version "24.1"
+  :group 'browse-url)
+
+(defcustom browse-url-mailto-function 'browse-url-mail
+  "Function to display mailto: links.
+This variable uses the same syntax as the
+`browse-url-browser-function' variable.  If the
+`browse-url-mailto-function' variable is nil, that variable will
+be used instead."
+  :type '(choice
+	  (function-item :tag "Emacs Mail" :value browse-url-mail)
+	  (function-item :tag "None" nil))
+  :version "24.1"
   :group 'browse-url)
 
 (defcustom browse-url-netscape-program "netscape"
@@ -607,7 +617,7 @@ down (this *won't* always work)."
   :group 'browse-url)
 
 (defcustom browse-url-elinks-wrapper '("xterm" "-e")
-  "*Wrapper command prepended to the Elinks command-line."
+  "Wrapper command prepended to the Elinks command-line."
   :type '(repeat (string :tag "Wrapper"))
   :group 'browse-url)
 
@@ -639,7 +649,6 @@ regarding its parameter treatment."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; URL input
 
-;;;###autoload
 (defun browse-url-url-at-point ()
   (let ((url (thing-at-point 'url)))
     (set-text-properties 0 (length url) nil url)
@@ -755,6 +764,9 @@ narrowed."
 
 (add-hook 'kill-buffer-hook 'browse-url-delete-temp-file)
 
+(declare-function dired-get-filename "dired"
+		  (&optional localp no-error-if-not-filep))
+
 ;;;###autoload
 (defun browse-url-of-dired-file ()
   "In Dired, ask a WWW browser to display the file named on this line."
@@ -779,22 +791,27 @@ narrowed."
 (defun browse-url (url &rest args)
   "Ask a WWW browser to load URL.
 Prompts for a URL, defaulting to the URL at or before point.  Variable
-`browse-url-browser-function' says which browser to use."
+`browse-url-browser-function' says which browser to use.
+If the URL is a mailto: URL, consult `browse-url-mailto-function'
+first, if that exists."
   (interactive (browse-url-interactive-arg "URL: "))
   (unless (called-interactively-p 'interactive)
     (setq args (or args (list browse-url-new-window-flag))))
-  (let ((process-environment (copy-sequence process-environment)))
+  (let ((process-environment (copy-sequence process-environment))
+	(function (or (and (string-match "\\`mailto:" url)
+			   browse-url-mailto-function)
+		      browse-url-browser-function)))
     ;; When connected to various displays, be careful to use the display of
     ;; the currently selected frame, rather than the original start display,
     ;; which may not even exist any more.
     (if (stringp (frame-parameter (selected-frame) 'display))
         (setenv "DISPLAY" (frame-parameter (selected-frame) 'display)))
-    (if (and (consp browse-url-browser-function)
-	     (not (functionp browse-url-browser-function)))
+    (if (and (consp function)
+	     (not (functionp function)))
 	;; The `function' can be an alist; look down it for first match
 	;; and apply the function (which might be a lambda).
 	(catch 'done
-	  (dolist (bf browse-url-browser-function)
+	  (dolist (bf function)
 	    (when (string-match (car bf) url)
 	      (apply (cdr bf) url args)
 	      (throw 'done t)))
@@ -802,7 +819,7 @@ Prompts for a URL, defaulting to the URL at or before point.  Variable
 		 url))
       ;; Unbound symbols go down this leg, since void-function from
       ;; apply is clearer than wrong-type-argument from dolist.
-      (apply browse-url-browser-function url args))))
+      (apply function url args))))
 
 ;;;###autoload
 (defun browse-url-at-point (&optional arg)
@@ -882,7 +899,6 @@ one showing the selected frame."
     (and (not (equal display (getenv "DISPLAY")))
          display)))
 
-;;;###autoload
 (defun browse-url-default-browser (url &rest args)
   "Find a suitable browser and ask it to load URL.
 Default to the URL around or before point.
@@ -943,10 +959,7 @@ Galeon, Konqueror, Netscape, Mosaic, Lynx in an xterm, and then W3."
 ;;;###autoload
 (defun browse-url-xdg-open (url &optional new-window)
   (interactive (browse-url-interactive-arg "URL: "))
-  (call-process "/bin/sh" nil nil nil
-		"-c"
-		(concat "nohup xdg-open " url
-			">/dev/null 2>&1 </dev/null")))
+  (call-process "nohup" nil nil nil "xdg-open" url))
 
 ;;;###autoload
 (defun browse-url-netscape (url &optional new-window)
@@ -1393,6 +1406,10 @@ with possible additional arguments `browse-url-xterm-args'."
 
 ;; --- Lynx in an Emacs "term" window ---
 
+(declare-function term-char-mode "term" ())
+(declare-function term-send-down "term" ())
+(declare-function term-send-string "term" (proc str))
+
 ;;;###autoload
 (defun browse-url-text-emacs (url &optional new-buffer)
   "Ask a text browser to load URL.
@@ -1413,6 +1430,7 @@ used instead of `browse-url-new-window-flag'."
 	 (buf (get-buffer "*text browser*"))
 	 (proc (and buf (get-buffer-process buf)))
 	 (n browse-url-text-input-attempts))
+    (require 'term)
     (if (and (browse-url-maybe-new-window new-buffer) buf)
 	;; Rename away the OLD buffer. This isn't very polite, but
 	;; term insists on working in a buffer named *lynx* and would
@@ -1485,20 +1503,27 @@ used instead of `browse-url-new-window-flag'."
 	   (to (assoc "To" alist))
 	   (subject (assoc "Subject" alist))
 	   (body (assoc "Body" alist))
-	   (rest (delete to (delete subject (delete body alist))))
+	   (rest (delq to (delq subject (delq body alist))))
 	   (to (cdr to))
 	   (subject (cdr subject))
 	   (body (cdr body))
 	   (mail-citation-hook (unless body mail-citation-hook)))
       (if (browse-url-maybe-new-window new-window)
 	  (compose-mail-other-window to subject rest nil
-				     (if body
-					 (list 'insert body)
-				       (list 'insert-buffer (current-buffer))))
+				     (list 'insert-buffer (current-buffer)))
 	(compose-mail to subject rest nil nil
-		      (if body
-			  (list 'insert body)
-			(list 'insert-buffer (current-buffer))))))))
+		      (list 'insert-buffer (current-buffer))))
+      (when body
+	(goto-char (point-min))
+	(unless (or (search-forward (concat "\n" mail-header-separator "\n")
+				    nil 'move)
+		    (bolp))
+	  (insert "\n"))
+	(goto-char (prog1
+		       (point)
+		     (insert (replace-regexp-in-string "\r\n" "\n" body))
+		     (unless (bolp)
+		       (insert "\n"))))))))
 
 ;; --- Random browser ---
 
@@ -1577,5 +1602,4 @@ from `browse-url-elinks-wrapper'."
 
 (provide 'browse-url)
 
-;; arch-tag: d2079573-5c06-4097-9598-f550fba19430
 ;;; browse-url.el ends here

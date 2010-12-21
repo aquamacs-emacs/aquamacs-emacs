@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Omitting Examples - Dired Extra Version 2 User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dired Extra Version 2 User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Omitting-Files-in-Dired.html#Omitting-Files-in-Dired" title="Omitting Files in Dired">
+<link rel="prev" href="Omitting-Variables.html#Omitting-Variables" title="Omitting Variables">
+<link rel="next" href="Omitting-Technical.html#Omitting-Technical" title="Omitting Technical">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Omitting-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Omitting-Technical.html#Omitting-Technical">Omitting Technical</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Omitting-Variables.html#Omitting-Variables">Omitting Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Omitting-Files-in-Dired.html#Omitting-Files-in-Dired">Omitting Files in Dired</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">3.2 Examples of Omitting Various File Types</h3>
+
+     <ul>
+<li><a name="index-RCS-files_002c-how-to-omit-them-in-Dired-21"></a><a name="index-Omitting-RCS-files-in-Dired-22"></a>If you wish to avoid seeing RCS files and the <samp><span class="file">RCS</span></samp> directory, then put
+
+     <pre class="example">          (setq dired-omit-files
+                (concat dired-omit-files "\\|^RCS$\\|,v$"))
+</pre>
+     <p class="noindent">in the <code>dired-load-hook</code> (see <a href="Installation.html#Installation">Installation</a>).  This assumes
+<code>dired-omit-localp</code> has its default value of <code>no-dir</code> to make the
+<code>^</code>-anchored matches work.  As a slower alternative, with
+<code>dired-omit-localp</code> set to <code>nil</code>, you can use <code>/</code> instead of
+<code>^</code> in the regexp.
+
+     <li><a name="index-Tib-files_002c-how-to-omit-them-in-Dired-23"></a><a name="index-Omitting-tib-files-in-Dired-24"></a>If you use <code>tib</code>, the bibliography program for use with TeX and
+LaTeX, and you
+want to omit the <samp><span class="file">INDEX</span></samp> and the <samp><span class="file">*-t.tex</span></samp> files, then put
+
+     <pre class="example">          (setq dired-omit-files
+                (concat dired-omit-files "\\|^INDEX$\\|-t\\.tex$"))
+</pre>
+     <p class="noindent">in the <code>dired-load-hook</code> (see <a href="Installation.html#Installation">Installation</a>).
+
+     <li><a name="index-Dot-files_002c-how-to-omit-them-in-Dired-25"></a><a name="index-Omitting-dot-files-in-Dired-26"></a>If you do not wish to see &lsquo;<samp><span class="samp">dot</span></samp>&rsquo; files (files starting with a <samp><span class="file">.</span></samp>),
+then put
+
+     <pre class="example">          (setq dired-omit-files
+                (concat dired-omit-files "\\|^\\..+$"))
+</pre>
+     <p class="noindent">in the <code>dired-load-hook</code> (see <a href="Installation.html#Installation">Installation</a>).
+
+</ul>
+
+   </body></html>
+

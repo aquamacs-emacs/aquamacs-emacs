@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Differences - EDT Emulation for Emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="EDT Emulation for Emacs">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Platform_002dspecific-notes.html#Platform_002dspecific-notes" title="Platform-specific notes">
+<link rel="next" href="Highlights.html#Highlights" title="Highlights">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the EDT emulation package for Emacs.
+
+Copyright (C) 1986, 1992, 1994, 1995, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Differences"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Highlights.html#Highlights">Highlights</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Platform_002dspecific-notes.html#Platform_002dspecific-notes">Platform-specific notes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">5 How Does this EDT Emulation Differ from Real EDT?</h2>
+
+<p>In general, you will find that this emulation of EDT replicates most,
+but not all, of EDT's most used Keypad Mode editing functions and
+behavior.  It is not perfect, but most EDT users who have tried the
+emulation agree that it is quite good enough to make it easy for
+die-hard EDT users to move over to using GNU Emacs.
+
+   <p>Here's a list of the most important differences between EDT and this GNU
+Emacs EDT Emulation.  The list is short but you must be aware of these
+differences if you are to use the EDT Emulation effectively.
+
+     <ol type=1 start=1>
+
+     <li>Entering repeat counts works a little differently than in EDT.
+
+     <p>EDT allows users to enter a repeat count before entering a command that
+accepts repeat counts.  For example, when using the real EDT, pressing
+these three keys in sequence, <kbd>GOLD 5 KP1</kbd>, will move the cursor in
+the current direction 5 words.  This does <strong>not</strong> work in Emacs!
+
+     <p>Emacs provides two ways to enter repeat counts and neither involves
+using the &lt;GOLD&gt; key.  First, repeat counts can be entered in Emacs
+by using the &lt;ESC&gt; key.  For example, pressing these keys in
+sequence, <kbd>ESC 1 0 KP1</kbd>, will move the cursor in the current
+direction 10 words.  Second, Emacs provides another command called
+<code>universal-argument</code> that can be used to do the same thing. 
+Normally, in Emacs has this bound to <kbd>C-u</kbd>.
+
+     <li>EDT's line mode commands and nokeypad mode commands are <strong>not</strong>
+supported (with one important exception; see item 8 in
+<a href="Highlights.html#Highlights">Highlights</a>).  Although, at first, this may seem like a big
+omission, the set of built-in Emacs commands provides a much richer set
+of capabilities which more than make up for this omission.
+
+     <p>To enter Emacs commands not bound to keys, you can press <kbd>GOLD KP7</kbd>
+or the &lt;DO&gt; key.  Emacs will display its own command prompt "M-x". 
+This stands for the keypress <kbd>Meta-x</kbd>, where &lt;Meta&gt; is a special
+shift key.  The &lt;Alt&gt; key is often mapped to behave as a &lt;Meta&gt;
+key.  So, you can also invoke this prompt by pressing <kbd>Meta-x</kbd>. 
+Typing the sequence <kbd>ESC x</kbd> will also invoke the prompt.
+
+     <li>Selected text is highlighted <strong>only</strong> on systems where Emacs
+supports the highlighting of text.
+
+     <li>Just like in TPU/EVE, the &lt;ENTER&gt; key is <strong>not</strong> used to
+terminate input when the editor prompts you for input.  The &lt;RETURN&gt;
+key is used, instead.  (&lt;KP4&gt; and &lt;KP5&gt; (the direction keys) do
+terminate input for the &lsquo;<samp><span class="samp">FIND</span></samp>&rsquo; command, just like in EDT, however.)
+
+        </ol>
+
+   </body></html>
+

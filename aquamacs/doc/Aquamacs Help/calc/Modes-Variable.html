@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Modes Variable - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Settings.html#Mode-Settings" title="Mode Settings">
+<link rel="prev" href="Language-Modes.html#Language-Modes" title="Language Modes">
+<link rel="next" href="Calc-Mode-Line.html#Calc-Mode-Line" title="Calc Mode Line">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Modes-Variable"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Calc-Mode-Line.html#Calc-Mode-Line">Calc Mode Line</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Language-Modes.html#Language-Modes">Language Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>
+<hr>
+</div>
+
+<h3 class="section">7.9 The <code>Modes</code> Variable</h3>
+
+<p class="noindent"><a name="index-m-g-640"></a><a name="index-calc_002dget_002dmodes-641"></a>The <kbd>m g</kbd> (<code>calc-get-modes</code>) command pushes onto the stack
+a vector of numbers that describes the various mode settings that
+are in effect.  With a numeric prefix argument, it pushes only the
+<var>n</var>th mode, i.e., the <var>n</var>th element of this vector.  Keyboard
+macros can use the <kbd>m g</kbd> command to modify their behavior based
+on the current mode settings.
+
+   <p><a name="index-g_t_0040code_007bModes_007d-variable-642"></a><a name="index-Modes-643"></a>The modes vector is also available in the special variable
+<code>Modes</code>.  In other words, <kbd>m g</kbd> is like <kbd>s r Modes &lt;RET&gt;</kbd>. 
+It will not work to store into this variable; in fact, if you do,
+<code>Modes</code> will cease to track the current modes.  (The <kbd>m g</kbd>
+command will continue to work, however.)
+
+   <p>In general, each number in this vector is suitable as a numeric
+prefix argument to the associated mode-setting command.  (Recall
+that the <kbd>~</kbd> key takes a number from the stack and gives it as
+a numeric prefix to the next command.)
+
+   <p>The elements of the modes vector are as follows:
+
+     <ol type=1 start=1>
+<li>Current precision.  Default is 12; associated command is <kbd>p</kbd>.
+
+     <li>Binary word size.  Default is 32; associated command is <kbd>b w</kbd>.
+
+     <li>Stack size (not counting the value about to be pushed by <kbd>m g</kbd>). 
+This is zero if <kbd>m g</kbd> is executed with an empty stack.
+
+     <li>Number radix.  Default is 10; command is <kbd>d r</kbd>.
+
+     <li>Floating-point format.  This is the number of digits, plus the
+constant 0 for normal notation, 10000 for scientific notation,
+20000 for engineering notation, or 30000 for fixed-point notation. 
+These codes are acceptable as prefix arguments to the <kbd>d n</kbd>
+command, but note that this may lose information:  For example,
+<kbd>d s</kbd> and <kbd>C-u 12 d s</kbd> have similar (but not quite
+identical) effects if the current precision is 12, but they both
+produce a code of 10012, which will be treated by <kbd>d n</kbd> as
+<kbd>C-u 12 d s</kbd>.  If the precision then changes, the float format
+will still be frozen at 12 significant figures.
+
+     <li>Angular mode.  Default is 1 (degrees).  Other values are 2 (radians)
+and 3 (HMS).  The <kbd>m d</kbd> command accepts these prefixes.
+
+     <li>Symbolic mode.  Value is 0 or 1; default is 0.  Command is <kbd>m s</kbd>.
+
+     <li>Fraction mode.  Value is 0 or 1; default is 0.  Command is <kbd>m f</kbd>.
+
+     <li>Polar mode.  Value is 0 (rectangular) or 1 (polar); default is 0. 
+Command is <kbd>m p</kbd>.
+
+     <li>Matrix/Scalar mode.  Default value is <i>-1</i>.  Value is 0 for Scalar
+mode, <i>-2</i> for Matrix mode, <i>-3</i> for square Matrix mode,
+or <var>N</var> for
+<!-- @math{N\times N} -->
+<var>N</var>x<var>N</var>
+Matrix mode.  Command is <kbd>m v</kbd>.
+
+     <li>Simplification mode.  Default is 1.  Value is <i>-1</i> for off (<kbd>m O</kbd>),
+0 for <kbd>m N</kbd>, 2 for <kbd>m B</kbd>, 3 for <kbd>m A</kbd>, 4 for <kbd>m E</kbd>,
+or 5 for <kbd>m&nbsp;U</kbd><!-- /@w -->.  The <kbd>m D</kbd> command accepts these prefixes.
+
+     <li>Infinite mode.  Default is <i>-1</i> (off).  Value is 1 if the mode is on,
+or 0 if the mode is on with positive zeros.  Command is <kbd>m i</kbd>.
+        </ol>
+
+   <p>For example, the sequence <kbd>M-1 m g &lt;RET&gt; 2 + ~ p</kbd> increases the
+precision by two, leaving a copy of the old precision on the stack. 
+Later, <kbd>~ p</kbd> will restore the original precision using that
+stack value.  (This sequence might be especially useful inside a
+keyboard macro.)
+
+   <p>As another example, <kbd>M-3 m g 1 - ~ &lt;DEL&gt;</kbd> deletes all but the
+oldest (bottommost) stack entry.
+
+   <p>Yet another example:  The HP-48 &ldquo;round&rdquo; command rounds a number
+to the current displayed precision.  You could roughly emulate this
+in Calc with the sequence <kbd>M-5 m g 10000 % ~ c c</kbd>.  (This
+would not work for fixed-point mode, but it wouldn't be hard to
+do a full emulation with the help of the <kbd>Z [</kbd> and <kbd>Z ]</kbd>
+programming commands.  See <a href="Conditionals-in-Macros.html#Conditionals-in-Macros">Conditionals in Macros</a>.)
+
+   </body></html>
+

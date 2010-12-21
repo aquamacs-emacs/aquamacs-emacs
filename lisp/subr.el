@@ -1,7 +1,8 @@
 ;;; subr.el --- basic lisp subroutines for Emacs
 
 ;; Copyright (C) 1985, 1986, 1992, 1994, 1995, 1999, 2000, 2001, 2002, 2003,
-;;   2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;;   2004, 2005, 2006, 2007, 2008, 2009, 2010
+;;   Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: internal
@@ -288,14 +289,11 @@ If LIST is nil, return nil.
 If N is non-nil, return the Nth-to-last link of LIST.
 If N is bigger than the length of LIST, return LIST."
   (if n
-      (let ((m 0) (p list))
-	(while (consp p)
-	  (setq m (1+ m) p (cdr p)))
-	(if (<= n 0) p
-	  (if (< n m) (nthcdr (- m n) list) list)))
-    (while (consp (cdr list))
-      (setq list (cdr list)))
-    list))
+      (and (>= n 0)
+           (let ((m (safe-length list)))
+             (if (< n m) (nthcdr (- m n) list) list)))
+    (and list
+         (nthcdr (1- (safe-length list)) list))))
 
 (defun butlast (list &optional n)
   "Return a copy of LIST with the last N elements removed."
@@ -419,7 +417,7 @@ Unibyte strings are converted to multibyte for comparison."
   (assoc-string key alist nil))
 
 (defun member-ignore-case (elt list)
-  "Like `member', but ignores differences in case and text representation.
+  "Like `member', but ignore differences in case and text representation.
 ELT must be a string.  Upper-case and lower-case letters are treated as equal.
 Unibyte strings are converted to multibyte for comparison.
 Non-strings in LIST are ignored."
@@ -939,8 +937,9 @@ Select the corresponding window as well."
 
 (defsubst posn-x-y (position)
   "Return the x and y coordinates in POSITION.
-POSITION should be a list of the form returned by the `event-start'
-and `event-end' functions."
+The return value has the form (X . Y), where X and Y are given in
+pixels.  POSITION should be a list of the form returned by
+`event-start' and `event-end'."
   (nth 2 position))
 
 (declare-function scroll-bar-scale "scroll-bar" (num-denom whole))
@@ -978,7 +977,10 @@ and `event-end' functions."
 	      ((null spacing)
 	       (setq spacing 0)))
 	(cons (/ (car pair) (frame-char-width frame))
-	      (/ (cdr pair) (+ (frame-char-height frame) spacing))))))))
+	      (- (/ (cdr pair) (+ (frame-char-height frame) spacing))
+		 (if (null (with-current-buffer (window-buffer window)
+			     header-line-format))
+		     0 1))))))))
 
 (defun posn-actual-col-row (position)
   "Return the actual column and row in POSITION, measured in characters.
@@ -1019,14 +1021,15 @@ and `event-end' functions."
 
 (defsubst posn-object-x-y (position)
   "Return the x and y coordinates relative to the object of POSITION.
-POSITION should be a list of the form returned by the `event-start'
-and `event-end' functions."
+The return value has the form (DX . DY), where DX and DY are
+given in pixels.  POSITION should be a list of the form returned
+by `event-start' and `event-end'."
   (nth 8 position))
 
 (defsubst posn-object-width-height (position)
   "Return the pixel width and height of the object of POSITION.
-POSITION should be a list of the form returned by the `event-start'
-and `event-end' functions."
+The return value has the form (WIDTH . HEIGHT).  POSITION should
+be a list of the form returned by `event-start' and `event-end'."
   (nth 9 position))
 
 
@@ -1039,7 +1042,6 @@ and `event-end' functions."
 (define-obsolete-function-alias 'eval-current-buffer 'eval-buffer "22.1")
 (define-obsolete-function-alias 'string-to-int 'string-to-number "22.1")
 
-(make-obsolete 'char-bytes "now always returns 1." "20.4")
 (make-obsolete 'forward-point "use (+ (point) N) instead." "23.1")
 
 (defun insert-string (&rest args)
@@ -1114,11 +1116,6 @@ is converted into a string by expressing it in decimal."
 (make-obsolete 'process-filter-multibyte-p nil "23.1")
 (make-obsolete 'set-process-filter-multibyte nil "23.1")
 
-(defconst directory-sep-char ?/
-  "Directory separator character for built-in functions that return file names.
-The value is always ?/.")
-(make-obsolete-variable 'directory-sep-char "do not use it, just use `/'." "21.1")
-
 (make-obsolete-variable
  'mode-line-inverse-video
  "use the appropriate faces instead."
@@ -1184,37 +1181,6 @@ to reread, so it now uses nil to mean `no event', instead of -1."
 
 
 ;;;; Hook manipulation functions.
-
-(defun make-local-hook (hook)
-  "Make the hook HOOK local to the current buffer.
-The return value is HOOK.
-
-You never need to call this function now that `add-hook' does it for you
-if its LOCAL argument is non-nil.
-
-When a hook is local, its local and global values
-work in concert: running the hook actually runs all the hook
-functions listed in *either* the local value *or* the global value
-of the hook variable.
-
-This function works by making t a member of the buffer-local value,
-which acts as a flag to run the hook functions in the default value as
-well.  This works for all normal hooks, but does not work for most
-non-normal hooks yet.  We will be changing the callers of non-normal
-hooks so that they can handle localness; this has to be done one by
-one.
-
-This function does nothing if HOOK is already local in the current
-buffer.
-
-Do not use `make-local-variable' to make a hook variable buffer-local."
-  (if (local-variable-p hook)
-      nil
-    (or (boundp hook) (set hook nil))
-    (make-local-variable hook)
-    (set hook (list t)))
-  hook)
-(make-obsolete 'make-local-hook "not necessary any more." "21.1")
 
 (defun add-hook (hook function &optional append local)
   "Add to the value of HOOK the function FUNCTION.
@@ -1415,9 +1381,8 @@ if it is empty or a duplicate."
 
 (defun run-mode-hooks (&rest hooks)
   "Run mode hooks `delayed-mode-hooks' and HOOKS, or delay HOOKS.
-Execution is delayed if `delay-mode-hooks' is non-nil.
-If `delay-mode-hooks' is nil, run `after-change-major-mode-hook'
-after running the mode hooks.
+Execution is delayed if the variable `delay-mode-hooks' is non-nil.
+Otherwise, runs the mode hooks and then `after-change-major-mode-hook'.
 Major mode functions should use this instead of `run-hooks' when running their
 FOO-mode-hook."
   (if delay-mode-hooks
@@ -1538,26 +1503,6 @@ If TOGGLE has a `:menu-tag', that is used for the menu item's label."
 	    (push (cons toggle keymap) minor-mode-map-alist)))))))
 
 ;;; Load history
-
-;; (defvar symbol-file-load-history-loaded nil
-;;   "Non-nil means we have loaded the file `fns-VERSION.el' in `exec-directory'.
-;; That file records the part of `load-history' for preloaded files,
-;; which is cleared out before dumping to make Emacs smaller.")
-
-;; (defun load-symbol-file-load-history ()
-;;   "Load the file `fns-VERSION.el' in `exec-directory' if not already done.
-;; That file records the part of `load-history' for preloaded files,
-;; which is cleared out before dumping to make Emacs smaller."
-;;   (unless symbol-file-load-history-loaded
-;;     (load (expand-file-name
-;; 	   ;; fns-XX.YY.ZZ.el does not work on DOS filesystem.
-;; 	   (if (eq system-type 'ms-dos)
-;; 	       "fns.el"
-;; 	     (format "fns-%s.el" emacs-version))
-;; 	   exec-directory)
-;; 	  ;; The file name fns-%s.el already has a .el extension.
-;; 	  nil nil t)
-;;     (setq symbol-file-load-history-loaded t)))
 
 (defun symbol-file (symbol &optional type)
   "Return the name of the file that defined SYMBOL.
@@ -2443,8 +2388,9 @@ Otherwise, return nil."
   (or (stringp object) (null object)))
 
 (defun booleanp (object)
-  "Return non-nil if OBJECT is one of the two canonical boolean values: t or nil."
-  (memq object '(nil t)))
+  "Return t if OBJECT is one of the two canonical boolean values: t or nil.
+Otherwise, return nil."
+  (and (memq object '(nil t)) t))
 
 (defun field-at-pos (pos)
   "Return the field at position POS, taking stickiness etc into account."
@@ -2518,7 +2464,7 @@ If PARAM is present and non-nil, it replaces STRING as the object
  `yank-rectangle', PARAM may be a list of strings to insert as a
  rectangle.
 If NOEXCLUDE is present and non-nil, the normal removal of the
- yank-excluded-properties is not performed; instead FUNCTION is
+ `yank-excluded-properties' is not performed; instead FUNCTION is
  responsible for removing those properties.  This may be necessary
  if FUNCTION adjusts point before or after inserting the object.
 If UNDO is present and non-nil, it is a function that will be called
@@ -2876,7 +2822,7 @@ but which should be robust in the unexpected case that an error is signaled."
   (let ((err (make-symbol "err")))
     `(condition-case-no-debug ,err
          (progn ,@body)
-       (error (message "Error: %s" ,err) nil))))
+       (error (message "Error: %S" ,err) nil))))
 
 (defmacro combine-after-change-calls (&rest body)
   "Execute BODY, but don't call the after-change functions till the end.
@@ -3426,10 +3372,7 @@ is nil and `use-dialog-box' is non-nil."
              ((memq answer '(exit-prefix quit)) (signal 'quit nil) t)
              (t t)))
         (ding)
-        (discard-input)
-        (setq xprompt
-              (if (eq answer 'recenter) prompt
-                (concat "Please answer y or n.  " prompt)))))
+        (discard-input)))
     (let ((ret (eq answer 'act)))
       (unless noninteractive
         (message "%s %s" prompt (if ret "y" "n")))
@@ -3657,18 +3600,18 @@ convenience wrapper around `make-progress-reporter' and friends.
 ;;;; Comparing version strings.
 
 (defconst version-separator "."
-  "*Specify the string used to separate the version elements.
+  "Specify the string used to separate the version elements.
 
 Usually the separator is \".\", but it can be any other string.")
 
 
 (defconst version-regexp-alist
-  '(("^[-_+ ]?alpha$"   . -3)
-    ("^[-_+]$"                 . -3) ; treat "1.2.3-20050920" and "1.2-3" as alpha releases
-    ("^[-_+ ]cvs$"             . -3)	; treat "1.2.3-CVS" as alpha release
-    ("^[-_+ ]?beta$"    . -2)
+  '(("^[-_+ ]?alpha$"           . -3)
+    ("^[-_+]$"                  . -3) ; treat "1.2.3-20050920" and "1.2-3" as alpha releases
+    ("^[-_+ ]cvs$"              . -3) ; treat "1.2.3-CVS" as alpha release
+    ("^[-_+ ]?beta$"            . -2)
     ("^[-_+ ]?\\(pre\\|rcc\\)$" . -1))
-  "*Specify association between non-numeric version and its priority.
+  "Specify association between non-numeric version and its priority.
 
 This association is used to handle version string like \"1.0pre2\",
 \"0.9alpha1\", etc.  It's used by `version-to-list' (which see) to convert the
@@ -3762,7 +3705,7 @@ See documentation for `version-separator' and `version-regexp-alist'."
 	      (setq al (cdr al)))
 	    (cond (al
 		   (push (cdar al) lst))
-		  ;; Convert 22.3a to 22.3.1.
+		  ;; Convert 22.3a to 22.3.1, 22.3b to 22.3.2, etc.
 		  ((string-match "^[-_+ ]?\\([a-zA-Z]\\)$" s)
 		   (push (- (aref (downcase (match-string 1 s)) 0) ?a -1)
 			 lst))
@@ -3818,7 +3761,7 @@ turn is higher than (1 -2), which is higher than (1 -3)."
   "Return t if L1, a list specification of a version, is lower or equal to L2.
 
 Note that integer list (1) is equal to (1 0), (1 0 0), (1 0 0 0),
-etc.  That is, the trailing zeroes are irrelevant.  Also, integer
+etc.  That is, the trailing zeroes are insignificant.  Also, integer
 list (1) is greater than (1 -1) which is greater than (1 -2)
 which is greater than (1 -3)."
   (while (and l1 l2 (= (car l1) (car l2)))
@@ -3860,7 +3803,7 @@ which is higher than \"1alpha\"."
   "Return t if version V1 is lower (older) than or equal to V2.
 
 Note that version string \"1\" is equal to \"1.0\", \"1.0.0\", \"1.0.0.0\",
-etc.  That is, the trailing \".0\"s are insignificant..  Also, version
+etc.  That is, the trailing \".0\"s are insignificant.  Also, version
 string \"1\" is higher (newer) than \"1pre\", which is higher than \"1beta\",
 which is higher than \"1alpha\"."
   (version-list-<= (version-to-list v1) (version-to-list v2)))
@@ -3869,7 +3812,7 @@ which is higher than \"1alpha\"."
   "Return t if version V1 is equal to V2.
 
 Note that version string \"1\" is equal to \"1.0\", \"1.0.0\", \"1.0.0.0\",
-etc.  That is, the trailing \".0\"s are insignificant..  Also, version
+etc.  That is, the trailing \".0\"s are insignificant.  Also, version
 string \"1\" is higher (newer) than \"1pre\", which is higher than \"1beta\",
 which is higher than \"1alpha\"."
   (version-list-= (version-to-list v1) (version-to-list v2)))
@@ -3881,9 +3824,9 @@ which is higher than \"1alpha\"."
 
 ;; The following statement ought to be in print.c, but `provide' can't
 ;; be used there.
+;; http://lists.gnu.org/archive/html/emacs-devel/2009-08/msg00236.html
 (when (hash-table-p (car (read-from-string
 			  (prin1-to-string (make-hash-table)))))
   (provide 'hashtable-print-readable))
 
-;; arch-tag: f7e0e6e5-70aa-4897-ae72-7a3511ec40bc
 ;;; subr.el ends here

@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Quick Start - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="index.html#Top" title="Top">
+<link rel="next" href="Introduction.html#Introduction" title="Introduction">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Quick-Start"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Introduction.html#Introduction">Introduction</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 Quick Start</h2>
+
+<p><i>EIEIO</i> provides an Object Oriented layer for Emacs Lisp.  You can
+use <i>EIEIO</i> to create classes, methods for those classes, and
+instances of classes.
+
+   <p>Here is a simple example of a class named <code>record</code>, containing
+three slots named <code>name</code>, <code>birthday</code>, and <code>phone</code>:
+
+<pre class="example">     (defclass record () ; No superclasses
+       ((name :initarg :name
+              :initform ""
+              :type string
+              :custom string
+              :documentation "The name of a person.")
+        (birthday :initarg :birthday
+                  :initform "Jan 1, 1970"
+                  :custom string
+                  :type string
+                  :documentation "The person's birthday.")
+        (phone :initarg :phone
+               :initform ""
+               :documentation "Phone number."))
+       "A single record for tracking people I know.")
+</pre>
+   <p>Each class can have methods, which are defined like this:
+
+<pre class="example">     (defmethod call-record ((rec record) &amp;optional scriptname)
+       "Dial the phone for the record REC.
+     Execute the program SCRIPTNAME to dial the phone."
+       (message "Dialing the phone for %s"  (oref rec name))
+       (shell-command (concat (or scriptname "dialphone.sh")
+                              " "
+                              (oref rec phone))))
+</pre>
+   <p class="noindent">In this example, the first argument to <code>call-record</code> is a list,
+of the form (<var>varname</var> <var>classname</var>).  <var>varname</var> is the
+name of the variable used for the first argument; <var>classname</var> is
+the name of the class that is expected as the first argument for this
+method.
+
+   <p><i>EIEIO</i> dispatches methods based on the type of the first argument. 
+You can have multiple methods with the same name for different classes
+of object.  When the <code>call-record</code> method is called, the first
+argument is examined to determine the class of that argument, and the
+method matching the input type is then executed.
+
+   <p>Once the behavior of a class is defined, you can create a new
+object of type <code>record</code>.  Objects are created by calling the
+constructor.  The constructor is a function with the same name as your
+class which returns a new instance of that class.  Here is an example:
+
+<pre class="example">     (setq rec (record "Eric" :name "Eric" :birthday "June" :phone "555-5555"))
+</pre>
+   <p class="noindent">The first argument is the name given to this instance.  Each instance
+is given a name, so different instances can be easily distinguished
+when debugging.
+
+   <p>It can be a bit repetitive to also have a :name slot.  To avoid doing
+this, it is sometimes handy to use the base class <code>eieio-named</code>. 
+See <a href="eieio_002dnamed.html#eieio_002dnamed">eieio-named</a>.
+
+   <p>Calling methods on an object is a lot like calling any function.  The
+first argument should be an object of a class which has had this
+method defined for it.  In this example it would look like this:
+
+<pre class="example">     (call-record rec)
+</pre>
+   <p class="noindent">or
+
+<pre class="example">     (call-record rec "my-call-script")
+</pre>
+   <p>In these examples, <i>EIEIO</i> automatically examines the class of
+<code>rec</code>, and ensures that the method defined above is called.  If
+<code>rec</code> is some other class lacking a <code>call-record</code> method, or
+some other data type, Emacs signals a <code>no-method-definition</code>
+error.  <a href="Signals.html#Signals">Signals</a>.
+
+   </body></html>
+

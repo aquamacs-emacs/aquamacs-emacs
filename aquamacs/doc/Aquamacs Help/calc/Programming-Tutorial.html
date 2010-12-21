@@ -1,0 +1,571 @@
+<html lang="en">
+<head>
+<title>Programming Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tutorial.html#Tutorial" title="Tutorial">
+<link rel="prev" href="Algebra-Tutorial.html#Algebra-Tutorial" title="Algebra Tutorial">
+<link rel="next" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Programming-Tutorial"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebra-Tutorial.html#Algebra-Tutorial">Algebra Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tutorial.html#Tutorial">Tutorial</a>
+<hr>
+</div>
+
+<h3 class="section">3.6 Programming Tutorial</h3>
+
+<p class="noindent">The Calculator is written entirely in Emacs Lisp, a highly extensible
+language.  If you know Lisp, you can program the Calculator to do
+anything you like.  Rewrite rules also work as a powerful programming
+system.  But Lisp and rewrite rules take a while to master, and often
+all you want to do is define a new function or repeat a command a few
+times.  Calc has features that allow you to do these things easily.
+
+   <p>One very limited form of programming is defining your own functions. 
+Calc's <kbd>Z F</kbd> command allows you to define a function name and
+key sequence to correspond to any formula.  Programming commands use
+the shift-<kbd>Z</kbd> prefix; the user commands they create use the lower
+case <kbd>z</kbd> prefix.
+
+<pre class="smallexample">     1:  1 + x + x^2 / 2 + x^3 / 6         1:  1 + x + x^2 / 2 + x^3 / 6
+         .                                     .
+     
+         ' 1 + x + x^2/2! + x^3/3! &lt;RET&gt;         Z F e myexp &lt;RET&gt; &lt;RET&gt; &lt;RET&gt; y
+</pre>
+   <p>This polynomial is a Taylor series approximation to &lsquo;<samp><span class="samp">exp(x)</span></samp>&rsquo;. 
+The <kbd>Z F</kbd> command asks a number of questions.  The above answers
+say that the key sequence for our function should be <kbd>z e</kbd>; the
+<kbd>M-x</kbd> equivalent should be <code>calc-myexp</code>; the name of the
+function in algebraic formulas should also be <code>myexp</code>; the
+default argument list &lsquo;<samp><span class="samp">(x)</span></samp>&rsquo; is acceptable; and finally <kbd>y</kbd>
+answers the question &ldquo;leave it in symbolic form for non-constant
+arguments?&rdquo;
+
+<pre class="smallexample">     1:  1.3495     2:  1.3495     3:  1.3495
+         .          1:  1.34986    2:  1.34986
+                        .          1:  myexp(a + 1)
+                                       .
+     
+         .3 z e         .3 E           ' a+1 &lt;RET&gt; z e
+</pre>
+   <p class="noindent">First we call our new <code>exp</code> approximation with 0.3 as an
+argument, and compare it with the true <code>exp</code> function.  Then
+we note that, as requested, if we try to give <kbd>z e</kbd> an
+argument that isn't a plain number, it leaves the <code>myexp</code>
+function call in symbolic form.  If we had answered <kbd>n</kbd> to the
+final question, &lsquo;<samp><span class="samp">myexp(a + 1)</span></samp>&rsquo; would have evaluated by plugging
+in &lsquo;<samp><span class="samp">a + 1</span></samp>&rsquo; for &lsquo;<samp><span class="samp">x</span></samp>&rsquo; in the defining formula.
+
+   <p><a name="index-Sine-integral-Si_0028x_0029-71"></a><a name="index-Si-72"></a>(&bull;) <strong>Exercise 1.</strong>  The &ldquo;sine integral&rdquo; function
+<!-- @math{{\rm Si}(x)} -->
+&lsquo;<samp><span class="samp">Si(x)</span></samp>&rsquo;
+is defined as the integral of &lsquo;<samp><span class="samp">sin(t)/t</span></samp>&rsquo; for
+&lsquo;<samp><span class="samp">t = 0</span></samp>&rsquo; to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; in radians.  (It was invented because this
+integral has no solution in terms of basic functions; if you give it
+to Calc's <kbd>a i</kbd> command, it will ponder it for a long time and then
+give up.)  We can use the numerical integration command, however,
+which in algebraic notation is written like &lsquo;<samp><span class="samp">ninteg(f(t), t, 0, x)</span></samp>&rsquo;
+with any integrand &lsquo;<samp><span class="samp">f(t)</span></samp>&rsquo;.  Define a <kbd>z s</kbd> command and
+<code>Si</code> function that implement this.  You will need to edit the
+default argument list a bit.  As a test, &lsquo;<samp><span class="samp">Si(1)</span></samp>&rsquo; should return
+0.946083. (If you don't get this answer, you might want to check that
+Calc is in Radians mode.  Also, <code>ninteg</code> will run a lot faster if
+you reduce the precision to, say, six digits beforehand.) 
+See <a href="Programming-Answer-1.html#Programming-Answer-1">1</a>. (&bull;)
+
+   <p>The simplest way to do real &ldquo;programming&rdquo; of Emacs is to define a
+<dfn>keyboard macro</dfn>.  A keyboard macro is simply a sequence of
+keystrokes which Emacs has stored away and can play back on demand. 
+For example, if you find yourself typing <kbd>H a S x &lt;RET&gt;</kbd> often,
+you may wish to program a keyboard macro to type this for you.
+
+<pre class="smallexample">     1:  y = sqrt(x)          1:  x = y^2
+         .                        .
+     
+         ' y=sqrt(x) &lt;RET&gt;       C-x ( H a S x &lt;RET&gt; C-x )
+     
+     1:  y = cos(x)           1:  x = s1 arccos(y) + 2 pi n1
+         .                        .
+     
+         ' y=cos(x) &lt;RET&gt;           X
+</pre>
+   <p class="noindent">When you type <kbd>C-x (</kbd>, Emacs begins recording.  But it is also
+still ready to execute your keystrokes, so you're really &ldquo;training&rdquo;
+Emacs by walking it through the procedure once.  When you type
+<kbd>C-x&nbsp;)</kbd><!-- /@w -->, the macro is recorded.  You can now type <kbd>X</kbd> to
+re-execute the same keystrokes.
+
+   <p>You can give a name to your macro by typing <kbd>Z K</kbd>.
+
+<pre class="smallexample">     1:  .              1:  y = x^4         1:  x = s2 sqrt(s1 sqrt(y))
+                            .                   .
+     
+       Z K x &lt;RET&gt;            ' y=x^4 &lt;RET&gt;         z x
+</pre>
+   <p class="noindent">Notice that we use shift-<kbd>Z</kbd> to define the command, and lower-case
+<kbd>z</kbd> to call it up.
+
+   <p>Keyboard macros can call other macros.
+
+<pre class="smallexample">     1:  abs(x)        1:  x = s1 y                1:  2 / x    1:  x = 2 / y
+         .                 .                           .            .
+     
+      ' abs(x) &lt;RET&gt;   C-x ( ' y &lt;RET&gt; a = z x C-x )    ' 2/x &lt;RET&gt;       X
+</pre>
+   <p>(&bull;) <strong>Exercise 2.</strong>  Define a keyboard macro to negate
+the item in level 3 of the stack, without disturbing the rest of
+the stack.  See <a href="Programming-Answer-2.html#Programming-Answer-2">2</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 3.</strong>  Define keyboard macros to compute
+the following functions:
+
+     <ol type=1 start=1>
+<li>Compute
+<!-- @math{\displaystyle{\sin x \over x}}, -->
+&lsquo;<samp><span class="samp">sin(x) / x</span></samp>&rsquo;,
+where &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is the number on the top of the stack.
+
+     <li>Compute the base-&lsquo;<samp><span class="samp">b</span></samp>&rsquo; logarithm, just like the <kbd>B</kbd> key except
+the arguments are taken in the opposite order.
+
+     <li>Produce a vector of integers from 1 to the integer on the top of
+the stack.
+        </ol>
+See <a href="Programming-Answer-3.html#Programming-Answer-3">3</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 4.</strong>  Define a keyboard macro to compute
+the average (mean) value of a list of numbers. 
+See <a href="Programming-Answer-4.html#Programming-Answer-4">4</a>. (&bull;)
+
+   <p>In many programs, some of the steps must execute several times. 
+Calc has <dfn>looping</dfn> commands that allow this.  Loops are useful
+inside keyboard macros, but actually work at any time.
+
+<pre class="smallexample">     1:  x^6          2:  x^6        1: 360 x^2
+         .            1:  4             .
+                          .
+     
+       ' x^6 &lt;RET&gt;          4         Z &lt; a d x &lt;RET&gt; Z &gt;
+</pre>
+   <p class="noindent">Here we have computed the fourth derivative of &lsquo;<samp><span class="samp">x^6</span></samp>&rsquo; by
+enclosing a derivative command in a &ldquo;repeat loop&rdquo; structure. 
+This structure pops a repeat count from the stack, then
+executes the body of the loop that many times.
+
+   <p>If you make a mistake while entering the body of the loop,
+type <kbd>Z&nbsp;C-g</kbd><!-- /@w --> to cancel the loop command.
+
+   <p><a name="index-Fibonacci-numbers-73"></a>Here's another example:
+
+<pre class="smallexample">     3:  1               2:  10946
+     2:  1               1:  17711
+     1:  20                  .
+         .
+     
+     1 &lt;RET&gt; &lt;RET&gt; 20       Z &lt; &lt;TAB&gt; C-j + Z &gt;
+</pre>
+   <p class="noindent">The numbers in levels 2 and 1 should be the 21st and 22nd Fibonacci
+numbers, respectively.  (To see what's going on, try a few repetitions
+of the loop body by hand; <kbd>C-j</kbd>, also on the Line-Feed or &lt;LFD&gt;
+key if you have one, makes a copy of the number in level 2.)
+
+   <p><a name="index-Golden-ratio-74"></a><a name="index-Phi_002c-golden-ratio-75"></a>A fascinating property of the Fibonacci numbers is that the &lsquo;<samp><span class="samp">n</span></samp>&rsquo;th
+Fibonacci number can be found directly by computing
+<!-- @math{\phi^n / \sqrt{5}} -->
+&lsquo;<samp><span class="samp">phi^n / sqrt(5)</span></samp>&rsquo;
+and then rounding to the nearest integer, where
+<!-- @math{\phi} (``phi''), -->
+&lsquo;<samp><span class="samp">phi</span></samp>&rsquo;,
+the &ldquo;golden ratio,&rdquo; is
+<!-- @math{(1 + \sqrt{5}) / 2}. -->
+&lsquo;<samp><span class="samp">(1 + sqrt(5)) / 2</span></samp>&rsquo;. 
+(For convenience, this constant is available from the <code>phi</code>
+variable, or the <kbd>I H P</kbd> command.)
+
+<pre class="smallexample">     1:  1.61803         1:  24476.0000409    1:  10945.9999817    1:  10946
+         .                   .                    .                    .
+     
+         I H P               21 ^                 5 Q /                R
+</pre>
+   <p><a name="index-Continued-fractions-76"></a>(&bull;) <strong>Exercise 5.</strong>  The <dfn>continued fraction</dfn>
+representation of
+<!-- @math{\phi} -->
+&lsquo;<samp><span class="samp">phi</span></samp>&rsquo;
+is
+<!-- @math{1 + 1/(1 + 1/(1 + 1/( \ldots )))}. -->
+&lsquo;<samp><span class="samp">1 + 1/(1 + 1/(1 + 1/( ... )))</span></samp>&rsquo;. 
+We can compute an approximate value by carrying this however far
+and then replacing the innermost
+<!-- @math{1/( \ldots )} -->
+&lsquo;<samp><span class="samp">1/( ... )</span></samp>&rsquo;
+by 1.  Approximate
+<!-- @math{\phi} -->
+&lsquo;<samp><span class="samp">phi</span></samp>&rsquo;
+using a twenty-term continued fraction. 
+See <a href="Programming-Answer-5.html#Programming-Answer-5">5</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 6.</strong>  Linear recurrences like the one for
+Fibonacci numbers can be expressed in terms of matrices.  Given a
+vector &lsquo;<samp><span class="samp">[a,&nbsp;b]</span></samp>&rsquo;<!-- /@w --> determine a matrix which, when multiplied by this
+vector, produces the vector &lsquo;<samp><span class="samp">[b, c]</span></samp>&rsquo;, where &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, &lsquo;<samp><span class="samp">b</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">c</span></samp>&rsquo; are three successive Fibonacci numbers.  Now write a program
+that, given an integer &lsquo;<samp><span class="samp">n</span></samp>&rsquo;, computes the &lsquo;<samp><span class="samp">n</span></samp>&rsquo;th Fibonacci number
+using matrix arithmetic.  See <a href="Programming-Answer-6.html#Programming-Answer-6">6</a>. (&bull;)
+
+   <p><a name="index-Harmonic-numbers-77"></a>A more sophisticated kind of loop is the <dfn>for</dfn> loop.  Suppose
+we wish to compute the 20th &ldquo;harmonic&rdquo; number, which is equal to
+the sum of the reciprocals of the integers from 1 to 20.
+
+<pre class="smallexample">     3:  0               1:  3.597739
+     2:  1                   .
+     1:  20
+         .
+     
+     0 &lt;RET&gt; 1 &lt;RET&gt; 20         Z ( &amp; + 1 Z )
+</pre>
+   <p class="noindent">The &ldquo;for&rdquo; loop pops two numbers, the lower and upper limits, then
+repeats the body of the loop as an internal counter increases from
+the lower limit to the upper one.  Just before executing the loop
+body, it pushes the current loop counter.  When the loop body
+finishes, it pops the &ldquo;step,&rdquo; i.e., the amount by which to
+increment the loop counter.  As you can see, our loop always
+uses a step of one.
+
+   <p>This harmonic number function uses the stack to hold the running
+total as well as for the various loop housekeeping functions.  If
+you find this disorienting, you can sum in a variable instead:
+
+<pre class="smallexample">     1:  0         2:  1                  .            1:  3.597739
+         .         1:  20                                  .
+                       .
+     
+         0 t 7       1 &lt;RET&gt; 20      Z ( &amp; s + 7 1 Z )       r 7
+</pre>
+   <p class="noindent">The <kbd>s +</kbd> command adds the top-of-stack into the value in a
+variable (and removes that value from the stack).
+
+   <p>It's worth noting that many jobs that call for a &ldquo;for&rdquo; loop can
+also be done more easily by Calc's high-level operations.  Two
+other ways to compute harmonic numbers are to use vector mapping
+and reduction (<kbd>v x 20</kbd>, then <kbd>V&nbsp;M&nbsp;&amp;</kbd><!-- /@w -->, then <kbd>V R +</kbd>),
+or to use the summation command <kbd>a +</kbd>.  Both of these are
+probably easier than using loops.  However, there are some
+situations where loops really are the way to go:
+
+   <p>(&bull;) <strong>Exercise 7.</strong>  Use a &ldquo;for&rdquo; loop to find the first
+harmonic number which is greater than 4.0. 
+See <a href="Programming-Answer-7.html#Programming-Answer-7">7</a>. (&bull;)
+
+   <p>Of course, if we're going to be using variables in our programs,
+we have to worry about the programs clobbering values that the
+caller was keeping in those same variables.  This is easy to
+fix, though:
+
+<pre class="smallexample">         .        1:  0.6667       1:  0.6667     3:  0.6667
+                      .                .          2:  3.597739
+                                                  1:  0.6667
+                                                      .
+     
+        Z `    p 4 &lt;RET&gt; 2 &lt;RET&gt; 3 /   s 7 s s a &lt;RET&gt;    Z '  r 7 s r a &lt;RET&gt;
+</pre>
+   <p class="noindent">When we type <kbd>Z `</kbd> (that's a back-quote character), Calc saves
+its mode settings and the contents of the ten &ldquo;quick variables&rdquo;
+for later reference.  When we type <kbd>Z '</kbd> (that's an apostrophe
+now), Calc restores those saved values.  Thus the <kbd>p 4</kbd> and
+<kbd>s 7</kbd> commands have no effect outside this sequence.  Wrapping
+this around the body of a keyboard macro ensures that it doesn't
+interfere with what the user of the macro was doing.  Notice that
+the contents of the stack, and the values of named variables,
+survive past the <kbd>Z '</kbd> command.
+
+   <p><a name="index-Bernoulli-numbers_002c-approximate-78"></a>The <dfn>Bernoulli numbers</dfn> are a sequence with the interesting
+property that all of the odd Bernoulli numbers are zero, and the
+even ones, while difficult to compute, can be roughly approximated
+by the formula
+<!-- @math{\displaystyle{2 n! \over (2 \pi)^n}}. -->
+&lsquo;<samp><span class="samp">2 n! / (2 pi)^n</span></samp>&rsquo;. 
+Let's write a keyboard macro to compute (approximate) Bernoulli numbers. 
+(Calc has a command, <kbd>k b</kbd>, to compute exact Bernoulli numbers, but
+this command is very slow for large &lsquo;<samp><span class="samp">n</span></samp>&rsquo; since the higher Bernoulli
+numbers are very large fractions.)
+
+<pre class="smallexample">     1:  10               1:  0.0756823
+         .                    .
+     
+         10     C-x ( &lt;RET&gt; 2 % Z [ &lt;DEL&gt; 0 Z : ' 2 $! / (2 pi)^$ &lt;RET&gt; = Z ] C-x )
+</pre>
+   <p class="noindent">You can read <kbd>Z [</kbd> as &ldquo;then,&rdquo; <kbd>Z :</kbd> as &ldquo;else,&rdquo; and
+<kbd>Z ]</kbd> as &ldquo;end-if.&rdquo;  There is no need for an explicit &ldquo;if&rdquo;
+command.  For the purposes of <kbd>Z&nbsp;[</kbd><!-- /@w -->, the condition is &ldquo;true&rdquo;
+if the value it pops from the stack is a nonzero number, or &ldquo;false&rdquo;
+if it pops zero or something that is not a number (like a formula). 
+Here we take our integer argument modulo 2; this will be nonzero
+if we're asking for an odd Bernoulli number.
+
+   <p>The actual tenth Bernoulli number is &lsquo;<samp><span class="samp">5/66</span></samp>&rsquo;.
+
+<pre class="smallexample">     3:  0.0756823    1:  0          1:  0.25305    1:  0          1:  1.16659
+     2:  5:66             .              .              .              .
+     1:  0.0757575
+         .
+     
+     10 k b &lt;RET&gt; c f   M-0 &lt;DEL&gt; 11 X   &lt;DEL&gt; 12 X       &lt;DEL&gt; 13 X       &lt;DEL&gt; 14 X
+</pre>
+   <p>Just to exercise loops a bit more, let's compute a table of even
+Bernoulli numbers.
+
+<pre class="smallexample">     3:  []             1:  [0.10132, 0.03079, 0.02340, 0.033197, ...]
+     2:  2                  .
+     1:  30
+         .
+     
+      [ ] 2 &lt;RET&gt; 30          Z ( X | 2 Z )
+</pre>
+   <p class="noindent">The vertical-bar <kbd>|</kbd> is the vector-concatenation command.  When
+we execute it, the list we are building will be in stack level 2
+(initially this is an empty list), and the next Bernoulli number
+will be in level 1.  The effect is to append the Bernoulli number
+onto the end of the list.  (To create a table of exact fractional
+Bernoulli numbers, just replace <kbd>X</kbd> with <kbd>k b</kbd> in the above
+sequence of keystrokes.)
+
+   <p>With loops and conditionals, you can program essentially anything
+in Calc.  One other command that makes looping easier is <kbd>Z /</kbd>,
+which takes a condition from the stack and breaks out of the enclosing
+loop if the condition is true (non-zero).  You can use this to make
+&ldquo;while&rdquo; and &ldquo;until&rdquo; style loops.
+
+   <p>If you make a mistake when entering a keyboard macro, you can edit
+it using <kbd>Z E</kbd>.  First, you must attach it to a key with <kbd>Z K</kbd>. 
+One technique is to enter a throwaway dummy definition for the macro,
+then enter the real one in the edit command.
+
+<pre class="smallexample">     1:  3                   1:  3           Calc Macro Edit Mode.
+         .                       .           Original keys: 1 &lt;return&gt; 2 +
+     
+                                             1                          ;; calc digits
+                                             RET                        ;; calc-enter
+                                             2                          ;; calc digits
+                                             +                          ;; calc-plus
+     
+     C-x ( 1 &lt;RET&gt; 2 + C-x )    Z K h &lt;RET&gt;      Z E h
+</pre>
+   <p class="noindent">A keyboard macro is stored as a pure keystroke sequence.  The
+<samp><span class="file">edmacro</span></samp> package (invoked by <kbd>Z E</kbd>) scans along the
+macro and tries to decode it back into human-readable steps. 
+Descriptions of the keystrokes are given as comments, which begin with
+&lsquo;<samp><span class="samp">;;</span></samp>&rsquo;, and which are ignored when the edited macro is saved. 
+Spaces and line breaks are also ignored when the edited macro is saved. 
+To enter a space into the macro, type <code>SPC</code>.  All the special
+characters <code>RET</code>, <code>LFD</code>, <code>TAB</code>, <code>SPC</code>, <code>DEL</code>,
+and <code>NUL</code> must be written in all uppercase, as must the prefixes
+<code>C-</code> and <code>M-</code>.
+
+   <p>Let's edit in a new definition, for computing harmonic numbers. 
+First, erase the four lines of the old definition.  Then, type
+in the new definition (or use Emacs <kbd>M-w</kbd> and <kbd>C-y</kbd> commands
+to copy it from this page of the Info file; you can of course skip
+typing the comments, which begin with &lsquo;<samp><span class="samp">;;</span></samp>&rsquo;).
+
+<pre class="smallexample">     Z`                      ;; calc-kbd-push     (Save local values)
+     0                       ;; calc digits       (Push a zero onto the stack)
+     st                      ;; calc-store-into   (Store it in the following variable)
+     1                       ;; calc quick variable  (Quick variable q1)
+     1                       ;; calc digits       (Initial value for the loop)
+     TAB                     ;; calc-roll-down    (Swap initial and final)
+     Z(                      ;; calc-kbd-for      (Begin the "for" loop)
+     &amp;                       ;; calc-inv          (Take the reciprocal)
+     s+                      ;; calc-store-plus   (Add to the following variable)
+     1                       ;; calc quick variable  (Quick variable q1)
+     1                       ;; calc digits       (The loop step is 1)
+     Z)                      ;; calc-kbd-end-for  (End the "for" loop)
+     sr                      ;; calc-recall       (Recall the final accumulated value)
+     1                       ;; calc quick variable (Quick variable q1)
+     Z'                      ;; calc-kbd-pop      (Restore values)
+</pre>
+   <p class="noindent">Press <kbd>C-c C-c</kbd> to finish editing and return to the Calculator.
+
+<pre class="smallexample">     1:  20         1:  3.597739
+         .              .
+     
+         20             z h
+</pre>
+   <p>The <samp><span class="file">edmacro</span></samp> package defines a handy <code>read-kbd-macro</code> command
+which reads the current region of the current buffer as a sequence of
+keystroke names, and defines that sequence on the <kbd>X</kbd>
+(and <kbd>C-x e</kbd>) key.  Because this is so useful, Calc puts this
+command on the <kbd>C-x * m</kbd> key.  Try reading in this macro in the
+following form:  Press <kbd>C-@</kbd> (or <kbd>C-&lt;SPC&gt;</kbd>) at
+one end of the text below, then type <kbd>C-x * m</kbd> at the other.
+
+<pre class="example">     Z ` 0 t 1
+         1 TAB
+         Z (  &amp; s + 1  1 Z )
+         r 1
+     Z '
+</pre>
+   <p>(&bull;) <strong>Exercise 8.</strong>  A general algorithm for solving
+equations numerically is <dfn>Newton's Method</dfn>.  Given the equation
+&lsquo;<samp><span class="samp">f(x) = 0</span></samp>&rsquo; for any function &lsquo;<samp><span class="samp">f</span></samp>&rsquo;, and an initial guess
+&lsquo;<samp><span class="samp">x_0</span></samp>&rsquo; which is reasonably close to the desired solution, apply
+this formula over and over:
+
+<pre class="example">     new_x = x - f(x)/f'(x)
+</pre>
+   <p class="noindent">where &lsquo;<samp><span class="samp">f'(x)</span></samp>&rsquo; is the derivative of &lsquo;<samp><span class="samp">f</span></samp>&rsquo;.  The &lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+values will quickly converge to a solution, i.e., eventually
+<!-- @math{x_{\rm new}} -->
+&lsquo;<samp><span class="samp">new_x</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">x</span></samp>&rsquo; will be equal to within the limits
+of the current precision.  Write a program which takes a formula
+involving the variable &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, and an initial guess &lsquo;<samp><span class="samp">x_0</span></samp>&rsquo;,
+on the stack, and produces a value of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; for which the formula
+is zero.  Use it to find a solution of
+<!-- @math{\sin(\cos x) = 0.5} -->
+&lsquo;<samp><span class="samp">sin(cos(x)) = 0.5</span></samp>&rsquo;
+near &lsquo;<samp><span class="samp">x = 4.5</span></samp>&rsquo;.  (Use angles measured in radians.)  Note that
+the built-in <kbd>a&nbsp;R</kbd><!-- /@w --> (<code>calc-find-root</code>) command uses Newton's
+method when it is able.  See <a href="Programming-Answer-8.html#Programming-Answer-8">8</a>. (&bull;)
+
+   <p><a name="index-Digamma-function-79"></a><a name="index-Gamma-constant_002c-Euler_0027s-80"></a><a name="index-Euler_0027s-gamma-constant-81"></a>(&bull;) <strong>Exercise 9.</strong>  The <dfn>digamma</dfn> function
+<!-- @math{\psi(z) (``psi'')} -->
+&lsquo;<samp><span class="samp">psi(z)</span></samp>&rsquo;
+is defined as the derivative of
+<!-- @math{\ln \Gamma(z)}. -->
+&lsquo;<samp><span class="samp">ln(gamma(z))</span></samp>&rsquo;. 
+For large values of &lsquo;<samp><span class="samp">z</span></samp>&rsquo;, it can be approximated by the infinite sum
+
+<pre class="example">     psi(z) ~= ln(z) - 1/2z - sum(bern(2 n) / 2 n z^(2 n), n, 1, inf)
+</pre>
+   <p class="noindent">where
+<!-- @math{\sum} -->
+&lsquo;<samp><span class="samp">sum</span></samp>&rsquo;
+represents the sum over &lsquo;<samp><span class="samp">n</span></samp>&rsquo; from 1 to infinity
+(or to some limit high enough to give the desired accuracy), and
+the <code>bern</code> function produces (exact) Bernoulli numbers. 
+While this sum is not guaranteed to converge, in practice it is safe. 
+An interesting mathematical constant is Euler's gamma, which is equal
+to about 0.5772.  One way to compute it is by the formula,
+<!-- @math{\gamma = -\psi(1)}. -->
+&lsquo;<samp><span class="samp">gamma = -psi(1)</span></samp>&rsquo;. 
+Unfortunately, 1 isn't a large enough argument
+for the above formula to work (5 is a much safer value for &lsquo;<samp><span class="samp">z</span></samp>&rsquo;). 
+Fortunately, we can compute
+<!-- @math{\psi(1)} -->
+&lsquo;<samp><span class="samp">psi(1)</span></samp>&rsquo;
+from
+<!-- @math{\psi(5)} -->
+&lsquo;<samp><span class="samp">psi(5)</span></samp>&rsquo;
+using the recurrence
+<!-- @math{\psi(z+1) = \psi(z) + {1 \over z}}. -->
+&lsquo;<samp><span class="samp">psi(z+1) = psi(z) + 1/z</span></samp>&rsquo;. 
+Your task:  Develop a program to compute
+<!-- @math{\psi(z)}; -->
+&lsquo;<samp><span class="samp">psi(z)</span></samp>&rsquo;;
+it should &ldquo;pump up&rdquo; &lsquo;<samp><span class="samp">z</span></samp>&rsquo;
+if necessary to be greater than 5, then use the above summation
+formula.  Use looping commands to compute the sum.  Use your function
+to compute
+<!-- @math{\gamma} -->
+&lsquo;<samp><span class="samp">gamma</span></samp>&rsquo;
+to twelve decimal places.  (Calc has a built-in command
+for Euler's constant, <kbd>I P</kbd>, which you can use to check your answer.) 
+See <a href="Programming-Answer-9.html#Programming-Answer-9">9</a>. (&bull;)
+
+   <p><a name="index-Polynomial_002c-list-of-coefficients-82"></a>(&bull;) <strong>Exercise 10.</strong>  Given a polynomial in &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and
+a number &lsquo;<samp><span class="samp">m</span></samp>&rsquo; on the stack, where the polynomial is of degree
+&lsquo;<samp><span class="samp">m</span></samp>&rsquo; or less (i.e., does not have any terms higher than &lsquo;<samp><span class="samp">x^m</span></samp>&rsquo;),
+write a program to convert the polynomial into a list-of-coefficients
+notation.  For example, &lsquo;<samp><span class="samp">5 x^4 + (x + 1)^2</span></samp>&rsquo; with &lsquo;<samp><span class="samp">m = 6</span></samp>&rsquo;
+should produce the list &lsquo;<samp><span class="samp">[1, 2, 1, 0, 5, 0, 0]</span></samp>&rsquo;.  Also develop
+a way to convert from this form back to the standard algebraic form. 
+See <a href="Programming-Answer-10.html#Programming-Answer-10">10</a>. (&bull;)
+
+   <p><a name="index-Recursion-83"></a>(&bull;) <strong>Exercise 11.</strong>  The <dfn>Stirling numbers of the
+first kind</dfn> are defined by the recurrences,
+
+<pre class="example">     s(n,n) = 1   for n &gt;= 0,
+     s(n,0) = 0   for n &gt; 0,
+     s(n+1,m) = s(n,m-1) - n s(n,m)   for n &gt;= m &gt;= 1.
+</pre>
+   <p>This can be implemented using a <dfn>recursive</dfn> program in Calc; the
+program must invoke itself in order to calculate the two righthand
+terms in the general formula.  Since it always invokes itself with
+&ldquo;simpler&rdquo; arguments, it's easy to see that it must eventually finish
+the computation.  Recursion is a little difficult with Emacs keyboard
+macros since the macro is executed before its definition is complete. 
+So here's the recommended strategy:  Create a &ldquo;dummy macro&rdquo; and assign
+it to a key with, e.g., <kbd>Z K s</kbd>.  Now enter the true definition,
+using the <kbd>z s</kbd> command to call itself recursively, then assign it
+to the same key with <kbd>Z K s</kbd>.  Now the <kbd>z s</kbd> command will run
+the complete recursive program.  (Another way is to use <kbd>Z&nbsp;E</kbd><!-- /@w -->
+or <kbd>C-x * m</kbd> (<code>read-kbd-macro</code>) to read the whole macro at once,
+thus avoiding the &ldquo;training&rdquo; phase.)  The task:  Write a program
+that computes Stirling numbers of the first kind, given &lsquo;<samp><span class="samp">n</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">m</span></samp>&rsquo; on the stack.  Test it with <em>small</em> inputs like
+&lsquo;<samp><span class="samp">s(4,2)</span></samp>&rsquo;.  (There is a built-in command for Stirling numbers,
+<kbd>k s</kbd>, which you can use to check your answers.) 
+See <a href="Programming-Answer-11.html#Programming-Answer-11">11</a>. (&bull;)
+
+   <p>The programming commands we've seen in this part of the tutorial
+are low-level, general-purpose operations.  Often you will find
+that a higher-level function, such as vector mapping or rewrite
+rules, will do the job much more easily than a detailed, step-by-step
+program can:
+
+   <p>(&bull;) <strong>Exercise 12.</strong>  Write another program for
+computing Stirling numbers of the first kind, this time using
+rewrite rules.  Once again, &lsquo;<samp><span class="samp">n</span></samp>&rsquo; and &lsquo;<samp><span class="samp">m</span></samp>&rsquo; should be taken
+from the stack.  See <a href="Programming-Answer-12.html#Programming-Answer-12">12</a>. (&bull;)
+
+<pre class="example">     
+</pre>
+   <p>This ends the tutorial section of the Calc manual.  Now you know enough
+about Calc to use it effectively for many kinds of calculations.  But
+Calc has many features that were not even touched upon in this tutorial. 
+<!-- [not-split] -->
+The rest of this manual tells the whole story. 
+<!-- [when-split] -->
+<!-- Volume II of this manual, the @dfn{Calc Reference}, tells the whole story. -->
+
+   </body></html>
+

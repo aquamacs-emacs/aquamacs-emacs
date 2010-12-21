@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Limitations and Known Bugs - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Performance-Issues.html#Performance-Issues" title="Performance Issues">
+<link rel="next" href="FAQ.html#FAQ" title="FAQ">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Limitations-and-Known-Bugs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ.html#FAQ">FAQ</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Performance-Issues.html#Performance-Issues">Performance Issues</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h2 class="chapter">3 Limitations and Known Bugs</h2>
+
+<p><a name="index-limitations-604"></a><a name="index-bugs-605"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+     <ul>
+<li>CC Mode doesn't support trigraphs.  (These are character sequences
+such as &lsquo;<samp><span class="samp">??(</span></samp>&rsquo;, which represents &lsquo;<samp><span class="samp">[</span></samp>&rsquo;.  They date from a time
+when some character sets didn't have all the characters that C needs,
+and are now utterly obsolete.)
+
+     <li>There is no way to apply auto newline settings (see <a href="Auto_002dnewlines.html#Auto_002dnewlines">Auto-newlines</a>)
+on already typed lines.  That's only a feature to ease interactive
+editing.
+
+     <p>To generalize this issue a bit: CC Mode is not intended to be used as
+a reformatter for old code in some more or less batch-like way.  With
+the exception of some functions like <code>c-indent-region</code>, it's only
+geared to be used interactively to edit new code.  There's currently no
+intention to change this goal.
+
+     <p>If you want to reformat old code, you're probably better off using some
+other tool instead, e.g. <a href="../indent/index.html#Top">GNU indent</a>, which has more powerful reformatting capabilities than
+CC Mode.
+
+     <li>The support for C++ templates (in angle brackets) is not yet complete. 
+When a non-nested template is used in a declaration, CC Mode indents
+it and font-locks it OK.  Templates used in expressions, and nested
+templates do not fare so well.  Sometimes a workaround is to refontify
+the expression after typing the closing &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;.
+
+     <li>In a <dfn>k&amp;r region</dfn> (the part of an old-fashioned C function
+declaration which specifies the types of its parameters, coming
+between the parameter list and the opening brace), there should be at
+most 20 top-level parenthesis and bracket pairs.  This limit has been
+imposed for performance reasons.  If it is violated, the source file
+might be incorrectly indented or fontified.
+
+     <li>On loading CC Mode, sometimes this error message appears:
+
+     <pre class="example">          File mode specification error: (void-variable c-font-lock-keywords-3)
+</pre>
+     <p>This is due to a bug in the function <code>eval-after-load</code> in some
+versions of (X)Emacs.  It can manifest itself when there is a symbolic
+link in the path of the directory which contains (X)Emacs.  As a
+workaround, put the following into your <samp><span class="file">.emacs</span></samp> file, fairly
+early on:
+
+     <pre class="example">          (defun my-load-cc-fonts ()
+            (require "cc-fonts"))
+          (add-hook 'c-initialization-hook 'my-load-cc-fonts)
+</pre>
+     </ul>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

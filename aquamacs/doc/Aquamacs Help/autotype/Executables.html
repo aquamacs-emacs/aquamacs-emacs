@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Executables - Features for Automatic Typing</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Features for Automatic Typing">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Copyrights.html#Copyrights" title="Copyrights">
+<link rel="next" href="Timestamps.html#Timestamps" title="Timestamps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Executables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Timestamps.html#Timestamps">Timestamps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Copyrights.html#Copyrights">Copyrights</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">8 Making Interpreter Scripts Executable</h2>
+
+<p><a name="index-executables-29"></a>
+<a name="index-executable_002dprefix-30"></a><a name="index-executable_002dchmod-31"></a>  Various interpreter modes such as Shell script mode or AWK mode will
+automatically insert or update the buffer's magic number, a special
+comment on the first line that makes the <code>exec</code> systemcall know
+how to execute the script.  To this end the script is automatically
+made executable upon saving, with <code>executable-chmod</code> as argument
+to the system <code>chmod</code> command.  The magic number is prefixed by
+the value of <code>executable-prefix</code>.
+
+   <p><a name="index-executable_002dmagicless_002dfile_002dregexp-32"></a>  Any file whose name matches <code>executable-magicless-file-regexp</code> is not
+furnished with a magic number, nor is it made executable.  This is mainly
+intended for resource files, which are only meant to be read in.
+
+   <p><a name="index-executable_002dinsert-33"></a>  The variable <code>executable-insert</code> says what to do when
+<code>executable-set-magic</code> is called non-interactively, e.g. when file has no
+or the wrong magic number:
+     <dl>
+<dt><code>nil</code><dd>Do nothing. 
+<br><dt><code>t</code><dd>Insert or update magic number. 
+<br><dt>other<dd>Insert or update magic number, but mark as unmodified. 
+</dl>
+
+   <p><a name="index-executable_002dset_002dmagic-34"></a><a name="index-executable_002dquery-35"></a>  The variable <code>executable-query</code> controls whether to ask about
+inserting or updating the magic number.  When this is <code>nil</code> updating
+is only done with <kbd>M-x executable-set-magic</kbd>.  When this is
+<code>function</code> you are queried whenever <code>executable-set-magic</code> is
+called as a function, such as when Emacs puts a buffer in Shell script
+mode.  Otherwise you are alway queried.
+
+   <p><a name="index-executable_002dself_002ddisplay-36"></a>  <kbd>M-x executable-self-display</kbd> adds a magic number to the buffer, which
+will turn it into a self displaying text file, when called as a Un*x command. 
+The &ldquo;interpreter&rdquo; used is <code>executable-self-display</code> with argument
+&lsquo;<samp><span class="samp">+2</span></samp>&rsquo;.
+
+   </body></html>
+

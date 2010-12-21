@@ -1,0 +1,205 @@
+<html lang="en">
+<head>
+<title>Calc Mode Line - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Settings.html#Mode-Settings" title="Mode Settings">
+<link rel="prev" href="Modes-Variable.html#Modes-Variable" title="Modes Variable">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Calc-Mode-Line"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modes-Variable.html#Modes-Variable">Modes Variable</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>
+<hr>
+</div>
+
+<h3 class="section">7.10 The Calc Mode Line</h3>
+
+<p class="noindent"><a name="index-Mode-line-indicators-644"></a>This section is a summary of all symbols that can appear on the
+Calc mode line, the highlighted bar that appears under the Calc
+stack window (or under an editing window in Embedded mode).
+
+   <p>The basic mode line format is:
+
+<pre class="example">     --%*-Calc: 12 Deg <var>other modes</var>       (Calculator)
+</pre>
+   <p>The &lsquo;<samp><span class="samp">%*</span></samp>&rsquo; indicates that the buffer is &ldquo;read-only&rdquo;; it shows that
+regular Emacs commands are not allowed to edit the stack buffer
+as if it were text.
+
+   <p>The word &lsquo;<samp><span class="samp">Calc:</span></samp>&rsquo; changes to &lsquo;<samp><span class="samp">CalcEmbed:</span></samp>&rsquo; if Embedded mode
+is enabled.  The words after this describe the various Calc modes
+that are in effect.
+
+   <p>The first mode is always the current precision, an integer. 
+The second mode is always the angular mode, either <code>Deg</code>,
+<code>Rad</code>, or <code>Hms</code>.
+
+   <p>Here is a complete list of the remaining symbols that can appear
+on the mode line:
+
+     <dl>
+<dt><code>Alg</code><dd>Algebraic mode (<kbd>m a</kbd>; see <a href="Algebraic-Entry.html#Algebraic-Entry">Algebraic Entry</a>).
+
+     <br><dt><code>Alg[(</code><dd>Incomplete algebraic mode (<kbd>C-u m a</kbd>).
+
+     <br><dt><code>Alg*</code><dd>Total algebraic mode (<kbd>m t</kbd>).
+
+     <br><dt><code>Symb</code><dd>Symbolic mode (<kbd>m s</kbd>; see <a href="Symbolic-Mode.html#Symbolic-Mode">Symbolic Mode</a>).
+
+     <br><dt><code>Matrix</code><dd>Matrix mode (<kbd>m v</kbd>; see <a href="Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>).
+
+     <br><dt><code>Matrix</code><var>n</var><dd>Dimensioned Matrix mode (<kbd>C-u </kbd><var>n</var><kbd> m v</kbd>; see <a href="Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>).
+
+     <br><dt><code>SqMatrix</code><dd>Square Matrix mode (<kbd>C-u m v</kbd>; see <a href="Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>).
+
+     <br><dt><code>Scalar</code><dd>Scalar mode (<kbd>m v</kbd>; see <a href="Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>).
+
+     <br><dt><code>Polar</code><dd>Polar complex mode (<kbd>m p</kbd>; see <a href="Polar-Mode.html#Polar-Mode">Polar Mode</a>).
+
+     <br><dt><code>Frac</code><dd>Fraction mode (<kbd>m f</kbd>; see <a href="Fraction-Mode.html#Fraction-Mode">Fraction Mode</a>).
+
+     <br><dt><code>Inf</code><dd>Infinite mode (<kbd>m i</kbd>; see <a href="Infinite-Mode.html#Infinite-Mode">Infinite Mode</a>).
+
+     <br><dt><code>+Inf</code><dd>Positive Infinite mode (<kbd>C-u 0 m i</kbd>).
+
+     <br><dt><code>NoSimp</code><dd>Default simplifications off (<kbd>m O</kbd>; see <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>).
+
+     <br><dt><code>NumSimp</code><dd>Default simplifications for numeric arguments only (<kbd>m N</kbd>).
+
+     <br><dt><code>BinSimp</code><var>w</var><dd>Binary-integer simplification mode; word size <var>w</var> (<kbd>m B</kbd>, <kbd>b w</kbd>).
+
+     <br><dt><code>AlgSimp</code><dd>Algebraic simplification mode (<kbd>m A</kbd>).
+
+     <br><dt><code>ExtSimp</code><dd>Extended algebraic simplification mode (<kbd>m E</kbd>).
+
+     <br><dt><code>UnitSimp</code><dd>Units simplification mode (<kbd>m U</kbd>).
+
+     <br><dt><code>Bin</code><dd>Current radix is 2 (<kbd>d 2</kbd>; see <a href="Radix-Modes.html#Radix-Modes">Radix Modes</a>).
+
+     <br><dt><code>Oct</code><dd>Current radix is 8 (<kbd>d 8</kbd>).
+
+     <br><dt><code>Hex</code><dd>Current radix is 16 (<kbd>d 6</kbd>).
+
+     <br><dt><code>Radix</code><var>n</var><dd>Current radix is <var>n</var> (<kbd>d r</kbd>).
+
+     <br><dt><code>Zero</code><dd>Leading zeros (<kbd>d z</kbd>; see <a href="Radix-Modes.html#Radix-Modes">Radix Modes</a>).
+
+     <br><dt><code>Big</code><dd>Big language mode (<kbd>d B</kbd>; see <a href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>).
+
+     <br><dt><code>Flat</code><dd>One-line normal language mode (<kbd>d O</kbd>).
+
+     <br><dt><code>Unform</code><dd>Unformatted language mode (<kbd>d U</kbd>).
+
+     <br><dt><code>C</code><dd>C language mode (<kbd>d C</kbd>; see <a href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal">C FORTRAN Pascal</a>).
+
+     <br><dt><code>Pascal</code><dd>Pascal language mode (<kbd>d P</kbd>).
+
+     <br><dt><code>Fortran</code><dd>FORTRAN language mode (<kbd>d F</kbd>).
+
+     <br><dt><code>TeX</code><dd>TeX language mode (<kbd>d T</kbd>; see <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX and LaTeX Language Modes</a>).
+
+     <br><dt><code>LaTeX</code><dd>LaTeX language mode (<kbd>d L</kbd>; see <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX and LaTeX Language Modes</a>).
+
+     <br><dt><code>Eqn</code><dd><dfn>Eqn</dfn> language mode (<kbd>d E</kbd>; see <a href="Eqn-Language-Mode.html#Eqn-Language-Mode">Eqn Language Mode</a>).
+
+     <br><dt><code>Math</code><dd>Mathematica language mode (<kbd>d M</kbd>; see <a href="Mathematica-Language-Mode.html#Mathematica-Language-Mode">Mathematica Language Mode</a>).
+
+     <br><dt><code>Maple</code><dd>Maple language mode (<kbd>d W</kbd>; see <a href="Maple-Language-Mode.html#Maple-Language-Mode">Maple Language Mode</a>).
+
+     <br><dt><code>Norm</code><var>n</var><dd>Normal float mode with <var>n</var> digits (<kbd>d n</kbd>; see <a href="Float-Formats.html#Float-Formats">Float Formats</a>).
+
+     <br><dt><code>Fix</code><var>n</var><dd>Fixed point mode with <var>n</var> digits after the point (<kbd>d f</kbd>).
+
+     <br><dt><code>Sci</code><dd>Scientific notation mode (<kbd>d s</kbd>).
+
+     <br><dt><code>Sci</code><var>n</var><dd>Scientific notation with <var>n</var> digits (<kbd>d s</kbd>).
+
+     <br><dt><code>Eng</code><dd>Engineering notation mode (<kbd>d e</kbd>).
+
+     <br><dt><code>Eng</code><var>n</var><dd>Engineering notation with <var>n</var> digits (<kbd>d e</kbd>).
+
+     <br><dt><code>Left</code><var>n</var><dd>Left-justified display indented by <var>n</var> (<kbd>d &lt;</kbd>; see <a href="Justification.html#Justification">Justification</a>).
+
+     <br><dt><code>Right</code><dd>Right-justified display (<kbd>d &gt;</kbd>).
+
+     <br><dt><code>Right</code><var>n</var><dd>Right-justified display with width <var>n</var> (<kbd>d &gt;</kbd>).
+
+     <br><dt><code>Center</code><dd>Centered display (<kbd>d =</kbd>).
+
+     <br><dt><code>Center</code><var>n</var><dd>Centered display with center column <var>n</var> (<kbd>d =</kbd>).
+
+     <br><dt><code>Wid</code><var>n</var><dd>Line breaking with width <var>n</var> (<kbd>d b</kbd>; see <a href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>).
+
+     <br><dt><code>Wide</code><dd>No line breaking (<kbd>d b</kbd>).
+
+     <br><dt><code>Break</code><dd>Selections show deep structure (<kbd>j b</kbd>; see <a href="Making-Selections.html#Making-Selections">Making Selections</a>).
+
+     <br><dt><code>Save</code><dd>Record modes in <samp><span class="file">~/.calc.el</span></samp> (<kbd>m R</kbd>; see <a href="General-Mode-Commands.html#General-Mode-Commands">General Mode Commands</a>).
+
+     <br><dt><code>Local</code><dd>Record modes in Embedded buffer (<kbd>m R</kbd>).
+
+     <br><dt><code>LocEdit</code><dd>Record modes as editing-only in Embedded buffer (<kbd>m R</kbd>).
+
+     <br><dt><code>LocPerm</code><dd>Record modes as permanent-only in Embedded buffer (<kbd>m R</kbd>).
+
+     <br><dt><code>Global</code><dd>Record modes as global in Embedded buffer (<kbd>m R</kbd>).
+
+     <br><dt><code>Manual</code><dd>Automatic recomputation turned off (<kbd>m C</kbd>; see <a href="Automatic-Recomputation.html#Automatic-Recomputation">Automatic Recomputation</a>).
+
+     <br><dt><code>Graph</code><dd>GNUPLOT process is alive in background (see <a href="Graphics.html#Graphics">Graphics</a>).
+
+     <br><dt><code>Sel</code><dd>Top-of-stack has a selection (Embedded only; see <a href="Making-Selections.html#Making-Selections">Making Selections</a>).
+
+     <br><dt><code>Dirty</code><dd>The stack display may not be up-to-date (see <a href="Display-Modes.html#Display-Modes">Display Modes</a>).
+
+     <br><dt><code>Inv</code><dd>&ldquo;Inverse&rdquo; prefix was pressed (<kbd>I</kbd>; see <a href="Inverse-and-Hyperbolic.html#Inverse-and-Hyperbolic">Inverse and Hyperbolic</a>).
+
+     <br><dt><code>Hyp</code><dd>&ldquo;Hyperbolic&rdquo; prefix was pressed (<kbd>H</kbd>).
+
+     <br><dt><code>Keep</code><dd>&ldquo;Keep-arguments&rdquo; prefix was pressed (<kbd>K</kbd>).
+
+     <br><dt><code>Narrow</code><dd>Stack is truncated (<kbd>d t</kbd>; see <a href="Truncating-the-Stack.html#Truncating-the-Stack">Truncating the Stack</a>). 
+</dl>
+
+   <p>In addition, the symbols <code>Active</code> and <code>~Active</code> can appear
+as minor modes on an Embedded buffer's mode line.  See <a href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>.
+
+   </body></html>
+

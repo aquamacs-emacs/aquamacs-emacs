@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Killing From Stack - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Kill-and-Yank.html#Kill-and-Yank" title="Kill and Yank">
+<link rel="prev" href="Kill-and-Yank.html#Kill-and-Yank" title="Kill and Yank">
+<link rel="next" href="Yanking-Into-Stack.html#Yanking-Into-Stack" title="Yanking Into Stack">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Killing-From-Stack"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Yanking-Into-Stack.html#Yanking-Into-Stack">Yanking Into Stack</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Kill-and-Yank.html#Kill-and-Yank">Kill and Yank</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Kill-and-Yank.html#Kill-and-Yank">Kill and Yank</a>
+<hr>
+</div>
+
+<h3 class="section">15.1 Killing from the Stack</h3>
+
+<p class="noindent"><a name="index-C_002dk-2183"></a><a name="index-calc_002dkill-2184"></a><a name="index-M_002dk-2185"></a><a name="index-calc_002dcopy_002das_002dkill-2186"></a><a name="index-C_002dw-2187"></a><a name="index-calc_002dkill_002dregion-2188"></a><a name="index-M_002dw-2189"></a><a name="index-calc_002dcopy_002dregion_002das_002dkill-2190"></a><a name="index-M_002dC_002dw-2191"></a><a name="index-Kill-ring-2192"></a><dfn>Kill</dfn> commands are Emacs commands that insert text into the &ldquo;kill
+ring,&rdquo; from which it can later be &ldquo;yanked&rdquo; by a <kbd>C-y</kbd> command. 
+Three common kill commands in normal Emacs are <kbd>C-k</kbd>, which kills
+one line, <kbd>C-w</kbd>, which kills the region between mark and point, and
+<kbd>M-w</kbd>, which puts the region into the kill ring without actually
+deleting it.  All of these commands work in the Calculator, too,
+although in the Calculator they operate on whole stack entries, so they
+&ldquo;round up&rdquo; the specified region to encompass full lines.  (To copy
+only parts of lines, the <kbd>M-C-w</kbd> command in the Calculator will copy
+the region to the kill ring without any &ldquo;rounding up&rdquo;, just like the
+<kbd>M-w</kbd> command in normal Emacs.)  Also, <kbd>M-k</kbd> has been provided
+to complete the set; it puts the current line into the kill ring without
+deleting anything.
+
+   <p>The kill commands are unusual in that they pay attention to the location
+of the cursor in the Calculator buffer.  If the cursor is on or below
+the bottom line, the kill commands operate on the top of the stack. 
+Otherwise, they operate on whatever stack element the cursor is on.  The
+text is copied into the kill ring exactly as it appears on the screen,
+including line numbers if they are enabled.
+
+   <p>A numeric prefix argument to <kbd>C-k</kbd> or <kbd>M-k</kbd> affects the number
+of lines killed.  A positive argument kills the current line and &lsquo;<samp><span class="samp">n-1</span></samp>&rsquo;
+lines below it.  A negative argument kills the &lsquo;<samp><span class="samp">-n</span></samp>&rsquo; lines above the
+current line.  Again this mirrors the behavior of the standard Emacs
+<kbd>C-k</kbd> command.  Although a whole line is always deleted, <kbd>C-k</kbd>
+with no argument copies only the number itself into the kill ring, whereas
+<kbd>C-k</kbd> with a prefix argument of 1 copies the number with its trailing
+newline.
+
+   </body></html>
+

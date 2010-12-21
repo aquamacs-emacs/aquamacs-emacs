@@ -1,0 +1,246 @@
+<html lang="en">
+<head>
+<title>Major Entry Points - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Introduction.html#Introduction" title="Introduction">
+<link rel="next" href="Session-Commands.html#Session-Commands" title="Session Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Major-Entry-Points"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Session-Commands.html#Session-Commands">Session Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Introduction.html#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">2 Major Entry Points</h2>
+
+<p>When Ediff starts up, it displays a small control window, which accepts the
+Ediff commands, and two or three windows displaying the files to be compared
+or merged. The control window can be in its own small frame or it can be
+part of a bigger frame that displays other buffers. In any case, it is
+important that the control window be active (i.e., be the one receiving the
+keystrokes) when you use Ediff. You can switch to other Emacs buffers at
+will and even edit the files currently being compared with Ediff and then
+switch back to Ediff at any time by activating the appropriate Emacs windows.
+
+   <p>Ediff can be invoked interactively using the following functions, which can
+be run either from the minibuffer or from the menu bar.  In the menu bar,
+all Ediff's entry points belong to three submenus of the Tools menu:
+Compare, Merge, and Apply Patch.
+
+     <dl>
+<dt><code>ediff-files</code><dt><code>ediff</code><dd><a name="index-ediff_002dfiles-5"></a><a name="index-ediff-6"></a>Compare two files.
+
+     <br><dt><code>ediff-backup</code><dd><a name="index-ediff_002dbackup-7"></a>Compare a file with its backup. If there are several numerical backups, use
+the latest. If the file is itself a backup, then compare it with its
+original.
+
+     <br><dt><code>ediff-current-file</code><dd><a name="index-ediff_002dcurrent_002dfile-8"></a>Compare the buffer with its file on disk. This function can be used as a
+safe version of <code>revert-buffer</code>.
+
+     <br><dt><code>ediff-buffers</code><dd><a name="index-ediff_002dbuffers-9"></a>Compare two buffers.
+
+     <br><dt><code>ediff-files3</code><dt><code>ediff3</code><dd><a name="index-ediff_002dfiles3-10"></a><a name="index-ediff3-11"></a>Compare three files.
+
+     <br><dt><code>ediff-buffers3</code><dd><a name="index-ediff_002dbuffers3-12"></a>Compare three buffers.
+
+     <br><dt><code>edirs</code><dt><code>ediff-directories</code><dd><a name="index-edirs-13"></a><a name="index-ediff_002ddirectories-14"></a> Compare files common to two directories. 
+<br><dt><code>edirs3</code><dt><code>ediff-directories3</code><dd><a name="index-edirs3-15"></a><a name="index-ediff_002ddirectories3-16"></a> Compare files common to three directories. 
+<br><dt><code>edir-revisions</code><dt><code>ediff-directory-revisions</code><dd><a name="index-ediff_002ddirectory_002drevisions-17"></a><a name="index-edir_002drevisions-18"></a> Compare versions of files in a given directory.  Ediff selects only the
+files that are under version control. 
+<br><dt><code>edir-merge-revisions</code><dt><code>ediff-merge-directory-revisions</code><dd><a name="index-edir_002dmerge_002drevisions-19"></a><a name="index-ediff_002dmerge_002ddirectory_002drevisions-20"></a> Merge versions of files in a given directory.  Ediff selects only the
+files that are under version control. 
+<br><dt><code>edir-merge-revisions-with-ancestor</code><dt><code>ediff-merge-directory-revisions-with-ancestor</code><dd><a name="index-edir_002dmerge_002drevisions_002dwith_002dancestor-21"></a><a name="index-ediff_002dmerge_002ddirectory_002drevisions_002dwith_002dancestor-22"></a> Merge versions of files in a given directory using other versions as
+ancestors.  Ediff selects only the files that are under version control.
+
+     <br><dt><code>ediff-windows-wordwise</code><dd><a name="index-ediff_002dwindows_002dwordwise-23"></a>Compare windows word-by-word.
+
+     <br><dt><code>ediff-windows-linewise</code><dd><a name="index-ediff_002dwindows_002dlinewise-24"></a>Compare windows line-by-line.
+
+     <br><dt><code>ediff-regions-wordwise</code><dd><a name="index-ediff_002dregions_002dwordwise-25"></a>Compare regions word-by-word.  The regions can come from the same buffer
+and they can even overlap.  You will be asked to specify the buffers that
+contain the regions, which you want to compare. For each buffer, you will
+also be asked to mark the regions to be compared. Pay attention to the
+messages that appear in the minibuffer.
+
+     <br><dt><code>ediff-regions-linewise</code><dd><a name="index-ediff_002dregions_002dlinewise-26"></a>Similar to <code>ediff-windows-linewise</code>, but compares the regions
+line-by-line. See <code>ediff-windows-linewise</code> for more details.
+
+     <br><dt><code>ediff-revision</code><dd><a name="index-ediff_002drevision-27"></a> Compare versions of the current buffer, if the buffer is visiting
+ a file under version control.
+
+     <br><dt><code>ediff-patch-file</code><dt><code>epatch</code><dd><a name="index-ediff_002dpatch_002dfile-28"></a><a name="index-epatch-29"></a>
+Patch a file or multiple files, then compare.  If the patch applies to just
+one file, Ediff will invoke a regular comparison session.  If it is a
+multi-file patch, then a session group interface will be used and the user
+will be able to patch the files selectively.  See <a href="Session-Groups.html#Session-Groups">Session Groups</a>, for
+more details.
+
+     <p>Since the patch might be in a buffer or a file, you will be asked which is
+the case. To avoid this extra prompt, you can invoke this command with a
+prefix argument.  With an odd prefix argument, Ediff assumes the patch
+is in a file; with an even argument, a buffer is assumed.
+
+     <p>Note that <code>ediff-patch-file</code> will actually use the <code>patch</code>
+utility to change the original files on disk.  This is not that
+dangerous, since you will always have the original contents of the file
+saved in another file that has the extension <samp><span class="file">.orig</span></samp>. 
+Furthermore, if the file is under version control, then you can always back
+out to one of the previous versions (see the section on Version Control in
+the Emacs manual).
+
+     <p><code>ediff-patch-file</code> is careful about versions control: if the file
+to be patched is checked in, then Ediff will offer to check it out, because
+failing to do so may result in the loss of the changes when the file is
+checked out the next time.
+
+     <p>If you don't intend to modify the file via the patch and just want to see
+what the patch is all about (and decide later), then
+<code>ediff-patch-buffer</code> might be a better choice.
+
+     <br><dt><code>ediff-patch-buffer</code><dt><code>epatch-buffer</code><dd><a name="index-ediff_002dpatch_002dbuffer-30"></a><a name="index-epatch_002dbuffer-31"></a>Patch a buffer, then compare.  The buffer being patched and the file visited
+by that buffer (if any) is <em>not</em> modified.  The result of the patch
+appears in some other buffer that has the name ending with <em>_patched</em>.
+
+     <p>This function would refuse to apply a multifile patch to a buffer.  Use
+<code>ediff-patch-file</code> for that (and when you want the original file to be
+modified by the <code>patch</code> utility).
+
+     <p>Since the patch might be in a buffer or a file, you will be asked which is
+the case. To avoid this extra prompt, you can invoke this command with a
+prefix argument.  With an odd prefix argument, Ediff assumes the patch
+is in a file; with an even argument, a buffer is assumed.
+
+     <br><dt><code>ediff-merge-files</code><dt><code>ediff-merge</code><dd><a name="index-ediff_002dmerge_002dfiles-32"></a><a name="index-ediff_002dmerge-33"></a>Merge two files.
+
+     <br><dt><code>ediff-merge-files-with-ancestor</code><dt><code>ediff-merge-with-ancestor</code><dd><a name="index-ediff_002dmerge_002dfiles_002dwith_002dancestor-34"></a><a name="index-ediff_002dmerge_002dwith_002dancestor-35"></a>Like <code>ediff-merge</code>, but with a third ancestor file.
+
+     <br><dt><code>ediff-merge-buffers</code><dd><a name="index-ediff_002dmerge_002dbuffers-36"></a>Merge two buffers.
+
+     <br><dt><code>ediff-merge-buffers-with-ancestor</code><dd><a name="index-ediff_002dmerge_002dbuffers_002dwith_002dancestor-37"></a>Same but with ancestor.
+
+     <br><dt><code>edirs-merge</code><dt><code>ediff-merge-directories</code><dd><a name="index-edirs_002dmerge-38"></a><a name="index-ediff_002dmerge_002ddirectories-39"></a> Merge files common to two directories. 
+<br><dt><code>edirs-merge-with-ancestor</code><dt><code>ediff-merge-directories-with-ancestor</code><dd><a name="index-edirs_002dmerge_002dwith_002dancestor-40"></a><a name="index-ediff_002dmerge_002ddirectories_002dwith_002dancestor-41"></a> Same but using files in a third directory as ancestors. 
+ If a pair of files doesn't have an ancestor in the ancestor-directory, you
+ will still be able to merge them without the ancestor.
+
+     <br><dt><code>ediff-merge-revisions</code><dd><a name="index-ediff_002dmerge_002drevisions-42"></a>Merge two versions of the file visited by the current buffer.
+
+     <br><dt><code>ediff-merge-revisions-with-ancestor</code><dd><a name="index-ediff_002dmerge_002drevisions_002dwith_002dancestor-43"></a>Same but with ancestor.
+
+     <br><dt><code>ediff-documentation</code><dd><a name="index-ediff_002ddocumentation-44"></a>Brings up this manual.
+
+     <br><dt><code>ediff-show-registry</code><dt><code>eregistry</code><dd>Brings up Ediff session registry.  This feature enables you to quickly find
+and restart active Ediff sessions. 
+</dl>
+
+<p class="noindent">If you want Ediff to be loaded from the very beginning of your Emacs
+session, you should put this line in your <samp><span class="file">~/.emacs</span></samp> file:
+
+<pre class="example">     (require 'ediff)
+</pre>
+   <p class="noindent">Otherwise, Ediff will be loaded automatically when you use one of the
+above functions, either directly or through the menus.
+
+   <p>When the above functions are invoked, the user is prompted for all the
+necessary information&mdash;typically the files or buffers to compare, merge, or
+patch.  Ediff tries to be smart about these prompts.  For instance, in
+comparing/merging files, it will offer the visible buffers as defaults.  In
+prompting for files, if the user enters a directory, the previously input
+file name will be appended to that directory.  In addition, if the variable
+<code>ediff-use-last-dir</code> is not <code>nil</code>, Ediff will offer
+previously entered directories as defaults (which will be maintained
+separately for each type of file, A, B, or C). 
+<a name="index-g_t_0040code_007bediff_002duse_002dlast_002ddir_007d-45"></a>
+All the above functions use the POSIX <code>diff</code> or <code>diff3</code> programs
+to find differences between two files.  They process the <code>diff</code> output
+and display it in a convenient form.  At present, Ediff understands only
+the plain output from diff.  Options such as &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; are not supported,
+nor is the format produced by incompatible file comparison programs such as
+the VMS version of <code>diff</code>.
+
+   <p>The functions <code>ediff-files</code>, <code>ediff-buffers</code>,
+<code>ediff-files3</code>, <code>ediff-buffers3</code> first display the coarse,
+line-based difference regions, as reported by the <code>diff</code> program.  The
+total number of difference regions and the current difference number are
+always displayed in the mode line of the control window.
+
+   <p>Since <code>diff</code> may report fairly large chunks of text as being different,
+even though the difference may be localized to just a few words or even
+to the white space or line breaks, Ediff further <em>refines</em> the
+regions to indicate which exact words differ.  If the only difference is
+in the white space and line breaks, Ediff says so.
+
+   <p>On a color display, fine differences are highlighted with color; on a
+monochrome display, they are underlined.  See <a href="Highlighting-Difference-Regions.html#Highlighting-Difference-Regions">Highlighting Difference Regions</a>, for information on how to customize this.
+
+   <p>The commands <code>ediff-windows-wordwise</code>,
+<code>ediff-windows-linewise</code>, <code>ediff-regions-wordwise</code> and
+<code>ediff-regions-linewise</code> do comparison on parts of existing Emacs
+buffers.  The commands <code>ediff-windows-wordwise</code> and
+<code>ediff-regions-wordwise</code> are intended for relatively small segments
+of buffers (e.g., up to 100 lines, depending on the speed of your machine),
+as they perform comparison on the basis of words rather than lines. 
+(Word-wise comparison of large chunks of text can be slow.)
+
+   <p>To compare large regions, use <code>ediff-regions-linewise</code>.  This
+command displays differences much like <code>ediff-files</code> and
+<code>ediff-buffers</code>.
+
+   <p>The functions <code>ediff-patch-file</code> and <code>ediff-patch-buffer</code> apply a
+patch to a file or a buffer and then run Ediff on the appropriate
+files/buffers, displaying the difference regions.
+
+   <p>The entry points <code>ediff-directories</code>, <code>ediff-merge-directories</code>,
+etc., provide a convenient interface for comparing and merging files in
+different directories.  The user is presented with Dired-like interface from
+which one can run a group of related Ediff sessions.
+
+   <p>For files under version control, <code>ediff-revision</code> lets you compare
+the file visited by the current buffer to one of its checked-in versions. 
+You can also compare two checked-in versions of the visited file. 
+Moreover, the functions <code>ediff-directory-revisions</code>,
+<code>ediff-merge-directory-revisions</code>, etc., let you run a group of
+related Ediff sessions by taking a directory and comparing (or merging)
+versions of files in that directory.
+
+   </body></html>
+

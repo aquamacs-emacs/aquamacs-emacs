@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Programming Answer 7 - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link rel="prev" href="Programming-Answer-6.html#Programming-Answer-6" title="Programming Answer 6">
+<link rel="next" href="Programming-Answer-8.html#Programming-Answer-8" title="Programming Answer 8">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Programming-Answer-7"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Programming-Answer-8.html#Programming-Answer-8">Programming Answer 8</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Programming-Answer-6.html#Programming-Answer-6">Programming Answer 6</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.7.64 Programming Tutorial Exercise 7</h4>
+
+<p class="noindent">The trick here is to compute the harmonic numbers differently, so that
+the loop counter itself accumulates the sum of reciprocals.  We use
+a separate variable to hold the integer counter.
+
+<pre class="smallexample">     1:  1          2:  1       1:  .
+         .          1:  4
+                        .
+     
+         1 t 1       1 &lt;RET&gt; 4      Z ( t 2 r 1 1 + s 1 &amp; Z )
+</pre>
+   <p class="noindent">The body of the loop goes as follows:  First save the harmonic sum
+so far in variable 2.  Then delete it from the stack; the for loop
+itself will take care of remembering it for us.  Next, recall the
+count from variable 1, add one to it, and feed its reciprocal to
+the for loop to use as the step value.  The for loop will increase
+the &ldquo;loop counter&rdquo; by that amount and keep going until the
+loop counter exceeds 4.
+
+<pre class="smallexample">     2:  31                  3:  31
+     1:  3.99498713092       2:  3.99498713092
+         .                   1:  4.02724519544
+                                 .
+     
+         r 1 r 2                 &lt;RET&gt; 31 &amp; +
+</pre>
+   <p>Thus we find that the 30th harmonic number is 3.99, and the 31st
+harmonic number is 4.02.
+
+   </body></html>
+

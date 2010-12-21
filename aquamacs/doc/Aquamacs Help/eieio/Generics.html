@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Generics - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Writing-Methods.html#Writing-Methods" title="Writing Methods">
+<link rel="next" href="Methods.html#Methods" title="Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Generics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Methods.html#Methods">Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Writing-Methods.html#Writing-Methods">Writing Methods</a>
+<hr>
+</div>
+
+<h3 class="section">6.1 Generics</h3>
+
+<p>Each <i>EIEIO</i> method has one corresponding generic.  This generic
+provides a function binding and the base documentation for the method
+symbol (see <a href="../elisp/Symbol-Components.html#Symbol-Components">Symbol Components</a>).
+
+<div class="defun">
+&mdash; Macro: <b>defgeneric</b><var> method arglist </var>[<var>doc-string</var>]<var><a name="index-defgeneric-18"></a></var><br>
+<blockquote><p>This macro turns the (unquoted) symbol <var>method</var> into a function. 
+<var>arglist</var> is the default list of arguments to use (not implemented
+yet).  <var>doc-string</var> is the documentation used for this symbol.
+
+        <p>A generic function acts as a placeholder for methods.  There is no
+need to call <code>defgeneric</code> yourself, as <code>defmethod</code> will call
+it if necessary.  Currently the argument list is unused.
+
+        <p><code>defgeneric</code> signals an error if you attempt to turn an existing
+Emacs Lisp function into a generic function.
+
+        <p>You can also create a generic method with <code>defmethod</code>
+(see <a href="Methods.html#Methods">Methods</a>).  When a method is created and there is no generic
+method in place with that name, then a new generic will be created,
+and the new method will use it. 
+</p></blockquote></div>
+
+   <p>In CLOS, a generic call also be used to provide an argument list and
+dispatch precedence for all the arguments.  In <i>EIEIO</i>, dispatching
+only occurs for the first argument, so the <var>arglist</var> is not used.
+
+   </body></html>
+

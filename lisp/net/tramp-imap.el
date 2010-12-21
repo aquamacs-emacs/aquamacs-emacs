@@ -84,10 +84,6 @@
   (add-to-list 'tramp-methods
 	       (list tramp-imap-method '(tramp-default-port 143))))
 
-;; Add a default for `tramp-default-user-alist'.  Default is the local user.
-(add-to-list 'tramp-default-user-alist
-	     `(,tramp-imap-method nil ,(user-login-name)))
-
 ;; Define Tramp IMAPS method ...
 ;;;###tramp-autoload
 (defconst tramp-imaps-method "imaps"
@@ -100,8 +96,12 @@
 	       (list tramp-imaps-method '(tramp-default-port 993))))
 
 ;; Add a default for `tramp-default-user-alist'.  Default is the local user.
-(add-to-list 'tramp-default-user-alist
-	     `(,tramp-imaps-method nil ,(user-login-name)))
+(add-to-list
+ 'tramp-default-user-alist
+ (list (concat "\\`"
+	       (regexp-opt (list tramp-imap-method tramp-imaps-method))
+	       "\\'")
+       nil (user-login-name)))
 
 ;; Add completion function for IMAP method.
 ;; (tramp-set-completion-function
@@ -122,7 +122,7 @@
     (directory-file-name . tramp-handle-directory-file-name)
     (directory-files . tramp-handle-directory-files)
     (directory-files-and-attributes
-     . tramp-imap-handle-directory-files-and-attributes)
+     . tramp-handle-directory-files-and-attributes)
     (dired-call-process . ignore)
     ;; `dired-compress-file' performed by default handler
     ;; `dired-uncache' performed by default handler
@@ -130,8 +130,8 @@
     ;; `file-accessible-directory-p' performed by default handler
     (file-attributes . tramp-imap-handle-file-attributes)
     (file-directory-p .  tramp-imap-handle-file-directory-p)
-    (file-executable-p . tramp-imap-handle-file-executable-p)
-    (file-exists-p . tramp-imap-handle-file-exists-p)
+    (file-executable-p . ignore)
+    (file-exists-p . tramp-handle-file-exists-p)
     (file-local-copy . tramp-imap-handle-file-local-copy)
     (file-modes . tramp-handle-file-modes)
     (file-name-all-completions . tramp-imap-handle-file-name-all-completions)
@@ -140,9 +140,9 @@
     (file-name-directory . tramp-handle-file-name-directory)
     (file-name-nondirectory . tramp-handle-file-name-nondirectory)
     ;; `file-name-sans-versions' performed by default handler
-    (file-newer-than-file-p . tramp-imap-handle-file-newer-than-file-p)
+    (file-newer-than-file-p . tramp-handle-file-newer-than-file-p)
     (file-ownership-preserved-p . ignore)
-    (file-readable-p . tramp-imap-handle-file-readable-p)
+    (file-readable-p . tramp-handle-file-exists-p)
     (file-regular-p . tramp-handle-file-regular-p)
     (file-remote-p . tramp-handle-file-remote-p)
     ;; `file-selinux-context' performed by default handler.
@@ -526,10 +526,6 @@ SIZE MODE WEIRD INODE DEVICE)."
 	  (goto-char point)
 	  (list (expand-file-name filename) size))))))
 
-(defun tramp-imap-handle-file-exists-p (filename)
-  "Like `file-exists-p' for Tramp files."
-  (and (file-attributes filename) t))
-
 (defun tramp-imap-handle-file-directory-p (filename)
   "Like `file-directory-p' for Tramp-IMAP files."
   ;; We allow only mailboxes to be a directory.
@@ -549,14 +545,6 @@ SIZE MODE WEIRD INODE DEVICE)."
   "Get inode equivalent \(actually the UID) for Tramp-IMAP FILENAME."
   (nth 10 (tramp-compat-file-attributes filename id-format)))
 
-(defun tramp-imap-handle-file-executable-p (filename)
-  "Like `file-executable-p' for Tramp files.  False for IMAP."
-  nil)
-
-(defun tramp-imap-handle-file-readable-p (filename)
-  "Like `file-readable-p' for Tramp files.  True for IMAP."
-  (file-exists-p filename))
-
 (defun tramp-imap-handle-file-writable-p (filename)
   "Like `file-writable-p' for Tramp files.  True for IMAP."
   ;; `file-exists-p' does not work yet for directories.
@@ -570,24 +558,6 @@ SIZE MODE WEIRD INODE DEVICE)."
    (t (with-parsed-tramp-file-name (expand-file-name filename) nil
 	(let ((iht (tramp-imap-make-iht v)))
 	  (imap-hash-rem (tramp-imap-get-file-inode filename) iht))))))
-
-(defun tramp-imap-handle-directory-files-and-attributes
-  (directory &optional full match nosort id-format)
-  "Like `directory-files-and-attributes' for Tramp files."
-  (mapcar
-   (lambda (x)
-     (cons x (tramp-compat-file-attributes
-	      (if full x (expand-file-name x directory)) id-format)))
-   (directory-files directory full match nosort)))
-
-;; TODO: fix this in tramp-imap-get-file-entries.
-(defun tramp-imap-handle-file-newer-than-file-p (file1 file2)
-  "Like `file-newer-than-file-p' for Tramp files."
-  (cond
-   ((not (file-exists-p file1)) nil)
-   ((not (file-exists-p file2)) t)
-   (t (tramp-time-less-p (nth 5 (file-attributes file2))
-			 (nth 5 (file-attributes file1))))))
 
 (defun tramp-imap-handle-file-local-copy (filename)
   "Like `file-local-copy' for Tramp files."
@@ -776,8 +746,7 @@ With NEEDED-SUBJECT, alters the imap-hash test accordingly."
 	 (method (tramp-file-name-method vec))
 	 (user (tramp-file-name-user vec))
 	 (ssl (string-equal method tramp-imaps-method))
-	 (port (or (tramp-file-name-port vec)
-		   (tramp-get-method-parameter method 'tramp-default-port)))
+	 (port (tramp-file-name-port vec))
 	 (result (imap-hash-make server port mbox user nil ssl)))
     ;; Return the IHT with a test override to look for the subject
     ;; marker.
@@ -872,5 +841,3 @@ With NEEDED-SUBJECT, alters the imap-hash test accordingly."
 ;;; (tramp-imap-make-iht (tramp-dissect-file-name "/imap:yourhosthere.com:/test/welcommen"))
 ;;; (tramp-imap-make-iht (tramp-dissect-file-name "/imap:yourhosthere.com:/INBOX.test/4"))
 ;;; (tramp-imap-make-iht (tramp-dissect-file-name "/imap:yourhosthere.com:/INBOX.test/4") "extra")
-
-;; arch-tag: f2723749-58fb-4f29-894e-39708096e850

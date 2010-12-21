@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+<title>Predefined Units - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Units.html#Units" title="Units">
+<link rel="prev" href="The-Units-Table.html#The-Units-Table" title="The Units Table">
+<link rel="next" href="User_002dDefined-Units.html#User_002dDefined-Units" title="User-Defined Units">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Predefined-Units"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="User_002dDefined-Units.html#User_002dDefined-Units">User-Defined Units</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-Units-Table.html#The-Units-Table">The Units Table</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Units.html#Units">Units</a>
+<hr>
+</div>
+
+<h3 class="section">12.3 Predefined Units</h3>
+
+<p class="noindent">The definitions of many units have changed over the years.  For example,
+the meter was originally defined in 1791 as one ten-millionth of the
+distance from the equator to the north pole.  In order to be more
+precise, the definition was adjusted several times, and now a meter is
+defined as the distance that light will travel in a vacuum in
+1/299792458 of a second; consequently, the speed of light in a
+vacuum is exactly 299792458 m/s.  Many other units have been
+redefined in terms of fundamental physical processes; a second, for
+example, is currently defined as 9192631770 periods of a certain
+radiation related to the cesium-133 atom.  The only SI unit that is not
+based on a fundamental physical process (although there are efforts to
+change this) is the kilogram, which was originally defined as the mass
+of one liter of water, but is now defined as the mass of the
+International Prototype Kilogram (IPK), a cylinder of platinum-iridium
+kept at the Bureau International des Poids et Mesures in S&egrave;vres,
+France.  (There are several copies of the IPK throughout the world.) 
+The British imperial units, once defined in terms of physical objects,
+were redefined in 1963 in terms of SI units.  The US customary units,
+which were the same as British units until the British imperial system
+was created in 1824, were also defined in terms of the SI units in 1893. 
+Because of these redefinitions, conversions between metric, British
+Imperial, and US customary units can often be done precisely.
+
+   <p>Since the exact definitions of many kinds of units have evolved over the
+years, and since certain countries sometimes have local differences in
+their definitions, it is a good idea to examine Calc's definition of a
+unit before depending on its exact value.  For example, there are three
+different units for gallons, corresponding to the US (<code>gal</code>),
+Canadian (<code>galC</code>), and British (<code>galUK</code>) definitions.  Also,
+note that <code>oz</code> is a standard ounce of mass, <code>ozt</code> is a Troy
+ounce, and <code>ozfl</code> is a fluid ounce.
+
+   <p>The temperature units corresponding to degrees Kelvin and Centigrade
+(Celsius) are the same in this table, since most units commands treat
+temperatures as being relative.  The <code>calc-convert-temperature</code>
+command has special rules for handling the different absolute magnitudes
+of the various temperature scales.
+
+   <p>The unit of volume &ldquo;liters&rdquo; can be referred to by either the lower-case
+<code>l</code> or the upper-case <code>L</code>.
+
+   <p>The unit <code>A</code> stands for Amperes; the name <code>Ang</code> is used
+for Angstroms.
+
+   <p>The unit <code>pt</code> stands for pints; the name <code>point</code> stands for
+a typographical point, defined by &lsquo;<samp><span class="samp">72 point = 1 in</span></samp>&rsquo;.  This is
+slightly different than the point defined by the American Typefounder's
+Association in 1886, but the point used by Calc has become standard
+largely due to its use by the PostScript page description language. 
+There is also <code>texpt</code>, which stands for a printer's point as
+defined by the TeX typesetting system:  &lsquo;<samp><span class="samp">72.27 texpt = 1 in</span></samp>&rsquo;. 
+Other units used by TeX are available; they are <code>texpc</code> (a pica),
+<code>texbp</code> (a &ldquo;big point&rdquo;, equal to a standard point which is larger
+than the point used by TeX), <code>texdd</code> (a Didot point),
+<code>texcc</code> (a Cicero) and <code>texsp</code> (a scaled TeX point,
+all dimensions representable in TeX are multiples of this value).
+
+   <p>The unit <code>e</code> stands for the elementary (electron) unit of charge;
+because algebra command could mistake this for the special constant
+&lsquo;<samp><span class="samp">e</span></samp>&rsquo;, Calc provides the alternate unit name <code>ech</code> which is
+preferable to <code>e</code>.
+
+   <p>The name <code>g</code> stands for one gram of mass; there is also <code>gf</code>,
+one gram of force.  (Likewise for <kbd>lb</kbd>, pounds, and <kbd>lbf</kbd>.) 
+Meanwhile, one &ldquo;&lsquo;<samp><span class="samp">g</span></samp>&rsquo;&rdquo; of acceleration is denoted <code>ga</code>.
+
+   <p>The unit <code>ton</code> is a U.S. ton of &lsquo;<samp><span class="samp">2000 lb</span></samp>&rsquo;, and <code>t</code> is
+a metric ton of &lsquo;<samp><span class="samp">1000 kg</span></samp>&rsquo;.
+
+   <p>The names <code>s</code> (or <code>sec</code>) and <code>min</code> refer to units of
+time; <code>arcsec</code> and <code>arcmin</code> are units of angle.
+
+   <p>Some &ldquo;units&rdquo; are really physical constants; for example, <code>c</code>
+represents the speed of light, and <code>h</code> represents Planck's
+constant.  You can use these just like other units: converting
+&lsquo;<samp><span class="samp">.5 c</span></samp>&rsquo; to &lsquo;<samp><span class="samp">m/s</span></samp>&rsquo; expresses one-half the speed of light in
+meters per second.  You can also use this merely as a handy reference;
+the <kbd>u g</kbd> command gets the definition of one of these constants
+in its normal terms, and <kbd>u b</kbd> expresses the definition in base
+units.
+
+   <p>Two units, <code>pi</code> and <code>alpha</code> (the fine structure constant,
+approximately <i>1/137</i>) are dimensionless.  The units simplification
+commands simply treat these names as equivalent to their corresponding
+values.  However you can, for example, use <kbd>u c</kbd> to convert a pure
+number into multiples of the fine structure constant, or <kbd>u b</kbd> to
+convert this back into a pure number.  (When <kbd>u c</kbd> prompts for the
+&ldquo;old units,&rdquo; just enter a blank line to signify that the value
+really is unitless.)
+
+<!-- Describe angular units, luminosity vs. steradians problem. -->
+   </body></html>
+

@@ -21,7 +21,6 @@ else
     tar xvzf manual.tgz html_node/Index.html
     mv html_node/Index.html html_node/Index_general.html
     tar xvzf manual.tgz html_node/index.html
-    sed 's|<body>|<body><a name="index"></a>|' <html_node/index.html >html_node/index2.html
     mv html_node/index2.html html_node/index.html
     mv html_node emanual
     curl -o /tmp/manual.html  http://www.gnu.org/software/emacs/manual/elisp.html
@@ -46,13 +45,12 @@ perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\
 
 $P/convert-emacs-manual-pages /tmp/emanual/*.html
 version=`$P/convert-emacs-reference-title /tmp/emanual/index.html`
+sed 's|<body>|<body><a name="EmacsLispReferenceIndex"></a>|'  </tmp/emanual/index.html >/tmp/emanual/index2.html
+mv /tmp/emanual/index2.html /tmp/emanual/index.html
 
 echo $version >/tmp/emanual/VERSION
 
 rm -r "$P"/../"Emacs Lisp Reference"
 mv /tmp/emanual $P/../"Emacs Lisp Reference"
 
-hiutil -C -g -s en -a -f $P/../"Emacs Lisp Reference/Emacs Lisp Reference.helpindex" $P/../"Emacs Lisp Reference"
-
-# "${indexer}" $P../EmacsLispReference -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1
-# cd $P/..
+#hiutil -C -g -s en -a -f $P/../"Emacs Lisp Reference/Emacs Lisp Reference.helpindex" $P/../"Emacs Lisp Reference"

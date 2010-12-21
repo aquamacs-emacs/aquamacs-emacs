@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Performance Issues - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Sample-_002eemacs-File.html#Sample-_002eemacs-File" title="Sample .emacs File">
+<link rel="next" href="Limitations-and-Known-Bugs.html#Limitations-and-Known-Bugs" title="Limitations and Known Bugs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Performance-Issues"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Limitations-and-Known-Bugs.html#Limitations-and-Known-Bugs">Limitations and Known Bugs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sample-_002eemacs-File.html#Sample-_002eemacs-File">Sample .emacs File</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h2 class="chapter">2 Performance Issues</h2>
+
+<p><a name="index-performance-597"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+<!-- FIXME: (ACM, 2003/5/24).  Check whether AWK needs mentioning here. -->
+   <p>C and its derivative languages are highly complex creatures.  Often,
+ambiguous code situations arise that require CC Mode to scan large
+portions of the buffer to determine syntactic context.  Such
+pathological code can cause CC Mode to perform fairly badly.  This
+section gives some insight in how CC Mode operates, how that interacts
+with some coding styles, and what you can use to improve performance.
+
+   <p>The overall goal is that CC Mode shouldn't be overly slow (i.e. take
+more than a fraction of a second) in any interactive operation. 
+I.e. it's tuned to limit the maximum response time in single operations,
+which is sometimes at the expense of batch-like operations like
+reindenting whole blocks.  If you find that CC Mode gradually gets
+slower and slower in certain situations, perhaps as the file grows in
+size or as the macro or comment you're editing gets bigger, then chances
+are that something isn't working right.  You should consider reporting
+it, unless it's something that's mentioned in this section.
+
+   <p>Because CC Mode has to scan the buffer backwards from the current
+insertion point, and because C's syntax is fairly difficult to parse in
+the backwards direction, CC Mode often tries to find the nearest
+position higher up in the buffer from which to begin a forward scan
+(it's typically an opening or closing parenthesis of some kind).  The
+farther this position is from the current insertion point, the slower it
+gets.
+
+   <p><a name="index-beginning_002dof_002ddefun-598"></a>In earlier versions of CC Mode, we used to recommend putting the
+opening brace of a top-level construct<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> into the leftmost
+column.  Earlier still, this used to be a rigid Emacs constraint, as
+embodied in the <code>beginning-of-defun</code> function.  CC Mode now
+caches syntactic information much better, so that the delay caused by
+searching for such a brace when it's not in column 0 is minimal,
+except perhaps when you've just moved a long way inside the file.
+
+   <p><a name="index-defun_002dprompt_002dregexp-599"></a><a name="index-c_002dJava_002ddefun_002dprompt_002dregexp-600"></a><a name="index-Java_002ddefun_002dprompt_002dregexp-_0028c_002d_0029-601"></a>A special note about <code>defun-prompt-regexp</code> in Java mode: The common
+style is to hang the opening braces of functions and classes on the
+right side of the line, and that doesn't work well with the Emacs
+approach.  CC Mode comes with a constant
+<code>c-Java-defun-prompt-regexp</code> which tries to define a regular
+expression usable for this style, but there are problems with it.  In
+some cases it can cause <code>beginning-of-defun</code> to hang<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  For this reason,
+it is not used by default, but if you feel adventurous, you can set
+<code>defun-prompt-regexp</code> to it in your mode hook.  In any event,
+setting and relying on <code>defun-prompt-regexp</code> will definitely slow
+things down because (X)Emacs will be doing regular expression searches a
+lot, so you'll probably be taking a hit either way!
+
+   <p>CC Mode maintains a cache of the opening parentheses of the blocks
+surrounding the point, and it adapts that cache as the point is moved
+around.  That means that in bad cases it can take noticeable time to
+indent a line in a new surrounding, but after that it gets fast as long
+as the point isn't moved far off.  The farther the point is moved, the
+less useful is the cache.  Since editing typically is done in &ldquo;chunks&rdquo;
+rather than on single lines far apart from each other, the cache
+typically gives good performance even when the code doesn't fit the
+Emacs approach to finding the defun starts.
+
+   <p><a name="index-c_002denable_002dxemacs_002dperformance_002dkludge_002dp-602"></a><a name="index-enable_002dxemacs_002dperformance_002dkludge_002dp-_0028c_002d_0029-603"></a>XEmacs users can set the variable
+<code>c-enable-xemacs-performance-kludge-p</code> to non-<code>nil</code>.  This
+tells CC Mode to use XEmacs-specific built-in functions which, in some
+circumstances, can locate the top-most opening brace much more quickly than
+<code>beginning-of-defun</code>.  Preliminary testing has shown that for
+styles where these braces are hung (e.g. most JDK-derived Java styles),
+this hack can improve performance of the core syntax parsing routines
+from 3 to 60 times.  However, for styles which <em>do</em> conform to
+Emacs' recommended style of putting top-level braces in column zero,
+this hack can degrade performance by about as much.  Thus this variable
+is set to <code>nil</code> by default, since the Emacs-friendly styles should
+be more common (and encouraged!).  Note that this variable has no effect
+in Emacs since the necessary built-in functions don't exist (in Emacs
+22.1 as of this writing in February 2007).
+
+   <p>Text properties are used to speed up skipping over syntactic whitespace,
+i.e. comments and preprocessor directives.  Indenting a line after a
+huge macro definition can be slow the first time, but after that the
+text properties are in place and it should be fast (even after you've
+edited other parts of the file and then moved back).
+
+   <p>Font locking can be a CPU hog, especially the font locking done on
+decoration level 3 which tries to be very accurate.  Note that that
+level is designed to be used with a font lock support mode that only
+fontifies the text that's actually shown, i.e. Lazy Lock or Just-in-time
+Lock mode, so make sure you use one of them.  Fontification of a whole
+buffer with some thousand lines can often take over a minute.  That is
+a known weakness; the idea is that it never should happen.
+
+   <p>The most effective way to speed up font locking is to reduce the
+decoration level to 2 by setting <code>font-lock-maximum-decoration</code>
+appropriately.  That level is designed to be as pretty as possible
+without sacrificing performance.  See <a href="Font-Locking-Preliminaries.html#Font-Locking-Preliminaries">Font Locking Preliminaries</a>, for
+more info.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> E.g. a function in C,
+or outermost class definition in C++ or Java.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> This
+has been observed in Emacs 19.34 and XEmacs 19.15.</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Saving Emacs Sessions - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Editing-Binary-Files.html#Editing-Binary-Files" title="Editing Binary Files">
+<link rel="next" href="Recursive-Edit.html#Recursive-Edit" title="Recursive Edit">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Saving-Emacs-Sessions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Recursive-Edit.html#Recursive-Edit">Recursive Edit</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Editing-Binary-Files.html#Editing-Binary-Files">Editing Binary Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">51 Saving Emacs Sessions</h2>
+
+<p><a name="index-saving-sessions-3803"></a><a name="index-restore-session-3804"></a><a name="index-remember-editing-session-3805"></a><a name="index-reload-files-3806"></a><a name="index-desktop-3807"></a>
+   Use the desktop library to save the state of Emacs from one session
+to another.  Once you save the Emacs <dfn>desktop</dfn>&mdash;the buffers,
+their file names, major modes, buffer positions, and so on&mdash;then
+subsequent Emacs sessions reload the saved desktop.
+
+   <p><a name="index-desktop_002dsave-3808"></a><a name="index-desktop_002dsave_002dmode-3809"></a>  You can save the desktop manually with the command <kbd>M-x
+desktop-save</kbd>.  You can also enable automatic saving of the desktop
+when you exit Emacs, and automatic restoration of the last saved
+desktop when Emacs starts: use the Customization buffer (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>) to set <code>desktop-save-mode</code> to <code>t</code> for future
+sessions, or add this line in your init file (see <a href="Init-File.html#Init-File">Init File</a>):
+
+<pre class="example">     (desktop-save-mode 1)
+</pre>
+   <p><a name="index-desktop_002dchange_002ddir-3810"></a><a name="index-desktop_002drevert-3811"></a><a name="index-desktop_002dpath-3812"></a>  If you turn on <code>desktop-save-mode</code> in your init file, then when
+Emacs starts, it looks for a saved desktop in the current directory. 
+(More precisely, it looks in the directories specified by
+<var>desktop-path</var>, and uses the first desktop it finds.) 
+Thus, you can have separate saved desktops in different directories,
+and the starting directory determines which one Emacs reloads.  You
+can save the current desktop and reload one saved in another directory
+by typing <kbd>M-x desktop-change-dir</kbd>.  Typing <kbd>M-x
+desktop-revert</kbd> reverts to the desktop previously reloaded.
+
+   <p>Specify the option &lsquo;<samp><span class="samp">--no-desktop</span></samp>&rsquo; on the command line when you
+don't want it to reload any saved desktop.  This turns off
+<code>desktop-save-mode</code> for the current session.  Starting Emacs with
+the &lsquo;<samp><span class="samp">--no-init-file</span></samp>&rsquo; option also disables desktop reloading,
+since it bypasses the init file, where <code>desktop-save-mode</code> is
+usually turned on.
+
+   <p><a name="index-desktop_002drestore_002deager-3813"></a>  By default, all the buffers in the desktop are restored at one go. 
+However, this may be slow if there are a lot of buffers in the
+desktop.  You can specify the maximum number of buffers to restore
+immediately with the variable <code>desktop-restore-eager</code>; the
+remaining buffers are restored &ldquo;lazily,&rdquo; when Emacs is idle.
+
+   <p><a name="index-desktop_002dclear-3814"></a><a name="index-desktop_002dglobals_002dto_002dclear-3815"></a><a name="index-desktop_002dclear_002dpreserve_002dbuffers_002dregexp-3816"></a>  Type <kbd>M-x desktop-clear</kbd> to empty the Emacs desktop.  This kills
+all buffers except for internal ones, and clears the global variables
+listed in <code>desktop-globals-to-clear</code>.  If you want this to
+preserve certain buffers, customize the variable
+<code>desktop-clear-preserve-buffers-regexp</code>, whose value is a regular
+expression matching the names of buffers not to kill.
+
+   <p>If you want to save minibuffer history from one session to
+another, use the <code>savehist</code> library.
+
+   </body></html>
+

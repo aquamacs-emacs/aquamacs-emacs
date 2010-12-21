@@ -1,5 +1,7 @@
 ;;; epa.el --- the EasyPG Assistant
-;; Copyright (C) 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+;; Copyright (C) 2006, 2007, 2008, 2009, 2010
+;;   Free Software Foundation, Inc.
 
 ;; Author: Daiki Ueno <ueno@unixuser.org>
 ;; Keywords: PGP, GnuPG
@@ -471,11 +473,9 @@ If ARG is non-nil, mark the key."
 					     'epa-key))
 		(setq keys (cons key keys))))
 	  (nreverse keys)))
-      (save-excursion
-	(beginning-of-line)
-	(let ((key (get-text-property (point) 'epa-key)))
-	  (if key
-	      (list key))))))
+      (let ((key (get-text-property (point-at-bol) 'epa-key)))
+	(if key
+	    (list key)))))
 
 (defun epa--select-keys (prompt keys)
   (unless (and epa-keys-buffer
@@ -635,8 +635,13 @@ If SECRET is non-nil, list secret keys instead of public keys."
 
 (defun epa-passphrase-callback-function (context key-id handback)
   (if (eq key-id 'SYM)
-      (read-passwd "Passphrase for symmetric encryption: "
-		   (eq (epg-context-operation context) 'encrypt))
+      (read-passwd
+       (format "Passphrase for symmetric encryption%s: "
+	       ;; Add the file name to the prompt, if any.
+	       (if (stringp handback)
+		   (format " for %s" handback)
+		 ""))
+       (eq (epg-context-operation context) 'encrypt))
     (read-passwd
      (if (eq key-id 'PIN)
 	"Passphrase for PIN: "
@@ -1246,5 +1251,4 @@ between START and END."
 
 (provide 'epa)
 
-;; arch-tag: 38d20ced-20d5-4137-b17a-f206335423d7
 ;;; epa.el ends here

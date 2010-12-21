@@ -1,0 +1,255 @@
+<html lang="en">
+<head>
+<title>Modify Macros - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Generalized-Variables.html#Generalized-Variables" title="Generalized Variables">
+<link rel="prev" href="Basic-Setf.html#Basic-Setf" title="Basic Setf">
+<link rel="next" href="Customizing-Setf.html#Customizing-Setf" title="Customizing Setf">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Modify-Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customizing-Setf.html#Customizing-Setf">Customizing Setf</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Setf.html#Basic-Setf">Basic Setf</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.2 Modify Macros</h4>
+
+<p class="noindent">This package defines a number of other macros besides <code>setf</code>
+that operate on generalized variables.  Many are interesting and
+useful even when the <var>place</var> is just a variable name.
+
+<div class="defun">
+&mdash; Special Form: <b>psetf</b> [<var>place form</var>]<var><small class="dots">...</small><a name="index-psetf-14"></a></var><br>
+<blockquote><p>This macro is to <code>setf</code> what <code>psetq</code> is to <code>setq</code>:
+When several <var>place</var>s and <var>form</var>s are involved, the
+assignments take place in parallel rather than sequentially. 
+Specifically, all subforms are evaluated from left to right, then
+all the assignments are done (in an undefined order). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>incf</b><var> place &amp;optional x<a name="index-incf-15"></a></var><br>
+<blockquote><p>This macro increments the number stored in <var>place</var> by one, or
+by <var>x</var> if specified.  The incremented value is returned.  For
+example, <code>(incf i)</code> is equivalent to <code>(setq i (1+ i))</code>, and
+<code>(incf (car x) 2)</code> is equivalent to <code>(setcar x (+ (car x) 2))</code>.
+
+        <p>Once again, care is taken to preserve the &ldquo;apparent&rdquo; order of
+evaluation.  For example,
+
+     <pre class="example">          (incf (aref vec (incf i)))
+</pre>
+        <p class="noindent">appears to increment <code>i</code> once, then increment the element of
+<code>vec</code> addressed by <code>i</code>; this is indeed exactly what it
+does, which means the above form is <em>not</em> equivalent to the
+&ldquo;obvious&rdquo; expansion,
+
+     <pre class="example">          (setf (aref vec (incf i)) (1+ (aref vec (incf i))))   ; Wrong!
+</pre>
+        <p class="noindent">but rather to something more like
+
+     <pre class="example">          (let ((temp (incf i)))
+            (setf (aref vec temp) (1+ (aref vec temp))))
+</pre>
+        <p class="noindent">Again, all of this is taken care of automatically by <code>incf</code> and
+the other generalized-variable macros.
+
+        <p>As a more Emacs-specific example of <code>incf</code>, the expression
+<code>(incf (point) </code><var>n</var><code>)</code> is essentially equivalent to
+<code>(forward-char </code><var>n</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>decf</b><var> place &amp;optional x<a name="index-decf-16"></a></var><br>
+<blockquote><p>This macro decrements the number stored in <var>place</var> by one, or
+by <var>x</var> if specified. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>pop</b><var> place<a name="index-pop-17"></a></var><br>
+<blockquote><p>This macro removes and returns the first element of the list stored
+in <var>place</var>.  It is analogous to <code>(prog1 (car </code><var>place</var><code>)
+(setf </code><var>place</var><code> (cdr </code><var>place</var><code>)))</code>, except that it takes care
+to evaluate all subforms only once. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>push</b><var> x place<a name="index-push-18"></a></var><br>
+<blockquote><p>This macro inserts <var>x</var> at the front of the list stored in
+<var>place</var>.  It is analogous to <code>(setf </code><var>place</var><code> (cons
+</code><var>x</var> <var>place</var><code>))</code>, except for evaluation of the subforms. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>pushnew</b><var> x place </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-pushnew-19"></a></var><br>
+<blockquote><p>This macro inserts <var>x</var> at the front of the list stored in
+<var>place</var>, but only if <var>x</var> was not <code>eql</code> to any
+existing element of the list.  The optional keyword arguments
+are interpreted in the same way as for <code>adjoin</code>. 
+See <a href="Lists-as-Sets.html#Lists-as-Sets">Lists as Sets</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>shiftf</b><var> place<small class="dots">...</small> newvalue<a name="index-shiftf-20"></a></var><br>
+<blockquote><p>This macro shifts the <var>place</var>s left by one, shifting in the
+value of <var>newvalue</var> (which may be any Lisp expression, not just
+a generalized variable), and returning the value shifted out of
+the first <var>place</var>.  Thus, <code>(shiftf </code><var>a</var> <var>b</var> <var>c</var>
+<var>d</var><code>)</code> is equivalent to
+
+     <pre class="example">          (prog1
+              <var>a</var>
+            (psetf <var>a</var> <var>b</var>
+                   <var>b</var> <var>c</var>
+                   <var>c</var> <var>d</var>))
+</pre>
+        <p class="noindent">except that the subforms of <var>a</var>, <var>b</var>, and <var>c</var> are actually
+evaluated only once each and in the apparent order. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>rotatef</b><var> place<small class="dots">...</small><a name="index-rotatef-21"></a></var><br>
+<blockquote><p>This macro rotates the <var>place</var>s left by one in circular fashion. 
+Thus, <code>(rotatef </code><var>a</var> <var>b</var> <var>c</var> <var>d</var><code>)</code> is equivalent to
+
+     <pre class="example">          (psetf <var>a</var> <var>b</var>
+                 <var>b</var> <var>c</var>
+                 <var>c</var> <var>d</var>
+                 <var>d</var> <var>a</var>)
+</pre>
+        <p class="noindent">except for the evaluation of subforms.  <code>rotatef</code> always
+returns <code>nil</code>.  Note that <code>(rotatef </code><var>a</var> <var>b</var><code>)</code>
+conveniently exchanges <var>a</var> and <var>b</var>. 
+</p></blockquote></div>
+
+   <p>The following macros were invented for this package; they have no
+analogues in Common Lisp.
+
+<div class="defun">
+&mdash; Special Form: <b>letf</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-letf-22"></a></var><br>
+<blockquote><p>This macro is analogous to <code>let</code>, but for generalized variables
+rather than just symbols.  Each <var>binding</var> should be of the form
+<code>(</code><var>place</var> <var>value</var><code>)</code>; the original contents of the
+<var>place</var>s are saved, the <var>value</var>s are stored in them, and
+then the body <var>form</var>s are executed.  Afterwards, the <var>places</var>
+are set back to their original saved contents.  This cleanup happens
+even if the <var>form</var>s exit irregularly due to a <code>throw</code> or an
+error.
+
+        <p>For example,
+
+     <pre class="example">          (letf (((point) (point-min))
+                 (a 17))
+            ...)
+</pre>
+        <p class="noindent">moves &ldquo;point&rdquo; in the current buffer to the beginning of the buffer,
+and also binds <code>a</code> to 17 (as if by a normal <code>let</code>, since
+<code>a</code> is just a regular variable).  After the body exits, <code>a</code>
+is set back to its original value and point is moved back to its
+original position.
+
+        <p>Note that <code>letf</code> on <code>(point)</code> is not quite like a
+<code>save-excursion</code>, as the latter effectively saves a marker
+which tracks insertions and deletions in the buffer.  Actually,
+a <code>letf</code> of <code>(point-marker)</code> is much closer to this
+behavior.  (<code>point</code> and <code>point-marker</code> are equivalent
+as <code>setf</code> places; each will accept either an integer or a
+marker as the stored value.)
+
+        <p>Since generalized variables look like lists, <code>let</code>'s shorthand
+of using &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; for &lsquo;<samp><span class="samp">(foo nil)</span></samp>&rsquo; as a <var>binding</var> would
+be ambiguous in <code>letf</code> and is not allowed.
+
+        <p>However, a <var>binding</var> specifier may be a one-element list
+&lsquo;<samp><span class="samp">(</span><var>place</var><span class="samp">)</span></samp>&rsquo;, which is similar to &lsquo;<samp><span class="samp">(</span><var>place</var>
+<var>place</var><span class="samp">)</span></samp>&rsquo;.  In other words, the <var>place</var> is not disturbed
+on entry to the body, and the only effect of the <code>letf</code> is
+to restore the original value of <var>place</var> afterwards.  (The
+redundant access-and-store suggested by the <code>(</code><var>place</var>
+<var>place</var><code>)</code> example does not actually occur.)
+
+        <p>In most cases, the <var>place</var> must have a well-defined value on
+entry to the <code>letf</code> form.  The only exceptions are plain
+variables and calls to <code>symbol-value</code> and <code>symbol-function</code>. 
+If the symbol is not bound on entry, it is simply made unbound by
+<code>makunbound</code> or <code>fmakunbound</code> on exit. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>letf*</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-letf_002a-23"></a></var><br>
+<blockquote><p>This macro is to <code>letf</code> what <code>let*</code> is to <code>let</code>:
+It does the bindings in sequential rather than parallel order. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>callf</b><var> function place args<small class="dots">...</small><a name="index-callf-24"></a></var><br>
+<blockquote><p>This is the &ldquo;generic&rdquo; modify macro.  It calls <var>function</var>,
+which should be an unquoted function name, macro name, or lambda. 
+It passes <var>place</var> and <var>args</var> as arguments, and assigns the
+result back to <var>place</var>.  For example, <code>(incf </code><var>place</var>
+<var>n</var><code>)</code> is the same as <code>(callf + </code><var>place</var> <var>n</var><code>)</code>. 
+Some more examples:
+
+     <pre class="example">          (callf abs my-number)
+          (callf concat (buffer-name) "&lt;" (int-to-string n) "&gt;")
+          (callf union happy-people (list joe bob) :test 'same-person)
+</pre>
+        <p>See <a href="Customizing-Setf.html#Customizing-Setf">Customizing Setf</a>, for <code>define-modify-macro</code>, a way
+to create even more concise notations for modify macros.  Note
+again that <code>callf</code> is an extension to standard Common Lisp. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>callf2</b><var> function arg1 place args<small class="dots">...</small><a name="index-callf2-25"></a></var><br>
+<blockquote><p>This macro is like <code>callf</code>, except that <var>place</var> is
+the <em>second</em> argument of <var>function</var> rather than the
+first.  For example, <code>(push </code><var>x</var> <var>place</var><code>)</code> is
+equivalent to <code>(callf2 cons </code><var>x</var> <var>place</var><code>)</code>. 
+</p></blockquote></div>
+
+   <p>The <code>callf</code> and <code>callf2</code> macros serve as building
+blocks for other macros like <code>incf</code>, <code>pushnew</code>, and
+<code>define-modify-macro</code>.  The <code>letf</code> and <code>letf*</code>
+macros are used in the processing of symbol macros;
+see <a href="Macro-Bindings.html#Macro-Bindings">Macro Bindings</a>.
+
+   </body></html>
+

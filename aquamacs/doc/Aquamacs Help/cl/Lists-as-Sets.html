@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Lists as Sets - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Substitution-of-Expressions.html#Substitution-of-Expressions" title="Substitution of Expressions">
+<link rel="next" href="Association-Lists.html#Association-Lists" title="Association Lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Lists-as-Sets"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Association-Lists.html#Association-Lists">Association Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Substitution-of-Expressions.html#Substitution-of-Expressions">Substitution of Expressions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">11.3 Lists as Sets</h3>
+
+<p class="noindent">These functions perform operations on lists which represent sets
+of elements.
+
+<div class="defun">
+&mdash; Function: <b>member*</b><var> item list </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-member_002a-159"></a></var><br>
+<blockquote><p>This function searches <var>list</var> for an element matching <var>item</var>. 
+If a match is found, it returns the cons cell whose <code>car</code> was
+the matching element.  Otherwise, it returns <code>nil</code>.  Elements
+are compared by <code>eql</code> by default; you can use the <code>:test</code>,
+<code>:test-not</code>, and <code>:key</code> arguments to modify this behavior. 
+See <a href="Sequences.html#Sequences">Sequences</a>.
+
+        <p>Note that this function's name is suffixed by &lsquo;<samp><span class="samp">*</span></samp>&rsquo; to avoid
+the incompatible <code>member</code> function defined in Emacs. 
+(That function uses <code>equal</code> for comparisons; it is equivalent
+to <code>(member* </code><var>item</var> <var>list</var><code> :test 'equal)</code>.) 
+</p></blockquote></div>
+
+   <p><a name="index-member_002dif-160"></a><a name="index-member_002dif_002dnot-161"></a>The <code>member-if</code> and <code>member-if-not</code> functions
+analogously search for elements which satisfy a given predicate.
+
+<div class="defun">
+&mdash; Function: <b>tailp</b><var> sublist list<a name="index-tailp-162"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>sublist</var> is a sublist of
+<var>list</var>, i.e., if <var>sublist</var> is <code>eql</code> to <var>list</var> or to
+any of its <code>cdr</code>s. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>adjoin</b><var> item list </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-adjoin-163"></a></var><br>
+<blockquote><p>This function conses <var>item</var> onto the front of <var>list</var>,
+like <code>(cons </code><var>item</var> <var>list</var><code>)</code>, but only if <var>item</var>
+is not already present on the list (as determined by <code>member*</code>). 
+If a <code>:key</code> argument is specified, it is applied to
+<var>item</var> as well as to the elements of <var>list</var> during
+the search, on the reasoning that <var>item</var> is &ldquo;about&rdquo; to
+become part of the list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>union</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-union-164"></a></var><br>
+<blockquote><p>This function combines two lists which represent sets of items,
+returning a list that represents the union of those two sets. 
+The result list will contain all items which appear in <var>list1</var>
+or <var>list2</var>, and no others.  If an item appears in both
+<var>list1</var> and <var>list2</var> it will be copied only once.  If
+an item is duplicated in <var>list1</var> or <var>list2</var>, it is
+undefined whether or not that duplication will survive in the
+result list.  The order of elements in the result list is also
+undefined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nunion</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-nunion-165"></a></var><br>
+<blockquote><p>This is a destructive version of <code>union</code>; rather than copying,
+it tries to reuse the storage of the argument lists if possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>intersection</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-intersection-166"></a></var><br>
+<blockquote><p>This function computes the intersection of the sets represented
+by <var>list1</var> and <var>list2</var>.  It returns the list of items
+which appear in both <var>list1</var> and <var>list2</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nintersection</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-nintersection-167"></a></var><br>
+<blockquote><p>This is a destructive version of <code>intersection</code>.  It
+tries to reuse storage of <var>list1</var> rather than copying. 
+It does <em>not</em> reuse the storage of <var>list2</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-difference</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-set_002ddifference-168"></a></var><br>
+<blockquote><p>This function computes the &ldquo;set difference&rdquo; of <var>list1</var>
+and <var>list2</var>, i.e., the set of elements that appear in
+<var>list1</var> but <em>not</em> in <var>list2</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nset-difference</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-nset_002ddifference-169"></a></var><br>
+<blockquote><p>This is a destructive <code>set-difference</code>, which will try
+to reuse <var>list1</var> if possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-exclusive-or</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-set_002dexclusive_002dor-170"></a></var><br>
+<blockquote><p>This function computes the &ldquo;set exclusive or&rdquo; of <var>list1</var>
+and <var>list2</var>, i.e., the set of elements that appear in
+exactly one of <var>list1</var> and <var>list2</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nset-exclusive-or</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-nset_002dexclusive_002dor-171"></a></var><br>
+<blockquote><p>This is a destructive <code>set-exclusive-or</code>, which will try
+to reuse <var>list1</var> and <var>list2</var> if possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>subsetp</b><var> list1 list2 </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-subsetp-172"></a></var><br>
+<blockquote><p>This function checks whether <var>list1</var> represents a subset
+of <var>list2</var>, i.e., whether every element of <var>list1</var>
+also appears in <var>list2</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

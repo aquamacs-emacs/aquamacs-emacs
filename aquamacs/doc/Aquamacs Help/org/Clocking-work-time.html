@@ -1,0 +1,222 @@
+<html lang="en">
+<head>
+<title>Clocking work time - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Dates-and-Times.html#Dates-and-Times" title="Dates and Times">
+<link rel="prev" href="Deadlines-and-scheduling.html#Deadlines-and-scheduling" title="Deadlines and scheduling">
+<link rel="next" href="Resolving-idle-time.html#Resolving-idle-time" title="Resolving idle time">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Clocking-work-time"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Resolving-idle-time.html#Resolving-idle-time">Resolving idle time</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Deadlines-and-scheduling.html#Deadlines-and-scheduling">Deadlines and scheduling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dates-and-Times.html#Dates-and-Times">Dates and Times</a>
+<hr>
+</div>
+
+<h3 class="section">8.4 Clocking work time</h3>
+
+<p>Org mode allows you to clock the time you spend on specific tasks in a
+project.  When you start working on an item, you can start the clock. 
+When you stop working on that task, or when you mark the task done, the
+clock is stopped and the corresponding time interval is recorded.  It
+also computes the total time spent on each subtree of a project.  And it
+remembers a history or tasks recently clocked, to that you can jump quickly
+between a number of tasks absorbing your time.
+
+   <p>To save the clock history across Emacs sessions, use
+<pre class="lisp">     (setq org-clock-persist 'history)
+     (org-clock-persistence-insinuate)
+</pre>
+   <p>When you clock into a new task after resuming Emacs, the incomplete
+clock<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+will be found (see <a href="Resolving-idle-time.html#Resolving-idle-time">Resolving idle time</a>) and you will be prompted about
+what to do with it.
+
+     
+<a name="index-C_002dc-C_002dx-C_002di-615"></a>
+<dl><dt><kbd>C-c C-x C-i</kbd><dd><a name="index-org_002dclock_002dinto_002ddrawer-616"></a>Start the clock on the current item (clock-in).  This inserts the CLOCK
+keyword together with a timestamp.  If this is not the first clocking of
+this item, the multiple CLOCK lines will be wrapped into a
+<code>:LOGBOOK:</code> drawer (see also the variable
+<code>org-clock-into-drawer</code>).  When called with a <kbd>C-u</kbd> prefix argument,
+select the task from a list of recently clocked tasks.  With two <kbd>C-u
+C-u</kbd> prefixes, clock into the task at point and mark it as the default task. 
+The default task will always be available when selecting a clocking task,
+with letter <kbd>d</kbd>.<br>
+<a name="index-property_003a-CLOCK_005fMODELINE_005fTOTAL-617"></a><a name="index-property_003a-LAST_005fREPEAT-618"></a><a name="index-org_002dclock_002dmodeline_002dtotal-619"></a>While the clock is running, the current clocking time is shown in the mode
+line, along with the title of the task.  The clock time shown will be all
+time ever clocked for this task and its children.  If the task has an effort
+estimate (see <a href="Effort-estimates.html#Effort-estimates">Effort estimates</a>), the mode line displays the current
+clocking time against it<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>  If the task
+is a repeating one (see <a href="Repeated-tasks.html#Repeated-tasks">Repeated tasks</a>), only the time since the last
+reset of the task <a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>
+will be shown.  More control over what time is shown can be exercised with
+the <code>CLOCK_MODELINE_TOTAL</code> property.  It may have the values
+<code>current</code> to show only the current clocking instance, <code>today</code> to
+show all time clocked on this tasks today (see also the variable
+<code>org-extend-today-until</code>), <code>all</code> to include all time, or
+<code>auto</code> which is the default<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a>.<br> Clicking with <kbd>mouse-1</kbd> onto the
+mode line entry will pop up a menu with clocking options. 
+<a name="index-C_002dc-C_002dx-C_002do-620"></a><br><dt><kbd>C-c C-x C-o</kbd><dd><a name="index-org_002dlog_002dnote_002dclock_002dout-621"></a>Stop the clock (clock-out).  This inserts another timestamp at the same
+location where the clock was last started.  It also directly computes
+the resulting time in inserts it after the time range as &lsquo;<samp><span class="samp">=&gt;
+HH:MM</span></samp>&rsquo;.  See the variable <code>org-log-note-clock-out</code> for the
+possibility to record an additional note together with the clock-out
+timestamp<a rel="footnote" href="#fn-5" name="fnd-5"><sup>5</sup></a>. 
+<a name="index-C_002dc-C_002dx-C_002de-622"></a><br><dt><kbd>C-c C-x C-e</kbd><dd>Update the effort estimate for the current clock task. 
+<a name="index-C_002dc-C_002dy-623"></a><a name="index-C_002dc-C_002dc-624"></a><br><dt><kbd>C-c C-y   </kbd><span class="roman">or</span><kbd>  C-c C-c</kbd><dd>Recompute the time interval after changing one of the timestamps.  This
+is only necessary if you edit the timestamps directly.  If you change
+them with <kbd>S-&lt;cursor&gt;</kbd> keys, the update is automatic. 
+<a name="index-C_002dc-C_002dt-625"></a><br><dt><kbd>C-c C-t</kbd><dd>Changing the TODO state of an item to DONE automatically stops the clock
+if it is running in this same item. 
+<a name="index-C_002dc-C_002dx-C_002dx-626"></a><br><dt><kbd>C-c C-x C-x</kbd><dd>Cancel the current clock.  This is useful if a clock was started by
+mistake, or if you ended up working on something else. 
+<a name="index-C_002dc-C_002dx-C_002dj-627"></a><br><dt><kbd>C-c C-x C-j</kbd><dd>Jump to the entry that contains the currently running clock.  With a
+<kbd>C-u</kbd> prefix arg, select the target task from a list of recently clocked
+tasks. 
+<a name="index-C_002dc-C_002dx-C_002dd-628"></a><br><dt><kbd>C-c C-x C-d</kbd><dd><a name="index-org_002dremove_002dhighlights_002dwith_002dchange-629"></a>Display time summaries for each subtree in the current buffer.  This
+puts overlays at the end of each headline, showing the total time
+recorded under that heading, including the time of any subheadings. You
+can use visibility cycling to study the tree, but the overlays disappear
+when you change the buffer (see variable
+<code>org-remove-highlights-with-change</code>) or press <kbd>C-c C-c</kbd>. 
+<a name="index-C_002dc-C_002dx-C_002dr-630"></a><br><dt><kbd>C-c C-x C-r</kbd><dd>Insert a dynamic block (see <a href="Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>) containing a clock
+report as an Org-mode table into the current file.  When the cursor is
+at an existing clock table, just update it.  When called with a prefix
+argument, jump to the first clock report in the current document and
+update it. 
+<a name="index-g_t_0023_002bBEGIN_002c-clocktable-631"></a>
+     <pre class="example">          #+BEGIN: clocktable :maxlevel 2 :emphasize nil :scope file
+          #+END: clocktable
+</pre>
+     <p class="noindent">If such a block already exists at point, its content is replaced by the
+new table.  The &lsquo;<samp><span class="samp">BEGIN</span></samp>&rsquo; line can specify options:
+     <pre class="example">          :maxlevel    <span class="roman">Maximum level depth to which times are listed in the table.</span>
+          :emphasize   <span class="roman">When </span><code>t</code><span class="roman">, emphasize level one and level two items.</span>
+          :scope       <span class="roman">The scope to consider.  This can be any of the following:</span>
+                       nil        <span class="roman">the current buffer or narrowed region</span>
+                       file       <span class="roman">the full current buffer</span>
+                       subtree    <span class="roman">the subtree where the clocktable is located</span>
+                       tree<var>N</var>      <span class="roman">the surrounding level </span><var>N</var><span class="roman"> tree, for example </span><code>tree3</code>
+                       tree       <span class="roman">the surrounding level 1 tree</span>
+                       agenda     <span class="roman">all agenda files</span>
+                       ("file"..) <span class="roman">scan these files</span>
+                       file-with-archives    <span class="roman">current file and its archives</span>
+                       agenda-with-archives  <span class="roman">all agenda files, including archives</span>
+          :block       <span class="roman">The time block to consider.  This block is specified either</span>
+                       <span class="roman">absolute, or relative to the current time and may be any of</span>
+                       <span class="roman">these formats:</span>
+                       2007-12-31    <span class="roman">New year eve 2007</span>
+                       2007-12       <span class="roman">December 2007</span>
+                       2007-W50      <span class="roman">ISO-week 50 in 2007</span>
+                       2007          <span class="roman">the year 2007</span>
+                       today, yesterday, today-<var>N</var>          <span class="roman">a relative day</span>
+                       thisweek, lastweek, thisweek-<var>N</var>     <span class="roman">a relative week</span>
+                       thismonth, lastmonth, thismonth-<var>N</var>  <span class="roman">a relative month</span>
+                       thisyear, lastyear, thisyear-<var>N</var>     <span class="roman">a relative year</span>
+                       <span class="roman">Use </span><kbd>S-&lt;left&gt;/&lt;right&gt;</kbd><span class="roman"> keys to shift the time interval.</span>
+          :tstart      <span class="roman">A time string specifying when to start considering times.</span>
+          :tend        <span class="roman">A time string specifying when to stop considering times.</span>
+          :step        <code>week</code><span class="roman"> or </span><code>day</code><span class="roman">, to split the table into chunks.</span>
+                       <span class="roman">To use this, </span><code>:block</code><span class="roman"> or </span><code>:tstart</code><span class="roman">, </span><code>:tend</code><span class="roman"> are needed.</span>
+          :link        <span class="roman">Link the item headlines in the table to their origins.</span>
+          :formula     <span class="roman">Content of a </span><code>#+TBLFM</code><span class="roman"> line to be added and evaluated.</span>
+                       <span class="roman">As a special case, &lsquo;</span><samp><span class="samp">:formula %</span></samp><span class="roman">&rsquo; adds a column with % time.</span>
+                       <span class="roman">If you do not specify a formula here, any existing formula.</span>
+                       <span class="roman">below the clock table will survive updates and be evaluated.</span>
+          :timestamp   <span class="roman">A timestamp for the entry, when available.  Look for SCHEDULED,</span>
+                       <span class="roman">DEADLINE, TIMESTAMP and TIMESTAMP_IA, in this order.</span>
+</pre>
+     <p>To get a clock summary of the current level 1 tree, for the current
+day, you could write
+     <pre class="example">          #+BEGIN: clocktable :maxlevel 2 :block today :scope tree1 :link t
+          #+END: clocktable
+</pre>
+     <p class="noindent">and to use a specific time range you could write<a rel="footnote" href="#fn-6" name="fnd-6"><sup>6</sup></a>
+     <pre class="example">          #+BEGIN: clocktable :tstart "&lt;2006-08-10 Thu 10:00&gt;"
+                              :tend "&lt;2006-08-10 Thu 12:00&gt;"
+          #+END: clocktable
+</pre>
+     <p>A summary of the current subtree with % times would be
+     <pre class="example">          #+BEGIN: clocktable :scope subtree :link t :formula %
+          #+END: clocktable
+</pre>
+     <p><a name="index-C_002dc-C_002dc-632"></a><br><dt><kbd>C-c C-c</kbd><dd><a name="index-C_002dc-C_002dx-C_002du-633"></a><dt><kbd>C-c C-x C-u</kbd><dd>Update dynamic block at point.  The cursor needs to be in the
+<code>#+BEGIN</code> line of the dynamic block. 
+<a name="index-C_002du-C_002dc-C_002dx-C_002du-634"></a><br><dt><kbd>C-u C-c C-x C-u</kbd><dd>Update all dynamic blocks (see <a href="Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>).  This is useful if
+you have several clock table blocks in a buffer. 
+<a name="index-S_002d_0040key_007bleft_007d-635"></a><a name="index-S_002d_0040key_007bright_007d-636"></a><br><dt><kbd>S-&lt;left&gt;</kbd><dt><kbd>S-&lt;right&gt;</kbd><dd>Shift the current <code>:block</code> interval and update the table.  The cursor
+needs to be in the <code>#+BEGIN: clocktable</code> line for this command.  If
+<code>:block</code> is <code>today</code>, it will be shifted to <code>today-1</code> etc. 
+</dl>
+
+   <p>The <kbd>l</kbd> key may be used in the timeline (see <a href="Timeline.html#Timeline">Timeline</a>) and in
+the agenda (see <a href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily agenda</a>) to show which tasks have been
+worked on or closed during a day.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> To resume the clock under the assumption that you have worked
+on this task while outside Emacs, use <code>(setq org-clock-persist t)</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> To add an effort estimate &ldquo;on the fly&rdquo;,
+hook a function doing this to <code>org-clock-in-prepare-hook</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> as recorded by the <code>LAST_REPEAT</code> property</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> See also the variable
+<code>org-clock-modeline-total</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-5" href="#fnd-5">5</a>]</small> The corresponding in-buffer setting is:
+<code>#+STARTUP: lognoteclock-out</code></p>
+
+   <p class="footnote"><small>[<a name="fn-6" href="#fnd-6">6</a>]</small> Note that all
+parameters must be specified in a single line&mdash;the line is broken here
+only to fit it into the manual.</p>
+
+   <hr></div>
+
+   </body></html>
+

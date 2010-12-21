@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+<title>Defining Minor Modes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minor-Modes.html#Minor-Modes" title="Minor Modes">
+<link rel="prev" href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes" title="Keymaps and Minor Modes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.2.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Defining-Minor-Modes"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes">Keymaps and Minor Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minor-Modes.html#Minor-Modes">Minor Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.3.3 Defining Minor Modes</h4>
+
+<p>The macro <code>define-minor-mode</code> offers a convenient way of
+implementing a mode in one self-contained definition.
+
+<div class="defun">
+&mdash; Macro: <b>define-minor-mode</b><var> mode doc </var>[<var>init-value </var>[<var>lighter </var>[<var>keymap</var>]]]<var> keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dminor_002dmode-1631"></a></var><br>
+<blockquote><p>This macro defines a new minor mode whose name is <var>mode</var> (a
+symbol).  It defines a command named <var>mode</var> to toggle the minor
+mode, with <var>doc</var> as its documentation string.  It also defines a
+variable named <var>mode</var>, which is set to <code>t</code> or <code>nil</code> by
+enabling or disabling the mode.  The variable is initialized to
+<var>init-value</var>.  Except in unusual circumstances (see below), this
+value must be <code>nil</code>.
+
+        <p>The string <var>lighter</var> says what to display in the mode line
+when the mode is enabled; if it is <code>nil</code>, the mode is not displayed
+in the mode line.
+
+        <p>The optional argument <var>keymap</var> specifies the keymap for the minor
+mode.  If non-<code>nil</code>, it should be a variable name (whose value is
+a keymap), a keymap, or an alist of the form
+
+     <pre class="example">          (<var>key-sequence</var> . <var>definition</var>)
+</pre>
+        <p class="noindent">where each <var>key-sequence</var> and <var>definition</var> are arguments
+suitable for passing to <code>define-key</code> (see <a href="Changing-Key-Bindings.html#Changing-Key-Bindings">Changing Key Bindings</a>).  If <var>keymap</var> is a keymap or an alist, this also
+defines the variable <var>mode</var><code>-map</code>.
+
+        <p>The above three arguments <var>init-value</var>, <var>lighter</var>, and
+<var>keymap</var> can be (partially) omitted when <var>keyword-args</var> are
+used.  The <var>keyword-args</var> consist of keywords followed by
+corresponding values.  A few keywords have special meanings:
+
+          <dl>
+<dt><code>:group </code><var>group</var><dd>Custom group name to use in all generated <code>defcustom</code> forms. 
+Defaults to <var>mode</var> without the possible trailing &lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;. 
+<strong>Warning:</strong> don't use this default group name unless you have
+written a <code>defgroup</code> to define that group properly.  See <a href="Group-Definitions.html#Group-Definitions">Group Definitions</a>.
+
+          <br><dt><code>:global </code><var>global</var><dd>If non-<code>nil</code>, this specifies that the minor mode should be global
+rather than buffer-local.  It defaults to <code>nil</code>.
+
+          <p>One of the effects of making a minor mode global is that the
+<var>mode</var> variable becomes a customization variable.  Toggling it
+through the Custom interface turns the mode on and off, and its value
+can be saved for future Emacs sessions (see <a href="../emacs/Saving-Customizations.html#Saving-Customizations">Saving Customizations</a>.  For the saved
+variable to work, you should ensure that the <code>define-minor-mode</code>
+form is evaluated each time Emacs starts; for packages that are not
+part of Emacs, the easiest way to do this is to specify a
+<code>:require</code> keyword.
+
+          <br><dt><code>:init-value </code><var>init-value</var><dd>This is equivalent to specifying <var>init-value</var> positionally.
+
+          <br><dt><code>:lighter </code><var>lighter</var><dd>This is equivalent to specifying <var>lighter</var> positionally.
+
+          <br><dt><code>:keymap </code><var>keymap</var><dd>This is equivalent to specifying <var>keymap</var> positionally. 
+</dl>
+
+        <p>Any other keyword arguments are passed directly to the
+<code>defcustom</code> generated for the variable <var>mode</var>.
+
+        <p>The command named <var>mode</var> first performs the standard actions such
+as setting the variable named <var>mode</var> and then executes the
+<var>body</var> forms, if any.  It finishes by running the mode hook
+variable <var>mode</var><code>-hook</code>. 
+</p></blockquote></div>
+
+   <p>The initial value must be <code>nil</code> except in cases where (1) the
+mode is preloaded in Emacs, or (2) it is painless for loading to
+enable the mode even though the user did not request it.  For
+instance, if the mode has no effect unless something else is enabled,
+and will always be loaded by that time, enabling it by default is
+harmless.  But these are unusual circumstances.  Normally, the
+initial value must be <code>nil</code>.
+
+   <p><a name="index-easy_002dmmode_002ddefine_002dminor_002dmode-1632"></a>  The name <code>easy-mmode-define-minor-mode</code> is an alias
+for this macro.
+
+   <p>Here is an example of using <code>define-minor-mode</code>:
+
+<pre class="smallexample">     (define-minor-mode hungry-mode
+       "Toggle Hungry mode.
+     With no argument, this command toggles the mode.
+     Non-null prefix argument turns on the mode.
+     Null prefix argument turns off the mode.
+     
+     When Hungry mode is enabled, the control delete key
+     gobbles all preceding whitespace except the last.
+     See the command \\[hungry-electric-delete]."
+      ;; The initial value.
+      nil
+      ;; The indicator for the mode line.
+      " Hungry"
+      ;; The minor mode bindings.
+      '(([C-backspace] . hungry-electric-delete))
+      :group 'hunger)
+</pre>
+   <p class="noindent">This defines a minor mode named &ldquo;Hungry mode,&rdquo; a command named
+<code>hungry-mode</code> to toggle it, a variable named <code>hungry-mode</code>
+which indicates whether the mode is enabled, and a variable named
+<code>hungry-mode-map</code> which holds the keymap that is active when the
+mode is enabled.  It initializes the keymap with a key binding for
+<kbd>C-&lt;DEL&gt;</kbd>.  It puts the variable <code>hungry-mode</code> into
+custom group <code>hunger</code>.  There are no <var>body</var> forms&mdash;many
+minor modes don't need any.
+
+   <p>Here's an equivalent way to write it:
+
+<pre class="smallexample">     (define-minor-mode hungry-mode
+       "Toggle Hungry mode.
+     With no argument, this command toggles the mode.
+     Non-null prefix argument turns on the mode.
+     Null prefix argument turns off the mode.
+     
+     When Hungry mode is enabled, the control delete key
+     gobbles all preceding whitespace except the last.
+     See the command \\[hungry-electric-delete]."
+      ;; The initial value.
+      :init-value nil
+      ;; The indicator for the mode line.
+      :lighter " Hungry"
+      ;; The minor mode bindings.
+      :keymap
+      '(([C-backspace] . hungry-electric-delete)
+        ([C-M-backspace]
+         . (lambda ()
+             (interactive)
+             (hungry-electric-delete t))))
+      :group 'hunger)
+</pre>
+   <div class="defun">
+&mdash; Macro: <b>define-globalized-minor-mode</b><var> global-mode mode turn-on keyword-args<small class="dots">...</small><a name="index-define_002dglobalized_002dminor_002dmode-1633"></a></var><br>
+<blockquote><p>This defines a global toggle named <var>global-mode</var> whose meaning is
+to enable or disable the buffer-local minor mode <var>mode</var> in all
+buffers.  To turn on the minor mode in a buffer, it uses the function
+<var>turn-on</var>; to turn off the minor mode, it calls <code>mode</code> with
+&minus;1 as argument.
+
+        <p>Globally enabling the mode also affects buffers subsequently created
+by visiting files, and buffers that use a major mode other than
+Fundamental mode; but it does not detect the creation of a new buffer
+in Fundamental mode.
+
+        <p>This defines the customization option <var>global-mode</var> (see <a href="Customization.html#Customization">Customization</a>),
+which can be toggled in the Custom interface to turn the minor mode on
+and off.  As with <code>define-minor-mode</code>, you should ensure that the
+<code>define-globalized-minor-mode</code> form is evaluated each time Emacs
+starts, for example by providing a <code>:require</code> keyword.
+
+        <p>Use <code>:group </code><var>group</var> in <var>keyword-args</var> to specify the
+custom group for the mode variable of the global minor mode. 
+</p></blockquote></div>
+
+   </body></html>
+

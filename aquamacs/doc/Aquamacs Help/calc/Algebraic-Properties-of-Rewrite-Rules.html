@@ -1,0 +1,320 @@
+<html lang="en">
+<head>
+<title>Algebraic Properties of Rewrite Rules - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
+<link rel="prev" href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules" title="Conditional Rewrite Rules">
+<link rel="next" href="Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules" title="Other Features of Rewrite Rules">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Algebraic-Properties-of-Rewrite-Rules"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules">Other Features of Rewrite Rules</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules">Conditional Rewrite Rules</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.11.4 Algebraic Properties of Rewrite Rules</h4>
+
+<p class="noindent">The rewrite mechanism understands the algebraic properties of functions
+like &lsquo;<samp><span class="samp">+</span></samp>&rsquo; and &lsquo;<samp><span class="samp">*</span></samp>&rsquo;.  In particular, pattern matching takes
+the associativity and commutativity of the following functions into
+account:
+
+<pre class="smallexample">     + - *  = !=  &amp;&amp; ||  and or xor  vint vunion vxor  gcd lcm  max min  beta
+</pre>
+   <p>For example, the rewrite rule:
+
+<pre class="example">     a x + b x  :=  (a + b) x
+</pre>
+   <p class="noindent">will match formulas of the form,
+
+<pre class="example">     a x + b x,  x a + x b,  a x + x b,  x a + b x
+</pre>
+   <p>Rewrites also understand the relationship between the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-</span></samp>&rsquo;
+operators.  The above rewrite rule will also match the formulas,
+
+<pre class="example">     a x - b x,  x a - x b,  a x - x b,  x a - b x
+</pre>
+   <p class="noindent">by matching &lsquo;<samp><span class="samp">b</span></samp>&rsquo; in the pattern to &lsquo;<samp><span class="samp">-b</span></samp>&rsquo; from the formula.
+
+   <p>Applied to a sum of many terms like &lsquo;<samp><span class="samp">r + a x + s + b x + t</span></samp>&rsquo;, this
+pattern will check all pairs of terms for possible matches.  The rewrite
+will take whichever suitable pair it discovers first.
+
+   <p>In general, a pattern using an associative operator like &lsquo;<samp><span class="samp">a + b</span></samp>&rsquo;
+will try <var>2 n</var> different ways to match a sum of <var>n</var> terms
+like &lsquo;<samp><span class="samp">x + y + z - w</span></samp>&rsquo;.  First, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is matched against each
+of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, &lsquo;<samp><span class="samp">y</span></samp>&rsquo;, &lsquo;<samp><span class="samp">z</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">-w</span></samp>&rsquo; in turn, with &lsquo;<samp><span class="samp">b</span></samp>&rsquo;
+being matched to the remainders &lsquo;<samp><span class="samp">y + z - w</span></samp>&rsquo;, &lsquo;<samp><span class="samp">x + z - w</span></samp>&rsquo;, etc. 
+If none of these succeed, then &lsquo;<samp><span class="samp">b</span></samp>&rsquo; is matched against each of the
+four terms with &lsquo;<samp><span class="samp">a</span></samp>&rsquo; matching the remainder.  Half-and-half matches,
+like &lsquo;<samp><span class="samp">(x + y) + (z - w)</span></samp>&rsquo;, are not tried.
+
+   <p>Note that &lsquo;<samp><span class="samp">*</span></samp>&rsquo; is not commutative when applied to matrices, but
+rewrite rules pretend that it is.  If you type <kbd>m v</kbd> to enable
+Matrix mode (see <a href="Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>), rewrite rules will match &lsquo;<samp><span class="samp">*</span></samp>&rsquo;
+literally, ignoring its usual commutativity property.  (In the
+current implementation, the associativity also vanishes&mdash;it is as
+if the pattern had been enclosed in a <code>plain</code> marker; see below.) 
+If you are applying rewrites to formulas with matrices, it's best to
+enable Matrix mode first to prevent algebraically incorrect rewrites
+from occurring.
+
+   <p>The pattern &lsquo;<samp><span class="samp">-x</span></samp>&rsquo; will actually match any expression.  For example,
+the rule
+
+<pre class="example">     f(-x)  :=  -f(x)
+</pre>
+   <p class="noindent">will rewrite &lsquo;<samp><span class="samp">f(a)</span></samp>&rsquo; to &lsquo;<samp><span class="samp">-f(-a)</span></samp>&rsquo;.  To avoid this, either use
+a <code>plain</code> marker as described below, or add a &lsquo;<samp><span class="samp">negative(x)</span></samp>&rsquo;
+condition.  The <code>negative</code> function is true if its argument
+&ldquo;looks&rdquo; negative, for example, because it is a negative number or
+because it is a formula like &lsquo;<samp><span class="samp">-x</span></samp>&rsquo;.  The new rule using this
+condition is:
+
+<pre class="example">     f(x)  :=  -f(-x)  :: negative(x)    <span class="roman">or, equivalently,</span>
+     f(-x)  :=  -f(x)  :: negative(-x)
+</pre>
+   <p>In the same way, the pattern &lsquo;<samp><span class="samp">x - y</span></samp>&rsquo; will match the sum &lsquo;<samp><span class="samp">a + b</span></samp>&rsquo;
+by matching &lsquo;<samp><span class="samp">y</span></samp>&rsquo; to &lsquo;<samp><span class="samp">-b</span></samp>&rsquo;.
+
+   <p>The pattern &lsquo;<samp><span class="samp">a b</span></samp>&rsquo; will also match the formula &lsquo;<samp><span class="samp">x/y</span></samp>&rsquo; if
+&lsquo;<samp><span class="samp">y</span></samp>&rsquo; is a number.  Thus the rule &lsquo;<samp><span class="samp">a x + b&nbsp;x<!-- /@w --> := (a+b) x</span></samp>&rsquo;
+will also convert &lsquo;<samp><span class="samp">a x + x / 2</span></samp>&rsquo; to &lsquo;<samp><span class="samp">(a + 0.5) x</span></samp>&rsquo; (or
+&lsquo;<samp><span class="samp">(a + 1:2) x</span></samp>&rsquo;, depending on the current fraction mode).
+
+   <p>Calc will <em>not</em> take other liberties with &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, &lsquo;<samp><span class="samp">/</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">^</span></samp>&rsquo;.  For example, the pattern &lsquo;<samp><span class="samp">f(a b)</span></samp>&rsquo; will not match
+&lsquo;<samp><span class="samp">f(x^2)</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">f(a + b)</span></samp>&rsquo; will not match &lsquo;<samp><span class="samp">f(2 x)</span></samp>&rsquo;, even
+though conceivably these patterns could match with &lsquo;<samp><span class="samp">a = b = x</span></samp>&rsquo;. 
+Nor will &lsquo;<samp><span class="samp">f(a b)</span></samp>&rsquo; match &lsquo;<samp><span class="samp">f(x / y)</span></samp>&rsquo; if &lsquo;<samp><span class="samp">y</span></samp>&rsquo; is not a
+constant, even though it could be considered to match with &lsquo;<samp><span class="samp">a = x</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">b = 1/y</span></samp>&rsquo;.  The reasons are partly for efficiency, and partly
+because while few mathematical operations are substantively different
+for addition and subtraction, often it is preferable to treat the cases
+of multiplication, division, and integer powers separately.
+
+   <p>Even more subtle is the rule set
+
+<pre class="example">     [ f(a) + f(b) := f(a + b),  -f(a) := f(-a) ]
+</pre>
+   <p class="noindent">attempting to match &lsquo;<samp><span class="samp">f(x) - f(y)</span></samp>&rsquo;.  You might think that Calc
+will view this subtraction as &lsquo;<samp><span class="samp">f(x) + (-f(y))</span></samp>&rsquo; and then apply
+the above two rules in turn, but actually this will not work because
+Calc only does this when considering rules for &lsquo;<samp><span class="samp">+</span></samp>&rsquo; (like the
+first rule in this set).  So it will see first that &lsquo;<samp><span class="samp">f(x) + (-f(y))</span></samp>&rsquo;
+does not match &lsquo;<samp><span class="samp">f(a) + f(b)</span></samp>&rsquo; for any assignments of the
+meta-variables, and then it will see that &lsquo;<samp><span class="samp">f(x) - f(y)</span></samp>&rsquo; does
+not match &lsquo;<samp><span class="samp">-f(a)</span></samp>&rsquo; for any assignment of &lsquo;<samp><span class="samp">a</span></samp>&rsquo;.  Because Calc
+tries only one rule at a time, it will not be able to rewrite
+&lsquo;<samp><span class="samp">f(x) - f(y)</span></samp>&rsquo; with this rule set.  An explicit &lsquo;<samp><span class="samp">f(a) - f(b)</span></samp>&rsquo;
+rule will have to be added.
+
+   <p>Another thing patterns will <em>not</em> do is break up complex numbers. 
+The pattern &lsquo;<samp><span class="samp">myconj(a + b&nbsp;i)<!-- /@w --> := a - b i</span></samp>&rsquo; will work for formulas
+involving the special constant &lsquo;<samp><span class="samp">i</span></samp>&rsquo; (such as &lsquo;<samp><span class="samp">3 - 4 i</span></samp>&rsquo;), but
+it will not match actual complex numbers like &lsquo;<samp><span class="samp">(3, -4)</span></samp>&rsquo;.  A version
+of the above rule for complex numbers would be
+
+<pre class="example">     myconj(a)  :=  re(a) - im(a) (0,1)  :: im(a) != 0
+</pre>
+   <p class="noindent">(Because the <code>re</code> and <code>im</code> functions understand the properties
+of the special constant &lsquo;<samp><span class="samp">i</span></samp>&rsquo;, this rule will also work for
+&lsquo;<samp><span class="samp">3 - 4 i</span></samp>&rsquo;.  In fact, this particular rule would probably be better
+without the &lsquo;<samp><span class="samp">im(a) != 0</span></samp>&rsquo; condition, since if &lsquo;<samp><span class="samp">im(a) = 0</span></samp>&rsquo; the
+righthand side of the rule will still give the correct answer for the
+conjugate of a real number.)
+
+   <p>It is also possible to specify optional arguments in patterns.  The rule
+
+<pre class="example">     opt(a) x + opt(b) (x^opt(c) + opt(d))  :=  f(a, b, c, d)
+</pre>
+   <p class="noindent">will match the formula
+
+<pre class="example">     5 (x^2 - 4) + 3 x
+</pre>
+   <p class="noindent">in a fairly straightforward manner, but it will also match reduced
+formulas like
+
+<pre class="example">     x + x^2,    2(x + 1) - x,    x + x
+</pre>
+   <p class="noindent">producing, respectively,
+
+<pre class="example">     f(1, 1, 2, 0),   f(-1, 2, 1, 1),   f(1, 1, 1, 0)
+</pre>
+   <p>(The latter two formulas can be entered only if default simplifications
+have been turned off with <kbd>m O</kbd>.)
+
+   <p>The default value for a term of a sum is zero.  The default value
+for a part of a product, for a power, or for the denominator of a
+quotient, is one.  Also, &lsquo;<samp><span class="samp">-x</span></samp>&rsquo; matches the pattern &lsquo;<samp><span class="samp">opt(a) b</span></samp>&rsquo;
+with &lsquo;<samp><span class="samp">a = -1</span></samp>&rsquo;.
+
+   <p>In particular, the distributive-law rule can be refined to
+
+<pre class="example">     opt(a) x + opt(b) x  :=  (a + b) x
+</pre>
+   <p class="noindent">so that it will convert, e.g., &lsquo;<samp><span class="samp">a x - x</span></samp>&rsquo;, to &lsquo;<samp><span class="samp">(a - 1) x</span></samp>&rsquo;.
+
+   <p>The pattern &lsquo;<samp><span class="samp">opt(a) + opt(b) x</span></samp>&rsquo; matches almost any formulas which
+are linear in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  You can also use the <code>lin</code> and <code>islin</code>
+functions with rewrite conditions to test for this; see <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>.  These functions are not as convenient to use in rewrite
+rules, but they recognize more kinds of formulas as linear:
+&lsquo;<samp><span class="samp">x/z</span></samp>&rsquo; is considered linear with &lsquo;<samp><span class="samp">b = 1/z</span></samp>&rsquo; by <code>lin</code>,
+but it will not match the above pattern because that pattern calls
+for a multiplication, not a division.
+
+   <p>As another example, the obvious rule to replace &lsquo;<samp><span class="samp">sin(x)^2 + cos(x)^2</span></samp>&rsquo;
+by 1,
+
+<pre class="example">     sin(x)^2 + cos(x)^2  :=  1
+</pre>
+   <p class="noindent">misses many cases because the sine and cosine may both be multiplied by
+an equal factor.  Here's a more successful rule:
+
+<pre class="example">     opt(a) sin(x)^2 + opt(a) cos(x)^2  :=  a
+</pre>
+   <p>Note that this rule will <em>not</em> match &lsquo;<samp><span class="samp">sin(x)^2 + 6 cos(x)^2</span></samp>&rsquo;
+because one &lsquo;<samp><span class="samp">a</span></samp>&rsquo; would have &ldquo;matched&rdquo; 1 while the other matched 6.
+
+   <p>Calc automatically converts a rule like
+
+<pre class="example">     f(x-1, x)  :=  g(x)
+</pre>
+   <p class="noindent">into the form
+
+<pre class="example">     f(temp, x)  :=  g(x)  :: temp = x-1
+</pre>
+   <p class="noindent">(where <code>temp</code> stands for a new, invented meta-variable that
+doesn't actually have a name).  This modified rule will successfully
+match &lsquo;<samp><span class="samp">f(6, 7)</span></samp>&rsquo;, binding &lsquo;<samp><span class="samp">temp</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x</span></samp>&rsquo; to 6 and 7,
+respectively, then verifying that they differ by one even though
+&lsquo;<samp><span class="samp">6</span></samp>&rsquo; does not superficially look like &lsquo;<samp><span class="samp">x-1</span></samp>&rsquo;.
+
+   <p>However, Calc does not solve equations to interpret a rule.  The
+following rule,
+
+<pre class="example">     f(x-1, x+1)  :=  g(x)
+</pre>
+   <p class="noindent">will not work.  That is, it will match &lsquo;<samp><span class="samp">f(a - 1 + b, a + 1 + b)</span></samp>&rsquo;
+but not &lsquo;<samp><span class="samp">f(6, 8)</span></samp>&rsquo;.  Calc always interprets at least one occurrence
+of a variable by literal matching.  If the variable appears &ldquo;isolated&rdquo;
+then Calc is smart enough to use it for literal matching.  But in this
+last example, Calc is forced to rewrite the rule to &lsquo;<samp><span class="samp">f(x-1, temp)
+:= g(x) :: temp = x+1</span></samp>&rsquo; where the &lsquo;<samp><span class="samp">x-1</span></samp>&rsquo; term must correspond to an
+actual &ldquo;something-minus-one&rdquo; in the target formula.
+
+   <p>A successful way to write this would be &lsquo;<samp><span class="samp">f(x, x+2) := g(x+1)</span></samp>&rsquo;. 
+You could make this resemble the original form more closely by using
+<code>let</code> notation, which is described in the next section:
+
+<pre class="example">     f(xm1, x+1)  :=  g(x)  :: let(x := xm1+1)
+</pre>
+   <p>Calc does this rewriting or &ldquo;conditionalizing&rdquo; for any sub-pattern
+which involves only the functions in the following list, operating
+only on constants and meta-variables which have already been matched
+elsewhere in the pattern.  When matching a function call, Calc is
+careful to match arguments which are plain variables before arguments
+which are calls to any of the functions below, so that a pattern like
+&lsquo;<samp><span class="samp">f(x-1, x)</span></samp>&rsquo; can be conditionalized even though the isolated
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo; comes after the &lsquo;<samp><span class="samp">x-1</span></samp>&rsquo;.
+
+<pre class="smallexample">     + - * / \ % ^  abs sign  round rounde roundu trunc floor ceil
+     max min  re im conj arg
+</pre>
+   <p>You can suppress all of the special treatments described in this
+section by surrounding a function call with a <code>plain</code> marker. 
+This marker causes the function call which is its argument to be
+matched literally, without regard to commutativity, associativity,
+negation, or conditionalization.  When you use <code>plain</code>, the
+&ldquo;deep structure&rdquo; of the formula being matched can show through. 
+For example,
+
+<pre class="example">     plain(a - a b)  :=  f(a, b)
+</pre>
+   <p class="noindent">will match only literal subtractions.  However, the <code>plain</code>
+marker does not affect its arguments' arguments.  In this case,
+commutativity and associativity is still considered while matching
+the &lsquo;<samp><span class="samp">a&nbsp;b</span></samp>&rsquo;<!-- /@w --> sub-pattern, so the whole pattern will match
+&lsquo;<samp><span class="samp">x - y x</span></samp>&rsquo; as well as &lsquo;<samp><span class="samp">x - x y</span></samp>&rsquo;.  We could go still
+further and use
+
+<pre class="example">     plain(a - plain(a b))  :=  f(a, b)
+</pre>
+   <p class="noindent">which would do a completely strict match for the pattern.
+
+   <p>By contrast, the <code>quote</code> marker means that not only the
+function name but also the arguments must be literally the same. 
+The above pattern will match &lsquo;<samp><span class="samp">x - x y</span></samp>&rsquo; but
+
+<pre class="example">     quote(a - a b)  :=  f(a, b)
+</pre>
+   <p class="noindent">will match only the single formula &lsquo;<samp><span class="samp">a - a b</span></samp>&rsquo;.  Also,
+
+<pre class="example">     quote(a - quote(a b))  :=  f(a, b)
+</pre>
+   <p class="noindent">will match only &lsquo;<samp><span class="samp">a - quote(a b)</span></samp>&rsquo;&mdash;probably not the desired
+effect!
+
+   <p>A certain amount of algebra is also done when substituting the
+meta-variables on the righthand side of a rule.  For example,
+in the rule
+
+<pre class="example">     a + f(b)  :=  f(a + b)
+</pre>
+   <p class="noindent">matching &lsquo;<samp><span class="samp">f(x) - y</span></samp>&rsquo; would produce &lsquo;<samp><span class="samp">f((-y) + x)</span></samp>&rsquo; if
+taken literally, but the rewrite mechanism will simplify the
+righthand side to &lsquo;<samp><span class="samp">f(x - y)</span></samp>&rsquo; automatically.  (Of course,
+the default simplifications would do this anyway, so this
+special simplification is only noticeable if you have turned the
+default simplifications off.)  This rewriting is done only when
+a meta-variable expands to a &ldquo;negative-looking&rdquo; expression. 
+If this simplification is not desirable, you can use a <code>plain</code>
+marker on the righthand side:
+
+<pre class="example">     a + f(b)  :=  f(plain(a + b))
+</pre>
+   <p class="noindent">In this example, we are still allowing the pattern-matcher to
+use all the algebra it can muster, but the righthand side will
+always simplify to a literal addition like &lsquo;<samp><span class="samp">f((-y) + x)</span></samp>&rsquo;.
+
+   </body></html>
+

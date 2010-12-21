@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Slashdot - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Browsing-the-Web.html#Browsing-the-Web" title="Browsing the Web">
+<link rel="prev" href="Web-Searches.html#Web-Searches" title="Web Searches">
+<link rel="next" href="Ultimate.html#Ultimate" title="Ultimate">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Slashdot"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Ultimate.html#Ultimate">Ultimate</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Web-Searches.html#Web-Searches">Web Searches</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Browsing-the-Web.html#Browsing-the-Web">Browsing the Web</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.4.3 Slashdot</h4>
+
+<p><a name="index-Slashdot-2296"></a><a name="index-nnslashdot-2297"></a>
+<a href="http://slashdot.org/">Slashdot</a> is a popular news site, with
+lively discussion following the news articles.  <code>nnslashdot</code> will
+let you read this forum in a convenient manner.
+
+   <p>The easiest way to read this source is to put something like the
+following in your <samp><span class="file">~/.gnus.el</span></samp> file:
+
+<pre class="lisp">     (setq gnus-secondary-select-methods
+           '((nnslashdot "")))
+</pre>
+   <p>This will make Gnus query the <code>nnslashdot</code> back end for new comments
+and groups.  The <kbd>F</kbd> command will subscribe each new news article as
+a new Gnus group, and you can read the comments by entering these
+groups.  (Note that the default subscription method is to subscribe new
+groups as zombies.  Other methods are available (see <a href="Subscription-Methods.html#Subscription-Methods">Subscription Methods</a>).
+
+   <p>If you want to remove an old <code>nnslashdot</code> group, the <kbd>G DEL</kbd>
+command is the most handy tool (see <a href="Foreign-Groups.html#Foreign-Groups">Foreign Groups</a>).
+
+   <p>When following up to <code>nnslashdot</code> comments (or posting new
+comments), some light <acronym>HTML</acronym>izations will be performed.  In
+particular, text quoted with &lsquo;<samp><span class="samp">&gt; </span></samp>&rsquo; will be quoted with
+&lsquo;<samp><span class="samp">blockquote</span></samp>&rsquo; instead, and signatures will have &lsquo;<samp><span class="samp">br</span></samp>&rsquo; added to
+the end of each line.  Other than that, you can just write <acronym>HTML</acronym>
+directly into the message buffer.  Note that Slashdot filters out some
+<acronym>HTML</acronym> forms.
+
+   <p>The following variables can be altered to change its behavior:
+
+     <dl>
+<dt><code>nnslashdot-threaded</code><dd>Whether <code>nnslashdot</code> should display threaded groups or not.  The
+default is <code>t</code>.  To be able to display threads, <code>nnslashdot</code>
+has to retrieve absolutely all comments in a group upon entry.  If a
+threaded display is not required, <code>nnslashdot</code> will only retrieve
+the comments that are actually wanted by the user.  Threading is nicer,
+but much, much slower than unthreaded.
+
+     <br><dt><code>nnslashdot-login-name</code><dd><a name="index-nnslashdot_002dlogin_002dname-2298"></a>The login name to use when posting.
+
+     <br><dt><code>nnslashdot-password</code><dd><a name="index-nnslashdot_002dpassword-2299"></a>The password to use when posting.
+
+     <br><dt><code>nnslashdot-directory</code><dd><a name="index-nnslashdot_002ddirectory-2300"></a>Where <code>nnslashdot</code> will store its files.  The default is
+<samp><span class="file">~/News/slashdot/</span></samp>.
+
+     <br><dt><code>nnslashdot-active-url</code><dd><a name="index-nnslashdot_002dactive_002durl-2301"></a>The <acronym>URL</acronym> format string that will be used to fetch the
+information on news articles and comments.  The default is<br>
+&lsquo;<samp><span class="samp">http://slashdot.org/search.pl?section=&amp;min=%d</span></samp>&rsquo;.
+
+     <br><dt><code>nnslashdot-comments-url</code><dd><a name="index-nnslashdot_002dcomments_002durl-2302"></a>The <acronym>URL</acronym> format string that will be used to fetch comments.
+
+     <br><dt><code>nnslashdot-article-url</code><dd><a name="index-nnslashdot_002darticle_002durl-2303"></a>The <acronym>URL</acronym> format string that will be used to fetch the news
+article.  The default is
+&lsquo;<samp><span class="samp">http://slashdot.org/article.pl?sid=%s&amp;mode=nocomment</span></samp>&rsquo;.
+
+     <br><dt><code>nnslashdot-threshold</code><dd><a name="index-nnslashdot_002dthreshold-2304"></a>The score threshold.  The default is -1.
+
+     <br><dt><code>nnslashdot-group-number</code><dd><a name="index-nnslashdot_002dgroup_002dnumber-2305"></a>The number of old groups, in addition to the ten latest, to keep
+updated.  The default is 0.
+
+   </dl>
+
+   </body></html>
+

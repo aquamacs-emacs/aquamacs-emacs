@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Symbolic Prefixes - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Various.html#Various" title="Various">
+<link rel="prev" href="Interactive.html#Interactive" title="Interactive">
+<link rel="next" href="Formatting-Variables.html#Formatting-Variables" title="Formatting Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Symbolic-Prefixes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interactive.html#Interactive">Interactive</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
+<hr>
+</div>
+
+<h3 class="section">8.3 Symbolic Prefixes</h3>
+
+<p><a name="index-symbolic-prefixes-2722"></a>
+Quite a lot of Emacs commands react to the (numeric) prefix.  For
+instance, <kbd>C-u 4 C-f</kbd> moves point four characters forward, and
+<kbd>C-u 9 0 0 I s s p</kbd> adds a permanent <code>Subject</code> substring score
+rule of 900 to the current article.
+
+   <p>This is all nice and well, but what if you want to give a command some
+additional information?  Well, what most commands do is interpret the
+&ldquo;raw&rdquo; prefix in some special way.  <kbd>C-u 0 C-x C-s</kbd> means that one
+doesn't want a backup file to be created when saving the current buffer,
+for instance.  But what if you want to save without making a backup
+file, and you want Emacs to flash lights and play a nice tune at the
+same time?  You can't, and you're probably perfectly happy that way.
+
+   <p><a name="index-M_002di-_0028Summary_0029-2723"></a><a name="index-gnus_002dsymbolic_002dargument-2724"></a>I'm not, so I've added a second prefix&mdash;the <dfn>symbolic prefix</dfn>.  The
+prefix key is <kbd>M-i</kbd> (<code>gnus-symbolic-argument</code>), and the next
+character typed in is the value.  You can stack as many <kbd>M-i</kbd>
+prefixes as you want.  <kbd>M-i a C-M-u</kbd> means &ldquo;feed the <kbd>C-M-u</kbd>
+command the symbolic prefix <code>a</code>&rdquo;.  <kbd>M-i a M-i b C-M-u</kbd> means
+&ldquo;feed the <kbd>C-M-u</kbd> command the symbolic prefixes <code>a</code> and
+<code>b</code>&rdquo;.  You get the drift.
+
+   <p>Typing in symbolic prefixes to commands that don't accept them doesn't
+hurt, but it doesn't do any good either.  Currently not many Gnus
+functions make use of the symbolic prefix.
+
+   <p>If you're interested in how Gnus implements this, see <a href="Extended-Interactive.html#Extended-Interactive">Extended Interactive</a>.
+
+   </body></html>
+

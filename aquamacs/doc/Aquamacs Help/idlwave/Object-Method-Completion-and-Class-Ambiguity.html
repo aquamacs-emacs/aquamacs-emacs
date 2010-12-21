@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Object Method Completion and Class Ambiguity - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Case-of-Completed-Words.html#Case-of-Completed-Words" title="Case of Completed Words">
+<link rel="next" href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell" title="Object Method Completion in the Shell">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Object-Method-Completion-and-Class-Ambiguity"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell">Object Method Completion in the Shell</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Case-of-Completed-Words.html#Case-of-Completed-Words">Case of Completed Words</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.4.2 Object Method Completion and Class Ambiguity</h4>
+
+<p><a name="index-Object-methods-149"></a><a name="index-Class-ambiguity-150"></a><a name="index-g_t_0040code_007bself_007d-object_002c-default-class-151"></a>An object method is not uniquely determined without the object's class. 
+Since the class is almost always omitted in the calling source (as
+required to obtain the true benefits of object-based programming),
+IDLWAVE considers all available methods in all classes as possible
+method name completions.  The combined list of keywords of the current
+method in <em>all</em> known classes which contain that method will be
+considered for keyword completion.  In the <samp><span class="file">*Completions*</span></samp> buffer,
+the matching classes will be shown next to each item (see option
+<code>idlwave-completion-show-classes</code>).  As a special case, the class
+of an object called &lsquo;<samp><span class="samp">self</span></samp>&rsquo; is always taken to be the class of the
+current routine, when in an IDLWAVE buffer.  All inherits classes are
+considered as well.
+
+   <p><a name="index-Forcing-class-query_002e-152"></a><a name="index-Class-query_002c-forcing-153"></a>You can also call <code>idlwave-complete</code> with a prefix arg: <kbd>C-u
+M-&lt;TAB&gt;</kbd>.  IDLWAVE will then prompt you for the class in order to
+narrow down the number of possible completions.  The variable
+<code>idlwave-query-class</code> can be configured to make such prompting the
+default for all methods (not recommended), or selectively for very
+common methods for which the number of completing keywords would be too
+large (e.g. <code>Init,SetProperty,GetProperty</code>).
+
+   <p><a name="index-Saving-object-class-on-_0040code_007b_002d_003e_007d-154"></a><a name="index-g_t_0040code_007b_002d_003e_007d-155"></a>After you have specified the class for a particular statement (e.g. when
+completing the method), IDLWAVE can remember it for the rest of the
+editing session.  Subsequent completions in the same statement
+(e.g. keywords) can then reuse this class information.  This works by
+placing a text property on the method invocation operator &lsquo;<samp><span class="samp">-&gt;</span></samp>&rsquo;,
+after which the operator will be shown in a different face (bold by
+default).  The variable <code>idlwave-store-inquired-class</code> can be used
+to turn it off or on.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-completion-show-classes</b> (<code>1</code>)<var><a name="index-idlwave_002dcompletion_002dshow_002dclasses-156"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means show up to that many classes in
+<samp><span class="file">*Completions*</span></samp> buffer when completing object methods and
+keywords. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-completion-fontify-classes</b> (<code>t</code>)<var><a name="index-idlwave_002dcompletion_002dfontify_002dclasses-157"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means fontify the classes in completions buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-query-class</b> (<code>nil</code>)<var><a name="index-idlwave_002dquery_002dclass-158"></a></var><br>
+<blockquote><p>Association list governing query for object classes during completion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-store-inquired-class</b> (<code>t</code>)<var><a name="index-idlwave_002dstore_002dinquired_002dclass-159"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means store class of a method call as text property on
+&lsquo;<samp><span class="samp">-&gt;</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-class-arrow-face</b><var><a name="index-idlwave_002dclass_002darrow_002dface-160"></a></var><br>
+<blockquote><p>Face to highlight object operator arrows &lsquo;<samp><span class="samp">-&gt;</span></samp>&rsquo; which carry a saved
+class text property. 
+</p></blockquote></div>
+
+   </body></html>
+

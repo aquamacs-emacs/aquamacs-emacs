@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Effort estimates - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Dates-and-Times.html#Dates-and-Times" title="Dates and Times">
+<link rel="prev" href="Resolving-idle-time.html#Resolving-idle-time" title="Resolving idle time">
+<link rel="next" href="Relative-timer.html#Relative-timer" title="Relative timer">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Effort-estimates"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Relative-timer.html#Relative-timer">Relative timer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Resolving-idle-time.html#Resolving-idle-time">Resolving idle time</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dates-and-Times.html#Dates-and-Times">Dates and Times</a>
+<hr>
+</div>
+
+<h3 class="section">8.6 Effort estimates</h3>
+
+<p><a name="index-effort-estimates-640"></a>
+<a name="index-property_002c-Effort-641"></a><a name="index-org_002deffort_002dproperty-642"></a>If you want to plan your work in a very detailed way, or if you need to
+produce offers with quotations of the estimated work effort, you may want to
+assign effort estimates to entries.  If you are also clocking your work, you
+may later want to compare the planned effort with the actual working time, a
+great way to improve planning estimates.  Effort estimates are stored in a
+special property &lsquo;<samp><span class="samp">Effort</span></samp>&rsquo;<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  You can set the effort
+for an entry with the following commands:
+
+     
+<a name="index-C_002dc-C_002dx-e-643"></a>
+<dl><dt><kbd>C-c C-x e</kbd><dd>Set the effort estimate for the current entry.  With a numeric prefix
+argument, set it to the NTH allowed value (see below).  This command is also
+accessible from the agenda with the <kbd>e</kbd> key. 
+<a name="index-C_002dc-C_002dx-C_002de-644"></a><br><dt><kbd>C-c C-x C-e</kbd><dd>Modify the effort estimate of the item currently being clocked. 
+</dl>
+
+   <p>Clearly the best way to work with effort estimates is through column view
+(see <a href="Column-view.html#Column-view">Column view</a>).  You should start by setting up discrete values for
+effort estimates, and a <code>COLUMNS</code> format that displays these values
+together with clock sums (if you want to clock your time).  For a specific
+buffer you can use
+
+<pre class="example">     #+PROPERTY: Effort_ALL 0 0:10 0:30 1:00 2:00 3:00 4:00 5:00 6:00 7:00 8:00
+     #+COLUMNS: %40ITEM(Task) %17Effort(Estimated Effort){:} %CLOCKSUM
+</pre>
+   <p class="noindent"><a name="index-org_002dglobal_002dproperties-645"></a><a name="index-org_002dcolumns_002ddefault_002dformat-646"></a>or, even better, you can set up these values globally by customizing the
+variables <code>org-global-properties</code> and <code>org-columns-default-format</code>. 
+In particular if you want to use this setup also in the agenda, a global
+setup may be advised.
+
+   <p>The way to assign estimates to individual items is then to switch to column
+mode, and to use <kbd>S-&lt;right&gt;</kbd> and <kbd>S-&lt;left&gt;</kbd> to change the
+value.  The values you enter will immediately be summed up in the hierarchy. 
+In the column next to it, any clocked time will be displayed.
+
+   <p><a name="index-org_002dagenda_002dcolumns_002dadd_002dappointments_002dto_002deffort_002dsum-647"></a>If you switch to column view in the daily/weekly agenda, the effort column
+will summarize the estimated work effort for each day<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>, and you can use this to find space in your schedule.  To get
+an overview of the entire part of the day that is committed, you can set the
+option <code>org-agenda-columns-add-appointments-to-effort-sum</code>.  The
+appointments on a day that take place over a specified time interval will
+then also be added to the load estimate of the day.
+
+   <p>Effort estimates can be used in secondary agenda filtering that is triggered
+with the <kbd>/</kbd> key in the agenda (see <a href="Agenda-commands.html#Agenda-commands">Agenda commands</a>).  If you have
+these estimates defined consistently, two or three key presses will narrow
+down the list to stuff that fits into an available time slot.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> You may change the property being
+used with the variable <code>org-effort-property</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Please note
+the pitfalls of summing hierarchical data in a flat list (see <a href="Agenda-column-view.html#Agenda-column-view">Agenda column view</a>).</p>
+
+   <hr></div>
+
+   </body></html>
+

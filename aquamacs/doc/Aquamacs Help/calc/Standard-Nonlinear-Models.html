@@ -1,0 +1,208 @@
+<html lang="en">
+<head>
+<title>Standard Nonlinear Models - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Curve-Fitting.html#Curve-Fitting" title="Curve Fitting">
+<link rel="prev" href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits" title="Error Estimates for Fits">
+<link rel="next" href="Curve-Fitting-Details.html#Curve-Fitting-Details" title="Curve Fitting Details">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Standard-Nonlinear-Models"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Curve-Fitting-Details.html#Curve-Fitting-Details">Curve Fitting Details</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits">Error Estimates for Fits</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.8.4 Standard Nonlinear Models</h4>
+
+<p class="noindent">The <kbd>a F</kbd> command also accepts other kinds of models besides
+lines and polynomials.  Some common models have quick single-key
+abbreviations; others must be entered by hand as algebraic formulas.
+
+   <p>Here is a complete list of the standard models recognized by <kbd>a F</kbd>:
+
+     <dl>
+<dt><kbd>1</kbd><dd>Linear or multilinear.  <i>a + b x + c y + d z</i>. 
+<br><dt><kbd>2-9</kbd><dd>Polynomials.  <i>a + b x + c x^2 + d x^3</i>. 
+<br><dt><kbd>e</kbd><dd>Exponential.  <i>a</i> <tt>exp</tt><i>(b x)</i> <tt>exp</tt><i>(c y)</i>. 
+<br><dt><kbd>E</kbd><dd>Base-10 exponential.  <i>a</i> <tt>10^</tt><i>(b x)</i> <tt>10^</tt><i>(c y)</i>. 
+<br><dt><kbd>x</kbd><dd>Exponential (alternate notation).  <tt>exp</tt><i>(a + b x + c y)</i>. 
+<br><dt><kbd>X</kbd><dd>Base-10 exponential (alternate).  <tt>10^</tt><i>(a + b x + c y)</i>. 
+<br><dt><kbd>l</kbd><dd>Logarithmic.  <i>a + b</i> <tt>ln</tt><i>(x) + c</i> <tt>ln</tt><i>(y)</i>. 
+<br><dt><kbd>L</kbd><dd>Base-10 logarithmic.  <i>a + b</i> <tt>log10</tt><i>(x) + c</i> <tt>log10</tt><i>(y)</i>. 
+<br><dt><kbd>^</kbd><dd>General exponential.  <i>a b^x c^y</i>. 
+<br><dt><kbd>p</kbd><dd>Power law.  <i>a x^b y^c</i>. 
+<br><dt><kbd>q</kbd><dd>Quadratic.  <i>a + b (x-c)^2 + d (x-e)^2</i>. 
+<br><dt><kbd>g</kbd><dd>Gaussian. 
+<!-- @math{{a \over b \sqrt{2 \pi}} \exp\left( -{1 \over 2} \left( x - c \over b \right)^2 \right)}. -->
+<i>(a / b sqrt(2 pi)) exp(-0.5*((x-c)/b)^2)</i>. 
+<br><dt><kbd>s</kbd><dd>Logistic <em>s</em> curve. 
+<!-- @math{a/(1+e^{b(x-c)})}. -->
+<i>a/(1 + exp(b (x - c)))</i>. 
+<br><dt><kbd>b</kbd><dd>Logistic bell curve. 
+<!-- @math{ae^{b(x-c)}/(1+e^{b(x-c)})^2}. -->
+<i>a exp(b (x - c))/(1 + exp(b (x - c)))^2</i>. 
+<br><dt><kbd>o</kbd><dd>Hubbert linearization. 
+<!-- @math{{y \over x} = a(1-x/b)}. -->
+<i>(y/x) = a (1 - x/b)</i>. 
+</dl>
+
+   <p>All of these models are used in the usual way; just press the appropriate
+letter at the model prompt, and choose variable names if you wish.  The
+result will be a formula as shown in the above table, with the best-fit
+values of the parameters substituted.  (You may find it easier to read
+the parameter values from the vector that is placed in the trail.)
+
+   <p>All models except Gaussian, logistics, Hubbert and polynomials can
+generalize as shown to any number of independent variables.  Also, all
+the built-in models except for the logistic and Hubbert curves have an
+additive or multiplicative parameter shown as &lsquo;<samp><span class="samp">a</span></samp>&rsquo; in the above table
+which can be replaced by zero or one, as appropriate, by typing <kbd>h</kbd>
+before the model key.
+
+   <p>Note that many of these models are essentially equivalent, but express
+the parameters slightly differently.  For example, &lsquo;<samp><span class="samp">a b^x</span></samp>&rsquo; and
+the other two exponential models are all algebraic rearrangements of
+each other.  Also, the &ldquo;quadratic&rdquo; model is just a degree-2 polynomial
+with the parameters expressed differently.  Use whichever form best
+matches the problem.
+
+   <p>The HP-28/48 calculators support four different models for curve
+fitting, called <code>LIN</code>, <code>LOG</code>, <code>EXP</code>, and <code>PWR</code>. 
+These correspond to Calc models &lsquo;<samp><span class="samp">a + b x</span></samp>&rsquo;, &lsquo;<samp><span class="samp">a + b ln(x)</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">a exp(b x)</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">a x^b</span></samp>&rsquo;, respectively.  In each case,
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo; is what the HP-48 identifies as the &ldquo;intercept,&rdquo; and
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo; is what it calls the &ldquo;slope.&rdquo;
+
+   <p>If the model you want doesn't appear on this list, press <kbd>'</kbd>
+(the apostrophe key) at the model prompt to enter any algebraic
+formula, such as <kbd>m x - b</kbd>, as the model.  (Not all models
+will work, though&mdash;see the next section for details.)
+
+   <p>The model can also be an equation like &lsquo;<samp><span class="samp">y = m x + b</span></samp>&rsquo;. 
+In this case, Calc thinks of all the rows of the data matrix on
+equal terms; this model effectively has two parameters
+(&lsquo;<samp><span class="samp">m</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo;) and two independent variables (&lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">y</span></samp>&rsquo;), with no &ldquo;dependent&rdquo; variables.  Model equations
+do not need to take this &lsquo;<samp><span class="samp">y =</span></samp>&rsquo; form.  For example, the
+implicit line equation &lsquo;<samp><span class="samp">a x + b y = 1</span></samp>&rsquo; works fine as a
+model.
+
+   <p>When you enter a model, Calc makes an alphabetical list of all
+the variables that appear in the model.  These are used for the
+default parameters, independent variables, and dependent variable
+(in that order).  If you enter a plain formula (not an equation),
+Calc assumes the dependent variable does not appear in the formula
+and thus does not need a name.
+
+   <p>For example, if the model formula has the variables &lsquo;<samp><span class="samp">a,mu,sigma,t,x</span></samp>&rsquo;,
+and the data matrix has three rows (meaning two independent variables),
+Calc will use &lsquo;<samp><span class="samp">a,mu,sigma</span></samp>&rsquo; as the default parameters, and the
+data rows will be named &lsquo;<samp><span class="samp">t</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, respectively.  If you
+enter an equation instead of a plain formula, Calc will use &lsquo;<samp><span class="samp">a,mu</span></samp>&rsquo;
+as the parameters, and &lsquo;<samp><span class="samp">sigma,t,x</span></samp>&rsquo; as the three independent
+variables.
+
+   <p>You can, of course, override these choices by entering something
+different at the prompt.  If you leave some variables out of the list,
+those variables must have stored values and those stored values will
+be used as constants in the model.  (Stored values for the parameters
+and independent variables are ignored by the <kbd>a F</kbd> command.) 
+If you list only independent variables, all the remaining variables
+in the model formula will become parameters.
+
+   <p>If there are <kbd>$</kbd> signs in the model you type, they will stand
+for parameters and all other variables (in alphabetical order)
+will be independent.  Use <kbd>$</kbd> for one parameter, <kbd>$$</kbd> for
+another, and so on.  Thus <kbd>$ x + $$</kbd> is another way to describe
+a linear model.
+
+   <p>If you type a <kbd>$</kbd> instead of <kbd>'</kbd> at the model prompt itself,
+Calc will take the model formula from the stack.  (The data must then
+appear at the second stack level.)  The same conventions are used to
+choose which variables in the formula are independent by default and
+which are parameters.
+
+   <p>Models taken from the stack can also be expressed as vectors of
+two or three elements, &lsquo;<samp><span class="samp">[</span><var>model</var><span class="samp">, </span><var>vars</var><span class="samp">]</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">[</span><var>model</var><span class="samp">, </span><var>vars</var><span class="samp">, </span><var>params</var><span class="samp">]</span></samp>&rsquo;.  Each of <var>vars</var>
+and <var>params</var> may be either a variable or a vector of variables. 
+(If <var>params</var> is omitted, all variables in <var>model</var> except
+those listed as <var>vars</var> are parameters.)
+
+   <p>When you enter a model manually with <kbd>'</kbd>, Calc puts a 3-vector
+describing the model in the trail so you can get it back if you wish.
+
+   <p><a name="index-Model1-1809"></a><a name="index-Model2-1810"></a>Finally, you can store a model in one of the Calc variables
+<code>Model1</code> or <code>Model2</code>, then use this model by typing
+<kbd>a F u</kbd> or <kbd>a F U</kbd> (respectively).  The value stored in
+the variable can be any of the formats that <kbd>a F $</kbd> would
+accept for a model on the stack.
+
+   <p>Calc uses the principal values of inverse functions like <code>ln</code>
+and <code>arcsin</code> when doing fits.  For example, when you enter
+the model &lsquo;<samp><span class="samp">y = sin(a t + b)</span></samp>&rsquo; Calc actually uses the easier
+form &lsquo;<samp><span class="samp">arcsin(y) = a t + b</span></samp>&rsquo;.  The <code>arcsin</code> function always
+returns results in the range from <i>-90</i> to 90 degrees (or the
+equivalent range in radians).  Suppose you had data that you
+believed to represent roughly three oscillations of a sine wave,
+so that the argument of the sine might go from zero to
+<!-- @math{3\times360} -->
+<i>3*360</i>
+degrees. 
+The above model would appear to be a good way to determine the
+true frequency and phase of the sine wave, but in practice it
+would fail utterly.  The righthand side of the actual model
+&lsquo;<samp><span class="samp">arcsin(y) = a t + b</span></samp>&rsquo; will grow smoothly with &lsquo;<samp><span class="samp">t</span></samp>&rsquo;, but
+the lefthand side will bounce back and forth between <i>-90</i> and 90. 
+No values of &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; can make the two sides match,
+even approximately.
+
+   <p>There is no good solution to this problem at present.  You could
+restrict your data to small enough ranges so that the above problem
+doesn't occur (i.e., not straddling any peaks in the sine wave). 
+Or, in this case, you could use a totally different method such as
+Fourier analysis, which is beyond the scope of the <kbd>a F</kbd> command. 
+(Unfortunately, Calc does not currently have any facilities for
+taking Fourier and related transforms.)
+
+   </body></html>
+

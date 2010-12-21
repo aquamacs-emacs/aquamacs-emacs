@@ -1,0 +1,273 @@
+<html lang="en">
+<head>
+<title>Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual.  Buying copies from the FSF supports it in
+     developing GNU and promoting software freedom."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">Emacs Development Environment</h1>
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">EDE</a>
+<li><a name="toc_EDE-Project-Concepts" href="EDE-Project-Concepts.html#EDE-Project-Concepts">1 <i>EDE</i> Project Concepts</a>
+<li><a name="toc_EDE-Mode" href="EDE-Mode.html#EDE-Mode">2 <i>EDE</i> Mode</a>
+<li><a name="toc_Creating-a-project" href="Creating-a-project.html#Creating-a-project">3 Creating a project</a>
+<li><a name="toc_Modifying-your-project" href="Modifying-your-project.html#Modifying-your-project">4 Modifying your project</a>
+<ul>
+<li><a href="Add_002fRemove-target.html#Add_002fRemove-target">4.1 Add/Remove target</a>
+<li><a href="Add_002fRemove-files.html#Add_002fRemove-files">4.2 Add/Remove files</a>
+<li><a href="Customize-Features.html#Customize-Features">4.3 Customize Features</a>
+<li><a href="EDE-Project-Features.html#EDE-Project-Features">4.4 EDE Project Features</a>
+<ul>
+<li><a href="Changing-Compilers-and-Flags.html#Changing-Compilers-and-Flags">4.4.1 Changing Compilers and Flags</a>
+<li><a href="Configurations.html#Configurations">4.4.2 Configurations</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Building-and-Debugging" href="Building-and-Debugging.html#Building-and-Debugging">5 Building and Debugging</a>
+<li><a name="toc_Miscellaneous-commands" href="Miscellaneous-commands.html#Miscellaneous-commands">6 Miscellaneous commands</a>
+<ul>
+<li><a href="Simple-projects.html#Simple-projects">6.1 Simple Projects</a>
+<ul>
+<li><a href="ede_002dcpp_002droot.html#ede_002dcpp_002droot">6.1.1 ede-cpp-root</a>
+<li><a href="ede_002dsimple-subclassing.html#ede_002dsimple-subclassing">6.1.2 ede-simple Subclassing</a>
+<li><a href="ede_002demacs.html#ede_002demacs">6.1.3 ede-emacs</a>
+<li><a href="ede_002dlinux.html#ede_002dlinux">6.1.4 ede-linux</a>
+<li><a href="Custom-Locate.html#Custom-Locate">6.1.5 Custom Locate</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Extending-EDE" href="Extending-EDE.html#Extending-EDE">7 Extending <i>EDE</i></a>
+<ul>
+<li><a href="User-interface-methods.html#User-interface-methods">7.1 User interface methods</a>
+<li><a href="Base-project-methods.html#Base-project-methods">7.2 Base project methods</a>
+<li><a href="Sourcecode-objects.html#Sourcecode-objects">7.3 Sourcecode objects</a>
+<li><a href="Compiler-and-Linker-objects.html#Compiler-and-Linker-objects">7.4 Compiler and Linker objects</a>
+<li><a href="Project.html#Project">7.5 Project</a>
+<ul>
+<li><a href="ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">7.5.1 ede-project-placeholder</a>
+<ul>
+<li><a href="ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">7.5.1.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproject.html#ede_002dproject">7.5.2 ede-project</a>
+<ul>
+<li><a href="ede_002dproject.html#ede_002dproject">7.5.2.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dcpp_002droot_002dproject.html#ede_002dcpp_002droot_002dproject">7.5.3 ede-cpp-root-project</a>
+<ul>
+<li><a href="ede_002dcpp_002droot_002dproject.html#ede_002dcpp_002droot_002dproject">7.5.3.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dsimple_002dproject.html#ede_002dsimple_002dproject">7.5.4 ede-simple-project</a>
+<ul>
+<li><a href="ede_002dsimple_002dproject.html#ede_002dsimple_002dproject">7.5.4.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dsimple_002dbase_002dproject.html#ede_002dsimple_002dbase_002dproject">7.5.5 ede-simple-base-project</a>
+<li><a href="ede_002dproj_002dproject.html#ede_002dproj_002dproject">7.5.6 ede-proj-project</a>
+<ul>
+<li><a href="ede_002dproj_002dproject.html#ede_002dproj_002dproject">7.5.6.1 Specialized Methods</a>
+</li></ul>
+<li><a href="project_002dam_002dmakefile.html#project_002dam_002dmakefile">7.5.7 project-am-makefile</a>
+<ul>
+<li><a href="project_002dam_002dmakefile.html#project_002dam_002dmakefile">7.5.7.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dstep_002dproject.html#ede_002dstep_002dproject">7.5.8 ede-step-project</a>
+<ul>
+<li><a href="ede_002dstep_002dproject.html#ede_002dstep_002dproject">7.5.8.1 Specialized Methods</a>
+</li></ul>
+</li></ul>
+<li><a href="Targets.html#Targets">7.6 Targets</a>
+<ul>
+<li><a href="ede_002dtarget.html#ede_002dtarget">7.6.1 ede-target</a>
+<ul>
+<li><a href="ede_002dtarget.html#ede_002dtarget">7.6.1.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget.html#ede_002dproj_002dtarget">7.6.2 ede-proj-target</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget.html#ede_002dproj_002dtarget">7.6.2.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile.html#ede_002dproj_002dtarget_002dmakefile">7.6.3 ede-proj-target-makefile</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile.html#ede_002dproj_002dtarget_002dmakefile">7.6.3.1 Specialized Methods</a>
+</li></ul>
+<li><a href="semantic_002dede_002dproj_002dtarget_002dgrammar.html#semantic_002dede_002dproj_002dtarget_002dgrammar">7.6.4 semantic-ede-proj-target-grammar</a>
+<ul>
+<li><a href="semantic_002dede_002dproj_002dtarget_002dgrammar.html#semantic_002dede_002dproj_002dtarget_002dgrammar">7.6.4.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dobjectcode.html#ede_002dproj_002dtarget_002dmakefile_002dobjectcode">7.6.5 ede-proj-target-makefile-objectcode</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dobjectcode.html#ede_002dproj_002dtarget_002dmakefile_002dobjectcode">7.6.5.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002darchive.html#ede_002dproj_002dtarget_002dmakefile_002darchive">7.6.6 ede-proj-target-makefile-archive</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002darchive.html#ede_002dproj_002dtarget_002dmakefile_002darchive">7.6.6.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dprogram.html#ede_002dproj_002dtarget_002dmakefile_002dprogram">7.6.7 ede-proj-target-makefile-program</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dprogram.html#ede_002dproj_002dtarget_002dmakefile_002dprogram">7.6.7.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject.html#ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject">7.6.8 ede-proj-target-makefile-shared-object</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject.html#ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject">7.6.8.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002delisp.html#ede_002dproj_002dtarget_002delisp">7.6.9 ede-proj-target-elisp</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002delisp.html#ede_002dproj_002dtarget_002delisp">7.6.9.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002delisp_002dautoloads.html#ede_002dproj_002dtarget_002delisp_002dautoloads">7.6.10 ede-proj-target-elisp-autoloads</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002delisp_002dautoloads.html#ede_002dproj_002dtarget_002delisp_002dautoloads">7.6.10.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dmiscelaneous.html#ede_002dproj_002dtarget_002dmakefile_002dmiscelaneous">7.6.11 ede-proj-target-makefile-miscelaneous</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dmiscelaneous.html#ede_002dproj_002dtarget_002dmakefile_002dmiscelaneous">7.6.11.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dinfo.html#ede_002dproj_002dtarget_002dmakefile_002dinfo">7.6.12 ede-proj-target-makefile-info</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002dmakefile_002dinfo.html#ede_002dproj_002dtarget_002dmakefile_002dinfo">7.6.12.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dproj_002dtarget_002dscheme.html#ede_002dproj_002dtarget_002dscheme">7.6.13 ede-proj-target-scheme</a>
+<ul>
+<li><a href="ede_002dproj_002dtarget_002dscheme.html#ede_002dproj_002dtarget_002dscheme">7.6.13.1 Specialized Methods</a>
+</li></ul>
+<li><a href="project_002dam_002dtarget.html#project_002dam_002dtarget">7.6.14 project-am-target</a>
+<ul>
+<li><a href="project_002dam_002dtarget.html#project_002dam_002dtarget">7.6.14.1 Specialized Methods</a>
+</li></ul>
+<li><a href="project_002dam_002dobjectcode.html#project_002dam_002dobjectcode">7.6.15 project-am-objectcode</a>
+<ul>
+<li><a href="project_002dam_002dobjectcode.html#project_002dam_002dobjectcode">7.6.15.1 Specialized Methods</a>
+</li></ul>
+<li><a href="project_002dam_002dprogram.html#project_002dam_002dprogram">7.6.16 project-am-program</a>
+<li><a href="project_002dam_002dheader_002dnoinst.html#project_002dam_002dheader_002dnoinst">7.6.17 project-am-header-noinst</a>
+<ul>
+<li><a href="project_002dam_002dheader_002dnoinst.html#project_002dam_002dheader_002dnoinst">7.6.17.1 Specialized Methods</a>
+</li></ul>
+<li><a href="project_002dam_002dheader_002dinst.html#project_002dam_002dheader_002dinst">7.6.18 project-am-header-inst</a>
+<ul>
+<li><a href="project_002dam_002dheader_002dinst.html#project_002dam_002dheader_002dinst">7.6.18.1 Specialized Methods</a>
+</li></ul>
+<li><a href="project_002dam_002dlisp.html#project_002dam_002dlisp">7.6.19 project-am-lisp</a>
+<ul>
+<li><a href="project_002dam_002dlisp.html#project_002dam_002dlisp">7.6.19.1 Specialized Methods</a>
+</li></ul>
+<li><a href="project_002dam_002dtexinfo.html#project_002dam_002dtexinfo">7.6.20 project-am-texinfo</a>
+<ul>
+<li><a href="project_002dam_002dtexinfo.html#project_002dam_002dtexinfo">7.6.20.1 Specialized Methods</a>
+</li></ul>
+<li><a href="project_002dam_002dman.html#project_002dam_002dman">7.6.21 project-am-man</a>
+<ul>
+<li><a href="project_002dam_002dman.html#project_002dam_002dman">7.6.21.1 Specialized Methods</a>
+</li></ul>
+</li></ul>
+<li><a href="Sourcecode.html#Sourcecode">7.7 Sourcecode</a>
+<ul>
+<li><a href="ede_002dsourcecode.html#ede_002dsourcecode">7.7.1 ede-sourcecode</a>
+<ul>
+<li><a href="ede_002dsourcecode.html#ede_002dsourcecode">7.7.1.1 Specialized Methods</a>
+</li></ul>
+</li></ul>
+<li><a href="Compilers.html#Compilers">7.8 Compilers</a>
+<ul>
+<li><a href="ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram">7.8.1 ede-compilation-program</a>
+<ul>
+<li><a href="ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram">7.8.1.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dcompiler.html#ede_002dcompiler">7.8.2 ede-compiler</a>
+<ul>
+<li><a href="ede_002dcompiler.html#ede_002dcompiler">7.8.2.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler">7.8.3 ede-object-compiler</a>
+<ul>
+<li><a href="ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler">7.8.3.1 Specialized Methods</a>
+</li></ul>
+<li><a href="ede_002dlinker.html#ede_002dlinker">7.8.4 ede-linker</a>
+</li></ul>
+</li></ul>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="EDE-Project-Concepts.html#EDE-Project-Concepts">EDE Project Concepts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="../index.html#dir">(dir)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">EDE</h2>
+
+<!-- node-name,  next,  previous,  up -->
+<p><i>EDE</i> is the Emacs Development Environment: an Emacs extension that
+simplifies building and debugging programs in Emacs.  It attempts to
+emulate a typical IDE (Integrated Development Environment).  <i>EDE</i>
+can manage or create your makefiles and other building environment
+duties, allowing you to concentrate on writing code rather than
+support files.  It aims to make it much easier for new programmers to
+learn and adopt GNU ways of doing things.
+
+   <p>This file describes EDE, the Emacs Development Environment.
+
+   <p>Copyright &copy; 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License.&rdquo;
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="EDE-Project-Concepts.html#EDE-Project-Concepts">EDE Project Concepts</a>:         <i>EDE</i> Project Concepts
+<li><a accesskey="2" href="EDE-Mode.html#EDE-Mode">EDE Mode</a>:                     Turning on <i>EDE</i> mode. 
+<li><a accesskey="3" href="Creating-a-project.html#Creating-a-project">Creating a project</a>:           Creating a project. 
+<li><a accesskey="4" href="Modifying-your-project.html#Modifying-your-project">Modifying your project</a>:       Adding and removing files and targets. 
+<li><a accesskey="5" href="Building-and-Debugging.html#Building-and-Debugging">Building and Debugging</a>:       Initiating a build or debug session. 
+<li><a accesskey="6" href="Miscellaneous-commands.html#Miscellaneous-commands">Miscellaneous commands</a>:       Other project related commands. 
+<li><a accesskey="7" href="Simple-projects.html#Simple-projects">Simple projects</a>:              Projects not managed by <i>EDE</i>. 
+<li><a accesskey="8" href="Extending-EDE.html#Extending-EDE">Extending EDE</a>:                Programming and extending <i>EDE</i>. 
+</ul>
+
+   </body></html>
+

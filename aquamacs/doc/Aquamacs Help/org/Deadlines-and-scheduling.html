@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Deadlines and scheduling - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Dates-and-Times.html#Dates-and-Times" title="Dates and Times">
+<link rel="prev" href="Creating-timestamps.html#Creating-timestamps" title="Creating timestamps">
+<link rel="next" href="Clocking-work-time.html#Clocking-work-time" title="Clocking work time">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Deadlines-and-scheduling"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Clocking-work-time.html#Clocking-work-time">Clocking work time</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-timestamps.html#Creating-timestamps">Creating timestamps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dates-and-Times.html#Dates-and-Times">Dates and Times</a>
+<hr>
+</div>
+
+<h3 class="section">8.3 Deadlines and scheduling</h3>
+
+<p>A timestamp may be preceded by special keywords to facilitate planning:
+
+     <dl>
+<dt><var>DEADLINE</var><dd><a name="index-DEADLINE-keyword-598"></a>
+Meaning: the task (most likely a TODO item, though not necessarily) is supposed
+to be finished on that date.
+
+     <p><a name="index-org_002ddeadline_002dwarning_002ddays-599"></a>On the deadline date, the task will be listed in the agenda.  In
+addition, the agenda for <em>today</em> will carry a warning about the
+approaching or missed deadline, starting
+<code>org-deadline-warning-days</code> before the due date, and continuing
+until the entry is marked DONE.  An example:
+
+     <pre class="example">          *** TODO write article about the Earth for the Guide
+              The editor in charge is [[bbdb:Ford Prefect]]
+              DEADLINE: &lt;2004-02-29 Sun&gt;
+</pre>
+     <p>You can specify a different lead time for warnings for a specific
+deadlines using the following syntax.  Here is an example with a warning
+period of 5 days <code>DEADLINE: &lt;2004-02-29 Sun -5d&gt;</code>.
+
+     <br><dt><var>SCHEDULED</var><dd><a name="index-SCHEDULED-keyword-600"></a>
+Meaning: you are planning to start working on that task on the given
+date.
+
+     <p><a name="index-org_002dagenda_002dskip_002dscheduled_002dif_002ddone-601"></a>The headline will be listed under the given date<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  In
+addition, a reminder that the scheduled date has passed will be present
+in the compilation for <em>today</em>, until the entry is marked DONE. 
+I.e. the task will automatically be forwarded until completed.
+
+     <pre class="example">          *** TODO Call Trillian for a date on New Years Eve.
+              SCHEDULED: &lt;2004-12-25 Sat&gt;
+</pre>
+     <p class="noindent"><b>Important:</b> Scheduling an item in Org mode should <i>not</i> be
+understood in the same way that we understand <i>scheduling a meeting</i>. 
+Setting a date for a meeting is just a simple appointment, you should
+mark this entry with a simple plain timestamp, to get this item shown
+on the date where it applies.  This is a frequent misunderstanding by
+Org users.  In Org mode, <i>scheduling</i> means setting a date when you
+want to start working on an action item. 
+</dl>
+
+   <p>You may use timestamps with repeaters in scheduling and deadline
+entries.  Org mode will issue early and late warnings based on the
+assumption that the timestamp represents the <i>nearest instance</i> of
+the repeater.  However, the use of diary sexp entries like
+<code>&lt;%%(diary-float t 42)&gt;</code>
+in scheduling and deadline timestamps is limited.  Org mode does not
+know enough about the internals of each sexp function to issue early and
+late warnings.  However, it will show the item on each day where the
+sexp entry matches.
+
+<ul class="menu">
+<li><a accesskey="1" href="Inserting-deadline_002fschedule.html#Inserting-deadline_002fschedule">Inserting deadline/schedule</a>:   Planning items
+<li><a accesskey="2" href="Repeated-tasks.html#Repeated-tasks">Repeated tasks</a>:               Items that show up again and again
+</ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> It will still
+be listed on that date after it has been marked DONE.  If you don't like
+this, set the variable <code>org-agenda-skip-scheduled-if-done</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

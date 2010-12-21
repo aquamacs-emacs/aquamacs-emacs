@@ -1,0 +1,206 @@
+<html lang="en">
+<head>
+<title>Manipulating Vectors - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Matrix-Functions.html#Matrix-Functions" title="Matrix Functions">
+<link rel="prev" href="Extracting-Elements.html#Extracting-Elements" title="Extracting Elements">
+<link rel="next" href="Vector-and-Matrix-Arithmetic.html#Vector-and-Matrix-Arithmetic" title="Vector and Matrix Arithmetic">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Manipulating-Vectors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Vector-and-Matrix-Arithmetic.html#Vector-and-Matrix-Arithmetic">Vector and Matrix Arithmetic</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Extracting-Elements.html#Extracting-Elements">Extracting Elements</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>
+<hr>
+</div>
+
+<h3 class="section">10.4 Manipulating Vectors</h3>
+
+<p class="noindent"><a name="index-v-l-1271"></a><a name="index-V-l-1272"></a><a name="index-calc_002dvlength-1273"></a><a name="index-vlen-1274"></a>The <kbd>v l</kbd> (<code>calc-vlength</code>) [<code>vlen</code>] command computes the
+length of a vector.  The length of a non-vector is considered to be zero. 
+Note that matrices are just vectors of vectors for the purposes of this
+command.
+
+   <p><a name="index-H-v-l-1275"></a><a name="index-H-V-l-1276"></a><a name="index-mdims-1277"></a>With the Hyperbolic flag, <kbd>H v l</kbd> [<code>mdims</code>] computes a vector
+of the dimensions of a vector, matrix, or higher-order object.  For
+example, &lsquo;<samp><span class="samp">mdims([[a,b,c],[d,e,f]])</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">[2, 3]</span></samp>&rsquo; since
+its argument is a
+<!-- @math{2\times3} -->
+2x3
+matrix.
+
+   <p><a name="index-v-f-1278"></a><a name="index-V-f-1279"></a><a name="index-calc_002dvector_002dfind-1280"></a><a name="index-find-1281"></a>The <kbd>v f</kbd> (<code>calc-vector-find</code>) [<code>find</code>] command searches
+along a vector for the first element equal to a given target.  The target
+is on the top of the stack; the vector is in the second-to-top position. 
+If a match is found, the result is the index of the matching element. 
+Otherwise, the result is zero.  The numeric prefix argument, if given,
+allows you to select any starting index for the search.
+
+   <p><a name="index-v-a-1282"></a><a name="index-V-a-1283"></a><a name="index-calc_002darrange_002dvector-1284"></a><a name="index-arrange-1285"></a><a name="index-Arranging-a-matrix-1286"></a><a name="index-Reshaping-a-matrix-1287"></a><a name="index-Flattening-a-matrix-1288"></a>The <kbd>v a</kbd> (<code>calc-arrange-vector</code>) [<code>arrange</code>] command
+rearranges a vector to have a certain number of columns and rows.  The
+numeric prefix argument specifies the number of columns; if you do not
+provide an argument, you will be prompted for the number of columns. 
+The vector or matrix on the top of the stack is <dfn>flattened</dfn> into a
+plain vector.  If the number of columns is nonzero, this vector is
+then formed into a matrix by taking successive groups of <var>n</var> elements. 
+If the number of columns does not evenly divide the number of elements
+in the vector, the last row will be short and the result will not be
+suitable for use as a matrix.  For example, with the matrix
+&lsquo;<samp><span class="samp">[[1, 2], [3,&nbsp;4]<!-- /@w -->]</span></samp>&rsquo; on the stack, <kbd>v a 4</kbd> produces
+&lsquo;<samp><span class="samp">[[1, 2, 3, 4]]</span></samp>&rsquo; (a
+<!-- @math{1\times4} -->
+1x4
+matrix), <kbd>v a 1</kbd> produces &lsquo;<samp><span class="samp">[[1], [2], [3], [4]]</span></samp>&rsquo; (a
+<!-- @math{4\times1} -->
+4x1
+matrix), <kbd>v a 2</kbd> produces &lsquo;<samp><span class="samp">[[1, 2], [3, 4]]</span></samp>&rsquo; (the original
+<!-- @math{2\times2} -->
+2x2
+matrix), <kbd>v&nbsp;a&nbsp;3</kbd><!-- /@w --> produces &lsquo;<samp><span class="samp">[[1, 2, 3], [4]]</span></samp>&rsquo; (not a
+matrix), and <kbd>v a 0</kbd> produces the flattened list
+&lsquo;<samp><span class="samp">[1, 2, 3,&nbsp;4<!-- /@w -->]</span></samp>&rsquo;.
+
+   <p><a name="index-Sorting-data-1289"></a><a name="index-v-S-1290"></a><a name="index-V-S-1291"></a><a name="index-I-v-S-1292"></a><a name="index-I-V-S-1293"></a><a name="index-calc_002dsort-1294"></a><a name="index-sort-1295"></a><a name="index-rsort-1296"></a>The <kbd>V S</kbd> (<code>calc-sort</code>) [<code>sort</code>] command sorts the elements of
+a vector into increasing order.  Real numbers, real infinities, and
+constant interval forms come first in this ordering; next come other
+kinds of numbers, then variables (in alphabetical order), then finally
+come formulas and other kinds of objects; these are sorted according
+to a kind of lexicographic ordering with the useful property that
+one vector is less or greater than another if the first corresponding
+unequal elements are less or greater, respectively.  Since quoted strings
+are stored by Calc internally as vectors of ASCII character codes
+(see <a href="Strings.html#Strings">Strings</a>), this means vectors of strings are also sorted into
+alphabetical order by this command.
+
+   <p>The <kbd>I V S</kbd> [<code>rsort</code>] command sorts a vector into decreasing order.
+
+   <p><a name="index-Permutation_002c-inverse-of-1297"></a><a name="index-Inverse-of-permutation-1298"></a><a name="index-Index-tables-1299"></a><a name="index-Rank-tables-1300"></a><a name="index-v-G-1301"></a><a name="index-V-G-1302"></a><a name="index-I-v-G-1303"></a><a name="index-I-V-G-1304"></a><a name="index-calc_002dgrade-1305"></a><a name="index-grade-1306"></a><a name="index-rgrade-1307"></a>The <kbd>V G</kbd> (<code>calc-grade</code>) [<code>grade</code>, <code>rgrade</code>] command
+produces an index table or permutation vector which, if applied to the
+input vector (as the index of <kbd>C-u v r</kbd>, say), would sort the vector. 
+A permutation vector is just a vector of integers from 1 to <var>n</var>, where
+each integer occurs exactly once.  One application of this is to sort a
+matrix of data rows using one column as the sort key; extract that column,
+grade it with <kbd>V G</kbd>, then use the result to reorder the original matrix
+with <kbd>C-u v r</kbd>.  Another interesting property of the <code>V G</code> command
+is that, if the input is itself a permutation vector, the result will
+be the inverse of the permutation.  The inverse of an index table is
+a rank table, whose <var>k</var>th element says where the <var>k</var>th original
+vector element will rest when the vector is sorted.  To get a rank
+table, just use <kbd>V G V G</kbd>.
+
+   <p>With the Inverse flag, <kbd>I V G</kbd> produces an index table that would
+sort the input into decreasing order.  Note that <kbd>V S</kbd> and <kbd>V G</kbd>
+use a &ldquo;stable&rdquo; sorting algorithm, i.e., any two elements which are equal
+will not be moved out of their original order.  Generally there is no way
+to tell with <kbd>V S</kbd>, since two elements which are equal look the same,
+but with <kbd>V G</kbd> this can be an important issue.  In the matrix-of-rows
+example, suppose you have names and telephone numbers as two columns and
+you wish to sort by phone number primarily, and by name when the numbers
+are equal.  You can sort the data matrix by names first, and then again
+by phone numbers.  Because the sort is stable, any two rows with equal
+phone numbers will remain sorted by name even after the second sort.
+
+   <p><a name="index-Histograms-1308"></a><a name="index-v-H-1309"></a><a name="index-V-H-1310"></a><a name="index-calc_002dhistogram-1311"></a><a name="index-histogram-1312"></a>The <kbd>V H</kbd> (<code>calc-histogram</code>) [<code>histogram</code>] command builds a
+histogram of a vector of numbers.  Vector elements are assumed to be
+integers or real numbers in the range [0..<var>n</var>) for some &ldquo;number of
+bins&rdquo; <var>n</var>, which is the numeric prefix argument given to the
+command.  The result is a vector of <var>n</var> counts of how many times
+each value appeared in the original vector.  Non-integers in the input
+are rounded down to integers.  Any vector elements outside the specified
+range are ignored.  (You can tell if elements have been ignored by noting
+that the counts in the result vector don't add up to the length of the
+input vector.)
+
+   <p><a name="index-H-v-H-1313"></a><a name="index-H-V-H-1314"></a>With the Hyperbolic flag, <kbd>H V H</kbd> pulls two vectors from the stack. 
+The second-to-top vector is the list of numbers as before.  The top
+vector is an equal-sized list of &ldquo;weights&rdquo; to attach to the elements
+of the data vector.  For example, if the first data element is 4.2 and
+the first weight is 10, then 10 will be added to bin 4 of the result
+vector.  Without the hyperbolic flag, every element has a weight of one.
+
+   <p><a name="index-v-t-1315"></a><a name="index-V-t-1316"></a><a name="index-calc_002dtranspose-1317"></a><a name="index-trn-1318"></a>The <kbd>v t</kbd> (<code>calc-transpose</code>) [<code>trn</code>] command computes
+the transpose of the matrix at the top of the stack.  If the argument
+is a plain vector, it is treated as a row vector and transposed into
+a one-column matrix.
+
+   <p><a name="index-v-v-1319"></a><a name="index-V-v-1320"></a><a name="index-calc_002dreverse_002dvector-1321"></a><a name="index-rev-1322"></a>The <kbd>v v</kbd> (<code>calc-reverse-vector</code>) [<code>rev</code>] command reverses
+a vector end-for-end.  Given a matrix, it reverses the order of the rows. 
+(To reverse the columns instead, just use <kbd>v t v v v t</kbd>.  The same
+principle can be used to apply other vector commands to the columns of
+a matrix.)
+
+   <p><a name="index-v-m-1323"></a><a name="index-V-m-1324"></a><a name="index-calc_002dmask_002dvector-1325"></a><a name="index-vmask-1326"></a>The <kbd>v m</kbd> (<code>calc-mask-vector</code>) [<code>vmask</code>] command uses
+one vector as a mask to extract elements of another vector.  The mask
+is in the second-to-top position; the target vector is on the top of
+the stack.  These vectors must have the same length.  The result is
+the same as the target vector, but with all elements which correspond
+to zeros in the mask vector deleted.  Thus, for example,
+&lsquo;<samp><span class="samp">vmask([1, 0, 1, 0, 1], [a, b, c, d, e])</span></samp>&rsquo; produces &lsquo;<samp><span class="samp">[a, c, e]</span></samp>&rsquo;. 
+See <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>.
+
+   <p><a name="index-v-e-1327"></a><a name="index-V-e-1328"></a><a name="index-calc_002dexpand_002dvector-1329"></a><a name="index-vexp-1330"></a>The <kbd>v e</kbd> (<code>calc-expand-vector</code>) [<code>vexp</code>] command
+expands a vector according to another mask vector.  The result is a
+vector the same length as the mask, but with nonzero elements replaced
+by successive elements from the target vector.  The length of the target
+vector is normally the number of nonzero elements in the mask.  If the
+target vector is longer, its last few elements are lost.  If the target
+vector is shorter, the last few nonzero mask elements are left
+unreplaced in the result.  Thus &lsquo;<samp><span class="samp">vexp([2, 0, 3, 0, 7], [a, b])</span></samp>&rsquo;
+produces &lsquo;<samp><span class="samp">[a, 0, b, 0, 7]</span></samp>&rsquo;.
+
+   <p><a name="index-H-v-e-1331"></a><a name="index-H-V-e-1332"></a>With the Hyperbolic flag, <kbd>H v e</kbd> takes a filler value from the
+top of the stack; the mask and target vectors come from the third and
+second elements of the stack.  This filler is used where the mask is
+zero:  &lsquo;<samp><span class="samp">vexp([2, 0, 3, 0, 7], [a, b], z)</span></samp>&rsquo; produces
+&lsquo;<samp><span class="samp">[a, z, c, z, 7]</span></samp>&rsquo;.  If the filler value is itself a vector,
+then successive values are taken from it, so that the effect is to
+interleave two vectors according to the mask:
+&lsquo;<samp><span class="samp">vexp([2, 0, 3, 7, 0, 0], [a, b], [x, y])</span></samp>&rsquo; produces
+&lsquo;<samp><span class="samp">[a, x, b, 7, y, 0]</span></samp>&rsquo;.
+
+   <p>Another variation on the masking idea is to combine &lsquo;<samp><span class="samp">[a, b, c, d, e]</span></samp>&rsquo;
+with the mask &lsquo;<samp><span class="samp">[1, 0, 1, 0, 1]</span></samp>&rsquo; to produce &lsquo;<samp><span class="samp">[a, 0, c, 0, e]</span></samp>&rsquo;. 
+You can accomplish this with <kbd>V M a &amp;</kbd>, mapping the logical &ldquo;and&rdquo;
+operation across the two vectors.  See <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>.  Note that
+the <code>? :</code> operation also discussed there allows other types of
+masking using vectors.
+
+   </body></html>
+

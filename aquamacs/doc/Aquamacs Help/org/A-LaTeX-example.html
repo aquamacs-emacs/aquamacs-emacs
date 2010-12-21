@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+<title>A LaTeX example - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" title="Tables in arbitrary syntax">
+<link rel="prev" href="Radio-tables.html#Radio-tables" title="Radio tables">
+<link rel="next" href="Translator-functions.html#Translator-functions" title="Translator functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="A-LaTeX-example"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Translator-functions.html#Translator-functions">Translator functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Radio-tables.html#Radio-tables">Radio tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax">Tables in arbitrary syntax</a>
+<hr>
+</div>
+
+<h4 class="subsection">A.5.2 A LaTeX example of radio tables</h4>
+
+<p><a name="index-La_0040TeX_007b_007d_002c-and-Orgtbl-mode-1420"></a>
+The best way to wrap the source table in LaTeX is to use the
+<code>comment</code> environment provided by <samp><span class="file">comment.sty</span></samp>.  It has to be
+activated by placing <code>\usepackage{comment}</code> into the document
+header.  Orgtbl mode can insert a radio table skeleton<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  with the command <kbd>M-x orgtbl-insert-radio-table</kbd>.  You will
+be prompted for a table name, let's say we use &lsquo;<samp><span class="samp">salesfigures</span></samp>&rsquo;.  You
+will then get the following template:
+
+   <p><a name="index-g_t_0023_002bORGTBL_002c-SEND-1421"></a>
+<pre class="example">     % BEGIN RECEIVE ORGTBL salesfigures
+     % END RECEIVE ORGTBL salesfigures
+     \begin{comment}
+     #+ORGTBL: SEND salesfigures orgtbl-to-latex
+     | | |
+     \end{comment}
+</pre>
+   <p class="noindent"><a name="index-La_0040TeX_007b_007d_002dverbatim_002denvironments-1422"></a>The <code>#+ORGTBL: SEND</code> line tells Orgtbl mode to use the function
+<code>orgtbl-to-latex</code> to convert the table into LaTeX and to put it
+into the receiver location with name <code>salesfigures</code>.  You may now
+fill in the table, feel free to use the spreadsheet features<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>:
+
+<pre class="example">     % BEGIN RECEIVE ORGTBL salesfigures
+     % END RECEIVE ORGTBL salesfigures
+     \begin{comment}
+     #+ORGTBL: SEND salesfigures orgtbl-to-latex
+     | Month | Days | Nr sold | per day |
+     |-------+------+---------+---------|
+     | Jan   |   23 |      55 |     2.4 |
+     | Feb   |   21 |      16 |     0.8 |
+     | March |   22 |     278 |    12.6 |
+     #+TBLFM: $4=$3/$2;%.1f
+     % $ (optional extra dollar to keep font-lock happy, see footnote)
+     \end{comment}
+</pre>
+   <p class="noindent">When you are done, press <kbd>C-c C-c</kbd> in the table to get the converted
+table inserted between the two marker lines.
+
+   <p>Now let's assume you want to make the table header by hand, because you
+want to control how columns are aligned, etc.  In this case we make sure
+that the table translator skips the first 2 lines of the source
+table, and tell the command to work as a <i>splice</i>, i.e. to not produce
+header and footer commands of the target table:
+
+<pre class="example">     \begin{tabular}{lrrr}
+     Month &amp; \multicolumn{1}{c}{Days} &amp; Nr.\ sold &amp; per day\\
+     % BEGIN RECEIVE ORGTBL salesfigures
+     % END RECEIVE ORGTBL salesfigures
+     \end{tabular}
+     %
+     \begin{comment}
+     #+ORGTBL: SEND salesfigures orgtbl-to-latex :splice t :skip 2
+     | Month | Days | Nr sold | per day |
+     |-------+------+---------+---------|
+     | Jan   |   23 |      55 |     2.4 |
+     | Feb   |   21 |      16 |     0.8 |
+     | March |   22 |     278 |    12.6 |
+     #+TBLFM: $4=$3/$2;%.1f
+     \end{comment}
+</pre>
+   <p>The LaTeX translator function <code>orgtbl-to-latex</code> is already part of
+Orgtbl mode.  It uses a <code>tabular</code> environment to typeset the table
+and marks horizontal lines with <code>\hline</code>.  Furthermore, it
+interprets the following parameters (see also see <a href="Translator-functions.html#Translator-functions">Translator functions</a>):
+
+     <dl>
+<dt><code>:splice nil/t</code><dd>When set to t, return only table body lines, don't wrap them into a
+tabular environment.  Default is nil.
+
+     <br><dt><code>:fmt fmt</code><dd>A format to be used to wrap each field, it should contain <code>%s</code> for the
+original field value.  For example, to wrap each field value in dollars,
+you could use <code>:fmt "$%s$"</code>.  This may also be a property list with
+column numbers and formats. for example <code>:fmt (2 "$%s$" 4 "%s\\%%")</code>. 
+A function of one argument can be used in place of the strings; the
+function must return a formatted string.
+
+     <br><dt><code>:efmt efmt</code><dd>Use this format to print numbers with exponentials.  The format should
+have <code>%s</code> twice for inserting mantissa and exponent, for example
+<code>"%s\\times10^{%s}"</code>.  The default is <code>"%s\\,(%s)"</code>.  This
+may also be a property list with column numbers and formats, for example
+<code>:efmt (2 "$%s\\times10^{%s}$" 4 "$%s\\cdot10^{%s}$")</code>.  After
+<code>efmt</code> has been applied to a value, <code>fmt</code> will also be
+applied.  Similar to <code>fmt</code>, functions of two arguments can be
+supplied instead of strings. 
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> By
+default this works only for LaTeX, HTML, and Texinfo.  Configure the
+variable <code>orgtbl-radio-tables</code> to install templates for other
+modes.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> If
+the &lsquo;<samp><span class="samp">#+TBLFM</span></samp>&rsquo; line contains an odd number of dollar characters,
+this may cause problems with font-lock in LaTeX mode.  As shown in the
+example you can fix this by adding an extra line inside the
+<code>comment</code> environment that is used to balance the dollar
+expressions.  If you are using AUCTeX with the font-latex library, a
+much better solution is to add the <code>comment</code> environment to the
+variable <code>LaTeX-verbatim-environments</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

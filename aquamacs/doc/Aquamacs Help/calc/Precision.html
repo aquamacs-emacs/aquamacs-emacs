@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Precision - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Settings.html#Mode-Settings" title="Mode Settings">
+<link rel="prev" href="General-Mode-Commands.html#General-Mode-Commands" title="General Mode Commands">
+<link rel="next" href="Inverse-and-Hyperbolic.html#Inverse-and-Hyperbolic" title="Inverse and Hyperbolic">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Precision"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Inverse-and-Hyperbolic.html#Inverse-and-Hyperbolic">Inverse and Hyperbolic</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="General-Mode-Commands.html#General-Mode-Commands">General Mode Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>
+<hr>
+</div>
+
+<h3 class="section">7.2 Precision</h3>
+
+<p class="noindent"><a name="index-p-400"></a><a name="index-calc_002dprecision-401"></a><a name="index-Precision-of-calculations-402"></a>The <kbd>p</kbd> (<code>calc-precision</code>) command controls the precision to
+which floating-point calculations are carried.  The precision must be
+at least 3 digits and may be arbitrarily high, within the limits of
+memory and time.  This affects only floats:  Integer and rational
+calculations are always carried out with as many digits as necessary.
+
+   <p>The <kbd>p</kbd> key prompts for the current precision.  If you wish you
+can instead give the precision as a numeric prefix argument.
+
+   <p>Many internal calculations are carried to one or two digits higher
+precision than normal.  Results are rounded down afterward to the
+current precision.  Unless a special display mode has been selected,
+floats are always displayed with their full stored precision, i.e.,
+what you see is what you get.  Reducing the current precision does not
+round values already on the stack, but those values will be rounded
+down before being used in any calculation.  The <kbd>c 0</kbd> through
+<kbd>c 9</kbd> commands (see <a href="Conversions.html#Conversions">Conversions</a>) can be used to round an
+existing value to a new precision.
+
+   <p><a name="index-Accuracy-of-calculations-403"></a>It is important to distinguish the concepts of <dfn>precision</dfn> and
+<dfn>accuracy</dfn>.  In the normal usage of these words, the number
+123.4567 has a precision of 7 digits but an accuracy of 4 digits. 
+The precision is the total number of digits not counting leading
+or trailing zeros (regardless of the position of the decimal point). 
+The accuracy is simply the number of digits after the decimal point
+(again not counting trailing zeros).  In Calc you control the precision,
+not the accuracy of computations.  If you were to set the accuracy
+instead, then calculations like &lsquo;<samp><span class="samp">exp(100)</span></samp>&rsquo; would generate many
+more digits than you would typically need, while &lsquo;<samp><span class="samp">exp(-100)</span></samp>&rsquo; would
+probably round to zero!  In Calc, both these computations give you
+exactly 12 (or the requested number of) significant digits.
+
+   <p>The only Calc features that deal with accuracy instead of precision
+are fixed-point display mode for floats (<kbd>d f</kbd>; see <a href="Float-Formats.html#Float-Formats">Float Formats</a>),
+and the rounding functions like <code>floor</code> and <code>round</code>
+(see <a href="Integer-Truncation.html#Integer-Truncation">Integer Truncation</a>).  Also, <kbd>c 0</kbd> through <kbd>c 9</kbd>
+deal with both precision and accuracy depending on the magnitudes
+of the numbers involved.
+
+   <p>If you need to work with a particular fixed accuracy (say, dollars and
+cents with two digits after the decimal point), one solution is to work
+with integers and an &ldquo;implied&rdquo; decimal point.  For example, $8.99
+divided by 6 would be entered <kbd>899 &lt;RET&gt; 6 /</kbd>, yielding 149.833
+(actually $1.49833 with our implied decimal point); pressing <kbd>R</kbd>
+would round this to 150 cents, i.e., $1.50.
+
+   <p>See <a href="Floats.html#Floats">Floats</a>, for still more on floating-point precision and related
+issues.
+
+   </body></html>
+

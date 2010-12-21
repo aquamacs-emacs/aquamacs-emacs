@@ -1,6 +1,7 @@
 /* Functions for the NeXT/Open/GNUstep and MacOSX window system.
-   Copyright (C) 1989, 1992, 1993, 1994, 2005, 2006, 2008, 2009, 2010
-     Free Software Foundation, Inc.
+
+Copyright (C) 1989, 1992, 1993, 1994, 2005, 2006, 2008, 2009, 2010
+  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -1216,8 +1217,6 @@ be shared by the new frame.  */)
                       "foreground", "Foreground", RES_TYPE_STRING);
   x_default_parameter (f, parms, Qbackground_color, build_string ("White"),
                       "background", "Background", RES_TYPE_STRING);
-  x_default_parameter (f, parms, Qcursor_color, build_string ("grey"),
-                      "cursorColor", "CursorColor", RES_TYPE_STRING);
   /* FIXME: not suppported yet in Nextstep */
   x_default_parameter (f, parms, Qline_spacing, Qnil,
 		       "lineSpacing", "LineSpacing", RES_TYPE_NUMBER);
@@ -1391,6 +1390,49 @@ arg nil means cycle forwards.  */)
   return Qnil;
 }
 
+
+DEFUN ("ns-visible-frame-list", Fns_visible_frame_list, Sns_visible_frame_list,
+       0, 0, 0,
+       doc: /* Return a list of all visible NS frames on the current space.  */)
+  ()
+{
+  Lisp_Object tail, frame;
+  struct frame *f;
+  Lisp_Object value;
+
+  value = Qnil;
+  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+    {
+      frame = XCAR (tail);
+      if (!FRAMEP (frame))
+	continue;
+      f = XFRAME (frame);
+      if (FRAME_VISIBLE_P (f)
+	  && FRAME_NS_P (f)
+	  && (! ([[FRAME_NS_VIEW (f) window] respondsToSelector:@selector(isOnActiveSpace)]) // (NSAppKitVersionNumber 
+	      || [[FRAME_NS_VIEW (f) window] isOnActiveSpace]))
+	value = Fcons (frame, value);
+    }
+  return value;
+}
+
+DEFUN ("ns-frame-is-on-active-space-p", Fns_frame_is_on_active_space_p, Sns_frame_is_on_active_space_p,
+       0, 1, 0,
+       doc: /* Return non-nil if FRAME is on active space.
+OS X 10.6 only; returns non-nil prior to 10.5 or for non-NS frames.*/)
+  (frame)
+     Lisp_Object frame;
+{
+  struct frame *f;
+  check_ns ();
+  CHECK_LIVE_FRAME (frame);
+  f = XFRAME (frame);
+  NSWindow *win = [FRAME_NS_VIEW (f) window];
+  if (! ([win respondsToSelector:@selector(isOnActiveSpace)]) // (NSAppKitVersionNumber 
+      || [win isOnActiveSpace])
+    return Qt;
+  return Qnil;
+}
 
 /* Spelling */
 
@@ -2251,7 +2293,7 @@ If omitted or nil, the selected frame's display is used.  */)
 
 DEFUN ("x-display-save-under", Fx_display_save_under,
        Sx_display_save_under, 0, 1, 0,
-       doc: /* Non-nil if the Nextstep display server supports the save-under feature.
+       doc: /* Return t if DISPLAY supports the save-under feature.
 The optional argument DISPLAY specifies which display to ask about.
 DISPLAY should be a frame, the display name as a string, or a terminal ID.
 If omitted or nil, the selected frame's display is used.  */)
@@ -2276,9 +2318,12 @@ If omitted or nil, the selected frame's display is used.  */)
 
 DEFUN ("x-open-connection", Fx_open_connection, Sx_open_connection,
        1, 3, 0,
-       doc: /* Open a connection to a Nextstep display server.
+       doc: /* Open a connection to a display server.
 DISPLAY is the name of the display to connect to.
-Optional arguments XRM-STRING and MUST-SUCCEED are currently ignored.  */)
+Optional second arg XRM-STRING is a string of resources in xrdb format.
+If the optional third arg MUST-SUCCEED is non-nil,
+terminate Emacs if we can't open the connection.
+\(In the Nextstep version, the last two arguments are currently ignored.)  */)
      (Lisp_Object display, Lisp_Object resource_string, Lisp_Object must_succeed)
 {
   struct ns_display_info *dpyinfo;
@@ -2868,8 +2913,8 @@ x_sync (struct frame *f)
 
 
 DEFUN ("xw-color-defined-p", Fxw_color_defined_p, Sxw_color_defined_p, 1, 2, 0,
-       doc: /* Return t if the current Nextstep display supports the color COLOR.
-The optional argument FRAME is currently ignored.  */)
+       doc: /* Internal function called by `color-defined-p', which see.
+\(Note that the Nextstep version of this function ignores FRAME.)  */)
      (Lisp_Object color, Lisp_Object frame)
 {
   NSColor * col;
@@ -2900,10 +2945,7 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
 
 
 DEFUN ("xw-display-color-p", Fxw_display_color_p, Sxw_display_color_p, 0, 1, 0,
-       doc: /* Return t if the Nextstep display supports color.
-The optional argument DISPLAY specifies which display to ask about.
-DISPLAY should be either a frame, a display name (a string), or terminal ID.
-If omitted or nil, that stands for the selected frame's display.  */)
+       doc: /* Internal function called by `display-color-p', which see.  */)
      (Lisp_Object display)
 {
   NSWindowDepth depth;
@@ -3100,6 +3142,8 @@ DEFUN ("x-show-tip", Fx_show_tip, Sx_show_tip, 1, 6, 0,
        doc: /* Show STRING in a \"tooltip\" window on frame FRAME.
 A tooltip window is a small window displaying a string.
 
+This is an internal function; Lisp code should call `tooltip-show'.
+
 FRAME nil or omitted means use the selected frame.
 
 PARMS is an optional list of frame parameters which can be used to
@@ -3267,7 +3311,7 @@ syms_of_nsfns (void)
 {
   int i;
 
-  Qfontsize = intern ("fontsize");
+  Qfontsize = intern_c_string ("fontsize");
   staticpro (&Qfontsize);
 
   DEFVAR_LISP ("ns-icon-type-alist", &Vns_icon_type_alist,
@@ -3336,6 +3380,8 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_convert_utf8_nfd_to_nfc);
   defsubr (&Sx_focus_frame);
   defsubr (&Sns_cycle_frame);
+  defsubr (&Sns_visible_frame_list);
+  defsubr (&Sns_frame_is_on_active_space_p);
   defsubr (&Sns_popup_spellchecker_panel);
   defsubr (&Sns_close_spellchecker_panel);
   defsubr (&Sns_spellchecker_panel_visible_p);
@@ -3365,4 +3411,3 @@ be used as the image of the icon representing the frame.  */);
 
 }
 
-// arch-tag: dc2a3f74-1123-4daa-8eed-fb78db6a5642

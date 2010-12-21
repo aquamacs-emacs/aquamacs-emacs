@@ -1,0 +1,202 @@
+<html lang="en">
+<head>
+<title>Writing New Back Ends - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
+<link rel="prev" href="Error-Messaging.html#Error-Messaging" title="Error Messaging">
+<link rel="next" href="Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus" title="Hooking New Back Ends Into Gnus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Writing-New-Back-Ends"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus">Hooking New Back Ends Into Gnus</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Error-Messaging.html#Error-Messaging">Error Messaging</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.7.2.4 Writing New Back Ends</h5>
+
+<p>Many back ends are quite similar.  <code>nnml</code> is just like
+<code>nnspool</code>, but it allows you to edit the articles on the server. 
+<code>nnmh</code> is just like <code>nnml</code>, but it doesn't use an active file,
+and it doesn't maintain overview databases.  <code>nndir</code> is just like
+<code>nnml</code>, but it has no concept of &ldquo;groups&rdquo;, and it doesn't allow
+editing articles.
+
+   <p>It would make sense if it were possible to &ldquo;inherit&rdquo; functions from
+back ends when writing new back ends.  And, indeed, you can do that if you
+want to.  (You don't have to if you don't want to, of course.)
+
+   <p>All the back ends declare their public variables and functions by using a
+package called <code>nnoo</code>.
+
+   <p>To inherit functions from other back ends (and allow other back ends to
+inherit functions from the current back end), you should use the
+following macros:
+
+     <dl>
+<dt><code>nnoo-declare</code><dd>This macro declares the first parameter to be a child of the subsequent
+parameters.  For instance:
+
+     <pre class="lisp">          (nnoo-declare nndir
+            nnml nnmh)
+</pre>
+     <p><code>nndir</code> has declared here that it intends to inherit functions from
+both <code>nnml</code> and <code>nnmh</code>.
+
+     <br><dt><code>defvoo</code><dd>This macro is equivalent to <code>defvar</code>, but registers the variable as
+a public server variable.  Most state-oriented variables should be
+declared with <code>defvoo</code> instead of <code>defvar</code>.
+
+     <p>In addition to the normal <code>defvar</code> parameters, it takes a list of
+variables in the parent back ends to map the variable to when executing
+a function in those back ends.
+
+     <pre class="lisp">          (defvoo nndir-directory nil
+            "Where nndir will look for groups."
+            nnml-current-directory nnmh-current-directory)
+</pre>
+     <p>This means that <code>nnml-current-directory</code> will be set to
+<code>nndir-directory</code> when an <code>nnml</code> function is called on behalf
+of <code>nndir</code>.  (The same with <code>nnmh</code>.)
+
+     <br><dt><code>nnoo-define-basics</code><dd>This macro defines some common functions that almost all back ends should
+have.
+
+     <pre class="lisp">          (nnoo-define-basics nndir)
+</pre>
+     <br><dt><code>deffoo</code><dd>This macro is just like <code>defun</code> and takes the same parameters.  In
+addition to doing the normal <code>defun</code> things, it registers the
+function as being public so that other back ends can inherit it.
+
+     <br><dt><code>nnoo-map-functions</code><dd>This macro allows mapping of functions from the current back end to
+functions from the parent back ends.
+
+     <pre class="lisp">          (nnoo-map-functions nndir
+            (nnml-retrieve-headers 0 nndir-current-group 0 0)
+            (nnmh-request-article 0 nndir-current-group 0 0))
+</pre>
+     <p>This means that when <code>nndir-retrieve-headers</code> is called, the first,
+third, and fourth parameters will be passed on to
+<code>nnml-retrieve-headers</code>, while the second parameter is set to the
+value of <code>nndir-current-group</code>.
+
+     <br><dt><code>nnoo-import</code><dd>This macro allows importing functions from back ends.  It should be the
+last thing in the source file, since it will only define functions that
+haven't already been defined.
+
+     <pre class="lisp">          (nnoo-import nndir
+            (nnmh
+             nnmh-request-list
+             nnmh-request-newgroups)
+            (nnml))
+</pre>
+     <p>This means that calls to <code>nndir-request-list</code> should just be passed
+on to <code>nnmh-request-list</code>, while all public functions from
+<code>nnml</code> that haven't been defined in <code>nndir</code> yet should be
+defined now.
+
+   </dl>
+
+   <p>Below is a slightly shortened version of the <code>nndir</code> back end.
+
+<pre class="lisp">     ;;; <span class="roman">nndir.el --- single directory newsgroup access for Gnus</span>
+     ;; <span class="roman">Copyright (C) 1995,1996 Free Software Foundation, Inc.</span>
+     
+     ;;; <span class="roman">Code:</span>
+     
+     (require 'nnheader)
+     (require 'nnmh)
+     (require 'nnml)
+     (require 'nnoo)
+     (eval-when-compile (require 'cl))
+     
+     (nnoo-declare nndir
+       nnml nnmh)
+     
+     (defvoo nndir-directory nil
+       "Where nndir will look for groups."
+       nnml-current-directory nnmh-current-directory)
+     
+     (defvoo nndir-nov-is-evil nil
+       "*Non-nil means that nndir will never retrieve NOV headers."
+       nnml-nov-is-evil)
+     
+     (defvoo nndir-current-group ""
+       nil
+       nnml-current-group nnmh-current-group)
+     (defvoo nndir-top-directory nil nil nnml-directory nnmh-directory)
+     (defvoo nndir-get-new-mail nil nil nnml-get-new-mail nnmh-get-new-mail)
+     
+     (defvoo nndir-status-string "" nil nnmh-status-string)
+     (defconst nndir-version "nndir 1.0")
+     
+     ;;; <span class="roman">Interface functions.</span>
+     
+     (nnoo-define-basics nndir)
+     
+     (deffoo nndir-open-server (server &amp;optional defs)
+       (setq nndir-directory
+             (or (cadr (assq 'nndir-directory defs))
+                 server))
+       (unless (assq 'nndir-directory defs)
+         (push `(nndir-directory ,server) defs))
+       (push `(nndir-current-group
+               ,(file-name-nondirectory
+                 (directory-file-name nndir-directory)))
+             defs)
+       (push `(nndir-top-directory
+               ,(file-name-directory (directory-file-name nndir-directory)))
+             defs)
+       (nnoo-change-server 'nndir server defs))
+     
+     (nnoo-map-functions nndir
+       (nnml-retrieve-headers 0 nndir-current-group 0 0)
+       (nnmh-request-article 0 nndir-current-group 0 0)
+       (nnmh-request-group nndir-current-group 0 0)
+       (nnmh-close-group nndir-current-group 0))
+     
+     (nnoo-import nndir
+       (nnmh
+        nnmh-status-message
+        nnmh-request-list
+        nnmh-request-newgroups))
+     
+     (provide 'nndir)
+</pre>
+   </body></html>
+

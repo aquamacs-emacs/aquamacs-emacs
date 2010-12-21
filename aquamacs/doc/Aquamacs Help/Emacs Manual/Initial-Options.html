@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<title>Initial Options - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Emacs-Invocation.html#Emacs-Invocation" title="Emacs Invocation">
+<link rel="prev" href="Action-Arguments.html#Action-Arguments" title="Action Arguments">
+<link rel="next" href="Command-Example.html#Command-Example" title="Command Example">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Initial-Options"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Command-Example.html#Command-Example">Command Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Action-Arguments.html#Action-Arguments">Action Arguments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Emacs-Invocation.html#Emacs-Invocation">Emacs Invocation</a>
+<hr>
+</div>
+
+<h3 class="appendixsec">C.2 Initial Options</h3>
+
+<p>The initial options specify parameters for the Emacs session.  This
+section describes the more general initial options; some other options
+specifically related to the X Window System appear in the following
+sections.
+
+   <p>Some initial options affect the loading of the initialization file. 
+The normal actions of Emacs are to first load <samp><span class="file">site-start.el</span></samp> if
+it exists, then your own initialization file <samp><span class="file">~/.emacs</span></samp> if it
+exists, and finally <samp><span class="file">default.el</span></samp> if it exists.  See <a href="Init-File.html#Init-File">Init File</a>. 
+Certain options prevent loading of some of these files or substitute
+other files for them.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">-t </span><var>device</var></samp>&rsquo;<dd><a name="index-g_t_002dt-4154"></a><dt>&lsquo;<samp><span class="samp">--terminal=</span><var>device</var></samp>&rsquo;<dd><a name="index-g_t_002d_002dterminal-4155"></a><a name="index-device-for-Emacs-terminal-I_002fO-4156"></a>Use <var>device</var> as the device for terminal input and output. 
+&lsquo;<samp><span class="samp">--terminal</span></samp>&rsquo; implies &lsquo;<samp><span class="samp">--no-window-system</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">-d </span><var>display</var></samp>&rsquo;<dd><a name="index-g_t_002dd-4157"></a><dt>&lsquo;<samp><span class="samp">--display=</span><var>display</var></samp>&rsquo;<dd><a name="index-g_t_002d_002ddisplay-4158"></a><a name="index-display-for-Emacs-frame-4159"></a>Use the X Window System and use the display named <var>display</var> to open
+the initial Emacs frame.  See <a href="Display-X.html#Display-X">Display X</a>, for more details.
+
+     <br><dt>&lsquo;<samp><span class="samp">-nw</span></samp>&rsquo;<dd><a name="index-g_t_002dnw-4160"></a><dt>&lsquo;<samp><span class="samp">--no-window-system</span></samp>&rsquo;<dd><a name="index-g_t_002d_002dno_002dwindow_002dsystem-4161"></a><a name="index-disable-window-system-4162"></a>Don't communicate directly with the window system, disregarding the
+<samp><span class="env">DISPLAY</span></samp> environment variable even if it is set.  This means that
+Emacs uses the terminal from which it was launched for all its display
+and input.
+
+     <p><a name="index-batch-mode-4163"></a><br><dt>&lsquo;<samp><span class="samp">-batch</span></samp>&rsquo;<dd><a name="index-g_t_002d_002dbatch-4164"></a><dt>&lsquo;<samp><span class="samp">--batch</span></samp>&rsquo;<dd>Run Emacs in <dfn>batch mode</dfn>.  Batch mode is used for running
+programs written in Emacs Lisp from shell scripts, makefiles, and so
+on.  To invoke a Lisp program, use the &lsquo;<samp><span class="samp">-batch</span></samp>&rsquo; option in
+conjunction with one or more of &lsquo;<samp><span class="samp">-l</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-f</span></samp>&rsquo; or &lsquo;<samp><span class="samp">--eval</span></samp>&rsquo;
+(see <a href="Action-Arguments.html#Action-Arguments">Action Arguments</a>).  See <a href="Command-Example.html#Command-Example">Command Example</a>, for an example.
+
+     <p>In batch mode, Emacs does not display the text being edited, and the
+standard terminal interrupt characters such as <kbd>C-z</kbd> and <kbd>C-c</kbd>
+have their usual effect.  Emacs functions that normally print a
+message in the echo area will print to either the standard output
+stream (<code>stdout</code>) or the standard error stream (<code>stderr</code>)
+instead.  (To be precise, functions like <code>prin1</code>, <code>princ</code>
+and <code>print</code> print to <code>stdout</code>, while <code>message</code> and
+<code>error</code> print to <code>stderr</code>.)  Functions that normally read
+keyboard input from the minibuffer take their input from the
+terminal's standard input stream (<code>stdin</code>) instead.
+
+     <p>&lsquo;<samp><span class="samp">--batch</span></samp>&rsquo; implies &lsquo;<samp><span class="samp">-q</span></samp>&rsquo; (do not load an initialization file),
+but <samp><span class="file">site-start.el</span></samp> is loaded nonetheless.  It also causes Emacs
+to exit after processing all the command options.  In addition, it
+disables auto-saving except in buffers for which it has been
+explicitly requested.
+
+     <br><dt>&lsquo;<samp><span class="samp">--script </span><var>file</var></samp>&rsquo;<dd><a name="index-g_t_002d_002dscript-4165"></a><a name="index-script-mode-4166"></a>Run Emacs in batch mode, like &lsquo;<samp><span class="samp">--batch</span></samp>&rsquo;, and then read and
+execute the Lisp code in <var>file</var>.
+
+     <p>The normal use of this option is in executable script files that run
+Emacs.  They can start with this text on the first line
+
+     <pre class="example">          #!/usr/bin/emacs --script
+</pre>
+     <p class="noindent">which will invoke Emacs with &lsquo;<samp><span class="samp">--script</span></samp>&rsquo; and supply the name of
+the script file as <var>file</var>.  Emacs Lisp then treats &lsquo;<samp><span class="samp">#!</span></samp>&rsquo;  as a
+comment delimiter.
+
+     <br><dt>&lsquo;<samp><span class="samp">-q</span></samp>&rsquo;<dd><a name="index-g_t_002dq-4167"></a><dt>&lsquo;<samp><span class="samp">--no-init-file</span></samp>&rsquo;<dd><a name="index-g_t_002d_002dno_002dinit_002dfile-4168"></a><a name="index-bypassing-init-and-_0040file_007bdefault_002eel_007d-file-4169"></a><a name="index-init-file_002c-not-loading-4170"></a><a name="index-g_t_0040file_007bdefault_002eel_007d-file_002c-not-loading-4171"></a>Do not load your Emacs initialization file, and do not load the file
+<samp><span class="file">default.el</span></samp> either (see <a href="Init-File.html#Init-File">Init File</a>).  Regardless of this
+switch, <samp><span class="file">site-start.el</span></samp> is still loaded.  When Emacs is invoked
+like this, the Customize facility does not allow options to be saved
+(see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).
+
+     <br><dt>&lsquo;<samp><span class="samp">--no-site-file</span></samp>&rsquo;<dd><a name="index-g_t_002d_002dno_002dsite_002dfile-4172"></a><a name="index-g_t_0040file_007bsite_002dstart_002eel_007d-file_002c-not-loading-4173"></a>Do not load <samp><span class="file">site-start.el</span></samp>.  The options &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-u</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">--batch</span></samp>&rsquo; have no effect on the loading of this file&mdash;this
+option and &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo; are the only options that block it.
+
+     <br><dt>&lsquo;<samp><span class="samp">--no-splash</span></samp>&rsquo;<dd><a name="index-g_t_002d_002dno_002dsplash-4174"></a><a name="index-inhibit_002dstartup_002dscreen-4175"></a><a name="index-splash-screen-4176"></a><a name="index-startup-message-4177"></a>Do not display a startup screen.  You can also achieve this effect by
+setting the variable <code>inhibit-startup-screen</code> to non-<code>nil</code>
+in your initialization file (see <a href="Entering-Emacs.html#Entering-Emacs">Entering Emacs</a>).
+
+     <br><dt>&lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;<dd><a name="index-g_t_002dQ-4178"></a><dt>&lsquo;<samp><span class="samp">--quick</span></samp>&rsquo;<dd><a name="index-g_t_002d_002dquick-4179"></a>Start emacs with minimum customizations, similar to using &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">--no-site-file</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">--no-splash</span></samp>&rsquo; together.  This also
+stops Emacs from processing X resources by setting
+<code>inhibit-x-resources</code> to <code>t</code> (see <a href="Resources.html#Resources">Resources</a>).
+
+     <br><dt>&lsquo;<samp><span class="samp">-daemon</span></samp>&rsquo;<dd><a name="index-g_t_002ddaemon-4180"></a><dt>&lsquo;<samp><span class="samp">--daemon</span></samp>&rsquo;<dd><a name="index-g_t_002d_002ddaemon-4181"></a>Start Emacs as a daemon&mdash;after Emacs starts up, it starts the Emacs
+server and disconnects from the terminal without opening any frames. 
+You can then use the <samp><span class="command">emacsclient</span></samp> command to connect to Emacs
+for editing.  See <a href="Emacs-Server.html#Emacs-Server">Emacs Server</a>, for information about using Emacs
+as a daemon.
+
+     <br><dt>&lsquo;<samp><span class="samp">-daemon=</span><var>SERVER-NAME</var></samp>&rsquo;<dd>Start emacs in background as a daemon, and use <var>SERVER-NAME</var> as
+the server name.
+
+     <br><dt>&lsquo;<samp><span class="samp">--no-desktop</span></samp>&rsquo;<dd><a name="index-g_t_002d_002dno_002ddesktop-4182"></a>Do not reload any saved desktop.  See <a href="Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs Sessions</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">-u </span><var>user</var></samp>&rsquo;<dd><a name="index-g_t_002du-4183"></a><dt>&lsquo;<samp><span class="samp">--user=</span><var>user</var></samp>&rsquo;<dd><a name="index-g_t_002d_002duser-4184"></a><a name="index-load-init-file-of-another-user-4185"></a>Load <var>user</var>'s initialization file instead of your
+own<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">--debug-init</span></samp>&rsquo;<dd><a name="index-g_t_002d_002ddebug_002dinit-4186"></a><a name="index-errors-in-init-file-4187"></a>Enable the Emacs Lisp debugger for errors in the init file. 
+See <a href="../elisp/Error-Debugging.html#Error-Debugging">Entering the Debugger on an Error</a>. 
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This option has no effect on MS-Windows.</p>
+
+   <hr></div>
+
+   </body></html>
+

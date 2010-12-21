@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Refinement of Difference Regions - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Narrowing.html#Narrowing" title="Narrowing">
+<link rel="next" href="Patch-and-Diff-Programs.html#Patch-and-Diff-Programs" title="Patch and Diff Programs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Refinement-of-Difference-Regions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Patch-and-Diff-Programs.html#Patch-and-Diff-Programs">Patch and Diff Programs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Narrowing.html#Narrowing">Narrowing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">7.7 Refinement of Difference Regions</h3>
+
+<p>Ediff has variables to control the way fine differences are
+highlighted.  This feature gives you control over the process of refinement. 
+Note that refinement ignores spaces, tabs, and newlines.
+
+     <dl>
+<dt><code>ediff-auto-refine</code><dd><a name="index-ediff_002dauto_002drefine-186"></a>This variable controls whether fine differences within regions are
+highlighted automatically (&ldquo;auto-refining&rdquo;).  The default is yes
+(&lsquo;<samp><span class="samp">on</span></samp>&rsquo;).
+
+     <p>On a slow machine, automatic refinement may be painful.  In that case,
+you can turn auto-refining on or off interactively by typing
+<kbd>@</kbd>.  You can also turn off display of refining that has
+already been done.
+
+     <p>When auto-refining is off, fine differences are shown only for regions
+for which these differences have been computed and saved before.  If
+auto-refining and display of refining are both turned off, fine
+differences are not shown at all.
+
+     <p>Typing <kbd>*</kbd> computes and displays fine differences for the current
+difference region, regardless of whether auto-refining is turned on.
+
+     <br><dt><code>ediff-auto-refine-limit</code><dd><a name="index-ediff_002dauto_002drefine_002dlimit-187"></a>If auto-refining is on, this variable limits the size of the regions to
+be auto-refined.  This guards against the possible slowdown that may be
+caused by extraordinary large difference regions.
+
+     <p>You can always refine the current region by typing <kbd>*</kbd>.
+
+     <br><dt><code>ediff-forward-word-function</code><dd><a name="index-ediff_002dforward_002dword_002dfunction-188"></a>This variable controls how fine differences are computed.  The
+value must be a Lisp function that determines how the current difference
+region should be split into words.
+
+     <p><a name="index-ediff_002ddiff_002dprogram-189"></a><a name="index-ediff_002dforward_002dword_002dfunction-190"></a><a name="index-ediff_002dforward_002dword-191"></a>Fine differences are computed by first splitting the current difference
+region into words and then passing the result to
+<code>ediff-diff-program</code>.  For the default forward word function (which is
+<code>ediff-forward-word</code>), a word is a string consisting of letters,
+&lsquo;<samp><span class="samp">-</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">_</span></samp>&rsquo;; a string of punctuation symbols; a string of digits,
+or a string consisting of symbols that are neither space, nor a letter.
+
+     <p>This default behavior is controlled by four variables: <code>ediff-word-1</code>,
+..., <code>ediff-word-4</code>.  See the on-line documentation for these variables
+and for the function <code>ediff-forward-word</code> for an explanation of how to
+modify these variables. 
+<a name="index-ediff_002dword_002d1-192"></a><a name="index-ediff_002dword_002d2-193"></a><a name="index-ediff_002dword_002d3-194"></a><a name="index-ediff_002dword_002d4-195"></a></dl>
+
+   <p>Sometimes, when a region has too many differences between the variants,
+highlighting of fine differences is inconvenient, especially on
+color displays.  If that is the case, type <kbd>*</kbd> with a negative
+prefix argument.  This unhighlights fine differences for the current
+region.
+
+   <p>To unhighlight fine differences in all difference regions, use the
+command <kbd>@</kbd>.  Repeated typing of this key cycles through three
+different states: auto-refining, no-auto-refining, and no-highlighting
+of fine differences.
+
+   </body></html>
+

@@ -24,13 +24,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <errno.h>
 #include <stdio.h>
 #include <setjmp.h>
-
-/* Define SIGCHLD as an alias for SIGCLD.  */
-
-#if !defined (SIGCHLD) && defined (SIGCLD)
-#define SIGCHLD SIGCLD
-#endif /* SIGCLD */
-
 #include <sys/types.h>
 
 #ifdef HAVE_UNISTD_H
@@ -38,32 +31,19 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 #include <sys/file.h>
-#ifdef HAVE_FCNTL_H
 #include <fcntl.h>
-#endif
 
 #ifdef WINDOWSNT
 #define NOMINMAX
 #include <windows.h>
-#include <stdlib.h>	/* for proper declaration of environ */
-#include <fcntl.h>
 #include "w32.h"
 #define _P_NOWAIT 1	/* from process.h */
 #endif
 
 #ifdef MSDOS	/* Demacs 1.1.1 91/10/16 HIRANO Satoshi */
-#include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/param.h>
 #endif /* MSDOS */
-
-#ifndef O_RDONLY
-#define O_RDONLY 0
-#endif
-
-#ifndef O_WRONLY
-#define O_WRONLY 1
-#endif
 
 #include "lisp.h"
 #include "commands.h"
@@ -274,21 +254,16 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 	if (!NILP (Vcoding_system_for_write))
 	  val = Vcoding_system_for_write;
 	else if (! must_encode)
-	  val = Qnil;
+	  val = Qraw_text;
 	else
 	  {
 	    args2 = (Lisp_Object *) alloca ((nargs + 1) * sizeof *args2);
 	    args2[0] = Qcall_process;
 	    for (i = 0; i < nargs; i++) args2[i + 1] = args[i];
 	    coding_systems = Ffind_operation_coding_system (nargs + 1, args2);
-	    if (CONSP (coding_systems))
-	      val = XCDR (coding_systems);
-	    else if (CONSP (Vdefault_process_coding_system))
-	      val = XCDR (Vdefault_process_coding_system);
-	    else
-	      val = Qnil;
+	    val = CONSP (coding_systems) ? XCDR (coding_systems) : Qnil;
 	  }
-	val = coding_inherit_eol_type (val, Qnil);
+	val = complement_process_encoding_system (val);
 	setup_coding_system (Fcheck_coding_system (val), &argument_coding);
 	coding_attrs = CODING_ID_ATTRS (argument_coding.id);
 	if (NILP (CODING_ATTR_ASCII_COMPAT (coding_attrs)))
@@ -678,9 +653,9 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
   QUIT;
 
   {
-    register int nread;
+    register EMACS_INT nread;
     int first = 1;
-    int total_read = 0;
+    EMACS_INT total_read = 0;
     int carryover = 0;
     int display_on_the_fly = display_p;
     struct coding_system saved_coding;
@@ -932,20 +907,16 @@ usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &r
   if (!NILP (Vcoding_system_for_write))
     val = Vcoding_system_for_write;
   else if (NILP (current_buffer->enable_multibyte_characters))
-    val = Qnil;
+    val = Qraw_text;
   else
     {
       args2 = (Lisp_Object *) alloca ((nargs + 1) * sizeof *args2);
       args2[0] = Qcall_process_region;
       for (i = 0; i < nargs; i++) args2[i + 1] = args[i];
       coding_systems = Ffind_operation_coding_system (nargs + 1, args2);
-      if (CONSP (coding_systems))
-	val = XCDR (coding_systems);
-      else if (CONSP (Vdefault_process_coding_system))
-	val = XCDR (Vdefault_process_coding_system);
-      else
-	val = Qnil;
+      val = CONSP (coding_systems) ? XCDR (coding_systems) : Qnil;
     }
+  val = complement_process_encoding_system (val);
 
   {
     int count1 = SPECPDL_INDEX ();
@@ -1183,6 +1154,14 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
 #ifdef WINDOWSNT
   prepare_standard_handles (in, out, err, handles);
   set_process_dir (SDATA (current_dir));
+  /* Spawn the child.  (See ntproc.c:Spawnve).  */
+  cpid = spawnve (_P_NOWAIT, new_argv[0], new_argv, env);
+  reset_standard_handles (in, out, err, handles);
+  if (cpid == -1)
+    /* An error occurred while trying to spawn the process.  */
+    report_file_error ("Spawning child process", Qnil);
+  return cpid;
+
 #else  /* not WINDOWSNT */
   /* Make sure that in, out, and err are not actually already in
      descriptors zero, one, or two; this could happen if Emacs is
@@ -1221,36 +1200,17 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
     emacs_close (out);
   if (err != in && err != out)
     emacs_close (err);
-#endif /* not MSDOS */
-#endif /* not WINDOWSNT */
 
 #if defined(USG)
 #ifndef SETPGRP_RELEASES_CTTY
   setpgrp ();			/* No arguments but equivalent in this case */
 #endif
-#else
+#else /* not USG */
   setpgrp (pid, pid);
-#endif /* USG */
+#endif /* not USG */
 
-#ifdef MSDOS
-  pid = run_msdos_command (new_argv, pwd_var + 4, in, out, err, env);
-  xfree (pwd_var);
-  if (pid == -1)
-    /* An error occurred while trying to run the subprocess.  */
-    report_file_error ("Spawning child process", Qnil);
-  return pid;
-#else  /* not MSDOS */
-#ifdef WINDOWSNT
-  /* Spawn the child.  (See ntproc.c:Spawnve).  */
-  cpid = spawnve (_P_NOWAIT, new_argv[0], new_argv, env);
-  reset_standard_handles (in, out, err, handles);
-  if (cpid == -1)
-    /* An error occurred while trying to spawn the process.  */
-    report_file_error ("Spawning child process", Qnil);
-  return cpid;
-#else /* not WINDOWSNT */
   /* setpgrp_of_tty is incorrect here; it uses input_fd.  */
-  EMACS_SET_TTY_PGRP (0, &pid);
+  tcsetpgrp (0, pid);
 
   /* execvp does not accept an environment arg so the only way
      to pass this environment is to set environ.  Our caller
@@ -1262,8 +1222,16 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
   emacs_write (1, new_argv[0], strlen (new_argv[0]));
   emacs_write (1, "\n", 1);
   _exit (1);
-#endif /* not WINDOWSNT */
-#endif /* not MSDOS */
+
+#else /* MSDOS */
+  pid = run_msdos_command (new_argv, pwd_var + 4, in, out, err, env);
+  xfree (pwd_var);
+  if (pid == -1)
+    /* An error occurred while trying to run the subprocess.  */
+    report_file_error ("Spawning child process", Qnil);
+  return pid;
+#endif  /* MSDOS */
+#endif  /* not WINDOWSNT */
 }
 
 #ifndef WINDOWSNT
@@ -1548,7 +1516,7 @@ void
 syms_of_callproc (void)
 {
 #ifdef DOS_NT
-  Qbuffer_file_type = intern ("buffer-file-type");
+  Qbuffer_file_type = intern_c_string ("buffer-file-type");
   staticpro (&Qbuffer_file_type);
 #endif /* DOS_NT */
 
@@ -1638,5 +1606,3 @@ See `setenv' and `getenv'.  */);
   defsubr (&Scall_process_region);
 }
 
-/* arch-tag: 769b8045-1df7-4d2b-8968-e3fb49017f95
-   (do not change this comment) */

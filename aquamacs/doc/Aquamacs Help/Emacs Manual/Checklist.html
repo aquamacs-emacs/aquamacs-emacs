@@ -1,0 +1,386 @@
+<html lang="en">
+<head>
+<title>Checklist - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Bugs.html#Bugs" title="Bugs">
+<link rel="prev" href="Understanding-Bug-Reporting.html#Understanding-Bug-Reporting" title="Understanding Bug Reporting">
+<link rel="next" href="Sending-Patches.html#Sending-Patches" title="Sending Patches">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Checklist"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sending-Patches.html#Sending-Patches">Sending Patches</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Understanding-Bug-Reporting.html#Understanding-Bug-Reporting">Understanding Bug Reporting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Bugs.html#Bugs">Bugs</a>
+<hr>
+</div>
+
+<h3 class="section">60.4 Checklist for Bug Reports</h3>
+
+<p><a name="index-reporting-bugs-4107"></a>
+  Before reporting a bug, first try to see if the problem has already
+been reported (see <a href="Known-Problems.html#Known-Problems">Known Problems</a>).
+
+   <p>If you are able to, try the latest release of Emacs to see if the
+problem has already been fixed.  Even better is to try the latest
+development version.  We recognize that this is not easy for some
+people, so do not feel that you absolutely must do this before making
+a report.
+
+   <p><a name="index-report_002demacs_002dbug-4108"></a>  The best way to write a bug report for Emacs is to use the command
+<kbd>M-x report-emacs-bug</kbd>.  This sets up a mail buffer
+(see <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>) and automatically inserts <em>some</em> of the
+essential information.  However, it cannot supply all the necessary
+information; you should still read and follow the guidelines below, so
+you can enter the other crucial information by hand before you send
+the message.  You may feel that some of the information inserted by
+<kbd>M-x report-emacs-bug</kbd> is not relevant, but unless you are
+absolutely sure it is best to leave it, so that the developers can
+decide for themselves.
+
+   <p>When you have finished writing your report, type <kbd>C-c C-c</kbd> and it
+will be sent to the Emacs maintainers at <a href="mailto:bug-gnu-emacs@gnu.org">bug-gnu-emacs@gnu.org</a>. 
+(If you want to suggest an improvement or new feature, use the same
+address.)  If you cannot send mail from inside Emacs, you can copy the
+text of your report to your normal mail client and send it to that
+address.  Or you can simply send an email to that address describing
+the problem.
+
+   <p>Your report will be sent to the &lsquo;<samp><span class="samp">bug-gnu-emacs</span></samp>&rsquo; mailing list, and
+stored in the tracker at <a href="http://debbugs.gnu.org">http://debbugs.gnu.org</a>.  Please try to
+include a valid reply email address, in case we need to ask you for
+more information about your report.  Submissions are moderated, so
+there may be a delay before your report appears.
+
+   <p>You do not need to know how the <a href="http://debbugs.gnu.org">http://debbugs.gnu.org</a> bug
+tracker works in order to report a bug, but if you want to, you can
+read the tracker's online documentation to see the various features
+you can use.
+
+   <p>All mail sent to the &lsquo;<samp><span class="samp">bug-gnu-emacs</span></samp>&rsquo; mailing list is also
+gatewayed to the &lsquo;<samp><span class="samp">bug.gnu.emacs</span></samp>&rsquo; newsgroup.  The reverse is also
+true, but we ask you not to post bug reports via the newsgroup.  It
+can make it much harder to contact you if we need to ask for more
+information, and it does not integrate well with the bug tracker.
+
+   <p>If your data is more than 500,000 bytes, please don't include it
+directly in the bug report; instead, offer to send it on request, or
+make it available by ftp and say where.
+
+   <p>To enable maintainers to investigate a bug, your report
+should include all these things:
+
+     <ul>
+<li>The version number of Emacs.  Without this, we won't know whether there is any
+point in looking for the bug in the current version of GNU Emacs.
+
+     <p><kbd>M-x report-emacs-bug</kbd> includes this information automatically,
+but if you are not using that command for your report you can get the
+version number by typing <kbd>M-x emacs-version &lt;RET&gt;</kbd>.  If that
+command does not work, you probably have something other than GNU
+Emacs, so you will have to report the bug somewhere else.
+
+     <li>The type of machine you are using, and the operating system name and
+version number (again, automatically included by <kbd>M-x
+report-emacs-bug</kbd>).  <kbd>M-x emacs-version &lt;RET&gt;</kbd> provides this
+information too.  Copy its output from the &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo; buffer,
+so that you get it all and get it accurately.
+
+     <li>The operands given to the <code>configure</code> command when Emacs was
+installed (automatically included by <kbd>M-x report-emacs-bug</kbd>).
+
+     <li>A complete list of any modifications you have made to the Emacs source. 
+(We may not have time to investigate the bug unless it happens in an
+unmodified Emacs.  But if you've made modifications and you don't tell
+us, you are sending us on a wild goose chase.)
+
+     <p>Be precise about these changes.  A description in English is not
+enough&mdash;send a context diff for them.
+
+     <p>Adding files of your own, or porting to another machine, is a
+modification of the source.
+
+     <li>Details of any other deviations from the standard procedure for installing
+GNU Emacs.
+
+     <li>The complete text of any files needed to reproduce the bug.
+
+     <p>If you can tell us a way to cause the problem without visiting any files,
+please do so.  This makes it much easier to debug.  If you do need files,
+make sure you arrange for us to see their exact contents.  For example, it
+can matter whether there are spaces at the ends of lines, or a
+newline after the last line in the buffer (nothing ought to care whether
+the last line is terminated, but try telling the bugs that).
+
+     <li>The precise commands we need to type to reproduce the bug. 
+If at all possible, give a full recipe for an Emacs started with the
+&lsquo;<samp><span class="samp">-Q</span></samp>&rsquo; option (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).  This bypasses your
+<samp><span class="file">.emacs</span></samp> customizations.
+
+     <p><a name="index-open_002ddribble_002dfile-4109"></a><a name="index-dribble-file-4110"></a><a name="index-logging-keystrokes-4111"></a>One way to record the input to Emacs precisely is to write a dribble
+file.  To start the file, execute the Lisp expression
+
+     <pre class="example">          (open-dribble-file "~/dribble")
+</pre>
+     <p class="noindent">using <kbd>M-:</kbd> or from the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer just after
+starting Emacs.  From then on, Emacs copies all your input to the
+specified dribble file until the Emacs process is killed.
+
+     <li><a name="index-open_002dtermscript-4112"></a><a name="index-termscript-file-4113"></a><a name="index-g_t_0040env_007bTERM_007d-environment-variable-4114"></a>For possible display bugs, the terminal type (the value of environment
+variable <samp><span class="env">TERM</span></samp>), the complete termcap entry for the terminal from
+<samp><span class="file">/etc/termcap</span></samp> (since that file is not identical on all machines),
+and the output that Emacs actually sent to the terminal.
+
+     <p>The way to collect the terminal output is to execute the Lisp expression
+
+     <pre class="example">          (open-termscript "~/termscript")
+</pre>
+     <p class="noindent">using <kbd>M-:</kbd> or from the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer just after
+starting Emacs.  From then on, Emacs copies all terminal output to the
+specified termscript file as well, until the Emacs process is killed. 
+If the problem happens when Emacs starts up, put this expression into
+your <samp><span class="file">.emacs</span></samp> file so that the termscript file will be open when
+Emacs displays the screen for the first time.
+
+     <p>Be warned: it is often difficult, and sometimes impossible, to fix a
+terminal-dependent bug without access to a terminal of the type that
+stimulates the bug.
+
+     <li>If non-<acronym>ASCII</acronym> text or internationalization is relevant, the locale that
+was current when you started Emacs.  On GNU/Linux and Unix systems, or
+if you use a Posix-style shell such as Bash, you can use this shell
+command to view the relevant values:
+
+     <pre class="smallexample">          echo LC_ALL=$LC_ALL LC_COLLATE=$LC_COLLATE LC_CTYPE=$LC_CTYPE \
+            LC_MESSAGES=$LC_MESSAGES LC_TIME=$LC_TIME LANG=$LANG
+</pre>
+     <p>Alternatively, use the <samp><span class="command">locale</span></samp> command, if your system has it,
+to display your locale settings.
+
+     <p>You can use the <kbd>M-!</kbd> command to execute these commands from
+Emacs, and then copy the output from the &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo; buffer into
+the bug report.  Alternatively, <kbd>M-x getenv &lt;RET&gt; LC_ALL
+&lt;RET&gt;</kbd> will display the value of <code>LC_ALL</code> in the echo area, and
+you can copy its output from the &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo; buffer.
+
+     <li>A description of what behavior you observe that you believe is
+incorrect.  For example, &ldquo;The Emacs process gets a fatal signal,&rdquo; or,
+&ldquo;The resulting text is as follows, which I think is wrong.&rdquo;
+
+     <p>Of course, if the bug is that Emacs gets a fatal signal, then one can't
+miss it.  But if the bug is incorrect text, the maintainer might fail to
+notice what is wrong.  Why leave it to chance?
+
+     <p>Even if the problem you experience is a fatal signal, you should still
+say so explicitly.  Suppose something strange is going on, such as, your
+copy of the source is out of sync, or you have encountered a bug in the
+C library on your system.  (This has happened!)  Your copy might crash
+and the copy here might not.  If you <em>said</em> to expect a crash, then
+when Emacs here fails to crash, we would know that the bug was not
+happening.  If you don't say to expect a crash, then we would not know
+whether the bug was happening&mdash;we would not be able to draw any
+conclusion from our observations.
+
+     <li>If the bug is that the Emacs Manual or the Emacs Lisp Reference Manual
+fails to describe the actual behavior of Emacs, or that the text is
+confusing, copy in the text from the online manual which you think is
+at fault.  If the section is small, just the section name is enough.
+
+     <li>If the manifestation of the bug is an Emacs error message, it is
+important to report the precise text of the error message, and a
+backtrace showing how the Lisp program in Emacs arrived at the error.
+
+     <p>To get the error message text accurately, copy it from the
+&lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo; buffer into the bug report.  Copy all of it, not just
+part.
+
+     <p><a name="index-toggle_002ddebug_002don_002derror-4115"></a><a name="index-Edebug-4116"></a>To make a backtrace for the error, use <kbd>M-x toggle-debug-on-error</kbd>
+before the error happens (that is to say, you must give that command
+and then make the bug happen).  This causes the error to start the Lisp
+debugger, which shows you a backtrace.  Copy the text of the
+debugger's backtrace into the bug report.  See <a href="../elisp/Debugger.html#Debugger">The Lisp Debugger</a>, for information on
+debugging Emacs Lisp programs with the Edebug package.
+
+     <p>This use of the debugger is possible only if you know how to make the
+bug happen again.  If you can't make it happen again, at least copy
+the whole error message.
+
+     <li>Check whether any programs you have loaded into the Lisp world,
+including your <samp><span class="file">.emacs</span></samp> file, set any variables that may affect the
+functioning of Emacs.  Also, see whether the problem happens in a
+freshly started Emacs without loading your <samp><span class="file">.emacs</span></samp> file (start
+Emacs with the <code>-Q</code> switch to prevent loading the init files).  If
+the problem does <em>not</em> occur then, you must report the precise
+contents of any programs that you must load into the Lisp world in order
+to cause the problem to occur.
+
+     <li>If the problem does depend on an init file or other Lisp programs that
+are not part of the standard Emacs system, then you should make sure it
+is not a bug in those programs by complaining to their maintainers
+first.  After they verify that they are using Emacs in a way that is
+supposed to work, they should report the bug.
+
+     <li>If you wish to mention something in the GNU Emacs source, show the line
+of code with a few lines of context.  Don't just give a line number.
+
+     <p>The line numbers in the development sources don't match those in your
+sources.  It would take extra work for the maintainers to determine what
+code is in your version at a given line number, and we could not be
+certain.
+
+     <li>Additional information from a C debugger such as GDB might enable
+someone to find a problem on a machine which he does not have available. 
+If you don't know how to use GDB, please read the GDB manual&mdash;it is not
+very long, and using GDB is easy.  You can find the GDB distribution,
+including the GDB manual in online form, in most of the same places you
+can find the Emacs distribution.  To run Emacs under GDB, you should
+switch to the <samp><span class="file">src</span></samp> subdirectory in which Emacs was compiled, then
+do &lsquo;<samp><span class="samp">gdb emacs</span></samp>&rsquo;.  It is important for the directory <samp><span class="file">src</span></samp> to be
+current so that GDB will read the <samp><span class="file">.gdbinit</span></samp> file in this
+directory.
+
+     <p>However, you need to think when you collect the additional information
+if you want it to show what causes the bug.
+
+     <p><a name="index-backtrace-for-bug-reports-4117"></a>For example, many people send just a backtrace, but that is not very
+useful by itself.  A simple backtrace with arguments often conveys
+little about what is happening inside GNU Emacs, because most of the
+arguments listed in the backtrace are pointers to Lisp objects.  The
+numeric values of these pointers have no significance whatever; all that
+matters is the contents of the objects they point to (and most of the
+contents are themselves pointers).
+
+     <p><a name="index-debug_005fprint-4118"></a>To provide useful information, you need to show the values of Lisp
+objects in Lisp notation.  Do this for each variable which is a Lisp
+object, in several stack frames near the bottom of the stack.  Look at
+the source to see which variables are Lisp objects, because the debugger
+thinks of them as integers.
+
+     <p>To show a variable's value in Lisp syntax, first print its value, then
+use the user-defined GDB command <code>pr</code> to print the Lisp object in
+Lisp syntax.  (If you must use another debugger, call the function
+<code>debug_print</code> with the object as an argument.)  The <code>pr</code>
+command is defined by the file <samp><span class="file">.gdbinit</span></samp>, and it works only if you
+are debugging a running process (not with a core dump).
+
+     <p>To make Lisp errors stop Emacs and return to GDB, put a breakpoint at
+<code>Fsignal</code>.
+
+     <p>For a short listing of Lisp functions running, type the GDB
+command <code>xbacktrace</code>.
+
+     <p>The file <samp><span class="file">.gdbinit</span></samp> defines several other commands that are useful
+for examining the data types and contents of Lisp objects.  Their names
+begin with &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  These commands work at a lower level than
+<code>pr</code>, and are less convenient, but they may work even when
+<code>pr</code> does not, such as when debugging a core dump or when Emacs has
+had a fatal signal.
+
+     <p><a name="index-debugging-Emacs_002c-tricks-and-techniques-4119"></a>More detailed advice and other useful techniques for debugging Emacs
+are available in the file <samp><span class="file">etc/DEBUG</span></samp> in the Emacs distribution. 
+That file also includes instructions for investigating problems
+whereby Emacs stops responding (many people assume that Emacs is
+&ldquo;hung,&rdquo; whereas in fact it might be in an infinite loop).
+
+     <p>To find the file <samp><span class="file">etc/DEBUG</span></samp> in your Emacs installation, use the
+directory name stored in the variable <code>data-directory</code>. 
+</ul>
+
+   <p>Here are some things that are not necessary in a bug report:
+
+     <ul>
+<li>A description of the envelope of the bug&mdash;this is not necessary for a
+reproducible bug.
+
+     <p>Often people who encounter a bug spend a lot of time investigating
+which changes to the input file will make the bug go away and which
+changes will not affect it.
+
+     <p>This is often time-consuming and not very useful, because the way we
+will find the bug is by running a single example under the debugger
+with breakpoints, not by pure deduction from a series of examples. 
+You might as well save time by not searching for additional examples. 
+It is better to send the bug report right away, go back to editing,
+and find another bug to report.
+
+     <p>Of course, if you can find a simpler example to report <em>instead</em> of
+the original one, that is a convenience.  Errors in the output will be
+easier to spot, running under the debugger will take less time, etc.
+
+     <p>However, simplification is not vital; if you can't do this or don't have
+time to try, please report the bug with your original test case.
+
+     <li>A core dump file.
+
+     <p>Debugging the core dump might be useful, but it can only be done on
+your machine, with your Emacs executable.  Therefore, sending the core
+dump file to the Emacs maintainers won't be useful.  Above all, don't
+include the core file in an email bug report!  Such a large message
+can be extremely inconvenient.
+
+     <li>A system-call trace of Emacs execution.
+
+     <p>System-call traces are very useful for certain special kinds of
+debugging, but in most cases they give little useful information.  It is
+therefore strange that many people seem to think that <em>the</em> way to
+report information about a crash is to send a system-call trace.  Perhaps
+this is a habit formed from experience debugging programs that don't
+have source code or debugging symbols.
+
+     <p>In most programs, a backtrace is normally far, far more informative than
+a system-call trace.  Even in Emacs, a simple backtrace is generally
+more informative, though to give full information you should supplement
+the backtrace by displaying variable values and printing them as Lisp
+objects with <code>pr</code> (see above).
+
+     <li>A patch for the bug.
+
+     <p>A patch for the bug is useful if it is a good one.  But don't omit the
+other information that a bug report needs, such as the test case, on the
+assumption that a patch is sufficient.  We might see problems with your
+patch and decide to fix the problem another way, or we might not
+understand it at all.  And if we can't understand what bug you are
+trying to fix, or why your patch should be an improvement, we mustn't
+install it.
+
+     <p>See <a href="Sending-Patches.html#Sending-Patches">Sending Patches</a>, for guidelines on how to make it easy for us to
+understand and install your patches.
+
+     <li>A guess about what the bug is or what it depends on.
+
+     <p>Such guesses are usually wrong.  Even experts can't guess right about
+such things without first using the debugger to find the facts. 
+</ul>
+
+   </body></html>
+

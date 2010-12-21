@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>File Styles - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Styles.html#Styles" title="Styles">
+<link rel="prev" href="Adding-Styles.html#Adding-Styles" title="Adding Styles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="File-Styles"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Adding-Styles.html#Adding-Styles">Adding Styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Styles.html#Styles">Styles</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">6.3.4 File Styles</h4>
+
+<p><a name="index-styles_002c-file-local-304"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p><a name="index-file-local-variables-305"></a>
+The Emacs manual describes how you can customize certain variables on a
+per-file basis by including a <dfn>file local variable</dfn> block at the end
+of the file (see <a href="../emacs/File-Variables.html#File-Variables">Local Variables in Files</a>).
+
+   <p>So far, you've only seen a functional interface for setting styles in
+CC Mode, and this can't be used here.  CC Mode fills the gap by
+providing two variables for use in a file's local variable list. 
+Don't use them anywhere else!  These allow you to customize the style
+on a per-file basis:
+
+<div class="defun">
+&mdash; Variable: <b>c-file-style</b><var><a name="index-c_002dfile_002dstyle-306"></a></var><br>
+<blockquote><p><a name="index-file_002dstyle-_0028c_002d_0029-307"></a>Set this variable to a style name string in the Local Variables list. 
+From now on, when you visit the file, CC Mode will automatically set
+the file's style to this one using <code>c-set-style</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>c-file-offsets</b><var><a name="index-c_002dfile_002doffsets-308"></a></var><br>
+<blockquote><p><a name="index-file_002doffsets-_0028c_002d_0029-309"></a>Set this variable (in the Local Variables list) to an association list
+of the same format as <code>c-offsets-alist</code>.  From now on, when you
+visit the file, CC Mode will automatically institute these offsets
+using <code>c-set-offset</code>. 
+</p></blockquote></div>
+
+   <p>Note that file style settings (i.e. <code>c-file-style</code>) are applied
+before file offset settings
+(i.e. <code>c-file-offsets</code>)<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p>If you set any variable by the file local variables mechanism, that
+setting takes priority over all other settings, even those in your
+mode hooks (see <a href="CC-Hooks.html#CC-Hooks">CC Hooks</a>).  Any individual setting of a variable
+will override one made through <code>c-file-style</code> or
+<code>c-file-offsets</code>. 
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Also, if either of these are set
+in a file's local variable section, all the style variable values are
+made local to that buffer, even if
+<code>c-style-variables-are-local-p</code> is <code>nil</code>.  Since this
+variable is virtually always non-<code>nil</code> anyhow, you're unlikely to
+notice this effect.</p>
+
+   <hr></div>
+
+   </body></html>
+

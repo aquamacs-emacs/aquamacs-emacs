@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Configuring mairix - Emacs Interface for Mairix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Emacs Interface for Mairix">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="About-mairix-and-mairix_002eel.html#About-mairix-and-mairix_002eel" title="About mairix and mairix.el">
+<link rel="next" href="Setting-up-mairix_002eel.html#Setting-up-mairix_002eel" title="Setting up mairix.el">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Configuring-mairix"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Setting-up-mairix_002eel.html#Setting-up-mairix_002eel">Setting up mairix.el</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="About-mairix-and-mairix_002eel.html#About-mairix-and-mairix_002eel">About mairix and mairix.el</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">2 Configuring mairix</h2>
+
+<p>Setting up mairix is easy: simply create a <samp><span class="file">.mairixrc</span></samp> file with
+(at least) the following entries:
+
+<pre class="example">     # Your mail base folder
+     base=~/Mail
+</pre>
+   <p>This is the base folder for your mails.  All the following directories,
+except the one for the database, are relative to this base folder.
+
+<pre class="example">     mbox = ... your mbox files which should be indexed ...
+     maildir= ... your maildir folders which should be indexed ...
+     mh= ... your nnml/mh folders which should be indexed ...
+</pre>
+   <p>Specify all your maildir/nnml folders and mbox files (relative to the
+base directory!) you want to index with mairix.  Use colons to separate
+different files.  See the man-page for <code>mairixrc</code> for details.
+
+<pre class="example">     mformat = mbox
+     database = ... location of database file ...
+</pre>
+   <p>This chooses <code>mbox</code> as the output format for the mairix search
+results.  Currently, this is the supported format by mairix.el, but
+technically it should be possible to also use maildir or mh; it's just
+not tested (yet).
+
+   <p>You should make sure that you don't accidentally index the search
+results produced by mairix.  This can be done by pointing
+`mairix-file-path' to a directory which is surely not indexed by mairix. 
+Another possibility is to use something like
+
+<pre class="example">     omit = mairix*
+</pre>
+   <p>in the <samp><span class="file">.mairixrc</span></samp> file, and prefix every search file you use with
+&ldquo;mairix&rdquo;.
+
+<pre class="example">     database = /home/user/.mairixdatabase
+</pre>
+   <p>This specifies the name of the database file.  Note that this is not
+relative to the <code>base</code> folder.
+
+   <p>See the man page for <code>mairixrc</code> for details and further options,
+especially regarding wildcard usage, which may be a little different
+than you are used to.
+
+   <p>Now simply call <code>mairix</code> to create the index for the first time. 
+Note that this may take a few minutes, but every following index will do
+the updates incrementally and hence is very fast.
+
+   </body></html>
+

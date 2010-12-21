@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Building Vectors - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Matrix-Functions.html#Matrix-Functions" title="Matrix Functions">
+<link rel="prev" href="Packing-and-Unpacking.html#Packing-and-Unpacking" title="Packing and Unpacking">
+<link rel="next" href="Extracting-Elements.html#Extracting-Elements" title="Extracting Elements">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Building-Vectors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Extracting-Elements.html#Extracting-Elements">Extracting Elements</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Packing-and-Unpacking.html#Packing-and-Unpacking">Packing and Unpacking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>
+<hr>
+</div>
+
+<h3 class="section">10.2 Building Vectors</h3>
+
+<p class="noindent">Vectors and matrices can be added,
+subtracted, multiplied, and divided; see <a href="Basic-Arithmetic.html#Basic-Arithmetic">Basic Arithmetic</a>.
+
+   <p><a name="index-g_t_007c-1203"></a><a name="index-calc_002dconcat-1204"></a><a name="index-g_t_007c-1205"></a>The <kbd>|</kbd> (<code>calc-concat</code>) [<code>vconcat</code>] command &ldquo;concatenates&rdquo; two vectors
+into one.  For example, after <kbd>[&nbsp;1&nbsp;,&nbsp;2&nbsp;]<!-- /@w --> [ 3 , 4 ] |</kbd>, the stack
+will contain the single vector &lsquo;<samp><span class="samp">[1, 2, 3, 4]</span></samp>&rsquo;.  If the arguments
+are matrices, the rows of the first matrix are concatenated with the
+rows of the second.  (In other words, two matrices are just two vectors
+of row-vectors as far as <kbd>|</kbd> is concerned.)
+
+   <p>If either argument to <kbd>|</kbd> is a scalar (a non-vector), it is treated
+like a one-element vector for purposes of concatenation:  <kbd>1 [ 2 , 3 ] |</kbd>
+produces the vector &lsquo;<samp><span class="samp">[1, 2, 3]</span></samp>&rsquo;.  Likewise, if one argument is a
+matrix and the other is a plain vector, the vector is treated as a
+one-row matrix.
+
+   <p><a name="index-H-_007c-1206"></a><a name="index-append-1207"></a>The <kbd>H |</kbd> (<code>calc-append</code>) [<code>append</code>] command concatenates
+two vectors without any special cases.  Both inputs must be vectors. 
+Whether or not they are matrices is not taken into account.  If either
+argument is a scalar, the <code>append</code> function is left in symbolic form. 
+See also <code>cons</code> and <code>rcons</code> below.
+
+   <p><a name="index-I-_007c-1208"></a><a name="index-H-I-_007c-1209"></a>The <kbd>I |</kbd> and <kbd>H I |</kbd> commands are similar, but they use their
+two stack arguments in the opposite order.  Thus <kbd>I |</kbd> is equivalent
+to <kbd>&lt;TAB&gt; |</kbd>, but possibly more convenient and also a bit faster.
+
+   <p><a name="index-v-d-1210"></a><a name="index-V-d-1211"></a><a name="index-calc_002ddiag-1212"></a><a name="index-diag-1213"></a>The <kbd>v d</kbd> (<code>calc-diag</code>) [<code>diag</code>] function builds a diagonal
+square matrix.  The optional numeric prefix gives the number of rows
+and columns in the matrix.  If the value at the top of the stack is a
+vector, the elements of the vector are used as the diagonal elements; the
+prefix, if specified, must match the size of the vector.  If the value on
+the stack is a scalar, it is used for each element on the diagonal, and
+the prefix argument is required.
+
+   <p>To build a constant square matrix, e.g., a
+<!-- @math{3\times3} -->
+3x3
+matrix filled with ones, use <kbd>0 M-3 v d 1 +</kbd>, i.e., build a zero
+matrix first and then add a constant value to that matrix.  (Another
+alternative would be to use <kbd>v b</kbd> and <kbd>v a</kbd>; see below.)
+
+   <p><a name="index-v-i-1214"></a><a name="index-V-i-1215"></a><a name="index-calc_002dident-1216"></a><a name="index-idn-1217"></a>The <kbd>v i</kbd> (<code>calc-ident</code>) [<code>idn</code>] function builds an identity
+matrix of the specified size.  It is a convenient form of <kbd>v d</kbd>
+where the diagonal element is always one.  If no prefix argument is given,
+this command prompts for one.
+
+   <p>In algebraic notation, &lsquo;<samp><span class="samp">idn(a,n)</span></samp>&rsquo; acts much like &lsquo;<samp><span class="samp">diag(a,n)</span></samp>&rsquo;,
+except that &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is required to be a scalar (non-vector) quantity. 
+If &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is omitted, &lsquo;<samp><span class="samp">idn(a)</span></samp>&rsquo; represents &lsquo;<samp><span class="samp">a</span></samp>&rsquo; times an
+identity matrix of unknown size.  Calc can operate algebraically on
+such generic identity matrices, and if one is combined with a matrix
+whose size is known, it is converted automatically to an identity
+matrix of a suitable matching size.  The <kbd>v i</kbd> command with an
+argument of zero creates a generic identity matrix, &lsquo;<samp><span class="samp">idn(1)</span></samp>&rsquo;. 
+Note that in dimensioned Matrix mode (see <a href="Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>), generic
+identity matrices are immediately expanded to the current default
+dimensions.
+
+   <p><a name="index-v-x-1218"></a><a name="index-V-x-1219"></a><a name="index-calc_002dindex-1220"></a><a name="index-index-1221"></a>The <kbd>v x</kbd> (<code>calc-index</code>) [<code>index</code>] function builds a vector
+of consecutive integers from 1 to <var>n</var>, where <var>n</var> is the numeric
+prefix argument.  If you do not provide a prefix argument, you will be
+prompted to enter a suitable number.  If <var>n</var> is negative, the result
+is a vector of negative integers from <var>n</var> to <i>-1</i>.
+
+   <p>With a prefix argument of just <kbd>C-u</kbd>, the <kbd>v x</kbd> command takes
+three values from the stack: <var>n</var>, <var>start</var>, and <var>incr</var> (with
+<var>incr</var> at top-of-stack).  Counting starts at <var>start</var> and increases
+by <var>incr</var> for successive vector elements.  If <var>start</var> or <var>n</var>
+is in floating-point format, the resulting vector elements will also be
+floats.  Note that <var>start</var> and <var>incr</var> may in fact be any kind
+of numbers or formulas.
+
+   <p>When <var>start</var> and <var>incr</var> are specified, a negative <var>n</var> has a
+different interpretation:  It causes a geometric instead of arithmetic
+sequence to be generated.  For example, &lsquo;<samp><span class="samp">index(-3, a, b)</span></samp>&rsquo; produces
+&lsquo;<samp><span class="samp">[a, a b, a b^2]</span></samp>&rsquo;.  If you omit <var>incr</var> in the algebraic form,
+&lsquo;<samp><span class="samp">index(</span><var>n</var><span class="samp">, </span><var>start</var><span class="samp">)</span></samp>&rsquo;, the default value for <var>incr</var>
+is one for positive <var>n</var> or two for negative <var>n</var>.
+
+   <p><a name="index-v-b-1222"></a><a name="index-V-b-1223"></a><a name="index-calc_002dbuild_002dvector-1224"></a><a name="index-cvec-1225"></a>The <kbd>v b</kbd> (<code>calc-build-vector</code>) [<code>cvec</code>] function builds a
+vector of <var>n</var> copies of the value on the top of the stack, where <var>n</var>
+is the numeric prefix argument.  In algebraic formulas, &lsquo;<samp><span class="samp">cvec(x,n,m)</span></samp>&rsquo;
+can also be used to build an <var>n</var>-by-<var>m</var> matrix of copies of <var>x</var>. 
+(Interactively, just use <kbd>v b</kbd> twice: once to build a row, then again
+to build a matrix of copies of that row.)
+
+   <p><a name="index-v-h-1226"></a><a name="index-V-h-1227"></a><a name="index-I-v-h-1228"></a><a name="index-I-V-h-1229"></a><a name="index-calc_002dhead-1230"></a><a name="index-calc_002dtail-1231"></a><a name="index-head-1232"></a><a name="index-tail-1233"></a>The <kbd>v h</kbd> (<code>calc-head</code>) [<code>head</code>] function returns the first
+element of a vector.  The <kbd>I v h</kbd> (<code>calc-tail</code>) [<code>tail</code>]
+function returns the vector with its first element removed.  In both
+cases, the argument must be a non-empty vector.
+
+   <p><a name="index-v-k-1234"></a><a name="index-V-k-1235"></a><a name="index-calc_002dcons-1236"></a><a name="index-cons-1237"></a>The <kbd>v k</kbd> (<code>calc-cons</code>) [<code>cons</code>] function takes a value <var>h</var>
+and a vector <var>t</var> from the stack, and produces the vector whose head is
+<var>h</var> and whose tail is <var>t</var>.  This is similar to <kbd>|</kbd>, except
+if <var>h</var> is itself a vector, <kbd>|</kbd> will concatenate the two vectors
+whereas <code>cons</code> will insert <var>h</var> at the front of the vector <var>t</var>.
+
+   <p><a name="index-H-v-h-1238"></a><a name="index-H-V-h-1239"></a><a name="index-rhead-1240"></a><a name="index-H-I-v-h-1241"></a><a name="index-H-I-V-h-1242"></a><a name="index-H-v-k-1243"></a><a name="index-H-V-k-1244"></a><a name="index-rtail-1245"></a><a name="index-rcons-1246"></a>Each of these three functions also accepts the Hyperbolic flag [<code>rhead</code>,
+<code>rtail</code>, <code>rcons</code>] in which case <var>t</var> instead represents
+the <em>last</em> single element of the vector, with <var>h</var>
+representing the remainder of the vector.  Thus the vector
+&lsquo;<samp><span class="samp">[a, b, c, d] = cons(a, [b, c, d]) = rcons([a, b, c], d)</span></samp>&rsquo;. 
+Also, &lsquo;<samp><span class="samp">head([a, b, c, d]) = a</span></samp>&rsquo;, &lsquo;<samp><span class="samp">tail([a, b, c, d]) = [b, c, d]</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">rhead([a, b, c, d]) = [a, b, c]</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">rtail([a, b, c, d]) = d</span></samp>&rsquo;.
+
+   </body></html>
+

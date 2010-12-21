@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Conditionals in Macros - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
+<link rel="prev" href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros" title="Naming Keyboard Macros">
+<link rel="next" href="Loops-in-Macros.html#Loops-in-Macros" title="Loops in Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Conditionals-in-Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Loops-in-Macros.html#Loops-in-Macros">Loops in Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros">Naming Keyboard Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.2 Conditionals in Keyboard Macros</h4>
+
+<p class="noindent"><a name="index-Z-_005b-2273"></a><a name="index-Z-_005d-2274"></a><a name="index-calc_002dkbd_002dif-2275"></a><a name="index-calc_002dkbd_002delse-2276"></a><a name="index-calc_002dkbd_002delse_002dif-2277"></a><a name="index-calc_002dkbd_002dend_002dif-2278"></a><a name="index-Conditional-structures-2279"></a>The <kbd>Z [</kbd> (<code>calc-kbd-if</code>) and <kbd>Z ]</kbd> (<code>calc-kbd-end-if</code>)
+commands allow you to put simple tests in a keyboard macro.  When Calc
+sees the <kbd>Z [</kbd>, it pops an object from the stack and, if the object is
+a non-zero value, continues executing keystrokes.  But if the object is
+zero, or if it is not provably nonzero, Calc skips ahead to the matching
+<kbd>Z ]</kbd> keystroke.  See <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>, for a set of commands for
+performing tests which conveniently produce 1 for true and 0 for false.
+
+   <p>For example, <kbd>&lt;RET&gt; 0 a &lt; Z [ n Z ]</kbd> implements an absolute-value
+function in the form of a keyboard macro.  This macro duplicates the
+number on the top of the stack, pushes zero and compares using <kbd>a &lt;</kbd>
+(<code>calc-less-than</code>), then, if the number was less than zero,
+executes <kbd>n</kbd> (<code>calc-change-sign</code>).  Otherwise, the change-sign
+command is skipped.
+
+   <p>To program this macro, type <kbd>C-x (</kbd>, type the above sequence of
+keystrokes, then type <kbd>C-x )</kbd>.  Note that the keystrokes will be
+executed while you are making the definition as well as when you later
+re-execute the macro by typing <kbd>X</kbd>.  Thus you should make sure a
+suitable number is on the stack before defining the macro so that you
+don't get a stack-underflow error during the definition process.
+
+   <p>Conditionals can be nested arbitrarily.  However, there should be exactly
+one <kbd>Z ]</kbd> for each <kbd>Z [</kbd> in a keyboard macro.
+
+   <p><a name="index-Z-_003a-2280"></a>The <kbd>Z :</kbd> (<code>calc-kbd-else</code>) command allows you to choose between
+two keystroke sequences.  The general format is <var>cond</var><kbd> Z [
+</kbd><var>then-part</var><kbd> Z : </kbd><var>else-part</var><kbd> Z ]</kbd>.  If <var>cond</var> is true
+(i.e., if the top of stack contains a non-zero number after <var>cond</var>
+has been executed), the <var>then-part</var> will be executed and the
+<var>else-part</var> will be skipped.  Otherwise, the <var>then-part</var> will
+be skipped and the <var>else-part</var> will be executed.
+
+   <p><a name="index-Z-_007c-2281"></a>The <kbd>Z |</kbd> (<code>calc-kbd-else-if</code>) command allows you to choose
+between any number of alternatives.  For example,
+<var>cond1</var><kbd> Z [ </kbd><var>part1</var><kbd> Z : </kbd><var>cond2</var><kbd> Z | </kbd><var>part2</var><kbd> Z :
+</kbd><var>part3</var><kbd> Z ]</kbd> will execute <var>part1</var> if <var>cond1</var> is true,
+otherwise it will execute <var>part2</var> if <var>cond2</var> is true, otherwise
+it will execute <var>part3</var>.
+
+   <p>More precisely, <kbd>Z [</kbd> pops a number and conditionally skips to the
+next matching <kbd>Z :</kbd> or <kbd>Z ]</kbd> key.  <kbd>Z&nbsp;]</kbd><!-- /@w --> has no effect when
+actually executed.  <kbd>Z :</kbd> skips to the next matching <kbd>Z ]</kbd>. 
+<kbd>Z |</kbd> pops a number and conditionally skips to the next matching
+<kbd>Z :</kbd> or <kbd>Z ]</kbd>; thus, <kbd>Z [</kbd> and <kbd>Z |</kbd> are functionally
+equivalent except that <kbd>Z [</kbd> participates in nesting but <kbd>Z |</kbd>
+does not.
+
+   <p>Calc's conditional and looping constructs work by scanning the
+keyboard macro for occurrences of character sequences like &lsquo;<samp><span class="samp">Z:</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">Z]</span></samp>&rsquo;.  One side-effect of this is that if you use these
+constructs you must be careful that these character pairs do not
+occur by accident in other parts of the macros.  Since Calc rarely
+uses shift-<kbd>Z</kbd> for any purpose except as a prefix character, this
+is not likely to be a problem.  Another side-effect is that it will
+not work to define your own custom key bindings for these commands. 
+Only the standard shift-<kbd>Z</kbd> bindings will work correctly.
+
+   <p><a name="index-Z-C_002dg-2282"></a>If Calc gets stuck while skipping characters during the definition of a
+macro, type <kbd>Z C-g</kbd> to cancel the definition.  (Typing plain <kbd>C-g</kbd>
+actually adds a <kbd>C-g</kbd> keystroke to the macro.)
+
+   </body></html>
+

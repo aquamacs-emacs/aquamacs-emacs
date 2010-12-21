@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Making a temporary copy - GNU Flymake 0.3</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Flymake 0.3">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Flymake-Implementation.html#Flymake-Implementation" title="Flymake Implementation">
+<link rel="prev" href="Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible" title="Determining whether syntax check is possible">
+<link rel="next" href="Locating-a-master-file.html#Locating-a-master-file" title="Locating a master file">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Flymake (version 0.3, April 2004),
+which is a universal on-the-fly syntax checker for GNU Emacs.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Making-a-temporary-copy"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Locating-a-master-file.html#Locating-a-master-file">Locating a master file</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible">Determining whether syntax check is possible</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Flymake-Implementation.html#Flymake-Implementation">Flymake Implementation</a>
+<hr>
+</div>
+
+<h3 class="section">5.2 Making a temporary copy</h3>
+
+<p><a name="index-Temporary-copy-of-the-buffer-19"></a><a name="index-Master-file-20"></a>
+After the possibility of the syntax check has been determined, a
+temporary copy of the current buffer is made so that the most recent
+unsaved changes could be seen by the syntax check tool. Making a copy
+is quite straightforward in a standalone case (mode <code>1</code>), as it's
+just saving buffer contents to a temporary file.
+
+   <p>Things get trickier, however, when master file is involved, as it
+requires to
+
+     <ul>
+<li>locate a master file
+<li>patch it to include the current file using its new (temporary)
+name. 
+</ul>
+
+   <p>Locating a master file is discussed in the following section.
+
+   <p>Patching just changes all appropriate lines of the master file so that they
+use the new (temporary) name of the current file. For example, suppose current
+file name is <code>file.h</code>, the master file is <code>file.cpp</code>, and
+it includes current file via <code>#include "file.h"</code>. Current file's copy
+is saved to file <code>file_flymake.h</code>, so the include line must be
+changed to <code>#include "file_flymake.h"</code>. Finally, patched master file
+is saved to <code>file_flymake_master.cpp</code>, and the last one is passed to
+the syntax check tool.
+
+   </body></html>
+

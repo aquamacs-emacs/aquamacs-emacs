@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+<title>Propagating marks - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="nnmairix.html#nnmairix" title="nnmairix">
+<link rel="prev" href="nnmairix-keyboard-shortcuts.html#nnmairix-keyboard-shortcuts" title="nnmairix keyboard shortcuts">
+<link rel="next" href="nnmairix-tips-and-tricks.html#nnmairix-tips-and-tricks" title="nnmairix tips and tricks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Propagating-marks"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="nnmairix-tips-and-tricks.html#nnmairix-tips-and-tricks">nnmairix tips and tricks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="nnmairix-keyboard-shortcuts.html#nnmairix-keyboard-shortcuts">nnmairix keyboard shortcuts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="nnmairix.html#nnmairix">nnmairix</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.18.2.7 Propagating marks</h5>
+
+<p>First of: you really need a patched mairix binary for using the marks
+propagation feature efficiently. Otherwise, you would have to update
+the mairix database all the time. You can get the patch at
+
+   <p><a href="http://www.randomsample.de/mairix-maildir-patch.tar">http://www.randomsample.de/mairix-maildir-patch.tar</a>
+
+   <p>You need the mairix v0.21 source code for this patch; everything else
+is explained in the accompanied readme file. If you don't want to use
+marks propagation, you don't have to apply these patches, but they also
+fix some annoyances regarding changing maildir flags, so it might still
+be useful to you.
+
+   <p>With the patched mairix binary, you can use <code>nnmairix</code> as an
+alternative to mail splitting (see <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>). For
+example, instead of splitting all mails from &lsquo;<samp><span class="samp">david@foobar.com</span></samp>&rsquo;
+into a group, you can simply create a search group with the query
+&lsquo;<samp><span class="samp">f:david@foobar.com</span></samp>&rsquo;. This is actually what &ldquo;smart folders&rdquo; are
+all about: simply put everything in one mail folder and dynamically
+create searches instead of splitting. This is more flexible, since you
+can dynamically change your folders any time you want to. This also
+implies that you will usually read your mails in the <code>nnmairix</code>
+groups instead of your &ldquo;real&rdquo; mail groups.
+
+   <p>There is one problem, though: say you got a new mail from
+&lsquo;<samp><span class="samp">david@foobar.com</span></samp>&rsquo;; it will now show up in two groups, the
+&ldquo;real&rdquo; group (your INBOX, for example) and in the <code>nnmairix</code>
+search group (provided you have updated the mairix database). Now you
+enter the <code>nnmairix</code> group and read the mail. The mail will be
+marked as read, but only in the <code>nnmairix</code> group&mdash;in the &ldquo;real&rdquo;
+mail group it will be still shown as unread.
+
+   <p>You could now catch up the mail group (see <a href="Group-Data.html#Group-Data">Group Data</a>), but this is
+tedious and error prone, since you may overlook mails you don't have
+created <code>nnmairix</code> groups for. Of course, you could first use
+<code>nnmairix-goto-original-article</code> (see <a href="nnmairix-keyboard-shortcuts.html#nnmairix-keyboard-shortcuts">nnmairix keyboard shortcuts</a>) and then read the mail in the original group, but that's
+even more cumbersome.
+
+   <p>Clearly, the easiest way would be if marks could somehow be
+automatically set for the original article. This is exactly what
+<em>marks propagation</em> is about.
+
+   <p>Marks propagation is deactivated by default. You can activate it for a
+certain <code>nnmairix</code> group with
+<code>nnmairix-group-toggle-propmarks-this-group</code> (bound to <kbd>G b
+p</kbd>). This function will warn you if you try to use it with your default
+search group; the reason is that the default search group is used for
+temporary searches, and it's easy to accidentally propagate marks from
+this group. However, you can ignore this warning if you really want to.
+
+   <p>With marks propagation enabled, all the marks you set in a <code>nnmairix</code>
+group should now be propagated to the original article. For example,
+you can now tick an article (by default with <kbd>!</kbd>) and this mark should
+magically be set for the original article, too.
+
+   <p>A few more remarks which you may or may not want to know:
+
+   <p><a name="index-nnmairix_002dpropagate_002dmarks_002dupon_002dclose-555"></a>Marks will not be set immediately, but only upon closing a group. This
+not only makes marks propagation faster, it also avoids problems with
+dangling symlinks when dealing with maildir files (since changing flags
+will change the file name). You can also control when to propagate marks
+via <code>nnmairix-propagate-marks-upon-close</code> (see the doc-string for
+details).
+
+   <p>Obviously, <code>nnmairix</code> will have to look up the original group for every
+article you want to set marks for. If available, <code>nnmairix</code> will first use
+the registry for determining the original group. The registry is very
+fast, hence you should really, really enable the registry when using
+marks propagation. If you don't have to worry about RAM and disc space,
+set <code>gnus-registry-max-entries</code> to a large enough value; to be on
+the safe side, choose roughly the amount of mails you index with mairix.
+
+   <p><a name="index-nnmairix_002donly_002duse_002dregistry-556"></a>If you don't want to use the registry or the registry hasn't seen the
+original article yet, <code>nnmairix</code> will use an additional mairix
+search for determining the file name of the article. This, of course, is
+way slower than the registry&mdash;if you set hundreds or even thousands of
+marks this way, it might take some time. You can avoid this situation by
+setting <code>nnmairix-only-use-registry</code> to t.
+
+   <p>Maybe you also want to propagate marks the other way round, i.e. if you
+tick an article in a "real" mail group, you'd like to have the same
+article in a <code>nnmairix</code> group ticked, too. For several good
+reasons, this can only be done efficiently if you use maildir. To
+immediately contradict myself, let me mention that it WON'T work with
+<code>nnmaildir</code>, since <code>nnmaildir</code> stores the marks externally and
+not in the file name. Therefore, propagating marks to <code>nnmairix</code>
+groups will usually only work if you use an IMAP server which uses
+maildir as its file format.
+
+   <p><a name="index-nnmairix_002dpropagate_002dmarks_002dto_002dnnmairix_002dgroups-557"></a>If you work with this setup, just set
+<code>nnmairix-propagate-marks-to-nnmairix-groups</code> to <code>t</code> and see what
+happens. If you don't like what you see, just set it to <code>nil</code> again. One
+problem might be that you get a wrong number of unread articles; this
+usually happens when you delete or expire articles in the original
+groups. When this happens, you can recreate the <code>nnmairix</code> group on the
+back end using <kbd>G b d</kbd>.
+
+   </body></html>
+

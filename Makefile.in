@@ -125,7 +125,7 @@ libexecdir=@libexecdir@
 # (and they contain cross-references that expect them to be there).
 mandir=@mandir@
 man1dir=$(mandir)/man1
-MAN_PAGES=b2m.1 ctags.1 ebrowse.1 emacs.1 emacsclient.1 etags.1 \
+MAN_PAGES=ctags.1 ebrowse.1 emacs.1 emacsclient.1 etags.1 \
           grep-changelog.1 rcs-checkin.1
 
 # Where to install and expect the info files describing Emacs.	In the
@@ -425,25 +425,22 @@ install-arch-dep: mkdir
 	-chmod 1755 $(DESTDIR)${bindir}/$(EMACSFULL)
 	rm -f $(DESTDIR)${bindir}/$(EMACS)
 	-ln $(DESTDIR)${bindir}/$(EMACSFULL) $(DESTDIR)${bindir}/$(EMACS)
-	-unset CDPATH; \
-	for f in `cd lib-src && echo fns-*.el`; do \
-	  if test -r lib-src/$$f ; then \
-	    ${INSTALL_DATA} lib-src/$$f $(DESTDIR)${archlibdir}/$$f; \
-	  else true; fi ; \
-	done
-	if test "${ns_appdir}" != ""; then \
+	if test "${ns_appresdir}" != ""; then \
 	  ( cd ${ns_appresdir} ; \
 	    if test -d share/emacs ; then dir=share/emacs/*/*; $(MV_DIRS); fi;\
 	    if test -d share/info ; then dir=share/info; $(MV_DIRS) ; fi ; \
 	    rm -fr share ) ; \
-	  ( cd ${ns_appbindir}/libexec ; dir=emacs/*/*/* ; $(MV_DIRS); \
+	  ( cd ${ns_appbindir}libexec ; dir=emacs/*/*/* ; $(MV_DIRS); \
 	    rm -fr emacs ; \
 	    cd ${ns_appbindir} ; mv emacs Aquamacs ) ; \
-	  ( cd ${ns_appbindir}/bin ; rm -f emacs emacs-23* ; \
+	  ( cd ${ns_appbindir}bin ; rm -f emacs emacs-24* ; \
 	    ln -sf ../libexec/* .) ; \
 	else true ; fi
 
-## Aquamacs
+## FIXME is the emacs-24* bit above really necessary and correct?
+## What if I have 24.1 and 24.2 installed at the same time?
+## In any case, it should use something like echo $version | sed 's/\..*//'
+## instead of hard-coding a version.
 
 AQUAMACS_DIR = $(srcdir)/aquamacs
 AQUAMACS_VERSION = $(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $(AQUAMACS_DIR)/src/site-lisp/site-start.el)
@@ -462,10 +459,6 @@ install-aquamacs: mkdir
 	  cd - >/dev/null ; \
 	  (cd $(ns_appresdir)/etc/images && find . -name '*.svg' -delete ; cd -) ; \
 	  cp $(AQUAMACS_DIR)/src/etc/aquamacs-splash-screen.jpg $(ns_appresdir)/etc/images/ ; \
-	  rm -r "$(ns_appresdir)/Emacs Manual" 2>/dev/null ; \
-	  cp -r "$(AQUAMACS_DIR)/doc/Emacs Manual" "$(ns_appresdir)/Emacs Manual" ; \
-	  rm -r "$(ns_appresdir)/Emacs Lisp Reference" 2>/dev/null ; \
-	  cp -r "$(AQUAMACS_DIR)/doc/Emacs Lisp Reference" "$(ns_appresdir)/Emacs Lisp Reference" ; \
 	  rm -r "$(ns_appresdir)/Aquamacs Help" 2>/dev/null ; \
 	  cp -r $(AQUAMACS_DIR)"/doc/Aquamacs Help" "$(ns_appresdir)/Aquamacs Help" ; \
 	  (cd $(ns_appresdir)/leim ; rm quail/*.el quail/*.el.gz ja-dic/*.el ja-dic/*.el.gz ; cd -) ; \
@@ -722,9 +715,6 @@ uninstall:
 	    esac ;					\
 	  fi ;						\
 	done
-	if [ -d $(DESTDIR)${archlibdir} ]; then \
-	  (cd $(DESTDIR)${archlibdir} && rm -f fns-*) \
-	fi
 	-rm -rf $(DESTDIR)${libexecdir}/emacs/${version}
 	(cd $(DESTDIR)${infodir} && \
 	  for elt in $(INFO_FILES); do \

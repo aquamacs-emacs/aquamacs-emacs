@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+<title>Programming Answer 11 - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link rel="prev" href="Programming-Answer-10.html#Programming-Answer-10" title="Programming Answer 10">
+<link rel="next" href="Programming-Answer-12.html#Programming-Answer-12" title="Programming Answer 12">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Programming-Answer-11"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Programming-Answer-12.html#Programming-Answer-12">Programming Answer 12</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Programming-Answer-10.html#Programming-Answer-10">Programming Answer 10</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.7.68 Programming Tutorial Exercise 11</h4>
+
+<p class="noindent">First we define a dummy program to go on the <kbd>z s</kbd> key.  The true
+<kbd>z&nbsp;s</kbd><!-- /@w --> key is supposed to take two numbers from the stack and
+return one number, so &lt;DEL&gt; as a dummy definition will make
+sure the stack comes out right.
+
+<pre class="smallexample">     2:  4          1:  4                         2:  4
+     1:  2              .                         1:  2
+         .                                            .
+     
+       4 &lt;RET&gt; 2       C-x ( &lt;DEL&gt; C-x )  Z K s &lt;RET&gt;       2
+</pre>
+   <p>The last step replaces the 2 that was eaten during the creation
+of the dummy <kbd>z s</kbd> command.  Now we move on to the real
+definition.  The recurrence needs to be rewritten slightly,
+to the form &lsquo;<samp><span class="samp">s(n,m) = s(n-1,m-1) - (n-1) s(n-1,m)</span></samp>&rsquo;.
+
+   <p>(Because this definition is long, it will be repeated in concise form
+below.  You can use <kbd>C-x * m</kbd> to load it from there.)
+
+<pre class="smallexample">     2:  4        4:  4       3:  4       2:  4
+     1:  2        3:  2       2:  2       1:  2
+         .        2:  4       1:  0           .
+                  1:  2           .
+                      .
+     
+       C-x (       M-2 &lt;RET&gt;        a =         Z [  &lt;DEL&gt; &lt;DEL&gt; 1  Z :
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     4:  4       2:  4                     2:  3      4:  3    4:  3    3:  3
+     3:  2       1:  2                     1:  2      3:  2    3:  2    2:  2
+     2:  2           .                         .      2:  3    2:  3    1:  3
+     1:  0                                            1:  2    1:  1        .
+         .                                                .        .
+     
+       &lt;RET&gt; 0   a = Z [  &lt;DEL&gt; &lt;DEL&gt; 0  Z :  &lt;TAB&gt; 1 - &lt;TAB&gt;   M-2 &lt;RET&gt;     1 -      z s
+</pre>
+   <p class="noindent">(Note that the value 3 that our dummy <kbd>z s</kbd> produces is not correct;
+it is merely a placeholder that will do just as well for now.)
+
+<pre class="smallexample">     3:  3               4:  3           3:  3       2:  3      1:  -6
+     2:  3               3:  3           2:  3       1:  9          .
+     1:  2               2:  3           1:  3           .
+         .               1:  2               .
+                             .
+     
+      M-&lt;TAB&gt; M-&lt;TAB&gt;     &lt;TAB&gt; &lt;RET&gt; M-&lt;TAB&gt;         z s          *          -
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  -6                          2:  4          1:  11      2:  11
+         .                           1:  2              .       1:  11
+                                         .                          .
+     
+       Z ] Z ] C-x )   Z K s &lt;RET&gt;      &lt;DEL&gt; 4 &lt;RET&gt; 2       z s      M-&lt;RET&gt; k s
+</pre>
+   <p>Even though the result that we got during the definition was highly
+bogus, once the definition is complete the <kbd>z s</kbd> command gets
+the right answers.
+
+   <p>Here's the full program once again:
+
+<pre class="example">     C-x (  M-2 &lt;RET&gt; a =
+            Z [  &lt;DEL&gt; &lt;DEL&gt; 1
+            Z :  &lt;RET&gt; 0 a =
+                 Z [  &lt;DEL&gt; &lt;DEL&gt; 0
+                 Z :  &lt;TAB&gt; 1 - &lt;TAB&gt; M-2 &lt;RET&gt; 1 - z s
+                      M-&lt;TAB&gt; M-&lt;TAB&gt; &lt;TAB&gt; &lt;RET&gt; M-&lt;TAB&gt; z s * -
+                 Z ]
+            Z ]
+     C-x )
+</pre>
+   <p>You can read this definition using <kbd>C-x * m</kbd> (<code>read-kbd-macro</code>)
+followed by <kbd>Z K s</kbd>, without having to make a dummy definition
+first, because <code>read-kbd-macro</code> doesn't need to execute the
+definition as it reads it in.  For this reason, <code>C-x * m</code> is often
+the easiest way to create recursive programs in Calc.
+
+   </body></html>
+

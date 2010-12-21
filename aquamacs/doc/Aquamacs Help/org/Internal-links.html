@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Internal links - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hyperlinks.html#Hyperlinks" title="Hyperlinks">
+<link rel="prev" href="Link-format.html#Link-format" title="Link format">
+<link rel="next" href="External-links.html#External-links" title="External links">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Internal-links"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="External-links.html#External-links">External links</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Link-format.html#Link-format">Link format</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinks.html#Hyperlinks">Hyperlinks</a>
+<hr>
+</div>
+
+<h3 class="section">4.2 Internal links</h3>
+
+<p><a name="index-internal-links-288"></a><a name="index-links_002c-internal-289"></a><a name="index-targets_002c-for-links-290"></a>
+<a name="index-property_002c-CUSTOM_005fID-291"></a>If the link does not look like a URL, it is considered to be internal in the
+current file.  The most important case is a link like
+&lsquo;<samp><span class="samp">[[#my-custom-id]]</span></samp>&rsquo; which will link to the entry with the
+<code>CUSTOM_ID</code> property &lsquo;<samp><span class="samp">my-custom-id</span></samp>&rsquo;.  Such custom IDs are very good
+for HTML export (see <a href="HTML-export.html#HTML-export">HTML export</a>) where they produce pretty section
+links.  You are responsible yourself to make sure these custom IDs are unique
+in a file.
+
+   <p>Links such as &lsquo;<samp><span class="samp">[[My Target]]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">[[My Target][Find my target]]</span></samp>&rsquo;
+lead to a text search in the current file.
+
+   <p>The link can be followed with <kbd>C-c C-o</kbd> when the cursor is on the link,
+or with a mouse click (see <a href="Handling-links.html#Handling-links">Handling links</a>).  Links to custom IDs will
+point to the corresponding headline.  The preferred match for a text link is
+a <i>dedicated target</i>: the same string in double angular brackets.  Targets
+may be located anywhere; sometimes it is convenient to put them into a
+comment line. For example
+
+<pre class="example">     # &lt;&lt;My Target&gt;&gt;
+</pre>
+   <p class="noindent">In HTML export (see <a href="HTML-export.html#HTML-export">HTML export</a>), such targets will become
+named anchors for direct access through &lsquo;<samp><span class="samp">http</span></samp>&rsquo; links<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p>If no dedicated target exists, Org will search for the words in the link.  In
+the above example the search would be for &lsquo;<samp><span class="samp">my target</span></samp>&rsquo;.  Links starting
+with a star like &lsquo;<samp><span class="samp">*My Target</span></samp>&rsquo; restrict the search to
+headlines<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  When searching, Org mode will first try an
+exact match, but then move on to more and more lenient searches.  For
+example, the link &lsquo;<samp><span class="samp">[[*My Targets]]</span></samp>&rsquo; will find any of the following:
+
+<pre class="example">     ** My targets
+     ** TODO my targets are bright
+     ** my 20 targets are
+</pre>
+   <p>Following a link pushes a mark onto Org's own mark ring.  You can
+return to the previous position with <kbd>C-c &amp;</kbd>.  Using this command
+several times in direct succession goes back to positions recorded
+earlier.
+
+<ul class="menu">
+<li><a accesskey="1" href="Radio-targets.html#Radio-targets">Radio targets</a>:                Make targets trigger links in plain text
+</ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Note that
+text before the first headline is usually not exported, so the first such
+target should be after the first headline, or in the line directly before the
+first headline.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> To insert a link targeting a headline, in-buffer
+completion can be used.  Just type a star followed by a few optional letters
+into the buffer and press <kbd>M-&lt;TAB&gt;</kbd>.  All headlines in the current
+buffer will be offered as completions.  See <a href="Handling-links.html#Handling-links">Handling links</a>, for more
+commands creating links.</p>
+
+   <hr></div>
+
+   </body></html>
+

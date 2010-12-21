@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>GTK Names in Emacs - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GTK-resources.html#GTK-resources" title="GTK resources">
+<link rel="prev" href="GTK-widget-names.html#GTK-widget-names" title="GTK widget names">
+<link rel="next" href="GTK-styles.html#GTK-styles" title="GTK styles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="GTK-Names-in-Emacs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GTK-styles.html#GTK-styles">GTK styles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GTK-widget-names.html#GTK-widget-names">GTK widget names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GTK-resources.html#GTK-resources">GTK resources</a>
+<hr>
+</div>
+
+<h4 class="appendixsubsec">D.6.2 GTK Widget Names in Emacs</h4>
+
+<p><a name="index-GTK-widget-names-4305"></a><a name="index-GTK-widget-classes-4306"></a>
+  In Emacs, the top level widget for a frame is a <code>GtkWindow</code>
+that contains a <code>GtkVBox</code>.  The <code>GtkVBox</code> contains the
+<code>GtkMenuBar</code> and a <code>GtkFixed</code> widget.  The vertical scroll
+bars, <code>GtkVScrollbar</code>, are contained in the <code>GtkFixed</code>
+widget.  The text you write in Emacs is drawn in the <code>GtkFixed</code>
+widget.
+
+   <p>Dialogs in Emacs are <code>GtkDialog</code> widgets.  The file dialog is a
+<code>GtkFileSelection</code> widget.
+
+<p class="noindent">To set a style for the menu bar using the absolute class name, use:
+
+<pre class="smallexample">     widget_class "GtkWindow.GtkVBox.GtkMenuBar" style "my_style"
+</pre>
+   <p class="noindent">For the scroll bar, the absolute class name is:
+
+<pre class="smallexample">     widget_class
+       "GtkWindow.GtkVBox.GtkFixed.GtkVScrollbar"
+          style "my_style"
+</pre>
+   <p class="noindent">The names for the emacs widgets, and their classes, are:
+
+   <p><table summary=""><tr align="left"><td valign="top"><code>emacs-filedialog</code>
+</td><td valign="top"><code>GtkFileSelection</code>
+<br></td></tr><tr align="left"><td valign="top"><code>emacs-dialog</code>
+</td><td valign="top"><code>GtkDialog</code>
+<br></td></tr><tr align="left"><td valign="top"><code>Emacs</code>
+</td><td valign="top"><code>GtkWindow</code>
+<br></td></tr><tr align="left"><td valign="top"><code>pane</code>
+</td><td valign="top"><code>GtkVHbox</code>
+<br></td></tr><tr align="left"><td valign="top"><code>emacs</code>
+</td><td valign="top"><code>GtkFixed</code>
+<br></td></tr><tr align="left"><td valign="top"><code>verticalScrollBar</code>
+</td><td valign="top"><code>GtkVScrollbar</code>
+<br></td></tr><tr align="left"><td valign="top"><code>emacs-toolbar</code>
+</td><td valign="top"><code>GtkToolbar</code>
+<br></td></tr><tr align="left"><td valign="top"><code>menubar</code>
+</td><td valign="top"><code>GtkMenuBar</code>
+<br></td></tr><tr align="left"><td valign="top"><code>emacs-menuitem</code>
+</td><td valign="top">anything in menus
+   <br></td></tr></table>
+
+<p class="noindent">Thus, for Emacs you can write the two examples above as:
+
+<pre class="smallexample">     widget "Emacs.pane.menubar" style "my_style"
+     widget "Emacs.pane.emacs.verticalScrollBar" style "my_style"
+</pre>
+   <p>GTK absolute names are quite strange when it comes to menus
+and dialogs.  The names do not start with &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo;, as they are
+free-standing windows and not contained (in the GTK sense) by the
+Emacs GtkWindow.  To customize the dialogs and menus, use wildcards like this:
+
+<pre class="smallexample">     widget "*emacs-dialog*" style "my_dialog_style"
+     widget "*emacs-filedialog* style "my_file_style"
+     widget "*emacs-menuitem* style "my_menu_style"
+</pre>
+   <p>If you specify a customization in <samp><span class="file">~/.emacs.d/gtkrc</span></samp>, then it
+automatically applies only to Emacs, since other programs don't read
+that file.  For example, the drop down menu in the file dialog can not
+be customized by any absolute widget name, only by an absolute class
+name.  This is because the widgets in the drop down menu do not
+have names and the menu is not contained in the Emacs GtkWindow.  To
+have all menus in Emacs look the same, use this in
+<samp><span class="file">~/.emacs.d/gtkrc</span></samp>:
+
+<pre class="smallexample">     widget_class "*Menu*" style "my_menu_style"
+</pre>
+   </body></html>
+

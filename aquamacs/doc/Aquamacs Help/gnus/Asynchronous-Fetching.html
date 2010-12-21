@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Asynchronous Fetching - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer" title="Sorting the Summary Buffer">
+<link rel="next" href="Article-Caching.html#Article-Caching" title="Article Caching">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Asynchronous-Fetching"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Article-Caching.html#Article-Caching">Article Caching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer">Sorting the Summary Buffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.11 Asynchronous Article Fetching</h3>
+
+<p><a name="index-asynchronous-article-fetching-1117"></a><a name="index-article-pre_002dfetch-1118"></a><a name="index-pre_002dfetch-1119"></a>
+If you read your news from an <acronym>NNTP</acronym> server that's far away, the
+network latencies may make reading articles a chore.  You have to wait
+for a while after pressing <kbd>n</kbd> to go to the next article before the
+article appears.  Why can't Gnus just go ahead and fetch the article
+while you are reading the previous one?  Why not, indeed.
+
+   <p>First, some caveats.  There are some pitfalls to using asynchronous
+article fetching, especially the way Gnus does it.
+
+   <p>Let's say you are reading article 1, which is short, and article 2 is
+quite long, and you are not interested in reading that.  Gnus does not
+know this, so it goes ahead and fetches article 2.  You decide to read
+article 3, but since Gnus is in the process of fetching article 2, the
+connection is blocked.
+
+   <p>To avoid these situations, Gnus will open two (count 'em two)
+connections to the server.  Some people may think this isn't a very nice
+thing to do, but I don't see any real alternatives.  Setting up that
+extra connection takes some time, so Gnus startup will be slower.
+
+   <p>Gnus will fetch more articles than you will read.  This will mean that
+the link between your machine and the <acronym>NNTP</acronym> server will become more
+loaded than if you didn't use article pre-fetch.  The server itself will
+also become more loaded&mdash;both with the extra article requests, and the
+extra connection.
+
+   <p>Ok, so now you know that you shouldn't really use this thing<small class="dots">...</small> unless
+you really want to.
+
+   <p><a name="index-gnus_002dasynchronous-1120"></a>Here's how:  Set <code>gnus-asynchronous</code> to <code>t</code>.  The rest should
+happen automatically.
+
+   <p><a name="index-gnus_002duse_002darticle_002dprefetch-1121"></a>You can control how many articles are to be pre-fetched by setting
+<code>gnus-use-article-prefetch</code>.  This is 30 by default, which means
+that when you read an article in the group, the back end will pre-fetch
+the next 30 articles.  If this variable is <code>t</code>, the back end will
+pre-fetch all the articles it can without bound.  If it is
+<code>nil</code>, no pre-fetching will be done.
+
+   <p><a name="index-gnus_002dasync_002dprefetch_002darticle_002dp-1122"></a><a name="index-gnus_002dasync_002dunread_002dp-1123"></a>There are probably some articles that you don't want to pre-fetch&mdash;read
+articles, for instance.  The <code>gnus-async-prefetch-article-p</code>
+variable controls whether an article is to be pre-fetched.  This
+function should return non-<code>nil</code> when the article in question is
+to be pre-fetched.  The default is <code>gnus-async-unread-p</code>, which
+returns <code>nil</code> on read articles.  The function is called with an
+article data structure as the only parameter.
+
+   <p>If, for instance, you wish to pre-fetch only unread articles shorter
+than 100 lines, you could say something like:
+
+<pre class="lisp">     (defun my-async-short-unread-p (data)
+       "Return non-nil for short, unread articles."
+       (and (gnus-data-unread-p data)
+            (&lt; (mail-header-lines (gnus-data-header data))
+               100)))
+     
+     (setq gnus-async-prefetch-article-p 'my-async-short-unread-p)
+</pre>
+   <p>These functions will be called many, many times, so they should
+preferably be short and sweet to avoid slowing down Gnus too much. 
+It's probably a good idea to byte-compile things like this.
+
+   <p><a name="index-gnus_002dprefetched_002darticle_002ddeletion_002dstrategy-1124"></a>Articles have to be removed from the asynch buffer sooner or later.  The
+<code>gnus-prefetched-article-deletion-strategy</code> says when to remove
+articles.  This is a list that may contain the following elements:
+
+     <dl>
+<dt><code>read</code><dd>Remove articles when they are read.
+
+     <br><dt><code>exit</code><dd>Remove articles when exiting the group. 
+</dl>
+
+   <p>The default value is <code>(read exit)</code>.
+
+<!-- @vindex gnus-use-header-prefetch -->
+<!-- If @code{gnus-use-header-prefetch} is non-@code{nil}, prefetch articles -->
+<!-- from the next group. -->
+   </body></html>
+

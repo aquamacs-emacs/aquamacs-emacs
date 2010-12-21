@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Building Classes - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Introduction.html#Introduction" title="Introduction">
+<link rel="next" href="Making-New-Objects.html#Making-New-Objects" title="Making New Objects">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Building-Classes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Making-New-Objects.html#Making-New-Objects">Making New Objects</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Introduction.html#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">3 Building Classes</h2>
+
+<p>A <dfn>class</dfn> is a definition for organizing data and methods
+together.  An <i>EIEIO</i> class has structures similar to the classes
+found in other object-oriented (OO) languages.
+
+   <p>To create a new class, use the <code>defclass</code> macro:
+
+<div class="defun">
+&mdash; Macro: <b>defclass</b><var> class-name superclass-list slot-list &amp;rest options-and-doc<a name="index-defclass-1"></a></var><br>
+<blockquote>
+        <p>Create a new class named <var>class-name</var>.  The class is represented
+by a self-referential symbol with the name <var>class-name</var>.  <i>EIEIO</i>
+stores the structure of the class as a symbol property of
+<var>class-name</var> (see <a href="../elisp/Symbol-Components.html#Symbol-Components">Symbol Components</a>).
+
+        <p>The <var>class-name</var> symbol's variable documentation string is a
+modified version of the doc string found in <var>options-and-doc</var>. 
+Each time a method is defined, the symbol's documentation string is
+updated to include the methods documentation as well.
+
+        <p>The parent classes for <var>class-name</var> is <var>superclass-list</var>. 
+Each element of <var>superclass-list</var> must be a class.  These classes
+are the parents of the class being created.  Every slot that appears
+in each parent class is replicated in the new class.
+
+        <p>If two parents share the same slot name, the parent which appears in
+the <var>superclass-list</var> first sets the tags for that slot.  If the
+new class has a slot with the same name as the parent, the new slot
+overrides the parent's slot. 
+</p></blockquote></div>
+
+<p class="noindent">Whenever defclass is used to create a new class, two predicates are
+created for it, named <var>CLASS-NAME</var><code>-p</code> and
+<var>CLASS-NAME</var><code>-child-p</code>:
+
+<div class="defun">
+&mdash; Function: <b>CLASS-NAME-p</b><var> object<a name="index-CLASS_002dNAME_002dp-2"></a></var><br>
+<blockquote><p>Return <code>t</code> if <var>OBJECT</var> is of the class <var>CLASS-NAME</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>CLASS-NAME-child-p</b><var> object<a name="index-CLASS_002dNAME_002dchild_002dp-3"></a></var><br>
+<blockquote><p>Return <code>t</code> if <var>OBJECT</var> is of the class <var>CLASS-NAME</var>,
+or is of a subclass of <var>CLASS-NAME</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>eieio-error-unsupported-class-tags</b><var><a name="index-eieio_002derror_002dunsupported_002dclass_002dtags-4"></a></var><br>
+<blockquote><p>If non-nil, <code>defclass</code> signals an error if a tag in a slot
+specifier is unsupported.
+
+        <p>This option is here to support programs written with older versions of
+<i>EIEIO</i>, which did not produce such errors. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="Inheritance.html#Inheritance">Inheritance</a>:          How to specify parents classes
+<li><a accesskey="2" href="Slot-Options.html#Slot-Options">Slot Options</a>:         How to specify features of a slot. 
+<li><a accesskey="3" href="Class-Options.html#Class-Options">Class Options</a>:        How to specify features for this class. 
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Examples of Rewrite Rules - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
+<link rel="prev" href="Debugging-Rewrites.html#Debugging-Rewrites" title="Debugging Rewrites">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Examples-of-Rewrite-Rules"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Debugging-Rewrites.html#Debugging-Rewrites">Debugging Rewrites</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.11.13 Examples of Rewrite Rules</h4>
+
+<p class="noindent">Returning to the example of substituting the pattern
+&lsquo;<samp><span class="samp">sin(x)^2 + cos(x)^2</span></samp>&rsquo; with 1, we saw that the rule
+&lsquo;<samp><span class="samp">opt(a) sin(x)^2 + opt(a) cos(x)^2 := a</span></samp>&rsquo; does a good job of
+finding suitable cases.  Another solution would be to use the rule
+&lsquo;<samp><span class="samp">cos(x)^2 := 1 - sin(x)^2</span></samp>&rsquo;, followed by algebraic simplification
+if necessary.  This rule will be the most effective way to do the job,
+but at the expense of making some changes that you might not desire.
+
+   <p>Another algebraic rewrite rule is &lsquo;<samp><span class="samp">exp(x+y) := exp(x) exp(y)</span></samp>&rsquo;. 
+To make this work with the <kbd>j&nbsp;r</kbd><!-- /@w --> command so that it can be
+easily targeted to a particular exponential in a large formula,
+you might wish to write the rule as &lsquo;<samp><span class="samp">select(exp(x+y)) :=
+select(exp(x) exp(y))</span></samp>&rsquo;.  The &lsquo;<samp><span class="samp">select</span></samp>&rsquo; markers will be
+ignored by the regular <kbd>a r</kbd> command
+(see <a href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">Selections with Rewrite Rules</a>).
+
+   <p>A surprisingly useful rewrite rule is &lsquo;<samp><span class="samp">a/(b-c) := a*(b+c)/(b^2-c^2)</span></samp>&rsquo;. 
+This will simplify the formula whenever &lsquo;<samp><span class="samp">b</span></samp>&rsquo; and/or &lsquo;<samp><span class="samp">c</span></samp>&rsquo; can
+be made simpler by squaring.  For example, applying this rule to
+&lsquo;<samp><span class="samp">2 / (sqrt(2) + 3)</span></samp>&rsquo; yields &lsquo;<samp><span class="samp">6:7 - 2:7 sqrt(2)</span></samp>&rsquo; (assuming
+Symbolic mode has been enabled to keep the square root from being
+evaluated to a floating-point approximation).  This rule is also
+useful when working with symbolic complex numbers, e.g.,
+&lsquo;<samp><span class="samp">(a + b i) / (c + d i)</span></samp>&rsquo;.
+
+   <p>As another example, we could define our own &ldquo;triangular numbers&rdquo; function
+with the rules &lsquo;<samp><span class="samp">[tri(0) := 0, tri(n) := n + tri(n-1) :: n&gt;0]</span></samp>&rsquo;.  Enter
+this vector and store it in a variable:  <kbd>s&nbsp;t<!-- /@w --> trirules</kbd>.  Now, given
+a suitable formula like &lsquo;<samp><span class="samp">tri(5)</span></samp>&rsquo; on the stack, type &lsquo;<samp><span class="samp">a r trirules</span></samp>&rsquo;
+to apply these rules repeatedly.  After six applications, <kbd>a r</kbd> will
+stop with 15 on the stack.  Once these rules are debugged, it would probably
+be most useful to add them to <code>EvalRules</code> so that Calc will evaluate
+the new <code>tri</code> function automatically.  We could then use <kbd>Z K</kbd> on
+the keyboard macro <kbd>' tri($) &lt;RET&gt;</kbd> to make a command that applies
+<code>tri</code> to the value on the top of the stack.  See <a href="Programming.html#Programming">Programming</a>.
+
+   <p><a name="index-Quaternions-1954"></a>The following rule set, contributed by
+<!-- Fran\c cois -->
+Francois
+Pinard, implements <dfn>quaternions</dfn>, a generalization of the concept of
+complex numbers.  Quaternions have four components, and are here
+represented by function calls &lsquo;<samp><span class="samp">quat(</span><var>w</var><span class="samp">, [</span><var>x</var><span class="samp">, </span><var>y</var><span class="samp">,
+</span><var>z</var><span class="samp">])</span></samp>&rsquo; with &ldquo;real part&rdquo; <var>w</var> and the three &ldquo;imaginary&rdquo; parts
+collected into a vector.  Various arithmetical operations on quaternions
+are supported.  To use these rules, either add them to <code>EvalRules</code>,
+or create a command based on <kbd>a r</kbd> for simplifying quaternion
+formulas.  A convenient way to enter quaternions would be a command
+defined by a keyboard macro containing: <kbd>' quat($$$$, [$$$, $$, $])
+&lt;RET&gt;</kbd>.
+
+<pre class="smallexample">     [ quat(w, x, y, z) := quat(w, [x, y, z]),
+       quat(w, [0, 0, 0]) := w,
+       abs(quat(w, v)) := hypot(w, v),
+       -quat(w, v) := quat(-w, -v),
+       r + quat(w, v) := quat(r + w, v) :: real(r),
+       r - quat(w, v) := quat(r - w, -v) :: real(r),
+       quat(w1, v1) + quat(w2, v2) := quat(w1 + w2, v1 + v2),
+       r * quat(w, v) := quat(r * w, r * v) :: real(r),
+       plain(quat(w1, v1) * quat(w2, v2))
+          := quat(w1 * w2 - v1 * v2, w1 * v2 + w2 * v1 + cross(v1, v2)),
+       quat(w1, v1) / r := quat(w1 / r, v1 / r) :: real(r),
+       z / quat(w, v) := z * quatinv(quat(w, v)),
+       quatinv(quat(w, v)) := quat(w, -v) / (w^2 + v^2),
+       quatsqr(quat(w, v)) := quat(w^2 - v^2, 2 * w * v),
+       quat(w, v)^k := quatsqr(quat(w, v)^(k / 2))
+                    :: integer(k) :: k &gt; 0 :: k % 2 = 0,
+       quat(w, v)^k := quatsqr(quat(w, v)^((k - 1) / 2)) * quat(w, v)
+                    :: integer(k) :: k &gt; 2,
+       quat(w, v)^-k := quatinv(quat(w, v)^k) :: integer(k) :: k &gt; 0 ]
+</pre>
+   <p>Quaternions, like matrices, have non-commutative multiplication. 
+In other words, &lsquo;<samp><span class="samp">q1 * q2 = q2 * q1</span></samp>&rsquo; is not necessarily true if
+&lsquo;<samp><span class="samp">q1</span></samp>&rsquo; and &lsquo;<samp><span class="samp">q2</span></samp>&rsquo; are <code>quat</code> forms.  The &lsquo;<samp><span class="samp">quat*quat</span></samp>&rsquo;
+rule above uses <code>plain</code> to prevent Calc from rearranging the
+product.  It may also be wise to add the line &lsquo;<samp><span class="samp">[quat(), matrix]</span></samp>&rsquo;
+to the <code>Decls</code> matrix, to ensure that Calc's other algebraic
+operations will not rearrange a quaternion product.  See <a href="Declarations.html#Declarations">Declarations</a>.
+
+   <p>These rules also accept a four-argument <code>quat</code> form, converting
+it to the preferred form in the first rule.  If you would rather see
+results in the four-argument form, just append the two items
+&lsquo;<samp><span class="samp">phase(2), quat(w, [x, y, z]) := quat(w, x, y, z)</span></samp>&rsquo; to the end
+of the rule set.  (But remember that multi-phase rule sets don't work
+in <code>EvalRules</code>.)
+
+   </body></html>
+

@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Data File Format - Forms Mode User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Forms Mode User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Forms-Commands.html#Forms-Commands" title="Forms Commands">
+<link rel="next" href="Control-File-Format.html#Control-File-Format" title="Control File Format">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Forms mode, a form-editing major mode for GNU Emacs.
+
+Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Data-File-Format"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Control-File-Format.html#Control-File-Format">Control File Format</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Forms-Commands.html#Forms-Commands">Forms Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Data File Format</h2>
+
+<p><a name="index-record-37"></a><a name="index-field-38"></a><a name="index-forms_002dfield_002dsep-39"></a>Files for use with Forms mode are very simple&mdash;each <dfn>record</dfn>
+(usually one line) forms the contents of one form.  Each record consists
+of a number of <dfn>fields</dfn>, which are separated by the value of the
+string <code>forms-field-sep</code>, which is <code>"\t"</code> (a Tab) by default.
+
+   <p><a name="index-forms_002dread_002dfile_002dfilter-40"></a><a name="index-forms_002dwrite_002dfile_002dfilter-41"></a>If the format of the data file is not suitable enough you can define the
+filter functions <code>forms-read-file-filter</code> and
+<code>forms-write-file-filter</code>. <code>forms-read-file-filter</code> is called
+when the data file is read from disk into the data buffer. It operates
+on the data buffer, ignoring read-only protections. When the data file
+is saved to disk <code>forms-write-file-filter</code> is called to cancel the
+effects of <code>forms-read-file-filter</code>. After being saved,
+<code>forms-read-file-filter</code> is called again to prepare the data buffer
+for further processing.
+
+   <p><a name="index-pseudo_002dnewline-42"></a><a name="index-forms_002dmulti_002dline-43"></a>Fields may contain text which shows up in the forms in multiple lines. 
+These lines are separated in the field using a &ldquo;pseudo-newline&rdquo;
+character which is defined by the value of the string
+<code>forms-multi-line</code>.  Its default value is <code>"\^k"</code> (a Control-K
+character).  If it is
+set to <code>nil</code>, multiple line fields are prohibited.
+
+   <p>If the data file does not exist, it is automatically created.
+
+   </body></html>
+

@@ -21,11 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    Geoff Voelker (voelker@cs.washington.edu)			     7-29-94
 */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
-
-#include <stdlib.h>
 #include <stdio.h>
 #include <setjmp.h>
 
@@ -279,7 +275,7 @@ round_heap (unsigned long align)
     sbrk (need_to_alloc);
 }
 
-#if (_MSC_VER >= 1000 && _MSC_VER < 1300 && !defined(USE_CRT_DLL))
+#if (_MSC_VER >= 1000 && _MSC_VER < 1300 && !defined (USE_CRT_DLL))
 
 /* MSVC 4.2 invokes these functions from mainCRTStartup to initialize
    a heap via HeapCreate.  They are normally defined by the runtime,
@@ -302,5 +298,3 @@ _heap_term (void)
 
 #endif
 
-/* arch-tag: 9a6a9860-040d-422d-8905-450dd535cd9c
-   (do not change this comment) */

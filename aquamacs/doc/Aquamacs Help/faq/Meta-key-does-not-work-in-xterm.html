@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Meta key does not work in xterm - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Key-bindings.html#Key-bindings" title="Key bindings">
+<link rel="prev" href="Binding-combinations-of-modifiers-and-function-keys.html#Binding-combinations-of-modifiers-and-function-keys" title="Binding combinations of modifiers and function keys">
+<link rel="next" href="ExtendChar-key-does-not-work-as-Meta.html#ExtendChar-key-does-not-work-as-Meta" title="ExtendChar key does not work as Meta">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Meta-key-does-not-work-in-xterm"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ExtendChar-key-does-not-work-as-Meta.html#ExtendChar-key-does-not-work-as-Meta">ExtendChar key does not work as Meta</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Binding-combinations-of-modifiers-and-function-keys.html#Binding-combinations-of-modifiers-and-function-keys">Binding combinations of modifiers and function keys</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-bindings.html#Key-bindings">Key bindings</a>
+<hr>
+</div>
+
+<h3 class="section">10.13 Why doesn't my &lt;Meta&gt; key work in an <code>xterm</code> window?</h3>
+
+<p><a name="index-g_t_0040key_007bMeta_007d-key-and-_0040code_007bxterm_007d-478"></a><a name="index-Xterm-and-_0040key_007bMeta_007d-key-479"></a>
+see <a href="../emacs/Unibyte-Mode.html#Unibyte-Mode">Single-Byte Character Set Support</a>.
+
+   <p>If the advice in the Emacs manual fails, try all of these methods before
+asking for further help:
+
+     <ul>
+<li>You may have big problems using <code>mwm</code> as your window manager. 
+(Does anyone know a good generic solution to allow the use of the
+&lt;Meta&gt; key in Emacs with <samp><span class="file">mwm</span></samp>?)
+
+     <li>For X11: Make sure it really is a &lt;Meta&gt; key.  Use <code>xev</code> to
+find out what keysym your &lt;Meta&gt; key generates.  It should be either
+<code>Meta_L</code> or <code>Meta_R</code>.  If it isn't, use <samp><span class="file">xmodmap</span></samp> to fix
+the situation.  If &lt;Meta&gt; does generate <code>Meta_L</code> or
+<code>Meta_R</code>, but <kbd>M-x</kbd> produces a non-<acronym>ASCII</acronym> character, put this in
+your <samp><span class="file">~/.Xdefaults</span></samp> file:
+
+     <pre class="example">           XTerm*eightBitInput:   false
+           XTerm*eightBitOutput:  true
+</pre>
+     <li>Make sure the <code>pty</code> the <code>xterm</code> is using is passing 8 bit
+characters.  &lsquo;<samp><span class="samp">stty -a</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">stty everything</span></samp>&rsquo;) should show
+&lsquo;<samp><span class="samp">cs8</span></samp>&rsquo; somewhere.  If it shows &lsquo;<samp><span class="samp">cs7</span></samp>&rsquo; instead, use &lsquo;<samp><span class="samp">stty
+cs8 -istrip</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">stty pass8</span></samp>&rsquo;) to fix it.
+
+     <li>If there is an <code>rlogin</code> connection between <code>xterm</code> and Emacs, the
+&lsquo;<samp><span class="samp">-8</span></samp>&rsquo; argument may need to be given to rlogin to make it pass all 8 bits
+of every character.
+
+     <li>If Emacs is running on Ultrix, it is reported that evaluating
+<code>(set-input-mode t nil)</code> helps.
+
+     <li>If all else fails, you can make <code>xterm</code> generate <kbd>&lt;ESC&gt; W</kbd> when
+you type <kbd>M-W</kbd>, which is the same conversion Emacs would make if it
+got the <kbd>M-W</kbd> anyway.  In X11R4, the following resource
+specification will do this:
+
+     <pre class="example">          XTerm.VT100.EightBitInput: false
+</pre>
+     <p class="noindent">(This changes the behavior of the <code>insert-eight-bit</code> action.)
+
+     <p>With older <code>xterm</code>s, you can specify this behavior with a translation:
+
+     <pre class="example">          XTerm.VT100.Translations: #override \
+            Meta&lt;KeyPress&gt;: string(0x1b) insert()
+</pre>
+     <p class="noindent">You might have to replace &lsquo;<samp><span class="samp">Meta</span></samp>&rsquo; with &lsquo;<samp><span class="samp">Alt</span></samp>&rsquo;.
+
+   </ul>
+
+   </body></html>
+

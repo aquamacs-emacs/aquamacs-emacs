@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Responses - Message Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Message Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Appendices.html#Appendices" title="Appendices">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Message, the Emacs message composition mode.
+
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Responses"></a>
+<p>
+Up:&nbsp;<a rel="up" accesskey="u" href="Appendices.html#Appendices">Appendices</a>
+<hr>
+</div>
+
+<h3 class="section">5.1 Responses</h3>
+
+<p>To determine where a message is to go, the following algorithm is used
+by default.
+
+     <dl>
+<dt><dfn>reply</dfn><dd>A <dfn>reply</dfn> is when you want to respond <em>just</em> to the person who
+sent the message via mail.  There will only be one recipient.  To
+determine who the recipient will be, the following headers are
+consulted, in turn:
+
+          <dl>
+<dt><code>Reply-To</code>
+<br><dt><code>From</code><dd></dl>
+
+     <br><dt><dfn>wide reply</dfn><dd>A <dfn>wide reply</dfn> is a mail response that includes <em>all</em> entities
+mentioned in the message you are responding to.  All mailboxes from the
+following headers will be concatenated to form the outgoing
+<code>To</code>/<code>Cc</code> headers:
+
+          <dl>
+<dt><code>From</code><dd>(unless there's a <code>Reply-To</code>, in which case that is used instead).
+
+          <br><dt><code>Cc</code>
+<br><dt><code>To</code><dd></dl>
+
+     <p>If a <code>Mail-Copies-To</code> header is present, it will also be included
+in the list of mailboxes.  If this header is &lsquo;<samp><span class="samp">never</span></samp>&rsquo;, that means
+that the <code>From</code> (or <code>Reply-To</code>) mailbox will be suppressed.
+
+     <br><dt><dfn>followup</dfn><dd>A <dfn>followup</dfn> is a response sent via news.  The following headers
+(listed in order of precedence) determine where the response is to be
+sent:
+
+          <dl>
+<dt><code>Followup-To</code>
+<br><dt><code>Newsgroups</code><dd>
+</dl>
+
+     <p>If a <code>Mail-Copies-To</code> header is present, it will be used as the
+basis of the new <code>Cc</code> header, except if this header is
+&lsquo;<samp><span class="samp">never</span></samp>&rsquo;.
+
+   </dl>
+
+   </body></html>
+

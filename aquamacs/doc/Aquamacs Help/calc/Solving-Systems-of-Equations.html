@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Solving Systems of Equations - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Solving-Equations.html#Solving-Equations" title="Solving Equations">
+<link rel="prev" href="Multiple-Solutions.html#Multiple-Solutions" title="Multiple Solutions">
+<link rel="next" href="Decomposing-Polynomials.html#Decomposing-Polynomials" title="Decomposing Polynomials">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Solving-Systems-of-Equations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Decomposing-Polynomials.html#Decomposing-Polynomials">Decomposing Polynomials</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multiple-Solutions.html#Multiple-Solutions">Multiple Solutions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Solving-Equations.html#Solving-Equations">Solving Equations</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.6.2 Solving Systems of Equations</h4>
+
+<p class="noindent"><a name="index-Systems-of-equations_002c-symbolic-1770"></a>You can also use the commands described above to solve systems of
+simultaneous equations.  Just create a vector of equations, then
+specify a vector of variables for which to solve.  (You can omit
+the surrounding brackets when entering the vector of variables
+at the prompt.)
+
+   <p>For example, putting &lsquo;<samp><span class="samp">[x + y = a, x - y = b]</span></samp>&rsquo; on the stack
+and typing <kbd>a S x,y &lt;RET&gt;</kbd> produces the vector of solutions
+&lsquo;<samp><span class="samp">[x = a - (a-b)/2, y = (a-b)/2]</span></samp>&rsquo;.  The result vector will
+have the same length as the variables vector, and the variables
+will be listed in the same order there.  Note that the solutions
+are not always simplified as far as possible; the solution for
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo; here could be improved by an application of the <kbd>a n</kbd>
+command.
+
+   <p>Calc's algorithm works by trying to eliminate one variable at a
+time by solving one of the equations for that variable and then
+substituting into the other equations.  Calc will try all the
+possibilities, but you can speed things up by noting that Calc
+first tries to eliminate the first variable with the first
+equation, then the second variable with the second equation,
+and so on.  It also helps to put the simpler (e.g., more linear)
+equations toward the front of the list.  Calc's algorithm will
+solve any system of linear equations, and also many kinds of
+nonlinear systems.
+
+   <p><a name="index-elim-1771"></a>Normally there will be as many variables as equations.  If you
+give fewer variables than equations (an &ldquo;over-determined&rdquo; system
+of equations), Calc will find a partial solution.  For example,
+typing <kbd>a S y &lt;RET&gt;</kbd> with the above system of equations
+would produce &lsquo;<samp><span class="samp">[y = a - x]</span></samp>&rsquo;.  There are now several ways to
+express this solution in terms of the original variables; Calc uses
+the first one that it finds.  You can control the choice by adding
+variable specifiers of the form &lsquo;<samp><span class="samp">elim(</span><var>v</var><span class="samp">)</span></samp>&rsquo; to the
+variables list.  This says that <var>v</var> should be eliminated from
+the equations; the variable will not appear at all in the solution. 
+For example, typing <kbd>a S y,elim(x)</kbd> would yield
+&lsquo;<samp><span class="samp">[y = a - (b+a)/2]</span></samp>&rsquo;.
+
+   <p>If the variables list contains only <code>elim</code> specifiers,
+Calc simply eliminates those variables from the equations
+and then returns the resulting set of equations.  For example,
+<kbd>a S elim(x)</kbd> produces &lsquo;<samp><span class="samp">[a - 2 y = b]</span></samp>&rsquo;.  Every variable
+eliminated will reduce the number of equations in the system
+by one.
+
+   <p>Again, <kbd>a S</kbd> gives you one solution to the system of
+equations.  If there are several solutions, you can use <kbd>H a S</kbd>
+to get a general family of solutions, or, if there is a finite
+number of solutions, you can use <kbd>a P</kbd> to get a list.  (In
+the latter case, the result will take the form of a matrix where
+the rows are different solutions and the columns correspond to the
+variables you requested.)
+
+   <p>Another way to deal with certain kinds of overdetermined systems of
+equations is the <kbd>a F</kbd> command, which does least-squares fitting
+to satisfy the equations.  See <a href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>.
+
+   </body></html>
+

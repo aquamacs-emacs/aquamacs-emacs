@@ -1,0 +1,178 @@
+<html lang="en">
+<head>
+<title>Hungry WS Deletion - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Auto_002dnewlines.html#Auto_002dnewlines" title="Auto-newlines">
+<link rel="next" href="Subword-Movement.html#Subword-Movement" title="Subword Movement">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Hungry-WS-Deletion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Subword-Movement.html#Subword-Movement">Subword Movement</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto_002dnewlines.html#Auto_002dnewlines">Auto-newlines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">4.8 Hungry Deletion of Whitespace</h3>
+
+<p><a name="index-hungry_002ddeletion-159"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>If you want to delete an entire block of whitespace at point, you can
+use <dfn>hungry deletion</dfn>.  This deletes all the contiguous whitespace
+either before point or after point in a single operation. 
+&ldquo;Whitespace&rdquo; here includes tabs and newlines, but not comments or
+preprocessor commands.  Hungry deletion can markedly cut down on the
+number of times you have to hit deletion keys when, for example,
+you've made a mistake on the preceding line and have already pressed
+<kbd>C-j</kbd>.
+
+   <p>Hungry deletion is a simple feature that some people find extremely
+useful.  In fact, you might find yourself wanting it in <strong>all</strong>
+your editing modes!
+
+   <p>Loosely speaking, in what follows, <dfn>&lt;DEL&gt;</dfn> means &ldquo;the
+backspace key&rdquo; and <dfn>&lt;DELETE&gt;</dfn> means &ldquo;the forward delete
+key&rdquo;.  This is discussed in more detail below.
+
+   <p>There are two different ways you can use hungry deletion:
+
+     <dl>
+<dt>Using <dfn>Hungry Delete Mode</dfn> with <kbd>&lt;DEL&gt;</kbd> and <kbd>C-d</kbd><dd>Here you toggle Hungry Delete minor mode with <kbd>M-x
+c-toggle-hungry-state</kbd><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>.)  This
+makes <kbd>&lt;DEL&gt;</kbd> and <kbd>C-d</kbd> do backwards and forward hungry
+deletion.
+
+          <dl>
+<dt><kbd>&lt;DEL&gt;</kbd> (<code>c-electric-backspace</code>)<dd><a name="index-DEL-160"></a><a name="index-c_002delectric_002dbackspace-161"></a><a name="index-electric_002dbackspace-_0028c_002d_0029-162"></a>This command is run by default when you hit the <kbd>DEL</kbd> key.  When
+hungry delete mode is enabled, it deletes any amount of whitespace in
+the backwards direction.  Otherwise, or when used with a prefix
+argument or in a literal (see <a href="Auto_002dnewlines.html#Auto_002dnewlines">Auto-newlines</a>), the command just
+deletes backwards in the usual way.  (More precisely, it calls the
+function contained in the variable <code>c-backspace-function</code>,
+passing it the prefix argument, if any.)
+
+          <br><dt><code>c-backspace-function</code><dd><a name="index-c_002dbackspace_002dfunction-163"></a><a name="index-backspace_002dfunction-_0028c_002d_0029-164"></a><a name="index-backward_002ddelete_002dchar_002duntabify-165"></a>Hook that gets called by <code>c-electric-backspace</code> when it doesn't
+do an &ldquo;electric&rdquo; deletion of the preceding whitespace.  The default
+value is <code>backward-delete-char-untabify</code>
+(see <a href="../elisp/Deletion.html#Deletion">Deletion</a>, the function which
+deletes a single character.
+
+          <br><dt><kbd>C-d</kbd> (<code>c-electric-delete-forward</code>)<dd><a name="index-C_002dd-166"></a><a name="index-c_002delectric_002ddelete_002dforward-167"></a><a name="index-electric_002ddelete_002dforward-_0028c_002d_0029-168"></a>This function, which is bound to <kbd>C-d</kbd> by default, works just like
+<code>c-electric-backspace</code> but in the forward direction.  When it
+doesn't do an &ldquo;electric&rdquo; deletion of the following whitespace, it
+just does <code>delete-char</code>, more or less.  (Strictly speaking, it
+calls the function in <code>c-delete-function</code> with the prefix
+argument.)
+
+          <br><dt><code>c-delete-function</code><dd><a name="index-c_002ddelete_002dfunction-169"></a><a name="index-delete_002dfunction-_0028c_002d_0029-170"></a><a name="index-delete_002dchar-171"></a>Hook that gets called by <code>c-electric-delete-forward</code> when it
+doesn't do an &ldquo;electric&rdquo; deletion of the following whitespace.  The
+default value is <code>delete-char</code>. 
+</dl>
+
+     <br><dt>Using Distinct Bindings<dd>The other (newer and recommended) way to use hungry deletion is to
+perform <code>c-hungry-delete-backwards</code> and
+<code>c-hungry-delete-forward</code> directly through their key sequences
+rather than using the minor mode toggling.
+
+          <dl>
+<dt><kbd>C-c C-&lt;DEL&gt;</kbd>, or <kbd>C-c &lt;DEL&gt;</kbd> (<code>c-hungry-delete-backwards</code>)<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a><dd><a name="index-C_002dc-C_002d_003cbackspace_003e-172"></a><a name="index-C_002dc-_003cbackspace_003e-173"></a><a name="index-C_002dc-C_002dDEL-174"></a><a name="index-C_002dc-DEL-175"></a><a name="index-c_002dhungry_002ddelete_002dbackwards-176"></a><a name="index-hungry_002ddelete_002dbackwards-_0028c_002d_0029-177"></a>Delete any amount of whitespace in the backwards direction (regardless
+whether hungry-delete mode is enabled or not).  This command is bound
+to both <kbd>C-c C-&lt;DEL&gt;</kbd> and <kbd>C-c &lt;DEL&gt;</kbd>, since the more
+natural one, <kbd>C-c C-&lt;DEL&gt;</kbd>, is sometimes difficult to type at
+a character terminal.
+
+          <br><dt><kbd>C-c C-d</kbd>, <kbd>C-c C-&lt;DELETE&gt;</kbd>, or <kbd>C-c &lt;DELETE&gt;</kbd> (<code>c-hungry-delete-forward</code>)<dd><a name="index-C_002dc-C_002dd-178"></a><a name="index-C_002dc-C_002d_003cDELETE_003e-179"></a><a name="index-C_002dc-_003cDELETE_003e-180"></a><a name="index-c_002dhungry_002ddelete_002dforward-181"></a><a name="index-hungry_002ddelete_002dforward-_0028c_002d_0029-182"></a>Delete any amount of whitespace in the forward direction (regardless
+whether hungry-delete mode is enabled or not).  This command is bound
+to both <kbd>C-c C-&lt;DELETE&gt;</kbd> and <kbd>C-c &lt;DELETE&gt;</kbd> for the
+same reason as for &lt;DEL&gt; above. 
+</dl>
+     </dl>
+
+   <p><a name="index-g_t_003cdelete_003e-183"></a><a name="index-g_t_003cbackspace_003e-184"></a>
+When we talk about <kbd>&lt;DEL&gt;</kbd>, and <kbd>&lt;DELETE&gt;</kbd> above, we
+actually do so without connecting them to the physical keys commonly
+known as &lt;Backspace&gt; and &lt;Delete&gt;.  The default bindings to
+those two keys depends on the flavor of (X)Emacs you are using.
+
+   <p><a name="index-c_002delectric_002ddelete-185"></a><a name="index-electric_002ddelete-_0028c_002d_0029-186"></a><a name="index-c_002dhungry_002ddelete-187"></a><a name="index-hungry_002ddelete-_0028c_002d_0029-188"></a><a name="index-delete_002dkey_002ddeletes_002dforward-189"></a>In XEmacs 20.3 and beyond, the &lt;Backspace&gt; key is bound to
+<code>c-electric-backspace</code> and the &lt;Delete&gt; key is bound to
+<code>c-electric-delete</code>.  You control the direction it deletes in by
+setting the variable <code>delete-key-deletes-forward</code>, a standard
+XEmacs variable. 
+<!-- This variable is encapsulated by XEmacs's (defsubst delete-forward-p ...). -->
+When this variable is non-<code>nil</code>, <code>c-electric-delete</code> will do
+forward deletion with <code>c-electric-delete-forward</code>, otherwise it
+does backward deletion with <code>c-electric-backspace</code>.  Similarly,
+<kbd>C-c &lt;Delete&gt;</kbd> and <kbd>C-c C-&lt;Delete&gt;</kbd> are bound to
+<code>c-hungry-delete</code> which is controlled in the same way by
+<code>delete-key-deletes-forward</code>.
+
+   <p><a name="index-normal_002derase_002dis_002dbackspace_002dmode-190"></a>
+Emacs 21 and later automatically binds &lt;Backspace&gt; and
+&lt;Delete&gt; to <kbd>DEL</kbd> and <kbd>C-d</kbd> according to your environment,
+and CC Mode extends those bindings to <kbd>C-c C-&lt;Backspace&gt;</kbd>
+etc.  If you need to change the bindings through
+<code>normal-erase-is-backspace-mode</code> then CC Mode will also adapt
+its extended bindings accordingly.
+
+   <p>In earlier (X)Emacs versions, CC Mode doesn't bind either
+&lt;Backspace&gt; or &lt;Delete&gt; directly.  Only the key codes
+<kbd>DEL</kbd> and <kbd>C-d</kbd> are bound, and it's up to the default bindings
+to map the physical keys to them.  You might need to modify this
+yourself if the defaults are unsuitable.
+
+   <p>Getting your &lt;Backspace&gt; and &lt;Delete&gt; keys properly set up can
+sometimes be tricky.  The information in <a href="../emacs/DEL-Does-Not-Delete.html#DEL-Does-Not-Delete">DEL Does Not Delete</a>, might be helpful if you're having
+trouble with this in GNU Emacs.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Prior to CC Mode 5.31, this command
+was bound to <kbd>C-c C-d</kbd>.  <kbd>C-c C-d</kbd> is now the default binding
+for <code>c-hungry-delete-forward</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> This command was formerly known as <code>c-hungry-backspace</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>FAQ 9-2 - Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Frequently Asked Questions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-9-_002d-Tuning-Gnus.html#FAQ-9-_002d-Tuning-Gnus" title="FAQ 9 - Tuning Gnus">
+<link rel="prev" href="FAQ-9_002d1.html#FAQ-9_002d1" title="FAQ 9-1">
+<link rel="next" href="FAQ-9_002d3.html#FAQ-9_002d3" title="FAQ 9-3">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-9-2"></a>
+<a name="FAQ-9_002d2"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-9_002d3.html#FAQ-9_002d3">FAQ 9-3</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-9_002d1.html#FAQ-9_002d1">FAQ 9-1</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-9-_002d-Tuning-Gnus.html#FAQ-9-_002d-Tuning-Gnus">FAQ 9 - Tuning Gnus</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 9.2</h5>
+
+<p>How to speed up the process of entering a group?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>A speed killer is setting the variable
+gnus-fetch-old-headers to anything different from nil,
+so don't do this if speed is an issue. To speed up
+building of summary say
+
+<pre class="example">     (gnus-compile)
+</pre>
+   <p class="noindent">at the bottom of your ~/.gnus.el, this will make gnus
+byte-compile things like
+gnus-summary-line-format. 
+then you could increase the value of gc-cons-threshold
+by saying something like
+
+<pre class="example">     (setq gc-cons-threshold 3500000)
+</pre>
+   <p class="noindent">in ~/.emacs. If you don't care about width of CJK
+characters or use Gnus 5.10 or younger together with a
+recent GNU Emacs, you should say
+
+<pre class="example">     (setq gnus-use-correct-string-widths nil)
+</pre>
+   <p class="noindent">in ~/.gnus.el (thanks to Jesper harder for the last
+two suggestions). Finally if you are still using 5.8.8
+or 5.9 and experience speed problems with summary
+buffer generation, you definitely should update to
+5.10 since there quite some work on improving it has
+been done.
+
+   </body></html>
+

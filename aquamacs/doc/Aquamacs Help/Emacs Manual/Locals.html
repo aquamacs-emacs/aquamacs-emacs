@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Locals - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Hooks.html#Hooks" title="Hooks">
+<link rel="next" href="File-Variables.html#File-Variables" title="File Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Locals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="File-Variables.html#File-Variables">File Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hooks.html#Hooks">Hooks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.3.3 Local Variables</h4>
+
+     <dl>
+<dt><kbd>M-x make-local-variable &lt;RET&gt; </kbd><var>var</var><kbd> &lt;RET&gt;</kbd><dd>Make variable <var>var</var> have a local value in the current buffer. 
+<br><dt><kbd>M-x kill-local-variable &lt;RET&gt; </kbd><var>var</var><kbd> &lt;RET&gt;</kbd><dd>Make variable <var>var</var> use its global value in the current buffer. 
+<br><dt><kbd>M-x make-variable-buffer-local &lt;RET&gt; </kbd><var>var</var><kbd> &lt;RET&gt;</kbd><dd>Mark variable <var>var</var> so that setting it will make it local to the
+buffer that is current at that time. 
+</dl>
+
+   <p><a name="index-local-variables-3987"></a>  Almost any variable can be made <dfn>local</dfn> to a specific Emacs
+buffer.  This means that its value in that buffer is independent of its
+value in other buffers.  A few variables are always local in every
+buffer.  Every other Emacs variable has a <dfn>global</dfn> value which is in
+effect in all buffers that have not made the variable local.
+
+   <p><a name="index-make_002dlocal_002dvariable-3988"></a>  <kbd>M-x make-local-variable</kbd> reads the name of a variable and makes
+it local to the current buffer.  Changing its value subsequently in
+this buffer will not affect others, and changes in its global value
+will not affect this buffer.
+
+   <p><a name="index-make_002dvariable_002dbuffer_002dlocal-3989"></a><a name="index-per_002dbuffer-variables-3990"></a>  <kbd>M-x make-variable-buffer-local</kbd> marks a variable so it will
+become local automatically whenever it is set.  More precisely, once a
+variable has been marked in this way, the usual ways of setting the
+variable automatically do <code>make-local-variable</code> first.  We call
+such variables <dfn>per-buffer</dfn> variables.  Many variables in Emacs
+are normally per-buffer; the variable's document string tells you when
+this is so.  A per-buffer variable's global value is normally never
+effective in any buffer, but it still has a meaning: it is the initial
+value of the variable for each new buffer.
+
+   <p>Major modes (see <a href="Major-Modes.html#Major-Modes">Major Modes</a>) always make variables local to the
+buffer before setting the variables.  This is why changing major modes
+in one buffer has no effect on other buffers.  Minor modes also work
+by setting variables&mdash;normally, each minor mode has one controlling
+variable which is non-<code>nil</code> when the mode is enabled
+(see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).  For many minor modes, the controlling variable
+is per buffer, and thus always buffer-local.  Otherwise, you can make
+it local in a specific buffer like any other variable.
+
+   <p>A few variables cannot be local to a buffer because they are always
+local to each display instead (see <a href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>).  If you try to
+make one of these variables buffer-local, you'll get an error message.
+
+   <p><a name="index-kill_002dlocal_002dvariable-3991"></a>  <kbd>M-x kill-local-variable</kbd> makes a specified variable cease to be
+local to the current buffer.  The global value of the variable
+henceforth is in effect in this buffer.  Setting the major mode kills
+all the local variables of the buffer except for a few variables
+specially marked as <dfn>permanent locals</dfn>.
+
+   <p><a name="index-setq_002ddefault-3992"></a>  To set the global value of a variable, regardless of whether the
+variable has a local value in the current buffer, you can use the Lisp
+construct <code>setq-default</code>.  This construct is used just like
+<code>setq</code>, but it sets variables' global values instead of their local
+values (if any).  When the current buffer does have a local value, the
+new global value may not be visible until you switch to another buffer. 
+Here is an example:
+
+<pre class="example">     (setq-default fill-column 75)
+</pre>
+   <p class="noindent"><code>setq-default</code> is the only way to set the global value of a variable
+that has been marked with <code>make-variable-buffer-local</code>.
+
+   <p><a name="index-default_002dvalue-3993"></a>  Lisp programs can use <code>default-value</code> to look at a variable's
+default value.  This function takes a symbol as argument and returns its
+default value.  The argument is evaluated; usually you must quote it
+explicitly.  For example, here's how to obtain the default value of
+<code>fill-column</code>:
+
+<pre class="example">     (default-value 'fill-column)
+</pre>
+   </body></html>
+

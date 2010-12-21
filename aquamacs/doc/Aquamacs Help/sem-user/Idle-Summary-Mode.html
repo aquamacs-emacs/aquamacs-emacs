@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>Idle Summary Mode - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Idle-Scheduler.html#Idle-Scheduler" title="Idle Scheduler">
+<link rel="prev" href="Debugging-Idle-Time-Issues.html#Debugging-Idle-Time-Issues" title="Debugging Idle Time Issues">
+<link rel="next" href="Idle-Completions-Mode.html#Idle-Completions-Mode" title="Idle Completions Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Idle-Summary-Mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Idle-Completions-Mode.html#Idle-Completions-Mode">Idle Completions Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Debugging-Idle-Time-Issues.html#Debugging-Idle-Time-Issues">Debugging Idle Time Issues</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Idle-Scheduler.html#Idle-Scheduler">Idle Scheduler</a>
+<hr>
+</div>
+
+<h4 class="subsection">Idle Summary Mode</h4>
+
+<p>Semantic Idle Summary mode is a minor mode that displays a short
+summary of the symbol at point, such as its function prototype, in the
+echo area.  Its functionality is similar to what ElDoc mode provides
+for Emacs Lisp (see <a href="../emacs/Lisp-Doc.html#Lisp-Doc">Lisp Doc</a>).
+
+<div class="defun">
+&mdash; global-semantic-idle-summary-mode: <b>&amp;optional</b><var> arg<a name="index-g_t_0026optional-37"></a></var><br>
+<blockquote><p>This command toggles Semantic Idle Summary mode in all
+-enabled buffers.  You can also toggle it via the
+&lsquo;<samp><span class="samp">Show Tag Summaries</span></samp>&rsquo; menu item in the &lsquo;<samp><span class="samp">Development</span></samp>&rsquo; menu. 
+</p></blockquote></div>
+
+   <p>When Semantic Idle Summary mode is active, a summary of the tag at
+point is displayed in the echo area.  This display takes place during
+the idle time, as given by <code>semantic-idle-scheduler-idle-time</code>
+(see <a href="Idle-Scheduler.html#Idle-Scheduler">Idle Scheduler</a>).
+
+   <p>You can override the method for getting the current tag to display by
+setting <code>idle-summary-current-symbol-info</code>.
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-summary-function</b><var><a name="index-semantic_002didle_002dsummary_002dfunction-38"></a></var><br>
+<blockquote><p>The value of this variable should be a function to call to display tag
+information during idle time.  See the variable
+<code>semantic-format-tag-functions</code> for a list of useful functions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-idle-summary-out-of-context-faces</b><var><a name="index-semantic_002didle_002dsummary_002dout_002dof_002dcontext_002dfaces-39"></a></var><br>
+<blockquote><p>The value of this variable is a list of font-lock faces indicating
+useless summary contexts.  These are generally faces used to highlight
+comments or strings.  Semantic Idle Summary mode does not display its
+usual summary if the text at point has one of these faces. 
+</p></blockquote></div>
+
+   </body></html>
+

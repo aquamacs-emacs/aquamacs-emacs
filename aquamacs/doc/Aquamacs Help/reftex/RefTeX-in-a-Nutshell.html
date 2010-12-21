@@ -1,0 +1,187 @@
+<html lang="en">
+<head>
+<title>RefTeX in a Nutshell - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Introduction.html#Introduction" title="Introduction">
+<link rel="prev" href="Installation.html#Installation" title="Installation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="RefTeX-in-a-Nutshell"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Installation.html#Installation">Installation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
+<hr>
+</div>
+
+<h3 class="section">1.4 <b>RefTeX</b> in a Nutshell</h3>
+
+<p><a name="index-Quick_002dStart-12"></a><a name="index-Getting-Started-13"></a><a name="index-RefTeX-in-a-Nutshell-14"></a><a name="index-Nutshell_002c-RefTeX-in-a-15"></a>
+     <ol type=1 start=1>
+<li><b>Table of Contents</b><br> Typing <kbd>C-c =</kbd> (<code>reftex-toc</code>) will show
+a table of contents of the document.  This buffer can display sections,
+labels and index entries defined in the document.  From the buffer, you
+can jump quickly to every part of your document.  Press <kbd>?</kbd> to get
+help.
+
+     <li><b>Labels and References</b><br> <b>RefTeX</b> helps to create unique labels
+and to find the correct key for references quickly.  It distinguishes
+labels for different environments, knows about all standard
+environments (and many others), and can be configured to recognize any
+additional labeled environments you have defined yourself (variable
+<code>reftex-label-alist</code>).
+
+          <ul>
+<li><b>Creating Labels</b><br>
+Type <kbd>C-c (</kbd> (<code>reftex-label</code>) to insert a label at point. 
+<b>RefTeX</b> will either
+               <ul>
+<li>derive a label from context (default for section labels)
+<li>prompt for a label string (default for figures and tables) or
+<li>insert a simple label made of a prefix and a number (all other
+environments)
+</ul>
+          Which labels are created how is configurable with the variable
+<code>reftex-insert-label-flags</code>.
+
+          <li><b>Referencing Labels</b><br> To make a reference, type <kbd>C-c )</kbd>
+(<code>reftex-reference</code>).  This shows an outline of the document with
+all labels of a certain type (figure, equation,...) and some label
+context.  Selecting a label inserts a <code>\ref{</code><var>label</var><code>}</code> macro
+into the original buffer. 
+</ul>
+
+     <li><b>Citations</b><br>
+Typing <kbd>C-c [</kbd> (<code>reftex-citation</code>) will let you specify a
+regular expression to search in current BibTeX database files (as
+specified in the <code>\bibliography</code> command) and pull out a list of
+matches for you to choose from.  The list is <em>formatted</em> and
+sorted.  The selected article is referenced as &lsquo;<samp><span class="samp">\cite{</span><var>key</var><span class="samp">}</span></samp>&rsquo;
+(see the variable <code>reftex-cite-format</code> if you want to insert
+different macros).
+
+     <li><b>Index Support</b><br>
+<b>RefTeX</b> helps to enter index entries.  It also compiles all
+entries into an alphabetically sorted <samp><span class="file">*Index*</span></samp> buffer which you
+can use to check and edit the entries.  <b>RefTeX</b> knows about the
+standard index macros and can be configured to recognize any additional
+macros you have defined (<code>reftex-index-macros</code>).  Multiple indices
+are supported.
+
+          <ul>
+<li><b>Creating Index Entries</b><br>
+To index the current selection or the word at point, type <kbd>C-c /</kbd>
+(<code>reftex-index-selection-or-word</code>).  The default macro
+<code>reftex-index-default-macro</code> will be used.  For a more complex entry
+type <kbd>C-c &lt;</kbd> (<code>reftex-index</code>), select any of the index macros
+and enter the arguments with completion.
+
+          <li><b>The Index Phrases File (Delayed Indexing)</b><br>
+Type <kbd>C-c \</kbd> (<code>reftex-index-phrase-selection-or-word</code>) to add
+the current word or selection to a special <em>index phrase file</em>. 
+<b>RefTeX</b> can later search the document for occurrences of these
+phrases and let you interactively index the matches.
+
+          <li><b>Displaying and Editing the Index</b><br>
+To display the compiled index in a special buffer, type <kbd>C-c &gt;</kbd>
+(<code>reftex-display-index</code>).  From that buffer you can check and edit
+all entries. 
+</ul>
+
+     <li><b>Viewing Cross-References</b><br>
+When point is on the <var>key</var> argument of a cross&ndash;referencing macro
+(<code>\label</code>, <code>\ref</code>, <code>\cite</code>, <code>\bibitem</code>,
+<code>\index</code>, and variations) or inside a BibTeX database entry, you
+can press <kbd>C-c &amp;</kbd> (<code>reftex-view-crossref</code>) to display
+corresponding locations in the document and associated BibTeX database
+files. <br>
+When the enclosing macro is <code>\cite</code> or <code>\ref</code> and no other
+message occupies the echo area, information about the citation or label
+will automatically be displayed in the echo area.
+
+     <li><b>Multifile Documents</b><br>
+Multifile Documents are fully supported.  The included files must have a
+file variable <code>TeX-master</code> or <code>tex-main-file</code> pointing to the
+master file.  <b>RefTeX</b> provides cross-referencing information from
+all parts of the document, and across document borders
+(<samp><span class="file">xr.sty</span></samp>).
+
+     <li><b>Document Parsing</b><br> <b>RefTeX</b> needs to parse the document in
+order to find labels and other information.  It does it automatically
+once and updates its list internally when <code>reftex-label</code> and
+<code>reftex-index</code> are used.  To enforce reparsing, call any of the
+commands described above with a raw <kbd>C-u</kbd> prefix, or press the
+<kbd>r</kbd> key in the label selection buffer, the table of contents
+buffer, or the index buffer.
+
+     <li><b>AUCTeX</b> <br> If your major LaTeX mode is AUCTeX, <b>RefTeX</b> can
+cooperate with it (see variable <code>reftex-plug-into-AUCTeX</code>).  AUCTeX
+contains style files which trigger appropriate settings in
+<b>RefTeX</b>, so that for many of the popular LaTeX packages no
+additional customizations will be necessary.
+
+     <li><b>Useful Settings</b><br>
+To integrate RefTeX with AUCTeX, use
+     <pre class="lisp">          (setq reftex-plug-into-AUCTeX t)
+</pre>
+     <p>To make your own LaTeX macro definitions known to <b>RefTeX</b>,
+customize the variables
+     <pre class="example">          <code>reftex-label-alist</code>          <span class="roman">(for label macros/environments)</span>
+          <code>reftex-section-levels</code>       <span class="roman">(for sectioning commands)</span>
+          <code>reftex-cite-format</code>          <span class="roman">(for </span><code>\cite</code><span class="roman">-like macros)</span>
+          <code>reftex-index-macros</code>         <span class="roman">(for </span><code>\index</code><span class="roman">-like macros)</span>
+          <code>reftex-index-default-macro</code>  <span class="roman">(to set the default macro)</span>
+</pre>
+     <p>If you have a large number of macros defined, you may want to write
+an AUCTeX style file to support them with both AUCTeX and
+<b>RefTeX</b>.
+
+     <li><b>Where Next?</b><br> Go ahead and use <b>RefTeX</b>.  Use its menus
+until you have picked up the key bindings.  For an overview of what you
+can do in each of the different special buffers, press <kbd>?</kbd>.  Read
+the manual if you get stuck, of if you are curious what else might be
+available.  The first part of the manual explains in
+a tutorial way how to use and customize <b>RefTeX</b>.  The second
+part is a command and variable reference.
+        </ol>
+
+   </body></html>
+

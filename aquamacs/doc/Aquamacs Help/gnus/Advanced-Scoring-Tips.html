@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Advanced Scoring Tips - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advanced-Scoring.html#Advanced-Scoring" title="Advanced Scoring">
+<link rel="prev" href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" title="Advanced Scoring Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Advanced-Scoring-Tips"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples">Advanced Scoring Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Scoring.html#Advanced-Scoring">Advanced Scoring</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.15.3 Advanced Scoring Tips</h4>
+
+<p>The <code>&amp;</code> and <code>|</code> logical operators do short-circuit logic. 
+That is, they stop processing their arguments when it's clear what the
+result of the operation will be.  For instance, if one of the arguments
+of an <code>&amp;</code> evaluates to <code>false</code>, there's no point in evaluating
+the rest of the arguments.  This means that you should put slow matches
+(&lsquo;<samp><span class="samp">body</span></samp>&rsquo;, &lsquo;<samp><span class="samp">header</span></samp>&rsquo;) last and quick matches (&lsquo;<samp><span class="samp">from</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">subject</span></samp>&rsquo;) first.
+
+   <p>The indirection arguments (<code>1-</code> and so on) will make their
+arguments work on previous generations of the thread.  If you say
+something like:
+
+<pre class="example">     ...
+     (1-
+      (1-
+       ("from" "lars")))
+     ...
+</pre>
+   <p>Then that means &ldquo;score on the from header of the grandparent of the
+current article&rdquo;.  An indirection is quite fast, but it's better to say:
+
+<pre class="example">     (1-
+      (&amp;
+       ("from" "Lars")
+       ("subject" "Gnus")))
+</pre>
+   <p>than it is to say:
+
+<pre class="example">     (&amp;
+      (1- ("from" "Lars"))
+      (1- ("subject" "Gnus")))
+</pre>
+   </body></html>
+

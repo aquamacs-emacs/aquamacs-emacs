@@ -1,0 +1,265 @@
+<html lang="en">
+<head>
+<title>Options (Defining Label Environments) - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Options.html#Options" title="Options">
+<link rel="prev" href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029" title="Options (Table of Contents)">
+<link rel="next" href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029" title="Options (Creating Labels)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Options-(Defining-Label-Environments)"></a>
+<a name="Options-_0028Defining-Label-Environments_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Options-_0028Table-of-Contents_0029.html#Options-_0028Table-of-Contents_0029">Options (Table of Contents)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Options.html#Options">Options</a>
+<hr>
+</div>
+
+<h3 class="section">8.2 Defining Label Environments</h3>
+
+<p><a name="index-Options_002c-defining-label-environments-459"></a><a name="index-Defining-label-environments_002c-options-460"></a>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-default-label-alist-entries</b><var><a name="index-reftex_002ddefault_002dlabel_002dalist_002dentries-461"></a></var><br>
+<blockquote><p>Default label alist specifications.  It is a list of symbols with
+associations in the constant <code>reftex-label-alist-builtin</code>. 
+<code>LaTeX</code> should always be the last entry. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-label-alist</b><var><a name="index-reftex_002dlabel_002dalist-462"></a></var><br>
+<blockquote><p>Set this variable to define additions and changes to the defaults in
+<code>reftex-default-label-alist-entries</code>.  The only things you
+<em>must not</em> change is that <code>?s</code> is the type indicator for
+section labels, and &lt;SPC&gt; for the <code>any</code> label type.  These are
+hard-coded at other places in the code.
+
+        <p>The value of the variable must be a list of items.  Each item is a list
+itself and has the following structure:
+
+     <pre class="example">           (<var>env-or-macro</var>  <var>type-key</var>  <var>label-prefix</var>  <var>reference-format</var>
+              <var>context-method</var>  (<var>magic-word</var> ... )  <var>toc-level</var>)
+</pre>
+        <p>Each list entry describes either an environment carrying a counter for
+use with <code>\label</code> and <code>\ref</code>, or a LaTeX macro defining a
+label as (or inside) one of its arguments.  The elements of each list
+entry are:
+
+          <dl>
+<dt><var>env-or-macro</var><dd>Name of the environment (like &lsquo;<samp><span class="samp">table</span></samp>&rsquo;) or macro (like
+&lsquo;<samp><span class="samp">\myfig</span></samp>&rsquo;).  For macros, indicate the arguments, as in
+&lsquo;<samp><span class="samp">\myfig[]{}{}{*}{}</span></samp>&rsquo;.  Use square brackets for optional
+arguments, a star to mark the label argument, if any.  The macro does
+not have to have a label argument - you could also use
+&lsquo;<samp><span class="samp">\label{...}</span></samp>&rsquo; inside one of its arguments.
+
+          <p>Special names: <code>section</code> for section labels, <code>any</code> to define a
+group which contains all labels.
+
+          <p>This may also be a function to do local parsing and identify point to be
+in a non-standard label environment.  The function must take an
+argument <var>bound</var> and limit backward searches to this value.  It
+should return either nil or a cons cell <code>(</code><var>function</var><code>
+. </code><var>position</var><code>)</code> with the function symbol and the position where the
+special environment starts.  See the Info documentation for an
+example.
+
+          <p>Finally this may also be <code>nil</code> if the entry is only meant to change
+some settings associated with the type indicator character (see
+below).
+
+          <br><dt><var>type-key</var><dd>Type indicator character, like <code>?t</code>, must be a printable ASCII
+character.  The type indicator is a single character which defines a
+label type.  Any label inside the environment or macro is assumed to
+belong to this type.  The same character may occur several times in this
+list, to cover cases in which different environments carry the same
+label type (like <code>equation</code> and <code>eqnarray</code>).  If the type
+indicator is <code>nil</code> and the macro has a label argument &lsquo;<samp><span class="samp">{*}</span></samp>&rsquo;,
+the macro defines neutral labels just like <code>\label</code>.  In this case
+the reminder of this entry is ignored.
+
+          <br><dt><var>label-prefix</var><dd>Label prefix string, like &lsquo;<samp><span class="samp">tab:</span></samp>&rsquo;.  The prefix is a short string
+used as the start of a label.  It may be the empty string.  The prefix
+may contain the following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes:
+
+          <pre class="example">               %f Current file name, directory and extension stripped.
+               %F Current file name relative to master file directory.
+               %m Master file name, directory and extension stripped.
+               %M Directory name (without path) where master file is located.
+               %u User login name, on systems which support this.
+               %S A section prefix derived with variable <code>reftex-section-prefixes</code>.
+</pre>
+          <p class="noindent">Example: In a file <samp><span class="file">intro.tex</span></samp>, &lsquo;<samp><span class="samp">eq:%f:</span></samp>&rsquo; will become
+&lsquo;<samp><span class="samp">eq:intro:</span></samp>&rsquo;.
+
+          <br><dt><var>reference-format</var><dd>Format string for reference insert in buffer.  &lsquo;<samp><span class="samp">%s</span></samp>&rsquo; will be
+replaced by the label.  When the format starts with &lsquo;<samp><span class="samp">~</span></samp>&rsquo;, this
+&lsquo;<samp><span class="samp">~</span></samp>&rsquo; will only be inserted when the character before point is
+<em>not</em> a whitespace.
+
+          <br><dt><var>context-method</var><dd>Indication on how to find the short context.
+               <ul>
+<li>If <code>nil</code>, use the text following the &lsquo;<samp><span class="samp">\label{...}</span></samp>&rsquo; macro. 
+<li>If <code>t</code>, use
+                    <ul>
+<li>the section heading for section labels. 
+<li>text following the &lsquo;<samp><span class="samp">\begin{...}</span></samp>&rsquo; statement of environments (not
+a good choice for environments like eqnarray or enumerate, where one has
+several labels in a single environment). 
+<li>text after the macro name (starting with the first arg) for
+macros. 
+</ul>
+               <li>If an integer, use the nth argument of the macro.  As a special case,
+1000 means to get text after the last macro argument. 
+<li>If a string, use as regexp to search <em>backward</em> from the label. 
+Context is then the text following the end of the match.  E.g. putting
+this to &lsquo;<samp><span class="samp">\\caption[[{]</span></samp>&rsquo; will use the caption in a figure or table
+environment.  &lsquo;<samp><span class="samp">\\begin{eqnarray}\|\\\\</span></samp>&rsquo; works for
+eqnarrays. 
+<li>If any of <code>caption</code>, <code>item</code>, <code>eqnarray-like</code>,
+<code>alignat-like</code>, this symbol will internally be translated into an
+appropriate regexp (see also the variable
+<code>reftex-default-context-regexps</code>). 
+<li>If a function, call this function with the name of the environment/macro
+as argument.  On call, point will be just after the <code>\label</code> macro. 
+The function is expected to return a suitable context string.  It should
+throw an exception (error) when failing to find context.  As an example,
+here is a function returning the 10 chars following the label macro as
+context:
+
+               <pre class="example">                    (defun my-context-function (env-or-mac)
+                       (if (&gt; (point-max) (+ 10 (point)))
+                           (buffer-substring (point) (+ 10 (point)))
+                         (error "Buffer too small")))
+</pre>
+               </ul>
+
+          <p>Label context is used in two ways by <b>RefTeX</b>: For display in the label
+menu, and to derive a label string.  If you want to use a different
+method for each of these, specify them as a dotted pair. 
+E.g. <code>(nil . t)</code> uses the text after the label (<code>nil</code>) for
+display, and text from the default position (<code>t</code>) to derive a label
+string.  This is actually used for section labels.
+
+          <br><dt><var>magic-word-list</var><dd>List of magic words which identify a reference to be of this type.  If
+the word before point is equal to one of these words when calling
+<code>reftex-reference</code>, the label list offered will be automatically
+restricted to labels of the correct type.  If the first element of this
+word&ndash;list is the symbol `regexp', the strings are interpreted as regular
+expressions.
+
+          <br><dt><var>toc-level</var><dd>The integer level at which this environment should be added to the table
+of contents.  See also <code>reftex-section-levels</code>.  A positive value
+will number the entries mixed with the sectioning commands of the same
+level.  A negative value will make unnumbered entries.  Useful only for
+theorem-like environments which structure the document.  Will be ignored
+for macros.  When omitted or <code>nil</code>, no TOC entries will be
+made. 
+</dl>
+
+        <p>If the type indicator characters of two or more entries are the same,
+<b>RefTeX</b> will use
+          <ul>
+<li>the first non-<code>nil</code> format and prefix
+<li>the magic words of all involved entries. 
+</ul>
+
+        <p>Any list entry may also be a symbol.  If that has an association in
+<code>reftex-label-alist-builtin</code>, the <code>cddr</code> of that association is
+spliced into the list.  However, builtin defaults should normally be set
+with the variable <code>reftex-default-label-alist-entries</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-section-prefixes</b><var><a name="index-reftex_002dsection_002dprefixes-463"></a></var><br>
+<blockquote><p>Prefixes for section labels.  When the label prefix given in an entry in
+<code>reftex-label-alist</code> contains &lsquo;<samp><span class="samp">%S</span></samp>&rsquo;, this list is used to
+determine the correct prefix string depending on the current section
+level.  The list is an alist, with each entry of the form
+<code>(</code><var>key</var><code>&nbsp;.&nbsp;</code><var>prefix</var><code>)</code><!-- /@w -->. Possible keys are sectioning macro
+names like &lsquo;<samp><span class="samp">chapter</span></samp>&rsquo;, integer section levels (as given in
+<code>reftex-section-levels</code>), and <code>t</code> for the default. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-default-context-regexps</b><var><a name="index-reftex_002ddefault_002dcontext_002dregexps-464"></a></var><br>
+<blockquote><p>Alist with default regular expressions for finding context.  The emacs
+lisp form <code>(format&nbsp;regexp&nbsp;(regexp-quote&nbsp;environment))</code><!-- /@w --> is used
+to calculate the final regular expression - so &lsquo;<samp><span class="samp">%s</span></samp>&rsquo; will be
+replaced with the environment or macro. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-trust-label-prefix</b><var><a name="index-reftex_002dtrust_002dlabel_002dprefix-465"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, trust the label prefix when determining label type. 
+It is customary to use special label prefixes to distinguish different label
+types.  The label prefixes have no syntactic meaning in LaTeX (unless
+special packages like fancyref) are being used.  RefTeX can and by
+default does parse around each label to detect the correct label type,
+but this process can be slow when a document contains thousands of
+labels.  If you use label prefixes consistently, you may speed up
+document parsing by setting this variable to a non-nil value.  RefTeX
+will then compare the label prefix with the prefixes found in
+`reftex-label-alist' and derive the correct label type in this way. 
+Possible values for this option are:
+
+     <pre class="example">          t       <span class="roman">This means to trust any label prefixes found.</span>
+          regexp  <span class="roman">If a regexp, only prefixes matched by the regexp are trusted.</span>
+          list    <span class="roman">List of accepted prefixes, as strings.  The colon is part of</span>
+                  <span class="roman">the prefix, e.g. ("fn:" "eqn:" "item:").</span>
+          nil     <span class="roman">Never trust a label prefix.</span>
+</pre>
+        <p>The only disadvantage of using this feature is that the label context
+displayed in the label selection buffer along with each label is
+simply some text after the label definition.  This is no problem if you
+place labels keeping this in mind (e.g. <i>before</i> the equation, <i>at
+the beginning</i> of a fig/tab caption ...).  Anyway, it is probably best
+to use the regexp or the list value types to fine-tune this feature. 
+For example, if your document contains thousands of footnotes with
+labels fn:xxx, you may want to set this variable to the value "^fn:$" or
+("fn:").  Then RefTeX will still do extensive parsing for any
+non-footnote labels. 
+</p></blockquote></div>
+
+   </body></html>
+

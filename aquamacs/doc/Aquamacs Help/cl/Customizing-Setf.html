@@ -1,0 +1,237 @@
+<html lang="en">
+<head>
+<title>Customizing Setf - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Generalized-Variables.html#Generalized-Variables" title="Generalized Variables">
+<link rel="prev" href="Modify-Macros.html#Modify-Macros" title="Modify Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Customizing-Setf"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modify-Macros.html#Modify-Macros">Modify Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.3 Customizing Setf</h4>
+
+<p class="noindent">Common Lisp defines three macros, <code>define-modify-macro</code>,
+<code>defsetf</code>, and <code>define-setf-method</code>, that allow the
+user to extend generalized variables in various ways.
+
+<div class="defun">
+&mdash; Special Form: <b>define-modify-macro</b><var> name arglist function </var>[<var>doc-string</var>]<var><a name="index-define_002dmodify_002dmacro-26"></a></var><br>
+<blockquote><p>This macro defines a &ldquo;read-modify-write&rdquo; macro similar to
+<code>incf</code> and <code>decf</code>.  The macro <var>name</var> is defined
+to take a <var>place</var> argument followed by additional arguments
+described by <var>arglist</var>.  The call
+
+     <pre class="example">          (<var>name</var> <var>place</var> <var>args</var>...)
+</pre>
+        <p class="noindent">will be expanded to
+
+     <pre class="example">          (callf <var>func</var> <var>place</var> <var>args</var>...)
+</pre>
+        <p class="noindent">which in turn is roughly equivalent to
+
+     <pre class="example">          (setf <var>place</var> (<var>func</var> <var>place</var> <var>args</var>...))
+</pre>
+        <p>For example:
+
+     <pre class="example">          (define-modify-macro incf (&amp;optional (n 1)) +)
+          (define-modify-macro concatf (&amp;rest args) concat)
+</pre>
+        <p>Note that <code>&amp;key</code> is not allowed in <var>arglist</var>, but
+<code>&amp;rest</code> is sufficient to pass keywords on to the function.
+
+        <p>Most of the modify macros defined by Common Lisp do not exactly
+follow the pattern of <code>define-modify-macro</code>.  For example,
+<code>push</code> takes its arguments in the wrong order, and <code>pop</code>
+is completely irregular.  You can define these macros &ldquo;by hand&rdquo;
+using <code>get-setf-method</code>, or consult the source file
+<samp><span class="file">cl-macs.el</span></samp> to see how to use the internal <code>setf</code>
+building blocks. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>defsetf</b><var> access-fn update-fn<a name="index-defsetf-27"></a></var><br>
+<blockquote><p>This is the simpler of two <code>defsetf</code> forms.  Where
+<var>access-fn</var> is the name of a function which accesses a place,
+this declares <var>update-fn</var> to be the corresponding store
+function.  From now on,
+
+     <pre class="example">          (setf (<var>access-fn</var> <var>arg1</var> <var>arg2</var> <var>arg3</var>) <var>value</var>)
+</pre>
+        <p class="noindent">will be expanded to
+
+     <pre class="example">          (<var>update-fn</var> <var>arg1</var> <var>arg2</var> <var>arg3</var> <var>value</var>)
+</pre>
+        <p class="noindent">The <var>update-fn</var> is required to be either a true function, or
+a macro which evaluates its arguments in a function-like way.  Also,
+the <var>update-fn</var> is expected to return <var>value</var> as its result. 
+Otherwise, the above expansion would not obey the rules for the way
+<code>setf</code> is supposed to behave.
+
+        <p>As a special (non-Common-Lisp) extension, a third argument of <code>t</code>
+to <code>defsetf</code> says that the <code>update-fn</code>'s return value is
+not suitable, so that the above <code>setf</code> should be expanded to
+something more like
+
+     <pre class="example">          (let ((temp <var>value</var>))
+            (<var>update-fn</var> <var>arg1</var> <var>arg2</var> <var>arg3</var> temp)
+            temp)
+</pre>
+        <p>Some examples of the use of <code>defsetf</code>, drawn from the standard
+suite of setf methods, are:
+
+     <pre class="example">          (defsetf car setcar)
+          (defsetf symbol-value set)
+          (defsetf buffer-name rename-buffer t)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>defsetf</b><var> access-fn arglist </var>(<var>store-var</var>)<var> forms<small class="dots">...</small><a name="index-defsetf-28"></a></var><br>
+<blockquote><p>This is the second, more complex, form of <code>defsetf</code>.  It is
+rather like <code>defmacro</code> except for the additional <var>store-var</var>
+argument.  The <var>forms</var> should return a Lisp form which stores
+the value of <var>store-var</var> into the generalized variable formed
+by a call to <var>access-fn</var> with arguments described by <var>arglist</var>. 
+The <var>forms</var> may begin with a string which documents the <code>setf</code>
+method (analogous to the doc string that appears at the front of a
+function).
+
+        <p>For example, the simple form of <code>defsetf</code> is shorthand for
+
+     <pre class="example">          (defsetf <var>access-fn</var> (&amp;rest args) (store)
+            (append '(<var>update-fn</var>) args (list store)))
+</pre>
+        <p>The Lisp form that is returned can access the arguments from
+<var>arglist</var> and <var>store-var</var> in an unrestricted fashion;
+macros like <code>setf</code> and <code>incf</code> which invoke this
+setf-method will insert temporary variables as needed to make
+sure the apparent order of evaluation is preserved.
+
+        <p>Another example drawn from the standard package:
+
+     <pre class="example">          (defsetf nth (n x) (store)
+            (list 'setcar (list 'nthcdr n x) store))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>define-setf-method</b><var> access-fn arglist forms<small class="dots">...</small><a name="index-define_002dsetf_002dmethod-29"></a></var><br>
+<blockquote><p>This is the most general way to create new place forms.  When
+a <code>setf</code> to <var>access-fn</var> with arguments described by
+<var>arglist</var> is expanded, the <var>forms</var> are evaluated and
+must return a list of five items:
+
+          <ol type=1 start=1>
+<li>A list of <dfn>temporary variables</dfn>.
+
+          <li>A list of <dfn>value forms</dfn> corresponding to the temporary variables
+above.  The temporary variables will be bound to these value forms
+as the first step of any operation on the generalized variable.
+
+          <li>A list of exactly one <dfn>store variable</dfn> (generally obtained
+from a call to <code>gensym</code>).
+
+          <li>A Lisp form which stores the contents of the store variable into
+the generalized variable, assuming the temporaries have been
+bound as described above.
+
+          <li>A Lisp form which accesses the contents of the generalized variable,
+assuming the temporaries have been bound.
+             </ol>
+
+        <p>This is exactly like the Common Lisp macro of the same name,
+except that the method returns a list of five values rather
+than the five values themselves, since Emacs Lisp does not
+support Common Lisp's notion of multiple return values.
+
+        <p>Once again, the <var>forms</var> may begin with a documentation string.
+
+        <p>A setf-method should be maximally conservative with regard to
+temporary variables.  In the setf-methods generated by
+<code>defsetf</code>, the second return value is simply the list of
+arguments in the place form, and the first return value is a
+list of a corresponding number of temporary variables generated
+by <code>gensym</code>.  Macros like <code>setf</code> and <code>incf</code> which
+use this setf-method will optimize away most temporaries that
+turn out to be unnecessary, so there is little reason for the
+setf-method itself to optimize. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-setf-method</b><var> place &amp;optional env<a name="index-get_002dsetf_002dmethod-30"></a></var><br>
+<blockquote><p>This function returns the setf-method for <var>place</var>, by
+invoking the definition previously recorded by <code>defsetf</code>
+or <code>define-setf-method</code>.  The result is a list of five
+values as described above.  You can use this function to build
+your own <code>incf</code>-like modify macros.  (Actually, it is
+better to use the internal functions <code>cl-setf-do-modify</code>
+and <code>cl-setf-do-store</code>, which are a bit easier to use and
+which also do a number of optimizations; consult the source
+code for the <code>incf</code> function for a simple example.)
+
+        <p>The argument <var>env</var> specifies the &ldquo;environment&rdquo; to be
+passed on to <code>macroexpand</code> if <code>get-setf-method</code> should
+need to expand a macro in <var>place</var>.  It should come from
+an <code>&amp;environment</code> argument to the macro or setf-method
+that called <code>get-setf-method</code>.
+
+        <p>See also the source code for the setf-methods for <code>apply</code>
+and <code>substring</code>, each of which works by calling
+<code>get-setf-method</code> on a simpler case, then massaging
+the result in various ways. 
+</p></blockquote></div>
+
+   <p>Modern Common Lisp defines a second, independent way to specify
+the <code>setf</code> behavior of a function, namely &ldquo;<code>setf</code>
+functions&rdquo; whose names are lists <code>(setf </code><var>name</var><code>)</code>
+rather than symbols.  For example, <code>(defun (setf foo) ...)</code>
+defines the function that is used when <code>setf</code> is applied to
+<code>foo</code>.  This package does not currently support <code>setf</code>
+functions.  In particular, it is a compile-time error to use
+<code>setf</code> on a form which has not already been <code>defsetf</code>'d
+or otherwise declared; in newer Common Lisps, this would not be
+an error since the function <code>(setf </code><var>func</var><code>)</code> might be
+defined later.
+
+   </body></html>
+

@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Wrapping Skeletons - Features for Automatic Typing</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Features for Automatic Typing">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Using-Skeletons.html#Using-Skeletons" title="Using Skeletons">
+<link rel="next" href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs" title="Skeletons as Abbrevs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Wrapping-Skeletons"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs">Skeletons as Abbrevs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-Skeletons.html#Using-Skeletons">Using Skeletons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">2 Wrapping Skeletons Around Existing Text</h2>
+
+<p><a name="index-wrapping-skeletons-3"></a>
+  Often you will find yourself with some code that for whatever reason
+suddenly becomes conditional.  Or you have written a bit of text and want to
+put it in the middle of a form letter.  Skeletons provide a means for
+accomplishing this, and can even, in the case of programming languages,
+reindent the wrapped code for you.
+
+   <p>Skeleton commands take an optional numeric prefix argument
+(see <a href="../emacs/Arguments.html#g_t_0028emacs_0029Arguments">(emacs)Arguments</a>).  This is interpreted in two different ways depending
+on whether the prefix is positive, i.e. forwards oriented or negative,
+i.e. backwards oriented.
+
+   <p>A positive prefix means to wrap the skeleton around that many
+following words.  This is accomplished by putting the words there where
+the point is normally left after that skeleton is inserted (see <a href="Using-Skeletons.html#Using-Skeletons">Using Skeletons</a>).  The point (see <a href="../emacs/Point.html#g_t_0028emacs_0029Point">(emacs)Point</a>) is left at the next
+interesting spot in the skeleton instead.
+
+   <p>A negative prefix means to do something similar with that many precedingly
+marked interregions (see <a href="../emacs/Mark.html#g_t_0028emacs_0029Mark">(emacs)Mark</a>).  In the simplest case, if you type
+<kbd>M--</kbd> just before issuing the skeleton command, that will wrap the
+skeleton around the current region, just like a positive argument would have
+wrapped it around a number of words.
+
+   <p>Smaller negative arguments will wrap that many interregions into successive
+interesting spots within the skeleton, again leaving the point at the next one. 
+We speak about interregions rather than regions here, because we treat them in
+the order they appear in the buffer, which coincides with successive regions
+only if they were marked in order.
+
+   <p>That is, if you marked in alphabetical order the points A B C [] (where []
+represents the point) and call a skeleton command with <kbd>M-- 3</kbd>, you will
+wrap the text from A to B into the first interesting spot of the skeleton, the
+text from B to C into the next one, the text from C to the point into the
+third one, and leave the point in the fourth one.  If there are less marks in
+the buffer, or if the skeleton defines less interesting points, the surplus is
+ignored.
+
+   <p>If, on the other hand, you marked in alphabetical order the points [] A C B,
+and call a skeleton command with <kbd>M-- 3</kbd>, you will wrap the text from
+point to A, then the text from A to C and finally the text from C to B.  This
+is done because the regions overlap and Emacs would be helplessly lost if it
+tried to follow the order in which you marked these points.
+
+   </body></html>
+

@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Conditionals - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Control-Structure.html#Control-Structure" title="Control Structure">
+<link rel="prev" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
+<link rel="next" href="Blocks-and-Exits.html#Blocks-and-Exits" title="Blocks and Exits">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Conditionals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Blocks-and-Exits.html#Blocks-and-Exits">Blocks and Exits</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structure.html#Control-Structure">Control Structure</a>
+<hr>
+</div>
+
+<h3 class="section">5.4 Conditionals</h3>
+
+<p class="noindent">These conditional forms augment Emacs Lisp's simple <code>if</code>,
+<code>and</code>, <code>or</code>, and <code>cond</code> forms.
+
+<div class="defun">
+&mdash; Special Form: <b>case</b><var> keyform clause<small class="dots">...</small><a name="index-case-38"></a></var><br>
+<blockquote><p>This macro evaluates <var>keyform</var>, then compares it with the key
+values listed in the various <var>clause</var>s.  Whichever clause matches
+the key is executed; comparison is done by <code>eql</code>.  If no clause
+matches, the <code>case</code> form returns <code>nil</code>.  The clauses are
+of the form
+
+     <pre class="example">          (<var>keylist</var> <var>body-forms</var>...)
+</pre>
+        <p class="noindent">where <var>keylist</var> is a list of key values.  If there is exactly
+one value, and it is not a cons cell or the symbol <code>nil</code> or
+<code>t</code>, then it can be used by itself as a <var>keylist</var> without
+being enclosed in a list.  All key values in the <code>case</code> form
+must be distinct.  The final clauses may use <code>t</code> in place of
+a <var>keylist</var> to indicate a default clause that should be taken
+if none of the other clauses match.  (The symbol <code>otherwise</code>
+is also recognized in place of <code>t</code>.  To make a clause that
+matches the actual symbol <code>t</code>, <code>nil</code>, or <code>otherwise</code>,
+enclose the symbol in a list.)
+
+        <p>For example, this expression reads a keystroke, then does one of
+four things depending on whether it is an &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, a &lsquo;<samp><span class="samp">b</span></samp>&rsquo;,
+a &lt;RET&gt; or <kbd>C-j</kbd>, or anything else.
+
+     <pre class="example">          (case (read-char)
+            (?a (do-a-thing))
+            (?b (do-b-thing))
+            ((?\r ?\n) (do-ret-thing))
+            (t (do-other-thing)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>ecase</b><var> keyform clause<small class="dots">...</small><a name="index-ecase-39"></a></var><br>
+<blockquote><p>This macro is just like <code>case</code>, except that if the key does
+not match any of the clauses, an error is signaled rather than
+simply returning <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>typecase</b><var> keyform clause<small class="dots">...</small><a name="index-typecase-40"></a></var><br>
+<blockquote><p>This macro is a version of <code>case</code> that checks for types
+rather than values.  Each <var>clause</var> is of the form
+&lsquo;<samp><span class="samp">(</span><var>type</var> <var>body</var><span class="samp">...)</span></samp>&rsquo;.  See <a href="Type-Predicates.html#Type-Predicates">Type Predicates</a>,
+for a description of type specifiers.  For example,
+
+     <pre class="example">          (typecase x
+            (integer (munch-integer x))
+            (float (munch-float x))
+            (string (munch-integer (string-to-int x)))
+            (t (munch-anything x)))
+</pre>
+        <p>The type specifier <code>t</code> matches any type of object; the word
+<code>otherwise</code> is also allowed.  To make one clause match any of
+several types, use an <code>(or ...)</code> type specifier. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>etypecase</b><var> keyform clause<small class="dots">...</small><a name="index-etypecase-41"></a></var><br>
+<blockquote><p>This macro is just like <code>typecase</code>, except that if the key does
+not match any of the clauses, an error is signaled rather than
+simply returning <code>nil</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

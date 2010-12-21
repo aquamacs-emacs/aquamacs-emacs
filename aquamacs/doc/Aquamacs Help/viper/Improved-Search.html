@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Improved Search - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Improvements-over-Vi.html#Improvements-over-Vi" title="Improvements over Vi">
+<link rel="prev" href="Completion.html#Completion" title="Completion">
+<link rel="next" href="Abbreviation-Facilities.html#Abbreviation-Facilities" title="Abbreviation Facilities">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Improved-Search"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Abbreviation-Facilities.html#Abbreviation-Facilities">Abbreviation Facilities</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion.html#Completion">Completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Improvements-over-Vi.html#Improvements-over-Vi">Improvements over Vi</a>
+<hr>
+</div>
+
+<h3 class="section">2.6 Improved Search</h3>
+
+<p><a name="index-buffer-search-87"></a><a name="index-word-search-88"></a>
+Viper provides buffer search, the ability to search the buffer for a region
+under the cursor.  You have to turn this on in <samp><span class="file">.viper</span></samp> either by calling
+
+<pre class="example">     (viper-buffer-search-enable)
+</pre>
+   <p class="noindent">or by setting <code>viper-buffer-search-char</code> to, say, <kbd>f3</kbd>:
+<pre class="example">     (setq viper-buffer-search-char ?g)
+</pre>
+   <p class="noindent">If the user calls <code>viper-buffer-search-enable</code> explicitly (the first
+method), then <code>viper-buffer-search-char</code> will be set to <kbd>g</kbd>. 
+Regardless of how this feature is enabled, the key
+<code>viper-buffer-search-char</code> will take movement commands, like
+<kbd>w,/,e</kbd>, to find a region and then search for the contents of that
+region.  This command is very useful for searching for variable names, etc.,
+in a program.  The search can be repeated by <kbd>n</kbd> or reversed by <kbd>N</kbd>.
+
+   <p><a name="index-incremental-search-89"></a>
+Emacs provides incremental search.  As you type the string in, the
+cursor will move to the next match.  You can snarf words from the buffer
+as you go along.  Incremental Search is normally bound to <kbd>C-s</kbd> and
+<kbd>C-r</kbd>.  See <a href="Customization.html#Customization">Customization</a>, to find out how to change the bindings
+of <kbd>C-r or C-s</kbd>. 
+For details, see <a href="../emacs/Incremental-Search.html#Incremental-Search">Incremental Search</a>
+
+   <p><a name="index-query-replace-90"></a>
+Viper also provides a query replace function that prompts through the
+minibuffer.  It is invoked by the <kbd>Q</kbd> key in Vi state.
+
+   <p><a name="index-mouse-search-91"></a>
+On a window display, Viper supports mouse search, i.e., you can search for a
+word by clicking on it.  See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for details.
+
+   <p>Finally, on a window display, Viper highlights search patterns as it finds
+them.  This is done through what is known as <em>faces</em> in Emacs.  The
+variable that controls how search patterns are highlighted is
+<code>viper-search-face</code>.  If you don't want any highlighting at all, put
+<pre class="example">     (copy-face 'default 'viper-search-face)
+</pre>
+   <p><a name="index-g_t_0040code_007bviper_002dsearch_002dface_007d-92"></a>in <samp><span class="file">~/.viper</span></samp>.  If you want to change how patterns are highlighted, you
+will have to change <code>viper-search-face</code> to your liking.  The easiest
+way to do this is to use Emacs customization widget, which is accessible
+from the menubar.  Viper customization group is located under the
+<em>Emulations</em> customization group, which in turn is under the
+<em>Editing</em> group (or simply by typing <kbd>:customize</kbd>).  All Viper
+faces are grouped together under Viper's
+<em>Highlighting</em> group.
+
+   <p>Try it: it is really simple!
+
+   </body></html>
+

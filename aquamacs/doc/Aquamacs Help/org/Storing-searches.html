@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Storing searches - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Custom-agenda-views.html#Custom-agenda-views" title="Custom agenda views">
+<link rel="prev" href="Custom-agenda-views.html#Custom-agenda-views" title="Custom agenda views">
+<link rel="next" href="Block-agenda.html#Block-agenda" title="Block agenda">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Storing-searches"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Block-agenda.html#Block-agenda">Block agenda</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Custom-agenda-views.html#Custom-agenda-views">Custom agenda views</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Custom-agenda-views.html#Custom-agenda-views">Custom agenda views</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.6.1 Storing searches</h4>
+
+<p>The first application of custom searches is the definition of keyboard
+shortcuts for frequently used searches, either creating an agenda
+buffer, or a sparse tree (the latter covering of course only the current
+buffer). 
+<a name="index-C_002dc-a-C-928"></a><a name="index-org_002dagenda_002dcustom_002dcommands-929"></a>Custom commands are configured in the variable
+<code>org-agenda-custom-commands</code>.  You can customize this variable, for
+example by pressing <kbd>C-c a C</kbd>.  You can also directly set it with
+Emacs Lisp in <samp><span class="file">.emacs</span></samp>.  The following example contains all valid
+search types:
+
+<pre class="lisp">     (setq org-agenda-custom-commands
+           '(("w" todo "WAITING")
+             ("W" todo-tree "WAITING")
+             ("u" tags "+boss-urgent")
+             ("v" tags-todo "+boss-urgent")
+             ("U" tags-tree "+boss-urgent")
+             ("f" occur-tree "\\&lt;FIXME\\&gt;")
+             ("h" . "HOME+Name tags searches") ; description for "h" prefix
+             ("hl" tags "+home+Lisa")
+             ("hp" tags "+home+Peter")
+             ("hk" tags "+home+Kim")))
+</pre>
+   <p class="noindent">The initial string in each entry defines the keys you have to press
+after the dispatcher command <kbd>C-c a</kbd> in order to access the command. 
+Usually this will be just a single character, but if you have many
+similar commands, you can also define two-letter combinations where the
+first character is the same in several combinations and serves as a
+prefix key<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  The second
+parameter is the search type, followed by the string or regular
+expression to be used for the matching.  The example above will
+therefore define:
+
+     <dl>
+<dt><kbd>C-c a w</kbd><dd>as a global search for TODO entries with &lsquo;<samp><span class="samp">WAITING</span></samp>&rsquo; as the TODO
+keyword
+<br><dt><kbd>C-c a W</kbd><dd>as the same search, but only in the current buffer and displaying the
+results as a sparse tree
+<br><dt><kbd>C-c a u</kbd><dd>as a global tags search for headlines marked &lsquo;<samp><span class="samp">:boss:</span></samp>&rsquo; but not
+&lsquo;<samp><span class="samp">:urgent:</span></samp>&rsquo;
+<br><dt><kbd>C-c a v</kbd><dd>as the same search as <kbd>C-c a u</kbd>, but limiting the search to
+headlines that are also TODO items
+<br><dt><kbd>C-c a U</kbd><dd>as the same search as <kbd>C-c a u</kbd>, but only in the current buffer and
+displaying the result as a sparse tree
+<br><dt><kbd>C-c a f</kbd><dd>to create a sparse tree (again: current buffer only) with all entries
+containing the word &lsquo;<samp><span class="samp">FIXME</span></samp>&rsquo;
+<br><dt><kbd>C-c a h</kbd><dd>as a prefix command for a HOME tags search where you have to press an
+additional key (<kbd>l</kbd>, <kbd>p</kbd> or <kbd>k</kbd>) to select a name (Lisa,
+Peter, or Kim) as additional tag to match. 
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> You can provide a description for a prefix key by
+inserting a cons cell with the prefix and the description.</p>
+
+   <hr></div>
+
+   </body></html>
+

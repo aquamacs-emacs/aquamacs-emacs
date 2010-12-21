@@ -28,7 +28,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <sys/types.h>
@@ -115,7 +114,7 @@ Lisp_Object Viso_2022_charset_list;
 /* List of emacs-mule charsets.  */
 Lisp_Object Vemacs_mule_charset_list;
 
-struct charset *emacs_mule_charset[256];
+int emacs_mule_charset[256];
 
 /* Mapping table from ISO2022's charset (specified by DIMENSION,
    CHARS, and FINAL-CHAR) to Emacs' charset.  */
@@ -1211,7 +1210,7 @@ usage: (define-charset-internal ...)  */)
 
   if (charset.emacs_mule_id >= 0)
     {
-      emacs_mule_charset[charset.emacs_mule_id] = CHARSET_FROM_ID (id);
+      emacs_mule_charset[charset.emacs_mule_id] = id;
       if (charset.emacs_mule_id < 0xA0)
 	emacs_mule_bytes[charset.emacs_mule_id] = charset.dimension + 1;
       else
@@ -2331,7 +2330,7 @@ init_charset_once (void)
 	iso_charset_table[i][j][k] = -1;
 
   for (i = 0; i < 256; i++)
-    emacs_mule_charset[i] = NULL;
+    emacs_mule_charset[i] = -1;
 
   charset_jisx0201_roman = -1;
   charset_jisx0208_1978 = -1;
@@ -2365,8 +2364,8 @@ syms_of_charset (void)
   Vemacs_mule_charset_list = Qnil;
 
   /* Don't staticpro them here.  It's done in syms_of_fns.  */
-  QCtest = intern (":test");
-  Qeq = intern ("eq");
+  QCtest = intern_c_string (":test");
+  Qeq = intern_c_string ("eq");
 
   staticpro (&Vcharset_hash_table);
   {

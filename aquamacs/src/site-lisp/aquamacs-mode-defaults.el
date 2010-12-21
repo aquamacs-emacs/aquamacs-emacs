@@ -56,12 +56,16 @@
 ;; NXML
 
 (unless (or (boundp 'nxml-version) (>= emacs-major-version 23))
-  (load "rng-auto")) 
+  (load "rng-auto"))
  
 (assq-set-equal "\\.\\(xml\\|xsl\\|rng\\|xhtml\\)" 
 		'nxml-mode 'auto-mode-alist)
  
 (assq-set-equal "<\\?xml " 'nxml-mode 'magic-mode-alist)
+
+;; NXHTML
+
+(load "autostart.el")
 
 ;; JDEE
 

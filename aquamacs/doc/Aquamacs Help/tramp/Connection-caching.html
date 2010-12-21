@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Connection caching - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Password-handling.html#Password-handling" title="Password handling">
+<link rel="next" href="Remote-Programs.html#Remote-Programs" title="Remote Programs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Connection-caching"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Remote-Programs.html#Remote-Programs">Remote Programs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Password-handling.html#Password-handling">Password handling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.13 Reusing connection related information.</h3>
+
+<p><a name="index-caching-145"></a>
+<a name="index-tramp_002dpersistency_002dfile_002dname-146"></a>In order to reduce initial connection time, <span class="sc">tramp</span> stores
+connection related information persistently.  The variable
+<code>tramp-persistency-file-name</code> keeps the file name where these
+information are written.  Its default value is
+<samp><span class="file">~/.emacs.d/tramp</span></samp>. 
+It is recommended to choose a local file name.
+
+   <p><span class="sc">tramp</span> reads this file during startup, and writes it when
+exiting GNU Emacs.  You can simply remove this file if
+<span class="sc">tramp</span> shall be urged to recompute these information next
+GNU Emacs startup time.
+
+   <p>Using such persistent information can be disabled by setting
+<code>tramp-persistency-file-name</code> to <code>nil</code>.
+
+   <p>Once consequence of reusing connection related information is that
+<var>tramp</var> needs to distinguish hosts.  If you, for example, run a
+local <code>sshd</code> on port 3001, which tunnels <samp><span class="command">ssh</span></samp> to another
+host, you could access both <samp><span class="file">/ssh<!-- /@w -->:localhost:</span></samp> and
+<samp><span class="file">/ssh<!-- /@w -->:localhost#3001:</span></samp>.  <var>tramp</var> would use the
+same host related information (like paths, Perl variants, etc) for
+both connections, although the information is valid only for one of
+them.
+
+   <p>In order to avoid trouble, you must use another host name for one of
+the connections, like introducing a <samp><span class="option">Host</span></samp> section in
+<samp><span class="file">~/.ssh/config</span></samp> (see <a href="Frequently-Asked-Questions.html#Frequently-Asked-Questions">Frequently Asked Questions</a>) or applying
+multiple hops (see <a href="Multi_002dhops.html#Multi_002dhops">Multi-hops</a>).
+
+   <p>When <span class="sc">tramp</span> detects a changed operating system version on a
+remote host (via the command <samp><span class="command">uname -sr</span></samp>), it flushes all
+connection related information for this host, and opens the
+connection, again.
+
+   </body></html>
+

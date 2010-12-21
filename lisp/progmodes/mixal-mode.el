@@ -125,7 +125,7 @@ value.")
 (defvar mixal-operation-codes-alist
   ;; FIXME: the codes FADD, FSUB, FMUL, FDIV, JRAD, and FCMP were in
   ;; mixal-operation-codes but not here.  They should probably be added here.
-  ;; 
+  ;;
   ;; We used to define this with a backquote and subexps like ,(+ 8 3) for
   ;; better clarity, but the resulting code was too big and caused the
   ;; byte-compiler to eat up all the stack space.  Even using
@@ -1106,8 +1106,7 @@ Assumes that file has been compiled with debugging support."
 
 ;;;###autoload
 (define-derived-mode mixal-mode fundamental-mode "mixal"
-  "Major mode for the mixal asm language.
-\\{mixal-mode-map}"
+  "Major mode for the mixal asm language."
   (set (make-local-variable 'comment-start) "*")
   (set (make-local-variable 'comment-start-skip) "^\\*[ \t]*")
   (set (make-local-variable 'font-lock-defaults)
@@ -1117,14 +1116,7 @@ Assumes that file has been compiled with debugging support."
   ;; might add an indent function in the future
   ;;  (set (make-local-variable 'indent-line-function) 'mixal-indent-line)
   (set (make-local-variable 'compile-command) (concat "mixasm "
-						      buffer-file-name))
-  ;; mixasm will do strange when there is no final newline,
-  ;; so let Emacs ensure that it is always there
-  (set (make-local-variable 'require-final-newline)
-       mode-require-final-newline))
-
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.mixal\\'" . mixal-mode))
+						      buffer-file-name)))
 
 (provide 'mixal-mode)
 

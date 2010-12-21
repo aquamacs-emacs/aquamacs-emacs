@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Escape sequences in shell output - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Common-requests.html#Common-requests" title="Common requests">
+<link rel="prev" href="Filling-paragraphs-with-a-single-space.html#Filling-paragraphs-with-a-single-space" title="Filling paragraphs with a single space">
+<link rel="next" href="Fullscreen-mode-on-MS_002dWindows.html#Fullscreen-mode-on-MS_002dWindows" title="Fullscreen mode on MS-Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Escape-sequences-in-shell-output"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fullscreen-mode-on-MS_002dWindows.html#Fullscreen-mode-on-MS_002dWindows">Fullscreen mode on MS-Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Filling-paragraphs-with-a-single-space.html#Filling-paragraphs-with-a-single-space">Filling paragraphs with a single space</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Common-requests.html#Common-requests">Common requests</a>
+<hr>
+</div>
+
+<h3 class="section">5.48 Why these strange escape sequences from <code>ls</code> from the Shell mode?</h3>
+
+<p><a name="index-Escape-sequences-in-_0040code_007bls_007d-output-331"></a><a name="index-g_t_0040code_007bls_007d-in-Shell-mode-332"></a>
+In many systems, <code>ls</code> is aliased to &lsquo;<samp><span class="samp">ls --color</span></samp>&rsquo;, which
+prints using ANSI color escape sequences.  Emacs version 21.1 and
+later includes the <code>ansi-color</code> package, which lets Shell mode
+recognize these escape sequences.  In Emacs 23.2 and later, the
+package is enabled by default; in earlier versions you can enable it
+by typing <kbd>M-x ansi-color-for-comint-mode</kbd> in the Shell buffer, or
+by adding <code>(add-hook 'shell-mode-hook
+'ansi-color-for-comint-mode-on)</code> to your init file.
+
+   <p>In Emacs versions before 21.1, the <code>ansi-color</code> package is not
+included.  In that case, you need to unalias <code>ls</code> for interactive
+shells running in Emacs; this can be done by checking the <code>EMACS</code>
+variable in the environment.
+
+   </body></html>
+

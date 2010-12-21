@@ -35,7 +35,7 @@ perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\
 
 $P/convert-emacs-manual-pages /tmp/emanual/*.html
 version=`$P/convert-emacs-manual-title /tmp/emanual/index.html`
-sed 's|<body>|<body><a name="index"></a>|' </tmp/emanual/index.html >/tmp/emanual/index2.html
+sed 's|<body>|<body><a name="EmacsManualIndex"></a>|' </tmp/emanual/index.html >/tmp/emanual/index2.html
 mv /tmp/emanual/index2.html /tmp/emanual/index.html
 
 echo $version >/tmp/emanual/VERSION
@@ -43,10 +43,4 @@ echo $version >/tmp/emanual/VERSION
 rm -r "$P"/../"Emacs Manual"
 mv /tmp/emanual $P/../"Emacs Manual"
 
-hiutil -C -g -s en -a -f $P/../"Emacs Manual/Emacs Manual.helpindex" $P/../"Emacs Manual"
-
-# pre 10.6
-# indexer=/Developer/Applications/Utilities/Help\ Indexer.app/Contents/MacOS/Help\ Indexer
-
-# "${indexer}" $P/../"Emacs Manual" -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1
-# cd $P/..
+#hiutil -C -g -s en -a -f $P/../"Emacs Manual/Emacs Manual.helpindex" $P/../"Emacs Manual"

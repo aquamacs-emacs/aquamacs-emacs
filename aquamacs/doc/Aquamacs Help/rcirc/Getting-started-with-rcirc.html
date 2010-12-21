@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Getting started with rcirc - rcirc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="rcirc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Basics.html#Basics" title="Basics">
+<link rel="prev" href="Internet-Relay-Chat.html#Internet-Relay-Chat" title="Internet Relay Chat">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Getting-started-with-rcirc"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Internet-Relay-Chat.html#Internet-Relay-Chat">Internet Relay Chat</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basics.html#Basics">Basics</a>
+<hr>
+</div>
+
+<h3 class="section">1.2 Getting started with rcirc</h3>
+
+<p><a name="index-getting-started-16"></a><a name="index-connecting-to-a-server-17"></a>
+<a name="index-irc-command-18"></a>Use the command <kbd>M-x irc</kbd> to connect using the defaults. 
+See <a href="Configuration.html#Configuration">Configuration</a>, if you want to change the defaults.
+
+   <p>Use <kbd>C-u M-x irc</kbd> if you don't want to use the defaults, eg. if you
+want to connect to a different network, or connect to the same network
+using a different nick.  This will prompt you for four things:
+
+     
+<a name="index-server_002c-connecting-19"></a>
+<a name="index-Freenode-network-20"></a>
+<dl><dt>IRC Server<dd>What server do you want to connect to? All the servers in a particular
+network are equivalent.  Some networks use a round-robin system where a
+single server redirects new connections to a random server in the
+network.  <code>irc.freenode.net</code> is such a server for the Freenode
+network.  Freenode provides the network &ldquo;for the Free and Open Source
+Software communities, for not-for-profit organizations and for related
+communities and organizations.&rdquo;
+
+     <p><a name="index-port_002c-connecting-21"></a><a name="index-g_t6667_002c-default-IRC-port-22"></a><br><dt>IRC Port<dd>All network connections require a port.  Just as web servers and clients
+use port 80 per default, IRC uses port 6667 per default.  You rarely
+have to use a different port.
+
+     <p><a name="index-nick_002c-connecting-23"></a><a name="index-changing-nick-24"></a><a name="index-name-changes-25"></a><br><dt>IRC Nick<dd><a name="index-user_002dlogin_002dname-26"></a>Every users needs a handle on-line.  You will automatically be assigned
+a slightly different nick if your chosen nick is already in use.  If
+your <code>user-login-name</code> is <code>alex</code>, and this nick is already
+in use, you might for example get assigned the nick <code>alex`</code>.
+
+     <p><a name="index-channels_002c-connecting-27"></a><a name="index-initial-channels-28"></a><a name="index-startup-channels-29"></a><br><dt>IRC Channels<dd>A space separated list of channels you want to join when connecting. 
+You don't need to join any channels, if you just want to have one-to-one
+conversations with friends on the same network.  If you're new to the
+Freenode network, join <code>#emacs</code>, the channel about all things
+Emacs, or join <code>#rcirc</code>, the channel about <code>rcirc</code>. 
+</dl>
+
+   <p><a name="index-server-buffer-30"></a>When you have answered these questions, <code>rcirc</code> will create a server
+buffer, which will be named something like <code>*irc.freenode.net*</code>,
+and a channel buffer for each of the channels you wanted to join.
+
+   <p><a name="index-RET-31"></a><a name="index-talking-32"></a><a name="index-communicating-33"></a>To talk in a channel, just type what you want to say in a channel
+buffer, and press &lt;RET&gt;.
+
+   <p><a name="index-C_002dc-C_002dc-34"></a><a name="index-multiline-messages-35"></a><a name="index-messages_002c-multiple-lines-36"></a><a name="index-pasting-multiple-lines-37"></a><a name="index-edit-message-before-sending-38"></a>If you want to paste multiple lines, such as source code, you can use
+<kbd>C-c C-c</kbd> to edit your message in a separate buffer.  Use <kbd>C-c
+C-c</kbd> to finish editing.  You still need to press &lt;RET&gt; to send it,
+though.  Generally, IRC users don't like people pasting more than around
+four lines of code, so use with care.
+
+<!-- This section copied from the Channels section. -->
+<!-- All index markers should point to the original! -->
+   <p>Once you are connected to multiple channels, or once you've turned you
+attention to other buffers in Emacs, you probably want to be notified
+of any activity in channels not currently visible.  All you need to do
+is switch channel tracking on using <kbd>M-x rcirc-track-minor-mode</kbd>. 
+To make this permanent, add the following to your init file:
+
+<pre class="example">     (rcirc-track-minor-mode 1)
+</pre>
+   <p>Use <kbd>C-c C-&lt;SPC&gt;</kbd> to switch to these buffers.
+
+   </body></html>
+

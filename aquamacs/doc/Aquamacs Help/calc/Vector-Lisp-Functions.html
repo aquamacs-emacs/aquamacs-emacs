@@ -1,0 +1,210 @@
+<html lang="en">
+<head>
+<title>Vector Lisp Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="prev" href="Computational-Lisp-Functions.html#Computational-Lisp-Functions" title="Computational Lisp Functions">
+<link rel="next" href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions" title="Symbolic Lisp Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Vector-Lisp-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions">Symbolic Lisp Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Computational-Lisp-Functions.html#Computational-Lisp-Functions">Computational Lisp Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.7.6 Vector Functions</h5>
+
+<p class="noindent">The functions described here perform various operations on vectors and
+matrices.
+
+<div class="defun">
+&mdash; Function: <b>math-concat</b><var> x y<a name="index-math_002dconcat-2457"></a></var><br>
+<blockquote><p>Do a vector concatenation; this operation is written &lsquo;<samp><var>x</var><span class="samp"> | </span><var>y</var></samp>&rsquo;
+in a symbolic formula.  See <a href="Building-Vectors.html#Building-Vectors">Building Vectors</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>vec-length</b><var> v<a name="index-vec_002dlength-2458"></a></var><br>
+<blockquote><p>Return the length of vector <var>v</var>.  If <var>v</var> is not a vector, the
+result is zero.  If <var>v</var> is a matrix, this returns the number of
+rows in the matrix. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mat-dimens</b><var> m<a name="index-mat_002ddimens-2459"></a></var><br>
+<blockquote><p>Determine the dimensions of vector or matrix <var>m</var>.  If <var>m</var> is not
+a vector, the result is an empty list.  If <var>m</var> is a plain vector
+but not a matrix, the result is a one-element list containing the length
+of the vector.  If <var>m</var> is a matrix with <var>r</var> rows and <var>c</var> columns,
+the result is the list &lsquo;<samp><span class="samp">(</span><var>r</var> <var>c</var><span class="samp">)</span></samp>&rsquo;.  Higher-order tensors
+produce lists of more than two dimensions.  Note that the object
+&lsquo;<samp><span class="samp">[[1, 2, 3], [4, 5]]</span></samp>&rsquo; is a vector of vectors not all the same size,
+and is treated by this and other Calc routines as a plain vector of two
+elements. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dimension-error</b><var><a name="index-dimension_002derror-2460"></a></var><br>
+<blockquote><p>Abort the current function with a message of &ldquo;Dimension error.&rdquo;
+The Calculator will leave the function being evaluated in symbolic
+form; this is really just a special case of <code>reject-arg</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>build-vector</b><var> args<a name="index-build_002dvector-2461"></a></var><br>
+<blockquote><p>Return a Calc vector with <var>args</var> as elements. 
+For example, &lsquo;<samp><span class="samp">(build-vector 1 2 3)</span></samp>&rsquo; returns the Calc vector
+&lsquo;<samp><span class="samp">[1, 2, 3]</span></samp>&rsquo;, stored internally as the list &lsquo;<samp><span class="samp">(vec 1 2 3)</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>make-vec</b><var> obj dims<a name="index-make_002dvec-2462"></a></var><br>
+<blockquote><p>Return a Calc vector or matrix all of whose elements are equal to
+<var>obj</var>.  For example, &lsquo;<samp><span class="samp">(make-vec 27 3 4)</span></samp>&rsquo; returns a 3x4 matrix
+filled with 27's. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>row-matrix</b><var> v<a name="index-row_002dmatrix-2463"></a></var><br>
+<blockquote><p>If <var>v</var> is a plain vector, convert it into a row matrix, i.e.,
+a matrix whose single row is <var>v</var>.  If <var>v</var> is already a matrix,
+leave it alone. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>col-matrix</b><var> v<a name="index-col_002dmatrix-2464"></a></var><br>
+<blockquote><p>If <var>v</var> is a plain vector, convert it into a column matrix, i.e., a
+matrix with each element of <var>v</var> as a separate row.  If <var>v</var> is
+already a matrix, leave it alone. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>map-vec</b><var> f v<a name="index-map_002dvec-2465"></a></var><br>
+<blockquote><p>Map the Lisp function <var>f</var> over the Calc vector <var>v</var>.  For example,
+&lsquo;<samp><span class="samp">(map-vec 'math-floor v)</span></samp>&rsquo; returns a vector of the floored components
+of vector <var>v</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>map-vec-2</b><var> f a b<a name="index-map_002dvec_002d2-2466"></a></var><br>
+<blockquote><p>Map the Lisp function <var>f</var> over the two vectors <var>a</var> and <var>b</var>. 
+If <var>a</var> and <var>b</var> are vectors of equal length, the result is a
+vector of the results of calling &lsquo;<samp><span class="samp">(</span><var>f</var> <var>ai</var> <var>bi</var><span class="samp">)</span></samp>&rsquo;
+for each pair of elements <var>ai</var> and <var>bi</var>.  If either <var>a</var> or
+<var>b</var> is a scalar, it is matched with each value of the other vector. 
+For example, &lsquo;<samp><span class="samp">(map-vec-2 'math-add v 1)</span></samp>&rsquo; returns the vector <var>v</var>
+with each element increased by one.  Note that using &lsquo;<samp><span class="samp">'+</span></samp>&rsquo; would not
+work here, since <code>defmath</code> does not expand function names everywhere,
+just where they are in the function position of a Lisp expression. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>reduce-vec</b><var> f v<a name="index-reduce_002dvec-2467"></a></var><br>
+<blockquote><p>Reduce the function <var>f</var> over the vector <var>v</var>.  For example, if
+<var>v</var> is &lsquo;<samp><span class="samp">[10, 20, 30, 40]</span></samp>&rsquo;, this calls &lsquo;<samp><span class="samp">(f (f (f 10 20) 30) 40)</span></samp>&rsquo;. 
+If <var>v</var> is a matrix, this reduces over the rows of <var>v</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>reduce-cols</b><var> f m<a name="index-reduce_002dcols-2468"></a></var><br>
+<blockquote><p>Reduce the function <var>f</var> over the columns of matrix <var>m</var>.  For
+example, if <var>m</var> is &lsquo;<samp><span class="samp">[[1, 2], [3, 4], [5, 6]]</span></samp>&rsquo;, the result
+is a vector of the two elements &lsquo;<samp><span class="samp">(f (f 1 3) 5)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">(f (f 2 4) 6)</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mat-row</b><var> m n<a name="index-mat_002drow-2469"></a></var><br>
+<blockquote><p>Return the <var>n</var>th row of matrix <var>m</var>.  This is equivalent to
+&lsquo;<samp><span class="samp">(elt m n)</span></samp>&rsquo;.  For a slower but safer version, use <code>mrow</code>. 
+(See <a href="Extracting-Elements.html#Extracting-Elements">Extracting Elements</a>.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mat-col</b><var> m n<a name="index-mat_002dcol-2470"></a></var><br>
+<blockquote><p>Return the <var>n</var>th column of matrix <var>m</var>, in the form of a vector. 
+The arguments are not checked for correctness. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mat-less-row</b><var> m n<a name="index-mat_002dless_002drow-2471"></a></var><br>
+<blockquote><p>Return a copy of matrix <var>m</var> with its <var>n</var>th row deleted.  The
+number <var>n</var> must be in range from 1 to the number of rows in <var>m</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mat-less-col</b><var> m n<a name="index-mat_002dless_002dcol-2472"></a></var><br>
+<blockquote><p>Return a copy of matrix <var>m</var> with its <var>n</var>th column deleted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>transpose</b><var> m<a name="index-transpose-2473"></a></var><br>
+<blockquote><p>Return the transpose of matrix <var>m</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>flatten-vector</b><var> v<a name="index-flatten_002dvector-2474"></a></var><br>
+<blockquote><p>Flatten nested vector <var>v</var> into a vector of scalars.  For example,
+if <var>v</var> is &lsquo;<samp><span class="samp">[[1, 2, 3], [4, 5]]</span></samp>&rsquo; the result is &lsquo;<samp><span class="samp">[1, 2, 3, 4, 5]</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>copy-matrix</b><var> m<a name="index-copy_002dmatrix-2475"></a></var><br>
+<blockquote><p>If <var>m</var> is a matrix, return a copy of <var>m</var>.  This maps
+<code>copy-sequence</code> over the rows of <var>m</var>; in Lisp terms, each
+element of the result matrix will be <code>eq</code> to the corresponding
+element of <var>m</var>, but none of the <code>cons</code> cells that make up
+the structure of the matrix will be <code>eq</code>.  If <var>m</var> is a plain
+vector, this is the same as <code>copy-sequence</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>swap-rows</b><var> m r1 r2<a name="index-swap_002drows-2476"></a></var><br>
+<blockquote><p>Exchange rows <var>r1</var> and <var>r2</var> of matrix <var>m</var> in-place.  In
+other words, unlike most of the other functions described here, this
+function changes <var>m</var> itself rather than building up a new result
+matrix.  The return value is <var>m</var>, i.e., &lsquo;<samp><span class="samp">(eq (swap-rows m 1 2) m)</span></samp>&rsquo;
+is true, with the side effect of exchanging the first two rows of
+<var>m</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+<title>Evaluates-To Operator - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Store-and-Recall.html#Store-and-Recall" title="Store and Recall">
+<link rel="prev" href="Let-Command.html#Let-Command" title="Let Command">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Evaluates-To-Operator"></a>
+<a name="Evaluates_002dTo-Operator"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Let-Command.html#Let-Command">Let Command</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Store-and-Recall.html#Store-and-Recall">Store and Recall</a>
+<hr>
+</div>
+
+<h3 class="section">13.5 The Evaluates-To Operator</h3>
+
+<p class="noindent"><a name="index-evalto-2078"></a><a name="index-g_t_003d_003e-2079"></a><a name="index-Evaluates_002dto-operator-2080"></a><a name="index-g_t_0040samp_007b_003d_003e_007d-operator-2081"></a>The special algebraic symbol &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; is known as the <dfn>evaluates-to
+operator</dfn>.  (It will show up as an <code>evalto</code> function call in
+other language modes like Pascal and LaTeX.)  This is a binary
+operator, that is, it has a lefthand and a righthand argument,
+although it can be entered with the righthand argument omitted.
+
+   <p>A formula like &lsquo;<samp><var>a</var><span class="samp"> =&gt; </span><var>b</var></samp>&rsquo; is evaluated by Calc as
+follows:  First, <var>a</var> is not simplified or modified in any
+way.  The previous value of argument <var>b</var> is thrown away; the
+formula <var>a</var> is then copied and evaluated as if by the <kbd>=</kbd>
+command according to all current modes and stored variable values,
+and the result is installed as the new value of <var>b</var>.
+
+   <p>For example, suppose you enter the algebraic formula &lsquo;<samp><span class="samp">2 + 3 =&gt; 17</span></samp>&rsquo;. 
+The number 17 is ignored, and the lefthand argument is left in its
+unevaluated form; the result is the formula &lsquo;<samp><span class="samp">2 + 3 =&gt; 5</span></samp>&rsquo;.
+
+   <p><a name="index-s-_003d-2082"></a><a name="index-calc_002devalto-2083"></a>You can enter an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; formula either directly using algebraic
+entry (in which case the righthand side may be omitted since it is
+going to be replaced right away anyhow), or by using the <kbd>s =</kbd>
+(<code>calc-evalto</code>) command, which takes <var>a</var> from the stack
+and replaces it with &lsquo;<samp><var>a</var><span class="samp"> =&gt; </span><var>b</var></samp>&rsquo;.
+
+   <p>Calc keeps track of all &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operators on the stack, and
+recomputes them whenever anything changes that might affect their
+values, i.e., a mode setting or variable value.  This occurs only
+if the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operator is at the top level of the formula, or
+if it is part of a top-level vector.  In other words, pushing
+&lsquo;<samp><span class="samp">2 + (a =&gt; 17)</span></samp>&rsquo; will change the 17 to the actual value of
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo; when you enter the formula, but the result will not be
+dynamically updated when &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is changed later because the
+&lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operator is buried inside a sum.  However, a vector
+of &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operators will be recomputed, since it is convenient
+to push a vector like &lsquo;<samp><span class="samp">[a =&gt;, b =&gt;, c =&gt;]</span></samp>&rsquo; on the stack to
+make a concise display of all the variables in your problem. 
+(Another way to do this would be to use &lsquo;<samp><span class="samp">[a, b, c] =&gt;</span></samp>&rsquo;,
+which provides a slightly different format of display.  You
+can use whichever you find easiest to read.)
+
+   <p><a name="index-m-C-2084"></a><a name="index-calc_002dauto_002drecompute-2085"></a>The <kbd>m C</kbd> (<code>calc-auto-recompute</code>) command allows you to
+turn this automatic recomputation on or off.  If you turn
+recomputation off, you must explicitly recompute an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;
+operator on the stack in one of the usual ways, such as by
+pressing <kbd>=</kbd>.  Turning recomputation off temporarily can save
+a lot of time if you will be changing several modes or variables
+before you look at the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; entries again.
+
+   <p>Most commands are not especially useful with &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operators
+as arguments.  For example, given &lsquo;<samp><span class="samp">x + 2 =&gt; 17</span></samp>&rsquo;, it won't
+work to type <kbd>1 +</kbd> to get &lsquo;<samp><span class="samp">x + 3 =&gt; 18</span></samp>&rsquo;.  If you want
+to operate on the lefthand side of the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operator on
+the top of the stack, type <kbd>j 1</kbd> (that's the digit &ldquo;one&rdquo;)
+to select the lefthand side, execute your commands, then type
+<kbd>j u</kbd> to unselect.
+
+   <p>All current modes apply when an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operator is computed,
+including the current simplification mode.  Recall that the
+formula &lsquo;<samp><span class="samp">x + y + x</span></samp>&rsquo; is not handled by Calc's default
+simplifications, but the <kbd>a s</kbd> command will reduce it to
+the simpler form &lsquo;<samp><span class="samp">y + 2 x</span></samp>&rsquo;.  You can also type <kbd>m A</kbd>
+to enable an Algebraic Simplification mode in which the
+equivalent of <kbd>a s</kbd> is used on all of Calc's results. 
+If you enter &lsquo;<samp><span class="samp">x + y + x =&gt;</span></samp>&rsquo; normally, the result will
+be &lsquo;<samp><span class="samp">x + y + x =&gt; x + y + x</span></samp>&rsquo;.  If you change to
+Algebraic Simplification mode, the result will be
+&lsquo;<samp><span class="samp">x + y + x =&gt; y + 2 x</span></samp>&rsquo;.  However, just pressing <kbd>a s</kbd>
+once will have no effect on &lsquo;<samp><span class="samp">x + y + x =&gt; x + y + x</span></samp>&rsquo;,
+because the righthand side depends only on the lefthand side
+and the current mode settings, and the lefthand side is not
+affected by commands like <kbd>a s</kbd>.
+
+   <p>The &ldquo;let&rdquo; command (<kbd>s l</kbd>) has an interesting interaction
+with the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operator.  The <kbd>s l</kbd> command evaluates the
+second-to-top stack entry with the top stack entry supplying
+a temporary value for a given variable.  As you might expect,
+if that stack entry is an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operator its righthand
+side will temporarily show this value for the variable.  In
+fact, all &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;s on the stack will be updated if they refer
+to that variable.  But this change is temporary in the sense
+that the next command that causes Calc to look at those stack
+entries will make them revert to the old variable value.
+
+<pre class="smallexample">     2:  a =&gt; a             2:  a =&gt; 17         2:  a =&gt; a
+     1:  a + 1 =&gt; a + 1     1:  a + 1 =&gt; 18     1:  a + 1 =&gt; a + 1
+         .                      .                   .
+     
+                                17 s l a &lt;RET&gt;        p 8 &lt;RET&gt;
+</pre>
+   <p>Here the <kbd>p 8</kbd> command changes the current precision,
+thus causing the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; forms to be recomputed after the
+influence of the &ldquo;let&rdquo; is gone.  The <kbd>d &lt;SPC&gt;</kbd> command
+(<code>calc-refresh</code>) is a handy way to force the &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;
+operators on the stack to be recomputed without any other
+side effects.
+
+   <p><a name="index-s-_003a-2086"></a><a name="index-calc_002dassign-2087"></a><a name="index-assign-2088"></a><a name="index-g_t_003a_003d-2089"></a>Embedded mode also uses &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operators.  In Embedded mode,
+the lefthand side of an &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; operator can refer to variables
+assigned elsewhere in the file by &lsquo;<samp><span class="samp">:=</span></samp>&rsquo; operators.  The
+assignment operator &lsquo;<samp><span class="samp">a := 17</span></samp>&rsquo; does not actually do anything
+by itself.  But Embedded mode recognizes it and marks it as a sort
+of file-local definition of the variable.  You can enter &lsquo;<samp><span class="samp">:=</span></samp>&rsquo;
+operators in Algebraic mode, or by using the <kbd>s :</kbd>
+(<code>calc-assign</code>) [<code>assign</code>] command which takes a variable
+and value from the stack and replaces them with an assignment.
+
+   <p>See <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX and LaTeX Language Modes</a>, for the way &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; appears in
+TeX language output.  The <dfn>eqn</dfn> mode gives similar
+treatment to &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;.
+
+   </body></html>
+

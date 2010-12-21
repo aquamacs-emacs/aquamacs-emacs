@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Splitting mail using spam-stat - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Statistics-Package.html#Spam-Statistics-Package" title="Spam Statistics Package">
+<link rel="prev" href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary" title="Creating a spam-stat dictionary">
+<link rel="next" href="Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary" title="Low-level interface to the spam-stat dictionary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Splitting-mail-using-spam-stat"></a>
+<a name="Splitting-mail-using-spam_002dstat"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary">Low-level interface to the spam-stat dictionary</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary">Creating a spam-stat dictionary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Statistics-Package.html#Spam-Statistics-Package">Spam Statistics Package</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">8.20.8.2 Splitting mail using spam-stat</h5>
+
+<p>This section describes how to use the Spam statistics
+<em>independently</em> of the See <a href="Spam-Package.html#Spam-Package">Spam Package</a>.
+
+   <p>First, add the following to your <samp><span class="file">~/.gnus.el</span></samp> file:
+
+<pre class="lisp">     (require 'spam-stat)
+     (spam-stat-load)
+</pre>
+   <p>This will load the necessary Gnus code, and the dictionary you
+created.
+
+   <p>Next, you need to adapt your fancy splitting rules:  You need to
+determine how to use <code>spam-stat</code>.  The following examples are for
+the nnml back end.  Using the nnimap back end works just as well.  Just
+use <code>nnimap-split-fancy</code> instead of <code>nnmail-split-fancy</code>.
+
+   <p>In the simplest case, you only have two groups, &lsquo;<samp><span class="samp">mail.misc</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">mail.spam</span></samp>&rsquo;.  The following expression says that mail is either
+spam or it should go into &lsquo;<samp><span class="samp">mail.misc</span></samp>&rsquo;.  If it is spam, then
+<code>spam-stat-split-fancy</code> will return &lsquo;<samp><span class="samp">mail.spam</span></samp>&rsquo;.
+
+<pre class="lisp">     (setq nnmail-split-fancy
+           `(| (: spam-stat-split-fancy)
+               "mail.misc"))
+</pre>
+   <div class="defun">
+&mdash; Variable: <b>spam-stat-split-fancy-spam-group</b><var><a name="index-spam_002dstat_002dsplit_002dfancy_002dspam_002dgroup-3009"></a></var><br>
+<blockquote><p>The group to use for spam.  Default is &lsquo;<samp><span class="samp">mail.spam</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+   <p>If you also filter mail with specific subjects into other groups, use
+the following expression.  Only mails not matching the regular
+expression are considered potential spam.
+
+<pre class="lisp">     (setq nnmail-split-fancy
+           `(| ("Subject" "\\bspam-stat\\b" "mail.emacs")
+               (: spam-stat-split-fancy)
+               "mail.misc"))
+</pre>
+   <p>If you want to filter for spam first, then you must be careful when
+creating the dictionary.  Note that <code>spam-stat-split-fancy</code> must
+consider both mails in &lsquo;<samp><span class="samp">mail.emacs</span></samp>&rsquo; and in &lsquo;<samp><span class="samp">mail.misc</span></samp>&rsquo; as
+non-spam, therefore both should be in your collection of non-spam
+mails, when creating the dictionary!
+
+<pre class="lisp">     (setq nnmail-split-fancy
+           `(| (: spam-stat-split-fancy)
+               ("Subject" "\\bspam-stat\\b" "mail.emacs")
+               "mail.misc"))
+</pre>
+   <p>You can combine this with traditional filtering.  Here, we move all
+HTML-only mails into the &lsquo;<samp><span class="samp">mail.spam.filtered</span></samp>&rsquo; group.  Note that since
+<code>spam-stat-split-fancy</code> will never see them, the mails in
+&lsquo;<samp><span class="samp">mail.spam.filtered</span></samp>&rsquo; should be neither in your collection of spam mails,
+nor in your collection of non-spam mails, when creating the
+dictionary!
+
+<pre class="lisp">     (setq nnmail-split-fancy
+           `(| ("Content-Type" "text/html" "mail.spam.filtered")
+               (: spam-stat-split-fancy)
+               ("Subject" "\\bspam-stat\\b" "mail.emacs")
+               "mail.misc"))
+</pre>
+   </body></html>
+

@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Publishing action - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Selecting-files.html#Selecting-files" title="Selecting files">
+<link rel="next" href="Publishing-options.html#Publishing-options" title="Publishing options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Publishing-action"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Publishing-options.html#Publishing-options">Publishing options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selecting-files.html#Selecting-files">Selecting files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h4 class="subsection">13.1.4 Publishing action</h4>
+
+<p><a name="index-action_002c-for-publishing-1216"></a>
+Publishing means that a file is copied to the destination directory and
+possibly transformed in the process.  The default transformation is to export
+Org files as HTML files, and this is done by the function
+<code>org-publish-org-to-html</code> which calls the HTML exporter (see <a href="HTML-export.html#HTML-export">HTML export</a>).  But you also can publish your content as PDF files using
+<code>org-publish-org-to-pdf</code>.  If you want to publish the Org file itself,
+but with <i>archived</i>, <i>commented</i>, and <i>tag-excluded</i> trees removed, use
+<code>org-publish-org-to-org</code> and set the parameters <code>:plain-source</code>
+and/or <code>:htmlized-source</code>.  This will produce <samp><span class="file">file.org</span></samp> and
+<samp><span class="file">file.org.html</span></samp> in the publishing
+directory<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Other files like images only
+need to be copied to the publishing destination, for this you may use
+<code>org-publish-attachment</code>.  For non-Org files, you always need to
+specify the publishing function:
+
+   <p><table summary=""><tr align="left"><td valign="top" width="30%"><code>:publishing-function</code>
+</td><td valign="top" width="70%">Function executing the publication of a file.  This may also be a
+list of functions, which will all be called in turn. 
+<br></td></tr><tr align="left"><td valign="top" width="30%"><code>:plain-source</code>
+</td><td valign="top" width="70%">Non-nil means, publish plain source. 
+<br></td></tr><tr align="left"><td valign="top" width="30%"><code>:htmlized-source</code>
+</td><td valign="top" width="70%">Non-nil means, publish htmlized source.
+   <br></td></tr></table>
+
+   <p>The function must accept two arguments: a property list containing at least a
+<code>:publishing-directory</code> property, and the name of the file to be
+published.  It should take the specified file, make the necessary
+transformation (if any) and place the result into the destination folder.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <samp><span class="file">file-source.org</span></samp> and <samp><span class="file">file-source.org.html</span></samp> if
+source and publishing directories are equal.  Note that with this kind of
+setup, you need to add <code>:exclude "-source\\.org"</code> to the project
+definition in <code>org-publish-project-alist</code> to avoid that the published
+source files will be considered as new org files the next time the project is
+published.</p>
+
+   <hr></div>
+
+   </body></html>
+

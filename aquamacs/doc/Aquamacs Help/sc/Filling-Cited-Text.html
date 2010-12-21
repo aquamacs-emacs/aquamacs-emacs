@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Filling Cited Text - Supercite User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Supercite User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Replying-and-Yanking.html#Replying-and-Yanking" title="Replying and Yanking">
+<link rel="prev" href="Reply-Buffer-Initialization.html#Reply-Buffer-Initialization" title="Reply Buffer Initialization">
+<link rel="next" href="Selecting-an-Attribution.html#Selecting-an-Attribution" title="Selecting an Attribution">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This document describes Supercite, an Emacs package for citing and
+attributing replies to mail and news messages.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Filling-Cited-Text"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selecting-an-Attribution.html#Selecting-an-Attribution">Selecting an Attribution</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reply-Buffer-Initialization.html#Reply-Buffer-Initialization">Reply Buffer Initialization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Replying-and-Yanking.html#Replying-and-Yanking">Replying and Yanking</a>
+<hr>
+</div>
+
+   <p><a name="index-filling-paragraphs-170"></a><a name="index-sc_002dauto_002dfill_002dregion_002dp-171"></a><a name="index-auto_002dfill_002dregion_002dp-_0028sc_002d_0029-172"></a><a name="index-filladapt-173"></a><a name="index-gin_002dmode-174"></a><a name="index-sc_002dsetup_002dfilladapt-175"></a><a name="index-setup_002dfilladapt-_0028sc_002d_0029-176"></a><a name="index-sc_002dload_002dhook-177"></a><a name="index-load_002dhook-_0028sc_002d_0029-178"></a>
+
+<h3 class="section">6.2 Filling Cited Text</h3>
+
+<p>Supercite will automatically fill newly cited text from the original
+message unless the variable <code>sc-auto-fill-region-p</code> has a
+<code>nil</code> value.  Supercite will also re-fill paragraphs when you
+manually cite or re-cite text.
+
+   <p>However, during normal editing, Supercite itself cannot be used to fill
+paragraphs.  This is a change from version 2.  There are other add-on
+lisp packages which do filling much better than Supercite ever did.  The
+two best known are <dfn>filladapt</dfn> and <dfn>gin-mode</dfn>.  Both work well
+with Supercite and both are available at the normal Emacs Lisp archive
+sites.  <dfn>gin-mode</dfn> works pretty well out of the box, but if you use
+<dfn>filladapt</dfn>, you may want to run the function
+<code>sc-setup-filladapt</code> from your <code>sc-load-hook</code>.  This simply
+makes <dfn>filladapt</dfn> a little more Supercite savvy than its default
+setup.
+
+   <p><a name="index-sc_002dfixup_002dwhitespace_002dp-179"></a><a name="index-fixup_002dwhitespace_002dp-_0028sc_002d_0029-180"></a>Also, Supercite will collapse leading whitespace between the citation
+string and the text on a line when the variable
+<code>sc-fixup-whitespace-p</code> is non-<code>nil</code>.  The default value for
+this variable is <code>nil</code>.
+
+   <p><a name="index-fill_002dprefix-181"></a>Its important to understand that Supercite's automatic filling (during
+the initial citation of the reply) is very fragile.  That is because
+figuring out the <code>fill-prefix</code> for a particular paragraph is a
+really hard thing to do automatically.  This is especially the case when
+the original message contains code or some other text where leading
+whitespace is important to preserve.  For this reason, many Supercite
+users typically run with <code>sc-auto-fill-region-p</code> (and possibly also
+<code>sc-fixup-whitespace-p</code>) set to <code>nil</code>.  They then manually
+fill each cited paragraph in the reply buffer.
+
+   <p>I usually run with both these variables containing their default values. 
+When Supercite's automatic filling breaks on a particular message, I
+will use Emacs' undo feature to undo back before the citation was
+applied to the original message.  Then I'll toggle the variables and
+manually cite those paragraphs that I don't want to fill or collapse
+whitespace on.  See <a href="Variable-Toggling-Shortcuts.html#Variable-Toggling-Shortcuts">Variable Toggling Shortcuts</a>.
+
+   <p><a name="index-C_002dc-C_002dp-C_002dp-182"></a>If you find that Supercite's automatic filling is just too fragile for
+your tastes, you might consider one of these alternate approaches. 
+Also, to make life easier, a shortcut function to toggle the state of
+both of these variables is provided on the key binding
+<kbd>C-c C-p C-p</kbd> (with the default value of <code>sc-mode-map-prefix</code>;
+see <a href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands">Post-yank Formatting Commands</a>).
+
+   <p>You will noticed that the minor mode string will
+show the state of these variables as qualifier characters. When both
+variables are <code>nil</code>, the Supercite minor mode string will display
+&lsquo;<samp><span class="samp">SC</span></samp>&rsquo;.  When just <code>sc-auto-fill-region-p</code> is non-<code>nil</code>, the
+string will display &lsquo;<samp><span class="samp">SC:f</span></samp>&rsquo;, and when just
+<code>sc-fixup-whitespace-p</code> is non-<code>nil</code>, the string will display
+&lsquo;<samp><span class="samp">SC:w</span></samp>&rsquo;.  When both variables are non-<code>nil</code>, the string will
+display &lsquo;<samp><span class="samp">SC:fw</span></samp>&rsquo;.  Note that the qualifiers chosen are mnemonics for
+the default bindings of the toggling function for each respective
+variable. 
+See <a href="Variable-Toggling-Shortcuts.html#Variable-Toggling-Shortcuts">Variable Toggling Shortcuts</a>.
+
+   <p>Why are these variables not set to <code>nil</code> by default?  It is because
+many users won't manually fill paragraphs that are Supercited, and there
+have been widespread complaints on the net about mail and news messages
+containing lines greater than about 72 characters.  So the default is to
+fill cited text.
+
+   </body></html>
+

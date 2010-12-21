@@ -315,7 +315,7 @@ display row, and VPOS is the row number (0-based) containing POS.  */)
   (Lisp_Object pos, Lisp_Object window, Lisp_Object partially)
 {
   register struct window *w;
-  register int posint;
+  register EMACS_INT posint;
   register struct buffer *buf;
   struct text_pos top;
   Lisp_Object in_window = Qnil;
@@ -759,32 +759,26 @@ display margins, fringes, header line, and/or mode line.  */)
 			     - WINDOW_MODE_LINE_HEIGHT (w) + add_y));
 }
 
-/* Test if the character at column *X, row *Y is within window W.
+/* Test if the character at column X, row Y is within window W.
    If it is not, return ON_NOTHING;
-   if it is in the window's text area,
-      set *x and *y to its location relative to the upper left corner
-         of the window, and
-      return ON_TEXT;
+   if it is in the window's text area, return ON_TEXT;
    if it is on the window's modeline, return ON_MODE_LINE;
    if it is on the border between the window and its right sibling,
       return ON_VERTICAL_BORDER.
-   if it is on a scroll bar,
-      return ON_SCROLL_BAR.
+   if it is on a scroll bar, return ON_SCROLL_BAR.
    if it is on the window's top line, return ON_HEADER_LINE;
    if it is in left or right fringe of the window,
-      return ON_LEFT_FRINGE or ON_RIGHT_FRINGE, and convert *X and *Y
-      to window-relative coordinates;
+      return ON_LEFT_FRINGE or ON_RIGHT_FRINGE;
    if it is in the marginal area to the left/right of the window,
-      return ON_LEFT_MARGIN or ON_RIGHT_MARGIN, and convert *X and *Y
-      to window-relative coordinates.
+      return ON_LEFT_MARGIN or ON_RIGHT_MARGIN.
 
    X and Y are frame relative pixel coordinates.  */
 
 static enum window_part
-coordinates_in_window (register struct window *w, register int *x, register int *y)
+coordinates_in_window (register struct window *w, int x, int y)
 {
   struct frame *f = XFRAME (WINDOW_FRAME (w));
-  int left_x, right_x, top_y, bottom_y;
+  int left_x, right_x;
   enum window_part part;
   int ux = FRAME_COLUMN_WIDTH (f);
   int x0 = WINDOW_LEFT_EDGE_X (w);
@@ -793,6 +787,12 @@ coordinates_in_window (register struct window *w, register int *x, register int 
      (Between mode lines for instance.  */
   int grabbable_width = ux;
   int lmargin_width, rmargin_width, text_left, text_right;
+  int top_y = WINDOW_TOP_EDGE_Y (w);
+  int bottom_y = WINDOW_BOTTOM_EDGE_Y (w);
+
+  /* Outside any interesting row?  */
+  if (y < top_y || y >= bottom_y)
+    return ON_NOTHING;
 
   /* In what's below, we subtract 1 when computing right_x because we
      want the rightmost pixel, which is given by left_pixel+width-1.  */
@@ -800,20 +800,12 @@ coordinates_in_window (register struct window *w, register int *x, register int 
     {
       left_x = 0;
       right_x = WINDOW_TOTAL_WIDTH (w) - 1;
-      top_y = WINDOW_TOP_EDGE_Y (w);
-      bottom_y = WINDOW_BOTTOM_EDGE_Y (w);
     }
   else
     {
       left_x = WINDOW_BOX_LEFT_EDGE_X (w);
       right_x = WINDOW_BOX_RIGHT_EDGE_X (w) - 1;
-      top_y = WINDOW_TOP_EDGE_Y (w);
-      bottom_y = WINDOW_BOTTOM_EDGE_Y (w);
     }
-
-  /* Outside any interesting row?  */
-  if (*y < top_y || *y >= bottom_y)
-    return ON_NOTHING;
 
   /* On the mode line or header line?  If it's near the start of
      the mode or header line of window that's has a horizontal
@@ -822,7 +814,7 @@ coordinates_in_window (register struct window *w, register int *x, register int 
      scroll bars.  */
 
   if (WINDOW_WANTS_MODELINE_P (w)
-      && *y >= bottom_y - CURRENT_MODE_LINE_HEIGHT (w))
+      && y >= bottom_y - CURRENT_MODE_LINE_HEIGHT (w))
     {
       part = ON_MODE_LINE;
 
@@ -831,60 +823,37 @@ coordinates_in_window (register struct window *w, register int *x, register int 
 	 between mode lines of horizontally adjacent mode lines
 	 as the vertical border.  If scroll bars on the left,
 	 return the right window.  */
-      if (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w)
-	  || WINDOW_RIGHTMOST_P (w))
-	{
-	  if (!WINDOW_LEFTMOST_P (w) && eabs (*x - x0) < grabbable_width)
-	    {
-	      /* Convert X and Y to window relative coordinates.
-		 Vertical border is at the left edge of window.  */
-	      *x = max (0, *x - x0);
-	      *y -= top_y;
-	      return ON_VERTICAL_BORDER;
-	    }
-	}
-      else
-	{
-	  /* Make sure we're not at the rightmost position of a
-	     mode-/header-line and there's yet another window on
-	     the right.  (Bug#1372)  */
-	  if ((WINDOW_RIGHTMOST_P (w) || *x < x1)
-	      && eabs (*x - x1) < grabbable_width)
-	    {
-	      /* Convert X and Y to window relative coordinates.
-		 Vertical border is at the right edge of window.  */
-	      *x = min (x1, *x) - x0;
-	      *y -= top_y;
-	      return ON_VERTICAL_BORDER;
-	    }
-	}
+      if ((WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w)
+	   || WINDOW_RIGHTMOST_P (w))
+	  && !WINDOW_LEFTMOST_P (w)
+	  && eabs (x - x0) < grabbable_width)
+	return ON_VERTICAL_BORDER;
 
-      if (*x < x0 || *x >= x1)
+      /* Make sure we're not at the rightmost position of a
+	 mode-/header-line and there's yet another window on the
+	 right.  (Bug#1372)  */
+      else if ((WINDOW_RIGHTMOST_P (w) || x < x1)
+	       && eabs (x - x1) < grabbable_width)
+	return ON_VERTICAL_BORDER;
+
+      if (x < x0 || x >= x1)
 	return ON_NOTHING;
 
-      /* Convert X and Y to window relative coordinates.
-	 Mode line starts at left edge of window.  */
-      *x -= x0;
-      *y -= top_y;
       return part;
     }
 
   if (WINDOW_WANTS_HEADER_LINE_P (w)
-      && *y < top_y + CURRENT_HEADER_LINE_HEIGHT (w))
+      && y < top_y + CURRENT_HEADER_LINE_HEIGHT (w))
     {
       part = ON_HEADER_LINE;
       goto header_vertical_border_check;
     }
 
-  if (*x < x0 || *x >= x1)
-    return ON_NOTHING;
+  if (x < x0 || x >= x1) return ON_NOTHING;
 
   /* Outside any interesting column?  */
-  if (*x < left_x || *x > right_x)
-    {
-      *y -= top_y;
-      return ON_SCROLL_BAR;
-    }
+  if (x < left_x || x > right_x)
+    return ON_SCROLL_BAR;
 
   lmargin_width = window_box_width (w, LEFT_MARGIN_AREA);
   rmargin_width = window_box_width (w, RIGHT_MARGIN_AREA);
@@ -897,75 +866,77 @@ coordinates_in_window (register struct window *w, register int *x, register int 
       if (!w->pseudo_window_p
 	  && !WINDOW_HAS_VERTICAL_SCROLL_BAR (w)
 	  && !WINDOW_RIGHTMOST_P (w)
-	  && (eabs (*x - right_x) < grabbable_width))
-	{
-	  /* Convert X and Y to window relative coordinates.
-	     Vertical border is at the right edge of window.  */
-	  *x = min (right_x, *x) - left_x;
-	  *y -= top_y;
-	  return ON_VERTICAL_BORDER;
-	}
+	  && (eabs (x - right_x) < grabbable_width))
+	return ON_VERTICAL_BORDER;
     }
-  else
-    {
-      /* Need to say "*x > right_x" rather than >=, since on character
-	 terminals, the vertical line's x coordinate is right_x.  */
-      if (!w->pseudo_window_p
-	  && !WINDOW_RIGHTMOST_P (w)
-	  && *x > right_x - ux)
-	{
-	  /* On the border on the right side of the window?  Assume that
-	     this area begins at RIGHT_X minus a canonical char width.  */
-	  *x = min (right_x, *x) - left_x;
-	  *y -= top_y;
-	  return ON_VERTICAL_BORDER;
-	}
-    }
+  /* Need to say "x > right_x" rather than >=, since on character
+     terminals, the vertical line's x coordinate is right_x.  */
+  else if (!w->pseudo_window_p
+	   && !WINDOW_RIGHTMOST_P (w)
+	   && x > right_x - ux)
+    return ON_VERTICAL_BORDER;
 
-  if (*x < text_left)
+  if (x < text_left)
     {
       if (lmargin_width > 0
 	  && (WINDOW_HAS_FRINGES_OUTSIDE_MARGINS (w)
-	      ? (*x >= left_x + WINDOW_LEFT_FRINGE_WIDTH (w))
-	      : (*x < left_x + lmargin_width)))
-	{
-	  *x -= left_x;
-	  if (WINDOW_HAS_FRINGES_OUTSIDE_MARGINS (w))
-	    *x -= WINDOW_LEFT_FRINGE_WIDTH (w);
-	  *y -= top_y;
-	  return ON_LEFT_MARGIN;
-	}
+	      ? (x >= left_x + WINDOW_LEFT_FRINGE_WIDTH (w))
+	      : (x < left_x + lmargin_width)))
+	return ON_LEFT_MARGIN;
 
-      /* Convert X and Y to window-relative pixel coordinates.  */
-      *x -= left_x;
-      *y -= top_y;
       return ON_LEFT_FRINGE;
     }
 
-  if (*x >= text_right)
+  if (x >= text_right)
     {
       if (rmargin_width > 0
 	  && (WINDOW_HAS_FRINGES_OUTSIDE_MARGINS (w)
-	      ? (*x < right_x - WINDOW_RIGHT_FRINGE_WIDTH (w))
-	      : (*x >= right_x - rmargin_width)))
-	{
-	  *x -= right_x - rmargin_width;
-	  if (WINDOW_HAS_FRINGES_OUTSIDE_MARGINS (w))
-	    *x += WINDOW_RIGHT_FRINGE_WIDTH (w);
-	  *y -= top_y;
-	  return ON_RIGHT_MARGIN;
-	}
+	      ? (x < right_x - WINDOW_RIGHT_FRINGE_WIDTH (w))
+	      : (x >= right_x - rmargin_width)))
+	return ON_RIGHT_MARGIN;
 
-      /* Convert X and Y to window-relative pixel coordinates.  */
-      *x -= left_x + WINDOW_LEFT_FRINGE_WIDTH (w);
-      *y -= top_y;
       return ON_RIGHT_FRINGE;
     }
 
   /* Everything special ruled out - must be on text area */
-  *x -= text_left;
-  *y -= top_y;
   return ON_TEXT;
+}
+
+/* Take X is the frame-relative pixel x-coordinate, and return the
+   x-coordinate relative to part PART of window W. */
+int
+window_relative_x_coord (struct window *w, enum window_part part, int x)
+{
+  int left_x = (w->pseudo_window_p) ? 0 : WINDOW_BOX_LEFT_EDGE_X (w);
+
+  switch (part)
+    {
+    case ON_TEXT:
+      return x - window_box_left (w, TEXT_AREA);
+
+    case ON_LEFT_FRINGE:
+      return x - left_x;
+
+    case ON_RIGHT_FRINGE:
+      return x - left_x - WINDOW_LEFT_FRINGE_WIDTH (w);
+
+    case ON_LEFT_MARGIN:
+      return (x - left_x
+	      - ((WINDOW_HAS_FRINGES_OUTSIDE_MARGINS (w))
+		 ? WINDOW_LEFT_FRINGE_WIDTH (w) : 0));
+
+    case ON_RIGHT_MARGIN:
+      return (x + 1
+	      - ((w->pseudo_window_p)
+		 ? WINDOW_TOTAL_WIDTH (w)
+		 : WINDOW_BOX_RIGHT_EDGE_X (w))
+	      + window_box_width (w, RIGHT_MARGIN_AREA)
+	      + ((WINDOW_HAS_FRINGES_OUTSIDE_MARGINS (w))
+		 ? WINDOW_RIGHT_FRINGE_WIDTH (w) : 0));
+    }
+
+  /* ON_SCROLL_BAR, ON_NOTHING, and ON_VERTICAL_BORDER:  */
+  return 0;
 }
 
 
@@ -1004,14 +975,16 @@ If they are in the windows's left or right marginal areas, `left-margin'\n\
   x = FRAME_PIXEL_X_FROM_CANON_X (f, lx) + FRAME_INTERNAL_BORDER_WIDTH (f);
   y = FRAME_PIXEL_Y_FROM_CANON_Y (f, ly) + FRAME_INTERNAL_BORDER_WIDTH (f);
 
-  switch (coordinates_in_window (w, &x, &y))
+  switch (coordinates_in_window (w, x, y))
     {
     case ON_NOTHING:
       return Qnil;
 
     case ON_TEXT:
-      /* X and Y are now window relative pixel coordinates.  Convert
-	 them to canonical char units before returning them.  */
+      /* Convert X and Y to window relative pixel coordinates, and
+	 return the canonical char units.  */
+      x -= window_box_left (w, TEXT_AREA);
+      y -= WINDOW_TOP_EDGE_Y (w);
       return Fcons (FRAME_CANON_X_FROM_PIXEL_X (f, x),
 		    FRAME_CANON_Y_FROM_PIXEL_Y (f, y));
 
@@ -1058,7 +1031,7 @@ If they are in the windows's left or right marginal areas, `left-margin'\n\
 struct check_window_data
 {
   Lisp_Object *window;
-  int *x, *y;
+  int x, y;
   enum window_part *part;
 };
 
@@ -1085,8 +1058,7 @@ check_window_containing (struct window *w, void *user_data)
    return it as a Lisp_Object.
 
    If X, Y is on one of the window's special `window_part' elements,
-   set *PART to the id of that element, and return X and Y converted
-   to window relative coordinates in WX and WY.
+   set *PART to the id of that element.
 
    If there is no window under X, Y return nil and leave *PART
    unmodified.  TOOL_BAR_P non-zero means detect tool-bar windows.
@@ -1101,7 +1073,8 @@ check_window_containing (struct window *w, void *user_data)
    case.  */
 
 Lisp_Object
-window_from_coordinates (struct frame *f, int x, int y, enum window_part *part, int *wx, int *wy, int tool_bar_p)
+window_from_coordinates (struct frame *f, int x, int y,
+			 enum window_part *part, int tool_bar_p)
 {
   Lisp_Object window;
   struct check_window_data cw;
@@ -1111,7 +1084,7 @@ window_from_coordinates (struct frame *f, int x, int y, enum window_part *part, 
     part = &dummy;
 
   window = Qnil;
-  cw.window = &window, cw.x = &x, cw.y = &y; cw.part = part;
+  cw.window = &window, cw.x = x, cw.y = y; cw.part = part;
   foreach_window (f, check_window_containing, &cw);
 
   /* If not found above, see if it's in the tool bar window, if a tool
@@ -1120,15 +1093,12 @@ window_from_coordinates (struct frame *f, int x, int y, enum window_part *part, 
       && tool_bar_p
       && WINDOWP (f->tool_bar_window)
       && WINDOW_TOTAL_LINES (XWINDOW (f->tool_bar_window)) > 0
-      && (coordinates_in_window (XWINDOW (f->tool_bar_window), &x, &y)
+      && (coordinates_in_window (XWINDOW (f->tool_bar_window), x, y)
 	  != ON_NOTHING))
     {
       *part = ON_TEXT;
       window = f->tool_bar_window;
     }
-
-  if (wx) *wx = x;
-  if (wy) *wy = y;
 
   return window;
 }
@@ -1156,7 +1126,7 @@ column 0.  */)
 				   + FRAME_INTERNAL_BORDER_WIDTH (f)),
 				  (FRAME_PIXEL_Y_FROM_CANON_Y (f, y)
 				   + FRAME_INTERNAL_BORDER_WIDTH (f)),
-				  0, 0, 0, 0);
+				  0, 0);
 }
 
 DEFUN ("window-point", Fwindow_point, Swindow_point, 0, 1, 0,
@@ -2424,6 +2394,16 @@ check_all_windows (void)
   window_loop (CHECK_ALL_WINDOWS, Qnil, 1, Qt);
 }
 
+DEFUN ("window-use-time", Fwindow_use_time, Swindow_use_time, 0, 1, 0,
+       doc: /* Return WINDOW's use time.
+WINDOW defaults to the selected window.  The window with the highest use
+time is the most recently selected one.  The window with the lowest use
+time is the least recently selected one.  */)
+  (Lisp_Object window)
+{
+  return decode_window (window)->use_time;
+}
+
 DEFUN ("get-lru-window", Fget_lru_window, Sget_lru_window, 0, 2, 0,
        doc: /* Return the window least recently selected or used for display.
 \(LRU means Least Recently Used.)
@@ -2504,7 +2484,7 @@ window-start value is reasonable when this function is called.  */)
   (Lisp_Object window)
 {
   struct window *w;
-  int startpos;
+  EMACS_INT startpos;
   int top, new_top;
 
   if (NILP (window))
@@ -3546,11 +3526,12 @@ This function runs `window-scroll-functions' before running
   else if (!EQ (tem, Qt))
     /* w->buffer is t when the window is first being set up.  */
     {
-      if (!EQ (tem, buffer))
-	if (EQ (w->dedicated, Qt))
-	  error ("Window is dedicated to `%s'", SDATA (XBUFFER (tem)->name));
-	else
-	  w->dedicated = Qnil;
+      if (EQ (tem, buffer))
+	return Qnil;
+      else if (EQ (w->dedicated, Qt))
+	error ("Window is dedicated to `%s'", SDATA (XBUFFER (tem)->name));
+      else
+	w->dedicated = Qnil;
 
       unshow_buffer (w);
     }
@@ -3633,7 +3614,7 @@ selected window before each command.  */)
      redisplay_window has altered point after scrolling,
      because it makes the change only in the window.  */
   {
-    register int new_point = marker_position (w->pointm);
+    register EMACS_INT new_point = marker_position (w->pointm);
     if (new_point < BEGV)
       SET_PT (BEGV);
     else if (new_point > ZV)
@@ -4852,7 +4833,7 @@ window_scroll_pixel_based (Lisp_Object window, int n, int whole, int noerror)
 	      /* Maybe modify window start instead of scrolling.  */
 	      if (rbot > 0 || w->vscroll < 0)
 		{
-		  int spos;
+		  EMACS_INT spos;
 
 		  Fset_window_vscroll (window, make_number (0), Qt);
 		  /* If there are other text lines above the current row,
@@ -4906,7 +4887,7 @@ window_scroll_pixel_based (Lisp_Object window, int n, int whole, int noerror)
   start_display (&it, w, start);
   if (whole)
     {
-      int start_pos = IT_CHARPOS (it);
+      EMACS_INT start_pos = IT_CHARPOS (it);
       int dy = WINDOW_FRAME_LINE_HEIGHT (w);
       dy = max ((window_box_height (w)
 		 - next_screen_context_lines * dy),
@@ -4985,8 +4966,8 @@ window_scroll_pixel_based (Lisp_Object window, int n, int whole, int noerror)
 
   if (! vscrolled)
     {
-      int pos = IT_CHARPOS (it);
-      int bytepos;
+      EMACS_INT pos = IT_CHARPOS (it);
+      EMACS_INT bytepos;
 
       /* If in the middle of a multi-glyph character move forward to
 	 the next character.  */
@@ -5056,7 +5037,7 @@ window_scroll_pixel_based (Lisp_Object window, int n, int whole, int noerror)
     }
   else if (n < 0)
     {
-      int charpos, bytepos;
+      EMACS_INT charpos, bytepos;
       int partial_p;
 
       /* Save our position, for the
@@ -5126,13 +5107,13 @@ static void
 window_scroll_line_based (Lisp_Object window, int n, int whole, int noerror)
 {
   register struct window *w = XWINDOW (window);
-  register int opoint = PT, opoint_byte = PT_BYTE;
-  register int pos, pos_byte;
+  register EMACS_INT opoint = PT, opoint_byte = PT_BYTE;
+  register EMACS_INT pos, pos_byte;
   register int ht = window_internal_height (w);
   register Lisp_Object tem;
   int lose;
   Lisp_Object bolp;
-  int startpos;
+  EMACS_INT startpos;
   Lisp_Object original_pos = Qnil;
 
   /* If scrolling screen-fulls, compute the number of lines to
@@ -5577,7 +5558,7 @@ and redisplay normally--don't erase and redraw the frame.  */)
   struct buffer *buf = XBUFFER (w->buffer);
   struct buffer *obuf = current_buffer;
   int center_p = 0;
-  int charpos, bytepos;
+  EMACS_INT charpos, bytepos;
   int iarg;
   int this_scroll_margin;
 
@@ -5937,7 +5918,7 @@ the return value is nil.  Otherwise the value is t.  */)
   Lisp_Object new_current_buffer;
   Lisp_Object frame;
   FRAME_PTR f;
-  int old_point = -1;
+  EMACS_INT old_point = -1;
 
   CHECK_WINDOW_CONFIGURATION (configuration);
 

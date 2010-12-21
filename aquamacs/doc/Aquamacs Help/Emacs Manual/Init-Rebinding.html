@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+<title>Init Rebinding - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link rel="prev" href="Rebinding.html#Rebinding" title="Rebinding">
+<link rel="next" href="Modifier-Keys.html#Modifier-Keys" title="Modifier Keys">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Init-Rebinding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modifier-Keys.html#Modifier-Keys">Modifier Keys</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rebinding.html#Rebinding">Rebinding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.4.6 Rebinding Keys in Your Init File</h4>
+
+<p><a name="index-rebinding-major-mode-keys-4043"></a><!-- This node is referenced in the tutorial.  When renaming or deleting -->
+<!-- it, the tutorial needs to be adjusted.  (TUTORIAL.de) -->
+
+   <p>If you have a set of key bindings that you like to use all the time,
+you can specify them in your initialization file by writing Lisp code. 
+See <a href="Init-File.html#Init-File">Init File</a>, for a description of the initialization file.
+
+   <p><a name="index-kbd-4044"></a>  There are several ways to write a key binding using Lisp.  The
+simplest is to use the <code>kbd</code> macro, which converts a textual
+representation of a key sequence&mdash;similar to how we have written key
+sequences in this manual&mdash;into a form that can be passed as an
+argument to <code>global-set-key</code>.  For example, here's how to bind
+<kbd>C-z</kbd> to the <code>shell</code> command (see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>):
+
+<pre class="example">     (global-set-key (kbd "C-z") 'shell)
+</pre>
+   <p class="noindent">The single-quote before the command name, <code>shell</code>, marks it as a
+constant symbol rather than a variable.  If you omit the quote, Emacs
+would try to evaluate <code>shell</code> as a variable.  This probably
+causes an error; it certainly isn't what you want.
+
+   <p>Here are some additional examples, including binding function keys
+and mouse events:
+
+<pre class="example">     (global-set-key (kbd "C-c y") 'clipboard-yank)
+     (global-set-key (kbd "C-M-q") 'query-replace)
+     (global-set-key (kbd "&lt;f5&gt;") 'flyspell-mode)
+     (global-set-key (kbd "C-&lt;f5&gt;") 'linum-mode)
+     (global-set-key (kbd "C-&lt;right&gt;") 'forward-sentence)
+     (global-set-key (kbd "&lt;mouse-2&gt;") 'mouse-save-then-kill)
+     (global-set-key (kbd "C-&lt;down-mouse-3&gt;") 'mouse-yank-at-click)
+</pre>
+   <p>Instead of using the <code>kbd</code> macro, you can use a Lisp string or
+vector to specify the key sequence.  Using a string is simpler, but
+only works for <acronym>ASCII</acronym> characters and Meta-modified
+<acronym>ASCII</acronym> characters.  For example, here's how to bind <kbd>C-x
+M-l</kbd> to <code>make-symbolic-link</code> (see <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>):
+
+<pre class="example">     (global-set-key "\C-x\M-l" 'make-symbolic-link)
+</pre>
+   <p>To put &lt;TAB&gt;, &lt;RET&gt;, &lt;ESC&gt;, or &lt;DEL&gt; in the string,
+use the Emacs Lisp escape sequences &lsquo;<samp><span class="samp">\t</span></samp>&rsquo;, &lsquo;<samp><span class="samp">\r</span></samp>&rsquo;, &lsquo;<samp><span class="samp">\e</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">\d</span></samp>&rsquo; respectively.  Here is an example which binds <kbd>C-x
+&lt;TAB&gt;</kbd> to <code>indent-rigidly</code> (see <a href="Indentation.html#Indentation">Indentation</a>):
+
+<pre class="example">     (global-set-key "\C-x\t" 'indent-rigidly)
+</pre>
+   <p>When the key sequence includes function keys or mouse button events,
+or non-<acronym>ASCII</acronym> characters such as <code>C-=</code> or <code>H-a</code>,
+you can use a vector to specify the key sequence.  Each element in the
+vector stands for an input event; the elements are separated by spaces
+and surrounded by a pair of square brackets.  If a vector element is a
+character, write it as a Lisp character constant: &lsquo;<samp><span class="samp">?</span></samp>&rsquo; followed by
+the character as it would appear in a string.  Function keys are
+represented by symbols (see <a href="Function-Keys.html#Function-Keys">Function Keys</a>); simply write the
+symbol's name, with no other delimiters or punctuation.  Here are some
+examples:
+
+<pre class="example">     (global-set-key [?\C-=] 'make-symbolic-link)
+     (global-set-key [?\M-\C-=] 'make-symbolic-link)
+     (global-set-key [?\H-a] 'make-symbolic-link)
+     (global-set-key [f7] 'make-symbolic-link)
+     (global-set-key [C-mouse-1] 'make-symbolic-link)
+</pre>
+   <p class="noindent">You can use a vector for the simple cases too:
+
+<pre class="example">     (global-set-key [?\C-z ?\M-l] 'make-symbolic-link)
+</pre>
+   <p>Language and coding systems may cause problems with key bindings for
+non-<acronym>ASCII</acronym> characters.  See <a href="Init-Non_002dASCII.html#Init-Non_002dASCII">Init Non-ASCII</a>.
+
+   <p>As described in <a href="Local-Keymaps.html#Local-Keymaps">Local Keymaps</a>, major modes and minor modes can
+define local keymaps.  These keymaps are constructed when the mode is
+used for the first time in a session.  If you wish to change one of
+these keymaps, you must use the <dfn>mode hook</dfn> (see <a href="Hooks.html#Hooks">Hooks</a>).
+
+   <p><a name="index-define_002dkey-4045"></a>  For example, Texinfo mode runs the hook <code>texinfo-mode-hook</code>. 
+Here's how you can use the hook to add local bindings for <kbd>C-c n</kbd>
+and <kbd>C-c p</kbd> in Texinfo mode:
+
+<pre class="example">     (add-hook 'texinfo-mode-hook
+               '(lambda ()
+                  (define-key texinfo-mode-map "\C-cp" 'backward-paragraph)
+                  (define-key texinfo-mode-map "\C-cn" 'forward-paragraph)))
+</pre>
+   </body></html>
+

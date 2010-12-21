@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Global TODO list - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Built_002din-agenda-views.html#Built_002din-agenda-views" title="Built-in agenda views">
+<link rel="prev" href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda" title="Weekly/daily agenda">
+<link rel="next" href="Matching-tags-and-properties.html#Matching-tags-and-properties" title="Matching tags and properties">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Global-TODO-list"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily agenda</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Built_002din-agenda-views.html#Built_002din-agenda-views">Built-in agenda views</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.3.2 The global TODO list</h4>
+
+<p><a name="index-global-TODO-list-751"></a><a name="index-TODO-list_002c-global-752"></a>
+The global TODO list contains all unfinished TODO items formatted and
+collected into a single place.
+
+     
+<a name="index-C_002dc-a-t-753"></a>
+<dl><dt><kbd>C-c a t</kbd><dd>Show the global TODO list.  This collects the TODO items from all
+agenda files (see <a href="Agenda-Views.html#Agenda-Views">Agenda Views</a>) into a single buffer.  The buffer is in
+<code>agenda-mode</code>, so there are commands to examine and manipulate
+the TODO entries directly from that buffer (see <a href="Agenda-commands.html#Agenda-commands">Agenda commands</a>). 
+<a name="index-C_002dc-a-T-754"></a><br><dt><kbd>C-c a T</kbd><dd><a name="index-TODO-keyword-matching-755"></a><a name="index-org_002dtodo_002dkeywords-756"></a>Like the above, but allows selection of a specific TODO keyword.  You
+can also do this by specifying a prefix argument to <kbd>C-c a t</kbd>.  With
+a <kbd>C-u</kbd> prefix you are prompted for a keyword, and you may also
+specify several keywords by separating them with &lsquo;<samp><span class="samp">|</span></samp>&rsquo; as the boolean OR
+operator.  With a numeric prefix, the nth keyword in
+<code>org-todo-keywords</code> is selected. 
+<a name="index-r-757"></a>The <kbd>r</kbd> key in the agenda buffer regenerates it, and you can give
+a prefix argument to this command to change the selected TODO keyword,
+for example <kbd>3 r</kbd>.  If you often need a search for a specific
+keyword, define a custom command for it (see <a href="Agenda-dispatcher.html#Agenda-dispatcher">Agenda dispatcher</a>).<br>
+Matching specific TODO keywords can also be done as part of a tags
+search (see <a href="Tag-searches.html#Tag-searches">Tag searches</a>). 
+</dl>
+
+   <p>Remote editing of TODO items means that you can change the state of a
+TODO entry with a single key press.  The commands available in the
+TODO list are described in <a href="Agenda-commands.html#Agenda-commands">Agenda commands</a>.
+
+   <p><a name="index-sublevels_002c-inclusion-into-TODO-list-758"></a>Normally the global TODO list simply shows all headlines with TODO
+keywords.  This list can become very long.  There are two ways to keep
+it more compact:
+     <ul>
+<li><a name="index-org_002dagenda_002dtodo_002dignore_002dscheduled-759"></a><a name="index-org_002dagenda_002dtodo_002dignore_002ddeadlines-760"></a><a name="index-org_002dagenda_002dtodo_002dignore_002dwith_002ddate-761"></a>Some people view a TODO item that has been <em>scheduled</em> for execution or
+have a <em>deadline</em> (see <a href="Timestamps.html#Timestamps">Timestamps</a>) as no longer <em>open</em>. 
+Configure the variables <code>org-agenda-todo-ignore-scheduled</code>,
+<code>org-agenda-todo-ignore-deadlines</code>, and/or
+<code>org-agenda-todo-ignore-with-date</code> to exclude such items from the
+global TODO list. 
+<li><a name="index-org_002dagenda_002dtodo_002dlist_002dsublevels-762"></a>TODO items may have sublevels to break up the task into subtasks.  In
+such cases it may be enough to list only the highest level TODO headline
+and omit the sublevels from the global list.  Configure the variable
+<code>org-agenda-todo-list-sublevels</code> to get this behavior. 
+</ul>
+
+   </body></html>
+

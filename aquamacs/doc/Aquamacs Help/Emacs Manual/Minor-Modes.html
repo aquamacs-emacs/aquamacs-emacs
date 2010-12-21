@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+<title>Minor Modes - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="next" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Minor-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">57.1 Minor Modes</h3>
+
+<p><a name="index-minor-modes-3926"></a><a name="index-mode_002c-minor-3927"></a>
+  Minor modes are optional features which you can turn on or off.  For
+example, Auto Fill mode is a minor mode in which &lt;SPC&gt; breaks
+lines between words as you type.  Minor modes are independent of one
+another and of the selected major mode.  Most minor modes say in the
+mode line when they are enabled; for example, &lsquo;<samp><span class="samp">Fill</span></samp>&rsquo; in the mode
+line means that Auto Fill mode is enabled.
+
+   <p>Each minor mode is associated with a command, called the <dfn>mode
+command</dfn>, which turns it on or off.  The name of this command consists
+of the name of the minor mode, followed by &lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;; for instance,
+the mode command for Auto Fill mode is <code>auto-fill-mode</code>.  Calling
+the minor mode command with no prefix argument <dfn>toggles</dfn> the mode,
+turning it on if it was off, and off if it was on.  A positive
+argument always turns the mode on, and a zero or negative argument
+always turns it off.  Mode commands are usually invoked with
+<kbd>M-x</kbd>, but you can bind keys to them if you wish (see <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>).
+
+   <p>Most minor modes also have a <dfn>mode variable</dfn>, with the same name
+as the mode command.  Its value is non-<code>nil</code> if the mode is
+enabled, and <code>nil</code> if it is disabled.  In some minor modes&mdash;but
+not all&mdash;the value of the variable alone determines whether the mode
+is active: the mode command works simply by setting the variable, and
+changing the value of the variable has the same effect as calling the
+mode command.  Because not all minor modes work this way, we recommend
+that you avoid changing the mode variables directly; use the mode
+commands instead.
+
+   <p>Some minor modes are <dfn>buffer-local</dfn>: they apply only to the
+current buffer, so you can enable the mode in certain buffers and not
+others.  Other minor modes are <dfn>global</dfn>: while enabled, they
+affect everything you do in the Emacs session, in all buffers.  Some
+global minor modes are enabled by default.
+
+   <p>The following is a list of some buffer-local minor modes:
+
+     <ul>
+<li>Abbrev mode automatically expands text based on pre-defined
+abbreviation definitions.  See <a href="Abbrevs.html#Abbrevs">Abbrevs</a>.
+
+     <li>Auto Fill mode inserts newlines as you type to prevent lines from
+becoming too long.  See <a href="Filling.html#Filling">Filling</a>.
+
+     <li>Auto Save mode saves the buffer contents periodically to reduce the
+amount of work you can lose in case of a crash.  See <a href="Auto-Save.html#Auto-Save">Auto Save</a>.
+
+     <li>Enriched mode enables editing and saving of formatted text. 
+See <a href="Formatted-Text.html#Formatted-Text">Formatted Text</a>.
+
+     <li>Flyspell mode automatically highlights misspelled words. 
+See <a href="Spelling.html#Spelling">Spelling</a>.
+
+     <li>Font-Lock mode automatically highlights certain textual units found in
+programs.  It is enabled globally by default, but you can disable it
+in individual buffers.  See <a href="Faces.html#Faces">Faces</a>.
+
+     <p><a name="index-linum_002dmode-3928"></a><a name="index-Linum-mode-3929"></a><li>Linum mode displays each line's line number in the window's left
+margin.  Its mode command is <code>linum-mode</code>.
+
+     <li>Outline minor mode provides similar facilities to the major mode
+called Outline mode.  See <a href="Outline-Mode.html#Outline-Mode">Outline Mode</a>.
+
+     <p><a name="index-Overwrite-mode-3930"></a><a name="index-mode_002c-Overwrite-3931"></a><a name="index-overwrite_002dmode-3932"></a><a name="index-INSERT-3933"></a><li>Overwrite mode causes ordinary printing characters to replace existing
+text instead of shoving it to the right.  For example, if point is in
+front of the &lsquo;<samp><span class="samp">B</span></samp>&rsquo; in &lsquo;<samp><span class="samp">FOOBAR</span></samp>&rsquo;, then in Overwrite mode typing
+a <kbd>G</kbd> changes it to &lsquo;<samp><span class="samp">FOOGAR</span></samp>&rsquo;, instead of producing
+&lsquo;<samp><span class="samp">FOOGBAR</span></samp>&rsquo; as usual.  In Overwrite mode, the command <kbd>C-q</kbd>
+inserts the next character whatever it may be, even if it is a
+digit&mdash;this gives you a way to insert a character instead of
+replacing an existing character.  The mode command,
+<code>overwrite-mode</code>, is bound to the &lt;Insert&gt; key.
+
+     <p><a name="index-binary_002doverwrite_002dmode-3934"></a><li>Binary Overwrite mode is a variant of Overwrite mode for editing
+binary files; it treats newlines and tabs like other characters, so
+that they overwrite other characters and can be overwritten by them. 
+In Binary Overwrite mode, digits after <kbd>C-q</kbd> specify an octal
+character code, as usual.
+
+     <li>Visual Line mode performs &ldquo;word wrapping&rdquo;, causing long lines to be
+wrapped at word boundaries.  See <a href="Visual-Line-Mode.html#Visual-Line-Mode">Visual Line Mode</a>. 
+</ul>
+
+   <p>Here are some useful global minor modes.  Since Line Number mode and
+Transient Mark mode can be enabled or disabled just by setting the
+value of the minor mode variable, you <em>can</em> set them differently
+for particular buffers, by explicitly making the corresponding
+variable local in those buffers.  See <a href="Locals.html#Locals">Locals</a>.
+
+     <ul>
+<li>Column Number mode enables display of the current column number in the
+mode line.  See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
+
+     <li>Delete Selection mode causes text insertion to first delete the text
+in the region, if the region is active.  See <a href="Using-Region.html#Using-Region">Using Region</a>.
+
+     <li>Icomplete mode displays an indication of available completions when
+you are in the minibuffer and completion is active.  See <a href="Completion-Options.html#Completion-Options">Completion Options</a>.
+
+     <li>Line Number mode enables display of the current line number in the
+mode line.  It is enabled by default.  See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
+
+     <li>Menu Bar mode gives each frame a menu bar.  It is enabled by default. 
+See <a href="Menu-Bars.html#Menu-Bars">Menu Bars</a>.
+
+     <li>Scroll Bar mode gives each window a scroll bar.  It is enabled by
+default, but the scroll bar is only displayed on graphical terminals. 
+See <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>.
+
+     <li>Tool Bar mode gives each frame a tool bar.  It is enabled by default,
+but the tool bar is only displayed on graphical terminals.  See <a href="Tool-Bars.html#Tool-Bars">Tool Bars</a>.
+
+     <li>Transient Mark mode highlights the region, and makes many Emacs
+commands operate on the region when the mark is active.  It is enabled
+by default.  See <a href="Mark.html#Mark">Mark</a>. 
+</ul>
+
+   </body></html>
+

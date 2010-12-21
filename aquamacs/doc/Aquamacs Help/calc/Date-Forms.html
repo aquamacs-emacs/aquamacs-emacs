@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+<title>Date Forms - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Data-Types.html#Data-Types" title="Data Types">
+<link rel="prev" href="HMS-Forms.html#HMS-Forms" title="HMS Forms">
+<link rel="next" href="Modulo-Forms.html#Modulo-Forms" title="Modulo Forms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Date-Forms"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modulo-Forms.html#Modulo-Forms">Modulo Forms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="HMS-Forms.html#HMS-Forms">HMS Forms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Data-Types.html#Data-Types">Data Types</a>
+<hr>
+</div>
+
+<h3 class="section">5.9 Date Forms</h3>
+
+<p class="noindent"><a name="index-Date-forms-271"></a>A <dfn>date form</dfn> represents a date and possibly an associated time. 
+Simple date arithmetic is supported:  Adding a number to a date
+produces a new date shifted by that many days; adding an HMS form to
+a date shifts it by that many hours.  Subtracting two date forms
+computes the number of days between them (represented as a simple
+number).  Many other operations, such as multiplying two date forms,
+are nonsensical and are not allowed by Calc.
+
+   <p>Date forms are entered and displayed enclosed in &lsquo;<samp><span class="samp">&lt; &gt;</span></samp>&rsquo; brackets. 
+The default format is, e.g., &lsquo;<samp><span class="samp">&lt;Wed Jan 9, 1991&gt;</span></samp>&rsquo; for dates,
+or &lsquo;<samp><span class="samp">&lt;3:32:20pm Wed Jan 9, 1991&gt;</span></samp>&rsquo; for dates with times. 
+Input is flexible; date forms can be entered in any of the usual
+notations for dates and times.  See <a href="Date-Formats.html#Date-Formats">Date Formats</a>.
+
+   <p>Date forms are stored internally as numbers, specifically the number
+of days since midnight on the morning of January 1 of the year 1 AD. 
+If the internal number is an integer, the form represents a date only;
+if the internal number is a fraction or float, the form represents
+a date and time.  For example, &lsquo;<samp><span class="samp">&lt;6:00am Wed Jan 9, 1991&gt;</span></samp>&rsquo;
+is represented by the number 726842.25.  The standard precision of
+12 decimal digits is enough to ensure that a (reasonable) date and
+time can be stored without roundoff error.
+
+   <p>If the current precision is greater than 12, date forms will keep
+additional digits in the seconds position.  For example, if the
+precision is 15, the seconds will keep three digits after the
+decimal point.  Decreasing the precision below 12 may cause the
+time part of a date form to become inaccurate.  This can also happen
+if astronomically high years are used, though this will not be an
+issue in everyday (or even everymillennium) use.  Note that date
+forms without times are stored as exact integers, so roundoff is
+never an issue for them.
+
+   <p>You can use the <kbd>v p</kbd> (<code>calc-pack</code>) and <kbd>v u</kbd>
+(<code>calc-unpack</code>) commands to get at the numerical representation
+of a date form.  See <a href="Packing-and-Unpacking.html#Packing-and-Unpacking">Packing and Unpacking</a>.
+
+   <p>Date forms can go arbitrarily far into the future or past.  Negative
+year numbers represent years BC.  Calc uses a combination of the
+Gregorian and Julian calendars, following the history of Great
+Britain and the British colonies.  This is the same calendar that
+is used by the <code>cal</code> program in most Unix implementations.
+
+   <p><a name="index-Julian-calendar-272"></a><a name="index-Gregorian-calendar-273"></a>Some historical background:  The Julian calendar was created by
+Julius Caesar in the year 46 BC as an attempt to fix the gradual
+drift caused by the lack of leap years in the calendar used
+until that time.  The Julian calendar introduced an extra day in
+all years divisible by four.  After some initial confusion, the
+calendar was adopted around the year we call 8 AD.  Some centuries
+later it became apparent that the Julian year of 365.25 days was
+itself not quite right.  In 1582 Pope Gregory XIII introduced the
+Gregorian calendar, which added the new rule that years divisible
+by 100, but not by 400, were not to be considered leap years
+despite being divisible by four.  Many countries delayed adoption
+of the Gregorian calendar because of religious differences;
+in Britain it was put off until the year 1752, by which time
+the Julian calendar had fallen eleven days behind the true
+seasons.  So the switch to the Gregorian calendar in early
+September 1752 introduced a discontinuity:  The day after
+Sep 2, 1752 is Sep 14, 1752.  Calc follows this convention. 
+To take another example, Russia waited until 1918 before
+adopting the new calendar, and thus needed to remove thirteen
+days (between Feb 1, 1918 and Feb 14, 1918).  This means that
+Calc's reckoning will be inconsistent with Russian history between
+1752 and 1918, and similarly for various other countries.
+
+   <p>Today's timekeepers introduce an occasional &ldquo;leap second&rdquo; as
+well, but Calc does not take these minor effects into account. 
+(If it did, it would have to report a non-integer number of days
+between, say, &lsquo;<samp><span class="samp">&lt;12:00am Mon Jan 1, 1900&gt;</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">&lt;12:00am Sat Jan 1, 2000&gt;</span></samp>&rsquo;.)
+
+   <p>Calc uses the Julian calendar for all dates before the year 1752,
+including dates BC when the Julian calendar technically had not
+yet been invented.  Thus the claim that day number <i>-10000</i> is
+called &ldquo;August 16, 28 BC&rdquo; should be taken with a grain of salt.
+
+   <p>Please note that there is no &ldquo;year 0&rdquo;; the day before
+&lsquo;<samp><span class="samp">&lt;Sat Jan 1, +1&gt;</span></samp>&rsquo; is &lsquo;<samp><span class="samp">&lt;Fri Dec 31, -1&gt;</span></samp>&rsquo;.  These are
+days 0 and <i>-1</i> respectively in Calc's internal numbering scheme.
+
+   <p><a name="index-Julian-day-counting-274"></a>Another day counting system in common use is, confusingly, also called
+&ldquo;Julian.&rdquo;  The Julian day number is the numbers of days since
+12:00 noon (GMT) on Jan 1, 4713 BC, which in Calc's scheme (in GMT)
+is <i>-1721423.5</i> (recall that Calc starts at midnight instead
+of noon).  Thus to convert a Calc date code obtained by unpacking a
+date form into a Julian day number, simply add 1721423.5 after
+compensating for the time zone difference.  The built-in <kbd>t J</kbd>
+command performs this conversion for you.
+
+   <p>The Julian day number is based on the Julian cycle, which was invented
+in 1583 by Joseph Justus Scaliger.  Scaliger named it the Julian cycle
+since it involves the Julian calendar, but some have suggested that
+Scaliger named it in honor of his father, Julius Caesar Scaliger.  The
+Julian cycle is based on three other cycles: the indiction cycle, the
+Metonic cycle, and the solar cycle.  The indiction cycle is a 15 year
+cycle originally used by the Romans for tax purposes but later used to
+date medieval documents.  The Metonic cycle is a 19 year cycle; 19
+years is close to being a common multiple of a solar year and a lunar
+month, and so every 19 years the phases of the moon will occur on the
+same days of the year.  The solar cycle is a 28 year cycle; the Julian
+calendar repeats itself every 28 years.  The smallest time period
+which contains multiples of all three cycles is the least common
+multiple of 15 years, 19 years and 28 years, which (since they're
+pairwise relatively prime) is
+<!-- @math{15\times 19\times 28 = 7980} years. -->
+15*19*28 = 7980 years. 
+This is the length of a Julian cycle.  Working backwards, the previous
+year in which all three cycles began was 4713 BC, and so Scalinger
+chose that year as the beginning of a Julian cycle.  Since at the time
+there were no historical records from before 4713 BC, using this year
+as a starting point had the advantage of avoiding negative year
+numbers.  In 1849, the astronomer John Herschel (son of William
+Herschel) suggested using the number of days since the beginning of
+the Julian cycle as an astronomical dating system; this idea was taken
+up by other astronomers.  (At the time, noon was the start of the
+astronomical day.  Herschel originally suggested counting the days
+since Jan 1, 4713 BC at noon Alexandria time; this was later amended to
+noon GMT.)  Julian day numbering is largely used in astronomy.
+
+   <p><a name="index-Unix-time-format-275"></a>The Unix operating system measures time as an integer number of
+seconds since midnight, Jan 1, 1970.  To convert a Calc date
+value into a Unix time stamp, first subtract 719164 (the code
+for &lsquo;<samp><span class="samp">&lt;Jan 1, 1970&gt;</span></samp>&rsquo;), then multiply by 86400 (the number of
+seconds in a day) and press <kbd>R</kbd> to round to the nearest
+integer.  If you have a date form, you can simply subtract the
+day &lsquo;<samp><span class="samp">&lt;Jan 1, 1970&gt;</span></samp>&rsquo; instead of unpacking and subtracting
+719164.  Likewise, divide by 86400 and add &lsquo;<samp><span class="samp">&lt;Jan 1, 1970&gt;</span></samp>&rsquo;
+to convert from Unix time to a Calc date form.  (Note that
+Unix normally maintains the time in the GMT time zone; you may
+need to subtract five hours to get New York time, or eight hours
+for California time.  The same is usually true of Julian day
+counts.)  The built-in <kbd>t U</kbd> command performs these
+conversions.
+
+   </body></html>
+

@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>NNTP marks - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="NNTP.html#NNTP" title="NNTP">
+<link rel="prev" href="Common-Variables.html#Common-Variables" title="Common Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="NNTP-marks"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Common-Variables.html#Common-Variables">Common Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="NNTP.html#NNTP">NNTP</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">6.2.1.4 NNTP marks</h5>
+
+<p><a name="index-storing-NNTP-marks-2101"></a>
+Gnus stores marks (see <a href="Marking-Articles.html#Marking-Articles">Marking Articles</a>) for <acronym>NNTP</acronym>
+servers in marks files.  A marks file records what marks you have set
+in a group and each file is specific to the corresponding server. 
+Marks files are stored in <samp><span class="file">~/News/marks</span></samp>
+(<code>nntp-marks-directory</code>) under a classic hierarchy resembling
+that of a news server, for example marks for the group
+&lsquo;<samp><span class="samp">gmane.discuss</span></samp>&rsquo; on the news.gmane.org server will be stored in
+the file <samp><span class="file">~/News/marks/news.gmane.org/gmane/discuss/.marks</span></samp>.
+
+   <p>Marks files are useful because you can copy the <samp><span class="file">~/News/marks</span></samp>
+directory (using rsync, scp or whatever) to another Gnus installation,
+and it will realize what articles you have read and marked.  The data
+in <samp><span class="file">~/News/marks</span></samp> has priority over the same data in
+<samp><span class="file">~/.newsrc.eld</span></samp>.
+
+   <p>Note that marks files are very much server-specific: Gnus remembers
+the article numbers so if you don't use the same servers on both
+installations things are most likely to break (most <acronym>NNTP</acronym>
+servers do not use the same article numbers as any other server). 
+However, if you use servers A, B, C on one installation and servers A,
+D, E on the other, you can sync the marks files for A and then you'll
+get synchronization for that server between the two installations.
+
+   <p>Using <acronym>NNTP</acronym> marks can possibly incur a performance penalty so
+if Gnus feels sluggish, try setting the <code>nntp-marks-is-evil</code>
+variable to <code>t</code>.  Marks will then be stored in <samp><span class="file">~/.newsrc.eld</span></samp>.
+
+   <p>Related variables:
+
+     <dl>
+<dt><code>nntp-marks-is-evil</code><dd><a name="index-nntp_002dmarks_002dis_002devil-2102"></a>If non-<code>nil</code>, this back end will ignore any marks files.  The
+default is <code>nil</code>.
+
+     <br><dt><code>nntp-marks-directory</code><dd><a name="index-nntp_002dmarks_002ddirectory-2103"></a>The directory where marks for nntp groups will be stored.
+
+   </dl>
+
+   </body></html>
+

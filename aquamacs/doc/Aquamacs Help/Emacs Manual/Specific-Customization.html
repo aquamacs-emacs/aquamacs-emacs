@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Specific Customization - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
+<link rel="prev" href="Face-Customization.html#Face-Customization" title="Face Customization">
+<link rel="next" href="Custom-Themes.html#Custom-Themes" title="Custom Themes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Specific-Customization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-Themes.html#Custom-Themes">Custom Themes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Face-Customization.html#Face-Customization">Face Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.2.6 Customizing Specific Items</h4>
+
+<p>Instead of finding the setting you want to change by navigating the
+structure of groups, here are other ways to specify the settings that
+you want to customize.
+
+     <dl>
+<dt><kbd>M-x customize-option &lt;RET&gt; </kbd><var>option</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with just one user option variable,
+<var>option</var>. 
+<br><dt><kbd>M-x customize-face &lt;RET&gt; </kbd><var>face</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with just one face, <var>face</var>. 
+<br><dt><kbd>M-x customize-group &lt;RET&gt; </kbd><var>group</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with just one group, <var>group</var>. 
+<br><dt><kbd>M-x customize-apropos &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with all the settings and groups that
+match <var>regexp</var>. 
+<br><dt><kbd>M-x customize-changed &lt;RET&gt; </kbd><var>version</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with all the settings and groups
+whose meaning has changed since Emacs version <var>version</var>. 
+<br><dt><kbd>M-x customize-saved</kbd><dd>Set up a customization buffer containing all settings that you
+have saved with customization buffers. 
+<br><dt><kbd>M-x customize-unsaved</kbd><dd>Set up a customization buffer containing all settings that you have
+set but not saved. 
+</dl>
+
+   <p><a name="index-customize_002doption-3962"></a>  If you want to alter a particular user option with the customization
+buffer, and you know its name, you can use the command <kbd>M-x
+customize-option</kbd> and specify the user option (variable) name.  This
+sets up the customization buffer with just one user option&mdash;the one
+that you asked for.  Editing, setting and saving the value work as
+described above, but only for the specified user option.  Minibuffer
+completion is handy if you only know part of the name.  However, this
+command can only see options that have been loaded in the current
+Emacs session.
+
+   <p><a name="index-customize_002dface-3963"></a>  Likewise, you can modify a specific face, chosen by name, using
+<kbd>M-x customize-face</kbd>.  By default it operates on the face used
+on the character after point.
+
+   <p><a name="index-customize_002dgroup-3964"></a>  You can also set up the customization buffer with a specific group,
+using <kbd>M-x customize-group</kbd>.  The immediate contents of the chosen
+group, including settings (user options and faces), and other groups,
+all appear as well (even if not already loaded).  However, the
+subgroups' own contents are not included.
+
+   <p><a name="index-customize_002dapropos-3965"></a>  For a more general way of controlling what to customize, you can use
+<kbd>M-x customize-apropos</kbd>.  You specify a regular expression as
+argument; then all <em>loaded</em> settings and groups whose names match
+this regular expression are set up in the customization buffer.  If
+you specify an empty regular expression, this includes <em>all</em>
+loaded groups and settings&mdash;which takes a long time to set up.
+
+   <p><a name="index-customize_002dchanged-3966"></a>  When you upgrade to a new Emacs version, you might want to consider
+customizing new settings, and settings whose meanings or default
+values have changed.  To do this, use <kbd>M-x customize-changed</kbd> and
+specify a previous Emacs version number using the minibuffer.  It
+creates a customization buffer which shows all the settings and groups
+whose definitions have been changed since the specified version,
+loading them if necessary.
+
+   <p><a name="index-customize_002dsaved-3967"></a><a name="index-customize_002dunsaved-3968"></a>  If you change settings and then decide the change was a mistake, you
+can use two special commands to revisit your previous changes.  Use
+<kbd>M-x customize-saved</kbd> to look at the settings that you have saved. 
+Use <kbd>M-x customize-unsaved</kbd> to look at the settings that you
+have set but not saved.
+
+   </body></html>
+

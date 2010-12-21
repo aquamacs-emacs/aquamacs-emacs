@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Quick Equation - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Defining-Label-Environments.html#Defining-Label-Environments" title="Defining Label Environments">
+<link rel="prev" href="Theorem-and-Axiom.html#Theorem-and-Axiom" title="Theorem and Axiom">
+<link rel="next" href="Figure-Wrapper.html#Figure-Wrapper" title="Figure Wrapper">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Quick-Equation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Figure-Wrapper.html#Figure-Wrapper">Figure Wrapper</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Theorem-and-Axiom.html#Theorem-and-Axiom">Theorem and Axiom</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.4.2 Quick Equation Macro</h4>
+
+<p><a name="index-Quick-equation-macro-150"></a><a name="index-Macros-as-environment-wrappers-151"></a>
+Suppose you would like to have a macro for quick equations.  It
+could be defined like this:
+
+<pre class="example">     \newcommand{\quickeq}[1]{\begin{equation} #1 \end{equation}}
+</pre>
+   <p class="noindent">and used like this:
+
+<pre class="example">     Einstein's equation is \quickeq{E=mc^2 \label{eq:einstein}}.
+</pre>
+   <p>We need to tell <b>RefTeX</b> that any label defined in the argument of the
+<code>\quickeq</code> is an equation label.  Here is how to do this with lisp:
+
+<pre class="lisp">     (setq reftex-label-alist '(("\\quickeq{}" ?e nil nil 1 nil)))
+</pre>
+   <p>The first element in this list is now the macro with empty braces as an
+<em>image</em> of the macro arguments.  <code>?e</code> indicates that this is
+an equation label, the different <code>nil</code> elements indicate to use the
+default values for equations.  The &lsquo;<samp><span class="samp">1</span></samp>&rsquo; as the fifth element
+indicates that the context of the label definition should be the 1st
+argument of the macro.
+
+   <p>Here is again how this would look in the customization buffer:
+
+<pre class="example">     Reftex Label Alist: [Hide]
+     [INS] [DEL] Package or Detailed   : [Value Menu] Detailed:
+                 Environment or \macro : [Value Menu] String: \quickeq{}
+                 Type specification    : [Value Menu] Char  : e
+                 Label prefix string   : [Value Menu] Default
+                 Label reference format: [Value Menu] Default
+                 Context method        : [Value Menu] Macro arg nr: 1
+                 Magic words:
+                   [INS]
+                 [ ] Make TOC entry    : [Value Menu] No entry
+</pre>
+   </body></html>
+

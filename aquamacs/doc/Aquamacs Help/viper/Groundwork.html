@@ -1,0 +1,211 @@
+<html lang="en">
+<head>
+<title>Groundwork - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Commands.html#Commands" title="Commands">
+<link rel="next" href="Text-Handling.html#Text-Handling" title="Text Handling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Groundwork"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-Handling.html#Text-Handling">Text Handling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Commands.html#Commands">Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">4.1 Groundwork</h3>
+
+<p>The VI command set is based on the idea of combining motion commands
+with other commands.  The motion command is used as a text region
+specifier for other commands. 
+We classify motion commands into <dfn>point commands</dfn> and
+<dfn>line commands</dfn>.
+
+   <p><a name="index-point-commands-282"></a>
+The point commands are:
+
+   <blockquote>
+<kbd>h</kbd>, <kbd>l</kbd>, <kbd>0</kbd>,  <kbd>$</kbd>, <kbd>w</kbd>, <kbd>W</kbd>, <kbd>b</kbd>, <kbd>B</kbd>,
+<kbd>e</kbd>, <kbd>E</kbd>, <kbd>(</kbd>, <kbd>)</kbd>, <kbd>/</kbd>, <kbd>?</kbd>, <kbd>`</kbd>, <kbd>f</kbd>,
+<kbd>F</kbd>, <kbd>t</kbd>, <kbd>T</kbd>, <kbd>%</kbd>, <kbd>;</kbd>, <kbd>,</kbd>, <kbd>^</kbd>
+</blockquote>
+
+   <p><a name="index-line-commands-283"></a>
+The line commands are:
+
+   <blockquote>
+<kbd>j</kbd>, <kbd>k</kbd>, <kbd>+</kbd>, <kbd>-</kbd>, <kbd>H</kbd>, <kbd>M</kbd>, <kbd>L</kbd>, <kbd>{</kbd>,
+<kbd>}</kbd>, <kbd>G</kbd>, <kbd>'</kbd>,  <kbd>[[</kbd>, <kbd>]]</kbd>, <kbd>[]</kbd>
+</blockquote>
+   Text Deletion Commands (see <a href="Deleting-Text.html#Deleting-Text">Deleting Text</a>), Change commands
+(see <a href="Changing-Text.html#Changing-Text">Changing Text</a>), even Shell Commands (see <a href="Shell-Commands.html#Shell-Commands">Shell Commands</a>)
+use these commands to describe a region of text to operate on.
+
+   <p><a name="index-r-and-R-region-specifiers-284"></a>
+Viper adds two region descriptors, <kbd>r</kbd> and <kbd>R</kbd>.  These describe
+the Emacs regions (see <a href="Basics.html#Basics">Basics</a>), but they are not movement commands.
+
+   <p>The command description uses angle brackets &lsquo;<samp><span class="samp">&lt;&gt;</span></samp>&rsquo; to indicate
+metasyntactic variables, since the normal conventions of using simple
+text can be confusing with Viper where the commands themselves are
+characters.  Watch out where <kbd>&lt;</kbd> shift commands and <kbd>&lt;count&gt;</kbd> are
+mentioned together!!!
+
+   <p><a name="index-g_t_003cmove_003e-285"></a><a name="index-g_t_003ca_002dz_003e-286"></a><a name="index-g_t_003caddress_003e-287"></a><a name="index-g_t_003cmove_003e-288"></a><a name="index-g_t_003ca_002dz_003e-289"></a><a name="index-g_t_003caddress_003e-290"></a><a name="index-movements-291"></a>
+&lsquo;<samp><span class="samp">&lt;move&gt;</span></samp>&rsquo; refers to the above movement commands, and &lsquo;<samp><span class="samp">&lt;a-z&gt;</span></samp>&rsquo;
+refers to registers or textmarkers from &lsquo;<samp><span class="samp">a</span></samp>&rsquo; to &lsquo;<samp><span class="samp">z</span></samp>&rsquo;.  Note
+that the &lsquo;<samp><span class="samp">&lt;move&gt;</span></samp>&rsquo;  is described by full move commands, that is to
+say they will take counts, and otherwise behave like normal move commands. 
+<a name="index-Ex-addresses-292"></a>&lsquo;<samp><span class="samp">&lt;address&gt;</span></samp>&rsquo; refers to Ex line addresses, which include
+
+     <dl>
+<dt><kbd>. &lt;No address&gt;</kbd><dd>Current line
+<br><dt><kbd>.+n .-n</kbd><dd>Add or subtract for current line
+<br><dt><kbd>number</kbd><dd>Actual line number, use <kbd>.=</kbd> to get the line number
+<br><dt><kbd>'&lt;a-z&gt;</kbd><dd>Textmarker
+<br><dt><kbd>$</kbd><dd>Last line
+<br><dt><kbd>x,y</kbd><dd>Where x and y are one of the above
+<br><dt><kbd>%</kbd><dd><a name="index-g_t_0025-_0028Ex-address_0029-293"></a>For the whole file, same as (1,$). 
+<br><dt><kbd>/&lt;pat&gt;/</kbd><dt><kbd>?&lt;pat&gt;?</kbd><dd>Next or previous line with pattern &lt;pat&gt;.
+
+     <p>Note that the pattern is allowed to contain newline character (inserted as
+<kbd>C-qC-j</kbd>).  Therefore, one can search for patterns that span several
+lines. 
+</dl>
+
+   <p><a name="index-g_t_0025-_0028Current-file_0029-294"></a>Note that &lsquo;<samp><span class="samp">%</span></samp>&rsquo; is used in Ex commands <kbd>:e</kbd> and <kbd>:r &lt;shell-cmd&gt;</kbd>
+to mean current file.  If you want a &lsquo;<samp><span class="samp">%</span></samp>&rsquo; in your command, it must be
+escaped as &lsquo;<samp><span class="samp">\%</span></samp>&rsquo;. Note that <kbd>:w</kbd> and the regular <kbd>:r &lt;file&gt;</kbd>
+command doesn't support the meta symbols &lsquo;<samp><span class="samp">%</span></samp>&rsquo; and &lsquo;<samp><span class="samp">#</span></samp>&rsquo;, because
+file history is a better mechanism. 
+<a name="index-g_t_0023-_0028Previous-file_0029-295"></a>Similarly, &lsquo;<samp><span class="samp">#</span></samp>&rsquo; expands to the previous file.  The previous file is
+the first file in <kbd>:args</kbd> listing.  This defaults to previous window
+in the VI sense if you have one window only.
+
+   <p><a name="index-g_t_003cargs_003e-296"></a><a name="index-g_t_003ccmd_003e-297"></a><a name="index-g_t_003cargs_003e-298"></a><a name="index-g_t_003ccmd_003e-299"></a>Others like &lsquo;<samp><span class="samp">&lt;args&gt; -- arguments</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&lt;cmd&gt; -- command</span></samp>&rsquo; etc. 
+should be fairly obvious.
+
+<p class="noindent">Common characters referred to include:
+
+     <dl>
+<dt><kbd>&lt;sp&gt;</kbd><dd>Space
+<br><dt><kbd>&lt;ht&gt;</kbd><dd>Tab
+<br><dt><kbd>&lt;lf&gt;</kbd><dd>Linefeed
+<br><dt><kbd>&lt;esc&gt;</kbd><dd>Escape
+<br><dt><kbd>&lt;cr&gt;</kbd><dd>Return, Enter
+</dl>
+   <a name="index-g_t_003ccr_003e-300"></a><a name="index-g_t_003cesc_003e-301"></a><a name="index-g_t_003clf_003e-302"></a><a name="index-g_t_003cht_003e-303"></a><a name="index-g_t_003csp_003e-304"></a>
+<a name="index-words-305"></a><a name="index-WORDS-306"></a><a name="index-char-307"></a><a name="index-CHAR-308"></a>
+We also use &lsquo;<samp><span class="samp">word</span></samp>&rsquo; for alphanumeric/non-alphanumeric words, and
+&lsquo;<samp><span class="samp">WORD</span></samp>&rsquo; for whitespace delimited words.  &lsquo;<samp><span class="samp">char</span></samp>&rsquo; refers to any
+<acronym>ASCII</acronym> character, &lsquo;<samp><span class="samp">CHAR</span></samp>&rsquo; to non-whitespace character. 
+Brackets &lsquo;<samp><span class="samp">[]</span></samp>&rsquo; indicate optional parameters; &lsquo;<samp><span class="samp">&lt;count&gt;</span></samp>&rsquo; also
+optional, usually defaulting to 1.  Brackets are elided for
+&lsquo;<samp><span class="samp">&lt;count&gt;</span></samp>&rsquo; to eschew obfuscation.
+
+   <p>Viper's idea of Vi's words is slightly different from Vi.  First, Viper
+words understand Emacs symbol tables.  Therefore, all symbols declared to be
+alphanumeric in a symbol table can automatically be made part of the Viper
+word.  This is useful when, for instance, editing text containing European,
+Cyrillic, Japanese, etc., texts.
+
+   <p>Second, Viper lets you depart from Vi's idea of a word by changing the a
+syntax preference via the customization widget (the variable
+<code>viper-syntax-preference</code>) or by executing
+<code>viper-set-syntax-preference</code> interactively.
+
+   <p>By default, Viper syntax preference is <code>reformed-vi</code>, which means that
+Viper considers only those symbols to be part of a word that are specified
+as word-symbols by the current Emacs syntax table (which may be different
+for different major modes) plus the underscore symbol <kbd>_</kbd>, minus the
+symbols that are not considered words in Vi (e.g., `,',;, etc.), but may be
+considered as word-symbols by various Emacs major modes.  Reformed-Vi works
+very close to Vi, and it also recognizes words in other
+alphabets.  Therefore, this is the most appropriate mode for editing text
+and is likely to fit all your needs.
+
+   <p>You can also set Viper syntax preference to <code>strict-vi</code>, which would
+cause Viper to view all non-English letters as non-word-symbols.
+
+   <p>You can also specify <code>emacs</code> as your preference, which would
+make Viper use exactly the same notion of a word as Emacs does.  In
+particular, the underscore may not be part of a word in some major modes.
+
+   <p>Finally, if <code>viper-syntax-preference</code> is set to <code>extended</code>, Viper
+words would consist of characters that are classified as alphanumeric
+<em>or</em> as parts of symbols.  This is convenient for editing programs.
+
+   <p><code>viper-syntax-preference</code> is a local variable, so it can have different
+values for different major modes.  For instance, in programming modes it can
+have the value <code>extended</code>.  In text modes where words contain special
+characters, such as European (non-English) letters, Cyrillic letters, etc.,
+the value can be <code>reformed-vi</code> or <code>emacs</code>. 
+If you consider using different syntactic preferences for different major
+modes, you should execute, for example,
+
+<pre class="example">     (viper-set-syntax-preference nil "extended")
+</pre>
+   <p>in the appropriate major mode hooks.
+
+   <p><a name="index-g_t_0040code_007bviper_002dsyntax_002dpreference_007d-309"></a><a name="index-g_t_0040code_007bviper_002dset_002dsyntax_002dpreference_007d-310"></a><a name="index-syntax-table-311"></a>
+
+   <p>The above discussion concerns only the movement commands.  In regular
+expressions, words remain the same as in Emacs.  That is, the expressions
+<code>\w</code>, <code>\&gt;</code>, <code>\&lt;</code>, etc., use Emacs' idea of what is a word,
+and they don't look into the value of variable
+<code>viper-syntax-preference</code>.  This is because Viper avoids changing
+syntax tables in order to not thwart the various major modes that set these
+tables.
+
+   <p>The usual Emacs convention is used to indicate Control Characters, i.e
+C-h for Control-h.  <em>Do not confuse this with a sequence of separate
+characters
+C, -, h!!!</em> The <kbd>^</kbd> is itself, never used to indicate a
+Control character.
+
+   <p>Finally, we note that Viper's Ex-style commands can be made to work on the
+current Emacs region.  This is done by typing a digit argument before
+<kbd>:</kbd>.  For instance, typing <kbd>1:</kbd> will prompt you with something like
+<em>:123,135</em>, assuming that the current region starts at line 123 and
+ends at line 135.  There is no need to type the line numbers, since Viper
+inserts them automatically in front of the Ex command. 
+<a name="index-Ex-commands-312"></a>
+
+   </body></html>
+

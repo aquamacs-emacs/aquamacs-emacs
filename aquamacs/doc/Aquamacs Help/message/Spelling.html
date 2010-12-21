@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Spelling - Message Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Message Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Mail-Aliases.html#Mail-Aliases" title="Mail Aliases">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Message, the Emacs message composition mode.
+
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Spelling"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Aliases.html#Mail-Aliases">Mail Aliases</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">2.11 Spelling</h3>
+
+<p><a name="index-spelling-196"></a><a name="index-ispell_002dmessage-197"></a>
+There are two popular ways to have Emacs spell-check your messages:
+<code>ispell</code> and <code>flyspell</code>.  <code>ispell</code> is the older and
+probably more popular package.  You typically first write the message,
+and then run the entire thing through <code>ispell</code> and fix all the
+typos.  To have this happen automatically when you send a message, put
+something like the following in your <samp><span class="file">.emacs</span></samp> file:
+
+<pre class="lisp">     (add-hook 'message-send-hook 'ispell-message)
+</pre>
+   <p><a name="index-ispell_002dmessage_002ddictionary_002dalist-198"></a>If you're in the habit of writing in different languages, this can be
+controlled by the <code>ispell-message-dictionary-alist</code> variable:
+
+<pre class="lisp">     (setq ispell-message-dictionary-alist
+           '(("^Newsgroups:.*\\bde\\." . "deutsch8")
+             (".*" . "default")))
+</pre>
+   <p><code>ispell</code> depends on having the external &lsquo;<samp><span class="samp">ispell</span></samp>&rsquo; command
+installed.
+
+   <p>The other popular method is using <code>flyspell</code>.  This package checks
+your spelling while you're writing, and marks any mis-spelled words in
+various ways.
+
+   <p>To use <code>flyspell</code>, put something like the following in your
+<samp><span class="file">.emacs</span></samp> file:
+
+<pre class="lisp">     (defun my-message-setup-routine ()
+       (flyspell-mode 1))
+     (add-hook 'message-setup-hook 'my-message-setup-routine)
+</pre>
+   <p><code>flyspell</code> depends on having the external &lsquo;<samp><span class="samp">ispell</span></samp>&rsquo; command
+installed.
+
+   </body></html>
+

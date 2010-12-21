@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Custom Line-Up - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customizing-Indentation.html#Customizing-Indentation" title="Customizing Indentation">
+<link rel="prev" href="Line_002dUp-Functions.html#Line_002dUp-Functions" title="Line-Up Functions">
+<link rel="next" href="Other-Indentation.html#Other-Indentation" title="Other Indentation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Custom-Line-Up"></a>
+<a name="Custom-Line_002dUp"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Indentation.html#Other-Indentation">Other Indentation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">11.4 Custom Line-Up Functions</h3>
+
+<p><a name="index-customization_002c-indentation-functions-562"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>The most flexible way to customize indentation is by writing custom
+line-up functions, and associating them with specific syntactic
+symbols (see <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>).  Depending on the effect you want,
+it might be better to write a <code>c-special-indent-hook</code> function
+rather than a line-up function (see <a href="Other-Indentation.html#Other-Indentation">Other Indentation</a>).
+
+   <p>CC Mode comes with an extensive set of predefined line-up functions,
+not all of which are used by the default styles.  So there's a good
+chance the function you want already exists.  See <a href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>, for a list of them.  If you write your own line-up
+function, it's probably a good idea to start working from one of these
+predefined functions, which can be found in the file
+<samp><span class="file">cc-align.el</span></samp>.  If you have written a line-up function that you
+think is generally useful, you're very welcome to contribute it;
+please contact <a href="mailto:bug-cc-mode@gnu.org">bug-cc-mode@gnu.org</a>.
+
+   <p>Line-up functions are passed a single argument, the syntactic
+element (see below).  The return value is a <code>c-offsets-alist</code>
+offset specification: for example, an integer, a symbol such as
+<code>+</code>, a vector, <code>nil</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, or even
+another line-up function.  Full details of these are in
+<a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.
+
+   <p>Line-up functions must not move point or change the content of the
+buffer (except temporarily).  They are however allowed to do
+<dfn>hidden buffer changes</dfn>, i.e. setting text properties for caching
+purposes etc.  Buffer undo recording is disabled while they run.
+
+   <p>The syntactic element passed as the parameter to a line-up function is
+a cons cell of the form
+
+<pre class="example">     (<var>syntactic-symbol</var> . <var>anchor-position</var>)
+</pre>
+   <p class="noindent"><!-- FIXME!!! The following sentence might be better omitted, since the -->
+<!-- information is in the cross reference "Syntactic Analysis".  2005/10/2. -->
+where <var>syntactic-symbol</var> is the symbol that the function was
+called for, and <var>anchor-position</var> is the anchor position (if any)
+for the construct that triggered the syntactic symbol
+(see <a href="Syntactic-Analysis.html#Syntactic-Analysis">Syntactic Analysis</a>).  This cons cell is how the syntactic
+element of a line used to be represented in CC Mode 5.28 and
+earlier.  Line-up functions are still passed this cons cell, so as to
+preserve compatibility with older configurations.  In the future, we
+may decide to convert to using the full list format&mdash;you can prepare
+your setup for this by using the access functions
+(<code>c-langelem-sym</code>, etc.)  described below.
+
+   <p><a name="index-c_002dsyntactic_002delement-563"></a><a name="index-syntactic_002delement-_0028c_002d_0029-564"></a><a name="index-c_002dsyntactic_002dcontext-565"></a><a name="index-syntactic_002dcontext-_0028c_002d_0029-566"></a>Some syntactic symbols, e.g. <code>arglist-cont-nonempty</code>, have more
+info in the syntactic element - typically other positions that can be
+interesting besides the anchor position.  That info can't be accessed
+through the passed argument, which is a cons cell.  Instead, you can
+get this information from the variable <code>c-syntactic-element</code>,
+which is dynamically bound to the complete syntactic element.  The
+variable <code>c-syntactic-context</code> might also be useful - it gets
+dynamically bound to the complete syntactic context.  See <a href="Custom-Braces.html#Custom-Braces">Custom Braces</a>.
+
+   <p>CC Mode provides a few functions to access parts of syntactic
+elements in a more abstract way.  Besides making the code easier to
+read, they also hide the difference between the old cons cell form
+used in the line-up function argument and the new list form used in
+<code>c-syntactic-element</code> and everywhere else.  The functions are:
+
+<div class="defun">
+&mdash; Function: <b>c-langelem-sym</b><var> langelem<a name="index-c_002dlangelem_002dsym-567"></a></var><br>
+<blockquote><p><a name="index-langelem_002dsym-_0028c_002d_0029-568"></a>Return the syntactic symbol in <var>langelem</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>c-langelem-pos</b><var> langelem<a name="index-c_002dlangelem_002dpos-569"></a></var><br>
+<blockquote><p><a name="index-langelem_002dpos-_0028c_002d_0029-570"></a>Return the anchor position in <var>langelem</var>, or nil if there is none. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>c-langelem-col</b><var> langelem &amp;optional preserve-point<a name="index-c_002dlangelem_002dcol-571"></a></var><br>
+<blockquote><p><a name="index-langelem_002dcol-_0028c_002d_0029-572"></a>Return the column of the anchor position in <var>langelem</var>.  Also move
+the point to that position unless <var>preserve-point</var> is
+non-<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>c-langelem-2nd-pos</b><var> langelem<a name="index-c_002dlangelem_002d2nd_002dpos-573"></a></var><br>
+<blockquote><p><a name="index-langelem_002d2nd_002dpos-_0028c_002d_0029-574"></a>Return the secondary position in <var>langelem</var>, or <code>nil</code> if there
+is none.
+
+        <p>Note that the return value of this function is always <code>nil</code> if
+<var>langelem</var> is in the old cons cell form.  Thus this function is
+only meaningful when used on syntactic elements taken from
+<code>c-syntactic-element</code> or <code>c-syntactic-context</code>. 
+</p></blockquote></div>
+
+   <p>Custom line-up functions can be as simple or as complex as you like, and
+any syntactic symbol that appears in <code>c-offsets-alist</code> can have a
+custom line-up function associated with it.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Returning <code>nil</code> is useful
+when the offset specification for a syntactic element is a list
+containing the line-up function (see <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>).</p>
+
+   <hr></div>
+
+   </body></html>
+

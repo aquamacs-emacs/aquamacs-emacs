@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Changing Selections - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Selecting-Subformulas.html#Selecting-Subformulas" title="Selecting Subformulas">
+<link rel="prev" href="Making-Selections.html#Making-Selections" title="Making Selections">
+<link rel="next" href="Displaying-Selections.html#Displaying-Selections" title="Displaying Selections">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Changing-Selections"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Displaying-Selections.html#Displaying-Selections">Displaying Selections</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Making-Selections.html#Making-Selections">Making Selections</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.1.2 Changing Selections</h4>
+
+<p class="noindent"><a name="index-j-m-1609"></a><a name="index-calc_002dselect_002dmore-1610"></a>Once you have selected a sub-formula, you can expand it using the
+<kbd>j&nbsp;m</kbd><!-- /@w --> (<code>calc-select-more</code>) command.  If &lsquo;<samp><span class="samp">a + b</span></samp>&rsquo; is
+selected, pressing <kbd>j&nbsp;m</kbd><!-- /@w --> repeatedly works as follows:
+
+<pre class="smallexample">                3    ...                3    ___                3    ___
+         (a + b)  . . .          (a + b)  + V c          (a + b)  + V c
+     1*  ...............     1*  ...............     1*  ---------------
+             . . . .                 . . . .                 2 x + 1
+</pre>
+   <p class="noindent">In the last example, the entire formula is selected.  This is roughly
+the same as having no selection at all, but because there are subtle
+differences the &lsquo;<samp><span class="samp">*</span></samp>&rsquo; character is still there on the line number.
+
+   <p>With a numeric prefix argument <var>n</var>, <kbd>j m</kbd> expands <var>n</var>
+times (or until the entire formula is selected).  Note that <kbd>j s</kbd>
+with argument <var>n</var> is equivalent to plain <kbd>j s</kbd> followed by
+<kbd>j m</kbd> with argument <var>n</var>.  If <kbd>j&nbsp;m</kbd><!-- /@w --> is used when there
+is no current selection, it is equivalent to <kbd>j&nbsp;s</kbd><!-- /@w -->.
+
+   <p>Even though <kbd>j m</kbd> does not explicitly use the location of the
+cursor within the formula, it nevertheless uses the cursor to determine
+which stack element to operate on.  As usual, <kbd>j m</kbd> when the cursor
+is not on any stack element operates on the top stack element.
+
+   <p><a name="index-j-l-1611"></a><a name="index-calc_002dselect_002dless-1612"></a>The <kbd>j l</kbd> (<code>calc-select-less</code>) command reduces the current
+selection around the cursor position.  That is, it selects the
+immediate sub-formula of the current selection which contains the
+cursor, the opposite of <kbd>j m</kbd>.  If the cursor is not inside the
+current selection, the command de-selects the formula.
+
+   <p><a name="index-j-1_002d9-1613"></a><a name="index-calc_002dselect_002dpart-1614"></a>The <kbd>j 1</kbd> through <kbd>j 9</kbd> (<code>calc-select-part</code>) commands
+select the <var>n</var>th sub-formula of the current selection.  They are
+like <kbd>j l</kbd> (<code>calc-select-less</code>) except they use counting
+rather than the cursor position to decide which sub-formula to select. 
+For example, if the current selection is <kbd>a + b + c</kbd> or
+<kbd>f(a, b, c)</kbd> or <kbd>[a, b, c]</kbd>, then <kbd>j 1</kbd> selects &lsquo;<samp><span class="samp">a</span></samp>&rsquo;,
+<kbd>j 2</kbd> selects &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, and <kbd>j 3</kbd> selects &lsquo;<samp><span class="samp">c</span></samp>&rsquo;; in each of
+these cases, <kbd>j 4</kbd> through <kbd>j 9</kbd> would be errors.
+
+   <p>If there is no current selection, <kbd>j 1</kbd> through <kbd>j 9</kbd> select
+the <var>n</var>th top-level sub-formula.  (In other words, they act as if
+the entire stack entry were selected first.)  To select the <var>n</var>th
+sub-formula where <var>n</var> is greater than nine, you must instead invoke
+<kbd>j&nbsp;1</kbd><!-- /@w --> with <var>n</var> as a numeric prefix argument.
+
+   <p><a name="index-j-n-1615"></a><a name="index-j-p-1616"></a><a name="index-calc_002dselect_002dnext-1617"></a><a name="index-calc_002dselect_002dprevious-1618"></a>The <kbd>j n</kbd> (<code>calc-select-next</code>) and <kbd>j p</kbd>
+(<code>calc-select-previous</code>) commands change the current selection
+to the next or previous sub-formula at the same level.  For example,
+if &lsquo;<samp><span class="samp">b</span></samp>&rsquo; is selected in &lsquo;<samp><span class="samp">2&nbsp;+&nbsp;a*b*c&nbsp;+&nbsp;x</span></samp>&rsquo;<!-- /@w -->, then <kbd>j n</kbd>
+selects &lsquo;<samp><span class="samp">c</span></samp>&rsquo;.  Further <kbd>j n</kbd> commands would be in error because,
+even though there is something to the right of &lsquo;<samp><span class="samp">c</span></samp>&rsquo; (namely, &lsquo;<samp><span class="samp">x</span></samp>&rsquo;),
+it is not at the same level; in this case, it is not a term of the
+same product as &lsquo;<samp><span class="samp">b</span></samp>&rsquo; and &lsquo;<samp><span class="samp">c</span></samp>&rsquo;.  However, <kbd>j m</kbd> (to select
+the whole product &lsquo;<samp><span class="samp">a*b*c</span></samp>&rsquo; as a term of the sum) followed by
+<kbd>j&nbsp;n</kbd><!-- /@w --> would successfully select the &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.
+
+   <p>Similarly, <kbd>j p</kbd> moves the selection from the &lsquo;<samp><span class="samp">b</span></samp>&rsquo; in this
+sample formula to the &lsquo;<samp><span class="samp">a</span></samp>&rsquo;.  Both commands accept numeric prefix
+arguments to move several steps at a time.
+
+   <p>It is interesting to compare Calc's selection commands with the
+Emacs Info system's commands for navigating through hierarchically
+organized documentation.  Calc's <kbd>j n</kbd> command is completely
+analogous to Info's <kbd>n</kbd> command.  Likewise, <kbd>j p</kbd> maps to
+<kbd>p</kbd>, <kbd>j 2</kbd> maps to <kbd>2</kbd>, and Info's <kbd>u</kbd> is like <kbd>j m</kbd>. 
+(Note that <kbd>j u</kbd> stands for <code>calc-unselect</code>, not &ldquo;up&rdquo;.) 
+The Info <kbd>m</kbd> command is somewhat similar to Calc's <kbd>j s</kbd> and
+<kbd>j l</kbd>; in each case, you can jump directly to a sub-component
+of the hierarchy simply by pointing to it with the cursor.
+
+   </body></html>
+

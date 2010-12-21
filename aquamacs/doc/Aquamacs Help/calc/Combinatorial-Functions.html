@@ -1,0 +1,195 @@
+<html lang="en">
+<head>
+<title>Combinatorial Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scientific-Functions.html#Scientific-Functions" title="Scientific Functions">
+<link rel="prev" href="Random-Numbers.html#Random-Numbers" title="Random Numbers">
+<link rel="next" href="Probability-Distribution-Functions.html#Probability-Distribution-Functions" title="Probability Distribution Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Combinatorial-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Probability-Distribution-Functions.html#Probability-Distribution-Functions">Probability Distribution Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Random-Numbers.html#Random-Numbers">Random Numbers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scientific-Functions.html#Scientific-Functions">Scientific Functions</a>
+<hr>
+</div>
+
+<h3 class="section">9.6 Combinatorial Functions</h3>
+
+<p class="noindent">Commands relating to combinatorics and number theory begin with the
+<kbd>k</kbd> key prefix.
+
+   <p><a name="index-k-g-1108"></a><a name="index-calc_002dgcd-1109"></a><a name="index-gcd-1110"></a>The <kbd>k g</kbd> (<code>calc-gcd</code>) [<code>gcd</code>] command computes the
+Greatest Common Divisor of two integers.  It also accepts fractions;
+the GCD of two fractions is defined by taking the GCD of the
+numerators, and the LCM of the denominators.  This definition is
+consistent with the idea that &lsquo;<samp><span class="samp">a / gcd(a,x)</span></samp>&rsquo; should yield an
+integer for any &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  For other types of arguments,
+the operation is left in symbolic form.
+
+   <p><a name="index-k-l-1111"></a><a name="index-calc_002dlcm-1112"></a><a name="index-lcm-1113"></a>The <kbd>k l</kbd> (<code>calc-lcm</code>) [<code>lcm</code>] command computes the
+Least Common Multiple of two integers or fractions.  The product of
+the LCM and GCD of two numbers is equal to the product of the
+numbers.
+
+   <p><a name="index-k-E-1114"></a><a name="index-calc_002dextended_002dgcd-1115"></a><a name="index-egcd-1116"></a>The <kbd>k E</kbd> (<code>calc-extended-gcd</code>) [<code>egcd</code>] command computes
+the GCD of two integers &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo; and returns a vector
+&lsquo;<samp><span class="samp">[g, a, b]</span></samp>&rsquo; where
+<!-- @math{g = \gcd(x,y) = a x + b y}. -->
+&lsquo;<samp><span class="samp">g = gcd(x,y) = a x + b y</span></samp>&rsquo;.
+
+   <p><a name="index-g_t_0021-1117"></a><a name="index-calc_002dfactorial-1118"></a><a name="index-fact-1119"></a><a name="index-g_t_0021-1120"></a>The <kbd>!</kbd> (<code>calc-factorial</code>) [<code>fact</code>] command computes the
+factorial of the number at the top of the stack.  If the number is an
+integer, the result is an exact integer.  If the number is an
+integer-valued float, the result is a floating-point approximation.  If
+the number is a non-integral real number, the generalized factorial is used,
+as defined by the Euler Gamma function.  Please note that computation of
+large factorials can be slow; using floating-point format will help
+since fewer digits must be maintained.  The same is true of many of
+the commands in this section.
+
+   <p><a name="index-k-d-1121"></a><a name="index-calc_002ddouble_002dfactorial-1122"></a><a name="index-dfact-1123"></a><a name="index-g_t_0021_0021-1124"></a>The <kbd>k d</kbd> (<code>calc-double-factorial</code>) [<code>dfact</code>] command
+computes the &ldquo;double factorial&rdquo; of an integer.  For an even integer,
+this is the product of even integers from 2 to &lsquo;<samp><span class="samp">N</span></samp>&rsquo;.  For an odd
+integer, this is the product of odd integers from 3 to &lsquo;<samp><span class="samp">N</span></samp>&rsquo;.  If
+the argument is an integer-valued float, the result is a floating-point
+approximation.  This function is undefined for negative even integers. 
+The notation &lsquo;<samp><span class="samp">N!!</span></samp>&rsquo; is also recognized for double factorials.
+
+   <p><a name="index-k-c-1125"></a><a name="index-calc_002dchoose-1126"></a><a name="index-choose-1127"></a>The <kbd>k c</kbd> (<code>calc-choose</code>) [<code>choose</code>] command computes the
+binomial coefficient &lsquo;<samp><span class="samp">N</span></samp>&rsquo;-choose-&lsquo;<samp><span class="samp">M</span></samp>&rsquo;, where &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is the number
+on the top of the stack and &lsquo;<samp><span class="samp">N</span></samp>&rsquo; is second-to-top.  If both arguments
+are integers, the result is an exact integer.  Otherwise, the result is a
+floating-point approximation.  The binomial coefficient is defined for all
+real numbers by
+<!-- @math{N! \over M! (N-M)!\,}. -->
+&lsquo;<samp><span class="samp">N! / M! (N-M)!</span></samp>&rsquo;.
+
+   <p><a name="index-H-k-c-1128"></a><a name="index-calc_002dperm-1129"></a><a name="index-perm-1130"></a>The <kbd>H k c</kbd> (<code>calc-perm</code>) [<code>perm</code>] command computes the
+number-of-permutations function &lsquo;<samp><span class="samp">N! / (N-M)!</span></samp>&rsquo;.
+
+   <p><a name="index-k-b-1131"></a><a name="index-H-k-b-1132"></a><a name="index-calc_002dbernoulli_002dnumber-1133"></a><a name="index-bern-1134"></a>The <kbd>k b</kbd> (<code>calc-bernoulli-number</code>) [<code>bern</code>] command
+computes a given Bernoulli number.  The value at the top of the stack
+is a nonnegative integer &lsquo;<samp><span class="samp">n</span></samp>&rsquo; that specifies which Bernoulli number
+is desired.  The <kbd>H k b</kbd> command computes a Bernoulli polynomial,
+taking &lsquo;<samp><span class="samp">n</span></samp>&rsquo; from the second-to-top position and &lsquo;<samp><span class="samp">x</span></samp>&rsquo; from the
+top of the stack.  If &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is a variable or formula the result is
+a polynomial in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;; if &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is a number the result is a number.
+
+   <p><a name="index-k-e-1135"></a><a name="index-H-k-e-1136"></a><a name="index-calc_002deuler_002dnumber-1137"></a><a name="index-euler-1138"></a>The <kbd>k e</kbd> (<code>calc-euler-number</code>) [<code>euler</code>] command similarly
+computes an Euler number, and <kbd>H&nbsp;k&nbsp;e</kbd><!-- /@w --> computes an Euler polynomial. 
+Bernoulli and Euler numbers occur in the Taylor expansions of several
+functions.
+
+   <p><a name="index-k-s-1139"></a><a name="index-H-k-s-1140"></a><a name="index-calc_002dstirling_002dnumber-1141"></a><a name="index-stir1-1142"></a><a name="index-stir2-1143"></a>The <kbd>k s</kbd> (<code>calc-stirling-number</code>) [<code>stir1</code>] command
+computes a Stirling number of the first
+<!-- kind@tie{}@math{n \brack m}, -->
+kind,
+given two integers &lsquo;<samp><span class="samp">n</span></samp>&rsquo; and &lsquo;<samp><span class="samp">m</span></samp>&rsquo; on the stack.  The <kbd>H k s</kbd>
+[<code>stir2</code>] command computes a Stirling number of the second
+<!-- kind@tie{}@math{n \brace m}. -->
+kind. 
+These are the number of &lsquo;<samp><span class="samp">m</span></samp>&rsquo;-cycle permutations of &lsquo;<samp><span class="samp">n</span></samp>&rsquo; objects,
+and the number of ways to partition &lsquo;<samp><span class="samp">n</span></samp>&rsquo; objects into &lsquo;<samp><span class="samp">m</span></samp>&rsquo;
+non-empty sets, respectively.
+
+   <p><a name="index-k-p-1144"></a><a name="index-calc_002dprime_002dtest-1145"></a><a name="index-Primes-1146"></a>The <kbd>k p</kbd> (<code>calc-prime-test</code>) command checks if the integer on
+the top of the stack is prime.  For integers less than eight million, the
+answer is always exact and reasonably fast.  For larger integers, a
+probabilistic method is used (see Knuth vol. II, section 4.5.4, algorithm P). 
+The number is first checked against small prime factors (up to 13).  Then,
+any number of iterations of the algorithm are performed.  Each step either
+discovers that the number is non-prime, or substantially increases the
+certainty that the number is prime.  After a few steps, the chance that
+a number was mistakenly described as prime will be less than one percent. 
+(Indeed, this is a worst-case estimate of the probability; in practice
+even a single iteration is quite reliable.)  After the <kbd>k p</kbd> command,
+the number will be reported as definitely prime or non-prime if possible,
+or otherwise &ldquo;probably&rdquo; prime with a certain probability of error.
+
+   <p><a name="index-prime-1147"></a>The normal <kbd>k p</kbd> command performs one iteration of the primality
+test.  Pressing <kbd>k p</kbd> repeatedly for the same integer will perform
+additional iterations.  Also, <kbd>k p</kbd> with a numeric prefix performs
+the specified number of iterations.  There is also an algebraic function
+&lsquo;<samp><span class="samp">prime(n)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">prime(n,iters)</span></samp>&rsquo; which returns 1 if &lsquo;<samp><span class="samp">n</span></samp>&rsquo;
+is (probably) prime and 0 if not.
+
+   <p><a name="index-k-f-1148"></a><a name="index-calc_002dprime_002dfactors-1149"></a><a name="index-prfac-1150"></a>The <kbd>k f</kbd> (<code>calc-prime-factors</code>) [<code>prfac</code>] command
+attempts to decompose an integer into its prime factors.  For numbers up
+to 25 million, the answer is exact although it may take some time.  The
+result is a vector of the prime factors in increasing order.  For larger
+inputs, prime factors above 5000 may not be found, in which case the
+last number in the vector will be an unfactored integer greater than 25
+million (with a warning message).  For negative integers, the first
+element of the list will be <i>-1</i>.  For inputs <i>-1</i>, <i>0</i>, and
+<i>1</i>, the result is a list of the same number.
+
+   <p><a name="index-k-n-1151"></a><a name="index-calc_002dnext_002dprime-1152"></a><a name="index-nextprime-1153"></a>The <kbd>k n</kbd> (<code>calc-next-prime</code>) [<code>nextprime</code>] command finds
+the next prime above a given number.  Essentially, it searches by calling
+<code>calc-prime-test</code> on successive integers until it finds one that
+passes the test.  This is quite fast for integers less than eight million,
+but once the probabilistic test comes into play the search may be rather
+slow.  Ordinarily this command stops for any prime that passes one iteration
+of the primality test.  With a numeric prefix argument, a number must pass
+the specified number of iterations before the search stops.  (This only
+matters when searching above eight million.)  You can always use additional
+<kbd>k p</kbd> commands to increase your certainty that the number is indeed
+prime.
+
+   <p><a name="index-I-k-n-1154"></a><a name="index-calc_002dprev_002dprime-1155"></a><a name="index-prevprime-1156"></a>The <kbd>I k n</kbd> (<code>calc-prev-prime</code>) [<code>prevprime</code>] command
+analogously finds the next prime less than a given number.
+
+   <p><a name="index-k-t-1157"></a><a name="index-calc_002dtotient-1158"></a><a name="index-totient-1159"></a>The <kbd>k t</kbd> (<code>calc-totient</code>) [<code>totient</code>] command computes the
+Euler &ldquo;totient&rdquo;
+<!-- function@tie{}@math{\phi(n)}, -->
+function,
+the number of integers less than &lsquo;<samp><span class="samp">n</span></samp>&rsquo; which
+are relatively prime to &lsquo;<samp><span class="samp">n</span></samp>&rsquo;.
+
+   <p><a name="index-k-m-1160"></a><a name="index-calc_002dmoebius-1161"></a><a name="index-moebius-1162"></a>The <kbd>k m</kbd> (<code>calc-moebius</code>) [<code>moebius</code>] command computes the
+<!-- M@"obius @math{\mu} -->
+Moebius &ldquo;mu&rdquo;
+function.  If the input number is a product of &lsquo;<samp><span class="samp">k</span></samp>&rsquo;
+distinct factors, this is &lsquo;<samp><span class="samp">(-1)^k</span></samp>&rsquo;.  If the input number has any
+duplicate factors (i.e., can be divided by the same prime more than once),
+the result is zero.
+
+   </body></html>
+

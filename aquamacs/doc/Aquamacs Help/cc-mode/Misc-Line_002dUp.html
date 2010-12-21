@@ -1,0 +1,208 @@
+<html lang="en">
+<head>
+<title>Misc Line-Up - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Line_002dUp-Functions.html#Line_002dUp-Functions" title="Line-Up Functions">
+<link rel="prev" href="Comment-Line_002dUp.html#Comment-Line_002dUp" title="Comment Line-Up">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Misc-Line-Up"></a>
+<a name="Misc-Line_002dUp"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Comment-Line_002dUp.html#Comment-Line_002dUp">Comment Line-Up</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">11.3.5 Miscellaneous Line-Up Functions</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>The line-up functions here are the odds and ends which didn't fit into
+any earlier category.
+
+<div class="defun">
+&mdash; Function: <b>c-lineup-dont-change</b><var><a name="index-c_002dlineup_002ddont_002dchange-554"></a></var><br>
+<blockquote><p><a name="index-lineup_002ddont_002dchange-_0028c_002d_0029-555"></a>This lineup function makes the line stay at whatever indentation it
+already has; think of it as an identity function for lineups.
+
+        <p><em>Works with: </em> Any syntactic symbol. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-cpp-define</b><var><a name="index-c_002dlineup_002dcpp_002ddefine-556"></a></var><br>
+<blockquote><p><a name="index-lineup_002dcpp_002ddefine-_0028c_002d_0029-557"></a>Line up macro continuation lines according to the indentation of the
+construct preceding the macro.  E.g:
+
+     <pre class="example">          const char msg[] =    &lt;- <span class="roman">The beginning of the preceding construct.</span>
+            \"Some text.\";
+          
+          #define X(A, B)  \
+          do {             \    &lt;- <i>c-lineup-cpp-define</i>
+            printf (A, B); \
+          } while (0)
+</pre>
+        <p class="noindent">and:
+
+     <pre class="example">          int dribble() {
+            if (!running)       &lt;- <span class="roman">The beginning of the preceding construct.</span>
+              error(\"Not running!\");
+          
+          #define X(A, B)    \
+            do {             \  &lt;- <i>c-lineup-cpp-define</i>
+              printf (A, B); \
+            } while (0)
+</pre>
+        <p>If <code>c-syntactic-indentation-in-macros</code> is non-<code>nil</code>, the
+function returns the relative indentation to the macro start line to
+allow accumulation with other offsets.  E.g. in the following cases,
+<code>cpp-define-intro</code> is combined with the
+<code>statement-block-intro</code> that comes from the &lsquo;<samp><span class="samp">do {</span></samp>&rsquo; that hangs
+on the &lsquo;<samp><span class="samp">#define</span></samp>&rsquo; line:
+
+     <pre class="example">          const char msg[] =
+            \"Some text.\";
+          
+          #define X(A, B) do { \
+            printf (A, B);     \  &lt;- <i>c-lineup-cpp-define</i>
+            this-&gt;refs++;      \
+          } while (0)             &lt;- <i>c-lineup-cpp-define</i>
+</pre>
+        <p class="noindent">and:
+
+     <pre class="example">          int dribble() {
+            if (!running)
+              error(\"Not running!\");
+          
+          #define X(A, B) do { \
+              printf (A, B);   \  &lt;- <i>c-lineup-cpp-define</i>
+              this-&gt;refs++;    \
+            } while (0)           &lt;- <i>c-lineup-cpp-define</i>
+</pre>
+        <p>The relative indentation returned by <code>c-lineup-cpp-define</code> is zero
+and two, respectively, on the two lines in each of these examples.  They
+are then added to the two column indentation that
+<code>statement-block-intro</code> gives in both cases here.
+
+        <p>If the relative indentation is zero, then <code>nil</code> is returned
+instead.  That is useful in a list expression to specify the default
+indentation on the top level.
+
+        <p>If <code>c-syntactic-indentation-in-macros</code> is <code>nil</code> then this
+function keeps the current indentation, except for empty lines (ignoring
+the ending backslash) where it takes the indentation from the closest
+preceding nonempty line in the macro.  If there's no such line in the
+macro then the indentation is taken from the construct preceding it, as
+described above.
+
+        <p><em>Works with: </em> <code>cpp-define-intro</code>. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-gcc-asm-reg</b><var><a name="index-c_002dlineup_002dgcc_002dasm_002dreg-558"></a></var><br>
+<blockquote><p><a name="index-lineup_002dgcc_002dasm_002dreg-_0028c_002d_0029-559"></a>Line up a gcc asm register under one on a previous line.
+
+     <pre class="example">              asm ("foo %1, %0\n"
+                   "bar %0, %1"
+                   : "=r" (w),
+                     "=r" (x)
+                   :  "0" (y),
+                      "1" (z));
+</pre>
+        <p>The &lsquo;<samp><span class="samp">x</span></samp>&rsquo; line is aligned to the text after the &lsquo;<samp><span class="samp">:</span></samp>&rsquo; on the
+&lsquo;<samp><span class="samp">w</span></samp>&rsquo; line, and similarly &lsquo;<samp><span class="samp">z</span></samp>&rsquo; under &lsquo;<samp><span class="samp">y</span></samp>&rsquo;.
+
+        <p>This is done only in an &lsquo;<samp><span class="samp">asm</span></samp>&rsquo; or &lsquo;<samp><span class="samp">__asm__</span></samp>&rsquo; block, and only to
+those lines mentioned.  Anywhere else <code>nil</code> is returned.  The usual
+arrangement is to have this routine as an extra feature at the start of
+arglist lineups, e.g.
+
+     <pre class="example">          (c-lineup-gcc-asm-reg c-lineup-arglist)
+</pre>
+        <p><em>Works with: </em> <code>arglist-cont</code>, <code>arglist-cont-nonempty</code>. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-topmost-intro-cont</b><var><a name="index-c_002dlineup_002dtopmost_002dintro_002dcont-560"></a></var><br>
+<blockquote><p><a name="index-lineup_002dtopmost_002dintro_002dcont-_0028c_002d_0029-561"></a>Line up declaration continuation lines zero or one indentation
+step<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  For lines preceding a
+definition, zero is used.  For other lines, <code>c-basic-offset</code> is
+added to the indentation.  E.g:
+
+     <pre class="example">          int
+          neg (int i)           &lt;- <i>c-lineup-topmost-intro-cont</i>
+          {
+              return -i;
+          }
+</pre>
+        <p class="noindent">and
+
+     <pre class="example">          struct
+          larch                 &lt;- <i>c-lineup-topmost-intro-cont</i>
+          {
+              double height;
+          }
+              the_larch,        &lt;- <i>c-lineup-topmost-intro-cont</i>
+              another_larch;    &lt;- <i>c-lineup-topmost-intro-cont</i>
+          &lt;--&gt; <i>c-basic-offset</i>
+</pre>
+        <p class="noindent">and
+
+     <pre class="example">          struct larch
+          the_larch,            &lt;- <i>c-lineup-topmost-intro-cont</i>
+              another_larch;    &lt;- <i>c-lineup-topmost-intro-cont</i>
+</pre>
+        <p><em>Works with: </em> <code>topmost-intro-cont</code>. 
+</p></blockquote></div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This function is mainly provided to mimic the behavior of
+CC Mode 5.28 and earlier where this case wasn't handled consistently so
+that those lines could be analyzed as either topmost-intro-cont or
+statement-cont.  It's used for <code>topmost-intro-cont</code> by default, but
+you might consider using <code>+</code> instead.</p>
+
+   <hr></div>
+
+   </body></html>
+

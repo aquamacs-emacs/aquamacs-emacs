@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>User Commands - PGG 0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="PGG 0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="How-to-use.html#How-to-use" title="How to use">
+<link rel="next" href="Selecting-an-implementation.html#Selecting-an-implementation" title="Selecting an implementation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes PGG 0.1, an Emacs interface to various
+PGP implementations.
+
+Copyright (C) 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="User-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selecting-an-implementation.html#Selecting-an-implementation">Selecting an implementation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="How-to-use.html#How-to-use">How to use</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 User Commands</h3>
+
+<p>At this time you can use some cryptographic commands.  The behavior of
+these commands relies on a fashion of invocation because they are also
+intended to be used as library functions.  In case you don't have the
+signer's public key, for example, the function <code>pgg-verify-region</code>
+fails immediately, but if the function had been called interactively, it
+would ask you to retrieve the signer's public key from the server.
+
+<div class="defun">
+&mdash; Command: <b>pgg-encrypt-region</b><var> start end recipients &amp;optional sign passphrase<a name="index-pgg_002dencrypt_002dregion-1"></a></var><br>
+<blockquote><p>Encrypt the current region between <var>start</var> and <var>end</var> for
+<var>recipients</var>.  When the function were called interactively, you
+would be asked about the recipients.
+
+        <p>If encryption is successful, it replaces the current region contents (in
+the accessible portion) with the resulting data.
+
+        <p>If optional argument <var>sign</var> is non-<code>nil</code>, the function is
+request to do a combined sign and encrypt.  This currently is
+confirmed to work with GnuPG, but might not work with PGP or PGP5.
+
+        <p>If optional <var>passphrase</var> is <code>nil</code>, the passphrase will be
+obtained from the passphrase cache or user. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>pgg-encrypt-symmetric-region</b><var> &amp;optional start end passphrase<a name="index-pgg_002dencrypt_002dsymmetric_002dregion-2"></a></var><br>
+<blockquote><p>Encrypt the current region between <var>start</var> and <var>end</var> using a
+symmetric cipher.  After invocation you are asked for a passphrase.
+
+        <p>If optional <var>passphrase</var> is <code>nil</code>, the passphrase will be
+obtained from the passphrase cache or user.
+
+        <p>symmetric-cipher encryption is currently only implemented for GnuPG. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>pgg-decrypt-region</b><var> start end &amp;optional passphrase<a name="index-pgg_002ddecrypt_002dregion-3"></a></var><br>
+<blockquote><p>Decrypt the current region between <var>start</var> and <var>end</var>.  If
+decryption is successful, it replaces the current region contents (in
+the accessible portion) with the resulting data.
+
+        <p>If optional <var>passphrase</var> is <code>nil</code>, the passphrase will be
+obtained from the passphrase cache or user. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>pgg-sign-region</b><var> start end &amp;optional cleartext passphrase<a name="index-pgg_002dsign_002dregion-4"></a></var><br>
+<blockquote><p>Make the signature from text between <var>start</var> and <var>end</var>.  If the
+optional third argument <var>cleartext</var> is non-<code>nil</code>, or the
+function is called interactively, it does not create a detached
+signature.  In such a case, it replaces the current region contents (in
+the accessible portion) with the resulting data.
+
+        <p>If optional <var>passphrase</var> is <code>nil</code>, the passphrase will be
+obtained from the passphrase cache or user. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>pgg-verify-region</b><var> start end &amp;optional signature fetch<a name="index-pgg_002dverify_002dregion-5"></a></var><br>
+<blockquote><p>Verify the current region between <var>start</var> and <var>end</var>.  If the
+optional third argument <var>signature</var> is non-<code>nil</code>, it is treated
+as the detached signature file of the current region.
+
+        <p>If the optional 4th argument <var>fetch</var> is non-<code>nil</code>, or the
+function is called interactively, we attempt to fetch the signer's
+public key from the key server. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>pgg-insert-key</b><var><a name="index-pgg_002dinsert_002dkey-6"></a></var><br>
+<blockquote><p>Retrieve the user's public key and insert it as ASCII-armored format. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>pgg-snarf-keys-region</b><var> start end<a name="index-pgg_002dsnarf_002dkeys_002dregion-7"></a></var><br>
+<blockquote><p>Collect public keys in the current region between <var>start</var> and
+<var>end</var>, and add them into the user's keyring. 
+</p></blockquote></div>
+
+   </body></html>
+

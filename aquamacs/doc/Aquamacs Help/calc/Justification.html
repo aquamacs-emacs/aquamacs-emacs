@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Justification - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Modes.html#Display-Modes" title="Display Modes">
+<link rel="prev" href="Truncating-the-Stack.html#Truncating-the-Stack" title="Truncating the Stack">
+<link rel="next" href="Labels.html#Labels" title="Labels">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Justification"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Labels.html#Labels">Labels</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Truncating-the-Stack.html#Truncating-the-Stack">Truncating the Stack</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Modes.html#Display-Modes">Display Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.7.9 Justification</h4>
+
+<p class="noindent"><a name="index-d-_003c-533"></a><a name="index-calc_002dleft_002djustify-534"></a><a name="index-d-_003d-535"></a><a name="index-calc_002dcenter_002djustify-536"></a><a name="index-d-_003e-537"></a><a name="index-calc_002dright_002djustify-538"></a>Values on the stack are normally left-justified in the window.  You can
+control this arrangement by typing <kbd>d &lt;</kbd> (<code>calc-left-justify</code>),
+<kbd>d &gt;</kbd> (<code>calc-right-justify</code>), or <kbd>d =</kbd>
+(<code>calc-center-justify</code>).  For example, in Right-Justification mode,
+stack entries are displayed flush-right against the right edge of the
+window.
+
+   <p>If you change the width of the Calculator window you may have to type
+<kbd>d &lt;SPC&gt;</kbd> (<code>calc-refresh</code>) to re-align right-justified or centered
+text.
+
+   <p>Right-justification is especially useful together with fixed-point
+notation (see <code>d f</code>; <code>calc-fix-notation</code>).  With these modes
+together, the decimal points on numbers will always line up.
+
+   <p>With a numeric prefix argument, the justification commands give you
+a little extra control over the display.  The argument specifies the
+horizontal &ldquo;origin&rdquo; of a display line.  It is also possible to
+specify a maximum line width using the <kbd>d b</kbd> command (see <a href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>).  For reference, the precise rules for formatting and
+breaking lines are given below.  Notice that the interaction between
+origin and line width is slightly different in each justification
+mode.
+
+   <p>In Left-Justified mode, the line is indented by a number of spaces
+given by the origin (default zero).  If the result is longer than the
+maximum line width, if given, or too wide to fit in the Calc window
+otherwise, then it is broken into lines which will fit; each broken
+line is indented to the origin.
+
+   <p>In Right-Justified mode, lines are shifted right so that the rightmost
+character is just before the origin, or just before the current
+window width if no origin was specified.  If the line is too long
+for this, then it is broken; the current line width is used, if
+specified, or else the origin is used as a width if that is
+specified, or else the line is broken to fit in the window.
+
+   <p>In Centering mode, the origin is the column number of the center of
+each stack entry.  If a line width is specified, lines will not be
+allowed to go past that width; Calc will either indent less or
+break the lines if necessary.  If no origin is specified, half the
+line width or Calc window width is used.
+
+   <p>Note that, in each case, if line numbering is enabled the display
+is indented an additional four spaces to make room for the line
+number.  The width of the line number is taken into account when
+positioning according to the current Calc window width, but not
+when positioning by explicit origins and widths.  In the latter
+case, the display is formatted as specified, and then uniformly
+shifted over four spaces to fit the line numbers.
+
+   </body></html>
+

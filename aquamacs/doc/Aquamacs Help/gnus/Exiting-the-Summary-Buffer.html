@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Exiting the Summary Buffer - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Various-Summary-Stuff.html#Various-Summary-Stuff" title="Various Summary Stuff">
+<link rel="next" href="Crosspost-Handling.html#Crosspost-Handling" title="Crosspost Handling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Exiting-the-Summary-Buffer"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Crosspost-Handling.html#Crosspost-Handling">Crosspost Handling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Various-Summary-Stuff.html#Various-Summary-Stuff">Various Summary Stuff</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.28 Exiting the Summary Buffer</h3>
+
+<p><a name="index-summary-exit-1741"></a><a name="index-exiting-groups-1742"></a>
+Exiting from the summary buffer will normally update all info on the
+group and return you to the group buffer.
+
+     <dl>
+<dt><kbd>Z Z</kbd><dt><kbd>Z Q</kbd><dt><kbd>q</kbd><dd><a name="index-Z-Z-_0028Summary_0029-1743"></a><a name="index-Z-Q-_0028Summary_0029-1744"></a><a name="index-q-_0028Summary_0029-1745"></a><a name="index-gnus_002dsummary_002dexit-1746"></a><a name="index-gnus_002dsummary_002dexit_002dhook-1747"></a><a name="index-gnus_002dsummary_002dprepare_002dexit_002dhook-1748"></a><a name="index-gnus_002dgroup_002dno_002dmore_002dgroups_002dhook-1749"></a><!-- @icon{gnus-summary-exit} -->
+Exit the current group and update all information on the group
+(<code>gnus-summary-exit</code>).  <code>gnus-summary-prepare-exit-hook</code> is
+called before doing much of the exiting, which calls
+<code>gnus-summary-expire-articles</code> by default. 
+<code>gnus-summary-exit-hook</code> is called after finishing the exit
+process.  <code>gnus-group-no-more-groups-hook</code> is run when returning to
+group mode having no more (unread) groups.
+
+     <br><dt><kbd>Z E</kbd><dt><kbd>Q</kbd><dd><a name="index-Z-E-_0028Summary_0029-1750"></a><a name="index-Q-_0028Summary_0029-1751"></a><a name="index-gnus_002dsummary_002dexit_002dno_002dupdate-1752"></a>Exit the current group without updating any information on the group
+(<code>gnus-summary-exit-no-update</code>).
+
+     <br><dt><kbd>Z c</kbd><dt><kbd>c</kbd><dd><a name="index-Z-c-_0028Summary_0029-1753"></a><a name="index-c-_0028Summary_0029-1754"></a><a name="index-gnus_002dsummary_002dcatchup_002dand_002dexit-1755"></a><!-- @icon{gnus-summary-catchup-and-exit} -->
+Mark all unticked articles in the group as read and then exit
+(<code>gnus-summary-catchup-and-exit</code>).
+
+     <br><dt><kbd>Z C</kbd><dd><a name="index-Z-C-_0028Summary_0029-1756"></a><a name="index-gnus_002dsummary_002dcatchup_002dall_002dand_002dexit-1757"></a>Mark all articles, even the ticked ones, as read and then exit
+(<code>gnus-summary-catchup-all-and-exit</code>).
+
+     <br><dt><kbd>Z n</kbd><dd><a name="index-Z-n-_0028Summary_0029-1758"></a><a name="index-gnus_002dsummary_002dcatchup_002dand_002dgoto_002dnext_002dgroup-1759"></a>Mark all articles as read and go to the next group
+(<code>gnus-summary-catchup-and-goto-next-group</code>).
+
+     <br><dt><kbd>Z p</kbd><dd><a name="index-Z-p-_0028Summary_0029-1760"></a><a name="index-gnus_002dsummary_002dcatchup_002dand_002dgoto_002dprev_002dgroup-1761"></a>Mark all articles as read and go to the previous group
+(<code>gnus-summary-catchup-and-goto-prev-group</code>).
+
+     <br><dt><kbd>Z R</kbd><dt><kbd>C-x C-s</kbd><dd><a name="index-Z-R-_0028Summary_0029-1762"></a><a name="index-C_002dx-C_002ds-_0028Summary_0029-1763"></a><a name="index-gnus_002dsummary_002dreselect_002dcurrent_002dgroup-1764"></a>Exit this group, and then enter it again
+(<code>gnus-summary-reselect-current-group</code>).  If given a prefix, select
+all articles, both read and unread.
+
+     <br><dt><kbd>Z G</kbd><dt><kbd>M-g</kbd><dd><a name="index-Z-G-_0028Summary_0029-1765"></a><a name="index-M_002dg-_0028Summary_0029-1766"></a><a name="index-gnus_002dsummary_002drescan_002dgroup-1767"></a><!-- @icon{gnus-summary-mail-get} -->
+Exit the group, check for new articles in the group, and select the
+group (<code>gnus-summary-rescan-group</code>).  If given a prefix, select all
+articles, both read and unread.
+
+     <br><dt><kbd>Z N</kbd><dd><a name="index-Z-N-_0028Summary_0029-1768"></a><a name="index-gnus_002dsummary_002dnext_002dgroup-1769"></a>Exit the group and go to the next group
+(<code>gnus-summary-next-group</code>).
+
+     <br><dt><kbd>Z P</kbd><dd><a name="index-Z-P-_0028Summary_0029-1770"></a><a name="index-gnus_002dsummary_002dprev_002dgroup-1771"></a>Exit the group and go to the previous group
+(<code>gnus-summary-prev-group</code>).
+
+     <br><dt><kbd>Z s</kbd><dd><a name="index-Z-s-_0028Summary_0029-1772"></a><a name="index-gnus_002dsummary_002dsave_002dnewsrc-1773"></a>Save the current number of read/marked articles in the dribble buffer
+and then save the dribble buffer (<code>gnus-summary-save-newsrc</code>).  If
+given a prefix, also save the <samp><span class="file">.newsrc</span></samp> file(s).  Using this
+command will make exit without updating (the <kbd>Q</kbd> command) worthless. 
+</dl>
+
+   <p><a name="index-gnus_002dexit_002dgroup_002dhook-1774"></a><code>gnus-exit-group-hook</code> is called when you exit the current group
+with an &ldquo;updating&rdquo; exit.  For instance <kbd>Q</kbd>
+(<code>gnus-summary-exit-no-update</code>) does not call this hook.
+
+   <p><a name="index-gnus_002dsummary_002dwake_002dup_002dthe_002ddead-1775"></a><a name="index-gnus_002ddead_002dsummary_002dmode-1776"></a><a name="index-gnus_002dkill_002dsummary_002don_002dexit-1777"></a>If you're in the habit of exiting groups, and then changing your mind
+about it, you might set <code>gnus-kill-summary-on-exit</code> to <code>nil</code>. 
+If you do that, Gnus won't kill the summary buffer when you exit it. 
+(Quelle surprise!)  Instead it will change the name of the buffer to
+something like &lsquo;<samp><span class="samp">*Dead Summary ... *</span></samp>&rsquo; and install a minor mode
+called <code>gnus-dead-summary-mode</code>.  Now, if you switch back to this
+buffer, you'll find that all keys are mapped to a function called
+<code>gnus-summary-wake-up-the-dead</code>.  So tapping any keys in a dead
+summary buffer will result in a live, normal summary buffer.
+
+   <p>There will never be more than one dead summary buffer at any one time.
+
+   <p><a name="index-gnus_002duse_002dcross_002dreference-1778"></a>The data on the current group will be updated (which articles you have
+read, which articles you have replied to, etc.) when you exit the
+summary buffer.  If the <code>gnus-use-cross-reference</code> variable is
+<code>t</code> (which is the default), articles that are cross-referenced to
+this group and are marked as read, will also be marked as read in the
+other subscribed groups they were cross-posted to.  If this variable is
+neither <code>nil</code> nor <code>t</code>, the article will be marked as read in
+both subscribed and unsubscribed groups (see <a href="Crosspost-Handling.html#Crosspost-Handling">Crosspost Handling</a>).
+
+   </body></html>
+

@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>Back End Interface - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
+<link rel="prev" href="Gnus-Utility-Functions.html#Gnus-Utility-Functions" title="Gnus Utility Functions">
+<link rel="next" href="Score-File-Syntax.html#Score-File-Syntax" title="Score File Syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Back-End-Interface"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Score-File-Syntax.html#Score-File-Syntax">Score File Syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnus-Utility-Functions.html#Gnus-Utility-Functions">Gnus Utility Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.7.2 Back End Interface</h4>
+
+<p>Gnus doesn't know anything about <acronym>NNTP</acronym>, spools, mail or virtual
+groups.  It only knows how to talk to <dfn>virtual servers</dfn>.  A virtual
+server is a <dfn>back end</dfn> and some <dfn>back end variables</dfn>.  As examples
+of the first, we have <code>nntp</code>, <code>nnspool</code> and <code>nnmbox</code>.  As
+examples of the latter we have <code>nntp-port-number</code> and
+<code>nnmbox-directory</code>.
+
+   <p>When Gnus asks for information from a back end&mdash;say <code>nntp</code>&mdash;on
+something, it will normally include a virtual server name in the
+function parameters.  (If not, the back end should use the &ldquo;current&rdquo;
+virtual server.)  For instance, <code>nntp-request-list</code> takes a virtual
+server as its only (optional) parameter.  If this virtual server hasn't
+been opened, the function should fail.
+
+   <p>Note that a virtual server name has no relation to some physical server
+name.  Take this example:
+
+<pre class="lisp">     (nntp "odd-one"
+           (nntp-address "ifi.uio.no")
+           (nntp-port-number 4324))
+</pre>
+   <p>Here the virtual server name is &lsquo;<samp><span class="samp">odd-one</span></samp>&rsquo; while the name of
+the physical server is &lsquo;<samp><span class="samp">ifi.uio.no</span></samp>&rsquo;.
+
+   <p>The back ends should be able to switch between several virtual servers. 
+The standard back ends implement this by keeping an alist of virtual
+server environments that they pull down/push up when needed.
+
+   <p>There are two groups of interface functions: <dfn>required functions</dfn>,
+which must be present, and <dfn>optional functions</dfn>, which Gnus will
+always check for presence before attempting to call 'em.
+
+   <p>All these functions are expected to return data in the buffer
+<code>nntp-server-buffer</code> (&lsquo;<samp><span class="samp"> *nntpd*</span></samp>&rsquo;), which is somewhat
+unfortunately named, but we'll have to live with it.  When I talk about
+<dfn>resulting data</dfn>, I always refer to the data in that buffer.  When I
+talk about <dfn>return value</dfn>, I talk about the function value returned by
+the function call.  Functions that fail should return <code>nil</code> as the
+return value.
+
+   <p>Some back ends could be said to be <dfn>server-forming</dfn> back ends, and
+some might be said not to be.  The latter are back ends that generally
+only operate on one group at a time, and have no concept of &ldquo;server&rdquo;
+&mdash;they have a group, and they deliver info on that group and nothing
+more.
+
+   <p>Gnus identifies each message by way of group name and article number.  A
+few remarks about these article numbers might be useful.  First of all,
+the numbers are positive integers.  Secondly, it is normally not
+possible for later articles to &ldquo;re-use&rdquo; older article numbers without
+confusing Gnus.  That is, if a group has ever contained a message
+numbered 42, then no other message may get that number, or Gnus will get
+mightily confused.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+Third, article numbers must be assigned in order of arrival in the
+group; this is not necessarily the same as the date of the message.
+
+   <p>The previous paragraph already mentions all the &ldquo;hard&rdquo; restrictions that
+article numbers must fulfill.  But it seems that it might be useful to
+assign <em>consecutive</em> article numbers, for Gnus gets quite confused
+if there are holes in the article numbering sequence.  However, due to
+the &ldquo;no-reuse&rdquo; restriction, holes cannot be avoided altogether.  It's
+also useful for the article numbers to start at 1 to avoid running out
+of numbers as long as possible.
+
+   <p>Note that by convention, back ends are named <code>nnsomething</code>, but
+Gnus also comes with some <code>nnnotbackends</code>, such as
+<samp><span class="file">nnheader.el</span></samp>, <samp><span class="file">nnmail.el</span></samp> and <samp><span class="file">nnoo.el</span></samp>.
+
+   <p>In the examples and definitions I will refer to the imaginary back end
+<code>nnchoke</code>.
+
+   <p><a name="index-g_t_0040code_007bnnchoke_007d-3184"></a>
+
+<ul class="menu">
+<li><a accesskey="1" href="Required-Back-End-Functions.html#Required-Back-End-Functions">Required Back End Functions</a>:   Functions that must be implemented. 
+<li><a accesskey="2" href="Optional-Back-End-Functions.html#Optional-Back-End-Functions">Optional Back End Functions</a>:   Functions that need not be implemented. 
+<li><a accesskey="3" href="Error-Messaging.html#Error-Messaging">Error Messaging</a>:              How to get messages and report errors. 
+<li><a accesskey="4" href="Writing-New-Back-Ends.html#Writing-New-Back-Ends">Writing New Back Ends</a>:        Extending old back ends. 
+<li><a accesskey="5" href="Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus">Hooking New Back Ends Into Gnus</a>:   What has to be done on the Gnus end. 
+<li><a accesskey="6" href="Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends">Mail-like Back Ends</a>:          Some tips on mail back ends. 
+</ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the function
+<code>nnchoke-request-update-info</code>, <a href="Optional-Back-End-Functions.html#Optional-Back-End-Functions">Optional Back End Functions</a>.</p>
+
+   <hr></div>
+
+   </body></html>
+

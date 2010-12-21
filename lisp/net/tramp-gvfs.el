@@ -104,10 +104,6 @@
 
 (require 'tramp)
 
-;; We call several `tramp-handle-*' functions directly.  So we must
-;; reqire that package as well.
-(require 'tramp-sh)
-
 (require 'dbus)
 (require 'url-parse)
 (require 'url-util)
@@ -128,8 +124,7 @@
 
 ;; Add a default for `tramp-default-user-alist'.  Rule: For the SYNCE
 ;; method, no user is chosen.
-(add-to-list 'tramp-default-user-alist
-	     '("synce" nil nil))
+(add-to-list 'tramp-default-user-alist '("\\`synce\\'" nil nil))
 
 (defcustom tramp-gvfs-zeroconf-domain "local"
   "*Zeroconf domain to be used for discovering services, like host names."
@@ -531,7 +526,6 @@ is no information where to trace the message.")
 (defun tramp-gvfs-dbus-event-error (event err)
   "Called when a D-Bus error message arrives, see `dbus-event-error-hooks'."
   (when tramp-gvfs-dbus-event-vector
-    ;(tramp-cleanup-connection tramp-gvfs-dbus-event-vector)
     (tramp-message tramp-gvfs-dbus-event-vector 10 "%S" event)
     (tramp-error tramp-gvfs-dbus-event-vector 'file-error "%s" (cadr err))))
 
@@ -1198,7 +1192,7 @@ connection if a previous connection has died for some reason."
 	      :name (tramp-buffer-name vec)
 	      :buffer (tramp-get-buffer vec)
 	      :server t :host 'local :service t)))
-      (tramp-set-process-query-on-exit-flag p nil)))
+      (tramp-compat-set-process-query-on-exit-flag p nil)))
 
   (unless (tramp-gvfs-connection-mounted-p vec)
     (let* ((method (tramp-file-name-method vec))
@@ -1437,5 +1431,4 @@ They are retrieved from the hal daemon."
 ;;   capability.
 ;; * Implement obex for other serial communication but bluetooth.
 
-;; arch-tag: f7f660ce-77f4-4132-9663-f5c25a47f7ed
 ;;; tramp-gvfs.el ends here

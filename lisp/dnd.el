@@ -155,10 +155,11 @@ Return nil if URI is not a local file."
       (let* ((decoded-f (decode-coding-string
 			 f
 			 (or file-name-coding-system
-			     default-file-name-coding-system)))
-	     (try-f (if (file-readable-p decoded-f) decoded-f f)))
-	(when (file-readable-p try-f) try-f)))))
-
+			     default-file-name-coding-system))))
+	(setq f (cond ((file-readable-p decoded-f) decoded-f)
+		      ((file-readable-p f) f)
+		      (t nil)))))
+    f))
 
 (defun dnd-open-local-file (uri action)
   "Open a local file.
@@ -171,11 +172,26 @@ file://server-name/file-name will also be handled by this function.
 An alternative for systems that do not support unc file names is
 `dnd-open-remote-url'. ACTION is ignored."
 
-  (let* ((f (dnd-get-local-file-name uri t)))
-    (if (and f (file-readable-p f))
+  (let* ((f (dnd-get-local-file-name uri nil)))
+    (if f
 	(progn
 	  (if (fboundp 'aquamacs-find-file)
-	      (let ((one-buffer-one-frame-mode (or one-buffer-one-frame-mode dnd-open-file-other-window)))
+	      (let ((one-buffer-one-frame-mode 
+		     (or one-buffer-one-frame-mode 
+			 dnd-open-file-other-window
+			 (and (boundp 'tabbar-mode)
+			      tabbar-mode 
+			      (fboundp 'ns-frame-is-on-active-space-p)	      
+			      (fboundp 'ns-visible-frame-list)
+			      (if (ns-frame-is-on-active-space-p (selected-frame))
+				  nil ;; no need to open a new frame
+				(if (not (ns-visible-frame-list))
+				    t ;; no frame visible on this space, open a new frame
+				  ;; frame visible on this space, we just need to make it selected
+				  (select-frame-set-input-focus (car (ns-visible-frame-list)))
+				  ;; .. and proceed to use it
+				  nil)
+				)))))
 		(aquamacs-find-file f))
 	    (if dnd-open-file-other-window
 		(find-file-other-window f)

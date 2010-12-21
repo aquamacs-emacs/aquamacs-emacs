@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Virtual Dired - Dired Extra Version 2 User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dired Extra Version 2 User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Shell-Command-Guessing.html#Shell-Command-Guessing" title="Shell Command Guessing">
+<link rel="next" href="Advanced-Mark-Commands.html#Advanced-Mark-Commands" title="Advanced Mark Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Virtual-Dired"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Advanced-Mark-Commands.html#Advanced-Mark-Commands">Advanced Mark Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell-Command-Guessing.html#Shell-Command-Guessing">Shell Command Guessing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">6 Virtual Dired</h2>
+
+<p><a name="index-Virtual-Dired-43"></a><a name="index-Perusing-_0040code_007bls_007d-listings-44"></a><a name="index-g_t_0040code_007bls_007d-listings_002c-how-to-peruse-them-in-Dired-45"></a>Using <dfn>Virtual Dired</dfn> means putting a buffer with Dired-like
+contents in Dired mode.  The files described by the buffer contents need
+not actually exist.  This is useful if you want to peruse an &lsquo;<samp><span class="samp">ls -lR</span></samp>&rsquo;
+output file, for example one you got from an FTP server.  You can use
+all motion commands usually available in Dired.  You can also use
+it to save a Dired buffer in a file and resume it in a later session.
+
+   <p><a name="index-dired_002dvirtual-46"></a><a name="index-g-47"></a><a name="index-dired_002dvirtual_002drevert-48"></a>Type <kbd>M-x dired-virtual</kbd> to put the current buffer into virtual
+Dired mode.  You will be prompted for the top level directory of this
+buffer, with a default value guessed from the buffer contents.  To
+convert the virtual to a real Dired buffer again, type <kbd>g</kbd> (which
+calls <code>dired-virtual-revert</code>) in the virtual Dired buffer and
+answer &lsquo;<samp><span class="samp">y</span></samp>&rsquo;.  You don't have to do this, though: you can relist
+single subdirectories using <kbd>l</kbd> (<code>dired-do-redisplay</code>) on the subdirectory
+headerline, leaving the buffer in virtual Dired mode all the time.
+
+   <p><a name="index-dired_002dvirtual_002dmode-49"></a><a name="index-auto_002dmode_002dalist-50"></a>The function &lsquo;<samp><span class="samp">dired-virtual-mode</span></samp>&rsquo; is specially designed to turn on
+virtual Dired mode from the <code>auto-mode-alist</code>.  To edit all
+<samp><span class="file">*.dired</span></samp> files automatically in virtual Dired mode, put this into your
+<samp><span class="file">~/.emacs</span></samp>:
+
+<pre class="example">     (setq auto-mode-alist (cons '("[^/]\\.dired$" . dired-virtual-mode)
+                                   auto-mode-alist))
+</pre>
+   <p class="noindent">The regexp is a bit more complicated than usual to exclude <samp><span class="file">.dired</span></samp>
+local-variable files.
+
+   </body></html>
+

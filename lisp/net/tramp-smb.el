@@ -31,10 +31,6 @@
 (eval-when-compile (require 'cl))	; block, return
 (require 'tramp)
 
-;; We call several `tramp-handle-*' functions directly.  So we must
-;; reqire that package as well.
-(require 'tramp-sh)
-
 ;; Define SMB method ...
 ;;;###tramp-autoload
 (defconst tramp-smb-method "smb"
@@ -53,7 +49,7 @@
 ;; Add a default for `tramp-default-user-alist'. Rule: For the SMB method,
 ;; the anonymous user is chosen.
 (add-to-list 'tramp-default-user-alist
-	     `(,tramp-smb-method nil ""))
+	     `(,(concat "\\`" tramp-smb-method "\\'") nil nil))
 
 ;; Add completion function for SMB method.
 (tramp-set-completion-function
@@ -157,7 +153,7 @@ See `tramp-actions-before-shell' for more info.")
     (directory-file-name . tramp-handle-directory-file-name)
     (directory-files . tramp-smb-handle-directory-files)
     (directory-files-and-attributes
-     . tramp-smb-handle-directory-files-and-attributes)
+     . tramp-handle-directory-files-and-attributes)
     (dired-call-process . ignore)
     (dired-compress-file . ignore)
     (dired-uncache . tramp-handle-dired-uncache)
@@ -165,8 +161,8 @@ See `tramp-actions-before-shell' for more info.")
     (file-accessible-directory-p . tramp-smb-handle-file-directory-p)
     (file-attributes . tramp-smb-handle-file-attributes)
     (file-directory-p .  tramp-smb-handle-file-directory-p)
-    (file-executable-p . tramp-smb-handle-file-exists-p)
-    (file-exists-p . tramp-smb-handle-file-exists-p)
+    (file-executable-p . tramp-handle-file-exists-p)
+    (file-exists-p . tramp-handle-file-exists-p)
     (file-local-copy . tramp-smb-handle-file-local-copy)
     (file-modes . tramp-handle-file-modes)
     (file-name-all-completions . tramp-smb-handle-file-name-all-completions)
@@ -175,9 +171,9 @@ See `tramp-actions-before-shell' for more info.")
     (file-name-directory . tramp-handle-file-name-directory)
     (file-name-nondirectory . tramp-handle-file-name-nondirectory)
     ;; `file-name-sans-versions' performed by default handler.
-    (file-newer-than-file-p . tramp-smb-handle-file-newer-than-file-p)
+    (file-newer-than-file-p . tramp-handle-file-newer-than-file-p)
     (file-ownership-preserved-p . ignore)
-    (file-readable-p . tramp-smb-handle-file-exists-p)
+    (file-readable-p . tramp-handle-file-exists-p)
     (file-regular-p . tramp-handle-file-regular-p)
     (file-remote-p . tramp-handle-file-remote-p)
     ;; `file-selinux-context' performed by default handler.
@@ -455,15 +451,6 @@ PRESERVE-UID-GID is completely ignored."
     ;; That's it.
     result))
 
-(defun tramp-smb-handle-directory-files-and-attributes
-  (directory &optional full match nosort id-format)
-  "Like `directory-files-and-attributes' for Tramp files."
-  (mapcar
-   (lambda (x)
-     (cons x (tramp-compat-file-attributes
-	      (if full x (expand-file-name x directory)) id-format)))
-   (directory-files directory full match nosort)))
-
 (defun tramp-smb-handle-expand-file-name (name &optional dir)
   "Like `expand-file-name' for Tramp files."
   ;; If DIR is not given, use DEFAULT-DIRECTORY or "/".
@@ -601,10 +588,6 @@ PRESERVE-UID-GID is completely ignored."
   (and (file-exists-p filename)
        (eq ?d (aref (nth 8 (file-attributes filename)) 0))))
 
-(defun tramp-smb-handle-file-exists-p (filename)
-  "Like `file-exists-p' for Tramp files."
-  (not (null (file-attributes filename))))
-
 (defun tramp-smb-handle-file-local-copy (filename)
   "Like `file-local-copy' for Tramp files."
   (with-parsed-tramp-file-name filename nil
@@ -641,14 +624,6 @@ PRESERVE-UID-GID is completely ignored."
 		   (file-name-as-directory (nth 0 x))
 		 (nth 0 x))))
 	    entries)))))))
-
-(defun tramp-smb-handle-file-newer-than-file-p (file1 file2)
-  "Like `file-newer-than-file-p' for Tramp files."
-  (cond
-   ((not (file-exists-p file1)) nil)
-   ((not (file-exists-p file2)) t)
-   (t (tramp-time-less-p (nth 5 (file-attributes file2))
-			 (nth 5 (file-attributes file1))))))
 
 (defun tramp-smb-handle-file-writable-p (filename)
   "Like `file-writable-p' for Tramp files."
@@ -1104,7 +1079,7 @@ If SHARE is result, entries are of type dir. Otherwise, shares are listed.
 Result is the list (LOCALNAME MODE SIZE MTIME)."
 ;; We are called from `tramp-smb-get-file-entries', which sets the
 ;; current buffer.
-  (let ((line (buffer-substring (point) (tramp-compat-line-end-position)))
+  (let ((line (buffer-substring (point) (point-at-eol)))
 	localname mode size month day hour min sec year mtime)
 
     (if (not share)
@@ -1202,8 +1177,7 @@ Result is the list (LOCALNAME MODE SIZE MTIME)."
 		(member
 		 "pathnames"
 		 (split-string
-		  (buffer-substring
-		   (point) (tramp-compat-line-end-position)) nil t)))))))))
+		  (buffer-substring (point) (point-at-eol)) nil t)))))))))
 
 (defun tramp-smb-get-stat-capability (vec)
   "Check, whether the SMB server supports the STAT command."
@@ -1327,7 +1301,7 @@ connection if a previous connection has died for some reason."
 
 	      (tramp-message
 	       vec 6 "%s" (mapconcat 'identity (process-command p) " "))
-	      (tramp-set-process-query-on-exit-flag p nil)
+	      (tramp-compat-set-process-query-on-exit-flag p nil)
 
 	      ;; Set variables for computing the prompt for reading password.
 	      (setq tramp-current-method tramp-smb-method
@@ -1421,5 +1395,4 @@ Returns nil if an error message has appeared."
 ;;   regular again.
 ;; * Make it multi-hop capable.
 
-;; arch-tag: fcc9dbec-7503-4d73-b638-3c8aa59575f5
 ;;; tramp-smb.el ends here

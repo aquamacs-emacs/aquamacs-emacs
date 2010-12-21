@@ -148,10 +148,10 @@ Lisp_Object ns_save_panel_file, ns_save_panel_buffer;
 Lisp_Object Vx_toolkit_scroll_bars;
 static Lisp_Object Qmodifier_value;
 Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qnone;
-extern Lisp_Object Qcursor_color, Qcursor_type, Qns;
+extern Lisp_Object Qcursor_color, Qcursor_type, Qns, Qleft;
 
 /* Specifies which emacs modifier should be generated when NS receives
-   the Alternate modifer.  May be Qnone or any of the modifier lisp symbols. */
+   the Alternate modifier.  May be Qnone or any of the modifier lisp symbols. */
 Lisp_Object ns_alternate_modifier;
 
 /* List of key codes (numbers) identifying keys for which 
@@ -161,30 +161,30 @@ will be reported as Meta. */
 Lisp_Object ns_alternate_meta_special_codes;
 
 /* Specifies which emacs modifier should be generated when NS receives
-   the Right Alternate modifer. Any of the modifier lisp symbols can be
-   used; Qnone falls back to ns_alternate_modifier. */
+   the right Alternate modifier.  Has same values as ns_alternate_modifier plus
+   the value Qleft which means whatever value ns_alternate_modifier has.  */
 Lisp_Object ns_right_alternate_modifier;
 
 /* Specifies which emacs modifier should be generated when NS receives
-   the Command modifer.  May be any of the modifier lisp symbols. */
+   the Command modifier.  May be any of the modifier lisp symbols. */
 Lisp_Object ns_command_modifier;
 
 /* Specifies which emacs modifier should be generated when NS receives
-   the Right Command modifer. Any of the modifier lisp symbols can be
-   used; Qnone falls back to ns_command_modifier. */
+   the right Command modifier.  Has same values as ns_command_modifier plus
+   the value Qleft which means whatever value ns_command_modifier has.  */
 Lisp_Object ns_right_command_modifier;
 
 /* Specifies which emacs modifier should be generated when NS receives
-   the Control modifer.  May be any of the modifier lisp symbols. */
+   the Control modifier.  May be any of the modifier lisp symbols. */
 Lisp_Object ns_control_modifier;
 
 /* Specifies which emacs modifier should be generated when NS receives
-   the Right Control modifer.  May be any of the modifier lisp symbols. 
-   Qnone falls ack to ns_control_modifier. */
+   the right Control modifier.  Has same values as ns_control_modifier plus
+   the value Qleft which means whatever value ns_control_modifier has.  */
 Lisp_Object ns_right_control_modifier;
 
 /* Specifies which emacs modifier should be generated when NS receives
-   the Function modifer (laptops).  May be any of the modifier lisp symbols. */
+   the Function modifier (laptops).  May be any of the modifier lisp symbols. */
 Lisp_Object ns_function_modifier;
 
 /* Non-nil specifies that control-click maps to left mouse button, command-click to middle button */
@@ -250,32 +250,37 @@ static BOOL inNsSelect = 0;
 
 /* Convert modifiers in a NeXTSTEP event to emacs style modifiers.  */
 #define NS_FUNCTION_KEY_MASK 0x800000
-#define NSLeftControlKeyMask    (0x000001 )
-#define NSRightControlKeyMask   (0x002000 )
-#define NSLeftCommandKeyMask    (0x000008 )
-#define NSRightCommandKeyMask   (0x000010 )
-#define NSLeftAlternateKeyMask  (0x000020 )
-#define NSRightAlternateKeyMask (0x000040 )
-
+#define NSLeftControlKeyMask    (0x000001 | NSControlKeyMask)
+#define NSRightControlKeyMask   (0x002000 | NSControlKeyMask)
+#define NSLeftCommandKeyMask    (0x000008 | NSCommandKeyMask)
+#define NSRightCommandKeyMask   (0x000010 | NSCommandKeyMask)
+#define NSLeftAlternateKeyMask  (0x000020 | NSAlternateKeyMask)
+#define NSRightAlternateKeyMask (0x000040 | NSAlternateKeyMask)
 #define EV_MODIFIERS(e)                               \
-  ((([e modifierFlags] & NSHelpKeyMask) ?	      \
+    ((([e modifierFlags] & NSHelpKeyMask) ?           \
            hyper_modifier : 0)                        \
-     | (([e modifierFlags] & NSShiftKeyMask) ?        \
+     | (!EQ (ns_right_alternate_modifier, Qleft) && \
+        (([e modifierFlags] & NSRightAlternateKeyMask) \
+         == NSRightAlternateKeyMask) ? \
+           parse_solitary_modifier (ns_right_alternate_modifier) : 0) \
+     | (([e modifierFlags] & NSAlternateKeyMask) ?                 \
+           parse_solitary_modifier (ns_alternate_modifier) : 0)   \
+     | (([e modifierFlags] & NSShiftKeyMask) ?     \
            shift_modifier : 0)                        \
+     | (!EQ (ns_right_control_modifier, Qleft) && \
+        (([e modifierFlags] & NSRightControlKeyMask) \
+         == NSRightControlKeyMask) ? \
+           parse_solitary_modifier (ns_right_control_modifier) : 0) \
+     | (([e modifierFlags] & NSControlKeyMask) ?      \
+           parse_solitary_modifier (ns_control_modifier) : 0)     \
      | (([e modifierFlags] & NS_FUNCTION_KEY_MASK) ?  \
            parse_solitary_modifier (ns_function_modifier) : 0)    \
-     | (([e modifierFlags] & NSLeftCommandKeyMask) ?		  \
-	 parse_solitary_modifier (ns_command_modifier) : 0)	  \
-     | (([e modifierFlags] & NSRightCommandKeyMask) ?			\
-	 parse_solitary_modifier ((EQ (ns_right_command_modifier, Qnone) ? ns_command_modifier : ns_right_command_modifier)) : 0) \
-     | (([e modifierFlags] & NSLeftAlternateKeyMask) ?			\
-	 parse_solitary_modifier (ns_alternate_modifier) : 0)		\
-     | (([e modifierFlags] & NSRightAlternateKeyMask) ?			\
-	 parse_solitary_modifier ((EQ (ns_right_alternate_modifier, Qnone) ? ns_alternate_modifier : ns_right_alternate_modifier)) : 0) \
-     | (([e modifierFlags] & NSLeftControlKeyMask) ?			\
-	 parse_solitary_modifier (ns_control_modifier) : 0)		\
-     | (([e modifierFlags] & NSRightControlKeyMask) ?			\
-	 parse_solitary_modifier ((EQ (ns_right_control_modifier, Qnone) ? ns_control_modifier : ns_right_control_modifier)) : 0))
+     | (!EQ (ns_right_command_modifier, Qleft) && \
+        (([e modifierFlags] & NSRightCommandKeyMask) \
+         == NSRightCommandKeyMask) ? \
+           parse_solitary_modifier (ns_right_command_modifier) : 0) \
+     | (([e modifierFlags] & NSCommandKeyMask) ?      \
+           parse_solitary_modifier (ns_command_modifier):0))
 
 
 #define EV_UDMODIFIERS(e)                                      \
@@ -590,7 +595,7 @@ ns_update_window_begin (struct window *w)
    -------------------------------------------------------------------------- */
 {
   struct frame *f = XFRAME (WINDOW_FRAME (w));
-  struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
+ Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
   NSTRACE (ns_update_window_begin);
 
   updated_window = w;
@@ -598,15 +603,15 @@ ns_update_window_begin (struct window *w)
 
   BLOCK_INPUT;
 
-  if (f == dpyinfo->mouse_face_mouse_frame)
+  if (f == hlinfo->mouse_face_mouse_frame)
     {
       /* Don't do highlighting for mouse motion during the update.  */
-      dpyinfo->mouse_face_defer = 1;
+      hlinfo->mouse_face_defer = 1;
 
         /* If the frame needs to be redrawn,
            simply forget about any prior mouse highlighting.  */
       if (FRAME_GARBAGED_P (f))
-        dpyinfo->mouse_face_window = Qnil;
+        hlinfo->mouse_face_window = Qnil;
 
       /* (further code for mouse faces ifdef'd out in other terms elided) */
     }
@@ -623,7 +628,7 @@ ns_update_window_end (struct window *w, int cursor_on_p,
    external (RIF) call; for one window called before update_end
    -------------------------------------------------------------------------- */
 {
-  struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (XFRAME (w->frame));
+  Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (XFRAME (w->frame));
 
   /* note: this fn is nearly identical in all terms */
   if (!w->pseudo_window_p)
@@ -645,9 +650,9 @@ ns_update_window_end (struct window *w, int cursor_on_p,
      frame_up_to_date to redisplay the mouse highlight.  */
   if (mouse_face_overwritten_p)
     {
-      dpyinfo->mouse_face_beg_row = dpyinfo->mouse_face_beg_col = -1;
-      dpyinfo->mouse_face_end_row = dpyinfo->mouse_face_end_col = -1;
-      dpyinfo->mouse_face_window = Qnil;
+      hlinfo->mouse_face_beg_row = hlinfo->mouse_face_beg_col = -1;
+      hlinfo->mouse_face_end_row = hlinfo->mouse_face_end_col = -1;
+      hlinfo->mouse_face_window = Qnil;
     }
 
   updated_window = NULL;
@@ -675,8 +680,8 @@ ns_update_end (struct frame *f)
 {
   NSView *view = FRAME_NS_VIEW (f);
 
-/*   if (f == FRAME_NS_DISPLAY_INFO (f)->mouse_face_mouse_frame) */
-    FRAME_NS_DISPLAY_INFO (f)->mouse_face_defer = 0;
+/*   if (f == MOUSE_HL_INFO (f)->mouse_face_mouse_frame) */
+    MOUSE_HL_INFO (f)->mouse_face_defer = 0;
 
   BLOCK_INPUT;
 
@@ -734,7 +739,7 @@ ns_focus (struct frame *f, NSRect *r, int n)
 /*debug_lock--; */
             }
 
-          if (view) 
+          if (view)
 	    {
 	      EmacsFullWindow *win = (EmacsFullWindow *) [view window];
 	      if ([win isKindOfClass:[EmacsFullWindow class]])
@@ -1114,6 +1119,7 @@ x_destroy_window (struct frame *f)
 {
   NSView *view = FRAME_NS_VIEW (f);
   struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
+  Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
   NSTRACE (x_destroy_window);
   check_ns ();
 
@@ -1130,13 +1136,13 @@ x_destroy_window (struct frame *f)
     dpyinfo->x_focus_frame = 0;
   if (f == dpyinfo->x_highlight_frame)
     dpyinfo->x_highlight_frame = 0;
-  if (f == dpyinfo->mouse_face_mouse_frame)
+  if (f == hlinfo->mouse_face_mouse_frame)
     {
-      dpyinfo->mouse_face_beg_row = dpyinfo->mouse_face_beg_col = -1;
-      dpyinfo->mouse_face_end_row = dpyinfo->mouse_face_end_col = -1;
-      dpyinfo->mouse_face_window = Qnil;
-      dpyinfo->mouse_face_deferred_gc = 0;
-      dpyinfo->mouse_face_mouse_frame = 0;
+      hlinfo->mouse_face_beg_row = hlinfo->mouse_face_beg_col = -1;
+      hlinfo->mouse_face_end_row = hlinfo->mouse_face_end_col = -1;
+      hlinfo->mouse_face_window = Qnil;
+      hlinfo->mouse_face_deferred_gc = 0;
+      hlinfo->mouse_face_mouse_frame = 0;
     }
 
   xfree (f->output_data.ns);
@@ -1164,16 +1170,31 @@ x_set_offset (struct frame *f, int xoff, int yoff, int change_grav)
 
   f->left_pos = xoff;
   f->top_pos = yoff;
-#ifdef NS_IMPL_GNUSTEP
-  if (xoff < 100)
-    f->left_pos = 100;  /* don't overlap menu */
-#endif
 
   if (view != nil && (screen = [[view window] screen]))
-    [[view window] setFrameTopLeftPoint:
-        NSMakePoint (SCREENMAXBOUND (f->left_pos),
-                     SCREENMAXBOUND ([screen frame].size.height
-                                     - NS_TOP_POS (f)))];
+    {
+      f->left_pos = f->size_hint_flags & XNegative
+        ? [screen visibleFrame].size.width + f->left_pos - FRAME_PIXEL_WIDTH (f)
+        : f->left_pos;
+      /* We use visibleFrame here to take menu bar into account.
+	 Ideally we should also adjust left/top with visibleFrame.offset.  */
+	 
+      f->top_pos = f->size_hint_flags & YNegative
+        ? ([screen visibleFrame].size.height + f->top_pos
+           - FRAME_PIXEL_HEIGHT (f) - FRAME_NS_TITLEBAR_HEIGHT (f)
+           - FRAME_TOOLBAR_HEIGHT (f))
+        : f->top_pos;
+#ifdef NS_IMPL_GNUSTEP
+      if (f->left_pos < 100)
+        f->left_pos = 100;  /* don't overlap menu */
+#endif
+      [[view window] setFrameTopLeftPoint:
+                       NSMakePoint (SCREENMAXBOUND (f->left_pos),
+                                    SCREENMAXBOUND ([screen frame].size.height
+                                                    - NS_TOP_POS (f)))];
+      f->size_hint_flags &= ~(XNegative|YNegative);
+    }
+
   UNBLOCK_INPUT;
 }
 
@@ -1227,8 +1248,8 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
       pixelheight = [[window screen] frame].size.height;
   }
   else {
-      pixelwidth =  FRAME_TEXT_COLS_TO_PIXEL_WIDTH   (f, cols);
-      pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows);
+  pixelwidth =  FRAME_TEXT_COLS_TO_PIXEL_WIDTH   (f, cols);
+  pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows);
   }
 
   /* If we have a toolbar, take its height into account. */
@@ -1285,18 +1306,18 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
      right-hand bars, don't worry about it since the extra is never used.
      (Obviously doesn't work for vertically split windows tho..) */
   {
-  NSPoint origin = FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (f)
-    ? NSMakePoint (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)
-                  - NS_SCROLL_BAR_WIDTH (f), 0)
-    : NSMakePoint (0, 0);
-  [view setFrame: NSMakeRect (0, 0, pixelwidth, pixelheight)];
-  [view setBoundsOrigin: origin];
+    NSPoint origin = FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (f)
+      ? NSMakePoint (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)
+                     - NS_SCROLL_BAR_WIDTH (f), 0)
+      : NSMakePoint (0, 0);
+    [view setFrame: NSMakeRect (0, 0, pixelwidth, pixelheight)];
+    [view setBoundsOrigin: origin];
   }
 
   change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
   FRAME_PIXEL_WIDTH (f) = pixelwidth;
   FRAME_PIXEL_HEIGHT (f) = pixelheight;
- /*  SET_FRAME_GARBAGED (f); // this short-circuits expose call in drawRect */
+/*  SET_FRAME_GARBAGED (f); // this short-circuits expose call in drawRect */
 
   mark_window_cursors_off (XWINDOW (f->root_window));
   cancel_mouse_face (f);
@@ -1325,8 +1346,8 @@ ns_lookup_indexed_color (unsigned long idx, struct frame *f)
       && ![color_table->empty_indices containsObject: [NSNumber numberWithUnsignedInt: idx]])
     {
       /* fprintf(stderr, "lookup color %d\n", idx); */
-      return color_table->colors[idx];
-    }
+  return color_table->colors[idx];
+}
   /* fprintf(stderr, "DISCARDING lookup color %d\n", idx); */
   return nil;  // mark undefined color
 }
@@ -1769,10 +1790,10 @@ note_mouse_movement (struct frame *frame, float x, float y)
     {
       if (ns_update_begin(frame))
 	{
-	  frame->mouse_moved = 1;
-	  note_mouse_highlight (frame, x, y);
-	  remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
-	  ns_update_end(frame);
+      frame->mouse_moved = 1;
+      note_mouse_highlight (frame, x, y);
+      remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
+      ns_update_end(frame);
 	}
       return 1;
     }
@@ -1870,20 +1891,18 @@ ns_frame_up_to_date (struct frame *f)
 
   if (FRAME_NS_P (f))
     {
-      struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
-      if ((dpyinfo->mouse_face_deferred_gc||f ==dpyinfo->mouse_face_mouse_frame)
-      /*&& dpyinfo->mouse_face_mouse_frame*/)
+      Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
+      if ((hlinfo->mouse_face_deferred_gc || f ==hlinfo->mouse_face_mouse_frame)
+      /*&& hlinfo->mouse_face_mouse_frame*/)
         {
           BLOCK_INPUT;
-	  if (ns_update_begin(f))
-	    {
-	      if (dpyinfo->mouse_face_mouse_frame)
-		note_mouse_highlight (dpyinfo->mouse_face_mouse_frame,
-				      dpyinfo->mouse_face_mouse_x,
-				      dpyinfo->mouse_face_mouse_y);
-	      dpyinfo->mouse_face_deferred_gc = 0;
-	      ns_update_end(f);
-	    }
+	  ns_update_begin(f);
+          if (hlinfo->mouse_face_mouse_frame)
+            note_mouse_highlight (hlinfo->mouse_face_mouse_frame,
+                                  hlinfo->mouse_face_mouse_x,
+                                  hlinfo->mouse_face_mouse_y);
+          hlinfo->mouse_face_deferred_gc = 0;
+	  ns_update_end(f);
           UNBLOCK_INPUT;
         }
     }
@@ -2002,10 +2021,10 @@ ns_clear_frame (struct frame *f)
   BLOCK_INPUT;
   if ([FRAME_NS_VIEW (f) canDraw])
     {
-      ns_focus (f, &r, 1);
-      [ns_lookup_indexed_color (NS_FACE_BACKGROUND (FRAME_DEFAULT_FACE (f)), f) set];
-      NSRectFill (r);
-      ns_unfocus (f);
+  ns_focus (f, &r, 1);
+  [ns_lookup_indexed_color (NS_FACE_BACKGROUND (FRAME_DEFAULT_FACE (f)), f) set];
+  NSRectFill (r);
+  ns_unfocus (f);
     }
 #ifdef NS_IMPL_COCOA
   [[view window] display];  /* redraw resize handle */
@@ -2372,6 +2391,8 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
   struct glyph *phys_cursor_glyph;
   int overspill;
   struct glyph *cursor_glyph;
+  struct face *face;
+  NSColor *hollow_color = FRAME_BACKGROUND_COLOR (f);
 
   /* If cursor is out of bounds, don't draw garbage.  This can happen
      in mini-buffer windows when switching between echo area glyphs
@@ -2381,7 +2402,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
 //fprintf(stderr, "drawcursor (%d,%d) activep = %d\tonp = %d\tc_type = %d\twidth = %d\n",x,y, active_p,on_p,cursor_type,cursor_width);
 
   if (!on_p)
-	return;
+    return;
 
   w->phys_cursor_type = cursor_type;
   w->phys_cursor_on_p = on_p;
@@ -2421,7 +2442,17 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
      should we do this more efficiently?
   Also needed for CJK glyphs.*/
   ns_clip_to_row (w, glyph_row, -1, NO); /* do ns_focus(f, &r, 1); if remove */
-  [FRAME_CURSOR_COLOR (f) set];
+
+
+  face = FACE_FROM_ID (f, phys_cursor_glyph->face_id);
+  if (face && NS_FACE_BACKGROUND (face)
+      == ns_index_color (FRAME_CURSOR_COLOR (f), f))
+    {
+      [ns_lookup_indexed_color (NS_FACE_FOREGROUND (face), f) set];
+      hollow_color = FRAME_CURSOR_COLOR (f);
+    }
+  else
+    [FRAME_CURSOR_COLOR (f) set];
 
 #ifdef NS_IMPL_COCOA
   /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
@@ -2439,7 +2470,10 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       NSRectFill (r);
       break;
     case HOLLOW_BOX_CURSOR:
-      NSFrameRect (r);
+      NSRectFill (r);
+      [hollow_color set];
+      NSRectFill (NSInsetRect (r, 1, 1));
+      [FRAME_CURSOR_COLOR (f) set];
       break;
     case HBAR_CURSOR:
       s = r;
@@ -2466,7 +2500,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
   if (cursor_type != NO_CURSOR && cursor_type != BAR_CURSOR
       && cursor_type != HOLLOW_BOX_CURSOR)
     {
-      draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
+    draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
     }
   ns_unfocus (f);
 #ifdef NS_IMPL_COCOA
@@ -2705,8 +2739,7 @@ ns_dumpglyphs_box_or_relief (struct glyph_string *s)
 
   if (s->hl == DRAW_MOUSE_FACE)
     {
-      face = FACE_FROM_ID
-        (s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
+      face = FACE_FROM_ID (s->f, MOUSE_HL_INFO (s->f)->mouse_face_face_id);
       if (!face)
         face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
     }
@@ -2773,8 +2806,8 @@ ns_maybe_dumpglyphs_background (struct glyph_string *s, char force_p)
           struct face *face;
           if (s->hl == DRAW_MOUSE_FACE)
             {
-              face = FACE_FROM_ID
-                (s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
+              face = FACE_FROM_ID (s->f,
+				   MOUSE_HL_INFO (s->f)->mouse_face_face_id);
               if (!face)
                 face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
             }
@@ -2859,15 +2892,17 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
      with its background color), we must clear just the image area. */
   if (s->hl == DRAW_MOUSE_FACE)
     {
-      face = FACE_FROM_ID
-	(s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
+      face = FACE_FROM_ID (s->f, MOUSE_HL_INFO (s->f)->mouse_face_face_id);
       if (!face)
-	face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
+       face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
     }
   else
     face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
 
-  [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
+  if (s->hl == DRAW_CURSOR)
+      [FRAME_CURSOR_COLOR (s->f) set];
+  else
+    [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
 
   if (bg_height > s->slice.height || s->img->hmargin || s->img->vmargin
       || s->img->mask || s->img->pixmap == 0 || s->width != s->background_width)
@@ -2930,6 +2965,16 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
                       s->slice.x == 0,
                       s->slice.x + s->slice.width == s->img->width, s);
     }
+
+  /* If there is no mask, the background won't be seen,
+     so draw a rectangle on the image for the cursor.
+     Do this for all images, getting trancparency right is not reliable.  */
+  if (s->hl == DRAW_CURSOR)
+    {
+      int thickness = abs (s->img->relief);
+      if (thickness == 0) thickness = 1;
+      ns_draw_box (br, thickness, FRAME_CURSOR_COLOR (s->f), 1, 1);
+    }
 }
 
 
@@ -2983,15 +3028,14 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
       ns_focus (s->f, r, n);
 
       if (s->hl == DRAW_MOUSE_FACE)
-	{
-	  face = FACE_FROM_ID
-	    (s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
-	  if (!face)
-	    face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
-	}
+       {
+         face = FACE_FROM_ID (s->f, MOUSE_HL_INFO (s->f)->mouse_face_face_id);
+         if (!face)
+           face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
+       }
       else
-	face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
-      
+       face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
+
       [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
 
       NSRectFill (r[0]);
@@ -3086,11 +3130,41 @@ ns_draw_glyph_string (struct glyph_string *s)
       if (ns_tmp_font == NULL)
           ns_tmp_font = (struct nsfont_info *)FRAME_FONT (s->f);
 
+      if (s->hl == DRAW_CURSOR && s->w->phys_cursor_type == FILLED_BOX_CURSOR)
+        {
+          unsigned long tmp = NS_FACE_BACKGROUND (s->face);
+          NS_FACE_BACKGROUND (s->face) = NS_FACE_FOREGROUND (s->face);
+          NS_FACE_FOREGROUND (s->face) = tmp;
+        }
+                    
       ns_tmp_font->font.driver->draw
         (s, 0, s->nchars, s->x, s->y,
          (ns_tmp_flags == NS_DUMPGLYPH_NORMAL && !s->background_filled_p)
          || ns_tmp_flags == NS_DUMPGLYPH_MOUSEFACE);
 
+      if (s->hl == DRAW_CURSOR && s->w->phys_cursor_type == FILLED_BOX_CURSOR)
+        {
+          unsigned long tmp = NS_FACE_BACKGROUND (s->face);
+          NS_FACE_BACKGROUND (s->face) = NS_FACE_FOREGROUND (s->face);
+          NS_FACE_FOREGROUND (s->face) = tmp;
+        }
+
+      ns_unfocus (s->f);
+      break;
+
+    case GLYPHLESS_GLYPH:
+      n = ns_get_glyph_string_clip_rect (s, r);
+      ns_focus (s->f, r, n);
+
+      if (s->for_overlaps || (s->cmp_from > 0
+			      && ! s->first_glyph->u.cmp.automatic))
+        s->background_filled_p = 1;
+      else
+        ns_maybe_dumpglyphs_background
+          (s, s->first_glyph->type == COMPOSITE_GLYPH);
+      /* ... */ 
+      /* Not yet implemented.  */
+      /* ... */ 
       ns_unfocus (s->f);
       break;
 
@@ -3307,7 +3381,7 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
                                          selector: @selector (timeout_handler:)
                                          userInfo: 0
                                           repeats: YES] /* for safe removal */
-							retain];
+                                                         retain];
 
   /* set a periodic task to try the select () again */
   fd_entry = [[NSTimer scheduledTimerWithTimeInterval: 0.1
@@ -3315,7 +3389,7 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
                                              selector: @selector (fd_handler:)
                                              userInfo: 0
                                               repeats: YES]
-							retain];
+               retain];
 
   /* Let Application dispatch events until it receives an event of the type
      NX_APPDEFINED, which should only be sent by timeout_handler.
@@ -3671,6 +3745,7 @@ ns_initialize_display_info (struct ns_display_info *dpyinfo)
 {
     NSScreen *screen = [NSScreen mainScreen];
     NSWindowDepth depth = [screen depth];
+    Mouse_HLInfo *hlinfo = &dpyinfo->mouse_highlight;
 
     dpyinfo->resx = 72.27; /* used 75.0, but this makes pt == pixel, expected */
     dpyinfo->resy = 72.27;
@@ -3685,16 +3760,16 @@ ns_initialize_display_info (struct ns_display_info *dpyinfo)
     dpyinfo->color_table->colors = NULL;
     dpyinfo->root_window = 42; /* a placeholder.. */
 
-    dpyinfo->mouse_face_mouse_frame = NULL;
-    dpyinfo->mouse_face_deferred_gc = 0;
-    dpyinfo->mouse_face_beg_row = dpyinfo->mouse_face_beg_col = -1;
-    dpyinfo->mouse_face_end_row = dpyinfo->mouse_face_end_col = -1;
-    dpyinfo->mouse_face_face_id = DEFAULT_FACE_ID;
-    dpyinfo->mouse_face_window = dpyinfo->mouse_face_overlay = Qnil;
-    dpyinfo->mouse_face_hidden = 0;
+    hlinfo->mouse_face_mouse_frame = NULL;
+    hlinfo->mouse_face_deferred_gc = 0;
+    hlinfo->mouse_face_beg_row = hlinfo->mouse_face_beg_col = -1;
+    hlinfo->mouse_face_end_row = hlinfo->mouse_face_end_col = -1;
+    hlinfo->mouse_face_face_id = DEFAULT_FACE_ID;
+    hlinfo->mouse_face_window = hlinfo->mouse_face_overlay = Qnil;
+    hlinfo->mouse_face_hidden = 0;
 
-    dpyinfo->mouse_face_mouse_x = dpyinfo->mouse_face_mouse_y = 0;
-    dpyinfo->mouse_face_defer = 0;
+    hlinfo->mouse_face_mouse_x = hlinfo->mouse_face_mouse_y = 0;
+    hlinfo->mouse_face_defer = 0;
 
     dpyinfo->x_highlight_frame = dpyinfo->x_focus_frame = NULL;
 
@@ -4073,7 +4148,7 @@ ns_term_init (Lisp_Object display_name)
                            keyEquivalent: @""
                                  atIndex: 0];
     [mainMenu setSubmenu: appMenu forItem: item];
-    [dockMenu insertItemWithTitle: @"New Frame"
+    [dockMenu insertItemWithTitle: @"New Buffer"
 			   action: @selector (newFrame:)
 		    keyEquivalent: @""
 			  atIndex: 0];
@@ -4421,12 +4496,15 @@ ns_term_shutdown (int sig)
   /* The Activated event is actually "reopen" 
    So the following seems questionable. */
   struct frame *emacsframe = SELECTED_FRAME ();
-  
+  NSEvent *theEvent = [NSApp currentEvent];
+
   if (!emacs_event)
     return;
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_APPLICATION_ACTIVATED;
-  EV_TRAILER ((id)nil);
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
+  EV_TRAILER (theEvent);
 
 }
 - (BOOL)applicationOpenUntitledFile:(NSApplication *)theApplication
@@ -4437,6 +4515,8 @@ ns_term_shutdown (int sig)
     return;
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_APPLICATION_OPEN_UNTITLED;
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
   EV_TRAILER ((id)nil);
   return YES; /* we assume this will be handled */
 }
@@ -4650,7 +4730,7 @@ ns_term_shutdown (int sig)
     return;
 
   if (newFont = [sender convertFont:
-			  ((struct nsfont_info *)face->font)->nsfont])
+                           ((struct nsfont_info *)face->font)->nsfont])
     {
       SET_FRAME_GARBAGED (emacsframe); /* now needed as of 2008/10 */
 
@@ -4832,7 +4912,7 @@ ns_term_shutdown (int sig)
 
 - (void)keyDown: (NSEvent *)theEvent
 {
-  struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (emacsframe);
+  Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (emacsframe);
   int code;
   unsigned fnKeysym = 0;
   int flags;
@@ -4869,10 +4949,10 @@ ns_term_shutdown (int sig)
 
   [NSCursor setHiddenUntilMouseMoves: YES];
 
-  if (dpyinfo->mouse_face_hidden && INTEGERP (Vmouse_highlight))
+  if (hlinfo->mouse_face_hidden && INTEGERP (Vmouse_highlight))
     {
-      clear_mouse_face (dpyinfo);
-      dpyinfo->mouse_face_hidden = 1;
+      clear_mouse_face (hlinfo);
+      hlinfo->mouse_face_hidden = 1;
     }
 
   if (!processingCompose)
@@ -4880,7 +4960,7 @@ ns_term_shutdown (int sig)
       code = ([[theEvent charactersIgnoringModifiers] length] == 0) ?
         0 : [[theEvent charactersIgnoringModifiers] characterAtIndex: 0];
       /* (Carbon way: [theEvent keyCode]) */
-
+      
       /* is it a "function key"? */
       fnKeysym = ns_convert_key (code);
       if (fnKeysym)
@@ -4903,7 +4983,13 @@ ns_term_shutdown (int sig)
       if (flags & NSShiftKeyMask)
         emacs_event->modifiers |= shift_modifier;
 
-      if (flags & NSCommandKeyMask)
+      if ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)
+        emacs_event->modifiers |= parse_solitary_modifier
+          (EQ (ns_right_command_modifier, Qleft)
+           ? ns_command_modifier
+           : ns_right_command_modifier);
+
+      if ((flags & NSLeftCommandKeyMask) == NSLeftCommandKeyMask)
         {
 	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
 	  if (flags & NSLeftCommandKeyMask || ! (flags & NSRightCommandKeyMask))
@@ -4949,23 +5035,22 @@ ns_term_shutdown (int sig)
             }
         }
 
-      if (flags & NSControlKeyMask)
-	{
-	  if (flags & NSLeftControlKeyMask || ! (flags & NSRightControlKeyMask))
-	    emacs_event->modifiers |=
-	      parse_solitary_modifier (ns_control_modifier);
-	  if (flags & NSRightControlKeyMask)
-	    emacs_event->modifiers |=
-	      parse_solitary_modifier ((EQ (ns_right_control_modifier, Qnone) ? 
-					  ns_control_modifier : ns_right_control_modifier));
-	}
+      if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
+          emacs_event->modifiers |= parse_solitary_modifier
+              (EQ (ns_right_control_modifier, Qleft)
+               ? ns_control_modifier
+               : ns_right_control_modifier);
+
+      if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask)
+        emacs_event->modifiers |= parse_solitary_modifier
+          (ns_control_modifier);
 
       if (flags & NS_FUNCTION_KEY_MASK && !fnKeysym)
-	emacs_event->modifiers |=
-	  parse_solitary_modifier (ns_function_modifier);
+          emacs_event->modifiers |=
+            parse_solitary_modifier (ns_function_modifier);
 
-      if (flags & NSRightAlternateKeyMask) /* default = meta */
-	{
+      if ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)
+        {
 	  if ((NILP (ns_right_alternate_modifier)
 	       || (EQ (ns_right_alternate_modifier, Qnone)
 		   && (NILP (ns_alternate_modifier) 
@@ -4977,18 +5062,43 @@ ns_term_shutdown (int sig)
 		   if (!fnKeysym)
 		    {
 		  /* accept pre-interp alt comb */
-		  if ([[theEvent characters] length] > 0)
-		    code = [[theEvent characters] characterAtIndex: 0];
-		  /*HACK: clear lone shift modifier to stop next if from firing */
-		  if (emacs_event->modifiers == shift_modifier)
-		    emacs_event->modifiers = 0;
-		    }
-		} 
+              if ([[theEvent characters] length] > 0)
+                code = [[theEvent characters] characterAtIndex: 0];
+              /*HACK: clear lone shift modifier to stop next if from firing */
+              if (emacs_event->modifiers == shift_modifier)
+                emacs_event->modifiers = 0;
+            }
+		}
 	      else
-		emacs_event->modifiers |= meta_modifier;
+		emacs_event->modifiers |= meta_modifier; 
 	    }
-	  else
-	    emacs_event->modifiers |=
+          else
+            emacs_event->modifiers |= parse_solitary_modifier
+              (EQ (ns_right_alternate_modifier, Qleft)
+               ? ns_alternate_modifier
+               : ns_right_alternate_modifier);
+        }
+
+      if ((flags & NSLeftAlternateKeyMask) == NSLeftAlternateKeyMask) /* default = meta */
+        {
+          if ((NILP (ns_alternate_modifier)
+               || EQ (ns_alternate_modifier, Qnone)))
+            {if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
+		{
+		   if (!fnKeysym)
+		    {   /* accept pre-interp alt comb */
+              if ([[theEvent characters] length] > 0)
+                code = [[theEvent characters] characterAtIndex: 0];
+              /*HACK: clear lone shift modifier to stop next if from firing */
+              if (emacs_event->modifiers == shift_modifier)
+                emacs_event->modifiers = 0;
+		    }
+		}
+	      else
+		emacs_event->modifiers |= meta_modifier; 
+            }
+          else
+              emacs_event->modifiers |=
 	      parse_solitary_modifier (EQ (ns_right_alternate_modifier, Qnone) ?
 				       ns_alternate_modifier
 				       : ns_right_alternate_modifier);
@@ -5021,8 +5131,8 @@ ns_term_shutdown (int sig)
 	    }
 	  else
 	    emacs_event->modifiers |=
-	      parse_solitary_modifier (ns_alternate_modifier);
-	}
+                parse_solitary_modifier (ns_alternate_modifier);
+        }
 
   if (NS_KEYLOG)
     fprintf (stderr, "keyDown: code =%x\tfnKey =%x\tflags = %x\tmods = %x\n",
@@ -5326,7 +5436,7 @@ ns_term_shutdown (int sig)
 		    } else 
 		    {
 		      emacs_event->code = 2;
-		    }
+    }
 		} else if (emacs_event->modifiers & alt_modifier)
 		{
 		  emacs_event->code = 1;
@@ -5386,7 +5496,7 @@ ns_term_shutdown (int sig)
 /* Tell emacs the mouse has moved. */
 - (void)mouseMoved: (NSEvent *)e
 {
-  struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (emacsframe);
+  Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (emacsframe);
   Lisp_Object frame;
 
 //  NSTRACE (mouseMoved);
@@ -5396,10 +5506,10 @@ ns_term_shutdown (int sig)
     = [self convertPoint: [e locationInWindow] fromView: nil];
 
   /* update any mouse face */
-  if (dpyinfo->mouse_face_hidden)
+  if (hlinfo->mouse_face_hidden)
     {
-      dpyinfo->mouse_face_hidden = 0;
-      clear_mouse_face (dpyinfo);
+      hlinfo->mouse_face_hidden = 0;
+      clear_mouse_face (hlinfo);
     }
 
   /* tooltip handling */
@@ -5588,7 +5698,7 @@ ns_term_shutdown (int sig)
   struct frame *old_focus = dpyinfo->x_focus_frame;
 
   NSTRACE (windowDidBecomeKey);
- 
+
   if (emacsframe != old_focus)
     dpyinfo->x_focus_frame = emacsframe;
 
@@ -5882,20 +5992,19 @@ ns_term_shutdown (int sig)
 {
   NSPoint p = [self convertPoint: [theEvent locationInWindow] fromView: nil];
   NSRect r;
-  struct ns_display_info *dpyinfo
-    = emacsframe ? FRAME_NS_DISPLAY_INFO (emacsframe) : NULL;
+  Mouse_HLInfo *hlinfo = emacsframe ? MOUSE_HL_INFO (emacsframe) : NULL;
 
   NSTRACE (mouseExited);
 
-  if (dpyinfo || !emacsframe)
+  if (!hlinfo)
     return;
 
   last_mouse_movement_time = EV_TIMESTAMP (theEvent);
 
-  if (emacsframe == dpyinfo->mouse_face_mouse_frame)
+  if (emacsframe == hlinfo->mouse_face_mouse_frame)
     {
-      clear_mouse_face (dpyinfo);
-      dpyinfo->mouse_face_mouse_frame = 0;
+      clear_mouse_face (hlinfo);
+      hlinfo->mouse_face_mouse_frame = 0;
     }
 }
 
@@ -6021,7 +6130,7 @@ ns_term_shutdown (int sig)
   NSTRACE (performDragOperation);
 
   if (!emacs_event)
-    return;
+    return NO;
 
   position = [self convertPoint: [sender draggingLocation] fromView: nil];
   x = lrint (position.x);  y = lrint (position.y);
@@ -6915,70 +7024,71 @@ syms_of_nsterm (void)
 
 
   DEFVAR_LISP ("ns-alternate-modifier", &ns_alternate_modifier,
-               doc: /* This variable describes the behavior of the
-alternate or option key.  Set to control, meta, alt, super, or hyper
-means it is taken to be that key.  Set to none means that the
-alternate / option key is not interpreted by Emacs at all, allowing it
-to be used at a lower level for accented character entry. */);
+               "Behavior of the alternate or option key.  \n\
+Set to control, meta, alt, super, or hyper\n\
+means it is taken to be that key.  Set to none means that the\n\
+alternate / option key is not interpreted by Emacs at all, allowing it\n\
+to be used at a lower level for accented character entry.");
   ns_alternate_modifier = Qmeta;
 
   DEFVAR_LISP ("ns-alternate-meta-special-codes", &ns_alternate_meta_special_codes,
-               doc: /* List of key codes (numbers) identifying special keys.
-For these special keys, the Option modifier will be interpreted as 
-Meta if `ns_alternate_modifier' and `ns_right_alternate_modifier' are
-configured such that the other keys with the Option modifier would
-be interpreted by the system (`none' or nil).
-
-If `ns_alternate_modifier' and `ns_right_alternate_modifier' are
-set to a specific Emacs modifier, this will be respected.*/);
+               "List of key codes (numbers) identifying special keys.\n\
+For these special keys, the Option modifier will be interpreted as \n\
+Meta if `ns_alternate_modifier' and `ns_right_alternate_modifier' are\n\
+configured such that the other keys with the Option modifier would\n\
+be interpreted by the system (`none' or nil).\n\
+\n\
+If `ns_alternate_modifier' and `ns_right_alternate_modifier' are\n\
+set to a specific Emacs modifier, this will be respected.");
   ns_alternate_meta_special_codes = Qnil;
 
   DEFVAR_LISP ("ns-right-alternate-modifier", &ns_right_alternate_modifier,
-               doc: /* This variable describes the behavior of the
-right alternate or option key.  Set to control, meta, alt, super, or
-hyper means it is taken to be that key.  Set to nil means that the
-alternate / option key is not interpreted by Emacs at all, allowing it
-to be used at a lower level for accented character entry.  Set to none
-means use ns-alternate-modifier value. */);
-  ns_right_alternate_modifier = Qnone;
+               "Behavior of the right alternate or option key.\n\
+Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
+Set to left means be the same key as `ns-alternate-modifier'.\n\
+Set to none means that the alternate / option key is not interpreted by Emacs\n\
+at all, allowing it to be used at a lower level for accented character entry.");
+  ns_right_alternate_modifier = Qleft;
 
   DEFVAR_LISP ("ns-command-modifier", &ns_command_modifier,
-               doc: /* This variable describes the behavior of the
-command key.  Set to control, meta, alt, super, or hyper means it is
-taken to be that key. */);
+               "Behavior of the command key.\n\
+Set to control, meta, alt, super, or hyper means it is\n\
+taken to be that key.");
   ns_command_modifier = Qalt;
 
   DEFVAR_LISP ("ns-right-command-modifier", &ns_right_command_modifier,
-               doc: /* This variable describes the behavior of the
-right command key.  Set to control, meta, alt, super, or hyper means
-it is taken to be that key.  Set to none means use ns-command-modifier
-value.  */);
-  ns_right_command_modifier = Qnone;
+               "Behavior of the right command key.\n\
+Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
+Set to left means be the same key as `ns-command-modifier'.\n\
+Set to none means that the command / option key is not interpreted by Emacs\n\
+at all, allowing it to be used at a lower level for accented character entry.");
+  ns_right_command_modifier = Qleft;
 
   DEFVAR_LISP ("ns-control-modifier", &ns_control_modifier,
-               doc: /* This variable describes the behavior of the
-control key.  Set to control, meta, alt, super, or hyper means it is
-taken to be that key. */);
+               "Behavior of the control key.\n\
+Set to control, meta, alt, super, or hyper means it is\n\
+taken to be that key.");
   ns_control_modifier = Qcontrol;
 
   DEFVAR_LISP ("ns-right-control-modifier", &ns_right_control_modifier,
-               doc: /* This variable describes the behavior of the
-right control key.  Set to control, meta, alt, super, or hyper means
-it is taken to be that key.  Set to none means use ns-command-modifier
-value.  */);
-  ns_right_control_modifier = Qcontrol;
+               "Behavior of the right control key.\n\
+Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
+Set to left means be the same key as `ns-control-modifier'.\n\
+Set to none means that the control / option key is not interpreted by Emacs\n\
+at all, allowing it to be used at a lower level for accented character entry.");
+  ns_right_control_modifier = Qleft;
 
   DEFVAR_LISP ("ns-function-modifier", &ns_function_modifier,
-               doc: /* This variable describes the behavior of the
-function key (on laptops).  Set to control, meta, alt, super, or hyper
-means it is taken to be that key.  Set to none means that the function
-key is not interpreted by Emacs at all, allowing it to be used at a
-lower level for accented character entry. */);
+               "Behavior of the function key (on laptops).  \n\
+Set to control, meta, alt, super, or hyper\n\
+means it is taken to be that key.  Set to none means that the function\n\
+key is not interpreted by Emacs at all, allowing it to be used at a\n\
+lower level for accented character entry.");
   ns_function_modifier = Qnone;
 
   DEFVAR_LISP ("ns-antialias-text", &ns_antialias_text,
-               doc: /* Non-nil (the default) means to render text
-antialiased. Only has an effect on OS X Panther and above.  */);
+               "Non-nil (the default) means to render text antialiased.\n\
+Only has an effect on OS X Panther and above.");
   ns_antialias_text = Qt;
 
   DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
@@ -6986,9 +7096,9 @@ antialiased. Only has an effect on OS X Panther and above.  */);
   ns_confirm_quit = Qnil;
 
   DEFVAR_LISP ("ns-emulate-three-button-mouse", &ns_emulate_three_button_mouse,
-               doc: /* Non-nil (the default) means to use control and
-command keys to emulate right and middle mouse
-buttons on a one-button mouse.  */);
+               "Non-nil (the default) means to use mouse button emulation with modifiers.\n\
+Ccontrol and command keys are used to emulate right and middle mouse\n\
+buttons on a one-button mouse.");
   ns_emulate_three_button_mouse = Qt;
 
   staticpro (&ns_display_name_list);

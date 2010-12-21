@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Sun workstations - EDT Emulation for Emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="EDT Emulation for Emacs">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Platform_002dspecific-notes.html#Platform_002dspecific-notes" title="Platform-specific notes">
+<link rel="next" href="MS_002dDOS.html#MS_002dDOS" title="MS-DOS">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the EDT emulation package for Emacs.
+
+Copyright (C) 1986, 1992, 1994, 1995, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sun-workstations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Platform_002dspecific-notes.html#Platform_002dspecific-notes">Platform-specific notes</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 Sun Workstations Running X</h3>
+
+<p>Some earlier Sun keyboards do not have arrow keys separate from the
+keypad keys.  It is difficult to emulate the full EDT keypad and still
+retain use of the arrow keys on such keyboards.
+
+   <p>The Sun Type 5 and other more recent Sun keyboards, however, do have
+separate arrow keys.  This makes them candidates for setting up a
+reasonable EDT keypad emulation.
+
+   <p>Depending upon the configuration of the version of X installed on your
+system, you may find the default X keynames for the keypad keys don't
+permit Emacs to interpret some or all the keypad keys as something other
+than arrow keys, numeric keys, &lt;Home&gt;, &lt;PageUp&gt;, etc.  Both Sun
+and HP have been particularly guilty of making bizarre keysym
+assignments to the keypad keys.
+
+   <p>In most cases, the X Windows command, <code>xmodmap</code>, can be used to
+correct the problem.  Here's a sample <samp><span class="file">.xmodmaprc</span></samp> file which
+corrects this problem on one Sun workstation configuration using an
+older SunOS release configured with a Sun Type 5 keyboard:
+
+<pre class="example">     ! File:  .xmodmaprc
+     !
+     ! Set up Sun Type 5 keypad for use with the GNU Emacs EDT Emulation
+     !
+     keycode  53 = KP_Divide
+     keycode  54 = KP_Multiply
+     keycode  57 = KP_Decimal
+     keycode  75 = KP_7
+     keycode  76 = KP_8
+     keycode  77 = KP_9
+     keycode  78 = KP_Subtract
+     keycode  97 = KP_Enter
+     keycode  98 = KP_4
+     keycode  99 = KP_5
+     keycode 100 = KP_6
+     keycode 101 = KP_0
+     keycode 105 = F24
+     keycode 119 = KP_1
+     keycode 120 = KP_2
+     keycode 121 = KP_3
+     keycode 132 = KP_Add
+</pre>
+   <p>If <samp><span class="file">edt-mapper.el</span></samp> does not recognize your keypad keys as unique
+keys, use the command &lsquo;<samp><span class="samp">xmodmap -pke</span></samp>&rsquo; to get a listing of the actual
+key codes and the keysyms mapped to them and then generate you own
+custom <samp><span class="file">.xmodmaprc</span></samp> similar to the one above.
+
+   <p>Next, feed <samp><span class="file">.xmodmaprc</span></samp> to the <code>xmodmap</code> command and all the
+Sun Type 5 keypad keys will now be configurable for the emulation of an
+LK-201 keypad (less the &lt;,&gt; key).  In this example, the line
+
+<pre class="example">     keycode 105 = F24
+</pre>
+   <p class="noindent">changes the X Windows name of the keypad &lt;NumLock&gt; key to
+be known internally as the &lt;F24&gt; key.  Doing so permits it to be
+configured to behave as the &lt;PF1&gt; (&lt;GOLD&gt;) key.
+
+   <p>The side effect of this change is that you will no longer have a
+&lt;NumLock&gt; key.  If you are using other software under X which
+requires a &lt;NumLock&gt; key, then examine your keyboard and look for
+one you don't use and redefine it to be the &lt;NumLock&gt; key. 
+Basically, you need to clear the &lt;NumLock&gt; key from being assigned
+as a modifier, assign it to the key of your choice, and then add it back
+as a modifier.  (<a href="Unix.html#Unix">Unix</a> for further help on how to do this.)
+
+   </body></html>
+

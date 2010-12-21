@@ -1,8 +1,8 @@
 ;;; comint.el --- general command interpreter in a window stuff
 
-;; Copyright (C) 1988, 1990, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1988, 1990, 1992, 1993, 1994, 1995, 1996, 1997, 1998,
+;;   1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+;;   2010  Free Software Foundation, Inc.
 
 ;; Author: Olin Shivers <shivers@cs.cmu.edu>
 ;;	Simon Marshall <simon@gnu.org>
@@ -244,8 +244,8 @@ This variable is buffer-local."
 (defcustom comint-input-ring-file-name nil
   "If non-nil, name of the file to read/write input history.
 See also `comint-read-input-ring' and `comint-write-input-ring'.
-
-This variable is buffer-local, and is a good thing to set in mode hooks."
+`comint-mode' makes this a buffer-local variable.  You probably want
+to set this in a mode hook, rather than customize the default value."
   :type '(choice (const :tag "nil" nil)
 		 file)
   :group 'comint)
@@ -339,13 +339,15 @@ This variable is buffer-local."
 ;; Ubuntu's sudo prompts like `[sudo] password for user:'
 ;; Some implementations of passwd use "Password (again)" as the 2nd prompt.
 ;; Something called "perforce" uses "Enter password:".
+;; See M-x comint-testsuite--test-comint-password-prompt-regexp.
 (defcustom comint-password-prompt-regexp
   (concat
-   "\\("
+   "\\(^ *\\|"
    (regexp-opt
-    '("Enter" "Enter same" "Old" "old" "New" "new" "'s" "login"
-      "Kerberos" "CVS" "UNIX" " SMB" "LDAP" "[sudo]" "Repeat" "Bad"))
-   " +\\)?"
+    '("Enter" "enter" "Enter same" "enter same" "Enter the" "enter the"
+      "Old" "old" "New" "new" "'s" "login"
+      "Kerberos" "CVS" "UNIX" " SMB" "LDAP" "[sudo]" "Repeat" "Bad") t)
+   " +\\)"
    (regexp-opt
     '("password" "Password" "passphrase" "Passphrase"
       "pass phrase" "Pass phrase"))
@@ -353,6 +355,7 @@ This variable is buffer-local."
 \\(?: for [^:]+\\)?:\\s *\\'")
   "Regexp matching prompts for passwords in the inferior process.
 This is used by `comint-watch-for-password-prompt'."
+  :version "24.1"
   :type 'regexp
   :group 'comint)
 
@@ -415,6 +418,9 @@ See `comint-send-input'."
   :type 'boolean
   :group 'comint)
 
+(define-obsolete-variable-alias 'comint-use-prompt-regexp-instead-of-fields
+  'comint-use-prompt-regexp "22.1")
+
 ;; Note: If it is decided to purge comint-prompt-regexp from the source
 ;; entirely, searching for uses of this variable will help to identify
 ;; places that need attention.
@@ -426,11 +432,6 @@ particular, common movement commands such as `beginning-of-line'
 respect field boundaries in a natural way)."
   :type 'boolean
   :group 'comint)
-
-;; Autoload is necessary for Custom to recognize old alias.
-;;;###autoload
-(define-obsolete-variable-alias 'comint-use-prompt-regexp-instead-of-fields
-  'comint-use-prompt-regexp "22.1")
 
 (defcustom comint-mode-hook nil
   "Hook run upon entry to `comint-mode'.
@@ -1008,7 +1009,7 @@ See also `comint-read-input-ring'."
     (choose-completion-string completion buffer)))
 
 (defun comint-dynamic-list-input-ring ()
-  "List in help buffer the buffer's input history."
+  "Display a list of recent inputs entered into the current buffer."
   (interactive)
   (if (or (not (ring-p comint-input-ring))
 	  (ring-empty-p comint-input-ring))
@@ -2298,8 +2299,6 @@ Does not delete the prompt."
 	(delete-region pmark (point))))
     ;; Output message and put back prompt
     (comint-output-filter proc replacement)))
-(define-obsolete-function-alias 'comint-kill-output
-  'comint-delete-output "21.1")
 
 (defun comint-write-output (filename &optional append mustbenew)
   "Write output from interpreter since last input to FILENAME.
@@ -2649,6 +2648,7 @@ updated using `comint-update-fence', if necessary."
 	(let ((inhibit-read-only t))
 	  (kill-region beg end yank-handler)
 	  (comint-update-fence))))))
+(set-advertised-calling-convention 'comint-kill-region '(beg end) "23.3")
 
 
 ;; Support for source-file processing commands.
@@ -3003,7 +3003,7 @@ Completes if after a filename.  See `comint-match-partial-filename' and
 This function is similar to `comint-replace-by-expanded-filename', except that
 it won't change parts of the filename already entered in the buffer; it just
 adds completion characters to the end of the filename.  A completions listing
-may be shown in a help buffer if completion is ambiguous.
+may be shown in a separate buffer if completion is ambiguous.
 
 Completion is dependent on the value of `comint-completion-addsuffix',
 `comint-completion-recexact' and `comint-completion-fignore', and the timing of
@@ -3090,11 +3090,11 @@ See `comint-dynamic-complete-filename'.  Returns t if successful."
 
 (defun comint-replace-by-expanded-filename ()
   "Dynamically expand and complete the filename at point.
-Replace the filename with an expanded, canonicalized and completed replacement.
-\"Expanded\" means environment variables (e.g., $HOME) and `~'s are replaced
-with the corresponding directories.  \"Canonicalized\" means `..'  and `.' are
-removed, and the filename is made absolute instead of relative.  For expansion
-see `expand-file-name' and `substitute-in-file-name'.  For completion see
+Replace the filename with an expanded, canonicalized and
+completed replacement, i.e. substituting environment
+variables (e.g. $HOME), `~'s, `..', and `.', and making the
+filename absolute.  For expansion see `expand-file-name' and
+`substitute-in-file-name'.  For completion see
 `comint-dynamic-complete-filename'."
   (interactive)
   (let ((filename (comint-match-partial-filename)))
@@ -3105,15 +3105,16 @@ see `expand-file-name' and `substitute-in-file-name'.  For completion see
 
 (defun comint-dynamic-simple-complete (stub candidates)
   "Dynamically complete STUB from CANDIDATES list.
-This function inserts completion characters at point by completing STUB from
-the strings in CANDIDATES.  A completions listing may be shown in a help buffer
-if completion is ambiguous.
+This function inserts completion characters at point by
+completing STUB from the strings in CANDIDATES.  If completion is
+ambiguous, possibly show a completions listing in a separate
+buffer.
 
-Returns nil if no completion was inserted.
-Returns `sole' if completed with the only completion match.
-Returns `shortest' if completed with the shortest of the completion matches.
-Returns `partial' if completed as far as possible with the completion matches.
-Returns `listed' if a completion listing was shown.
+Return nil if no completion was inserted.
+Return `sole' if completed with the only completion match.
+Return `shortest' if completed with the shortest match.
+Return `partial' if completed as far as possible.
+Return `listed' if a completion listing was shown.
 
 See also `comint-dynamic-complete-filename'."
   (let* ((completion-ignore-case (memq system-type '(ms-dos windows-nt cygwin)))
@@ -3161,7 +3162,7 @@ See also `comint-dynamic-complete-filename'."
 
 
 (defun comint-dynamic-list-filename-completions ()
-  "List in help buffer possible completions of the filename at point."
+  "Display a list of possible completions for the filename at point."
   (interactive)
   (let* ((completion-ignore-case read-file-name-completion-ignore-case)
 	 ;; If we bind this, it breaks remote directory tracking in rlogin.el.
@@ -3190,9 +3191,9 @@ See also `comint-dynamic-complete-filename'."
 (defvar comint-dynamic-list-completions-config nil)
 
 (defun comint-dynamic-list-completions (completions &optional common-substring)
-  "List in help buffer sorted COMPLETIONS.
+  "Display a list of sorted COMPLETIONS.
 The meaning of COMMON-SUBSTRING is the same as in `display-completion-list'.
-Typing SPC flushes the help buffer."
+Typing SPC flushes the completions buffer."
   (let ((window (get-buffer-window "*Completions*" 0)))
     (setq completions (sort completions 'string-lessp))
     (if (and (eq last-command this-command)
@@ -3752,5 +3753,4 @@ REGEXP-GROUP is the regular expression group in REGEXP to use."
 
 (provide 'comint)
 
-;; arch-tag: 1793314c-09db-40be-9549-9aeae3e75164
 ;;; comint.el ends here

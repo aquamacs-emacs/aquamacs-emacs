@@ -1,0 +1,214 @@
+<html lang="en">
+<head>
+<title>Formatting Lisp Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="prev" href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions" title="Symbolic Lisp Functions">
+<link rel="next" href="Hooks.html#Hooks" title="Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Formatting-Lisp-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hooks.html#Hooks">Hooks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions">Symbolic Lisp Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.7.8 I/O and Formatting Functions</h5>
+
+<p class="noindent">The functions described here are responsible for parsing and formatting
+Calc numbers and formulas.
+
+<div class="defun">
+&mdash; Function: <b>calc-eval</b><var> str sep arg1 arg2 <small class="dots">...</small><a name="index-calc_002deval-2529"></a></var><br>
+<blockquote><p>This is the simplest interface to the Calculator from another Lisp program. 
+See <a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">Calling Calc from Your Programs</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-number</b><var> str<a name="index-read_002dnumber-2530"></a></var><br>
+<blockquote><p>If string <var>str</var> contains a valid Calc number, either integer,
+fraction, float, or HMS form, this function parses and returns that
+number.  Otherwise, it returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-expr</b><var> str<a name="index-read_002dexpr-2531"></a></var><br>
+<blockquote><p>Read an algebraic expression from string <var>str</var>.  If <var>str</var> does
+not have the form of a valid expression, return a list of the form
+&lsquo;<samp><span class="samp">(error </span><var>pos</var> <var>msg</var><span class="samp">)</span></samp>&rsquo; where <var>pos</var> is an integer index
+into <var>str</var> of the general location of the error, and <var>msg</var> is
+a string describing the problem. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-exprs</b><var> str<a name="index-read_002dexprs-2532"></a></var><br>
+<blockquote><p>Read a list of expressions separated by commas, and return it as a
+Lisp list.  If an error occurs in any expressions, an error list as
+shown above is returned instead. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-do-alg-entry</b><var> initial prompt no-norm<a name="index-calc_002ddo_002dalg_002dentry-2533"></a></var><br>
+<blockquote><p>Read an algebraic formula or formulas using the minibuffer.  All
+conventions of regular algebraic entry are observed.  The return value
+is a list of Calc formulas; there will be more than one if the user
+entered a list of values separated by commas.  The result is <code>nil</code>
+if the user presses Return with a blank line.  If <var>initial</var> is
+given, it is a string which the minibuffer will initially contain. 
+If <var>prompt</var> is given, it is the prompt string to use; the default
+is &ldquo;Algebraic:&rdquo;.  If <var>no-norm</var> is <code>t</code>, the formulas will
+be returned exactly as parsed; otherwise, they will be passed through
+<code>calc-normalize</code> first.
+
+        <p>To support the use of <kbd>$</kbd> characters in the algebraic entry, use
+<code>let</code> to bind <code>calc-dollar-values</code> to a list of the values
+to be substituted for <kbd>$</kbd>, <kbd>$$</kbd>, and so on, and bind
+<code>calc-dollar-used</code> to 0.  Upon return, <code>calc-dollar-used</code>
+will have been changed to the highest number of consecutive <kbd>$</kbd>s
+that actually appeared in the input. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>format-number</b><var> a<a name="index-format_002dnumber-2534"></a></var><br>
+<blockquote><p>Convert the real or complex number or HMS form <var>a</var> to string form. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>format-flat-expr</b><var> a prec<a name="index-format_002dflat_002dexpr-2535"></a></var><br>
+<blockquote><p>Convert the arbitrary Calc number or formula <var>a</var> to string form,
+in the style used by the trail buffer and the <code>calc-edit</code> command. 
+This is a simple format designed
+mostly to guarantee the string is of a form that can be re-parsed by
+<code>read-expr</code>.  Most formatting modes, such as digit grouping,
+complex number format, and point character, are ignored to ensure the
+result will be re-readable.  The <var>prec</var> parameter is normally 0; if
+you pass a large integer like 1000 instead, the expression will be
+surrounded by parentheses unless it is a plain number or variable name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>format-nice-expr</b><var> a width<a name="index-format_002dnice_002dexpr-2536"></a></var><br>
+<blockquote><p>This is like <code>format-flat-expr</code> (with <var>prec</var> equal to 0),
+except that newlines will be inserted to keep lines down to the
+specified <var>width</var>, and vectors that look like matrices or rewrite
+rules are written in a pseudo-matrix format.  The <code>calc-edit</code>
+command uses this when only one stack entry is being edited. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>format-value</b><var> a width<a name="index-format_002dvalue-2537"></a></var><br>
+<blockquote><p>Convert the Calc number or formula <var>a</var> to string form, using the
+format seen in the stack buffer.  Beware the string returned may
+not be re-readable by <code>read-expr</code>, for example, because of digit
+grouping.  Multi-line objects like matrices produce strings that
+contain newline characters to separate the lines.  The <var>w</var>
+parameter, if given, is the target window size for which to format
+the expressions.  If <var>w</var> is omitted, the width of the Calculator
+window is used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>compose-expr</b><var> a prec<a name="index-compose_002dexpr-2538"></a></var><br>
+<blockquote><p>Format the Calc number or formula <var>a</var> according to the current
+language mode, returning a &ldquo;composition.&rdquo;  To learn about the
+structure of compositions, see the comments in the Calc source code. 
+You can specify the format of a given type of function call by putting
+a <code>math-compose-</code><var>lang</var> property on the function's symbol,
+whose value is a Lisp function that takes <var>a</var> and <var>prec</var> as
+arguments and returns a composition.  Here <var>lang</var> is a language
+mode name, one of <code>normal</code>, <code>big</code>, <code>c</code>, <code>pascal</code>,
+<code>fortran</code>, <code>tex</code>, <code>eqn</code>, <code>math</code>, or <code>maple</code>. 
+In Big mode, Calc actually tries <code>math-compose-big</code> first, then
+tries <code>math-compose-normal</code>.  If this property does not exist,
+or if the function returns <code>nil</code>, the function is written in the
+normal function-call notation for that language. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>composition-to-string</b><var> c w<a name="index-composition_002dto_002dstring-2539"></a></var><br>
+<blockquote><p>Convert a composition structure returned by <code>compose-expr</code> into
+a string.  Multi-line compositions convert to strings containing
+newline characters.  The target window size is given by <var>w</var>. 
+The <code>format-value</code> function basically calls <code>compose-expr</code>
+followed by <code>composition-to-string</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>comp-width</b><var> c<a name="index-comp_002dwidth-2540"></a></var><br>
+<blockquote><p>Compute the width in characters of composition <var>c</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>comp-height</b><var> c<a name="index-comp_002dheight-2541"></a></var><br>
+<blockquote><p>Compute the height in lines of composition <var>c</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>comp-ascent</b><var> c<a name="index-comp_002dascent-2542"></a></var><br>
+<blockquote><p>Compute the portion of the height of composition <var>c</var> which is on or
+above the baseline.  For a one-line composition, this will be one. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>comp-descent</b><var> c<a name="index-comp_002ddescent-2543"></a></var><br>
+<blockquote><p>Compute the portion of the height of composition <var>c</var> which is below
+the baseline.  For a one-line composition, this will be zero. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>comp-first-char</b><var> c<a name="index-comp_002dfirst_002dchar-2544"></a></var><br>
+<blockquote><p>If composition <var>c</var> is a &ldquo;flat&rdquo; composition, return the first
+(leftmost) character of the composition as an integer.  Otherwise,
+return <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>comp-last-char</b><var> c<a name="index-comp_002dlast_002dchar-2545"></a></var><br>
+<blockquote><p>If composition <var>c</var> is a &ldquo;flat&rdquo; composition, return the last
+(rightmost) character, otherwise return <code>nil</code>. 
+</p></blockquote></div>
+
+<!-- @node Lisp Variables, Hooks, Formatting Lisp Functions, Internals -->
+<!-- @subsubsection Lisp Variables -->
+<!-- @noindent -->
+<!-- (This section is currently unfinished.) -->
+   </body></html>
+

@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Paren List Symbols - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntactic-Symbols.html#Syntactic-Symbols" title="Syntactic Symbols">
+<link rel="prev" href="External-Scope-Symbols.html#External-Scope-Symbols" title="External Scope Symbols">
+<link rel="next" href="Literal-Symbols.html#Literal-Symbols" title="Literal Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Paren-List-Symbols"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="External-Scope-Symbols.html#External-Scope-Symbols">External Scope Symbols</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">10.2.7 Parenthesis (Argument) List Symbols</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>A number of syntactic symbols are associated with parenthesis lists,
+a.k.a argument lists, as found in function declarations and function
+calls.  This example illustrates these:
+
+<pre class="example">      1: void a_function( int line1,
+      2:                  int line2 );
+      3:
+      4: void a_longer_function(
+      5:     int line1,
+      6:     int line2
+      7:     );
+      8:
+      9: void call_them( int line1, int line2 )
+     10: {
+     11:     a_function(
+     12:         line1,
+     13:         line2
+     14:         );
+     15:
+     16:     a_longer_function( line1,
+     17:                        line2 );
+     18: }
+</pre>
+   <p><a name="index-arglist_002dintro-450"></a><a name="index-arglist_002dclose-451"></a>Lines 5 and 12 are assigned <code>arglist-intro</code> syntax since they are
+the first line following the open parenthesis, and lines 7 and 14 are
+assigned <code>arglist-close</code> syntax since they contain the parenthesis
+that closes the argument list.
+
+   <p><a name="index-arglist_002dcont_002dnonempty-452"></a><a name="index-arglist_002dcont-453"></a>Lines that continue argument lists can be assigned one of two syntactic
+symbols.  For example, Lines 2 and 17
+are assigned <code>arglist-cont-nonempty</code> syntax.  What this means
+is that they continue an argument list, but that the line containing the
+parenthesis that opens the list is <em>not empty</em> following the open
+parenthesis.  Contrast this against lines 6 and 13 which are assigned
+<code>arglist-cont</code> syntax.  This is because the parenthesis that opens
+their argument lists is the last character on that line.
+
+   <p>Syntactic elements with <code>arglist-intro</code>,
+<code>arglist-cont-nonempty</code>, and <code>arglist-close</code> contain two
+buffer positions: the anchor position (the beginning of the
+declaration or statement) and the position of the open parenthesis. 
+The latter position can be used in a line-up function (see <a href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>).
+
+   <p>Note that there is no <code>arglist-open</code> syntax.  This is because any
+parenthesis that opens an argument list, appearing on a separate line,
+is assigned the <code>statement-cont</code> syntax instead.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

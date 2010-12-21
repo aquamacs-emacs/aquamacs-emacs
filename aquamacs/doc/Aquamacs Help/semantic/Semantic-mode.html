@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Semantic mode - Semantic Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Semantic Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Using-Semantic.html#Using-Semantic" title="Using Semantic">
+<link rel="next" href="SemanticDB.html#SemanticDB" title="SemanticDB">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the Semantic library and utilities.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Semantic-mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SemanticDB.html#SemanticDB">SemanticDB</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Using-Semantic.html#Using-Semantic">Using Semantic</a>
+<hr>
+</div>
+
+<h3 class="section">2.1 Semantic mode</h3>
+
+<p><a name="index-Semantic-mode-1"></a>
+Semantic mode is a global minor mode for <i>Semantic</i> as a whole.  When
+enabled, each file you visit is automatically parsed, provided its
+major mode is specified in the variable
+<code>semantic-new-buffer-setup-functions</code> (the default value of this
+variable sets up parsing for all the parsers included with Emacs, but
+you may add to it if you install additional parsers).
+
+   <p>In each parser-enabled buffer, a number of <i>Semantic</i> commands are
+available for navigating, querying, and editing source code. 
+See <a href="Semantic-mode-user-commands.html#Semantic-mode-user-commands">Semantic mode user commands</a>.  Enabling Semantic mode also
+installs a &lsquo;<samp><span class="samp">Development</span></samp>&rsquo; menu on the menu-bar, with many of these
+commands.
+
+   <p>In addition, enabling Semantic mode turns on certain auxiliary global
+minor modes.  The variable <code>semantic-default-submodes</code> determines
+which auxiliary modes are enabled; the defaults are SemanticDB mode
+(see <a href="SemanticDB.html#SemanticDB">SemanticDB</a>) and Global Semantic Idle Scheduler mode
+(see <a href="Idle-Scheduler.html#Idle-Scheduler">Idle Scheduler</a>).  You can also toggle the auxiliary minor
+modes separately, using their mode functions (e.g. <kbd>M-x
+semanticdb-minor-mode</kbd>), or via the &lsquo;<samp><span class="samp">Development</span></samp>&rsquo; menu.  The
+various auxiliary minor modes are described in the following sections.
+
+<div class="defun">
+&mdash; Variable: <b>semantic-new-buffer-setup-functions</b><var><a name="index-semantic_002dnew_002dbuffer_002dsetup_002dfunctions-2"></a></var><br>
+<blockquote><p>The value of this variable is an alist of functions to call for
+setting up <i>Semantic</i> parsing in the buffer.  Each element has the
+form <code>(</code><var>mode</var><code> . </code><var>fn</var><code>)</code>, where <var>mode</var> is a value of
+<code>major-mode</code> for the buffer and <var>fn</var> is the corresponding
+function for setting up the parser.  <var>fn</var> is called, with no
+arguments, after the major mode is initialized (and after the mode
+hooks have been run).
+
+        <p>The default value enables <i>Semantic</i> for all supported major modes
+(i.e., C, C++, Scheme, Javascript, Java, HTML, SRecode, and Make), but
+you can remove modes from this list if you don't want to use
+<i>Semantic</i> with them. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-default-submodes</b><var><a name="index-semantic_002ddefault_002dsubmodes-3"></a></var><br>
+<blockquote><p>The value of this variable is a list of symbols, specifying the
+auxiliary minor modes to enable when enabling Semantic mode.  The
+valid mode symbols are:
+
+          <ul>
+<li><code>global-semantic-idle-scheduler-mode</code> (see <a href="Idle-Scheduler.html#Idle-Scheduler">Idle Scheduler</a>). 
+<li><code>global-semanticdb-minor-mode</code> (see <a href="SemanticDB.html#SemanticDB">SemanticDB</a>). 
+<li><code>global-semantic-idle-summary-mode</code> (see <a href="Idle-Summary-Mode.html#Idle-Summary-Mode">Idle Summary Mode</a>). 
+<li><code>global-semantic-idle-completions-mode</code> (see <a href="Idle-Completions-Mode.html#Idle-Completions-Mode">Idle Completions Mode</a>). 
+<li><code>global-semantic-highlight-func-mode</code> (see <a href="Highlight-Func-Mode.html#Highlight-Func-Mode">Highlight Func Mode</a>). 
+<li><code>global-semantic-decoration-mode</code> (see <a href="Tag-Decoration-Mode.html#Tag-Decoration-Mode">Tag Decoration Mode</a>). 
+<li><code>global-semantic-stickyfunc-mode</code> (see <a href="Sticky-Func-Mode.html#Sticky-Func-Mode">Sticky Func Mode</a>). 
+<li><code>global-semantic-mru-bookmark-mode</code> (see <a href="MRU-Bookmarks.html#MRU-Bookmarks">MRU Bookmarks</a>). 
+</ul>
+        </p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="Semantic-mode-user-commands.html#Semantic-mode-user-commands">Semantic mode user commands</a>
+</ul>
+
+   </body></html>
+

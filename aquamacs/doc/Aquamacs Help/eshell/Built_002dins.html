@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<title>Built-ins - Eshell: The Emacs Shell</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Eshell: The Emacs Shell">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Scripts.html#Scripts" title="Scripts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Eshell, the Emacs shell.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Built-ins"></a>
+<a name="Built_002dins"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Scripts.html#Scripts">Scripts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.6 Built-in commands</h3>
+
+<p>Several commands are built-in in Eshell.  In order to call the
+external variant of a built-in command <code>foo</code>, you could call
+<code>*foo</code>.  Usually, this should not be necessary.  You can check
+what will be applied by the <code>which</code> command:
+
+<pre class="example">     ~ $ which ls
+     eshell/ls is a compiled Lisp function in `em-ls.el'
+     ~ $ which *ls
+     /bin/ls
+</pre>
+   <p>Some of the built-in commands have a special behaviour in Eshell:
+
+     <dl>
+<dt><code>cd</code><dd><a name="index-cd-10"></a>This command changes the current working directory.  Usually, it is
+invoked as &lsquo;<samp><span class="samp">cd foo</span></samp>&rsquo; where <samp><span class="file">foo</span></samp> is the new working
+directory.  But <code>cd</code> knows about a few special arguments:
+
+     <p>When it receives no argument at all, it changes to the home directory.
+
+     <p>Giving the command &lsquo;<samp><span class="samp">cd -</span></samp>&rsquo; changes back to the previous working
+directory (this is the same as &lsquo;<samp><span class="samp">cd $-</span></samp>&rsquo;).
+
+     <p>The command &lsquo;<samp><span class="samp">cd =</span></samp>&rsquo; shows the directory stack.  Each line is
+numbered.
+
+     <p>With &lsquo;<samp><span class="samp">cd =foo</span></samp>&rsquo;, Eshell searches the directory stack for a
+directory matching the regular expression &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; and changes to
+that directory.
+
+     <p>With &lsquo;<samp><span class="samp">cd -42</span></samp>&rsquo;, you can access the directory stack by number.
+
+     <br><dt><code>history</code><dd><a name="index-history-11"></a>The &lsquo;<samp><span class="samp">history</span></samp>&rsquo; command shows all commands kept in the history ring
+as numbered list.  If the history ring contains
+<code>eshell-history-size</code> commands, those numbers change after every
+command invocation, therefore the &lsquo;<samp><span class="samp">history</span></samp>&rsquo; command shall be
+applied before using the expansion mechanism with history numbers.
+
+     <p>The n-th entry of the history ring can be applied with the &lsquo;<samp><span class="samp">!n</span></samp>&rsquo;
+command.  If <code>n</code> is negative, the entry is counted from the end
+of the history ring.
+
+     <p>&lsquo;<samp><span class="samp">!foo</span></samp>&rsquo; expands to the last command beginning with <code>foo</code>, and
+&lsquo;<samp><span class="samp">!?foo</span></samp>&rsquo; to the last command containing <code>foo</code>.  The n-th
+argument of the last command beginning with <code>foo</code> is accessible
+by <code>!foo:n</code>.
+
+     <br><dt><code>su</code><dd><a name="index-su-12"></a><dt><code>sudo</code><dd><a name="index-sudo-13"></a><code>su</code> and <code>sudo</code> work as expected: they apply the following
+commands (<code>su</code>), or the command being an argument (<code>sudo</code>)
+under the permissions of somebody else.
+
+     <p>This does not work only on
+the local host, but even on a remote one, when
+<code>default-directory</code> is a remote file name.  The necessary
+proxy configuration of Tramp is performed
+automatically. 
+Example:
+
+     <pre class="example">          ~ $ cd /ssh:otherhost:/etc
+          /ssh:user@otherhost:/etc $ sudo find-file shadow
+</pre>
+     </dl>
+
+   </body></html>
+

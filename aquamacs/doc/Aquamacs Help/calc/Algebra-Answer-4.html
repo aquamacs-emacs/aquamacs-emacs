@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Algebra Answer 4 - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link rel="prev" href="Algebra-Answer-3.html#Algebra-Answer-3" title="Algebra Answer 3">
+<link rel="next" href="Rewrites-Answer-1.html#Rewrites-Answer-1" title="Rewrites Answer 1">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Algebra-Answer-4"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rewrites-Answer-1.html#Rewrites-Answer-1">Rewrites Answer 1</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebra-Answer-3.html#Algebra-Answer-3">Algebra Answer 3</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.7.51 Algebra Tutorial Exercise 4</h4>
+
+<p class="noindent">The hard part is that <kbd>V R +</kbd> is no longer sufficient to add up all
+the contributions from the slices, since the slices have varying
+coefficients.  So first we must come up with a vector of these
+coefficients.  Here's one way:
+
+<pre class="smallexample">     2:  -1                 2:  3                    1:  [4, 2, ..., 4]
+     1:  [1, 2, ..., 9]     1:  [-1, 1, ..., -1]         .
+         .                      .
+     
+         1 n v x 9 &lt;RET&gt;          V M ^  3 &lt;TAB&gt;             -
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  [4, 2, ..., 4, 1]      1:  [1, 4, 2, ..., 4, 1]
+         .                          .
+     
+         1 |                        1 &lt;TAB&gt; |
+</pre>
+   <p class="noindent">Now we compute the function values.  Note that for this method we need
+eleven values, including both endpoints of the desired interval.
+
+<pre class="smallexample">     2:  [1, 4, 2, ..., 4, 1]
+     1:  [1, 1.1, 1.2,  ...  , 1.8, 1.9, 2.]
+         .
+     
+      11 &lt;RET&gt; 1 &lt;RET&gt; .1 &lt;RET&gt;  C-u v x
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     2:  [1, 4, 2, ..., 4, 1]
+     1:  [0., 0.084941, 0.16993, ... ]
+         .
+     
+         ' sin(x) ln(x) &lt;RET&gt;   m r  p 5 &lt;RET&gt;   V M $ &lt;RET&gt;
+</pre>
+   <p class="noindent">Once again this calls for <kbd>V M * V R +</kbd>; a simple <kbd>*</kbd> does the
+same thing.
+
+<pre class="smallexample">     1:  11.22      1:  1.122      1:  0.374
+         .              .              .
+     
+         *              .1 *           3 /
+</pre>
+   <p class="noindent">Wow!  That's even better than the result from the Taylor series method.
+
+   </body></html>
+

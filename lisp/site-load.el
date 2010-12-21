@@ -39,6 +39,7 @@
 ;; this will only work if files have been byte-compiled.
 
 (load "emacs-lisp/easy-mmode")
+(load "emacs-lisp/easymenu")
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
 ;; (load "tool-bar")  ;; taken out while we're working on it!

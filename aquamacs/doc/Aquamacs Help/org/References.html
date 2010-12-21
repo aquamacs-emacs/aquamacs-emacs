@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+<title>References - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-spreadsheet.html#The-spreadsheet" title="The spreadsheet">
+<link rel="prev" href="The-spreadsheet.html#The-spreadsheet" title="The spreadsheet">
+<link rel="next" href="Formula-syntax-for-Calc.html#Formula-syntax-for-Calc" title="Formula syntax for Calc">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="References"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Formula-syntax-for-Calc.html#Formula-syntax-for-Calc">Formula syntax for Calc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.5.1 References</h4>
+
+<p><a name="index-references-212"></a>
+To compute fields in the table from other fields, formulas must
+reference other fields or ranges.  In Org, fields can be referenced
+by name, by absolute coordinates, and by relative coordinates.  To find
+out what the coordinates of a field are, press <kbd>C-c ?</kbd> in that
+field, or press <kbd>C-c }</kbd> to toggle the display of a grid.
+
+<h5 class="subsubheading">Field references</h5>
+
+<p><a name="index-field-references-213"></a><a name="index-references_002c-to-fields-214"></a>
+Formulas can reference the value of another field in two ways.  Like in
+any other spreadsheet, you may reference fields with a letter/number
+combination like <code>B3</code>, meaning the 2nd field in the 3rd row. 
+<!-- Such references are always fixed to that field, they don't change -->
+<!-- when you copy and paste a formula to a different field.  So -->
+<!-- Org's @code{B3} behaves like @code{$B$3} in other spreadsheets. -->
+
+<p class="noindent">Org also uses another, more general operator that looks like this:
+<pre class="example">     @<var>row</var>$<var>column</var>
+</pre>
+   <p class="noindent">Column references can be absolute like &lsquo;<samp><span class="samp">1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">2</span></samp>&rsquo;,...&lsquo;<samp><var>N</var></samp>&rsquo;,
+or relative to the current column like &lsquo;<samp><span class="samp">+1</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-2</span></samp>&rsquo;.
+
+   <p>The row specification only counts data lines and ignores horizontal
+separator lines (hlines).  You can use absolute row numbers
+&lsquo;<samp><span class="samp">1</span></samp>&rsquo;...&lsquo;<samp><var>N</var></samp>&rsquo;, and row numbers relative to the current row like
+&lsquo;<samp><span class="samp">+3</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-1</span></samp>&rsquo;.  Or specify the row relative to one of the
+hlines: &lsquo;<samp><span class="samp">I</span></samp>&rsquo; refers to the first hline<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, &lsquo;<samp><span class="samp">II</span></samp>&rsquo; to
+the second, etc.  &lsquo;<samp><span class="samp">-I</span></samp>&rsquo; refers to the first such line above the
+current line, &lsquo;<samp><span class="samp">+I</span></samp>&rsquo; to the first such line below the current line. 
+You can also write &lsquo;<samp><span class="samp">III+2</span></samp>&rsquo; which is the second data line after the
+third hline in the table.
+
+   <p>&lsquo;<samp><span class="samp">0</span></samp>&rsquo; refers to the current row and column.  Also, if you omit
+either the column or the row part of the reference, the current
+row/column is implied.
+
+   <p>Org's references with <em>unsigned</em> numbers are fixed references
+in the sense that if you use the same reference in the formula for two
+different fields, the same field will be referenced each time. 
+Org's references with <em>signed</em> numbers are floating
+references because the same reference operator can reference different
+fields depending on the field being calculated by the formula.
+
+   <p>As a special case, references like &lsquo;<samp><span class="samp">$LR5</span></samp>&rsquo; and &lsquo;<samp><span class="samp">$LR12</span></samp>&rsquo; can be used
+to refer in a stable way to the 5th and 12th field in the last row of the
+table.
+
+   <p>Here are a few examples:
+
+<pre class="example">     @2$3      <span class="roman">2nd row, 3rd column</span>
+     C2        <span class="roman">same as previous</span>
+     $5        <span class="roman">column 5 in the current row</span>
+     E&amp;        <span class="roman">same as previous</span>
+     @2        <span class="roman">current column, row 2</span>
+     @-1$-3    <span class="roman">the field one row up, three columns to the left</span>
+     @-I$2     <span class="roman">field just under hline above current row, column 2</span>
+</pre>
+   <h5 class="subsubheading">Range references</h5>
+
+<p><a name="index-range-references-215"></a><a name="index-references_002c-to-ranges-216"></a>
+You may reference a rectangular range of fields by specifying two field
+references connected by two dots &lsquo;<samp><span class="samp">..</span></samp>&rsquo;.  If both fields are in the
+current row, you may simply use &lsquo;<samp><span class="samp">$2..$7</span></samp>&rsquo;, but if at least one field
+is in a different row, you need to use the general <code>@row$column</code>
+format at least for the first field (i.e the reference must start with
+&lsquo;<samp><span class="samp">@</span></samp>&rsquo; in order to be interpreted correctly).  Examples:
+
+<pre class="example">     $1..$3        <span class="roman">First three fields in the current row.</span>
+     $P..$Q        <span class="roman">Range, using column names (see under Advanced)</span>
+     @2$1..@4$3    <span class="roman">6 fields between these two fields.</span>
+     A2..C4        <span class="roman">Same as above.</span>
+     @-1$-2..@-1   <span class="roman">3 numbers from the column to the left, 2 up to current row</span>
+</pre>
+   <p class="noindent">Range references return a vector of values that can be fed
+into Calc vector functions.  Empty fields in ranges are normally
+suppressed, so that the vector contains only the non-empty fields (but
+see the &lsquo;<samp><span class="samp">E</span></samp>&rsquo; mode switch below).  If there are no non-empty fields,
+&lsquo;<samp><span class="samp">[0]</span></samp>&rsquo; is returned to avoid syntax errors in formulas.
+
+<h5 class="subsubheading">Named references</h5>
+
+<p><a name="index-named-references-217"></a><a name="index-references_002c-named-218"></a><a name="index-name_002c-of-column-or-field-219"></a><a name="index-constants_002c-in-calculations-220"></a><a name="index-g_t_0023_002bCONSTANTS-221"></a>
+<a name="index-org_002dtable_002dformula_002dconstants-222"></a>&lsquo;<samp><span class="samp">$name</span></samp>&rsquo; is interpreted as the name of a column, parameter or
+constant.  Constants are defined globally through the variable
+<code>org-table-formula-constants</code>, and locally (for the file) through a
+line like
+
+<pre class="example">     #+CONSTANTS: c=299792458. pi=3.14 eps=2.4e-6
+</pre>
+   <p class="noindent"><a name="index-constants_002dunit_002dsystem-223"></a><a name="index-constants_002eel-224"></a>Also properties (see <a href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>) can be used as
+constants in table formulas: for a property &lsquo;<samp><span class="samp">:Xyz:</span></samp>&rsquo; use the name
+&lsquo;<samp><span class="samp">$PROP_Xyz</span></samp>&rsquo;, and the property will be searched in the current
+outline entry and in the hierarchy above it.  If you have the
+<samp><span class="file">constants.el</span></samp> package, it will also be used to resolve constants,
+including natural constants like &lsquo;<samp><span class="samp">$h</span></samp>&rsquo; for Planck's constant, and
+units like &lsquo;<samp><span class="samp">$km</span></samp>&rsquo; for kilometers<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  Column names and parameters can be specified in special table
+lines.  These are described below, see <a href="Advanced-features.html#Advanced-features">Advanced features</a>.  All
+names must start with a letter, and further consist of letters and
+numbers.
+
+<h5 class="subsubheading">Remote references</h5>
+
+<p><a name="index-remote-references-225"></a><a name="index-references_002c-remote-226"></a><a name="index-references_002c-to-a-different-table-227"></a><a name="index-name_002c-of-column-or-field-228"></a><a name="index-constants_002c-in-calculations-229"></a><a name="index-g_t_0023_002bTBLNAME-230"></a>
+You may also reference constants, fields and ranges from a different table,
+either in the current file or even in a different file.  The syntax is
+
+<pre class="example">     remote(NAME-OR-ID,REF)
+</pre>
+   <p class="noindent">where NAME can be the name of a table in the current file as set by a
+<code>#+TBLNAME: NAME</code> line before the table.  It can also be the ID of an
+entry, even in a different file, and the reference then refers to the first
+table in that entry.  REF is an absolute field or range reference as
+described above for example <code>@3$3</code> or <code>$somename</code>, valid in the
+referenced table.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Note that only
+hlines are counted that <em>separate</em> table lines.  If the table
+starts with a hline above the header, it does not count.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> <samp><span class="file">constants.el</span></samp> can
+supply the values of constants in two different unit systems, <code>SI</code>
+and <code>cgs</code>.  Which one is used depends on the value of the variable
+<code>constants-unit-system</code>.  You can use the <code>#+STARTUP</code> options
+<code>constSI</code> and <code>constcgs</code> to set this value for the current
+buffer.</p>
+
+   <hr></div>
+
+   </body></html>
+

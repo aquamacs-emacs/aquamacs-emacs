@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Literal Symbols - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntactic-Symbols.html#Syntactic-Symbols" title="Syntactic Symbols">
+<link rel="prev" href="Paren-List-Symbols.html#Paren-List-Symbols" title="Paren List Symbols">
+<link rel="next" href="Multiline-Macro-Symbols.html#Multiline-Macro-Symbols" title="Multiline Macro Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Literal-Symbols"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multiline-Macro-Symbols.html#Multiline-Macro-Symbols">Multiline Macro Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Paren-List-Symbols.html#Paren-List-Symbols">Paren List Symbols</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">10.2.8 Comment String Label and Macro Symbols</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>A few miscellaneous syntactic symbols that haven't been previously
+covered are illustrated by this C++ example:
+
+<pre class="example">      1: void Bass::play( int volume )
+      2: const
+      3: {
+      4:     /* this line starts a multiline
+      5:      * comment.  This line should get `c' syntax */
+      6:
+      7:     char* a_multiline_string = "This line starts a multiline \
+      8: string.  This line should get `string' syntax.";
+      9:
+     10:   note:
+     11:     {
+     12: #ifdef LOCK
+     13:         Lock acquire();
+     14: #endif // LOCK
+     15:         slap_pop();
+     16:         cout &lt;&lt; "I played "
+     17:              &lt;&lt; "a note\n";
+     18:     }
+     19: }
+</pre>
+   <p>The lines to note in this example include:
+
+     <ul>
+<li><a name="index-func_002ddecl_002dcont-454"></a>Line 2 is assigned the <code>func-decl-cont</code> syntax.
+
+     <li><a name="index-comment_002dintro-455"></a>Line 4 is assigned both <code>defun-block-intro</code> <em>and</em>
+<code>comment-intro</code> syntax.  A syntactic element with
+<code>comment-intro</code> has no anchor point &mdash; It is always accompanied
+by another syntactic element which does have one.
+
+     <li><a name="index-c-456"></a>Line 5 is assigned <code>c</code> syntax.
+
+     <li><a name="index-syntactic-whitespace-457"></a>Line 6 which, even though it contains nothing but whitespace, is
+assigned <code>defun-block-intro</code>.  Note that the appearance of the
+comment on lines 4 and 5 do not cause line 6 to be assigned
+<code>statement</code> syntax because comments are considered to be
+<dfn>syntactic whitespace</dfn>, which are ignored when analyzing
+code.
+
+     <li><a name="index-string-458"></a>Line 8 is assigned <code>string</code> syntax.
+
+     <li><a name="index-label-459"></a>Line 10 is assigned <code>label</code> syntax.
+
+     <li><a name="index-block_002dopen-460"></a>Line 11 is assigned <code>block-open</code> as well as <code>statement</code>
+syntax.  A <code>block-open</code> syntactic element doesn't have an anchor
+position, since it always appears with another syntactic element which
+does have one.
+
+     <li><a name="index-cpp_002dmacro-461"></a>Lines 12 and 14 are assigned <code>cpp-macro</code> syntax in addition to the
+normal syntactic symbols (<code>statement-block-intro</code> and
+<code>statement</code>, respectively).  Normally <code>cpp-macro</code> is
+configured to cancel out the normal syntactic context to make all
+preprocessor directives stick to the first column, but that's easily
+changed if you want preprocessor directives to be indented like the rest
+of the code.  Like <code>comment-intro</code>, a syntactic element with
+<code>cpp-macro</code> doesn't contain an anchor position.
+
+     <li><a name="index-stream_002dop-462"></a>Line 17 is assigned <code>stream-op</code> syntax. 
+</ul>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

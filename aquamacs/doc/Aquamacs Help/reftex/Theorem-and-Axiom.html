@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Theorem and Axiom - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Defining-Label-Environments.html#Defining-Label-Environments" title="Defining Label Environments">
+<link rel="next" href="Quick-Equation.html#Quick-Equation" title="Quick Equation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Theorem-and-Axiom"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Quick-Equation.html#Quick-Equation">Quick Equation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.4.1 Theorem and Axiom Environments</h4>
+
+<p><a name="index-g_t_0040code_007btheorem_007d_002c-newtheorem-145"></a><a name="index-g_t_0040code_007baxiom_007d_002c-newtheorem-146"></a><a name="index-g_t_0040code_007b_005cnewtheorem_007d-147"></a>
+Suppose you are using <code>\newtheorem</code> in LaTeX in order to define two
+new environments, <code>theorem</code> and <code>axiom</code>
+
+<pre class="example">     \newtheorem{axiom}{Axiom}
+     \newtheorem{theorem}{Theorem}
+</pre>
+   <p class="noindent">to be used like this:
+
+<pre class="example">     \begin{axiom}
+     \label{ax:first}
+       ....
+     \end{axiom}
+</pre>
+   <p>So we need to tell <b>RefTeX</b> that <code>theorem</code> and <code>axiom</code> are new
+labeled environments which define their own label categories.  We can
+either use Lisp to do this (e.g. in <samp><span class="file">.emacs</span></samp>) or use the custom
+library.  With Lisp it would look like this
+
+<pre class="lisp">     (setq reftex-label-alist
+        '(("axiom"   ?a "ax:"  "~\\ref{%s}" nil ("axiom"   "ax.") -2)
+          ("theorem" ?h "thr:" "~\\ref{%s}" t   ("theorem" "th.") -3)))
+</pre>
+   <p>The type indicator characters <code>?a</code> and <code>?h</code> are used for
+prompts when <b>RefTeX</b> queries for a label type.  <code>?h</code>
+was chosen for <code>theorem</code> since <code>?t</code> is already taken by
+<code>table</code>.  Note that also <code>?s</code>, <code>?f</code>, <code>?e</code>,
+<code>?i</code>, <code>?n</code> are already used for standard environments.
+
+<p class="noindent">The labels for Axioms and Theorems will have the prefixes &lsquo;<samp><span class="samp">ax:</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">thr:</span></samp>&rsquo;, respectively.  See <a href="AUCTeX.html#AUCTeX">AUCTeX</a>, for information on how
+AUCTeX can use RefTeX to automatically create labels when a new environment
+is inserted into a buffer.  Additionally, the following needs to be
+added to one's .emacs file before AUCTeX will automatically create
+labels for the new environments.
+
+<pre class="lisp">     (add-hook 'LaTeX-mode-hook
+        (lambda ()
+          (LaTeX-add-environments
+            '("axiom" LaTeX-env-label)
+            '("theorem" LaTeX-env-label))))
+</pre>
+   <p class="noindent">The &lsquo;<samp><span class="samp">~\ref{%s}</span></samp>&rsquo; is a format string indicating how to insert
+references to these labels.
+
+<p class="noindent">The next item indicates how to grab context of the label definition.
+     <ul>
+<li><code>t</code> means to get it from a default location (from the beginning of
+a <code>\macro</code> or after the <code>\begin</code> statement).  <code>t</code> is
+<em>not</em> a good choice for eqnarray and similar environments. 
+<li><code>nil</code> means to use the text right after the label definition. 
+<li>For more complex ways of getting context, see the variable
+<code>reftex-label-alist</code> (<a href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a>). 
+</ul>
+
+   <p>The following list of strings is used to guess the correct label type
+from the word before point when creating a reference.  E.g. if you
+write: &lsquo;<samp><span class="samp">As we have shown in Theorem</span></samp>&rsquo; and then press <kbd>C-c )</kbd>,
+<b>RefTeX</b> will know that you are looking for a theorem label and
+restrict the menu to only these labels without even asking.
+
+   <p>The final item in each entry is the level at which the environment
+should produce entries in the table of context buffer.  If the number is
+positive, the environment will produce numbered entries (like
+<code>\section</code>), if it is negative the entries will be unnumbered (like
+<code>\section*</code>).  Use this only for environments which structure the
+document similar to sectioning commands.  For everything else, omit the
+item.
+
+   <p>To do the same configuration with <code>customize</code>, you need to click on
+the <code>[INS]</code> button twice to create two templates and fill them in
+like this:
+
+<pre class="example">     Reftex Label Alist: [Hide]
+     [INS] [DEL] Package or Detailed   : [Value Menu] Detailed:
+                 Environment or \macro : [Value Menu] String: axiom
+                 Type specification    : [Value Menu] Char  : a
+                 Label prefix string   : [Value Menu] String: ax:
+                 Label reference format: [Value Menu] String: ~\ref{%s}
+                 Context method        : [Value Menu] After label
+                 Magic words:
+                   [INS] [DEL] String: axiom
+                   [INS] [DEL] String: ax.
+                   [INS]
+                 [X] Make TOC entry    : [Value Menu] Level: -2
+     [INS] [DEL] Package or Detailed   : [Value Menu] Detailed:
+                 Environment or \macro : [Value Menu] String: theorem
+                 Type specification    : [Value Menu] Char  : h
+                 Label prefix string   : [Value Menu] String: thr:
+                 Label reference format: [Value Menu] String: ~\ref{%s}
+                 Context method        : [Value Menu] Default position
+                 Magic words:
+                   [INS] [DEL] String: theorem
+                   [INS] [DEL] String: theor.
+                   [INS] [DEL] String: th.
+                   [INS]
+                 [X] Make TOC entry    : [Value Menu] Level: -3
+</pre>
+   <p><a name="index-reftex_002dinsert_002dlabel_002dflags-148"></a><a name="index-reftex_002dlabel_002dmenu_002dflags-149"></a>Depending on how you would like the label insertion and selection for
+the new environments to work, you might want to add the letters &lsquo;<samp><span class="samp">a</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">h</span></samp>&rsquo; to some of the flags in the variables
+<code>reftex-insert-label-flags</code> (see <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a>)
+and <code>reftex-label-menu-flags</code> (see <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a>).
+
+   </body></html>
+

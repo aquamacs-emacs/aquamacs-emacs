@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Slave Gnusae - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
+<link rel="prev" href="The-Server-is-Down.html#The-Server-is-Down" title="The Server is Down">
+<link rel="next" href="New-Groups.html#New-Groups" title="New Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Slave-Gnusae"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="New-Groups.html#New-Groups">New Groups</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-Server-is-Down.html#The-Server-is-Down">The Server is Down</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
+<hr>
+</div>
+
+<h3 class="section">1.4 Slave Gnusae</h3>
+
+<p><a name="index-slave-22"></a>
+You might want to run more than one Emacs with more than one Gnus at the
+same time.  If you are using different <samp><span class="file">.newsrc</span></samp> files (e.g., if you
+are using the two different Gnusae to read from two different servers),
+that is no problem whatsoever.  You just do it.
+
+   <p>The problem appears when you want to run two Gnusae that use the same
+<samp><span class="file">.newsrc</span></samp> file.
+
+   <p>To work around that problem some, we here at the Think-Tank at the Gnus
+Towers have come up with a new concept: <dfn>Masters</dfn> and
+<dfn>slaves</dfn>.  (We have applied for a patent on this concept, and have
+taken out a copyright on those words.  If you wish to use those words in
+conjunction with each other, you have to send $1 per usage instance to
+me.  Usage of the patent (<dfn>Master/Slave Relationships In Computer
+Applications</dfn>) will be much more expensive, of course.)
+
+   <p><a name="index-gnus_002dslave-23"></a>Anyway, you start one Gnus up the normal way with <kbd>M-x gnus</kbd> (or
+however you do it).  Each subsequent slave Gnusae should be started with
+<kbd>M-x gnus-slave</kbd>.  These slaves won't save normal <samp><span class="file">.newsrc</span></samp>
+files, but instead save <dfn>slave files</dfn> that contain information only
+on what groups have been read in the slave session.  When a master Gnus
+starts, it will read (and delete) these slave files, incorporating all
+information from them.  (The slave files will be read in the sequence
+they were created, so the latest changes will have precedence.)
+
+   <p>Information from the slave files has, of course, precedence over the
+information in the normal (i.e., master) <samp><span class="file">.newsrc</span></samp> file.
+
+   <p>If the <samp><span class="file">.newsrc*</span></samp> files have not been saved in the master when the
+slave starts, you may be prompted as to whether to read an auto-save
+file.  If you answer &ldquo;yes&rdquo;, the unsaved changes to the master will be
+incorporated into the slave.  If you answer &ldquo;no&rdquo;, the slave may see some
+messages as unread that have been read in the master.
+
+   </body></html>
+

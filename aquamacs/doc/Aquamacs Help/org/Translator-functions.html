@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Translator functions - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" title="Tables in arbitrary syntax">
+<link rel="prev" href="A-LaTeX-example.html#A-LaTeX-example" title="A LaTeX example">
+<link rel="next" href="Radio-lists.html#Radio-lists" title="Radio lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Translator-functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Radio-lists.html#Radio-lists">Radio lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="A-LaTeX-example.html#A-LaTeX-example">A LaTeX example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax">Tables in arbitrary syntax</a>
+<hr>
+</div>
+
+<h4 class="subsection">A.5.3 Translator functions</h4>
+
+<p><a name="index-HTML_002c-and-Orgtbl-mode-1423"></a><a name="index-translator-function-1424"></a>
+Orgtbl mode has several translator functions built-in: <code>orgtbl-to-csv</code>
+(comma-separated values), <code>orgtbl-to-tsv</code> (TAB-separated values)
+<code>orgtbl-to-latex</code>, <code>orgtbl-to-html</code>, and <code>orgtbl-to-texinfo</code>. 
+Except for <code>orgtbl-to-html</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, these all use a generic
+translator, <code>orgtbl-to-generic</code>.  For example, <code>orgtbl-to-latex</code>
+itself is a very short function that computes the column definitions for the
+<code>tabular</code> environment, defines a few field and line separators and then
+hands processing over to the generic translator.  Here is the entire code:
+
+<pre class="lisp">     (defun orgtbl-to-latex (table params)
+       "Convert the Orgtbl mode TABLE to LaTeX."
+       (let* ((alignment (mapconcat (lambda (x) (if x "r" "l"))
+                                    org-table-last-alignment ""))
+              (params2
+               (list
+                :tstart (concat "\\begin{tabular}{" alignment "}")
+                :tend "\\end{tabular}"
+                :lstart "" :lend " \\\\" :sep " &amp; "
+                :efmt "%s\\,(%s)" :hline "\\hline")))
+         (orgtbl-to-generic table (org-combine-plists params2 params))))
+</pre>
+   <p>As you can see, the properties passed into the function (variable
+<var>PARAMS</var>) are combined with the ones newly defined in the function
+(variable <var>PARAMS2</var>).  The ones passed into the function (i.e. the
+ones set by the &lsquo;<samp><span class="samp">ORGTBL SEND</span></samp>&rsquo; line) take precedence.  So if you
+would like to use the LaTeX translator, but wanted the line endings to
+be &lsquo;<samp><span class="samp">\\[2mm]</span></samp>&rsquo; instead of the default &lsquo;<samp><span class="samp">\\</span></samp>&rsquo;, you could just
+overrule the default with
+
+<pre class="example">     #+ORGTBL: SEND test orgtbl-to-latex :lend " \\\\[2mm]"
+</pre>
+   <p>For a new language, you can either write your own converter function in
+analogy with the LaTeX translator, or you can use the generic function
+directly.  For example, if you have a language where a table is started
+with &lsquo;<samp><span class="samp">!BTBL!</span></samp>&rsquo;, ended with &lsquo;<samp><span class="samp">!ETBL!</span></samp>&rsquo;, and where table lines are
+started with &lsquo;<samp><span class="samp">!BL!</span></samp>&rsquo;, ended with &lsquo;<samp><span class="samp">!EL!</span></samp>&rsquo;, and where the field
+separator is a TAB, you could call the generic translator like this (on
+a single line!):
+
+<pre class="example">     #+ORGTBL: SEND test orgtbl-to-generic :tstart "!BTBL!" :tend "!ETBL!"
+                                   :lstart "!BL! " :lend " !EL!" :sep "\t"
+</pre>
+   <p class="noindent">Please check the documentation string of the function
+<code>orgtbl-to-generic</code> for a full list of parameters understood by
+that function, and remember that you can pass each of them into
+<code>orgtbl-to-latex</code>, <code>orgtbl-to-texinfo</code>, and any other function
+using the generic function.
+
+   <p>Of course you can also write a completely new function doing complicated
+things the generic translator cannot do.  A translator function takes
+two arguments.  The first argument is the table, a list of lines, each
+line either the symbol <code>hline</code> or a list of fields.  The second
+argument is the property list containing all parameters specified in the
+&lsquo;<samp><span class="samp">#+ORGTBL: SEND</span></samp>&rsquo; line.  The function must return a single string
+containing the formatted table.  If you write a generally useful
+translator, please post it on <a href="mailto:emacs-orgmode@gnu.org">emacs-orgmode@gnu.org</a> so that
+others can benefit from your work.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The HTML translator uses the same
+code that produces tables during HTML export.</p>
+
+   <hr></div>
+
+   </body></html>
+

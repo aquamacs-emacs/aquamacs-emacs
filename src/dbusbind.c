@@ -19,7 +19,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 
 #ifdef HAVE_DBUS
-#include <stdlib.h>
 #include <stdio.h>
 #include <dbus/dbus.h>
 #include <setjmp.h>
@@ -27,6 +26,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "frame.h"
 #include "termhooks.h"
 #include "keyboard.h"
+#include "process.h"
 
 
 /* Subroutines.  */
@@ -57,6 +57,9 @@ Lisp_Object QCdbus_type_int32, QCdbus_type_uint32;
 Lisp_Object QCdbus_type_int64, QCdbus_type_uint64;
 Lisp_Object QCdbus_type_double, QCdbus_type_string;
 Lisp_Object QCdbus_type_object_path, QCdbus_type_signature;
+#ifdef DBUS_TYPE_UNIX_FD
+Lisp_Object QCdbus_type_unix_fd;
+#endif
 Lisp_Object QCdbus_type_array, QCdbus_type_variant;
 Lisp_Object QCdbus_type_struct, QCdbus_type_dict_entry;
 
@@ -147,6 +150,22 @@ int xd_in_read_queued_messages = 0;
 #endif
 
 /* Check whether TYPE is a basic DBusType.  */
+#ifdef DBUS_TYPE_UNIX_FD
+#define XD_BASIC_DBUS_TYPE(type)					\
+  ((type ==  DBUS_TYPE_BYTE)						\
+   || (type ==  DBUS_TYPE_BOOLEAN)					\
+   || (type ==  DBUS_TYPE_INT16)					\
+   || (type ==  DBUS_TYPE_UINT16)					\
+   || (type ==  DBUS_TYPE_INT32)					\
+   || (type ==  DBUS_TYPE_UINT32)					\
+   || (type ==  DBUS_TYPE_INT64)					\
+   || (type ==  DBUS_TYPE_UINT64)					\
+   || (type ==  DBUS_TYPE_DOUBLE)					\
+   || (type ==  DBUS_TYPE_STRING)					\
+   || (type ==  DBUS_TYPE_OBJECT_PATH)					\
+   || (type ==  DBUS_TYPE_SIGNATURE)					\
+   || (type ==  DBUS_TYPE_UNIX_FD))
+#else
 #define XD_BASIC_DBUS_TYPE(type)					\
   ((type ==  DBUS_TYPE_BYTE)						\
    || (type ==  DBUS_TYPE_BOOLEAN)					\
@@ -160,6 +179,7 @@ int xd_in_read_queued_messages = 0;
    || (type ==  DBUS_TYPE_STRING)					\
    || (type ==  DBUS_TYPE_OBJECT_PATH)					\
    || (type ==  DBUS_TYPE_SIGNATURE))
+#endif
 
 /* This was a macro.  On Solaris 2.11 it was said to compile for
    hours, when optimzation is enabled.  So we have transferred it into
@@ -182,6 +202,9 @@ xd_symbol_to_dbus_type (Lisp_Object object)
      : (EQ (object, QCdbus_type_string)) ? DBUS_TYPE_STRING
      : (EQ (object, QCdbus_type_object_path)) ? DBUS_TYPE_OBJECT_PATH
      : (EQ (object, QCdbus_type_signature)) ? DBUS_TYPE_SIGNATURE
+#ifdef DBUS_TYPE_UNIX_FD
+     : (EQ (object, QCdbus_type_unix_fd)) ? DBUS_TYPE_UNIX_FD
+#endif
      : (EQ (object, QCdbus_type_array)) ? DBUS_TYPE_ARRAY
      : (EQ (object, QCdbus_type_variant)) ? DBUS_TYPE_VARIANT
      : (EQ (object, QCdbus_type_struct)) ? DBUS_TYPE_STRUCT
@@ -238,6 +261,9 @@ xd_signature (char *signature, unsigned int dtype, unsigned int parent_type, Lis
     case DBUS_TYPE_UINT16:
     case DBUS_TYPE_UINT32:
     case DBUS_TYPE_UINT64:
+#ifdef DBUS_TYPE_UNIX_FD
+    case DBUS_TYPE_UNIX_FD:
+#endif
       CHECK_NATNUM (object);
       sprintf (signature, "%c", dtype);
       break;
@@ -451,6 +477,9 @@ xd_append_arg (unsigned int dtype, Lisp_Object object, DBusMessageIter *iter)
 	}
 
       case DBUS_TYPE_UINT32:
+#ifdef DBUS_TYPE_UNIX_FD
+      case DBUS_TYPE_UNIX_FD:
+#endif
 	CHECK_NUMBER (object);
 	{
 	  dbus_uint32_t val = XUINT (object);
@@ -648,6 +677,9 @@ xd_retrieve_arg (unsigned int dtype, DBusMessageIter *iter)
       }
 
     case DBUS_TYPE_UINT32:
+#ifdef DBUS_TYPE_UNIX_FD
+    case DBUS_TYPE_UNIX_FD:
+#endif
       {
 	dbus_uint32_t val;
 	dbus_message_iter_get_basic (iter, &val);
@@ -799,71 +831,84 @@ xd_initialize (Lisp_Object bus, int raise_error)
   return connection;
 }
 
+/* Return the file descriptor for WATCH, -1 if not found.  */
+static int
+xd_find_watch_fd (DBusWatch *watch)
+{
+#if HAVE_DBUS_WATCH_GET_UNIX_FD
+  /* TODO: Reverse these on Win32, which prefers the opposite.  */
+  int fd = dbus_watch_get_unix_fd (watch);
+  if (fd == -1)
+    fd = dbus_watch_get_socket (watch);
+#else
+  int fd = dbus_watch_get_fd (watch);
+#endif
+  return fd;
+}
 
-/* Add connection file descriptor to input_wait_mask, in order to
-   let select() detect, whether a new message has been arrived.  */
-dbus_bool_t
+/* Prototype.  */
+static void
+xd_read_queued_messages (int fd, void *data, int for_read);
+
+/* Start monitoring WATCH for possible I/O.  */
+static dbus_bool_t
 xd_add_watch (DBusWatch *watch, void *data)
 {
-  /* We check only for incoming data.  */
-  if (dbus_watch_get_flags (watch) & DBUS_WATCH_READABLE)
+  unsigned int flags = dbus_watch_get_flags (watch);
+  int fd = xd_find_watch_fd (watch);
+
+  XD_DEBUG_MESSAGE ("fd %d, write %d, enabled %d",
+                    fd, flags & DBUS_WATCH_WRITABLE,
+                    dbus_watch_get_enabled (watch));
+
+  if (fd == -1)
+    return FALSE;
+
+  if (dbus_watch_get_enabled (watch))
     {
-#if HAVE_DBUS_WATCH_GET_UNIX_FD
-      /* TODO: Reverse these on Win32, which prefers the opposite.  */
-      int fd = dbus_watch_get_unix_fd(watch);
-      if (fd == -1)
-	fd = dbus_watch_get_socket(watch);
-#else
-      int fd = dbus_watch_get_fd(watch);
-#endif
-      XD_DEBUG_MESSAGE ("fd %d", fd);
-
-      if (fd == -1)
-	return FALSE;
-
-      /* Add the file descriptor to input_wait_mask.  */
-      add_keyboard_wait_descriptor (fd);
+      if (flags & DBUS_WATCH_WRITABLE)
+        add_write_fd (fd, xd_read_queued_messages, data);
+      if (flags & DBUS_WATCH_READABLE)
+        add_read_fd (fd, xd_read_queued_messages, data);
     }
-
-  /* Return.  */
   return TRUE;
 }
 
-/* Remove connection file descriptor from input_wait_mask.  DATA is
-   the used bus, either a string or QCdbus_system_bus or
+/* Stop monitoring WATCH for possible I/O.
+   DATA is the used bus, either a string or QCdbus_system_bus or
    QCdbus_session_bus.  */
-void
+static void
 xd_remove_watch (DBusWatch *watch, void *data)
 {
-  /* We check only for incoming data.  */
-  if (dbus_watch_get_flags (watch) & DBUS_WATCH_READABLE)
+  unsigned int flags = dbus_watch_get_flags (watch);
+  int fd = xd_find_watch_fd (watch);
+
+  XD_DEBUG_MESSAGE ("fd %d", fd);
+
+  if (fd == -1)
+    return;
+
+  /* Unset session environment.  */
+  if (data != NULL && data == (void*) XHASH (QCdbus_session_bus))
     {
-#if HAVE_DBUS_WATCH_GET_UNIX_FD
-      /* TODO: Reverse these on Win32, which prefers the opposite.  */
-      int fd = dbus_watch_get_unix_fd(watch);
-      if (fd == -1)
-	fd = dbus_watch_get_socket(watch);
-#else
-      int fd = dbus_watch_get_fd(watch);
-#endif
-      XD_DEBUG_MESSAGE ("fd %d", fd);
-
-      if (fd == -1)
-	return;
-
-      /* Unset session environment.  */
-      if ((data != NULL) && (data == (void*) XHASH (QCdbus_session_bus)))
-	{
-	  XD_DEBUG_MESSAGE ("unsetenv DBUS_SESSION_BUS_ADDRESS");
-	  unsetenv ("DBUS_SESSION_BUS_ADDRESS");
-	}
-
-      /* Remove the file descriptor from input_wait_mask.  */
-      delete_keyboard_wait_descriptor (fd);
+      XD_DEBUG_MESSAGE ("unsetenv DBUS_SESSION_BUS_ADDRESS");
+      unsetenv ("DBUS_SESSION_BUS_ADDRESS");
     }
 
-  /* Return.  */
-  return;
+  if (flags & DBUS_WATCH_WRITABLE)
+    delete_write_fd (fd);
+  if (flags & DBUS_WATCH_READABLE)
+    delete_read_fd (fd);
+}
+
+/* Toggle monitoring WATCH for possible I/O.  */
+static void
+xd_toggle_watch (DBusWatch *watch, void *data)
+{
+  if (dbus_watch_get_enabled (watch))
+    xd_add_watch (watch, data);
+  else
+    xd_remove_watch (watch, data);
 }
 
 DEFUN ("dbus-init-bus", Fdbus_init_bus, Sdbus_init_bus, 1, 1, 0,
@@ -880,11 +925,15 @@ DEFUN ("dbus-init-bus", Fdbus_init_bus, Sdbus_init_bus, 1, 1, 0,
   if (!dbus_connection_set_watch_functions (connection,
 					    xd_add_watch,
 					    xd_remove_watch,
-					    NULL, (void*) XHASH (bus), NULL))
+                                            xd_toggle_watch,
+					    (void*) XHASH (bus), NULL))
     XD_SIGNAL1 (build_string ("Cannot add watch functions"));
 
   /* Add bus to list of registered buses.  */
   Vdbus_registered_buses =  Fcons (bus, Vdbus_registered_buses);
+
+  /* We do not want to abort.  */
+  putenv ("DBUS_FATAL_WARNINGS=0");
 
   /* Return.  */
   return Qnil;
@@ -966,6 +1015,7 @@ input arguments.  It follows the mapping rules:
   DBUS_TYPE_UINT16      => number
   DBUS_TYPE_INT16       => integer
   DBUS_TYPE_UINT32      => number or float
+  DBUS_TYPE_UNIX_FD     => number or float
   DBUS_TYPE_INT32       => integer or float
   DBUS_TYPE_UINT64      => number or float
   DBUS_TYPE_INT64       => integer or float
@@ -1288,9 +1338,6 @@ usage: (dbus-call-method-asynchronously BUS SERVICE PATH INTERFACE METHOD HANDLE
       result = Qnil;
     }
 
-  /* Flush connection to ensure the message is handled.  */
-  dbus_connection_flush (connection);
-
   XD_DEBUG_MESSAGE ("Message sent");
 
   /* Cleanup.  */
@@ -1378,9 +1425,6 @@ usage: (dbus-method-return-internal BUS SERIAL SERVICE &rest ARGS)  */)
      message queue.  */
   if (!dbus_connection_send (connection, dmessage, NULL))
     XD_SIGNAL1 (build_string ("Cannot send message"));
-
-  /* Flush connection to ensure the message is handled.  */
-  dbus_connection_flush (connection);
 
   XD_DEBUG_MESSAGE ("Message sent");
 
@@ -1470,9 +1514,6 @@ usage: (dbus-method-error-internal BUS SERIAL SERVICE &rest ARGS)  */)
      message queue.  */
   if (!dbus_connection_send (connection, dmessage, NULL))
     XD_SIGNAL1 (build_string ("Cannot send message"));
-
-  /* Flush connection to ensure the message is handled.  */
-  dbus_connection_flush (connection);
 
   XD_DEBUG_MESSAGE ("Message sent");
 
@@ -1589,9 +1630,6 @@ usage: (dbus-send-signal BUS SERVICE PATH INTERFACE SIGNAL &rest ARGS)  */)
   if (!dbus_connection_send (connection, dmessage, NULL))
     XD_SIGNAL1 (build_string ("Cannot send message"));
 
-  /* Flush connection to ensure the message is handled.  */
-  dbus_connection_flush (connection);
-
   XD_DEBUG_MESSAGE ("Signal sent");
 
   /* Cleanup.  */
@@ -1601,76 +1639,26 @@ usage: (dbus-send-signal BUS SERVICE PATH INTERFACE SIGNAL &rest ARGS)  */)
   return Qt;
 }
 
-/* Check, whether there is pending input in the message queue of the
-   D-Bus BUS.  BUS is either a Lisp symbol, :system or :session, or a
-   string denoting the bus address.  */
-int
-xd_get_dispatch_status (Lisp_Object bus)
-{
-  DBusConnection *connection;
-
-  /* Open a connection to the bus.  */
-  connection = xd_initialize (bus, FALSE);
-  if (connection == NULL) return FALSE;
-
-  /* Non blocking read of the next available message.  */
-  dbus_connection_read_write (connection, 0);
-
-  /* Return.  */
-  return
-    (dbus_connection_get_dispatch_status (connection)
-     == DBUS_DISPATCH_DATA_REMAINS)
-    ? TRUE : FALSE;
-}
-
-/* Check for queued incoming messages from the buses.  */
-int
-xd_pending_messages (void)
-{
-  Lisp_Object busp = Vdbus_registered_buses;
-
-  while (!NILP (busp))
-    {
-      /* We do not want to have an autolaunch for the session bus.  */
-      if (EQ ((CAR_SAFE (busp)), QCdbus_session_bus)
-	  && getenv ("DBUS_SESSION_BUS_ADDRESS") == NULL)
-	continue;
-
-      if (xd_get_dispatch_status (CAR_SAFE (busp)))
-	return TRUE;
-
-      busp = CDR_SAFE (busp);
-    }
-
-  return FALSE;
-}
-
-/* Read queued incoming message of the D-Bus BUS.  BUS is either a
-   Lisp symbol, :system or :session, or a string denoting the bus
-   address.  */
-static Lisp_Object
-xd_read_message (Lisp_Object bus)
+/* Read one queued incoming message of the D-Bus BUS.
+   BUS is either a Lisp symbol, :system or :session, or a string denoting
+   the bus address.  */
+static void
+xd_read_message_1 (DBusConnection *connection, Lisp_Object bus)
 {
   Lisp_Object args, key, value;
   struct gcpro gcpro1;
   struct input_event event;
-  DBusConnection *connection;
   DBusMessage *dmessage;
   DBusMessageIter iter;
   unsigned int dtype;
   int mtype, serial;
   const char *uname, *path, *interface, *member;
 
-  /* Open a connection to the bus.  */
-  connection = xd_initialize (bus, TRUE);
-
-  /* Non blocking read of the next available message.  */
-  dbus_connection_read_write (connection, 0);
   dmessage = dbus_connection_pop_message (connection);
 
   /* Return if there is no queued message.  */
   if (dmessage == NULL)
-    return Qnil;
+    return;
 
   /* Collect the parameters.  */
   args = Qnil;
@@ -1801,22 +1789,49 @@ xd_read_message (Lisp_Object bus)
  cleanup:
   dbus_message_unref (dmessage);
 
-  RETURN_UNGCPRO (Qnil);
+  UNGCPRO;
 }
 
-/* Read queued incoming messages from all buses.  */
-void
-xd_read_queued_messages (void)
+/* Read queued incoming messages of the D-Bus BUS.
+   BUS is either a Lisp symbol, :system or :session, or a string denoting
+   the bus address.  */
+static Lisp_Object
+xd_read_message (Lisp_Object bus)
+{
+  /* Open a connection to the bus.  */
+  DBusConnection *connection = xd_initialize (bus, TRUE);
+
+  /* Non blocking read of the next available message.  */
+  dbus_connection_read_write (connection, 0);
+
+  while (dbus_connection_get_dispatch_status (connection)
+         != DBUS_DISPATCH_COMPLETE)
+    xd_read_message_1 (connection, bus);
+  return Qnil;
+}
+
+/* Callback called when something is ready to read or write.  */
+static void
+xd_read_queued_messages (int fd, void *data, int for_read)
 {
   Lisp_Object busp = Vdbus_registered_buses;
+  Lisp_Object bus = Qnil;
 
+  /* Find bus related to fd.  */
+  if (data != NULL)
+    while (!NILP (busp))
+      {
+	if (data == (void*) XHASH (CAR_SAFE (busp)))
+	  bus = CAR_SAFE (busp);
+	busp = CDR_SAFE (busp);
+      }
+
+  if (NILP(bus))
+    return;
+
+  /* We ignore all Lisp errors during the call.  */
   xd_in_read_queued_messages = 1;
-  while (!NILP (busp))
-    {
-      /* We ignore all Lisp errors during the call.  */
-      internal_catch (Qdbus_error, xd_read_message, CAR_SAFE (busp));
-      busp = CDR_SAFE (busp);
-    }
+  internal_catch (Qdbus_error, xd_read_message, bus);
   xd_in_read_queued_messages = 0;
 }
 
@@ -2122,6 +2137,11 @@ syms_of_dbusbind (void)
   QCdbus_type_signature = intern_c_string (":signature");
   staticpro (&QCdbus_type_signature);
 
+#ifdef DBUS_TYPE_UNIX_FD
+  QCdbus_type_unix_fd = intern_c_string (":unix-fd");
+  staticpro (&QCdbus_type_unix_fd);
+#endif
+
   QCdbus_type_array = intern_c_string (":array");
   staticpro (&QCdbus_type_array);
 
@@ -2181,6 +2201,9 @@ be called when the D-Bus reply message arrives.  */);
     doc: /* If non-nil, debug messages of D-Bus bindings are raised.  */);
 #ifdef DBUS_DEBUG
   Vdbus_debug = Qt;
+  /* We can also set environment variable DBUS_VERBOSE=1 in order to
+     see more traces.  This requires libdbus-1 to be configured with
+     --enable-verbose-mode.  */
 #else
   Vdbus_debug = Qnil;
 #endif

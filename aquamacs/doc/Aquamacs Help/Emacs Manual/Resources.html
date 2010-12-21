@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+<title>Resources - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="X-Resources.html#X-Resources" title="X Resources">
+<link rel="next" href="Table-of-Resources.html#Table-of-Resources" title="Table of Resources">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Resources"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Table-of-Resources.html#Table-of-Resources">Table of Resources</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="X-Resources.html#X-Resources">X Resources</a>
+<hr>
+</div>
+
+<h3 class="appendixsec">D.1 X Resources</h3>
+
+<p><a name="index-resources-4275"></a><a name="index-X-resources-4276"></a><a name="index-g_t_0040file_007b_007e_002f_002eXdefaults_007d-file-4277"></a><a name="index-g_t_0040file_007b_007e_002f_002eXresources_007d-file-4278"></a>
+  Programs running under the X Window System organize their user
+options under a hierarchy of classes and resources.  You can specify
+default values for these options in your <dfn>X resource file</dfn>,
+usually named <samp><span class="file">~/.Xdefaults</span></samp> or <samp><span class="file">~/.Xresources</span></samp>.  Changes in
+this file do not take effect immediately, because the X server stores
+its own list of resources; to update it, use the command
+<samp><span class="command">xrdb</span></samp>&mdash;for instance, &lsquo;<samp><span class="samp">xrdb ~/.Xdefaults</span></samp>&rsquo;.
+
+   <p><a name="index-Registry-_0028MS_002dWindows_0029-4279"></a>  (MS-Windows systems do not support X resource files; on Windows,
+Emacs looks for X resources in the Windows Registry, first under the
+key &lsquo;<samp><span class="samp">HKEY_CURRENT_USER\SOFTWARE\GNU\Emacs</span></samp>&rsquo; and then under the key
+&lsquo;<samp><span class="samp">HKEY_LOCAL_MACHINE\SOFTWARE\GNU\Emacs</span></samp>&rsquo;.  The menu and scroll
+bars are native widgets on MS-Windows, so they are only customizable
+via the system-wide settings in the Display Control Panel.  You can
+also set resources using the &lsquo;<samp><span class="samp">-xrm</span></samp>&rsquo; command line option, as
+explained below.)
+
+   <p>Each line in the X resource file specifies a value for one option or
+for a collection of related options.  Each resource specification
+consists of a <dfn>program name</dfn> and a <dfn>resource name</dfn>.  Case
+distinctions are significant in each of these names.  Here is an
+example:
+
+<pre class="example">     emacs.borderWidth: 2
+</pre>
+   <p>The program name is the name of the executable file to which the
+resource applies.  For Emacs, this is normally &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo;.  To
+specify a definition that applies to all instances of Emacs,
+regardless of the name of the Emacs executable, use &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo;.
+
+   <p>The resource name is the name of a program setting.  For instance,
+Emacs recognizes a &lsquo;<samp><span class="samp">borderWidth</span></samp>&rsquo; resource that controls the width
+of the external border for graphical frames.
+
+   <p>Resources are grouped into named classes.  For instance, the
+&lsquo;<samp><span class="samp">BorderWidth</span></samp>&rsquo; class contains both the &lsquo;<samp><span class="samp">borderWidth</span></samp>&rsquo; resource
+(which we just described), as well as the &lsquo;<samp><span class="samp">internalBorder</span></samp>&rsquo;
+resource, which controls the width of the internal border for
+graphical frames.  Instead of using a resource name, you can use a
+class name to specify the same value for all resources in that class. 
+Here's an example:
+
+<pre class="example">     emacs.BorderWidth: 2
+</pre>
+   <p>If you specify a value for a class, it becomes the default for all
+resources in that class.  You can specify values for individual
+resources as well; these override the class value, for those
+particular resources.  The following example specifies 2 as the
+default width for all borders, but overrides this value with 4 for the
+external border:
+
+<pre class="example">     emacs.BorderWidth: 2
+     emacs.borderWidth: 4
+</pre>
+   <p>The order in which the lines appear in the file does not matter. 
+One way to experiment with the effect of different resource settings
+is to use the <code>editres</code> program.  See the <code>editres</code> man page
+for more details.
+
+   <p>Emacs does not process X resources at all if you set the variable
+<code>inhibit-x-resources</code> to a non-<code>nil</code> value, or if you
+specify the &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">--quick</span></samp>&rsquo;) command-line argument
+(see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).  (The &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo; argument automatically sets
+<code>inhibit-x-resources</code> to <code>t</code>.)
+
+   <p>In addition, you can use the following command-line options to
+override the X resources file:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">-name </span><var>name</var></samp>&rsquo;<dd><a name="index-g_t_002d_002dname-4280"></a><dt>&lsquo;<samp><span class="samp">--name=</span><var>name</var></samp>&rsquo;<dd><a name="index-resource-name_002c-command_002dline-argument-4281"></a>This option sets the program name of the initial Emacs frame to
+<var>name</var>.  It also sets the title of the initial frame to
+<var>name</var>.  This option does not affect subsequent frames.
+
+     <p>If you don't specify this option, the default is to use the Emacs
+executable's name as the program name.
+
+     <p>For consistency, &lsquo;<samp><span class="samp">-name</span></samp>&rsquo; also specifies the name to use for other
+resource values that do not belong to any particular frame.
+
+     <p>The resources that name Emacs invocations also belong to a class,
+named &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo;.  If you write &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo; instead of
+&lsquo;<samp><span class="samp">emacs</span></samp>&rsquo;, the resource applies to all frames in all Emacs jobs,
+regardless of frame titles and regardless of the name of the
+executable file.
+
+     <br><dt>&lsquo;<samp><span class="samp">-xrm </span><var>resource-values</var></samp>&rsquo;<dd><a name="index-g_t_002d_002dxrm-4282"></a><dt>&lsquo;<samp><span class="samp">--xrm=</span><var>resource-values</var></samp>&rsquo;<dd><a name="index-resource-values_002c-command_002dline-argument-4283"></a>This option specifies X resource values for the present Emacs job.
+
+     <p><var>resource-values</var> should have the same format that you would use
+inside a file of X resources.  To include multiple resource
+specifications in <var>resource-values</var>, put a newline between them,
+just as you would in a file.  You can also use &lsquo;<samp><span class="samp">#include
+"</span><var>filename</var><span class="samp">"</span></samp>&rsquo; to include a file full of resource specifications. 
+Resource values specified with &lsquo;<samp><span class="samp">-xrm</span></samp>&rsquo; take precedence over all
+other resource specifications. 
+</dl>
+
+   </body></html>
+

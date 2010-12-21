@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Copy/cut/paste - SES: Simple Emacs Spreadsheet</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SES: Simple Emacs Spreadsheet">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Basics.html#The-Basics" title="The Basics">
+<link rel="prev" href="Clearing-cells.html#Clearing-cells" title="Clearing cells">
+<link rel="next" href="Customizing-SES.html#Customizing-SES" title="Customizing SES">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents SES: the Simple Emacs Spreadsheet.
+
+Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Copy%2fcut%2fpaste"></a>
+<a name="Copy_002fcut_002fpaste"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customizing-SES.html#Customizing-SES">Customizing SES</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Clearing-cells.html#Clearing-cells">Clearing cells</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Basics.html#The-Basics">The Basics</a>
+<hr>
+</div>
+
+<h3 class="section">2.5 Copy, cut, and paste</h3>
+
+<p><a name="index-copy-36"></a><a name="index-cut-37"></a><a name="index-paste-38"></a><a name="index-kill_002dring_002dsave-39"></a><a name="index-mouse_002dset_002dregion-40"></a><a name="index-mouse_002dset_002dsecondary-41"></a><a name="index-ses_002dkill_002doverride-42"></a><a name="index-yank-43"></a><a name="index-clipboard_002dyank-44"></a><a name="index-mouse_002dyank_002dat_002dclick-45"></a><a name="index-mouse_002dyank_002dat_002dsecondary-46"></a><a name="index-ses_002dyank_002dpop-47"></a>
+The copy functions work on rectangular regions of cells.  You can paste the
+copies into non-SES buffers to export the print text.
+
+     <dl>
+<dt><kbd>M-w</kbd><dt><kbd>[copy]</kbd><dt><kbd>[C-insert]</kbd><dd>Copy the highlighted cells to kill ring and primary clipboard
+(<code>kill-ring-save</code>).
+
+     <br><dt><kbd>[drag-mouse-1]</kbd><dd>Mark a region and copy it to kill ring and primary clipboard
+(<code>mouse-set-region</code>).
+
+     <br><dt><kbd>[M-drag-mouse-1]</kbd><dd>Mark a region and copy it to kill ring and secondary clipboard
+(<code>mouse-set-secondary</code>).
+
+     <br><dt><kbd>C-w</kbd><dt><kbd>[cut]</kbd><dt><kbd>[S-delete]</kbd><dd>The cut functions do not actually delete rows or columns&mdash;they copy
+and then clear (<code>ses-kill-override</code>).
+
+     <br><dt><kbd>C-y</kbd><dt><kbd>[S-insert]</kbd><dd>Paste from kill ring (<code>yank</code>).  The paste functions behave
+differently depending on the format of the text being inserted:
+          <ul>
+<li>When pasting cells that were cut from a SES buffer, the print text is
+ignored and only the attached formula and printer are inserted; cell
+references in the formula are relocated unless you use <kbd>C-u</kbd>. 
+<li>The pasted text overwrites a rectangle of cells whose top left corner
+is the current cell.  If part of the rectangle is beyond the edges of
+the spreadsheet, you must confirm the increase in spreadsheet size. 
+<li>Non-SES text is usually inserted as a replacement formula for the
+current cell.  If the formula would be a symbol, it's treated as a
+string unless you use <kbd>C-u</kbd>.  Pasted formulas with syntax errors
+are always treated as strings. 
+</ul>
+
+     <br><dt><kbd>[paste]</kbd><dd>Paste from primary clipboard or kill ring (<code>clipboard-yank</code>).
+
+     <br><dt><kbd>[mouse-2]</kbd><dd>Set point and paste from primary clipboard (<code>mouse-yank-at-click</code>).
+
+     <br><dt><kbd>[M-mouse-2]</kbd><dd>Set point and paste from secondary clipboard (<code>mouse-yank-secondary</code>).
+
+     <br><dt><kbd>M-y</kbd><dd>Immediately after a paste, you can replace the text with a preceding
+element from the kill ring (<code>ses-yank-pop</code>).  Unlike the standard
+Emacs yank-pop, the SES version uses <code>undo</code> to delete the old
+yank.  This doesn't make any difference? 
+</dl>
+
+   </body></html>
+

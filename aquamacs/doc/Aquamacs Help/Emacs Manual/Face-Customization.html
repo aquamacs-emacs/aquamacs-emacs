@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Face Customization - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
+<link rel="prev" href="Saving-Customizations.html#Saving-Customizations" title="Saving Customizations">
+<link rel="next" href="Specific-Customization.html#Specific-Customization" title="Specific Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Face-Customization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Specific-Customization.html#Specific-Customization">Specific Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Saving-Customizations.html#Saving-Customizations">Saving Customizations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.2.5 Customizing Faces</h4>
+
+<p><a name="index-customizing-faces-3957"></a><a name="index-bold-font-3958"></a><a name="index-italic-font-3959"></a><a name="index-fonts-and-faces-3960"></a>
+  In addition to variables, some customization groups also include
+faces.  When you show the contents of a group, both the variables and
+the faces in the group appear in the customization buffer.  Here is an
+example of how a face looks:
+
+<pre class="smallexample">     Custom Changed Face:(sample) [Hide Face]
+        [State]: STANDARD.
+     Face used when the customize item has been changed.
+     Parent groups: [Custom Magic Faces]
+     Attributes: [ ] Font Family: *
+                 [ ] Width: *
+                 [ ] Height: *
+                 [ ] Weight: *
+                 [ ] Slant: *
+                 [ ] Underline: *
+                 [ ] Overline: *
+                 [ ] Strike-through: *
+                 [ ] Box around text: *
+                 [ ] Inverse-video: *
+                 [X] Foreground: white       (sample)
+                 [X] Background: blue        (sample)
+                 [ ] Stipple: *
+                 [ ] Inherit: *
+</pre>
+   <p>Each face attribute has its own line.  The &lsquo;<samp><span class="samp">[</span><var>x</var><span class="samp">]</span></samp>&rsquo; button
+before the attribute name indicates whether the attribute is
+<dfn>enabled</dfn>; &lsquo;<samp><span class="samp">[X]</span></samp>&rsquo; means that it's enabled, and &lsquo;<samp><span class="samp">[ ]</span></samp>&rsquo;
+means that it's disabled.  You can enable or disable the attribute by
+clicking that button.  When the attribute is enabled, you can change
+the attribute value in the usual ways.
+
+   <p>For the colors, you can specify a color name (use <kbd>M-x
+list-colors-display</kbd> for a list of them) or a hexadecimal color
+specification of the form &lsquo;<samp><span class="samp">#</span><var>rr</var><var>gg</var><var>bb</var></samp>&rsquo;. 
+(&lsquo;<samp><span class="samp">#000000</span></samp>&rsquo; is black, &lsquo;<samp><span class="samp">#ff0000</span></samp>&rsquo; is red, &lsquo;<samp><span class="samp">#00ff00</span></samp>&rsquo; is
+green, &lsquo;<samp><span class="samp">#0000ff</span></samp>&rsquo; is blue, and &lsquo;<samp><span class="samp">#ffffff</span></samp>&rsquo; is white.)  On a
+black-and-white display, the colors you can use for the background are
+&lsquo;<samp><span class="samp">black</span></samp>&rsquo;, &lsquo;<samp><span class="samp">white</span></samp>&rsquo;, &lsquo;<samp><span class="samp">gray</span></samp>&rsquo;, &lsquo;<samp><span class="samp">gray1</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">gray3</span></samp>&rsquo;.  Emacs supports these shades of gray by using background
+stipple patterns instead of a color.
+
+   <p>Setting, saving and resetting a face work like the same operations for
+variables (see <a href="Changing-a-Variable.html#Changing-a-Variable">Changing a Variable</a>).
+
+   <p>A face can specify different appearances for different types of
+display.  For example, a face can make text red on a color display, but
+use a bold font on a monochrome display.  To specify multiple
+appearances for a face, select &lsquo;<samp><span class="samp">For All Kinds of Displays</span></samp>&rsquo; in the
+menu you get from invoking &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo;.
+
+   <p><a name="index-modify_002dface-3961"></a>  Another more basic way to set the attributes of a specific face is
+with <kbd>M-x modify-face</kbd>.  This command reads the name of a face, then
+reads the attributes one by one.  For the color and stipple attributes,
+the attribute's current value is the default&mdash;type just &lt;RET&gt; if
+you don't want to change that attribute.  Type &lsquo;<samp><span class="samp">none</span></samp>&rsquo; if you want
+to clear out the attribute.
+
+   </body></html>
+

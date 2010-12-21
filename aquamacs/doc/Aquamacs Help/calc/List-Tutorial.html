@@ -1,0 +1,579 @@
+<html lang="en">
+<head>
+<title>List Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" title="Vector/Matrix Tutorial">
+<link rel="prev" href="Matrix-Tutorial.html#Matrix-Tutorial" title="Matrix Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="List-Tutorial"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Matrix-Tutorial.html#Matrix-Tutorial">Matrix Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">Vector/Matrix Tutorial</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.3.3 Vectors as Lists</h4>
+
+<p class="noindent"><a name="index-Lists-43"></a>Although Calc has a number of features for manipulating vectors and
+matrices as mathematical objects, you can also treat vectors as
+simple lists of values.  For example, we saw that the <kbd>k f</kbd>
+command returns a vector which is a list of the prime factors of a
+number.
+
+   <p>You can pack and unpack stack entries into vectors:
+
+<pre class="smallexample">     3:  10         1:  [10, 20, 30]     3:  10
+     2:  20             .                2:  20
+     1:  30                              1:  30
+         .                                   .
+     
+                        M-3 v p              v u
+</pre>
+   <p>You can also build vectors out of consecutive integers, or out
+of many copies of a given value:
+
+<pre class="smallexample">     1:  [1, 2, 3, 4]    2:  [1, 2, 3, 4]    2:  [1, 2, 3, 4]
+         .               1:  17              1:  [17, 17, 17, 17]
+                             .                   .
+     
+         v x 4 &lt;RET&gt;           17                  v b 4 &lt;RET&gt;
+</pre>
+   <p>You can apply an operator to every element of a vector using the
+<dfn>map</dfn> command.
+
+<pre class="smallexample">     1:  [17, 34, 51, 68]   1:  [289, 1156, 2601, 4624]  1:  [17, 34, 51, 68]
+         .                      .                            .
+     
+         V M *                  2 V M ^                      V M Q
+</pre>
+   <p class="noindent">In the first step, we multiply the vector of integers by the vector
+of 17's elementwise.  In the second step, we raise each element to
+the power two.  (The general rule is that both operands must be
+vectors of the same length, or else one must be a vector and the
+other a plain number.)  In the final step, we take the square root
+of each element.
+
+   <p>(&bull;) <strong>Exercise 1.</strong>  Compute a vector of powers of two
+from
+<!-- @math{2^{-4}} -->
+&lsquo;<samp><span class="samp">2^-4</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">2^4</span></samp>&rsquo;.  See <a href="List-Answer-1.html#List-Answer-1">1</a>. (&bull;)
+
+   <p>You can also <dfn>reduce</dfn> a binary operator across a vector. 
+For example, reducing &lsquo;<samp><span class="samp">*</span></samp>&rsquo; computes the product of all the
+elements in the vector:
+
+<pre class="smallexample">     1:  123123     1:  [3, 7, 11, 13, 41]      1:  123123
+         .              .                           .
+     
+         123123         k f                         V R *
+</pre>
+   <p class="noindent">In this example, we decompose 123123 into its prime factors, then
+multiply those factors together again to yield the original number.
+
+   <p>We could compute a dot product &ldquo;by hand&rdquo; using mapping and
+reduction:
+
+<pre class="smallexample">     2:  [1, 2, 3]     1:  [7, 12, 0]     1:  19
+     1:  [7, 6, 0]         .                  .
+         .
+     
+         r 1 r 2           V M *              V R +
+</pre>
+   <p class="noindent">Recalling two vectors from the previous section, we compute the
+sum of pairwise products of the elements to get the same answer
+for the dot product as before.
+
+   <p>A slight variant of vector reduction is the <dfn>accumulate</dfn> operation,
+<kbd>V U</kbd>.  This produces a vector of the intermediate results from
+a corresponding reduction.  Here we compute a table of factorials:
+
+<pre class="smallexample">     1:  [1, 2, 3, 4, 5, 6]    1:  [1, 2, 6, 24, 120, 720]
+         .                         .
+     
+         v x 6 &lt;RET&gt;                 V U *
+</pre>
+   <p>Calc allows vectors to grow as large as you like, although it gets
+rather slow if vectors have more than about a hundred elements. 
+Actually, most of the time is spent formatting these large vectors
+for display, not calculating on them.  Try the following experiment
+(if your computer is very fast you may need to substitute a larger
+vector size).
+
+<pre class="smallexample">     1:  [1, 2, 3, 4, ...      1:  [2, 3, 4, 5, ...
+         .                         .
+     
+         v x 500 &lt;RET&gt;               1 V M +
+</pre>
+   <p>Now press <kbd>v .</kbd> (the letter <kbd>v</kbd>, then a period) and try the
+experiment again.  In <kbd>v .</kbd> mode, long vectors are displayed
+&ldquo;abbreviated&rdquo; like this:
+
+<pre class="smallexample">     1:  [1, 2, 3, ..., 500]   1:  [2, 3, 4, ..., 501]
+         .                         .
+     
+         v x 500 &lt;RET&gt;               1 V M +
+</pre>
+   <p class="noindent">(where now the &lsquo;<samp><span class="samp">...</span></samp>&rsquo; is actually part of the Calc display). 
+You will find both operations are now much faster.  But notice that
+even in <kbd>v&nbsp;.</kbd><!-- /@w --> mode, the full vectors are still shown in the Trail. 
+Type <kbd>t&nbsp;.</kbd><!-- /@w --> to cause the trail to abbreviate as well, and try the
+experiment one more time.  Operations on long vectors are now quite
+fast!  (But of course if you use <kbd>t .</kbd> you will lose the ability
+to get old vectors back using the <kbd>t y</kbd> command.)
+
+   <p>An easy way to view a full vector when <kbd>v .</kbd> mode is active is
+to press <kbd>`</kbd> (back-quote) to edit the vector; editing always works
+with the full, unabbreviated value.
+
+   <p><a name="index-Least_002dsquares-for-fitting-a-straight-line-44"></a><a name="index-Fitting-data-to-a-line-45"></a><a name="index-Line_002c-fitting-data-to-46"></a><a name="index-Data_002c-extracting-from-buffers-47"></a><a name="index-Columns-of-data_002c-extracting-48"></a>As a larger example, let's try to fit a straight line to some data,
+using the method of least squares.  (Calc has a built-in command for
+least-squares curve fitting, but we'll do it by hand here just to
+practice working with vectors.)  Suppose we have the following list
+of values in a file we have loaded into Emacs:
+
+<pre class="smallexample">       x        y
+      ---      ---
+      1.34    0.234
+      1.41    0.298
+      1.49    0.402
+      1.56    0.412
+      1.64    0.466
+      1.73    0.473
+      1.82    0.601
+      1.91    0.519
+      2.01    0.603
+      2.11    0.637
+      2.22    0.645
+      2.33    0.705
+      2.45    0.917
+      2.58    1.009
+      2.71    0.971
+      2.85    1.062
+      3.00    1.148
+      3.15    1.157
+      3.32    1.354
+</pre>
+   <p class="noindent">If you are reading this tutorial in printed form, you will find it
+easiest to press <kbd>C-x * i</kbd> to enter the on-line Info version of
+the manual and find this table there.  (Press <kbd>g</kbd>, then type
+<kbd>List Tutorial</kbd>, to jump straight to this section.)
+
+   <p>Position the cursor at the upper-left corner of this table, just
+to the left of the &lsquo;<samp><span class="samp">1.34</span></samp>&rsquo;.  Press <kbd>C-@</kbd> to set the mark. 
+(On your system this may be <kbd>C-2</kbd>, <kbd>C-&lt;SPC&gt;</kbd>, or <kbd>NUL</kbd>.) 
+Now position the cursor to the lower-right, just after the &lsquo;<samp><span class="samp">1.354</span></samp>&rsquo;. 
+You have now defined this region as an Emacs &ldquo;rectangle.&rdquo;  Still
+in the Info buffer, type <kbd>C-x * r</kbd>.  This command
+(<code>calc-grab-rectangle</code>) will pop you back into the Calculator, with
+the contents of the rectangle you specified in the form of a matrix.
+
+<pre class="smallexample">     1:  [ [ 1.34, 0.234 ]
+           [ 1.41, 0.298 ]
+           ...
+</pre>
+   <p class="noindent">(You may wish to use <kbd>v .</kbd> mode to abbreviate the display of this
+large matrix.)
+
+   <p>We want to treat this as a pair of lists.  The first step is to
+transpose this matrix into a pair of rows.  Remember, a matrix is
+just a vector of vectors.  So we can unpack the matrix into a pair
+of row vectors on the stack.
+
+<pre class="smallexample">     1:  [ [ 1.34,  1.41,  1.49,  ... ]     2:  [1.34, 1.41, 1.49, ... ]
+           [ 0.234, 0.298, 0.402, ... ] ]   1:  [0.234, 0.298, 0.402, ... ]
+         .                                      .
+     
+         v t                                    v u
+</pre>
+   <p class="noindent">Let's store these in quick variables 1 and 2, respectively.
+
+<pre class="smallexample">     1:  [1.34, 1.41, 1.49, ... ]        .
+         .
+     
+         t 2                             t 1
+</pre>
+   <p class="noindent">(Recall that <kbd>t 2</kbd> is a variant of <kbd>s 2</kbd> that removes the
+stored value from the stack.)
+
+   <p>In a least squares fit, the slope &lsquo;<samp><span class="samp">m</span></samp>&rsquo; is given by the formula
+
+<pre class="example">     m = (N sum(x y) - sum(x) sum(y)) / (N sum(x^2) - sum(x)^2)
+</pre>
+   <p class="noindent">where
+<!-- @math{\sum x} -->
+&lsquo;<samp><span class="samp">sum(x)</span></samp>&rsquo;
+represents the sum of all the values of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  While there is an
+actual <code>sum</code> function in Calc, it's easier to sum a vector using a
+simple reduction.  First, let's compute the four different sums that
+this formula uses.
+
+<pre class="smallexample">     1:  41.63                 1:  98.0003
+         .                         .
+     
+      r 1 V R +   t 3           r 1 2 V M ^ V R +   t 4
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  13.613                1:  33.36554
+         .                         .
+     
+      r 2 V R +   t 5           r 1 r 2 V M * V R +   t 6
+</pre>
+   <p class="noindent">These are &lsquo;<samp><span class="samp">sum(x)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">sum(x^2)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">sum(y)</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">sum(x y)</span></samp>&rsquo;,
+respectively.  (We could have used <kbd>*</kbd> to compute &lsquo;<samp><span class="samp">sum(x^2)</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">sum(x y)</span></samp>&rsquo;.)
+
+   <p>Finally, we also need &lsquo;<samp><span class="samp">N</span></samp>&rsquo;, the number of data points.  This is just
+the length of either of our lists.
+
+<pre class="smallexample">     1:  19
+         .
+     
+      r 1 v l   t 7
+</pre>
+   <p class="noindent">(That's <kbd>v</kbd> followed by a lower-case <kbd>l</kbd>.)
+
+   <p>Now we grind through the formula:
+
+<pre class="smallexample">     1:  633.94526  2:  633.94526  1:  67.23607
+         .          1:  566.70919      .
+                        .
+     
+      r 7 r 6 *      r 3 r 5 *         -
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     2:  67.23607   3:  67.23607   2:  67.23607   1:  0.52141679
+     1:  1862.0057  2:  1862.0057  1:  128.9488       .
+         .          1:  1733.0569      .
+                        .
+     
+      r 7 r 4 *      r 3 2 ^           -              /   t 8
+</pre>
+   <p>That gives us the slope &lsquo;<samp><span class="samp">m</span></samp>&rsquo;.  The y-intercept &lsquo;<samp><span class="samp">b</span></samp>&rsquo; can now
+be found with the simple formula,
+
+<pre class="example">     b = (sum(y) - m sum(x)) / N
+</pre>
+   <pre class="smallexample">     1:  13.613     2:  13.613     1:  -8.09358   1:  -0.425978
+         .          1:  21.70658       .              .
+                        .
+     
+        r 5            r 8 r 3 *       -              r 7 /   t 9
+</pre>
+   <p>Let's &ldquo;plot&rdquo; this straight line approximation,
+<!-- @math{y \approx m x + b}, -->
+&lsquo;<samp><span class="samp">m x + b</span></samp>&rsquo;,
+and compare it with the original data.
+
+<pre class="smallexample">     1:  [0.699, 0.735, ... ]    1:  [0.273, 0.309, ... ]
+         .                           .
+     
+         r 1 r 8 *                   r 9 +    s 0
+</pre>
+   <p class="noindent">Notice that multiplying a vector by a constant, and adding a constant
+to a vector, can be done without mapping commands since these are
+common operations from vector algebra.  As far as Calc is concerned,
+we've just been doing geometry in 19-dimensional space!
+
+   <p>We can subtract this vector from our original &lsquo;<samp><span class="samp">y</span></samp>&rsquo; vector to get
+a feel for the error of our fit.  Let's find the maximum error:
+
+<pre class="smallexample">     1:  [0.0387, 0.0112, ... ]   1:  [0.0387, 0.0112, ... ]   1:  0.0897
+         .                            .                            .
+     
+         r 2 -                        V M A                        V R X
+</pre>
+   <p class="noindent">First we compute a vector of differences, then we take the absolute
+values of these differences, then we reduce the <code>max</code> function
+across the vector.  (The <code>max</code> function is on the two-key sequence
+<kbd>f x</kbd>; because it is so common to use <code>max</code> in a vector
+operation, the letters <kbd>X</kbd> and <kbd>N</kbd> are also accepted for
+<code>max</code> and <code>min</code> in this context.  In general, you answer
+the <kbd>V M</kbd> or <kbd>V R</kbd> prompt with the actual key sequence that
+invokes the function you want.  You could have typed <kbd>V R f x</kbd> or
+even <kbd>V R x max &lt;RET&gt;</kbd> if you had preferred.)
+
+   <p>If your system has the GNUPLOT program, you can see graphs of your
+data and your straight line to see how well they match.  (If you have
+GNUPLOT 3.0 or higher, the following instructions will work regardless
+of the kind of display you have.  Some GNUPLOT 2.0, non-X-windows systems
+may require additional steps to view the graphs.)
+
+   <p>Let's start by plotting the original data.  Recall the &ldquo;<var>x</var>&rdquo; and &ldquo;<var>y</var>&rdquo;
+vectors onto the stack and press <kbd>g f</kbd>.  This &ldquo;fast&rdquo; graphing
+command does everything you need to do for simple, straightforward
+plotting of data.
+
+<pre class="smallexample">     2:  [1.34, 1.41, 1.49, ... ]
+     1:  [0.234, 0.298, 0.402, ... ]
+         .
+     
+         r 1 r 2    g f
+</pre>
+   <p>If all goes well, you will shortly get a new window containing a graph
+of the data.  (If not, contact your GNUPLOT or Calc installer to find
+out what went wrong.)  In the X window system, this will be a separate
+graphics window.  For other kinds of displays, the default is to
+display the graph in Emacs itself using rough character graphics. 
+Press <kbd>q</kbd> when you are done viewing the character graphics.
+
+   <p>Next, let's add the line we got from our least-squares fit.
+
+<pre class="smallexample">     2:  [1.34, 1.41, 1.49, ... ]
+     1:  [0.273, 0.309, 0.351, ... ]
+         .
+     
+         &lt;DEL&gt; r 0    g a  g p
+</pre>
+   <p>It's not very useful to get symbols to mark the data points on this
+second curve; you can type <kbd>g S g p</kbd> to remove them.  Type <kbd>g q</kbd>
+when you are done to remove the X graphics window and terminate GNUPLOT.
+
+   <p>(&bull;) <strong>Exercise 2.</strong>  An earlier exercise showed how to do
+least squares fitting to a general system of equations.  Our 19 data
+points are really 19 equations of the form &lsquo;<samp><span class="samp">y_i = m x_i + b</span></samp>&rsquo; for
+different pairs of &lsquo;<samp><span class="samp">(x_i,y_i)</span></samp>&rsquo;.  Use the matrix-transpose method
+to solve for &lsquo;<samp><span class="samp">m</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, duplicating the above result. 
+See <a href="List-Answer-2.html#List-Answer-2">2</a>. (&bull;)
+
+   <p><a name="index-Geometric-mean-49"></a>(&bull;) <strong>Exercise 3.</strong>  If the input data do not form a
+rectangle, you can use <kbd>C-x&nbsp;*&nbsp;g</kbd><!-- /@w --> (<code>calc-grab-region</code>)
+to grab the data the way Emacs normally works with regions&mdash;it reads
+left-to-right, top-to-bottom, treating line breaks the same as spaces. 
+Use this command to find the geometric mean of the following numbers. 
+(The geometric mean is the <var>n</var>th root of the product of <var>n</var> numbers.)
+
+<pre class="example">     2.3  6  22  15.1  7
+       15  14  7.5
+       2.5
+</pre>
+   <p class="noindent">The <kbd>C-x * g</kbd> command accepts numbers separated by spaces or commas,
+with or without surrounding vector brackets. 
+See <a href="List-Answer-3.html#List-Answer-3">3</a>. (&bull;)
+
+   <p>As another example, a theorem about binomial coefficients tells
+us that the alternating sum of binomial coefficients
+<var>n</var>-choose-0 minus <var>n</var>-choose-1 plus <var>n</var>-choose-2, and so
+on up to <var>n</var>-choose-<var>n</var>,
+always comes out to zero.  Let's verify this
+for &lsquo;<samp><span class="samp">n=6</span></samp>&rsquo;.
+
+<pre class="smallexample">     1:  [1, 2, 3, 4, 5, 6, 7]     1:  [0, 1, 2, 3, 4, 5, 6]
+         .                             .
+     
+         v x 7 &lt;RET&gt;                     1 -
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  [1, -6, 15, -20, 15, -6, 1]          1:  0
+         .                                        .
+     
+         V M ' (-1)^$ choose(6,$) &lt;RET&gt;             V R +
+</pre>
+   <p>The <kbd>V M '</kbd> command prompts you to enter any algebraic expression
+to define the function to map over the vector.  The symbol &lsquo;<samp><span class="samp">$</span></samp>&rsquo;
+inside this expression represents the argument to the function. 
+The Calculator applies this formula to each element of the vector,
+substituting each element's value for the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; sign(s) in turn.
+
+   <p>To define a two-argument function, use &lsquo;<samp><span class="samp">$$</span></samp>&rsquo; for the first
+argument and &lsquo;<samp><span class="samp">$</span></samp>&rsquo; for the second:  <kbd>V M ' $$-$ &lt;RET&gt;</kbd> is
+equivalent to <kbd>V M -</kbd>.  This is analogous to regular algebraic
+entry, where &lsquo;<samp><span class="samp">$$</span></samp>&rsquo; would refer to the next-to-top stack entry
+and &lsquo;<samp><span class="samp">$</span></samp>&rsquo; would refer to the top stack entry, and <kbd>' $$-$ &lt;RET&gt;</kbd>
+would act exactly like <kbd>-</kbd>.
+
+   <p>Notice that the <kbd>V M '</kbd> command has recorded two things in the
+trail:  The result, as usual, and also a funny-looking thing marked
+&lsquo;<samp><span class="samp">oper</span></samp>&rsquo; that represents the operator function you typed in. 
+The function is enclosed in &lsquo;<samp><span class="samp">&lt; &gt;</span></samp>&rsquo; brackets, and the argument is
+denoted by a &lsquo;<samp><span class="samp">#</span></samp>&rsquo; sign.  If there were several arguments, they
+would be shown as &lsquo;<samp><span class="samp">#1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">#2</span></samp>&rsquo;, and so on.  (For example,
+<kbd>V M ' $$-$</kbd> will put the function &lsquo;<samp><span class="samp">&lt;#1 - #2&gt;</span></samp>&rsquo; on the
+trail.)  This object is a &ldquo;nameless function&rdquo;; you can use nameless
+&lsquo;<samp><span class="samp">&lt;&nbsp;&gt;</span></samp>&rsquo;<!-- /@w --> notation to answer the <kbd>V M '</kbd> prompt if you like. 
+Nameless function notation has the interesting, occasionally useful
+property that a nameless function is not actually evaluated until
+it is used.  For example, <kbd>V M ' $+random(2.0)</kbd> evaluates
+&lsquo;<samp><span class="samp">random(2.0)</span></samp>&rsquo; once and adds that random number to all elements
+of the vector, but <kbd>V M ' &lt;#+random(2.0)&gt;</kbd> evaluates the
+&lsquo;<samp><span class="samp">random(2.0)</span></samp>&rsquo; separately for each vector element.
+
+   <p>Another group of operators that are often useful with <kbd>V M</kbd> are
+the relational operators:  <kbd>a =</kbd>, for example, compares two numbers
+and gives the result 1 if they are equal, or 0 if not.  Similarly,
+<kbd>a&nbsp;&lt;</kbd><!-- /@w --> checks for one number being less than another.
+
+   <p>Other useful vector operations include <kbd>v v</kbd>, to reverse a
+vector end-for-end; <kbd>V S</kbd>, to sort the elements of a vector
+into increasing order; and <kbd>v r</kbd> and <kbd>v&nbsp;c</kbd><!-- /@w -->, to extract
+one row or column of a matrix, or (in both cases) to extract one
+element of a plain vector.  With a negative argument, <kbd>v r</kbd>
+and <kbd>v c</kbd> instead delete one row, column, or vector element.
+
+   <p><a name="index-Divisor-functions-50"></a>(&bull;) <strong>Exercise 4.</strong>  The &lsquo;<samp><span class="samp">k</span></samp>&rsquo;th <dfn>divisor function</dfn>
+is the sum of the &lsquo;<samp><span class="samp">k</span></samp>&rsquo;th powers of all the divisors of an
+integer &lsquo;<samp><span class="samp">n</span></samp>&rsquo;.  Figure out a method for computing the divisor
+function for reasonably small values of &lsquo;<samp><span class="samp">n</span></samp>&rsquo;.  As a test,
+the 0th and 1st divisor functions of 30 are 8 and 72, respectively. 
+See <a href="List-Answer-4.html#List-Answer-4">4</a>. (&bull;)
+
+   <p><a name="index-Square_002dfree-numbers-51"></a><a name="index-Duplicate-values-in-a-list-52"></a>(&bull;) <strong>Exercise 5.</strong>  The <kbd>k f</kbd> command produces a
+list of prime factors for a number.  Sometimes it is important to
+know that a number is <dfn>square-free</dfn>, i.e., that no prime occurs
+more than once in its list of prime factors.  Find a sequence of
+keystrokes to tell if a number is square-free; your method should
+leave 1 on the stack if it is, or 0 if it isn't. 
+See <a href="List-Answer-5.html#List-Answer-5">5</a>. (&bull;)
+
+   <p><a name="index-Triangular-lists-53"></a>(&bull;) <strong>Exercise 6.</strong>  Build a list of lists that looks
+like the following diagram.  (You may wish to use the <kbd>v /</kbd>
+command to enable multi-line display of vectors.)
+
+<pre class="smallexample">     1:  [ [1],
+           [1, 2],
+           [1, 2, 3],
+           [1, 2, 3, 4],
+           [1, 2, 3, 4, 5],
+           [1, 2, 3, 4, 5, 6] ]
+</pre>
+   <p class="noindent">See <a href="List-Answer-6.html#List-Answer-6">6</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 7.</strong>  Build the following list of lists.
+
+<pre class="smallexample">     1:  [ [0],
+           [1, 2],
+           [3, 4, 5],
+           [6, 7, 8, 9],
+           [10, 11, 12, 13, 14],
+           [15, 16, 17, 18, 19, 20] ]
+</pre>
+   <p class="noindent">See <a href="List-Answer-7.html#List-Answer-7">7</a>. (&bull;)
+
+   <p><a name="index-Maximizing-a-function-over-a-list-of-values-54"></a><!-- [fix-ref Numerical Solutions] -->
+(&bull;) <strong>Exercise 8.</strong>  Compute a list of values of Bessel's
+<!-- @math{J_1(x)} -->
+&lsquo;<samp><span class="samp">J1</span></samp>&rsquo;
+function &lsquo;<samp><span class="samp">besJ(1,x)</span></samp>&rsquo; for &lsquo;<samp><span class="samp">x</span></samp>&rsquo; from 0 to 5 in steps of 0.25. 
+Find the value of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; (from among the above set of values) for
+which &lsquo;<samp><span class="samp">besJ(1,x)</span></samp>&rsquo; is a maximum.  Use an &ldquo;automatic&rdquo; method,
+i.e., just reading along the list by hand to find the largest value
+is not allowed!  (There is an <kbd>a X</kbd> command which does this kind
+of thing automatically; see <a href="Numerical-Solutions.html#Numerical-Solutions">Numerical Solutions</a>.) 
+See <a href="List-Answer-8.html#List-Answer-8">8</a>. (&bull;)
+
+   <p><a name="index-Digits_002c-vectors-of-55"></a>(&bull;) <strong>Exercise 9.</strong>  You are given an integer in the range
+<!-- @math{0 \le N < 10^m} -->
+&lsquo;<samp><span class="samp">0 &lt;= N &lt; 10^m</span></samp>&rsquo;
+for &lsquo;<samp><span class="samp">m=12</span></samp>&rsquo; (i.e., an integer of less than
+twelve digits).  Convert this integer into a vector of &lsquo;<samp><span class="samp">m</span></samp>&rsquo;
+digits, each in the range from 0 to 9.  In vector-of-digits notation,
+add one to this integer to produce a vector of &lsquo;<samp><span class="samp">m+1</span></samp>&rsquo; digits
+(since there could be a carry out of the most significant digit). 
+Convert this vector back into a regular integer.  A good integer
+to try is 25129925999.  See <a href="List-Answer-9.html#List-Answer-9">9</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 10.</strong>  Your friend Joe tried to use
+<kbd>V R a =</kbd> to test if all numbers in a list were equal.  What
+happened?  How would you do this test?  See <a href="List-Answer-10.html#List-Answer-10">10</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 11.</strong>  The area of a circle of radius one
+is &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;.  The area of the
+<!-- @math{2\times2} -->
+2x2
+square that encloses that circle is 4.  So if we throw <var>n</var> darts at
+random points in the square, about &lsquo;<samp><span class="samp">pi/4</span></samp>&rsquo; of them will land inside
+the circle.  This gives us an entertaining way to estimate the value of
+&lsquo;<samp><span class="samp">pi</span></samp>&rsquo;.  The <kbd>k&nbsp;r</kbd><!-- /@w -->
+command picks a random number between zero and the value on the stack. 
+We could get a random floating-point number between <i>-1</i> and 1 by typing
+<kbd>2.0&nbsp;k&nbsp;r&nbsp;1&nbsp;-</kbd><!-- /@w -->.  Build a vector of 100 random &lsquo;<samp><span class="samp">(x,y)</span></samp>&rsquo; points in
+this square, then use vector mapping and reduction to count how many
+points lie inside the unit circle.  Hint:  Use the <kbd>v b</kbd> command. 
+See <a href="List-Answer-11.html#List-Answer-11">11</a>. (&bull;)
+
+   <p><a name="index-Matchstick-problem-56"></a>(&bull;) <strong>Exercise 12.</strong>  The <dfn>matchstick problem</dfn> provides
+another way to calculate &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;.  Say you have an infinite field
+of vertical lines with a spacing of one inch.  Toss a one-inch matchstick
+onto the field.  The probability that the matchstick will land crossing
+a line turns out to be
+<!-- @math{2/\pi}. -->
+&lsquo;<samp><span class="samp">2/pi</span></samp>&rsquo;. 
+Toss 100 matchsticks to estimate &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;.  (If you want still more fun,
+the probability that the GCD (<kbd>k&nbsp;g</kbd><!-- /@w -->) of two large integers is
+one turns out to be
+<!-- @math{6/\pi^2}. -->
+&lsquo;<samp><span class="samp">6/pi^2</span></samp>&rsquo;. 
+That provides yet another way to estimate &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;.) 
+See <a href="List-Answer-12.html#List-Answer-12">12</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 13.</strong>  An algebraic entry of a string in
+double-quote marks, &lsquo;<samp><span class="samp">"hello"</span></samp>&rsquo;, creates a vector of the numerical
+(ASCII) codes of the characters (here, &lsquo;<samp><span class="samp">[104, 101, 108, 108, 111]</span></samp>&rsquo;). 
+Sometimes it is convenient to compute a <dfn>hash code</dfn> of a string,
+which is just an integer that represents the value of that string. 
+Two equal strings have the same hash code; two different strings
+<dfn>probably</dfn> have different hash codes.  (For example, Calc has
+over 400 function names, but Emacs can quickly find the definition for
+any given name because it has sorted the functions into &ldquo;buckets&rdquo; by
+their hash codes.  Sometimes a few names will hash into the same bucket,
+but it is easier to search among a few names than among all the names.) 
+One popular hash function is computed as follows:  First set &lsquo;<samp><span class="samp">h = 0</span></samp>&rsquo;. 
+Then, for each character from the string in turn, set &lsquo;<samp><span class="samp">h = 3h + c_i</span></samp>&rsquo;
+where &lsquo;<samp><span class="samp">c_i</span></samp>&rsquo; is the character's ASCII code.  If we have 511 buckets,
+we then take the hash code modulo 511 to get the bucket number.  Develop a
+simple command or commands for converting string vectors into hash codes. 
+The hash code for &lsquo;<samp><span class="samp">"Testing, 1, 2, 3"</span></samp>&rsquo; is 1960915098, which modulo
+511 is 121.  See <a href="List-Answer-13.html#List-Answer-13">13</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 14.</strong>  The <kbd>H V R</kbd> and <kbd>H V U</kbd>
+commands do nested function evaluations.  <kbd>H V U</kbd> takes a starting
+value and a number of steps <var>n</var> from the stack; it then applies the
+function you give to the starting value 0, 1, 2, up to <var>n</var> times
+and returns a vector of the results.  Use this command to create a
+&ldquo;random walk&rdquo; of 50 steps.  Start with the two-dimensional point
+&lsquo;<samp><span class="samp">(0,0)</span></samp>&rsquo;; then take one step a random distance between <i>-1</i> and 1
+in both &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo;; then take another step, and so on.  Use the
+<kbd>g f</kbd> command to display this random walk.  Now modify your random
+walk to walk a unit distance, but in a random direction, at each step. 
+(Hint:  The <code>sincos</code> function returns a vector of the cosine and
+sine of an angle.)  See <a href="List-Answer-14.html#List-Answer-14">14</a>. (&bull;)
+
+   </body></html>
+

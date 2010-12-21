@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Process/Prefix - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Various.html#Various" title="Various">
+<link rel="next" href="Interactive.html#Interactive" title="Interactive">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Process%2fPrefix"></a>
+<a name="Process_002fPrefix"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Interactive.html#Interactive">Interactive</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
+<hr>
+</div>
+
+<h3 class="section">8.1 Process/Prefix</h3>
+
+<p><a name="index-process_002fprefix-convention-2714"></a>
+Many functions, among them functions for moving, decoding and saving
+articles, use what is known as the <dfn>Process/Prefix convention</dfn>.
+
+   <p>This is a method for figuring out what articles the user wants the
+command to be performed on.
+
+   <p>It goes like this:
+
+   <p>If the numeric prefix is N, perform the operation on the next N
+articles, starting with the current one.  If the numeric prefix is
+negative, perform the operation on the previous N articles, starting
+with the current one.
+
+   <p><a name="index-transient_002dmark_002dmode-2715"></a>If <code>transient-mark-mode</code> in non-<code>nil</code> and the region is
+active, all articles in the region will be worked upon.
+
+   <p>If there is no numeric prefix, but some articles are marked with the
+process mark, perform the operation on the articles marked with
+the process mark.
+
+   <p>If there is neither a numeric prefix nor any articles marked with the
+process mark, just perform the operation on the current article.
+
+   <p>Quite simple, really, but it needs to be made clear so that surprises
+are avoided.
+
+   <p>Commands that react to the process mark will push the current list of
+process marked articles onto a stack and will then clear all process
+marked articles.  You can restore the previous configuration with the
+<kbd>M P y</kbd> command (see <a href="Setting-Process-Marks.html#Setting-Process-Marks">Setting Process Marks</a>).
+
+   <p><a name="index-gnus_002dsummary_002dgoto_002dunread-2716"></a>One thing that seems to shock &amp; horrify lots of people is that, for
+instance, <kbd>3 d</kbd> does exactly the same as <kbd>d</kbd> <kbd>d</kbd> <kbd>d</kbd>. 
+Since each <kbd>d</kbd> (which marks the current article as read) by default
+goes to the next unread article after marking, this means that <kbd>3 d</kbd>
+will mark the next three unread articles as read, no matter what the
+summary buffer looks like.  Set <code>gnus-summary-goto-unread</code> to
+<code>nil</code> for a more straightforward action.
+
+   <p>Many commands do not use the process/prefix convention.  All commands
+that do explicitly say so in this manual.  To apply the process/prefix
+convention to commands that do not use it, you can use the <kbd>M-&amp;</kbd>
+command.  For instance, to mark all the articles in the group as
+expirable, you could say <kbd>M P b M-&amp; E</kbd>.
+
+   </body></html>
+

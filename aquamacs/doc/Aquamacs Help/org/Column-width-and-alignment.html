@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Column width and alignment - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tables.html#Tables" title="Tables">
+<link rel="prev" href="Built_002din-table-editor.html#Built_002din-table-editor" title="Built-in table editor">
+<link rel="next" href="Column-groups.html#Column-groups" title="Column groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Column-width-and-alignment"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Column-groups.html#Column-groups">Column groups</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Built_002din-table-editor.html#Built_002din-table-editor">Built-in table editor</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tables.html#Tables">Tables</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Column width and alignment</h3>
+
+<p><a name="index-narrow-columns-in-tables-203"></a><a name="index-alignment-in-tables-204"></a>
+The width of columns is automatically determined by the table editor.  And
+also the alignment of a column is determined automatically from the fraction
+of number-like versus non-number fields in the column.
+
+   <p>Sometimes a single field or a few fields need to carry more text,
+leading to inconveniently wide columns.  To limit<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> the width of a column, one field anywhere in
+the column may contain just the string &lsquo;<samp><span class="samp">&lt;N&gt;</span></samp>&rsquo; where &lsquo;<samp><span class="samp">N</span></samp>&rsquo; is an
+integer specifying the width of the column in characters.  The next
+re-align will then set the width of this column to no more than this
+value.
+
+<pre class="example">     |---+------------------------------|               |---+--------|
+     |   |                              |               |   | &lt;6&gt;    |
+     | 1 | one                          |               | 1 | one    |
+     | 2 | two                          |     ----\     | 2 | two    |
+     | 3 | This is a long chunk of text |     ----/     | 3 | This=&gt; |
+     | 4 | four                         |               | 4 | four   |
+     |---+------------------------------|               |---+--------|
+</pre>
+   <p class="noindent">Fields that are wider become clipped and end in the string &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;. 
+Note that the full text is still in the buffer, it is only invisible. 
+To see the full text, hold the mouse over the field&mdash;a tool-tip window
+will show the full content.  To edit such a field, use the command
+<kbd>C-c `</kbd> (that is <kbd>C-c</kbd> followed by the backquote).  This will
+open a new window with the full field.  Edit it and finish with <kbd>C-c
+C-c</kbd>.
+
+   <p><a name="index-org_002dstartup_002dalign_002dall_002dtables-205"></a>When visiting a file containing a table with narrowed columns, the
+necessary character hiding has not yet happened, and the table needs to
+be aligned before it looks nice.  Setting the option
+<code>org-startup-align-all-tables</code> will realign all tables in a file
+upon visiting, but also slow down startup.  You can also set this option
+on a per-file basis with:
+
+<pre class="example">     #+STARTUP: align
+     #+STARTUP: noalign
+</pre>
+   <p>If you would like to overrule the automatic alignment of number-rich columns
+to the right and of string-rich column to the left, you and use &lsquo;<samp><span class="samp">&lt;r&gt;</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">&lt;l&gt;</span></samp>&rsquo; in a similar fashion.  You may also combine alignment and field
+width like this: &lsquo;<samp><span class="samp">&lt;l10&gt;</span></samp>&rsquo;.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This feature
+does not work on XEmacs.</p>
+
+   <hr></div>
+
+   </body></html>
+

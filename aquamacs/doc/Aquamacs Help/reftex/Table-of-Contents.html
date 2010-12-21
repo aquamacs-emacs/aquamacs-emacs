@@ -1,0 +1,241 @@
+<html lang="en">
+<head>
+<title>Table of Contents - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Introduction.html#Introduction" title="Introduction">
+<link rel="next" href="Labels-and-References.html#Labels-and-References" title="Labels and References">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Table-of-Contents"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Labels-and-References.html#Labels-and-References">Labels and References</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Introduction.html#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">2 Table of Contents</h2>
+
+<p><a name="index-g_t_0040file_007b_002atoc_002a_007d-buffer-16"></a><a name="index-Structure-editing-17"></a><a name="index-Table-of-contents-buffer-18"></a><a name="index-reftex_002dtoc-19"></a><a name="index-C_002dc-_003d-20"></a>
+Pressing the keys <kbd>C-c =</kbd> pops up a buffer showing the table of
+contents of the document.  By default, this <samp><span class="file">*toc*</span></samp> buffer shows
+only the sections of a document.  Using the <kbd>l</kbd> and <kbd>i</kbd> keys you
+can display all labels and index entries defined in the document as
+well.
+
+   <p>With the cursor in any of the lines denoting a location in the
+document, simple key strokes will display the corresponding part in
+another window, jump to that location, or perform other actions.
+
+   <p><a name="index-g_t_003f-21"></a>Here is a list of special commands in the <samp><span class="file">*toc*</span></samp> buffer.  A
+summary of this information is always available by pressing
+<kbd>?</kbd>.
+
+     <dl>
+<dt><b>General</b>
+<br><dt><kbd>?</kbd><dd>Display a summary of commands.
+
+     <br><dt><kbd>0-9, -</kbd><dd>Prefix argument.
+
+     <br><dt><b>Moving around</b>
+<br><dt><kbd>n</kbd><dd>Goto next entry in the table of context.
+
+     <br><dt><kbd>p</kbd><dd>Goto previous entry in the table of context.
+
+     <br><dt><kbd>C-c C-n</kbd><dd>Goto next section heading.  Useful when many labels and index entries
+separate section headings.
+
+     <br><dt><kbd>C-c C-p</kbd><dd>Goto previous section heading.
+
+     <br><dt><kbd>N z</kbd><dd>Jump to section N, using the prefix arg.  For example, <kbd>3 z</kbd> jumps
+to section 3.
+
+     <br><dt><b>Access to document locations</b>
+<br><dt><kbd>&lt;SPC&gt;</kbd><dd>Show the corresponding location in another window.  This command does
+<em>not</em> select that other window.
+
+     <br><dt><kbd>&lt;TAB&gt;</kbd><dd>Goto the location in another window.
+
+     <br><dt><kbd>&lt;RET&gt;</kbd><dd>Go to the location and hide the <samp><span class="file">*toc*</span></samp> buffer.  This will restore
+the window configuration before <code>reftex-toc</code> (<kbd>C-c =</kbd>) was
+called.
+
+     <br><dt><kbd>mouse-2</kbd><dd><a name="index-reftex_002dhighlight_002dselection-22"></a>Clicking with mouse button 2 on a line has the same effect as &lt;RET&gt;. 
+See also variable <code>reftex-highlight-selection</code>, <a href="Options-_0028Fontification_0029.html#Options-_0028Fontification_0029">Options (Fontification)</a>.
+
+     <br><dt><kbd>f</kbd><dd><a name="index-reftex_002dtoc_002dfollow_002dmode-23"></a><a name="index-reftex_002drevisit_002dto_002dfollow-24"></a>Toggle follow mode.  When follow mode is active, the other window will
+always show the location corresponding to the line at point in the
+<samp><span class="file">*toc*</span></samp> buffer.  This is similar to pressing &lt;SPC&gt; after each
+cursor motion.  The default for this flag can be set with the variable
+<code>reftex-toc-follow-mode</code>.  Note that only context in files already
+visited is shown.  <b>RefTeX</b> will not visit a file just for follow
+mode.  See, however, the variable
+<code>reftex-revisit-to-follow</code>.
+
+     <br><dt><kbd>.</kbd><dd>Show calling point in another window.  This is the point from where
+<code>reftex-toc</code> was last called.
+
+     <br><dt><b>Promotion and Demotion</b><dd>
+
+     <br><dt><kbd>&lt;</kbd><dd>Promote the current section.  This will convert <code>\section</code> to
+<code>\chapter</code>, <code>\subsection</code> to <code>\section</code> etc. If there is
+an active region, all sections in the region will be promoted, including
+the one at point.  To avoid mistakes, <b>RefTeX</b> requires a fresh
+document scan before executing this command - if necessary, it will
+automatically do this scan and ask the user to repeat the promotion
+command.
+
+     <br><dt><kbd>&gt;</kbd><dd>Demote the current section.  This is the opposite of promotion.  It will
+convert <code>\chapter</code> to <code>\section</code> etc.  If there is an active
+region, all sections in the region will be demoted, including the one at
+point.
+
+     <br><dt><kbd>M-%</kbd><dd>Rename the label at point.  While generally not recommended, this can be
+useful when a package like <samp><span class="file">fancyref</span></samp> is used where the label
+prefix determines the wording of a reference.  After a
+promotion/demotion it may be necessary to change a few labels from
+&lsquo;<samp><span class="samp">sec:xyz</span></samp>&rsquo; to &lsquo;<samp><span class="samp">cha:xyz</span></samp>&rsquo; or vice versa.  This command can be
+used to do this - it launches a query replace to rename the definition
+and all references of a label.
+
+     <br><dt><b>Exiting</b>
+<br><dt><kbd>q</kbd><dd>Hide the <samp><span class="file">*toc*</span></samp> buffer, return to the position where
+<code>reftex-toc</code> was last called.
+
+     <br><dt><kbd>k</kbd><dd>Kill the <samp><span class="file">*toc*</span></samp> buffer, return to the position where
+<code>reftex-toc</code> was last called.
+
+     <br><dt><kbd>C-c &gt;</kbd><dd>Switch to the <samp><span class="file">*Index*</span></samp> buffer of this document.  With prefix
+&lsquo;<samp><span class="samp">2</span></samp>&rsquo;, restrict the index to the section at point in the <samp><span class="file">*toc*</span></samp>
+buffer.
+
+     <br><dt><b>Controlling what gets displayed</b><dd>
+
+     <br><dt><kbd>t</kbd><dd><a name="index-reftex_002dtoc_002dmax_002dlevel-25"></a>Change the maximum level of toc entries displayed in the <samp><span class="file">*toc*</span></samp>
+buffer.  Without prefix arg, all levels will be included.  With prefix
+arg (e.g <kbd>3 t</kbd>), ignore all toc entries with level greater than
+<var>arg</var> (3 in this case).  Chapters are level 1, sections are level 2. 
+The mode line &lsquo;<samp><span class="samp">T&lt;&gt;</span></samp>&rsquo; indicator shows the current value.  The default
+depth can be configured with the variable
+<code>reftex-toc-max-level</code>.
+
+     <br><dt><kbd>F</kbd><dd><a name="index-reftex_002dtoc_002dinclude_002dfile_002dboundaries-26"></a>Toggle the display of the file borders of a multifile document in the
+<samp><span class="file">*toc*</span></samp> buffer.  The default for this flag can be set with the
+variable <code>reftex-toc-include-file-boundaries</code>.
+
+     <br><dt><kbd>l</kbd><dd><a name="index-reftex_002dtoc_002dinclude_002dlabels-27"></a>Toggle the display of labels in the <samp><span class="file">*toc*</span></samp> buffer.  The default
+for this flag can be set with the variable
+<code>reftex-toc-include-labels</code>.  When called with a prefix argument,
+<b>RefTeX</b> will prompt for a label type and include only labels of
+the selected type in the <samp><span class="file">*toc*</span></samp> buffer.  The mode line &lsquo;<samp><span class="samp">L&lt;&gt;</span></samp>&rsquo;
+indicator shows which labels are included.
+
+     <br><dt><kbd>i</kbd><dd><a name="index-reftex_002dtoc_002dinclude_002dindex_002dentries-28"></a>Toggle the display of index entries in the <samp><span class="file">*toc*</span></samp> buffer.  The
+default for this flag can be set with the variable
+<code>reftex-toc-include-index-entries</code>.  When called with a prefix
+argument, <b>RefTeX</b> will prompt for a specific index and include
+only entries in the selected index in the <samp><span class="file">*toc*</span></samp> buffer.  The mode
+line &lsquo;<samp><span class="samp">I&lt;&gt;</span></samp>&rsquo; indicator shows which index is used.
+
+     <br><dt><kbd>c</kbd><dd><a name="index-reftex_002dtoc_002dinclude_002dcontext-29"></a>Toggle the display of label and index context in the <samp><span class="file">*toc*</span></samp>
+buffer.  The default for this flag can be set with the variable
+<code>reftex-toc-include-context</code>.
+
+     <br><dt><b>Updating the buffer</b><dd>
+
+     <br><dt><kbd>g</kbd><dd>Rebuild the <samp><span class="file">*toc*</span></samp> buffer.  This does <em>not</em> rescan the
+document.
+
+     <br><dt><kbd>r</kbd><dd><a name="index-reftex_002denable_002dpartial_002dscans-30"></a>Reparse the LaTeX document and rebuild the <samp><span class="file">*toc*</span></samp> buffer.  When
+<code>reftex-enable-partial-scans</code> is non-<code>nil</code>, rescan only the file this
+location is defined in, not the entire document.
+
+     <br><dt><kbd>C-u r</kbd><dd>Reparse the <em>entire</em> LaTeX document and rebuild the <samp><span class="file">*toc*</span></samp>
+buffer.
+
+     <br><dt><kbd>x</kbd><dd>Switch to the <samp><span class="file">*toc*</span></samp> buffer of an external document.  When the
+current document is using the <code>xr</code> package (see <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a>), <b>RefTeX</b> will switch to one of the external
+documents.
+
+     <br><dt><b>Automatic recentering</b><dd>
+
+     <br><dt><kbd>d</kbd><dd>Toggle the display of a dedicated frame displaying just the <samp><span class="file">*toc*</span></samp>
+buffer.  Follow mode and visiting locations will not work that frame,
+but automatic recentering will make this frame always show your current
+editing location in the document (see below).
+
+     <br><dt><kbd>a</kbd><dd>Toggle the automatic recentering of the <samp><span class="file">*toc*</span></samp> buffer.  When this
+option is on, moving around in the document will cause the <samp><span class="file">*toc*</span></samp>
+to always highlight the current section.  By default, this option is
+active while the dedicated <samp><span class="file">*TOC*</span></samp> frame exists.  See also the
+variable <code>reftex-auto-recenter-toc</code>.
+
+   </dl>
+
+   <p><a name="index-reftex_002dtoc_002dmap-31"></a>In order to define additional commands for the <samp><span class="file">*toc*</span></samp> buffer, the
+keymap <code>reftex-toc-map</code> may be used.
+
+   <p><a name="index-reftex_002dtoc_002drecenter-32"></a><a name="index-reftex_002dauto_002drecenter_002dtoc-33"></a><a name="index-reftex_002didle_002dtime-34"></a><a name="index-g_t_0040file_007b_002atoc_002a_007d-buffer_002c-recentering-35"></a><a name="index-Table-of-contents-buffer_002c-recentering-36"></a><a name="index-C_002dc-_002d-37"></a>If you call <code>reftex-toc</code> while the <samp><span class="file">*toc*</span></samp> buffer already
+exists, the cursor will immediately jump to the right place, i.e. the
+section from which <code>reftex-toc</code> was called will be highlighted. 
+The command <kbd>C-c -</kbd> (<code>reftex-toc-recenter</code>) will only redisplay
+the <samp><span class="file">*toc*</span></samp> buffer and highlight the correct line without actually
+selecting the <samp><span class="file">*toc*</span></samp> window.  This can be useful to quickly find
+out where in the document you currently are.  You can also automate this
+by asking RefTeX to keep track of your current editing position in the
+TOC.  The TOC window will then be updated whenever you stop typing for
+more than <code>reftex-idle-time</code> seconds.  By default this works only
+with the dedicated <samp><span class="file">*TOC*</span></samp> frame.  But you can also force automatic
+recentering of the TOC window on the current frame with
+<pre class="lisp">     (setq reftex-auto-recenter-toc t)
+</pre>
+   <p><a name="index-Sectioning-commands-38"></a><a name="index-KOMA_002dScript_002c-LaTeX-classes-39"></a><a name="index-LaTeX-classes_002c-KOMA_002dScript-40"></a><a name="index-TOC-entries-for-environments-41"></a><a name="index-reftex_002dsection_002dlevels-42"></a>The section macros recognized by <b>RefTeX</b> are all LaTeX section
+macros (from <code>\part</code> to <code>\subsubparagraph</code>) and the commands
+<code>\addchap</code> and <code>\addsec</code> from the KOMA-Script classes. 
+Additional macros can be configured with the variable
+<code>reftex-section-levels</code>.  It is also possible to add certain LaTeX
+environments to the table of contents.  This is probably only useful for
+theorem-like environments. See <a href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>, for an
+example.
+
+   </body></html>
+

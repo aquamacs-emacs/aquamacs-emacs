@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>DEL Does Not Delete - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lossage.html#Lossage" title="Lossage">
+<link rel="next" href="Stuck-Recursive.html#Stuck-Recursive" title="Stuck Recursive">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="DEL-Does-Not-Delete"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Stuck-Recursive.html#Stuck-Recursive">Stuck Recursive</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lossage.html#Lossage">Lossage</a>
+<hr>
+</div>
+
+<h3 class="section">59.1 If &lt;DEL&gt; Fails to Delete</h3>
+
+<p><a name="index-g_t_0040key_007bDEL_007d-vs-_0040key_007bBACKSPACE_007d-4095"></a><a name="index-g_t_0040key_007bBACKSPACE_007d-vs-_0040key_007bDEL_007d-4096"></a><a name="index-usual-erasure-key-4097"></a>
+  Every keyboard has a large key, usually labelled &lt;Backspace&gt;,
+which is ordinarily used to erase the last character that you typed. 
+We call this key <dfn>the usual erasure key</dfn>.  In Emacs, it is
+supposed to be equivalent to &lt;DEL&gt;.
+
+   <p>When Emacs starts up on a graphical display, it determines
+automatically which key should be &lt;DEL&gt;.  In some unusual cases,
+Emacs gets the wrong information from the system.  If the usual
+erasure key deletes forwards instead of backwards, that is probably
+what happened&mdash;Emacs ought to be treating the &lt;Backspace&gt; key as
+&lt;DEL&gt;, but it isn't.
+
+   <p>Some keyboards also have a &lt;Delete&gt; key, which is ordinarily
+used to delete forwards.  If this key deletes backward in Emacs, that
+too suggests Emacs got the wrong information&mdash;but in the opposite
+sense.
+
+   <p>On a text-only terminal, if you find the usual erasure key prompts
+for a Help command, like <kbd>Control-h</kbd>, instead of deleting a
+character, it means that key is actually sending the &lt;BS&gt;
+character.  Emacs ought to be treating &lt;BS&gt; as &lt;DEL&gt;, but it
+isn't.
+
+   <p>In all of those cases, the immediate remedy is the same: use the
+command <kbd>M-x normal-erase-is-backspace-mode</kbd>.  This toggles
+between the two modes that Emacs supports for handling &lt;DEL&gt;, so
+if Emacs starts in the wrong mode, this should switch to the right
+mode.  On a text-only terminal, if you want to ask for help when
+&lt;BS&gt; is treated as &lt;DEL&gt;, use &lt;F1&gt;; <kbd>C-?</kbd> may also
+work, if it sends character code 127.
+
+   <p><a name="index-normal_002derase_002dis_002dbackspace_002dmode-4098"></a>  To fix the problem automatically for every Emacs session, you can
+put one of the following lines into your <samp><span class="file">.emacs</span></samp> file
+(see <a href="Init-File.html#Init-File">Init File</a>).  For the first case above, where &lt;Backspace&gt;
+deletes forwards instead of backwards, use this line to make
+&lt;Backspace&gt; act as &lt;DEL&gt; (resulting in behavior compatible
+with Emacs 20 and previous versions):
+
+<pre class="lisp">     (normal-erase-is-backspace-mode 0)
+</pre>
+   <p class="noindent">For the other two cases, use this line:
+
+<pre class="lisp">     (normal-erase-is-backspace-mode 1)
+</pre>
+   <p><a name="index-normal_002derase_002dis_002dbackspace-4099"></a>  Another way to fix the problem for every Emacs session is to
+customize the variable <code>normal-erase-is-backspace</code>: the value
+<code>t</code> specifies the mode where &lt;BS&gt; or &lt;BACKSPACE&gt; is
+&lt;DEL&gt;, and <code>nil</code> specifies the other mode.  See <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>.
+
+   </body></html>
+

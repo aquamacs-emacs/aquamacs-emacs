@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Highlighting and Menus - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Various.html#Various" title="Various">
+<link rel="prev" href="Mode-Lines.html#Mode-Lines" title="Mode Lines">
+<link rel="next" href="Buttons.html#Buttons" title="Buttons">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Highlighting-and-Menus"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buttons.html#Buttons">Buttons</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Lines.html#Mode-Lines">Mode Lines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
+<hr>
+</div>
+
+<h3 class="section">8.9 Highlighting and Menus</h3>
+
+<p><a name="index-visual-2756"></a><a name="index-highlighting-2757"></a><a name="index-menus-2758"></a>
+<a name="index-gnus_002dvisual-2759"></a>The <code>gnus-visual</code> variable controls most of the Gnus-prettifying
+aspects.  If <code>nil</code>, Gnus won't attempt to create menus or use fancy
+colors or fonts.  This will also inhibit loading the <samp><span class="file">gnus-vis.el</span></samp>
+file.
+
+   <p>This variable can be a list of visual properties that are enabled.  The
+following elements are valid, and are all included by default:
+
+     <dl>
+<dt><code>group-highlight</code><dd>Do highlights in the group buffer. 
+<br><dt><code>summary-highlight</code><dd>Do highlights in the summary buffer. 
+<br><dt><code>article-highlight</code><dd>Do highlights in the article buffer. 
+<br><dt><code>highlight</code><dd>Turn on highlighting in all buffers. 
+<br><dt><code>group-menu</code><dd>Create menus in the group buffer. 
+<br><dt><code>summary-menu</code><dd>Create menus in the summary buffers. 
+<br><dt><code>article-menu</code><dd>Create menus in the article buffer. 
+<br><dt><code>browse-menu</code><dd>Create menus in the browse buffer. 
+<br><dt><code>server-menu</code><dd>Create menus in the server buffer. 
+<br><dt><code>score-menu</code><dd>Create menus in the score buffers. 
+<br><dt><code>menu</code><dd>Create menus in all buffers. 
+</dl>
+
+   <p>So if you only want highlighting in the article buffer and menus in all
+buffers, you could say something like:
+
+<pre class="lisp">     (setq gnus-visual '(article-highlight menu))
+</pre>
+   <p>If you want highlighting only and no menus whatsoever, you'd say:
+
+<pre class="lisp">     (setq gnus-visual '(highlight))
+</pre>
+   <p>If <code>gnus-visual</code> is <code>t</code>, highlighting and menus will be used
+in all Gnus buffers.
+
+   <p>Other general variables that influence the look of all buffers include:
+
+     <dl>
+<dt><code>gnus-mouse-face</code><dd><a name="index-gnus_002dmouse_002dface-2760"></a>This is the face (i.e., font) used for mouse highlighting in Gnus.  No
+mouse highlights will be done if <code>gnus-visual</code> is <code>nil</code>.
+
+   </dl>
+
+   <p>There are hooks associated with the creation of all the different menus:
+
+     <dl>
+<dt><code>gnus-article-menu-hook</code><dd><a name="index-gnus_002darticle_002dmenu_002dhook-2761"></a>Hook called after creating the article mode menu.
+
+     <br><dt><code>gnus-group-menu-hook</code><dd><a name="index-gnus_002dgroup_002dmenu_002dhook-2762"></a>Hook called after creating the group mode menu.
+
+     <br><dt><code>gnus-summary-menu-hook</code><dd><a name="index-gnus_002dsummary_002dmenu_002dhook-2763"></a>Hook called after creating the summary mode menu.
+
+     <br><dt><code>gnus-server-menu-hook</code><dd><a name="index-gnus_002dserver_002dmenu_002dhook-2764"></a>Hook called after creating the server mode menu.
+
+     <br><dt><code>gnus-browse-menu-hook</code><dd><a name="index-gnus_002dbrowse_002dmenu_002dhook-2765"></a>Hook called after creating the browse mode menu.
+
+     <br><dt><code>gnus-score-menu-hook</code><dd><a name="index-gnus_002dscore_002dmenu_002dhook-2766"></a>Hook called after creating the score mode menu.
+
+   </dl>
+
+   </body></html>
+

@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Internal archiving - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Archiving.html#Archiving" title="Archiving">
+<link rel="prev" href="Moving-subtrees.html#Moving-subtrees" title="Moving subtrees">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Internal-archiving"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Moving-subtrees.html#Moving-subtrees">Moving subtrees</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Archiving.html#Archiving">Archiving</a>
+<hr>
+</div>
+
+<h4 class="subsection">9.6.2 Internal archiving</h4>
+
+<p>If you want to just switch off (for agenda views) certain subtrees without
+moving them to a different file, you can use the <code>ARCHIVE tag</code>.
+
+   <p>A headline that is marked with the ARCHIVE tag (see <a href="Tags.html#Tags">Tags</a>) stays at
+its location in the outline tree, but behaves in the following way:
+     <ul>
+<li><a name="index-org_002dcycle_002dopen_002darchived_002dtrees-711"></a>It does not open when you attempt to do so with a visibility cycling
+command (see <a href="Visibility-cycling.html#Visibility-cycling">Visibility cycling</a>).  You can force cycling archived
+subtrees with <kbd>C-&lt;TAB&gt;</kbd>, or by setting the option
+<code>org-cycle-open-archived-trees</code>.  Also normal outline commands like
+<code>show-all</code> will open archived subtrees. 
+<li><a name="index-org_002dsparse_002dtree_002dopen_002darchived_002dtrees-712"></a>During sparse tree construction (see <a href="Sparse-trees.html#Sparse-trees">Sparse trees</a>), matches in
+archived subtrees are not exposed, unless you configure the option
+<code>org-sparse-tree-open-archived-trees</code>. 
+<li><a name="index-org_002dagenda_002dskip_002darchived_002dtrees-713"></a>During agenda view construction (see <a href="Agenda-Views.html#Agenda-Views">Agenda Views</a>), the content of
+archived trees is ignored unless you configure the option
+<code>org-agenda-skip-archived-trees</code>, in which case these trees will always
+be included.  In the agenda you can press <kbd>v a</kbd> to get archives
+temporarily included. 
+<li><a name="index-org_002dexport_002dwith_002darchived_002dtrees-714"></a>Archived trees are not exported (see <a href="Exporting.html#Exporting">Exporting</a>), only the headline
+is.  Configure the details using the variable
+<code>org-export-with-archived-trees</code>. 
+<li><a name="index-org_002dcolumns_002dskip_002darrchived_002dtrees-715"></a>Archived trees are excluded from column view unless the variable
+<code>org-columns-skip-arrchived-trees</code> is configured to <code>nil</code>. 
+</ul>
+
+   <p>The following commands help managing the ARCHIVE tag:
+
+     
+<a name="index-C_002dc-C_002dx-a-716"></a>
+<dl><dt><kbd>C-c C-x a</kbd><dd>Toggle the ARCHIVE tag for the current headline.  When the tag is set,
+the headline changes to a shadowed face, and the subtree below it is
+hidden. 
+<a name="index-C_002du-C_002dc-C_002dx-a-717"></a><br><dt><kbd>C-u C-c C-x a</kbd><dd>Check if any direct children of the current headline should be archived. 
+To do this, each subtree is checked for open TODO entries.  If none are
+found, the command offers to set the ARCHIVE tag for the child.  If the
+cursor is <em>not</em> on a headline when this command is invoked, the
+level 1 trees will be checked. 
+<a name="index-C_002d_0040kbd_007bTAB_007d-718"></a><br><dt><kbd>C-TAB</kbd><dd>Cycle a tree even if it is tagged with ARCHIVE. 
+<a name="index-C_002dc-C_002dx-A-719"></a><br><dt><kbd>C-c C-x A</kbd><dd>Move the current entry to the <em>Archive Sibling</em>.  This is a sibling of
+the entry with the heading &lsquo;<samp><span class="samp">Archive</span></samp>&rsquo; and the tag &lsquo;<samp><span class="samp">ARCHIVE</span></samp>&rsquo;.  The
+entry becomes a child of that sibling and in this way retains a lot of its
+original context, including inherited tags and approximate position in the
+outline. 
+</dl>
+
+   </body></html>
+

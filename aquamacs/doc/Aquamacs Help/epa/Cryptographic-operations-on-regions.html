@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Cryptographic operations on regions - EasyPG Assistant User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="EasyPG Assistant User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Key-management.html#Key-management" title="Key management">
+<link rel="next" href="Cryptographic-operations-on-files.html#Cryptographic-operations-on-files" title="Cryptographic operations on files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EasyPG Assistant 1.0.0.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Cryptographic-operations-on-regions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Cryptographic-operations-on-files.html#Cryptographic-operations-on-files">Cryptographic operations on files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-management.html#Key-management">Key management</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Cryptographic operations on regions</h3>
+
+<div class="defun">
+&mdash; Command: <b>epa-decrypt-region</b><var> start end<a name="index-epa_002ddecrypt_002dregion-8"></a></var><br>
+<blockquote><p>Decrypt the current region between <var>start</var> and <var>end</var>.  It
+replaces the region with the decrypted text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-decrypt-armor-in-region</b><var> start end<a name="index-epa_002ddecrypt_002darmor_002din_002dregion-9"></a></var><br>
+<blockquote><p>Decrypt OpenPGP armors in the current region between <var>start</var> and
+<var>end</var>.  The difference from <code>epa-decrypt-region</code> is that
+<code>epa-decrypt-armor-in-region</code> searches armors in the region
+and applies <code>epa-decrypt-region</code> to each of them.  That is, this
+command does not alter the original text around armors. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-verify-region</b><var> start end<a name="index-epa_002dverify_002dregion-10"></a></var><br>
+<blockquote><p>Verify the current region between <var>start</var> and <var>end</var>.  It sends
+the verification result to the minibuffer or a popup window.  It
+replaces the region with the signed text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-verify-cleartext-in-region</b><var><a name="index-epa_002dverify_002dcleartext_002din_002dregion-11"></a></var><br>
+<blockquote><p>Verify OpenPGP cleartext blocks in the current region between
+<var>start</var> and <var>end</var>.  The difference from
+<code>epa-verify-region</code> is that <code>epa-verify-cleartext-in-region</code>
+searches OpenPGP cleartext blocks in the region and applies
+<code>epa-verify-region</code> to each of them.  That is, this command does
+not alter the original text around OpenPGP cleartext blocks. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-sign-region</b><var> start end signers type<a name="index-epa_002dsign_002dregion-12"></a></var><br>
+<blockquote><p>Sign the current region between <var>start</var> and <var>end</var>.  By
+default, it creates a cleartext signature.  If a prefix argument is
+given, it will let you select signing keys, and then a signature
+type. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-encrypt-region</b><var> start end recipients sign signers<a name="index-epa_002dencrypt_002dregion-13"></a></var><br>
+<blockquote><p>Encrypt the current region between <var>start</var> and <var>end</var>.  It will
+let you select recipients.  If a prefix argument is given, it will
+also ask you whether or not to sign the text before encryption and if
+you answered yes, it will let you select the signing keys. 
+</p></blockquote></div>
+
+   </body></html>
+

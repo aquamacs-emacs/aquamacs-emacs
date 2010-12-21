@@ -1,0 +1,358 @@
+<html lang="en">
+<head>
+<title>No Gnus - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="New-Features.html#New-Features" title="New Features">
+<link rel="prev" href="Oort-Gnus.html#Oort-Gnus" title="Oort Gnus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="No-Gnus"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Oort-Gnus.html#Oort-Gnus">Oort Gnus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="New-Features.html#New-Features">New Features</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.2.9.7 No Gnus</h5>
+
+<p><a name="index-No-Gnus-3098"></a>
+New features in No Gnus:
+<!-- FIXME: Gnus 5.12? -->
+
+<!-- *-texinfo-*- -->
+<!-- Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc. -->
+<!-- Permission is granted to anyone to make or distribute verbatim copies -->
+<!-- of this document as received, in any medium, provided that the -->
+<!-- copyright notice and this permission notice are preserved, -->
+<!-- thus giving the recipient permission to redistribute in turn. -->
+<!-- Permission is granted to distribute modified versions -->
+<!-- of this document, or of portions of it, -->
+<!-- under the above conditions, provided also that they -->
+<!-- carry prominent notices stating who last changed them. -->
+<!-- This file contains a list of news features Gnus.  It is supposed to be -->
+<!-- included in `gnus.texi'.  `GNUS-NEWS' is automatically generated from -->
+<!-- this file (see `gnus-news.el'). -->
+     <ul>
+<li>Installation changes
+
+          <ul>
+<li>Upgrading from previous (stable) version if you have used No Gnus.
+
+          <p>If you have tried No Gnus (the unstable Gnus branch leading to this
+release) but went back to a stable version, be careful when upgrading
+to this version.  In particular, you will probably want to remove the
+<samp><span class="file">~/News/marks</span></samp> directory (perhaps selectively), so that flags are
+read from your <samp><span class="file">~/.newsrc.eld</span></samp> instead of from the stale marks
+file, where this release will store flags for nntp.  See a later entry
+for more information about nntp marks.  Note that downgrading isn't
+safe in general.
+
+          <li>Incompatibility when switching from Emacs 23 to Emacs 22
+In Emacs 23, Gnus uses Emacs' new internal coding system <code>utf-8-emacs</code>
+for saving articles drafts and <samp><span class="file">~/.newsrc.eld</span></samp>.  These files may not
+be read correctly in Emacs 22 and below.  If you want to use Gnus across
+different Emacs versions, you may set <code>mm-auto-save-coding-system</code>
+to <code>emacs-mule</code>. 
+<!-- FIXME: Untested.  (Or did anyone test it?) -->
+<!-- Cf. http://thread.gmane.org/gmane.emacs.gnus.general/66251/focus=66344 -->
+
+          <li>Lisp files are now installed in <samp><span class="file">.../site-lisp/gnus/</span></samp> by default. 
+It defaulted to <samp><span class="file">.../site-lisp/</span></samp> formerly.  In addition to this,
+the new installer issues a warning if other Gnus installations which
+will shadow the latest one are detected.  You can then remove those
+shadows manually or remove them using <code>make
+remove-installed-shadows</code>.
+
+          <li>The installation directory name is allowed to have spaces and/or tabs. 
+</ul>
+
+     <li>New packages and libraries within Gnus
+
+          <ul>
+<li>Gnus includes the Emacs Lisp <acronym>SASL</acronym> library.
+
+          <p>This provides a clean <acronym>API</acronym> to <acronym>SASL</acronym> mechanisms from
+within Emacs.  The user visible aspects of this, compared to the earlier
+situation, include support for <acronym>DIGEST</acronym>-<acronym>MD5</acronym> and
+<acronym>NTLM</acronym>.   See <a href="../sasl/index.html#Top">Emacs SASL</a>.
+
+          <li>ManageSieve connections uses the <acronym>SASL</acronym> library by default.
+
+          <p>The primary change this brings is support for <acronym>DIGEST-MD5</acronym> and
+<acronym>NTLM</acronym>, when the server supports it.
+
+          <li>Gnus includes a password cache mechanism in password.el.
+
+          <p>It is enabled by default (see <code>password-cache</code>), with a short
+timeout of 16 seconds (see <code>password-cache-expiry</code>).  If
+<acronym>PGG</acronym> is used as the <acronym>PGP</acronym> back end, the <acronym>PGP</acronym>
+passphrase is managed by this mechanism.  Passwords for ManageSieve
+connections are managed by this mechanism, after querying the user
+about whether to do so.
+
+          <li>Using EasyPG with Gnus
+When EasyPG, is available, Gnus will use it instead of <acronym>PGG</acronym>. 
+EasyPG is an Emacs user interface to GNU Privacy Guard.  See <a href="../epa/index.html#Top">EasyPG Assistant user's manual</a>. 
+EasyPG is included in Emacs 23 and available separately as well. 
+</ul>
+
+     <li>Changes in group mode
+<!-- ************************ -->
+
+          <ul>
+<li>Old intermediate incoming mail files (<samp><span class="file">Incoming*</span></samp>) are deleted
+after a couple of days, not immediately.  See <a href="Mail-Source-Customization.html#Mail-Source-Customization">Mail Source Customization</a>. 
+(New in Gnus 5.10.10 / No Gnus 0.8)
+<!-- This entry is also present in the node "Oort Gnus". -->
+
+     </ul>
+
+     <li>Changes in summary and article mode
+
+          <ul>
+<li>Gnus now supports sticky article buffers.  Those are article buffers
+that are not reused when you select another article.  See <a href="Sticky-Articles.html#Sticky-Articles">Sticky Articles</a>.
+
+          <!-- @item Bookmarks -->
+          <!-- FIXME: To be added -->
+          <li>Gnus can selectively display &lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; articles
+with a WWW browser with <kbd>K H</kbd>.  See <a href="MIME-Commands.html#MIME-Commands">MIME Commands</a>.
+
+          <!-- gnus-registry-marks -->
+          <!-- FIXME: To be added -->
+          <li>International host names (<acronym>IDNA</acronym>) can now be decoded
+inside article bodies using <kbd>W i</kbd>
+(<code>gnus-summary-idna-message</code>).  This requires that GNU Libidn
+(<a href="http://www.gnu.org/software/libidn/">http://www.gnu.org/software/libidn/</a>) has been installed. 
+<!-- FIXME: Also mention @code{message-use-idna}? -->
+
+          <li>The non-<acronym>ASCII</acronym> group names handling has been much
+improved.  The back ends that fully support non-<acronym>ASCII</acronym> group
+names are now <code>nntp</code>, <code>nnml</code>, and <code>nnrss</code>.  Also the
+agent, the cache, and the marks features work with those back ends. 
+See <a href="Non_002dASCII-Group-Names.html#Non_002dASCII-Group-Names">Non-ASCII Group Names</a>.
+
+          <li>Gnus now displays <acronym>DNS</acronym> master files sent as text/dns
+using dns-mode.
+
+          <li>Gnus supports new limiting commands in the Summary buffer:
+<kbd>/ r</kbd> (<code>gnus-summary-limit-to-replied</code>) and <kbd>/ R</kbd>
+(<code>gnus-summary-limit-to-recipient</code>).  See <a href="Limiting.html#Limiting">Limiting</a>.
+
+          <li>You can now fetch all ticked articles from the server using
+<kbd>Y t</kbd> (<code>gnus-summary-insert-ticked-articles</code>).  See <a href="Summary-Generation-Commands.html#Summary-Generation-Commands">Summary Generation Commands</a>.
+
+          <li>Gnus supports a new sort command in the Summary buffer:
+<kbd>C-c C-s C-t</kbd> (<code>gnus-summary-sort-by-recipient</code>).  See <a href="Summary-Sorting.html#Summary-Sorting">Summary Sorting</a>.
+
+          <li><acronym>S/MIME</acronym> now features <acronym>LDAP</acronym> user certificate searches. 
+You need to configure the server in <code>smime-ldap-host-list</code>.
+
+          <li>URLs inside Open<acronym>PGP</acronym> headers are retrieved and imported
+to your PGP key ring when you click on them.
+
+          <li>Picons can be displayed right from the textual address, see
+<code>gnus-picon-style</code>.  See <a href="Picons.html#Picons">Picons</a>.
+
+          <li><acronym>ANSI</acronym> <acronym>SGR</acronym> control sequences can be transformed
+using <kbd>W A</kbd>.
+
+          <p><acronym>ANSI</acronym> sequences are used in some Chinese hierarchies for
+highlighting articles (<code>gnus-article-treat-ansi-sequences</code>).
+
+          <li>Gnus now MIME decodes articles even when they lack "MIME-Version" header. 
+This changes the default of <code>gnus-article-loose-mime</code>.
+
+          <li><code>gnus-decay-scores</code> can be a regexp matching score files. 
+For example, set it to &lsquo;<samp><span class="samp">\\.ADAPT\\'</span></samp>&rsquo; and only adaptive score files
+will be decayed.  See <a href="Score-Decays.html#Score-Decays">Score Decays</a>.
+
+          <li>Strings prefixing to the <code>To</code> and <code>Newsgroup</code> headers in
+summary lines when using <code>gnus-ignored-from-addresses</code> can be
+customized with <code>gnus-summary-to-prefix</code> and
+<code>gnus-summary-newsgroup-prefix</code>.  See <a href="To-From-Newsgroups.html#To-From-Newsgroups">To From Newsgroups</a>.
+
+          <li>You can replace <acronym>MIME</acronym> parts with external bodies. 
+See <code>gnus-mime-replace-part</code> and <code>gnus-article-replace-part</code>. 
+See <a href="MIME-Commands.html#MIME-Commands">MIME Commands</a>, <a href="Using-MIME.html#Using-MIME">Using MIME</a>.
+
+          <li>The option <code>mm-fill-flowed</code> can be used to disable treatment of
+format=flowed messages.  Also, flowed text is disabled when sending
+inline <acronym>PGP</acronym> signed messages.  See <a href="../emacs-mime/Flowed-text.html#Flowed-text">Flowed text</a>.  (New in Gnus 5.10.7)
+<!-- This entry is also present in the node "Oort Gnus". -->
+
+          <li>Now the new command <kbd>S W</kbd>
+(<code>gnus-article-wide-reply-with-original</code>) for a wide reply in the
+article buffer yanks a text that is in the active region, if it is set,
+as well as the <kbd>R</kbd> (<code>gnus-article-reply-with-original</code>) command. 
+Note that the <kbd>R</kbd> command in the article buffer no longer accepts a
+prefix argument, which was used to make it do a wide reply. 
+See <a href="Article-Keymap.html#Article-Keymap">Article Keymap</a>.
+
+          <li>The new command <kbd>C-h b</kbd>
+(<code>gnus-article-describe-bindings</code>) used in the article buffer now
+shows not only the article commands but also the real summary commands
+that are accessible from the article buffer.
+
+     </ul>
+
+     <li>Changes in Message mode
+
+          <ul>
+<li>Gnus now supports the &ldquo;hashcash&rdquo; client puzzle anti-spam mechanism. 
+Use <code>(setq message-generate-hashcash t)</code> to enable. 
+See <a href="Hashcash.html#Hashcash">Hashcash</a>.
+
+          <li>You can now drag and drop attachments to the Message buffer. 
+See <code>mml-dnd-protocol-alist</code> and <code>mml-dnd-attach-options</code>. 
+See <a href="../message/MIME.html#MIME">MIME</a>.
+
+          <li>The option <code>message-yank-empty-prefix</code> now controls how
+empty lines are prefixed in cited text.  See <a href="../message/Insertion-Variables.html#Insertion-Variables">Insertion Variables</a>.
+
+          <li>Gnus uses narrowing to hide headers in Message buffers. 
+The <code>References</code> header is hidden by default.  To make all
+headers visible, use <code>(setq message-hidden-headers nil)</code>. 
+See <a href="../message/Message-Headers.html#Message-Headers">Message Headers</a>.
+
+          <li>You can highlight different levels of citations like in the
+article buffer.  See <code>gnus-message-highlight-citation</code>.
+
+          <li><code>auto-fill-mode</code> is enabled by default in Message mode. 
+See <code>message-fill-column</code>.  See <a href="../message/Various-Message-Variables.html#Various-Message-Variables">Message Headers</a>.
+
+          <li>You can now store signature files in a special directory
+named <code>message-signature-directory</code>.
+
+          <li>The option <code>message-citation-line-format</code> controls the format
+of the "Whomever writes:" line.  You need to set
+<code>message-citation-line-function</code> to
+<code>message-insert-formatted-citation-line</code> as well. 
+</ul>
+
+     <li>Changes in back ends
+
+          <ul>
+<li>The nntp back end stores article marks in <samp><span class="file">~/News/marks</span></samp>.
+
+          <p>The directory can be changed using the (customizable) variable
+<code>nntp-marks-directory</code>, and marks can be disabled using the
+(back end) variable <code>nntp-marks-is-evil</code>.  The advantage of this
+is that you can copy <samp><span class="file">~/News/marks</span></samp> (using rsync, scp or
+whatever) to another Gnus installation, and it will realize what
+articles you have read and marked.  The data in <samp><span class="file">~/News/marks</span></samp>
+has priority over the same data in <samp><span class="file">~/.newsrc.eld</span></samp>.
+
+          <li>You can import and export your <acronym>RSS</acronym> subscriptions from
+<acronym>OPML</acronym> files.  See <a href="RSS.html#RSS">RSS</a>.
+
+          <li><acronym>IMAP</acronym> identity (<acronym>RFC</acronym> 2971) is supported.
+
+          <p>By default, Gnus does not send any information about itself, but you can
+customize it using the variable <code>nnimap-id</code>.
+
+          <li>The <code>nnrss</code> back end now supports multilingual text. 
+Non-<acronym>ASCII</acronym> group names for the <code>nnrss</code> groups are also
+supported.  See <a href="RSS.html#RSS">RSS</a>.
+
+          <li>Retrieving mail with <acronym>POP3</acronym> is supported over <acronym>SSL</acronym>/<acronym>TLS</acronym> and with StartTLS.
+
+          <li>The nnml back end allows other compression programs beside <samp><span class="file">gzip</span></samp>
+for compressed message files.  See <a href="Mail-Spool.html#Mail-Spool">Mail Spool</a>.
+
+          <li>The nnml back end supports group compaction.
+
+          <p>This feature, accessible via the functions
+<code>gnus-group-compact-group</code> (<kbd>G z</kbd> in the group buffer) and
+<code>gnus-server-compact-server</code> (<kbd>z</kbd> in the server buffer)
+renumbers all articles in a group, starting from 1 and removing gaps. 
+As a consequence, you get a correct total article count (until
+messages are deleted again).
+
+          <!-- @item nnmairix.el -->
+          <!-- FIXME -->
+          <!-- @item nnir.el -->
+          <!-- FIXME -->
+     </ul>
+
+     <li>Appearance
+<!-- Maybe it's not worth to separate this from "Miscellaneous"? -->
+
+          <ul>
+<li>The tool bar has been updated to use GNOME icons. 
+You can also customize the tool bars: <kbd>M-x customize-apropos RET
+-tool-bar$</kbd> should get you started.  (Only for Emacs, not in XEmacs.) 
+<!-- FIXME: Document this in the manual -->
+
+          <li>The tool bar icons are now (de)activated correctly
+in the group buffer, see the variable <code>gnus-group-update-tool-bar</code>. 
+Its default value depends on your Emacs version. 
+<!-- FIXME: Document this in the manual -->
+
+          <li>You can change the location of XEmacs' toolbars in Gnus buffers. 
+See <code>gnus-use-toolbar</code> and <code>message-use-toolbar</code>.
+
+     </ul>
+
+     <li>Miscellaneous changes
+
+          <ul>
+<li>Having edited the select-method for the foreign server in the
+server buffer is immediately reflected to the subscription of the groups
+which use the server in question.  For instance, if you change
+<code>nntp-via-address</code> into &lsquo;<samp><span class="samp">bar.example.com</span></samp>&rsquo; from
+&lsquo;<samp><span class="samp">foo.example.com</span></samp>&rsquo;, Gnus will connect to the news host by way of the
+intermediate host &lsquo;<samp><span class="samp">bar.example.com</span></samp>&rsquo; from next time.
+
+          <li>The <samp><span class="file">all.SCORE</span></samp> file can be edited from the group buffer
+using <kbd>W e</kbd>.
+
+          <li>You can set <code>gnus-mark-copied-or-moved-articles-as-expirable</code>
+to a non-<code>nil</code> value so that articles that have been read may be
+marked as expirable automatically when copying or moving them to a group
+that has auto-expire turned on.  The default is <code>nil</code> and copying
+and moving of articles behave as before; i.e., the expirable marks will
+be unchanged except that the marks will be removed when copying or
+moving articles to a group that has not turned auto-expire on. 
+See <a href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>.
+
+     </ul>
+
+   </ul>
+
+<!-- gnus-news.texi ends here. -->
+   </body></html>
+

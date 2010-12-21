@@ -112,7 +112,7 @@ Offer to send a bug report."
 	(when (file-newer-than-file-p file aquamacs-id-file)
 	  (let ((location (aq-chomp
 			   (shell-command-to-string
-			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
+			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
 	    (when (aquamacs-ask-for-confirmation (format "Aquamacs crashed the last time you ran it.  Send Report? 
 Please send a simple bug report by e-mailing the automatically
 generated crash report to us.
@@ -134,13 +134,15 @@ If kill-session is non-nil, kills the current session
   (let ((osx-version (shell-command-to-string 
 		      "/usr/bin/sw_vers | /usr/bin/awk '/ProductVersion/ {print $2}'"))
 		(aquamacs-args (or args (list "-q"))))
-	(if (string< "10.6" osx-version)
-	    (progn
-	      (async-shell-command (concat  "open -a " (car command-line-args) " -n --args " 
-					    (mapconcat 'identity aquamacs-args " ")))
-	      (if kill-session (kill-emacs)))
-	  (apply 'start-process "aquamacs-with-args" nil 
-		 (car command-line-args) aquamacs-args))))
+    (if (string< "10.6" osx-version)
+	(progn
+	  (apply #'call-process "open" nil 0 nil 
+		 "-a" (car command-line-args) 
+		 "-n" 
+		 "--args" aquamacs-args)
+	  (if kill-session (kill-emacs)))
+      (apply 'start-process "aquamacs-with-args" nil 
+	     (car command-line-args) aquamacs-args))))
 
 (defun start-vanilla-aquamacs (&optional kill-session)
   "Start a vanilla Aquamacs.

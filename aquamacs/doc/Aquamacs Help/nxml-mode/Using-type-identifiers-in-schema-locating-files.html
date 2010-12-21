@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Using type identifiers in schema locating files - nXML Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="nXML Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Schema-locating-files.html#Schema-locating-files" title="Schema locating files">
+<link rel="prev" href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema" title="Using the document element to locate a schema">
+<link rel="next" href="Using-multiple-schema-locating-files.html#Using-multiple-schema-locating-files" title="Using multiple schema locating files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents nxml-mode, an Emacs major mode for editing
+XML with RELAX NG support.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Using-type-identifiers-in-schema-locating-files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-multiple-schema-locating-files.html#Using-multiple-schema-locating-files">Using multiple schema locating files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema">Using the document element to locate a schema</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Schema-locating-files.html#Schema-locating-files">Schema locating files</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.4 Using type identifiers in schema locating files</h4>
+
+<p>Type identifiers allow a level of indirection in locating the
+schema for a document.  Instead of associating the document directly
+with a schema URI, the document is associated with a type identifier,
+which is in turn associated with a schema URI. nXML mode does not
+constrain the format of type identifiers.  They can be simply strings
+without any formal structure or they can be public identifiers or
+URIs.  Note that these type identifiers have nothing to do with the
+DOCTYPE declaration.  When comparing type identifiers, whitespace is
+normalized in the same way as with the &lsquo;<samp><span class="samp">xsd:token</span></samp>&rsquo;
+datatype: leading and trailing whitespace is stripped; other sequences
+of whitespace are normalized to a single space character.
+
+   <p>Each of the rules described in previous sections that uses a
+&lsquo;<samp><span class="samp">uri</span></samp>&rsquo; attribute to specify a schema, can instead use a
+&lsquo;<samp><span class="samp">typeId</span></samp>&rsquo; attribute to specify a type identifier.  The type
+identifier can be associated with a URI using a &lsquo;<samp><span class="samp">typeId</span></samp>&rsquo;
+element. For example,
+
+<pre class="example">     &lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+       &lt;namespace ns="http://www.w3.org/1999/xhtml" typeId="XHTML"/&gt;
+       &lt;typeId id="XHTML" typeId="XHTML Strict"/&gt;
+       &lt;typeId id="XHTML Strict" uri="xhtml-strict.rnc"/&gt;
+       &lt;typeId id="XHTML Transitional" uri="xhtml-transitional.rnc"/&gt;
+     &lt;/locatingRules&gt;
+</pre>
+   <p class="noindent">declares three type identifiers &lsquo;<samp><span class="samp">XHTML</span></samp>&rsquo; (representing the
+default variant of XHTML to be used), &lsquo;<samp><span class="samp">XHTML Strict</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">XHTML Transitional</span></samp>&rsquo;.  Such a schema locating file would
+use &lsquo;<samp><span class="samp">xhtml-strict.rnc</span></samp>&rsquo; for a document whose namespace is
+&lsquo;<samp><span class="samp">http://www.w3.org/1999/xhtml</span></samp>&rsquo;.  But it is considerably
+more flexible than a schema locating file that simply specified
+
+<pre class="example">     &lt;namespace ns="http://www.w3.org/1999/xhtml" uri="xhtml-strict.rnc"/&gt;
+</pre>
+   <p class="noindent">A user can easily use <kbd>C-c C-s C-t</kbd> to select between XHTML
+Strict and XHTML Transitional. Also, a user can easily add a catalog
+
+<pre class="example">     &lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+       &lt;typeId id="XHTML" typeId="XHTML Transitional"/&gt;
+     &lt;/locatingRules&gt;
+</pre>
+   <p class="noindent">that makes the default variant of XHTML be XHTML Transitional.
+
+   </body></html>
+
