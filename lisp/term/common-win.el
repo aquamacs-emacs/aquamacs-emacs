@@ -128,6 +128,16 @@ is not used)."
 	       (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 	       (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
 	       (cons (logior (lsh 0 16)  14) 'ns-show-prefs)
+	       (cons (logior (lsh 0 16)  17) 'ns-change-color)
+	       (cons (logior (lsh 0 16)  20) 'ns-check-spelling)
+	       (cons (logior (lsh 0 16)  21) 'ns-spelling-change)
+	       (cons (logior (lsh 0 16)  90) 'ns-application-activated)
+	       (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
+	       (cons (logior (lsh 0 16)  92) 'ns-application-reopen)
+	       (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
+	       (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
+	       (cons (logior (lsh 0 16)  132) 'ns-tool-bar-customized) ;; Aquamacs only
+	       (cons (logior (lsh 0 16)  133) 'ns-save-panel-closed) ;; Aquamacs only
 	       ))))
     (set-terminal-parameter frame 'x-setup-function-keys t)))
 

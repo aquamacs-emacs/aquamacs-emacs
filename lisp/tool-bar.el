@@ -75,7 +75,7 @@ underscore. EXTENSION and the original file name extension (starting
 with a period) are added to the file name.
 
 E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
-g  (mapcar
+  (mapcar
    (lambda (spec) 
      (let ((f (plist-get spec :file)) 
 	    )
