@@ -65,7 +65,10 @@
 
 ;; NXHTML
 
-(load "autostart.el")
+;; (load "autostart.el")
+;; (aquamacs-set-defaults '((nxhtml-menu-mode nil)))
+(autoload 'nxhtml-mode "autostart.el" "Major mode for editing XHTML documents." 'interactive nil)
+(autoload 'nxhtml-menu-mode "autostart.el" "Minor mode providing web project management and more." 'interactive nil)
 
 ;; JDEE
 
