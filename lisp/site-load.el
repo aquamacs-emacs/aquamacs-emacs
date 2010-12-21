@@ -88,6 +88,10 @@
 (aq-preload "filladapt")
  
 
+(let ((load-path (cons (concat default-directory "../lisp/aquamacs/edit-modes/")
+		       load-path)))
+  (aq-preload "mode-preloads"))
+
 ;; (load "mail/rfc822.el")
 ;; (load "mail/mail-utils.el")
 ;; (load "international/mule-util.el")
