@@ -1737,10 +1737,10 @@ key, a click, or a menu-item")))
 (define-key menu-bar-help-menu [sep1]
   '("--"))
 (define-key menu-bar-help-menu [send-emacs-bug-report]
-  '(menu-item ,(purecopy "Send Bug Report...") report-emacs-bug
+  `(menu-item ,(purecopy "Send Bug Report...") report-emacs-bug
 	      :help ,(purecopy "Send e-mail to Emacs maintainers")))
 (define-key menu-bar-help-menu [emacs-news]
-  '(menu-item ,(purecopy "Emacs News") view-emacs-news
+  `(menu-item ,(purecopy "Emacs News") view-emacs-news
 	      :help ,(purecopy "New features of this version")))
 
 (defun help-with-tutorial-spec-language ()
