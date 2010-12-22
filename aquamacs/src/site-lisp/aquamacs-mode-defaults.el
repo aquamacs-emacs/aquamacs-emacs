@@ -31,9 +31,12 @@
 ;; aquamacs-preloaded-load-path was set during preloading
 ;; it is used as a cache, since searching the file hierarchy takes plenty of time.
 ;; here, we just turn it into a full path name
-(let ((res (expand-file-name (mac-resources-path))))
+
+(let ((res (expand-file-name (mac-resources-path)))
+      (lp2))
   (dolist (p aquamacs-preloaded-load-path)
-    (push (concat res p) load-path)))
+    (push (concat res p) lp2))
+  (nconc load-path lp2))
 
 (unless aquamacs-preloaded-load-path
   (error "Error: load path cache was not computed during preloading."))

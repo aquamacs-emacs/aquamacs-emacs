@@ -36,10 +36,6 @@
 
 ;; Unit test  / check requirements
 (require 'aquamacs-tools)
-(aquamacs-require  '(boundp 'ns-command-modifier))
-(aquamacs-require  '(boundp 'ns-control-modifier))
-(aquamacs-require  '(boundp 'ns-alternate-modifier))
-
 (require 'emulate-mac-keyboard-mode)
 
 ;; To do: this should only happen when the mode is switched on

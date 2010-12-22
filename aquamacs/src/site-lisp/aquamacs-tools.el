@@ -399,24 +399,6 @@ Optional CODING is used for encoding coding-system."
     t))
 ; (load-pre-sitestart-files)
 
-;; Aquamacs Unit Tests
-
-(defvar aquamacs-require-list nil)
-(defun aquamacs-require (arg)
-  (setq aquamacs-require-list (cons arg aquamacs-require-list))
-)
-(defun aquamacs-run-unit-tests ()
-  (message "Aquamacs Unit Tests...")
-  (mapc
-   (lambda (expr)
-     (if (eval expr)
-	 (message (format "%s passed." expr))
-       (message (format "%s failed." expr))))
-   aquamacs-require-list)
-  (message "... done")
-)
- 
-
 
 (defun aq-current-milliseconds ()
   (let ((ti (cdr (current-time)))
