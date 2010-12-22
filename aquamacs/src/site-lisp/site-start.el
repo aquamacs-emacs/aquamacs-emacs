@@ -85,6 +85,15 @@ Changes in this code are ignored during the online version check.")
   ;; load path  
   ;;(normal-top-level-add-subdirs-to-load-path)  ; no need to do this is in site-start.
 
+  ;; (mapc
+  ;;  (lambda (f)
+  ;;    (let ((fn (expand-file-name f data-directory)))
+  ;;      (delete fn load-path)
+  ;;      (setq load-path (cons fn load-path))))
+  ;;  '(  "../lisp/aquamacs/macosx" "../lisp" "../lisp/aquamacs"))
+  ;; "../lisp/aquamacs/tabbar" for some reason, this prevents it from loading aquamacs-tabbar later on
+  ;; undiagnosed.  commented out load-path priorisiation for this reason.
+
   (require 'aquamacs)
   (require 'aquamacs-aux) ;; calls (aquamacs-setup)
   ;; fix function associations in load-history
