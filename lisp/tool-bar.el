@@ -90,6 +90,7 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
 	  )))
    image-spec-list))
 
+(defvar tool-bar-load-png-only nil)
 (defun tool-bar--image-expression (icon)
   (let* ((fg (face-attribute 'tool-bar :foreground))
 	 (bg (face-attribute 'tool-bar :background))
@@ -107,20 +108,23 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
                                  (concat icon ".pbm")) colors))
 	 (xbm-spec (append (list :type 'xbm :file
                                  (concat icon ".xbm")) colors))
-	 (image (find-image
-		(if (display-color-p)
-		    (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec))))
+	 ;; (format-spec (if (display-color-p)
+	 ;; 		  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+	 ;; 		(list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
+	 (format-spec (if tool-bar-load-png-only
+			  (list png-spec)
+			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)))
+	 (image (find-image format-spec))
 	 (image-sel (find-image
 		     (if (display-color-p)
 			 (tool-bar-set-file-extension
-			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+			  format-spec
 			  "_sel")
 		       nil)))
 	 (image-dis (find-image
 		     (if (display-color-p)
 			 (tool-bar-set-file-extension
-			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+			  format-spec
 			  "_dis")
 		       nil)))
 	 (images (when image ;; image may be nil if not found.

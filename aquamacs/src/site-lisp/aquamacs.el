@@ -35,12 +35,10 @@
 
 (defvar aq-starttime 0)
 
-(defun ats (txt) nil)
+(defmacro ats (txt) nil)
 
 ;; (defun ats (txt) 
 ;;   (message "ATS %s:  %s" (time-since aq-starttime) txt))
-
-
 
 (setq aq-starttime (current-time))
 (ats "started")
@@ -699,23 +697,7 @@ No errors are signaled."
 	(if (or (derived-mode-p 'text-mode) text-mode-variant)
 	    (smart-spacing-mode (if enable 1 0)))))))
 
-
-(defun aquamacs-setup ()
- 
-  (require 'mac-extra-functions)
-  (aquamacs-mac-initialize) ;; call at runtime only
-  (defvar aquamacs-mac-application-bundle-directory
-    "This is actually defined in mac-extra-functions.el")
-
-  (ats "aquamacs-mac-initialize done")
-
-
-  (require 'aquamacs-tools)
-  (ats "aquamacs-tools done")
-  ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
-
-
-  
+;; preload these
 
   (defcustom aquamacs-quick-yes-or-no-prompt-flag t
     "If non-nil, the user does not have to type in yes or no at
@@ -727,7 +709,7 @@ yes-or-no prompts - y or n will do."
   (defvaralias 'aquamacs-quick-yes-or-no-prompt 
     'aquamacs-quick-yes-or-no-prompt-flag)
 
-; (yes-or-no-p "asda")
+  ; (yes-or-no-p "asda")
   ; (aquamacs-ask-for-confirmation "asd" t)
  
   (defun aquamacs-repl-yes-or-no-p (text)
@@ -768,18 +750,7 @@ yes-or-no prompts - y or n will do."
     )
   (defvaralias  'aquamacs-ring-bell-on-error 'aquamacs-ring-bell-on-error-flag)
 
-  ;; but please ring the bell when there is a real error
-
-  (defadvice error (around ring-bell (&rest args) activate protect)
  
-    (if aquamacs-ring-bell-on-error-flag
-	(progn
-	  (aquamacs-bell)
-	  ad-do-it)
-      ;; else
-      ad-do-it))
-    
-
 
   ;; Find-file may open a new frame
   (if (running-on-a-mac-p)
@@ -839,6 +810,33 @@ yes-or-no prompts - y or n will do."
   (add-hook 'after-init-hook 'aquamacs-setup-echo-areas)
   (add-hook 'minibuffer-setup-hook 'aquamacs-set-minibuffer-face)
   (aquamacs-setup-echo-areas)
+
+
+;; the following code is not preloaded
+(defun aquamacs-setup ()
+ 
+
+  (require 'aquamacs-tools)
+  (ats "aquamacs-tools done")
+  ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
+
+  (require 'mac-extra-functions)
+  (aquamacs-mac-initialize) ;; call at runtime only
+  (defvar aquamacs-mac-application-bundle-directory
+    "This is actually defined in mac-extra-functions.el")
+
+  (ats "aquamacs-mac-initialize done")
+
+  ;; please ring the bell when there is a real error
+  (defadvice error (around ring-bell (&rest args) activate protect)
+ 
+    (if aquamacs-ring-bell-on-error-flag
+	(progn
+	  (aquamacs-bell)
+	  ad-do-it)
+      ;; else
+      ad-do-it))
+    
 
   ;; tabbar needs to be defined before osxkeys
   (defvar aquamacs-pre-user-directories-load-path)
@@ -1574,6 +1572,8 @@ to write the `custom-file'.")
 ;; via hook so it can be turned off
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
  
+;; tool-bar-setup was here
+
 
 (ats "aquamacs-tool-bar-setup ...")
 (when (running-on-a-mac-p)
