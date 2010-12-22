@@ -125,6 +125,9 @@
   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
   (setq tool-bar-map (make-sparse-keymap))
 
+  (let ((image-load-path (list (car image-load-path)))
+	(tool-bar-load-png-only t))
+
   (tool-bar-add-item-from-menu 'new-empty-buffer-other-frame "new" nil :label "New")
 
   (tool-bar-add-item-from-menu 'mac-key-open-file "open" nil :label "Open")
@@ -219,7 +222,9 @@
   ;; Toolbar button, mapped to handle-toggle-tool-bar in tool-bar.el
   ;; (Toolbar button - on systems that support it!)
   (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
-
+  ;; do not enable these before runtime (just to be sure)
+  (add-hook 'menu-bar-update-hook 'maybe-restore-tool-bar-configuration)
+  (define-key global-map [ns-tool-bar-customized] 'update-tool-bar-from-user-configuration)
 
   (defvar aquamacs-default-toolbarx-meaning-alist
     (aquamacs-toolbar-x-create-meaning-list tool-bar-map)
@@ -228,7 +233,7 @@ The contents of this variable are generated from `tool-bar-map'.
 Changes to this variable will have no immediate effect.
 
 This variable is used in the AUCTeX configuration.")
-  )
+  ))
 
 ;; To Do:
 ;; these hashes are probably not very reliable
@@ -384,8 +389,6 @@ If there is a user-supplied visibility term, set it."
       (store-tool-bar-configuration user-config))))
 
  
-(add-hook 'menu-bar-update-hook 'maybe-restore-tool-bar-configuration)
-(define-key global-map [ns-tool-bar-customized] 'update-tool-bar-from-user-configuration)
 
 
 (defun aquamacs-toolbar-update-showhide-menu ())
