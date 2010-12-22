@@ -454,6 +454,8 @@ install-aquamacs: mkdir
 	  cp -r $(AQUAMACS_DIR)/src/commandline-tool/Aquamacs\ Command\ Line\ Tool.mpkg .; \
 	  cd - >/dev/null ; \
 	  (cd $(ns_appresdir)/etc/images && find . -name '*.svg' -delete ; cd -) ; \
+	  (cp $(AQUAMACS_DIR)/src/site-lisp/tabbar/*.png $(ns_appresdir)/etc/images/ && \
+	    rm $(ns_appresdir)/lisp/aquamacs/tabbar/*.png) ; \
 	  cp $(AQUAMACS_DIR)/src/etc/aquamacs-splash-screen.jpg $(ns_appresdir)/etc/images/ ; \
 	  rm -r "$(ns_appresdir)/Aquamacs Help" 2>/dev/null ; \
 	  cp -r $(AQUAMACS_DIR)"/doc/Aquamacs Help" "$(ns_appresdir)/Aquamacs Help" ; \
