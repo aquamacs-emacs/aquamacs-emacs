@@ -56,7 +56,7 @@ conveniently adding tool bar items."
       (progn
   	(modify-all-frames-parameters (list (cons 'tool-bar-lines 1)))
 	(if (= 1 (length (default-value 'tool-bar-map))) ; not yet setup
-	    (tool-bar-setup)))
+       (tool-bar-setup)))
     (modify-all-frames-parameters (list (cons 'tool-bar-lines 0)))))
 
 (defun tool-bar-set-file-extension (image-spec-list extension)
@@ -82,6 +82,7 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
 	  )))
    image-spec-list))
 
+(defvar tool-bar-load-png-only nil)
 (defun tool-bar-get-image-spec (icon)
   (let* ((fg (face-attribute 'tool-bar :foreground))
 	 (bg (face-attribute 'tool-bar :background))
@@ -99,20 +100,23 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
                                  (concat icon ".pbm")) colors))
 	 (xbm-spec (append (list :type 'xbm :file
                                  (concat icon ".xbm")) colors))
-	 (image (find-image
-		(if (display-color-p)
-		    (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec))))
+	 ;; (format-spec (if (display-color-p)
+	 ;; 		  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+	 ;; 		(list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
+	 (format-spec (if tool-bar-load-png-only
+			  (list png-spec)
+			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)))
+	 (image (find-image format-spec))
 	 (image-sel (find-image
 		     (if (display-color-p)
 			 (tool-bar-set-file-extension
-			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+			  format-spec
 			  "_sel")
 		       nil)))
 	 (image-dis (find-image
 		     (if (display-color-p)
 			 (tool-bar-set-file-extension
-			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+			  format-spec
 			  "_dis")
 		       nil)))
 	 (images (when image ;; image may be nil if not found.
@@ -238,10 +242,10 @@ ICON.pbm, and finally ICON.xbm, using `find-image'."
 	 (image (car is))
 	 (images (cdr is))) 
     (when (and (display-images-p) image)
-      (define-key-after map (vector key)
+    (define-key-after map (vector key)
 	`(menu-item ,label 
 		    ,def :image ,images ,@props)))))
-  
+
 
 ;;;###autoload
 (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
@@ -270,7 +274,7 @@ bar in FROM-MAP (which defaults to `global-map'), but modifies
 the binding by adding an image specification for ICON. It finds
 ICON just like `tool-bar-add-item'. PROPS are additional
 properties to add to the binding.
-  
+
 FROM-MAP must contain appropriate binding for `[menu-bar]' which
 holds a keymap."
   (unless from-map
@@ -278,41 +282,41 @@ holds a keymap."
   (let* ((icon-name (if (consp icon) (car icon) icon))
 	 (label (if (consp icon) (cdr icon)))
 	 (menu-bar-map (lookup-key from-map [menu-bar]))
-  	 (keys (where-is-internal command menu-bar-map))
+	 (keys (where-is-internal command menu-bar-map))
 	 (is (tool-bar-get-image-spec icon-name))
 	 (image (car is))
 	 (images (cdr is)) 
-  	 submap key)
+	 submap key)
     (when (and (display-images-p) image)
-      ;; We'll pick up the last valid entry in the list of keys if
-      ;; there's more than one.
-      (dolist (k keys)
-	;; We're looking for a binding of the command in a submap of
-	;; the menu bar map, so the key sequence must be two or more
-	;; long.
-	(if (and (vectorp k)
-		 (> (length k) 1))
-	    (let ((m (lookup-key menu-bar-map (substring k 0 -1)))
-		  ;; Last element in the bound key sequence:
-		  (kk (aref k (1- (length k)))))
-	      (if (and (keymapp m)
-		       (symbolp kk))
-		  (setq submap m
-			key kk)))))
-      (when (and (symbolp submap) (boundp submap))
-	(setq submap (eval submap)))
-      (let ((defn (assq key (cdr submap))))
-	(if (eq (cadr defn) 'menu-item)
-	    (define-key-after in-map (vector key)
+    ;; We'll pick up the last valid entry in the list of keys if
+    ;; there's more than one.
+    (dolist (k keys)
+      ;; We're looking for a binding of the command in a submap of
+      ;; the menu bar map, so the key sequence must be two or more
+      ;; long.
+      (if (and (vectorp k)
+               (> (length k) 1))
+          (let ((m (lookup-key menu-bar-map (substring k 0 -1)))
+                ;; Last element in the bound key sequence:
+                (kk (aref k (1- (length k)))))
+            (if (and (keymapp m)
+                     (symbolp kk))
+                (setq submap m
+                      key kk)))))
+    (when (and (symbolp submap) (boundp submap))
+      (setq submap (eval submap)))
+    (let ((defn (assq key (cdr submap))))
+      (if (eq (cadr defn) 'menu-item)
+          (define-key-after in-map (vector key)
 	      (append `(menu-item ,(or label (car (cddr defn)))) (cdr (cddr defn))
 		      (list :image image) props))
-	  (setq defn (cdr defn))
-	  (define-key-after in-map (vector key)
-	    (let ((rest (cdr defn)))
-	      ;; If the rest of the definition starts
-	      ;; with a list of menu cache info, get rid of that.
-	      (if (and (consp rest) (consp (car rest)))
-		  (setq rest (cdr rest)))
+        (setq defn (cdr defn))
+        (define-key-after in-map (vector key)
+          (let ((rest (cdr defn)))
+            ;; If the rest of the definition starts
+            ;; with a list of menu cache info, get rid of that.
+            (if (and (consp rest) (consp (car rest)))
+                (setq rest (cdr rest)))
 	      (append `(menu-item ,(or label (car defn)) ,rest)
 		      (list :image image) props))))))))
 
@@ -332,50 +336,50 @@ holds a keymap."
      (tool-bar-add-item-from-menu 'dired '("diropen" . "Directory"))
      (tool-bar-add-item-from-menu 'kill-this-buffer "close")
      (tool-bar-add-item-from-menu 'save-buffer '("save" . "Save") nil
-				  :visible '(or buffer-file-name
-						(not (eq 'special
-							 (get major-mode
-							      'mode-class)))))
+			       :visible '(or buffer-file-name
+					     (not (eq 'special
+						      (get major-mode
+							   'mode-class)))))
      (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save As") nil
-				  :visible '(or buffer-file-name
-						(not (eq 'special
-							 (get major-mode
-							      'mode-class)))))
-     (tool-bar-add-item-from-menu 'undo "undo" nil
-				  :visible '(not (eq 'special (get major-mode
-								   'mode-class))))
-     (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
+			       :visible '(or buffer-file-name
+					     (not (eq 'special
+						      (get major-mode
+							   'mode-class)))))
+  (tool-bar-add-item-from-menu 'undo "undo" nil
+			       :visible '(not (eq 'special (get major-mode
+								'mode-class))))
+  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
 				  "cut" nil
 				  :visible '(not (eq 'special (get major-mode
-								   'mode-class))))
-     (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
+								'mode-class))))
+  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
 				  "copy")
-     (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
+  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
 				  "paste" nil
 				  :visible '(not (eq 'special (get major-mode
-								   'mode-class))))
+								'mode-class))))
      (tool-bar-add-item-from-menu 'nonincremental-search-forward "search")
-     ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
+  ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
 
-     ;; There's no icon appropriate for News and we need a command rather
-     ;; than a lambda for Read Mail.
-     ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
+  ;; There's no icon appropriate for News and we need a command rather
+  ;; than a lambda for Read Mail.
+  ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 
      (tool-bar-add-item-from-menu 'print-buffer "print")
 
-     ;; tool-bar-add-item-from-menu itself operates on
-     ;; (default-value 'tool-bar-map), but when we don't use that function,
-     ;; we must explicitly operate on the default value.
+  ;; tool-bar-add-item-from-menu itself operates on
+  ;; (default-value 'tool-bar-map), but when we don't use that function,
+  ;; we must explicitly operate on the default value.
 
-     (let ((tool-bar-map (default-value 'tool-bar-map)))
+  (let ((tool-bar-map (default-value 'tool-bar-map)))
        (tool-bar-add-item '("preferences" . "Customize") 'customize 'customize
-			  :help "Edit preferences (customize)")
+		       :help "Edit preferences (customize)")
 
        (tool-bar-add-item '("help" . "Help") (lambda ()
-					       (interactive)
-					       (popup-menu menu-bar-help-menu))
-			  'help
-			  :help "Pop up the Help menu"))
+				(interactive)
+				(popup-menu menu-bar-help-menu))
+		       'help
+		       :help "Pop up the Help menu"))
      (setq tool-bar-setup t))))
 
 (provide 'tool-bar)

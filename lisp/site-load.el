@@ -14,7 +14,7 @@
 
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
-;; (load "tool-bar")  ;; taken out while we're working on it!
+(load "tool-bar")  ;; taken out while we're working on it!
 (load "tooltip")
 (load "image") ;; path issue should be alright now
 (load "image-file")
@@ -66,8 +66,9 @@
 ; the following can't be precompiled. reason unknown.
 ;; no text available if this is compiled in. 
 ;;(aq-preload "aquamacs-mode-specific-themes")
-(aq-preload "aquamacs")
+(load "calendar/time-date")
 (aq-preload "aquamacs-tool-bar")
+(aq-preload "aquamacs")
 (aq-preload "macosx/osx_defaults")
 (aq-preload "macosx/aquamacs-menu")
 ; these define minor modes

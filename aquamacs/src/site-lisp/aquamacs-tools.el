@@ -430,7 +430,7 @@ Optional CODING is used for encoding coding-system."
 (defun aq-start-timer ()
   (setq aq-timer (current-time))
 )
-(aq-start-timer)
+;(aq-start-timer)
 (defun aq-print-timer ()
   (message  (format "%d" (aq-current-milliseconds))  ))
 
