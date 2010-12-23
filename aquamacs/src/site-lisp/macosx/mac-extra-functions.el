@@ -203,7 +203,6 @@ end tell"
     ))
 ; (mac-key-show-in-finder "/tmp/")
 
-(defvar aquamacs-pre-user-directories-load-path nil)
 (defvar aquamacs-mac-add-standard-directories-added-flag nil)
 ; (setq aquamacs-mac-add-standard-directories-added-flag nil)
 ; (setq normal-top-level-add-subdirs-inode-list nil)
@@ -225,7 +224,6 @@ end tell"
 		  "~/Library/Preferences/Aquamacs Emacs" ; for Aquamacs (user-specific)
 		  )))
 	(setq aquamacs-mac-add-standard-directories-added-flag t)
-	(setq aquamacs-pre-user-directories-load-path load-path)
 	(mapcar (lambda (dir)
 		  (let* ((xdir (directory-file-name (expand-file-name dir) ) )
 			 (default-directory xdir)) 
