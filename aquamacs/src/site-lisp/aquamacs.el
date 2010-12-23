@@ -839,10 +839,9 @@ yes-or-no prompts - y or n will do."
     
 
   ;; tabbar needs to be defined before osxkeys
-  (defvar aquamacs-pre-user-directories-load-path)
   (if (running-on-a-mac-p)
       ;; force loading of our own toolbar
-      (let ((load-path (or aquamacs-pre-user-directories-load-path load-path)))
+      (let ((load-path (cons (expand-file-name "../lisp/aquamacs/tabbar" data-directory) load-path)))
 	(require 'aquamacs-tabbar))
     ;; aquamacs-tabbar doesn't work without windows
     (require 'tabbar))
