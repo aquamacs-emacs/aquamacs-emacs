@@ -5330,11 +5330,22 @@ Also rename any existing auto save file, if it was made in this session."
 (defvar auto-save-file-name-prefix "#" "String prepended to auto save file names.")
 (defvar auto-save-file-name-postfix "#" "String appended to auto save file names.")
 
+(defvar aquamacs-untitled-buffer-creation-time nil "Creation time of an untitled buffer.
+If set, this is used to produce a unique auto save file name
+by `make-auto-save-file-name'. Set by `new-empty-buffer' in Aquamacs.")
+(make-variable-buffer-local 'aquamacs-untitled-buffer-creation-time)
+
 (defun make-auto-save-file-name ()
   "Return file name to use for auto-saves of current buffer.
 Does not consider `auto-save-visited-file-name' as that variable is checked
 before calling this function.  You can redefine this for customization.
 See also `auto-save-file-name-p'."
+  (let ((buffer-file-name 
+	 (or buffer-file-name
+	     (if aquamacs-untitled-buffer-creation-time
+		 (format "%suntitled-%s" default-directory
+			 aquamacs-untitled-buffer-creation-time)))))
+			 
   (if buffer-file-name
       (let ((handler (find-file-name-handler buffer-file-name
 					     'make-auto-save-file-name)))
@@ -5436,7 +5447,7 @@ See also `auto-save-file-name-p'."
       (condition-case ()
 	  (delete-file file-name)
 	(file-error nil))
-      file-name)))
+      file-name))))
 
 (defun auto-save-file-name-p (filename)
   "Return non-nil if FILENAME can be yielded by `make-auto-save-file-name'.
