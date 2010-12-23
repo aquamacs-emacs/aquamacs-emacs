@@ -6,7 +6,7 @@
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="prev" href="Overview.html#Overview" title="Overview">
-<link rel="next" href="Help-for-developers.html#Help-for-developers" title="Help for developers">
+<link rel="next" href="Secret-Service-API.html#Secret-Service-API" title="Secret Service API">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This file describes the Emacs auth-source library.
@@ -48,7 +48,7 @@ Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
 <div class="node">
 <a name="Help-for-users"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Help-for-developers.html#Help-for-developers">Help for developers</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Secret-Service-API.html#Secret-Service-API">Secret Service API</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview.html#Overview">Overview</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
@@ -92,15 +92,19 @@ auth-source library is not loaded for some other reason.
 &mdash; Variable: <b>auth-sources</b><var><a name="index-auth_002dsources-1"></a></var><br>
 <blockquote>
         <p>The <code>auth-sources</code> variable tells the auth-source library where
-your netrc files live for a particular host and protocol.  While you
-can get fancy, the default and simplest configuration is:
+your netrc files or Secret Service API collection items live for a
+particular host and protocol.  While you can get fancy, the default
+and simplest configuration is:
 
-     <pre class="lisp">          (setq auth-sources '((:source "~/.authinfo.gpg" :host t :protocol t)))
+     <pre class="lisp">          ;;; old default: required :host and :protocol, not needed anymore
+          (setq auth-sources '((:source "~/.authinfo.gpg" :host t :protocol t)))
+          ;;; mostly equivalent (see below about fallbacks) but shorter:
+          (setq auth-sources '((:source "~/.authinfo.gpg")))
 </pre>
         <p>This says &ldquo;for any host and any protocol, use just that one file.&rdquo;
-Sweet simplicity.  In fact, this is already the default, so unless you
-want to move your netrc file, it will just work if you have that
-file.  You may not, though, so make sure it exists.
+Sweet simplicity.  In fact, the latter is already the default, so
+unless you want to move your netrc file, it will just work if you have
+that file.  Make sure it exists.
 
         <p>By adding multiple entries to <code>auth-sources</code> with a particular
 host or protocol, you can have specific netrc files for that host or
@@ -108,19 +112,38 @@ protocol.  Usually this is unnecessary but may make sense if you have
 shared netrc files or some other unusual setup (90% of Emacs users
 have unusual setups and the remaining 10% are <em>really</em> unusual).
 
+        <p>Here's an example that uses the Secret Service API for all lookups,
+using the default collection:
+
+     <pre class="lisp">          (setq auth-sources '((:source (:secrets default))))
+</pre>
+        <p>And here's a mixed example, using two sources:
+
+     <pre class="lisp">          (setq auth-sources '((:source (:secrets default) :host "myserver" :user "joe")
+                               (:source "~/.authinfo.gpg")))
+</pre>
+        <p>The best match is determined by order (starts from the bottom) only
+for the first pass, where things are checked exactly.  In the example
+above, the first pass would find a single match for host
+<code>myserver</code>.  The netrc choice would fail because it matches any
+host and protocol implicitly (as a <em>fallback</em>).  A specified
+value of <code>:host t</code> in <code>auth-sources</code> is considered a match
+on the first pass, unlike a missing <code>:host</code>.
+
+        <p>Now if you look for host <code>missing</code>, it won't match either source
+explicitly.  The second pass (the <em>fallback</em> pass) will look at
+all the implicit matches and collect them.  They will be scored and
+returned sorted by score.  The score is based on the number of
+explicit parameters that matched. See the <code>auth-pick</code> function
+for details.
+
         </blockquote></div>
 
    <p>If you don't customize <code>auth-sources</code>, you'll have to live with
 the defaults: any host and any port are looked up in the netrc
-file <code>~/.authinfo.gpg</code>.  This is an encrypted file if and only if
-you set up EPA, which is strongly recommended.
+file <code>~/.authinfo.gpg</code>, which is a GnuPG encrypted file
+(see <a href="GnuPG-and-EasyPG-Assistant-Configuration.html#GnuPG-and-EasyPG-Assistant-Configuration">GnuPG and EasyPG Assistant Configuration</a>).
 
-<pre class="lisp">     (require 'epa-file)
-     (epa-file-enable)
-     ;;; VERY important if you want symmetric encryption
-     ;;; irrelevant if you don't
-     (setq epa-file-cache-passphrase-for-symmetric-encryption t)
-</pre>
    <p>The simplest working netrc line example is one without a port.
 
 <pre class="example">     machine YOURMACHINE login YOU password YOURPASSWORD

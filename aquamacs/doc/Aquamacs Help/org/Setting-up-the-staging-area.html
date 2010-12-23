@@ -10,9 +10,10 @@
 <link rel="next" href="Pushing-to-MobileOrg.html#Pushing-to-MobileOrg" title="Pushing to MobileOrg">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,30 +58,39 @@ Up:&nbsp;<a rel="up" accesskey="u" href="MobileOrg.html#MobileOrg">MobileOrg</a>
 
 <h3 class="section">B.1 Setting up the staging area</h3>
 
-<p>Org-mode has commands to prepare a directory with files for <i>MobileOrg</i>,
-and to read captured notes from there.  If Emacs can directly write to the
-WebDAV directory accessed by <i>MobileOrg</i>, just point to this directory
-using the variable <code>org-mobile-directory</code>.  Using the <samp><span class="file">tramp</span></samp>
-method, <code>org-mobile-directory</code> may point to a remote directory
-accessible through, for example,
-<samp><span class="file">ssh/scp</span></samp>:
+<p>MobileOrg needs to interact with Emacs through a directory on a server.  If you
+are using a public server, you should consider to encrypt the files that are
+uploaded to the server.  This can be done with Org-mode 7.02 and with
+<i>MobileOrg 1.5</i> (iPhone version), and you need an <samp><span class="file">openssl</span></samp>
+installation on your system.  To turn on encryption, set a password in
+<i>MobileOrg</i> and, on the Emacs side, configure the variable
+<code>org-mobile-use-encryption</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
 
-<pre class="smallexample">     (setq org-mobile-directory "/scpc:user@remote.host:org/webdav/")
-</pre>
-   <p>If Emacs cannot access the WebDAV directory directly using a <samp><span class="file">tramp</span></samp>
-method, or you prefer to maintain a local copy, you can use a local directory
-for staging.  Other means must then be used to keep this directory in sync
-with the WebDAV directory.  In the following example, files are staged in
-<samp><span class="file">~/stage</span></samp>, and Org-mode hooks take care of moving files to and from the
-WebDAV directory using <samp><span class="file">scp</span></samp>.
+   <p>The easiest way to create that directory is to use a free
+<a href="http://dropbox.com">Dropbox.com</a> account<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>. 
+When MobileOrg first connects to your Dropbox, it will create a directory
+<i>MobileOrg</i> inside the Dropbox.  After the directory has been created, tell
+Emacs about it:
 
-<pre class="smallexample">     (setq org-mobile-directory "~/stage/")
-     (add-hook 'org-mobile-post-push-hook
-       (lambda () (shell-command "scp -r ~/stage/* user@wdhost:mobile/")))
-     (add-hook 'org-mobile-pre-pull-hook
-       (lambda () (shell-command "scp user@wdhost:mobile/mobileorg.org ~/stage/ ")))
-     (add-hook 'org-mobile-post-pull-hook
-       (lambda () (shell-command "scp ~/stage/mobileorg.org user@wdhost:mobile/")))
+<pre class="lisp">     (setq org-mobile-directory "~/Dropbox/MobileOrg")
 </pre>
+   <p>Org-mode has commands to put files for <i>MobileOrg</i> into that directory,
+and to read captured notes from there.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If you can safely store the
+password in your Emacs setup, you might also want to configure
+<code>org-mobile-encryption-password</code>.  Please read the docstring of that
+variable.  Note that encryption will apply only to the contents of the
+<samp><span class="file">.org</span></samp> files.  The file names themselves will remain visible.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> If you cannot use
+Dropbox, or if your version of MobileOrg does not support it, you can use a
+webdav server.  For more information, check out the documentation of MobileOrg and also this
+<a href="http://orgmode.org/worg/org-faq.php#mobileorg_webdav">FAQ entry</a>.</p>
+
+   <hr></div>
+
    </body></html>
 

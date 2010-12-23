@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -48,12 +48,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="The-Kill-Ring.html#The-Kill-Ring">The K
 <h4 class="subsection">32.8.5 Low-Level Kill Ring</h4>
 
 <p>These functions and variables provide access to the kill ring at a
-lower level, but still convenient for use in Lisp programs, because they
-take care of interaction with window system selections
+lower level, but are still convenient for use in Lisp programs,
+because they take care of interaction with window system selections
 (see <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>).
 
 <div class="defun">
-&mdash; Function: <b>current-kill</b><var> n &amp;optional do-not-move<a name="index-current_002dkill-2561"></a></var><br>
+&mdash; Function: <b>current-kill</b><var> n &amp;optional do-not-move<a name="index-current_002dkill-2636"></a></var><br>
 <blockquote><p>The function <code>current-kill</code> rotates the yanking pointer, which
 designates the &ldquo;front&rdquo; of the kill ring, by <var>n</var> places (from newer
 kills to older ones), and returns the text at that place in the ring.
@@ -77,7 +77,7 @@ move the yanking pointer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>kill-new</b><var> string &amp;optional replace yank-handler<a name="index-kill_002dnew-2562"></a></var><br>
+&mdash; Function: <b>kill-new</b><var> string &amp;optional replace<a name="index-kill_002dnew-2637"></a></var><br>
 <blockquote><p>This function pushes the text <var>string</var> onto the kill ring and
 makes the yanking pointer point to it.  It discards the oldest entry
 if appropriate.  It also invokes the value of
@@ -85,31 +85,21 @@ if appropriate.  It also invokes the value of
 
         <p>If <var>replace</var> is non-<code>nil</code>, then <code>kill-new</code> replaces the
 first element of the kill ring with <var>string</var>, rather than pushing
-<var>string</var> onto the kill ring.
-
-        <p>If <var>yank-handler</var> is non-<code>nil</code>, this puts that value onto
-the string of killed text, as a <code>yank-handler</code> property. 
-See <a href="Yanking.html#Yanking">Yanking</a>.  Note that if <var>yank-handler</var> is <code>nil</code>, then
-<code>kill-new</code> copies any <code>yank-handler</code> properties present on
-<var>string</var> onto the kill ring, as it does with other text properties. 
+<var>string</var> onto the kill ring. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>kill-append</b><var> string before-p &amp;optional yank-handler<a name="index-kill_002dappend-2563"></a></var><br>
+&mdash; Function: <b>kill-append</b><var> string before-p<a name="index-kill_002dappend-2638"></a></var><br>
 <blockquote><p>This function appends the text <var>string</var> to the first entry in the
 kill ring and makes the yanking pointer point to the combined entry. 
 Normally <var>string</var> goes at the end of the entry, but if
 <var>before-p</var> is non-<code>nil</code>, it goes at the beginning.  This
 function also invokes the value of <code>interprogram-cut-function</code>
-(see below).  This handles <var>yank-handler</var> just like
-<code>kill-new</code>, except that if <var>yank-handler</var> is different from
-the <code>yank-handler</code> property of the first entry of the kill ring,
-<code>kill-append</code> pushes the concatenated string onto the kill ring,
-instead of replacing the original first entry with it. 
+(see below). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>interprogram-paste-function</b><var><a name="index-interprogram_002dpaste_002dfunction-2564"></a></var><br>
+&mdash; Variable: <b>interprogram-paste-function</b><var><a name="index-interprogram_002dpaste_002dfunction-2639"></a></var><br>
 <blockquote><p>This variable provides a way of transferring killed text from other
 programs, when you are using a window system.  Its value should be
 <code>nil</code> or a function of no arguments.
@@ -135,18 +125,16 @@ use <code>string=</code> to compare it with the last text Emacs provided.)
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>interprogram-cut-function</b><var><a name="index-interprogram_002dcut_002dfunction-2565"></a></var><br>
+&mdash; Variable: <b>interprogram-cut-function</b><var><a name="index-interprogram_002dcut_002dfunction-2640"></a></var><br>
 <blockquote><p>This variable provides a way of communicating killed text to other
 programs, when you are using a window system.  Its value should be
-<code>nil</code> or a function of one required and one optional argument.
+<code>nil</code> or a function of one required argument.
 
         <p>If the value is a function, <code>kill-new</code> and <code>kill-append</code> call
-it with the new first element of the kill ring as the first argument. 
-The second, optional, argument has the same meaning as the <var>push</var>
-argument to <code>x-set-cut-buffer</code> (see <a href="Definition-of-x_002dset_002dcut_002dbuffer.html#Definition-of-x_002dset_002dcut_002dbuffer">Definition of x-set-cut-buffer</a>) and only affects the second and later cut buffers.
+it with the new first element of the kill ring as the argument.
 
         <p>The normal use of this function is to set the window system's primary
-selection (and first cut buffer) from the newly killed text. 
+selection from the newly killed text. 
 See <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>. 
 </p></blockquote></div>
 

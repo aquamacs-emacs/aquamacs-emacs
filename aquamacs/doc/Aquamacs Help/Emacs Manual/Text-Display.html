@@ -12,7 +12,7 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.2.50.
+updated for Emacs version 24.0.50.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
@@ -47,12 +47,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">18.15 How Text Is Displayed</h3>
 
-<p><a name="index-characters-_0028in-text_0029-595"></a>
+<p><a name="index-characters-_0028in-text_0029-597"></a>
   <acronym>ASCII</acronym> printing characters (octal codes 040 through 0176) in Emacs
 buffers are displayed with their graphics, as are non-<acronym>ASCII</acronym> multibyte
 printing characters (octal codes above 0400).
 
-   <p><a name="index-tab_002dwidth-596"></a>  Some <acronym>ASCII</acronym> control characters are displayed in special
+   <p><a name="index-tab_002dwidth-598"></a>  Some <acronym>ASCII</acronym> control characters are displayed in special
 ways.  The newline character (octal code 012) is displayed by starting
 a new line.  The tab character (octal code 011) is displayed by moving
 to the next tab stop column (normally every 8 columns).  The number of
@@ -72,7 +72,7 @@ displayed with octal escape sequences; thus, character code 0230
 (octal) is displayed as &lsquo;<samp><span class="samp">\230</span></samp>&rsquo;.  The backslash appears in face
 <code>escape-glyph</code>.
 
-   <p><a name="index-ctl_002darrow-597"></a>  If the variable <code>ctl-arrow</code> is <code>nil</code>, control characters in
+   <p><a name="index-ctl_002darrow-599"></a>  If the variable <code>ctl-arrow</code> is <code>nil</code>, control characters in
 the buffer are displayed with octal escape sequences, except for newline
 and tab.  Altering the value of <code>ctl-arrow</code> makes it local to the
 current buffer; until that time, the default value is in effect.  The
@@ -85,7 +85,7 @@ graphics.  In unibyte mode, if you enable European display they are
 displayed using their graphics (assuming your terminal supports them),
 otherwise as escape sequences.  See <a href="Unibyte-Mode.html#Unibyte-Mode">Unibyte Mode</a>.
 
-   <p><a name="index-nobreak_002dchar_002ddisplay-598"></a><a name="index-no_002dbreak-space_002c-display-599"></a><a name="index-no_002dbreak-hyphen_002c-display-600"></a><a name="index-soft-hyphen_002c-display-601"></a>  Some character sets define &ldquo;no-break&rdquo; versions of the space and
+   <p><a name="index-nobreak_002dchar_002ddisplay-600"></a><a name="index-no_002dbreak-space_002c-display-601"></a><a name="index-no_002dbreak-hyphen_002c-display-602"></a><a name="index-soft-hyphen_002c-display-603"></a>  Some character sets define &ldquo;no-break&rdquo; versions of the space and
 hyphen characters, which are used where a line should not be broken. 
 Emacs normally displays these characters with special faces
 (respectively, <code>nobreak-space</code> and <code>escape-glyph</code>) to
@@ -96,6 +96,37 @@ prefix these characters with an escape character.
 
    <p>You can customize the way any particular character code is displayed
 by means of a display table.  See <a href="../elisp/Display-Tables.html#Display-Tables">Display Tables</a>.
+
+   <p><a name="index-glyphless-characters-604"></a><a name="index-characters-with-no-font-glyphs-605"></a>  On graphics displays, some characters could have no glyphs in any of
+the fonts available to Emacs.  On text terminals, some characters
+could be impossible to encode with the terminal coding system
+(see <a href="Terminal-Coding.html#Terminal-Coding">Terminal Coding</a>).  Emacs can display such <dfn>glyphless</dfn>
+characters using one of the following methods:
+
+     <dl>
+<dt><code>zero-width</code><dd>Don't display the character.
+
+     <br><dt><code>thin-space</code><dd>Display a thin space, 1-pixel wide on graphics displays or 1-character
+wide on text terminals.
+
+     <br><dt><code>empty-box</code><dd>Display an empty box.
+
+     <br><dt><code>acronym</code><dd>Display the acronym of the character's name (such as <span class="sc">zwnj</span> or
+<span class="sc">rlm</span>) in a box.
+
+     <br><dt><code>hex-code</code><dd>Display the Unicode codepoint of the character in hexadecimal
+notation, in a box. 
+</dl>
+
+<p class="noindent"><a name="index-g_t_0040code_007bglyphless_002dchar_007d-face-606"></a>With the exception of <code>zero-width</code>, all other methods draw these
+characters in a special face <code>glyphless-char</code>, which you can
+customize.
+
+   <p><a name="index-glyphless_002dchar_002ddisplay_002dcontrol-607"></a><a name="index-char_002dacronym_002dtable-608"></a>To control what glyphless characters are displayed using which method,
+customize the variable <code>glyphless-char-display-control</code>; see its
+doc string for the details.  For even finer control, set the elements
+of 2 char-tables: <code>glyphless-char-display</code> and
+<code>char-acronym-table</code>.
 
    </body></html>
 

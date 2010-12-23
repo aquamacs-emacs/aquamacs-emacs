@@ -10,9 +10,10 @@
 <link rel="next" href="Using-links-outside-Org.html#Using-links-outside-Org" title="Using links outside Org">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,14 +58,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinks.html#Hyperlinks">Hyperlinks<
 
 <h3 class="section">4.4 Handling links</h3>
 
-<p><a name="index-links_002c-handling-313"></a>
+<p><a name="index-links_002c-handling-424"></a>
 Org provides methods to create a link in the correct syntax, to
 insert it into an Org file, and to follow the link.
 
      
-<a name="index-C_002dc-l-314"></a>
-<a name="index-storing-links-315"></a>
-<dl><dt><kbd>C-c l</kbd><dd>Store a link to the current location.  This is a <em>global</em> command (you
+<a name="index-C_002dc-l-425"></a>
+<a name="index-org_002dstore_002dlink-426"></a>
+<dl><dt><kbd>C-c l &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-store-link</code><kbd>)</kbd><dd>
+<a name="index-storing-links-427"></a>Store a link to the current location.  This is a <em>global</em> command (you
 must create the key binding yourself) which can be used in any buffer to
 create a link.  The link will be stored for later insertion into an Org
 buffer (see below).  What kind of link will be created depends on the current
@@ -75,7 +77,7 @@ For Org files, if there is a &lsquo;<samp><span class="samp">&lt;&lt;target&gt;&
 to the target.  Otherwise it points to the current headline, which will also
 be the description.
 
-     <p><a name="index-org_002dlink_002dto_002dorg_002duse_002did-316"></a><a name="index-property_002c-CUSTOM_005fID-317"></a><a name="index-property_002c-ID-318"></a>If the headline has a <code>CUSTOM_ID</code> property, a link to this custom ID
+     <p><a name="index-org_002dlink_002dto_002dorg_002duse_002did-428"></a><a name="index-property_002c-CUSTOM_005fID-429"></a><a name="index-property_002c-ID-430"></a>If the headline has a <code>CUSTOM_ID</code> property, a link to this custom ID
 will be stored.  In addition or alternatively (depending on the value of
 <code>org-link-to-org-use-id</code>), a globally unique <code>ID</code> property will be
 created and/or used to construct a link.  So using this command in Org
@@ -96,7 +98,7 @@ Here the link will be the current URL, with the page title as description.
 Links created in a BBDB buffer will point to the current entry.
 
      <p><b>Chat: IRC</b><br>
-<a name="index-org_002dirc_002dlink_002dto_002dlogs-319"></a>For IRC links, if you set the variable <code>org-irc-link-to-logs</code> to
+<a name="index-org_002dirc_002dlink_002dto_002dlogs-431"></a>For IRC links, if you set the variable <code>org-irc-link-to-logs</code> to
 <code>t</code>, a &lsquo;<samp><span class="samp">file:/</span></samp>&rsquo; style link to the relevant point in the logs for
 the current conversation is created.  Otherwise an &lsquo;<samp><span class="samp">irc:/</span></samp>&rsquo; style link to
 the user/channel/server under the point will be stored.
@@ -114,7 +116,8 @@ The key binding <kbd>C-c l</kbd> is only a suggestion&mdash;see <a href="Install
 When the cursor is in an agenda view, the created link points to the
 entry referenced by the current line.
 
-     <p><a name="index-C_002dc-C_002dl-320"></a><a name="index-link-completion-321"></a><a name="index-completion_002c-of-links-322"></a><a name="index-inserting-links-323"></a><br><dt><kbd>C-c C-l</kbd><dd><a name="index-org_002dkeep_002dstored_002dlink_002dafter_002dinsertion-324"></a>Insert a link<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This prompts for a link to be inserted into the buffer. 
+     <p><a name="index-C_002dc-C_002dl-432"></a><a name="index-org_002dinsert_002dlink-433"></a><br><dt><kbd>C-c C-l &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-insert-link</code><kbd>)</kbd><dd>
+<a name="index-link-completion-434"></a><a name="index-completion_002c-of-links-435"></a><a name="index-inserting-links-436"></a><a name="index-org_002dkeep_002dstored_002dlink_002dafter_002dinsertion-437"></a>Insert a link<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This prompts for a link to be inserted into the buffer. 
 You can just type a link, using text for an internal link, or one of the link
 type prefixes mentioned in the examples above.  The link will be inserted
 into the buffer<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>, along with a descriptive text. 
@@ -134,7 +137,8 @@ specific completion support for some link types<a rel="footnote" href="#fn-3" na
 example, if you type <kbd>file &lt;RET&gt;</kbd>, file name completion (alternative
 access: <kbd>C-u C-c C-l</kbd>, see below) will be offered, and after <kbd>bbdb
 &lt;RET&gt;</kbd> you can complete contact names. 
-<a name="index-C_002du-C_002dc-C_002dl-325"></a><a name="index-file-name-completion-326"></a><a name="index-completion_002c-of-file-names-327"></a><br><dt><kbd>C-u C-c C-l</kbd><dd>When <kbd>C-c C-l</kbd> is called with a <kbd>C-u</kbd> prefix argument, a link to
+<a name="index-C_002du-C_002dc-C_002dl-438"></a><br><dt><kbd>C-u C-c C-l</kbd><dd>
+<a name="index-file-name-completion-439"></a><a name="index-completion_002c-of-file-names-440"></a>When <kbd>C-c C-l</kbd> is called with a <kbd>C-u</kbd> prefix argument, a link to
 a file will be inserted and you may use file name completion to select
 the name of the file.  The path to the file is inserted relative to the
 directory of the current Org file, if the linked file is in the current
@@ -142,9 +146,10 @@ directory or in a sub-directory of it, or if the path is written relative
 to the current directory using &lsquo;<samp><span class="samp">../</span></samp>&rsquo;.  Otherwise an absolute path
 is used, if possible with &lsquo;<samp><span class="samp">~/</span></samp>&rsquo; for your home directory.  You can
 force an absolute path with two <kbd>C-u</kbd> prefixes. 
-<br><dt><kbd>C-c C-l </kbd><span class="roman">(with cursor on existing link)</span><dd>When the cursor is on an existing link, <kbd>C-c C-l</kbd> allows you to edit the
+<br><dt><kbd>C-c C-l  </kbd><span class="roman">(with cursor on existing link)</span><dd>When the cursor is on an existing link, <kbd>C-c C-l</kbd> allows you to edit the
 link and description parts of the link. 
-<a name="index-following-links-328"></a><a name="index-C_002dc-C_002do-329"></a><a name="index-RET-330"></a><br><dt><kbd>C-c C-o </kbd><span class="roman">or</span><kbd> &lt;RET&gt;</kbd><dd><a name="index-org_002dfile_002dapps-331"></a>Open link at point.  This will launch a web browser for URLs (using
+<a name="index-following-links-441"></a><a name="index-C_002dc-C_002do-442"></a><a name="index-org_002dopen_002dat_002dpoint-443"></a><br><dt><kbd>C-c C-o &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-open-at-point</code><kbd>)</kbd><dd>
+<a name="index-org_002dfile_002dapps-444"></a>Open link at point.  This will launch a web browser for URLs (using
 <samp><span class="command">browse-url-at-point</span></samp>), run VM/MH-E/Wanderlust/Rmail/Gnus/BBDB for
 the corresponding links, and execute the command in a shell link.  When the
 cursor is on an internal link, this command runs the corresponding search. 
@@ -158,19 +163,32 @@ visit the file with Emacs, use a <kbd>C-u</kbd> prefix.  If you want to avoid
 opening in Emacs, use a <kbd>C-u C-u</kbd> prefix.<br>
 If the cursor is on a headline, but not on a link, offer all links in the
 headline and entry text. 
-<a name="index-mouse_002d2-332"></a><a name="index-mouse_002d1-333"></a><br><dt><kbd>mouse-2</kbd><dt><kbd>mouse-1</kbd><dd>On links, <kbd>mouse-2</kbd> will open the link just as <kbd>C-c C-o</kbd>
-would.  Under Emacs 22, <kbd>mouse-1</kbd> will also follow a link. 
-<a name="index-mouse_002d3-334"></a><br><dt><kbd>mouse-3</kbd><dd><a name="index-org_002ddisplay_002dinternal_002dlink_002dwith_002dindirect_002dbuffer-335"></a>Like <kbd>mouse-2</kbd>, but force file links to be opened with Emacs, and
+<a name="index-g_t_0040key_007bRET_007d-445"></a><br><dt><kbd>&lt;RET&gt;</kbd><dd>
+<a name="index-org_002dreturn_002dfollows_002dlink-446"></a>When <code>org-return-follows-link</code> is set, <kbd>&lt;RET&gt;</kbd> will also follow
+the link at point. 
+<a name="index-mouse_002d2-447"></a><a name="index-mouse_002d1-448"></a><br><dt><kbd>mouse-2</kbd><dt><kbd>mouse-1</kbd><dd>On links, <kbd>mouse-2</kbd> will open the link just as <kbd>C-c C-o</kbd>
+would.  Under Emacs 22 and later, <kbd>mouse-1</kbd> will also follow a link. 
+<a name="index-mouse_002d3-449"></a><br><dt><kbd>mouse-3</kbd><dd><a name="index-org_002ddisplay_002dinternal_002dlink_002dwith_002dindirect_002dbuffer-450"></a>Like <kbd>mouse-2</kbd>, but force file links to be opened with Emacs, and
 internal links to be displayed in another window<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a>. 
-<a name="index-mark-ring-336"></a><a name="index-C_002dc-_0025-337"></a><br><dt><kbd>C-c %</kbd><dd>Push the current position onto the mark ring, to be able to return
+<a name="index-C_002dc-C_002dx-C_002dv-451"></a><a name="index-org_002dtoggle_002dinline_002dimages-452"></a><br><dt><kbd>C-c C-x C-v &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-toggle-inline-images</code><kbd>)</kbd><dd>
+<a name="index-inlining-images-453"></a><a name="index-images_002c-inlining-454"></a><a name="index-org_002dstartup_002dwith_002dinline_002dimages-455"></a><a name="index-g_t_0040code_007binlineimages_007d_002c-STARTUP-keyword-456"></a><a name="index-g_t_0040code_007bnoinlineimages_007d_002c-STARTUP-keyword-457"></a>Toggle the inline display of linked images.  Normally this will only inline
+images that have no description part in the link, i.e. images that will also
+be inlined during export.  When called with a prefix argument, also display
+images that do have a link description.  You can ask for inline images to be
+displayed at startup by configuring the variable
+<code>org-startup-with-inline-images</code><a rel="footnote" href="#fn-5" name="fnd-5"><sup>5</sup></a>. 
+<a name="index-C_002dc-_0025-458"></a><a name="index-org_002dmark_002dring_002dpush-459"></a><br><dt><kbd>C-c % &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-mark-ring-push</code><kbd>)</kbd><dd>
+<a name="index-mark-ring-460"></a>Push the current position onto the mark ring, to be able to return
 easily. Commands following an internal link do this automatically. 
-<a name="index-links_002c-returning-to-338"></a><a name="index-C_002dc-_0026-339"></a><br><dt><kbd>C-c &amp;</kbd><dd>Jump back to a recorded position.  A position is recorded by the
+<a name="index-C_002dc-_0026-461"></a><a name="index-org_002dmark_002dring_002dgoto-462"></a><br><dt><kbd>C-c &amp; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-mark-ring-goto</code><kbd>)</kbd><dd>
+<a name="index-links_002c-returning-to-463"></a>Jump back to a recorded position.  A position is recorded by the
 commands following internal links, and by <kbd>C-c %</kbd>.  Using this
 command several times in direct succession moves through a ring of
 previously recorded positions. 
-<a name="index-C_002dc-C_002dx-C_002dn-340"></a><a name="index-C_002dc-C_002dx-C_002dp-341"></a><a name="index-links_002c-finding-next_002fprevious-342"></a><br><dt><kbd>C-c C-x C-n</kbd><dt><kbd>C-c C-x C-p</kbd><dd>Move forward/backward to the next link in the buffer.  At the limit of
+<a name="index-C_002dc-C_002dx-C_002dn-464"></a><a name="index-C_002dc-C_002dx-C_002dp-465"></a><a name="index-org_002dnext_002dlink-466"></a><a name="index-org_002dprevious_002dlink-467"></a><br><dt><kbd>C-c C-x C-n &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-next-link</code><kbd>)</kbd><dt><kbd>C-c C-x C-p &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-previous-link</code><kbd>)</kbd><dd>
+<a name="index-links_002c-finding-next_002fprevious-468"></a>Move forward/backward to the next link in the buffer.  At the limit of
 the buffer, the search fails once, and then wraps around.  The key
-bindings for this are really too long, you might want to bind this also
+bindings for this are really too long; you might want to bind this also
 to <kbd>C-n</kbd> and <kbd>C-p</kbd>
      <pre class="lisp">          (add-hook 'org-load-hook
             (lambda ()
@@ -197,6 +215,9 @@ calling a special function <code>org-PREFIX-complete-link</code>.</p>
 
    <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> See the
 variable <code>org-display-internal-link-with-indirect-buffer</code></p>
+
+   <p class="footnote"><small>[<a name="fn-5" href="#fnd-5">5</a>]</small> with corresponding
+<code>#+STARTUP</code> keywords <code>inlineimages</code> and <code>inlineimages</code></p>
 
    <hr></div>
 

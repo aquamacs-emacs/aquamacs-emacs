@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Packaging Basics - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Packaging.html#Packaging" title="Packaging">
+<link rel="next" href="Simple-Packages.html#Simple-Packages" title="Simple Packages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Packaging-Basics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Simple-Packages.html#Simple-Packages">Simple Packages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Packaging.html#Packaging">Packaging</a>
+<hr>
+</div>
+
+<h3 class="section">40.1 Packaging Basics</h3>
+
+<p><a name="index-packaging-basics-3911"></a>
+  A package has a few attributes:
+<a name="index-package-attributes-3912"></a>
+     <dl>
+<dt>Name<dd>A string, the name of the package.  This attribute is mandatory.  If
+it does not exist, the package cannot be installed by the package
+manager.
+
+     <br><dt>Version<dd>A version number, which is anything that can be parsed by
+<code>version-to-list</code>.  This attribute is mandatory.  If it does not
+exist, the package cannot be installed by the package manager.
+
+     <br><dt>Brief description<dd>This is shown to the user in the package menu buffer.  It is just a
+single line.  On a terminal with 80 characters per line, there are
+only 36 characters available in the package menu mode for showing the
+brief description, so it is best to keep it very brief.  If no brief
+name is given, an empty string is used.
+
+     <br><dt>Long description<dd>This can be a <samp><span class="file">README</span></samp> file or the like.  This is available to
+the user before the package is installed, via the package menu.  It
+should more fully describe the package and its capabilities, so a user
+can read it to decide whether he wants to install the package.  This
+attribute is optional.
+
+     <br><dt>Dependencies<dd>This is a list of other packages and their minimal acceptable
+versions.  This is used both at download time (to make sure all the
+needed code is available) and at activation time (to ensure a package
+is only activated if all its dependencies have been successfully
+activated).  This attribute is optional.
+
+     <br><dt>Manual<dd>A package can optionally include an Info manual. 
+</dl>
+
+   <p>Conceptually, a package goes through several state transitions (in
+reality some of these transitions are grouped together):
+
+     <dl>
+<dt>Download<dd>Fetch the package from somewhere.
+
+     <br><dt>Install<dd>Unpack the package, or write a <samp><span class="file">.el</span></samp> file into the appropriate
+install directory.  This step also includes extracting autoloads and
+byte-compiling the Emacs Lisp code.
+
+     <br><dt>Activate<dd>Update <code>load-path</code> and <code>Info-directory-list</code> and evaluate
+the autoloads, so that the package is ready for the user to use. 
+</dl>
+
+   <p>It is best for users if packages do not do too much work at
+activation time.  The best approach is to have activation consist of
+some autoloads and little more.
+
+   </body></html>
+

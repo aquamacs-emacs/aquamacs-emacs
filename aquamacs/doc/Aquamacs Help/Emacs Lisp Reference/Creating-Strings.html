@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -50,7 +50,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and
 putting strings together, or by taking them apart.
 
 <div class="defun">
-&mdash; Function: <b>make-string</b><var> count character<a name="index-make_002dstring-223"></a></var><br>
+&mdash; Function: <b>make-string</b><var> count character<a name="index-make_002dstring-225"></a></var><br>
 <blockquote><p>This function returns a string made up of <var>count</var> repetitions of
 <var>character</var>.  If <var>count</var> is negative, an error is signaled.
 
@@ -59,13 +59,12 @@ putting strings together, or by taking them apart.
           (make-string 0 ?x)
                &rArr; ""
 </pre>
-        <p>Other functions to compare with this one include <code>char-to-string</code>
-(see <a href="String-Conversion.html#String-Conversion">String Conversion</a>), <code>make-vector</code> (see <a href="Vectors.html#Vectors">Vectors</a>), and
-<code>make-list</code> (see <a href="Building-Lists.html#Building-Lists">Building Lists</a>). 
+        <p>Other functions to compare with this one include <code>make-vector</code>
+(see <a href="Vectors.html#Vectors">Vectors</a>) and <code>make-list</code> (see <a href="Building-Lists.html#Building-Lists">Building Lists</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string</b><var> &amp;rest characters<a name="index-string-224"></a></var><br>
+&mdash; Function: <b>string</b><var> &amp;rest characters<a name="index-string-226"></a></var><br>
 <blockquote><p>This returns a string containing the characters <var>characters</var>.
 
      <pre class="example">          (string ?a ?b ?c)
@@ -74,7 +73,7 @@ putting strings together, or by taking them apart.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>substring</b><var> string start &amp;optional end<a name="index-substring-225"></a></var><br>
+&mdash; Function: <b>substring</b><var> string start &amp;optional end<a name="index-substring-227"></a></var><br>
 <blockquote><p>This function returns a new string which consists of those characters
 from <var>string</var> in the range from (and including) the character at the
 index <var>start</var> up to (but excluding) the character at the index
@@ -135,7 +134,7 @@ beginning of a buffer is at index 1.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>substring-no-properties</b><var> string &amp;optional start end<a name="index-substring_002dno_002dproperties-226"></a></var><br>
+&mdash; Function: <b>substring-no-properties</b><var> string &amp;optional start end<a name="index-substring_002dno_002dproperties-228"></a></var><br>
 <blockquote><p>This works like <code>substring</code> but discards all text properties from
 the value.  Also, <var>start</var> may be omitted or <code>nil</code>, which is
 equivalent to 0.  Thus, <code>(substring-no-properties&nbsp;</code><var>string</var><code>)</code><!-- /@w --> returns a copy of <var>string</var>, with all text
@@ -143,8 +142,8 @@ properties removed.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>concat</b><var> &amp;rest sequences<a name="index-concat-227"></a></var><br>
-<blockquote><p><a name="index-copying-strings-228"></a><a name="index-concatenating-strings-229"></a>This function returns a new string consisting of the characters in the
+&mdash; Function: <b>concat</b><var> &amp;rest sequences<a name="index-concat-229"></a></var><br>
+<blockquote><p><a name="index-copying-strings-230"></a><a name="index-concatenating-strings-231"></a>This function returns a new string consisting of the characters in the
 arguments passed to it (along with their text properties, if any).  The
 arguments may be strings, lists of numbers, or vectors of numbers; they
 are not themselves changed.  If <code>concat</code> receives no arguments, it
@@ -173,7 +172,7 @@ string to be used as a shell command, see <a href="Shell-Arguments.html#Shell-Ar
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>split-string</b><var> string &amp;optional separators omit-nulls<a name="index-split_002dstring-230"></a></var><br>
+&mdash; Function: <b>split-string</b><var> string &amp;optional separators omit-nulls<a name="index-split_002dstring-232"></a></var><br>
 <blockquote><p>This function splits <var>string</var> into substrings based on the regular
 expression <var>separators</var> (see <a href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>).  Each match
 for <var>separators</var> defines a splitting point; the substrings between
@@ -243,12 +242,13 @@ practice:
           (split-string "ooo" "\\|o+" t)
                &rArr; ("o" "o" "o")
 </pre>
-        <p>If you need to split a string that is a shell command, where
-individual arguments could be quoted, see <a href="Shell-Arguments.html#Shell-Arguments">split-string-and-unquote</a>. 
+        <p>If you need to split a string into a list of individual command-line
+arguments suitable for <code>call-process</code> or <code>start-process</code>,
+see <a href="Shell-Arguments.html#Shell-Arguments">split-string-and-unquote</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>split-string-default-separators</b><var><a name="index-split_002dstring_002ddefault_002dseparators-231"></a></var><br>
+&mdash; Variable: <b>split-string-default-separators</b><var><a name="index-split_002dstring_002ddefault_002dseparators-233"></a></var><br>
 <blockquote><p>The default value of <var>separators</var> for <code>split-string</code>.  Its
 usual value is <code>"[&nbsp;\f\t\n\r\v]+"</code><!-- /@w -->. 
 </p></blockquote></div>

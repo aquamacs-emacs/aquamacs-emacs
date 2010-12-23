@@ -5,8 +5,8 @@
 <meta name="description" content="Using of D-Bus">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Signals.html#Signals" title="Signals">
-<link rel="next" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link rel="prev" href="Alternative-Buses.html#Alternative-Buses" title="Alternative Buses">
+<link rel="next" href="Index.html#Index" title="Index">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -40,16 +40,23 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 <div class="node">
 <a name="Errors-and-Events"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Signals.html#Signals">Signals</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Index.html#Index">Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Alternative-Buses.html#Alternative-Buses">Alternative Buses</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="chapter">8 Errors and events.</h2>
+<h2 class="chapter">9 Errors and events.</h2>
 
-<p><a name="index-errors-54"></a><a name="index-events-55"></a>
-Input parameters of <code>dbus-call-method</code>,
+<p><a name="index-debugging-57"></a><a name="index-errors-58"></a><a name="index-events-59"></a>
+The internal actions can be traced by running in a debug mode.
+
+<div class="defun">
+&mdash; Variable: <b>dbus-debug</b><var><a name="index-dbus_002ddebug-60"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, D-Bus specific debug messages are raised. 
+</p></blockquote></div>
+
+   <p>Input parameters of <code>dbus-call-method</code>,
 <code>dbus-call-method-non-blocking</code>,
 <code>dbus-call-method-asynchronously</code>, and
 <code>dbus-register-signal</code> are checked for correct D-Bus types. If
@@ -61,11 +68,10 @@ there is a type mismatch, the Lisp error <code>wrong-type-argument</code>
 appended to the <code>dbus-error</code>.
 
 <div class="defun">
-&mdash; Special Form: <b>dbus-ignore-errors</b><var> forms<small class="dots">...</small><a name="index-dbus_002dignore_002derrors-56"></a></var><br>
+&mdash; Special Form: <b>dbus-ignore-errors</b><var> forms<small class="dots">...</small><a name="index-dbus_002dignore_002derrors-61"></a></var><br>
 <blockquote><p>This executes <var>forms</var> exactly like a <code>progn</code>, except that
 <code>dbus-error</code> errors are ignored during the <var>forms</var>.  These
-errors can be made visible when variable <code>dbus-debug</code> is set to
-<code>t</code>. 
+errors can be made visible when <code>dbus-debug</code> is set to <code>t</code>. 
 </p></blockquote></div>
 
    <p>Incoming D-Bus messages are handled as Emacs events, see see <a href="../elisp/Misc-Events.html#Misc-Events">Misc Events</a>.  They are retrieved only, when Emacs runs in
@@ -102,40 +108,40 @@ definition of the callback function in <a href="Signals.html#Signals">Signals</a
 callback function in order to retrieve the information from the event.
 
 <div class="defun">
-&mdash; Function: <b>dbus-event-bus-name</b><var> event<a name="index-dbus_002devent_002dbus_002dname-57"></a></var><br>
+&mdash; Function: <b>dbus-event-bus-name</b><var> event<a name="index-dbus_002devent_002dbus_002dname-62"></a></var><br>
 <blockquote><p>Returns the bus name <var>event</var> is coming from. 
 The result is either the symbol <code>:system</code> or the symbol <code>:session</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dbus-event-message-type</b><var> event<a name="index-dbus_002devent_002dmessage_002dtype-58"></a></var><br>
+&mdash; Function: <b>dbus-event-message-type</b><var> event<a name="index-dbus_002devent_002dmessage_002dtype-63"></a></var><br>
 <blockquote><p>Returns the message type of the corresponding D-Bus message.  The
-result is a number. 
+result is a natural number. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dbus-event-serial-number</b><var> event<a name="index-dbus_002devent_002dserial_002dnumber-59"></a></var><br>
+&mdash; Function: <b>dbus-event-serial-number</b><var> event<a name="index-dbus_002devent_002dserial_002dnumber-64"></a></var><br>
 <blockquote><p>Returns the serial number of the corresponding D-Bus message. 
-The result is a number. 
+The result is a natural number. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dbus-event-service-name</b><var> event<a name="index-dbus_002devent_002dservice_002dname-60"></a></var><br>
+&mdash; Function: <b>dbus-event-service-name</b><var> event<a name="index-dbus_002devent_002dservice_002dname-65"></a></var><br>
 <blockquote><p>Returns the unique name of the D-Bus object <var>event</var> is coming from. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dbus-event-path-name</b><var> event<a name="index-dbus_002devent_002dpath_002dname-61"></a></var><br>
+&mdash; Function: <b>dbus-event-path-name</b><var> event<a name="index-dbus_002devent_002dpath_002dname-66"></a></var><br>
 <blockquote><p>Returns the object path of the D-Bus object <var>event</var> is coming from. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dbus-event-interface-name</b><var> event<a name="index-dbus_002devent_002dinterface_002dname-62"></a></var><br>
+&mdash; Function: <b>dbus-event-interface-name</b><var> event<a name="index-dbus_002devent_002dinterface_002dname-67"></a></var><br>
 <blockquote><p>Returns the interface name of the D-Bus object <var>event</var> is coming from. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dbus-event-member-name</b><var> event<a name="index-dbus_002devent_002dmember_002dname-63"></a></var><br>
+&mdash; Function: <b>dbus-event-member-name</b><var> event<a name="index-dbus_002devent_002dmember_002dname-68"></a></var><br>
 <blockquote><p>Returns the member name of the D-Bus object <var>event</var> is coming
 from.  It is either a signal name or a method name. 
 </p></blockquote></div>
@@ -146,7 +152,7 @@ setting the variable <code>dbus-debug</code> to <code>t</code>.  They can also b
 handled by a hook function.
 
 <div class="defun">
-&mdash; Variable: <b>dbus-event-error-hooks</b><var><a name="index-dbus_002devent_002derror_002dhooks-64"></a></var><br>
+&mdash; Variable: <b>dbus-event-error-hooks</b><var><a name="index-dbus_002devent_002derror_002dhooks-69"></a></var><br>
 <blockquote><p>This hook variable keeps a list of functions, which are called when a
 D-Bus error happens in the event handler.  Every function must accept
 two arguments, the event and the error variable catched in

@@ -10,9 +10,10 @@
 <link rel="next" href="Publishing-options.html#Publishing-options" title="Publishing options">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,20 +58,20 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Confi
 
 <h4 class="subsection">13.1.4 Publishing action</h4>
 
-<p><a name="index-action_002c-for-publishing-1216"></a>
+<p><a name="index-action_002c-for-publishing-1624"></a>
 Publishing means that a file is copied to the destination directory and
 possibly transformed in the process.  The default transformation is to export
 Org files as HTML files, and this is done by the function
 <code>org-publish-org-to-html</code> which calls the HTML exporter (see <a href="HTML-export.html#HTML-export">HTML export</a>).  But you also can publish your content as PDF files using
-<code>org-publish-org-to-pdf</code>.  If you want to publish the Org file itself,
-but with <i>archived</i>, <i>commented</i>, and <i>tag-excluded</i> trees removed, use
-<code>org-publish-org-to-org</code> and set the parameters <code>:plain-source</code>
-and/or <code>:htmlized-source</code>.  This will produce <samp><span class="file">file.org</span></samp> and
-<samp><span class="file">file.org.html</span></samp> in the publishing
-directory<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Other files like images only
-need to be copied to the publishing destination, for this you may use
-<code>org-publish-attachment</code>.  For non-Org files, you always need to
-specify the publishing function:
+<code>org-publish-org-to-pdf</code>, or as <code>ascii</code>, <code>latin1</code> or
+<code>utf8</code> encoded files using the corresponding functions.  If you want to
+publish the Org file itself, but with <i>archived</i>, <i>commented</i>, and
+<i>tag-excluded</i> trees removed, use <code>org-publish-org-to-org</code> and set the
+parameters <code>:plain-source</code> and/or <code>:htmlized-source</code>.  This will
+produce <samp><span class="file">file.org</span></samp> and <samp><span class="file">file.org.html</span></samp> in the publishing
+directory<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Other files like images only need to be copied to the
+publishing destination; for this you may use <code>org-publish-attachment</code>. 
+For non-Org files, you always need to specify the publishing function:
 
    <p><table summary=""><tr align="left"><td valign="top" width="30%"><code>:publishing-function</code>
 </td><td valign="top" width="70%">Function executing the publication of a file.  This may also be a
@@ -81,19 +82,20 @@ list of functions, which will all be called in turn.
 </td><td valign="top" width="70%">Non-nil means, publish htmlized source.
    <br></td></tr></table>
 
-   <p>The function must accept two arguments: a property list containing at least a
-<code>:publishing-directory</code> property, and the name of the file to be
-published.  It should take the specified file, make the necessary
-transformation (if any) and place the result into the destination folder.
+   <p>The function must accept three arguments: a property list containing at least
+a <code>:publishing-directory</code> property, the name of the file to be
+published, and the path to the publishing directory of the output file.  It
+should take the specified file, make the necessary transformation (if any)
+and place the result into the destination folder.
 
    <div class="footnote">
 <hr>
 <h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <samp><span class="file">file-source.org</span></samp> and <samp><span class="file">file-source.org.html</span></samp> if
 source and publishing directories are equal.  Note that with this kind of
 setup, you need to add <code>:exclude "-source\\.org"</code> to the project
-definition in <code>org-publish-project-alist</code> to avoid that the published
-source files will be considered as new org files the next time the project is
-published.</p>
+definition in <code>org-publish-project-alist</code> to prevent the published
+source files from being considered as new org files the next time the project
+is published.</p>
 
    <hr></div>
 

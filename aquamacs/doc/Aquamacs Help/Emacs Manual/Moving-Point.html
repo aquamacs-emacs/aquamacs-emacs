@@ -12,7 +12,7 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.2.50.
+updated for Emacs version 24.0.50.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
@@ -58,14 +58,28 @@ keys.  You can also click the left mouse button to move point to the
 position clicked.  Emacs also provides a variety of additional
 keyboard commands that move point in more sophisticated ways.
 
-   <p><a name="index-C_002da-79"></a><a name="index-C_002de-80"></a><a name="index-C_002df-81"></a><a name="index-C_002db-82"></a><a name="index-C_002dn-83"></a><a name="index-C_002dp-84"></a><a name="index-M_002d_003e-85"></a><a name="index-M_002d_003c-86"></a><a name="index-M_002dr-87"></a><a name="index-LEFT-88"></a><a name="index-RIGHT-89"></a><a name="index-UP-90"></a><a name="index-DOWN-91"></a><a name="index-move_002dbeginning_002dof_002dline-92"></a><a name="index-move_002dend_002dof_002dline-93"></a><a name="index-forward_002dchar-94"></a><a name="index-backward_002dchar-95"></a><a name="index-next_002dline-96"></a><a name="index-previous_002dline-97"></a><a name="index-beginning_002dof_002dbuffer-98"></a><a name="index-end_002dof_002dbuffer-99"></a><a name="index-goto_002dchar-100"></a><a name="index-goto_002dline-101"></a><a name="index-move_002dto_002dwindow_002dline-102"></a>
+   <p><a name="index-C_002da-79"></a><a name="index-C_002de-80"></a><a name="index-C_002df-81"></a><a name="index-C_002db-82"></a><a name="index-C_002dn-83"></a><a name="index-C_002dp-84"></a><a name="index-M_002d_003e-85"></a><a name="index-M_002d_003c-86"></a><a name="index-M_002dr-87"></a><a name="index-LEFT-88"></a><a name="index-RIGHT-89"></a><a name="index-UP-90"></a><a name="index-DOWN-91"></a><a name="index-move_002dbeginning_002dof_002dline-92"></a><a name="index-move_002dend_002dof_002dline-93"></a><a name="index-forward_002dchar-94"></a><a name="index-backward_002dchar-95"></a><a name="index-right_002dchar-96"></a><a name="index-left_002dchar-97"></a><a name="index-next_002dline-98"></a><a name="index-previous_002dline-99"></a><a name="index-beginning_002dof_002dbuffer-100"></a><a name="index-end_002dof_002dbuffer-101"></a><a name="index-goto_002dchar-102"></a><a name="index-goto_002dline-103"></a><a name="index-move_002dto_002dwindow_002dline-104"></a>
      <dl>
 <dt><kbd>C-a</kbd><dt><kbd>&lt;Home&gt;</kbd><dd>Move to the beginning of the line (<code>move-beginning-of-line</code>). 
 <br><dt><kbd>C-e</kbd><dt><kbd>&lt;End&gt;</kbd><dd>Move to the end of the line (<code>move-end-of-line</code>). 
-<br><dt><kbd>C-f</kbd><dt><kbd>&lt;right&gt;</kbd><dd>Move forward one character (<code>forward-char</code>). 
-<br><dt><kbd>C-b</kbd><dt><kbd>&lt;left&gt;</kbd><dd>Move backward one character (<code>backward-char</code>). 
-<br><dt><kbd>M-f</kbd><dt><kbd>M-&lt;right&gt;</kbd><dt><kbd>C-&lt;right&gt;</kbd><dd>Move forward one word (<code>forward-word</code>). 
-<br><dt><kbd>M-b</kbd><dt><kbd>M-&lt;left&gt;</kbd><dt><kbd>C-&lt;left&gt;</kbd><dd>Move backward one word (<code>backward-word</code>). 
+<br><dt><kbd>C-f</kbd><dd>Move forward one character (<code>forward-char</code>). 
+<br><dt><kbd>&lt;right&gt;</kbd><dd>Move one character to the right (<code>right-char</code>).  This
+moves one character forward in text that is read in the usual
+left-to-right direction, but one character <em>backward</em> if the text
+is read right-to-left, as needed for right-to-left scripts such as
+Arabic.  See <a href="Bidirectional-Editing.html#Bidirectional-Editing">Bidirectional Editing</a>. 
+<br><dt><kbd>C-b</kbd><dd>Move backward one character (<code>backward-char</code>). 
+<br><dt><kbd>&lt;left&gt;</kbd><dd>Move one character to the left (<code>left-char</code>).  This
+moves one character backward in left-to-right text and one character
+forward in right-to-left text. 
+<br><dt><kbd>M-f</kbd><dt><kbd>M-&lt;right&gt;</kbd><dd>Move forward one word (<code>forward-word</code>). 
+<br><dt><kbd>C-&lt;right&gt;</kbd><dd>Move one word to the right (<code>right-word</code>).  This moves one word
+forward in left-to-right text and one word backward in right-to-left
+text. 
+<br><dt><kbd>M-b</kbd><dt><kbd>M-&lt;left&gt;</kbd><dd>Move backward one word (<code>backward-word</code>). 
+<br><dt><kbd>C-&lt;left&gt;</kbd><dd>Move one word to the left (<code>left-word</code>).  This moves one word
+backward in left-to-right text and one word forward in right-to-left
+text. 
 <br><dt><kbd>C-n</kbd><dt><kbd>&lt;down&gt;</kbd><dd>Move down one screen line (<code>next-line</code>).  This command attempts
 to keep the horizontal position unchanged, so if you start in the
 middle of one line, you move to the middle of the next. 
@@ -104,7 +118,7 @@ for <var>n</var>.  Just type &lt;RET&gt; in the minibuffer to use it.  You can
 also specify <var>n</var> by giving <kbd>M-g M-g</kbd> a numeric prefix argument. 
 See <a href="Select-Buffer.html#Select-Buffer">Select Buffer</a>, for the behavior of <kbd>M-g M-g</kbd> when you give it
 a plain prefix argument. 
-<br><dt><kbd>C-x C-n</kbd><dd><a name="index-set_002dgoal_002dcolumn-103"></a><a name="index-C_002dx-C_002dn-104"></a>Use the current column of point as the <dfn>semipermanent goal column</dfn>
+<br><dt><kbd>C-x C-n</kbd><dd><a name="index-set_002dgoal_002dcolumn-105"></a><a name="index-C_002dx-C_002dn-106"></a>Use the current column of point as the <dfn>semipermanent goal column</dfn>
 for <kbd>C-n</kbd> and <kbd>C-p</kbd> (<code>set-goal-column</code>).  When a
 semipermanent goal column is in effect, those commands always try to
 move to this column, or as close as possible to it, after moving
@@ -113,7 +127,7 @@ vertically.  The goal column remains in effect until canceled.
 preserve the horizontal position, as usual. 
 </dl>
 
-   <p><a name="index-line_002dmove_002dvisual-105"></a>  When a line of text in the buffer is longer than the width of the
+   <p><a name="index-line_002dmove_002dvisual-107"></a>  When a line of text in the buffer is longer than the width of the
 window, Emacs usually displays it on two or more <dfn>screen lines</dfn>. 
 For convenience, <kbd>C-n</kbd> and <kbd>C-p</kbd> move point by screen lines,
 as do the equivalent keys <kbd>&lt;down&gt;</kbd> and <kbd>&lt;up&gt;</kbd>.  You
@@ -133,13 +147,13 @@ of the logical line.  Whenever we encounter commands that work on
 screen lines, such as <kbd>C-n</kbd> and <kbd>C-p</kbd>, we will point these
 out.
 
-   <p><a name="index-track_002deol-106"></a>  When <code>line-move-visual</code> is <code>nil</code>, you can also set the
+   <p><a name="index-track_002deol-108"></a>  When <code>line-move-visual</code> is <code>nil</code>, you can also set the
 variable <code>track-eol</code> to a non-<code>nil</code> value.  Then <kbd>C-n</kbd>
 and <kbd>C-p</kbd>, when starting at the end of the logical line, move to
 the end of the next logical line.  Normally, <code>track-eol</code> is
 <code>nil</code>.
 
-   <p><a name="index-next_002dline_002dadd_002dnewlines-107"></a>  <kbd>C-n</kbd> normally stops at the end of the buffer when you use it on
+   <p><a name="index-next_002dline_002dadd_002dnewlines-109"></a>  <kbd>C-n</kbd> normally stops at the end of the buffer when you use it on
 the last line of the buffer.  However, if you set the variable
 <code>next-line-add-newlines</code> to a non-<code>nil</code> value, <kbd>C-n</kbd> on
 the last line of a buffer creates an additional line at the end and

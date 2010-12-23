@@ -170,7 +170,7 @@ could use the command line tool <code>dbus-send</code> in a shell:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dbus-register-property</b><var> bus service path interface property access value<a name="index-dbus_002dregister_002dproperty-48"></a></var><br>
+&mdash; Function: <b>dbus-register-property</b><var> bus service path interface property access value &amp;optional emits-signal<a name="index-dbus_002dregister_002dproperty-48"></a></var><br>
 <blockquote><p>With this function, an application declares a <var>property</var> on the D-Bus
 <var>bus</var>.
 
@@ -198,7 +198,12 @@ only way to change their values.  Properties with access type
 
         <p>The interface &lsquo;<samp><span class="samp">org.freedesktop.DBus.Properties</span></samp>&rsquo; is added to
 <var>path</var>, including a default handler for the &lsquo;<samp><span class="samp">Get</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">GetAll</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Set</span></samp>&rsquo; methods of this interface.  Example:
+&lsquo;<samp><span class="samp">GetAll</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Set</span></samp>&rsquo; methods of this interface.  When
+<var>emits-signal</var> is non-<code>nil</code>, the signal
+&lsquo;<samp><span class="samp">PropertiesChanged</span></samp>&rsquo; is sent when the property is changed by
+<code>dbus-set-property</code>.
+
+     <p class="noindent">Example:
 
      <pre class="lisp">          (dbus-register-property
             :session "org.freedesktop.TextEditor" "/org/freedesktop/TextEditor"
@@ -209,7 +214,7 @@ only way to change their values.  Properties with access type
           
           (dbus-register-property
             :session "org.freedesktop.TextEditor" "/org/freedesktop/TextEditor"
-            "org.freedesktop.TextEditor" "version" :readwrite emacs-version)
+            "org.freedesktop.TextEditor" "version" :readwrite emacs-version t)
           
           &rArr; ((:session "org.freedesktop.TextEditor" "version")
               ("org.freedesktop.TextEditor" "/org/freedesktop/TextEditor"))

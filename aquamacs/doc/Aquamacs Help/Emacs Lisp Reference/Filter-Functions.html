@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Output-from-Processes.html#Output-from-
 
 <h4 class="subsection">37.9.2 Process Filter Functions</h4>
 
-<p><a name="index-filter-function-3250"></a><a name="index-process-filter-3251"></a>
+<p><a name="index-filter-function-3334"></a><a name="index-process-filter-3335"></a>
   A process <dfn>filter function</dfn> is a function that receives the
 standard output from the associated process.  If a process has a filter,
 then <em>all</em> output from that process is passed to the filter.  The
@@ -82,18 +82,20 @@ process's buffer, mimicking the actions of Emacs when there is no
 filter.  Such filter functions need to use <code>set-buffer</code> in order to
 be sure to insert in that buffer.  To avoid setting the current buffer
 semipermanently, these filter functions must save and restore the
-current buffer.  They should also update the process marker, and in some
-cases update the value of point.  Here is how to do these things:
+current buffer.  They should also check whether the buffer is still
+alive, update the process marker, and in some cases update the value
+of point.  Here is how to do these things:
 
 <pre class="smallexample">     (defun ordinary-insertion-filter (proc string)
-       (with-current-buffer (process-buffer proc)
-         (let ((moving (= (point) (process-mark proc))))
-           (save-excursion
-             ;; <span class="roman">Insert the text, advancing the process marker.</span>
-             (goto-char (process-mark proc))
-             (insert string)
-             (set-marker (process-mark proc) (point)))
-           (if moving (goto-char (process-mark proc))))))
+       (when (buffer-live-p (process-buffer proc))
+         (with-current-buffer (process-buffer proc)
+           (let ((moving (= (point) (process-mark proc))))
+             (save-excursion
+               ;;  <span class="roman">Insert the text, advancing the process marker.</span>
+               (goto-char (process-mark proc))
+               (insert string)
+               (set-marker (process-mark proc) (point)))
+             (if moving (goto-char (process-mark proc)))))))
 </pre>
    <p class="noindent">The reason to use <code>with-current-buffer</code>, rather than using
 <code>save-excursion</code> to save and restore the current buffer, is so as
@@ -115,12 +117,6 @@ expression searching or matching had to explicitly save and restore the
 match data.  Now Emacs does this automatically for filter functions;
 they never need to do it explicitly.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
 
-   <p>A filter function that writes the output into the buffer of the
-process should check whether the buffer is still alive.  If it tries to
-insert into a dead buffer, it will get an error.  The expression
-<code>(buffer-name (process-buffer </code><var>process</var><code>))</code> returns <code>nil</code>
-if the buffer is dead.
-
    <p>The output to the function may come in chunks of any size.  A program
 that produces the same output twice in a row may send it as one batch of
 200 characters one time, and five batches of 40 characters the next.  If
@@ -130,13 +126,13 @@ or more batches of output; one way to do this is to insert the
 received text into a temporary buffer, which can then be searched.
 
 <div class="defun">
-&mdash; Function: <b>set-process-filter</b><var> process filter<a name="index-set_002dprocess_002dfilter-3252"></a></var><br>
+&mdash; Function: <b>set-process-filter</b><var> process filter<a name="index-set_002dprocess_002dfilter-3336"></a></var><br>
 <blockquote><p>This function gives <var>process</var> the filter function <var>filter</var>.  If
 <var>filter</var> is <code>nil</code>, it gives the process no filter. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>process-filter</b><var> process<a name="index-process_002dfilter-3253"></a></var><br>
+&mdash; Function: <b>process-filter</b><var> process<a name="index-process_002dfilter-3337"></a></var><br>
 <blockquote><p>This function returns the filter function of <var>process</var>, or <code>nil</code>
 if it has none. 
 </p></blockquote></div>

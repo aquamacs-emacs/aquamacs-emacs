@@ -67,8 +67,8 @@ applied, when the corresponding D-Bus message is created:
 <pre class="example">
      <p><table summary=""><tr align="left"><td valign="top">Lisp type               </td><td valign="top"></td><td valign="top">D-Bus type
      <br></td></tr><tr align="left"><td valign="top"><br></td></tr><tr align="left"><td valign="top"><code>t</code> and <code>nil</code> </td><td valign="top">==&gt; </td><td valign="top">DBUS_TYPE_BOOLEAN
-     <br></td></tr><tr align="left"><td valign="top">number                  </td><td valign="top">==&gt; </td><td valign="top">DBUS_TYPE_UINT32
-     <br></td></tr><tr align="left"><td valign="top">integer                 </td><td valign="top">==&gt; </td><td valign="top">DBUS_TYPE_INT32
+     <br></td></tr><tr align="left"><td valign="top">natural number          </td><td valign="top">==&gt; </td><td valign="top">DBUS_TYPE_UINT32
+     <br></td></tr><tr align="left"><td valign="top">negative integer        </td><td valign="top">==&gt; </td><td valign="top">DBUS_TYPE_INT32
      <br></td></tr><tr align="left"><td valign="top">float                   </td><td valign="top">==&gt; </td><td valign="top">DBUS_TYPE_DOUBLE
      <br></td></tr><tr align="left"><td valign="top">string                  </td><td valign="top">==&gt; </td><td valign="top">DBUS_TYPE_STRING
      <br></td></tr><tr align="left"><td valign="top">list                    </td><td valign="top">==&gt; </td><td valign="top">DBUS_TYPE_ARRAY
@@ -82,19 +82,20 @@ symbol can be preceeded to the corresponding Lisp object. Basic D-Bus
 types are represented by the type symbols <code>:byte</code>,
 <code>:boolean</code>, <code>:int16</code>, <code>:uint16</code>, <code>:int32</code>,
 <code>:uint32</code>, <code>:int64</code>, <code>:uint64</code>, <code>:double</code>,
-<code>:string</code>, <code>:object-path</code> and <code>:signature</code>.
+<code>:string</code>, <code>:object-path</code>, <code>:signature</code> and
+<code>:unix-fd</code>.
 
 <p class="noindent">Example:
 
-<pre class="lisp">     (dbus-call-method ... <var>NUMBER</var> <var>STRING</var>)
+<pre class="lisp">     (dbus-call-method ... <var>NAT-NUMBER</var> <var>STRING</var>)
 </pre>
    <p>is equivalent to
 
-<pre class="lisp">     (dbus-call-method ... :uint32 <var>NUMBER</var> :string <var>STRING</var>)
+<pre class="lisp">     (dbus-call-method ... :uint32 <var>NAT-NUMBER</var> :string <var>STRING</var>)
 </pre>
    <p>but different to
 
-<pre class="lisp">     (dbus-call-method ... :int32 <var>NUMBER</var> :signature <var>STRING</var>)
+<pre class="lisp">     (dbus-call-method ... :int32 <var>NAT-NUMBER</var> :signature <var>STRING</var>)
 </pre>
    <p>The value for a byte D-Bus type can be any integer in the range 0
 through 255.  If a character is used as argument, modifiers
@@ -185,13 +186,14 @@ objects.
 <pre class="example">
      <p><table summary=""><tr align="left"><td valign="top">D-Bus type            </td><td valign="top"></td><td valign="top">Lisp type
      <br></td></tr><tr align="left"><td valign="top"><br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_BOOLEAN     </td><td valign="top">==&gt; </td><td valign="top"><code>t</code> or <code>nil</code>
-     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_BYTE        </td><td valign="top">==&gt; </td><td valign="top">number
-     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_UINT16      </td><td valign="top">==&gt; </td><td valign="top">number
-     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_INT16       </td><td valign="top">==&gt; </td><td valign="top">number
-     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_UINT32      </td><td valign="top">==&gt; </td><td valign="top">number or float
-     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_INT32       </td><td valign="top">==&gt; </td><td valign="top">number or float
-     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_UINT64      </td><td valign="top">==&gt; </td><td valign="top">number or float
-     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_INT64       </td><td valign="top">==&gt; </td><td valign="top">number or float
+     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_BYTE        </td><td valign="top">==&gt; </td><td valign="top">natural number
+     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_UINT16      </td><td valign="top">==&gt; </td><td valign="top">natural number
+     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_INT16       </td><td valign="top">==&gt; </td><td valign="top">integer
+     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_UINT32      </td><td valign="top">==&gt; </td><td valign="top">natural number or float
+     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_UNIX_FD     </td><td valign="top">==&gt; </td><td valign="top">natural number or float
+     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_INT32       </td><td valign="top">==&gt; </td><td valign="top">integer or float
+     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_UINT64      </td><td valign="top">==&gt; </td><td valign="top">natural number or float
+     <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_INT64       </td><td valign="top">==&gt; </td><td valign="top">integer or float
      <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_DOUBLE      </td><td valign="top">==&gt; </td><td valign="top">float
      <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_STRING      </td><td valign="top">==&gt; </td><td valign="top">string
      <br></td></tr><tr align="left"><td valign="top">DBUS_TYPE_OBJECT_PATH </td><td valign="top">==&gt; </td><td valign="top">string
@@ -203,9 +205,9 @@ objects.
      <br></td></tr></table>
 </pre>
    <p>A float object in case of <code>DBUS_TYPE_UINT32</code>,
-<code>DBUS_TYPE_INT32</code>, <code>DBUS_TYPE_UINT64</code> and
-<code>DBUS_TYPE_INT6432</code> is returned, when the C value exceeds the
-Emacs number size range.
+<code>DBUS_TYPE_INT32</code>, <code>DBUS_TYPE_UINT64</code>,
+<code>DBUS_TYPE_INT64</code> and <code>DBUS_TYPE_UNIX_FD</code> is returned, when
+the C value exceeds the Emacs number size range.
 
    <p>The resulting list of the last 4 D-Bus compound types contains as
 elements the elements of the D-Bus container, mapped according to the
@@ -215,7 +217,7 @@ same rules.
 <a href="Inspection.html#Inspection">Inspection</a>, would offer as Lisp data the following object
 (<var>BOOL</var> stands here for either <code>nil</code> or <code>t</code>):
 
-<pre class="lisp">     (<var>NUMBER</var> ((<var>STRING</var> <var>BOOL</var> <var>BOOL</var>) (<var>STRING</var> <var>BOOL</var> <var>BOOL</var>) ...))
+<pre class="lisp">     (<var>INTEGER</var> ((<var>STRING</var> <var>BOOL</var> <var>BOOL</var>) (<var>STRING</var> <var>BOOL</var> <var>BOOL</var>) ...))
 </pre>
    <div class="defun">
 &mdash; Function: <b>dbus-byte-array-to-string</b><var> byte-array<a name="index-dbus_002dbyte_002darray_002dto_002dstring-34"></a></var><br>

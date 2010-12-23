@@ -10,9 +10,10 @@
 <link rel="next" href="Agenda-column-view.html#Agenda-column-view" title="Agenda column view">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,22 +58,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Agenda-Views.html#Agenda-Views">Agenda 
 
 <h3 class="section">10.7 Exporting Agenda Views</h3>
 
-<p><a name="index-agenda-views_002c-exporting-935"></a>
+<p><a name="index-agenda-views_002c-exporting-1290"></a>
 If you are away from your computer, it can be very useful to have a printed
-version of some agenda views to carry around.  Org mode can export custom
+version of some agenda views to carry around.  Org-mode can export custom
 agenda views as plain text, HTML<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, Postscript, PDF<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>, and iCalendar files.  If
 you want to do this only occasionally, use the command
 
      
-<a name="index-C_002dx-C_002dw-936"></a>
-<dl><dt><kbd>C-x C-w</kbd><dd><a name="index-exporting-agenda-views-937"></a><a name="index-agenda-views_002c-exporting-938"></a><a name="index-org_002dagenda_002dexporter_002dsettings-939"></a>Write the agenda view to a file.  Depending on the extension of the selected
+<a name="index-C_002dx-C_002dw-1291"></a>
+<a name="index-org_002dwrite_002dagenda-1292"></a>
+<dl><dt><kbd>C-x C-w &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-write-agenda</code><kbd>)</kbd><dd>
+<a name="index-exporting-agenda-views-1293"></a><a name="index-agenda-views_002c-exporting-1294"></a><a name="index-org_002dagenda_002dexporter_002dsettings-1295"></a>Write the agenda view to a file.  Depending on the extension of the selected
 file name, the view will be exported as HTML (extension <samp><span class="file">.html</span></samp> or
 <samp><span class="file">.htm</span></samp>), Postscript (extension <samp><span class="file">.ps</span></samp>), iCalendar (extension
 <samp><span class="file">.ics</span></samp>), or plain text (any other extension).  Use the variable
 <code>org-agenda-exporter-settings</code> to set options for <samp><span class="file">ps-print</span></samp> and
 for <samp><span class="file">htmlize</span></samp> to be used during export, for example
 
-     <p><a name="index-org_002dagenda_002dadd_002dentry_002dtext_002dmaxlines-940"></a><a name="index-htmlize_002doutput_002dtype-941"></a><a name="index-ps_002dnumber_002dof_002dcolumns-942"></a><a name="index-ps_002dlandscape_002dmode-943"></a>
+     <p><a name="index-org_002dagenda_002dadd_002dentry_002dtext_002dmaxlines-1296"></a><a name="index-htmlize_002doutput_002dtype-1297"></a><a name="index-ps_002dnumber_002dof_002dcolumns-1298"></a><a name="index-ps_002dlandscape_002dmode-1299"></a>
      <pre class="lisp">          (setq org-agenda-exporter-settings
                 '((ps-number-of-columns 2)
                   (ps-landscape-mode t)
@@ -107,7 +110,7 @@ or absolute.
               ("~/views/office.ps" "~/calendars/office.ics"))))
 </pre>
    <p>The extension of the file name determines the type of export.  If it is
-<samp><span class="file">.html</span></samp>, Org mode will use the <samp><span class="file">htmlize.el</span></samp> package to convert
+<samp><span class="file">.html</span></samp>, Org-mode will use the <samp><span class="file">htmlize.el</span></samp> package to convert
 the buffer to HTML and save it to this file name.  If the extension is
 <samp><span class="file">.ps</span></samp>, <code>ps-print-buffer-with-faces</code> is used to produce
 Postscript output.  If the extension is <samp><span class="file">.ics</span></samp>, iCalendar export is
@@ -121,8 +124,10 @@ Instead, there is a special command to produce <em>all</em> specified
 files in one step:
 
      
-<a name="index-C_002dc-a-e-944"></a>
-<dl><dt><kbd>C-c a e</kbd><dd>Export all agenda views that have export file names associated with
+<a name="index-C_002dc-a-e-1300"></a>
+<a name="index-org_002dstore_002dagenda_002dviews-1301"></a>
+<dl><dt><kbd>C-c a e &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-store-agenda-views</code><kbd>)</kbd><dd>
+Export all agenda views that have export file names associated with
 them. 
 </dl>
 
@@ -153,7 +158,7 @@ in <code>org-agenda-custom-commands</code> take precedence.
 </pre>
    <p class="noindent">or, if you need to modify some parameters<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a>
 <pre class="example">     emacs -eval '(org-batch-store-agenda-views                      \
-                   org-agenda-ndays 30                               \
+                   org-agenda-span month                             \
                    org-agenda-start-day "2007-11-01"                 \
                    org-agenda-include-diary nil                      \
                    org-agenda-files (quote ("~/org/project.org")))'  \

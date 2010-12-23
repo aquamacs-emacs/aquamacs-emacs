@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -52,7 +52,7 @@ file if it isn't already loaded (see <a href="Named-Features.html#Named-Features
 all these facilities call the <code>load</code> function to do the work.
 
 <div class="defun">
-&mdash; Function: <b>load</b><var> filename &amp;optional missing-ok nomessage nosuffix must-suffix<a name="index-load-793"></a></var><br>
+&mdash; Function: <b>load</b><var> filename &amp;optional missing-ok nomessage nosuffix must-suffix<a name="index-load-794"></a></var><br>
 <blockquote><p>This function finds and opens a file of Lisp code, evaluates all the
 forms in it, and closes the file.
 
@@ -100,6 +100,10 @@ in <code>load-path</code>, where <code>nil</code> stands for the default directo
 <code>load-path</code>, then all three suffixes in the second directory, and
 so on.  See <a href="Library-Search.html#Library-Search">Library Search</a>.
 
+        <p>Whatever the name under which the file is eventually found, and the
+directory where Emacs found it, Emacs sets the value of the variable
+<code>load-file-name</code> to that file's name.
+
         <p>If you get a warning that <samp><span class="file">foo.elc</span></samp> is older than <samp><span class="file">foo.el</span></samp>, it
 means you should consider recompiling <samp><span class="file">foo.el</span></samp>.  See <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>.
 
@@ -111,11 +115,11 @@ See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
 in the echo area during loading unless <var>nomessage</var> is
 non-<code>nil</code>.
 
-        <p><a name="index-load-errors-794"></a>Any unhandled errors while loading a file terminate loading.  If the
+        <p><a name="index-load-errors-795"></a>Any unhandled errors while loading a file terminate loading.  If the
 load was done for the sake of <code>autoload</code>, any function definitions
 made during the loading are undone.
 
-        <p><a name="index-file_002derror-795"></a>If <code>load</code> can't find the file to load, then normally it signals the
+        <p><a name="index-file_002derror-796"></a>If <code>load</code> can't find the file to load, then normally it signals the
 error <code>file-error</code> (with &lsquo;<samp><span class="samp">Cannot open load file
 </span><var>filename</var></samp>&rsquo;).  But if <var>missing-ok</var> is non-<code>nil</code>, then
 <code>load</code> just returns <code>nil</code>.
@@ -128,7 +132,7 @@ See below.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>load-file</b><var> filename<a name="index-load_002dfile-796"></a></var><br>
+&mdash; Command: <b>load-file</b><var> filename<a name="index-load_002dfile-797"></a></var><br>
 <blockquote><p>This command loads the file <var>filename</var>.  If <var>filename</var> is a
 relative file name, then the current default directory is assumed. 
 This command does not use <code>load-path</code>, and does not append
@@ -138,20 +142,27 @@ precisely the file name to load.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>load-library</b><var> library<a name="index-load_002dlibrary-797"></a></var><br>
+&mdash; Command: <b>load-library</b><var> library<a name="index-load_002dlibrary-798"></a></var><br>
 <blockquote><p>This command loads the library named <var>library</var>.  It is equivalent to
 <code>load</code>, except for the way it reads its argument interactively. 
 See <a href="../emacs/Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>load-in-progress</b><var><a name="index-load_002din_002dprogress-798"></a></var><br>
+&mdash; Variable: <b>load-in-progress</b><var><a name="index-load_002din_002dprogress-799"></a></var><br>
 <blockquote><p>This variable is non-<code>nil</code> if Emacs is in the process of loading a
 file, and it is <code>nil</code> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>load-read-function</b><var><a name="index-load_002dread_002dfunction-799"></a></var><br>
+&mdash; Variable: <b>load-file-name</b><var><a name="index-load_002dfile_002dname-800"></a></var><br>
+<blockquote><p>When Emacs is in the process of loading a file, this variable's value
+is the name of that file, as Emacs found it during the search
+described earlier in this section. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>load-read-function</b><var><a name="index-load_002dread_002dfunction-801"></a></var><br>
 <blockquote><p><a name="Definition-of-load_002dread_002dfunction"></a><!-- do not allow page break at anchor; work around Texinfo deficiency. -->
 This variable specifies an alternate expression-reading function for
 <code>load</code> and <code>eval-region</code> to use instead of <code>read</code>. 

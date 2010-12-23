@@ -12,7 +12,7 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.2.50.
+updated for Emacs version 24.0.50.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
@@ -47,7 +47,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">18.8 Font Lock mode</h3>
 
-<p><a name="index-Font-Lock-mode-509"></a><a name="index-mode_002c-Font-Lock-510"></a><a name="index-syntax-highlighting-and-coloring-511"></a>
+<p><a name="index-Font-Lock-mode-511"></a><a name="index-mode_002c-Font-Lock-512"></a><a name="index-syntax-highlighting-and-coloring-513"></a>
   Font Lock mode is a minor mode, always local to a particular buffer,
 which highlights (or &ldquo;fontifies&rdquo;) the buffer contents according to
 the syntax of the text you are editing.  It can recognize comments and
@@ -57,12 +57,12 @@ constructs, such as names of functions being defined or reserved
 keywords.  Some special modes, such as Occur mode and Info mode, have
 completely specialized ways of assigning fonts for Font Lock mode.
 
-   <p><a name="index-font_002dlock_002dmode-512"></a>  Font Lock mode is turned on by default in all modes which support it. 
+   <p><a name="index-font_002dlock_002dmode-514"></a>  Font Lock mode is turned on by default in all modes which support it. 
 You can toggle font-lock for each buffer with the command <kbd>M-x
 font-lock-mode</kbd>.  Using a positive argument unconditionally turns Font
 Lock mode on, and a negative or zero argument turns it off.
 
-   <p><a name="index-global_002dfont_002dlock_002dmode-513"></a><a name="index-global_002dfont_002dlock_002dmode-514"></a>  If you do not wish Font Lock mode to be turned on by default,
+   <p><a name="index-global_002dfont_002dlock_002dmode-515"></a><a name="index-global_002dfont_002dlock_002dmode-516"></a>  If you do not wish Font Lock mode to be turned on by default,
 customize the variable <code>global-font-lock-mode</code> using the Customize
 interface (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>), or use the function
 <code>global-font-lock-mode</code> in your <samp><span class="file">.emacs</span></samp> file, like this:
@@ -73,7 +73,7 @@ interface (see <a href="Easy-Customization.html#Easy-Customization">Easy Customi
 take effect whenever fontification is done; that is, potentially at
 any time.
 
-   <p><a name="index-turn_002don_002dfont_002dlock-515"></a>  If you have disabled Global Font Lock mode, you can still enable Font
+   <p><a name="index-turn_002don_002dfont_002dlock-517"></a>  If you have disabled Global Font Lock mode, you can still enable Font
 Lock for specific major modes by adding the function
 <code>turn-on-font-lock</code> to the mode hooks (see <a href="Hooks.html#Hooks">Hooks</a>).  For
 example, to enable Font Lock mode for editing C files, you can do this:
@@ -87,7 +87,7 @@ customize-group &lt;RET&gt; font-lock-faces &lt;RET&gt;</kbd>.  You can then
 use that customization buffer to customize the appearance of these
 faces.  See <a href="Face-Customization.html#Face-Customization">Face Customization</a>.
 
-   <p><a name="index-font_002dlock_002dmaximum_002ddecoration-516"></a>  The variable <code>font-lock-maximum-decoration</code> specifies the
+   <p><a name="index-font_002dlock_002dmaximum_002ddecoration-518"></a>  The variable <code>font-lock-maximum-decoration</code> specifies the
 preferred level of fontification, for modes that provide multiple
 levels.  Level 1 is the least amount of fontification; some modes
 support levels as high as 3.  The normal default is &ldquo;as high as
@@ -99,13 +99,13 @@ otherwise, use this:
 <pre class="example">     (setq font-lock-maximum-decoration
            '((c-mode . 1) (c++-mode . 1)))
 </pre>
-   <p><a name="index-font_002dlock_002dmaximum_002dsize-517"></a>  Fontification can be too slow for large buffers, so you can suppress
+   <p><a name="index-font_002dlock_002dmaximum_002dsize-519"></a>  Fontification can be too slow for large buffers, so you can suppress
 it for buffers above a certain size.  The variable
 <code>font-lock-maximum-size</code> specifies a buffer size, beyond which
 buffer fontification is suppressed.
 
 <!-- @w is used below to prevent a bad page-break. -->
-   <p><a name="index-font_002dlock_002dbeginning_002dof_002dsyntax_002dfunction-518"></a><a name="index-incorrect-fontification-519"></a><a name="index-parenthesis-in-column-zero-and-fontification-520"></a><a name="index-brace-in-column-zero-and-fontification-521"></a>  Comment and string fontification (or &ldquo;syntactic&rdquo; fontification)
+   <p><a name="index-font_002dlock_002dbeginning_002dof_002dsyntax_002dfunction-520"></a><a name="index-incorrect-fontification-521"></a><a name="index-parenthesis-in-column-zero-and-fontification-522"></a><a name="index-brace-in-column-zero-and-fontification-523"></a>  Comment and string fontification (or &ldquo;syntactic&rdquo; fontification)
 relies on analysis of the syntactic structure of the buffer text.  For
 the sake of speed, some modes, including Lisp mode, rely on a special
 convention: an open-parenthesis or open-brace in the leftmost column
@@ -115,7 +115,7 @@ don't follow this convention, Font Lock mode can misfontify the text
 that follows an open-parenthesis or open-brace in the leftmost column
 that is inside a string or comment.
 
-   <p><a name="index-slow-display-during-scrolling-522"></a>  The variable <code>font-lock-beginning-of-syntax-function</code> (always
+   <p><a name="index-slow-display-during-scrolling-524"></a>  The variable <code>font-lock-beginning-of-syntax-function</code> (always
 buffer-local) specifies how Font Lock mode can find a position
 guaranteed to be outside any comment or string.  In modes which use the
 leftmost column parenthesis convention, the default value of the variable
@@ -127,7 +127,7 @@ buffer text from the beginning of the buffer.  This can considerably
 slow down redisplay while scrolling, particularly if you are close to
 the end of a large buffer.
 
-   <p><a name="index-font_002dlock_002dadd_002dkeywords-523"></a>  Font Lock highlighting patterns already exist for many modes, but you
+   <p><a name="index-font_002dlock_002dadd_002dkeywords-525"></a>  Font Lock highlighting patterns already exist for many modes, but you
 may want to fontify additional patterns.  You can use the function
 <code>font-lock-add-keywords</code>, to add your own highlighting patterns for
 a particular mode.  For example, to highlight &lsquo;<samp><span class="samp">FIXME:</span></samp>&rsquo; words in C
@@ -138,10 +138,10 @@ comments, use this:
                 (font-lock-add-keywords nil
                  '(("\\&lt;\\(FIXME\\):" 1 font-lock-warning-face t)))))
 </pre>
-   <p><a name="index-font_002dlock_002dremove_002dkeywords-524"></a>  To remove keywords from the font-lock highlighting patterns, use the
+   <p><a name="index-font_002dlock_002dremove_002dkeywords-526"></a>  To remove keywords from the font-lock highlighting patterns, use the
 function <code>font-lock-remove-keywords</code>.  See <a href="../elisp/Search_002dbased-Fontification.html#Search_002dbased-Fontification">Search-based Fontification</a>.
 
-   <p><a name="index-just_002din_002dtime-_0028JIT_0029-font_002dlock-525"></a><a name="index-background-syntax-highlighting-526"></a>  Fontifying large buffers can take a long time.  To avoid large
+   <p><a name="index-just_002din_002dtime-_0028JIT_0029-font_002dlock-527"></a><a name="index-background-syntax-highlighting-528"></a>  Fontifying large buffers can take a long time.  To avoid large
 delays when a file is visited, Emacs fontifies only the visible
 portion of a buffer.  As you scroll through the buffer, each portion
 that becomes visible is fontified as soon as it is displayed; this

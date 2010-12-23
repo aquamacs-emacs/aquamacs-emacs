@@ -10,9 +10,10 @@
 <link rel="next" href="Formula-syntax-for-Calc.html#Formula-syntax-for-Calc" title="Formula syntax for Calc">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,7 +58,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="The-spreadsheet.html#The-spreadsheet">T
 
 <h4 class="subsection">3.5.1 References</h4>
 
-<p><a name="index-references-212"></a>
+<p><a name="index-references-292"></a>
 To compute fields in the table from other fields, formulas must
 reference other fields or ranges.  In Org, fields can be referenced
 by name, by absolute coordinates, and by relative coordinates.  To find
@@ -66,7 +67,7 @@ field, or press <kbd>C-c }</kbd> to toggle the display of a grid.
 
 <h5 class="subsubheading">Field references</h5>
 
-<p><a name="index-field-references-213"></a><a name="index-references_002c-to-fields-214"></a>
+<p><a name="index-field-references-293"></a><a name="index-references_002c-to-fields-294"></a>
 Formulas can reference the value of another field in two ways.  Like in
 any other spreadsheet, you may reference fields with a letter/number
 combination like <code>B3</code>, meaning the 2nd field in the 3rd row. 
@@ -117,7 +118,7 @@ table.
 </pre>
    <h5 class="subsubheading">Range references</h5>
 
-<p><a name="index-range-references-215"></a><a name="index-references_002c-to-ranges-216"></a>
+<p><a name="index-range-references-295"></a><a name="index-references_002c-to-ranges-296"></a>
 You may reference a rectangular range of fields by specifying two field
 references connected by two dots &lsquo;<samp><span class="samp">..</span></samp>&rsquo;.  If both fields are in the
 current row, you may simply use &lsquo;<samp><span class="samp">$2..$7</span></samp>&rsquo;, but if at least one field
@@ -137,30 +138,46 @@ suppressed, so that the vector contains only the non-empty fields (but
 see the &lsquo;<samp><span class="samp">E</span></samp>&rsquo; mode switch below).  If there are no non-empty fields,
 &lsquo;<samp><span class="samp">[0]</span></samp>&rsquo; is returned to avoid syntax errors in formulas.
 
+<h5 class="subsubheading">Field coordinates in formulas</h5>
+
+<p><a name="index-field-coordinates-297"></a><a name="index-coordinates_002c-of-field-298"></a><a name="index-row_002c-of-field-coordinates-299"></a><a name="index-column_002c-of-field-coordinates-300"></a>
+For Calc formulas and Lisp formulas <code>@#</code> and <code>$#</code> can be used to
+get the row or column number of the field where the formula result goes. 
+The traditional Lisp formula equivalents are <code>org-table-current-dline</code>
+and <code>org-table-current-column</code>.  Examples:
+
+<pre class="example">     if(@# % 2, $#, string(""))   <span class="roman">column number on odd lines only</span>
+     $3 = remote(FOO, @@#$2)      <span class="roman">copy column 2 from table FOO into</span>
+                                  <span class="roman">column 3 of the current table</span>
+</pre>
+   <p class="noindent">For the second example, table FOO must have at least as many rows
+as the current table.  Inefficient<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> for large
+number of rows.
+
 <h5 class="subsubheading">Named references</h5>
 
-<p><a name="index-named-references-217"></a><a name="index-references_002c-named-218"></a><a name="index-name_002c-of-column-or-field-219"></a><a name="index-constants_002c-in-calculations-220"></a><a name="index-g_t_0023_002bCONSTANTS-221"></a>
-<a name="index-org_002dtable_002dformula_002dconstants-222"></a>&lsquo;<samp><span class="samp">$name</span></samp>&rsquo; is interpreted as the name of a column, parameter or
+<p><a name="index-named-references-301"></a><a name="index-references_002c-named-302"></a><a name="index-name_002c-of-column-or-field-303"></a><a name="index-constants_002c-in-calculations-304"></a><a name="index-g_t_0023_002bCONSTANTS-305"></a>
+<a name="index-org_002dtable_002dformula_002dconstants-306"></a>&lsquo;<samp><span class="samp">$name</span></samp>&rsquo; is interpreted as the name of a column, parameter or
 constant.  Constants are defined globally through the variable
 <code>org-table-formula-constants</code>, and locally (for the file) through a
 line like
 
 <pre class="example">     #+CONSTANTS: c=299792458. pi=3.14 eps=2.4e-6
 </pre>
-   <p class="noindent"><a name="index-constants_002dunit_002dsystem-223"></a><a name="index-constants_002eel-224"></a>Also properties (see <a href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>) can be used as
+   <p class="noindent"><a name="index-constants_002dunit_002dsystem-307"></a><a name="index-constants_002eel-308"></a>Also properties (see <a href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>) can be used as
 constants in table formulas: for a property &lsquo;<samp><span class="samp">:Xyz:</span></samp>&rsquo; use the name
 &lsquo;<samp><span class="samp">$PROP_Xyz</span></samp>&rsquo;, and the property will be searched in the current
 outline entry and in the hierarchy above it.  If you have the
 <samp><span class="file">constants.el</span></samp> package, it will also be used to resolve constants,
 including natural constants like &lsquo;<samp><span class="samp">$h</span></samp>&rsquo; for Planck's constant, and
-units like &lsquo;<samp><span class="samp">$km</span></samp>&rsquo; for kilometers<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  Column names and parameters can be specified in special table
+units like &lsquo;<samp><span class="samp">$km</span></samp>&rsquo; for kilometers<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>.  Column names and parameters can be specified in special table
 lines.  These are described below, see <a href="Advanced-features.html#Advanced-features">Advanced features</a>.  All
 names must start with a letter, and further consist of letters and
 numbers.
 
 <h5 class="subsubheading">Remote references</h5>
 
-<p><a name="index-remote-references-225"></a><a name="index-references_002c-remote-226"></a><a name="index-references_002c-to-a-different-table-227"></a><a name="index-name_002c-of-column-or-field-228"></a><a name="index-constants_002c-in-calculations-229"></a><a name="index-g_t_0023_002bTBLNAME-230"></a>
+<p><a name="index-remote-references-309"></a><a name="index-references_002c-remote-310"></a><a name="index-references_002c-to-a-different-table-311"></a><a name="index-name_002c-of-column-or-field-312"></a><a name="index-constants_002c-in-calculations-313"></a><a name="index-g_t_0023_002bTBLNAME-314"></a>
 You may also reference constants, fields and ranges from a different table,
 either in the current file or even in a different file.  The syntax is
 
@@ -179,7 +196,10 @@ referenced table.
 hlines are counted that <em>separate</em> table lines.  If the table
 starts with a hline above the header, it does not count.</p>
 
-   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> <samp><span class="file">constants.el</span></samp> can
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The computation time scales as
+O(N^2) because table FOO is parsed for each field to be copied.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> <samp><span class="file">constants.el</span></samp> can
 supply the values of constants in two different unit systems, <code>SI</code>
 and <code>cgs</code>.  Which one is used depends on the value of the variable
 <code>constants-unit-system</code>.  You can use the <code>#+STARTUP</code> options

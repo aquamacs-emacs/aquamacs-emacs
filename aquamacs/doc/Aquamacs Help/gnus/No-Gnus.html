@@ -46,9 +46,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="New-Features.html#New-Features">New Fea
 <hr>
 </div>
 
-<h5 class="subsubsection">10.2.9.7 No Gnus</h5>
+<h5 class="subsubsection">11.2.9.7 No Gnus</h5>
 
-<p><a name="index-No-Gnus-3098"></a>
+<p><a name="index-No-Gnus-2958"></a>
 New features in No Gnus:
 <!-- FIXME: Gnus 5.12? -->
 
@@ -66,7 +66,17 @@ New features in No Gnus:
 <!-- included in `gnus.texi'.  `GNUS-NEWS' is automatically generated from -->
 <!-- this file (see `gnus-news.el'). -->
      <ul>
-<li>Installation changes
+<li>Supported Emacs versions
+The following Emacs versions are supported by No Gnus:
+          <ul>
+<li>Emacs 22 and up
+<li>XEmacs 21.4
+<li>XEmacs 21.5
+<li>SXEmacs
+
+     </ul>
+
+     <li>Installation changes
 
           <ul>
 <li>Upgrading from previous (stable) version if you have used No Gnus.
@@ -102,7 +112,14 @@ remove-installed-shadows</code>.
      <li>New packages and libraries within Gnus
 
           <ul>
-<li>Gnus includes the Emacs Lisp <acronym>SASL</acronym> library.
+<li>New version of <code>nnimap</code>
+
+          <p><code>nnimap</code> has been reimplemented in a mostly-compatible way.  See
+the Gnus manual for a description of the new interface.  In
+particular, <code>nnimap-inbox</code> and the client side split method has
+changed.
+
+          <li>Gnus includes the Emacs Lisp <acronym>SASL</acronym> library.
 
           <p>This provides a clean <acronym>API</acronym> to <acronym>SASL</acronym> mechanisms from
 within Emacs.  The user visible aspects of this, compared to the earlier
@@ -133,7 +150,11 @@ EasyPG is included in Emacs 23 and available separately as well.
 <!-- ************************ -->
 
           <ul>
-<li>Old intermediate incoming mail files (<samp><span class="file">Incoming*</span></samp>) are deleted
+<li>Symbols like <code>gcc-self</code> now has the same presedence rules in
+<code>gnus-parameters</code> as other &ldquo;real&rdquo; variables: The last match
+wins instead of the first match.
+
+          <li>Old intermediate incoming mail files (<samp><span class="file">Incoming*</span></samp>) are deleted
 after a couple of days, not immediately.  See <a href="Mail-Source-Customization.html#Mail-Source-Customization">Mail Source Customization</a>. 
 (New in Gnus 5.10.10 / No Gnus 0.8)
 <!-- This entry is also present in the node "Oort Gnus". -->
@@ -143,7 +164,10 @@ after a couple of days, not immediately.  See <a href="Mail-Source-Customization
      <li>Changes in summary and article mode
 
           <ul>
-<li>Gnus now supports sticky article buffers.  Those are article buffers
+<li>There's now only one variable that determines how <acronym>HTML</acronym>
+is rendered: <code>mm-text-html-renderer</code>.
+
+          <li>Gnus now supports sticky article buffers.  Those are article buffers
 that are not reused when you select another article.  See <a href="Sticky-Articles.html#Sticky-Articles">Sticky Articles</a>.
 
           <!-- @item Bookmarks -->
@@ -232,7 +256,10 @@ that are accessible from the article buffer.
      <li>Changes in Message mode
 
           <ul>
-<li>Gnus now supports the &ldquo;hashcash&rdquo; client puzzle anti-spam mechanism. 
+<li>Gnus now defaults to saving all outgoing messages in per-month
+nnfolder archives.
+
+          <li>Gnus now supports the &ldquo;hashcash&rdquo; client puzzle anti-spam mechanism. 
 Use <code>(setq message-generate-hashcash t)</code> to enable. 
 See <a href="Hashcash.html#Hashcash">Hashcash</a>.
 
@@ -262,6 +289,15 @@ of the "Whomever writes:" line.  You need to set
 <code>message-citation-line-function</code> to
 <code>message-insert-formatted-citation-line</code> as well. 
 </ul>
+
+     <li>Changes in Browse Server mode
+
+          <ul>
+<li>Gnus' sophisticated subscription methods are now available in
+Browse Server buffers as well using the variable
+<code>gnus-browse-subscribe-newsgroup-method</code>.
+
+     </ul>
 
      <li>Changes in back ends
 
@@ -348,6 +384,10 @@ and moving of articles behave as before; i.e., the expirable marks will
 be unchanged except that the marks will be removed when copying or
 moving articles to a group that has not turned auto-expire on. 
 See <a href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>.
+
+          <li>NoCeM support has been removed.
+
+          <li>Carpal mode has been removed.
 
      </ul>
 

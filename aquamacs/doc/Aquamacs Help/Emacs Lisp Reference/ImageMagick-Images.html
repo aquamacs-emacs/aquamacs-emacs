@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>ImageMagick Images - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Images.html#Images" title="Images">
+<link rel="prev" href="PostScript-Images.html#PostScript-Images" title="PostScript Images">
+<link rel="next" href="Other-Image-Types.html#Other-Image-Types" title="Other Image Types">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="ImageMagick-Images"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Image-Types.html#Other-Image-Types">Other Image Types</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="PostScript-Images.html#PostScript-Images">PostScript Images</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.16.8 ImageMagick Images</h4>
+
+<p><a name="index-ImageMagick-images-3634"></a><a name="index-images_002c-support-for-more-formats-3635"></a>
+  If you build Emacs with ImageMagick (<a href="http://www.imagemagick.org">http://www.imagemagick.org</a>)
+support, you can use the ImageMagick library to load many image formats.
+
+   <p><a name="index-imagemagick_002dtypes-3636"></a>The function <code>imagemagick-types</code> returns a list of image file
+extensions that your installation of ImageMagick supports.  To enable
+support, you must call the function <code>imagemagick-register-types</code>.
+
+   <p><a name="index-imagemagick_002dtypes_002dinhibit-3637"></a>The variable <code>imagemagick-types-inhibit</code> specifies a list of
+image types that you do <em>not</em> want ImageMagick to handle.  There
+may be overlap between image loaders in your Emacs installation, and
+you may prefer to use a different one for a given image type (which
+<!-- FIXME how is this priority determined? -->
+loader will be used in practice depends on the priority of the loaders). 
+<!-- FIXME why are these uppercase when image-types is lower-case? -->
+<!-- FIXME what are the possibe options?  Are these actually file extensions? -->
+For example, if you never want to use the ImageMagick loader to use
+JPEG files, add <code>JPG</code> to this list.
+
+   <p><a name="index-imagemagick_002drender_002dtype-3638"></a>You can set the variable <code>imagemagick-render-type</code> to choose
+between screen render methods for the ImageMagick loader.  The options
+are: <code>0</code>, a conservative method which works with older
+<!-- FIXME details of this "newer method"? -->
+<!-- Presumably it is faster but may be less "robust"? -->
+ImageMagick versions (it is a bit slow, but robust); and <code>1</code>,
+a newer ImageMagick method.
+
+   <p>Images loaded with ImageMagick support a few new display specifications:
+
+     <dl>
+<dt><code>:width, :height</code><dd>The <code>:width</code> and <code>:height</code> keywords are used for scaling the
+image.  If only one of them is specified, the other one will be
+calculated so as to preserve the aspect ratio.  If both are specified,
+aspect ratio may not be preserved.
+
+     <br><dt><code>:rotation</code><dd>Specifies a rotation angle in degrees.
+
+     <br><dt><code>:index</code><dd>Specifies which image to view inside an image bundle file format, such
+as TIFF or DJVM.  You can use the <code>image-metadata</code> function to
+retrieve the total number of images in an image bundle (this is
+similar to how GIF files work). 
+</dl>
+
+   </body></html>
+

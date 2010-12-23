@@ -50,7 +50,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Composing-Messages.html#Composing-Messa
 
 <h3 class="section">5.6 Posting Styles</h3>
 
-<p><a name="index-posting-styles-1957"></a><a name="index-styles-1958"></a>
+<p><a name="index-posting-styles-1896"></a><a name="index-styles-1897"></a>
 All them variables, they make my head swim.
 
    <p>So what if you want a different <code>Organization</code> and signature based
@@ -58,7 +58,7 @@ on what groups you post to?  And you post both from your home machine
 and your work machine, and you want different <code>From</code> lines, and so
 on?
 
-   <p><a name="index-gnus_002dposting_002dstyles-1959"></a>One way to do stuff like that is to write clever hooks that change the
+   <p><a name="index-gnus_002dposting_002dstyles-1898"></a>One way to do stuff like that is to write clever hooks that change the
 variables you need to have changed.  That's a bit boring, so somebody
 came up with the bright idea of letting the user specify these things in
 a handy alist.  Here's an example of a <code>gnus-posting-styles</code>
@@ -122,21 +122,26 @@ the headers of the article; if the value is <code>nil</code>, the header
 name will be removed.  If the attribute name is <code>eval</code>, the form
 is evaluated, and the result is thrown away.
 
-   <p>The attribute value can be a string (used verbatim), a function with
-zero arguments (the return value will be used), a variable (its value
-will be used) or a list (it will be <code>eval</code>ed and the return value
-will be used).  The functions and sexps are called/<code>eval</code>ed in the
-message buffer that is being set up.  The headers of the current article
-are available through the <code>message-reply-headers</code> variable, which
-is a vector of the following headers: number subject from date id
-references chars lines xref extra.
+   <p>The attribute value can be a string, a function with zero arguments
+(the return value will be used), a variable (its value will be used)
+or a list (it will be <code>eval</code>ed and the return value will be
+used).  The functions and sexps are called/<code>eval</code>ed in the
+message buffer that is being set up.  The headers of the current
+article are available through the <code>message-reply-headers</code>
+variable, which is a vector of the following headers: number subject
+from date id references chars lines xref extra.
 
-   <p><a name="index-message_002dreply_002dheaders-1960"></a>
+   <p>In the case of a string value, if the <code>match</code> is a regular
+expression, a &lsquo;<samp><span class="samp">gnus-match-substitute-replacement</span></samp>&rsquo; is proceed on
+the value to replace the positional parameters &lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo; by the
+corresponding parenthetical matches (see See <a href="../elisp/Replacing-the-Text-that-Matched.html#Replacing-the-Text-that-Matched">Text Replacement</a>.)
+
+   <p><a name="index-message_002dreply_002dheaders-1899"></a>
 If you wish to check whether the message you are about to compose is
 meant to be a news article or a mail message, you can check the values
 of the <code>message-news-p</code> and <code>message-mail-p</code> functions.
 
-   <p><a name="index-message_002dmail_002dp-1961"></a><a name="index-message_002dnews_002dp-1962"></a>
+   <p><a name="index-message_002dmail_002dp-1900"></a><a name="index-message_002dnews_002dp-1901"></a>
 So here's a new example:
 
 <pre class="lisp">     (setq gnus-posting-styles

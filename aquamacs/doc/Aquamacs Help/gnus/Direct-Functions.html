@@ -48,18 +48,22 @@ Up:&nbsp;<a rel="up" accesskey="u" href="NNTP.html#NNTP">NNTP</a>
 
 <h5 class="subsubsection">6.2.1.1 Direct Functions</h5>
 
-<p><a name="index-direct-connection-functions-2072"></a>
+<p><a name="index-direct-connection-functions-2015"></a>
 These functions are called direct because they open a direct connection
 between your machine and the <acronym>NNTP</acronym> server.  The behavior of these
 functions is also affected by commonly understood variables
 (see <a href="Common-Variables.html#Common-Variables">Common Variables</a>).
 
      
-<a name="index-nntp_002dopen_002dnetwork_002dstream-2073"></a>
+<a name="index-nntp_002dopen_002dnetwork_002dstream-2016"></a>
 <dl><dt><code>nntp-open-network-stream</code><dd>This is the default, and simply connects to some port or other on the
-remote system.
+remote system.  If both Emacs and the server supports it, the
+connection will be upgraded to an encrypted <acronym>STARTTLS</acronym>
+connection automatically.
 
-     <p><a name="index-nntp_002dopen_002dtls_002dstream-2074"></a><br><dt><code>nntp-open-tls-stream</code><dd>Opens a connection to a server over a <dfn>secure</dfn> channel.  To use
+     <br><dt><code>network-only</code><dd>The same as the above, but don't do automatic <acronym>STARTTLS</acronym> upgrades.
+
+     <p><a name="index-nntp_002dopen_002dtls_002dstream-2017"></a><br><dt><code>nntp-open-tls-stream</code><dd>Opens a connection to a server over a <dfn>secure</dfn> channel.  To use
 this you must have <a href="http://www.gnu.org/software/gnutls/">GNUTLS</a>
 installed.  You then define a server as follows:
 
@@ -71,7 +75,7 @@ installed.  You then define a server as follows:
                 (nntp-port-number 563)
                 (nntp-address "snews.bar.com"))
 </pre>
-     <p><a name="index-nntp_002dopen_002dssl_002dstream-2075"></a><br><dt><code>nntp-open-ssl-stream</code><dd>Opens a connection to a server over a <dfn>secure</dfn> channel.  To use
+     <p><a name="index-nntp_002dopen_002dssl_002dstream-2018"></a><br><dt><code>nntp-open-ssl-stream</code><dd>Opens a connection to a server over a <dfn>secure</dfn> channel.  To use
 this you must have <a href="http://www.openssl.org">OpenSSL</a> or
 <a href="ftp://ftp.psy.uq.oz.au/pub/Crypto/SSL">SSLeay</a> installed.  You
 then define a server as follows:
@@ -84,7 +88,7 @@ then define a server as follows:
                 (nntp-port-number 563)
                 (nntp-address "snews.bar.com"))
 </pre>
-     <p><a name="index-nntp_002dopen_002dnetcat_002dstream-2076"></a><br><dt><code>nntp-open-netcat-stream</code><dd>Opens a connection to an <acronym>NNTP</acronym> server using the <code>netcat</code>
+     <p><a name="index-nntp_002dopen_002dnetcat_002dstream-2019"></a><br><dt><code>nntp-open-netcat-stream</code><dd>Opens a connection to an <acronym>NNTP</acronym> server using the <code>netcat</code>
 program.  You might wonder why this function exists, since we have
 the default <code>nntp-open-network-stream</code> which would do the job.  (One
 of) the reason(s) is that if you are behind a firewall but have direct
@@ -99,7 +103,7 @@ connections to the outside world thanks to a command wrapper like
      <p>With the default method, you would need to wrap your whole Emacs
 session, which is not a good idea.
 
-     <p><a name="index-nntp_002dopen_002dtelnet_002dstream-2077"></a><br><dt><code>nntp-open-telnet-stream</code><dd>Like <code>nntp-open-netcat-stream</code>, but uses <code>telnet</code> rather than
+     <p><a name="index-nntp_002dopen_002dtelnet_002dstream-2020"></a><br><dt><code>nntp-open-telnet-stream</code><dd>Like <code>nntp-open-netcat-stream</code>, but uses <code>telnet</code> rather than
 <code>netcat</code>.  <code>telnet</code> is a bit less robust because of things
 like line-end-conversion, but sometimes netcat is simply
 not available.  The previous example would turn into:

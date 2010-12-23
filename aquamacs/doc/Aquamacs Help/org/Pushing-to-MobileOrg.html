@@ -10,9 +10,10 @@
 <link rel="next" href="Pulling-from-MobileOrg.html#Pulling-from-MobileOrg" title="Pulling from MobileOrg">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -61,25 +62,26 @@ Up:&nbsp;<a rel="up" accesskey="u" href="MobileOrg.html#MobileOrg">MobileOrg</a>
 to the directory <code>org-mobile-directory</code>.  By default this list contains
 all agenda files (as listed in <code>org-agenda-files</code>), but additional files
 can be included by customizing <code>org-mobiles-files</code>.  File names will be
-staged with path relative to <code>org-directory</code>, so all files should be
-inside this directory.  The push operation also creates (in the same
-directory) a special Org file <samp><span class="file">agendas.org</span></samp>.  This file is an Org-mode
-style outline, containing every custom agenda view defined by the user. 
-While creating the agendas, Org-mode will force<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  an ID property on all entries
-referenced by the agendas, so that these entries can be uniquely identified
-if <i>MobileOrg</i> flags them for further action.  Finally, Org writes the file
-<samp><span class="file">index.org</span></samp>, containing links to all other files.  If <i>MobileOrg</i> is
-configured to request this file from the WebDAV server, all agendas and Org
-files will be downloaded to the device.  To speed up the download, MobileOrg
-will only read files whose checksums<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> have changed.
+staged with paths relative to <code>org-directory</code>, so all files should be
+inside this directory.  The push operation also creates a special Org file
+<samp><span class="file">agendas.org</span></samp> with all custom agenda view defined by the
+user<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
+Finally, Org writes the file <samp><span class="file">index.org</span></samp>, containing links to all other
+files.  <i>MobileOrg</i> first reads this file from the server, and then
+downloads all agendas and Org files listed in it.  To speed up the download,
+MobileOrg will only read files whose checksums<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> have changed.
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the variable
-<code>org-mobile-force-id-on-agenda-items</code>.</p>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> While creating the agendas, Org-mode will force ID properties
+on all referenced entries, so that these entries can be uniquely identified
+if <i>MobileOrg</i> flags them for further action.  If you do not want to get
+these properties in so many entries, you can set the variable
+<code>org-mobile-force-id-on-agenda-items</code> to <code>nil</code>.  Org mode will then
+rely on outline paths, in the hope that these will be unique enough.</p>
 
-   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> stored automatically in the
-file <samp><span class="file">checksums.dat</span></samp></p>
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> stored automatically
+in the file <samp><span class="file">checksums.dat</span></samp></p>
 
    <hr></div>
 

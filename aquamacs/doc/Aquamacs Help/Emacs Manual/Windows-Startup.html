@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Windows Startup - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Microsoft-Windows.html#Microsoft-Windows" title="Microsoft Windows">
+<link rel="next" href="Text-and-Binary.html#Text-and-Binary" title="Text and Binary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 24.0.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Windows-Startup"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-and-Binary.html#Text-and-Binary">Text and Binary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Windows">Microsoft Windows</a>
+<hr>
+</div>
+
+<h3 class="section">G.1 How to Start Emacs on MS-Windows</h3>
+
+<p><a name="index-starting-Emacs-on-MS_002dWindows-4374"></a>
+  There are several ways of starting Emacs on MS-Windows:
+
+     <ol type=1 start=1>
+<li><a name="index-runemacs_002eexe-4375"></a><a name="index-desktop-shortcut_002c-MS_002dWindows-4376"></a><a name="index-start-directory_002c-MS_002dWindows-4377"></a><a name="index-directory-where-Emacs-starts-on-MS_002dWindows-4378"></a>From the desktop shortcut icon: either double-click the left mouse
+button on the icon, or click once, then press &lt;RET&gt;.  The desktop
+shortcut should specify as its &ldquo;Target&rdquo; (in the &ldquo;Properties&rdquo; of
+the shortcut) the full absolute file name of <samp><span class="file">runemacs.exe</span></samp>,
+<em>not</em> of <samp><span class="file">emacs.exe</span></samp>.  This is because <samp><span class="file">runemacs.exe</span></samp>
+hides the console window that would have been created if the target of
+the shortcut were <samp><span class="file">emacs.exe</span></samp> (which is a console program, as far
+as Windows is concerned).  If you use this method, Emacs starts in the
+directory specified by the shortcut.  To control where that is,
+right-click on the shortcut, select &ldquo;Properties&rdquo;, and in the
+&ldquo;Shortcut&rdquo; tab modify the &ldquo;Start in&rdquo; field to your liking.
+
+     <li>From the Command Prompt window, by typing <kbd>emacs &lt;RET&gt;</kbd> at the
+prompt.  The Command Prompt window where you did that will not be
+available for invoking other commands until Emacs exits.  In this
+case, Emacs will start in the current directory of the Windows shell.
+
+     <li>From the Command Prompt window, by typing <kbd>runemacs &lt;RET&gt;</kbd> at
+the prompt.  The Command Prompt window where you did that will be
+immediately available for invoking other commands.  In this case,
+Emacs will start in the current directory of the Windows shell.
+
+     <li><a name="index-invoking-Emacs-from-Windows-Explorer-4379"></a><a name="index-emacsclient_002eexe-4380"></a><a name="index-emacsclientw_002eexe-4381"></a>Via the Emacs client program, <samp><span class="file">emacsclient.exe</span></samp> or
+<samp><span class="file">emacsclientw.exe</span></samp>.  This allows to invoke Emacs from other
+programs, and to reuse a running Emacs process for serving editing
+jobs required by other programs.  See <a href="Emacs-Server.html#Emacs-Server">Emacs Server</a>.  The difference
+between <samp><span class="file">emacsclient.exe</span></samp> and <samp><span class="file">emacsclientw.exe</span></samp> is that the
+former waits for Emacs to signal that the editing job is finished,
+while the latter does not wait.  Which one of them to use in each case
+depends on the expectations of the program that needs editing
+services.  If the program will use the edited files, it needs to wait
+for Emacs, so you should use <samp><span class="file">emacsclient.exe</span></samp>.  By contrast, if
+the results of editing are not needed by the invoking program, you
+will be better off using <samp><span class="file">emacsclientw.exe</span></samp>.  A notable situation
+where you would want <samp><span class="file">emacsclientw.exe</span></samp> is when you right-click
+on a file in the Windows Explorer and select &ldquo;Open With&rdquo; from the
+pop-up menu.  Use the &lsquo;<samp><span class="samp">--alternate-editor=</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-a</span></samp>&rsquo; options
+if Emacs might not be running (or not running as a server) when
+<samp><span class="command">emacsclient</span></samp> is invoked&mdash;that will always give you an
+editor.  When invoked via <samp><span class="command">emacsclient</span></samp>, Emacs will start in
+the current directory of the program that invoked
+<samp><span class="command">emacsclient</span></samp>.
+        </ol>
+
+   </body></html>
+

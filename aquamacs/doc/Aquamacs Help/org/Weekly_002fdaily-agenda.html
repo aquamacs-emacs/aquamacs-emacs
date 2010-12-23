@@ -10,9 +10,10 @@
 <link rel="next" href="Global-TODO-list.html#Global-TODO-list" title="Global TODO list">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -58,18 +59,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Built_002din-agenda-views.html#Built_00
 
 <h4 class="subsection">10.3.1 The weekly/daily agenda</h4>
 
-<p><a name="index-agenda-739"></a><a name="index-weekly-agenda-740"></a><a name="index-daily-agenda-741"></a>
+<p><a name="index-agenda-1007"></a><a name="index-weekly-agenda-1008"></a><a name="index-daily-agenda-1009"></a>
 The purpose of the weekly/daily <em>agenda</em> is to act like a page of a
 paper agenda, showing all the tasks for the current week or day.
 
      
-<a name="index-org_002dagenda_002c-command-742"></a>
-<a name="index-C_002dc-a-a-743"></a>
-<dl><dt><kbd>C-c a a</kbd><dd><a name="index-org_002dagenda_002dndays-744"></a>Compile an agenda for the current week from a list of Org files.  The agenda
+<a name="index-org_002dagenda_002c-command-1010"></a>
+<a name="index-C_002dc-a-a-1011"></a>
+<a name="index-org_002dagenda_002dlist-1012"></a>
+<dl><dt><kbd>C-c a a &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-list</code><kbd>)</kbd><dd>
+Compile an agenda for the current week from a list of Org files.  The agenda
 shows the entries for each day.  With a numeric prefix<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  (like <kbd>C-u 2 1
-C-c a a</kbd>) you may set the number of days to be displayed (see also the
-variable <code>org-agenda-ndays</code>)
+C-c a a</kbd>) you may set the number of days to be displayed. 
 </dl>
+
+   <p><a name="index-org_002dagenda_002dspan-1013"></a><a name="index-org_002dagenda_002dndays-1014"></a>The default number of days displayed in the agenda is set by the variable
+<code>org-agenda-span</code> (or the obsolete <code>org-agenda-ndays</code>).  This
+variable can be set to any number of days you want to see by default in the
+agenda, or to a span name, such a <code>day</code>, <code>week</code>, <code>month</code> or
+<code>year</code>.
 
    <p>Remote editing from the agenda buffer means, for example, that you can
 change the dates of deadlines and appointments from the agenda buffer. 
@@ -77,7 +85,7 @@ The commands available in the Agenda buffer are listed in <a href="Agenda-comman
 
 <h5 class="subsubheading">Calendar/Diary integration</h5>
 
-<p><a name="index-calendar-integration-745"></a><a name="index-diary-integration-746"></a>
+<p><a name="index-calendar-integration-1015"></a><a name="index-diary-integration-1016"></a>
 Emacs contains the calendar and diary by Edward M. Reingold.  The
 calendar displays a three-month calendar with holidays from different
 countries and cultures.  The diary allows you to keep track of
@@ -86,14 +94,14 @@ anniversaries, lunar phases, sunrise/set, recurrent appointments
 Org.  It can be very useful to combine output from Org with
 the diary.
 
-   <p>In order to include entries from the Emacs diary into Org mode's
+   <p>In order to include entries from the Emacs diary into Org-mode's
 agenda, you only need to customize the variable
 
 <pre class="lisp">     (setq org-agenda-include-diary t)
 </pre>
    <p class="noindent">After that, everything will happen automatically.  All diary
 entries including holidays, anniversaries, etc., will be included in the
-agenda buffer created by Org mode.  &lt;SPC&gt;, &lt;TAB&gt;, and
+agenda buffer created by Org-mode.  &lt;SPC&gt;, &lt;TAB&gt;, and
 &lt;RET&gt; can be used from the agenda buffer to jump to the diary
 file in order to edit existing diary entries.  The <kbd>i</kbd> command to
 insert new entries for the current date works in the agenda buffer, as
@@ -104,7 +112,7 @@ between calendar and agenda.
 
    <p>If you are using the diary only for sexp entries and holidays, it is
 faster to not use the above setting, but instead to copy or even move
-the entries into an Org file. Org mode evaluates diary-style sexp
+the entries into an Org file. Org-mode evaluates diary-style sexp
 entries, and does it faster because there is no overhead for first
 creating the diary display.  Note that the sexp entries must start at
 the left margin, no whitespace is allowed before them.  For example,
@@ -115,12 +123,12 @@ will be made in the agenda:
      #+CATEGORY: Holiday
      %%(org-calendar-holiday)   ; special function for holiday names
      #+CATEGORY: Ann
-     %%(diary-anniversary 14  5 1956) Arthur Dent is %d years old
-     %%(diary-anniversary  2 10 1869) Mahatma Gandhi would be %d years old
+     %%(diary-anniversary  5 14 1956)<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> Arthur Dent is %d years old
+     %%(diary-anniversary 10  2 1869) Mahatma Gandhi would be %d years old
 </pre>
    <h5 class="subsubheading">Anniversaries from BBDB</h5>
 
-<p><a name="index-BBDB_002c-anniversaries-747"></a><a name="index-anniversaries_002c-from-BBDB-748"></a>
+<p><a name="index-BBDB_002c-anniversaries-1017"></a><a name="index-anniversaries_002c-from-BBDB-1018"></a>
 If you are using the Big Brothers Database to store your contacts, you will
 very likely prefer to store anniversaries in BBDB rather than in a
 separate Org or diary file.  Org supports this and will show BBDB
@@ -130,7 +138,7 @@ following to one your your agenda files:
 <pre class="example">     * Anniversaries
        :PROPERTIES:
        :CATEGORY: Anniv
-       :END
+       :END:
      %%(org-bbdb-anniversaries)
 </pre>
    <p>You can then go ahead and define anniversaries for a BBDB record.  Basically,
@@ -153,7 +161,7 @@ in an Org or Diary file.
 
 <h5 class="subsubheading">Appointment reminders</h5>
 
-<p><a name="index-g_t_0040file_007bappt_002eel_007d-749"></a><a name="index-appointment-reminders-750"></a>
+<p><a name="index-g_t_0040file_007bappt_002eel_007d-1019"></a><a name="index-appointment-reminders-1020"></a>
 Org can interact with Emacs appointments notification facility.  To add all
 the appointments of your agenda files, use the command
 <code>org-agenda-to-appt</code>.  This command also lets you filter through the
@@ -166,6 +174,8 @@ or matching a regular expression. See the docstring for details.
 compatibility, the universal prefix <kbd>C-u</kbd> causes all TODO entries to be
 listed before the agenda.  This feature is deprecated, use the dedicated TODO
 list, or a block agenda instead (see <a href="Block-agenda.html#Block-agenda">Block agenda</a>).</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Note that the order of the arguments (month, day, year) depends on the setting of <code>calendar-date-style</code>.</p>
 
    <hr></div>
 

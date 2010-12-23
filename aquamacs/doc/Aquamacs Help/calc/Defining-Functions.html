@@ -10,7 +10,8 @@
 <link rel="next" href="Defining-Simple-Commands.html#Defining-Simple-Commands" title="Defining Simple Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+This file documents Calc, the GNU Emacs calculator, included with
+GNU Emacs {No value for `EMACSVER'}.
 
 Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -53,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Definitions.html#Lisp-Definitions"
 
 <h4 class="subsection">18.5.1 Defining New Functions</h4>
 
-<p class="noindent"><a name="index-defmath-2317"></a>The <code>defmath</code> function (actually a Lisp macro) is like <code>defun</code>
+<p class="noindent"><a name="index-defmath-2322"></a>The <code>defmath</code> function (actually a Lisp macro) is like <code>defun</code>
 except that code in the body of the definition can make use of the full
 range of Calculator data types.  The prefix &lsquo;<samp><span class="samp">calcFunc-</span></samp>&rsquo; is added
 to the specified name to get the actual Lisp function name.  As a simple
@@ -185,7 +186,7 @@ step of <code>myfact</code> could have been written
 </pre>
    <p>A good place to put your <code>defmath</code> commands is your Calc init file
 (the file given by <code>calc-settings-file</code>, typically
-<samp><span class="file">~/.calc.el</span></samp>), which will not be loaded until Calc starts. 
+<samp><span class="file">~/.emacs.d/calc.el</span></samp>), which will not be loaded until Calc starts. 
 If a file named <samp><span class="file">.emacs</span></samp> exists in your home directory, Emacs reads
 and executes the Lisp forms in this file as it starts up.  While it may
 seem reasonable to put your favorite <code>defmath</code> commands there,
@@ -200,7 +201,7 @@ to be <samp><span class="file">.emacs</span></samp>), a better effect can be had
       (defmath ... )
      ))
 </pre>
-   <p class="noindent"><a name="index-calc_002ddefine-2318"></a>The <code>put</code> function adds a <dfn>property</dfn> to a symbol.  Each Lisp
+   <p class="noindent"><a name="index-calc_002ddefine-2323"></a>The <code>put</code> function adds a <dfn>property</dfn> to a symbol.  Each Lisp
 symbol has a list of properties associated with it.  Here we add a
 property with a name of <code>thing</code> and a &lsquo;<samp><span class="samp">(progn ...)</span></samp>&rsquo; form as
 its value.  When Calc starts up, and at the start of every Calc command,
@@ -231,7 +232,7 @@ protect against this situation, you can put
 
 <pre class="example">     (run-hooks 'calc-check-defines)
 </pre>
-   <p><a name="index-calc_002dcheck_002ddefines-2319"></a>at the end of your file.  The <code>calc-check-defines</code> function is what
+   <p><a name="index-calc_002dcheck_002ddefines-2324"></a>at the end of your file.  The <code>calc-check-defines</code> function is what
 looks for and evaluates properties on <code>calc-define</code>; <code>run-hooks</code>
 has the advantage that it is quietly ignored if <code>calc-check-defines</code>
 is not yet defined because Calc has not yet been loaded.

@@ -50,7 +50,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Sum
 
 <h3 class="section">3.11 Asynchronous Article Fetching</h3>
 
-<p><a name="index-asynchronous-article-fetching-1117"></a><a name="index-article-pre_002dfetch-1118"></a><a name="index-pre_002dfetch-1119"></a>
+<p><a name="index-asynchronous-article-fetching-1041"></a><a name="index-article-pre_002dfetch-1042"></a><a name="index-pre_002dfetch-1043"></a>
 If you read your news from an <acronym>NNTP</acronym> server that's far away, the
 network latencies may make reading articles a chore.  You have to wait
 for a while after pressing <kbd>n</kbd> to go to the next article before the
@@ -80,17 +80,17 @@ extra connection.
    <p>Ok, so now you know that you shouldn't really use this thing<small class="dots">...</small> unless
 you really want to.
 
-   <p><a name="index-gnus_002dasynchronous-1120"></a>Here's how:  Set <code>gnus-asynchronous</code> to <code>t</code>.  The rest should
+   <p><a name="index-gnus_002dasynchronous-1044"></a>Here's how:  Set <code>gnus-asynchronous</code> to <code>t</code>.  The rest should
 happen automatically.
 
-   <p><a name="index-gnus_002duse_002darticle_002dprefetch-1121"></a>You can control how many articles are to be pre-fetched by setting
+   <p><a name="index-gnus_002duse_002darticle_002dprefetch-1045"></a>You can control how many articles are to be pre-fetched by setting
 <code>gnus-use-article-prefetch</code>.  This is 30 by default, which means
 that when you read an article in the group, the back end will pre-fetch
 the next 30 articles.  If this variable is <code>t</code>, the back end will
 pre-fetch all the articles it can without bound.  If it is
 <code>nil</code>, no pre-fetching will be done.
 
-   <p><a name="index-gnus_002dasync_002dprefetch_002darticle_002dp-1122"></a><a name="index-gnus_002dasync_002dunread_002dp-1123"></a>There are probably some articles that you don't want to pre-fetch&mdash;read
+   <p><a name="index-gnus_002dasync_002dprefetch_002darticle_002dp-1046"></a><a name="index-gnus_002dasync_002dunread_002dp-1047"></a>There are probably some articles that you don't want to pre-fetch&mdash;read
 articles, for instance.  The <code>gnus-async-prefetch-article-p</code>
 variable controls whether an article is to be pre-fetched.  This
 function should return non-<code>nil</code> when the article in question is
@@ -113,7 +113,15 @@ than 100 lines, you could say something like:
 preferably be short and sweet to avoid slowing down Gnus too much. 
 It's probably a good idea to byte-compile things like this.
 
-   <p><a name="index-gnus_002dprefetched_002darticle_002ddeletion_002dstrategy-1124"></a>Articles have to be removed from the asynch buffer sooner or later.  The
+   <p><a name="index-gnus_002dasync_002dpost_002dfetch_002dfunction-1048"></a><a name="index-gnus_002dhtml_002dprefetch_002dimages-1049"></a>After an article has been prefetched, this
+<code>gnus-async-post-fetch-function</code> will be called.  The buffer will
+be narrowed to the region of the article that was fetched.  A useful
+value would be <code>gnus-html-prefetch-images</code>, which will prefetch
+and store images referenced in the article, so that you don't have to
+wait for them to be fetched when you read the article.  This is useful
+for <acronym>HTML</acronym> messages that have external images.
+
+   <p><a name="index-gnus_002dprefetched_002darticle_002ddeletion_002dstrategy-1050"></a>Articles have to be removed from the asynch buffer sooner or later.  The
 <code>gnus-prefetched-article-deletion-strategy</code> says when to remove
 articles.  This is a list that may contain the following elements:
 

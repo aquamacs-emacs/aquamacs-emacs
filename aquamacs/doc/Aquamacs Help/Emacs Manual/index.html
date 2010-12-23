@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>GNU Emacs Manual</title>
-<META NAME="AppleTitle" content="Emacs Manual (23.2.50)">
+<META NAME="AppleTitle" content="Emacs Manual (24.0.50)">
 <META NAME="AppleFont" content="Lucida Grande,Helvetica">
 
 <meta http-equiv="Content-Type" content="text/html">
@@ -12,7 +12,7 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.2.50.
+updated for Emacs version 24.0.50.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
@@ -35,7 +35,7 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body><a name="EmacsManualIndex"></a> <h1>GNU Emacs Manual</h1> <address>Free Software Foundation</address>
-<address>last updated October 03, 2010</address>
+<address>last updated December 23, 2010</address>
 <p> 
 	<img src="gnu-head-sm.jpg"
 	alt=" [image of the head of a GNU] "
@@ -55,12 +55,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
 <p>Emacs is the extensible, customizable, self-documenting real-time
 display editor.  This Info file describes how to edit with Emacs and
 some of how to customize it; it corresponds to GNU Emacs version
-23.2.50.
+24.0.50.
 
    <p><div style="color:red;">For specific additions and deviations from Emacs as described in this manual, please refer to the Aquamacs manual.</div>For information on extending Emacs, see <a href="../elisp/index.html#Top">Emacs Lisp</a>.
 
    <p>This is the Sixteenth edition of the <cite>GNU Emacs Manual</cite>,<br>
-updated for Emacs version 23.2.50.
+updated for Emacs version 24.0.50.
 
    <p>Copyright &copy; 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
@@ -853,14 +853,16 @@ already listed, mentioned here so you can get to them in one step:
 
 </p>
 <ul class="menu">
-<li><a href="GDB_002dUI-Layout.html#GDB_002dUI-Layout">GDB-UI Layout</a>:        Control the number of displayed buffers. 
+<li><a href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout">GDB User Interface Layout</a>:    Control the number of displayed buffers. 
 <li><a href="Source-Buffers.html#Source-Buffers">Source Buffers</a>:       Use the mouse in the fringe/margin to
                           control your program. 
 <li><a href="Breakpoints-Buffer.html#Breakpoints-Buffer">Breakpoints Buffer</a>:   A breakpoint control panel. 
+<li><a href="Threads-Buffer.html#Threads-Buffer">Threads Buffer</a>:               Displays your threads. 
 <li><a href="Stack-Buffer.html#Stack-Buffer">Stack Buffer</a>:         Select a frame from the call stack. 
-<li><a href="Other-GDB_002dUI-Buffers.html#Other-GDB_002dUI-Buffers">Other GDB-UI Buffers</a>: Input/output, locals, registers,
+<li><a href="Other-GDB-Buffers.html#Other-GDB-Buffers">Other GDB Buffers</a>:            Input/output, locals, registers,
                           assembler, threads and memory buffers. 
-<li><a href="Watch-Expressions.html#Watch-Expressions">Watch Expressions</a>:    Monitor variable values in the speedbar.
+<li><a href="Watch-Expressions.html#Watch-Expressions">Watch Expressions</a>:    Monitor variable values in the speedbar. 
+<li><a href="Multithreaded-Debugging.html#Multithreaded-Debugging">Multithreaded Debugging</a>:      Debugging programs with several threads.
 
 </li></ul>
 <p>Maintaining Large Programs
@@ -882,6 +884,7 @@ already listed, mentioned here so you can get to them in one step:
 <li><a href="Introduction-to-VC.html#Introduction-to-VC">Introduction to VC</a>:   How version control works in general. 
 <li><a href="VC-Mode-Line.html#VC-Mode-Line">VC Mode Line</a>:         How the mode line shows version control status. 
 <li><a href="Basic-VC-Editing.html#Basic-VC-Editing">Basic VC Editing</a>:     How to edit a file under version control. 
+<li><a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>:           Features available in log entry buffers. 
 <li><a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>:        Examining and comparing old versions. 
 <li><a href="Secondary-VC-Commands.html#Secondary-VC-Commands">Secondary VC Commands</a>:  The commands used a little less frequently. 
 <li><a href="VC-Directory-Mode.html#VC-Directory-Mode">VC Directory Mode</a>:    Listing files managed by version control. 
@@ -899,6 +902,9 @@ already listed, mentioned here so you can get to them in one step:
 <li><a href="Why-Version-Control_003f.html#Why-Version-Control_003f">Why Version Control?</a>:     Understanding the problems it addresses. 
 <li><a href="Version-Control-Systems.html#Version-Control-Systems">Version Control Systems</a>:  Supported version control back-end systems. 
 <li><a href="VCS-Concepts.html#VCS-Concepts">VCS Concepts</a>:             Words and concepts related to version control. 
+<li><a href="VCS-Merging.html#VCS-Merging">VCS Merging</a>:              How file conflicts are handled. 
+<li><a href="VCS-Changesets.html#VCS-Changesets">VCS Changesets</a>:           Changesets in version control. 
+<li><a href="VCS-Repositories.html#VCS-Repositories">VCS Repositories</a>:         Where version control repositories are stored. 
 <li><a href="Types-of-Log-File.html#Types-of-Log-File">Types of Log File</a>:        The VCS log in contrast to the ChangeLog.
 
 </li></ul>
@@ -908,8 +914,7 @@ already listed, mentioned here so you can get to them in one step:
 <ul class="menu">
 <li><a href="VC-With-A-Merging-VCS.html#VC-With-A-Merging-VCS">VC With A Merging VCS</a>:   Without locking: default mode for CVS. 
 <li><a href="VC-With-A-Locking-VCS.html#VC-With-A-Locking-VCS">VC With A Locking VCS</a>:   RCS in its default mode, SCCS, and optionally CVS. 
-<li><a href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v">Advanced C-x v v</a>:        Advanced features available with a prefix argument. 
-<li><a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>:              Features available in log entry buffers.
+<li><a href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v">Advanced C-x v v</a>:        Advanced features available with a prefix argument.
 
 </li></ul>
 <p>The Secondary Commands of VC
@@ -1433,6 +1438,7 @@ already listed, mentioned here so you can get to them in one step:
 
 </p>
 <ul class="menu">
+<li><a href="Windows-Startup.html#Windows-Startup">Windows Startup</a>:      How to start Emacs on Windows. 
 <li><a href="Text-and-Binary.html#Text-and-Binary">Text and Binary</a>:      Text files use CRLF to terminate lines. 
 <li><a href="Windows-Files.html#Windows-Files">Windows Files</a>:        File-name conventions on Windows. 
 <li><a href="ls-in-Lisp.html#ls-in-Lisp">ls in Lisp</a>:           Emulation of <code>ls</code> for Dired. 
@@ -1836,6 +1842,7 @@ already listed, mentioned here so you can get to them in one step:
 <li><a href="Undisplayable-Characters.html#Undisplayable-Characters">26.17 Undisplayable Characters</a>
 <li><a href="Unibyte-Mode.html#Unibyte-Mode">26.18 Unibyte Editing Mode</a>
 <li><a href="Charsets.html#Charsets">26.19 Charsets</a>
+<li><a href="Bidirectional-Editing.html#Bidirectional-Editing">26.20 Bidirectional Editing</a>
 </li></ul>
 <li><a name="toc_Major-Modes" href="Major-Modes.html#Major-Modes">27 Major Modes</a>
 <ul>
@@ -1989,13 +1996,14 @@ already listed, mentioned here so you can get to them in one step:
 <li><a href="GUD-Customization.html#GUD-Customization">31.6.4 GUD Customization</a>
 <li><a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">31.6.5 GDB Graphical Interface</a>
 <ul>
-<li><a href="GDB_002dUI-Layout.html#GDB_002dUI-Layout">31.6.5.1 GDB User Interface Layout</a>
+<li><a href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout">31.6.5.1 GDB User Interface Layout</a>
 <li><a href="Source-Buffers.html#Source-Buffers">31.6.5.2 Source Buffers</a>
 <li><a href="Breakpoints-Buffer.html#Breakpoints-Buffer">31.6.5.3 Breakpoints Buffer</a>
-<li><a href="Stack-Buffer.html#Stack-Buffer">31.6.5.4 Stack Buffer</a>
-<li><a href="Other-GDB_002dUI-Buffers.html#Other-GDB_002dUI-Buffers">31.6.5.5 Other Buffers</a>
-<li><a href="Watch-Expressions.html#Watch-Expressions">31.6.5.6 Watch Expressions</a>
-<li><a href="Reverse-Debugging.html#Reverse-Debugging">31.6.5.7 Reverse Debugging</a>
+<li><a href="Threads-Buffer.html#Threads-Buffer">31.6.5.4 Threads Buffer</a>
+<li><a href="Stack-Buffer.html#Stack-Buffer">31.6.5.5 Stack Buffer</a>
+<li><a href="Other-GDB-Buffers.html#Other-GDB-Buffers">31.6.5.6 Other Buffers</a>
+<li><a href="Watch-Expressions.html#Watch-Expressions">31.6.5.7 Watch Expressions</a>
+<li><a href="Multithreaded-Debugging.html#Multithreaded-Debugging">31.6.5.8 Stopping and Starting Multi-threaded Programs</a>
 </li></ul>
 </li></ul>
 <li><a href="Executing-Lisp.html#Executing-Lisp">31.7 Executing Lisp Expressions</a>
@@ -2013,7 +2021,10 @@ already listed, mentioned here so you can get to them in one step:
 <li><a href="Why-Version-Control_003f.html#Why-Version-Control_003f">32.1.1.1 Understanding the problems it addresses</a>
 <li><a href="Version-Control-Systems.html#Version-Control-Systems">32.1.1.2 Supported Version Control Systems</a>
 <li><a href="VCS-Concepts.html#VCS-Concepts">32.1.1.3 Concepts of Version Control</a>
-<li><a href="Types-of-Log-File.html#Types-of-Log-File">32.1.1.4 Types of Log File</a>
+<li><a href="VCS-Merging.html#VCS-Merging">32.1.1.4 Merge-based vs lock-based Version Control</a>
+<li><a href="VCS-Changesets.html#VCS-Changesets">32.1.1.5 Changeset-based vs File-based Version Control</a>
+<li><a href="VCS-Repositories.html#VCS-Repositories">32.1.1.6 Decentralized vs Centralized Repositories</a>
+<li><a href="Types-of-Log-File.html#Types-of-Log-File">32.1.1.7 Types of Log File</a>
 </li></ul>
 <li><a href="VC-Mode-Line.html#VC-Mode-Line">32.1.2 Version Control and the Mode Line</a>
 <li><a href="Basic-VC-Editing.html#Basic-VC-Editing">32.1.3 Basic Editing under Version Control</a>
@@ -2021,48 +2032,48 @@ already listed, mentioned here so you can get to them in one step:
 <li><a href="VC-With-A-Merging-VCS.html#VC-With-A-Merging-VCS">32.1.3.1 Basic Version Control with Merging</a>
 <li><a href="VC-With-A-Locking-VCS.html#VC-With-A-Locking-VCS">32.1.3.2 Basic Version Control with Locking</a>
 <li><a href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v">32.1.3.3 Advanced Control in <kbd>C-x v v</kbd></a>
-<li><a href="Log-Buffer.html#Log-Buffer">32.1.3.4 Features of the Log Entry Buffer</a>
 </li></ul>
-<li><a href="Old-Revisions.html#Old-Revisions">32.1.4 Examining And Comparing Old Revisions</a>
-<li><a href="Secondary-VC-Commands.html#Secondary-VC-Commands">32.1.5 The Secondary Commands of VC</a>
+<li><a href="Log-Buffer.html#Log-Buffer">32.1.4 Features of the Log Entry Buffer</a>
+<li><a href="Old-Revisions.html#Old-Revisions">32.1.5 Examining And Comparing Old Revisions</a>
+<li><a href="Secondary-VC-Commands.html#Secondary-VC-Commands">32.1.6 The Secondary Commands of VC</a>
 <ul>
-<li><a href="Registering.html#Registering">32.1.5.1 Registering a File for Version Control</a>
-<li><a href="VC-Change-Log.html#VC-Change-Log">32.1.5.2 VC Change Log</a>
-<li><a href="VC-Undo.html#VC-Undo">32.1.5.3 Undoing Version Control Actions</a>
+<li><a href="Registering.html#Registering">32.1.6.1 Registering a File for Version Control</a>
+<li><a href="VC-Change-Log.html#VC-Change-Log">32.1.6.2 VC Change Log</a>
+<li><a href="VC-Undo.html#VC-Undo">32.1.6.3 Undoing Version Control Actions</a>
 </li></ul>
-<li><a href="VC-Directory-Mode.html#VC-Directory-Mode">32.1.6 VC Directory Mode</a>
+<li><a href="VC-Directory-Mode.html#VC-Directory-Mode">32.1.7 VC Directory Mode</a>
 <ul>
-<li><a href="VC-Directory-Buffer.html#VC-Directory-Buffer">32.1.6.1 The VC Directory Buffer</a>
-<li><a href="VC-Directory-Commands.html#VC-Directory-Commands">32.1.6.2 VC Directory Commands</a>
+<li><a href="VC-Directory-Buffer.html#VC-Directory-Buffer">32.1.7.1 The VC Directory Buffer</a>
+<li><a href="VC-Directory-Commands.html#VC-Directory-Commands">32.1.7.2 VC Directory Commands</a>
 </li></ul>
-<li><a href="Branches.html#Branches">32.1.7 Multiple Branches of a File</a>
+<li><a href="Branches.html#Branches">32.1.8 Multiple Branches of a File</a>
 <ul>
-<li><a href="Switching-Branches.html#Switching-Branches">32.1.7.1 Switching between Branches</a>
-<li><a href="Creating-Branches.html#Creating-Branches">32.1.7.2 Creating New Branches</a>
-<li><a href="Merging.html#Merging">32.1.7.3 Merging Branches</a>
-<li><a href="Multi_002dUser-Branching.html#Multi_002dUser-Branching">32.1.7.4 Multi-User Branching</a>
+<li><a href="Switching-Branches.html#Switching-Branches">32.1.8.1 Switching between Branches</a>
+<li><a href="Creating-Branches.html#Creating-Branches">32.1.8.2 Creating New Branches</a>
+<li><a href="Merging.html#Merging">32.1.8.3 Merging Branches</a>
+<li><a href="Multi_002dUser-Branching.html#Multi_002dUser-Branching">32.1.8.4 Multi-User Branching</a>
 </li></ul>
-<li><a href="Remote-Repositories.html#Remote-Repositories">32.1.8 Remote Repositories</a>
+<li><a href="Remote-Repositories.html#Remote-Repositories">32.1.9 Remote Repositories</a>
 <ul>
-<li><a href="Version-Backups.html#Version-Backups">32.1.8.1 Version Backups</a>
-<li><a href="Local-Version-Control.html#Local-Version-Control">32.1.8.2 Local Version Control</a>
+<li><a href="Version-Backups.html#Version-Backups">32.1.9.1 Version Backups</a>
+<li><a href="Local-Version-Control.html#Local-Version-Control">32.1.9.2 Local Version Control</a>
 </li></ul>
-<li><a href="Revision-Tags.html#Revision-Tags">32.1.9 Revision Tags</a>
+<li><a href="Revision-Tags.html#Revision-Tags">32.1.10 Revision Tags</a>
 <ul>
-<li><a href="Making-Revision-Tags.html#Making-Revision-Tags">32.1.9.1 Making and Using Revision Tags</a>
-<li><a href="Revision-Tag-Caveats.html#Revision-Tag-Caveats">32.1.9.2 Revision Tag Caveats</a>
+<li><a href="Making-Revision-Tags.html#Making-Revision-Tags">32.1.10.1 Making and Using Revision Tags</a>
+<li><a href="Revision-Tag-Caveats.html#Revision-Tag-Caveats">32.1.10.2 Revision Tag Caveats</a>
 </li></ul>
-<li><a href="Miscellaneous-VC.html#Miscellaneous-VC">32.1.10 Miscellaneous Commands and Features of VC</a>
+<li><a href="Miscellaneous-VC.html#Miscellaneous-VC">32.1.11 Miscellaneous Commands and Features of VC</a>
 <ul>
-<li><a href="Change-Logs-and-VC.html#Change-Logs-and-VC">32.1.10.1 Change Logs and VC</a>
-<li><a href="Renaming-and-VC.html#Renaming-and-VC">32.1.10.2 Renaming VC Work Files and Master Files</a>
-<li><a href="Version-Headers.html#Version-Headers">32.1.10.3 Inserting Version Control Headers</a>
+<li><a href="Change-Logs-and-VC.html#Change-Logs-and-VC">32.1.11.1 Change Logs and VC</a>
+<li><a href="Renaming-and-VC.html#Renaming-and-VC">32.1.11.2 Renaming VC Work Files and Master Files</a>
+<li><a href="Version-Headers.html#Version-Headers">32.1.11.3 Inserting Version Control Headers</a>
 </li></ul>
-<li><a href="Customizing-VC.html#Customizing-VC">32.1.11 Customizing VC</a>
+<li><a href="Customizing-VC.html#Customizing-VC">32.1.12 Customizing VC</a>
 <ul>
-<li><a href="General-VC-Options.html#General-VC-Options">32.1.11.1 General Options</a>
-<li><a href="RCS-and-SCCS.html#RCS-and-SCCS">32.1.11.2 Options for RCS and SCCS</a>
-<li><a href="CVS-Options.html#CVS-Options">32.1.11.3 Options specific for CVS</a>
+<li><a href="General-VC-Options.html#General-VC-Options">32.1.12.1 General Options</a>
+<li><a href="RCS-and-SCCS.html#RCS-and-SCCS">32.1.12.2 Options for RCS and SCCS</a>
+<li><a href="CVS-Options.html#CVS-Options">32.1.12.3 Options specific for CVS</a>
 </li></ul>
 </li></ul>
 <li><a href="Change-Log.html#Change-Log">32.2 Change Logs</a>
@@ -2377,7 +2388,7 @@ already listed, mentioned here so you can get to them in one step:
 <li><a href="Resources.html#Resources">D.1 X Resources</a>
 <li><a href="Table-of-Resources.html#Table-of-Resources">D.2 Table of X Resources for Emacs</a>
 <li><a href="Face-Resources.html#Face-Resources">D.3 X Resources for Faces</a>
-<li><a href="Lucid-Resources.html#Lucid-Resources">D.4 Lucid Menu X Resources</a>
+<li><a href="Lucid-Resources.html#Lucid-Resources">D.4 Lucid Menu And Dialog X Resources</a>
 <li><a href="LessTif-Resources.html#LessTif-Resources">D.5 LessTif Menu X Resources</a>
 <li><a href="GTK-resources.html#GTK-resources">D.6 GTK resources</a>
 <ul>
@@ -2403,25 +2414,26 @@ already listed, mentioned here so you can get to them in one step:
 </li></ul>
 <li><a name="toc_Microsoft-Windows" href="Microsoft-Windows.html#Microsoft-Windows">Appendix G Emacs and Microsoft Windows/MS-DOS</a>
 <ul>
-<li><a href="Text-and-Binary.html#Text-and-Binary">G.1 Text Files and Binary Files</a>
-<li><a href="Windows-Files.html#Windows-Files">G.2 File Names on MS-Windows</a>
-<li><a href="ls-in-Lisp.html#ls-in-Lisp">G.3 Emulation of <code>ls</code> on MS-Windows</a>
-<li><a href="Windows-HOME.html#Windows-HOME">G.4 HOME Directory on MS-Windows</a>
-<li><a href="Windows-Keyboard.html#Windows-Keyboard">G.5 Keyboard Usage on MS-Windows</a>
-<li><a href="Windows-Mouse.html#Windows-Mouse">G.6 Mouse Usage on MS-Windows</a>
-<li><a href="Windows-Processes.html#Windows-Processes">G.7 Subprocesses on Windows 9X/ME and Windows NT/2K/XP</a>
-<li><a href="Windows-Printing.html#Windows-Printing">G.8 Printing and MS-Windows</a>
-<li><a href="Windows-Fonts.html#Windows-Fonts">G.9 Specifying Fonts on MS-Windows</a>
-<li><a href="Windows-Misc.html#Windows-Misc">G.10 Miscellaneous Windows-specific features</a>
-<li><a href="MS_002dDOS.html#MS_002dDOS">G.11 Emacs and MS-DOS</a>
+<li><a href="Windows-Startup.html#Windows-Startup">G.1 How to Start Emacs on MS-Windows</a>
+<li><a href="Text-and-Binary.html#Text-and-Binary">G.2 Text Files and Binary Files</a>
+<li><a href="Windows-Files.html#Windows-Files">G.3 File Names on MS-Windows</a>
+<li><a href="ls-in-Lisp.html#ls-in-Lisp">G.4 Emulation of <code>ls</code> on MS-Windows</a>
+<li><a href="Windows-HOME.html#Windows-HOME">G.5 HOME and Startup Directories on MS-Windows</a>
+<li><a href="Windows-Keyboard.html#Windows-Keyboard">G.6 Keyboard Usage on MS-Windows</a>
+<li><a href="Windows-Mouse.html#Windows-Mouse">G.7 Mouse Usage on MS-Windows</a>
+<li><a href="Windows-Processes.html#Windows-Processes">G.8 Subprocesses on Windows 9X/ME and Windows NT/2K/XP</a>
+<li><a href="Windows-Printing.html#Windows-Printing">G.9 Printing and MS-Windows</a>
+<li><a href="Windows-Fonts.html#Windows-Fonts">G.10 Specifying Fonts on MS-Windows</a>
+<li><a href="Windows-Misc.html#Windows-Misc">G.11 Miscellaneous Windows-specific features</a>
+<li><a href="MS_002dDOS.html#MS_002dDOS">G.12 Emacs and MS-DOS</a>
 <ul>
-<li><a href="MS_002dDOS-Keyboard.html#MS_002dDOS-Keyboard">G.11.1 Keyboard Usage on MS-DOS</a>
-<li><a href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">G.11.2 Mouse Usage on MS-DOS</a>
-<li><a href="MS_002dDOS-Display.html#MS_002dDOS-Display">G.11.3 Display on MS-DOS</a>
-<li><a href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names">G.11.4 File Names on MS-DOS</a>
-<li><a href="MS_002dDOS-Printing.html#MS_002dDOS-Printing">G.11.5 Printing and MS-DOS</a>
-<li><a href="MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE">G.11.6 International Support on MS-DOS</a>
-<li><a href="MS_002dDOS-Processes.html#MS_002dDOS-Processes">G.11.7 Subprocesses on MS-DOS</a>
+<li><a href="MS_002dDOS-Keyboard.html#MS_002dDOS-Keyboard">G.12.1 Keyboard Usage on MS-DOS</a>
+<li><a href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">G.12.2 Mouse Usage on MS-DOS</a>
+<li><a href="MS_002dDOS-Display.html#MS_002dDOS-Display">G.12.3 Display on MS-DOS</a>
+<li><a href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names">G.12.4 File Names on MS-DOS</a>
+<li><a href="MS_002dDOS-Printing.html#MS_002dDOS-Printing">G.12.5 Printing and MS-DOS</a>
+<li><a href="MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE">G.12.6 International Support on MS-DOS</a>
+<li><a href="MS_002dDOS-Processes.html#MS_002dDOS-Processes">G.12.7 Subprocesses on MS-DOS</a>
 </li></ul>
 </li></ul>
 <li><a name="toc_Manifesto" href="Manifesto.html#Manifesto">The GNU Manifesto</a>

@@ -50,7 +50,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Composing-Messages.html#Composing-Messa
 
 <h3 class="section">5.5 Archived Messages</h3>
 
-<p><a name="index-archived-messages-1948"></a><a name="index-sent-messages-1949"></a>
+<p><a name="index-archived-messages-1888"></a><a name="index-sent-messages-1889"></a>
 Gnus provides a few different methods for storing the mail and news you
 send.  The default method is to use the <dfn>archive virtual server</dfn> to
 store the messages.  If you want to disable this completely, the
@@ -60,7 +60,7 @@ is the default.
    <p>For archiving interesting messages in a group you read, see the
 <kbd>B c</kbd> (<code>gnus-summary-copy-article</code>) command (see <a href="Mail-Group-Commands.html#Mail-Group-Commands">Mail Group Commands</a>).
 
-   <p><a name="index-gnus_002dmessage_002darchive_002dmethod-1950"></a><code>gnus-message-archive-method</code> says what virtual server Gnus is to
+   <p><a name="index-gnus_002dmessage_002darchive_002dmethod-1890"></a><code>gnus-message-archive-method</code> says what virtual server Gnus is to
 use to store sent messages.  The default is <code>"archive"</code>, and when
 actually being used it is expanded into:
 
@@ -71,7 +71,7 @@ actually being used it is expanded into:
                (nnfolder-inhibit-expiry t))
 </pre>
    <blockquote>
-<a name="index-gnus_002dupdate_002dmessage_002darchive_002dmethod-1951"></a>Note: a server like this is saved in the <samp><span class="file">~/.newsrc.eld</span></samp> file first
+<a name="index-gnus_002dupdate_002dmessage_002darchive_002dmethod-1891"></a>Note: a server like this is saved in the <samp><span class="file">~/.newsrc.eld</span></samp> file first
 so that it may be used as a real method of the server which is named
 <code>"archive"</code> (that is, for the case where
 <code>gnus-message-archive-method</code> is set to <code>"archive"</code>) ever
@@ -96,7 +96,7 @@ directory chosen, you could say something like:
                       (nnfolder-active-file "~/News/sent-mail/active")
                       (nnfolder-directory "~/News/sent-mail/")))
 </pre>
-   <p><a name="index-gnus_002dmessage_002darchive_002dgroup-1952"></a><a name="index-Gcc-1953"></a>Gnus will insert <code>Gcc</code> headers in all outgoing messages that point
+   <p><a name="index-gnus_002dmessage_002darchive_002dgroup-1892"></a><a name="index-Gcc-1893"></a>Gnus will insert <code>Gcc</code> headers in all outgoing messages that point
 to one or more group(s) on that server.  Which group to use is
 determined by the <code>gnus-message-archive-group</code> variable.
 
@@ -150,8 +150,6 @@ messages in one file per month:
                  "misc-news"
                (concat "mail." (format-time-string "%Y-%m")))))
 </pre>
-   <!-- (XEmacs 19.13 doesn't have @code{format-time-string}, so you'll have to -->
-<!-- use a different value for @code{gnus-message-archive-group} there.) -->
    <p>Now, when you send a message off, it will be stored in the appropriate
 group.  (If you want to disable storing for just one particular message,
 you can just remove the <code>Gcc</code> header that has been inserted.)  The
@@ -163,28 +161,10 @@ if (using <kbd>G r</kbd> in the group buffer) to something
 nice&mdash;&lsquo;<samp><span class="samp">misc-mail-september-1995</span></samp>&rsquo;, or whatever.  New messages will
 continue to be stored in the old (now empty) group.
 
-   <p>That's the default method of archiving sent messages.  Gnus offers a
-different way for the people who don't like the default method.  In that
-case you should set <code>gnus-message-archive-group</code> to <code>nil</code>;
-this will disable archiving.
-
      <dl>
-<dt><code>gnus-outgoing-message-group</code><dd><a name="index-gnus_002doutgoing_002dmessage_002dgroup-1954"></a>All outgoing messages will be put in this group.  If you want to store
-all your outgoing mail and articles in the group &lsquo;<samp><span class="samp">nnml:archive</span></samp>&rsquo;,
-you set this variable to that value.  This variable can also be a list of
-group names.
+<dt><code>gnus-gcc-mark-as-read</code><dd><a name="index-gnus_002dgcc_002dmark_002das_002dread-1894"></a>If non-<code>nil</code>, automatically mark <code>Gcc</code> articles as read.
 
-     <p>If you want to have greater control over what group to put each
-message in, you can set this variable to a function that checks the
-current newsgroup name and then returns a suitable group name (or list
-of names).
-
-     <p>This variable can be used instead of <code>gnus-message-archive-group</code>,
-but the latter is the preferred method.
-
-     <br><dt><code>gnus-gcc-mark-as-read</code><dd><a name="index-gnus_002dgcc_002dmark_002das_002dread-1955"></a>If non-<code>nil</code>, automatically mark <code>Gcc</code> articles as read.
-
-     <br><dt><code>gnus-gcc-externalize-attachments</code><dd><a name="index-gnus_002dgcc_002dexternalize_002dattachments-1956"></a>If <code>nil</code>, attach files as normal parts in Gcc copies; if a regexp
+     <br><dt><code>gnus-gcc-externalize-attachments</code><dd><a name="index-gnus_002dgcc_002dexternalize_002dattachments-1895"></a>If <code>nil</code>, attach files as normal parts in Gcc copies; if a regexp
 and matches the Gcc group name, attach files as external parts; if it is
 <code>all</code>, attach local files as external parts; if it is other
 non-<code>nil</code>, the behavior is the same as <code>all</code>, but it may be

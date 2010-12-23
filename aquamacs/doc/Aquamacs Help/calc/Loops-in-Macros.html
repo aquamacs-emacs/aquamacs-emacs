@@ -10,7 +10,8 @@
 <link rel="next" href="Local-Values-in-Macros.html#Local-Values-in-Macros" title="Local Values in Macros">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+This file documents Calc, the GNU Emacs calculator, included with
+GNU Emacs {No value for `EMACSVER'}.
 
 Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -53,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard-Macros">K
 
 <h4 class="subsection">18.2.3 Loops in Keyboard Macros</h4>
 
-<p class="noindent"><a name="index-Z-_003c-2283"></a><a name="index-Z-_003e-2284"></a><a name="index-calc_002dkbd_002drepeat-2285"></a><a name="index-calc_002dkbd_002dend_002drepeat-2286"></a><a name="index-Looping-structures-2287"></a><a name="index-Iterative-structures-2288"></a>The <kbd>Z &lt;</kbd> (<code>calc-kbd-repeat</code>) and <kbd>Z &gt;</kbd>
+<p class="noindent"><a name="index-Z-_003c-2288"></a><a name="index-Z-_003e-2289"></a><a name="index-calc_002dkbd_002drepeat-2290"></a><a name="index-calc_002dkbd_002dend_002drepeat-2291"></a><a name="index-Looping-structures-2292"></a><a name="index-Iterative-structures-2293"></a>The <kbd>Z &lt;</kbd> (<code>calc-kbd-repeat</code>) and <kbd>Z &gt;</kbd>
 (<code>calc-kbd-end-repeat</code>) commands pop a number from the stack,
 which must be an integer, then repeat the keystrokes between the brackets
 the specified number of times.  If the integer is zero or negative, the
@@ -73,7 +74,7 @@ another approach is to type the macro as written-out keystroke names
 in a buffer, then use <kbd>C-x * m</kbd> (<code>read-kbd-macro</code>) to read the
 macro.
 
-   <p><a name="index-Z-_002f-2289"></a><a name="index-calc_002dbreak-2290"></a>The <kbd>Z /</kbd> (<code>calc-kbd-break</code>) command allows you to break out
+   <p><a name="index-Z-_002f-2294"></a><a name="index-calc_002dbreak-2295"></a>The <kbd>Z /</kbd> (<code>calc-kbd-break</code>) command allows you to break out
 of a keyboard macro loop prematurely.  It pops an object from the stack;
 if that object is true (a non-zero number), control jumps out of the
 innermost enclosing <kbd>Z &lt;</kbd> <small class="dots">...</small> <kbd>Z &gt;</kbd> loop and continues
@@ -81,7 +82,7 @@ after the <kbd>Z &gt;</kbd>.  If the object is false, the <kbd>Z /</kbd> has no
 effect.  Thus <var>cond</var><kbd> Z /</kbd> is similar to &lsquo;<samp><span class="samp">if (</span><var>cond</var><span class="samp">) break;</span></samp>&rsquo;
 in the C language.
 
-   <p><a name="index-Z-_0028-2291"></a><a name="index-Z-_0029-2292"></a><a name="index-calc_002dkbd_002dfor-2293"></a><a name="index-calc_002dkbd_002dend_002dfor-2294"></a>The <kbd>Z (</kbd> (<code>calc-kbd-for</code>) and <kbd>Z )</kbd> (<code>calc-kbd-end-for</code>)
+   <p><a name="index-Z-_0028-2296"></a><a name="index-Z-_0029-2297"></a><a name="index-calc_002dkbd_002dfor-2298"></a><a name="index-calc_002dkbd_002dend_002dfor-2299"></a>The <kbd>Z (</kbd> (<code>calc-kbd-for</code>) and <kbd>Z )</kbd> (<code>calc-kbd-end-for</code>)
 commands are similar to <kbd>Z &lt;</kbd> and <kbd>Z &gt;</kbd>, except that they make the
 value of the counter available inside the loop.  The general layout is
 <var>init</var> <var>final</var><kbd> Z ( </kbd><var>body</var> <var>step</var><kbd> Z )</kbd>.  The <kbd>Z (</kbd>
@@ -91,7 +92,7 @@ The <kbd>Z (</kbd> command then repeatedly pushes the counter value onto the
 stack and executes <var>body</var> and <var>step</var>, adding <var>step</var> to the
 counter each time until the loop finishes.
 
-   <p><a name="index-Summations-_0028by-keyboard-macros_0029-2295"></a>By default, the loop finishes when the counter becomes greater than (or
+   <p><a name="index-Summations-_0028by-keyboard-macros_0029-2300"></a>By default, the loop finishes when the counter becomes greater than (or
 less than) <var>final</var>, assuming <var>initial</var> is less than (greater
 than) <var>final</var>.  If <var>initial</var> is equal to <var>final</var>, the body
 executes exactly once.  The body of the loop always executes at least
@@ -105,7 +106,7 @@ Note that <var>step</var> may still be negative in this loop; the prefix
 argument merely constrains the loop-finished test.  Likewise, a prefix
 argument of <i>-1</i> forces downward-counting conventions.
 
-   <p><a name="index-Z-_0040_007b-2296"></a><a name="index-Z-_0040_007d-2297"></a><a name="index-calc_002dkbd_002dloop-2298"></a><a name="index-calc_002dkbd_002dend_002dloop-2299"></a>The <kbd>Z {</kbd> (<code>calc-kbd-loop</code>) and <kbd>Z }</kbd>
+   <p><a name="index-Z-_0040_007b-2301"></a><a name="index-Z-_0040_007d-2302"></a><a name="index-calc_002dkbd_002dloop-2303"></a><a name="index-calc_002dkbd_002dend_002dloop-2304"></a>The <kbd>Z {</kbd> (<code>calc-kbd-loop</code>) and <kbd>Z }</kbd>
 (<code>calc-kbd-end-loop</code>) commands are similar to <kbd>Z &lt;</kbd> and
 <kbd>Z &gt;</kbd>, except that they do not pop a count from the stack&mdash;they
 effectively create an infinite loop.  Every <kbd>Z {</kbd> <small class="dots">...</small> <kbd>Z }</kbd>

@@ -10,9 +10,10 @@
 <link rel="next" href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" title="Tables in arbitrary syntax">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -58,7 +59,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Hacking.html#Hacking">Hacking</a>
 
 <h3 class="section">A.4 Context-sensitive commands</h3>
 
-<p><a name="index-context_002dsensitive-commands_002c-hooks-1412"></a><a name="index-add_002dons_002c-context_002dsensitive-commands-1413"></a><a name="index-org_002dctrl_002dc_002dctrl_002dc_002dhook-1414"></a>
+<p><a name="index-context_002dsensitive-commands_002c-hooks-1900"></a><a name="index-add_002dons_002c-context_002dsensitive-commands-1901"></a><a name="index-org_002dctrl_002dc_002dctrl_002dc_002dhook-1902"></a>
 Org has several commands that act differently depending on context.  The most
 important example it the <kbd>C-c C-c</kbd> (see <a href="The-very-busy-C_002dc-C_002dc-key.html#The-very-busy-C_002dc-C_002dc-key">The very busy C-c C-c key</a>). 
 Also the <kbd>M-cursor</kbd> and <kbd>M-S-cursor</kbd> keys have this property.
@@ -66,8 +67,9 @@ Also the <kbd>M-cursor</kbd> and <kbd>M-S-cursor</kbd> keys have this property.
    <p>Add-ons can tap into this functionality by providing a function that detects
 special context for that add-on and executes functionality appropriate for
 the context.  Here is an example from Dan Davison's <samp><span class="file">org-R.el</span></samp> which
-allows you to evaluate commands based on the <samp><span class="file">R</span></samp> programming language.  For
-this package, special contexts are lines that start with <code>#+R:</code> or
+allows you to evaluate commands based on the <samp><span class="file">R</span></samp> programming language
+<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  For this
+package, special contexts are lines that start with <code>#+R:</code> or
 <code>#+RR:</code>.
 
 <pre class="lisp">     (defun org-R-apply-maybe ()
@@ -85,6 +87,13 @@ this package, special contexts are lines that start with <code>#+R:</code> or
 case, <code>org-R-apply</code> is called and the function returns <code>t</code> to
 signal that action was taken, and <kbd>C-c C-c</kbd> will stop looking for other
 contexts.  If the function finds it should do nothing locally, it returns <code>nil</code> so that other, similar functions can have a try.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <samp><span class="file">org-R.el</span></samp> has been replaced by the org-mode functionality
+described in <a href="Working-With-Source-Code.html#Working-With-Source-Code">Working With Source Code</a> and is now obsolete.</p>
+
+   <hr></div>
 
    </body></html>
 

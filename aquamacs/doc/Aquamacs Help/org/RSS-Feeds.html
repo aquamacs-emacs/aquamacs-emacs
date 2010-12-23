@@ -10,9 +10,10 @@
 <link rel="next" href="Protocols.html#Protocols" title="Protocols">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,27 +58,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Capture-_002d-Refile-_002d-Archive.html
 
 <h3 class="section">9.3 RSS feeds</h3>
 
-<p><a name="index-RSS-feeds-685"></a>
-Org has the capability to add and change entries based on information found in
-RSS feeds.  You could use this to make a task out of each new podcast in a
+<p><a name="index-RSS-feeds-932"></a><a name="index-Atom-feeds-933"></a>
+Org can add and change entries based on information found in RSS feeds and
+Atom feeds.  You could use this to make a task out of each new podcast in a
 podcast feed.  Or you could use a phone-based note-creating service on the
-web to import tasks into Org.  To access feeds, you need to configure the
-variable <code>org-feed-alist</code>.  The docstring of this variable has detailed
+web to import tasks into Org.  To access feeds, configure the variable
+<code>org-feed-alist</code>.  The docstring of this variable has detailed
 information.  Here is just an example:
 
 <pre class="example">     (setq org-feed-alist
-           '(("ReQall" "http://www.reqall.com/user/feeds/rss/a1b2c3....."
-              "~/org/feeds.org" "ReQall Entries")
+          '(("Slashdot"
+              "http://rss.slashdot.org/Slashdot/slashdot"
+              "~/txt/org/feeds.org" "Slashdot Entries")))
 </pre>
-   <p class="noindent">will configure that new items from the feed provided by <samp><span class="file">reqall.com</span></samp>
-will result in new entries in the file <samp><span class="file">~/org/feeds.org</span></samp> under the
-heading &lsquo;<samp><span class="samp">ReQall Entries</span></samp>&rsquo;, whenever the following command is used:
+   <p class="noindent">will configure that new items from the feed provided by
+<code>rss.slashdot.org</code> will result in new entries in the file
+<samp><span class="file">~/org/feeds.org</span></samp> under the heading &lsquo;<samp><span class="samp">Slashdot Entries</span></samp>&rsquo;, whenever
+the following command is used:
 
      
-<a name="index-C_002dc-C_002dx-g-686"></a>
-<dl><dt><kbd>C-c C-x g</kbd><dd>Collect items from the feeds configured in <code>org-feed-alist</code> and act upon
+<a name="index-C_002dc-C_002dx-g-934"></a>
+<a name="index-org_002dfeed_002dupdate_002dall-935"></a>
+<dl><dt><kbd>C-c C-x g &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-feed-update-all</code><kbd>)</kbd>
+<br><dt><kbd>C-c C-x g</kbd><dd>Collect items from the feeds configured in <code>org-feed-alist</code> and act upon
 them. 
-<a name="index-C_002dc-C_002dx-G-687"></a><br><dt><kbd>C-c C-x G</kbd><dd>Prompt for a feed name and go to the inbox configured for this feed. 
+<a name="index-C_002dc-C_002dx-G-936"></a><a name="index-org_002dfeed_002dgoto_002dinbox-937"></a><br><dt><kbd>C-c C-x G &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-feed-goto-inbox</code><kbd>)</kbd><dd>
+Prompt for a feed name and go to the inbox configured for this feed. 
 </dl>
 
    <p>Under the same headline, Org will create a drawer &lsquo;<samp><span class="samp">FEEDSTATUS</span></samp>&rsquo; in which
@@ -87,8 +93,8 @@ list of drawers in that file:
 
 <pre class="example">     #+DRAWERS: LOGBOOK PROPERTIES FEEDSTATUS
 </pre>
-   <p>For more information, see <samp><span class="file">org-feed.el</span></samp> and the docstring of
-<code>org-feed-alist</code>.
+   <p>For more information, including how to read atom feeds, see
+<samp><span class="file">org-feed.el</span></samp> and the docstring of <code>org-feed-alist</code>.
 
    </body></html>
 

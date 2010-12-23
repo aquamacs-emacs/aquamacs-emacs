@@ -10,9 +10,10 @@
 <link rel="next" href="Field-formulas.html#Field-formulas" title="Field formulas">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,25 +58,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="The-spreadsheet.html#The-spreadsheet">T
 
 <h4 class="subsection">3.5.3 Emacs Lisp forms as formulas</h4>
 
-<p><a name="index-Lisp-forms_002c-as-table-formulas-237"></a>
-It is also possible to write a formula in Emacs Lisp; this can be useful
-for string manipulation and control structures, if Calc's
-functionality is not enough.  If a formula starts with a single-quote
-followed by an opening parenthesis, then it is evaluated as a Lisp form. 
-The evaluation should return either a string or a number.  Just as with
-<samp><span class="file">calc</span></samp> formulas, you can specify modes and a printf format after a
-semicolon.  With Emacs Lisp forms, you need to be conscious about the way
-field references are interpolated into the form.  By default, a
-reference will be interpolated as a Lisp string (in double-quotes)
-containing the field.  If you provide the &lsquo;<samp><span class="samp">N</span></samp>&rsquo; mode switch, all
-referenced elements will be numbers (non-number fields will be zero) and
-interpolated as Lisp numbers, without quotes.  If you provide the
-&lsquo;<samp><span class="samp">L</span></samp>&rsquo; flag, all fields will be interpolated literally, without quotes. 
-I.e., if you want a reference to be interpreted as a string by the Lisp
-form, enclose the reference operator itself in double-quotes, like
-<code>"$3"</code>.  Ranges are inserted as space-separated fields, so you can
-embed them in list or vector syntax.  A few examples, note how the
-&lsquo;<samp><span class="samp">N</span></samp>&rsquo; mode is used when we do computations in Lisp.
+<p><a name="index-Lisp-forms_002c-as-table-formulas-321"></a>
+It is also possible to write a formula in Emacs Lisp; this can be useful for
+string manipulation and control structures, if Calc's functionality is not
+enough.  If a formula starts with a single-quote followed by an opening
+parenthesis, then it is evaluated as a Lisp form.  The evaluation should
+return either a string or a number.  Just as with <samp><span class="file">calc</span></samp> formulas, you
+can specify modes and a printf format after a semicolon.  With Emacs Lisp
+forms, you need to be conscious about the way field references are
+interpolated into the form.  By default, a reference will be interpolated as
+a Lisp string (in double-quotes) containing the field.  If you provide the
+&lsquo;<samp><span class="samp">N</span></samp>&rsquo; mode switch, all referenced elements will be numbers (non-number
+fields will be zero) and interpolated as Lisp numbers, without quotes.  If
+you provide the &lsquo;<samp><span class="samp">L</span></samp>&rsquo; flag, all fields will be interpolated literally,
+without quotes.  I.e., if you want a reference to be interpreted as a string
+by the Lisp form, enclose the reference operator itself in double-quotes,
+like <code>"$3"</code>.  Ranges are inserted as space-separated fields, so you can
++embed them in list or vector syntax.  Here are a few examples&mdash;note how the
+&lsquo;<samp><span class="samp">N</span></samp>&rsquo; mode is used when we do computations in Lisp:
 
 <pre class="example">     <span class="roman">Swap the first two characters of the content of column 1</span>
        '(concat (substring $1 1 2) (substring $1 0 1) (substring $1 2))

@@ -10,9 +10,10 @@
 <link rel="next" href="External-links.html#External-links" title="External links">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,8 +58,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinks.html#Hyperlinks">Hyperlinks<
 
 <h3 class="section">4.2 Internal links</h3>
 
-<p><a name="index-internal-links-288"></a><a name="index-links_002c-internal-289"></a><a name="index-targets_002c-for-links-290"></a>
-<a name="index-property_002c-CUSTOM_005fID-291"></a>If the link does not look like a URL, it is considered to be internal in the
+<p><a name="index-internal-links-399"></a><a name="index-links_002c-internal-400"></a><a name="index-targets_002c-for-links-401"></a>
+<a name="index-property_002c-CUSTOM_005fID-402"></a>If the link does not look like a URL, it is considered to be internal in the
 current file.  The most important case is a link like
 &lsquo;<samp><span class="samp">[[#my-custom-id]]</span></samp>&rsquo; which will link to the entry with the
 <code>CUSTOM_ID</code> property &lsquo;<samp><span class="samp">my-custom-id</span></samp>&rsquo;.  Such custom IDs are very good
@@ -81,17 +82,10 @@ comment line. For example
    <p class="noindent">In HTML export (see <a href="HTML-export.html#HTML-export">HTML export</a>), such targets will become
 named anchors for direct access through &lsquo;<samp><span class="samp">http</span></samp>&rsquo; links<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
 
-   <p>If no dedicated target exists, Org will search for the words in the link.  In
-the above example the search would be for &lsquo;<samp><span class="samp">my target</span></samp>&rsquo;.  Links starting
-with a star like &lsquo;<samp><span class="samp">*My Target</span></samp>&rsquo; restrict the search to
-headlines<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  When searching, Org mode will first try an
-exact match, but then move on to more and more lenient searches.  For
-example, the link &lsquo;<samp><span class="samp">[[*My Targets]]</span></samp>&rsquo; will find any of the following:
+   <p>If no dedicated target exists, Org will search for a headline that is exactly
+the link text but may also include a TODO keyword and tags<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  In non-Org files, the search will look for the words in the
+link text.  In the above example the search would be for &lsquo;<samp><span class="samp">my target</span></samp>&rsquo;.
 
-<pre class="example">     ** My targets
-     ** TODO my targets are bright
-     ** my 20 targets are
-</pre>
    <p>Following a link pushes a mark onto Org's own mark ring.  You can
 return to the previous position with <kbd>C-c &amp;</kbd>.  Using this command
 several times in direct succession goes back to positions recorded
@@ -108,11 +102,11 @@ text before the first headline is usually not exported, so the first such
 target should be after the first headline, or in the line directly before the
 first headline.</p>
 
-   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> To insert a link targeting a headline, in-buffer
-completion can be used.  Just type a star followed by a few optional letters
-into the buffer and press <kbd>M-&lt;TAB&gt;</kbd>.  All headlines in the current
-buffer will be offered as completions.  See <a href="Handling-links.html#Handling-links">Handling links</a>, for more
-commands creating links.</p>
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> To insert
+a link targeting a headline, in-buffer completion can be used.  Just type a
+star followed by a few optional letters into the buffer and press
+<kbd>M-&lt;TAB&gt;</kbd>.  All headlines in the current buffer will be offered as
+completions.</p>
 
    <hr></div>
 

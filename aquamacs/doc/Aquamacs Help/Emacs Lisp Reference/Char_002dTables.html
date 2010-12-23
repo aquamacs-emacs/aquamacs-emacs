@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -47,7 +47,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences
 
 <h3 class="section">6.6 Char-Tables</h3>
 
-<p><a name="index-char_002dtables-406"></a><a name="index-extra-slots-of-char_002dtable-407"></a>
+<p><a name="index-char_002dtables-407"></a><a name="index-extra-slots-of-char_002dtable-408"></a>
   A char-table is much like a vector, except that it is indexed by
 character codes.  Any valid character code, without modifiers, can be
 used as an index in a char-table.  You can access a char-table's
@@ -57,7 +57,7 @@ data not associated with particular character codes.  Like vectors,
 char-tables are constants when evaluated, and can hold elements of any
 type.
 
-   <p><a name="index-subtype-of-char_002dtable-408"></a>  Each char-table has a <dfn>subtype</dfn>, a symbol, which serves two
+   <p><a name="index-subtype-of-char_002dtable-409"></a>  Each char-table has a <dfn>subtype</dfn>, a symbol, which serves two
 purposes:
 
      <ul>
@@ -75,19 +75,19 @@ the char-table has no extra slots.  See <a href="Property-Lists.html#Property-Li
 information about symbol properties. 
 </ul>
 
-   <p><a name="index-parent-of-char_002dtable-409"></a>  A char-table can have a <dfn>parent</dfn>, which is another char-table.  If
+   <p><a name="index-parent-of-char_002dtable-410"></a>  A char-table can have a <dfn>parent</dfn>, which is another char-table.  If
 it does, then whenever the char-table specifies <code>nil</code> for a
 particular character <var>c</var>, it inherits the value specified in the
 parent.  In other words, <code>(aref </code><var>char-table</var> <var>c</var><code>)</code> returns
 the value from the parent of <var>char-table</var> if <var>char-table</var> itself
 specifies <code>nil</code>.
 
-   <p><a name="index-default-value-of-char_002dtable-410"></a>  A char-table can also have a <dfn>default value</dfn>.  If so, then
+   <p><a name="index-default-value-of-char_002dtable-411"></a>  A char-table can also have a <dfn>default value</dfn>.  If so, then
 <code>(aref </code><var>char-table</var> <var>c</var><code>)</code> returns the default value
 whenever the char-table does not specify any other non-<code>nil</code> value.
 
 <div class="defun">
-&mdash; Function: <b>make-char-table</b><var> subtype &amp;optional init<a name="index-make_002dchar_002dtable-411"></a></var><br>
+&mdash; Function: <b>make-char-table</b><var> subtype &amp;optional init<a name="index-make_002dchar_002dtable-412"></a></var><br>
 <blockquote><p>Return a newly-created char-table, with subtype <var>subtype</var> (a
 symbol).  Each element is initialized to <var>init</var>, which defaults to
 <code>nil</code>.  You cannot alter the subtype of a char-table after the
@@ -104,13 +104,13 @@ This should be an integer between 0 and 10; otherwise,
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>char-table-p</b><var> object<a name="index-char_002dtable_002dp-412"></a></var><br>
+&mdash; Function: <b>char-table-p</b><var> object<a name="index-char_002dtable_002dp-413"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a char-table, and
 <code>nil</code> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>char-table-subtype</b><var> char-table<a name="index-char_002dtable_002dsubtype-413"></a></var><br>
+&mdash; Function: <b>char-table-subtype</b><var> char-table<a name="index-char_002dtable_002dsubtype-414"></a></var><br>
 <blockquote><p>This function returns the subtype symbol of <var>char-table</var>. 
 </p></blockquote></div>
 
@@ -118,25 +118,25 @@ This should be an integer between 0 and 10; otherwise,
 To do that, use <code>char-table-range</code> (see below).
 
 <div class="defun">
-&mdash; Function: <b>char-table-parent</b><var> char-table<a name="index-char_002dtable_002dparent-414"></a></var><br>
+&mdash; Function: <b>char-table-parent</b><var> char-table<a name="index-char_002dtable_002dparent-415"></a></var><br>
 <blockquote><p>This function returns the parent of <var>char-table</var>.  The parent is
 always either <code>nil</code> or another char-table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-char-table-parent</b><var> char-table new-parent<a name="index-set_002dchar_002dtable_002dparent-415"></a></var><br>
+&mdash; Function: <b>set-char-table-parent</b><var> char-table new-parent<a name="index-set_002dchar_002dtable_002dparent-416"></a></var><br>
 <blockquote><p>This function sets the parent of <var>char-table</var> to <var>new-parent</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>char-table-extra-slot</b><var> char-table n<a name="index-char_002dtable_002dextra_002dslot-416"></a></var><br>
+&mdash; Function: <b>char-table-extra-slot</b><var> char-table n<a name="index-char_002dtable_002dextra_002dslot-417"></a></var><br>
 <blockquote><p>This function returns the contents of extra slot <var>n</var> of
 <var>char-table</var>.  The number of extra slots in a char-table is
 determined by its subtype. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-char-table-extra-slot</b><var> char-table n value<a name="index-set_002dchar_002dtable_002dextra_002dslot-417"></a></var><br>
+&mdash; Function: <b>set-char-table-extra-slot</b><var> char-table n value<a name="index-set_002dchar_002dtable_002dextra_002dslot-418"></a></var><br>
 <blockquote><p>This function stores <var>value</var> in extra slot <var>n</var> of
 <var>char-table</var>. 
 </p></blockquote></div>
@@ -145,7 +145,7 @@ determined by its subtype.
 it can also specify a value for an entire character set.
 
 <div class="defun">
-&mdash; Function: <b>char-table-range</b><var> char-table range<a name="index-char_002dtable_002drange-418"></a></var><br>
+&mdash; Function: <b>char-table-range</b><var> char-table range<a name="index-char_002dtable_002drange-419"></a></var><br>
 <blockquote><p>This returns the value specified in <var>char-table</var> for a range of
 characters <var>range</var>.  Here are the possibilities for <var>range</var>:
 
@@ -161,7 +161,7 @@ characters <var>range</var>.  Here are the possibilities for <var>range</var>:
         </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-char-table-range</b><var> char-table range value<a name="index-set_002dchar_002dtable_002drange-419"></a></var><br>
+&mdash; Function: <b>set-char-table-range</b><var> char-table range value<a name="index-set_002dchar_002dtable_002drange-420"></a></var><br>
 <blockquote><p>This function sets the value in <var>char-table</var> for a range of
 characters <var>range</var>.  Here are the possibilities for <var>range</var>:
 
@@ -179,7 +179,7 @@ characters <var>range</var>.  Here are the possibilities for <var>range</var>:
         </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>map-char-table</b><var> function char-table<a name="index-map_002dchar_002dtable-420"></a></var><br>
+&mdash; Function: <b>map-char-table</b><var> function char-table<a name="index-map_002dchar_002dtable-421"></a></var><br>
 <blockquote><p>This function calls its argument <var>function</var> for each element of
 <var>char-table</var> that has a non-<code>nil</code> value.  The call to
 <var>function</var> is with two arguments, a key and a value.  The key

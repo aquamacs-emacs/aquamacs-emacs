@@ -50,19 +50,19 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Article-Treatment.html#Article-Treatmen
 
 <h4 class="subsection">3.18.6 Article Buttons</h4>
 
-<p><a name="index-buttons-1448"></a>
+<p><a name="index-buttons-1377"></a>
 People often include references to other stuff in articles, and it would
 be nice if Gnus could just fetch whatever it is that people talk about
 with the minimum of fuzz when you hit <kbd>RET</kbd> or use the middle mouse
 button on these references.
 
-   <p><a name="index-gnus_002dbutton_002dman_002dhandler-1449"></a>Gnus adds <dfn>buttons</dfn> to certain standard references by default:
+   <p><a name="index-gnus_002dbutton_002dman_002dhandler-1378"></a>Gnus adds <dfn>buttons</dfn> to certain standard references by default:
 Well-formed URLs, mail addresses, Message-IDs, Info links, man pages and
 Emacs or Gnus related references.  This is controlled by two variables,
 one that handles article bodies and one that handles article heads:
 
      <dl>
-<dt><code>gnus-button-alist</code><dd><a name="index-gnus_002dbutton_002dalist-1450"></a>This is an alist where each entry has this form:
+<dt><code>gnus-button-alist</code><dd><a name="index-gnus_002dbutton_002dalist-1379"></a>This is an alist where each entry has this form:
 
      <pre class="lisp">          (<var>regexp</var> <var>button-par</var> <var>use-p</var> <var>function</var> <var>data-par</var>)
 </pre>
@@ -94,7 +94,7 @@ says which part of the match is to be sent as data to <var>function</var>.
 
      <pre class="lisp">          ("&lt;URL:\\([^\n\r&gt;]*\\)&gt;" 0 t gnus-button-url 1)
 </pre>
-     <br><dt><code>gnus-header-button-alist</code><dd><a name="index-gnus_002dheader_002dbutton_002dalist-1451"></a>This is just like the other alist, except that it is applied to the
+     <br><dt><code>gnus-header-button-alist</code><dd><a name="index-gnus_002dheader_002dbutton_002dalist-1380"></a>This is just like the other alist, except that it is applied to the
 article head only, and that each entry has an additional element that is
 used to say what headers to apply the buttonize coding to:
 
@@ -109,17 +109,17 @@ used to say what headers to apply the buttonize coding to:
 <dt><code>gnus-button-</code><var>*</var><code>-level</code><dd>See <a href="Article-Button-Levels.html#Article-Button-Levels">Article Button Levels</a>.
 
      <!-- Stuff related to gnus-button-browse-level -->
-     <br><dt><code>gnus-button-url-regexp</code><dd><a name="index-gnus_002dbutton_002durl_002dregexp-1452"></a>A regular expression that matches embedded URLs.  It is used in the
+     <br><dt><code>gnus-button-url-regexp</code><dd><a name="index-gnus_002dbutton_002durl_002dregexp-1381"></a>A regular expression that matches embedded URLs.  It is used in the
 default values of the variables above.
 
      <!-- Stuff related to gnus-button-man-level -->
-     <br><dt><code>gnus-button-man-handler</code><dd><a name="index-gnus_002dbutton_002dman_002dhandler-1453"></a>The function to use for displaying man pages.  It must take at least one
+     <br><dt><code>gnus-button-man-handler</code><dd><a name="index-gnus_002dbutton_002dman_002dhandler-1382"></a>The function to use for displaying man pages.  It must take at least one
 argument with a string naming the man page.
 
      <!-- Stuff related to gnus-button-message-level -->
-     <br><dt><code>gnus-button-mid-or-mail-regexp</code><dd><a name="index-gnus_002dbutton_002dmid_002dor_002dmail_002dregexp-1454"></a>Regular expression that matches a message ID or a mail address.
+     <br><dt><code>gnus-button-mid-or-mail-regexp</code><dd><a name="index-gnus_002dbutton_002dmid_002dor_002dmail_002dregexp-1383"></a>Regular expression that matches a message ID or a mail address.
 
-     <br><dt><code>gnus-button-prefer-mid-or-mail</code><dd><a name="index-gnus_002dbutton_002dprefer_002dmid_002dor_002dmail-1455"></a>This variable determines what to do when the button on a string as
+     <br><dt><code>gnus-button-prefer-mid-or-mail</code><dd><a name="index-gnus_002dbutton_002dprefer_002dmid_002dor_002dmail-1384"></a>This variable determines what to do when the button on a string as
 &lsquo;<samp><span class="samp">foo123@bar.invalid</span></samp>&rsquo; is pushed.  Strings like this can be either a
 message ID or a mail address.  If it is one of the symbols <code>mid</code> or
 <code>mail</code>, Gnus will always assume that the string is a message ID or
@@ -130,25 +130,18 @@ function must return <code>mid</code>, <code>mail</code>, <code>invalid</code> o
 <code>ask</code>.  The default value is the function
 <code>gnus-button-mid-or-mail-heuristic</code>.
 
-     <br><dt><code>gnus-button-mid-or-mail-heuristic</code><dd><a name="index-gnus_002dbutton_002dmid_002dor_002dmail_002dheuristic-1456"></a>Function that guesses whether its argument is a message ID or a mail
+     <br><dt><code>gnus-button-mid-or-mail-heuristic</code><dd><a name="index-gnus_002dbutton_002dmid_002dor_002dmail_002dheuristic-1385"></a>Function that guesses whether its argument is a message ID or a mail
 address.  Returns <code>mid</code> if it's a message IDs, <code>mail</code> if
 it's a mail address, <code>ask</code> if unsure and <code>invalid</code> if the
 string is invalid.
 
-     <br><dt><code>gnus-button-mid-or-mail-heuristic-alist</code><dd><a name="index-gnus_002dbutton_002dmid_002dor_002dmail_002dheuristic_002dalist-1457"></a>An alist of <code>(RATE . REGEXP)</code> pairs used by the function
+     <br><dt><code>gnus-button-mid-or-mail-heuristic-alist</code><dd><a name="index-gnus_002dbutton_002dmid_002dor_002dmail_002dheuristic_002dalist-1386"></a>An alist of <code>(RATE . REGEXP)</code> pairs used by the function
 <code>gnus-button-mid-or-mail-heuristic</code>.
 
-     <!-- Stuff related to gnus-button-tex-level -->
-     <br><dt><code>gnus-button-ctan-handler</code><dd><a name="index-gnus_002dbutton_002dctan_002dhandler-1458"></a>The function to use for displaying CTAN links.  It must take one
-argument, the string naming the URL.
-
-     <br><dt><code>gnus-ctan-url</code><dd><a name="index-gnus_002dctan_002durl-1459"></a>Top directory of a CTAN (Comprehensive TeX Archive Network) archive used
-by <code>gnus-button-ctan-handler</code>.
-
      <!-- Misc stuff -->
-     <br><dt><code>gnus-article-button-face</code><dd><a name="index-gnus_002darticle_002dbutton_002dface-1460"></a>Face used on buttons.
+     <br><dt><code>gnus-article-button-face</code><dd><a name="index-gnus_002darticle_002dbutton_002dface-1387"></a>Face used on buttons.
 
-     <br><dt><code>gnus-article-mouse-face</code><dd><a name="index-gnus_002darticle_002dmouse_002dface-1461"></a>Face used when the mouse cursor is over a button.
+     <br><dt><code>gnus-article-mouse-face</code><dd><a name="index-gnus_002darticle_002dmouse_002dface-1388"></a>Face used when the mouse cursor is over a button.
 
 </dl>
 

@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 
 <h3 class="section">15.7 Features</h3>
 
-<p><a name="index-features-820"></a><a name="index-requiring-features-821"></a><a name="index-providing-features-822"></a>
+<p><a name="index-features-822"></a><a name="index-requiring-features-823"></a><a name="index-providing-features-824"></a>
   <code>provide</code> and <code>require</code> are an alternative to
 <code>autoload</code> for loading files automatically.  They work in terms of
 named <dfn>features</dfn>.  Autoloading is triggered by calling a specific
@@ -59,7 +59,7 @@ feature.  Another program that uses them may ensure they are defined by
 <dfn>requiring</dfn> the feature.  This loads the file of definitions if it
 hasn't been loaded already.
 
-   <p><a name="index-load-error-with-require-823"></a>  To require the presence of a feature, call <code>require</code> with the
+   <p><a name="index-load-error-with-require-825"></a>  To require the presence of a feature, call <code>require</code> with the
 feature name as argument.  <code>require</code> looks in the global variable
 <code>features</code> to see whether the desired feature has been provided
 already.  If not, it loads the feature from the appropriate file.  This
@@ -89,7 +89,7 @@ so that <code>require</code> need not be given the file name.
 <code>(require 'comint)</code> will henceforth know that nothing needs to be
 done.
 
-   <p><a name="index-byte_002dcompiling-_0040code_007brequire_007d-824"></a>  When <code>require</code> is used at top level in a file, it takes effect
+   <p><a name="index-byte_002dcompiling-_0040code_007brequire_007d-826"></a>  When <code>require</code> is used at top level in a file, it takes effect
 when you byte-compile that file (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>) as well as
 when you load it.  This is in case the required package contains macros
 that the byte compiler must know about.  It also avoids byte compiler
@@ -112,7 +112,7 @@ execute the <code>provide</code> call, so the subsequent <code>require</code> ca
 does nothing when the file is loaded.
 
 <div class="defun">
-&mdash; Function: <b>provide</b><var> feature &amp;optional subfeatures<a name="index-provide-825"></a></var><br>
+&mdash; Function: <b>provide</b><var> feature &amp;optional subfeatures<a name="index-provide-827"></a></var><br>
 <blockquote><p>This function announces that <var>feature</var> is now loaded, or being
 loaded, into the current Emacs session.  This means that the facilities
 associated with <var>feature</var> are or will be available for other Lisp
@@ -148,7 +148,7 @@ See <a href="Autoload.html#Autoload">Autoload</a>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>require</b><var> feature &amp;optional filename noerror<a name="index-require-826"></a></var><br>
+&mdash; Function: <b>require</b><var> feature &amp;optional filename noerror<a name="index-require-828"></a></var><br>
 <blockquote><p>This function checks whether <var>feature</var> is present in the current
 Emacs session (using <code>(featurep </code><var>feature</var><code>)</code>; see below).  The
 argument <var>feature</var> must be a symbol.
@@ -173,7 +173,7 @@ was not provided</span></samp>&rsquo;.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>featurep</b><var> feature &amp;optional subfeature<a name="index-featurep-827"></a></var><br>
+&mdash; Function: <b>featurep</b><var> feature &amp;optional subfeature<a name="index-featurep-829"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>feature</var> has been provided in
 the current Emacs session (i.e., if <var>feature</var> is a member of
 <code>features</code>.)  If <var>subfeature</var> is non-<code>nil</code>, then the
@@ -183,7 +183,7 @@ property of the <var>feature</var> symbol.)
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>features</b><var><a name="index-features-828"></a></var><br>
+&mdash; Variable: <b>features</b><var><a name="index-features-830"></a></var><br>
 <blockquote><p>The value of this variable is a list of symbols that are the features
 loaded in the current Emacs session.  Each symbol was put in this list
 with a call to <code>provide</code>.  The order of the elements in the

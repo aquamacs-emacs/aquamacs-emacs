@@ -10,9 +10,10 @@
 <link rel="next" href="Tag-searches.html#Tag-searches" title="Tag searches">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,30 +58,33 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
 
 <h3 class="section">6.2 Setting tags</h3>
 
-<p><a name="index-setting-tags-455"></a><a name="index-tags_002c-setting-456"></a>
-<a name="index-M_002d_0040key_007bTAB_007d-457"></a>Tags can simply be typed into the buffer at the end of a headline. 
+<p><a name="index-setting-tags-595"></a><a name="index-tags_002c-setting-596"></a>
+<a name="index-M_002d_0040key_007bTAB_007d-597"></a>Tags can simply be typed into the buffer at the end of a headline. 
 After a colon, <kbd>M-&lt;TAB&gt;</kbd> offers completion on tags.  There is
 also a special command for inserting tags:
 
      
-<a name="index-C_002dc-C_002dq-458"></a>
-<dl><dt><kbd>C-c C-q</kbd><dd><a name="index-completion_002c-of-tags-459"></a><a name="index-org_002dtags_002dcolumn-460"></a>Enter new tags for the current headline.  Org mode will either offer
+<a name="index-C_002dc-C_002dq-598"></a>
+<a name="index-org_002dset_002dtags_002dcommand-599"></a>
+<dl><dt><kbd>C-c C-q &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-set-tags-command</code><kbd>)</kbd><dd>
+<a name="index-completion_002c-of-tags-600"></a><a name="index-org_002dtags_002dcolumn-601"></a>Enter new tags for the current headline.  Org-mode will either offer
 completion or a special single-key interface for setting tags, see
 below.  After pressing &lt;RET&gt;, the tags will be inserted and aligned
 to <code>org-tags-column</code>.  When called with a <kbd>C-u</kbd> prefix, all
 tags in the current buffer will be aligned to that column, just to make
 things look nice.  TAGS are automatically realigned after promotion,
 demotion, and TODO state changes (see <a href="TODO-basics.html#TODO-basics">TODO basics</a>). 
-<a name="index-C_002dc-C_002dc-461"></a><br><dt><kbd>C-c C-c</kbd><dd>When the cursor is in a headline, this does the same as <kbd>C-c C-q</kbd>. 
+<a name="index-C_002dc-C_002dc-602"></a><a name="index-org_002dset_002dtags_002dcommand-603"></a><br><dt><kbd>C-c C-c &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-set-tags-command</code><kbd>)</kbd><dd>
+When the cursor is in a headline, this does the same as <kbd>C-c C-q</kbd>. 
 </dl>
 
-   <p><a name="index-org_002dtag_002dalist-462"></a>Org will support tag insertion based on a <em>list of tags</em>.  By
+   <p><a name="index-org_002dtag_002dalist-604"></a>Org will support tag insertion based on a <em>list of tags</em>.  By
 default this list is constructed dynamically, containing all tags
 currently used in the buffer.  You may also globally specify a hard list
 of tags with the variable <code>org-tag-alist</code>.  Finally you can set
 the default tags for a given file with lines like
 
-   <p><a name="index-g_t_0023_002bTAGS-463"></a>
+   <p><a name="index-g_t_0023_002bTAGS-605"></a>
 <pre class="example">     #+TAGS: @work @home @tennisclub
      #+TAGS: laptop car pc sailboat
 </pre>
@@ -90,7 +94,7 @@ in a specific file, add an empty TAGS option line to that file:
 
 <pre class="example">     #+TAGS:
 </pre>
-   <p><a name="index-org_002dtag_002dpersistent_002dalist-464"></a>If you have a preferred set of tags that you would like to use in every file,
+   <p><a name="index-org_002dtag_002dpersistent_002dalist-606"></a>If you have a preferred set of tags that you would like to use in every file,
 in addition to those defined on a per-file basis by TAGS option lines, then
 you may specify a list of tags with the variable
 <code>org-tag-persistent-alist</code>.  You may turn this off on a per-file basis
@@ -98,7 +102,7 @@ by adding a STARTUP option line to that file:
 
 <pre class="example">     #+STARTUP: noptag
 </pre>
-   <p>By default Org mode uses the standard minibuffer completion facilities for
+   <p>By default Org-mode uses the standard minibuffer completion facilities for
 entering tags.  However, it also implements another, quicker, tag selection
 method called <em>fast tag selection</em>.  This allows you to select and
 deselect tags with just a single key press.  For this to work well you should
@@ -159,10 +163,10 @@ keys:
 <dt><kbd>a-z...</kbd><dd>Pressing keys assigned to tags will add or remove them from the list of
 tags in the current line.  Selecting a tag in a group of mutually
 exclusive tags will turn off any other tags from that group. 
-<a name="index-g_t_0040key_007bTAB_007d-465"></a><br><dt><kbd>&lt;TAB&gt;</kbd><dd>Enter a tag in the minibuffer, even if the tag is not in the predefined
+<a name="index-g_t_0040key_007bTAB_007d-607"></a><br><dt><kbd>&lt;TAB&gt;</kbd><dd>Enter a tag in the minibuffer, even if the tag is not in the predefined
 list.  You will be able to complete on all tags present in the buffer. 
-<a name="index-g_t_0040key_007bSPC_007d-466"></a><br><dt><kbd>&lt;SPC&gt;</kbd><dd>Clear all tags for this line. 
-<a name="index-g_t_0040key_007bRET_007d-467"></a><br><dt><kbd>&lt;RET&gt;</kbd><dd>Accept the modified set. 
+<a name="index-g_t_0040key_007bSPC_007d-608"></a><br><dt><kbd>&lt;SPC&gt;</kbd><dd>Clear all tags for this line. 
+<a name="index-g_t_0040key_007bRET_007d-609"></a><br><dt><kbd>&lt;RET&gt;</kbd><dd>Accept the modified set. 
 <br><dt><kbd>C-g</kbd><dd>Abort without installing changes. 
 <br><dt><kbd>q</kbd><dd>If <kbd>q</kbd> is not assigned to a tag, it aborts like <kbd>C-g</kbd>. 
 <br><dt><kbd>!</kbd><dd>Turn off groups of mutually exclusive tags.  Use this to (as an
@@ -181,7 +185,7 @@ alternatively with <kbd>C-c C-c C-c w</kbd>.  Adding the non-predefined tag
 &lsquo;<samp><span class="samp">Sarah</span></samp>&rsquo; could be done with <kbd>C-c C-c &lt;TAB&gt; S a r a h
 &lt;RET&gt; &lt;RET&gt;</kbd>.
 
-   <p><a name="index-org_002dfast_002dtag_002dselection_002dsingle_002dkey-468"></a>If you find that most of the time you need only a single key press to
+   <p><a name="index-org_002dfast_002dtag_002dselection_002dsingle_002dkey-610"></a>If you find that most of the time you need only a single key press to
 modify your list of tags, set the variable
 <code>org-fast-tag-selection-single-key</code>.  Then you no longer have to
 press &lt;RET&gt; to exit fast tag selection&mdash;it will immediately exit

@@ -50,7 +50,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Sum
 
 <h3 class="section">3.6 Delayed Articles</h3>
 
-<p><a name="index-delayed-sending-829"></a><a name="index-send-delayed-830"></a>
+<p><a name="index-delayed-sending-754"></a><a name="index-send-delayed-755"></a>
 Sometimes, you might wish to delay the sending of a message.  For
 example, you might wish to arrange for a message to turn up just in time
 to remind your about the birthday of your Significant Other.  For this,
@@ -58,7 +58,7 @@ there is the <code>gnus-delay</code> package.  Setup is simple:
 
 <pre class="lisp">     (gnus-delay-initialize)
 </pre>
-   <p><a name="index-gnus_002ddelay_002darticle-831"></a>Normally, to send a message you use the <kbd>C-c C-c</kbd> command from
+   <p><a name="index-gnus_002ddelay_002darticle-756"></a>Normally, to send a message you use the <kbd>C-c C-c</kbd> command from
 Message mode.  To delay a message, use <kbd>C-c C-j</kbd>
 (<code>gnus-delay-article</code>) instead.  This will ask you for how long the
 message should be delayed.  Possible answers are:
@@ -85,17 +85,17 @@ that means a time tomorrow.
 couple of variables:
 
      <dl>
-<dt><code>gnus-delay-default-hour</code><dd><a name="index-gnus_002ddelay_002ddefault_002dhour-832"></a>When you specify a specific date, the message will be due on that hour
+<dt><code>gnus-delay-default-hour</code><dd><a name="index-gnus_002ddelay_002ddefault_002dhour-757"></a>When you specify a specific date, the message will be due on that hour
 on the given date.  Possible values are integers 0 through 23.
 
-     <br><dt><code>gnus-delay-default-delay</code><dd><a name="index-gnus_002ddelay_002ddefault_002ddelay-833"></a>This is a string and gives the default delay.  It can be of any of the
+     <br><dt><code>gnus-delay-default-delay</code><dd><a name="index-gnus_002ddelay_002ddefault_002ddelay-758"></a>This is a string and gives the default delay.  It can be of any of the
 formats described above.
 
-     <br><dt><code>gnus-delay-group</code><dd><a name="index-gnus_002ddelay_002dgroup-834"></a>Delayed articles will be kept in this group on the drafts server until
+     <br><dt><code>gnus-delay-group</code><dd><a name="index-gnus_002ddelay_002dgroup-759"></a>Delayed articles will be kept in this group on the drafts server until
 they are due.  You probably don't need to change this.  The default
 value is <code>"delayed"</code>.
 
-     <br><dt><code>gnus-delay-header</code><dd><a name="index-gnus_002ddelay_002dheader-835"></a>The deadline for each article will be stored in a header.  This variable
+     <br><dt><code>gnus-delay-header</code><dd><a name="index-gnus_002ddelay_002dheader-760"></a>The deadline for each article will be stored in a header.  This variable
 is a string and gives the header name.  You probably don't need to
 change this.  The default value is <code>"X-Gnus-Delayed"</code>. 
 </dl>
@@ -106,7 +106,7 @@ calculates the deadline of the message and stores it in the
 <code>X-Gnus-Delayed</code> header and puts the message in the
 <code>nndraft:delayed</code> group.
 
-   <p><a name="index-gnus_002ddelay_002dsend_002dqueue-836"></a>And whenever you get new news, Gnus looks through the group for articles
+   <p><a name="index-gnus_002ddelay_002dsend_002dqueue-761"></a>And whenever you get new news, Gnus looks through the group for articles
 which are due and sends them.  It uses the <code>gnus-delay-send-queue</code>
 function for this.  By default, this function is added to the hook
 <code>gnus-get-new-news-hook</code>.  But of course, you can change this. 
@@ -114,7 +114,7 @@ Maybe you want to use the demon to send drafts?  Just tell the demon to
 execute the <code>gnus-delay-send-queue</code> function.
 
      <dl>
-<dt><code>gnus-delay-initialize</code><dd><a name="index-gnus_002ddelay_002dinitialize-837"></a>By default, this function installs <code>gnus-delay-send-queue</code> in
+<dt><code>gnus-delay-initialize</code><dd><a name="index-gnus_002ddelay_002dinitialize-762"></a>By default, this function installs <code>gnus-delay-send-queue</code> in
 <code>gnus-get-new-news-hook</code>.  But it accepts the optional second
 argument <code>no-check</code>.  If it is non-<code>nil</code>,
 <code>gnus-get-new-news-hook</code> is not changed.  The optional first
@@ -124,6 +124,12 @@ argument is ignored.
 Presumably, you want to use the demon for sending due delayed articles. 
 Just don't forget to set that up :-)
 </dl>
+
+   <p>When delaying an article with <kbd>C-c C-j</kbd>, Message mode will
+automatically add a <code>"Date"</code> header with the current time.  In
+many cases you probably want the <code>"Date"</code> header to reflect the
+time the message is sent instead.  To do this, you have to delete
+<code>Date</code> from <code>message-draft-headers</code>.
 
    </body></html>
 

@@ -46,9 +46,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Back-Ends.html#Spam-Back-Ends">Spa
 <hr>
 </div>
 
-<h5 class="subsubsection">8.20.6.11 Using SpamOracle with Gnus</h5>
+<h5 class="subsubsection">9.18.6.11 Using SpamOracle with Gnus</h5>
 
-<p><a name="index-spam-filtering-2985"></a><a name="index-SpamOracle-2986"></a><a name="index-spam-2987"></a>
+<p><a name="index-spam-filtering-2843"></a><a name="index-SpamOracle-2844"></a><a name="index-spam-2845"></a>
 An easy way to filter out spam is to use SpamOracle.  SpamOracle is an
 statistical mail filtering tool written by Xavier Leroy and needs to be
 installed separately.
@@ -65,7 +65,7 @@ the advantage that the user can see the <em>X-Spam</em> headers.
    <p>The easiest method is to make <samp><span class="file">spam.el</span></samp> (see <a href="Spam-Package.html#Spam-Package">Spam Package</a>)
 call SpamOracle.
 
-   <p><a name="index-spam_002duse_002dspamoracle-2988"></a>To enable SpamOracle usage by <code>spam.el</code>, set the variable
+   <p><a name="index-spam_002duse_002dspamoracle-2846"></a>To enable SpamOracle usage by <code>spam.el</code>, set the variable
 <code>spam-use-spamoracle</code> to <code>t</code> and configure the
 <code>nnmail-split-fancy</code> or <code>nnimap-split-fancy</code>.  See <a href="Spam-Package.html#Spam-Package">Spam Package</a>.  In this example the &lsquo;<samp><span class="samp">INBOX</span></samp>&rsquo; of an nnimap server is
 filtered using SpamOracle.  Mails recognized as spam mails will be
@@ -74,25 +74,25 @@ messages stay in &lsquo;<samp><span class="samp">INBOX</span></samp>&rsquo;:
 
 <pre class="example">     (setq spam-use-spamoracle t
            spam-split-group "Junk"
+           ;; <span class="roman">for nnimap you'll probably want to set nnimap-split-methods, see the manual</span>
            nnimap-split-inbox '("INBOX")
-           nnimap-split-rule 'nnimap-split-fancy
            nnimap-split-fancy '(| (: spam-split) "INBOX"))
 </pre>
    <div class="defun">
-&mdash; Variable: <b>spam-use-spamoracle</b><var><a name="index-spam_002duse_002dspamoracle-2989"></a></var><br>
+&mdash; Variable: <b>spam-use-spamoracle</b><var><a name="index-spam_002duse_002dspamoracle-2847"></a></var><br>
 <blockquote><p>Set to <code>t</code> if you want Gnus to enable spam filtering using
 SpamOracle. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>spam-spamoracle-binary</b><var><a name="index-spam_002dspamoracle_002dbinary-2990"></a></var><br>
+&mdash; Variable: <b>spam-spamoracle-binary</b><var><a name="index-spam_002dspamoracle_002dbinary-2848"></a></var><br>
 <blockquote><p>Gnus uses the SpamOracle binary called <samp><span class="file">spamoracle</span></samp> found in the
 user's PATH.  Using the variable <code>spam-spamoracle-binary</code>, this
 can be customized. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>spam-spamoracle-database</b><var><a name="index-spam_002dspamoracle_002ddatabase-2991"></a></var><br>
+&mdash; Variable: <b>spam-spamoracle-database</b><var><a name="index-spam_002dspamoracle_002ddatabase-2849"></a></var><br>
 <blockquote><p>By default, SpamOracle uses the file <samp><span class="file">~/.spamoracle.db</span></samp> as a database to
 store its analysis.  This is controlled by the variable
 <code>spam-spamoracle-database</code> which defaults to <code>nil</code>.  That means
@@ -113,7 +113,7 @@ convenient.  For a detailed description of spam- and ham-processors,
 See <a href="Spam-Package.html#Spam-Package">Spam Package</a>.
 
 <div class="defun">
-&mdash; Variable: <b>gnus-group-spam-exit-processor-spamoracle</b><var><a name="index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dspamoracle-2992"></a></var><br>
+&mdash; Variable: <b>gnus-group-spam-exit-processor-spamoracle</b><var><a name="index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dspamoracle-2850"></a></var><br>
 <blockquote><p>Add this symbol to a group's <code>spam-process</code> parameter by
 customizing the group parameter or the
 <code>gnus-spam-process-newsgroups</code> variable.  When this symbol is added
@@ -129,7 +129,7 @@ the same way, we promise.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>gnus-group-ham-exit-processor-spamoracle</b><var><a name="index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dspamoracle-2993"></a></var><br>
+&mdash; Variable: <b>gnus-group-ham-exit-processor-spamoracle</b><var><a name="index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dspamoracle-2851"></a></var><br>
 <blockquote><p>Add this symbol to a group's <code>spam-process</code> parameter by
 customizing the group parameter or the
 <code>gnus-spam-process-newsgroups</code> variable.  When this symbol is added

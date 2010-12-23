@@ -46,9 +46,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Mail-Sources.html#Mail-Sources">Mail So
 <hr>
 </div>
 
-<h5 class="subsubsection">6.3.4.1 Mail Source Specifiers</h5>
+<h5 class="subsubsection">6.4.4.1 Mail Source Specifiers</h5>
 
-<p><a name="index-POP-2135"></a><a name="index-mail-server-2136"></a><a name="index-procmail-2137"></a><a name="index-mail-spool-2138"></a><a name="index-mail-source-2139"></a>
+<p><a name="index-POP-2079"></a><a name="index-mail-server-2080"></a><a name="index-procmail-2081"></a><a name="index-mail-spool-2082"></a><a name="index-mail-source-2083"></a>
 You tell Gnus how to fetch mail by setting <code>mail-sources</code>
 (see <a href="Fetching-Mail.html#Fetching-Mail">Fetching Mail</a>) to a <dfn>mail source specifier</dfn>.
 
@@ -120,7 +120,7 @@ mail spool while moving the mail.
      <p>Alter this script to fit the &lsquo;<samp><span class="samp">movemail</span></samp>&rsquo; and temporary
 file you want to use.
 
-     <br><dt><code>directory</code><dd><a name="index-nnmail_002dscan_002ddirectory_002dmail_002dsource_002donce-2140"></a>Get mail from several files in a directory.  This is typically used
+     <br><dt><code>directory</code><dd><a name="index-nnmail_002dscan_002ddirectory_002dmail_002dsource_002donce-2084"></a>Get mail from several files in a directory.  This is typically used
 when you have procmail split the incoming mail into several files. 
 That is, there is a one-to-one correspondence between files in that
 directory and groups, so that mail from the file <samp><span class="file">foo.bar.spool</span></samp>
@@ -130,7 +130,7 @@ to be used instead of <code>.spool</code>.)  Setting
 Gnus to scan the mail source only once.  This is particularly useful
 if you want to scan mail groups at a specified level.
 
-     <p><a name="index-nnmail_002dresplit_002dincoming-2141"></a>There is also the variable <code>nnmail-resplit-incoming</code>, if you set
+     <p><a name="index-nnmail_002dresplit_002dincoming-2085"></a>There is also the variable <code>nnmail-resplit-incoming</code>, if you set
 that to a non-<code>nil</code> value, then the normal splitting process is
 applied to all the files from the directory, <a href="Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>.
 
@@ -216,7 +216,7 @@ and says what authentication scheme to use.  The default is
 
      </dl>
 
-     <p><a name="index-pop3_002dmovemail-2142"></a><a name="index-pop3_002dleave_002dmail_002don_002dserver-2143"></a>If the <code>:program</code> and <code>:function</code> keywords aren't specified,
+     <p><a name="index-pop3_002dmovemail-2086"></a><a name="index-pop3_002dleave_002dmail_002don_002dserver-2087"></a>If the <code>:program</code> and <code>:function</code> keywords aren't specified,
 <code>pop3-movemail</code> will be used.  If <code>pop3-leave-mail-on-server</code>
 is non-<code>nil</code> the mail is to be left on the <acronym>POP</acronym> server
 after fetching when using <code>pop3-movemail</code>.  Note that POP servers
@@ -274,10 +274,7 @@ from locking problems).
 <acronym>IMAP</acronym> as intended, as a network mail reading protocol (ie
 with nnimap), for some reason or other, Gnus let you treat it similar
 to a <acronym>POP</acronym> server and fetches articles from a given
-<acronym>IMAP</acronym> mailbox.  See <a href="IMAP.html#IMAP">IMAP</a>, for more information.
-
-     <p>Note that for the Kerberos, GSSAPI, <acronym>TLS</acronym>/<acronym>SSL</acronym> and STARTTLS support you
-may need external programs and libraries, See <a href="IMAP.html#IMAP">IMAP</a>.
+<acronym>IMAP</acronym> mailbox.  See <a href="Using-IMAP.html#Using-IMAP">Using IMAP</a>, for more information.
 
      <p>Keywords:
 
@@ -351,38 +348,6 @@ mailbox after finishing the fetch.
                 :stream kerberos4
                 :fetchflag "\\Seen")
 </pre>
-     <br><dt><code>webmail</code><dd>Get mail from a webmail server, such as <a href="http://www.hotmail.com/">http://www.hotmail.com/</a>,
-<a href="http://webmail.netscape.com/">http://webmail.netscape.com/</a>, <a href="http://www.netaddress.com/">http://www.netaddress.com/</a>,
-<a href="http://mail.yahoo.com/">http://mail.yahoo.com/</a>.
-
-     <p>NOTE: Webmail largely depends on cookies.  A "one-line-cookie" patch is
-required for url "4.0pre.46".
-
-     <p>WARNING: Mails may be lost.  NO WARRANTY.
-
-     <p>Keywords:
-
-          <dl>
-<dt><code>:subtype</code><dd>The type of the webmail server.  The default is <code>hotmail</code>.  The
-alternatives are <code>netscape</code>, <code>netaddress</code>, <code>my-deja</code>.
-
-          <br><dt><code>:user</code><dd>The user name to give to the webmail server.  The default is the login
-name.
-
-          <br><dt><code>:password</code><dd>The password to give to the webmail server.  If not specified, the user is
-prompted.
-
-          <br><dt><code>:dontexpunge</code><dd>If non-<code>nil</code>, only fetch unread articles and don't move them to
-trash folder after finishing the fetch.
-
-     </dl>
-
-     <p>An example webmail source:
-
-     <pre class="lisp">          (webmail :subtype 'hotmail
-                   :user "user-name"
-                   :password "secret")
-</pre>
      <br><dt><code>group</code><dd>Get the actual mail source from the <code>mail-source</code> group parameter,
 See <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>.
 
@@ -409,7 +374,7 @@ useful when you use local mail and news.
      </dl>
      </dl>
 
-<h5 class="subsubsection">6.3.4.2 Function Interface</h5>
+<h5 class="subsubsection">6.4.4.2 Function Interface</h5>
 
 <p>Some of the above keywords specify a Lisp function to be executed. 
 For each keyword <code>:foo</code>, the Lisp variable <code>foo</code> is bound to

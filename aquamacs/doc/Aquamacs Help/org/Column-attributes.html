@@ -9,9 +9,10 @@
 <link rel="prev" href="Scope-of-column-definitions.html#Scope-of-column-definitions" title="Scope of column definitions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -68,15 +69,15 @@ optional.  The individual parts have the following meaning:
      <var>property</var>        <span class="roman">The property that should be edited in this column.</span>
                      <span class="roman">Special properties representing meta data are allowed here</span>
                      <span class="roman">as well (see <a href="Special-properties.html#Special-properties">Special properties</a>)</span>
-     (title)         <span class="roman">The header text for the column. If omitted, the</span>
-                     <span class="roman">property name is used.</span>
+     <var>title</var>     <span class="roman">The header text for the column. If omitted, the property</span>
+                     <span class="roman">name is used.</span>
      {<var>summary-type</var>}  <span class="roman">The summary type.  If specified, the column values for</span>
                      <span class="roman">parent nodes are computed from the children.</span>
                      <span class="roman">Supported summary types are:</span>
                      {+}       <span class="roman">Sum numbers in this column.</span>
                      {+;%.1f}  <span class="roman">Like &lsquo;</span><samp><span class="samp">+</span></samp><span class="roman">&rsquo;, but format result with &lsquo;</span><samp><span class="samp">%.1f</span></samp><span class="roman">&rsquo;.</span>
                      {$}       <span class="roman">Currency, short for &lsquo;</span><samp><span class="samp">+;%.2f</span></samp><span class="roman">&rsquo;.</span>
-                     {:}       <span class="roman">Sum times, HH:MM:SS, plain numbers are hours.</span>
+                     {:}       <span class="roman">Sum times, HH:MM, plain numbers are hours.</span>
                      {X}       <span class="roman">Checkbox status, &lsquo;</span><samp><span class="samp">[X]</span></samp><span class="roman">&rsquo; if all children are &lsquo;</span><samp><span class="samp">[X]</span></samp><span class="roman">&rsquo;.</span>
                      {X/}      <span class="roman">Checkbox status, &lsquo;</span><samp><span class="samp">[n/m]</span></samp><span class="roman">&rsquo;.</span>
                      {X%}      <span class="roman">Checkbox status, &lsquo;</span><samp><span class="samp">[n%]</span></samp><span class="roman">&rsquo;.</span>
@@ -86,13 +87,30 @@ optional.  The individual parts have the following meaning:
                      {:min}    <span class="roman">Smallest time value in column.</span>
                      {:max}    <span class="roman">Largest time value.</span>
                      {:mean}   <span class="roman">Arithmetic mean of time values.</span>
-                     {@min}   <span class="roman">Minimum age (in days/hours/mins/seconds).</span>
-                     {@max}   <span class="roman">Maximum age (in days/hours/mins/seconds).</span>
-                     {@mean}  <span class="roman">Arithmetic mean of ages (in days/hours/mins/seconds).</span>
+                     {@min}    <span class="roman">Minimum age (in days/hours/mins/seconds).</span>
+                     {@max}    <span class="roman">Maximum age (in days/hours/mins/seconds).</span>
+                     {@mean}   <span class="roman">Arithmetic mean of ages (in days/hours/mins/seconds).</span>
+                     {est+}    <span class="roman">Add low-high estimates.</span>
 </pre>
    <p class="noindent">Be aware that you can only have one summary type for any property you
 include. Subsequent columns referencing the same property will all display the
 same summary information.
+
+   <p>The <code>est+</code> summary type requires further explanation.  It is used for
+combining estimates, expressed as low-high ranges.  For example, instead
+of estimating a particular task will take 5 days, you might estimate it as
+5-6 days if you're fairly confident you know how much work is required, or
+1-10 days if you don't really know what needs to be done.  Both ranges
+average at 5.5 days, but the first represents a more predictable delivery.
+
+   <p>When combining a set of such estimates, simply adding the lows and highs
+produces an unrealistically wide result. Instead, <code>est+</code> adds the
+statistical mean and variance of the sub-tasks, generating a final estimate
+from the sum.  For example, suppose you had ten tasks, each of which was
+estimated at 0.5 to 2 days of work.  Straight addition produces an estimate
+of 5 to 20 days, representing what to expect if everything goes either
+extremely well or extremely poorly. In contrast, <code>est+</code> estimates the
+full job more realistically, at 10-15 days.
 
    <p>Here is an example for a complete columns definition, along with allowed
 values.

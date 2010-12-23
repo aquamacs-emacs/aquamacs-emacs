@@ -10,9 +10,10 @@
 <link rel="next" href="Agenda-dispatcher.html#Agenda-dispatcher" title="Agenda dispatcher">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,8 +58,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Agenda-Views.html#Agenda-Views">Agenda 
 
 <h3 class="section">10.1 Agenda files</h3>
 
-<p><a name="index-agenda-files-723"></a><a name="index-files-for-agenda-724"></a>
-<a name="index-org_002dagenda_002dfiles-725"></a>The information to be shown is normally collected from all <em>agenda
+<p><a name="index-agenda-files-984"></a><a name="index-files-for-agenda-985"></a>
+<a name="index-org_002dagenda_002dfiles-986"></a>The information to be shown is normally collected from all <em>agenda
 files</em>, the files listed in the variable
 <code>org-agenda-files</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. If a directory is part of this list,
 all files with the extension <samp><span class="file">.org</span></samp> in this directory will be part
@@ -68,15 +69,19 @@ of the list.
 be put into the list<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  You can customize <code>org-agenda-files</code>, but
 the easiest way to maintain it is through the following commands
 
-   <p><a name="index-files_002c-adding-to-agenda-list-726"></a>
+   <p><a name="index-files_002c-adding-to-agenda-list-987"></a>
      
-<a name="index-C_002dc-_005b-727"></a>
-<dl><dt><kbd>C-c [</kbd><dd>Add current file to the list of agenda files.  The file is added to
+<a name="index-C_002dc-_005b-988"></a>
+<a name="index-org_002dagenda_002dto_002dfront-989"></a>
+<dl><dt><kbd>C-c [ &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-to-front</code><kbd>)</kbd><dd>
+Add current file to the list of agenda files.  The file is added to
 the front of the list.  If it was already in the list, it is moved to
 the front.  With a prefix argument, file is added/moved to the end. 
-<a name="index-C_002dc-_005d-728"></a><br><dt><kbd>C-c ]</kbd><dd>Remove current file from the list of agenda files. 
-<a name="index-C_002d_002c-729"></a><a name="index-C_002d_0027-730"></a><br><dt><kbd>C-,</kbd><dt><kbd>C-'</kbd><dd>Cycle through agenda file list, visiting one file after the other. 
-<a name="index-M_002dx-org_002diswitchb-731"></a><br><dt><kbd>M-x org-iswitchb</kbd><dd>Command to use an <code>iswitchb</code>-like interface to switch to and between Org
+<a name="index-C_002dc-_005d-990"></a><a name="index-org_002dremove_002dfile-991"></a><br><dt><kbd>C-c ] &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-remove-file</code><kbd>)</kbd><dd>
+Remove current file from the list of agenda files. 
+<a name="index-C_002d_002c-992"></a><a name="index-C_002d_0027-993"></a><a name="index-org_002dcycle_002dagenda_002dfiles-994"></a><br><dt><kbd>C-' &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-cycle-agenda-files</code><kbd>)</kbd>
+<dt><kbd>C-,</kbd><dd>Cycle through agenda file list, visiting one file after the other. 
+<a name="index-M_002dx-org_002diswitchb-995"></a><br><dt><kbd>M-x org-iswitchb</kbd><dd>Command to use an <code>iswitchb</code>-like interface to switch to and between Org
 buffers. 
 </dl>
 
@@ -91,25 +96,31 @@ you may press <kbd>&lt;</kbd> once or several times in the dispatcher
 extended period, use the following commands:
 
      
-<a name="index-C_002dc-C_002dx-_003c-732"></a>
-<dl><dt><kbd>C-c C-x &lt;</kbd><dd>Permanently restrict the agenda to the current subtree.  When with a
+<a name="index-C_002dc-C_002dx-_003c-996"></a>
+<a name="index-org_002dagenda_002dset_002drestriction_002dlock-997"></a>
+<dl><dt><kbd>C-c C-x &lt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-set-restriction-lock</code><kbd>)</kbd><dd>
+Permanently restrict the agenda to the current subtree.  When with a
 prefix argument, or with the cursor before the first headline in a file,
 the agenda scope is set to the entire file.  This restriction remains in
 effect until removed with <kbd>C-c C-x &gt;</kbd>, or by typing either <kbd>&lt;</kbd>
 or <kbd>&gt;</kbd> in the agenda dispatcher.  If there is a window displaying an
 agenda view, the new restriction takes effect immediately. 
-<a name="index-C_002dc-C_002dx-_003e-733"></a><br><dt><kbd>C-c C-x &gt;</kbd><dd>Remove the permanent restriction created by <kbd>C-c C-x &lt;</kbd>. 
+<a name="index-C_002dc-C_002dx-_003e-998"></a><a name="index-org_002dagenda_002dremove_002drestriction_002dlock-999"></a><br><dt><kbd>C-c C-x &gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-remove-restriction-lock</code><kbd>)</kbd><dd>
+Remove the permanent restriction created by <kbd>C-c C-x &lt;</kbd>. 
 </dl>
 
 <p class="noindent">When working with <samp><span class="file">speedbar.el</span></samp>, you can use the following commands in
 the Speedbar frame:
      
-<a name="index-g_t_003c-734"></a>
-<dl><dt><kbd>&lt; </kbd><span class="roman">in the speedbar frame</span><dd>Permanently restrict the agenda to the item&mdash;either an Org file or a subtree
+<a name="index-g_t_003c-1000"></a>
+<a name="index-org_002dspeedbar_002dset_002dagenda_002drestriction-1001"></a>
+<dl><dt><kbd>&lt; </kbd><span class="roman">in the speedbar frame</span><kbd> &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-speedbar-set-agenda-restriction</code><kbd>)</kbd><dd>
+Permanently restrict the agenda to the item&mdash;either an Org file or a subtree
 in such a file&mdash;at the cursor in the Speedbar frame. 
 If there is a window displaying an agenda view, the new restriction takes
 effect immediately. 
-<a name="index-g_t_003e-735"></a><br><dt><kbd>&gt; </kbd><span class="roman">in the speedbar frame</span><dd>Lift the restriction. 
+<a name="index-g_t_003e-1002"></a><a name="index-org_002dagenda_002dremove_002drestriction_002dlock-1003"></a><br><dt><kbd>&gt; </kbd><span class="roman">in the speedbar frame</span><kbd> &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-remove-restriction-lock</code><kbd>)</kbd><dd>
+Lift the restriction. 
 </dl>
 
    <div class="footnote">

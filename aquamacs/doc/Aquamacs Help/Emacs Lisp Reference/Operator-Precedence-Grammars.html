@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Operator Precedence Grammars - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SMIE.html#SMIE" title="SMIE">
+<link rel="prev" href="SMIE-setup.html#SMIE-setup" title="SMIE setup">
+<link rel="next" href="SMIE-Grammar.html#SMIE-Grammar" title="SMIE Grammar">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Operator-Precedence-Grammars"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SMIE-Grammar.html#SMIE-Grammar">SMIE Grammar</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="SMIE-setup.html#SMIE-setup">SMIE setup</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SMIE.html#SMIE">SMIE</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">23.7.1.2 Operator Precedence Grammars</h5>
+
+<p>SMIE's precedence grammars simply give to each token a pair of
+precedences: the left-precedence and the right-precedence.  We say
+<code>T1 &lt; T2</code> if the right-precedence of token <code>T1</code> is less than
+the left-precedence of token <code>T2</code>.  A good way to read this
+<code>&lt;</code> is as a kind of parenthesis: if we find <code>... T1 something
+T2 ...</code>  then that should be parsed as <code>... T1 (something T2 ...</code>
+rather than as <code>... T1 something) T2 ...</code>.  The latter
+interpretation would be the case if we had <code>T1 &gt; T2</code>.  If we have
+<code>T1 = T2</code>, it means that token T2 follows token T1 in the same
+syntactic construction, so typically we have <code>"begin" = "end"</code>. 
+Such pairs of precedences are sufficient to express left-associativity
+or right-associativity of infix operators, nesting of tokens like
+parentheses and many other cases.
+
+<!-- ¡Let's leave this undocumented to leave it more open for change! -->
+<!-- @defvar smie-grammar -->
+<!-- The value of this variable is an alist specifying the left and right -->
+<!-- precedence of each token.  It is meant to be initialized by using one of -->
+<!-- the functions below. -->
+<!-- @end defvar -->
+<div class="defun">
+&mdash; Function: <b>smie-prec2-&gt;grammar</b><var> table<a name="index-smie_002dprec2_002d_003egrammar-1706"></a></var><br>
+<blockquote><p>This function takes a <em>prec2</em> grammar <var>table</var> and returns an
+alist suitable for use in <code>smie-setup</code>.  The <em>prec2</em>
+<var>table</var> is itself meant to be built by one of the functions below. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>smie-merge-prec2s</b><var> &amp;rest tables<a name="index-smie_002dmerge_002dprec2s-1707"></a></var><br>
+<blockquote><p>This function takes several <em>prec2</em> <var>tables</var> and merges them
+into a new <em>prec2</em> table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>smie-precs-&gt;prec2</b><var> precs<a name="index-smie_002dprecs_002d_003eprec2-1708"></a></var><br>
+<blockquote><p>This function builds a <em>prec2</em> table from a table of precedences
+<var>precs</var>.  <var>precs</var> should be a list, sorted by precedence (for
+example <code>"+"</code> will come before <code>"*"</code>), of elements of the form
+<code>(</code><var>assoc</var> <var>op</var><code> ...)</code>, where each <var>op</var> is a token that
+acts as an operator; <var>assoc</var> is their associativity, which can be
+either <code>left</code>, <code>right</code>, <code>assoc</code>, or <code>nonassoc</code>. 
+All operators in a given element share the same precedence level
+and associativity. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>smie-bnf-&gt;prec2</b><var> bnf &amp;rest resolvers<a name="index-smie_002dbnf_002d_003eprec2-1709"></a></var><br>
+<blockquote><p>This function lets you specify the grammar using a BNF notation. 
+It accepts a <var>bnf</var> description of the grammar along with a set of
+conflict resolution rules <var>resolvers</var>, and
+returns a <em>prec2</em> table.
+
+        <p><var>bnf</var> is a list of nonterminal definitions of the form
+<code>(</code><var>nonterm</var> <var>rhs1</var> <var>rhs2</var><code> ...)</code> where each <var>rhs</var>
+is a (non-empty) list of terminals (aka tokens) or non-terminals.
+
+        <p>Not all grammars are accepted:
+          <ul>
+<li>An <var>rhs</var> cannot be an empty list (an empty list is never needed,
+since SMIE allows all non-terminals to match the empty string anyway). 
+<li>An <var>rhs</var> cannot have 2 consecutive non-terminals: each pair of
+non-terminals needs to be separated by a terminal (aka token). 
+This is a fundamental limitation of operator precedence grammars. 
+</ul>
+
+        <p>Additionally, conflicts can occur:
+          <ul>
+<li>The returned <em>prec2</em> table holds constraints between pairs of tokens, and
+for any given pair only one constraint can be present: T1 &lt; T2,
+T1 = T2, or T1 &gt; T2. 
+<li>A token can be an <code>opener</code> (something similar to an open-paren),
+a <code>closer</code> (like a close-paren), or <code>neither</code> of the two
+(e.g. an infix operator, or an inner token like <code>"else"</code>). 
+</ul>
+
+        <p>Precedence conflicts can be resolved via <var>resolvers</var>, which
+is a list of <em>precs</em> tables (see <code>smie-precs-&gt;prec2</code>): for
+each precedence conflict, if those <code>precs</code> tables
+specify a particular constraint, then the conflict is resolved by using
+this constraint instead, else a conflict is reported and one of the
+conflicting constraints is picked arbitrarily and the others are
+simply ignored. 
+</p></blockquote></div>
+
+   </body></html>
+
