@@ -10,9 +10,10 @@
 <link rel="next" href="Custom-time-format.html#Custom-time-format" title="Custom time format">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -58,30 +59,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Creating-timestamps.html#Creating-times
 
 <h4 class="subsection">8.2.1 The date/time prompt</h4>
 
-<p><a name="index-date_002c-reading-in-minibuffer-574"></a><a name="index-time_002c-reading-in-minibuffer-575"></a>
-<a name="index-org_002dread_002ddate_002dprefer_002dfuture-576"></a>When Org mode prompts for a date/time, the default is shown in default
+<p><a name="index-date_002c-reading-in-minibuffer-764"></a><a name="index-time_002c-reading-in-minibuffer-765"></a>
+<a name="index-org_002dread_002ddate_002dprefer_002dfuture-766"></a>When Org-mode prompts for a date/time, the default is shown in default
 date/time format, and the prompt therefore seems to ask for a specific
 format.  But it will in fact accept any string containing some date and/or
 time information, and it is really smart about interpreting your input.  You
 can, for example, use <kbd>C-y</kbd> to paste a (possibly multi-line) string
-copied from an email message.  Org mode will find whatever information is in
+copied from an email message.  Org-mode will find whatever information is in
 there and derive anything you have not specified from the <em>default date
 and time</em>.  The default is usually the current date and time, but when
 modifying an existing timestamp, or when entering the second stamp of a
 range, it is taken from the stamp in the buffer.  When filling in
-information, Org mode assumes that most of the time you will want to enter a
+information, Org-mode assumes that most of the time you will want to enter a
 date in the future: if you omit the month/year and the given day/month is
 <i>before</i> today, it will assume that you mean a future date<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  If the date has been automatically shifted into the future, the
 time prompt will show this with &lsquo;<samp><span class="samp">(=&gt;F).</span></samp>&rsquo;
 
    <p>For example, let's assume that today is <b>June 13, 2006</b>.  Here is how
-various inputs will be interpreted, the items filled in by Org mode are
+various inputs will be interpreted, the items filled in by Org-mode are
 in <b>bold</b>.
 
 <pre class="example">     3-2-5         --&gt; 2003-02-05
+     2/5/3         --&gt; 2003-02-05
      14            --&gt; <b>2006</b>-<b>06</b>-14
      12            --&gt; <b>2006</b>-<b>07</b>-12
-     Fri           --&gt; nearest Friday (defaultdate or later)
+     2/5           --&gt; <b>2007</b>-02-05
+     Fri           --&gt; nearest Friday (default date or later)
      sep 15        --&gt; <b>2006</b>-09-15
      feb 15        --&gt; <b>2007</b>-02-15
      sep 12 9      --&gt; 2009-09-12
@@ -97,7 +100,7 @@ letter ([dwmy]) to indicate change in days, weeks, months, or years.  With a
 single plus or minus, the date is always relative to today.  With a
 double plus or minus, it is relative to the default date.  If instead of
 a single letter, you use the abbreviation of day name, the date will be
-the nth such day.  E.g.
+the Nth such day.  E.g.
 
 <pre class="example">     +0            --&gt; today
      .             --&gt; today
@@ -107,25 +110,34 @@ the nth such day.  E.g.
      ++5           --&gt; five days from default date
      +2tue         --&gt; second Tuesday from now.
 </pre>
-   <p><a name="index-parse_002dtime_002dmonths-577"></a><a name="index-parse_002dtime_002dweekdays-578"></a>The function understands English month and weekday abbreviations.  If
+   <p><a name="index-parse_002dtime_002dmonths-767"></a><a name="index-parse_002dtime_002dweekdays-768"></a>The function understands English month and weekday abbreviations.  If
 you want to use unabbreviated names and/or other languages, configure
 the variables <code>parse-time-months</code> and <code>parse-time-weekdays</code>.
 
-   <p><a name="index-calendar_002c-for-selecting-date-579"></a><a name="index-org_002dpopup_002dcalendar_002dfor_002ddate_002dprompt-580"></a>Parallel to the minibuffer prompt, a calendar is popped up<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  When you exit the date
+   <p>You can specify a time range by giving start and end times or by giving a
+start time and a duration (in HH:MM format). Use `-' or `-{}-' as the separator
+in the former case and use '+' as the separator in the latter case. E.g.
+
+<pre class="example">     11am-1:15pm    --&gt; 11:00-13:15
+     11am--1:15pm   --&gt; same as above
+     11am+2:15      --&gt; same as above
+</pre>
+   <p><a name="index-calendar_002c-for-selecting-date-769"></a><a name="index-org_002dpopup_002dcalendar_002dfor_002ddate_002dprompt-770"></a>Parallel to the minibuffer prompt, a calendar is popped up<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  When you exit the date
 prompt, either by clicking on a date in the calendar, or by pressing
 &lt;RET&gt;, the date selected in the calendar will be combined with the
 information entered at the prompt.  You can control the calendar fully
 from the minibuffer:
 
-   <p><a name="index-g_t_003c-581"></a><a name="index-g_t_003e-582"></a><a name="index-mouse_002d1-583"></a><a name="index-S_002d_0040key_007bright_007d-584"></a><a name="index-S_002d_0040key_007bleft_007d-585"></a><a name="index-S_002d_0040key_007bdown_007d-586"></a><a name="index-S_002d_0040key_007bup_007d-587"></a><a name="index-M_002dS_002d_0040key_007bright_007d-588"></a><a name="index-M_002dS_002d_0040key_007bleft_007d-589"></a><a name="index-g_t_0040key_007bRET_007d-590"></a>
-<pre class="example">     &gt; / &lt;          <span class="roman">Scroll calendar forward/backward by one month.</span>
+   <p><a name="index-g_t_003c-771"></a><a name="index-g_t_003e-772"></a><a name="index-M_002dv-773"></a><a name="index-C_002dv-774"></a><a name="index-mouse_002d1-775"></a><a name="index-S_002d_0040key_007bright_007d-776"></a><a name="index-S_002d_0040key_007bleft_007d-777"></a><a name="index-S_002d_0040key_007bdown_007d-778"></a><a name="index-S_002d_0040key_007bup_007d-779"></a><a name="index-M_002dS_002d_0040key_007bright_007d-780"></a><a name="index-M_002dS_002d_0040key_007bleft_007d-781"></a><a name="index-g_t_0040key_007bRET_007d-782"></a>
+<pre class="example">     &lt;RET&gt;           <span class="roman">Choose date at cursor in calendar.</span>
      mouse-1        <span class="roman">Select date by clicking on it.</span>
      S-&lt;right&gt;/&lt;left&gt;     <span class="roman">One day forward/backward.</span>
      S-&lt;down&gt;/&lt;up&gt;     <span class="roman">One week forward/backward.</span>
      M-S-&lt;right&gt;/&lt;left&gt;   <span class="roman">One month forward/backward.</span>
-     &lt;RET&gt;           <span class="roman">Choose date in calendar.</span>
+     &gt; / &lt;          <span class="roman">Scroll calendar forward/backward by one month.</span>
+     M-v / C-v      <span class="roman">Scroll calendar forward/backward by 3 months.</span>
 </pre>
-   <p><a name="index-org_002dread_002ddate_002ddisplay_002dlive-591"></a>The actions of the date/time prompt may seem complex, but I assure you they
+   <p><a name="index-org_002dread_002ddate_002ddisplay_002dlive-783"></a>The actions of the date/time prompt may seem complex, but I assure you they
 will grow on you, and you will start getting annoyed by pretty much any other
 way of entering a date/time out there.  To help you understand what is going
 on, the current interpretation of your input will be displayed live in the

@@ -48,23 +48,22 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
 <hr>
 </div>
 
-<h3 class="section">8.5 Window Layout</h3>
+<h3 class="section">9.5 Window Layout</h3>
 
-<p><a name="index-window-layout-2736"></a>
+<p><a name="index-window-layout-2613"></a>
 No, there's nothing here about X, so be quiet.
 
-   <p><a name="index-gnus_002duse_002dfull_002dwindow-2737"></a>If <code>gnus-use-full-window</code> non-<code>nil</code>, Gnus will delete all
+   <p><a name="index-gnus_002duse_002dfull_002dwindow-2614"></a>If <code>gnus-use-full-window</code> non-<code>nil</code>, Gnus will delete all
 other windows and occupy the entire Emacs screen by itself.  It is
 <code>t</code> by default.
 
    <p>Setting this variable to <code>nil</code> kinda works, but there are
 glitches.  Use at your own peril.
 
-   <p><a name="index-gnus_002dbuffer_002dconfiguration-2738"></a><code>gnus-buffer-configuration</code> describes how much space each Gnus
+   <p><a name="index-gnus_002dbuffer_002dconfiguration-2615"></a><code>gnus-buffer-configuration</code> describes how much space each Gnus
 buffer should be given.  Here's an excerpt of this variable:
 
-<pre class="lisp">     ((group (vertical 1.0 (group 1.0 point)
-                           (if gnus-carpal (group-carpal 4))))
+<pre class="lisp">     ((group (vertical 1.0 (group 1.0 point)))
       (article (vertical 1.0 (summary 0.25 point)
                              (article 1.0))))
 </pre>
@@ -98,7 +97,6 @@ present) gets focus.
 
 <pre class="lisp">     (article (vertical 1.0 (group 4)
                             (summary 0.25 point)
-                            (if gnus-carpal (summary-carpal 4))
                             (article 1.0)))
 </pre>
    <p>If the size spec is an integer instead of a floating point number,
@@ -108,19 +106,15 @@ occupy, not a percentage.
    <p>If the <dfn>split</dfn> looks like something that can be <code>eval</code>ed (to be
 precise&mdash;if the <code>car</code> of the split is a function or a subr), this
 split will be <code>eval</code>ed.  If the result is non-<code>nil</code>, it will
-be used as a split.  This means that there will be three buffers if
-<code>gnus-carpal</code> is <code>nil</code>, and four buffers if <code>gnus-carpal</code>
-is non-<code>nil</code>.
+be used as a split.
 
    <p>Not complicated enough for you?  Well, try this on for size:
 
 <pre class="lisp">     (article (horizontal 1.0
                   (vertical 0.5
-                      (group 1.0)
-                      (gnus-carpal 4))
+                      (group 1.0))
                   (vertical 1.0
                       (summary 0.25 point)
-                      (summary-carpal 4)
                       (article 1.0))))
 </pre>
    <p>Whoops.  Two buffers with the mystery 100% tag.  And what's that
@@ -152,7 +146,7 @@ top-level split.  <var>form</var> should be an Emacs Lisp form that should
 return a valid split.  We see that each split is fully recursive, and
 may contain any number of <code>vertical</code> and <code>horizontal</code> splits.
 
-   <p><a name="index-gnus_002dwindow_002dmin_002dwidth-2739"></a><a name="index-gnus_002dwindow_002dmin_002dheight-2740"></a><a name="index-window-height-2741"></a><a name="index-window-width-2742"></a>Finding the right sizes can be a bit complicated.  No window may be less
+   <p><a name="index-gnus_002dwindow_002dmin_002dwidth-2616"></a><a name="index-gnus_002dwindow_002dmin_002dheight-2617"></a><a name="index-window-height-2618"></a><a name="index-window-width-2619"></a>Finding the right sizes can be a bit complicated.  No window may be less
 than <code>gnus-window-min-height</code> (default 1) characters high, and all
 windows must be at least <code>gnus-window-min-width</code> (default 1)
 characters wide.  Gnus will try to enforce this before applying the
@@ -164,7 +158,7 @@ you can just set these two variables to <code>nil</code>.
 Windows inside a <code>horizontal</code> split are shown side-by-side, and
 windows within a <code>vertical</code> split are shown above each other.
 
-   <p><a name="index-gnus_002dconfigure_002dframe-2743"></a>If you want to experiment with window placement, a good tip is to call
+   <p><a name="index-gnus_002dconfigure_002dframe-2620"></a>If you want to experiment with window placement, a good tip is to call
 <code>gnus-configure-frame</code> directly with a split.  This is the function
 that does all the real work when splitting buffers.  Below is a pretty
 nonsensical configuration with 5 windows; two for the group buffer and
@@ -236,7 +230,7 @@ accomplish that, something like the following can be done:
                          (name . "Message"))
                         (message 1.0 point))))
 </pre>
-   <p><a name="index-gnus_002dadd_002dconfiguration-2744"></a>Since the <code>gnus-buffer-configuration</code> variable is so long and
+   <p><a name="index-gnus_002dadd_002dconfiguration-2621"></a>Since the <code>gnus-buffer-configuration</code> variable is so long and
 complicated, there's a function you can use to ease changing the config
 of a single setting: <code>gnus-add-configuration</code>.  If, for instance,
 you want to change the <code>article</code> setting, you could say:
@@ -251,7 +245,7 @@ you want to change the <code>article</code> setting, you could say:
 <samp><span class="file">~/.gnus.el</span></samp> file or in some startup hook&mdash;they should be run after
 Gnus has been loaded.
 
-   <p><a name="index-gnus_002dalways_002dforce_002dwindow_002dconfiguration-2745"></a>If all windows mentioned in the configuration are already visible, Gnus
+   <p><a name="index-gnus_002dalways_002dforce_002dwindow_002dconfiguration-2622"></a>If all windows mentioned in the configuration are already visible, Gnus
 won't change the window configuration.  If you always want to force the
 &ldquo;right&rdquo; window configuration, you can set
 <code>gnus-always-force-window-configuration</code> to non-<code>nil</code>.
@@ -261,7 +255,7 @@ window is displayed vertically next to another window, you may also want
 to fiddle with <code>gnus-tree-minimize-window</code> to avoid having the
 windows resized.
 
-<h4 class="subsection">8.5.1 Example Window Configurations</h4>
+<h4 class="subsection">9.5.1 Example Window Configurations</h4>
 
      <ul>
 <li>Narrow left hand side occupied by group buffer.  Right hand side split

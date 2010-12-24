@@ -66,7 +66,33 @@ but you can change the behavior to suit your needs by fiddling with the
 expression (or list of regular expressions) will be removed from the
 <code>Cc</code> header. A value of <code>nil</code> means exclude your name only.
 
-   <p><a name="index-message_002dwide_002dreply_002dconfirm_002drecipients-8"></a>If <code>message-wide-reply-confirm-recipients</code> is non-<code>nil</code> you
+   <p><a name="index-message_002dprune_002drecipient_002drules-8"></a><code>message-prune-recipient-rules</code> is used to prune the addresses
+used when doing a wide reply.  It's meant to be used to remove
+duplicate addresses and the like.  It's a list of lists, where the
+first element is a regexp to match the address to trigger the rule,
+and the second is a regexp that will be expanded based on the first,
+to match addresses to be pruned.
+
+   <p>It's complicated to explain, but it's easy to use.
+
+   <p>For instance, if you get an email from &lsquo;<samp><span class="samp">foo@example.org</span></samp>&rsquo;, but
+&lsquo;<samp><span class="samp">foo@zot.example.org</span></samp>&rsquo; is also in the <code>Cc</code> list, then your
+wide reply will go out to both these addresses, since they are unique.
+
+   <p>To avoid this, do something like the following:
+
+<pre class="lisp">     (setq message-prune-recipient-rules
+           '(("^\\([^@]+\\)@\\(.*\\)" "\\1@.*[.]\\2")))
+</pre>
+   <p>If, for instance, you want all wide replies that involve messages from
+&lsquo;<samp><span class="samp">cvs@example.org</span></samp>&rsquo; to go to that address, and nowhere else (i.e.,
+remove all other recipients if &lsquo;<samp><span class="samp">cvs@example.org</span></samp>&rsquo; is in the
+recipient list:
+
+<pre class="lisp">     (setq message-prune-recipient-rules
+           '(("cvs@example.org" ".")))
+</pre>
+   <p><a name="index-message_002dwide_002dreply_002dconfirm_002drecipients-9"></a>If <code>message-wide-reply-confirm-recipients</code> is non-<code>nil</code> you
 will be asked to confirm that you want to reply to multiple
 recipients.  The default is <code>nil</code>.
 

@@ -12,7 +12,7 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.2.50.
+updated for Emacs version 24.0.50.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
@@ -47,7 +47,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
 
 <h3 class="section">37.7 Operating on Files</h3>
 
-<p><a name="index-operating-on-files-in-Dired-3041"></a>
+<p><a name="index-operating-on-files-in-Dired-3081"></a>
   This section describes the basic Dired commands to operate on one file
 or several files.  All of these commands are capital letters; all of
 them use the minibuffer, either to read an argument or to ask for
@@ -69,7 +69,7 @@ on all those files.
 <p class="noindent">Certain other Dired commands, such as <kbd>!</kbd> and the &lsquo;<samp><span class="samp">%</span></samp>&rsquo;
 commands, use the same conventions to decide which files to work on.
 
-   <p><a name="index-dired_002ddwim_002dtarget-3042"></a><a name="index-two-directories-_0028in-Dired_0029-3043"></a>  Commands which ask for a destination directory, such as those which
+   <p><a name="index-dired_002ddwim_002dtarget-3082"></a><a name="index-two-directories-_0028in-Dired_0029-3083"></a>  Commands which ask for a destination directory, such as those which
 copy and rename files or create links for them, try to guess the default
 target directory for the operation.  Normally, they suggest the Dired
 buffer's default directory, but if the variable <code>dired-dwim-target</code>
@@ -79,29 +79,29 @@ next window, that other buffer's directory is suggested instead.
    <p>Here are the file-manipulating Dired commands that operate on files.
 
      
-<a name="index-dired_002ddo_002dcopy-3044"></a>
-<a name="index-C-_0040r_007b_0028Dired_0029_007d-3045"></a>
-<a name="index-copying-files-_0028in-Dired_0029-3046"></a>
+<a name="index-dired_002ddo_002dcopy-3084"></a>
+<a name="index-C-_0040r_007b_0028Dired_0029_007d-3085"></a>
+<a name="index-copying-files-_0028in-Dired_0029-3086"></a>
 <dl><dt><kbd>C </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Copy the specified files (<code>dired-do-copy</code>).  The argument <var>new</var>
 is the directory to copy into, or (if copying a single file) the new
 name.  This is like the shell command <code>cp</code>.
 
-     <p><a name="index-dired_002dcopy_002dpreserve_002dtime-3047"></a>If <code>dired-copy-preserve-time</code> is non-<code>nil</code>, then copying
+     <p><a name="index-dired_002dcopy_002dpreserve_002dtime-3087"></a>If <code>dired-copy-preserve-time</code> is non-<code>nil</code>, then copying
 with this command preserves the modification time of the old file in
 the copy, like &lsquo;<samp><span class="samp">cp -p</span></samp>&rsquo;.
 
-     <p><a name="index-dired_002drecursive_002dcopies-3048"></a><a name="index-recursive-copying-3049"></a>The variable <code>dired-recursive-copies</code> controls whether to copy
+     <p><a name="index-dired_002drecursive_002dcopies-3088"></a><a name="index-recursive-copying-3089"></a>The variable <code>dired-recursive-copies</code> controls whether to copy
 directories recursively (like &lsquo;<samp><span class="samp">cp -r</span></samp>&rsquo;).  The default is
 <code>nil</code>, which means that directories cannot be copied.
 
-     <br><dt><kbd>D</kbd><dd><a name="index-dired_002ddo_002ddelete-3050"></a><a name="index-D-_0040r_007b_0028Dired_0029_007d-3051"></a>Delete the specified files (<code>dired-do-delete</code>).  This is like the
+     <br><dt><kbd>D</kbd><dd><a name="index-dired_002ddo_002ddelete-3090"></a><a name="index-D-_0040r_007b_0028Dired_0029_007d-3091"></a>Delete the specified files (<code>dired-do-delete</code>).  This is like the
 shell command <code>rm</code>.
 
      <p>Like the other commands in this section, this command operates on the
 <em>marked</em> files, or the next <var>n</var> files.  By contrast, <kbd>x</kbd>
 (<code>dired-do-flagged-delete</code>) deletes all <dfn>flagged</dfn> files.
 
-     <p><a name="index-dired_002ddo_002drename-3052"></a><a name="index-R-_0040r_007b_0028Dired_0029_007d-3053"></a><a name="index-renaming-files-_0028in-Dired_0029-3054"></a><a name="index-moving-files-_0028in-Dired_0029-3055"></a><br><dt><kbd>R </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Rename the specified files (<code>dired-do-rename</code>).  If you rename a
+     <p><a name="index-dired_002ddo_002drename-3092"></a><a name="index-R-_0040r_007b_0028Dired_0029_007d-3093"></a><a name="index-renaming-files-_0028in-Dired_0029-3094"></a><a name="index-moving-files-_0028in-Dired_0029-3095"></a><br><dt><kbd>R </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Rename the specified files (<code>dired-do-rename</code>).  If you rename a
 single file, the argument <var>new</var> is the new name of the file.  If
 you rename several files, the argument <var>new</var> is the directory into
 which to move the files (this is like the shell command <code>mv</code>).
@@ -109,58 +109,70 @@ which to move the files (this is like the shell command <code>mv</code>).
      <p>Dired automatically changes the visited file name of buffers associated
 with renamed files so that they refer to the new names.
 
-     <p><a name="index-dired_002ddo_002dhardlink-3056"></a><a name="index-H-_0040r_007b_0028Dired_0029_007d-3057"></a><a name="index-hard-links-_0028in-Dired_0029-3058"></a><br><dt><kbd>H </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Make hard links to the specified files (<code>dired-do-hardlink</code>). 
+     <p><a name="index-dired_002ddo_002dhardlink-3096"></a><a name="index-H-_0040r_007b_0028Dired_0029_007d-3097"></a><a name="index-hard-links-_0028in-Dired_0029-3098"></a><br><dt><kbd>H </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Make hard links to the specified files (<code>dired-do-hardlink</code>). 
 This is like the shell command <code>ln</code>.  The argument <var>new</var> is
 the directory to make the links in, or (if making just one link) the
 name to give the link.
 
-     <p><a name="index-dired_002ddo_002dsymlink-3059"></a><a name="index-S-_0040r_007b_0028Dired_0029_007d-3060"></a><a name="index-symbolic-links-_0028creation-in-Dired_0029-3061"></a><br><dt><kbd>S </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Make symbolic links to the specified files (<code>dired-do-symlink</code>). 
+     <p><a name="index-dired_002ddo_002dsymlink-3099"></a><a name="index-S-_0040r_007b_0028Dired_0029_007d-3100"></a><a name="index-symbolic-links-_0028creation-in-Dired_0029-3101"></a><br><dt><kbd>S </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Make symbolic links to the specified files (<code>dired-do-symlink</code>). 
 This is like &lsquo;<samp><span class="samp">ln -s</span></samp>&rsquo;.  The argument <var>new</var> is the directory to
 make the links in, or (if making just one link) the name to give the
 link.
 
-     <p><a name="index-dired_002ddo_002dchmod-3062"></a><a name="index-M-_0040r_007b_0028Dired_0029_007d-3063"></a><a name="index-changing-file-permissions-_0028in-Dired_0029-3064"></a><br><dt><kbd>M </kbd><var>modespec</var><kbd> &lt;RET&gt;</kbd><dd>Change the mode (also called &ldquo;permission bits&rdquo;) of the specified files
+     <p><a name="index-dired_002ddo_002dchmod-3102"></a><a name="index-M-_0040r_007b_0028Dired_0029_007d-3103"></a><a name="index-changing-file-permissions-_0028in-Dired_0029-3104"></a><br><dt><kbd>M </kbd><var>modespec</var><kbd> &lt;RET&gt;</kbd><dd>Change the mode (also called &ldquo;permission bits&rdquo;) of the specified files
 (<code>dired-do-chmod</code>).  This uses the <code>chmod</code> program, so
 <var>modespec</var> can be any argument that <code>chmod</code> can handle.
 
-     <p><a name="index-dired_002ddo_002dchgrp-3065"></a><a name="index-G-_0040r_007b_0028Dired_0029_007d-3066"></a><a name="index-changing-file-group-_0028in-Dired_0029-3067"></a><br><dt><kbd>G </kbd><var>newgroup</var><kbd> &lt;RET&gt;</kbd><dd>Change the group of the specified files to <var>newgroup</var>
+     <p><a name="index-dired_002ddo_002dchgrp-3105"></a><a name="index-G-_0040r_007b_0028Dired_0029_007d-3106"></a><a name="index-changing-file-group-_0028in-Dired_0029-3107"></a><br><dt><kbd>G </kbd><var>newgroup</var><kbd> &lt;RET&gt;</kbd><dd>Change the group of the specified files to <var>newgroup</var>
 (<code>dired-do-chgrp</code>).
 
-     <p><a name="index-dired_002ddo_002dchown-3068"></a><a name="index-O-_0040r_007b_0028Dired_0029_007d-3069"></a><a name="index-changing-file-owner-_0028in-Dired_0029-3070"></a><br><dt><kbd>O </kbd><var>newowner</var><kbd> &lt;RET&gt;</kbd><dd>Change the owner of the specified files to <var>newowner</var>
+     <p><a name="index-dired_002ddo_002dchown-3108"></a><a name="index-O-_0040r_007b_0028Dired_0029_007d-3109"></a><a name="index-changing-file-owner-_0028in-Dired_0029-3110"></a><br><dt><kbd>O </kbd><var>newowner</var><kbd> &lt;RET&gt;</kbd><dd>Change the owner of the specified files to <var>newowner</var>
 (<code>dired-do-chown</code>).  (On most systems, only the superuser can do
 this.)
 
-     <p><a name="index-dired_002dchown_002dprogram-3071"></a>The variable <code>dired-chown-program</code> specifies the name of the
+     <p><a name="index-dired_002dchown_002dprogram-3111"></a>The variable <code>dired-chown-program</code> specifies the name of the
 program to use to do the work (different systems put <code>chown</code> in
 different places).
 
-     <p><a name="index-dired_002ddo_002dtouch-3072"></a><a name="index-T-_0040r_007b_0028Dired_0029_007d-3073"></a><a name="index-changing-file-time-_0028in-Dired_0029-3074"></a><br><dt><kbd>T </kbd><var>timestamp</var><kbd> &lt;RET&gt;</kbd><dd>Touch the specified files (<code>dired-do-touch</code>).  This means
+     <p><a name="index-dired_002ddo_002dtouch-3112"></a><a name="index-T-_0040r_007b_0028Dired_0029_007d-3113"></a><a name="index-changing-file-time-_0028in-Dired_0029-3114"></a><br><dt><kbd>T </kbd><var>timestamp</var><kbd> &lt;RET&gt;</kbd><dd>Touch the specified files (<code>dired-do-touch</code>).  This means
 updating their modification times to the present time.  This is like
 the shell command <code>touch</code>.
 
-     <p><a name="index-dired_002ddo_002dprint-3075"></a><a name="index-P-_0040r_007b_0028Dired_0029_007d-3076"></a><a name="index-printing-files-_0028in-Dired_0029-3077"></a><br><dt><kbd>P </kbd><var>command</var><kbd> &lt;RET&gt;</kbd><dd>Print the specified files (<code>dired-do-print</code>).  You must specify the
+     <p><a name="index-dired_002ddo_002dprint-3115"></a><a name="index-P-_0040r_007b_0028Dired_0029_007d-3116"></a><a name="index-printing-files-_0028in-Dired_0029-3117"></a><br><dt><kbd>P </kbd><var>command</var><kbd> &lt;RET&gt;</kbd><dd>Print the specified files (<code>dired-do-print</code>).  You must specify the
 command to print them with, but the minibuffer starts out with a
 suitable guess made using the variables <code>lpr-command</code> and
 <code>lpr-switches</code> (the same variables that <code>lpr-buffer</code> uses;
 see <a href="Printing.html#Printing">Printing</a>).
 
-     <p><a name="index-dired_002ddo_002dcompress-3078"></a><a name="index-Z-_0040r_007b_0028Dired_0029_007d-3079"></a><a name="index-compressing-files-_0028in-Dired_0029-3080"></a><br><dt><kbd>Z</kbd><dd>Compress the specified files (<code>dired-do-compress</code>).  If the file
+     <p><a name="index-dired_002ddo_002dcompress-3118"></a><a name="index-Z-_0040r_007b_0028Dired_0029_007d-3119"></a><a name="index-compressing-files-_0028in-Dired_0029-3120"></a><br><dt><kbd>Z</kbd><dd>Compress the specified files (<code>dired-do-compress</code>).  If the file
 appears to be a compressed file already, uncompress it instead.
 
-     <p><a name="index-dired_002ddo_002dload-3081"></a><a name="index-L-_0040r_007b_0028Dired_0029_007d-3082"></a><a name="index-loading-several-files-_0028in-Dired_0029-3083"></a><br><dt><kbd>L</kbd><dd>Load the specified Emacs Lisp files (<code>dired-do-load</code>). 
+     <p><a name="index-epa_002ddired_002ddo_002ddecrypt-3121"></a><a name="index-g_t_003ad-_0040r_007b_0028Dired_0029_007d-3122"></a><a name="index-decrypting-files-_0028in-Dired_0029-3123"></a><br><dt><kbd>:d</kbd><dd>Decrypt the specified files (<code>epa-dired-do-decrypt</code>). 
+See <a href="../epa/Dired-integration.html#Dired-integration">Dired integration</a>.
+
+     <p><a name="index-epa_002ddired_002ddo_002dverify-3124"></a><a name="index-g_t_003av-_0040r_007b_0028Dired_0029_007d-3125"></a><a name="index-verifying-digital-signatures-on-files-_0028in-Dired_0029-3126"></a><br><dt><kbd>:v</kbd><dd>Verify digital signatures on the specified files (<code>epa-dired-do-verify</code>). 
+See <a href="../epa/Dired-integration.html#Dired-integration">Dired integration</a>.
+
+     <p><a name="index-epa_002ddired_002ddo_002dsign-3127"></a><a name="index-g_t_003as-_0040r_007b_0028Dired_0029_007d-3128"></a><a name="index-signing-files-_0028in-Dired_0029-3129"></a><br><dt><kbd>:s</kbd><dd>Digitally sign the specified files (<code>epa-dired-do-sign</code>). 
+See <a href="../epa/Dired-integration.html#Dired-integration">Dired integration</a>.
+
+     <p><a name="index-epa_002ddired_002ddo_002dencrypt-3130"></a><a name="index-g_t_003ae-_0040r_007b_0028Dired_0029_007d-3131"></a><a name="index-encrypting-files-_0028in-Dired_0029-3132"></a><br><dt><kbd>:e</kbd><dd>Encrypt the specified files (<code>epa-dired-do-encrypt</code>). 
+See <a href="../epa/Dired-integration.html#Dired-integration">Dired integration</a>.
+
+     <p><a name="index-dired_002ddo_002dload-3133"></a><a name="index-L-_0040r_007b_0028Dired_0029_007d-3134"></a><a name="index-loading-several-files-_0028in-Dired_0029-3135"></a><br><dt><kbd>L</kbd><dd>Load the specified Emacs Lisp files (<code>dired-do-load</code>). 
 See <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>.
 
-     <p><a name="index-dired_002ddo_002dbyte_002dcompile-3084"></a><a name="index-B-_0040r_007b_0028Dired_0029_007d-3085"></a><a name="index-byte_002dcompiling-several-files-_0028in-Dired_0029-3086"></a><br><dt><kbd>B</kbd><dd>Byte compile the specified Emacs Lisp files
+     <p><a name="index-dired_002ddo_002dbyte_002dcompile-3136"></a><a name="index-B-_0040r_007b_0028Dired_0029_007d-3137"></a><a name="index-byte_002dcompiling-several-files-_0028in-Dired_0029-3138"></a><br><dt><kbd>B</kbd><dd>Byte compile the specified Emacs Lisp files
 (<code>dired-do-byte-compile</code>).  See <a href="../elisp/Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>.
 
-     <p><a name="index-A-_0040r_007b_0028Dired_0029_007d-3087"></a><a name="index-dired_002ddo_002dsearch-3088"></a><a name="index-search-multiple-files-_0028in-Dired_0029-3089"></a><br><dt><kbd>A </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>Search all the specified files for the regular expression <var>regexp</var>
+     <p><a name="index-A-_0040r_007b_0028Dired_0029_007d-3139"></a><a name="index-dired_002ddo_002dsearch-3140"></a><a name="index-search-multiple-files-_0028in-Dired_0029-3141"></a><br><dt><kbd>A </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>Search all the specified files for the regular expression <var>regexp</var>
 (<code>dired-do-search</code>).
 
      <p>This command is a variant of <code>tags-search</code>.  The search stops at
 the first match it finds; use <kbd>M-,</kbd> to resume the search and find
 the next match.  See <a href="Tags-Search.html#Tags-Search">Tags Search</a>.
 
-     <p><a name="index-Q-_0040r_007b_0028Dired_0029_007d-3090"></a><a name="index-dired_002ddo_002dquery_002dreplace_002dregexp-3091"></a><a name="index-search-and-replace-in-multiple-files-_0028in-Dired_0029-3092"></a><br><dt><kbd>Q </kbd><var>regexp</var><kbd> &lt;RET&gt; </kbd><var>to</var><kbd> &lt;RET&gt;</kbd><dd>Perform <code>query-replace-regexp</code> on each of the specified files,
+     <p><a name="index-Q-_0040r_007b_0028Dired_0029_007d-3142"></a><a name="index-dired_002ddo_002dquery_002dreplace_002dregexp-3143"></a><a name="index-search-and-replace-in-multiple-files-_0028in-Dired_0029-3144"></a><br><dt><kbd>Q </kbd><var>regexp</var><kbd> &lt;RET&gt; </kbd><var>to</var><kbd> &lt;RET&gt;</kbd><dd>Perform <code>query-replace-regexp</code> on each of the specified files,
 replacing matches for <var>regexp</var> with the string
 <var>to</var> (<code>dired-do-query-replace-regexp</code>).
 

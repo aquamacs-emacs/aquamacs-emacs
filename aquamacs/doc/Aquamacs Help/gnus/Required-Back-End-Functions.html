@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Back-End-Interface.html#Back-End-Interf
 <hr>
 </div>
 
-<h5 class="subsubsection">10.7.2.1 Required Back End Functions</h5>
+<h5 class="subsubsection">11.7.2.1 Required Back End Functions</h5>
 
      <dl>
 <dt><code>(nnchoke-retrieve-headers ARTICLES &amp;optional GROUP SERVER FETCH-OLD)</code><dd>
@@ -95,7 +95,7 @@ these in the data buffer.
           valid-message  = "221 " &lt;number&gt; " Article retrieved." eol
           header         = &lt;text&gt; eol
 </pre>
-     <p><a name="index-BNF-3185"></a>(The version of BNF used here is the one used in RFC822.)
+     <p><a name="index-BNF-3045"></a>(The version of BNF used here is the one used in RFC822.)
 
      <p>If the return value is <code>nov</code>, the data buffer should contain
 <dfn>network overview database</dfn> lines.  These are basically fields
@@ -166,12 +166,15 @@ group and article numbers are when fetching articles by
 <code>Message-ID</code>.  If this isn't possible, <code>t</code> should be returned
 on successful article retrieval.
 
-     <br><dt><code>(nnchoke-request-group GROUP &amp;optional SERVER FAST)</code><dd>
+     <br><dt><code>(nnchoke-request-group GROUP &amp;optional SERVER FAST INFO)</code><dd>
 Get data on <var>group</var>.  This function also has the side effect of
 making <var>group</var> the current group.
 
      <p>If <var>fast</var>, don't bother to return useful data, just make <var>group</var>
 the current group.
+
+     <p>If <var>info</var>, it allows the backend to update the group info
+structure.
 
      <p>Here's an example of some result data and a definition of the same:
 

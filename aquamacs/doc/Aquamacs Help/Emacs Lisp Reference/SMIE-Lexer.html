@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>SMIE Lexer - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SMIE.html#SMIE" title="SMIE">
+<link rel="prev" href="SMIE-Grammar.html#SMIE-Grammar" title="SMIE Grammar">
+<link rel="next" href="SMIE-Tricks.html#SMIE-Tricks" title="SMIE Tricks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="SMIE-Lexer"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SMIE-Tricks.html#SMIE-Tricks">SMIE Tricks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="SMIE-Grammar.html#SMIE-Grammar">SMIE Grammar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SMIE.html#SMIE">SMIE</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">23.7.1.4 Defining Tokens</h5>
+
+<p>SMIE comes with a predefined lexical analyzer which uses syntax tables
+in the following way: any sequence of characters that have word or
+symbol syntax is considered a token, and so is any sequence of
+characters that have punctuation syntax.  This default lexer is
+often a good starting point but is rarely actually correct for any given
+language.  For example, it will consider <code>"2,+3"</code> to be composed
+of 3 tokens: <code>"2"</code>, <code>",+"</code>, and <code>"3"</code>.
+
+   <p>To describe the lexing rules of your language to SMIE, you need
+2 functions, one to fetch the next token, and another to fetch the
+previous token.  Those functions will usually first skip whitespace and
+comments and then look at the next chunk of text to see if it
+is a special token.  If so it should skip the token and
+return a description of this token.  Usually this is simply the string
+extracted from the buffer, but it can be anything you want. 
+For example:
+<pre class="example">     (defvar sample-keywords-regexp
+       (regexp-opt '("+" "*" "," ";" "&gt;" "&gt;=" "&lt;" "&lt;=" ":=" "=")))
+     (defun sample-smie-forward-token ()
+       (forward-comment (point-max))
+       (cond
+        ((looking-at sample-keywords-regexp)
+         (goto-char (match-end 0))
+         (match-string-no-properties 0))
+        (t (buffer-substring-no-properties
+            (point)
+            (progn (skip-syntax-forward "w_")
+                   (point))))))
+     (defun sample-smie-backward-token ()
+       (forward-comment (- (point)))
+       (cond
+        ((looking-back sample-keywords-regexp (- (point) 2) t)
+         (goto-char (match-beginning 0))
+         (match-string-no-properties 0))
+        (t (buffer-substring-no-properties
+            (point)
+            (progn (skip-syntax-backward "w_")
+                   (point))))))
+</pre>
+   <p>Notice how those lexers return the empty string when in front of
+parentheses.  This is because SMIE automatically takes care of the
+parentheses defined in the syntax table.  More specifically if the lexer
+returns nil or an empty string, SMIE tries to handle the corresponding
+text as a sexp according to syntax tables.
+
+   </body></html>
+

@@ -50,7 +50,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Group-Buffer.html#Group-Buffer">Group B
 
 <h3 class="section">2.6 Group Levels</h3>
 
-<p><a name="index-group-level-167"></a><a name="index-level-168"></a>
+<p><a name="index-group-level-158"></a><a name="index-level-159"></a>
 All groups have a level of <dfn>subscribedness</dfn>.  For instance, if a
 group is on level 2, it is more subscribed than a group on level 5.  You
 can ask Gnus to just list groups on a given level or lower
@@ -60,12 +60,12 @@ a given level or lower (see <a href="Scanning-New-Messages.html#Scanning-New-Mes
    <p>Remember:  The higher the level of the group, the less important it is.
 
      <dl>
-<dt><kbd>S l</kbd><dd><a name="index-S-l-_0028Group_0029-169"></a><a name="index-gnus_002dgroup_002dset_002dcurrent_002dlevel-170"></a>Set the level of the current group.  If a numeric prefix is given, the
+<dt><kbd>S l</kbd><dd><a name="index-S-l-_0028Group_0029-160"></a><a name="index-gnus_002dgroup_002dset_002dcurrent_002dlevel-161"></a>Set the level of the current group.  If a numeric prefix is given, the
 next <var>n</var> groups will have their levels set.  The user will be
 prompted for a level. 
 </dl>
 
-   <p><a name="index-gnus_002dlevel_002dkilled-171"></a><a name="index-gnus_002dlevel_002dzombie-172"></a><a name="index-gnus_002dlevel_002dunsubscribed-173"></a><a name="index-gnus_002dlevel_002dsubscribed-174"></a>Gnus considers groups from levels 1 to
+   <p><a name="index-gnus_002dlevel_002dkilled-162"></a><a name="index-gnus_002dlevel_002dzombie-163"></a><a name="index-gnus_002dlevel_002dunsubscribed-164"></a><a name="index-gnus_002dlevel_002dsubscribed-165"></a>Gnus considers groups from levels 1 to
 <code>gnus-level-subscribed</code> (inclusive) (default 5) to be subscribed,
 <code>gnus-level-subscribed</code> (exclusive) and
 <code>gnus-level-unsubscribed</code> (inclusive) (default 7) to be
@@ -105,13 +105,13 @@ list of killed groups.)
 Set them once, and don't touch them ever again.  Better yet, don't touch
 them at all unless you know exactly what you're doing.
 
-   <p><a name="index-gnus_002dlevel_002ddefault_002dunsubscribed-175"></a><a name="index-gnus_002dlevel_002ddefault_002dsubscribed-176"></a>Two closely related variables are <code>gnus-level-default-subscribed</code>
+   <p><a name="index-gnus_002dlevel_002ddefault_002dunsubscribed-166"></a><a name="index-gnus_002dlevel_002ddefault_002dsubscribed-167"></a>Two closely related variables are <code>gnus-level-default-subscribed</code>
 (default 3) and <code>gnus-level-default-unsubscribed</code> (default 6),
 which are the levels that new groups will be put on if they are
 (un)subscribed.  These two variables should, of course, be inside the
 relevant valid ranges.
 
-   <p><a name="index-gnus_002dkeep_002dsame_002dlevel-177"></a>If <code>gnus-keep-same-level</code> is non-<code>nil</code>, some movement commands
+   <p><a name="index-gnus_002dkeep_002dsame_002dlevel-168"></a>If <code>gnus-keep-same-level</code> is non-<code>nil</code>, some movement commands
 will only move to groups of the same level (or lower).  In
 particular, going from the last article in one group to the next group
 will go to the next group of the same level (or lower).  This might be
@@ -121,20 +121,22 @@ rest.
    <p>If this variable is <code>best</code>, Gnus will make the next newsgroup the
 one with the best level.
 
-   <p><a name="index-gnus_002dgroup_002ddefault_002dlist_002dlevel-178"></a>All groups with a level less than or equal to
+   <p><a name="index-gnus_002dgroup_002ddefault_002dlist_002dlevel-169"></a>All groups with a level less than or equal to
 <code>gnus-group-default-list-level</code> will be listed in the group buffer
-by default.
+by default. 
+This variable can also be a function.  In that case, that function will
+be called and the result will be used as value.
 
-   <p><a name="index-gnus_002dgroup_002dlist_002dinactive_002dgroups-179"></a>If <code>gnus-group-list-inactive-groups</code> is non-<code>nil</code>, non-active
+   <p><a name="index-gnus_002dgroup_002dlist_002dinactive_002dgroups-170"></a>If <code>gnus-group-list-inactive-groups</code> is non-<code>nil</code>, non-active
 groups will be listed along with the unread groups.  This variable is
 <code>t</code> by default.  If it is <code>nil</code>, inactive groups won't be
 listed.
 
-   <p><a name="index-gnus_002dgroup_002duse_002dpermanent_002dlevels-180"></a>If <code>gnus-group-use-permanent-levels</code> is non-<code>nil</code>, once you
+   <p><a name="index-gnus_002dgroup_002duse_002dpermanent_002dlevels-171"></a>If <code>gnus-group-use-permanent-levels</code> is non-<code>nil</code>, once you
 give a level prefix to <kbd>g</kbd> or <kbd>l</kbd>, all subsequent commands will
 use this level as the &ldquo;work&rdquo; level.
 
-   <p><a name="index-gnus_002dactivate_002dlevel-181"></a>Gnus will normally just activate (i. e., query the server about) groups
+   <p><a name="index-gnus_002dactivate_002dlevel-172"></a>Gnus will normally just activate (i. e., query the server about) groups
 on level <code>gnus-activate-level</code> or less.  If you don't want to
 activate unsubscribed groups, for instance, you might set this variable
 to 5.  The default is 6.

@@ -6,7 +6,7 @@
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
-<link rel="next" href="The-First-Time.html#The-First-Time" title="The First Time">
+<link rel="next" href="The-Server-is-Down.html#The-Server-is-Down" title="The Server is Down">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
@@ -41,7 +41,7 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 <div class="node">
 <a name="Finding-the-News"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="The-First-Time.html#The-First-Time">The First Time</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Server-is-Down.html#The-Server-is-Down">The Server is Down</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
 <hr>
 </div>
@@ -49,7 +49,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting 
 <h3 class="section">1.1 Finding the News</h3>
 
 <p><a name="index-finding-news-6"></a>
-<a name="index-gnus_002dselect_002dmethod-7"></a><!-- @head -->
+First of all, you should know that there is a special buffer called
+<code>*Server*</code> that lists all the servers Gnus knows about.  You can
+press <kbd>^</kbd> from the Group buffer to see it.  In the Server buffer,
+you can press <kbd>RET</kbd> on a defined server to see all the groups it
+serves (subscribed or not!).  You can also add or delete servers, edit
+a foreign server's definition, agentize or de-agentize a server, and
+do many other neat things.  See <a href="Server-Buffer.html#Server-Buffer">Server Buffer</a>. 
+See <a href="Foreign-Groups.html#Foreign-Groups">Foreign Groups</a>.  See <a href="Agent-Basics.html#Agent-Basics">Agent Basics</a>.
+
+   <p><a name="index-gnus_002dselect_002dmethod-7"></a><!-- @head -->
 The <code>gnus-select-method</code> variable says where Gnus should look for
 news.  This variable should be a list where the first element says
 <dfn>how</dfn> and the second element says <dfn>where</dfn>.  This method is your
@@ -77,27 +86,14 @@ Gnus will see whether <code>gnus-nntpserver-file</code>
 If that fails as well, Gnus will try to use the machine running Emacs
 as an <acronym>NNTP</acronym> server.  That's a long shot, though.
 
-   <p><a name="index-gnus_002dnntp_002dserver-11"></a>If <code>gnus-nntp-server</code> is set, this variable will override
-<code>gnus-select-method</code>.  You should therefore set
-<code>gnus-nntp-server</code> to <code>nil</code>, which is what it is by default.
-
-   <p><a name="index-gnus_002dsecondary_002dservers-12"></a><a name="index-gnus_002dnntp_002dserver-13"></a>You can also make Gnus prompt you interactively for the name of an
-<acronym>NNTP</acronym> server.  If you give a non-numerical prefix to <code>gnus</code>
-(i.e., <kbd>C-u M-x gnus</kbd>), Gnus will let you choose between the servers
-in the <code>gnus-secondary-servers</code> list (if any).  You can also just
-type in the name of any server you feel like visiting.  (Note that this
-will set <code>gnus-nntp-server</code>, which means that if you then <kbd>M-x
-gnus</kbd> later in the same Emacs session, Gnus will contact the same
-server.)
-
-   <p><a name="index-gnus_002dgroup_002dbrowse_002dforeign_002dserver-14"></a><a name="index-B-_0028Group_0029-15"></a>However, if you use one <acronym>NNTP</acronym> server regularly and are just
+   <p><a name="index-gnus_002dgroup_002dbrowse_002dforeign_002dserver-11"></a><a name="index-B-_0028Group_0029-12"></a>However, if you use one <acronym>NNTP</acronym> server regularly and are just
 interested in a couple of groups from a different server, you would be
 better served by using the <kbd>B</kbd> command in the group buffer.  It will
 let you have a look at what groups are available, and you can subscribe
 to any of the groups you want to.  This also makes <samp><span class="file">.newsrc</span></samp>
 maintenance much tidier.  See <a href="Foreign-Groups.html#Foreign-Groups">Foreign Groups</a>.
 
-   <p><a name="index-gnus_002dsecondary_002dselect_002dmethods-16"></a><!-- @head -->
+   <p><a name="index-gnus_002dsecondary_002dselect_002dmethods-13"></a><!-- @head -->
 A slightly different approach to foreign groups is to set the
 <code>gnus-secondary-select-methods</code> variable.  The select methods
 listed in this variable are in many ways just as native as the

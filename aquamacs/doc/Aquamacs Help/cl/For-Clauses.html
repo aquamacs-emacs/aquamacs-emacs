@@ -227,14 +227,17 @@ to the previous end position.  The clause allows <code>of</code>,
 term restricts the search to just the specified property.  The
 <code>of</code> term may specify either a buffer or a string.
 
-     <br><dt><code>for </code><var>var</var><code> being the frames</code><dd>This clause iterates over all frames, i.e., X window system windows
-open on Emacs files.  The
-clause <code>screens</code> is a synonym for <code>frames</code>.  The frames
-are visited in <code>next-frame</code> order starting from
-<code>selected-frame</code>.
+     <br><dt><code>for </code><var>var</var><code> being the frames</code><dd>This clause iterates over all Emacs frames. The clause <code>screens</code> is
+a synonym for <code>frames</code>.  The frames are visited in
+<code>next-frame</code> order starting from <code>selected-frame</code>.
 
      <br><dt><code>for </code><var>var</var><code> being the windows [of </code><var>frame</var><code>]</code><dd>This clause iterates over the windows (in the Emacs sense) of
-the current frame, or of the specified <var>frame</var>.
+the current frame, or of the specified <var>frame</var>.  It visits windows
+in <code>next-window</code> order starting from <code>selected-window</code>
+(or <code>frame-selected-window</code> if you specify <var>frame</var>). 
+This clause treats the minibuffer window in the same way as
+<code>next-window</code> does.  For greater flexibility, consider using
+<code>walk-windows</code> instead.
 
      <br><dt><code>for </code><var>var</var><code> being the buffers</code><dd>This clause iterates over all buffers in Emacs.  It is equivalent
 to &lsquo;<samp><span class="samp">for </span><var>var</var><span class="samp"> in (buffer-list)</span></samp>&rsquo;.

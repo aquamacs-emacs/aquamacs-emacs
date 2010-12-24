@@ -10,9 +10,10 @@
 <link rel="next" href="Include-files.html#Include-files" title="Include files">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,11 +58,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Markup.html#Markup">Markup</a>
 
 <h3 class="section">11.3 Literal examples</h3>
 
-<p><a name="index-literal-examples_002c-markup-rules-984"></a><a name="index-code-line-references_002c-markup-rules-985"></a>
+<p><a name="index-literal-examples_002c-markup-rules-1342"></a><a name="index-code-line-references_002c-markup-rules-1343"></a>
 You can include literal examples that should not be subjected to
 markup.  Such examples will be typeset in monospace, so this is well suited
 for source code and similar examples. 
-<a name="index-g_t_0023_002bBEGIN_005fEXAMPLE-986"></a>
+<a name="index-g_t_0023_002bBEGIN_005fEXAMPLE-1344"></a>
 <pre class="example">     #+BEGIN_EXAMPLE
      Some example from a text file.
      #+END_EXAMPLE
@@ -74,16 +75,16 @@ whitespace before the colon:
 <pre class="example">     Here is an example
         : Some example from a text file.
 </pre>
-   <p><a name="index-formatting-source-code_002c-markup-rules-987"></a>If the example is source code from a programming language, or any other text
+   <p><a name="index-formatting-source-code_002c-markup-rules-1345"></a>If the example is source code from a programming language, or any other text
 that can be marked up by font-lock in Emacs, you can ask for the example to
-look like the fontified Emacs buffer<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This is done with the &lsquo;<samp><span class="samp">src</span></samp>&rsquo;
-block, where you also need to specify the name of the major mode that should
-be used to fontify the example:
-<a name="index-g_t_0023_002bBEGIN_005fSRC-988"></a>
+look like the fontified Emacs buffer<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This is done with the &lsquo;<samp><span class="samp">src</span></samp>&rsquo; block, where you also
+need to specify the name of the major mode that should be used to fontify the
+example:
+<a name="index-g_t_0023_002bBEGIN_005fSRC-1346"></a>
 <pre class="example">     #+BEGIN_SRC emacs-lisp
-     (defun org-xor (a b)
-        "Exclusive or."
-        (if a (not b) b))
+       (defun org-xor (a b)
+          "Exclusive or."
+          (if a (not b) b))
      #+END_SRC
 </pre>
    <p>Both in <code>example</code> and in <code>src</code> snippets, you can add a <code>-n</code>
@@ -109,24 +110,24 @@ Here is an example:
      In line [[(sc)]] we remember the current position.  [[(jump)][Line (jump)]]
      jumps to point-min.
 </pre>
-   <p><a name="index-org_002dcoderef_002dlabel_002dformat-989"></a>If the syntax for the label format conflicts with the language syntax, use a
+   <p><a name="index-org_002dcoderef_002dlabel_002dformat-1347"></a>If the syntax for the label format conflicts with the language syntax, use a
 <code>-l</code> switch to change the format, for example &lsquo;<samp><span class="samp">#+BEGIN_SRC pascal
 -n -r -l "((%s))"</span></samp>&rsquo;.  See also the variable <code>org-coderef-label-format</code>.
 
    <p>HTML export also allows examples to be published as text areas, See <a href="Text-areas-in-HTML-export.html#Text-areas-in-HTML-export">Text areas in HTML export</a>.
 
      
-<a name="index-C_002dc-_0027-990"></a>
+<a name="index-C_002dc-_0027-1348"></a>
 <dl><dt><kbd>C-c '</kbd><dd>Edit the source code example at point in its native mode.  This works by
 switching to a temporary buffer with the source code.  You need to exit by
-pressing <kbd>C-c '</kbd> again<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>, the edited version will
+pressing <kbd>C-c '</kbd> again<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>.  The edited version will
 then replace the old version in the Org buffer.  Fixed-width regions
 (where each line starts with a colon followed by a space) will be edited
 using <code>artist-mode</code><a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a> to allow creating ASCII
 drawings easily.  Using this command in an empty line will create a new
 fixed-width region. 
-<a name="index-C_002dc-l-991"></a><br><dt><kbd>C-c l</kbd><dd>Calling <code>org-store-link</code> while editing a source code example in a
-temporary buffer created with <kbd>C-c '</kbd> will prompt for a label, make sure
+<a name="index-C_002dc-l-1349"></a><br><dt><kbd>C-c l</kbd><dd>Calling <code>org-store-link</code> while editing a source code example in a
+temporary buffer created with <kbd>C-c '</kbd> will prompt for a label.  Make sure
 that it is unique in the current buffer, and insert it with the proper
 formatting like &lsquo;<samp><span class="samp">(ref:label)</span></samp>&rsquo; at the end of the current line.  Then the
 label is stored as a link &lsquo;<samp><span class="samp">(label)</span></samp>&rsquo;, for retrieval with <kbd>C-c C-l</kbd>. 
@@ -134,11 +135,22 @@ label is stored as a link &lsquo;<samp><span class="samp">(label)</span></samp>&
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Currently this works for the
-HTML backend, and requires the <samp><span class="file">htmlize.el</span></samp> package version 1.34 or
-later.  It also works for LaTeX with the listings package, if you turn on the
-option <code>org-export-latex-listings</code> and make sure that the listings
-package is included by the LaTeX header.</p>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This works automatically for
+the HTML backend (it requires version 1.34 of the <samp><span class="file">htmlize.el</span></samp> package,
+which is distributed with Org).  Fontified code chunks in LaTeX can be
+achieved using either the listings or the
+<a href="http://code.google.com/p/minted">minted</a> package. To use listings, turn
+on the variable <code>org-export-latex-listings</code> and ensure that the listings
+package is included by the LaTeX header (e.g. by configuring
+<code>org-export-latex-packages-alist</code>). See the listings documentation for
+configuration options, including obtaining colored output.  For minted it is
+necessary to install the program <a href="http://pygments.org">pygments</a>, in
+addition to setting <code>org-export-latex-minted</code>, ensuring that the minted
+package is included by the LaTeX header, and ensuring that the
+<code>-shell-escape</code> option is passed to <samp><span class="file">pdflatex</span></samp> (see
+<code>org-latex-to-pdf-process</code>). See the documentation of the variables
+<code>org-export-latex-listings</code> and <code>org-export-latex-minted</code> for
+further details.</p>
 
    <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Adding <code>-k</code> to <code>-n -r</code> will <i>keep</i> the
 labels in the source code while using line numbers for the links, which might
@@ -146,7 +158,7 @@ be useful to explain those in an org-mode example code.</p>
 
    <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> Upon exit, lines starting with &lsquo;<samp><span class="samp">*</span></samp>&rsquo;
 or &lsquo;<samp><span class="samp">#</span></samp>&rsquo; will get a comma prepended, to keep them from being interpreted
-by Org as outline nodes or special comments.  These commas will be striped
+by Org as outline nodes or special comments.  These commas will be stripped
 for editing with <kbd>C-c '</kbd>, and also for export.</p>
 
    <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> You may select a different-mode with the

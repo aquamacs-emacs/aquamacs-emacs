@@ -9,7 +9,8 @@
 <link rel="prev" href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations" title="Solving Systems of Equations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+This file documents Calc, the GNU Emacs calculator, included with
+GNU Emacs {No value for `EMACSVER'}.
 
 Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -51,7 +52,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Solving-Equations.html#Solving-Equation
 
 <h4 class="subsection">11.6.3 Decomposing Polynomials</h4>
 
-<p class="noindent"><a name="index-poly-1772"></a>The <code>poly</code> function takes a polynomial and a variable as
+<p class="noindent"><a name="index-poly-1777"></a>The <code>poly</code> function takes a polynomial and a variable as
 arguments, and returns a vector of polynomial coefficients (constant
 coefficient first).  For example, &lsquo;<samp><span class="samp">poly(x^3 + 2 x, x)</span></samp>&rsquo; returns
 &lsquo;<samp><span class="samp">[0, 2, 0, 1]</span></samp>&rsquo;.  If the input is not a polynomial in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;,
@@ -64,13 +65,13 @@ note that &lsquo;<samp><span class="samp">poly(0, x)</span></samp>&rsquo; return
 Note also that &lsquo;<samp><span class="samp">x</span></samp>&rsquo; may actually be any formula; for example,
 &lsquo;<samp><span class="samp">poly(sin(x)^2 - sin(x) + 3, sin(x))</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">[3, -1, 1]</span></samp>&rsquo;.
 
-   <p><a name="index-Coefficients-of-polynomial-1773"></a><a name="index-Degree-of-polynomial-1774"></a>To get the &lsquo;<samp><span class="samp">x^k</span></samp>&rsquo; coefficient of polynomial &lsquo;<samp><span class="samp">p</span></samp>&rsquo;, use
+   <p><a name="index-Coefficients-of-polynomial-1778"></a><a name="index-Degree-of-polynomial-1779"></a>To get the &lsquo;<samp><span class="samp">x^k</span></samp>&rsquo; coefficient of polynomial &lsquo;<samp><span class="samp">p</span></samp>&rsquo;, use
 &lsquo;<samp><span class="samp">poly(p, x)_(k+1)</span></samp>&rsquo;.  To get the degree of polynomial &lsquo;<samp><span class="samp">p</span></samp>&rsquo;,
 use &lsquo;<samp><span class="samp">vlen(poly(p, x)) - 1</span></samp>&rsquo;.  For example, &lsquo;<samp><span class="samp">poly((x+1)^4, x)</span></samp>&rsquo;
 returns &lsquo;<samp><span class="samp">[1, 4, 6, 4, 1]</span></samp>&rsquo;, so &lsquo;<samp><span class="samp">poly((x+1)^4, x)_(2+1)</span></samp>&rsquo;
 gives the &lsquo;<samp><span class="samp">x^2</span></samp>&rsquo; coefficient of this polynomial, 6.
 
-   <p><a name="index-gpoly-1775"></a>One important feature of the solver is its ability to recognize
+   <p><a name="index-gpoly-1780"></a>One important feature of the solver is its ability to recognize
 formulas which are &ldquo;essentially&rdquo; polynomials.  This ability is
 made available to the user through the <code>gpoly</code> function, which
 is used just like <code>poly</code>:  &lsquo;<samp><span class="samp">gpoly(</span><var>expr</var><span class="samp">, </span><var>var</var><span class="samp">)</span></samp>&rsquo;. 
@@ -117,7 +118,7 @@ can handle quartics and smaller polynomials, so it calls
 &lsquo;<samp><span class="samp">gpoly(</span><var>expr</var><span class="samp">, </span><var>var</var><span class="samp">, 4)</span></samp>&rsquo; to discover whether <var>expr</var>
 can be treated by its linear, quadratic, cubic, or quartic formulas.
 
-   <p><a name="index-pdeg-1776"></a>The <code>pdeg</code> function computes the degree of a polynomial;
+   <p><a name="index-pdeg-1781"></a>The <code>pdeg</code> function computes the degree of a polynomial;
 &lsquo;<samp><span class="samp">pdeg(p,x)</span></samp>&rsquo; is the highest power of <code>x</code> that appears in
 <code>p</code>.  This is the same as &lsquo;<samp><span class="samp">vlen(poly(p,x))-1</span></samp>&rsquo;, but is
 much more efficient.  If <code>p</code> is constant with respect to <code>x</code>,
@@ -130,13 +131,13 @@ that <code>pdeg(c) = pdeg(c,x) = 0</code> for any nonzero constant <code>c</code
 the degree of the constant zero is considered to be <code>-inf</code>
 (minus infinity).
 
-   <p><a name="index-plead-1777"></a>The <code>plead</code> function finds the leading term of a polynomial. 
+   <p><a name="index-plead-1782"></a>The <code>plead</code> function finds the leading term of a polynomial. 
 Thus &lsquo;<samp><span class="samp">plead(p,x)</span></samp>&rsquo; is equivalent to &lsquo;<samp><span class="samp">poly(p,x)_vlen(poly(p,x))</span></samp>&rsquo;,
 though again more efficient.  In particular, &lsquo;<samp><span class="samp">plead((2x+1)^10, x)</span></samp>&rsquo;
 returns 1024 without expanding out the list of coefficients.  The
 value of <code>plead(p,x)</code> will be zero only if &lsquo;<samp><span class="samp">p = 0</span></samp>&rsquo;.
 
-   <p><a name="index-pcont-1778"></a>The <code>pcont</code> function finds the <dfn>content</dfn> of a polynomial.  This
+   <p><a name="index-pcont-1783"></a>The <code>pcont</code> function finds the <dfn>content</dfn> of a polynomial.  This
 is the greatest common divisor of all the coefficients of the polynomial. 
 With two arguments, <code>pcont(p,x)</code> effectively uses &lsquo;<samp><span class="samp">poly(p,x)</span></samp>&rsquo;
 to get a list of coefficients, then uses <code>pgcd</code> (the polynomial
@@ -157,7 +158,7 @@ denominators, as well as dividing by any common content in the
 numerators.  The numerical content of a polynomial is negative only
 if all the coefficients in the polynomial are negative.
 
-   <p><a name="index-pprim-1779"></a>The <code>pprim</code> function finds the <dfn>primitive part</dfn> of a
+   <p><a name="index-pprim-1784"></a>The <code>pprim</code> function finds the <dfn>primitive part</dfn> of a
 polynomial, which is simply the polynomial divided (using <code>pdiv</code>
 if necessary) by its content.  If the input polynomial has rational
 coefficients, the result will have integer coefficients in simplest

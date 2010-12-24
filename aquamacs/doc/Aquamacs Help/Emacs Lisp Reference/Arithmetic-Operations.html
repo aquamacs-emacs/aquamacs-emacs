@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 
 <h3 class="section">3.6 Arithmetic Operations</h3>
 
-<p><a name="index-arithmetic-operations-173"></a>
+<p><a name="index-arithmetic-operations-175"></a>
   Emacs Lisp provides the traditional four arithmetic operations:
 addition, subtraction, multiplication, and division.  Remainder and modulus
 functions supplement the division functions.  The functions to
@@ -61,7 +61,7 @@ do not check for overflow.  Thus <code>(1+ 268435455)</code> may evaluate to
 &minus;268435456, depending on your hardware.
 
 <div class="defun">
-&mdash; Function: <b>1+</b><var> number-or-marker<a name="index-g_t1_002b-174"></a></var><br>
+&mdash; Function: <b>1+</b><var> number-or-marker<a name="index-g_t1_002b-176"></a></var><br>
 <blockquote><p>This function returns <var>number-or-marker</var> plus 1. 
 For example,
 
@@ -85,12 +85,12 @@ like this:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>1-</b><var> number-or-marker<a name="index-g_t1_002d-175"></a></var><br>
+&mdash; Function: <b>1-</b><var> number-or-marker<a name="index-g_t1_002d-177"></a></var><br>
 <blockquote><p>This function returns <var>number-or-marker</var> minus 1. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>+</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002b-176"></a></var><br>
+&mdash; Function: <b>+</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002b-178"></a></var><br>
 <blockquote><p>This function adds its arguments together.  When given no arguments,
 <code>+</code> returns 0.
 
@@ -104,7 +104,7 @@ like this:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>-</b><var> &amp;optional number-or-marker &amp;rest more-numbers-or-markers<a name="index-g_t_002d-177"></a></var><br>
+&mdash; Function: <b>-</b><var> &amp;optional number-or-marker &amp;rest more-numbers-or-markers<a name="index-g_t_002d-179"></a></var><br>
 <blockquote><p>The <code>-</code> function serves two purposes: negation and subtraction. 
 When <code>-</code> has a single argument, the value is the negative of the
 argument.  When there are multiple arguments, <code>-</code> subtracts each of
@@ -121,7 +121,7 @@ cumulatively.  If there are no arguments, the result is 0.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>*</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002a-178"></a></var><br>
+&mdash; Function: <b>*</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002a-180"></a></var><br>
 <blockquote><p>This function multiplies its arguments together, and returns the
 product.  When given no arguments, <code>*</code> returns 1.
 
@@ -135,7 +135,7 @@ product.  When given no arguments, <code>*</code> returns 1.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>/</b><var> dividend divisor &amp;rest divisors<a name="index-g_t_002f-179"></a></var><br>
+&mdash; Function: <b>/</b><var> dividend divisor &amp;rest divisors<a name="index-g_t_002f-181"></a></var><br>
 <blockquote><p>This function divides <var>dividend</var> by <var>divisor</var> and returns the
 quotient.  If there are additional arguments <var>divisors</var>, then it
 divides <var>dividend</var> by each divisor in turn.  Each argument may be a
@@ -149,7 +149,7 @@ differently with negative arguments.  This is because the Lisp function
 permits machine-dependent rounding.  As a practical matter, all known
 machines round in the standard fashion.
 
-        <p><a name="index-g_t_0040code_007barith_002derror_007d-in-division-180"></a>If you divide an integer by 0, an <code>arith-error</code> error is signaled. 
+        <p><a name="index-g_t_0040code_007barith_002derror_007d-in-division-182"></a>If you divide an integer by 0, an <code>arith-error</code> error is signaled. 
 (See <a href="Errors.html#Errors">Errors</a>.)  Floating point division by zero returns either
 infinity or a NaN if your machine supports <acronym>IEEE</acronym> floating point;
 otherwise, it signals an <code>arith-error</code> error.
@@ -172,8 +172,8 @@ otherwise, it signals an <code>arith-error</code> error.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>%</b><var> dividend divisor<a name="index-g_t_0025-181"></a></var><br>
-<blockquote><p><a name="index-remainder-182"></a>This function returns the integer remainder after division of <var>dividend</var>
+&mdash; Function: <b>%</b><var> dividend divisor<a name="index-g_t_0025-183"></a></var><br>
+<blockquote><p><a name="index-remainder-184"></a>This function returns the integer remainder after division of <var>dividend</var>
 by <var>divisor</var>.  The arguments must be integers or markers.
 
         <p>For negative arguments, the remainder is in principle machine-dependent
@@ -199,8 +199,8 @@ since the quotient is; but in practice, all known machines behave alike.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>mod</b><var> dividend divisor<a name="index-mod-183"></a></var><br>
-<blockquote><p><a name="index-modulus-184"></a>This function returns the value of <var>dividend</var> modulo <var>divisor</var>;
+&mdash; Function: <b>mod</b><var> dividend divisor<a name="index-mod-185"></a></var><br>
+<blockquote><p><a name="index-modulus-186"></a>This function returns the value of <var>dividend</var> modulo <var>divisor</var>;
 in other words, the remainder after division of <var>dividend</var>
 by <var>divisor</var>, but with the same sign as <var>divisor</var>. 
 The arguments must be numbers or markers.

@@ -97,10 +97,6 @@ or 2 to connect to the remote host.  (You can also specify in
 <samp><span class="file">~/.ssh/config</span></samp>, the SSH configuration file, which protocol
 should be used, and use the regular <samp><span class="option">ssh</span></samp> method.)
 
-     <p>Two other variants, <samp><span class="option">ssh1_old</span></samp> and <samp><span class="option">ssh2_old</span></samp>, use the
-<samp><span class="command">ssh1</span></samp> and <samp><span class="command">ssh2</span></samp> commands explicitly.  If you don't
-know what these are, you do not need these options.
-
      <p>All the methods based on <samp><span class="command">ssh</span></samp> have an additional feature: you
 can specify a host name which looks like <samp><span class="file">host#42</span></samp> (the real host
 name, then a hash sign, then a port number).  This means to connect to
@@ -156,7 +152,10 @@ to not print any shell prompt, which confuses <span class="sc">tramp</span> migh
 This method is also similar to <samp><span class="option">ssh</span></samp>.  It only uses the
 <samp><span class="command">krlogin -x</span></samp> command to log in to the remote host.
 
-     <br><dt><samp><span class="option">plink</span></samp><dd><a name="index-method-plink-35"></a><a name="index-plink-method-36"></a>
+     <br><dt><samp><span class="option">ksu</span></samp><dd><a name="index-method-ksu-35"></a><a name="index-ksu-method-36"></a><a name="index-Kerberos-_0028with-ksu-method_0029-37"></a>
+This is another method from the Kerberos suite.  It behaves like <samp><span class="option">su</span></samp>.
+
+     <br><dt><samp><span class="option">plink</span></samp><dd><a name="index-method-plink-38"></a><a name="index-plink-method-39"></a>
 This method is mostly interesting for Windows users using the PuTTY
 implementation of SSH.  It uses &lsquo;<samp><span class="samp">plink -ssh</span></samp>&rsquo; to log in to the
 remote host.
@@ -173,21 +172,12 @@ line to accept the SSH key?  Maybe this can be made automatic?
      <p>CCC: Say something about the first shell command failing.  This might
 be due to a wrong setting of <code>tramp-rsh-end-of-line</code>.
 
-     <br><dt><samp><span class="option">plinkx</span></samp><dd><a name="index-method-plinkx-37"></a><a name="index-plinkx-method-38"></a>
+     <br><dt><samp><span class="option">plinkx</span></samp><dd><a name="index-method-plinkx-40"></a><a name="index-plinkx-method-41"></a>
 Another method using PuTTY on Windows.  Instead of host names, it
 expects PuTTY session names, calling &lsquo;<samp><span class="samp">plink -load </span><var>session</var><span class="samp">
 -t"</span></samp>&rsquo;.  User names are relevant only in case the corresponding session
 hasn't defined a user name.  Different port numbers must be defined in
 the session.
-
-     <br><dt><samp><span class="option">fish</span></samp><dd><a name="index-method-fish-39"></a><a name="index-fish-method-40"></a>
-This is an experimental implementation of the fish protocol, known from
-the GNU Midnight Commander or the KDE Konqueror.  <span class="sc">tramp</span> expects
-the fish server implementation from the KDE kioslave.  That means, the
-file <samp><span class="file">~/.fishsrv.pl</span></samp> is expected to reside on the remote host.
-
-     <p>The implementation lacks good performance.  The code is offered anyway,
-maybe somebody can improve the performance.
 
    </dl>
 

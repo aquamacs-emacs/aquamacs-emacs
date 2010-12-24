@@ -10,9 +10,10 @@
 <link rel="next" href="Search-options.html#Search-options" title="Search options">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,23 +58,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinks.html#Hyperlinks">Hyperlinks<
 
 <h3 class="section">4.6 Link abbreviations</h3>
 
-<p><a name="index-link-abbreviations-343"></a><a name="index-abbreviation_002c-links-344"></a>
+<p><a name="index-link-abbreviations-469"></a><a name="index-abbreviation_002c-links-470"></a>
 Long URLs can be cumbersome to type, and often many similar links are
 needed in a document.  For this you can use link abbreviations.  An
 abbreviated link looks like this
 
 <pre class="example">     [[linkword:tag][description]]
 </pre>
-   <p class="noindent"><a name="index-org_002dlink_002dabbrev_002dalist-345"></a>where the tag is optional.  The <i>linkword</i> must be a word; letter, numbers,
-&lsquo;<samp><span class="samp">-</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">_</span></samp>&rsquo; are allowed here.  Abbreviations are resolved
+   <p class="noindent"><a name="index-org_002dlink_002dabbrev_002dalist-471"></a>where the tag is optional. 
+The <i>linkword</i> must be a word, starting with a letter, followed by
+letters, numbers, &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">_</span></samp>&rsquo;.  Abbreviations are resolved
 according to the information in the variable <code>org-link-abbrev-alist</code>
 that relates the linkwords to replacement text.  Here is an example:
 
-<pre class="lisp">     (setq org-link-abbrev-alist
+<pre class="smalllisp">     (setq org-link-abbrev-alist
        '(("bugzilla" . "http://10.1.2.9/bugzilla/show_bug.cgi?id=")
          ("google"   . "http://www.google.com/search?q=")
-         ("ads"      . "http://adsabs.harvard.edu/cgi-bin/
-                        nph-abs_connect?author=%s&amp;db_key=AST")))
+         ("gmap"     . "http://maps.google.com/maps?q=%s")
+         ("omap"     . "http://nominatim.openstreetmap.org/search?q=%s&amp;polygon=1")
+         ("ads"      . "http://adsabs.harvard.edu/cgi-bin/nph-abs_connect?author=%s&amp;db_key=AST")))
 </pre>
    <p>If the replacement text contains the string &lsquo;<samp><span class="samp">%s</span></samp>&rsquo;, it will be
 replaced with the tag.  Otherwise the tag will be appended to the string
@@ -82,13 +85,16 @@ be called with the tag as the only argument to create the link.
 
    <p>With the above setting, you could link to a specific bug with
 <code>[[bugzilla:129]]</code>, search the web for &lsquo;<samp><span class="samp">OrgMode</span></samp>&rsquo; with
-<code>[[google:OrgMode]]</code> and find out what the Org author is
-doing besides Emacs hacking with <code>[[ads:Dominik,C]]</code>.
+<code>[[google:OrgMode]]</code>, show the map location of the Free Software
+Foundation <code>[[gmap:51 Franklin Street, Boston]]</code> or of Carsten office
+<code>[[omap:Science Park 904, Amsterdam, The Netherlands]]</code> and find out
+what the Org author is doing besides Emacs hacking with
+<code>[[ads:Dominik,C]]</code>.
 
    <p>If you need special abbreviations just for a single Org buffer, you
 can define them in the file with
 
-   <p><a name="index-g_t_0023_002bLINK-346"></a>
+   <p><a name="index-g_t_0023_002bLINK-472"></a>
 <pre class="example">     #+LINK: bugzilla  http://10.1.2.9/bugzilla/show_bug.cgi?id=
      #+LINK: google    http://www.google.com/search?q=%s
 </pre>

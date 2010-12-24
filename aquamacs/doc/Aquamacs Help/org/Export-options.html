@@ -10,9 +10,10 @@
 <link rel="next" href="The-export-dispatcher.html#The-export-dispatcher" title="The export dispatcher">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This manual is for Org version 6.33x.
+This manual is for Org version 7.4.
 
-Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,8 +58,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Exporting.html#Exporting">Exporting</a>
 
 <h3 class="section">12.2 Export options</h3>
 
-<p><a name="index-options_002c-for-export-1028"></a>
-<a name="index-completion_002c-of-option-keywords-1029"></a>The exporter recognizes special lines in the buffer which provide
+<p><a name="index-options_002c-for-export-1390"></a>
+<a name="index-completion_002c-of-option-keywords-1391"></a>The exporter recognizes special lines in the buffer which provide
 additional information.  These lines may be put anywhere in the file. 
 The whole set of lines can be inserted into the buffer with <kbd>C-c
 C-e t</kbd>.  For individual lines, a good way to make sure the keyword is
@@ -69,14 +70,16 @@ In particular, note that you can place commonly-used (export) options in
 a separate file which can be included using <code>#+SETUPFILE</code>.
 
      
-<a name="index-C_002dc-C_002de-t-1030"></a>
-<dl><dt><kbd>C-c C-e t</kbd><dd>Insert template with export options, see example below. 
+<a name="index-C_002dc-C_002de-t-1392"></a>
+<a name="index-org_002dinsert_002dexport_002doptions_002dtemplate-1393"></a>
+<dl><dt><kbd>C-c C-e t &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-insert-export-options-template</code><kbd>)</kbd><dd>
+Insert template with export options, see example below. 
 </dl>
 
-   <p><a name="index-g_t_0023_002bTITLE-1031"></a><a name="index-g_t_0023_002bAUTHOR-1032"></a><a name="index-g_t_0023_002bDATE-1033"></a><a name="index-g_t_0023_002bEMAIL-1034"></a><a name="index-g_t_0023_002bDESCRIPTION-1035"></a><a name="index-g_t_0023_002bKEYWORDS-1036"></a><a name="index-g_t_0023_002bLANGUAGE-1037"></a><a name="index-g_t_0023_002bTEXT-1038"></a><a name="index-g_t_0023_002bOPTIONS-1039"></a><a name="index-g_t_0023_002bBIND-1040"></a><a name="index-g_t_0023_002bLINK_005fUP-1041"></a><a name="index-g_t_0023_002bLINK_005fHOME-1042"></a><a name="index-g_t_0023_002bEXPORT_005fSELECT_005fTAGS-1043"></a><a name="index-g_t_0023_002bEXPORT_005fEXCLUDE_005fTAGS-1044"></a><a name="index-g_t_0023_002bLATEX_005fHEADER-1045"></a><a name="index-user_002dfull_002dname-1046"></a><a name="index-user_002dmail_002daddress-1047"></a><a name="index-org_002dexport_002ddefault_002dlanguage-1048"></a>
+   <p><a name="index-g_t_0023_002bTITLE-1394"></a><a name="index-g_t_0023_002bAUTHOR-1395"></a><a name="index-g_t_0023_002bDATE-1396"></a><a name="index-g_t_0023_002bEMAIL-1397"></a><a name="index-g_t_0023_002bDESCRIPTION-1398"></a><a name="index-g_t_0023_002bKEYWORDS-1399"></a><a name="index-g_t_0023_002bLANGUAGE-1400"></a><a name="index-g_t_0023_002bTEXT-1401"></a><a name="index-g_t_0023_002bOPTIONS-1402"></a><a name="index-g_t_0023_002bBIND-1403"></a><a name="index-g_t_0023_002bLINK_005fUP-1404"></a><a name="index-g_t_0023_002bLINK_005fHOME-1405"></a><a name="index-g_t_0023_002bEXPORT_005fSELECT_005fTAGS-1406"></a><a name="index-g_t_0023_002bEXPORT_005fEXCLUDE_005fTAGS-1407"></a><a name="index-g_t_0023_002bXSLT-1408"></a><a name="index-g_t_0023_002bLATEX_005fHEADER-1409"></a><a name="index-user_002dfull_002dname-1410"></a><a name="index-user_002dmail_002daddress-1411"></a><a name="index-org_002dexport_002ddefault_002dlanguage-1412"></a>
 <pre class="example">     #+TITLE:       the title to be shown (default is the buffer name)
      #+AUTHOR:      the author (default taken from <code>user-full-name</code>)
-     #+DATE:        a date, fixed, of a format string for <code>format-time-string</code>
+     #+DATE:        a date, fixed, or a format string for <code>format-time-string</code>
      #+EMAIL:       his/her email address (default from <code>user-mail-address</code>)
      #+DESCRIPTION: the page description, e.g. for the XHTML meta tag
      #+KEYWORDS:    the page keywords, e.g. for the XHTML meta tag
@@ -91,14 +94,15 @@ a separate file which can be included using <code>#+SETUPFILE</code>.
      #+LATEX_HEADER: extra line(s) for the LaTeX header, like \usepackage{xyz}
      #+EXPORT_SELECT_TAGS:   Tags that select a tree for export
      #+EXPORT_EXCLUDE_TAGS:  Tags that exclude a tree from export
+     #+XSLT:        the XSLT stylesheet used by DocBook exporter to generate FO file
 </pre>
-   <p class="noindent">The OPTIONS line is a compact<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> form to specify export settings.  Here
-you can:
-<a name="index-headline-levels-1049"></a><a name="index-section_002dnumbers-1050"></a><a name="index-table-of-contents-1051"></a><a name="index-line_002dbreak-preservation-1052"></a><a name="index-quoted-HTML-tags-1053"></a><a name="index-fixed_002dwidth-sections-1054"></a><a name="index-tables-1055"></a><a name="index-g_t_0040TeX_007b_007d_002dlike-syntax-for-sub_002d-and-superscripts-1056"></a><a name="index-footnotes-1057"></a><a name="index-special-strings-1058"></a><a name="index-emphasized-text-1059"></a><a name="index-g_t_0040TeX_007b_007d-macros-1060"></a><a name="index-La_0040TeX_007b_007d-fragments-1061"></a><a name="index-author-info_002c-in-export-1062"></a><a name="index-time-info_002c-in-export-1063"></a>
+   <p class="noindent">The OPTIONS line is a compact<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> form to specify export
+settings.  Here you can:
+<a name="index-headline-levels-1413"></a><a name="index-section_002dnumbers-1414"></a><a name="index-table-of-contents-1415"></a><a name="index-line_002dbreak-preservation-1416"></a><a name="index-quoted-HTML-tags-1417"></a><a name="index-fixed_002dwidth-sections-1418"></a><a name="index-tables-1419"></a><a name="index-g_t_0040TeX_007b_007d_002dlike-syntax-for-sub_002d-and-superscripts-1420"></a><a name="index-footnotes-1421"></a><a name="index-special-strings-1422"></a><a name="index-emphasized-text-1423"></a><a name="index-g_t_0040TeX_007b_007d-macros-1424"></a><a name="index-g_t_0040LaTeX_007b_007d-fragments-1425"></a><a name="index-author-info_002c-in-export-1426"></a><a name="index-time-info_002c-in-export-1427"></a>
 <pre class="example">     H:         <span class="roman">set the number of headline levels for export</span>
      num:       <span class="roman">turn on/off section-numbers</span>
      toc:       <span class="roman">turn on/off table of contents, or set level limit (integer)</span>
-     \n:        <span class="roman">turn on/off line-break-preservation</span>
+     \n:        <span class="roman">turn on/off line-break-preservation (DOES NOT WORK)</span>
      @:         <span class="roman">turn on/off quoted HTML tags</span>
      ::         <span class="roman">turn on/off fixed-width sections</span>
      |:         <span class="roman">turn on/off tables</span>
@@ -113,16 +117,19 @@ you can:
      &lt;:         <span class="roman">turn on/off inclusion of any time/date stamps like DEADLINES</span>
      *:         <span class="roman">turn on/off emphasized text (bold, italic, underlined)</span>
      TeX:       <span class="roman">turn on/off simple TeX macros in plain text</span>
-     LaTeX:     <span class="roman">turn on/off LaTeX fragments</span>
+     LaTeX:     <span class="roman">configure export of LaTeX fragments.  Default </span><code>auto</code>
      skip:      <span class="roman">turn on/off skipping the text before the first heading</span>
      author:    <span class="roman">turn on/off inclusion of author name/email into exported file</span>
+     email:     <span class="roman">turn on/off inclusion of author email into exported file</span>
      creator:   <span class="roman">turn on/off inclusion of creator info into exported file</span>
      timestamp: <span class="roman">turn on/off inclusion creation time into exported file</span>
      d:         <span class="roman">turn on/off inclusion of drawers</span>
 </pre>
-   <p class="noindent">These options take effect in both the HTML and LaTeX export, except
-for <code>TeX</code> and <code>LaTeX</code>, which are respectively <code>t</code> and
-<code>nil</code> for the LaTeX export.
+   <p class="noindent">These options take effect in both the HTML and LaTeX export, except for
+<code>TeX</code> and <code>LaTeX</code>, which are respectively <code>t</code> and <code>nil</code>
+for the LaTeX export.  The default values for these and many other options
+are given by a set of variables.  For a list of such variables, the
+corresponding OPTIONS keys and also the publishing keys (see <a href="Project-alist.html#Project-alist">Project alist</a>), see the constant <code>org-export-plist-vars</code>.
 
    <p>When exporting only a single subtree by selecting it with <kbd>C-c @</kbd> before
 calling an export command, the subtree can overrule some of the file's export

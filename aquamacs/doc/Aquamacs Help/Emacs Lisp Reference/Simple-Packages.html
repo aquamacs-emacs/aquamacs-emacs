@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Simple Packages - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Packaging.html#Packaging" title="Packaging">
+<link rel="prev" href="Packaging-Basics.html#Packaging-Basics" title="Packaging Basics">
+<link rel="next" href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" title="Multi-file Packages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Simple-Packages"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multi_002dfile-Packages.html#Multi_002dfile-Packages">Multi-file Packages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Packaging.html#Packaging">Packaging</a>
+<hr>
+</div>
+
+<h3 class="section">40.2 Simple Packages</h3>
+
+<p><a name="index-single-file-packages-3913"></a>
+  The simplest package consists of a single Emacs Lisp source file. 
+In this case, all the attributes of the package (see <a href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>) are taken from this file.
+
+   <p>The package system expects this <samp><span class="file">.el</span></samp> file to conform to the
+Emacs Lisp library header conventions.  See <a href="Library-Headers.html#Library-Headers">Library Headers</a>.
+
+   <p>The name of the package is the same as the base name of the
+<samp><span class="file">.el</span></samp> file, as written in the first comment line.  For example,
+given the header line:
+
+<pre class="smallexample">     ;;; superfrobnicator.el --- frobnicate and bifurcate flanges
+</pre>
+   <p>the package name will be &lsquo;<samp><span class="samp">superfrobnicator</span></samp>&rsquo;.
+
+   <p>The short description of the package is also taken from the first
+line of the file.
+
+   <p>If the file has a &ldquo;Commentary&rdquo; header, then it is used as the long
+description.
+
+   <p>The version of the package comes either from the &ldquo;Package-Version&rdquo;
+header, if it exists, or from the &ldquo;Version&rdquo; header.  A package is
+required to have a version number.  Each release of a package must be
+accompanied by an increase in the version number.
+
+   <p>If the file has a &ldquo;Package-Requires&rdquo; header, then that is used as
+the package dependencies.  Otherwise, the package is assumed not to
+have any dependencies.
+
+   <p>A single-file package cannot have an Info manual.
+
+   <p>The file will be scanned for autoload cookies at install time. 
+See <a href="Autoload.html#Autoload">Autoload</a>.
+
+   </body></html>
+

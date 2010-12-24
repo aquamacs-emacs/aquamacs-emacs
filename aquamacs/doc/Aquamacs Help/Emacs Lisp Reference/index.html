@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>GNU Emacs Lisp Reference Manual</title>
-<META NAME="AppleTitle" content="Emacs Lisp Reference (23.2.50)">
+<META NAME="AppleTitle" content="Emacs Lisp Reference (24.0.50)">
 <META NAME="AppleFont" content="Lucida Grande,Helvetica">
 
 <meta http-equiv="Content-Type" content="text/html">
@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -35,7 +35,7 @@ Foundation, Inc.
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body><a name="EmacsLispReferenceIndex"></a> <a name="index"></a><h1>GNU Emacs Lisp Reference</h1> <address>Free Software Foundation</address>
-<address>last updated October 03, 2010</address>
+<address>last updated December 23, 2010</address>
 <p> 
 	<img src="gnu-head-sm.jpg"
 	alt=" [image of the head of a GNU] "
@@ -53,7 +53,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
 <h2 class="unnumbered">Emacs Lisp</h2>
 
 <p>This is edition 3.0 of the GNU Emacs Lisp Reference Manual,<br>
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
    <p>Copyright &copy; 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -129,6 +129,8 @@ developing GNU and promoting software freedom.&rdquo;
 <li><a href="System-Interface.html#System-Interface">System Interface</a>:         Getting the user id, system type, environment
                               variables, and other such things.
 
+<li><a href="Packaging.html#Packaging">Packaging</a>:                Preparing Lisp code for distribution.
+
 </li></ul>
 <p>Appendices
 
@@ -146,7 +148,7 @@ developing GNU and promoting software freedom.&rdquo;
 <li><a href="Standard-Keymaps.html#Standard-Keymaps">Standard Keymaps</a>:         List of standard keymaps. 
 <li><a href="Standard-Hooks.html#Standard-Hooks">Standard Hooks</a>:           List of standard hook variables.
 
-<li><a href="General_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fIndex.html#General_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fIndex">General_General_General_General_General_General_General_General_General_Index</a>:                    General_General_General_General_General_General_General_General_General_Index including concepts, functions, variables,
+<li><a href="General_005fGeneral_005fGeneral_005fGeneral_005fIndex.html#General_005fGeneral_005fGeneral_005fGeneral_005fIndex">General_General_General_General_Index</a>:                    General_General_General_General_Index including concepts, functions, variables,
                               and other terms.
 
 <!-- Do NOT modify the following 3 lines!  They must have this form to -->
@@ -1674,6 +1676,15 @@ mentioned here so you can get to them in one step:
                               X Session Management.
 
 </li></ul>
+<p>Preparing Lisp code for distribution
+
+</p>
+<ul class="menu">
+<li><a href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>:         The basic concepts of Emacs Lisp packages. 
+<li><a href="Simple-Packages.html#Simple-Packages">Simple Packages</a>:          How to package a single .el file. 
+<li><a href="Multi_002dfile-Packages.html#Multi_002dfile-Packages">Multi-file Packages</a>:      How to package multiple files.
+
+</li></ul>
 <p>Starting Up Emacs
 
 </p>
@@ -1786,6 +1797,7 @@ mentioned here so you can get to them in one step:
 <li><a href="index.html#toc_Processes">37 Processes</a></li>
 <li><a href="index.html#toc_Display">38 Emacs Display</a></li>
 <li><a href="index.html#toc_System-Interface">39 Operating System Interface</a></li>
+<li><a href="index.html#toc_Packaging">40 Preparing Lisp code for distribution</a></li>
 <li><a href="index.html#toc_Antinews">Appendix A Emacs 22 Antinews</a></li>
 <li><a href="index.html#toc_GNU-Free-Documentation-License">Appendix B GNU Free Documentation License</a></li>
 <li><a href="index.html#toc_GPL">Appendix C GNU General Public License</a></li>
@@ -1795,7 +1807,7 @@ mentioned here so you can get to them in one step:
 <li><a href="index.html#toc_Standard-Buffer_002dLocal-Variables">Appendix G Buffer-Local Variables</a></li>
 <li><a href="index.html#toc_Standard-Keymaps">Appendix H Standard Keymaps</a></li>
 <li><a href="index.html#toc_Standard-Hooks">Appendix I Standard Hooks</a></li>
-<li><a href="index.html#toc_General_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fIndex">General_General_General_General_General_General_General_General_General_Index</a></li>
+<li><a href="index.html#toc_General_005fGeneral_005fGeneral_005fGeneral_005fIndex">General_General_General_General_Index</a></li>
 </ul>
 </div>
 
@@ -2342,7 +2354,21 @@ mentioned here so you can get to them in one step:
 <li><a href="Region-to-Fontify.html#Region-to-Fontify">23.6.10.2 Region to Fontify after a Buffer Change</a>
 </li></ul>
 </li></ul>
-<li><a href="Desktop-Save-Mode.html#Desktop-Save-Mode">23.7 Desktop Save Mode</a>
+<li><a href="Auto_002dIndentation.html#Auto_002dIndentation">23.7 Auto-indention of code</a>
+<ul>
+<li><a href="SMIE.html#SMIE">23.7.1 Simple Minded Indentation Engine</a>
+<ul>
+<li><a href="SMIE-setup.html#SMIE-setup">23.7.1.1 SMIE Setup and Features</a>
+<li><a href="Operator-Precedence-Grammars.html#Operator-Precedence-Grammars">23.7.1.2 Operator Precedence Grammars</a>
+<li><a href="SMIE-Grammar.html#SMIE-Grammar">23.7.1.3 Defining the Grammar of a Language</a>
+<li><a href="SMIE-Lexer.html#SMIE-Lexer">23.7.1.4 Defining Tokens</a>
+<li><a href="SMIE-Tricks.html#SMIE-Tricks">23.7.1.5 Living With a Weak Parser</a>
+<li><a href="SMIE-Indentation.html#SMIE-Indentation">23.7.1.6 Specifying Indentation Rules</a>
+<li><a href="SMIE-Indentation-Helpers.html#SMIE-Indentation-Helpers">23.7.1.7 Helper Functions for Indentation Rules</a>
+<li><a href="SMIE-Indentation-Example.html#SMIE-Indentation-Example">23.7.1.8 Sample Indentation Rules</a>
+</li></ul>
+</li></ul>
+<li><a href="Desktop-Save-Mode.html#Desktop-Save-Mode">23.8 Desktop Save Mode</a>
 </li></ul>
 <li><a name="toc_Documentation" href="Documentation.html#Documentation">24 Documentation</a>
 <ul>
@@ -2569,8 +2595,9 @@ mentioned here so you can get to them in one step:
 <li><a href="Transposition.html#Transposition">32.22 Transposition of Text</a>
 <li><a href="Base-64.html#Base-64">32.23 Base 64 Encoding</a>
 <li><a href="MD5-Checksum.html#MD5-Checksum">32.24 MD5 Checksum</a>
-<li><a href="Atomic-Changes.html#Atomic-Changes">32.25 Atomic Change Groups</a>
-<li><a href="Change-Hooks.html#Change-Hooks">32.26 Change Hooks</a>
+<li><a href="Parsing-HTML.html#Parsing-HTML">32.25 Parsing HTML</a>
+<li><a href="Atomic-Changes.html#Atomic-Changes">32.26 Atomic Change Groups</a>
+<li><a href="Change-Hooks.html#Change-Hooks">32.27 Change Hooks</a>
 </li></ul>
 <li><a name="toc_Non_002dASCII-Characters" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">33 Non-<acronym>ASCII</acronym> Characters</a>
 <ul>
@@ -2767,10 +2794,11 @@ mentioned here so you can get to them in one step:
 <li><a href="GIF-Images.html#GIF-Images">38.16.5 GIF Images</a>
 <li><a href="TIFF-Images.html#TIFF-Images">38.16.6 TIFF Images</a>
 <li><a href="PostScript-Images.html#PostScript-Images">38.16.7 PostScript Images</a>
-<li><a href="Other-Image-Types.html#Other-Image-Types">38.16.8 Other Image Types</a>
-<li><a href="Defining-Images.html#Defining-Images">38.16.9 Defining Images</a>
-<li><a href="Showing-Images.html#Showing-Images">38.16.10 Showing Images</a>
-<li><a href="Image-Cache.html#Image-Cache">38.16.11 Image Cache</a>
+<li><a href="ImageMagick-Images.html#ImageMagick-Images">38.16.8 ImageMagick Images</a>
+<li><a href="Other-Image-Types.html#Other-Image-Types">38.16.9 Other Image Types</a>
+<li><a href="Defining-Images.html#Defining-Images">38.16.10 Defining Images</a>
+<li><a href="Showing-Images.html#Showing-Images">38.16.11 Showing Images</a>
+<li><a href="Image-Cache.html#Image-Cache">38.16.12 Image Cache</a>
 </li></ul>
 <li><a href="Buttons.html#Buttons">38.17 Buttons</a>
 <ul>
@@ -2829,6 +2857,13 @@ mentioned here so you can get to them in one step:
 <li><a href="X11-Keysyms.html#X11-Keysyms">39.15 Operating on X11 Keysyms</a>
 <li><a href="Batch-Mode.html#Batch-Mode">39.16 Batch Mode</a>
 <li><a href="Session-Management.html#Session-Management">39.17 Session Management</a>
+<li><a href="Dynamic-Libraries.html#Dynamic-Libraries">39.18 Dynamically Loaded Libraries</a>
+</li></ul>
+<li><a name="toc_Packaging" href="Packaging.html#Packaging">40 Preparing Lisp code for distribution</a>
+<ul>
+<li><a href="Packaging-Basics.html#Packaging-Basics">40.1 Packaging Basics</a>
+<li><a href="Simple-Packages.html#Simple-Packages">40.2 Simple Packages</a>
+<li><a href="Multi_002dfile-Packages.html#Multi_002dfile-Packages">40.3 Multi-file Packages</a>
 </li></ul>
 <li><a name="toc_Antinews" href="Antinews.html#Antinews">Appendix A Emacs 22 Antinews</a>
 <ul>
@@ -2865,7 +2900,7 @@ mentioned here so you can get to them in one step:
 <li><a name="toc_Standard-Buffer_002dLocal-Variables" href="Standard-Buffer_002dLocal-Variables.html#Standard-Buffer_002dLocal-Variables">Appendix G Buffer-Local Variables</a>
 <li><a name="toc_Standard-Keymaps" href="Standard-Keymaps.html#Standard-Keymaps">Appendix H Standard Keymaps</a>
 <li><a name="toc_Standard-Hooks" href="Standard-Hooks.html#Standard-Hooks">Appendix I Standard Hooks</a>
-<li><a name="toc_General_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fIndex" href="General_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fIndex.html#General_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fGeneral_005fIndex">General_General_General_General_General_General_General_General_General_Index</a>
+<li><a name="toc_General_005fGeneral_005fGeneral_005fGeneral_005fIndex" href="General_005fGeneral_005fGeneral_005fGeneral_005fIndex.html#General_005fGeneral_005fGeneral_005fGeneral_005fIndex">General_General_General_General_Index</a>
 </li></ul>
 </div>
 

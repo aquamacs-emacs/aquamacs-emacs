@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+<title>Template elements - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Capture-templates.html#Capture-templates" title="Capture templates">
+<link rel="prev" href="Capture-templates.html#Capture-templates" title="Capture templates">
+<link rel="next" href="Template-expansion.html#Template-expansion" title="Template expansion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 7.4.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Template-elements"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Template-expansion.html#Template-expansion">Template expansion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Capture-templates.html#Capture-templates">Capture templates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Capture-templates.html#Capture-templates">Capture templates</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">9.1.3.1 Template elements</h5>
+
+<p>Now lets look at the elements of a template definition.  Each entry in
+<code>org-capture-templates</code> is a list with the following items:
+
+     <dl>
+<dt><var>keys</var><dd>The keys that will select the template, as a string, characters
+only, for example <code>"a"</code> for a template to be selected with a
+single key, or <code>"bt"</code> for selection with two keys.  When using
+several keys, keys using the same prefix key must be sequential
+in the list and preceded by a 2-element entry explaining the
+prefix key, for example
+     <pre class="example">                   ("b" "Templates for marking stuff to buy")
+</pre>
+     <p class="noindent">If you do not define a template for the <kbd>C</kbd> key, this key will
+be used to open the customize buffer for this complex variable.
+
+     <br><dt><var>description</var><dd>A short string describing the template, which will be shown during
+selection.
+
+     <br><dt><var>type</var><dd>The type of entry, a symbol.  Valid values are:
+          <dl>
+<dt><code>entry</code><dd>An Org-mode node, with a headline. Will be filed as the child of the
+target entry or as a top-level entry.  The target file should be an Org-mode
+file. 
+<br><dt><code>item</code><dd>A plain list item, placed in the first plain  list at the target
+location.  Again the target file should be an Org file. 
+<br><dt><code>checkitem</code><dd>A checkbox item.  This only differs from the plain list item by the
+default template. 
+<br><dt><code>table-line</code><dd>a new line in the first table at the target location.  Where exactly the
+line will be inserted depends on the properties <code>:prepend</code> and
+<code>:table-line-pos</code> (see below). 
+<br><dt><code>plain</code><dd>Text to be inserted as it is. 
+</dl>
+
+     <br><dt><var>target</var><dd><a name="index-org_002ddefault_002dnotes_002dfile-897"></a>Specification of where the captured item should be placed.  In Org-mode
+files, targets usually define a node.  Entries will become children of this
+node.  Other types will be added to the table or list in the body of this
+node.  Most target specifications contain a file name.  If that file name is
+the empty string, it defaults to <code>org-default-notes-file</code>.
+
+     <p>Valid values are:
+          <dl>
+<dt><code>(file "path/to/file")</code><dd>Text will be placed at the beginning or end of that file.
+
+          <br><dt><code>(id "id of existing org entry")</code><dd>Filing as child of this entry, or in the body of the entry.
+
+          <br><dt><code>(file+headline "path/to/file" "node headline")</code><dd>Fast configuration if the target heading is unique in the file.
+
+          <br><dt><code>(file+olp "path/to/file" "Level 1 heading" "Level 2" ...)</code><dd>For non-unique headings, the full path is safer.
+
+          <br><dt><code>(file+regexp  "path/to/file" "regexp to find location")</code><dd>Use a regular expression to position the cursor.
+
+          <br><dt><code>(file+datetree "path/to/file")</code><dd>Will create a heading in a date tree for today's date.
+
+          <br><dt><code>(file+datetree+prompt "path/to/file")</code><dd>Will create a heading in a date tree, but will prompt for the date.
+
+          <br><dt><code>(file+function "path/to/file" function-finding-location)</code><dd>A function to find the right location in the file.
+
+          <br><dt><code>(clock)</code><dd>File to the entry that is currently being clocked.
+
+          <br><dt><code>(function function-finding-location)</code><dd>Most general way, write your own function to find both
+file and location. 
+</dl>
+
+     <br><dt><var>template</var><dd>The template for creating the capture item.  If you leave this empty, an
+appropriate default template will be used.  Otherwise this is a string with
+escape codes, which will be replaced depending on time and context of the
+capture call.  The string with escapes may be loaded from a template file,
+using the special syntax <code>(file "path/to/template")</code>.  See below for
+more details.
+
+     <br><dt><var>properties</var><dd>The rest of the entry is a property list of additional options. 
+Recognized properties are:
+          <dl>
+<dt><code>:prepend</code><dd>Normally new captured information will be appended at
+the target location (last child, last table line, last list item...). 
+Setting this property will change that.
+
+          <br><dt><code>:immediate-finish</code><dd>When set, do not offer to edit the information, just
+file it away immediately.  This makes sense if the template only needs
+information that can be added automatically.
+
+          <br><dt><code>:empty-lines</code><dd>Set this to the number of lines to insert
+before and after the new item.  Default 0, only common other value is 1.
+
+          <br><dt><code>:clock-in</code><dd>Start the clock in this item.
+
+          <br><dt><code>:clock-resume</code><dd>If starting the capture interrupted a clock, restart that clock when finished
+with the capture.
+
+          <br><dt><code>:unnarrowed</code><dd>Do not narrow the target buffer, simply show the full buffer.  Default is to
+narrow it so that you only see the new material.
+
+          <br><dt><code>:kill-buffer</code><dd>If the target file was not yet visited when capture was invoked, kill the
+buffer again after capture is completed. 
+</dl>
+     </dl>
+
+   </body></html>
+

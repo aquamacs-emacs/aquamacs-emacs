@@ -499,6 +499,8 @@ Specifies the major mode to be used for `new-empty-buffer'
 and `new-empty-buffer-other-frame'."
   :group 'Aquamacs)
 
+(defvar aquamacs--new-buffer-last-timestamp nil)
+(defvar aquamacs--new-buffer-timestamp-counter 0)
 (defun new-empty-buffer  (&optional other-frame mode)
   "Visits an empty buffer.
 The major mode is set to MODE, or, if that is nil,
@@ -520,6 +522,15 @@ the value of `aquamacs-default-major-mode'."
 	(select-frame-set-input-focus (window-frame (selected-window)))))
     (setq buffer-offer-save t)
     (put 'buffer-offer-save 'permanent-local t)
+    (let* ((ts (format-time-string "%d%H%MZ" nil t))
+	   (ts2 ts))
+      (if (equal ts2 aquamacs--new-buffer-last-timestamp)
+	  (setq ts2 (format "%s.%s" ts (incf aquamacs--new-buffer-timestamp-counter)))
+	(setq aquamacs--new-buffer-timestamp-counter 0))
+      (setq aquamacs--new-buffer-last-timestamp ts)
+      (setq aquamacs-untitled-buffer-creation-time ts2))
+    (if auto-save-default
+	(auto-save-mode t))
     (set-buffer-modified-p nil)))
 
 (defalias  'new-frame-with-new-scratch 'new-empty-buffer)

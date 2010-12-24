@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.50.
+corresponding to Emacs version 24.0.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.5 Defining Global Variables</h3>
 
-<p><a name="index-variable-definition-600"></a>
+<p><a name="index-variable-definition-601"></a>
   You may announce your intention to use a symbol as a global variable
 with a <dfn>variable definition</dfn>: a special form, either <code>defconst</code>
 or <code>defvar</code>.
@@ -68,7 +68,7 @@ declarations.  However, it does make a difference for initialization:
 <code>defvar</code> initializes it only if it is void.
 
 <div class="defun">
-&mdash; Special Form: <b>defvar</b><var> symbol </var>[<var>value </var>[<var>doc-string</var>]]<var><a name="index-defvar-601"></a></var><br>
+&mdash; Special Form: <b>defvar</b><var> symbol </var>[<var>value </var>[<var>doc-string</var>]]<var><a name="index-defvar-602"></a></var><br>
 <blockquote><p>This special form defines <var>symbol</var> as a variable and can also
 initialize and document it.  The definition informs a person reading
 your code that <var>symbol</var> is used as a variable that might be set or
@@ -144,10 +144,10 @@ if it were evaluated, but since it is not evaluated, there is no error.)
 at top level in a file where its value does not matter. 
 </p></blockquote></div>
 
-   <p><a name="index-constant-variables-602"></a>
+   <p><a name="index-constant-variables-603"></a>
 
 <div class="defun">
-&mdash; Special Form: <b>defconst</b><var> symbol value </var>[<var>doc-string</var>]<var><a name="index-defconst-603"></a></var><br>
+&mdash; Special Form: <b>defconst</b><var> symbol value </var>[<var>doc-string</var>]<var><a name="index-defconst-604"></a></var><br>
 <blockquote><p>This special form defines <var>symbol</var> as a value and initializes it. 
 It informs a person reading your code that <var>symbol</var> has a standard
 global value, established here, that should not be changed by the user
@@ -161,22 +161,24 @@ not the buffer-local value.  (But you should not be making
 buffer-local bindings for a symbol that is defined with
 <code>defconst</code>.)
 
-        <p>Here, <code>pi</code> is a constant that presumably ought not to be changed
-by anyone (attempts by the Indiana State Legislature notwithstanding). 
-As the second form illustrates, however, this is only advisory.
+        <p>An example of the use of <code>defconst</code> is Emacs' definition of
+<code>float-pi</code>&mdash;the mathematical constant pi, which ought not
+to be changed by anyone (attempts by the Indiana State Legislature
+notwithstanding).  As the second form illustrates, however,
+<code>defconst</code> is only advisory.
 
-     <pre class="example">          (defconst pi 3.1415 "Pi to five places.")
-               &rArr; pi
-          (setq pi 3)
-               &rArr; pi
-          pi
+     <pre class="example">          (defconst float-pi 3.141592653589793 "The value of Pi.")
+               &rArr; float-pi
+          (setq float-pi 3)
+               &rArr; float-pi
+          float-pi
                &rArr; 3
 </pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>user-variable-p</b><var> variable<a name="index-user_002dvariable_002dp-604"></a></var><br>
-<blockquote><p><a name="index-user-option-605"></a>This function returns <code>t</code> if <var>variable</var> is a user option&mdash;a
+&mdash; Function: <b>user-variable-p</b><var> variable<a name="index-user_002dvariable_002dp-605"></a></var><br>
+<blockquote><p><a name="index-user-option-606"></a>This function returns <code>t</code> if <var>variable</var> is a user option&mdash;a
 variable intended to be set by the user for customization&mdash;and
 <code>nil</code> otherwise.  (Variables other than user options exist for the
 internal purposes of Lisp programs, and users need not know about them.)
@@ -188,7 +190,7 @@ and is a string, and its first character is &lsquo;<samp><span class="samp">*</s
 is a user option.  Aliases of user options are also user options. 
 </p></blockquote></div>
 
-   <p><a name="index-variable_002dinteractive-606"></a>  If a user option variable has a <code>variable-interactive</code> property,
+   <p><a name="index-variable_002dinteractive-607"></a>  If a user option variable has a <code>variable-interactive</code> property,
 the <code>set-variable</code> command uses that value to control reading the
 new value for the variable.  The property's value is used as if it were
 specified in <code>interactive</code> (see <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>).  However,
