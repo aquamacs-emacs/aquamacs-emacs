@@ -74,11 +74,13 @@ Exclude internal buffers."
 
 (defun window-number-list ()
   "Return IDs of all windows as list of numbers."
-  (let (window-numbers)
-    (walk-windows
-     #'(lambda (window)
-	 (push (window-number window) window-numbers)) 'nomini t)
-    window-numbers))
+  (mapcar
+   (lambda (w)
+     (window-number w))
+   (apply 'nconc
+	  (mapcar (lambda (f)
+		    (window-list f 'nomini (frame-first-window f)))
+		  (frame-list)))))
 
 (defun tabbar-window-alist-update (window)
   "Update the list of windows and corresponding buffers to be
@@ -108,15 +110,27 @@ displayed buffer.  Result is an alist of alists."
 	(add-to-list 'tabbar-window-alist (cons wnumber (list bufpair)) t))))
   tabbar-window-alist)
 
+
+;; avoid use of walk-windows 
+;; incompatibility with ECB when called from some hook or
+;; as idle timer function
+(defmacro tabbar-walk-windows (fun)
+  `(mapc
+   ,fun
+   (apply 'nconc
+	  (mapcar (lambda (f)
+		    (window-list f 'nomini (frame-first-window f)))
+		  (frame-list)))))
+
 (defun window-number-get-window (wnumber)
   "Return window corresponding to ID number."
-  (let (window-id)
-    (walk-windows
-     #'(lambda (window)
-	 (when (eq wnumber (window-number window))
-	   (setq window-id window))) 'nomini t)
-    window-id))
-
+  (let (win)
+    (tabbar-walk-windows 
+     (lambda (w)
+       (if (= (window-number w) wnumber)
+	   (setq win w))))
+    win))
+    
 
 (defvar tabbar-display-bug-workaround nil
 "Should tabbar work around a display bug?
@@ -186,9 +200,10 @@ Return the current tabset, which corresponds to (selected-window)."
   ;; run tabbar-window-alist-update for all windows
   ;; could probably change this to only windows in current frame,
   ;; since modified frame is active for 'window-configuration-change-hook
-  (walk-windows 'tabbar-window-alist-update 'nomini t)
+  (tabbar-walk-windows 'tabbar-window-alist-update)
+  ;; (walk-windows 'tabbar-window-alist-update 'nomini t)
   ;; run tabbar-window-alist-cleanup to remove defunct entries
-  (tabbar-window-alist-cleanup) 
+  (tabbar-window-alist-cleanup)
   ;; if the alist has changed, update the tab sets (compare against cache)
   (unless (equal tabbar-window-alist tabbar-window-cache)
     ;; cycle through alist.
@@ -242,7 +257,6 @@ Return the current tabset, which corresponds to (selected-window)."
     (setq tabbar-window-cache (copy-tree tabbar-window-alist)))
   (tabbar-get-tabset (number-to-string (window-number (selected-window))))
   )
-
 
 (defun tabbar-window-update-tabsets-when-idle ()
   "Wait for emacs to be idle before updating tabsets.  This prevents tabs from
