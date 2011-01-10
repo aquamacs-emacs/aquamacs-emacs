@@ -973,7 +973,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 )
 
 (defun aquamacs-handle-app-activated ()
-  "Aquamacs was activated.
+  "Aquamacs has been activated.
 Ensure that there is a (hidden) frame in the current space."
   (interactive)
   ;; Must call at idle time.  Frame is not correctly
@@ -983,18 +983,23 @@ Ensure that there is a (hidden) frame in the current space."
   ;; To Do: diagnose and fix.  Perhaps related to the way
   ;; the NS port handles file requests via ns_pending_files
   ;; (which do not display the behavior.)
-  (run-with-idle-timer 0.1 nil 'aquamacs-handle-app-activated2))
+  ;; It appears that isOnActiveSpace returns the wrong
+  ;; result shortly after switching.  We increase the delay for this
+  ;; reason.  The invisible frame is only created in certain cases
+  ;; anyways.
+  (run-with-idle-timer 0.5 nil 'aquamacs-handle-app-activated2))
 
 (defun aquamacs-handle-app-activated2 ()
   (unless (ns-frame-is-on-active-space-p (selected-frame))
-    (let* ((display-buffer-reuse-frames 'select)
+    ;; find a frame on active space
+    ;; (unless (ns-visible-frame-list)
+      (let* ((display-buffer-reuse-frames 'select)
 	   (one-buffer-one-frame nil)
 	   (hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
       (select-window (frame-first-window hf))
       (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
       ;; (switch-to-buffer (init-aquamacs-last-frame-empty-buffer) 'norecord)
       (make-frame-invisible hf t))))
-
 
 ;; FIXES IN VARIOUS PLACES
 

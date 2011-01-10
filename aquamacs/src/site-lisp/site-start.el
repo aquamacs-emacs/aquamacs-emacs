@@ -59,10 +59,7 @@ Changes in this code are ignored during the online version check.")
 (unless (boundp 'initial-window-system)
   (defvaralias 'initial-window-system 'window-system))
 
-;; only for Emacs.app
-(when (fboundp 'ns-find-file) ;; running Cocoa?
-  (setq unicode-emacs 0)
-  (require 'cocoa-compatibility))
+(require 'cocoa-compatibility)
 
 (when ;; do not load this twice 
     (not (memq 'aquamacs-site-start features))
