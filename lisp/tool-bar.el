@@ -365,6 +365,13 @@ holds a keymap."
   ;; than a lambda for Read Mail.
   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 
+  ;; Help button on a tool bar is rather non-standard...
+  ;; (let ((tool-bar-map (default-value 'tool-bar-map)))
+  ;;   (tool-bar-add-item "help" (lambda ()
+  ;; 				(interactive)
+  ;; 				(popup-menu menu-bar-help-menu))
+  ;; 		       'help
+  ;; 		       :help "Pop up the Help menu"))
 
   ;; tool-bar-add-item-from-menu itself operates on
   ;; (default-value 'tool-bar-map), but when we don't use that function,

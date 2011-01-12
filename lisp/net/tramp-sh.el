@@ -161,10 +161,11 @@ detected as prompt when being sent on echoing hosts, therefore.")
     (tramp-async-args           (("-q")))
     (tramp-remote-sh            "/bin/sh")
     (tramp-copy-program         "scp")
-    (tramp-copy-args            (("-P" "%p") ("%k" "-p") ("-q")
+    (tramp-copy-args            (("-P" "%p") ("%k" "-p") ("-q") ("-r")
 				 ("-o" "ControlPath=%t.%%r@%%h:%%p")
 				 ("-o" "ControlMaster=auto")))
     (tramp-copy-keep-date       t)
+    (tramp-copy-recursive       t)
     (tramp-gw-args              (("-o" "GlobalKnownHostsFile=/dev/null")
 				 ("-o" "UserKnownHostsFile=/dev/null")
 				 ("-o" "StrictHostKeyChecking=no")))
@@ -179,8 +180,9 @@ detected as prompt when being sent on echoing hosts, therefore.")
     (tramp-async-args           (("-q")))
     (tramp-remote-sh            "/bin/sh")
     (tramp-copy-program         "scp")
-    (tramp-copy-args            (("%k" "-p")))
+    (tramp-copy-args            (("-P" "%p") ("%k" "-p") ("-q") ("-r")))
     (tramp-copy-keep-date       t)
+    (tramp-copy-recursive       t)
     (tramp-gw-args              (("-o" "GlobalKnownHostsFile=/dev/null")
 				 ("-o" "UserKnownHostsFile=/dev/null")
 				 ("-o" "StrictHostKeyChecking=no")))
@@ -380,19 +382,22 @@ detected as prompt when being sent on echoing hosts, therefore.")
     (tramp-copy-args            (("%k" "-p")))
     (tramp-copy-keep-date       t)))
 
+;;;###tramp-autoload
 (add-to-list 'tramp-default-method-alist
 	     `(,tramp-local-host-regexp "\\`root\\'" "su"))
 
+;;;###tramp-autoload
 (add-to-list 'tramp-default-user-alist
 	     `(,(concat "\\`" (regexp-opt '("su" "sudo" "ksu")) "\\'")
 	       nil "root"))
+;; Do not add "ssh" based methods, otherwise ~/.ssh/config would be ignored.
+;;;###tramp-autoload
 (add-to-list 'tramp-default-user-alist
 	     `(,(concat
 		 "\\`"
 		 (regexp-opt
-		  '("rcp" "remcp" "scp" "scp1" "scp2" "scpc" "scpx" "sftp"
-		    "rsync" "rsyncc" "rsh" "remsh" "ssh" "ssh1" "ssh2" "sshx"
-		    "telnet" "krlogin" "plink" "plink1" "pscp" "psftp" "fcp"))
+		  '("rcp" "remcp" "rsh" "telnet" "krlogin"
+		    "plink" "plink1" "pscp" "psftp" "fcp"))
 		 "\\'")
 	       nil ,(user-login-name)))
 

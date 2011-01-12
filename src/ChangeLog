@@ -1,3 +1,241 @@
+2011-01-10  Michael Albinus  <michael.albinus@gmx.de>
+
+	* dbusbind.c (Fdbus_register_service): Raise an error in case of
+	unexpected return values.
+	(Fdbus_register_method): Remove connection initialization.
+
+2011-01-10  Jan Moringen  <jan.moringen@uni-bielefeld.de>
+
+	* dbusbind.c (QCdbus_request_name_allow_replacement): New symbol;
+	used by Fdbus_register_service.
+	(QCdbus_request_name_replace_existing): Likewise.
+	(QCdbus_request_name_do_not_queue): Likewise.
+	(QCdbus_request_name_reply_primary_owner): Likewise.
+	(QCdbus_request_name_reply_in_queue): Likewise.
+	(QCdbus_request_name_reply_exists): Likewise.
+	(QCdbus_request_name_reply_already_owner): Likewise.
+	(Fdbus_register_service): New function.
+	(Fdbus_register_method): Use Fdbus_register_service to do the name
+	registration.
+	(syms_of_dbusbind): Add symbols dbus-register-service,
+	:allow-replacement, :replace-existing, :do-not-queue,
+	:primary-owner, :existing, :in-queue and :already-owner.
+
+2011-01-09  Chong Yidong  <cyd@stupidchicken.com>
+
+	* gtkutil.c (update_frame_tool_bar): Don't advance tool-bar index
+	when removing extra buttons.
+
+2011-01-08  Chong Yidong  <cyd@stupidchicken.com>
+
+	* fns.c (Fyes_or_no_p): Doc fix.
+
+2011-01-08  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* fns.c (Fyes_or_no_p): Add usage.
+
+2011-01-08  Glenn Morris  <rgm@gnu.org>
+
+	* makefile.w32-in ($(EMACS)):
+	* Makefile.in (emacs$(EXEEXT)): -batch implies -q.
+
+	* xdisp.c (syms_of_xdisp) <Qrisky_local_variable>: Move from here...
+	* emacs.c (syms_of_emacs) <Qrisky_local_variable>: ...to here.
+
+2011-01-07  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* image.c (imagemagick_load_image): Fix some resource leaks and
+	error handling.
+
+2011-01-07  Chong Yidong  <cyd@stupidchicken.com>
+
+	* fns.c (Fyes_or_no_p): Accept format string args.
+
+2011-01-07  Glenn Morris  <rgm@gnu.org>
+
+	* emacs.c (no_site_lisp): New int.
+	(USAGE1): Add --no-site-lisp, mention -Q uses it.
+	(main): Set no_site_lisp.
+	(standard_args): Add --no-site-lisp.
+	* lisp.h (no_site_lisp): New int.
+	* lread.c (init_lread): If no_site_lisp, don't re-add site-lisp
+	directories to Vload_path.
+
+2011-01-05  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* alloc.c (mark_stack): Use __builtin_unwind_init if available.
+
+2011-01-04  Jan Moringen  <jan.moringen@uni-bielefeld.de>
+
+	* dbusbind.c (Fdbus_register_method): Added optional parameter
+	dont_register_service.  Updated docstring accordingly.
+
+2011-01-04  Glenn Morris  <rgm@gnu.org>
+
+	* emacs.c (emacs_copyright): Update short copyright year to 2011.
+
+2011-01-03  Eli Zaretskii  <eliz@gnu.org>
+
+	* image.c (png_jmpbuf): Remove definition.
+	(my_png_error, png_load): Don't use png_jmpbuf.
+
+2011-01-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* keyboard.c (Vselect_active_regions): Doc fix.  (Bug#7702)
+
+2011-01-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* image.c <Qlibpng_version>: New variable.
+	(syms_of_image): Intern and staticpro it.  Set its value to the
+	version of PNG library we were compiled with.
+	(my_png_error, png_load): Avoid GCC warnings about direct access
+	to png_ptr->jmpbuf.  (Bug#7716)
+	(png_jmpbuf): New macro.
+	(my_png_error, png_load): Use it instead of #ifdef'ing according
+	to PNG_LIBPNG_VER_MAJOR and PNG_LIBPNG_VER_MINOR.
+
+2011-01-02  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* .gdbinit (xgetptr): Fix the union+lsb case.
+	(xbacktrace): Fix the union case.
+
+2011-01-02  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* window.c (Fmove_to_window_line): Avoid abort when called in a buffer
+	different from selected-window's.
+
+2011-01-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* keyboard.c (parse_menu_item): Prepend "  " to the key sequence
+	equivalent of a menu item when the key sequence is given by the
+	`:keys' attribute.  (Bug#7662)
+
+	* xdisp.c (Fformat_mode_line): Doc fix: no need to state that only
+	the basic faces are supported.
+
+2011-01-02  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xterm.c (x_check_fullscreen): Fix pixel/character mixup.
+
+2011-01-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (Fformat_mode_line): Fix last change.
+
+2011-01-02  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xdisp.c (Fformat_mode_line): Restrict the FACE argument to basic
+	faces (Bug#7587).
+
+2011-01-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* fileio.c (Fexpand_file_name): One more doc fix.
+
+2011-01-01  Chong Yidong  <cyd@stupidchicken.com>
+
+	* gtkutil.c (xg_get_tool_bar_widgets): Use NULL for a missing
+	image or label in the container.
+	(xg_make_tool_item): Replace VERT_ONLY arg with HORIZ, TEXT_IMAGE.
+	(xg_show_toolbar_item): Function deleted.
+	(xg_tool_item_stale_p): New function.
+	(update_frame_tool_bar): Calculate tool-bar style once per call.
+	Instead of hiding text labels, omit them.  Don't use
+	xg_show_toolbar_item; create new GtkToolItems from scratch if
+	necessary, instead of trying to re-use them.  This avoids an
+	annoying animation when changing tool-bars.
+
+2010-12-31  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* nsfns.m (ns_set_name_as_filename): Always use buffer name for
+	title and buffer filename only for RepresentedFilename.
+	Handle bad UTF-8 in buffer name (Bug#7517).
+
+2010-12-30  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* coding.h (ENCODE_UTF_8): Remove "Used by ..." comment.
+
+	* nsfns.m (ns_set_name_iconic): Remove.
+	(ns_set_name_internal): New function (Bug#7517).
+	(Vicon_title_format): Extern declare.
+	(ns_set_name): Call ns_set_name_internal.
+	(x_explicitly_set_name): Remove call to ns_set_name_iconic.
+	(x_implicitly_set_name): Ditto.
+	(x_set_title): Remove commet about EXPLICIT.  Call ns_set_name_internal.
+	(ns_set_name_as_filename): Encode name with ENCODE_UTF_8 (Bug#7517).
+
+2010-12-29  Štěpán Němec  <stepnem@gmail.com>  (tiny change)
+
+	* window.c (syms_of_window): Add missing defsubr for
+	window-use-time.
+
+2010-12-28  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* xterm.h (x_alloc_lighter_color_for_widget): Restore declaration.
+	* xterm.c (x_alloc_lighter_color_for_widget): Restore.
+
+2010-12-27  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* buffer.c: Remove unused declarations.
+	* buffer.h: Likewise.
+	* charset.h: Likewise.
+	* composite.h: Likewise.
+	* dispextern.h: Likewise.
+	* dispnew.c: Likewise.
+	* font.h: Likewise.
+	* fontset.c: Likewise.
+	* fontset.h: Likewise.
+	* intervals.h: Likewise.
+	* keymap.h: Likewise.
+	* lisp.h: Likewise.
+	* syntax.c: Likewise.
+	* syntax.h: Likewise.
+	* termhooks.h: Likewise.
+	* window.h: Likewise.
+	* xsettings.h: Likewise.
+	* xterm.c: Likewise.
+	* xterm.h: Likewise.
+
+	* chartab.c (sub_char_table_ref): Make static.
+	* dispnew.c (line_hash_code, required_matrix_height)
+	(required_matrix_width): Likewise.
+	* eval.c (interactive_p, apply_lambda): Likewise.
+	* fns.c (string_make_multibyte, copy_hash_table, hash_clear):
+	Likewise.
+	* font.c (QCadstyle, QCregistry, font_make_spec)
+	(font_parse_fcname, font_encode_char, font_at): Likewise.
+	* frame.c (x_frame_get_arg): Likewise.
+	* keymap.c (get_keyelt): Likewise.
+	* lread.c (read_filtered_event): Likewise.
+	* print.c (write_string_1): Likewise.
+	* window.c (delete_window, window_height, window_width)
+	(foreach_window): Likewise.
+	* xrdb.c (x_get_customization_string, x_get_resource): Likewise.
+	* xterm.c (x_scroll_bar_clear, xembed_set_info)
+	(xembed_send_message): Likewise.
+
+	* eval.c (run_hook_list_with_args): Delete.
+	* font.c (font_unparse_gtkname, font_update_lface): Likewise.
+	* terminal.c (get_terminal_param): Likewise.
+	* xterm.c (x_alloc_lighter_color_for_widget): Likewise.
+
+	* scroll.c: Fix comment.
+
+	* dispnew.c (add_window_display_history)
+	(add_frame_display_history, glyph_row_slice_p)
+	(find_glyph_row_slice, flush_stdout)
+	(check_matrix_pointer_lossage, matrix_row)
+	(check_matrix_invariants, check_window_matrix_pointers)
+	(check_matrix_pointers, window_to_frame_vpos)
+	(window_to_frame_hpos): Prototize.
+	* textprop.c (erase_properties): Likewise.
+
+2010-12-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* print.c (PRINT_NUMBER_OBJECT, PRINT_NUMBER_STATUS): Remove.
+	(print_preprocess): Fix handling of uninterned symbols in last change.
+
+	* print.c (print, print_preprocess, print_object): Use a hash table
+	rather than a linear table for Vprint_number_table.
+
 2010-12-20  Chong Yidong  <cyd@stupidchicken.com>
 
 	* frame.c (focus_follows_mouse): Default to 0 (Bug#7269).
@@ -29260,7 +29498,7 @@ See ChangeLog.10 for earlier changes.
 ;; coding: utf-8
 ;; End:
 
-  Copyright (C) 2007, 2008, 2009, 2010
+  Copyright (C) 2007, 2008, 2009, 2010, 2011
     Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.

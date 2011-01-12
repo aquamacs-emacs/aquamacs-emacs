@@ -1,3 +1,97 @@
+2011-01-07  Daiki Ueno  <ueno@unixuser.org>
+
+	* mml2015.el (epg-sub-key-fingerprint): Autoload.
+	(mml2015-epg-find-usable-secret-key): New function.
+	(mml2015-epg-sign): Use mml2015-epg-find-usable-secret-key instead of
+	mml2015-epg-find-usable-key (Bug#7797).
+	(mml2015-epg-encrypt): Ditto.
+
+2011-01-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* flow-fill.el (fill-flowed-encode): Do encoding citation-aware.
+
+2011-01-03  Glenn Morris  <rgm@gnu.org>
+
+	* sieve-manage.el (sieve-manage-open): Correctly set sieve-manage-port.
+
+	* sieve.el (sieve-open-server): Give a more explicit error if
+	sieve-manage-open returns nil.  (Bug#7720)
+
+2011-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* gnus-msg.el (gnus-message-replyencrypt): Default to `t'.
+
+2011-01-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* nnimap.el (nnimap-login): Prefer AUTH=CRAM-MD5, if it's available.
+	This avoids sending passwords in plain text over non-encrypted
+	channels.
+
+	* shr.el (shr-rescale-image): Display all GIF images as animated images.
+
+	* nnimap.el (nnimap-login): Refactored out into own function, and
+	implement CRAM-MD5.
+	(nnimap-wait-for-line): Refactored out.
+
+	* mm-view.el (mml-smime): Require.
+
+2010-12-20  David Engster  <deng@eml.cc>
+
+	* mm-view.el (mm-view-pkcs7-decrypt): If mml-smime-use is set to 'epg,
+	use EPG to decrypt S/MIME messages instead of openssl.
+
+2011-01-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* nnimap.el (nnimap-request-group): Avoid double SELECT on `M-g'.
+
+	* gnus-group.el (gnus-group-kill-group): Don't try to update the group
+	status is the group clearly is unreachable.
+
+	* auth-source.el (auth-source-create): Add the optional second
+	parameter to `local-variable-p' to be compatible with XEmacs.
+
+2011-01-02  Wang Diancheng  <dcwang@kingbase.com.cn>  (tiny change)
+
+	* nnml.el (nnml-request-article): Allow requesting by Message-ID to
+	work when using a compressed nnml folder.
+
+2011-01-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-sum.el (gnus-select-newsgroup): Don't propagate marks to
+	backends after sanitising on entry, because this never makes sense:
+	If the articles have gone missing, then the data no longer exists on
+	the backend, and if they haven't, then Gnus is wrong, and shouldn't
+	overwrite anything anyway.
+
+	* shr.el (shr-insert-document): Bind shr-width dynamically to
+	window-width if it's nil.
+
+2010-12-30  Tassilo Horn  <tassilo@member.fsf.org>
+
+	* shr.el (shr-width, shr-insert-document): Allow nil as shr-width value
+	with the meaning of using the full emacs window width for rendering.
+
+2010-12-27  Daiki Ueno  <ueno@unixuser.org>
+
+	* mml2015.el (mml2015-epg-sign, mml2015-epg-encrypt): Take care the
+	case when sender is not given.
+
+2010-12-23  Julien Danjou  <julien@danjou.info>
+
+	* gnus-gravatar.el (gnus-gravatar-transform-address): Set
+	`mail-extr-ignore-realname-equals-mailbox-name' to nil when extracting
+	the addresses, otherwise we might misplaced the gravatar.
+
+2010-12-21  Daiki Ueno  <ueno@unixuser.org>
+
+	* mml1991.el (pgg-sign-region, pgg-encrypt-region):
+	* gnus-art.el (pgg-snarf-keys-region): Autoload since PGG is now
+	obsolete in Emacs.
+
+2010-12-20  Julien Danjou  <julien@danjou.info>
+
+	* gnus-util.el (gnus-rescale-image): Revert last change.
+
 2010-12-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-group.el (gnus-group-delete-articles): New command.

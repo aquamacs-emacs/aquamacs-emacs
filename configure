@@ -731,6 +731,7 @@ UNEXEC_OBJ
 C_SWITCH_MACHINE
 LD_SWITCH_SYSTEM
 CANNOT_DUMP
+HAVE_MAKEINFO
 MAKEINFO
 GZIP_PROG
 INSTALL_INFO
@@ -836,6 +837,7 @@ with_makeinfo
 with_compress_info
 with_pkg_config_prog
 with_crt_dir
+with_gameuser
 with_gnustep_conf
 enable_ns_self_contained
 enable_asserts
@@ -1550,6 +1552,7 @@ Optional Packages:
                           path to pkg-config for finding GTK and librsvg
   --with-crt-dir=DIR      directory containing crtn.o etc. The default is
                           /usr/lib, or /usr/lib64 on some platforms.
+  --with-gameuser=USER    user for shared game score files
   --with-gnustep-conf=PATH
                           path to GNUstep.conf; default $GNUSTEP_CONFIG_FILE,
                           or /etc/GNUstep/GNUstep.conf
@@ -2560,8 +2563,6 @@ archlibdir='${libexecdir}/emacs/${version}/${configuration}'
 docdir='${datadir}/emacs/${version}/etc'
 gamedir='${localstatedir}/games/emacs'
 
-gameuser=games
-
 
 
 
@@ -2919,6 +2920,16 @@ if test "${with_crt_dir+set}" = set; then :
 fi
 
 CRT_DIR="${with_crt_dir}"
+
+
+# Check whether --with-gameuser was given.
+if test "${with_gameuser+set}" = set; then :
+  withval=$with_gameuser;
+fi
+
+test "X${with_gameuser}" != X && test "${with_gameuser}" != yes \
+  && gameuser="${with_gameuser}"
+test "X$gameuser" = X && gameuser=games
 
 
 # Check whether --with-gnustep-conf was given.
@@ -5462,9 +5473,12 @@ fi
 ## should test for it as it does for any other build requirement.
 ## We use the presence of $srcdir/info/emacs to distinguish a release,
 ## with pre-built manuals, from a Bazaar checkout.
+HAVE_MAKEINFO=yes
+
 if test "$MAKEINFO" = "no"; then
+  MAKEINFO=makeinfo
   if test "x${with_makeinfo}" = "xno"; then
-    MAKEINFO=off
+    HAVE_MAKEINFO=no
   elif test ! -e $srcdir/info/emacs; then
     as_fn_error $? "You do not seem to have makeinfo >= 4.6, and your
 source tree does not seem to have pre-built manuals in the \`info' directory.
@@ -5472,6 +5486,7 @@ Either install a suitable version of makeinfo, or re-run configure
 with the \`--without-makeinfo' option to build without the manuals. " "$LINENO" 5
   fi
 fi
+
 
 
 if test x$GCC = xyes; then
@@ -11857,6 +11872,38 @@ _ACEOF
 fi
 done
 
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for __builtin_unwind_init" >&5
+$as_echo_n "checking for __builtin_unwind_init... " >&6; }
+if ${emacs_cv_func___builtin_unwind_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+__builtin_unwind_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  emacs_cv_func___builtin_unwind_init=yes
+else
+  emacs_cv_func___builtin_unwind_init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $emacs_cv_func___builtin_unwind_init" >&5
+$as_echo "$emacs_cv_func___builtin_unwind_init" >&6; }
+if test $emacs_cv_func___builtin_unwind_init = yes; then
+
+$as_echo "#define HAVE___BUILTIN_UNWIND_INIT 1" >>confdefs.h
+
+fi
 
 for ac_header in sys/un.h
 do :

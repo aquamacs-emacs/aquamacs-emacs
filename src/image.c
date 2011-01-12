@@ -1,7 +1,7 @@
 /* Functions for image support on window system.
    Copyright (C) 1989, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
-                 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-                 Free Software Foundation, Inc.
+                 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+		 2011 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -94,6 +94,11 @@ typedef struct w32_bitmap_record Bitmap_Record;
    without modifying lots of files).  */
 extern void x_query_colors (struct frame *f, XColor *colors, int ncolors);
 extern void x_query_color (struct frame *f, XColor *color);
+
+/* Version of libpng that we were compiled with, or -1 if no PNG
+   support was compiled in.  This is tested by w32-win.el to correctly
+   set up the alist used to search for PNG libraries.  */
+Lisp_Object Qlibpng_version;
 #endif /* HAVE_NTGUI */
 
 #ifdef HAVE_NS
@@ -5530,6 +5535,8 @@ static void
 my_png_error (png_struct *png_ptr, const char *msg)
 {
   xassert (png_ptr != NULL);
+  /* Avoid compiler warning about deprecated direct access to
+     png_ptr's fields in libpng versions 1.4.x.  */
   image_error ("PNG error: %s", build_string (msg), Qnil);
   longjmp (png_ptr->jmpbuf, 1);
 }
@@ -7554,9 +7561,15 @@ imagemagick_load_image (/* Pointer to emacs frame structure.  */
       exception = AcquireExceptionInfo ();
 
       im_image = ReadImage (image_info, exception);
-      CatchException (exception);
+      DestroyExceptionInfo (exception);
 
-      image_wand = NewMagickWandFromImage (im_image);
+      if (im_image != NULL)
+	{
+	  image_wand = NewMagickWandFromImage (im_image);
+	  status = MagickTrue;
+	}
+      else
+	status = MagickFalse;
     }
   else
     {
@@ -7659,11 +7672,6 @@ imagemagick_load_image (/* Pointer to emacs frame structure.  */
      width, height, and then transfer ownerwship to Emacs.  */
   height = MagickGetImageHeight (image_wand);
   width = MagickGetImageWidth (image_wand);
-  if (status == MagickFalse)
-    {
-      image_error ("Imagemagick image get size failed", Qnil, Qnil);
-      goto imagemagick_error;
-    }
 
   if (! check_image_size (f, width, height))
     {
@@ -7683,6 +7691,9 @@ imagemagick_load_image (/* Pointer to emacs frame structure.  */
       if (!x_create_x_image_and_pixmap (f, width, height, 0,
                                         &ximg, &img->pixmap))
         {
+#ifdef COLOR_TABLE_SUPPORT
+	  free_color_table ();
+#endif
           image_error("Imagemagick X bitmap allocation failure", Qnil, Qnil);
           goto imagemagick_error;
         }
@@ -7695,6 +7706,10 @@ imagemagick_load_image (/* Pointer to emacs frame structure.  */
       iterator = NewPixelIterator (image_wand);
       if (iterator == (PixelIterator *) NULL)
         {
+#ifdef COLOR_TABLE_SUPPORT
+	  free_color_table ();
+#endif
+	  x_destroy_x_image (ximg);
           image_error ("Imagemagick pixel iterator creation failed",
                        Qnil, Qnil);
           goto imagemagick_error;
@@ -7729,6 +7744,9 @@ imagemagick_load_image (/* Pointer to emacs frame structure.  */
       if (!x_create_x_image_and_pixmap (f, width, height, imagedepth,
                                         &ximg, &img->pixmap))
 	{
+#ifdef COLOR_TABLE_SUPPORT
+	  free_color_table ();
+#endif
 	  image_error("Imagemagick X bitmap allocation failure", Qnil, Qnil);
 	  goto imagemagick_error;
 	}
@@ -7791,6 +7809,7 @@ imagemagick_load_image (/* Pointer to emacs frame structure.  */
   return 1;
 
  imagemagick_error:
+  DestroyMagickWand (image_wand);
   /* TODO more cleanup.  */
   image_error ("Error parsing IMAGEMAGICK image `%s'", img->spec, Qnil);
   return 0;
@@ -8775,6 +8794,16 @@ non-numeric, there is no explicit limit on the size of images.  */);
   QCpt_height = intern_c_string (":pt-height");
   staticpro (&QCpt_height);
 #endif /* HAVE_GHOSTSCRIPT */
+
+#ifdef HAVE_NTGUI
+  Qlibpng_version = intern_c_string ("libpng-version");
+  staticpro (&Qlibpng_version);
+#if HAVE_PNG
+  SET_SYMBOL_VAL (XSYMBOL (Qlibpng_version), make_number (PNG_LIBPNG_VER));
+#else
+  SET_SYMBOL_VAL (XSYMBOL (Qlibpng_version), make_number (-1));
+#endif
+#endif
 
 #if defined (HAVE_XPM) || defined (HAVE_NS)
   Qxpm = intern_c_string ("xpm");

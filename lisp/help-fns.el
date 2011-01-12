@@ -289,13 +289,19 @@ suitable file is found, return nil."
      ((not (stringp file-name))
       ;; If we don't have a file-name string by now, we lost.
       nil)
+     ;; Now, `file-name' should have become an absolute file name.
+     ;; For files loaded from ~/.emacs.elc, try ~/.emacs.
+     ((let (fn)
+	(and (string-equal file-name
+			   (expand-file-name ".emacs.elc" "~"))
+	     (file-readable-p (setq fn (expand-file-name ".emacs" "~")))
+	     fn)))
+     ;; When the Elisp source file can be found in the install
+     ;; directory, return the name of that file.
      ((let ((lib-name
 	     (if (string-match "[.]elc\\'" file-name)
 		 (substring-no-properties file-name 0 -1)
 	       file-name)))
-	;; When the Elisp source file can be found in the install
-	;; directory return the name of that file - `file-name' should
-	;; have become an absolute file name ny now.
 	(or (and (file-readable-p lib-name) lib-name)
 	    ;; The library might be compressed.
 	    (and (file-readable-p (concat lib-name ".gz")) lib-name))))
@@ -638,14 +644,12 @@ it is displayed along with the global value."
 	      (with-current-buffer standard-output
 		(setq val-start-pos (point))
 		(princ "value is ")
-		(terpri)
+		  (terpri)
 		(let ((from (point)))
 		  (pp val)
-		  ;; Hyperlinks in variable's value are quite frequently
-		  ;; inappropriate e.g C-h v <RET> features <RET>
-		  ;; (help-xref-on-pp from (point))
-		  (if (< (point) (+ from 20))
-		      (delete-region (1- from) from))
+		  (if (< (point) (+ 68 (line-beginning-position 0)))
+		      (delete-region from (1+ from))
+		    (delete-region (1- from) from))
 		  (let* ((sv (get variable 'standard-value))
 			 (origval (and (consp sv)
 				       (condition-case nil
