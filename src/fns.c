@@ -1,7 +1,7 @@
 /* Random utility Lisp functions.
    Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997,
                  1998, 1999, 2000, 2001, 2002, 2003, 2004,
-                 2005, 2006, 2007, 2008, 2009, 2010
+                 2005, 2006, 2007, 2008, 2009, 2010, 2011
 		 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -872,7 +872,7 @@ string_byte_to_char (Lisp_Object string, EMACS_INT byte_index)
 
 /* Convert STRING to a multibyte string.  */
 
-Lisp_Object
+static Lisp_Object
 string_make_multibyte (Lisp_Object string)
 {
   unsigned char *buf;
@@ -2460,22 +2460,24 @@ do_yes_or_no_p (Lisp_Object prompt)
 
 /* Anything that calls this function must protect from GC!  */
 
-DEFUN ("yes-or-no-p", Fyes_or_no_p, Syes_or_no_p, 1, 1, 0,
+DEFUN ("yes-or-no-p", Fyes_or_no_p, Syes_or_no_p, 1, MANY, 0,
        doc: /* Ask user a yes-or-no question.  Return t if answer is yes.
-Takes one argument, which is the string to display to ask the question.
-It should end in a space; `yes-or-no-p' adds `(yes or no) ' to it.
-The user must confirm the answer with RET,
-and can edit it until it has been confirmed.
+The string to display to ask the question is obtained by
+formatting the string PROMPT with arguments ARGS (see `format').
+The result should end in a space; `yes-or-no-p' adds
+\"(yes or no) \" to it.
+
+The user must confirm the answer with RET, and can edit it until it
+has been confirmed.
 
 Under a windowing system a dialog box will be used if `last-nonmenu-event'
-is nil, and `use-dialog-box' is non-nil.  */)
-  (Lisp_Object prompt)
+is nil, and `use-dialog-box' is non-nil.
+usage: (yes-or-no-p PROMPT &rest ARGS)  */)
+  (int nargs, Lisp_Object *args)
 {
   register Lisp_Object ans;
-  Lisp_Object args[2];
   struct gcpro gcpro1;
-
-  CHECK_STRING (prompt);
+  Lisp_Object prompt = Fformat (nargs, args);
 
 #ifdef HAVE_MENUS
   if (FRAME_WINDOW_P (SELECTED_FRAME ())
@@ -2496,10 +2498,7 @@ is nil, and `use-dialog-box' is non-nil.  */)
     }
 #endif /* HAVE_MENUS */
 
-  args[0] = prompt;
-  args[1] = build_string ("(yes or no) ");
-  prompt = Fconcat (2, args);
-
+  prompt = concat2 (prompt, build_string ("(yes or no) "));
   GCPRO1 (prompt);
 
   while (1)
@@ -3701,7 +3700,7 @@ make_hash_table (Lisp_Object test, Lisp_Object size, Lisp_Object rehash_size,
 /* Return a copy of hash table H1.  Keys and values are not copied,
    only the table itself is.  */
 
-Lisp_Object
+static Lisp_Object
 copy_hash_table (struct Lisp_Hash_Table *h1)
 {
   Lisp_Object table;
@@ -3909,7 +3908,7 @@ hash_remove_from_table (struct Lisp_Hash_Table *h, Lisp_Object key)
 
 /* Clear hash table H.  */
 
-void
+static void
 hash_clear (struct Lisp_Hash_Table *h)
 {
   if (h->count > 0)
