@@ -757,9 +757,9 @@ prompting.  If file is a directory perform a `find-file' on it."
    "ODB External Editor tokens stored with this buffer."))
 
 (defun ns-odb-save-function ()
-  (ns-send-odb-notification 'saved (current-buffer) buffer-odb-parms))
+  (ns-send-odb-notification 'saved (current-buffer) buffer-odb-parameters))
 (defun ns-odb-kill-function ()
-  (ns-send-odb-notification 'closed (current-buffer) buffer-odb-parms))
+  (ns-send-odb-notification 'closed (current-buffer) buffer-odb-parameters))
 
 (defvar ns-input-parms) 			; nsterm.m
 
@@ -770,30 +770,30 @@ If OPEN-FILE is non-nil, always open the file."
   (while (car ns-input-file) 
     (let ((uri (concat "file://" (car ns-input-file))))
       (unwind-protect
-	  ;; we should really leave it to dnd to 
-	  ;; decide what to do with the file
-	  (require 'dnd)
-	(let* ((event last-input-event)
-	       (window (or (posn-window (event-start event))
-			   (selected-window)))
-	       action)
-	  ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
-	  ;; 	(setq action 'copy))
-	  (when (windowp window) (select-window window))
-	  (if open-file
-	      (dnd-open-local-file uri nil)
-	    (dnd-handle-one-url window action
-				uri))
-	  ;; install ODB file save handler
-	  ;; this is installed for completeness - most
-	  ;; applications seem to monitor edited files 
-	  ;; via system means independent of us.
-	  (and ns-input-parms
-	       (setq buffer-odb-parameters ns-input-parms)
-	       (add-hook 'after-save-hook 'ns-odb-save-function nil 'local)
-	       (add-hook 'kill-buffer-hook 'ns-odb-kill-function nil 'local))
-	  ))
-      (setq ns-input-file (cdr ns-input-file)))))
+	  (progn
+	    ;; we should really leave it to dnd to 
+	    ;; decide what to do with the file
+	    (require 'dnd)
+	    (let* ((event last-input-event)
+		   (window (or (posn-window (event-start event))
+			       (selected-window)))
+		   action)
+	      ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
+	      ;; 	(setq action 'copy))
+	      (when (windowp window) (select-window window))
+	      (if open-file
+		  (dnd-open-local-file uri nil)
+		(dnd-handle-one-url window action
+				    uri))
+	      ;; install ODB file save handler
+	      ;; this is installed for completeness - most
+	      ;; applications seem to monitor edited files 
+	      ;; via system means independent of us.
+	      (and ns-input-parms
+		   (setq buffer-odb-parameters ns-input-parms)
+		   (add-hook 'after-save-hook 'ns-odb-save-function nil 'local)
+		   (add-hook 'kill-buffer-hook 'ns-odb-kill-function nil 'local))))
+      (setq ns-input-file (cdr ns-input-file))))))
 
 (defun ns-handle-open-file ()
   "Handle one or more files to be opened.
