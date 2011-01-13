@@ -309,17 +309,28 @@ This overrides entries in `obof-same-frame-regexps'."
 
 (defun open-in-other-frame-p (buf &optional switching)
   (not (obof-same-frame-p buf switching)))
- 
-(defun killable-buffer-p (buf)
-  "Returns non-nil if buffer BUF can be killed."
-  (let ( (bufname (get-bufname buf)))
-	(if (or (equal "\*Messages\*" bufname) 
-		(equal  "\*scratch\*" bufname) 
-		(equal  "\*Help\*" bufname) 
-		)
-	    nil
-	  t)))
 
+
+(defcustom delete-window-preserve-buffer '("\*Messages\*" "\*scratch\*" "\*Help\*")
+  "Preserve these buffers when deleting window displaying them.
+When `one-buffer-one-frame-mode' or `tabbar-mode' are on,
+a buffer is killed when the last window displaying it is
+deleted by way of user interaction via high-level commands such
+as `close-window', unless the buffer name is listed in this
+customization variable, or this variable is set to `t'."
+  :group 'Aquamacs
+  :group 'frames
+  :type '(choice (repeat string)    
+		 (set (const "\*Messages\*") (const "\*scratch\*") (const "\*Help\*"))
+		 (const t)))
+
+(defun killable-buffer-p (buf)
+  "Returns non-nil if buffer BUF may be be killed.
+Customize `delete-window-preserve-buffer' to configure."
+  (if (or (eq t delete-window-preserve-buffer)
+	  (member (get-bufname buf) delete-window-preserve-buffer))
+      nil
+    t))
 
 ; init
 (setq aquamacs-newly-opened-windows '() )
