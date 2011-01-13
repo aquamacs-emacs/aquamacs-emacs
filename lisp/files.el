@@ -1178,7 +1178,7 @@ use with M-x."
 	  (setq arg (1+ arg)))
 	(forward-char))
     (forward-char)
-    (while (> 0 arg )
+    (while (> arg 0)
       (re-search-forward "[/\n]" nil t)
       (setq arg (1- arg)))
     (backward-char)))

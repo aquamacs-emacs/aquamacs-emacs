@@ -273,7 +273,14 @@ With argument, do this that many times."
   (interactive "p")
   (if (and transient-mark-mode mark-active)
       (kill-region (region-beginning) (region-end))
-    (kill-region (point) 
+    ;; bindings in minibuffer-*-map are insufficient,
+    ;; as the osx-key-mode-map may take precedence (with its own remappings).
+    ;; therefore, we need to catch the case of reading a file name here.
+    (if minibuffer-completing-file-name ;; are we in read-file-name?  (fails if read-file-name-function set)
+	(if (and arg (< arg 0))
+	    (backward-kill-filename (- (or arg 1)))
+	  (kill-filename 1))
+      (kill-region (point) 
 		 (let ((at-wb
 			(or 
 			 (not smart-spacing-mode)
@@ -287,7 +294,7 @@ With argument, do this that many times."
 		       (if (> arg 0)
 			   (skip-chars-forward " " 1)
 			 (skip-chars-backward " " 1)))
-		   (point)))))
+		   (point))))))
 
 (defun aquamacs-backward-kill-word (&optional arg)
   "Kill characters backward until encountering the beginning of a word.
@@ -1018,6 +1025,10 @@ ns-command-modifier osxkeys-command-key))))
 
 
 ;; ensure that we remap the right backward-kill-word 
+;; NOTE: unless Emacs changes its priorisation of remap-bindings in various
+;; minor/major mode maps, the following is ineffective, as the remappings
+;; from osx-key-mode take precedence over these.
+;; binding C-del/C-backspace directly does not work, either.
 (define-key minibuffer-local-filename-completion-map 
   [remap aquamacs-backward-kill-word] 'backward-kill-filename)
 (define-key minibuffer-local-filename-must-match-map 
