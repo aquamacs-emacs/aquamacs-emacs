@@ -44,7 +44,7 @@
 
 (or (featurep 'ns)
     (error "%s: Loading ns-win.el but not compiled for GNUstep/MacOS"
-           (invocation-name)))
+	   (invocation-name)))
 
 (eval-when-compile (require 'cl))       ; lexical-let
 
@@ -110,15 +110,15 @@ The properties returned may include `top', `left', `height', and `width'."
    ;; NS-Style specification
    (if (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
 \\( \\([0-9]+\\) ?\\)?\\)?\\)?"
-		      geom)
+		     geom)
        (append
-      (list (cons 'top (string-to-number (match-string 1 geom))))
-      (if (match-string 3 geom)
-	  (list (cons 'left (string-to-number (match-string 3 geom)))))
-      (if (match-string 5 geom)
-	  (list (cons 'height (string-to-number (match-string 5 geom)))))
-      (if (match-string 7 geom)
-	  (list (cons 'width (string-to-number (match-string 7 geom)))))))))
+	 (list (cons 'top (string-to-number (match-string 1 geom))))
+	 (if (match-string 3 geom)
+	     (list (cons 'left (string-to-number (match-string 3 geom)))))
+	 (if (match-string 5 geom)
+	     (list (cons 'height (string-to-number (match-string 5 geom)))))
+	 (if (match-string 7 geom)
+	     (list (cons 'width (string-to-number (match-string 7 geom)))))))))
 
 ;;;; Keyboard mapping.
 
@@ -378,22 +378,22 @@ See `ns-insert-working-text'."
 ;; Lisp code based on utf-8m.el, by Seiji Zenitani, Eiji Honjoh, and
 ;; Carsten Bormann.
 (when (eq system-type 'darwin)
-  (defun ns-utf8-nfd-post-read-conversion (length)
-    "Calls `ns-convert-utf8-nfd-to-nfc' to compose char sequences."
-    (save-excursion
-      (save-restriction
-        (narrow-to-region (point) (+ (point) length))
-        (let ((str (buffer-string)))
-          (delete-region (point-min) (point-max))
-          (insert (ns-convert-utf8-nfd-to-nfc str))
+      (defun ns-utf8-nfd-post-read-conversion (length)
+	"Calls `ns-convert-utf8-nfd-to-nfc' to compose char sequences."
+	(save-excursion
+	  (save-restriction
+	    (narrow-to-region (point) (+ (point) length))
+	    (let ((str (buffer-string)))
+	      (delete-region (point-min) (point-max))
+	      (insert (ns-convert-utf8-nfd-to-nfc str))
           (- (point-max) (point-min))))))
 
-  (define-coding-system 'utf-8-nfd
-    "UTF-8 NFD (decomposed) encoding."
-    :coding-type 'utf-8
-    :mnemonic ?U
-    :charset-list '(unicode)
-    :post-read-conversion 'ns-utf8-nfd-post-read-conversion)
+      (define-coding-system 'utf-8-nfd
+	"UTF-8 NFD (decomposed) encoding."
+	:coding-type 'utf-8
+	:mnemonic ?U
+	:charset-list '(unicode)
+	:post-read-conversion 'ns-utf8-nfd-post-read-conversion)
   (set-file-name-coding-system 'utf-8-nfd))
 
 
@@ -428,6 +428,17 @@ prompting.  If file is a directory perform a `find-file' on it."
         (find-file f)
       (push-mark (+ (point) (cadr (insert-file-contents f)))))))
 
+(make-variable-buffer-local
+ (defvar buffer-odb-parameters nil 
+   "ODB External Editor tokens stored with this buffer."))
+
+(defun ns-odb-save-function ()
+  (ns-send-odb-notification 'saved (current-buffer) buffer-odb-parameters))
+(defun ns-odb-kill-function ()
+  (ns-send-odb-notification 'closed (current-buffer) buffer-odb-parameters))
+
+(defvar ns-input-parms) 			; nsterm.m
+
 (defun ns-handle-drag-file (&optional open-file)
   "Handle one or more dragged files.
 If OPEN-FILE is non-nil, always open the file."
@@ -443,10 +454,10 @@ If OPEN-FILE is non-nil, always open the file."
 			  (car ns-input-file)
 			  command-line-default-directory)))))
       (unwind-protect
-	  (unwind-protect
-	      ;; we should really leave it to dnd to 
-	      ;; decide what to do with the file
-	      (require 'dnd)
+	  (progn
+	    ;; we should really leave it to dnd to 
+	    ;; decide what to do with the file
+	    (require 'dnd)
 	    (let* ((event last-input-event)
 		   (window (or (posn-window (event-start event))
 			       (selected-window)))
@@ -454,12 +465,19 @@ If OPEN-FILE is non-nil, always open the file."
 	      ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
 	      ;; 	(setq action 'copy))
 	      (when (windowp window) (select-window window))
-		(if open-file
-		    (dnd-open-local-file uri nil)
-		  (dnd-handle-one-url window action
-				      uri))))
-	;; ensure this is run:
-	(setq ns-input-file (cdr ns-input-file))))))
+	      (if open-file
+		  (dnd-open-local-file uri nil)
+		(dnd-handle-one-url window action
+				    uri))
+	      ;; install ODB file save handler
+	      ;; this is installed for completeness - most
+	      ;; applications seem to monitor edited files 
+	      ;; via system means independent of us.
+	      (and ns-input-parms
+		   (setq buffer-odb-parameters ns-input-parms)
+		   (add-hook 'after-save-hook 'ns-odb-save-function nil 'local)
+		   (add-hook 'kill-buffer-hook 'ns-odb-kill-function nil 'local))))
+      (setq ns-input-file (cdr ns-input-file))))))
 
 (defun ns-handle-open-file ()
   "Handle one or more files to be opened.
@@ -645,8 +663,8 @@ unless the current buffer is a scratch buffer."
   (modify-frame-parameters
    (or frame (selected-frame))
    (list (cons 'tool-bar-lines
-		       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
-				   0 1)) ))
+	       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
+		   0 1)) ))
   ;; trigger update of toolbar
   (force-mode-line-update))
 
@@ -715,14 +733,14 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
 ;; Conditional on new-fontset so bootstrapping works on non-GUI compiles.
 (when (fboundp 'new-fontset)
-  ;; Setup the default fontset.
-  (create-default-fontset)
-  ;; Create the standard fontset.
-  (condition-case err
-      (create-fontset-from-fontset-spec ns-standard-fontset-spec t)
-    (error (display-warning
-            'initialization
-            (format "Creation of the standard fontset failed: %s" err)
+      ;; Setup the default fontset.
+      (create-default-fontset)
+      ;; Create the standard fontset.
+      (condition-case err
+	  (create-fontset-from-fontset-spec ns-standard-fontset-spec t)
+	(error (display-warning
+		'initialization
+		(format "Creation of the standard fontset failed: %s" err)
             :error))))
 
 (defvar ns-reg-to-script)               ; nsfont.m
@@ -915,9 +933,9 @@ TYPE may be `txt', `html', `pdf' or `rtf', or nil (text string)."
      ((eq area 'vertical-line)
       'default)
      ((and (not area) (eq p (window-point window)))
-            'cursor)
+      'cursor)
      ((and (not area) mark-active (< (region-beginning) p) (< p (region-end)))
-            'region)
+      'region)
      ((not area)
       (let* ((faces (or (get-char-property p 'face window) 'default))
 	     (face (if (consp faces) (car faces) faces)))
@@ -936,14 +954,14 @@ EVENT is a mouse event, and ATTRIBUTE is either
 	(error "Position not in text area of window"))
     (let* ((face (ns-face-at-pos position))
 	   (frame (window-frame (posn-window position))))
-    (cond
-     ((eq face 'cursor)
-      (modify-frame-parameters frame (list (cons 'cursor-color
-                                                 ns-input-color))))
-     ((not face)
+      (cond
+       ((eq face 'cursor)
+	(modify-frame-parameters frame (list (cons 'cursor-color
+						   ns-input-color))))
+       ((not face)
 	(modify-frame-parameters frame (list (cons attribute
-                                                 ns-input-color))))
-     (t
+						   ns-input-color))))
+       (t
 	(if (eq attribute 'foreground-color)
 	    (set-face-foreground face ns-input-color frame)
 	  (set-face-background face ns-input-color frame))
