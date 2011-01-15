@@ -797,10 +797,10 @@ If OPEN-FILE is non-nil, always open the file."
 	      ;; this is installed for completeness - most
 	      ;; applications seem to monitor edited files 
 	      ;; via system means independent of us.
-	      (and ns-input-parms
-		   (setq buffer-odb-parameters ns-input-parms)
-		   (add-hook 'after-save-hook 'ns-odb-save-function nil 'local)
-		   (add-hook 'kill-buffer-hook 'ns-odb-kill-function nil 'local))))
+	      (when ns-input-parms
+		(setq buffer-odb-parameters ns-input-parms)
+		(add-hook 'after-save-hook 'ns-odb-save-function nil 'local)
+		(add-hook 'kill-buffer-hook 'ns-odb-kill-function nil 'local))))
       (setq ns-input-file (cdr ns-input-file))))))
 
 (defun ns-handle-open-file ()

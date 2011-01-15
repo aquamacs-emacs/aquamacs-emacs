@@ -2770,12 +2770,11 @@ OSStatus odb_event (struct buffer *buffer,
 DEFUN ("ns-send-odb-notification", Fns_send_odb_notification, Sns_send_odb_notification, 3, 3, 0,
        doc: /* Send ODB notification after file save.
 BUF is the buffer in question.
-TYPE is one of `saved', `closed', `end'.
+TYPE is one of `saved', `closed'.
 PARMS is an association list as communicated for the opening event for the specific buffer.
-
  */)
-     (buf, type, parms)
-     Lisp_Object buf, type, parms;
+     (type, buf, parms)
+     Lisp_Object type, buf, parms;
 {
   struct buffer *buffer;
 
@@ -2783,6 +2782,8 @@ PARMS is an association list as communicated for the opening event for the speci
     buffer = current_buffer;
   else
     buffer = XBUFFER (buf);
+
+  CHECK_BUFFER (buf);
 
   if (EQ (type, intern ("closed")))
     {
@@ -2794,6 +2795,11 @@ PARMS is an association list as communicated for the opening event for the speci
       if (odb_event(buffer, parms, kAEModifiedFile) != noErr)
 	error("Error during ODB notification.");
     }
+  else
+    {
+      error("ODB: TYPE must be one of `closed', `saved'.");
+    }
+    
   return Qnil;
 }
 
