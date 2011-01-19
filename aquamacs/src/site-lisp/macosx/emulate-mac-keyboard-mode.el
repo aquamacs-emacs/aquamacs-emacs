@@ -142,9 +142,10 @@ Example:
 	  (map (make-sparse-keymap)))
       (mapcar (lambda (x)
 		(setq emkm-ins-count (1+ emkm-ins-count))
-		(let ((string-rep (if (stringp (cdr x))
+		(let* ((string-rep (if (stringp (cdr x))
 				      (cdr x)
-				    (char-to-string (cdr x)))))
+				    (char-to-string (cdr x))))
+		       (vec-rep (string-to-vector string-rep)))
 		  (define-key map  (car x)
 		    (eval (list 'defun  (intern (format "emkm-%s-%d" 
 							language emkm-ins-count))
@@ -162,7 +163,7 @@ This command is part of `%s'." string-rep language mode-name mode-name)
 				`(if (aq-list-contains (event-modifiers 
 						     last-command-event)
 						    'meta)
-				     (execute-kbd-macro ,string-rep)
+				     (execute-kbd-macro ,vec-rep)
 				   ;; otherwise: called using Esc prefix.
 				   ;; call original binding 
 				   (let ((,mode-name nil))
