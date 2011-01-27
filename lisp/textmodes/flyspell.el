@@ -454,7 +454,9 @@ NOSKIP is non-nil, don't skip the current highlighted word (if any)."
 	 word)
     (if (not misspell-region)
 	;; no misspelling found; blank and beep the spelling panel
-	(ns-spellchecker-show-word "")
+	(progn
+	  (ns-spellchecker-show-word "")
+	  (message "Spell checker: found no errors"))
       ;; misspelling found; set region to mispelled word, and show
       ;;   in spelling panel
       (goto-char misspell-end)
