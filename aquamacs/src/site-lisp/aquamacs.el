@@ -712,12 +712,12 @@ yes-or-no prompts - y or n will do."
   ; (yes-or-no-p "asda")
   ; (aquamacs-ask-for-confirmation "asd" t)
  
-  (defun aquamacs-repl-yes-or-no-p (text)
+  (defun aquamacs-repl-yes-or-no-p (&rest args)
     "Like `old-yes-or-no-p' - use that function instead."
-    (aquamacs-ask-for-confirmation text t nil nil t))
-  (defun aquamacs-y-or-n-p (text)
+    (aquamacs-ask-for-confirmation (apply #'format args) t nil nil t))
+  (defun aquamacs-y-or-n-p (&rest args)
     "Like `old-y-or-n-p' - use that function instead."
-    (aquamacs-ask-for-confirmation text nil nil nil t))
+    (aquamacs-ask-for-confirmation (apply #'format args) nil nil nil t))
 
   (unless (fboundp 'old-yes-or-no-p)
     (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p)))

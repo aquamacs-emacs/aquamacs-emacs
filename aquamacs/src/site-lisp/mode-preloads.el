@@ -214,12 +214,13 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 ;; Objective C
 
 (defun objc-mode-buffer-check ()
-  (if (string-match "\\.m$" buffer-file-name)
-      (save-restriction
-	(narrow-to-region (point-min)
-			  (min (point-max)
-			       (+ (point-min) magic-mode-regexp-match-limit)))
-	(looking-at "\\(.\\|\n\\)*#\\(include\\|import\\|define\\)"))))
+  (and buffer-file-name
+       (string-match "\\.m$" buffer-file-name)
+       (save-restriction
+	 (narrow-to-region (point-min)
+			   (min (point-max)
+				(+ (point-min) magic-mode-regexp-match-limit)))
+	 (looking-at "\\(.\\|\n\\)*#\\(include\\|import\\|define\\)"))))
 
 (setq magic-mode-alist
      (append '(("\\(.\\|\n\\)*\n@\\(implementation\\|interface\\|protocol\\)" . objc-mode)
