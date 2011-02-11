@@ -13,8 +13,8 @@
 
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
-m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.68],,
-[m4_warning([this file was generated for autoconf 2.68.
+m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.66],,
+[m4_warning([this file was generated for autoconf 2.66.
 You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically `autoreconf'.])])
@@ -984,20 +984,3 @@ AC_SUBST([am__tar])
 AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
-m4_include([m4/00gnulib.m4])
-m4_include([m4/c-strtod.m4])
-m4_include([m4/extensions.m4])
-m4_include([m4/getopt.m4])
-m4_include([m4/gl-comp.m4])
-m4_include([m4/gnulib-common.m4])
-m4_include([m4/include_next.m4])
-m4_include([m4/mktime.m4])
-m4_include([m4/multiarch.m4])
-m4_include([m4/stdbool.m4])
-m4_include([m4/stddef_h.m4])
-m4_include([m4/strftime.m4])
-m4_include([m4/time_h.m4])
-m4_include([m4/time_r.m4])
-m4_include([m4/tm_gmtoff.m4])
-m4_include([m4/unistd_h.m4])
-m4_include([m4/wchar_t.m4])

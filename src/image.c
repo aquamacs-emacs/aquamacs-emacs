@@ -7452,7 +7452,12 @@ imagemagick_image_p (Lisp_Object object)
 /* The GIF library also defines DrawRectangle, but its never used in Emacs.
    Therefore rename the function so it doesnt collide with ImageMagick.  */
 #define DrawRectangle DrawRectangleGif
+#if defined (HAVE_WAND_MAGICKWAND_H)
 #include <wand/MagickWand.h>
+#else
+#include <wand/magick_wand.h>
+#endif /* HAVE_MAGICKWAND_H */
+
 
 /* imagemagick_load_image is a helper function for imagemagick_load,
    which does the actual loading given contents and size, apart from

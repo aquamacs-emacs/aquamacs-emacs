@@ -90,9 +90,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if the file /usr/lpp/X11/bin/smt.exp exists. */
 #undef HAVE_AIX_SMT_EXP
 
-/* Define to 1 if you have the `alarm' function. */
-#undef HAVE_ALARM
-
 /* Define to 1 if you have `alloca', as a function or macro. */
 #undef HAVE_ALLOCA
 
@@ -105,9 +102,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if GCC-style __attribute__ ((__aligned__ (expr))) works. */
 #undef HAVE_ATTRIBUTE_ALIGNED
-
-/* Define to 1 if strtold conforms to C99. */
-#undef HAVE_C99_STRTOLD
 
 /* Define to 1 if you have the `cbrt' function. */
 #undef HAVE_CBRT
@@ -135,14 +129,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the `dbus_watch_get_unix_fd' function. */
 #undef HAVE_DBUS_WATCH_GET_UNIX_FD
-
-/* Define to 1 if you have the declaration of `getenv', and to 0 if you don't.
-   */
-#undef HAVE_DECL_GETENV
-
-/* Define to 1 if you have the declaration of `localtime_r', and to 0 if you
-   don't. */
-#undef HAVE_DECL_LOCALTIME_R
 
 /* Define to 1 if you have the declaration of `sys_siglist', and to 0 if you
    don't. */
@@ -227,12 +213,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the `getloadavg' function. */
 #undef HAVE_GETLOADAVG
-
-/* Define to 1 if you have the <getopt.h> header file. */
-#undef HAVE_GETOPT_H
-
-/* Define to 1 if you have the `getopt_long_only' function. */
-#undef HAVE_GETOPT_LONG_ONLY
 
 /* Define to 1 if you have the `getpagesize' function. */
 #undef HAVE_GETPAGESIZE
@@ -437,9 +417,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the <locale.h> header file. */
 #undef HAVE_LOCALE_H
-
-/* Define to 1 if you have the `localtime_r' function. */
-#undef HAVE_LOCALTIME_R
 
 /* Define to 1 if you have the `logb' function. */
 #undef HAVE_LOGB
@@ -726,7 +703,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if `struct timeval' is declared by <sys/time.h>. */
 #undef HAVE_TIMEVAL
 
-/* Define if struct tm has the tm_gmtoff member. */
+/* Define to 1 if `tm_gmtoff' is member of `struct tm'. */
 #undef HAVE_TM_GMTOFF
 
 /* Define to 1 if your `struct tm' has `tm_zone'. Deprecated, use
@@ -767,8 +744,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the <vfork.h> header file. */
 #undef HAVE_VFORK_H
 
-/* Define if you have the 'wchar_t' type. */
-#undef HAVE_WCHAR_T
+/* Define to 1 if you have the <wand/MagickWand.h> header file. */
+#undef HAVE_WAND_MAGICKWAND_H
 
 /* Define if you have a window system. */
 #undef HAVE_WINDOW_SYSTEM
@@ -827,9 +804,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you want to use the X window system. */
 #undef HAVE_X_WINDOWS
-
-/* Define to 1 if the system has the type `_Bool'. */
-#undef HAVE__BOOL
 
 /* Define to 1 if you have the `__builtin_unwind_init' function. */
 #undef HAVE___BUILTIN_UNWIND_INIT
@@ -1018,45 +992,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define for large files, on AIX-style hosts. */
 #undef _LARGE_FILES
 
-/* Define to 1 if on MINIX. */
-#undef _MINIX
-
-/* Define to 2 if the system does not provide POSIX.1 features except with
-   this defined. */
-#undef _POSIX_1_SOURCE
-
-/* Define to 1 if you need to in order for `stat' and other things to work. */
-#undef _POSIX_SOURCE
-
-/* Define to 500 only on HP-UX. */
-#undef _XOPEN_SOURCE
-
-/* Enable extensions on AIX 3, Interix.  */
-#ifndef _ALL_SOURCE
-# undef _ALL_SOURCE
-#endif
-/* Enable GNU extensions on systems that have them.  */
-#ifndef _GNU_SOURCE
-# undef _GNU_SOURCE
-#endif
-/* Enable threading extensions on Solaris.  */
-#ifndef _POSIX_PTHREAD_SEMANTICS
-# undef _POSIX_PTHREAD_SEMANTICS
-#endif
-/* Enable extensions on HP NonStop.  */
-#ifndef _TANDEM_SOURCE
-# undef _TANDEM_SOURCE
-#endif
-/* Enable general extensions on Solaris.  */
-#ifndef __EXTENSIONS__
-# undef __EXTENSIONS__
-#endif
-
-
-/* Define to rpl_ if the getopt replacement functions and variables should be
-   used. */
-#undef __GETOPT_PREFIX
-
 /* Define like PROTOTYPES; this can be used by system headers. */
 #undef __PROTOTYPES
 
@@ -1073,63 +1008,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
-/* Define to `__inline__' or `__inline' if that's what the C compiler
-   calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
-#undef inline
-#endif
-
-/* Work around a bug in Apple GCC 4.0.1 build 5465: In C99 mode, it supports
-   the ISO C 99 semantics of 'extern inline' (unlike the GNU C semantics of
-   earlier versions), but does not display it by setting __GNUC_STDC_INLINE__.
-   __APPLE__ && __MACH__ test for MacOS X.
-   __APPLE_CC__ tests for the Apple compiler and its version.
-   __STDC_VERSION__ tests for the C99 mode.  */
-#if defined __APPLE__ && defined __MACH__ && __APPLE_CC__ >= 5465 && !defined __cplusplus && __STDC_VERSION__ >= 199901L && !defined __GNUC_STDC_INLINE__
-# define __GNUC_STDC_INLINE__ 1
-#endif
-
 /* Define to a type if <wchar.h> does not define. */
 #undef mbstate_t
-
-/* Define to the name of the strftime replacement function. */
-#undef my_strftime
 
 /* Define to `int' if <sys/types.h> does not define. */
 #undef pid_t
 
-/* Define to the equivalent of the C99 'restrict' keyword, or to
-   nothing if this is not supported.  Do not define if restrict is
-   supported directly.  */
-#undef restrict
-/* Work around a bug in Sun C++: it does not support _Restrict or
-   __restrict__, even though the corresponding Sun C compiler ends up with
-   "#define restrict _Restrict" or "#define restrict __restrict__" in the
-   previous line.  Perhaps some future version of Sun C++ will work with
-   restrict; if so, hopefully it defines __RESTRICT like Sun C does.  */
-#if defined __SUNPRO_CC && !defined __RESTRICT
-# define _Restrict
-# define __restrict__
-#endif
-
-/* Define to `unsigned int' if <sys/types.h> does not define. */
-#undef size_t
-
 /* Define to any substitute for sys_siglist. */
 #undef sys_siglist
-
-/* Define as a marker that can be attached to declarations that might not
-    be used.  This helps to reduce warnings, such as from
-    GCC -Wunused-parameter.  */
-#if __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 7)
-# define _GL_UNUSED __attribute__ ((__unused__))
-#else
-# define _GL_UNUSED
-#endif
-/* The name _UNUSED_PARAMETER_ is an earlier spelling, although the name
-   is a misnomer outside of parameter lists.  */
-#define _UNUSED_PARAMETER_ _GL_UNUSED
-
 
 /* Define as `fork' if `vfork' does not work. */
 #undef vfork
