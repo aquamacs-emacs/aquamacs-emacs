@@ -1,6 +1,6 @@
 ;;; image-dired.el --- use dired to browse and manipulate your images
 ;;
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 2005-2011 Free Software Foundation, Inc.
 ;;
 ;; Version: 0.4.11
 ;; Keywords: multimedia
@@ -384,7 +384,7 @@ Used together with `image-dired-cmd-read-exif-data-program-options'."
   "%p -s -s -s -%t \"%f\""
   "Format of command used to read EXIF data.
 Available options are %p which is replaced by
-`image-dired-cmd-write-exif-data-options', %f which is replaced
+`image-dired-cmd-write-exif-data-program', %f which is replaced
 by the image file name and %t which is replaced by the tag name."
   :type 'string
   :group 'image-dired)
@@ -2194,15 +2194,15 @@ matching tag will be marked in the dired buffer."
 Track this in associated dired buffer if `image-dired-track-movement' is
 non-nil."
   (interactive "e")
-  (let (file)
-    (mouse-set-point event)
-    (goto-char (posn-point (event-end event)))
-    (setq file (image-dired-original-file-name))
-    (if image-dired-track-movement
-        (image-dired-track-original-file))
-    (image-dired-create-display-image-buffer)
-    (display-buffer image-dired-display-image-buffer)
-    (image-dired-display-image file)))
+  (mouse-set-point event)
+  (goto-char (posn-point (event-end event)))
+  (let ((file (image-dired-original-file-name)))
+    (when file
+      (if image-dired-track-movement
+	  (image-dired-track-original-file))
+      (image-dired-create-display-image-buffer)
+      (display-buffer image-dired-display-image-buffer)
+      (image-dired-display-image file))))
 
 (defun image-dired-mouse-select-thumbnail (event)
   "Use mouse EVENT to select thumbnail image.
@@ -2622,5 +2622,4 @@ tags to their respective image file.  Internal function used by
 
 (provide 'image-dired)
 
-;; arch-tag: 9d11411d-331f-4380-8b44-8adfe3a0343e
 ;;; image-dired.el ends here

@@ -1,7 +1,6 @@
 ;;; nnir.el --- search mail with various search engines -*- coding: iso-8859-1 -*-
 
-;; Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
-;;   2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2011 Free Software Foundation, Inc.
 
 ;; Author: Kai Groﬂjohann <grossjohann@ls6.cs.uni-dortmund.de>
 ;; Swish-e and Swish++ backends by:
@@ -204,11 +203,12 @@
 ;; Imap variables
 
 (defvar nnir-imap-search-arguments
-  '(("Whole message" . "TEXT")
-    ("Subject" . "SUBJECT")
-    ("To" . "TO")
-    ("From" . "FROM")
-    ("Imap" . ""))
+  '(("whole message" . "TEXT")
+    ("subject" . "SUBJECT")
+    ("to" . "TO")
+    ("from" . "FROM")
+    ("body" . "BODY")
+    ("imap" . ""))
   "Mapping from user readable keys to IMAP search items for use in nnir")
 
 (defvar nnir-imap-search-other "HEADER %S"
@@ -336,7 +336,7 @@ result, `gnus-retrieve-headers' will be called instead."
   :type '(function)
   :group 'nnir)
 
-(defcustom nnir-imap-default-search-key "Whole message"
+(defcustom nnir-imap-default-search-key "whole message"
   "*The default IMAP search key for an nnir search. Must be one of
   the keys in `nnir-imap-search-arguments'. To use raw imap queries
   by default set this to \"Imap\"."
@@ -1501,11 +1501,14 @@ Tested with Namazu 2.0.6 on a GNU/Linux system."
 		(setq search-func (cadr (assoc nnir-search-engine
 					       nnir-engines)))
 		(if search-func
-		    (funcall search-func
-			     (if nnir-extra-parms
-				 (nnir-read-parms q nnir-search-engine)
-			       q)
-			     server (cadr x))
+		    (funcall
+		     search-func
+		     (if nnir-extra-parms
+			 (or (and (eq nnir-search-engine 'imap)
+				  (assq 'criteria q) q)
+			     (setq q (nnir-read-parms q nnir-search-engine)))
+		       q)
+		     server (cadr x))
 		  nil)))
 	    groups))))
 

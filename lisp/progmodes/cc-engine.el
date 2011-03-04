@@ -1,8 +1,6 @@
 ;;; cc-engine.el --- core syntax guessing engine for CC mode
 
-;; Copyright (C) 1985, 1987, 1992, 1993, 1994, 1995, 1996, 1997, 1998,
-;;   1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-;;   2010  Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1987, 1992-2011  Free Software Foundation, Inc.
 
 ;; Authors:    2001- Alan Mackenzie
 ;;             1998- Martin Stjernholm
@@ -2025,9 +2023,9 @@ comment at the start of cc-engine.el for more info."
 
 (defvar c-state-nonlit-pos-cache nil)
 (make-variable-buffer-local 'c-state-nonlit-pos-cache)
-;; A list of buffer positions which are known not to be in a literal.  This is
-;; ordered with higher positions at the front of the list.  Only those which
-;; are less than `c-state-nonlit-pos-cache-limit' are valid.
+;; A list of buffer positions which are known not to be in a literal or a cpp
+;; construct.  This is ordered with higher positions at the front of the list.
+;; Only those which are less than `c-state-nonlit-pos-cache-limit' are valid.
 
 (defvar c-state-nonlit-pos-cache-limit 1)
 (make-variable-buffer-local 'c-state-nonlit-pos-cache-limit)
@@ -2058,6 +2056,12 @@ comment at the start of cc-engine.el for more info."
   ;; This function is almost the same as `c-literal-limits'.  It differs in
   ;; that it is a lower level function, and that it rigourously follows the
   ;; syntax from BOB, whereas `c-literal-limits' uses a "local" safe position.
+  ;;
+  ;; NOTE: This function manipulates `c-state-nonlit-pos-cache'.  This cache
+  ;; MAY NOT contain any positions within macros, since macros are frequently
+  ;; turned into comments by use of the `c-cpp-delimiter' category properties.
+  ;; We cannot rely on this mechanism whilst determining a cache pos since
+  ;; this function is also called from outwith `c-parse-state'.
   (save-restriction
     (widen)
     (save-excursion
@@ -2076,6 +2080,11 @@ comment at the start of cc-engine.el for more info."
 		   here)
 	  (setq lit (c-state-pp-to-literal pos npos))
 	  (setq pos (or (cdr lit) npos)) ; end of literal containing npos.
+	  (goto-char pos)
+	  (when (and (c-beginning-of-macro) (/= (point) pos))
+	    (c-syntactic-end-of-macro)
+	    (or (eobp) (forward-char))
+	    (setq pos (point)))
 	  (setq c-state-nonlit-pos-cache (cons pos c-state-nonlit-pos-cache)))
 
 	(if (> pos c-state-nonlit-pos-cache-limit)
@@ -2160,7 +2169,7 @@ comment at the start of cc-engine.el for more info."
 ;; of fruitless backward scans.
 (defvar c-state-brace-pair-desert nil)
 (make-variable-buffer-local 'c-state-brace-pair-desert)
-;; Used only in `c-append-lower-brace-pair-to-state-cache'.  It is set when an
+;; Used only in `c-append-lower-brace-pair-to-state-cache'.  It is set when
 ;; that defun has searched backwards for a brace pair and not found one.  Its
 ;; value is either nil or a cons (PA . FROM), where PA is the position of the
 ;; enclosing opening paren/brace/bracket which bounds the backwards search (or
@@ -2844,6 +2853,29 @@ comment at the start of cc-engine.el for more info."
 	c-state-old-cpp-beg nil
 	c-state-old-cpp-end nil)
   (c-state-mark-point-min-literal))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Debugging routines to dump `c-state-cache' in a "replayable" form.
+;; (defmacro c-sc-de (elt) 		; "c-state-cache-dump-element"
+;;   `(format ,(concat "(setq " (symbol-name elt) " %s)    ") ,elt))
+;; (defmacro c-sc-qde (elt)		; "c-state-cache-quote-dump-element"
+;;   `(format ,(concat "(setq " (symbol-name elt) " '%s)    ") ,elt))
+;; (defun c-state-dump ()
+;;   ;; For debugging.
+;;   ;(message
+;;   (concat
+;;    (c-sc-qde c-state-cache)
+;;    (c-sc-de c-state-cache-good-pos)
+;;    (c-sc-qde c-state-nonlit-pos-cache)
+;;    (c-sc-de c-state-nonlit-pos-cache-limit)
+;;    (c-sc-qde c-state-brace-pair-desert)
+;;    (c-sc-de c-state-point-min)
+;;    (c-sc-de c-state-point-min-lit-type)
+;;    (c-sc-de c-state-point-min-lit-start)
+;;    (c-sc-de c-state-min-scan-pos)
+;;    (c-sc-de c-state-old-cpp-beg)
+;;    (c-sc-de c-state-old-cpp-end)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun c-invalidate-state-cache-1 (here)
   ;; Invalidate all info on `c-state-cache' that applies to the buffer at HERE
@@ -5446,9 +5478,11 @@ comment at the start of cc-engine.el for more info."
 	    (goto-char start)
 	    nil))
 
-      (forward-char)
+      (forward-char) ; Forward over the opening '<'.
 
       (unless (looking-at c-<-op-cont-regexp)
+	;; go forward one non-alphanumeric character (group) per iteration of
+	;; this loop.
 	(while (and
 		(progn
 		  (c-forward-syntactic-ws)
@@ -5477,7 +5511,7 @@ comment at the start of cc-engine.el for more info."
 			    (c-forward-type)
 			    (c-forward-syntactic-ws))))))
 
-		  (setq pos (point))
+		  (setq pos (point))    ; e.g. first token inside the '<'
 
 		  ;; Note: These regexps exploit the match order in \| so
 		  ;; that "<>" is matched by "<" rather than "[^>:-]>".
@@ -5513,37 +5547,35 @@ comment at the start of cc-engine.el for more info."
 		  ;; Either an operator starting with '<' or a nested arglist.
 		  (setq pos (point))
 		  (let (id-start id-end subres keyword-match)
-		    (if (if (looking-at c-<-op-cont-regexp)
-			    (setq tmp (match-end 0))
-			  (setq tmp pos)
-			  (backward-char)
-			  (not
-			   (and
-
-			    (save-excursion
-			      ;; There's always an identifier before an angle
-			      ;; bracket arglist, or a keyword in
-			      ;; `c-<>-type-kwds' or `c-<>-arglist-kwds'.
-			      (c-backward-syntactic-ws)
-			      (setq id-end (point))
-			      (c-simple-skip-symbol-backward)
-			      (when (or (setq keyword-match
-					      (looking-at c-opt-<>-sexp-key))
-					(not (looking-at c-keywords-regexp)))
-				(setq id-start (point))))
-
-			    (setq subres
-				  (let ((c-promote-possible-types t)
-					(c-record-found-types t))
-				    (c-forward-<>-arglist-recur
-				     (and keyword-match
-					  (c-keyword-member
-					   (c-keyword-sym (match-string 1))
-					   'c-<>-type-kwds)))))
-			    )))
-
-			;; It was not an angle bracket arglist.
-			(goto-char tmp)
+                  (cond
+		     ;; The '<' begins a multi-char operator.
+		     ((looking-at c-<-op-cont-regexp)
+		      (setq tmp (match-end 0))
+		      (goto-char (match-end 0)))
+		     ;; We're at a nested <.....>
+		     ((progn
+			(setq tmp pos)
+			(backward-char) ; to the '<'
+			(and
+			 (save-excursion
+			   ;; There's always an identifier before an angle
+			   ;; bracket arglist, or a keyword in `c-<>-type-kwds'
+			   ;; or `c-<>-arglist-kwds'.
+			   (c-backward-syntactic-ws)
+			   (setq id-end (point))
+			   (c-simple-skip-symbol-backward)
+			   (when (or (setq keyword-match
+					   (looking-at c-opt-<>-sexp-key))
+				     (not (looking-at c-keywords-regexp)))
+			     (setq id-start (point))))
+			 (setq subres
+			       (let ((c-promote-possible-types t)
+				     (c-record-found-types t))
+				 (c-forward-<>-arglist-recur
+				  (and keyword-match
+				       (c-keyword-member
+					(c-keyword-sym (match-string 1))
+					'c-<>-type-kwds)))))))
 
 		      ;; It was an angle bracket arglist.
 		      (setq c-record-found-types subres)
@@ -5558,8 +5590,13 @@ comment at the start of cc-engine.el for more info."
 				   (c-forward-syntactic-ws)
 				   (looking-at c-opt-identifier-concat-key)))
 			    (c-record-ref-id (cons id-start id-end))
-			  (c-record-type-id (cons id-start id-end))))))
-		  t)
+                        (c-record-type-id (cons id-start id-end)))))
+
+                   ;; At a "less than" operator.
+                   (t
+                    (forward-char)
+                    )))
+                t)                    ; carry on looping.
 
 		 ((and (not c-restricted-<>-arglists)
 		       (or (and (eq (char-before) ?&)
@@ -10337,5 +10374,4 @@ Cannot combine absolute offsets %S and %S in `add' method"
 
 (cc-provide 'cc-engine)
 
-;; arch-tag: 149add18-4673-4da5-ac47-6805e4eae089
 ;;; cc-engine.el ends here

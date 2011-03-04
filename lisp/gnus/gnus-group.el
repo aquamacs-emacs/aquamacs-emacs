@@ -1,8 +1,6 @@
 ;;; gnus-group.el --- group mode commands for Gnus
 
-;; Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-;;   2005, 2006, 2007, 2008, 2009, 2010, 2011 Free Software
-;;   Foundation, Inc.
+;; Copyright (C) 1996-2011  Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -1678,6 +1676,13 @@ and ends at END."
           " "))
     " "))
 
+
+(defun gnus-group-refresh-group (group)
+  (gnus-activate-group group)
+  (gnus-get-unread-articles-in-group (gnus-get-info group)
+				     (gnus-active group))
+  (gnus-group-update-group group))
+
 (defun gnus-group-update-group (group &optional visible-only)
   "Update all lines where GROUP appear.
 If VISIBLE-ONLY is non-nil, the group won't be displayed if it isn't
@@ -2462,7 +2467,7 @@ If PROMPT (the prefix) is a number, use the prompt specified in
 `gnus-group-jump-to-group-prompt'."
   (interactive
    (list (gnus-group-completing-read
-          nil nil (gnus-read-active-file-p)
+          nil nil nil
           (if current-prefix-arg
               (cdr (assq current-prefix-arg gnus-group-jump-to-group-prompt))
             (or (and (stringp gnus-group-jump-to-group-prompt)
@@ -4394,6 +4399,21 @@ and the second element is the address."
 
 (defun gnus-group-set-params-info (group params)
   (gnus-group-set-info params group 'params))
+
+;; Ad-hoc function for inserting data from a different newsrc.eld
+;; file.  Use with caution, if at all.
+(defun gnus-import-other-newsrc-file (file)
+  (with-temp-buffer
+    (insert-file file)
+    (let (form)
+      (while (ignore-errors
+	       (setq form (read (current-buffer))))
+	(when (and (consp form)
+		   (eq (cadr form) 'gnus-newsrc-alist))
+	  (let ((infos (cadr (nth 2 form))))
+	    (dolist (info infos)
+	      (when (gnus-get-info (car info))
+		(gnus-set-info (car info) info)))))))))
 
 (defun gnus-add-marked-articles (group type articles &optional info force)
   ;; Add ARTICLES of TYPE to the info of GROUP.

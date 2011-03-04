@@ -72,7 +72,6 @@
 	(append load-path
 		(list (expand-file-name "emulation" (car load-path))))))
    (load "emulation/cua-base")
-   (load "emulation/pc-select")
    )
 (load "delsel")
 (load "paren")

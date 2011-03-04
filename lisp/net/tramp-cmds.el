@@ -1,6 +1,6 @@
 ;;; tramp-cmds.el --- Interactive commands for Tramp
 
-;; Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2011 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, processes
@@ -280,6 +280,12 @@ buffer in your bug report.
 	(lisp-indent-line)
 	(insert ")\n"))
       (insert-buffer-substring elbuf)))
+
+  ;; Dump load-path shadows.
+  (insert "\nload-path shadows:\n==================\n")
+  (ignore-errors
+    (mapc (lambda (x) (when (string-match "tramp" x) (insert x "\n")))
+	  (split-string (list-load-path-shadows t) "\n")))
 
   ;; Append buffers only when we are in message mode.
   (when (and

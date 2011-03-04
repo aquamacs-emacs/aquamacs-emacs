@@ -1,8 +1,6 @@
 ;; autoload.el --- maintain autoloads in loaddefs.el
 
-;; Copyright (C) 1991, 1992, 1993, 1994, 1995, 1996, 1997, 2001, 2002, 2003,
-;;   2004, 2005, 2006, 2007, 2008, 2009, 2010
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1991-1997, 2001-2011  Free Software Foundation, Inc.
 
 ;; Author: Roland McGrath <roland@gnu.org>
 ;; Keywords: maint
@@ -539,7 +537,8 @@ Return non-nil if and only if FILE adds no autoloads to OUTFILE
 (defun autoload-save-buffers ()
   (while autoload-modified-buffers
     (with-current-buffer (pop autoload-modified-buffers)
-      (save-buffer))))
+      (let ((version-control 'never))
+	(save-buffer)))))
 
 ;;;###autoload
 (defun update-file-autoloads (file &optional save-after)
@@ -571,8 +570,9 @@ removes any prior now out-of-date autoload entries."
       (with-current-buffer
           ;; We used to use `raw-text' to read this file, but this causes
           ;; problems when the file contains non-ASCII characters.
-          (find-file-noselect
-           (autoload-ensure-default-file (autoload-generated-file)))
+	  (let ((enable-local-variables :safe))
+	    (find-file-noselect
+	     (autoload-ensure-default-file (autoload-generated-file))))
         ;; This is to make generated-autoload-file have Unix EOLs, so
         ;; that it is portable to all platforms.
         (or (eq 0 (coding-system-eol-type buffer-file-coding-system))
@@ -658,8 +658,9 @@ directory or directories specified."
          (autoload-modified-buffers nil))
 
     (with-current-buffer
-	(find-file-noselect
-         (autoload-ensure-default-file (autoload-generated-file)))
+	(let ((enable-local-variables :safe))
+	  (find-file-noselect
+	   (autoload-ensure-default-file (autoload-generated-file))))
       (save-excursion
 
 	;; Canonicalize file names and remove the autoload file itself.
@@ -723,7 +724,8 @@ directory or directories specified."
 	 (current-buffer) nil nil no-autoloads this-time)
 	(insert generate-autoload-section-trailer))
 
-      (save-buffer)
+      (let ((version-control 'never))
+	(save-buffer))
       ;; In case autoload entries were added to other files because of
       ;; file-local autoload-generated-file settings.
       (autoload-save-buffers))))

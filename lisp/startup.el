@@ -1,8 +1,6 @@
 ;;; startup.el --- process Emacs shell arguments
 
-;; Copyright (C) 1985, 1986, 1992, 1994, 1995, 1996, 1997, 1998, 1999,
-;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1985-1986, 1992, 1994-2011  Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: internal
@@ -2065,7 +2063,7 @@ Type \\[describe-distribution] for information on "))
 
 (defun display-startup-echo-area-message ()
   (let ((resize-mini-windows t))
-    (or noninteractive ;(input-pending-p) init-file-had-error
+    (or noninteractive                  ;(input-pending-p) init-file-had-error
 	;; t if the init file says to inhibit the echo area startup message.
 	inhibit-startup-echo-area-message
 	(message "%s" (startup-echo-area-message)))))

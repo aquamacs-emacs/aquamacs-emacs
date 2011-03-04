@@ -1,7 +1,6 @@
 ;;; viper-cmd.el --- Vi command support for Viper
 
-;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;   2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+;; Copyright (C) 1997-2011  Free Software Foundation, Inc.
 
 ;; Author: Michael Kifer <kifer@cs.stonybrook.edu>
 ;; Package: viper
@@ -2376,7 +2375,7 @@ problems."
     (if (eq viper-intermediate-command 'viper-repeat)
 	(viper-change-subr (mark t) (point))
       (viper-change (mark t) (point)))
-    ;; com is set to ?r when we repeat this comand with dot
+    ;; com is set to ?r when we repeat this command with dot
     (viper-set-destructive-command (list 'viper-substitute val ?r nil nil nil))
     ))
 

@@ -1,7 +1,6 @@
 ;;; gnus-start.el --- startup functions for Gnus
 
-;; Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-;;   2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2011 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -378,13 +377,6 @@ does not affect old (already subscribed) newsgroups."
   "*Non-nil means .newsrc should be deleted prior to save.
 Its use is due to the bogus appearance that .newsrc was modified on
 disc."
-  :group 'gnus-newsrc
-  :type 'boolean)
-
-(defcustom gnus-use-backend-marks nil
-  "If non-nil, Gnus will store and retrieve marks from the backends.
-This means that marks will be stored both in .newsrc.eld and in
-the backend, and will slow operation down somewhat."
   :group 'gnus-newsrc
   :type 'boolean)
 
@@ -872,6 +864,7 @@ prompt the user for the name of an NNTP server to use."
 			       (gnus-get-buffer-create
 				(file-name-nondirectory dribble-file)))
       (set (make-local-variable 'file-precious-flag) t)
+      (setq buffer-save-without-query t)
       (erase-buffer)
       (setq buffer-file-name dribble-file)
       (auto-save-mode t)
@@ -1509,8 +1502,8 @@ If SCAN, request a scan of that group as well."
 			      (gnus-info-group info)))))
       (gnus-activate-group (gnus-info-group info) nil t))
 
-    ;; Allow backends to update marks, 
-    (when gnus-use-backend-marks
+    ;; Allow backends to update marks,
+    (when gnus-propagate-marks
       (let ((method (inline (gnus-find-method-for-group
 			     (gnus-info-group info)))))
 	(when (gnus-check-backend-function 'request-marks (car method))
@@ -1520,7 +1513,7 @@ If SCAN, request a scan of that group as well."
 	   (num 0))
 
       ;; These checks are present in gnus-activate-group but skipped
-      ;; due to setting dont-check in the preceeding call.
+      ;; due to setting dont-check in the preceding call.
 
       ;; If a cache is present, we may have to alter the active info.
       (when (and gnus-use-cache info)
@@ -1683,6 +1676,29 @@ If SCAN, request a scan of that group as well."
 		(lambda (c1 c2)
 		  (< (gnus-method-rank (cadr c1) (car c1))
 		     (gnus-method-rank (cadr c2) (car c2))))))
+    ;; Go through the list of servers and possibly extend methods that
+    ;; aren't equal (and that need extension; i.e., they are async).
+    (let ((methods nil))
+      (dolist (elem type-cache)
+	(destructuring-bind (method method-type infos dummy) elem
+	  (let ((gnus-opened-servers methods))
+	    (when (and (gnus-similar-server-opened method)
+		       (gnus-check-backend-function
+			'retrieve-group-data-early (car method)))
+	      (setq method (gnus-server-extend-method
+			    (gnus-info-group (car infos))
+			    method))
+	      (setcar elem method))
+	    (push (list method 'ok) methods)))))
+
+    ;; If we have primary/secondary select methods, but no groups from
+    ;; them, we still want to issue a retrieval request from them.
+    (dolist (method (cons gnus-select-method
+			  gnus-secondary-select-methods))
+      (when (and (not (assoc method type-cache))
+		 (gnus-check-backend-function 'request-list (car method)))
+	(with-current-buffer nntp-server-buffer
+	  (gnus-read-active-file-1 method nil))))
 
     ;; Start early async retrieval of data.
     (dolist (elem type-cache)
@@ -1701,6 +1717,8 @@ If SCAN, request a scan of that group as well."
 		    'retrieve-group-data-early (car method)))
 	      (when (gnus-check-backend-function 'request-scan (car method))
 		(gnus-request-scan nil method))
+	      ;; Store the token we get back from -early so that we
+	      ;; can pass it to -finish later.
 	      (setcar (nthcdr 3 elem)
 		      (gnus-retrieve-group-data-early method infos)))))))
 
@@ -1742,12 +1760,15 @@ If SCAN, request a scan of that group as well."
 (defun gnus-read-active-for-groups (method infos early-data)
   (with-current-buffer nntp-server-buffer
     (cond
+     ;; Finish up getting the data from the methods that have -early
+     ;; methods.
      ((and
        (gnus-check-backend-function 'finish-retrieve-group-infos (car method))
        (or (not (gnus-agent-method-p method))
 	   (gnus-online method)))
       (gnus-finish-retrieve-group-infos method infos early-data)
       (gnus-agent-save-active method))
+     ;; Most backends have -retrieve-groups.
      ((gnus-check-backend-function 'retrieve-groups (car method))
       (when (gnus-check-backend-function 'request-scan (car method))
 	(gnus-request-scan nil method))
@@ -1756,8 +1777,11 @@ If SCAN, request a scan of that group as well."
 	 (dolist (info infos (nreverse groups))
 	   (push (gnus-group-real-name (gnus-info-group info)) groups))
 	 method)))
+     ;; Virtually all backends have -request-list.
      ((gnus-check-backend-function 'request-list (car method))
-      (gnus-read-active-file-1 method nil infos))
+      (gnus-read-active-file-1 method nil))
+     ;; Except nnvirtual and friends, where we request each group, one
+     ;; by one.
      (t
       (dolist (info infos)
 	(gnus-activate-group (gnus-info-group info) nil nil method t))))))
@@ -1863,7 +1887,7 @@ If SCAN, request a scan of that group as well."
                             ;; OK - I'm done
                             (setq articles nil))
                            ((< range article)
-                            ;; this range preceeds the article. Leave the range unmodified.
+                            ;; this range precedes the article. Leave the range unmodified.
                             (pop ranges)
                             ranges)
                            ((= range article)
@@ -1886,11 +1910,11 @@ If SCAN, request a scan of that group as well."
                             (setcar ranges min)
                             ranges)
                            ((< max article)
-                            ;; this range preceeds the article. Leave the range unmodified.
+                            ;; this range precedes the article. Leave the range unmodified.
                             (pop ranges)
                             ranges)
                            ((< article min)
-                            ;; this article preceeds the range.  Return null to move to the
+                            ;; this article precedes the range.  Return null to move to the
                             ;; next article
                             nil)
                            (t
@@ -1986,7 +2010,7 @@ If SCAN, request a scan of that group as well."
 	       (message "Quit reading the active file")
 	       nil))))))))
 
-(defun gnus-read-active-file-1 (method force &optional infos)
+(defun gnus-read-active-file-1 (method force)
   (let (where mesg)
     (setq where (nth 1 method)
 	  mesg (format "Reading active file%s via %s..."

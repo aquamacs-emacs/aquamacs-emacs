@@ -1,3 +1,83 @@
+2011-02-26  Eli Zaretskii  <eliz@gnu.org>
+
+	* sedlibmk.inp (BITSIZEOF_PTRDIFF_T, BITSIZEOF_SIG_ATOMIC_T)
+	(BITSIZEOF_SIZE_T, BITSIZEOF_WCHAR_T)
+	(BITSIZEOF_WINT_TGNULIB_FCHMODAT, GNULIB_FSTATAT, GNULIB_FUTIMENS)
+	(GNULIB_LCHMOD, GNULIB_LSTAT, GNULIB_MBTOWC, GNULIB_MKDIRAT)
+	(GNULIB_MKFIFO, GNULIB_MKFIFOAT, GNULIB_MKNOD, GNULIB_MKNODAT)
+	(GNULIB_STAT, GNULIB_UTIMENSAT, GNULIB_WCTOMB, HAVE_FCHMODAT)
+	(HAVE_FSTATAT, HAVE_FUTIMENS, HAVE_INTTYPES_H, HAVE_LCHMOD)
+	(HAVE_LONG_LONG_INT, HAVE_LSTAT, HAVE_MKDIRAT, HAVE_MKFIFO)
+	(HAVE_MKFIFOAT, HAVE_MKNOD, HAVE_MKNODAT)
+	(HAVE_SIGNED_SIG_ATOMIC_T, HAVE_SIGNED_WCHAR_T)
+	(HAVE_SIGNED_WINT_T, HAVE_STDINT_H, HAVE_SYS_BITYPES_H)
+	(HAVE_SYS_INTTYPES_H, HAVE_SYS_TYPES_H)
+	(HAVE_UNSIGNED_LONG_LONG_INT, HAVE_UTIMENSAT, HAVE_WCHAR_H)
+	(MKDIR_P, NEXT_AS_FIRST_DIRECTIVE_STDINT_H)
+	(NEXT_AS_FIRST_DIRECTIVE_SYS_STAT_H, NEXT_STDINT_H)
+	(NEXT_SYS_STAT_H, REPLACE_LSTAT, REPLACE_MBTOWC, REPLACE_MKDIR)
+	(REPLACE_MKFIFO, REPLACE_MKNOD, REPLACE_STAT, REPLACE_UTIMENSAT)
+	(REPLACE_WCTOMB, SIG_ATOMIC_T_SUFFIX, SIZE_T_SUFFIX, STDINT_H)
+	(WCHAR_T_SUFFIX, WINT_T_SUFFIX, APPLE_UNIVERSAL_BUILD): New edits.
+	($(MKDIR_P)): Replace with equivalent DOS command.
+	(gl_LIBOBJS): Add md5.o and filemode.o.
+
+	* sed2v2.inp (BITSIZEOF_PTRDIFF_T, BITSIZEOF_SIG_ATOMIC_T)
+	(BITSIZEOF_SIZE_T, BITSIZEOF_WCHAR_T, BITSIZEOF_WINT_T)
+	(HAVE_LONG_LONG_INT, HAVE_SIGNED_SIG_ATOMIC_T, HAVE_SIGNED_WINT_T)
+	(HAVE_UNSIGNED_LONG_LONG_INT, HAVE_WCHAR_H, HAVE_INTTYPES_H): New
+	edits.
+
+	* depfiles.bat: Create a dummy .Po file only if a file by the same
+	name does not already exist in the deps/ subdirectory.
+
+2011-02-19  Eli Zaretskii  <eliz@gnu.org>
+
+	* depfiles.bat: New file.
+
+	* sedlibmk.inp: New file.
+
+	* sedlibcf.inp: New file.
+
+	* sedleim.inp (RUN_EMACS): Rename from RUN-EMACS.
+	(BUILT_EMACS): Rename from BUILT-EMACS.
+
+	* sed6.inp (MAKEINFO): Edit to "makeinfo".
+	(ENVADD): Adjust to MAKEINFO_OPTS.
+	(texinputdir): Don't edit.
+
+	* sed3v2.inp (-DVERSION): Edit out.
+	(LOADLIBES): Don't edit to empty.
+
+	* sed2v2.inp: Remove workaround for the "#if ! HAVE_MKTIME ||
+	BROKEN_MKTIME" stuff -- it's no longer in src/config.in.
+	(HAVE_ATTRIBUTE_ALIGNED, HAVE_C99_STRTOLD, HAVE_DECL_GETENV)
+	(HAVE__BOOL): Edit to 1.
+	(VERSION, inline, restrict): Edit for DJGPP.
+	(my_strftime): Edit to nstrftime.
+
+	* sed1v2.inp (NS_OBJC_OBJ): Edit to empty.
+	(@true): Edit to "@rem".
+	(move-if-change): Edit to "update".
+	(echo): Edit to "djecho".
+	(cd $(lib) && ...): Edit to "$(MAKE) -C ...".
+	(LIBOBJS): Edit to empty.
+	($(libsrc)/make-docfile): Two new edits, one each for every
+	invocation of make-docfile.
+	(move-if-change): Fix edit.
+	Remove some unused switches from $(ALL_CFLAGS), to make the GCC
+	command line shorter.
+
+	* mainmake.v2 (version): Remove, no longer needed (config.in
+	defines VERSION).
+	(all): Add lib.
+	(lib): New target and recipe.
+	(lib-src): Depend on lib.
+	(src): Depend on lib and lib-src.
+	(clean, mostlyclean, distclean, maintainer-clean, extraclean)
+	(bootstrap-clean): Recurse into lib.
+	(lib, lib-src, src): Specify "all" as an explicit target.
+
 2011-01-08  Glenn Morris  <rgm@gnu.org>
 
 	* sedleim.inp (RUN-EMACS): -batch implies --no-init-file.
@@ -1090,8 +1170,7 @@
 ;; coding: utf-8
 ;; End:
 
-    Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2001, 2002, 2003,
-       2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright (C) 1994-1999, 2001-2011  Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

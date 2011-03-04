@@ -1,8 +1,6 @@
 ;;; vhdl-mode.el --- major mode for editing VHDL code
 
-;; Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
-;;   2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1992-2011  Free Software Foundation, Inc.
 
 ;; Authors:     Reto Zimmermann <reto@gnu.org>
 ;;              Rodney J. Whitby <software.vhdl-mode@rwhitby.net>
@@ -1777,7 +1775,7 @@ NOTE: Activate the new setting by restarting Emacs.
 
 (defcustom vhdl-intelligent-tab t
   "*Non-nil means `TAB' does indentation, word completion and tab insertion.
-That is, if preceeding character is part of a word then complete word,
+That is, if preceding character is part of a word then complete word,
 else if not at beginning of line then insert tab,
 else if last command was a `TAB' or `RET' then dedent one step,
 else indent current line (i.e. `TAB' is bound to `vhdl-electric-tab').
@@ -6948,7 +6946,7 @@ only-lines."
 ;; Indentation commands
 
 (defun vhdl-electric-tab (&optional prefix-arg)
-  "If preceeding character is part of a word or a paren then hippie-expand,
+  "If preceding character is part of a word or a paren then hippie-expand,
 else if right of non whitespace on line then insert tab,
 else if last command was a tab or return then dedent one step or if a comment
 toggle between normal indent and inline comment indent,
@@ -10398,7 +10396,7 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
   (if vhdl-upper-case-keywords (upcase-word num) (downcase-word num)))
 
 (defun vhdl-minibuffer-tab (&optional prefix-arg)
-  "If preceeding character is part of a word or a paren then hippie-expand,
+  "If preceding character is part of a word or a paren then hippie-expand,
 else insert tab (used for word completion in VHDL minibuffer)."
   (interactive "P")
   (cond
@@ -13058,7 +13056,7 @@ hierarchy otherwise.")
 ;; Scan functions
 
 (defun vhdl-scan-context-clause ()
-  "Scan the context clause that preceeds a design unit."
+  "Scan the context clause that precedes a design unit."
   (let (lib-alist)
     (save-excursion
       (when (re-search-backward "^[ \t]*\\(architecture\\|configuration\\|entity\\|package\\)\\>" nil t)

@@ -1,7 +1,6 @@
 ;;; bytecomp.el --- compilation of Lisp code into byte code
 
-;; Copyright (C) 1985, 1986, 1987, 1992, 1994, 1998, 2000, 2001, 2002,
-;;   2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 1985-1987, 1992, 1994, 1998, 2000-2011
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Jamie Zawinski <jwz@lucid.com>
@@ -228,6 +227,7 @@ the functions you loaded will not be able to run.")
 
 (defvar byte-compile-disable-print-circle nil
   "If non-nil, disable `print-circle' on printing a byte-compiled code.")
+(make-obsolete-variable 'byte-compile-disable-print-circle nil "24.1")
 ;;;###autoload(put 'byte-compile-disable-print-circle 'safe-local-variable 'booleanp)
 
 (defcustom byte-compile-dynamic-docstrings t

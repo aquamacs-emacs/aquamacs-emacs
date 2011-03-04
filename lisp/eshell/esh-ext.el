@@ -1,7 +1,6 @@
 ;;; esh-ext.el --- commands external to Eshell
 
-;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
-;;   2008, 2009, 2010  Free Software Foundation, Inc.
+;; Copyright (C) 1999-2011  Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 
@@ -203,7 +202,7 @@ causing the user to wonder if anything's really going on..."
 (defun eshell-external-command (command args)
   "Insert output from an external COMMAND, using ARGS."
   (setq args (eshell-stringify-list (eshell-flatten-list args)))
-  (if (string-equal (file-remote-p default-directory 'method) "ftp")
+  (if (file-remote-p default-directory)
       (eshell-remote-command command args))
   (let ((interp (eshell-find-interpreter command)))
     (assert interp)
@@ -306,5 +305,4 @@ line of the form #!<interp>."
 			    (cdr interp)))))
 	  (or interp (list fullname)))))))
 
-;; arch-tag: 178d4064-7e60-4745-b81f-bab5d8d7c40f
 ;;; esh-ext.el ends here

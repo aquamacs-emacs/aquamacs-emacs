@@ -1,8 +1,6 @@
 ;;; gnus-msg.el --- mail and post interface for Gnus
 
-;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
-;;   2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Free Software
-;;   Foundation, Inc.
+;; Copyright (C) 1995-2011  Free Software Foundation, Inc.
 
 ;; Author: Masanobu UMEDA <umerin@flab.flab.fujitsu.junet>
 ;;	Lars Magne Ingebrigtsen <larsi@gnus.org>
@@ -385,11 +383,13 @@ Thank you for your help in stamping out bugs.
 (defvar gnus-article-reply nil)
 (defmacro gnus-setup-message (config &rest forms)
   (let ((winconf (make-symbol "gnus-setup-message-winconf"))
+	(winconf-name (make-symbol "gnus-setup-message-winconf-name"))
 	(buffer (make-symbol "gnus-setup-message-buffer"))
 	(article (make-symbol "gnus-setup-message-article"))
 	(yanked (make-symbol "gnus-setup-yanked-articles"))
 	(group (make-symbol "gnus-setup-message-group")))
     `(let ((,winconf (current-window-configuration))
+	   (,winconf-name gnus-current-window-configuration)
 	   (,buffer (buffer-name (current-buffer)))
 	   (,article gnus-article-reply)
 	   (,yanked gnus-article-yanked-articles)
@@ -434,7 +434,7 @@ Thank you for your help in stamping out bugs.
 	   (progn
 	     ,@forms)
 	 (gnus-inews-add-send-actions ,winconf ,buffer ,article ,config
-				      ,yanked)
+				      ,yanked ',winconf-name)
 	 (setq gnus-message-buffer (current-buffer))
 	 (set (make-local-variable 'gnus-message-group-art)
 	      (cons ,group ,article))
@@ -477,7 +477,7 @@ Thank you for your help in stamping out bugs.
 
 ;;;###autoload
 (defun gnus-msg-mail (&optional to subject other-headers continue
-				switch-action yank-action send-actions)
+		      switch-action yank-action send-actions return-action)
   "Start editing a mail message to be sent.
 Like `message-mail', but with Gnus paraphernalia, particularly the
 Gcc: header for archiving purposes."
@@ -486,7 +486,7 @@ Gcc: header for archiving purposes."
 	mail-buf)
     (gnus-setup-message 'message
       (message-mail to subject other-headers continue
-		    nil yank-action send-actions))
+		    nil yank-action send-actions return-action))
     (when switch-action
       (setq mail-buf (current-buffer))
       (switch-to-buffer buf)
@@ -529,7 +529,8 @@ Gcc: header for archiving purposes."
 	    (throw 'found (cons (cadr elem) (caddr elem)))))))))
 
 (defun gnus-inews-add-send-actions (winconf buffer article
-					    &optional config yanked)
+					    &optional config yanked
+					    winconf-name)
   (gnus-make-local-hook 'message-sent-hook)
   (add-hook 'message-sent-hook (if gnus-agent 'gnus-agent-possibly-do-gcc
 				 'gnus-inews-do-gcc) nil t)
@@ -540,8 +541,10 @@ Gcc: header for archiving purposes."
 	`(lambda (&optional arg)
 	   (gnus-post-method arg ,gnus-newsgroup-name)))
   (message-add-action
-   `(when (gnus-buffer-exists-p ,buffer)
-      (set-window-configuration ,winconf))
+   `(progn
+      (setq gnus-current-window-configuration ',winconf-name)
+      (when (gnus-buffer-exists-p ,buffer)
+	(set-window-configuration ,winconf)))
    'exit 'postpone 'kill)
   (let ((to-be-marked (cond
 		       (yanked
@@ -1083,14 +1086,14 @@ If VERY-WIDE, make a very wide reply."
 	      (gnus-summary-work-articles 1))))
   ;; Allow user to require confirmation before replying by mail to the
   ;; author of a news article (or mail message).
-  (when (or
-	    (not (or (gnus-news-group-p gnus-newsgroup-name)
+  (when (or (not (or (gnus-news-group-p gnus-newsgroup-name)
 		     gnus-confirm-treat-mail-like-news))
 	    (not (cond ((stringp gnus-confirm-mail-reply-to-news)
 			(string-match gnus-confirm-mail-reply-to-news
 				      gnus-newsgroup-name))
 		       ((functionp gnus-confirm-mail-reply-to-news)
-			(funcall gnus-confirm-mail-reply-to-news gnus-newsgroup-name))
+			(funcall gnus-confirm-mail-reply-to-news
+				 gnus-newsgroup-name))
 		       (t gnus-confirm-mail-reply-to-news)))
 	    (if (or wide very-wide)
 		t ;; Ignore gnus-confirm-mail-reply-to-news for wide and very
@@ -1125,7 +1128,7 @@ If VERY-WIDE, make a very wide reply."
 	    (insert headers))
 	  (goto-char (point-max)))
 	(mml-quote-region (point) (point-max))
-	(message-reply nil wide)
+	(message-reply nil wide 'switch-to-buffer)
 	(when yank
 	  (gnus-inews-yank-articles yank))
 	(gnus-summary-handle-replysign)))))

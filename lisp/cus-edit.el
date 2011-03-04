@@ -1,7 +1,6 @@
 ;;; cus-edit.el --- tools for customizing Emacs and Lisp packages
 ;;
-;; Copyright (C) 1996, 1997, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;   2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+;; Copyright (C) 1996-1997, 1999-2011  Free Software Foundation, Inc.
 ;;
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
 ;; Maintainer: FSF
@@ -1600,7 +1599,7 @@ Otherwise use brackets."
 	       'editable-field
 	       :size 40 :help-echo echo
 	       :action `(lambda (widget &optional event)
-			  (customize-apropos (widget-value widget))))))
+			  (customize-apropos (split-string (widget-value widget)))))))
 	(widget-insert " ")
 	(widget-create-child-and-convert
 	 search-widget 'push-button
@@ -4863,5 +4862,4 @@ if that value is non-nil."
 
 (provide 'cus-edit)
 
-;; arch-tag: 64533aa4-1b1a-48c3-8812-f9dc718e8a6f
 ;;; cus-edit.el ends here
