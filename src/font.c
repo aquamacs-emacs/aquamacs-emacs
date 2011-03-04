@@ -1549,7 +1549,8 @@ font_parse_fcname (name, font)
 		    size_found = 0;
 		    break;
 		  }
-	      if (size_found)
+	      /* GTK font sizes must occur at the end.  */
+	      if (size_found && *q == '\0')
 		{
 		  double point_size = strtod (p, &q);
 		  ASET (font, FONT_SIZE_INDEX, make_float (point_size));
@@ -1603,7 +1604,7 @@ font_parse_fcname (name, font)
 	  else if (PROP_MATCH ("Italic", 6))
 	    {
 	      prop_found = 1;
-	      prop = font_intern_prop ("italic", 4, 1);
+	      prop = font_intern_prop ("italic", 6, 1);
 	      FONT_SET_STYLE (font, FONT_SLANT_INDEX, prop);
 	    }
 	  else if (PROP_MATCH ("Oblique", 7))
@@ -3041,7 +3042,7 @@ font_open_entity (f, entity, pixel_size)
   Lisp_Object objlist, size, val, font_object;
   struct font *font;
   int min_width, height;
-  int scaled_pixel_size;
+  int scaled_pixel_size = pixel_size;
 
   font_assert (FONT_ENTITY_P (entity));
   size = AREF (entity, FONT_SIZE_INDEX);
@@ -3421,7 +3422,7 @@ font_find_for_lface (f, attrs, spec, c)
   XSETFRAME (frame, f);
   size = AREF (spec, FONT_SIZE_INDEX);
   pixel_size = font_pixel_size (f, spec);
-  if (pixel_size == 0)
+  if (pixel_size == 0 && INTEGERP (attrs[LFACE_HEIGHT_INDEX]))
     {
       double pt = XINT (attrs[LFACE_HEIGHT_INDEX]);
 

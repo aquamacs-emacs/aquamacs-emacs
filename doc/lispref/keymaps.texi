@@ -1510,6 +1510,12 @@ does not have the effect of remapping @code{kill-line} into
 if an ordinary binding specifies @code{my-kill-line}, this keymap will
 remap it to @code{my-other-kill-line}.
 
+To undo the remapping of a command, remap it to @code{nil}; e.g.
+
+@smallexample
+(define-key my-mode-map [remap kill-line] nil)
+@end smallexample
+
 @defun command-remapping command &optional position keymaps
 This function returns the remapping for @var{command} (a symbol),
 given the current active keymaps.  If @var{command} is not remapped
@@ -1974,6 +1980,7 @@ feature.
 @cindex defining menus
 @cindex menu prompt string
 @cindex prompt string (of menu)
+@cindex menu item
 
 A keymap acts as a menu if it has an @dfn{overall prompt string},
 which is a string that appears as an element of the keymap.
@@ -2090,6 +2097,7 @@ the item strings themselves, since that is redundant.
 @node Extended Menu Items
 @subsubsection Extended Menu Items
 @kindex menu-item
+@cindex extended menu item
 
   An extended-format menu item is a more flexible and also cleaner
 alternative to the simple format.  You define an event type with a

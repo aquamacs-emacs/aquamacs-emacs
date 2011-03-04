@@ -6636,7 +6636,8 @@ typedef struct
   win = nwin;
   condemned = NO;
   pixel_height = NSHeight (r);
-  min_portion = 20 / (pixel_height > 0 ? pixel_height : 1);
+  if (pixel_height == 0) pixel_height = 1;
+  min_portion = 20 / pixel_height;
 
   frame = XFRAME (XWINDOW (win)->frame);
   if (FRAME_LIVE_P (frame))
@@ -6665,8 +6666,8 @@ typedef struct
   NSTRACE (EmacsScroller_setFrame);
   BLOCK_INPUT;
   pixel_height = NSHeight (newRect);
-  /* pixel_height may be 0 */
-  min_portion = 20 / (pixel_height > 0 ? pixel_height : 1);
+  if (pixel_height == 0) pixel_height = 1;
+  min_portion = 20 / pixel_height;
   [super setFrame: newRect];
   [self display];
   UNBLOCK_INPUT;

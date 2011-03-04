@@ -222,15 +222,15 @@ The properties returned may include `top', `left', `height', and `width'."
    ;; NS-Style specification
    (if (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
 \\( \\([0-9]+\\) ?\\)?\\)?\\)?"
-		     geom)
+		      geom)
        (append
-	 (list (cons 'top (string-to-number (match-string 1 geom))))
-	 (if (match-string 3 geom)
-	     (list (cons 'left (string-to-number (match-string 3 geom)))))
-	 (if (match-string 5 geom)
-	     (list (cons 'height (string-to-number (match-string 5 geom)))))
-	 (if (match-string 7 geom)
-	     (list (cons 'width (string-to-number (match-string 7 geom)))))))))
+      (list (cons 'top (string-to-number (match-string 1 geom))))
+      (if (match-string 3 geom)
+	  (list (cons 'left (string-to-number (match-string 3 geom)))))
+      (if (match-string 5 geom)
+	  (list (cons 'height (string-to-number (match-string 5 geom)))))
+      (if (match-string 7 geom)
+	  (list (cons 'width (string-to-number (match-string 7 geom)))))))))
 
 ;;;; Keyboard mapping.
 
@@ -309,7 +309,7 @@ The properties returned may include `top', `left', `height', and `width'."
 ;             (cons (logior (lsh 0 16)   9) 'ns-insert-working-text)
 ;             (cons (logior (lsh 0 16)  10) 'ns-delete-working-text)
              (cons (logior (lsh 0 16)  11) 'ns-spi-service-call)
-             (cons (logior (lsh 0 16)  12) 'ns-new-frame)
+	     (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 	     (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
 	     (cons (logior (lsh 0 16)  14) 'ns-show-prefs) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  17) 'ns-change-color)
@@ -875,6 +875,70 @@ Lines are highlighted according to `ns-input-line'."
      (t (read res)))))
 
 
+(declare-function ns-read-file-name "nsfns.m"
+		  (prompt &optional dir isLoad init))
+
+;;;; File handling.
+
+(defun ns-open-file-using-panel ()
+  "Pop up open-file panel, and load the result in a buffer."
+  (interactive)
+  ;; Prompt dir defaultName isLoad initial.
+  (setq ns-input-file (ns-read-file-name "Select File to Load" nil t nil))
+  (if ns-input-file
+      (and (setq ns-input-file (list ns-input-file)) (ns-find-file))))
+
+(defun ns-write-file-using-panel ()
+  "Pop up save-file panel, and save buffer in resulting name."
+  (interactive)
+  (let (ns-output-file)
+    ;; Prompt dir defaultName isLoad initial.
+    (setq ns-output-file (ns-read-file-name "Save As" nil nil nil))
+    (message ns-output-file)
+    (if ns-output-file (write-file ns-output-file))))
+
+(defcustom ns-pop-up-frames 'fresh
+  "Non-nil means open files upon request from the Workspace in a new frame.
+If t, always do so.  Any other non-nil value means open a new frame
+unless the current buffer is a scratch buffer."
+  :type '(choice (const :tag "Never" nil)
+                 (const :tag "Always" t)
+                 (other :tag "Except for scratch buffer" fresh))
+  :version "23.1"
+  :group 'ns)
+
+(declare-function ns-hide-emacs "nsfns.m" (on))
+
+(defun ns-find-file ()
+  "Do a `find-file' with the `ns-input-file' as argument."
+  (interactive)
+  (let ((f) (file) (bufwin1) (bufwin2))
+    (setq f (file-truename (expand-file-name (car ns-input-file)
+					     command-line-default-directory)))
+    (setq ns-input-file (cdr ns-input-file))
+    (setq file (find-file-noselect f))
+    (setq bufwin1 (get-buffer-window file 'visible))
+    (setq bufwin2 (get-buffer-window "*scratch*" 'visibile))
+    (cond
+     (bufwin1
+      (select-frame (window-frame bufwin1))
+      (raise-frame (window-frame bufwin1))
+      (select-window bufwin1))
+     ((and (eq ns-pop-up-frames 'fresh) bufwin2)
+      (ns-hide-emacs 'activate)
+      (select-frame (window-frame bufwin2))
+      (raise-frame (window-frame bufwin2))
+      (select-window bufwin2)
+      (find-file f))
+     (ns-pop-up-frames
+      (ns-hide-emacs 'activate)
+      (let ((pop-up-frames t)) (pop-to-buffer file nil)))
+     (t
+      (ns-hide-emacs 'activate)
+      (find-file f)))))
+
+
+
 ;;;; Frame-related functions.
 
 ;; Don't show the frame name; that's redundant with Nextstep.
@@ -924,8 +988,8 @@ Lines are highlighted according to `ns-input-line'."
   (modify-frame-parameters
    (or frame (selected-frame))
    (list (cons 'tool-bar-lines
-	       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
-		   0 1)) ))
+		       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
+				   0 1)) ))
   ;; trigger update of toolbar
   (force-mode-line-update))
 
@@ -1241,9 +1305,9 @@ the operating system.")
      ((eq area 'vertical-line)
       'default)
      ((and (not area) (eq p (window-point window)))
-      'cursor)
+            'cursor)
      ((and (not area) mark-active (< (region-beginning) p) (< p (region-end)))
-      'region)
+            'region)
      ((not area)
       (let* ((faces (or (get-char-property p 'face window) 'default))
 	     (face (if (consp faces) (car faces) faces)))
@@ -1262,14 +1326,14 @@ EVENT is a mouse event, and ATTRIBUTE is either
 	(error "Position not in text area of window"))
     (let* ((face (ns-face-at-pos position))
 	   (frame (window-frame (posn-window position))))
-      (cond
-       ((eq face 'cursor)
-	(modify-frame-parameters frame (list (cons 'cursor-color
-						   ns-input-color))))
-       ((not face)
+    (cond
+     ((eq face 'cursor)
+      (modify-frame-parameters frame (list (cons 'cursor-color
+                                                 ns-input-color))))
+     ((not face)
 	(modify-frame-parameters frame (list (cons attribute
-						   ns-input-color))))
-       (t
+                                                 ns-input-color))))
+     (t
 	(if (eq attribute 'foreground-color)
 	    (set-face-foreground face ns-input-color frame)
 	  (set-face-background face ns-input-color frame))
