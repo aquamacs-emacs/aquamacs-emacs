@@ -1,8 +1,6 @@
 ;;; browse-url.el --- pass a URL to a WWW browser
 
-;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
-;;   2004, 2005, 2006, 2007, 2008, 2009, 2010
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1995-2011  Free Software Foundation, Inc.
 
 ;; Author: Denis Howe <dbh@doc.ic.ac.uk>
 ;; Maintainer: FSF
@@ -800,7 +798,12 @@ first, if that exists."
   (let ((process-environment (copy-sequence process-environment))
 	(function (or (and (string-match "\\`mailto:" url)
 			   browse-url-mailto-function)
-		      browse-url-browser-function)))
+		      browse-url-browser-function))
+	;; Ensure that `default-directory' exists and is readable (b#6077).
+	(default-directory (if (and (file-directory-p default-directory)
+				    (file-readable-p default-directory))
+			       default-directory
+			     (expand-file-name "~/"))))
     ;; When connected to various displays, be careful to use the display of
     ;; the currently selected frame, rather than the original start display,
     ;; which may not even exist any more.

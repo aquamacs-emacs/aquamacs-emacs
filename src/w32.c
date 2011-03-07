@@ -1,6 +1,5 @@
 /* Utility and Unix shadow routines for GNU Emacs on the Microsoft W32 API.
-   Copyright (C) 1994, 1995, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
-                 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+   Copyright (C) 1994-1995, 2000-2011  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -148,13 +147,8 @@ typedef HRESULT (WINAPI * ShGetFolderPath_fn)
 void globals_of_w32 (void);
 static DWORD get_rid (PSID);
 
-extern Lisp_Object Vw32_downcase_file_names;
-extern Lisp_Object Vw32_generate_fake_inodes;
-extern Lisp_Object Vw32_get_true_file_attributes;
 /* Defined in process.c for its own purpose.  */
 extern Lisp_Object Qlocal;
-
-extern int w32_num_mouse_buttons;
 
 
 /* Initialization states.
@@ -1514,8 +1508,6 @@ w32_get_resource (char *key, LPDWORD lpdwtype)
 }
 
 char *get_emacs_configuration (void);
-extern Lisp_Object Vsystem_configuration;
-
 void
 init_environment (char ** argv)
 {
@@ -3622,6 +3614,25 @@ utime (const char *name, struct utimbuf *times)
 }
 
 
+/* Symlink-related functions that always fail.  Used in fileio.c to
+   avoid #ifdef's.  */
+int
+symlink (char const *dummy1, char const *dummy2)
+{
+  errno = ENOSYS;
+  return -1;
+}
+
+ssize_t
+readlink (const char *name, char *dummy1, size_t dummy2)
+{
+  /* `access' is much faster than `stat' on MS-Windows.  */
+  if (sys_access (name, 0) == 0)
+    errno = EINVAL;
+  return -1;
+}
+
+
 /* Support for browsing other processes and their attributes.  See
    process.c for the Lisp bindings.  */
 
@@ -5184,9 +5195,6 @@ sys_pipe (int * phandles)
   return rc;
 }
 
-/* From ntproc.c */
-extern int w32_pipe_read_delay;
-
 /* Function to do blocking read of one byte, needed to implement
    select.  It is only allowed on sockets and pipes. */
 int
@@ -5666,7 +5674,6 @@ check_windows_init_file (void)
 
   if (!noninteractive && !inhibit_window_system)
     {
-      extern Lisp_Object Vwindow_system, Vload_path, Qfile_exists_p;
       Lisp_Object objs[2];
       Lisp_Object full_load_path;
       Lisp_Object init_file;

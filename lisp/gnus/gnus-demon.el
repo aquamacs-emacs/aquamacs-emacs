@@ -1,7 +1,6 @@
 ;;; gnus-demon.el --- daemonic Gnus behavior
 
-;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-;;   2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 1995-2011 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -141,7 +140,7 @@ Emacs has been idle for IDLE `gnus-demon-timestep's."
              ;; (func number nil)
              ;; Call every `time'
              ((and (numberp time) (null idle))
-              (run-with-timer t time 'gnus-demon-run-callback func)))))
+              (run-with-timer time time 'gnus-demon-run-callback func)))))
       (when timer
         (add-to-list 'gnus-demon-timers timer)))))
 

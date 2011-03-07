@@ -1,7 +1,6 @@
 ;;; sql.el --- specialized comint.el for SQL interpreters
 
-;; Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
-;;   2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+;; Copyright (C) 1998-2011  Free Software Foundation, Inc.
 
 ;; Author: Alex Schroeder <alex@gnu.org>
 ;; Maintainer: Michael Mauger <mmaug@yahoo.com>
@@ -2802,7 +2801,7 @@ server/database name."
 (defun sql-rename-buffer (&optional new-name)
   "Rename a SQL interactive buffer.
 
-Prompts for the new name if command is preceeded by
+Prompts for the new name if command is preceded by
 \\[universal-argument].  If no buffer name is provided, then the
 `sql-alternate-buffer-name' is used.
 
@@ -3263,7 +3262,7 @@ you must tell Emacs.  Here's how to do that in your `~/.emacs' file:
   :abbrev-table sql-mode-abbrev-table
   (if sql-mode-menu
       (easy-menu-add sql-mode-menu)); XEmacs
-  
+
   (set (make-local-variable 'comment-start) "--")
   ;; Make each buffer in sql-mode remember the "current" SQLi buffer.
   (make-local-variable 'sql-buffer)
@@ -4258,4 +4257,3 @@ buffer.
 (provide 'sql)
 
 ;;; sql.el ends here
-

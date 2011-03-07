@@ -1,7 +1,5 @@
 /* Updating of data structures for redisplay.
-   Copyright (C) 1985, 1986, 1987, 1988, 1993, 1994, 1995,
-                 1997, 1998, 1999, 2000, 2001, 2002, 2003,
-                 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1985-1988, 1993-1995, 1997-2011 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -23,10 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <stdio.h>
 #include <ctype.h>
 #include <setjmp.h>
-
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 
 #include "lisp.h"
 #include "termchar.h"
@@ -173,12 +168,6 @@ static void adjust_frame_glyphs_for_window_redisplay (struct frame *);
 static void adjust_frame_glyphs_for_frame_redisplay (struct frame *);
 
 
-/* Non-zero means don't pause redisplay for pending input.  (This is
-   for debugging and for a future implementation of EDT-like
-   scrolling.  */
-
-int redisplay_dont_pause;
-
 /* Define PERIODIC_PREEMPTION_CHECKING to 1, if micro-second timers
    are supported, so we can check for input during redisplay at
    regular intervals.  */
@@ -189,10 +178,6 @@ int redisplay_dont_pause;
 #endif
 
 #if PERIODIC_PREEMPTION_CHECKING
-
-/* If a number (float), check for user input every N seconds.  */
-
-Lisp_Object Vredisplay_preemption_period;
 
 /* Redisplay preemption timers.  */
 
@@ -209,49 +194,6 @@ int frame_garbaged;
 /* Nonzero means last display completed.  Zero means it was preempted.  */
 
 int display_completed;
-
-/* Lisp variable visible-bell; enables use of screen-flash instead of
-   audible bell.  */
-
-int visible_bell;
-
-/* Invert the color of the whole frame, at a low level.  */
-
-int inverse_video;
-
-/* Line speed of the terminal.  */
-
-EMACS_INT baud_rate;
-
-/* Either nil or a symbol naming the window system under which Emacs
-   creates the first frame.  */
-
-Lisp_Object Vinitial_window_system;
-
-/* Version number of X windows: 10, 11 or nil.  */
-
-Lisp_Object Vwindow_system_version;
-
-/* Vector of glyph definitions.  Indexed by glyph number, the contents
-   are a string which is how to output the glyph.
-
-   If Vglyph_table is nil, a glyph is output by using its low 8 bits
-   as a character code.
-
-   This is an obsolete feature that is no longer used.  The variable
-   is retained for compatibility.  */
-
-Lisp_Object Vglyph_table;
-
-/* Display table to use for vectors that don't specify their own.  */
-
-Lisp_Object Vstandard_display_table;
-
-/* Nonzero means reading single-character input with prompt so put
-   cursor on mini-buffer after the prompt.  Positive means at end of
-   text in echo area; negative means at beginning of line.  */
-
-int cursor_in_echo_area;
 
 Lisp_Object Qdisplay_table, Qredisplay_dont_pause;
 
@@ -368,7 +310,7 @@ add_window_display_history (struct window *w, char *msg, int paused_p)
 	   w,
 	   ((BUFFERP (w->buffer)
 	     && STRINGP (XBUFFER (w->buffer)->name))
-	    ? (char *) SDATA (XBUFFER (w->buffer)->name)
+	    ? SSDATA (XBUFFER (w->buffer)->name)
 	    : "???"),
 	   paused_p ? " ***paused***" : "");
   strcat (buf, msg);
@@ -1184,32 +1126,6 @@ copy_row_except_pointers (struct glyph_row *to, struct glyph_row *from)
 
   /* Restore original pointers of TO.  */
   memcpy (to->glyphs, pointers, sizeof to->glyphs);
-}
-
-
-/* Copy contents of glyph row FROM to glyph row TO.  Glyph pointers in
-   TO and FROM are left unchanged.  Glyph contents are copied from the
-   glyph memory of FROM to the glyph memory of TO.  Increment buffer
-   positions in row TO by DELTA/ DELTA_BYTES.  */
-
-void
-copy_glyph_row_contents (struct glyph_row *to, struct glyph_row *from,
-			 EMACS_INT delta, EMACS_INT delta_bytes)
-{
-  int area;
-
-  /* This is like a structure assignment TO = FROM, except that
-     glyph pointers in the rows are left unchanged.  */
-  copy_row_except_pointers (to, from);
-
-  /* Copy glyphs from FROM to TO.  */
-  for (area = 0; area < LAST_AREA; ++area)
-    if (from->used[area])
-      memcpy (to->glyphs[area], from->glyphs[area],
-	      from->used[area] * sizeof (struct glyph));
-
-  /* Increment buffer positions in TO by DELTA.  */
-  increment_row_positions (to, delta, delta_bytes);
 }
 
 
@@ -2281,8 +2197,6 @@ adjust_frame_glyphs_for_frame_redisplay (struct frame *f)
 static void
 adjust_frame_glyphs_for_window_redisplay (struct frame *f)
 {
-  struct window *w;
-
   xassert (FRAME_WINDOW_P (f) && FRAME_LIVE_P (f));
 
   /* Allocate/reallocate window matrices.  */
@@ -2294,6 +2208,7 @@ adjust_frame_glyphs_for_window_redisplay (struct frame *f)
 #if ! defined (USE_X_TOOLKIT) && ! defined (USE_GTK)
   {
     /* Allocate a dummy window if not already done.  */
+    struct window *w;
     if (NILP (f->menu_bar_window))
       {
 	f->menu_bar_window = make_window ();
@@ -2316,23 +2231,26 @@ adjust_frame_glyphs_for_window_redisplay (struct frame *f)
 #endif /* HAVE_X_WINDOWS */
 
 #ifndef USE_GTK
-  /* Allocate/ reallocate matrices of the tool bar window.  If we
-     don't have a tool bar window yet, make one.  */
-  if (NILP (f->tool_bar_window))
-    {
-      f->tool_bar_window = make_window ();
+  {
+    /* Allocate/ reallocate matrices of the tool bar window.  If we
+       don't have a tool bar window yet, make one.  */
+    struct window *w;
+    if (NILP (f->tool_bar_window))
+      {
+	f->tool_bar_window = make_window ();
+	w = XWINDOW (f->tool_bar_window);
+	XSETFRAME (w->frame, f);
+	w->pseudo_window_p = 1;
+      }
+    else
       w = XWINDOW (f->tool_bar_window);
-      XSETFRAME (w->frame, f);
-      w->pseudo_window_p = 1;
-    }
-  else
-    w = XWINDOW (f->tool_bar_window);
 
-  XSETFASTINT (w->top_line, FRAME_MENU_BAR_LINES (f));
-  XSETFASTINT (w->left_col, 0);
-  XSETFASTINT (w->total_lines, FRAME_TOOL_BAR_LINES (f));
-  XSETFASTINT (w->total_cols, FRAME_TOTAL_COLS (f));
-  allocate_matrices_for_window_redisplay (w);
+    XSETFASTINT (w->top_line, FRAME_MENU_BAR_LINES (f));
+    XSETFASTINT (w->left_col, 0);
+    XSETFASTINT (w->total_lines, FRAME_TOOL_BAR_LINES (f));
+    XSETFASTINT (w->total_cols, FRAME_TOTAL_COLS (f));
+    allocate_matrices_for_window_redisplay (w);
+  }
 #endif
 }
 
@@ -2982,7 +2900,7 @@ sync_window_with_frame_matrix_rows (struct window *w)
 /* Return the window in the window tree rooted in W containing frame
    row ROW.  Value is null if none is found.  */
 
-struct window *
+static struct window *
 frame_row_to_window (struct window *w, int row)
 {
   struct window *found = NULL;
@@ -3620,12 +3538,12 @@ redraw_overlapping_rows (struct window *w, int yb)
 #endif /* HAVE_WINDOW_SYSTEM */
 
 
-#ifdef GLYPH_DEBUG
+#if defined GLYPH_DEBUG && 0
 
 /* Check that no row in the current matrix of window W is enabled
    which is below what's displayed in the window.  */
 
-void
+static void
 check_current_matrix_flags (struct window *w)
 {
   int last_seen_p = 0;
@@ -4074,7 +3992,7 @@ update_text_area (struct window *w, int vpos)
 	{
 	  /* Otherwise clear to the end of the old row.  Everything
 	     after that position should be clear already.  */
-	  int x;
+	  int xlim;
 
 	  if (i >= desired_row->used[TEXT_AREA])
 	    rif->cursor_to (vpos, i, desired_row->y,
@@ -4091,11 +4009,11 @@ update_text_area (struct window *w, int vpos)
 		  : (w->phys_cursor.hpos >= desired_row->used[TEXT_AREA])))
 	    {
 	      w->phys_cursor_on_p = 0;
-	      x = -1;
+	      xlim = -1;
 	    }
 	  else
-	    x = current_row->pixel_width;
-	  rif->clear_end_of_line (x);
+	    xlim = current_row->pixel_width;
+	  rif->clear_end_of_line (xlim);
 	  changed_p = 1;
 	}
     }
@@ -4551,7 +4469,7 @@ scrolling_window (struct window *w, int header_line_p)
 	&& old_lines[i]->old_uses == 1
         && old_lines[i]->new_uses == 1)
       {
-	int j, k;
+	int p, q;
 	int new_line = old_lines[i]->new_line_number;
 	struct run *run = run_pool + run_idx++;
 
@@ -4564,33 +4482,33 @@ scrolling_window (struct window *w, int header_line_p)
 	run->height = MATRIX_ROW (current_matrix, i)->height;
 
 	/* Extend backward.  */
-	j = i - 1;
-	k = new_line - 1;
-	while (j > first_old
-	       && k > first_new
-	       && old_lines[j] == new_lines[k])
+	p = i - 1;
+	q = new_line - 1;
+	while (p > first_old
+	       && q > first_new
+	       && old_lines[p] == new_lines[q])
 	  {
-	    int h = MATRIX_ROW (current_matrix, j)->height;
+	    int h = MATRIX_ROW (current_matrix, p)->height;
 	    --run->current_vpos;
 	    --run->desired_vpos;
 	    ++run->nrows;
 	    run->height += h;
 	    run->desired_y -= h;
 	    run->current_y -= h;
-	    --j, --k;
+	    --p, --q;
 	  }
 
 	/* Extend forward.  */
-	j = i + 1;
-	k = new_line + 1;
-	while (j < last_old
-	       && k < last_new
-	       && old_lines[j] == new_lines[k])
+	p = i + 1;
+	q = new_line + 1;
+	while (p < last_old
+	       && q < last_new
+	       && old_lines[p] == new_lines[q])
 	  {
-	    int h = MATRIX_ROW (current_matrix, j)->height;
+	    int h = MATRIX_ROW (current_matrix, p)->height;
 	    ++run->nrows;
 	    run->height += h;
-	    ++j, ++k;
+	    ++p, ++q;
 	  }
 
 	/* Insert run into list of all runs.  Order runs by copied
@@ -4598,11 +4516,11 @@ scrolling_window (struct window *w, int header_line_p)
 	   be copied because they are already in place.  This is done
 	   because we can avoid calling update_window_line in this
 	   case.  */
-	for (j = 0; j < nruns && runs[j]->height > run->height; ++j)
+	for (p = 0; p < nruns && runs[p]->height > run->height; ++p)
 	  ;
-	for (k = nruns; k > j; --k)
-	  runs[k] = runs[k - 1];
-	runs[j] = run;
+	for (q = nruns; q > p; --q)
+	  runs[q] = runs[q - 1];
+	runs[p] = run;
 	++nruns;
 
 	i += run->nrows;
@@ -4699,7 +4617,7 @@ update_frame_1 (struct frame *f, int force_p, int inhibit_id_p)
   struct glyph_matrix *current_matrix = f->current_matrix;
   struct glyph_matrix *desired_matrix = f->desired_matrix;
   int i;
-  int pause;
+  int pause_p;
   int preempt_count = baud_rate / 2400 + 1;
 
   xassert (current_matrix && desired_matrix);
@@ -4713,7 +4631,7 @@ update_frame_1 (struct frame *f, int force_p, int inhibit_id_p)
 #if !PERIODIC_PREEMPTION_CHECKING
   if (!force_p && detect_input_pending_ignore_squeezables ())
     {
-      pause = 1;
+      pause_p = 1;
       goto do_pause;
     }
 #endif
@@ -4793,10 +4711,10 @@ update_frame_1 (struct frame *f, int force_p, int inhibit_id_p)
 	}
     }
 
-  pause = (i < FRAME_LINES (f) - 1) ? i : 0;
+  pause_p = (i < FRAME_LINES (f) - 1) ? i : 0;
 
   /* Now just clean up termcap drivers and set cursor, etc.  */
-  if (!pause)
+  if (!pause_p)
     {
       if ((cursor_in_echo_area
 	   /* If we are showing a message instead of the mini-buffer,
@@ -4897,7 +4815,7 @@ update_frame_1 (struct frame *f, int force_p, int inhibit_id_p)
 #endif
 
   clear_desired_matrices (f);
-  return pause;
+  return pause_p;
 }
 
 
@@ -5654,7 +5572,7 @@ marginal_area_string (struct window *w, enum window_part part,
 
 #ifdef SIGWINCH
 
-SIGTYPE
+static SIGTYPE
 window_change_signal (int signalnum) /* If we don't have an argument, */
                    		/* some compilers complain in signal calls.  */
 {
@@ -5909,7 +5827,7 @@ FILE = nil means just close any termscript file currently open.  */)
   if (! NILP (file))
     {
       file = Fexpand_file_name (file, Qnil);
-      tty->termscript = fopen (SDATA (file), "w");
+      tty->termscript = fopen (SSDATA (file), "w");
       if (tty->termscript == 0)
 	report_file_error ("Opening termscript", Fcons (file, Qnil));
     }
@@ -6189,7 +6107,7 @@ pass nil for VARIABLE.  */)
     {
       buf = XCDR (XCAR (tail));
       /* Ignore buffers that aren't included in buffer lists.  */
-      if (SREF (XBUFFER (buf)->name, 0) == ' ')
+      if (SREF (BVAR (XBUFFER (buf), name), 0) == ' ')
 	continue;
       if (vecp == end)
 	goto changed;
@@ -6197,7 +6115,7 @@ pass nil for VARIABLE.  */)
 	goto changed;
       if (vecp == end)
 	goto changed;
-      if (!EQ (*vecp++, XBUFFER (buf)->read_only))
+      if (!EQ (*vecp++, BVAR (XBUFFER (buf), read_only)))
 	goto changed;
       if (vecp == end)
 	goto changed;
@@ -6244,10 +6162,10 @@ pass nil for VARIABLE.  */)
     {
       buf = XCDR (XCAR (tail));
       /* Ignore buffers that aren't included in buffer lists.  */
-      if (SREF (XBUFFER (buf)->name, 0) == ' ')
+      if (SREF (BVAR (XBUFFER (buf), name), 0) == ' ')
 	continue;
       *vecp++ = buf;
-      *vecp++ = XBUFFER (buf)->read_only;
+      *vecp++ = BVAR (XBUFFER (buf), read_only);
       *vecp++ = Fbuffer_modified_p (buf);
     }
   /* Fill up the vector with lambdas (always at least one).  */
@@ -6561,27 +6479,27 @@ syms_of_display (void)
   Qredisplay_dont_pause = intern_c_string ("redisplay-dont-pause");
   staticpro (&Qredisplay_dont_pause);
 
-  DEFVAR_INT ("baud-rate", &baud_rate,
+  DEFVAR_INT ("baud-rate", baud_rate,
 	      doc: /* *The output baud rate of the terminal.
 On most systems, changing this value will affect the amount of padding
 and the other strategic decisions made during redisplay.  */);
 
-  DEFVAR_BOOL ("inverse-video", &inverse_video,
+  DEFVAR_BOOL ("inverse-video", inverse_video,
 	       doc: /* *Non-nil means invert the entire frame display.
 This means everything is in inverse video which otherwise would not be.  */);
 
-  DEFVAR_BOOL ("visible-bell", &visible_bell,
+  DEFVAR_BOOL ("visible-bell", visible_bell,
 	       doc: /* *Non-nil means try to flash the frame to represent a bell.
 
 See also `ring-bell-function'.  */);
 
-  DEFVAR_BOOL ("no-redraw-on-reenter", &no_redraw_on_reenter,
+  DEFVAR_BOOL ("no-redraw-on-reenter", no_redraw_on_reenter,
 	       doc: /* *Non-nil means no need to redraw entire frame after suspending.
 A non-nil value is useful if the terminal can automatically preserve
 Emacs's frame display when you reenter Emacs.
 It is up to you to set this variable if your terminal can do that.  */);
 
-  DEFVAR_LISP ("initial-window-system", &Vinitial_window_system,
+  DEFVAR_LISP ("initial-window-system", Vinitial_window_system,
 	       doc: /* Name of the window system that Emacs uses for the first frame.
 The value is a symbol:
  nil for a termcap frame (a character-only terminal),
@@ -6607,14 +6525,14 @@ Use of this variable as a boolean is deprecated.  Instead,
 use `display-graphic-p' or any of the other `display-*-p'
 predicates which report frame's specific UI-related capabilities.  */);
 
-  DEFVAR_LISP ("window-system-version", &Vwindow_system_version,
+  DEFVAR_LISP ("window-system-version", Vwindow_system_version,
 	       doc: /* The version number of the window system in use.
 For X windows, this is 11.  */);
 
-  DEFVAR_BOOL ("cursor-in-echo-area", &cursor_in_echo_area,
+  DEFVAR_BOOL ("cursor-in-echo-area", cursor_in_echo_area,
 	       doc: /* Non-nil means put cursor in minibuffer, at end of any message there.  */);
 
-  DEFVAR_LISP ("glyph-table", &Vglyph_table,
+  DEFVAR_LISP ("glyph-table", Vglyph_table,
 	       doc: /* Table defining how to output a glyph code to the frame.
 If not nil, this is a vector indexed by glyph code to define the glyph.
 Each element can be:
@@ -6625,17 +6543,17 @@ Each element can be:
     while outputting it.  */);
   Vglyph_table = Qnil;
 
-  DEFVAR_LISP ("standard-display-table", &Vstandard_display_table,
+  DEFVAR_LISP ("standard-display-table", Vstandard_display_table,
 	       doc: /* Display table to use for buffers that specify none.
 See `buffer-display-table' for more information.  */);
   Vstandard_display_table = Qnil;
 
-  DEFVAR_BOOL ("redisplay-dont-pause", &redisplay_dont_pause,
+  DEFVAR_BOOL ("redisplay-dont-pause", redisplay_dont_pause,
 	       doc: /* *Non-nil means update isn't paused when input is detected.  */);
   redisplay_dont_pause = 0;
 
 #if PERIODIC_PREEMPTION_CHECKING
-  DEFVAR_LISP ("redisplay-preemption-period", &Vredisplay_preemption_period,
+  DEFVAR_LISP ("redisplay-preemption-period", Vredisplay_preemption_period,
 	       doc: /* *The period in seconds between checking for input during redisplay.
 If input is detected, redisplay is pre-empted, and the input is processed.
 If nil, never pre-empt redisplay.  */);
@@ -6650,6 +6568,3 @@ If nil, never pre-empt redisplay.  */);
       Vwindow_system_version = Qnil;
     }
 }
-
-/* arch-tag: 8d812b1f-04a2-4195-a9c4-381f8457a413
-   (do not change this comment) */

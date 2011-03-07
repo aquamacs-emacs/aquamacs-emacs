@@ -1,5 +1,5 @@
 /* NeXT/Open/GNUstep and MacOSX Cocoa menu and toolbar module.
-   Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 2007-2011 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -66,8 +66,7 @@ extern Lisp_Object QCtoggle, QCradio;
 
 Lisp_Object Qdebug_on_next_call;
 Lisp_Object Vcancel_special_indicator_flag;
-extern Lisp_Object Voverriding_local_map, Voverriding_local_map_menu_flag,
-		   Qoverriding_local_map, Qoverriding_terminal_local_map;
+extern Lisp_Object Qoverriding_local_map, Qoverriding_terminal_local_map;
 
 extern long context_menu_value;
 EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
@@ -77,9 +76,6 @@ NSMenu *panelMenu;
 static int popup_activated_flag;
 static NSModalSession popupSession;
 static EmacsAlertPanel *popupSheetAlert;
-
-Lisp_Object Vns_tool_bar_size_mode;
-Lisp_Object Vns_tool_bar_display_mode;
 
 /* NOTE: toolbar implementation is at end,
   following complete menu implementation. */
@@ -376,7 +372,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 /*           if (submenu && strcmp (submenuTitle, SDATA (string)))
                continue; */
 
-	  wv->name = (char *) SDATA (string);
+	  wv->name = SSDATA (string);
           update_submenu_strings (wv->contents);
 	  wv = wv->next;
 	}
@@ -465,7 +461,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
             strncpy (previous_strings[i/4], SDATA (string), 10);
 
 	  wv = xmalloc_widget_value ();
-	  wv->name = (char *) SDATA (string);
+	  wv->name = SSDATA (string);
 	  wv->value = 0;
 	  wv->enabled = 1;
 	  wv->button_type = BUTTON_TYPE_NONE;
@@ -953,7 +949,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	    }
 #endif
 	  pane_string = (NILP (pane_name)
-			 ? "" : (char *) SDATA (pane_name));
+			 ? "" : SSDATA (pane_name));
 	  /* If there is just one top-level pane, put all its items directly
 	     under the top-level menu.  */
 	  if (menu_items_n_panes == 1)
@@ -1018,9 +1014,9 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	    prev_wv->next = wv;
 	  else
 	    save_wv->contents = wv;
-	  wv->name = (char *) SDATA (item_name);
+	  wv->name = SSDATA (item_name);
 	  if (!NILP (descrip))
-	    wv->key = (char *) SDATA (descrip);
+	    wv->key = SSDATA (descrip);
 	  wv->value = 0;
 	  /* If this item has a null value,
 	     make the call_data null so that it won't display a box
@@ -1069,7 +1065,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	title = ENCODE_MENU_STRING (title);
 #endif
 
-      wv_title->name = (char *) SDATA (title);
+      wv_title->name = SSDATA (title);
       wv_title->enabled = NO;
       wv_title->button_type = BUTTON_TYPE_NONE;
       wv_title->help = Qnil;
@@ -1222,7 +1218,7 @@ update_frame_tool_bar (FRAME_PTR f)
       helpObj = TOOLPROP (TOOL_BAR_ITEM_HELP);
       if (NILP (helpObj))
         helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-      helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
+      helpText = NILP (helpObj) ? "" : SSDATA (helpObj);
 
       /* Ignore invalid image specifications.  */
       if (!valid_image_p (image))
@@ -2095,7 +2091,7 @@ DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_
 void
 syms_of_nsmenu (void)
 {
-  DEFVAR_LISP ("ns-tool-bar-size-mode", &Vns_tool_bar_size_mode,
+  DEFVAR_LISP ("ns-tool-bar-size-mode", Vns_tool_bar_size_mode,
 	       doc: /* *Specify the size of the tool bar items.
 The value can be `small' (for small items), `regular' 
 (for regular sized items) and nil for the system default.
@@ -2106,7 +2102,7 @@ This variable only takes effect for newly created tool bars.
 
   Vns_tool_bar_size_mode = Qnil;
 
-  DEFVAR_LISP ("ns-tool-bar-display-mode", &Vns_tool_bar_display_mode,
+  DEFVAR_LISP ("ns-tool-bar-display-mode", Vns_tool_bar_display_mode,
      doc: /* *Specify whether to display the tool bar as icons with
 labels.  The value can be `icons' (for icons only), `labels' (for
 labels), `both' for both, and nil, in which case the system default is
@@ -2127,4 +2123,3 @@ This variable only takes effect for newly created tool bars.*/);
   Vcancel_special_indicator_flag = Fcons(Qnil, Qnil);
 }
 
-// arch-tag: 75773656-52e5-4c44-a398-47bd87b32619

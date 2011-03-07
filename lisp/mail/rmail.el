@@ -1,7 +1,6 @@
 ;;; rmail.el --- main code of "RMAIL" mail reader for Emacs
 
-;; Copyright (C) 1985, 1986, 1987, 1988, 1993, 1994, 1995, 1996, 1997, 1998,
-;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 1985-1988, 1993-1998, 2000-2011
 ;;   Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
@@ -192,7 +191,7 @@ please report it with \\[report-emacs-bug].")
   :group 'rmail-retrieve
   :type '(repeat (directory)))
 
-(declare-function rmail-dont-reply-to "mail-utils" (destinations))
+(declare-function mail-dont-reply-to "mail-utils" (destinations))
 (declare-function rmail-update-summary "rmailsum" (&rest ignore))
 
 (defun rmail-probe (prog)
@@ -284,26 +283,16 @@ Setting this variable has an effect only before reading a mail."
   :version "21.1")
 
 ;;;###autoload
-(defcustom rmail-dont-reply-to-names nil
-  "A regexp specifying addresses to prune from a reply message.
-If this is nil, it is set the first time you compose a reply, to
-a value which excludes your own email address, plus whatever is
-specified by `rmail-default-dont-reply-to-names'.
-
-Matching addresses are excluded from the CC field in replies, and
-also the To field, unless this would leave an empty To field."
-  :type '(choice regexp (const :tag "Your Name" nil))
-  :group 'rmail-reply)
+(defvaralias 'rmail-dont-reply-to-names 'mail-dont-reply-to-names)
 
 ;;;###autoload
-(defvar rmail-default-dont-reply-to-names (purecopy "\\`info-")
-  "Regexp specifying part of the default value of `rmail-dont-reply-to-names'.
-This is used when the user does not set `rmail-dont-reply-to-names'
-explicitly.  (The other part of the default value is the user's
-email address and name.)  It is useful to set this variable in
-the site customization file.  The default value is conventionally
-used for large mailing lists to broadcast announcements.")
-;; Is it really useful to set this site-wide?
+(defvar rmail-default-dont-reply-to-names nil
+  "Regexp specifying part of the default value of `mail-dont-reply-to-names'.
+This is used when the user does not set `mail-dont-reply-to-names'
+explicitly.")
+;;;###autoload
+(make-obsolete-variable 'rmail-default-dont-reply-to-names
+                        'mail-dont-reply-to-names "24.1")
 
 ;;;###autoload
 (defcustom rmail-ignored-headers
@@ -514,7 +503,7 @@ FIELD is the plain text name of a field in the message, such as
 \"subject\" or \"from\".  A FIELD of \"to\" will automatically include
 all text from the \"cc\" field as well.
 
-REGEXP is an expression to match in the preceeding specified FIELD.
+REGEXP is an expression to match in the preceding specified FIELD.
 FIELD/REGEXP pairs continue in the list.
 
 examples:
@@ -3441,30 +3430,72 @@ does not pop any summary buffer."
 ;;;; *** Rmail Mailing Commands ***
 
 (defun rmail-start-mail (&optional noerase to subject in-reply-to cc
-				   replybuffer sendactions same-window others)
-  (let (yank-action)
+				   replybuffer sendactions same-window
+				   other-headers)
+  (let ((switch-function
+	 (cond (same-window nil)
+	       (rmail-mail-new-frame 'switch-to-buffer-other-frame)
+	       (t 'switch-to-buffer-other-window)))
+	yank-action)
     (if replybuffer
 	;; The function used here must behave like insert-buffer wrt
 	;; point and mark (see doc of sc-cite-original).
 	(setq yank-action (list 'insert-buffer replybuffer)))
-    (setq others (cons (cons "cc" cc) others))
-    (setq others (cons (cons "in-reply-to" in-reply-to) others))
-    (if same-window
-	(compose-mail to subject others
-		      noerase nil
-		      yank-action sendactions)
-      (if rmail-mail-new-frame
-	  (prog1
-	      (compose-mail to subject others
-			    noerase 'switch-to-buffer-other-frame
-			    yank-action sendactions)
-	    ;; This is not a standard frame parameter;
-	    ;; nothing except sendmail.el looks at it.
+    (push (cons "cc" cc) other-headers)
+    (push (cons "in-reply-to" in-reply-to) other-headers)
+    (setq other-headers
+	  (mapcar #'(lambda (elt)
+		      (cons (car elt) (if (stringp (cdr elt))
+					  (rfc2047-decode-string (cdr elt)))))
+		  other-headers))
+    (if (stringp to) (setq to (rfc2047-decode-string to)))
+    (if (stringp in-reply-to)
+	(setq in-reply-to (rfc2047-decode-string in-reply-to)))
+    (if (stringp cc) (setq cc (rfc2047-decode-string cc)))
+    (if (stringp subject) (setq subject (rfc2047-decode-string subject)))
+    (prog1
+	(compose-mail to subject other-headers noerase
+		      switch-function yank-action sendactions
+		      '(rmail-mail-return))
+      (if (eq switch-function 'switch-to-buffer-other-frame)
+	  ;; This is not a standard frame parameter; nothing except
+	  ;; sendmail.el looks at it.
 	    (modify-frame-parameters (selected-frame)
-				     '((mail-dedicated-frame . t))))
-	(compose-mail to subject others
-		      noerase 'switch-to-buffer-other-window
-		      yank-action sendactions)))))
+				   '((mail-dedicated-frame . t)))))))
+
+(defun rmail-mail-return ()
+  (cond
+   ;; If there is only one visible frame with no special handling,
+   ;; consider deleting the mail window to return to Rmail.
+   ((or (null (delq (selected-frame) (visible-frame-list)))
+	(not (or (window-dedicated-p (frame-selected-window))
+		 (and pop-up-frames (one-window-p))
+		 (cdr (assq 'mail-dedicated-frame
+			    (frame-parameters))))))
+    (let (rmail-flag summary-buffer)
+      (and (not (one-window-p))
+	   (with-current-buffer
+	       (window-buffer (next-window (selected-window) 'not))
+	     (setq rmail-flag (eq major-mode 'rmail-mode))
+	     (setq summary-buffer
+		   (and (boundp 'mail-bury-selects-summary)
+			mail-bury-selects-summary
+			(boundp 'rmail-summary-buffer)
+			rmail-summary-buffer
+			(buffer-name rmail-summary-buffer)
+			(not (get-buffer-window rmail-summary-buffer))
+			rmail-summary-buffer))))
+      (if rmail-flag
+	  ;; If the Rmail buffer has a summary, show that.
+	  (if summary-buffer (switch-to-buffer summary-buffer)
+	    (delete-window)))))
+   ;; If the frame was probably made for this buffer, the user
+   ;; probably wants to delete it now.
+   ((display-multi-frame-p)
+    (delete-frame (selected-frame)))
+   ;; The previous frame is where normally they have the Rmail buffer
+   ;; displayed.
+   (t (other-frame -1))))
 
 (defun rmail-mail ()
   "Send mail in another window.
@@ -3547,15 +3578,14 @@ use \\[mail-yank-original] to yank the original message into it."
      ;; Remove unwanted names from reply-to, since Mail-Followup-To
      ;; header causes all the names in it to wind up in reply-to, not
      ;; in cc.  But if what's left is an empty list, use the original.
-     (let* ((reply-to-list (rmail-dont-reply-to reply-to)))
+     (let* ((reply-to-list (mail-dont-reply-to reply-to)))
        (if (string= reply-to-list "") reply-to reply-to-list))
      subject
      (rmail-make-in-reply-to-field from date message-id)
      (if just-sender
 	 nil
-       ;; mail-strip-quoted-names is NOT necessary for rmail-dont-reply-to
-       ;; to do its job.
-       (let* ((cc-list (rmail-dont-reply-to
+       ;; `mail-dont-reply-to' doesn't need `mail-strip-quoted-names'.
+       (let* ((cc-list (mail-dont-reply-to
 			(mail-strip-quoted-names
 			 (if (null cc) to (concat to ", " cc))))))
 	 (if (string= cc-list "") nil cc-list)))
@@ -4231,7 +4261,7 @@ encoded string (and the same mask) will decode the string."
 ;;; Start of automatically extracted autoloads.
 
 ;;;### (autoloads (rmail-edit-current-message) "rmailedit" "rmailedit.el"
-;;;;;;  "4bf8a5cdfc921b9e30680ee71b7f9ca6")
+;;;;;;  "090ad9432c3bf9a6098bb9c3d7c71baf")
 ;;; Generated autoloads from rmailedit.el
 
 (autoload 'rmail-edit-current-message "rmailedit" "\
@@ -4243,7 +4273,7 @@ Edit the contents of this message.
 
 ;;;### (autoloads (rmail-next-labeled-message rmail-previous-labeled-message
 ;;;;;;  rmail-read-label rmail-kill-label rmail-add-label) "rmailkwd"
-;;;;;;  "rmailkwd.el" "112240cbb53c402294013cc49987771a")
+;;;;;;  "rmailkwd.el" "08c288c88cfe7be50830122c064e3884")
 ;;; Generated autoloads from rmailkwd.el
 
 (autoload 'rmail-add-label "rmailkwd" "\
@@ -4286,7 +4316,7 @@ With prefix argument N moves forward N messages with these labels.
 
 ;;;***
 
-;;;### (autoloads (rmail-mime) "rmailmm" "rmailmm.el" "3735f9bfe6ff3e612091857cc6b401b6")
+;;;### (autoloads (rmail-mime) "rmailmm" "rmailmm.el" "c530622b53038152ca84f2ec9313bd7a")
 ;;; Generated autoloads from rmailmm.el
 
 (autoload 'rmail-mime "rmailmm" "\
@@ -4312,7 +4342,7 @@ attachments as specfied by `rmail-mime-attachment-dirs-alist'.
 ;;;***
 
 ;;;### (autoloads (set-rmail-inbox-list) "rmailmsc" "rmailmsc.el"
-;;;;;;  "c3575020691d5769bcf08ecc932304c3")
+;;;;;;  "ca19b2f8a3e8aa01aa75ca7413f8a5ef")
 ;;; Generated autoloads from rmailmsc.el
 
 (autoload 'set-rmail-inbox-list "rmailmsc" "\
@@ -4328,7 +4358,7 @@ This applies only to the current session.
 
 ;;;### (autoloads (rmail-sort-by-labels rmail-sort-by-lines rmail-sort-by-correspondent
 ;;;;;;  rmail-sort-by-recipient rmail-sort-by-author rmail-sort-by-subject
-;;;;;;  rmail-sort-by-date) "rmailsort" "rmailsort.el" "b96e85edd736f23f1e9d54a299268d1e")
+;;;;;;  rmail-sort-by-date) "rmailsort" "rmailsort.el" "ad1c98fe868c0e5804cf945d6c980d0b")
 ;;; Generated autoloads from rmailsort.el
 
 (autoload 'rmail-sort-by-date "rmailsort" "\
@@ -4362,7 +4392,7 @@ If prefix argument REVERSE is non-nil, sorts in reverse order.
 Sort messages of current Rmail buffer by other correspondent.
 This uses either the \"From\", \"Sender\", \"To\", or
 \"Apparently-To\" header, downcased.  Uses the first header not
-excluded by `rmail-dont-reply-to-names'.  If prefix argument
+excluded by `mail-dont-reply-to-names'.  If prefix argument
 REVERSE is non-nil, sorts in reverse order.
 
 \(fn REVERSE)" t nil)
@@ -4387,7 +4417,7 @@ If prefix argument REVERSE is non-nil, sorts in reverse order.
 
 ;;;### (autoloads (rmail-summary-by-senders rmail-summary-by-topic
 ;;;;;;  rmail-summary-by-regexp rmail-summary-by-recipients rmail-summary-by-labels
-;;;;;;  rmail-summary) "rmailsum" "rmailsum.el" "666a5db1021cdcba6e68a18a553d65f1")
+;;;;;;  rmail-summary) "rmailsum" "rmailsum.el" "3817e21639db697abe5832d3223ecfc2")
 ;;; Generated autoloads from rmailsum.el
 
 (autoload 'rmail-summary "rmailsum" "\
@@ -4435,7 +4465,7 @@ SENDERS is a string of regexps separated by commas.
 ;;;***
 
 ;;;### (autoloads (unforward-rmail-message undigestify-rmail-message)
-;;;;;;  "undigest" "undigest.el" "8cf8a8ffa48eeddf0bde388fa8de1783")
+;;;;;;  "undigest" "undigest.el" "41e6a48ea63224385c447a944528feb6")
 ;;; Generated autoloads from undigest.el
 
 (autoload 'undigestify-rmail-message "undigest" "\

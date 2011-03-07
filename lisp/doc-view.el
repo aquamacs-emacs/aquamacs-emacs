@@ -1,6 +1,6 @@
 ;;; doc-view.el --- View PDF/PostScript/DVI files in Emacs
 
-;; Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2011 Free Software Foundation, Inc.
 ;;
 ;; Author: Tassilo Horn <tassilo@member.fsf.org>
 ;; Maintainer: Tassilo Horn <tassilo@member.fsf.org>
@@ -1061,7 +1061,12 @@ For now these keys are useful:
       (message "DocView: please wait till conversion finished.")
     (let ((txt (expand-file-name "doc.txt" (doc-view-current-cache-dir))))
       (if (file-readable-p txt)
-	  (find-file txt)
+	  (let ((name (concat "Text contents of "
+			      (file-name-nondirectory buffer-file-name)))
+		(dir (file-name-directory buffer-file-name)))
+	    (with-current-buffer (find-file txt)
+	      (rename-buffer name)
+	      (setq default-directory dir)))
 	(doc-view-doc->txt txt 'doc-view-open-text)))))
 
 ;;;;; Toggle between editing and viewing
@@ -1238,11 +1243,11 @@ If BACKWARD is non-nil, jump to the previous match."
      (concat "No PNG support is available, or some conversion utility for "
 	     (file-name-extension doc-view-buffer-file-name)
 	     " files is missing."))
-    (if (and (executable-find doc-view-pdftotext-program)
-	     (y-or-n-p
-	      "Unable to render file.  View extracted text instead? "))
-	(doc-view-open-text)
-      (doc-view-toggle-display))))
+    (when (and (executable-find doc-view-pdftotext-program)
+	       (y-or-n-p
+		"Unable to render file.  View extracted text instead? "))
+      (doc-view-open-text))
+    (doc-view-toggle-display)))
 
 (defvar bookmark-make-record-function)
 
@@ -1476,5 +1481,4 @@ See the command `doc-view-mode' for more information on this mode."
 ;; mode: outline-minor
 ;; End:
 
-;; arch-tag: 5d6e5c5e-095f-489e-b4e4-1ca90a7d79be
 ;;; doc-view.el ends here

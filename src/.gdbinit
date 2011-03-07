@@ -1,6 +1,4 @@
-# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 2000, 2001,
-#   2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-#   Free Software Foundation, Inc.
+# Copyright (C) 1992-1998, 2000-2011  Free Software Foundation, Inc.
 #
 # This file is part of GNU Emacs.
 #
@@ -1289,7 +1287,7 @@ document xreload
   with gdb 5.0.)
   This function reloads them.
 end
-#xreload
+xreload
 
 # Flush display (X only)
 define ff
@@ -1301,14 +1299,14 @@ Works only when an inferior emacs is executing.
 end
 
 
-# define hook-run
-#   xreload
-# end
+define hook-run
+  xreload
+end
 
-# # Call xreload if a new Emacs executable is loaded.
-# define hookpost-run
-#   xreload
-# end
+# Call xreload if a new Emacs executable is loaded.
+define hookpost-run
+  xreload
+end
 
 set print pretty on
 set print sevenbit-strings
@@ -1317,23 +1315,23 @@ show environment DISPLAY
 show environment TERM
 
 # People get bothered when they see messages about non-existent functions...
-# xgetptr Vsystem_type
+xgetptr globals.f_Vsystem_type
 # $ptr is NULL in temacs
-# if ($ptr != 0)
-#   set $tem = (struct Lisp_Symbol *) $ptr
-#   xgetptr $tem->xname
-#   set $tem = (struct Lisp_String *) $ptr
-#   set $tem = (char *) $tem->data
+if ($ptr != 0)
+  set $tem = (struct Lisp_Symbol *) $ptr
+  xgetptr $tem->xname
+  set $tem = (struct Lisp_String *) $ptr
+  set $tem = (char *) $tem->data
 
-#   # Don't let abort actually run, as it will make stdio stop working and
-#   # therefore the `pr' command above as well.
-#   if $tem[0] == 'w' && $tem[1] == 'i' && $tem[2] == 'n' && $tem[3] == 'd'
-#     # The windows-nt build replaces abort with its own function.
-#     break w32_abort
-#   else
-#     break abort
-#   end
-# end
+  # Don't let abort actually run, as it will make stdio stop working and
+  # therefore the `pr' command above as well.
+  if $tem[0] == 'w' && $tem[1] == 'i' && $tem[2] == 'n' && $tem[3] == 'd'
+    # The windows-nt build replaces abort with its own function.
+    break w32_abort
+  else
+    break abort
+  end
+end
 
 # x_error_quitter is defined only on X.  But window-system is set up
 # only at run time, during Emacs startup, so we need to defer setting
@@ -1342,7 +1340,7 @@ show environment TERM
 tbreak init_sys_modes
 commands
   silent
-  xgetptr Vinitial_window_system
+  xgetptr globals.f_Vinitial_window_system
   set $tem = (struct Lisp_Symbol *) $ptr
   xgetptr $tem->xname
   set $tem = (struct Lisp_String *) $ptr
@@ -1355,4 +1353,3 @@ commands
   end
   continue
 end
-# arch-tag: 12f34321-7bfa-4240-b77a-3cd3a1696dfe

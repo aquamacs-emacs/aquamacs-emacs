@@ -28,9 +28,8 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-Copyright (C) 1984, 1987, 1988, 1989, 1993, 1994, 1995, 1998, 1999,
-  2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-  2011  Free Software Foundation, Inc.
+Copyright (C) 1984, 1987-1989, 1993-1995, 1998-2011
+  Free Software Foundation, Inc.
 
 This file is not considered part of GNU Emacs.
 
@@ -172,9 +171,8 @@ char pot_etags_version[] = "@(#) pot revision number is 17.38.1.4";
 # endif
 #endif /* !WINDOWSNT */
 
-#ifdef HAVE_UNISTD_H
-# include <unistd.h>
-#else
+#include <unistd.h>
+#ifndef HAVE_UNISTD_H
 # if defined (HAVE_GETCWD) && !defined (WINDOWSNT)
     extern char *getcwd (char *buf, size_t size);
 # endif
@@ -190,10 +188,6 @@ char pot_etags_version[] = "@(#) pot revision number is 17.38.1.4";
 #ifdef NDEBUG
 # undef  assert			/* some systems have a buggy assert.h */
 # define assert(x) ((void) 0)
-#endif
-
-#if !defined (S_ISREG) && defined (S_IFREG)
-# define S_ISREG(m)	(((m) & S_IFMT) == S_IFREG)
 #endif
 
 #ifdef NO_LONG_OPTIONS		/* define this if you don't have GNU getopt */
@@ -245,7 +239,6 @@ If you want regular expression support, you should delete this notice and
 #define ISLOWER(c)	islower (CHAR(c))
 
 #define lowcase(c)	tolower (CHAR(c))
-#define upcase(c)	toupper (CHAR(c))
 
 
 /*
@@ -5329,7 +5322,7 @@ prolog_skip_comment (linebuffer *plb, FILE *inf)
  */
 static int
 prolog_pr (char *s, char *last)
-             
+
                 		/* Name of last clause. */
 {
   int pos;
@@ -5486,7 +5479,7 @@ Erlang_functions (FILE *inf)
  */
 static int
 erlang_func (char *s, char *last)
-             
+
                 		/* Name of last clause. */
 {
   int pos;
@@ -6644,7 +6637,7 @@ filename_is_absolute (char *fn)
 	  );
 }
 
-/* Upcase DOS drive letter and collapse separators into single slashes.
+/* Downcase DOS drive letter and collapse separators into single slashes.
    Works in place. */
 static void
 canonicalize_filename (register char *fn)
@@ -6654,8 +6647,9 @@ canonicalize_filename (register char *fn)
 
 #ifdef DOS_NT
   /* Canonicalize drive letter case.  */
-  if (fn[0] != '\0' && fn[1] == ':' && ISLOWER (fn[0]))
-    fn[0] = upcase (fn[0]);
+# define ISUPPER(c)	isupper (CHAR(c))
+  if (fn[0] != '\0' && fn[1] == ':' && ISUPPER (fn[0]))
+    fn[0] = lowcase (fn[0]);
 
   sep = '\\';
 #endif

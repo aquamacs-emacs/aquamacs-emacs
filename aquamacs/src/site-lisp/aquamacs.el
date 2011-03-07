@@ -26,7 +26,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, 2007, 2008, 2009, 2010: David Reitter
+;; Copyright (C) 2005,2006, 2007, 2008, 2009, 2010, 2011: David Reitter
 
 
 (require 'aquamacs-tools)
@@ -390,7 +390,7 @@ un-Mac-like way when you select text and copy&paste it.")))
        'face (list :family "Lucida Grande" :height 140))
      ;;The GPL stipulates that the following message is shown.
      (propertize 	
-      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2010 Free Software Foundation, Inc. (C) 2010 D. Reitter. No Warranty.") 
+      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2011 Free Software Foundation, Inc. (C) 2011 D. Reitter. No Warranty.") 
       'face (list :family "Lucida Grande" :height 110))))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
@@ -1348,14 +1348,6 @@ to the selected frame."
    '((fancy-splash-image "aquamacs-splash-screen.jpg")
      (fancy-splash-max-time 3000)))
     
-  ;; while pc selection mode will be turned on, we don't
-  ;; want it to override Emacs like key bindings. 
-  ;; we need to fill the following variable with something
-  ;; that is non-nil.
-  (setq pc-select-default-key-bindings '(([home]      . beginning-of-buffer)
-					 ([end]      . end-of-buffer)
-					 ))
-
   (aquamacs-set-defaults 
    '(
      ;; scratch buffer should be empty 
@@ -1366,9 +1358,6 @@ to the selected frame."
      (mouse-wheel-progressive-speed t)
    ;;  (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
      (mouse-wheel-scroll-amount (1 ((shift) . 0.5) ((control) . 0.2) ))
-   ;;  (pc-select-meta-moves-sexps t) ;; leave nil so we can otherwise assign M-left/right
-     (pc-select-selection-keys-only t)
-     (pc-selection-mode t)
      (show-paren-mode t)
      (blink-cursor-mode t)
      (cursor-type (bar . 2))
@@ -1393,10 +1382,7 @@ to the selected frame."
 
 
   
-					; activate the modes
-
-   (ats "enabling pc-sel")
-  (pc-selection-mode 1) 
+;; activate some editing modes
   (show-paren-mode 1) 
   (blink-cursor-mode 1)
   (savehist-mode 1)
