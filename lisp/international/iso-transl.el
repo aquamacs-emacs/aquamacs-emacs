@@ -256,8 +256,12 @@ sequence VECTOR.  (VECTOR is normally one character long.)")
 (defmacro iso-transl-define-key (keymap key def)
   "Back up definition of KEY in KEYMAP, then `define-key'."
   `(progn
-     (push (cons ,key (or (lookup-key ,keymap ,key) 'none))
-	   (get ',keymap 'iso-transl-backup))
+     (put ',keymap 'iso-transl-backup
+	  (cons (cons ,key (or (lookup-key ,keymap ,key) 'none))
+		(get ',keymap 'iso-transl-backup)))
+     ;; can't use push, since `cl' is not available during compilation
+     ;; (push (cons ,key (or (lookup-key ,keymap ,key) 'none))
+     ;; 	   (get ',keymap 'iso-transl-backup))
      (define-key ,keymap ,key ,def)))
 
 ;; For each entry in the alist, we'll make up to three ways to generate
