@@ -875,40 +875,6 @@ XParseGeometry (char *string, int *x, int *y,
   return 0;
 }
 
-
-/* TODO: move to nsterm? */
-int
-ns_lisp_to_cursor_type (Lisp_Object arg)
-{
-  char *str;
-  if (XTYPE (arg) == Lisp_String)
-    str = SDATA (arg);
-  else if (XTYPE (arg) == Lisp_Symbol)
-    str = SDATA (SYMBOL_NAME (arg));
-  else return -1;
-  if (!strcmp (str, "box"))	return FILLED_BOX_CURSOR;
-  if (!strcmp (str, "hollow"))	return HOLLOW_BOX_CURSOR;
-  if (!strcmp (str, "hbar"))	return HBAR_CURSOR;
-  if (!strcmp (str, "bar"))	return BAR_CURSOR;
-  if (!strcmp (str, "no"))	return NO_CURSOR;
-  return -1;
-}
-
-
-Lisp_Object
-ns_cursor_type_to_lisp (int arg)
-{
-  switch (arg)
-    {
-    case FILLED_BOX_CURSOR: return Qbox;
-    case HOLLOW_BOX_CURSOR: return intern ("hollow");
-    case HBAR_CURSOR:	    return intern ("hbar");
-    case BAR_CURSOR:	    return intern ("bar");
-    case NO_CURSOR:
-    default:		    return intern ("no");
-    }
-}
-
 /* This is the same as the xfns.c definition.  */
 void
 x_set_cursor_type (f, arg, oldval)
