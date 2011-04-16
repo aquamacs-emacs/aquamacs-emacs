@@ -2400,8 +2400,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
     r.size.width -= overspill;
 
   /* TODO: only needed in rare cases with last-resort font in HELLO..
-     should we do this more efficiently?
-  Also needed for CJK glyphs.*/
+     should we do this more efficiently? */
   ns_clip_to_row (w, glyph_row, -1, NO); /* do ns_focus(f, &r, 1); if remove */
 
 
@@ -2423,6 +2422,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
   	   case, then move the ns_unfocus() here after that call. */
   NSDisableScreenUpdates ();
 #endif
+
   switch (cursor_type)
     {
     case NO_CURSOR:
@@ -2453,15 +2453,12 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       NSRectFill (s);
       break;
     }
-
-  /* draw the character under the cursor 
-   Doesn't look good for bar cursors - so don't do it then.*/
-  if (cursor_type != NO_CURSOR && cursor_type != BAR_CURSOR
-      && cursor_type != HOLLOW_BOX_CURSOR)
-    {
-    draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
-    }
   ns_unfocus (f);
+
+  /* draw the character under the cursor */
+  if (cursor_type != NO_CURSOR)
+    draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
+
 #ifdef NS_IMPL_COCOA
   NSEnableScreenUpdates ();
 #endif
