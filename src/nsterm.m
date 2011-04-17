@@ -2568,6 +2568,9 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       if ((cursor_glyph->resolved_level & 1) != 0)
         s.origin.x += cursor_glyph->pixel_width - s.size.width;
 
+      /* Do not exceed width of current glyph - that would leave marks. */
+      s.size.width = min (max (1, cursor_glyph->pixel_width - 1), cursor_width);
+
       NSRectFill (s);
       break;
     }
