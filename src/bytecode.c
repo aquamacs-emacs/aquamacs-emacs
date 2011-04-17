@@ -76,11 +76,7 @@ Lisp_Object Qbyte_code_meter;
     }									\
 }
 
-#else /* no BYTE_CODE_METER */
-
-#define METER_CODE(last_code, this_code)
-
-#endif /* no BYTE_CODE_METER */
+#endif /* BYTE_CODE_METER */
 
 
 Lisp_Object Qbytecode;
@@ -146,7 +142,9 @@ Lisp_Object Qbytecode;
 #define Bpreceding_char 0150
 #define Bcurrent_column 0151
 #define Bindent_to 0152
+#ifdef BYTE_CODE_SAFE
 #define Bscan_buffer 0153 /* No longer generated as of v18 */
+#endif
 #define Beolp 0154
 #define Beobp 0155
 #define Bbolp 0156
@@ -154,8 +152,12 @@ Lisp_Object Qbytecode;
 #define Bcurrent_buffer 0160
 #define Bset_buffer 0161
 #define Bsave_current_buffer_1 0162 /* Replacing Bsave_current_buffer.  */
+#if 0
 #define Bread_char 0162 /* No longer generated as of v19 */
+#endif
+#ifdef BYTE_CODE_SAFE
 #define Bset_mark 0163 /* this loser is no longer generated as of v18 */
+#endif
 #define Binteractive_p 0164 /* Needed since interactive-p takes unevalled args */
 
 #define Bforward_char 0165
@@ -227,7 +229,6 @@ Lisp_Object Qbytecode;
 #define BinsertN 0261
 
 #define Bconstant 0300
-#define CONSTANTLIM 0100
 
 /* Whether to maintain a `top' and `bottom' field in the stack frame.  */
 #define BYTE_MAINTAIN_TOP (BYTE_CODE_SAFE || BYTE_MARK_STACK)
@@ -363,6 +364,7 @@ unmark_byte_stack (void)
    We do this at every branch, to avoid loops that never GC.  */
 
 #define MAYBE_GC()					\
+ do {							\
   if (consing_since_gc > gc_cons_threshold		\
       && consing_since_gc > gc_relative_threshold)	\
     {							\
@@ -370,7 +372,7 @@ unmark_byte_stack (void)
       Fgarbage_collect ();				\
       AFTER_POTENTIAL_GC ();				\
     }							\
-  else
+ } while (0)
 
 /* Check for jumping out of range.  */
 
@@ -552,7 +554,16 @@ If the third argument is incorrect, Emacs may crash.  */)
 	  {
 	    Lisp_Object v1;
 	    v1 = TOP;
-	    TOP = CAR (v1);
+	    if (CONSP (v1))
+	      TOP = XCAR (v1);
+	    else if (NILP (v1))
+	      TOP = Qnil;
+	    else
+	      {
+		BEFORE_POTENTIAL_GC ();
+		wrong_type_argument (Qlistp, v1);
+		AFTER_POTENTIAL_GC ();
+	      }
 	    break;
 	  }
 
@@ -578,7 +589,17 @@ If the third argument is incorrect, Emacs may crash.  */)
 	  {
 	    Lisp_Object v1;
 	    v1 = TOP;
-	    TOP = CDR (v1);
+	    if (CONSP (v1))
+	      TOP = XCDR (v1);
+	    else if (NILP (v1))
+	      TOP = Qnil;
+	    else
+	      {
+		BEFORE_POTENTIAL_GC ();
+		wrong_type_argument (Qlistp, v1);
+		AFTER_POTENTIAL_GC ();
+	      }
+	    break;
 	    break;
 	  }
 
@@ -909,13 +930,13 @@ If the third argument is incorrect, Emacs may crash.  */)
 	    v1 = POP;
 	    v2 = TOP;
 	    CHECK_NUMBER (v2);
-	    AFTER_POTENTIAL_GC ();
 	    op = XINT (v2);
 	    immediate_quit = 1;
 	    while (--op >= 0 && CONSP (v1))
 	      v1 = XCDR (v1);
 	    immediate_quit = 0;
 	    TOP = CAR (v1);
+	    AFTER_POTENTIAL_GC ();
 	    break;
 	  }
 
@@ -1323,7 +1344,7 @@ If the third argument is incorrect, Emacs may crash.  */)
 	  {
 	    Lisp_Object v1;
 	    BEFORE_POTENTIAL_GC ();
-	    XSETFASTINT (v1, (int) current_column ()); /* iftc */
+	    XSETFASTINT (v1, current_column ());
 	    AFTER_POTENTIAL_GC ();
 	    PUSH (v1);
 	    break;

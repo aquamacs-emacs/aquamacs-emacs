@@ -594,15 +594,15 @@ in `Info-file-supports-index-cookies-list'."
 (defun info-initialize ()
   "Initialize `Info-directory-list', if that hasn't been done yet."
   (unless Info-directory-list
-    (let ((path (getenv "INFOPATH")))
+    (let ((path (getenv "INFOPATH"))
+	  (sep (regexp-quote path-separator)))
       (setq Info-directory-list
 	    (prune-directory-list
 	     (if path
-		 (if (string-match ":\\'" path)
-		     (append (split-string (substring path 0 -1)
-					   (regexp-quote path-separator))
+		 (if (string-match-p (concat sep "\\'") path)
+		     (append (split-string (substring path 0 -1) sep)
 			     (Info-default-dirs))
-		   (split-string path (regexp-quote path-separator)))
+		   (split-string path sep))
 	       (Info-default-dirs)))))))
 
 ;;;###autoload
@@ -4929,6 +4929,27 @@ type returned by `Info-bookmark-make-record', which see."
     ;; within the node.
     (bookmark-default-handler
      `("" (buffer . ,buf) . ,(bookmark-get-bookmark-record bmk)))))
+
+
+;;;###autoload
+(defun info-display-manual (manual)
+  "Go to Info buffer that displays MANUAL, creating it if none already exists."
+  (interactive "sManual name: ")
+  (let ((blist (buffer-list))
+	(manual-re (concat "\\(/\\|\\`\\)" manual "\\(\\.\\|\\'\\)"))
+	(case-fold-search t)
+	found)
+    (dolist (buffer blist)
+      (with-current-buffer buffer
+	(when (and (eq major-mode 'Info-mode)
+		   (stringp Info-current-file)
+		   (string-match manual-re Info-current-file))
+	  (setq found buffer
+		blist nil))))
+    (if found
+	(pop-to-buffer found)
+      (info-initialize)
+      (info (Info-find-file manual)))))
 
 (provide 'info)
 
