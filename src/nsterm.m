@@ -2459,7 +2459,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       break;
     case BAR_CURSOR:
       s = r;
-      s.size.width = min (cursor_width, 2); //FIXME(see above)
+      s.size.width = min (max (1, s.size.width - 1), cursor_width);
       NSRectFill (s);
       break;
     }
