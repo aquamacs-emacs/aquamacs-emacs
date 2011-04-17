@@ -196,7 +196,7 @@ static NSMutableArray *ns_pending_files, *ns_pending_service_names,
   *ns_pending_service_args;
 static BOOL inNsSelect = 0;
 
-/* Convert modifiers in a NeXTstep event to emacs style modifiers.  */
+/* Convert modifiers in a NeXTSTEP event to emacs style modifiers.  */
 #define NS_FUNCTION_KEY_MASK 0x800000
 #define NSLeftControlKeyMask    (0x000001 | NSControlKeyMask)
 #define NSRightControlKeyMask   (0x002000 | NSControlKeyMask)
@@ -1126,7 +1126,7 @@ x_set_offset (struct frame *f, int xoff, int yoff, int change_grav)
         : f->left_pos;
       /* We use visibleFrame here to take menu bar into account.
 	 Ideally we should also adjust left/top with visibleFrame.origin.  */
-
+	 
       f->top_pos = f->size_hint_flags & YNegative
         ? ([screen visibleFrame].size.height + f->top_pos
            - FRAME_PIXEL_HEIGHT (f) - FRAME_NS_TITLEBAR_HEIGHT (f)
@@ -1215,7 +1215,7 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
     FRAME_TOOLBAR_HEIGHT (f) = 0;
 
   wr.size.width = pixelwidth + f->border_width;
-  wr.size.height = pixelheight + FRAME_NS_TITLEBAR_HEIGHT (f)
+  wr.size.height = pixelheight + FRAME_NS_TITLEBAR_HEIGHT (f) 
                   + FRAME_TOOLBAR_HEIGHT (f);
 
   /* constrain to screen if we can */
@@ -1257,12 +1257,12 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
      right-hand bars, don't worry about it since the extra is never used.
      (Obviously doesn't work for vertically split windows tho..) */
   {
-    NSPoint origin = FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (f)
-      ? NSMakePoint (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)
-                     - NS_SCROLL_BAR_WIDTH (f), 0)
-      : NSMakePoint (0, 0);
-    [view setFrame: NSMakeRect (0, 0, pixelwidth, pixelheight)];
-    [view setBoundsOrigin: origin];
+  NSPoint origin = FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (f)
+    ? NSMakePoint (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)
+                  - NS_SCROLL_BAR_WIDTH (f), 0)
+    : NSMakePoint (0, 0);
+  [view setFrame: NSMakeRect (0, 0, pixelwidth, pixelheight)];
+  [view setBoundsOrigin: origin];
   }
 
   change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
@@ -1853,7 +1853,7 @@ ns_frame_up_to_date (struct frame *f)
                                   hlinfo->mouse_face_mouse_x,
                                   hlinfo->mouse_face_mouse_y);
           hlinfo->mouse_face_deferred_gc = 0;
-	  ns_update_end(f);
+         ns_update_end(f);
           UNBLOCK_INPUT;
         }
     }
@@ -2349,7 +2349,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
   NSTRACE (dumpcursor);
 
   if (!on_p)
-    return;
+	return;
 
   w->phys_cursor_type = cursor_type;
   w->phys_cursor_on_p = on_p;
@@ -2394,7 +2394,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
   /* FIXME: if we overwrite the internal border area, it does not get erased;
      fix by truncating cursor, but better would be to erase properly */
   overspill = r.origin.x + r.size.width -
-    WINDOW_TEXT_TO_FRAME_PIXEL_X (w, WINDOW_BOX_RIGHT_EDGE_X (w)
+    WINDOW_TEXT_TO_FRAME_PIXEL_X (w, WINDOW_BOX_RIGHT_EDGE_X (w) 
       - WINDOW_TOTAL_FRINGE_WIDTH (w) - FRAME_INTERNAL_BORDER_WIDTH (f));
   if (overspill > 0)
     r.size.width -= overspill;
@@ -2412,7 +2412,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       hollow_color = FRAME_CURSOR_COLOR (f);
     }
   else
-    [FRAME_CURSOR_COLOR (f) set];
+  [FRAME_CURSOR_COLOR (f) set];
 
 #ifdef NS_IMPL_COCOA
   /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
@@ -2450,6 +2450,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       if ((cursor_glyph->resolved_level & 1) != 0)
         s.origin.x += cursor_glyph->pixel_width - s.size.width;
 
+      s.size.width = min (max (1, s.size.width - 1), cursor_width);
       NSRectFill (s);
       break;
     }
@@ -3926,7 +3927,7 @@ ns_term_init (Lisp_Object display_name)
   strncpy (terminal->name, SDATA (display_name), SBYTES (display_name));
   terminal->name[SBYTES (display_name)] = 0;
 
-  UNBLOCK_INPUT;
+  UNBLOCK_INPUT; 
 
   if (!inhibit_x_resources)
     {
@@ -3943,7 +3944,7 @@ ns_term_init (Lisp_Object display_name)
 			 stringForKey: @"AppleHighlightColor"];
   if (ns_selection_color == nil)
     ns_selection_color = NS_SELECTION_COLOR_DEFAULT;
-
+  
   {
     NSColorList *cl = [NSColorList colorListNamed: @"Emacs"];
 
@@ -4110,7 +4111,7 @@ ns_term_init (Lisp_Object display_name)
                    keyEquivalent: @"q"
                          atIndex: 10];
 
-    item = [mainMenu insertItemWithTitle: ns_app_name
+    item = [mainMenu insertItemWithTitle: ns_app_name                       
                                   action: @selector (menuDown:)
                            keyEquivalent: @""
                                  atIndex: 0];
@@ -4597,7 +4598,7 @@ typedef struct
         -appShouldTerminate
           Cancel -> Nothing else
           Accept ->
-
+	  
 	  -terminate
 	  KEY_NS_POWER_OFF, (save-buffers-kill-emacs)
 	  ns_term_shutdown()
@@ -4607,10 +4608,10 @@ typedef struct
 - (void) terminate: (id)sender
 {
   struct frame *emacsframe = SELECTED_FRAME ();
-
+  
   if (!emacs_event)
     return;
-
+  
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_POWER_OFF;
   emacs_event->arg = Qt; /* mark as non-key event */
@@ -5172,7 +5173,7 @@ typedef struct
 	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
 	  if (flags & NSLeftCommandKeyMask || ! (flags & NSRightCommandKeyMask))
 	    {
-	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
+          emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 	    }
 	  if (flags & NSRightCommandKeyMask)
 	    {
@@ -5231,8 +5232,8 @@ typedef struct
         || EQ (ns_alternate_modifier, Qnone);
 
       if ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)
-        {
-          if ((NILP (ns_right_alternate_modifier)
+	{
+	  if ((NILP (ns_right_alternate_modifier)
 	       || (EQ (ns_right_alternate_modifier, Qnone)
 		   && (NILP (ns_alternate_modifier) 
 		       || EQ (ns_alternate_modifier, Qnone)))))
@@ -5243,17 +5244,17 @@ typedef struct
 		   if (!fnKeysym)
 		    {
 		  /* accept pre-interp alt comb */
-              if ([[theEvent characters] length] > 0)
-                code = [[theEvent characters] characterAtIndex: 0];
-              /*HACK: clear lone shift modifier to stop next if from firing */
-              if (emacs_event->modifiers == shift_modifier)
-                emacs_event->modifiers = 0;
-            }
-		}
-          else
-		emacs_event->modifiers |= meta_modifier; 
+		  if ([[theEvent characters] length] > 0)
+		    code = [[theEvent characters] characterAtIndex: 0];
+		  /*HACK: clear lone shift modifier to stop next if from firing */
+		  if (emacs_event->modifiers == shift_modifier)
+		    emacs_event->modifiers = 0;
+	}
+		} 
+	      else
+		emacs_event->modifiers |= meta_modifier;
 	    }
-          else
+	  else
             emacs_event->modifiers |= parse_solitary_modifier
               (EQ (ns_right_alternate_modifier, Qleft)
                ? ns_alternate_modifier
@@ -5279,13 +5280,13 @@ typedef struct
 		emacs_event->modifiers |= meta_modifier; 
             }
           else
-              emacs_event->modifiers |=
+	    emacs_event->modifiers |=
 	      parse_solitary_modifier (EQ (ns_right_alternate_modifier, Qnone) ?
 				       ns_alternate_modifier
 				       : ns_right_alternate_modifier);
 	}
       if (flags & NSLeftAlternateKeyMask || (flags & NSAlternateKeyMask && ! (flags & NSRightAlternateKeyMask))) /* default = meta */
-	{
+        {
 	  /* The better way to do this would be to add Meta to every key for 
 	     which the Option modifier doesn't change the character code.
 	     However, we can't find out about this in pure Cocoa
@@ -5300,18 +5301,18 @@ typedef struct
 		  if (!fnKeysym)
 		    {
 		  /* accept pre-interp alt comb */
-		  if ([[theEvent characters] length] > 0)
-		    code = [[theEvent characters] characterAtIndex: 0];
-		  /*HACK: clear lone shift modifier to stop next if from firing */
-		  if (emacs_event->modifiers == shift_modifier)
-		    emacs_event->modifiers = 0;
-		    }		    
+              if ([[theEvent characters] length] > 0)
+                code = [[theEvent characters] characterAtIndex: 0];
+              /*HACK: clear lone shift modifier to stop next if from firing */
+              if (emacs_event->modifiers == shift_modifier)
+                emacs_event->modifiers = 0;
+            }
 		}
-	      else
+          else
 		emacs_event->modifiers |= meta_modifier;
 	    }
 	  else
-	    emacs_event->modifiers |=
+              emacs_event->modifiers |=
                 parse_solitary_modifier (ns_alternate_modifier);
         }
 
@@ -5858,7 +5859,7 @@ typedef struct
      a "windowDidResize" which calls x_set_window_size).  */
 #ifndef NS_IMPL_GNUSTEP
   if (cols > 0 && rows > 0)
-    x_set_window_size (emacsframe, 0, cols, rows);
+     x_set_window_size (emacsframe, 0, cols, rows);
 #endif
 
   ns_send_appdefined (-1);
@@ -6119,7 +6120,7 @@ typedef struct
           /* restore */
           result = ns_userRect.size.height ? ns_userRect : result;
           ns_userRect = NSMakeRect (0, 0, 0, 0);
-        }
+    }
     }
 
   [self windowWillResize: sender toSize: result.size];
@@ -6277,7 +6278,7 @@ typedef struct
 
   /*
     drawRect: may be called (at least in OS X 10.5) for invisible
-    views as well for some reason.  Thus, do not infer visibility
+    views as well for some reason.  Thus, do not infer visibility 
     here.
 
     emacsframe->async_visible = 1;
@@ -6618,10 +6619,10 @@ typedef struct
         return;
 
       vettedSize = [[self delegate] windowWillResize: self toSize: size];
-      [[NSNotificationCenter defaultCenter]
+          [[NSNotificationCenter defaultCenter]
             postNotificationName: NSWindowDidResizeNotification
                           object: self];
-    }
+        }
   else
     [super mouseDragged: theEvent];
 }
