@@ -173,10 +173,14 @@ that can be used as the COLLECTION argument to `try-completion' and
 `all-completions'.  See Info node `(elisp)Programmed Completion'."
   (lexical-let ((fun fun))
     (lambda (string pred action)
-      (with-current-buffer (let ((win (minibuffer-selected-window)))
-                             (if (window-live-p win) (window-buffer win)
-                               (current-buffer)))
-        (complete-with-action action (funcall fun string) string pred)))))
+      (if (eq (car-safe action) 'boundaries)
+          ;; `fun' is not supposed to return another function but a plain old
+          ;; completion table, whose boundaries are always trivial.
+          nil
+        (with-current-buffer (let ((win (minibuffer-selected-window)))
+                               (if (window-live-p win) (window-buffer win)
+                                 (current-buffer)))
+          (complete-with-action action (funcall fun string) string pred))))))
 
 (defmacro lazy-completion-table (var fun)
   "Initialize variable VAR as a lazy completion table.
@@ -240,6 +244,10 @@ in which case TERMINATOR-REGEXP is a regular expression whose submatch
 number 1 should match TERMINATOR.  This is used when there is a need to
 distinguish occurrences of the TERMINATOR strings which are really terminators
 from others (e.g. escaped)."
+  ;; FIXME: This implementation is not right since it only adds the terminator
+  ;; in try-completion, so any completion-style that builds the completion via
+  ;; all-completions won't get the terminator, and selecting an entry in
+  ;; *Completions* won't get the terminator added either.
   (cond
    ((eq (car-safe action) 'boundaries)
     (let* ((suffix (cdr action))
@@ -688,6 +696,8 @@ scroll the window of possible completions."
         (t     t)))))
 
 (defun completion--flush-all-sorted-completions (&rest ignore)
+  (remove-hook 'after-change-functions
+               'completion--flush-all-sorted-completions t)
   (setq completion-cycling nil)
   (setq completion-all-sorted-completions nil))
 
@@ -704,8 +714,18 @@ scroll the window of possible completions."
         (when last
           (setcdr last nil)
           ;; Prefer shorter completions.
-          (setq all (sort all (lambda (c1 c2) (< (length c1) (length c2)))))
+          (setq all (sort all (lambda (c1 c2)
+                                (let ((s1 (get-text-property
+                                           0 :completion-cycle-penalty c1))
+                                      (s2 (get-text-property
+                                           0 :completion-cycle-penalty c2)))
+                                  (if (eq s1 s2)
+                                      (< (length c1) (length c2))
+                                    (< (or s1 (length c1))
+                                       (or s2 (length c2))))))))
           ;; Prefer recently used completions.
+          ;; FIXME: Additional sorting ideas:
+          ;; - for M-x, prefer commands that have no key binding.
           (let ((hist (symbol-value minibuffer-history-variable)))
             (setq all (sort all (lambda (c1 c2)
                                   (> (length (member c1 hist))
@@ -1000,8 +1020,8 @@ It also eliminates runs of equal strings."
 		  ;; a space displayed.
 		  (set-text-properties (- (point) 1) (point)
 				       ;; We can't just set tab-width, because
-				       ;; completion-setup-function will kill all
-				       ;; local variables :-(
+				       ;; completion-setup-function will kill
+				       ;; all local variables :-(
 				       `(display (space :align-to ,column)))
 		  nil))))
             (if (not (consp str))
@@ -1229,6 +1249,8 @@ the ones passed to `completion-in-region'.  The functions on this hook
 are expected to perform completion on START..END using COLLECTION
 and PREDICATE, either by calling NEXT-FUN or by doing it themselves.")
 
+(defvar completion-in-region--data nil)
+
 (defun completion-in-region (start end collection &optional predicate)
   "Complete the text between START and END using COLLECTION.
 Return nil if there is no valid completion, else t.
@@ -1236,18 +1258,85 @@ Point needs to be somewhere between START and END."
   (assert (<= start (point)) (<= (point) end))
   ;; FIXME: undisplay the *Completions* buffer once the completion is done.
   (with-wrapper-hook
+      ;; FIXME: Maybe we should use this hook to provide a "display
+      ;; completions" operation as well.
       completion-in-region-functions (start end collection predicate)
     (let ((minibuffer-completion-table collection)
           (minibuffer-completion-predicate predicate)
           (ol (make-overlay start end nil nil t)))
       (overlay-put ol 'field 'completion)
+      (completion-in-region-mode 1)
+      (setq completion-in-region--data
+            (list (current-buffer) start end collection))
       (unwind-protect
           (call-interactively 'minibuffer-complete)
         (delete-overlay ol)))))
 
+(defvar completion-in-region-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "?" 'completion-help-at-point)
+    (define-key map "\t" 'completion-at-point)
+    map)
+  "Keymap activated during `completion-in-region'.")
+
+;; It is difficult to know when to exit completion-in-region-mode (i.e. hide
+;; the *Completions*).
+;; - lisp-mode: never.
+;; - comint: only do it if you hit SPC at the right time.
+;; - pcomplete: pop it down on SPC or after some time-delay.
+;; - semantic: use a post-command-hook check similar to this one.
+(defun completion-in-region--postch ()
+  (message "completion-in-region--postch: cmd=%s" this-command)
+  (or unread-command-events ;Don't pop down the completions in the middle of
+                            ;mouse-drag-region/mouse-set-point.
+      (and completion-in-region--data
+           (and (eq (car completion-in-region--data)
+                    (current-buffer))
+                (>= (point) (nth 1 completion-in-region--data))
+                (<= (point)
+                    (save-excursion
+                      (goto-char (nth 2 completion-in-region--data))
+                      (line-end-position)))
+                (let ((comp-data (run-hook-wrapped
+                                  'completion-at-point-functions
+                                  ;; Only use the known-safe functions.
+                                  #'completion--capf-wrapper 'safe)))
+                  (eq (car comp-data)
+                      ;; We're still in the same completion field.
+                      (nth 1 completion-in-region--data)))))
+      (completion-in-region-mode -1)))
+
+;; (defalias 'completion-in-region--prech 'completion-in-region--postch)
+
+(define-minor-mode completion-in-region-mode
+  "Transient minor mode used during `completion-in-region'."
+  :global t
+  (setq completion-in-region--data nil)
+  ;; (remove-hook 'pre-command-hook #'completion-in-region--prech)
+  (remove-hook 'post-command-hook #'completion-in-region--postch)
+  (setq minor-mode-overriding-map-alist
+        (delq (assq 'completion-in-region-mode minor-mode-overriding-map-alist)
+              minor-mode-overriding-map-alist))
+  (if (null completion-in-region-mode)
+      (progn
+        (unless (equal "*Completions*" (buffer-name (window-buffer)))
+          (minibuffer-hide-completions))
+        (message "Leaving completion-in-region-mode"))
+    ;; (add-hook 'pre-command-hook #'completion-in-region--prech)
+    (add-hook 'post-command-hook #'completion-in-region--postch)
+    (push `(completion-in-region-mode . ,completion-in-region-mode-map)
+          minor-mode-overriding-map-alist)))
+
+;; Define-minor-mode added our keymap to minor-mode-map-alist, but we want it
+;; on minor-mode-overriding-map-alist instead.
+(setq minor-mode-map-alist
+      (delq (assq 'completion-in-region-mode minor-mode-map-alist)
+            minor-mode-map-alist))
+
 (defvar completion-at-point-functions '(tags-completion-at-point-function)
   "Special hook to find the completion table for the thing at point.
-It is called without any argument and should return either nil,
+Each function on this hook is called in turns without any argument and should
+return either nil to mean that it is not applicable at point,
 or a function of no argument to perform completion (discouraged),
 or a list of the form (START END COLLECTION &rest PROPS) where
  START and END delimit the entity to complete and should include point,
@@ -1257,15 +1346,37 @@ Currently supported properties are:
  `:predicate'           a predicate that completion candidates need to satisfy.
  `:annotation-function' the value to use for `completion-annotate-function'.")
 
+(defvar completion--capf-misbehave-funs nil
+  "List of functions found on `completion-at-point-functions' that misbehave.")
+(defvar completion--capf-safe-funs nil
+  "List of well-behaved functions found on `completion-at-point-functions'.")
+
+(defun completion--capf-wrapper (fun which)
+  (if (case which
+        (all t)
+        (safe (member fun completion--capf-safe-funs))
+        (optimist (not (member fun completion--capf-misbehave-funs))))
+      (let ((res (funcall fun)))
+        (cond
+         ((consp res)
+          (unless (member fun completion--capf-safe-funs)
+            (push fun completion--capf-safe-funs)))
+         ((not (or (listp res) (functionp res)))
+          (unless (member fun completion--capf-misbehave-funs)
+            (message
+             "Completion function %S uses a deprecated calling convention" fun)
+            (push fun completion--capf-misbehave-funs))))
+        res)))
+
 (defun completion-at-point ()
   "Perform completion on the text around point.
 The completion method is determined by `completion-at-point-functions'."
   (interactive)
-  (let ((res (run-hook-with-args-until-success
-              'completion-at-point-functions)))
+  (let ((res (run-hook-wrapped 'completion-at-point-functions
+                               #'completion--capf-wrapper 'all)))
     (cond
      ((functionp res) (funcall res))
-     (res
+     ((consp res)
       (let* ((plist (nthcdr 3 res))
              (start (nth 0 res))
              (end (nth 1 res))
@@ -1273,7 +1384,39 @@ The completion method is determined by `completion-at-point-functions'."
               (or (plist-get plist :annotation-function)
                   completion-annotate-function)))
         (completion-in-region start end (nth 2 res)
-                              (plist-get plist :predicate)))))))
+                              (plist-get plist :predicate))))
+     (res))))  ;Maybe completion already happened and the function returned t.
+
+(defun completion-help-at-point ()
+  "Display the completions on the text around point.
+The completion method is determined by `completion-at-point-functions'."
+  (interactive)
+  (let ((res (run-hook-wrapped 'completion-at-point-functions
+                               ;; Ignore misbehaving functions.
+                               #'completion--capf-wrapper 'optimist)))
+    (cond
+     ((functionp res)
+      (message "Don't know how to show completions for %S" res))
+     ((consp res)
+      (let* ((plist (nthcdr 3 res))
+             (minibuffer-completion-table (nth 2 res))
+             (minibuffer-completion-predicate (plist-get plist :predicate))
+             (completion-annotate-function
+              (or (plist-get plist :annotation-function)
+                  completion-annotate-function))
+             (ol (make-overlay (nth 0 res) (nth 1 res) nil nil t)))
+        ;; FIXME: We should somehow (ab)use completion-in-region-function or
+        ;; introduce a corresponding hook (plus another for word-completion,
+        ;; and another for force-completion, maybe?).
+        (overlay-put ol 'field 'completion)
+        (unwind-protect
+            (call-interactively 'minibuffer-completion-help)
+          (delete-overlay ol))))
+     (res
+      ;; The hook function already performed completion :-(
+      ;; Not much we can do at this point.
+      nil)
+     (t (message "Nothing to complete at point")))))
 
 ;;; Key bindings.
 
@@ -1480,8 +1623,9 @@ except that it passes the file name through `substitute-in-file-name'."
                             'completion--file-name-table)
   "Internal subroutine for `read-file-name'.  Do not call this.")
 
-(defvar read-file-name-function nil
-  "If this is non-nil, `read-file-name' does its work by calling this function.")
+(defvar read-file-name-function 'read-file-name-default
+  "The function called by `read-file-name' to do its work.
+It should accept the same arguments as `read-file-name'.")
 
 (defcustom read-file-name-completion-ignore-case
   (if (memq system-type '(ms-dos windows-nt darwin cygwin))
@@ -1519,7 +1663,7 @@ such as making the current buffer visit no file in the case of
 (declare-function x-file-dialog "xfns.c"
                   (prompt dir &optional default-filename mustmatch only-dir-p))
 
-(defun read-file-name-defaults (&optional dir initial)
+(defun read-file-name--defaults (&optional dir initial)
   (let ((default
 	  (cond
 	   ;; With non-nil `initial', use `dir' as the first default.
@@ -1586,6 +1730,12 @@ treated as equivalent to nil.
 
 See also `read-file-name-completion-ignore-case'
 and `read-file-name-function'."
+  (funcall (or read-file-name-function #'read-file-name-default)
+           prompt dir default-filename mustmatch initial predicate))
+
+(defun read-file-name-default (prompt &optional dir default-filename mustmatch initial predicate)
+  "Default method for reading file names.
+See `read-file-name' for the meaning of the arguments."
   (unless dir (setq dir default-directory))
   (unless (file-name-absolute-p dir) (setq dir (expand-file-name dir)))
   (unless default-filename
@@ -1607,9 +1757,6 @@ and `read-file-name-function'."
                     (minibuffer--double-dollars dir)))
                  (initial (cons (minibuffer--double-dollars initial) 0)))))
 
-    (if read-file-name-function
-        (funcall read-file-name-function
-                 prompt dir default-filename mustmatch initial predicate)
       (let ((completion-ignore-case read-file-name-completion-ignore-case)
             (minibuffer-completing-file-name t)
             (pred (or predicate 'file-exists-p))
@@ -1645,7 +1792,7 @@ and `read-file-name-function'."
 				 (lambda ()
 				   (with-current-buffer
 				       (window-buffer (minibuffer-selected-window))
-				     (read-file-name-defaults dir initial)))))
+				   (read-file-name--defaults dir initial)))))
                         (completing-read prompt 'read-file-name-internal
                                          pred mustmatch insdef
                                          'file-name-history default-filename)))
@@ -1719,7 +1866,7 @@ and `read-file-name-function'."
                                 (if history-delete-duplicates
                                     (delete val1 file-name-history)
                                   file-name-history)))))))
-          val)))))
+	val))))
 
 (defun internal-complete-buffer-except (&optional buffer)
   "Perform completion on all buffers excluding BUFFER.
@@ -1893,9 +2040,9 @@ or a symbol chosen among `any', `star', `point', `prefix'."
         (append (completion-pcm--string->pattern prefix)
                 '(point)
                 (completion-pcm--string->pattern suffix)))
-    (let ((pattern nil)
-          (p 0)
-          (p0 0))
+    (let* ((pattern nil)
+           (p 0)
+           (p0 p))
 
       (while (and (setq p (string-match completion-pcm--delim-wild-regex
                                         string p))

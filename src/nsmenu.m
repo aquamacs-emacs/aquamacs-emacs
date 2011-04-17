@@ -1841,7 +1841,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     record_unwind_protect (pop_down_menu, make_save_value (dialog, 0));
     popup_activated_flag = 1;
 
-  extern EMACS_TIME timer_check (int do_it_now);  
+  extern EMACS_TIME timer_check (void);  
 
   [dialog layout]; /* because we may not call beginSheet / runModal */
 
@@ -1869,7 +1869,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     {
       /* Run this for timers.el, indep of atimers; might not return.
          TODO: use return value to avoid calling every iteration. */
-      timer_check (1);
+      timer_check ();
       [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
         }
   if (ret == -1 && ret2 != -1)
