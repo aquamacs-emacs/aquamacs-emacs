@@ -588,6 +588,11 @@ ns_menu_bar_should_be_hidden (void)
 
 /* Show or hide the menu bar, based on user setting.  */
 
+/* for OS X 10.5 build compatibility */
+#ifndef NSApplicationPresentationOptions
+typedef NSUInteger NSApplicationPresentationOptions;
+#endif
+
 static void
 ns_update_auto_hide_menu_bar (void)
 {
