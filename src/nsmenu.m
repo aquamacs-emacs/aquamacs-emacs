@@ -171,7 +171,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
   if ([menu isKindOfClass: [EmacsMenu class]] == NO) // && menu != panelMenu)
     {
       if (menu != panelMenu)
-	[menu release];
+      [menu release];
       menu = nil;
     }
 
@@ -240,26 +240,26 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
       /* Save the frame's previous menu bar contents data */
       if (previous_menu_items_used)
 	bcopy (XVECTOR (f->menu_bar_vector)->contents, previous_items,
-	       previous_menu_items_used * sizeof (Lisp_Object));
+		previous_menu_items_used * sizeof (Lisp_Object));
 
       /* parse stage 1: extract from lisp */
       save_menu_items ();
 
       menu_items = f->menu_bar_vector;
       menu_items_allocated = VECTORP (menu_items) ? ASIZE (menu_items) : 0;
-      submenu_start = (int *) alloca (XVECTOR (items)->size * sizeof (int *));
-      submenu_end = (int *) alloca (XVECTOR (items)->size * sizeof (int *));
-      submenu_n_panes = (int *) alloca (XVECTOR (items)->size * sizeof (int));
+      submenu_start = (int *) alloca (ASIZE (items) * sizeof (int *));
+      submenu_end = (int *) alloca (ASIZE (items) * sizeof (int *));
+      submenu_n_panes = (int *) alloca (ASIZE (items) * sizeof (int));
       submenu_top_level_items
-	= (int *) alloca (XVECTOR (items)->size * sizeof (int *));
+	= (int *) alloca (ASIZE (items) * sizeof (int *));
       init_menu_items ();
-      for (i = 0; i < XVECTOR (items)->size; i += 4)
+      for (i = 0; i < ASIZE (items); i += 4)
 	{
 	  Lisp_Object key, string, maps;
 
-	  key = XVECTOR (items)->contents[i];
-	  string = XVECTOR (items)->contents[i + 1];
-	  maps = XVECTOR (items)->contents[i + 2];
+	  key = AREF (items, i);
+	  string = AREF (items, i + 1);
+	  maps = AREF (items, i + 2);
 	  if (NILP (string))
 	    break;
 
@@ -267,7 +267,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
                was causing crashes in the _common parsing code.. need to make
                sure proper initialization done.. */
 /*        if (submenu && strcmp (submenuTitle, SDATA (string)))
-	      continue; */
+             continue; */
 
 	  submenu_start[i] = menu_items_used;
 
@@ -332,11 +332,11 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
             /* FIXME: this ALWAYS fails on Buffers menu items.. something
                  about their strings causes them to change every time, so we
                  double-check failures */
-            if (!EQ (previous_items[i], XVECTOR (menu_items)->contents[i]))
+            if (!EQ (previous_items[i], AREF (menu_items, i)))
               if (!(STRINGP (previous_items[i])
-                    && STRINGP (XVECTOR (menu_items)->contents[i])
+                    && STRINGP (AREF (menu_items, i))
                     && !strcmp (SDATA (previous_items[i]),
-                               SDATA (XVECTOR (menu_items)->contents[i]))))
+				SDATA (AREF (menu_items, i)))))
                   break;
           if (i == previous_menu_items_used)
             {
@@ -367,10 +367,10 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
       /* Parse stage 2a: now GC cannot happen during the lifetime of the
          widget_value, so it's safe to store data from a Lisp_String */
       wv = first_wv->contents;
-      for (i = 0; i < XVECTOR (items)->size; i += 4)
+      for (i = 0; i < ASIZE (items); i += 4)
 	{
 	  Lisp_Object string;
-	  string = XVECTOR (items)->contents[i + 1];
+	  string = AREF (items, i + 1);
 	  if (NILP (string))
 	    break;
 /*           if (submenu && strcmp (submenuTitle, SDATA (string)))
@@ -428,7 +428,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 
 
       /* check if no change.. this mechanism is a bit rough, but ready */
-      n = XVECTOR (items)->size / 4;
+      n = ASIZE (items) / 4;
       if (f == last_f && n_previous_strings == n)
         {
           for (i = 0; i<n; i++)
@@ -455,9 +455,9 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
         }
 
       [menu clear];
-      for (i = 0; i < XVECTOR (items)->size; i += 4)
+      for (i = 0; i < ASIZE (items); i += 4)
 	{
-	  string = XVECTOR (items)->contents[i + 1];
+	  string = AREF (items, i + 1);
 	  if (NILP (string))
 	    break;
 
@@ -602,7 +602,7 @@ static int trackingMenu = 0;
 
   /* Cocoa/Carbon will request update on every keystroke via
      IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
-     since key equivalents are handled through emacs.  
+     since key equivalents are handled through emacs.
      
      On Leopard, even keystroke events generate SystemDefined event.
      Third-party applications that enhance mouse / trackpad
@@ -626,8 +626,8 @@ static int trackingMenu = 0;
 
 
 - (BOOL)performKeyEquivalent: (NSEvent *)event
- {
-   if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
+{
+  if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
       && FRAME_NS_VIEW (SELECTED_FRAME ())
       /* must check if EmacsWindow.  Could be sheet/NSPanel.
          If on space without a window, [event window] is nil. */
@@ -650,8 +650,8 @@ static int trackingMenu = 0;
       // return [[NSApp mainMenu] performKeyEquivalent:event];
     }
 
-   return YES;
- }
+  return YES;
+}
 
 
 /* Parse a widget_value's key rep (examples: 's-p', 's-S', '(C-x C-s)', '<f13>')
@@ -668,7 +668,7 @@ static int trackingMenu = 0;
 
   if (!key || !strlen (key))
     return @"";
-  
+
   while (*tpos == ' ' || *tpos == '(')
     tpos++;
 
@@ -676,9 +676,9 @@ static int trackingMenu = 0;
   if (*tpos != 's') 
 #endif
     {
-      keyEquivModMask = 0; /* signal */
-      return [NSString stringWithUTF8String: tpos];
-    }
+  keyEquivModMask = 0; /* signal */
+  return [NSString stringWithUTF8String: tpos];
+}
   return [NSString stringWithFormat: @"%c", tpos[2]];
 }
 
@@ -732,7 +732,7 @@ static int trackingMenu = 0;
 -(void)clear
 {
   int n;
-  
+
   for (n = [self numberOfItems]-1; n >= 0; n--)
     {
       NSMenuItem *item = [self itemAtIndex: n];
@@ -795,18 +795,18 @@ static int trackingMenu = 0;
 	  }
       }
    
-    /* add new contents */
+  /* add new contents */
 
-    NSMenuItem *item = [self addItemWithWidgetValue: wv];
-    if (wv->contents)
-      {
-	EmacsMenu *submenu = [[EmacsMenu alloc] initWithTitle: [item title]];
-	
-	[self setSubmenu: submenu forItem: item];
-	[submenu fillWithWidgetValue: wv->contents];
-	[submenu release];
-	[item setAction: nil];
-      }
+      NSMenuItem *item = [self addItemWithWidgetValue: wv];
+      if (wv->contents)
+        {
+          EmacsMenu *submenu = [[EmacsMenu alloc] initWithTitle: [item title]];
+
+          [self setSubmenu: submenu forItem: item];
+          [submenu fillWithWidgetValue: wv->contents];
+          [submenu release];
+          [item setAction: nil];
+        }
     }
 
   [self setMenuChangedMessagesEnabled: YES];
@@ -845,14 +845,14 @@ static int trackingMenu = 0;
   p.y = NSHeight ([view frame]) - p.y;
   NSEvent *e = [[view window] currentEvent];
   NSEvent *event = [NSEvent mouseEventWithType: NSRightMouseDown
-                                      location: p
-                                 modifierFlags: 0
-                                     timestamp: [e timestamp]
-                                  windowNumber: [[view window] windowNumber]
-                                       context: [e context]
-                                   eventNumber: 0/*[e eventNumber] */
-                                    clickCount: 1
-                                      pressure: 0];
+                              location: p
+                         modifierFlags: 0
+                             timestamp: [e timestamp]
+                          windowNumber: [[view window] windowNumber]
+                               context: [e context]
+                           eventNumber: 0/*[e eventNumber] */
+                            clickCount: 1
+                              pressure: 0];
   long retVal;
 
   context_menu_value = -1;
@@ -913,7 +913,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
   i = 0;
   while (i < menu_items_used)
     {
-      if (EQ (XVECTOR (menu_items)->contents[i], Qnil))
+      if (EQ (AREF (menu_items, i), Qnil))
 	{
 	  submenu_stack[submenu_depth++] = save_wv;
 	  save_wv = prev_wv;
@@ -921,21 +921,21 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	  first_pane = 1;
 	  i++;
 	}
-      else if (EQ (XVECTOR (menu_items)->contents[i], Qlambda))
+      else if (EQ (AREF (menu_items, i), Qlambda))
 	{
 	  prev_wv = save_wv;
 	  save_wv = submenu_stack[--submenu_depth];
 	  first_pane = 0;
 	  i++;
 	}
-      else if (EQ (XVECTOR (menu_items)->contents[i], Qt)
+      else if (EQ (AREF (menu_items, i), Qt)
 	       && submenu_depth != 0)
 	i += MENU_ITEMS_PANE_LENGTH;
       /* Ignore a nil in the item list.
 	 It's meaningful only for dialog boxes.  */
-      else if (EQ (XVECTOR (menu_items)->contents[i], Qquote))
+      else if (EQ (AREF (menu_items, i), Qquote))
 	i += 1;
-      else if (EQ (XVECTOR (menu_items)->contents[i], Qt))
+      else if (EQ (AREF (menu_items, i), Qt))
 	{
 	  /* Create a new pane.  */
 	  Lisp_Object pane_name, prefix;
@@ -1025,7 +1025,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	     make the call_data null so that it won't display a box
 	     when the mouse is on it.  */
 	  wv->call_data
-	      = !NILP (def) ? (void *) &XVECTOR (menu_items)->contents[i] : 0;
+	      = !NILP (def) ? (void *) &AREF (menu_items, i) : 0;
 	  wv->enabled = !NILP (enable);
 
 	  if (NILP (type))
@@ -1237,7 +1237,7 @@ update_frame_tool_bar (FRAME_PTR f)
       captionObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
       captionText = NILP (captionObj) ? "" : (char *)SDATA (captionObj);
 
-      [toolbar addDisplayItemWithImage: img->pixmap idx: i  helpText: helpText
+      [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
 			       enabled: enabled_p  visible: visible_p
 				   key: keyText  labelText: captionText];
 #undef TOOLPROP
@@ -1504,8 +1504,8 @@ Items in this list are always Lisp symbols.*/)
   [identifierToItem setObject: item forKey: identifier];
   [availableIdentifiers addObject: identifier];
   if (visible)
-    [activeIdentifiers addObject: identifier];
-  enablement = (enablement << 1) | (enabled == YES);   
+  [activeIdentifiers addObject: identifier];
+  enablement = (enablement << 1) | (enabled == YES);
 }
 
 /* This overrides super's implementation, which automatically sets
@@ -1647,12 +1647,12 @@ a notification */
 {
   NSString *str = [NSString stringWithUTF8String: text];
   NSRect r = [textField frame];
-  NSSize textSize = [str sizeWithAttributes: 
+  NSSize textSize = [str sizeWithAttributes:
      [NSDictionary dictionaryWithObject: [[textField font] screenFont]
 				 forKey: NSFontAttributeName]];
-  NSSize padSize = [[[textField font] screenFont] 
+  NSSize padSize = [[[textField font] screenFont]
 		     boundingRectForFont].size;
- 
+
   r.size.width = textSize.width + padSize.width/2;
   r.size.height = textSize.height + padSize.height/2;
   [textField setFrame: r];
@@ -1739,7 +1739,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   BOOL useSheet = YES;
 
   NSTRACE (x-popup-dialog);
-  
+
   check_ns ();
 
   CHECK_CONS (contents);
@@ -1770,7 +1770,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   else
     {
       useSheet = NO;
-      window = Qnil;
+    window = Qnil;
     }
 
   if (FRAMEP (window))
@@ -1794,18 +1794,18 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   Lisp_Object head;
   /* read contents */
   if (XTYPE (contents) == Lisp_Cons)
-    {
+{
       head = Fcar (contents);
       [((EmacsAlertPanel*)dialog) processDialogFromList: Fcdr (contents)];
-    }
+}
   else
     head = contents;
 
   if (XTYPE (head) == Lisp_String)
-    {
+{
       char* split = strchr( SDATA (head), '\n');
       if ( split )
-	{
+{
 	  split[0] = '\0'; 
 	  [dialog setMessageText:
 		   [NSString stringWithUTF8String: SDATA (head)]];
@@ -1813,15 +1813,15 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	  [dialog setInformativeText:
 		   [NSString stringWithUTF8String: split+1]];
 	} else
-	{
+    {
 	  [dialog setMessageText:
 		   [NSString stringWithUTF8String: SDATA (head)]];
-	}
     }
- 
+    }
+
   {
     int i;
-      
+
   NSInteger ret = -1;
 
   {
@@ -1834,21 +1834,21 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   [dialog layout]; /* because we may not call beginSheet / runModal */
 
   if (useSheet)
-    {
+{
       [dialog beginSheetModalForWindow:[FRAME_NS_VIEW (f) window]
 			 modalDelegate:dialog
 			didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
 			 contextInfo:&ret];
       popupSheetAlert = dialog; /* store so the sheet will be ended. */
-    }
+}
   else
     popupSheetAlert = nil;
 
-  
+
   /* initiate a session that will be ended by pop_down_menu */
   [dialog retain];  
   popupSession = [NSApp beginModalSessionForWindow: [dialog window]];
-  
+
   int ret2 = -1;
   while (popup_activated_flag
 	 && ret == -1
@@ -1859,28 +1859,28 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
          TODO: use return value to avoid calling every iteration. */
       timer_check (1);
       [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
-    }
+        }
   if (ret == -1 && ret2 != -1)
     ret = ret2;
 
   if (ret>=0 && ret<dialog->returnValueCount)
-    {
+        {
       // *(EMACS_INT*)(&tem)
       tem = (Lisp_Object) dialog->returnValues[ret];
       if ([[dialog suppressionButton] state] == NSOnState)
-	{
+        {
 	  tem = Fcons (tem, dialog->returnValues[[[dialog suppressionButton] tag]]);
-	}
+        }
     }
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
-  }
+}
   UNBLOCK_INPUT;
   [dialog release];
   if (ret==-2) /*cancel*/
      Fsignal (Qquit, Qnil); /*special button value for cancel*/
 
   return tem;
-}
+    }
 
 }
 
@@ -1891,8 +1891,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
    ========================================================================== */
 
 @interface FlippedView : NSView
-{
-}
+    {
+    }
 @end
 
 @implementation FlippedView
@@ -1922,21 +1922,21 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 - (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
   * ((NSInteger*) contextInfo) = returnCode;
-}
+    }
 
 /* do to: move this into init: */
 - (void) processDialogFromList: (Lisp_Object)list
-{
+  {
   Lisp_Object item;
   int cancel = 1;
   for (; CONSP (list) && returnValueCount<20; list = XCDR (list))
     {
       item = XCAR (list);
-      
+
       if (STRINGP (item))
         { /* inactive button */
           [[self addButtonWithTitle: [NSString stringWithUTF8String: SDATA (item)] ] setEnabled:NO];
-        } 
+          }
       else if (NILP (item))
         { /* unfortunately, NSAlert will resize this button.  We can
 	     only customize after a call to update:, but then the
@@ -1944,60 +1944,60 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	     pointless.  */
 	  NSButton *space = [self addButtonWithTitle: @" " ];
 	  [space setHidden:YES];
-        }
+      }
       else if (CONSP (item)) 
-        { 
+    {
 	  NSString *title = @"malformed";
 	  NSString *key = nil;
 	  NSButton *button = nil;
 	  if (CONSP (XCAR (item))) /* key specified? */
-	    {
+        {
 	      if (STRINGP (XCAR (XCAR (item))))
 		title = [NSString stringWithUTF8String: SDATA (XCAR (XCAR (item)))];
 	      if (INTEGERP ( XCDR (XCAR (item))))
 		key =  [[NSString stringWithFormat: @"%c", XINT (XCDR (XCAR (item)))] retain];
 	      else
 		key = nil;
-	    }
+        }
 	  else
 	    {
 	      if (STRINGP (XCAR (item)))
 		title = [NSString stringWithUTF8String: SDATA (XCAR (item))];
-	    }
+    }
 	  if (EQ (XCDR (item), intern ("suppress")))
-	    {
+      {
 	      [self setShowsSuppressionButton:YES];
 	      button = [self suppressionButton];
 	      [button setTitle:title];
-	    } 
+      }
 	  else
 	    { /* normal button*/
 	      button = [self addButtonWithTitle: title];
 	    }
 	  [button setTag: returnValueCount];
 	  if (key)
-	    {
+      {
 	      [button setKeyEquivalent: key];
 	      /* buttons like Don't Save have a non-nil modifier
 		 by default.  We have to reset that. */
 	      [button setKeyEquivalentModifierMask: 0];
-	    }
+      }
 	  returnValues[returnValueCount++] = XCDR (item);
-        }
+  }
       else if (EQ (item, intern ("cancel")))
 	{ /* add cancel button */
 	  [[self addButtonWithTitle:  @"Cancel"] setTag: -2];
 	  cancel = 0;
-	}    
+}
       else if (EQ (item, intern ("no-cancel")))
 	{ /* skip cancel button */
 	  cancel = 0;
-	}    
+}
     }
 
   if (cancel || returnValueCount == 0)
     [[self addButtonWithTitle: @"Cancel"] setTag: -2];
-}
+  }
 
 @end
 
@@ -2110,5 +2110,3 @@ This variable only takes effect for newly created tool bars.*/);
   staticpro (&Qdebug_on_next_call);
   Vcancel_special_indicator_flag = Fcons(Qnil, Qnil);
 }
-
-// arch-tag: 75773656-52e5-4c44-a398-47bd87b32619
