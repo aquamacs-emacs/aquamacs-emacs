@@ -49,6 +49,9 @@
 (load "button")
 ; (load "view")  ; can't do it in Emacs 24
 ;(load "help-mode")
+
+(load "emacs-lisp/cconv")
+(load "emacs-lisp/macroexp")
 (load "help-fns")
 
 (load "emacs-lisp/debug")
