@@ -1880,7 +1880,7 @@ key, a click, or a menu-item")))
 (define-key global-map [menu-bar tools]
   (cons (purecopy "Tools") menu-bar-tools-menu))
 (define-key global-map [menu-bar buffer]
-  (cons (purecopy "Buffers") global-buffers-menu-map))
+  (cons (purecopy "Window") global-buffers-menu-map))
 (define-key global-map [menu-bar options]
   (cons (purecopy "Options") menu-bar-options-menu))
 (define-key global-map [menu-bar edit]
