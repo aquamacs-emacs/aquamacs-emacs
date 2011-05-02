@@ -98,6 +98,10 @@ is highlighted lazily using isearch lazy highlighting (see
   :group 'matching
   :version "22.1")
 
+(defvar replace-count 0
+  "Number of replacements done so far.
+See `replace-regexp' and `query-replace-regexp-eval'.")
+
 (defun query-replace-descr (string)
   (mapconcat 'isearch-text-char-description string ""))
 
@@ -772,26 +776,29 @@ a previously found match."
     (define-key map "\C-c\C-f" 'next-error-follow-minor-mode)
     (define-key map [menu-bar] (make-sparse-keymap))
     (define-key map [menu-bar occur]
-      `(cons ,(purecopy "Occur") map))
+      (cons (purecopy "Occur") map))
     (define-key map [next-error-follow-minor-mode]
-      (menu-bar-make-mm-toggle next-error-follow-minor-mode
-			       "Auto Occurrence Display"
-			       "Display another occurrence when moving the cursor"))
+      `(menu-item ,(purecopy "Auto Occurrence Display")
+		  next-error-follow-minor-mode
+		  :help ,(purecopy
+			  "Display another occurrence when moving the cursor")
+		  :button (:toggle . (and (boundp 'next-error-follow-minor-mode)
+					  next-error-follow-minor-mode))))
     (define-key map [separator-1] menu-bar-separator)
     (define-key map [kill-this-buffer]
-      `(menu-item ,(purecopy "Kill occur buffer") kill-this-buffer
+      `(menu-item ,(purecopy "Kill Occur Buffer") kill-this-buffer
 		  :help ,(purecopy "Kill the current *Occur* buffer")))
     (define-key map [quit-window]
-      `(menu-item ,(purecopy "Quit occur window") quit-window
+      `(menu-item ,(purecopy "Quit Occur Window") quit-window
 		  :help ,(purecopy "Quit the current *Occur* buffer.  Bury it, and maybe delete the selected frame")))
     (define-key map [revert-buffer]
-      `(menu-item ,(purecopy "Revert occur buffer") revert-buffer
+      `(menu-item ,(purecopy "Revert Occur Buffer") revert-buffer
 		  :help ,(purecopy "Replace the text in the *Occur* buffer with the results of rerunning occur")))
     (define-key map [clone-buffer]
-      `(menu-item ,(purecopy "Clone occur buffer") clone-buffer
+      `(menu-item ,(purecopy "Clone Occur Buffer") clone-buffer
 		  :help ,(purecopy "Create and return a twin copy of the current *Occur* buffer")))
     (define-key map [occur-rename-buffer]
-      `(menu-item ,(purecopy "Rename occur buffer") occur-rename-buffer
+      `(menu-item ,(purecopy "Rename Occur Buffer") occur-rename-buffer
 		  :help ,(purecopy "Rename the current *Occur* buffer to *Occur: original-buffer-name*.")))
     (define-key map [separator-2] menu-bar-separator)
     (define-key map [occur-mode-goto-occurrence-other-window]
@@ -804,10 +811,10 @@ a previously found match."
       `(menu-item ,(purecopy "Display Occurrence") occur-mode-display-occurrence
 		  :help ,(purecopy "Display in another window the occurrence the current line describes")))
     (define-key map [occur-next]
-      `(menu-item ,(purecopy "Move to next match") occur-next
+      `(menu-item ,(purecopy "Move to Next Match") occur-next
 		  :help ,(purecopy "Move to the Nth (default 1) next match in an Occur mode buffer")))
     (define-key map [occur-prev]
-      `(menu-item ,(purecopy "Move to previous match") occur-prev
+      `(menu-item ,(purecopy "Move to Previous Match") occur-prev
 		  :help ,(purecopy "Move to the Nth (default 1) previous match in an Occur mode buffer")))
     map)
   "Keymap for `occur-mode'.")
@@ -846,7 +853,7 @@ Alternatively, click \\[occur-mode-mouse-goto] on an item to go to it.
   (add-hook 'change-major-mode-hook 'font-lock-defontify nil t)
   (setq next-error-function 'occur-next-error))
 
-(defun occur-revert-function (ignore1 ignore2)
+(defun occur-revert-function (_ignore1 _ignore2)
   "Handle `revert-buffer' for Occur mode buffers."
   (apply 'occur-1 (append occur-revert-arguments (list (buffer-name)))))
 
@@ -1066,6 +1073,8 @@ are not modified."
   (interactive (occur-read-primary-args))
   (occur-1 regexp nlines (list (current-buffer))))
 
+(defvar ido-ignore-item-temp-list)
+
 (defun multi-occur (bufs regexp &optional nlines)
   "Show all lines in buffers BUFS containing a match for REGEXP.
 This function acts on multiple buffers; otherwise, it is exactly like
@@ -1201,11 +1210,12 @@ See also `multi-occur'."
             (set-buffer-modified-p nil)
             (run-hooks 'occur-hook)))))))
 
-(defun occur-engine (regexp buffers out-buf nlines case-fold-search
+(defun occur-engine (regexp buffers out-buf nlines case-fold
 			    title-face prefix-face match-face keep-props)
   (with-current-buffer out-buf
     (let ((globalcount 0)
-	  (coding nil))
+	  (coding nil)
+	  (case-fold-search case-fold))
       ;; Map over all the buffers
       (dolist (buf buffers)
 	(when (buffer-live-p buf)
@@ -1305,8 +1315,7 @@ See also `multi-occur'."
 			      (nth 0 ret))))
 		      ;; Actually insert the match display data
 		      (with-current-buffer out-buf
-			(let ((beg (point))
-			      (end (progn (insert data) (point)))))))
+			(insert data)))
 		    (goto-char endpt))
 		  (if endpt
 		      (progn
@@ -1554,8 +1563,9 @@ type them using Lisp syntax."
 	  (setcar n 'replace-count))))))
     (setq n (cdr n))))
 
-(defun replace-eval-replacement (expression replace-count)
-  (let ((replacement (eval expression)))
+(defun replace-eval-replacement (expression count)
+  (let* ((replace-count count)
+         (replacement (eval expression)))
     (if (stringp replacement)
         replacement
       (prin1-to-string replacement t))))
@@ -1575,15 +1585,15 @@ with the `noescape' argument set.
 				(prin1-to-string replacement t))
 			      t t)))
 
-(defun replace-loop-through-replacements (data replace-count)
+(defun replace-loop-through-replacements (data count)
   ;; DATA is a vector contaning the following values:
   ;;   0 next-rotate-count
   ;;   1 repeat-count
   ;;   2 next-replacement
   ;;   3 replacements
-  (if (= (aref data 0) replace-count)
+  (if (= (aref data 0) count)
       (progn
-        (aset data 0 (+ replace-count (aref data 1)))
+        (aset data 0 (+ count (aref data 1)))
         (let ((next (cdr (aref data 2))))
           (aset data 2 (if (consp next) next (aref data 3))))))
   (car (aref data 2)))
@@ -2007,6 +2017,11 @@ make, or the user didn't cancel the call."
 		 replace-count
 		 (if (= replace-count 1) "" "s")))
     (or (and keep-going stack) multi-buffer)))
+
+(defvar isearch-error)
+(defvar isearch-forward)
+(defvar isearch-case-fold-search)
+(defvar isearch-string)
 
 (defvar replace-overlay nil)
 

@@ -92,6 +92,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if gettimeofday accepts only one argument. */
 #undef GETTIMEOFDAY_ONE_ARGUMENT
 
+/* Define to make the limit macros in <stdint.h> visible. */
+#undef GL_TRIGGER_STDC_LIMIT_MACROS
+
 /* Define to 1 if you want to use the GNU memory allocator. */
 #undef GNU_MALLOC
 
@@ -155,6 +158,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the declaration of `strmode', and to 0 if you
    don't. */
 #undef HAVE_DECL_STRMODE
+
+/* Define to 1 if you have the declaration of `strtoull', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRTOULL
+
+/* Define to 1 if you have the declaration of `strtoumax', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRTOUMAX
 
 /* Define to 1 if you have the declaration of `sys_siglist', and to 0 if you
    don't. */
@@ -278,6 +289,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define if using GnuTLS. */
 #undef HAVE_GNUTLS
+
+/* Define if using GnuTLS certificate verification callbacks. */
+#undef HAVE_GNUTLS_CALLBACK_CERTIFICATE_VERIFY
+
+/* Define to 1 if you have the `gnutls_certificate_set_verify_function'
+   function. */
+#undef HAVE_GNUTLS_CERTIFICATE_SET_VERIFY_FUNCTION
 
 /* Define to 1 if you have the gpm library (-lgpm). */
 #undef HAVE_GPM
@@ -582,6 +600,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the `readlink' function. */
 #undef HAVE_READLINK
 
+/* Define to 1 if you have the `readlinkat' function. */
+#undef HAVE_READLINKAT
+
 /* Define to 1 if you have the `recvfrom' function. */
 #undef HAVE_RECVFROM
 
@@ -636,9 +657,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if 'wint_t' is a signed integer type. */
 #undef HAVE_SIGNED_WINT_T
 
-/* Define to 1 if the system has the type `size_t'. */
-#undef HAVE_SIZE_T
-
 /* Define to 1 if you have sound support. */
 #undef HAVE_SOUND
 
@@ -674,6 +692,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the `strsignal' function. */
 #undef HAVE_STRSIGNAL
+
+/* Define to 1 if you have the `strtoull' function. */
+#undef HAVE_STRTOULL
+
+/* Define to 1 if you have the `strtoumax' function. */
+#undef HAVE_STRTOUMAX
 
 /* Define to 1 if `ifr_addr' is a member of `struct ifreq'. */
 #undef HAVE_STRUCT_IFREQ_IFR_ADDR
@@ -1151,6 +1175,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define like PROTOTYPES; this can be used by system headers. */
 #undef __PROTOTYPES
 
+/* Ensure that <stdint.h> defines the limit macros, since gnulib's
+   <inttypes.h> relies on them.  */
+#if defined __cplusplus && !defined __STDC_LIMIT_MACROS && GL_TRIGGER_STDC_LIMIT_MACROS
+# define __STDC_LIMIT_MACROS 1
+#endif
+
+
 /* Define to compiler's equivalent of C99 restrict keyword in array
    declarations. Define as empty for no equivalent. */
 #undef __restrict_arr
@@ -1208,6 +1239,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* type to use in place of socklen_t if not defined */
 #undef socklen_t
+
+/* Define as a signed type of the same size as size_t. */
+#undef ssize_t
 
 /* Define to any substitute for sys_siglist. */
 #undef sys_siglist
@@ -1331,10 +1365,6 @@ extern "C"
 void *alloca (size_t);
 #endif
 
-#ifndef HAVE_SIZE_T
-typedef unsigned size_t;
-#endif
-
 #ifndef HAVE_STRCHR
 #define strchr(a, b) index (a, b)
 #endif
@@ -1360,6 +1390,20 @@ typedef unsigned size_t;
 #define EXTERNALLY_VISIBLE __attribute__((externally_visible))
 #else
 #define EXTERNALLY_VISIBLE
+#endif
+
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 7)
+# define ATTRIBUTE_FORMAT(spec) __attribute__ ((__format__ spec))
+#else
+# define ATTRIBUTE_FORMAT(spec) /* empty */
+#endif
+
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 4)
+# define ATTRIBUTE_FORMAT_PRINTF(formatstring_parameter, first_argument) \
+   ATTRIBUTE_FORMAT ((__gnu_printf__, formatstring_parameter, first_argument))
+#else
+# define ATTRIBUTE_FORMAT_PRINTF(formatstring_parameter, first_argument) \
+   ATTRIBUTE_FORMAT ((__printf__, formatstring_parameter, first_argument))
 #endif
 
 /* Some versions of GNU/Linux define noinline in their headers.  */

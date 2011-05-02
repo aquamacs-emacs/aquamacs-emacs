@@ -4,7 +4,7 @@
 
 ;; Author: Ryan Yeske <rcyeske@gmail.com>
 ;; Maintainers: Ryan Yeske <rcyeske@gmail.com>,
-;;              Deniz Dogan <deniz.a.m.dogan@gmail.com>
+;;              Deniz Dogan <deniz@dogan.se>
 ;; Keywords: comm
 
 ;; This file is part of GNU Emacs.
@@ -900,7 +900,6 @@ IRC command completion is performed only if '/' is the first input char."
     (define-key map (kbd "C-c C-m") 'rcirc-cmd-msg)
     (define-key map (kbd "C-c C-r") 'rcirc-cmd-nick) ; rename
     (define-key map (kbd "C-c C-o") 'rcirc-omit-mode)
-    (define-key map (kbd "M-o") 'rcirc-omit-mode)
     (define-key map (kbd "C-c C-p") 'rcirc-cmd-part)
     (define-key map (kbd "C-c C-q") 'rcirc-cmd-query)
     (define-key map (kbd "C-c C-t") 'rcirc-cmd-topic)
@@ -2742,10 +2741,13 @@ the only argument."
 
 (defun rcirc-handler-353 (process sender args text)
   "RPL_NAMREPLY"
-  (let ((channel (caddr args)))
+  (let ((channel (nth 2 args))
+	(names (or (nth 3 args) "")))
     (mapc (lambda (nick)
             (rcirc-put-nick-channel process nick channel))
-          (split-string (cadddr args) " " t))
+          (split-string names " " t))
+    ;; create a temporary buffer to insert the names into
+    ;; rcirc-handler-366 (RPL_ENDOFNAMES) will handle it
     (with-current-buffer (rcirc-get-temp-buffer-create process channel)
       (goto-char (point-max))
       (insert (car (last args)) " "))))

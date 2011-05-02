@@ -1128,9 +1128,9 @@ which it may alter in any way."
   'mail-decode-encoded-address-string
   "Function used to decode addresses with encoded words.")
 
-(defcustom gnus-extra-headers '(To Newsgroups)
+(defcustom gnus-extra-headers '(To Cc Keywords Gcc Newsgroups)
   "*Extra headers to parse."
-  :version "21.1"
+  :version "24.1"                       ; added Cc Keywords Gcc
   :group 'gnus-summary
   :type '(repeat symbol))
 
@@ -6070,12 +6070,15 @@ If SELECT-ARTICLES, only select those articles from GROUP."
 	  (let* ((old (cdr (assq (cdr type) (gnus-info-marks info))))
 		 ;; Don't do anything about marks for articles we
 		 ;; didn't actually get any headers for.
-		 (existing (gnus-compress-sequence gnus-newsgroup-articles))
 		 (del
-		  (gnus-remove-from-range (gnus-copy-sequence old) list))
+		  (gnus-list-range-intersection
+		   gnus-newsgroup-articles
+		   (gnus-remove-from-range (gnus-copy-sequence old) list)))
 		 (add
-		  (gnus-remove-from-range
-		   (gnus-copy-sequence list) old)))
+		  (gnus-list-range-intersection
+		   gnus-newsgroup-articles
+		   (gnus-remove-from-range
+		    (gnus-copy-sequence list) old))))
 	    (when add
 	      (push (list add 'add (list (cdr type))) delta-marks))
 	    (when del
@@ -7032,7 +7035,7 @@ displayed, no centering will be performed."
 
 (defun gnus-summary-select-article-buffer ()
   "Reconfigure windows to show the article buffer.
-If `gnus-widen-article-buffer' is set, show only the article
+If `gnus-widen-article-window' is set, show only the article
 buffer."
   (interactive)
   (if (not (gnus-buffer-live-p gnus-article-buffer))
@@ -7780,7 +7783,8 @@ If BACKWARD, the previous article is selected instead of the next."
 	  ;; Somehow or other, we may now have selected a different
 	  ;; window.  Make point go back to the summary buffer.
 	  (when (eq current-summary (current-buffer))
-	    (select-window (get-buffer-window current-summary)))
+            ;; FIXME: This burps when get-buffer-window returns nil.
+	    (select-window (get-buffer-window current-summary 0)))
 	  (gnus-summary-walk-group-buffer
 	   gnus-newsgroup-name cmd unread backward point))))))))
 

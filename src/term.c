@@ -77,16 +77,20 @@ static int been_here = -1;
 static void tty_set_scroll_region (struct frame *f, int start, int stop);
 static void turn_on_face (struct frame *, int face_id);
 static void turn_off_face (struct frame *, int face_id);
+static void tty_turn_off_highlight (struct tty_display_info *);
 static void tty_show_cursor (struct tty_display_info *);
 static void tty_hide_cursor (struct tty_display_info *);
 static void tty_background_highlight (struct tty_display_info *tty);
+static struct terminal *get_tty_terminal (Lisp_Object, int);
 static void clear_tty_hooks (struct terminal *terminal);
 static void set_tty_hooks (struct terminal *terminal);
 static void dissociate_if_controlling_tty (int fd);
 static void delete_tty (struct terminal *);
 static void maybe_fatal (int must_succeed, struct terminal *terminal,
-			 const char *str1, const char *str2, ...) NO_RETURN;
-static void vfatal (const char *str, va_list ap) NO_RETURN;
+			 const char *str1, const char *str2, ...)
+  NO_RETURN ATTRIBUTE_FORMAT_PRINTF (3, 5) ATTRIBUTE_FORMAT_PRINTF (4, 5);
+static void vfatal (const char *str, va_list ap)
+  NO_RETURN ATTRIBUTE_FORMAT_PRINTF (1, 0);
 
 
 #define OUTPUT(tty, a)                                          \
@@ -131,11 +135,11 @@ enum no_color_bit
 
 /* The largest frame width in any call to calculate_costs.  */
 
-int max_frame_cols;
+static int max_frame_cols;
 
 /* The largest frame height in any call to calculate_costs.  */
 
-int max_frame_lines;
+static int max_frame_lines;
 
 /* Non-zero if we have dropped our controlling tty and therefore
    should not open a frame on stdout. */
@@ -171,7 +175,7 @@ tty_ring_bell (struct frame *f)
 
 /* Set up termcap modes for Emacs. */
 
-void
+static void
 tty_set_terminal_modes (struct terminal *terminal)
 {
   struct tty_display_info *tty = terminal->display_info.tty;
@@ -199,7 +203,7 @@ tty_set_terminal_modes (struct terminal *terminal)
 
 /* Reset termcap modes before exiting Emacs. */
 
-void
+static void
 tty_reset_terminal_modes (struct terminal *terminal)
 {
   struct tty_display_info *tty = terminal->display_info.tty;
@@ -284,7 +288,7 @@ tty_turn_off_insert (struct tty_display_info *tty)
 
 /* Handle highlighting.  */
 
-void
+static void
 tty_turn_off_highlight (struct tty_display_info *tty)
 {
   if (tty->standout_mode)
@@ -707,6 +711,7 @@ tty_write_glyphs (struct frame *f, struct glyph *string, int len)
 {
   unsigned char *conversion_buffer;
   struct coding_system *coding;
+  size_t n, stringlen;
 
   struct tty_display_info *tty = FRAME_TTY (f);
 
@@ -734,13 +739,12 @@ tty_write_glyphs (struct frame *f, struct glyph *string, int len)
      the tail.  */
   coding->mode &= ~CODING_MODE_LAST_BLOCK;
 
-  while (len > 0)
+  for (stringlen = len; stringlen != 0; stringlen -= n)
     {
       /* Identify a run of glyphs with the same face.  */
       int face_id = string->face_id;
-      int n;
 
-      for (n = 1; n < len; ++n)
+      for (n = 1; n < stringlen; ++n)
 	if (string[n].face_id != face_id)
 	  break;
 
@@ -748,7 +752,7 @@ tty_write_glyphs (struct frame *f, struct glyph *string, int len)
       tty_highlight_if_desired (tty);
       turn_on_face (f, face_id);
 
-      if (n == len)
+      if (n == stringlen)
 	/* This is the last run.  */
 	coding->mode |= CODING_MODE_LAST_BLOCK;
       conversion_buffer = encode_terminal_code (string, n, coding);
@@ -762,7 +766,6 @@ tty_write_glyphs (struct frame *f, struct glyph *string, int len)
 	    fwrite (conversion_buffer, 1, coding->produced, tty->termscript);
 	  UNBLOCK_INPUT;
 	}
-      len -= n;
       string += n;
 
       /* Turn appearance modes off.  */
@@ -1933,6 +1936,8 @@ produce_glyphless_glyph (struct it *it, int for_no_font, Lisp_Object acronym)
 	{
 	  if (! STRINGP (acronym) && CHAR_TABLE_P (Vglyphless_char_display))
 	    acronym = CHAR_TABLE_REF (Vglyphless_char_display, it->c);
+	  if (CONSP (acronym))
+	    acronym = XCDR (acronym);
 	  buf[0] = '[';
 	  str = STRINGP (acronym) ? SSDATA (acronym) : "";
 	  for (len = 0; len < 6 && str[len] && ASCII_BYTE_P (str[len]); len++)
@@ -2367,7 +2372,7 @@ set_tty_color_mode (struct tty_display_info *tty, struct frame *f)
 
 /* Return the tty display object specified by TERMINAL. */
 
-struct terminal *
+static struct terminal *
 get_tty_terminal (Lisp_Object terminal, int throw)
 {
   struct terminal *t = get_terminal (terminal, throw);
@@ -2613,6 +2618,8 @@ frame's terminal). */)
  ***********************************************************************/
 
 #ifdef HAVE_GPM
+
+#ifndef HAVE_WINDOW_SYSTEM
 void
 term_mouse_moveto (int x, int y)
 {
@@ -2626,6 +2633,7 @@ term_mouse_moveto (int x, int y)
   last_mouse_x = x;
   last_mouse_y = y;  */
 }
+#endif /* HAVE_WINDOW_SYSTEM */
 
 /* Implementation of draw_row_with_mouse_face for TTY/GPM.  */
 void
@@ -3113,7 +3121,7 @@ init_tty (const char *name, const char *terminal_type, int must_succeed)
   terminal = create_terminal ();
 #ifdef MSDOS
   if (been_here > 0)
-    maybe_fatal (1, 0, "Attempt to create another terminal %s", "",
+    maybe_fatal (0, 0, "Attempt to create another terminal %s", "",
 		 name, "");
   been_here = 1;
   tty = &the_only_display_info;
@@ -3154,13 +3162,12 @@ init_tty (const char *name, const char *terminal_type, int must_succeed)
          if we don't have one at the moment.  */
       fd = emacs_open (name, O_RDWR | O_IGNORE_CTTY | O_NOCTTY, 0);
     else
-#else
+#endif /* O_IGNORE_CTTY */
       /* Alas, O_IGNORE_CTTY is a GNU extension that seems to be only
          defined on Hurd.  On other systems, we need to explicitly
          dissociate ourselves from the controlling tty when we want to
          open a frame on the same terminal.  */
       fd = emacs_open (name, O_RDWR | O_NOCTTY, 0);
-#endif /* O_IGNORE_CTTY */
 
     tty->name = xstrdup (name);
     terminal->name = xstrdup (name);
@@ -3620,7 +3627,7 @@ vfatal (const char *str, va_list ap)
 
 /* Auxiliary error-handling function for init_tty.
    Delete TERMINAL, then call error or fatal with str1 or str2,
-   respectively, according to MUST_SUCCEED.  */
+   respectively, according to whether MUST_SUCCEED is zero or not.  */
 
 static void
 maybe_fatal (int must_succeed, struct terminal *terminal,

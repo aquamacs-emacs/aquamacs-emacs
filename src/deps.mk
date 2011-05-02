@@ -44,7 +44,8 @@ buffer.o: buffer.c buffer.h region-cache.h commands.h window.h \
    $(INTERVALS_H) blockinput.h atimer.h systime.h character.h ../lib/unistd.h \
    indent.h keyboard.h coding.h keymap.h frame.h lisp.h globals.h $(config_h)
 callint.o: callint.c window.h commands.h buffer.h keymap.h globals.h msdos.h \
-   keyboard.h dispextern.h systime.h coding.h composite.h lisp.h $(config_h)
+   keyboard.h dispextern.h systime.h coding.h composite.h lisp.h \
+   character.h $(config_h)
 callproc.o: callproc.c epaths.h buffer.h commands.h lisp.h $(config_h) \
    process.h systty.h syssignal.h character.h coding.h ccl.h msdos.h \
    composite.h w32.h blockinput.h atimer.h systime.h frame.h termhooks.h \
@@ -187,6 +188,7 @@ sysdep.o: sysdep.c syssignal.h systty.h systime.h syswait.h blockinput.h \
    process.h dispextern.h termhooks.h termchar.h termopts.h coding.h \
    frame.h atimer.h window.h msdos.h dosfns.h keyboard.h cm.h lisp.h \
    globals.h $(config_h) composite.h sysselect.h gnutls.h \
+   ../lib/allocator.h ../lib/careadlinkat.h \
    ../lib/unistd.h ../lib/ignore-value.h
 term.o: term.c termchar.h termhooks.h termopts.h lisp.h globals.h $(config_h) \
    cm.h frame.h disptab.h keyboard.h character.h charset.h coding.h ccl.h \

@@ -128,6 +128,8 @@ List of factors, used to expand/compress the time scale.  See `vc-annotate'."
     (define-key m "p" 'vc-annotate-prev-revision)
     (define-key m "w" 'vc-annotate-working-revision)
     (define-key m "v" 'vc-annotate-toggle-annotation-visibility)
+    (define-key m "v" 'vc-annotate-toggle-annotation-visibility)
+    (define-key m "\C-m" 'vc-annotate-goto-line)
     m)
   "Local keymap used for VC-Annotate mode.")
 
@@ -489,7 +491,7 @@ Return a cons (REV . FILENAME)."
   "Visit the log of the revision at line.
 If the VC backend supports it, only show the log entry for the revision.
 If a *vc-change-log* buffer exists and already shows a log for
-the file in question, search for the log entry required and move point ."
+the file in question, search for the log entry required and move point."
   (interactive)
   (if (not (equal major-mode 'vc-annotate-mode))
       (message "Cannot be invoked outside of a vc annotate buffer")
@@ -672,6 +674,36 @@ The annotations are relative to the current time, unless overridden by OFFSET."
           (put-text-property start end 'face face)))))
   ;; Pretend to font-lock there were no matches.
   nil)
+
+(defun vc-annotate-goto-line ()
+  "Go to the line corresponding to the current VC Annotate line."
+  (interactive)
+  (unless (eq major-mode 'vc-annotate-mode)
+    (error "Not in a VC-Annotate buffer"))
+  (let ((line (save-restriction
+		(widen)
+		(line-number-at-pos)))
+	(rev vc-annotate-parent-rev))
+    (pop-to-buffer
+     (or (and (buffer-live-p vc-parent-buffer)
+	      vc-parent-buffer)
+	 (and (file-exists-p vc-annotate-parent-file)
+	      (find-file-noselect vc-annotate-parent-file))
+	 (error "File not found: %s" vc-annotate-parent-file)))
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (forward-line (1- line))
+      (recenter))
+    ;; Issue a warning if the lines might be incorrect.
+    (cond
+     ((buffer-modified-p)
+      (message "Buffer modified; annotated line numbers may be incorrect"))
+     ((not (eq (vc-state buffer-file-name) 'up-to-date))
+      (message "File is not up-to-date; annotated line numbers may be incorrect"))
+     ((not (equal rev (vc-working-revision buffer-file-name)))
+      (message "Annotations were for revision %s; line numbers may be incorrect"
+	       rev)))))
 
 (provide 'vc-annotate)
 

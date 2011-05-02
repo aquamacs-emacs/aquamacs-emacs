@@ -23,11 +23,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <time.h>
 #include <setjmp.h>
 
-/* Note on some machines this defines `vector' as a typedef,
-   so make sure we don't use that name in this file.  */
-#undef vector
-#define vector *****
-
 #include "lisp.h"
 #include "commands.h"
 #include "character.h"
@@ -49,11 +44,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define NULL ((POINTER_TYPE *)0)
 #endif
 
-Lisp_Object Qstring_lessp, Qprovide, Qrequire;
-Lisp_Object Qyes_or_no_p_history;
+Lisp_Object Qstring_lessp;
+static Lisp_Object Qprovide, Qrequire;
+static Lisp_Object Qyes_or_no_p_history;
 Lisp_Object Qcursor_in_echo_area;
-Lisp_Object Qwidget_type;
-Lisp_Object Qcodeset, Qdays, Qmonths, Qpaper;
+static Lisp_Object Qwidget_type;
+static Lisp_Object Qcodeset, Qdays, Qmonths, Qpaper;
 
 static int internal_equal (Lisp_Object , Lisp_Object, int, int);
 
@@ -510,7 +506,7 @@ concat (size_t nargs, Lisp_Object *args,
 	  Lisp_Object ch;
 	  EMACS_INT this_len_byte;
 
-	  if (VECTORP (this))
+	  if (VECTORP (this) || COMPILEDP (this))
 	    for (i = 0; i < len; i++)
 	      {
 		ch = AREF (this, i);
@@ -1076,7 +1072,7 @@ an error is signaled.  */)
       EMACS_INT converted = str_to_unibyte (SDATA (string), str, chars, 0);
 
       if (converted < chars)
-	error ("Can't convert the %dth character to unibyte", converted);
+	error ("Can't convert the %"pI"dth character to unibyte", converted);
       string = make_unibyte_string ((char *) str, chars);
       xfree (str);
     }
@@ -1247,17 +1243,10 @@ substring_both (Lisp_Object string, EMACS_INT from, EMACS_INT from_byte,
 {
   Lisp_Object res;
   EMACS_INT size;
-  EMACS_INT size_byte;
 
   CHECK_VECTOR_OR_STRING (string);
 
-  if (STRINGP (string))
-    {
-      size = SCHARS (string);
-      size_byte = SBYTES (string);
-    }
-  else
-    size = ASIZE (string);
+  size = STRINGP (string) ? SCHARS (string) : ASIZE (string);
 
   if (!(0 <= from && from <= to && to <= size))
     args_out_of_range_3 (string, make_number (from), make_number (to));
@@ -2074,14 +2063,12 @@ internal_equal (register Lisp_Object o1, register Lisp_Object o2, int depth, int
 	/* Boolvectors are compared much like strings.  */
 	if (BOOL_VECTOR_P (o1))
 	  {
-	    int size_in_chars
-	      = ((XBOOL_VECTOR (o1)->size + BOOL_VECTOR_BITS_PER_CHAR - 1)
-		 / BOOL_VECTOR_BITS_PER_CHAR);
-
 	    if (XBOOL_VECTOR (o1)->size != XBOOL_VECTOR (o2)->size)
 	      return 0;
 	    if (memcmp (XBOOL_VECTOR (o1)->data, XBOOL_VECTOR (o2)->data,
-			size_in_chars))
+			((XBOOL_VECTOR (o1)->size
+			  + BOOL_VECTOR_BITS_PER_CHAR - 1)
+			 / BOOL_VECTOR_BITS_PER_CHAR)))
 	      return 0;
 	    return 1;
 	  }
@@ -2297,7 +2284,7 @@ mapcar1 (EMACS_INT leni, Lisp_Object *vals, Lisp_Object fn, Lisp_Object seq)
     1) lists are not relocated and 2) the list is marked via `seq' so will not
     be freed */
 
-  if (VECTORP (seq))
+  if (VECTORP (seq) || COMPILEDP (seq))
     {
       for (i = 0; i < leni; i++)
 	{
@@ -2548,7 +2535,7 @@ advisable.  */)
   return ret;
 }
 
-Lisp_Object Qsubfeatures;
+static Lisp_Object Qsubfeatures;
 
 DEFUN ("featurep", Ffeaturep, Sfeaturep, 1, 2, 0,
        doc: /* Return t if FEATURE is present in this Emacs.
@@ -3357,13 +3344,14 @@ base64_decode_1 (const char *from, char *to, EMACS_INT length,
 
 /* The list of all weak hash tables.  Don't staticpro this one.  */
 
-struct Lisp_Hash_Table *weak_hash_tables;
+static struct Lisp_Hash_Table *weak_hash_tables;
 
 /* Various symbols.  */
 
-Lisp_Object Qhash_table_p, Qeq, Qeql, Qequal, Qkey, Qvalue;
+static Lisp_Object Qhash_table_p, Qkey, Qvalue;
+Lisp_Object Qeq, Qeql, Qequal;
 Lisp_Object QCtest, QCsize, QCrehash_size, QCrehash_threshold, QCweakness;
-Lisp_Object Qhash_table_test, Qkey_or_value, Qkey_and_value;
+static Lisp_Object Qhash_table_test, Qkey_or_value, Qkey_and_value;
 
 /* Function prototypes.  */
 
@@ -3693,9 +3681,9 @@ copy_hash_table (struct Lisp_Hash_Table *h1)
   struct Lisp_Vector *next;
 
   h2 = allocate_hash_table ();
-  next = h2->vec_next;
+  next = h2->header.next.vector;
   memcpy (h2, h1, sizeof *h2);
-  h2->vec_next = next;
+  h2->header.next.vector = next;
   h2->key_and_value = Fcopy_sequence (h1->key_and_value);
   h2->hash = Fcopy_sequence (h1->hash);
   h2->next = Fcopy_sequence (h1->next);
@@ -4038,7 +4026,7 @@ sweep_weak_hash_tables (void)
       marked = 0;
       for (h = weak_hash_tables; h; h = h->next_weak)
 	{
-	  if (h->size & ARRAY_MARK_FLAG)
+	  if (h->header.size & ARRAY_MARK_FLAG)
 	    marked |= sweep_weak_table (h, 0);
 	}
     }
@@ -4049,7 +4037,7 @@ sweep_weak_hash_tables (void)
     {
       next = h->next_weak;
 
-      if (h->size & ARRAY_MARK_FLAG)
+      if (h->header.size & ARRAY_MARK_FLAG)
 	{
 	  /* TABLE is marked as used.  Sweep its contents.  */
 	  if (h->count > 0)
@@ -4165,7 +4153,7 @@ sxhash_bool_vector (Lisp_Object vec)
   unsigned hash = XBOOL_VECTOR (vec)->size;
   int i, n;
 
-  n = min (SXHASH_MAX_LEN, XBOOL_VECTOR (vec)->vector_size);
+  n = min (SXHASH_MAX_LEN, XBOOL_VECTOR (vec)->header.size);
   for (i = 0; i < n; ++i)
     hash = SXHASH_COMBINE (hash, XBOOL_VECTOR (vec)->data[i]);
 
@@ -4226,9 +4214,9 @@ sxhash (Lisp_Object obj, int depth)
       {
 	double val = XFLOAT_DATA (obj);
 	unsigned char *p = (unsigned char *) &val;
-	unsigned char *e = p + sizeof val;
-	for (hash = 0; p < e; ++p)
-	  hash = SXHASH_COMBINE (hash, *p);
+	size_t i;
+	for (hash = 0, i = 0; i < sizeof val; i++)
+	  hash = SXHASH_COMBINE (hash, p[i]);
 	break;
       }
 

@@ -19,7 +19,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 #include <config.h>
+
 #include <ctype.h>
+#include <sys/types.h>
 #include <setjmp.h>
 #include "lisp.h"
 #include "commands.h"
@@ -95,12 +97,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define ST_COMMENT_STYLE (256 + 1)
 #define ST_STRING_STYLE (256 + 2)
 
-Lisp_Object Qsyntax_table_p, Qsyntax_table, Qscan_error;
+static Lisp_Object Qsyntax_table_p;
+static Lisp_Object Qsyntax_table, Qscan_error;
 
+#ifndef __GNUC__
 /* Used as a temporary in SYNTAX_ENTRY and other macros in syntax.h,
    if not compiled with GCC.  No need to mark it, since it is used
    only very temporarily.  */
 Lisp_Object syntax_temp;
+#endif
 
 /* This is the internal form of the parse state used in parse-partial-sexp.  */
 
@@ -138,6 +143,7 @@ static EMACS_INT find_start_begv;
 static int find_start_modiff;
 
 
+static Lisp_Object Fsyntax_table_p (Lisp_Object);
 static Lisp_Object skip_chars (int, Lisp_Object, Lisp_Object, int);
 static Lisp_Object skip_syntaxes (int, Lisp_Object, Lisp_Object);
 static Lisp_Object scan_lists (EMACS_INT, EMACS_INT, EMACS_INT, int);
@@ -171,11 +177,12 @@ struct gl_state_s gl_state;		/* Global state of syntax parser.  */
    start/end of OBJECT.  */
 
 void
-update_syntax_table (EMACS_INT charpos, int count, int init,
+update_syntax_table (EMACS_INT charpos, EMACS_INT count, int init,
 		     Lisp_Object object)
 {
   Lisp_Object tmp_table;
-  int cnt = 0, invalidate = 1;
+  unsigned cnt = 0;
+  int invalidate = 1;
   INTERVAL i;
 
   if (init)
@@ -974,7 +981,7 @@ text property.  */)
 	break;
       }
 
-  if (val < XVECTOR (Vsyntax_code_object)->size && NILP (match))
+  if (val < ASIZE (Vsyntax_code_object) && NILP (match))
     return XVECTOR (Vsyntax_code_object)->contents[val];
   else
     /* Since we can't use a shared object, let's make a new one.  */
@@ -1219,7 +1226,7 @@ scan_words (register EMACS_INT from, register EMACS_INT count)
   register EMACS_INT from_byte = CHAR_TO_BYTE (from);
   register enum syntaxcode code;
   int ch0, ch1;
-  Lisp_Object func, script, pos;
+  Lisp_Object func, pos;
 
   immediate_quit = 1;
   QUIT;
@@ -1259,7 +1266,6 @@ scan_words (register EMACS_INT from, register EMACS_INT count)
 	}
       else
 	{
-	  script = CHAR_TABLE_REF (Vchar_script_table, ch0);
 	  while (1)
 	    {
 	      if (from == end) break;
@@ -1310,7 +1316,6 @@ scan_words (register EMACS_INT from, register EMACS_INT count)
 	}
       else
 	{
-	  script = CHAR_TABLE_REF (Vchar_script_table, ch1);
 	  while (1)
 	    {
 	      if (from == beg)
@@ -1367,8 +1372,6 @@ and the function returns nil.  Field boundaries are not noticed if
   return val == orig_val ? Qt : Qnil;
 }
 
-Lisp_Object skip_chars (int, Lisp_Object, Lisp_Object, int);
-
 DEFUN ("skip-chars-forward", Fskip_chars_forward, Sskip_chars_forward, 1, 2, 0,
        doc: /* Move point forward, stopping before a char not in STRING, or at pos LIM.
 STRING is like the inside of a `[...]' in a regular expression
@@ -1542,7 +1545,8 @@ skip_chars (int forwardp, Lisp_Object string, Lisp_Object lim, int handle_iso_cl
 
 	      if (c <= c2)
 		{
-		  while (c <= c2)
+		  unsigned lim2 = c2 + 1;
+		  while (c < lim2)
 		    fastmap[c++] = 1;
 		  if (! ASCII_CHAR_P (c2))
 		    string_has_eight_bit = 1;
@@ -1682,7 +1686,8 @@ skip_chars (int forwardp, Lisp_Object string, Lisp_Object lim, int handle_iso_cl
 		}
 	      if (! ASCII_CHAR_P (c))
 		{
-		  while (leading_code <= leading_code2)
+		  unsigned lim2 = leading_code2 + 1;
+		  while (leading_code < lim2)
 		    fastmap[leading_code++] = 1;
 		  if (c <= c2)
 		    {
@@ -1714,9 +1719,9 @@ skip_chars (int forwardp, Lisp_Object string, Lisp_Object lim, int handle_iso_cl
 	  for (i = 0; i < n_char_ranges; i += 2)
 	    {
 	      int c1 = char_ranges[i];
-	      int c2 = char_ranges[i + 1];
+	      unsigned lim2 = char_ranges[i + 1] + 1;
 
-	      for (; c1 <= c2; c1++)
+	      for (; c1 < lim2; c1++)
 		{
 		  int b = CHAR_TO_BYTE_SAFE (c1);
 		  if (b >= 0)
@@ -3367,7 +3372,7 @@ init_syntax_once (void)
 
   /* Create objects which can be shared among syntax tables.  */
   Vsyntax_code_object = Fmake_vector (make_number (Smax), Qnil);
-  for (i = 0; i < XVECTOR (Vsyntax_code_object)->size; i++)
+  for (i = 0; i < ASIZE (Vsyntax_code_object); i++)
     XVECTOR (Vsyntax_code_object)->contents[i]
       = Fcons (make_number (i), Qnil);
 

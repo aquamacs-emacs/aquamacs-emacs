@@ -294,7 +294,7 @@ if test x$ac_gc_check_stringbytes != x ; then
    strings is redundantly recorded in sdata structures so that it can
    be compared to the sizes recorded in Lisp strings.])
 fi
-if test x$ac_gc_check_stringoverrun != x ; then
+if test x$ac_gc_check_string_overrun != x ; then
   AC_DEFINE(GC_CHECK_STRING_OVERRUN, 1,
 [Define this to check for short string overrun.])
 fi
@@ -987,6 +987,9 @@ else
   CPPFLAGS="$C_SWITCH_SYSTEM $C_SWITCH_MACHINE $CPPFLAGS"
 fi
 
+# Suppress obsolescent Autoconf test for size_t; Emacs assumes C89 or better.
+AC_DEFUN([AC_TYPE_SIZE_T])
+
 dnl Do this early because it can frob feature test macros for Unix-98 &c.
 AC_SYS_LARGEFILE
 
@@ -1631,7 +1634,7 @@ fi
 
 use_mmap_for_buffers=no
 case "$opsys" in
-  freebsd|irix6-5) use_mmap_for_buffers=yes ;;
+  cygwin|freebsd|irix6-5) use_mmap_for_buffers=yes ;;
 esac
 
 AC_FUNC_MMAP
@@ -1805,7 +1808,10 @@ fi
 HAVE_IMAGEMAGICK=no
 if test "${HAVE_X11}" = "yes"; then
   if test "${with_imagemagick}" != "no"; then
-    IMAGEMAGICK_MODULE="Wand"
+    ## 6.2.8 is the earliest version known to work, but earlier versions
+    ## might work - let us know if you find one.
+    ## 6.0.7 does not work.  See bug#7955.
+    IMAGEMAGICK_MODULE="Wand >= 6.2.8"
     PKG_CHECK_MODULES(IMAGEMAGICK, $IMAGEMAGICK_MODULE, HAVE_IMAGEMAGICK=yes, :)
     AC_SUBST(IMAGEMAGICK_CFLAGS)
     AC_SUBST(IMAGEMAGICK_LIBS)
@@ -1969,12 +1975,22 @@ fi
 AC_SUBST(LIBSELINUX_LIBS)
 
 HAVE_GNUTLS=no
+HAVE_GNUTLS_CALLBACK_CERTIFICATE_VERIFY=no
 if test "${with_gnutls}" = "yes" ; then
   PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 2.2.4], HAVE_GNUTLS=yes, HAVE_GNUTLS=no)
   if test "${HAVE_GNUTLS}" = "yes"; then
     AC_DEFINE(HAVE_GNUTLS, 1, [Define if using GnuTLS.])
   fi
+
+  CFLAGS="$CFLAGS $LIBGNUTLS_CFLAGS"
+  LIBS="$LIBGNUTLS_LIBS $LIBS"
+  AC_CHECK_FUNCS(gnutls_certificate_set_verify_function, HAVE_GNUTLS_CALLBACK_CERTIFICATE_VERIFY=yes)
+
+  if test "${HAVE_GNUTLS_CALLBACK_CERTIFICATE_VERIFY}" = "yes"; then
+    AC_DEFINE(HAVE_GNUTLS_CALLBACK_CERTIFICATE_VERIFY, 1, [Define if using GnuTLS certificate verification callbacks.])
+  fi
 fi
+
 AC_SUBST(LIBGNUTLS_LIBS)
 AC_SUBST(LIBGNUTLS_CFLAGS)
 
@@ -3023,8 +3039,6 @@ if test $emacs_cv_langinfo_codeset = yes; then
     [Define if you have <langinfo.h> and nl_langinfo(CODESET).])
 fi
 
-AC_CHECK_TYPES(size_t)
-
 AC_TYPE_MBSTATE_T
 
 AC_CACHE_CHECK([for C restricted array declarations], emacs_cv_c_restrict_arr,
@@ -3550,10 +3564,6 @@ extern "C"
 void *alloca (size_t);
 #endif
 
-#ifndef HAVE_SIZE_T
-typedef unsigned size_t;
-#endif
-
 #ifndef HAVE_STRCHR
 #define strchr(a, b) index (a, b)
 #endif
@@ -3579,6 +3589,20 @@ typedef unsigned size_t;
 #define EXTERNALLY_VISIBLE __attribute__((externally_visible))
 #else
 #define EXTERNALLY_VISIBLE
+#endif
+
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 7)
+# define ATTRIBUTE_FORMAT(spec) __attribute__ ((__format__ spec))
+#else
+# define ATTRIBUTE_FORMAT(spec) /* empty */
+#endif
+
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 4)
+# define ATTRIBUTE_FORMAT_PRINTF(formatstring_parameter, first_argument) \
+   ATTRIBUTE_FORMAT ((__gnu_printf__, formatstring_parameter, first_argument))
+#else
+# define ATTRIBUTE_FORMAT_PRINTF(formatstring_parameter, first_argument) \
+   ATTRIBUTE_FORMAT ((__printf__, formatstring_parameter, first_argument))
 #endif
 
 /* Some versions of GNU/Linux define noinline in their headers.  */
