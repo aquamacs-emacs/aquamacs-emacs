@@ -1225,8 +1225,8 @@ to the selected frame."
 
   (require 'mouse-sel) ; provie functions - but don't turn on mouse-sel-mode
  
-
-  (aquamacs-set-defaults '((cua-use-hyper-key only) ;;this avoids shift-return
+  (aquamacs-set-defaults '((mouse-drag-copy-region t) ;; needed in Emacs 24
+			   (cua-use-hyper-key only) ;;this avoids shift-return
 			   (cua-enable-cua-keys nil)))
  
   ;; enable cua-keep-region-after-copy only for the mac like commands
