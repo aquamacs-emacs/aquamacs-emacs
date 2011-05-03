@@ -415,7 +415,7 @@ With argument, display info only for the selected version."
 	   (beginning-of-line)
 	   (point)))))))
 
-(defun view-emacs-todo (&optional arg)
+(defun view-emacs-todo (&optional _arg)
   "Display the Emacs TODO list."
   (interactive "P")
   (view-help-file "TODO"))
@@ -1256,6 +1256,15 @@ Select help window if the actual value of the user option
        ;; Reset `help-window' to nil to avoid confusing future calls of
        ;; `help-mode-finish' with plain `with-output-to-temp-buffer'.
        (setq help-window nil))))
+
+;; Called from C, on encountering `help-char' when reading a char.
+;; Don't print to *Help*; that would clobber Help history.
+(defun help-form-show ()
+  "Display the output of a non-nil `help-form'."
+  (let ((msg (eval help-form)))
+    (if (stringp msg)
+	(with-output-to-temp-buffer " *Char Help*"
+	  (princ msg)))))
 
 (provide 'help)
 

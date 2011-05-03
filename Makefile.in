@@ -332,9 +332,9 @@ DOS_gnulib_comp.m4 = gl-comp.m4
 # $(gnulib_srcdir) (relative to $(srcdir) and should have build tools
 # as per $(gnulib_srcdir)/DEPENDENCIES.
 GNULIB_MODULES = \
-  crypto/md5 dtoastr filemode getloadavg getopt-gnu \
+  careadlinkat crypto/md5 dtoastr filemode getloadavg getopt-gnu \
   ignore-value intprops lstat mktime readlink \
-  socklen stdio strftime symlink sys_stat
+  socklen stdio strftime strtoumax symlink sys_stat
 GNULIB_TOOL_FLAGS = \
  --import --no-changelog --no-vc-files --makefile-name=gnulib.mk
 sync-from-gnulib: $(gnulib_srcdir)
@@ -403,8 +403,15 @@ Makefile: config.status $(srcdir)/src/config.in \
           $(srcdir)/test/automated/Makefile.in
 	./config.status
 
+# Don't erase config.status if make is interrupted while refreshing it.
+.PRECIOUS: config.status
+
 config.status: ${srcdir}/configure ${srcdir}/lisp/version.el
-	./config.status --recheck
+	if [ -x ./config.status ]; then	\
+	    ./config.status --recheck;	\
+	else				\
+	    ./configure;		\
+	fi
 
 AUTOCONF_INPUTS = @MAINT@ $(srcdir)/configure.in $(srcdir)/aclocal.m4
 

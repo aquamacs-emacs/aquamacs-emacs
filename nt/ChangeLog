@@ -1,3 +1,58 @@
+2011-04-30  Eli Zaretskii  <eliz@gnu.org>
+
+	* config.nt (HAVE_LONG_LONG_INT, HAVE_UNSIGNED_LONG_LONG_INT):
+	Define to 1 for MinGW of MSVC versions >= 1400.
+
+2011-04-28  Eli Zaretskii  <eliz@gnu.org>
+
+	* gmake.defs (ARCH): Fix error message in case of unknown
+	architecture.
+
+2011-04-27  Eli Zaretskii  <eliz@gnu.org>
+
+	* inc/inttypes.h: New file.
+
+	* config.nt (HAVE_DECL_STRTOULL, HAVE_DECL_STRTOUMAX)
+	(HAVE_STRTOULL, HAVE_STRTOUMAX): New macros.
+
+2011-04-27  Daniel Colascione  <dan.colascione@gmail.com>
+
+	* cmdproxy.c (try_dequote_cmdline): Notice variable substitutions
+	inside quotation marks and bail out.
+
+2011-04-26  Daniel Colascione  <dan.colascione@gmail.com>
+
+	* cmdproxy.c (try_dequote_cmdline): New function.
+	(main): Use it.
+
+2011-04-24  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* configure.bat: New options --without-gnutls and --lib, new build
+	variable USER_LIBS, automatically detect GnuTLS.  Copies the PNG
+	library setup with trivial modifications.
+	* INSTALL: Add instructions for GnuTLS support.
+	* gmake.defs: Prefix USER_LIBS with -l.
+
+2011-04-15  Ben Key  <bkey76@gmail.com>
+
+	* configure.bat: Modified the code that parses the --cflags and
+	--ldflags options to support parameters that include the =
+	character as long as they are enclosed in quotes.  This
+	functionality depends on command extensions.  Configure.bat now
+	attempts to enable command extensions and displays a warning
+	message if they could not be enabled.  If configure.bat could
+	not enable command extensions the old parsing code is used that
+	does not support parameters that include the = character.
+
+	* INSTALL: Updated the file to describe the new functionality
+	using text provided by Eli Zaretskii.
+
+2011-04-06  Eli Zaretskii  <eliz@gnu.org>
+
+	* config.nt (NO_INLINE, ATTRIBUTE_FORMAT)
+	(ATTRIBUTE_FORMAT_PRINTF): Define, as followup to revision 103841
+	on the trunk on 2011-04-06.
+
 2011-03-27  Glenn Morris  <rgm@gnu.org>
 
 	* config.nt: Remove RETSIGTYPE, SIGTYPE (identical to void).
@@ -12,6 +67,10 @@
 
 	* cmdproxy.c: Include <ctype.h>.
 	(make_absolute): Remove unused variable `i'.
+
+2011-03-07  Chong Yidong  <cyd@stupidchicken.com>
+
+	* Version 23.3 released.
 
 2011-02-27  Eli Zaretskii  <eliz@gnu.org>
 

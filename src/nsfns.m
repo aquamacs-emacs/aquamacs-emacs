@@ -483,7 +483,7 @@ ns_set_name_internal (FRAME_PTR f, Lisp_Object name)
   if (!STRINGP (f->icon_name))
     encoded_icon_name = encoded_name;
   else
-    encoded_icon_name = ENCODE_UTF_8 (f->icon_name);    
+    encoded_icon_name = ENCODE_UTF_8 (f->icon_name);
 
   str = [NSString stringWithUTF8String: SDATA (encoded_icon_name)];
 
@@ -637,7 +637,7 @@ ns_set_name_as_filename (struct frame *f)
 
   if (FRAME_ICONIFIED_P (f))
     [[view window] setMiniwindowTitle: str];
-  else 
+  else
     {
       NSString *fstr;
 
@@ -986,8 +986,8 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_fullscreen,  /* generic OK */
   x_set_font_backend, /* generic OK */
   x_set_alpha,
-  0, /* x_set_sticky */  
-  0, /* x_set_tool_bar_position */  
+  0, /* x_set_sticky */
+  0, /* x_set_tool_bar_position */
 };
 
 
@@ -2613,7 +2613,7 @@ In case the execution fails, an error is signaled. */)
      (Lisp_Object script)
 {
   Lisp_Object result;
-  long status;
+  int status;
 
   CHECK_STRING (script);
   check_ns ();
@@ -2664,7 +2664,7 @@ OSStatus odb_event (struct buffer *buffer,
   remote_token_type = Fcdr (Fassq (Qremote_token_type, parms));
 
   if (NILP (remote_id))
-    return;
+    return -1000;
         
   rid = XUINT (remote_id);
 
@@ -2731,17 +2731,19 @@ PARMS is an association list as communicated for the opening event for the speci
 
   if (EQ (type, intern ("closed")))
     {
-      if (odb_event(buffer, parms, kAEClosedFile) != noErr)
-	error("Error during ODB notification.");
+      OSStatus err_val = odb_event (buffer, parms, kAEClosedFile);
+      if (err_val != noErr)
+	error("Error %d during ODB notification for `closed'.", err_val);
     }
   else if (EQ (type, intern ("saved")))
     {
-      if (odb_event(buffer, parms, kAEModifiedFile) != noErr)
-	error("Error during ODB notification.");
+      OSStatus err_val = odb_event (buffer, parms, kAEModifiedFile);
+      if (err_val != noErr)
+	error("Error %d during ODB notification for `saved'.", err_val);
     }
   else
     {
-      error("ODB: TYPE must be one of `closed', `saved'.");
+      error ("ODB: TYPE must be one of `closed', `saved'.");
     }
     
   return Qnil;
@@ -3134,7 +3136,7 @@ If omitted or nil, that stands for the selected frame's display.  */)
 {
   struct ns_display_info *dpyinfo;
   check_ns ();
-  
+
   dpyinfo = check_ns_display_info (display);
   /* We force 24+ bit depths to 24-bit to prevent an overflow.  */
   return make_number (1 << min (dpyinfo->n_planes, 24));
@@ -3178,7 +3180,7 @@ compute_tip_xy (struct frame *f,
       pt.y = x_display_pixel_height (FRAME_NS_DISPLAY_INFO (f)) - XINT (top)
         - height;
     }
-  
+
   vScreen = [[[view window] screen] visibleFrame];
 
   /* Ensure in bounds.  (Note, screen origin = lower left.) */
@@ -3482,4 +3484,3 @@ be used as the image of the icon representing the frame.  */);
   check_window_system_func = check_ns;
 
 }
-

@@ -218,10 +218,8 @@ xmalloc (unsigned int size)
 #define IS_DEVICE_SEP(_c_) ((_c_) == DEVICE_SEP)
 #endif
 #endif
-#ifndef IS_ANY_SEP
-#define IS_ANY_SEP(_c_) (IS_DIRECTORY_SEP (_c_))
-#endif
 
+char *get_current_dir_name (void);
 
 /* Return the current working directory.  Returns NULL on errors.
    Any other returned value must be freed with free.  This is used
@@ -487,6 +485,7 @@ ttyname (int fd)
 
 /* Display a normal or error message.
    On Windows, use a message box if compiled as a Windows app.  */
+static void message (int, const char *, ...) ATTRIBUTE_FORMAT_PRINTF (2, 3);
 static void
 message (int is_error, const char *format, ...)
 {
@@ -1523,7 +1522,7 @@ start_daemon_and_retry_set_socket (void)
 int
 main (int argc, char **argv)
 {
-  int rl, needlf = 0;
+  int rl = 0, needlf = 0;
   char *cwd, *str;
   char string[BUFSIZ+1];
   int null_socket_name IF_LINT ( = 0);

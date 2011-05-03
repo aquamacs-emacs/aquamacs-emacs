@@ -21,6 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef HAVE_GNUTLS
 #include <gnutls/gnutls.h>
+#include <gnutls/x509.h>
 
 typedef enum
 {
@@ -28,6 +29,7 @@ typedef enum
   GNUTLS_STAGE_EMPTY = 0,
   GNUTLS_STAGE_CRED_ALLOC,
   GNUTLS_STAGE_FILES,
+  GNUTLS_STAGE_CALLBACKS,
   GNUTLS_STAGE_INIT,
   GNUTLS_STAGE_PRIORITY,
   GNUTLS_STAGE_CRED_SET,
@@ -50,15 +52,15 @@ typedef enum
 
 #define GNUTLS_LOG2(level, max, string, extra) if (level <= max) { gnutls_log_function2 (level, "(Emacs) " string, extra); }
 
-int
-emacs_gnutls_write (int fildes, struct Lisp_Process *proc, char *buf,
-                    unsigned int nbyte);
-int
+EMACS_INT
+emacs_gnutls_write (int fildes, struct Lisp_Process *proc, const char *buf,
+                    EMACS_INT nbyte);
+EMACS_INT
 emacs_gnutls_read (int fildes, struct Lisp_Process *proc, char *buf,
-                   unsigned int nbyte);
+                   EMACS_INT nbyte);
 
 extern void syms_of_gnutls (void);
 
-#endif 
+#endif
 
 #endif

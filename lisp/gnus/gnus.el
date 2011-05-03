@@ -1107,16 +1107,18 @@ be set in `.emacs' instead."
     (set-buffer-modified-p t)))
 
 (defun gnus-splash-svg-color-symbols (list)
-  "Do color-symbol search-and-replace in svg file"
+  "Do color-symbol search-and-replace in svg file."
   (let ((type (plist-get (cdr list) :type))
         (file (plist-get (cdr list) :file))
         (color-symbols (plist-get (cdr list) :color-symbols)))
     (if (string= type "svg")
-        (let ((data (with-temp-buffer (insert-file file) (buffer-string))))
+        (let ((data (with-temp-buffer (insert-file-contents file)
+                                      (buffer-string))))
           (mapc (lambda (rule)
                   (setq data (replace-regexp-in-string
                               (concat "fill:" (car rule))
-                              (concat "fill:" (cdr rule)) data))) color-symbols)
+                              (concat "fill:" (cdr rule)) data)))
+                color-symbols)
           (cons (car list) (list :type type :data data)))
        list)))
 
@@ -1873,7 +1875,10 @@ total number of articles in the group.")
  :function-document
  "Whether this group should be ignored by the registry."
  :variable gnus-registry-ignored-groups
- :variable-default nil
+ :variable-default (mapcar
+                    (lambda (g) (list g t))
+                    '("delayed$" "drafts$" "queue$" "INBOX$"
+                      "^nnmairix:" "archive"))
  :variable-document
  "*Groups in which the registry should be turned off."
  :variable-group gnus-registry

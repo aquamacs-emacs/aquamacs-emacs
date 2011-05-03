@@ -596,6 +596,11 @@ typedef NSUInteger NSApplicationPresentationOptions;
 static void
 ns_update_auto_hide_menu_bar (void)
 {
+#ifndef MAC_OS_X_VERSION_10_6
+#define MAC_OS_X_VERSION_10_6 1060
+#endif
+#ifdef NS_IMPL_COCOA
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
   BLOCK_INPUT;
 
   NSTRACE (ns_update_auto_hide_menu_bar);
@@ -628,6 +633,8 @@ ns_update_auto_hide_menu_bar (void)
     }
 
   UNBLOCK_INPUT;
+#endif
+#endif
 }
 
 

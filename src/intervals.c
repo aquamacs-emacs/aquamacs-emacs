@@ -39,6 +39,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <setjmp.h>
+#include <intprops.h>
 #include "lisp.h"
 #include "intervals.h"
 #include "buffer.h"
@@ -51,7 +52,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #define TMEM(sym, set) (CONSP (set) ? ! NILP (Fmemq (sym, set)) : ! NILP (set))
 
-Lisp_Object merge_properties_sticky (Lisp_Object pleft, Lisp_Object pright);
+static Lisp_Object merge_properties_sticky (Lisp_Object, Lisp_Object);
+static INTERVAL merge_interval_right (INTERVAL);
 static INTERVAL reproduce_tree (INTERVAL, INTERVAL);
 static INTERVAL reproduce_tree_obj (INTERVAL, Lisp_Object);
 
@@ -777,7 +779,7 @@ update_interval (register INTERVAL i, EMACS_INT pos)
 	      i = i->right;		/* Move to the right child */
 	    }
 	  else if (NULL_PARENT (i))
-	    error ("Point %d after end of properties", pos);
+	    error ("Point %"pI"d after end of properties", pos);
 	  else
             i = INTERVAL_PARENT (i);
 	  continue;
@@ -804,9 +806,9 @@ update_interval (register INTERVAL i, EMACS_INT pos)
 static INTERVAL
 adjust_intervals_for_insertion (tree, position, length)
      INTERVAL tree;
-     int position, length;
+     EMACS_INT position, length;
 {
-  register int relative_position;
+  register EMACS_INT relative_position;
   register INTERVAL this;
 
   if (TOTAL_LENGTH (tree) == 0)	/* Paranoia */
@@ -1089,7 +1091,7 @@ FR     8  9  A  B
        left rear-nonsticky = t,   right front-sticky = nil (inherit none)
 */
 
-Lisp_Object
+static Lisp_Object
 merge_properties_sticky (Lisp_Object pleft, Lisp_Object pright)
 {
   register Lisp_Object props, front, rear;
@@ -1258,7 +1260,7 @@ delete_node (register INTERVAL i)
    I is presumed to be empty; that is, no adjustments are made
    for the length of I.  */
 
-void
+static void
 delete_interval (register INTERVAL i)
 {
   register INTERVAL parent;
@@ -1325,8 +1327,8 @@ interval_deletion_adjustment (register INTERVAL tree, register EMACS_INT from,
   if (relative_position < LEFT_TOTAL_LENGTH (tree))
     {
       EMACS_INT subtract = interval_deletion_adjustment (tree->left,
-							  relative_position,
-							  amount);
+							 relative_position,
+							 amount);
       tree->total_length -= subtract;
       CHECK_TOTAL_LENGTH (tree);
       return subtract;
@@ -1434,7 +1436,10 @@ offset_intervals (struct buffer *buffer, EMACS_INT start, EMACS_INT length)
   if (length > 0)
     adjust_intervals_for_insertion (BUF_INTERVALS (buffer), start, length);
   else
-    adjust_intervals_for_deletion (buffer, start, -length);
+    {
+      IF_LINT (if (length < - TYPE_MAXIMUM (EMACS_INT)) abort ();)
+      adjust_intervals_for_deletion (buffer, start, -length);
+    }
 }
 
 /* Merge interval I with its lexicographic successor. The resulting
@@ -1446,7 +1451,7 @@ offset_intervals (struct buffer *buffer, EMACS_INT start, EMACS_INT length)
    The caller must verify that this is not the last (rightmost)
    interval.  */
 
-INTERVAL
+static INTERVAL
 merge_interval_right (register INTERVAL i)
 {
   register EMACS_INT absorb = LENGTH (i);
@@ -1677,7 +1682,7 @@ graft_intervals_into_buffer (INTERVAL source, EMACS_INT position,
 			     EMACS_INT length, struct buffer *buffer,
 			     int inherit)
 {
-  register INTERVAL under, over, this, prev;
+  register INTERVAL under, over, this;
   register INTERVAL tree;
   EMACS_INT over_used;
 
@@ -1767,7 +1772,8 @@ graft_intervals_into_buffer (INTERVAL source, EMACS_INT position,
       /* This call may have some effect because previous_interval may
          update `position' fields of intervals.  Thus, don't ignore it
          for the moment.  Someone please tell me the truth (K.Handa).  */
-      prev = previous_interval (under);
+      INTERVAL prev = previous_interval (under);
+      (void) prev;
 #if 0
       /* But, this code surely has no effect.  And, anyway,
          END_NONSTICKY_P is unreliable now.  */

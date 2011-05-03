@@ -36,12 +36,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 Lisp_Object Qfunction_documentation;
 
+extern Lisp_Object Qclosure;
 /* Buffer used for reading from documentation file.  */
 static char *get_doc_string_buffer;
 static int get_doc_string_buffer_size;
 
 static unsigned char *read_bytecode_pointer;
-Lisp_Object Fsnarf_documentation (Lisp_Object);
+static Lisp_Object Fdocumentation_property (Lisp_Object, Lisp_Object,
+					    Lisp_Object);
+static Lisp_Object Fsnarf_documentation (Lisp_Object);
 
 /* readchar in lread.c calls back here to fetch the next byte.
    If UNREADFLAG is 1, we unread a byte.  */
@@ -153,7 +156,7 @@ get_doc_string (Lisp_Object filepos, int unibyte, int definition)
   if (0 > lseek (fd, position - offset, 0))
     {
       emacs_close (fd);
-      error ("Position %ld out of range in doc string file \"%s\"",
+      error ("Position %"pI"d out of range in doc string file \"%s\"",
 	     position, name);
     }
 
@@ -250,7 +253,9 @@ get_doc_string (Lisp_Object filepos, int unibyte, int definition)
 	  else if (c == '_')
 	    *to++ = 037;
 	  else
-	    error ("Invalid data in documentation file -- ^A followed by code 0%o", c);
+	    error ("\
+Invalid data in documentation file -- %c followed by code %03o",
+		   1, (unsigned)c);
 	}
       else
 	*to++ = *from++;
@@ -342,6 +347,8 @@ string is passed through `substitute-command-keys'.  */)
     {
       if (XSUBR (fun)->doc == 0)
 	return Qnil;
+      /* FIXME: This is not portable, as it assumes that string
+	 pointers have the top bit clear.  */
       else if ((EMACS_INT) XSUBR (fun)->doc >= 0)
 	doc = build_string (XSUBR (fun)->doc);
       else
@@ -374,6 +381,7 @@ string is passed through `substitute-command-keys'.  */)
       else if (EQ (funcar, Qkeymap))
 	return build_string ("Prefix command (definition is a keymap associating keystrokes with commands).");
       else if (EQ (funcar, Qlambda)
+	       || (EQ (funcar, Qclosure) && (fun = XCDR (fun), 1))
 	       || EQ (funcar, Qautoload))
 	{
 	  Lisp_Object tem1 = Fcdr (Fcdr (fun));
@@ -480,7 +488,7 @@ aren't strings.  */)
     }
   else if (!STRINGP (tem))
     /* Feval protects its argument.  */
-    tem = Feval (tem);
+    tem = Feval (tem, Qnil);
 
   if (NILP (raw) && STRINGP (tem))
     tem = Fsubstitute_command_keys (tem);
@@ -507,7 +515,8 @@ store_function_docstring (Lisp_Object fun, EMACS_INT offset)
       Lisp_Object tem;
 
       tem = XCAR (fun);
-      if (EQ (tem, Qlambda) || EQ (tem, Qautoload))
+      if (EQ (tem, Qlambda) || EQ (tem, Qautoload)
+	  || (EQ (tem, Qclosure) && (fun = XCDR (fun), 1)))
 	{
 	  tem = Fcdr (Fcdr (fun));
 	  if (CONSP (tem) && INTEGERP (XCAR (tem)))
@@ -666,7 +675,7 @@ the same file name is found in the `doc-directory'.  */)
 		; /* Just a source file name boundary marker.  Ignore it.  */
 
 	      else
-		error ("DOC file invalid at position %d", pos);
+		error ("DOC file invalid at position %"pI"d", pos);
 	    }
 	}
       pos += end - buf;
@@ -782,7 +791,7 @@ a new string, without any text properties, is returned.  */)
 	do_remap:
 	  tem = Fwhere_is_internal (name, keymap, Qt, Qnil, Qnil);
 
-	  if (VECTORP (tem) && XVECTOR (tem)->size > 1
+	  if (VECTORP (tem) && ASIZE (tem) > 1
 	      && EQ (AREF (tem, 0), Qremap) && SYMBOLP (AREF (tem, 1))
 	      && follow_remap)
 	    {

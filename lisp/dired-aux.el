@@ -459,6 +459,8 @@ with a prefix argument."
 		      (funcall fun file))))
 	(forward-line 1)))))
 
+(defvar backup-extract-version-start)  ; used in backup-extract-version
+
 (defun dired-collect-file-versions (fn)
   (let ((fn (file-name-sans-versions fn)))
     ;; Only do work if this file is not already in the alist.
@@ -628,7 +630,7 @@ can be produced by `dired-get-marked-files', for example."
 (defvar dired-mark-separator " "
   "Separates marked files in dired shell commands.")
 
-(defun dired-shell-stuff-it (command file-list on-each &optional raw-arg)
+(defun dired-shell-stuff-it (command file-list on-each &optional _raw-arg)
 ;; "Make up a shell command line from COMMAND and FILE-LIST.
 ;; If ON-EACH is t, COMMAND should be applied to each file, else
 ;; simply concat all files and apply COMMAND to this.
@@ -1078,7 +1080,6 @@ files matching `dired-omit-regexp'."
 	;; Entry is always for files, even if they happen to also be directories
 	(let* ((opoint (point))
 	       (cur-dir (dired-current-directory))
-	       (orig-file-name filename)
 	       (directory (if relative cur-dir (file-name-directory filename)))
 	       reason)
 	  (setq filename
@@ -1251,21 +1252,20 @@ Special value `always' suppresses confirmation."
 
 (defun dired-copy-file-recursive (from to ok-flag &optional
 				       preserve-time top recursive)
-  (let ((attrs (file-attributes from))
-	dirfailed)
+  (let ((attrs (file-attributes from)))
     (if (and recursive
 	     (eq t (car attrs))
 	     (or (eq recursive 'always)
 		 (yes-or-no-p (format "Recursive copies of %s? " from))))
 	;; This is a directory.
-	(copy-directory from to dired-copy-preserve-time)
+	(copy-directory from to preserve-time)
       ;; Not a directory.
       (or top (dired-handle-overwrite to))
       (condition-case err
 	  (if (stringp (car attrs))
 	      ;; It is a symlink
 	      (make-symbolic-link (car attrs) to ok-flag)
-	    (copy-file from to ok-flag dired-copy-preserve-time))
+	    (copy-file from to ok-flag preserve-time))
 	(file-date-error
 	 (push (dired-make-relative from)
 	       dired-create-files-failures)
@@ -1360,36 +1360,35 @@ Special value `always' suppresses confirmation."
 	(setcar elt cur-dir)
 	(when cons (setcar cons cur-dir))))))
 
+;; Bound in dired-create-files
+(defvar overwrite-query)
+(defvar overwrite-backup-query)
+
 ;; The basic function for half a dozen variations on cp/mv/ln/ln -s.
 (defun dired-create-files (file-creator operation fn-list name-constructor
 					&optional marker-char)
+  "Create one or more new files from a list of existing files FN-LIST.
+This function also handles querying the user, updating Dired
+buffers, and displaying a success or failure message.
 
-;; Create a new file for each from a list of existing files.  The user
-;; is queried, dired buffers are updated, and at the end a success or
-;; failure message is displayed
+FILE-CREATOR should be a function.  It is called once for each
+file in FN-LIST, and must create a new file, querying the user
+and updating Dired buffers as necessary.  It should accept three
+arguments: the old file name, the new name, and an argument
+OK-IF-ALREADY-EXISTS with the same meaning as in `copy-file'.
 
-;; FILE-CREATOR must accept three args: oldfile newfile ok-if-already-exists
+OPERATION should be a capitalized string describing the operation
+performed (e.g. `Copy').  It is used for error logging.
 
-;; It is called for each file and must create newfile, the entry of
-;; which will be added.  The user will be queried if the file already
-;; exists.  If oldfile is removed by FILE-CREATOR (i.e, it is a
-;; rename), it is FILE-CREATOR's responsibility to update dired
-;; buffers.  FILE-CREATOR must abort by signaling a file-error if it
-;; could not create newfile.  The error is caught and logged.
+FN-LIST is the list of files to copy (full absolute file names).
 
-;; OPERATION (a capitalized string, e.g. `Copy') describes the
-;; operation performed.  It is used for error logging.
+NAME-CONSTRUCTOR should be a function accepting a single
+argument, the name of an old file, and returning either the
+corresponding new file name or nil to skip.
 
-;; FN-LIST is the list of files to copy (full absolute file names).
-
-;; NAME-CONSTRUCTOR returns a newfile for every oldfile, or nil to
-;; skip.  If it skips files for other reasons than a direct user
-;; query, it is supposed to tell why (using dired-log).
-
-;; Optional MARKER-CHAR is a character with which to mark every
-;; newfile's entry, or t to use the current marker character if the
-;; oldfile was marked.
-
+Optional MARKER-CHAR is a character with which to mark every
+newfile's entry, or t to use the current marker character if the
+old file was marked."
   (let (dired-create-files-failures failures
 	skipped (success-count 0) (total (length fn-list)))
     (let (to overwrite-query
@@ -1551,7 +1550,7 @@ Optional arg HOW-TO determiness how to treat the target.
 	   (function
 	    (lambda (from)
 	      (expand-file-name (file-name-nondirectory from) target)))
-	 (function (lambda (from) target)))
+	 (function (lambda (_from) target)))
        marker-char))))
 
 ;; Read arguments for a marked-files command that wants a file name,
@@ -1745,6 +1744,8 @@ of `dired-dwim-target', which see."
 
 ;;; 5K
 ;;;###begin dired-re.el
+(defvar rename-regexp-query)
+
 (defun dired-do-create-files-regexp
   (file-creator operation arg regexp newname &optional whole-name marker-char)
   ;; Create a new file for each marked file using regexps.
@@ -1756,7 +1757,6 @@ of `dired-dwim-target', which see."
   ;;   instead of only the non-directory part of the file.
   ;; Optional arg MARKER-CHAR as in dired-create-files.
   (let* ((fn-list (dired-get-marked-files nil arg))
-	 (fn-count (length fn-list))
 	 (operation-prompt (concat operation " `%s' to `%s'?"))
 	 (rename-regexp-help-form (format "\
 Type SPC or `y' to %s one match, DEL or `n' to skip to next,
@@ -1864,6 +1864,8 @@ See function `dired-do-rename-regexp' for more info."
   (dired-do-create-files-regexp
    (function make-symbolic-link)
    "SymLink" arg regexp newname whole-name dired-keep-marker-symlink))
+
+(defvar rename-non-directory-query)
 
 (defun dired-create-files-non-directory
   (file-creator basename-constructor operation arg)
@@ -2061,8 +2063,7 @@ of marked files.  If KILL-ROOT is non-nil, kill DIRNAME as well."
     (while alist
       (setq elt (car alist)
 	    alist (cdr alist)
-	    dir (car elt)
-	    pos (dired-get-subdir-min elt))
+	    dir (car elt))
       (if (dired-tree-lessp dir new-dir)
 	  ;; Insert NEW-DIR after DIR
 	  (setq new-pos (dired-get-subdir-max elt)

@@ -432,8 +432,14 @@ lisp= \
 	$(lispsource)/facemenu.elc \
 	$(MOUSE_SUPPORT) \
 	$(lispsource)/emacs-lisp/float-sup.elc \
+	$(lispsource)/emacs-lisp/debug.elc \
+	$(lispsource)/emacs-lisp/bytecomp.elc \
 	$(lispsource)/frame.elc \
+	$(lispsource)/emacs-lisp/cconv.elc \
+	$(lispsource)/emacs-lisp/byte-opt.elc \
+	$(lispsource)/emacs-lisp/macroexp.elc \
 	$(lispsource)/help.elc \
+	$(lispsource)/help-fns.elc \
 	$(lispsource)/indent.elc \
 	$(lispsource)/isearch.elc \
 	$(lispsource)/rfn-eshadow.elc \
@@ -525,9 +531,15 @@ shortlisp= \
 	../lisp/aquamacs-faces.elc \
 	../lisp/files.elc \
 	../lisp/emacs-lisp/float-sup.elc \
+	../lisp/emacs-lisp/debug.elc \
+	../lisp/emacs-lisp/bytecomp.elc \
 	../lisp/format.elc \
 	../lisp/frame.elc \
+	../lisp/emacs-lisp/cconv.elc \
+	../lisp/emacs-lisp/byte-opt.elc \
+	../lisp/macroexp.elc \
 	../lisp/help.elc \
+	../lisp/help-fns.elc \
 	../lisp/indent.elc \
 	../lisp/isearch.elc \
 	../lisp/rfn-eshadow.elc \
@@ -766,10 +778,10 @@ extraclean: distclean
 ctagsfiles1 = [xyzXYZ]*.[hcm]
 ctagsfiles2 = [a-wA-W]*.[hcm]
 
-TAGS: $(srcdir)/$(ctagsfiles1) $(srcdir)/$(ctagsfiles2)
+TAGS: $(srcdir)/$(ctagsfiles1) $(srcdir)/$(ctagsfiles2) $(M_FILE) $(S_FILE)
 	../lib-src/etags --include=TAGS-LISP --include=$(lwlibdir)/TAGS \
 	  --regex='/[ 	]*DEFVAR_[A-Z_ 	(]+"\([^"]+\)"/' \
-	  $(srcdir)/$(ctagsfiles1) $(srcdir)/$(ctagsfiles2)
+	  $(srcdir)/$(ctagsfiles1) $(srcdir)/$(ctagsfiles2) $(M_FILE) $(S_FILE)
 frc:
 TAGS-LISP: frc
 	$(MAKE) -f $(lispdir)/Makefile TAGS-LISP ETAGS=../lib-src/etags
