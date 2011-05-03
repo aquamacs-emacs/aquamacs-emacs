@@ -234,7 +234,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 {
 }
 @end
-
+@interface EmacsFileDelegate : NSObject
+{
+}
+- (BOOL)panel: (id)sender isValidFilename: (NSString *)filename;
+- (BOOL)panel: (id)sender shouldShowFilename: (NSString *)filename;
+- (NSString *)panel: (id)sender userEnteredFilename: (NSString *)filename
+          confirmed: (BOOL)okFlag;
+@end
 
 /* ==========================================================================
 

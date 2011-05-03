@@ -10763,7 +10763,7 @@ hscroll_window_tree (window)
 	      current_buffer = XBUFFER (w->buffer);
 
 	      if (w == XWINDOW (selected_window))
-		pt = BUF_PT (current_buffer);
+		pt = PT;
 	      else
 		{
 		  pt = marker_position (w->pointm);
@@ -11197,7 +11197,7 @@ reconsider_clip_changes (w, b)
       int pt;
 
       if (w == XWINDOW (selected_window))
-	pt = BUF_PT (current_buffer);
+	pt = PT;
       else
 	pt = marker_position (w->pointm);
 
@@ -25144,6 +25144,7 @@ init_xdisp ()
 
   mini_w = XWINDOW (minibuf_window);
   root_window = FRAME_ROOT_WINDOW (XFRAME (WINDOW_FRAME (mini_w)));
+  echo_area_window = minibuf_window;
 
   if (!noninteractive)
     {

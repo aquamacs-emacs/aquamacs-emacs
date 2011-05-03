@@ -1,6 +1,138 @@
-2011-02-28  Chong Yidong  <cyd@stupidchicken.com>
+2011-04-25  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-process-actions): Add POS argument.  Delete
+	region between POS and (pos).
+	(tramp-do-copy-or-rename-file-out-of-band): Use `nil' position in
+	`tramp-process-actions' call.
+	(tramp-maybe-open-connection): Call `tramp-process-actions' with pos.
+
+	* net/tramp-smb.el (tramp-smb-maybe-open-connection): Use `nil'
+	position in `tramp-process-actions' call.
+
+2011-04-24  Daniel Colascione <dan.colascione@gmail.com>
+
+	* progmodes/cc-engine.el (c-forward-decl-or-cast-1): Use
+	correct match group (bug#8438).
+
+2011-04-22  Juanma Barranquero  <lekktu@gmail.com>
+
+	* buff-menu.el (Buffer-menu--buffers): Fix typo in docstring (bug#8535).
+
+2011-04-21  Juanma Barranquero  <lekktu@gmail.com>
+
+	* play/mpuz.el (mpuz-silent): Doc fix.
+	(mpuz-mode-map): Move initialization into declaration.
+	(mpuz-put-number-on-board): Rename parameter L to COLUMNS.
+	(mpuz-letter-to-digit, mpuz-check-all-solved, mpuz-create-buffer):
+	Fix typos in docstrings.
+
+	* play/doctor.el (doc$, doctor-$, doctor-read-print, doctor-read-token)
+	(doctor-nounp, doctor-pronounp): Fix typos in docstrings.
+
+2011-04-15  Juanma Barranquero  <lekktu@gmail.com>
+
+	* mouse-drag.el (mouse-drag-throw): Fix typo in docstring.
+
+2011-04-10  Chong Yidong  <cyd@stupidchicken.com>
+
+	* minibuffer.el (completion--do-completion): Avoid the "Next char
+	not unique" prompt if icomplete-mode is enabled (Bug#5849).
+
+2011-04-10  Stephen Berman <stephen.berman@gmx.net>
+
+	* textmodes/page.el (what-page): Use line-number-at-pos to
+	calculate line number (Bug#6825).
+
+2011-04-10  Chong Yidong  <cyd@stupidchicken.com>
+
+	* mouse.el (mouse-drag-mode-line-1): Make sure that if we push
+	mouse-2 into unread-command-events, it is interpreted correctly.
+
+2011-04-09  Chong Yidong  <cyd@stupidchicken.com>
+
+	* image-mode.el (image-type, image-mode-map, image-minor-mode-map)
+	(image-toggle-display): Doc fix.
+
+2011-04-06  Juanma Barranquero  <lekktu@gmail.com>
+
+	Backport revno:103823 and revno:103824 from trunk.
+	* help-fns.el (describe-variable): Complete all variables having
+	documentation, including keywords.
+	http://lists.gnu.org/archive/html/emacs-devel/2011-04/msg00112.html
+
+2011-03-24  Juanma Barranquero  <lekktu@gmail.com>
+
+	* vc-annotate.el (vc-annotate-show-log-revision-at-line):
+	Fix typo in docstring.
+
+2011-03-19  Eli Zaretskii  <eliz@gnu.org>
+
+	* emerge.el (emerge-metachars): Separate value for ms-dos and
+	windows-nt systems.
+	(emerge-protect-metachars): Quote correctly for ms-dos and
+	windows-nt systems.
+
+2011-03-15  Ralph Schleicher  <rs@ralph-schleicher.de>  (tiny change)
+
+	* info.el (info-initialize): Replace all uses of `:' with
+	path-separator for compatibility with non-Unix systems.
+	Cache quoting of path-separator.  (Bug#8258)
+
+2011-03-12  Juanma Barranquero  <lekktu@gmail.com>
+
+	* avoid.el (mouse-avoidance-mode, mouse-avoidance-nudge-dist)
+	(mouse-avoidance-threshold, mouse-avoidance-banish-destination)
+	(mouse-avoidance-mode): Fix typos in docstrings.
+
+2011-03-12  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-progress-reporter-update): Use
+	`tramp-compat-funcall'.
+	(tramp-handle-start-file-process): Use `tramp-compat-process-get'.
+	(tramp-handle-insert-file-contents): Make `file-remote-p' call
+	compatible.
+	(tramp-open-connection-setup-interactive-shell): Use
+	`tramp-compat-process-put'.
+
+	* net/tramp-compat.el (tramp-compat-process-get)
+	(tramp-compat-process-put): New defuns.
+
+	* net/trampver.el: Update release number.
+
+2011-03-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* ebuff-menu.el (electric-buffer-menu-mode-map): Move initialization
+	into declaration.  Remove redundant and harmful binding.
+
+2011-03-11  Juanma Barranquero  <lekktu@gmail.com>
+
+	Backport revno:103463 from trunk.
+	* emacs-lisp/cl-macs.el (lexical-let*): Fix argument name in docstring.
+
+	Backport revno:103622 from trunk.
+	* help-fns.el (describe-variable): Don't complete keywords.
+	Suggested by Teodor Zlatanov <tzz@lifelogs.com>.
+
+2011-03-11  Eli Zaretskii  <eliz@gnu.org>
+
+	* files.el (file-ownership-preserved-p): Pass `integer' as an
+	explicit 2nd argument to `file-attributes'.  If the file's owner
+	is the Administrators group on Windows, and the current user is
+	Administrator, consider that a match.
+
+	* server.el (server-ensure-safe-dir): Consider server directory
+	safe on MS-Windows if its owner is the Administrators group while
+	the current Emacs user is Administrator.  Use `=' to compare
+	numerical UIDs, since they could be integers or floats.
+
+2011-03-07  Chong Yidong  <cyd@stupidchicken.com>
 
 	* Version 23.3 released.
+
+2011-03-07  Chong Yidong  <cyd@stupidchicken.com>
+
+	* progmodes/cc-cmds.el (c-beginning-of-statement): Fix 2011-01-31
+	change; patch supplied by Alan Mackenzie was applied incorrectly.
 
 2011-02-26  Eli Zaretskii  <eliz@gnu.org>
 

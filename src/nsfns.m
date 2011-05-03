@@ -1991,10 +1991,11 @@ when `ns-popup-save-panel' was called.
 DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 4, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
 Optional arg DIR, if non-nil, supplies a default directory.
-Optional arg ISLOAD, if non-nil, means read a file name for loading.
+Optional arg MUSTMATCH, if non-nil, means the returned file or
+directory must exist.
 Optional arg INIT, if non-nil, provides a default file name to use.  */)
-     (prompt, dir, isLoad, init)
-     Lisp_Object prompt, dir, isLoad, init;
+     (prompt, dir, mustmatch, init)
+     Lisp_Object prompt, dir, mustmatch, init;
 {
   static id fileDelegate = nil;
   int ret;
@@ -2011,12 +2012,15 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
 
   check_ns ();
 
+  if (fileDelegate == nil)
+    fileDelegate = [EmacsFileDelegate new];
+
   [NSCursor setHiddenUntilMouseMoves: NO];
 
   if ([dirS characterAtIndex: 0] == '~')
     dirS = [dirS stringByExpandingTildeInPath];
 
-  panel = NILP (isLoad) ?
+  panel = NILP (mustmatch) ?
     (id)[EmacsSavePanel savePanel] : (id)[EmacsOpenPanel openPanel];
 
   [panel setTitle: promptS];
@@ -2026,13 +2030,14 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
   //   [panel setAllowsOtherFileTypes: YES];
 
   [panel setTreatsFilePackagesAsDirectories: YES];
+  [panel setDelegate: fileDelegate];
   /* must provide - users will have a hard time switching this off otherwise */
   [panel setCanSelectHiddenExtension:NO];
   [panel setExtensionHidden:NO];
 
   panelOK = 0;
   BLOCK_INPUT;
-  if (NILP (isLoad))
+  if (NILP (mustmatch))
     {
       ret = [panel runModalForDirectory: dirS file: initS];
     }
@@ -2076,6 +2081,7 @@ If OWNER is nil, Emacs is assumed.  */)
     return build_string (value);
   return Qnil;
 }
+
 
 DEFUN ("ns-set-resource", Fns_set_resource, Sns_set_resource, 3, 3, 0,
        doc: /* Set property NAME of OWNER to VALUE, from the defaults database.
@@ -3394,6 +3400,25 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 #endif
 @end
 
+
+@implementation EmacsFileDelegate
+/* --------------------------------------------------------------------------
+   Delegate methods for Open/Save panels
+   -------------------------------------------------------------------------- */
+- (BOOL)panel: (id)sender isValidFilename: (NSString *)filename
+{
+  return YES;
+}
+- (BOOL)panel: (id)sender shouldShowFilename: (NSString *)filename
+{
+  return YES;
+}
+- (NSString *)panel: (id)sender userEnteredFilename: (NSString *)filename
+          confirmed: (BOOL)okFlag
+{
+  return filename;
+}
+@end
 
 
 #endif
