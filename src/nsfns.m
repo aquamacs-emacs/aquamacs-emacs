@@ -2686,7 +2686,7 @@ OSStatus odb_event (struct buffer *buffer,
   remote_token_type = Fcdr (Fassq (Qremote_token_type, parms));
 
   if (NILP (remote_id))
-    return;
+    return -1000;
         
   rid = XUINT (remote_id);
 
@@ -2753,17 +2753,19 @@ PARMS is an association list as communicated for the opening event for the speci
 
   if (EQ (type, intern ("closed")))
     {
-      if (odb_event(buffer, parms, kAEClosedFile) != noErr)
-	error("Error during ODB notification.");
+      OSStatus err_val = odb_event (buffer, parms, kAEClosedFile);
+      if (err_val != noErr)
+	error("Error %d during ODB notification for `closed'.", err_val);
     }
   else if (EQ (type, intern ("saved")))
     {
-      if (odb_event(buffer, parms, kAEModifiedFile) != noErr)
-	error("Error during ODB notification.");
+      OSStatus err_val = odb_event (buffer, parms, kAEModifiedFile);
+      if (err_val != noErr)
+	error("Error %d during ODB notification for `saved'.", err_val);
     }
   else
     {
-      error("ODB: TYPE must be one of `closed', `saved'.");
+      error ("ODB: TYPE must be one of `closed', `saved'.");
     }
     
   return Qnil;
