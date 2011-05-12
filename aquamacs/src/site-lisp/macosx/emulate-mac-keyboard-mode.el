@@ -1,6 +1,6 @@
 ;; -*-mode:emacs-lisp; coding: utf-8;-*-'
 ;; emulate-mac-*-keyboard-modes for Aquamacs
-;; (C) 2005,2007, 2010 by David Reitter
+;; (C) 2005, 2007, 2010, 2011 by David Reitter
 ;; do not copy / redistribute outside of Aquamacs. All rights reserved.
 
 ;; This defines multiple global minor modes, each of which
@@ -27,8 +27,6 @@ Example:
  ((german . ((\"\\M-l\" . \"@\")
  	     (\"\\M-/\" . \"\\\\\"))))")
 
-(defvar emmkm--euro 342604)
-
 (setq emulate-mac-keyboard-mode-maps
  `((german . (("\M-l" . "@")
 	       ("\M-/" . "\\")
@@ -38,10 +36,10 @@ Example:
 	       ("\M-8" . "{")
 	       ("\M-9" . "}")
 	       ("\M-n" . "~")
-	       ("\M-e" . ,emmkm--euro) ;; euro symbol
+	       ("\M-e" . "€") ;; euro symbol
 	       ))
     (french . (([?\M-`] . "@")
-	       ("\M-$" . ,emmkm--euro) 
+	       ("\M-$" . "€") 
 	       ("\M-/" . "\\")
 	       ([?\M-£]  . "#") ;; was: "\M-£"
 	       ("\M-n" . "~")
@@ -52,7 +50,7 @@ Example:
 	       ([?\M-°] . "]")))
     (spanish . (([?\M-`] . "[")
               ("\M-+" . "]")
-              ("\M-5" . ,emmkm--euro)
+              ("\M-5" . "€")
               ([?\M-´]  . "{")
               ([?\M-ç]  . "}") 
               ("\M-3" . "#")
@@ -103,7 +101,7 @@ Example:
 	       ("\M-O" . "Ø") 
 	       ;; ("\M-a" . "å") ;; overlaps with Emacs default 
 	       ;; ("\M-A" . "Å") ;; overlaps with Emacs default M-a
-	       ("\M-e" . ,emmkm--euro) ;; euro symbol
+	       ("\M-e" . "€") ;; euro symbol
 	       ))
 
     (swiss-french . (("\M-g" . "@")
@@ -121,13 +119,13 @@ Example:
 	       ("\M-O" . "Ø") 
 	       ;; ("\M-a" . "å") ;; overlaps with Emacs default M-a
 	       ;; ("\M-A" . "Å") ;; overlaps with Emacs default M-a
-	       ("\M-e" . ,emmkm--euro) ;; euro symbol
+	       ("\M-e" . "€") ;; euro symbol
 	       ))
     (us . (     ("\M-3" . "£")
-		("\M-@" . ,emmkm--euro) ;; euro symbol
+		("\M-@" . "€") ;; euro symbol
 		("\M-6" . "§")))
     (british . (("\M-3" . "#")
-		("\M-2" . ,emmkm--euro) ;; euro symbol
+		("\M-2" . "€") ;; euro symbol
 		("\M-6" . "§")))))
 
 ;; (progn (define-emulate-mac-keyboard-modes) (make-emulate-mac-keyboard-mode-map 'german) (emulate-mac-german-keyboard-mode))
