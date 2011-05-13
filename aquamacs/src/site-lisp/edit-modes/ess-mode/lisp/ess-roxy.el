@@ -40,21 +40,24 @@
 ;; - preview
 ;;   - C-c C-e C-r :: create a preview of the Rd file as generated
 ;;     using roxygen
+;;   - C-c C-e C-t :: create a preview of the Rd HTML file as generated
+;;     using roxygen and the tools package
+;;     
+;; Known issues:
 ;;
-;; To enable it for ESS, put something like
-;;
-;; (add-to-list 'load-path "/path/to/dir/with/ess-roxy")
-;; (require 'ess-roxy)
-;; (add-hook 'ess-mode-hook
-;; 	  (lambda () (ess-roxy-mode) ))
+;; - hideshow mode does not work very well. In particular, if ordinary
+;;   comments precede a roxygen entry, then both will be hidden in the
+;;   same overlay from start and not unfoldable using TAB since the
+;;   roxygen prefix is not present. The planned solution is implement
+;;   a replacement for hideshow.
+;; - only limited functionality for S4 documentation. 
+
+;; this *is* enabled now via ess-mode-hook in ./ess-site.el
 
 (require 'ess-custom)
 (require 'hideshow)
 
 ;; ------------------
-(defconst ess-roxy-version "0.2"
-  "Current version of ess-roxy.el.")
-
 (defvar ess-roxy-mode-map nil
   "Keymap for `ess-roxy' mode.")
 (if ess-roxy-mode-map
@@ -65,6 +68,7 @@
   (define-key ess-roxy-mode-map (kbd "C-c C-e n")   'ess-roxy-next-entry)
   (define-key ess-roxy-mode-map (kbd "C-c C-e p")   'ess-roxy-previous-entry)
   (define-key ess-roxy-mode-map (kbd "C-c C-e C-r")   'ess-roxy-preview-Rd)
+  (define-key ess-roxy-mode-map (kbd "C-c C-e C-t")   'ess-roxy-preview-HTML)
   (define-key ess-roxy-mode-map (kbd "C-c C-e C-c") 'ess-roxy-toggle-roxy-region)
   (define-key ess-roxy-mode-map (kbd "C-c C-o") 'ess-roxy-update-entry))
 
@@ -73,14 +77,14 @@
     `((,(concat ess-roxy-str " *\\([@\\]"
 		(regexp-opt ess-roxy-tags-param t)
 		"\\)\\>")
-       (1 font-lock-keyword-face prepend))
+       (1 'font-lock-keyword-face prepend))
       (,(concat ess-roxy-str " *\\([@\\]"
          (regexp-opt '("param") t)
          "\\)\\>\\(?:[ \t]+\\(\\sw+\\)\\)?")
-       (1 font-lock-keyword-face prepend)
-       (3 font-lock-variable-name-face prepend))
+       (1 'font-lock-keyword-face prepend)
+       (3 'font-lock-variable-name-face prepend))
       (,(concat "[@\\]" (regexp-opt ess-roxy-tags-noparam t) "\\>")
-       (0 font-lock-variable-name-face prepend))
+       (0 'font-lock-variable-name-face prepend))
       (,(concat ess-roxy-str)
        (0 'bold prepend)))))
 
@@ -90,7 +94,8 @@
   :keymap ess-roxy-mode-map
   (if ess-roxy-mode
       (progn
-        (font-lock-add-keywords nil ess-roxy-font-lock-keywords)
+	(unless (featurep 'xemacs) ;; does not exist in xemacs:
+	  (font-lock-add-keywords nil ess-roxy-font-lock-keywords))
 	(if ess-roxy-hide-show-p
 	    (progn
 	      ;(setq hs-c-start-regexp "s")
@@ -107,15 +112,14 @@
 	    (progn
 	      (hs-show-all)
 	      (hs-minor-mode))))
-    (font-lock-remove-keywords nil ess-roxy-font-lock-keywords))
+    (unless (featurep 'xemacs)
+      (font-lock-remove-keywords nil ess-roxy-font-lock-keywords)))
   (when font-lock-mode
     (font-lock-fontify-buffer)))
 
 
 ;; (setq hs-c-start-regexp ess-roxy-str)
 ;; (make-variable-buffer-local 'hs-c-start-regexp)
-
-
 
 ;; Function definitions
 (defun ess-roxy-beg-of-entry ()
@@ -241,10 +245,16 @@ function at point. if here is supplied start inputting
       (goto-char here))
     (while (stringp (car (car args)))
       (setq arg-des (pop args))
-      (insert (concat "\n"
-		      ess-roxy-str " @param " (car arg-des) " "))
-      (insert (concat (car (cdr arg-des))))
-      (ess-roxy-fill-field))))
+      (unless (string= (car arg-des) "")
+	  (progn
+	    (insert (concat "\n"
+			    ess-roxy-str " @param " (car arg-des) " "))
+	    (insert 
+	     (ess-replace-in-string (concat (car (cdr arg-des))) "\n" 
+				    (concat "\n" ess-roxy-str)))
+	    (if ess-roxy-fill-param-p
+		(ess-roxy-fill-field))
+	    )))))
 
 (defun ess-roxy-merge-args (fun ent)
   "Take two args lists (alists) and return their union. Result
@@ -253,7 +263,7 @@ association from ent are preferred over entries from fun. Also,
 drop entries from ent that are not in fun and are associated with
 the empty string."
   (let ((res-arg nil)
-	(arg-des))
+	(arg-des))			
     (while (stringp (car (car fun)))
       (setq arg-des (pop fun))
       (if (assoc (car arg-des) ent)
@@ -267,9 +277,12 @@ the empty string."
     (nreverse res-arg)))
 
 (defun ess-roxy-update-entry ()
-  "Update the current entry or the entry above the function which
-the point is in. Add basic roxygen documentation if no roxygen
-entry is available."
+  "Update the entry at the point or the entry above the function
+which the point is in. Add a template empty roxygen documentation
+if no roxygen entry is available. The template can be customized
+via the variable `ess-roxy-template-alist'. The parameter
+descriptions can are filled if `ess-roxy-fill-param-p' is
+non-nil."
   (interactive)
   (save-excursion
     (let* ((args-fun (ess-roxy-get-args-list-from-def))
@@ -296,11 +309,11 @@ entry is available."
 	  (if (string= (car tag-def) "param")
 	      (ess-roxy-insert-args args (point))
 	    (if (string= (car tag-def) "description")
-		(insert (concat line-break ess-roxy-str " " 
+		(insert (concat line-break ess-roxy-str " "
 				(cdr tag-def) "\n" ess-roxy-str))
 	      (if (string= (car tag-def) "details")
 		  (insert (concat line-break ess-roxy-str " " (cdr tag-def)))
-		(insert (concat line-break ess-roxy-str " @" 
+		(insert (concat line-break ess-roxy-str " @"
 				(car tag-def) " " (cdr tag-def))))
 		))
 	  (setq line-break "\n")
@@ -379,21 +392,17 @@ point is"
 		    (setq args-text (buffer-substring-no-properties
 				     field-beg field-end))
 		    (setq args-text
-			  (ess-replace-in-string args-text
-						 ess-roxy-str ""))
+		    	  (ess-replace-in-string args-text
+		    				 ess-roxy-str ""))
 		    (setq args-text
 			  (ess-replace-in-string
-			   args-text "@param" ""))
-		    (setq args-text
-			  (ess-replace-in-string args-text "\n" ""))
-		    (setq args-text (replace-regexp-in-string
-				     "^ +" "" args-text))
-		    (setq arg-name (replace-regexp-in-string
-				    " .*" ""  args-text))
+			   args-text "[[:space:]]*@param *" ""))
+		    ;; (setq args-text
+		    ;; 	  (ess-replace-in-string args-text "\n" ""))
+		    (string-match "[^[:space:]]*" args-text)
+		    (setq arg-name (match-string 0 args-text))
 		    (setq desc (replace-regexp-in-string
-				(concat "^" arg-name) "" args-text))
-		    (setq desc (replace-regexp-in-string
-				"^ +" "" desc))
+				(concat "^" arg-name " *") "" args-text))
 		    (setq args (cons (list (concat arg-name)
 					   (concat desc)) args))))
 	      (forward-line -1))
@@ -410,7 +419,7 @@ string. Convenient for editing example fields."
   	  (error "region is not active")))
   (save-excursion
     (let (RE to-string)
-      (narrow-to-region beg end)
+      (narrow-to-region beg (- end 1))
       (if (ess-roxy-entry-p)
 	  (progn (setq RE (concat "^" ess-roxy-str " *"))
 		 (setq to-string ""))
@@ -421,40 +430,72 @@ string. Convenient for editing example fields."
 	(replace-match to-string))
       (widen))))
 
-(defun ess-roxy-preview-Rd (&optional arg)
-  "Use the connected R session and the roxygen package to create
-a preview of the Rd file of the entry at point. If called with
-`arg' is non-nil (e.g. called with the universal argument), also
-set the visited file name of the created buffer to allow for
-saving (and using Rd-modes preview function) of the file."
-  (interactive "P")
+(defun ess-roxy-preview ()
+  "Use the connected R session and the roxygen package to
+generate the Rd code for entry at point, place it in a temporary
+buffer and return that buffer."
   (let ((beg (ess-roxy-beg-of-entry))
 	(roxy-tmp (make-temp-file "ess-roxy"))
-	(roxy-buf (get-buffer-create " *RoxygenPreview*"))
-	beg-end)
+	(roxy-buf (get-buffer-create " *RoxygenPreview*")))
     (if (= beg 0)
 	(error "Point is not in a Roxygen entry"))
     (save-excursion
       (goto-char (ess-roxy-end-of-entry))
       (forward-line 1)
-      (setq beg-end (ess-end-of-function))
-      (append-to-file beg (car (cdr beg-end)) roxy-tmp)
-      (ess-command "library(roxygen)\n" roxy-buf)
-      (save-excursion
-	(set-buffer roxy-buf)
+      (if (ess-end-of-function nil t)
+	  (append-to-file beg (point) roxy-tmp)
+	(while (and (forward-line 1) (not (looking-at "^$")) 
+		    (not (looking-at ess-roxy-str))))
+	(append-to-file beg (point) roxy-tmp))
+      (ess-command "print(suppressWarnings(require(roxygen, quietly=TRUE)))\n"
+		   roxy-buf)
+      (with-current-buffer roxy-buf
 	(goto-char 1)
-	(if (search-forward-regexp "Error in library(roxygen)" nil t)
-	    (error "Failed to load the roxygen package")))
-      (ess-command ".ess_roxy_roclet <- make.Rd.roclet(NULL)\n")
-      (ess-command (concat ".ess_roxy_roclet$parse(\"" roxy-tmp "\")\n") roxy-buf)
-      (delete-file roxy-tmp))
+	(if (search-forward-regexp "FALSE" nil t)
+	    (error (concat "Failed to load the roxygen package; "
+			   "in R, try  install.packages(\"roxygen\")"))))
+      (ess-command (concat "make.Rd.roclet()$parse(\"" roxy-tmp "\")\n") roxy-buf))
+    (delete-file roxy-tmp)
+    roxy-buf))
+
+(defun ess-roxy-preview-HTML (&optional visit-instead-of-open)
+  "Use the connected R session and the roxygen package to
+generate a HTML page for the roxygen entry at point and open that
+buffer in a browser. Visit the HTML file instead of showing it in
+a browser if `visit-instead-of-open' is non-nil"
+  (interactive "P")
+  (let ((roxy-buf (ess-roxy-preview))
+	(rd-tmp-file (make-temp-file "ess-roxy-" nil ".Rd"))
+	(html-tmp-file (make-temp-file "ess-roxy-" nil ".html")))
+    (with-current-buffer roxy-buf
+      (set-visited-file-name rd-tmp-file)
+      (save-buffer)
+      (kill-buffer roxy-buf))
+    (ess-command "print(suppressWarnings(require(tools, quietly=TRUE)))\n")
+    (if (not visit-instead-of-open)
+	(ess-command 
+	 (concat "browseURL(Rd2HTML(\"" rd-tmp-file "\",\"" 
+		 html-tmp-file "\", stages=c(\"render\")))\n"))
+      (ess-command 
+       (concat "Rd2HTML(\"" rd-tmp-file "\",\"" 
+	       html-tmp-file "\", stages=c(\"render\"))\n"))
+      (find-file html-tmp-file))))
+
+(defun ess-roxy-preview-Rd (&optional name-file)
+  "Use the connected R session and the roxygen package to
+generate the Rd code for the roxygen entry at point. If called
+with a non-nil `name-file' (e.g. universal argument C-u),
+also set the visited file name of the created buffer to
+facilitate saving that file."
+  (interactive "P")
+  (let ((roxy-buf (ess-roxy-preview)))
     (pop-to-buffer roxy-buf)
-    (if arg
+    (if name-file
 	(save-excursion
 	  (goto-char 1)
 	  (search-forward-regexp "name{\\(.+\\)}")
 	  (set-visited-file-name (concat (match-string 1) ".Rd"))))
-    )(Rd-mode))
+    (Rd-mode)))
 
 (defun ess-roxy-mark-active ()
   "True if region is active and transient mark mode activated"
@@ -497,23 +538,20 @@ saving (and using Rd-modes preview function) of the file."
   "Return the arguments specified for the current function as a
 list of strings."
   (save-excursion
-    (let ((result)
-	  (args-txt
+    (let ((args-txt
 	   (progn
 	     (ess-beginning-of-function)
 	     (buffer-substring-no-properties
 	      (progn
-		(search-forward-regexp "function *" nil nil 1)
+		(search-forward-regexp "[=,-]* *function *" nil nil 1)
 		(+ (point) 1))
 	      (progn
 		(ess-roxy-match-paren)
 		(point))))))
-      (setq args-txt (replace-regexp-in-string "([^)]*)" "" args-txt))
-      (setq args-txt (replace-regexp-in-string "=[^,]*" "" args-txt))
-      (setq args-txt (replace-regexp-in-string "\n*" "" args-txt))
-      (setq args-txt (replace-regexp-in-string " *" "" args-txt))
-      (setq result (split-string args-txt ","))
-       result)))
+      (setq args-txt (replace-regexp-in-string "([^)]+)" "" args-txt))
+      (setq args-txt (replace-regexp-in-string "=[^,]+" "" args-txt))
+      (setq args-txt (replace-regexp-in-string "[ \t\n]+" "" args-txt))
+      (split-string args-txt ","))))
 
 (defun ess-roxy-match-paren ()
   "Go to the matching parenthesis"
@@ -524,8 +562,8 @@ list of strings."
   "complete the tag at point"
   (let ((token-string (thing-at-point 'symbol)))
     (if (string-match "@.+" token-string)
-	(progn 
-	  (comint-dynamic-simple-complete 
+	(progn
+	  (comint-dynamic-simple-complete
 	   (replace-regexp-in-string "^@" "" token-string)
 	   (append ess-roxy-tags-noparam ess-roxy-tags-param))))))
 

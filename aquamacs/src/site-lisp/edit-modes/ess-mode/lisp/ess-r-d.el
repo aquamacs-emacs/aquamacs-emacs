@@ -1,11 +1,11 @@
 ;;; ess-r-d.el --- R customization
 
-;; Copyright (C) 1997--2007 A.J. Rossini, Rich M. Heiberger, Martin
+;; Copyright (C) 1997--2011 A.J. Rossini, Richard M. Heiberger, Martin
 ;;	Maechler, Kurt Hornik, Rodney Sparapani, and Stephen Eglen.
 
 ;; Original Author: A.J. Rossini
 ;; Created: 12 Jun 1997
-;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
+;; Maintainers: ESS-core <ESS-core@r-project.org>
 
 ;; Keywords: start up, configuration.
 
@@ -34,7 +34,7 @@
 (ess-message "[ess-r-d:] (require 'ess-s-l)")
 (require 'ess-s-l)
 
-(require 'ess-r-args);  for now
+(require 'ess-r-args); for now --- should the default rather become ess-eldoc?
 
 ;; modify S Syntax table:
 (setq R-syntax-table S-syntax-table)
@@ -116,6 +116,7 @@ Optional prefix (C-u) allows to set command line arguments, such as
 If you have certain command line arguments that should always be passed
 to R, put them in the variable `inferior-R-args'."
   (interactive "P")
+  ;; get settings, notably inferior-R-program-name :
   (setq ess-customize-alist R-customize-alist)
   (ess-write-to-dribble-buffer   ;; for debugging only
    (format
@@ -134,10 +135,14 @@ to R, put them in the variable `inferior-R-args'."
 			       r-always-arg
 			       "'] ? "))
 		    nil)))
-	 )
-	 ;;Micro$ ?: default-process-coding-system ;-breaks UTF locales on Unix:
-    (if ess-microsoft-p
-	(setq default-process-coding-system '(undecided-dos . undecided-dos)))
+	 use-dialog-box)
+
+    (when (or ess-microsoft-p
+	      (eq system-type 'cygwin))
+       (setq use-dialog-box nil)
+       (if ess-microsoft-p ;; default-process-coding-system would break UTF locales on Unix
+	   (setq default-process-coding-system '(undecided-dos . undecided-dos))))
+
     (inferior-ess r-start-args) ;; -> .. (ess-multi ...) -> .. (inferior-ess-mode) ..
     ;;-------------------------
     (ess-write-to-dribble-buffer
@@ -172,10 +177,11 @@ to R, put them in the variable `inferior-R-args'."
 	(ess-eval-linewise inferior-ess-language-start
 			   nil nil nil 'wait-prompt))))
 
+
 ;;;### autoload
 (defun R-mode  (&optional proc-name)
   "Major mode for editing R source.  See `ess-mode' for more help."
-  (interactive)
+  (interactive "P")
   (setq ess-customize-alist R-customize-alist)
   ;;(setq imenu-generic-expression R-imenu-generic-expression)
   (ess-mode R-customize-alist proc-name)
@@ -188,13 +194,42 @@ to R, put them in the variable `inferior-R-args'."
 	     (ess-imenu-R)))
   ;; MM:      ^^^^^^^^^^^ should really use ess-imenu-mode-function from the
   ;;     alist above!
-  )
-
+  (run-hooks 'R-mode-hook))
 
 (fset 'r-mode 'R-mode)
 
+(defun ess-R-arch-2-bit (arch)
+  "Translate R's architecture shortcuts/directory names to 'bits',
+ i.e., \"32\" or \"64\" (for now)."
+  (if (string= arch "i386")  "32"
+    ;; else:
+    "64"))
+
+(defun ess-rterm-arch-version (long-path &optional give-cons)
+  "Find an architecture-specific name for LONG-PATH, an absolute (long name) path
+ to R on Windows. Returns either Name, a string, or a (Name . Path) cons, such as
+ (\"R-2.12.1-64bit\"  .  \"C:/Program Files/R/R-2.12.1/bin/x64/Rterm.exe\")
+
+\"R-x.y.z/bin/Rterm.exe\" will return \"R-x.y.z\", for R-2.11.x and older.
+\"R-x.y.z/bin/i386/Rterm.exe\" will return \"R-x.y.z-32bit\", for R-2.12.x and newer.
+\"R-x.y.z/bin/x64/Rterm.exe\"  will return \"R-x.y.z-64bit\", for R-2.12.x and newer."
+  (let* ((dir  (directory-file-name (file-name-directory long-path)))
+	 (dir2 (directory-file-name (file-name-directory dir)))
+	 (v-1up (file-name-nondirectory dir));; one level up
+	 (v-2up (file-name-nondirectory dir2));; two levels up; don't want "bin" ...
+	 (v-3up (file-name-nondirectory ;; three levels up; no "bin" for i386, x64 ...
+		      (directory-file-name (file-name-directory dir2))))
+	 (val (if (string= v-2up "bin")
+		  (concat v-3up "-" (ess-R-arch-2-bit v-1up) "bit")
+		;; pre R-2.12.x, or when there's no extra arch-specific sub directory:
+		v-2up)))
+    (if give-cons
+	(cons val long-path)
+      val)))
+
+
 (defun ess-r-versions-create ()
-  "Generate the `M-x R-x.y' functions for starting other versions of R.
+  "Generate the `M-x R-x.y.z' functions for starting other versions of R.
 On MS Windows, this works using `ess-rterm-version-paths'; otherwise,
 see `ess-r-versions' for strings that determine which functions are created.
 
@@ -207,17 +242,17 @@ defuns will normally be placed on the menubar and stored as
     ;; else, if ess-r-versions is non-nil, let's try to find those R versions.
     ;; This works by creating a temp buffer where the template function is
     ;; edited so that X.Y is replaced by the version name
-    (let ((versions)
+    (let (versions
+	  r-versions-created
 	  (eval-buf (get-buffer-create "*ess-temp-r-evals*"))
-	  (r-versions-created)
 	  (template
 	   ;; This is the template function used for creating M-x R-X.Y.
 	   (concat
 	    "(defun R-X.Y (&optional start-args)
-  \"Call R-X.Y, i.e., the R version 'R-X.Y' using ESS.
+  \"Call the R version 'R-X.Y' using ESS.
 This function was generated by `ess-r-versions-create'.\"
   (interactive \"P\")
-  (let ((use-dialog-box nil);; Win-only: dialog box won't return a directory
+  (let ((inferior-R-version \"R-X.Y\")
         (inferior-R-program-name \""
 	    (if ess-microsoft-p "Rterm" "R") "-X.Y\"))
     (R start-args)))
@@ -232,49 +267,46 @@ This function was generated by `ess-r-versions-create'.\"
 	;; Find which versions of R we want.  Remove the pathname, leaving just
 	;; the name of the executable.
 	(setq versions
-	      (if ess-microsoft-p ess-rterm-version-paths
-		;;                ^^^^^^^^^^^^^^^^^^^^^^^ created in
-		;;		./ess-site.el at start
+	      (if ess-microsoft-p
+		  (mapcar '(lambda(v) (ess-rterm-arch-version v 'give-cons))
+			  ess-rterm-version-paths)
+		;;        ^^^^^^^^^^^^^^^^^^^^^^^ from ./ess-site.el at start
 		;; else (non-MS):
 		(ess-uniq-list
 		 (mapcar 'file-name-nondirectory
 			 (apply 'nconc
 				(mapcar 'ess-find-exec-completions
 					ess-r-versions))))))
+	(setq r-versions-created ; also for returning at end.
+	      (if ess-microsoft-p
+		  (mapcar 'car versions)
+		versions))
 	(ess-write-to-dribble-buffer
 	 (format "(R): ess-r-versions-create making M-x defuns for \n %s\n"
-		 (mapconcat 'identity versions "\n ")))
-	(if (not ess-microsoft-p)
-	    (setq r-versions-created versions)) ;keep copy for returning at end.
+		 (mapconcat 'identity r-versions-created "\n ")))
 
 	;; Iterate over each string in VERSIONS, creating a new defun each time.
 	(while versions
 	  (let* ((version (car versions))
-		 (this-version version)
+		 (ver (if ess-microsoft-p (car version) version))
 		 (beg (point)))
 
 	    (setq versions (cdr versions))
-	    (when ess-microsoft-p
-	      (setq
-	       version (file-name-nondirectory ;; two levels up; don't want "bin" ...
-			(directory-file-name (file-name-directory
-					      (directory-file-name (file-name-directory version)))))
-	       r-versions-created (cons version r-versions-created)))
-
 	    (insert template)
 	    (goto-char beg)
-	    (while (search-forward "R-X.Y" nil t)
-	      (replace-match version t t))
+	    (while (search-forward "R-X.Y" nil t) ;; in all cases
+	      (replace-match ver t t))
 	    (when ess-microsoft-p
 	      (goto-char beg)
 	      (while (search-forward "Rterm-X.Y" nil t)
-		(replace-match this-version t t)))
+		(replace-match (w32-short-file-name (cdr version)) t t)))
 	    (goto-char (point-max)))
 	  )
 	;; buffer has now been created with defuns, so eval them!
-	(eval-buffer)
-	(kill-buffer eval-buf)
-	)
+	(eval-buffer))
+      (unless (and (boundp 'ess-debugging) ess-debugging)
+	(kill-buffer eval-buf))
+
       r-versions-created)))
 
 (defvar ess-newest-R nil
@@ -323,16 +355,15 @@ prompt for command line arguments."
       (fset 'R-newest
 	    (intern
 	     (if ess-microsoft-p
-		 (file-name-nondirectory
-		  (substring (file-name-directory
-			      (substring (file-name-directory rnewest) 0 -1))
-			     0 -1))
+		 (ess-rterm-arch-version rnewest)
 	       rnewest)))
       ;;(fset 'R-newest (intern rnewest))
       (R-newest start-args))))
 
 ;; (ess-r-version-date "R-2.5.1") (ess-r-version-date "R-patched")
 ;; (ess-r-version-date "R-1.2.1") (ess-r-version-date "R-1.8.1")
+;; Windows:
+;;  (ess-r-version-date "C:/Program Files (x86)/R/R-2.11.1/bin/Rterm.exe")
 ;; Note that for R-devel, ver-string is something like
 ;; R version 2.6.0 Under development (unstable) (2007-07-14 r42234)
 ;; Antique examples are 'R 1.0.1  (April 14, 2000)' or 'R 1.5.1 (2002-06-17).'
@@ -341,15 +372,16 @@ prompt for command line arguments."
 The date is returned as a date string.  If the version of R could
 not be found from the output of the RVER program, \"-1\" is
 returned."
-  (let (ver-string
-	(date "-1"))
-    (setq ver-string (shell-command-to-string
-		      (concat rver " --version")))
+  (let ((date "-1")
+	(ver-string (shell-command-to-string
+		     ;; here, MS Windows (shell-command) needs a short name:
+		     (concat (if ess-microsoft-p (w32-short-file-name rver) rver)
+			     " --version"))))
     (when (string-match
 	   "R \\(version \\)?[1-9][^\n]+ (\\(2[0-9-]+\\)\\( r[0-9]+\\)?)"
 	   ver-string)
       (setq date (match-string 2 ver-string)))
-    (cons  date rver)))
+    (cons date rver)))
 
 (defun ess-current-R-version ()
   "Get the version of R currently running in the ESS buffer as a string"
@@ -372,6 +404,7 @@ Return the name of the newest version of R."
   (let ((rtimes (mapcar 'ess-r-version-date rvers)))
     ;; SJE: 2007-07-13 -- following line is a temp var to check that
     ;; the newest version of R is found correctly.
+    ;; (nowadays gives a compile warning)
     (setq ess-temp-newest rtimes)
     (ess-find-newest-date rtimes)))
 
@@ -401,12 +434,13 @@ If the value returned is nil, no valid newest version of R could be found."
     new-r))
 
 
-(defun ess-find-rterm (&optional ess-R-root-dir)
+(defun ess-find-rterm (&optional ess-R-root-dir bin-Rterm-exe)
   "Find the full path of all occurences of Rterm.exe under the ESS-R-ROOT-DIR.
 If ESS-R-ROOT-DIR is nil, construct it by looking for an occurence of Rterm.exe
 in the exec-path.  If there are no occurences of Rterm.exe in the exec-path,
 then use `ess-program-files' (which evaluates to something like \"c:/progra~1/R/\"
-in English locales) which is the default location for the R distribution."
+in English locales) which is the default location for the R distribution.
+If BIN-RTERM-EXE is nil, then use \"bin/Rterm.exe\"."
     (if (not ess-R-root-dir)
 	(let ((Rpath (executable-find "Rterm")))
 	  (setq ess-R-root-dir
@@ -418,6 +452,8 @@ in English locales) which is the default location for the R distribution."
 	   (format "(ess-find-rterm): ess-R-root-dir = '%s'\n" ess-R-root-dir))
 	  ))
 
+    (if (not bin-Rterm-exe) (setq bin-Rterm-exe "bin/Rterm.exe"))
+
     (when (file-directory-p ess-R-root-dir) ; otherwise file-name-all-.. errors
       (setq ess-R-root-dir
 	    (ess-replace-regexp-in-string "[\\]" "/" ess-R-root-dir))
@@ -428,9 +464,11 @@ in English locales) which is the default location for the R distribution."
 			  (file-name-all-completions r-prefix ess-R-root-dir))
 		       (append '("rw") ess-r-versions))))))
 	(mapcar '(lambda (dir)
-		   (concat ess-R-root-dir
-			   (ess-replace-regexp-in-string "[\\]" "/" dir)
-			   "bin/Rterm.exe"))
+		   (let ((R-path
+			  (concat ess-R-root-dir
+				  (ess-replace-regexp-in-string "[\\]" "/" dir)
+				  bin-Rterm-exe)))
+		     (if (file-exists-p R-path) R-path)))
 		R-ver))))
 
 ;; From Jim (James W.) MacDonald, based on code by Deepayan Sarkar,
@@ -466,9 +504,16 @@ To be used instead of ESS' completion engine for R versions >= 2.5.0
 	    (ess-get-words-from-vector
 	     (concat NS ".retrieveCompletions()\n")))))
 
-    (or (comint-dynamic-simple-complete token-string
-					possible-completions)
-	'none)))
+    ;; If there are no possible-completions, should return nil, so
+    ;; that when this function is called from
+    ;; comint-dynamic-complete-functions, other functions can then be
+    ;; tried.
+    (if (null possible-completions)
+	nil
+      (or (comint-dynamic-simple-complete token-string
+					  possible-completions)
+	  'none))))
+
 
 ;;;### autoload
 (defun Rnw-mode ()
@@ -575,6 +620,20 @@ Completion is available for supplying options."
       ;; else: without prefix use defaults:
       (browse-url (concat site okstring "&max=20&result=normal&sort=score"
 			  "&idxname=Rhelp02a&idxname=functions&idxname=docs")))))
+
+
+(defun ess-dirs ()
+  "Set Emacs' current directory to be the same as the *R* process.
+If you change directory within *R* using setwd(), run this command so that
+Emacs can update its `default-directory' variable for the *R* buffer.
+
+Currently this function has been tested only for *R*, but should also work for
+*S* buffers."
+  (interactive)
+  (let ((dir (car (ess-get-words-from-vector "getwd()\n"))))
+    (message "new (ESS / default) directory: %s" dir)
+    (setq ess-directory (file-name-as-directory dir)))
+    (setq default-directory ess-directory))
 
 
  ; provides

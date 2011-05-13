@@ -8,7 +8,7 @@
 
 ;; Original Author: Richard M. Heiberger <rmh@sbm.temple.edu>
 ;; Created: April 2001
-;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
+;; Maintainers: ESS-core <ESS-core@r-project.org>
 
 ;; Keywords: start up, configuration.
 
@@ -85,7 +85,7 @@ connects it to the '(ddeESS [S+6])' window.")
 				   " "
 				   inferior-S+6-print-command
 				   " S_PROJ="
-				   (directory-file-name default-directory)))
+				   (w32-short-file-name (directory-file-name default-directory))))
 ;;    (inferior-ess-ddeclient      . "ddeclient")
 ;;    (inferior-ess-client-name    . "S-PLUS")
 ;;    (inferior-ess-client-command . "SCommand")
@@ -199,9 +199,11 @@ to start the Splus program."
 	  (append ess-customize-alist '((inferior-ess-primary-prompt   . "^"))))
     (setq ess-customize-alist		; change inferior-ess-start-args
 	  (append ess-customize-alist '((inferior-ess-start-args   . "-i"))))
-    (let ((s-proj (getenv "S_PROJ")))
+    (let ((s-proj (getenv "S_PROJ"))
+	  (use-dialog-box (not (or ess-microsoft-p (eq system-type 'cygwin))))
+	  )
       (cd (w32-short-file-name (directory-file-name default-directory)))
-      (setenv "S_PROJ" default-directory)
+      (setenv "S_PROJ" (w32-short-file-name default-directory))
       (inferior-ess)
       (sleep-for 2) ; need to wait, else working too fast!  The Splus
 		    ; command in '(ddeESS [S+6])' should follow the "$"
@@ -297,7 +299,9 @@ Splus Commands window blink a DOS window and you won't see them.\n\n")
   "Call 'Sqpe' from 'S-PLUS [678].x for Windows', the 'Real Thing' from StatSci."
   (interactive)
   (setq ess-customize-alist Sqpe+6-customize-alist)
-  (let* ((shome-nil-p (equal (getenv "SHOME") nil)))
+  (let* ((shome-nil-p (equal (getenv "SHOME") nil))
+	 (use-dialog-box (not (or ess-microsoft-p (eq system-type 'cygwin))))
+	 )
     (if shome-nil-p (setenv "SHOME" inferior-Sqpe+6-SHOME-name))
     (ess-write-to-dribble-buffer
      (format "\n(Sqpe+6): ess-dialect=%s, buf=%s\n" ess-dialect
@@ -362,7 +366,7 @@ S-Plus 7 or S-Plus 8."
 not point to S-Plus 6 or 7 or 8.  Please add `splus[678]?/cmd'
 (expand the `[678]?' to match your setup) to your `exec-path' or
 specify the complete path to `Splus.exe' in the variable
-`inferior-S+6-program-name' in your `.emacs' file.")
+`inferior-S+6-program-name' in your `.emacs' file.")  ;;; " This comment keeps emacs font-lock from getting out of phase.
       (progn
     (forward-line)
       (if (search-backward "splus\t6.0" (point-min) t)
@@ -400,9 +404,11 @@ to start the Splus program."
 	  (append ess-customize-alist '((inferior-ess-primary-prompt   . "^"))))
     (setq ess-customize-alist		; change inferior-ess-start-args
 	  (append ess-customize-alist '((inferior-ess-start-args   . ""))))
-    (let ((s-proj (getenv "S_PROJ")))
+    (let ((s-proj (getenv "S_PROJ"))
+	 (use-dialog-box (not (or ess-microsoft-p (eq system-type 'cygwin))))
+	  )
       (cd (w32-short-file-name (directory-file-name default-directory)))
-      (setenv "S_PROJ" default-directory)
+      (setenv "S_PROJ" (w32-short-file-name default-directory))
       (inferior-ess)
       (sleep-for 2) ; need to wait, else working too fast!  The Splus
 		    ; command in '(ddeESS [S+6])' should follow the "$"
@@ -488,13 +494,15 @@ Splus Commands window blink a DOS window and you won't see them.\n\n")
     (toggle-read-only t)		; restore ESS buffer to be read-only
     ))
 
-(defun ess-sqpe-versions-create ()
+(defun ess-sqpe-versions-create (ess-SHOME-versions &optional x64)
   "Generate the `M-x splusxy' functions for starting other versions of
-Sqpe.  See `ess-sqpe-versions' for strings that determine which
+Sqpe.  `ESS-SHOME-VERSIONS' is normally taken from
+`ess-sqpe-versions', a variable that contains strings that determine which
 functions are created.  This works by creating a temp buffer where the
 template function `Sqpe+template' is edited by replacing the string
 'Sqpe+template' by the version name.  The list of functions actually
-created appears in the *ESS* buffer.
+created appears in the *ESS* buffer.  If `X64' is not nil, then
+modify the function name to show \"-64bit\" in its name.
 
 The result `ess-sqpe-versions-created' will store a list of the new
 Sqpe defuns, if any, that were created.  The defuns will normally be
@@ -512,6 +520,7 @@ placed on the menubar upon ESS initialisation."
       (delete-region (point-min) (point-max))
 
       ;; Find which versions of Sqpe we want.
+      (setq x64 (if x64 "-64bit"))
       (setq versions (ess-uniq-list ess-SHOME-versions))
       ;; Iterate over each string in VERSIONS, creating a new defun each time.
       (while versions
@@ -520,23 +529,24 @@ placed on the menubar upon ESS initialisation."
 	(if (file-executable-p version)
 	    (progn
 	      (setq beg (point))
+	      (setq version-function-name (concat (file-name-nondirectory version) x64))
 	      (prin1 (symbol-function 'Sqpe+template) eval-buf)
 	      (insert "\n\n")
 	      (goto-char beg)
 	      (while (search-forward "lambda" nil t 1)
 		(replace-match
-		 (concat "defun " (file-name-nondirectory version))
+		 (concat "defun " version-function-name)
 		 t t))
 	      (while (search-forward "ess-SHOME" nil t)
 		(replace-match version t t))
 	      (goto-char (point-max))
 	      (setq ess-sqpe-versions-created
-		    (cons (file-name-nondirectory version)
+		    (cons version-function-name
 			  ess-sqpe-versions-created))
 	      (ess-write-to-dribble-buffer
 	       (format
 		"(Sqpe): ess-sqpe-versions-create making M-x defun %s for %s \n"
-		(file-name-nondirectory version) version))
+		 version-function-name version))
 	      )))
       ;; buffer has now been created with defuns, so eval them!
       (eval-buffer)

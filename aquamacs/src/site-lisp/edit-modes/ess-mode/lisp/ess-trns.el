@@ -5,7 +5,7 @@
 ;;	Maechler, Kurt Hornik, Rodney Sparapani, and Stephen Eglen.
 
 ;; Original Author: David Smith <dsmith@stats.adelaide.edu.au>
-;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
+;; Maintainers: ESS-core <ESS-core@r-project.org>
 
 ;; This file is part of ESS
 
@@ -242,7 +242,7 @@ is not already."
        (save-excursion
  	(set-buffer ess-buf)
  	(goto-char (point-max))
- 	(ess-eval-linewise input nil nil nil 1)))) 
+ 	(ess-eval-linewise input nil nil nil 1))))
 ;; replacement code ends
   (goto-char ess-temp-point)
   (comint-next-prompt 1))
@@ -269,21 +269,51 @@ Deletes any lines not beginning with a prompt, and then removes the
 prompt from those lines that remain.  Prefix argument means to use
 \\[toggle-read-only] to clean even if the buffer is \\[read-only]."
   (interactive "r\nP")
-  (let ((do-toggle (and buffer-read-only even-if-read-only)))
+  (unless inferior-ess-prompt
+    (error "Cannot clean ESS transcript region in this mode!
+ That only works in ess-transcript-mode or inferior-ess-mode ('*R*' etc)."
+	   ;; Maybe call ess-clean-region-in-new-transcript ?"))
+	   ))
+  (let ((do-toggle (and buffer-read-only even-if-read-only))
+	(ess-prompt-rx (concat "^" inferior-ess-prompt)))
     (save-excursion
       (if do-toggle (toggle-read-only 0))
       (save-restriction
-	(unless 'xemacs-p ;; does not exist in xemacs:
+	(unless (featurep 'xemacs) ;; does not exist in xemacs:
 	  (deactivate-mark))
 	(narrow-to-region beg end)
 	(goto-char (point-min))
-	(delete-non-matching-lines (concat "^" inferior-ess-prompt))
+	(delete-non-matching-lines ess-prompt-rx)
 	(goto-char (point-min))
 	;; (replace-regexp  *  * ) :
-	(while (re-search-forward (concat "^" inferior-ess-prompt) nil t)
+	(while (re-search-forward ess-prompt-rx nil t)
 	  (replace-match "" nil nil)))
 
       (if do-toggle (toggle-read-only 1)))))
+
+
+;; unfinished idea :-----------------------
+
+;; (defun ess-clean-region-in-new-transcript (beg end)
+;;   "Copy the region into a new ess-transcript buffer, and clean it there,
+;;  using \\[ess-transcript-clean-region]."
+;;   (interactive "r")
+
+;;   (let ((bname (buffer-file-name)))
+;;     (setq bname (if bname .. ..))
+;;     (let
+;; 	 (fbase (if fname (file-name-sans-extension (file-name-nondirectory fname))
+;; 		  (buffer-name)))
+;;
+;; 	 ;; the buffer name should be like a file name
+;; 	 (buf-nam ....)
+;; 	 (trns-buf (get-buffer-create fbase))
+;;     (pop-to-buffer trns-buf)
+;;     (ess-transcript-mode .....)
+;; )))
+
+
+
 
 (defun ess-transcript-DO-clean-region (beg end)
   "Clean the current via \\[ess-transcript-clean-region] even if the buffer is read-only."

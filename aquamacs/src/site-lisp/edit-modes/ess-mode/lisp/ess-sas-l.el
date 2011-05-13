@@ -7,7 +7,7 @@
 ;;          A.J. Rossini,
 ;;          Rodney Sparapani
 ;; Created: 20 Aug 1997
-;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
+;; Maintainers: ESS-core <ESS-core@r-project.org>
 
 ;; Keywords: start up, configuration.
 
@@ -250,7 +250,7 @@ number."
       (list
      ;; .log NOTE: messages
      (cons "^NOTE: .*$"                          font-lock-comment-face)
-     (cons "^      [^ ].*[.]$"                   font-lock-comment-face)
+     (cons "^      [^ @].*[.]$"                   font-lock-comment-face)
      (cons "^      [a-z].*[a-z][ ]?$"            font-lock-comment-face)
      (cons "^      Engine:[ ]+V.+$"              font-lock-comment-face)
      (cons "^      Physical Name:[ ]+.+$"        font-lock-comment-face)
@@ -299,16 +299,16 @@ number."
      (cons "^ERROR\\( [0-9]+-[1-9][0-9][0-9]\\)?: .*$"   
                                                  font-lock-keyword-face)
      ;       ERROR:
-     (cons "^       [^ ].*\\([.][ ]?\\|[,a-z][ ]\\)$"  
+     (cons "^       [^ @].*\\([.][ ]?[ ]?\\|[,a-z][ ]\\)$"  
                                                  font-lock-keyword-face)
      ;       ERROR #-###:
-     (cons "^             [^ ].*\\([.][ ]?\\|[,a-z][ ]\\)$"
+     (cons "^             [^ @].*\\([.][ ]?[ ]?\\|[,a-z][ ]\\)$"
                                                  font-lock-keyword-face)
      ;       ERROR ##-###:
-     (cons "^              [^ ].*\\([.][ ]?\\|[,a-z][ ]\\)$" 
+     (cons "^              [^ @].*\\([.][ ]?[ ]?\\|[,a-z][ ]\\)$" 
 						 font-lock-keyword-face)
      ;       ERROR ###-###:
-     (cons "^               [^ ].*\\([.][ ]?\\|[,a-z][ ]\\)$" 
+     (cons "^               [^ @].*\\([.][ ]?[ ]?\\|[,a-z][ ]\\)$" 
 						 font-lock-keyword-face)
      (cons "^              a format name."       font-lock-keyword-face)
      (cons "^       where a numeric operand is required. The condition was: "
@@ -319,16 +319,16 @@ number."
      (cons "^WARNING\\( [0-9]+-[1-9][0-9][0-9]\\)?: .*$"  
                                                  font-lock-function-name-face)
      ;       WARNING:
-     (cons "^         [^ ].*\\([.][ ]?\\|[,a-z][ ]\\)$"
+     (cons "^         [^ @].*\\([.][ ]?[ ]?\\|[,a-z][ ]\\)$"
                                                  font-lock-function-name-face)
      ;       WARNING #-###:
-     (cons "^               [^ ].*\\([.][ ]?\\|[,a-z][ ]\\)$"
+     (cons "^               [^ @].*\\([.][ ]?[ ]?\\|[,a-z][ ]\\)$"
                                                  font-lock-function-name-face)
      ;       WARNING ##-###:
-     (cons "^                [^ ].*\\([.][ ]?\\|[,a-z][ ]\\)$"
+     (cons "^                [^ @].*\\([.][ ]?[ ]?\\|[,a-z][ ]\\)$"
                                                  font-lock-function-name-face)
      ;       WARNING ###-###:
-     (cons "^                 [^ ].*\\([.][ ]?\\|[,a-z][ ]\\)$"
+     (cons "^                 [^ @].*\\([.][ ]?[ ]?\\|[,a-z][ ]\\)$"
                                                  font-lock-function-name-face)
 
      ;; SAS comments
@@ -395,7 +395,7 @@ number."
 		    "calendar" "catalog" "chart" "cimport" "cport" "compare" "contents" "copy" "corr" 		    
 		    "datasets" "dbcstab" "display"
 		    "explode" "export"
-		    "format" "forms" "freq" "fsbrowse" "fsedit" "fsletter" "fslist" "fsview"		    		     
+		    "fcmp" "format" "forms" "freq" "fsbrowse" "fsedit" "fsletter" "fslist" "fsview"
 		    "ganno" "gchart" "gcontour" "gdevice" "geocode" "gfont" "gimport" "ginside"
 		    "gkeymap" "gmap" "goptions" "gplot" "gprint" "gproject" "greduce" "gremove" 
 		    "greplay" "gslide" "gtestit" "g3d" "g3grid" 
@@ -404,33 +404,35 @@ number."
 		    "options"
 		    "plot" "pmenu" "print" "printto"
 		    "rank" "registry" "report"
-		    "sort" "sql" "standard" "summary"
+		    "sgpanel" "sgplot" "sgscatter" "sort" "sql" "standard" "summary"
 		    "tabulate" "template" "timeplot" "transpose" "trantab"
 		    "univariate"
 
 		   ;;SAS/Stat and SAS/ETS
 		    "aceclus" "anova" "arima" "autoreg"
 		    "bgenmod" "blifereg" "boxplot" "bphreg"		    		    
-		    "calis" "cancorr" "candisc" "catmod" "citibase" "cluster" "computab" "corresp"
+		    "calis" "cancorr" "candisc" "catmod" "citibase" "cluster" "computab" "corresp" "countreg"
 		    "discrim" "distance"
-		    "expand"
+		    "entropy" "expand"
 		    "factor" "fastclus" "forecast"
 		    "gam" "genmod" "glimmix" "glm" "glmmod" "glmpower" "glmselect"
 		    "hpmixed"
 		    "inbreed"
 		    "kde" "krige2d"
 		    "lattice" "lifereg" "lifetest" "loess" "logistic"
-		    "mcmc" "mds" "mi" "mianalyze" "mixed" "modeclus" "model" "mortgage" "multtest"
+		    "mcmc" "mdc" "mds" "mi" "mianalyze" "mixed" "modeclus" "model" "mortgage" "multtest"
 		    "nested" "nlin" "nlmixed" "npar1way"
 		    "orthoreg"
-		    "pdlreg" "phreg" "plan" "pls" "power" "princomp" "prinqual" "probit"
-		    "quantreg"
-		    "reg" "robustreg" "rsreg"
-		    "score" "seqdesign" "seqtest" "sim2d" "simlin" "simnormal" "spectra" "statespace" "stdize" "stepdisc" 
-		    "surveyfreq" "surveylogistic" "surveymeans" "surveyreg" "surveyselect" "syslin"
-		    "tcalis" "tphreg" "tpspline" "transreg" "tree" "ttest"
-		    "varclus" "varcomp" "variogram"
-		    "x11"
+		    "panel" "pdlreg" "phreg" "plan" "plm" "pls" "power" "princomp" "prinqual" "probit"
+		    "qlim" "quantreg"
+		    "reg" "risk" "robustreg" "rsreg"
+		    "score" "seqdesign" "seqtest" "severity" "sim2d" "similarity" "simlin" "simnormal"
+		    "spectra" "statespace" "stdize" "stepdisc" 
+		    "surveyfreq" "surveylogistic" "surveymeans" "surveyphreg" "surveyreg" "surveyselect" "syslin"
+		    "tcalis" "timeid" "timeseries" "tphreg" "tpspline" "transreg" "tree" "ttest"
+		    "ucm"
+		    "varclus" "varcomp" "variogram" "varmax"
+		    "x11" "x12"
 		) 'words)) font-lock-constant-face)   
 
 ;       (cons (concat
@@ -458,7 +460,7 @@ number."
 		"keep" 
 		"label" "length" "libname" "like" "link" "lsmeans" ; "le" "lt"
 		"manova" "means" "merge" "missing" "model" "modify" 
-		"not" "note" "null" ; "ne" 
+		"not" "null" ; "ne" "note" 
 		"ods" "options" "or" "output" "otherwise" 
 		"pageby" "plot" "put" 
 		"random" "rename" "repeated" "retain"

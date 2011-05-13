@@ -7,7 +7,7 @@
 
 ;; Original Author: A.J. Rossini <rossini@biostat.washington.edu>
 ;; Created: 26 Aug 1997
-;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
+;; Maintainers: ESS-core <ESS-core@r-project.org>
 
 ;; This file is part of ESS (Emacs Speaks Statistics).
 
@@ -254,8 +254,8 @@ when \\[ess-toggle-S-assign-key] is called.")
 
 (defun S-comment-indent ()
   "Indentation for S comments."
-
-  (if (looking-at "###")
+  (if (or (looking-at "###")
+      (and (looking-at "#!") (= 1 (line-number-at-pos))))
       (current-column)
     (if (looking-at "##")
 	(let ((tem (S-calculate-indent)))
@@ -277,25 +277,28 @@ Return the amount the indentation changed by."
 	   (setq indent (current-indentation)))
 	  (t
 	   (skip-chars-forward " \t")
-	   (if (and ess-fancy-comments (looking-at "###"))
-	       (setq indent 0))
-	   (if (and ess-fancy-comments
-		    (looking-at "#")
-		    (not (looking-at "##")))
-	       (setq indent comment-column)
-	     (if (eq indent t) (setq indent 0))
-	     (if (listp indent) (setq indent (car indent)))
-	     (cond ((and (looking-at "else\\b")
-			 (not (looking-at "else\\s_")))
-		    (setq indent (save-excursion
-				   (ess-backward-to-start-of-if)
-				   (+ ess-else-offset (current-indentation)))))
-		   ((= (following-char) ?})
-		    (setq indent
-			  (+ indent
-			     (- ess-close-brace-offset ess-indent-level))))
-		   ((= (following-char) ?{)
-		    (setq indent (+ indent ess-brace-offset)))))))
+	   (cond ((and ess-fancy-comments ;; ### or #!
+		       (or (looking-at "###")
+			   (and (looking-at "#!") (= 1 (line-number-at-pos)))))
+		  (setq indent 0))
+		 ;; Single # comment
+		 ((and ess-fancy-comments
+		       (looking-at "#") (not (looking-at "##")))
+		  (setq indent comment-column))
+		 (t
+		  (if (eq indent t) (setq indent 0))
+		  (if (listp indent) (setq indent (car indent)))
+		  (cond ((and (looking-at "else\\b")
+			      (not (looking-at "else\\s_")))
+			 (setq indent (save-excursion
+					(ess-backward-to-start-of-if)
+					(+ ess-else-offset (current-indentation)))))
+			((= (following-char) ?})
+			 (setq indent
+			       (+ indent
+				  (- ess-close-brace-offset ess-indent-level))))
+			((= (following-char) ?{)
+			 (setq indent (+ indent ess-brace-offset))))))))
     (skip-chars-forward " \t")
     (setq shift-amt (- indent (current-column)))
     (if (zerop shift-amt)
@@ -445,6 +448,26 @@ Uses the file given by the variable `ess-function-outline-file'."
       (if (search-forward "$D$" nil t)
 	  (replace-match (ess-time-string 'clock) 'not-upcase 'literal)))
     (goto-char (1+ oldpos))))
+
+
+(defun ess-use-this-dir ()
+  "Synchronise the current directory of the S or R process to the one of the current
+buffer. If that buffer has no associated *R* process, provide a message."
+  (interactive)
+  (if ess-local-process-name
+      (let ((cmd (format "setwd('%s')\n" default-directory))
+	    )
+	(unless (string= ess-language "S")
+	  ;; FIXME: generalize this for Stata, SAS, Xlispstat... -- then move to ess-mode.el
+	  (error
+	   "ESS setting working directory in *%s* not yet implemented for language %s"
+	   ess-local-process-name ess-language))
+	(ess-command cmd)
+	(message "Directory of *%s* process set to %s"
+		 ess-local-process-name default-directory))
+        ;; no local process
+    (message "No *%s* process associated with this buffer." ess-dialect)))
+
 
 ;;*;; S/R  Pretty-Editing
 
@@ -716,7 +739,10 @@ and I need to relearn emacs lisp (but I had to, anyway."
 	    (set (make-local-variable 'fill-nobreak-predicate)
 		 'ess-inside-string-p)
 	    (set (make-local-variable 'normal-auto-fill-function)
-		 'ess-do-auto-fill)))
+		 'ess-do-auto-fill)
+	    (when (string= ess-language "S");; <- is this needed at all here?
+	      (local-set-key "\M-\r" 'ess-use-this-dir))
+	    ))
 
 (provide 'ess-s-l)
 
