@@ -6,7 +6,7 @@
 ;; Original Author: Stephen Eglen
 ;; Created: 2004-05-06
 ;; Revised: 2009-03-16
-;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
+;; Maintainers: ESS-core <ESS-core@r-project.org>
 
 ;; This file is part of ESS
 
@@ -89,9 +89,12 @@ For beginners, this is probably better set to a non-nil value."
 
 (defcustom ess-toolbar-items
   '( (R   "startr"  "Start R process")
-     (S   "spluslogo" "Start S process")
+     ;;(S   "spluslogo" "Start S process")
+     (S   "splus_letter_small" "Start S process")
      (ess-eval-line-and-step   "rline" "Eval line & step")
      (ess-eval-region   "rregion" "Eval region")
+     (ess-eval-function-or-paragraph-and-step "rregion"
+        "Eval function or paragraph and step")
      (ess-load-file   "rbuffer" "Load file")
      (ess-eval-function   "rfunction" "Eval function")
      (ess-switch-to-ESS   "switch_ess" "Switch to ESS buffer"))
