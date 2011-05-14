@@ -4,7 +4,7 @@
 ;;	Maechler, Kurt Hornik, Rodney Sparapani, and Stephen Eglen.
 
 ;; Original Author: Rodney A. Sparapani
-;; Maintainer: ESS-core@stat.math.ethz.ch
+;; Maintainer: ESS-core@r-project.org
 ;; Created: 17 November 1999
 ;; Keywords: SAS
 
@@ -567,7 +567,7 @@ current buffer if nil."
 	  (if ess-tmp-glyph (progn
 		(switch-to-buffer (file-name-nondirectory ess-tmp-graph))
 		(ess-xemacs-insert-glyph
-		    (make-glyph (vector ess-tmp-glyph :file ess-tmp-graph))))    
+		    (make-glyph (vector ess-tmp-glyph :file ess-tmp-graph))))
 
           ;;else use the appropriate graphics file image viewer
 	    (while (< ess-tmp-counter ess-tmp-length)
@@ -595,12 +595,12 @@ current buffer if nil."
 
             (comint-send-input))))))))
 
-(defun ess-sas-file-path ()
+(defun ess-sas-file-path (&optional force)
  "Define `ess-sas-file-path' to be the current buffer depending on suffix."
   (interactive)
 
   (save-match-data (let ((ess-sas-temp-file (expand-file-name (buffer-name))))
-    (if (string-match ess-sas-suffix-regexp ess-sas-temp-file) ;;(progn
+    (if (or force (string-match ess-sas-suffix-regexp ess-sas-temp-file)) ;;(progn
 	(setq ess-sas-file-path
 	   (nth 0 (split-string ess-sas-temp-file "[<]")))))))
 	;; (setq ess-directory (file-name-directory ess-sas-file-path)))))))
@@ -668,7 +668,7 @@ current buffer if nil."
 
 	      (if revert
 		  (if (and (> ess-sas-log-max 0) (string-equal suffix "log")
-			   (> (ess-num-or-zero (nth 7 (file-attributes ess-sas-temp-file))) 
+			   (> (ess-num-or-zero (nth 7 (file-attributes ess-sas-temp-file)))
 			      ess-sas-log-max))
 		      (progn
 			(insert-file-contents ess-sas-temp-file nil 0
@@ -877,7 +877,7 @@ optional argument is non-nil, then set-buffer rather than switch."
 (defun ess-sas-rtf-portrait (&optional ess-tmp-font-size)
 "Creates an MS RTF portrait file from the current buffer."
     (interactive)
-    (ess-sas-file-path)
+    (ess-sas-file-path t)
     (ess-revert-wisely)
 
     (if (equal ess-tmp-font-size nil)
@@ -891,7 +891,8 @@ optional argument is non-nil, then set-buffer rather than switch."
 	(goto-char (point-min))
 	(replace-regexp "\\\\fmodern .*;" (concat "\\\\fmodern " ess-sas-rtf-font-name ";"))
 	(goto-line 2)
-	(insert "\\margl720\\margr720\\margt720\\margb720\n")
+	(if (string-match ess-sas-suffix-regexp ess-sas-file-path)
+	    (insert "\\margl720\\margr720\\margt720\\margb720\n"))
         (goto-char (point-min))
 
         (while (replace-regexp "\\\\fs[0-9]+" (concat "\\\\fs" ess-tmp-font-size)) nil)
@@ -1132,9 +1133,9 @@ Keep in mind that the maximum command line length in MS-DOS is
 (defun ess-sas-toggle-sas-log-mode ()
   "Toggle SAS-log-mode for .log files."
   (interactive)
-  
+
   (ess-sas-goto-log)
-  (kill-buffer nil)  
+  (kill-buffer nil)
 
 ;  (if (equal (cdr (assoc "\\.[lL][oO][gG]\\'" auto-mode-alist)) 'SAS-log-mode) (progn
 ;      (setq auto-mode-alist (delete '("\\.[lL][oO][gG]\\'" . SAS-log-mode) auto-mode-alist))
@@ -1147,7 +1148,7 @@ Keep in mind that the maximum command line length in MS-DOS is
 ;      (font-lock-mode 1)
 ;      (font-lock-fontify-buffer))
 
-  (if (equal (cdr (assoc "\\.[lL][oO][gG]\\'" auto-mode-alist)) 'SAS-log-mode) 
+  (if (equal (cdr (assoc "\\.[lL][oO][gG]\\'" auto-mode-alist)) 'SAS-log-mode)
       (setq auto-mode-alist (delete '("\\.[lL][oO][gG]\\'" . SAS-log-mode) auto-mode-alist))
       (setq auto-mode-alist (append '(("\\.[lL][oO][gG]\\'" . SAS-log-mode)) auto-mode-alist)))
   (ess-sas-goto-log))

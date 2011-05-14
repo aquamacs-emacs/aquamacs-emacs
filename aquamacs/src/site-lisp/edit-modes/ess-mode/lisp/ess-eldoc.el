@@ -5,7 +5,7 @@
 
 ;; Original Author: Stephen Eglen
 ;; Created: 2007-06-30
-;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
+;; Maintainers: ESS-core <ESS-core@r-project.org>
 
 ;; This file is part of ESS
 
@@ -29,16 +29,16 @@
 ;; buffers.  Eldoc is used in Emacs lisp buffers to show the function
 ;; arglist and docstrings for variables.  To try it, view an emacs
 ;; lisp buffer, and then do M-x turn-on-eldoc-mode, and move over
-;; function and variable namess.
+;; function and variable names.
 
 ;; This file extends eldoc to work in R buffers.  It currently uses
-;; Sven's essd-r-args.el file to retrieve args for a given R function
+;; Sven's ess-r-args.el file to retrieve args for a given R function
 ;; (via ess-r-args-get).  Note that it works slightly different to
 ;; Sven's code, in that you just need to have the point over the name
 ;; of an R function, or inside its arguments list, for eldoc to show
 ;; the arg list.
 
-;; To use this functionality, simply add 
+;; To use this functionality, simply add
 ;;
 ;; (require 'ess-eldoc)
 ;;
@@ -68,6 +68,11 @@
 ;; those function names are reported instead.  This might be seen as
 ;; undesirable behaviour, in which case a solution would be to only
 ;; look up the function name if it is followed by (.
+
+;; If you want to use this feature in *R* buffers, add the following
+;; to .emacs:
+;; (add-hook 'inferior-ess-mode-hook 'ess-use-eldoc)
+
 
 ;; In the current version, I do not cache the arg list, but that was
 ;; done in an earlier version, to save repeated calls to
@@ -104,7 +109,7 @@
 ;; following two defvars are not currently used.
 (defvar ess-eldoc-last-name nil
   "Name of the last function looked up in eldoc.
-We remember this to see whether we need to look up documentation, or used 
+We remember this to see whether we need to look up documentation, or used
 the cached value in `ess-eldoc-last-args'.")
 
 (defvar ess-eldoc-last-args nil
@@ -119,15 +124,15 @@ to look up any doc strings."
 	name)
     (when ess-local-process-name
       (setq name (ess-guess-fun))		;guess the word at point.
-      (unless (= (length name) 0) 
+      (unless (= (length name) 0)
 	;; look up function name at point.
 	(setq doc (ess-r-args-get name)))
       (unless doc
 	;; no function found at point; see if we are in a arg-list
 	;; of a function.
 	(save-excursion
-	  (condition-case nil 
-	      (progn 
+	  (condition-case nil
+	      (progn
 		(up-list -1)
 		(setq name (ess-guess-fun))
 		(setq doc (ess-r-args-get name)))
@@ -136,7 +141,7 @@ to look up any doc strings."
     (if doc
 	(concat name ": " doc)
       doc)))
-  
+
 (defun ess-eldoc-2 ()
   ;; simple, old version.
   (interactive)
@@ -155,9 +160,9 @@ This is the first version; works only on function name, not within arg list."
   (if ess-current-process-name
       (progn
 	(setq name (ess-guess-fun))		;guess the word at point.
-	(if (equal (length name) 0) 
+	(if (equal (length name) 0)
 	    nil
-	  ;; else 
+	  ;; else
 	  (unless (equal name ess-eldoc-last-name)
 	    ;; name is different to the last name we lookedup, so get
 	    ;; new args from R and store them.
@@ -183,12 +188,11 @@ This is the first version; works only on function name, not within arg list."
 (defun ess-use-eldoc ()
   "Switch on eldoc for ESS (R mode only)."
   (interactive)
-  (when (equal ess-dialect "R")
-    (set (make-local-variable 'eldoc-documentation-function) 'ess-eldoc)
-    (eldoc-mode t)))
+  (set (make-local-variable 'eldoc-documentation-function) 'ess-eldoc)
+  (eldoc-mode t))
 
 ;; For now, while testing, switch on ess-eldoc.  Later, ths could be removed
 ;; and instead ask user to add it.
-(add-hook 'ess-mode-hook 'ess-use-eldoc)
+(add-hook 'R-mode-hook 'ess-use-eldoc)
 
 (provide 'ess-eldoc)

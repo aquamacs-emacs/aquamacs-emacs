@@ -1,11 +1,11 @@
 ;;; ess-custom.el --- Customize variables for ESS
 
-;; Copyright (C) 1997--2006 A.J. Rossini, Rich M. Heiberger, Martin
+;; Copyright (C) 1997--2010 A.J. Rossini, Rich M. Heiberger, Martin
 ;;	Maechler, Kurt Hornik, Rodney Sparapani, and Stephen Eglen.
 
 ;; Original Author: A.J. Rossini <blindglobe@gmail.com>
 ;; Created: 05 June 2000
-;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
+;; Maintainers: ESS-core <ESS-core@r-project.org>
 
 ;; Keywords: editing and process modes.
 
@@ -117,9 +117,14 @@
   :prefix "ess-" ;; << -- added for ESS integration  FIXME??
   :group 'tools)
 
+(defgroup ess-sweave nil
+  "Mode for editing Sweave (*.[SR]nw) files."
+  :group 'ess-S
+  :prefix "ess-")
+
 ;; Variables (not user-changeable)
 
-(defvar ess-version "5.8"
+(defvar ess-version "5.13"
   "Version of ESS currently loaded.")
 
 (defvar no-doc
@@ -176,7 +181,7 @@ as `ess-imenu-use-S'."
   :type 'boolean)
 
 (defcustom ess-display-buffer-reuse-frames t
-  "Non-nil means \[[display-buffer] reuses existing frames; see
+  "Non-nil means \\[display-buffer] reuses existing frames; see
 `display-buffer-reuse-frames'."
   :group 'ess
   :type 'boolean)
@@ -367,45 +372,31 @@ regardless of where in the line point is when the TAB command is used."
   :type 'boolean
   :group 'ess-edit)
 
-(defcustom ess-indent-level 2
-  "Indentation of S statements with respect to containing block."
-  :type 'integer
-  :group 'ess-edit)
+(defvar ess-indent-level 2
+  "Indentation of S statements with respect to containing block.")
 
-(defcustom ess-brace-imaginary-offset 0
-  "Imagined indentation of an open brace following a statement."
-  :type 'integer
-  :group 'ess-edit)
+(defvar ess-brace-imaginary-offset 0
+  "Imagined indentation of an open brace following a statement.")
 
-(defcustom ess-brace-offset 0
+(defvar ess-brace-offset 0
   "Extra indentation for open braces.
-Compares with other text in same context."
-  :type 'integer
-  :group 'ess-edit)
+Compares with other text in same context.")
 
-(defcustom ess-continued-statement-offset 2
-  "Extra indent for lines not starting new statements."
-  :type 'integer
-  :group 'ess-edit)
+(defvar ess-continued-statement-offset 2
+  "Extra indent for lines not starting new statements.")
 
-(defcustom ess-continued-brace-offset 0
+(defvar ess-continued-brace-offset 0
   "Extra indent for substatements that start with open-braces.
-This is in addition to ess-continued-statement-offset."
-  :type 'integer
-  :group 'ess-edit)
+This is in addition to ess-continued-statement-offset.")
 
-(defcustom ess-arg-function-offset 2
+(defvar ess-arg-function-offset 2
   "Extra indent for internal substatements of function `foo' that called
 in `arg=foo(...)' form.
-If not number, the statements are indented at open-parenthesis following foo."
-  :type 'integer
-  :group 'ess-edit)
+If not number, the statements are indented at open-parenthesis following foo.")
 
 ;;added rmh 2Nov97 at request of Terry Therneau
-(defcustom ess-close-brace-offset 0
-  "Extra indentation for closing braces."
-  :type 'integer
-  :group 'ess-edit)
+(defvar ess-close-brace-offset 0
+  "Extra indentation for closing braces.")
 
 ;;added rmh 2Nov97 at request of Terry Therneau
 (defcustom ess-fancy-comments t
@@ -417,24 +408,17 @@ If not number, the statements are indented at open-parenthesis following foo."
 ;; PeterDalgaard, 1Apr97 :
 ;;The default ess-else-offset should be 0, not 2 IMHO (try looking at
 ;;the ls() function, for instance).  Was 2.
-(defcustom ess-else-offset 0
-  "Extra indent for `else' lines."
-  :type 'integer
-  :group 'ess-edit)
+(defvar ess-else-offset 0
+  "Extra indent for `else' lines.")
 
-(defcustom ess-expression-offset 4
+(defvar ess-expression-offset 4
   "Extra indent for internal substatements of `expression' that specified
 in `obj <- expression(...)' form.
 If not number, the statements are indented at open-parenthesis following
-`expression'."
-  :type 'integer
-  :group 'ess-edit)
+`expression'.")
 
 ;;;*;;; Editing styles
 
-;;; **FIXME**  The following NEEDS to be customized.
-;; SJE: I disagree; this variable should not be customized; individual vars,
-;; such as ess-indent-level are already customizable.
 (defvar ess-default-style-list
   (list 'DEFAULT
 	(cons 'ess-indent-level ess-indent-level)
@@ -495,16 +479,35 @@ If not number, the statements are indented at open-parenthesis following
 	       (ess-else-offset . 0)
 	       (ess-close-brace-offset . 2))))
   "Predefined formatting styles for ESS code.
-Values for all groups, except DEFAULT, are fixed.
-To change the value of variables in the DEFAULT group, change
-the corresponding variables, e.g. `ess-indent-level'.
-The default style in use is controlled by `ess-default-style'.")
+Values for all groups, except OWN, are fixed.  To change the
+value of variables in the OWN group, customize the variable
+`ess-own-style-list'.  The default style in use is controlled by
+`ess-default-style'.")
+
+(defun ess-add-style (key entries)
+  "Add a new style to `ess-style-list', with the key KEY.
+Remove any existing entry with the same KEY before adding the new one.
+This can be used"
+  (setq ess-style-alist (assq-delete-all key ess-style-alist))
+  (add-to-list 'ess-style-alist (cons key entries)))
+
+(defcustom ess-own-style-list (cdr ess-default-style-list)
+  "Indentation variables for your own style that can be changed.
+Set `ess-default-style' to 'OWN to use these values.  To change
+these values, use the customize interface."
+  :group 'ess-edit
+  :type '(repeat (cons symbol integer))
+  :initialize 'custom-initialize-set
+  :set (lambda (symbol value)
+	 (set symbol value)
+	 (ess-add-style 'OWN value)))
 
 (defcustom ess-default-style 'DEFAULT
   "The default value of `ess-style'.
 See the variable `ess-style-alist' for how these groups (DEFAULT,
-GNU, BSD, ...) map onto different settings for variables."
+OWN, GNU, BSD, ...) map onto different settings for variables."
   :type '(choice (const DEFAULT)
+		 (const OWN)
 		 (const GNU)
 		 (const BSD)
 		 (const K&R)
@@ -607,6 +610,11 @@ Good for evaluating ESS code."
   :group 'ess-hooks
   :type 'hook)
 
+(defcustom R-mode-hook nil
+  "Hook run when entering R mode."
+  :type 'hook
+  :group 'ess-R)
+
 (defcustom Rnw-mode-hook nil
   "Hook run when entering Rnw mode."
   :type 'hook
@@ -628,27 +636,31 @@ If nil, ESS will try finding one from a list."
 
 ;; ---- ./ess-roxy.el : ------------
 
-(defcustom ess-roxy-tags-noparam '("export")
+(defcustom ess-roxy-tags-noparam '("export" "nord")
   "The tags used in roxygen fields that can be used alone.  Used
 to decide highlighting and tag completion."
   :group 'ess-roxy
   :type '(repeat string))
 
 (defcustom ess-roxy-tags-param '("author" "aliases" "concept"
-				 "examples" "format" "keywords" 
-				 "method" "exportMethod" 
+				 "examples" "format" "keywords"
+				 "method" "exportMethod"
 				 "name" "note" "param"
-				 "include" "references" "return" 
-				 "seealso" "source" "docType" 
-				 "title" "TODO" "usage")
-  "The tags used in roxygen fields that require a parameter. 
+				 "include" "references" "return"
+				 "seealso" "source" "docType"
+				 "title" "TODO" "usage" "import"
+                                 "exportClass" "exportPattern" "S3method"
+                                 "importFrom" "importClassesFrom"
+                                 "importMethodsFrom" "useDynLib"
+                                 "rdname" "slot")
+  "The tags used in roxygen fields that require a parameter.
 Used to decide highlighting and tag completion."
   :group 'ess-roxy
   :type '(repeat string))
 
-(defcustom ess-roxy-template-alist 
-  (list (cons "description"  "<description>")
-	(cons "details" "<details>")
+(defcustom ess-roxy-template-alist
+  (list (cons "description"  ".. content for \\description{} (no empty lines) ..")
+	(cons "details" ".. content for \\details{} ..")
 	(cons "title" "")
 	(cons "param"  "")
 	(cons "return" "")
@@ -661,6 +673,12 @@ therefore also be at the beginning of this template to give
 syntactically correct roxygen entries)"
   :group 'ess-roxy
   :type '(alist :value-type (group string)))
+
+(defcustom ess-roxy-fill-param-p nil
+  "Non-nil causes parameter descriptions to be filled (word-wrapped) upon `ess-roxy-update-entry'."
+  :group 'ess-roxy
+  :type '(choice (const :tag "Off" nil)
+                 (const :tag "On" t)))
 
 (defcustom ess-roxy-hide-show-p nil
   "Non-nil means ess-roxy uses hs-minor-mode for block hiding with TAB."
@@ -675,9 +693,16 @@ syntactically correct roxygen entries)"
                  (const :tag "On" t)))
 
 (defcustom ess-roxy-str "##'"
-  "String to insert before each line in a roxygen block."
+  "Prefix string to insert before each line in a roxygen block."
   :group 'ess-roxy
   :type 'string)
+
+(defcustom ess-swv-pdflatex-commands '("texi2pdf" "pdflatex" "make")
+  "Commands to run a version of pdflatex in  \\[ess-swv-PDF];
+the first entry is the default command."
+  :group 'ess-sweave
+  :type 'list)
+
 
  ; System variables
 
@@ -776,14 +801,23 @@ Used in e.g., \\[ess-execute-objects] or \\[ess-display-help-on-object]."
   :type 'string)
 
 
-(defcustom ess-program-files
+(defcustom ess-program-files ;; 32 bit version
   (if ess-microsoft-p
-      (w32-short-file-name (getenv "ProgramFiles"))
+      (if (getenv "ProgramW6432")
+	  (w32-short-file-name (getenv "ProgramFiles(x86)"));; always 32 on 64 bit OS
+	(w32-short-file-name (getenv "ProgramFiles")))      ;; always 32 on 32 bit OS
     nil)
-  "Safe (no embedded blanks) 8.3 name that works across internationalization."
+  "Safe (no embedded blanks) 8.3 name for 32-bit programs that works across internationalization."
   :group 'ess
   :type 'string)
 
+(defcustom ess-program-files-64 ;; 64 bit version
+  (if (and ess-microsoft-p (getenv "ProgramW6432"))
+      (w32-short-file-name (getenv "ProgramW6432"))
+    nil)
+  "Safe (no embedded blanks) 8.3 name for 64-bit programs that works across internationalization."
+  :group 'ess
+  :type 'string)
 
 (defcustom ess-rterm-version-paths nil
   "Stores the full path file names of Rterm versions, computed via
@@ -817,6 +851,7 @@ file."
        "/Insightful/splus8.0.4"
        "/Insightful/splus80"
        "/TIBCO/splus81"
+       "/TIBCO/splus82"
 ))
   "List of possible values of the environment variable SHOME for recent
 releases of S-Plus.  These are the default locations for several
@@ -825,6 +860,27 @@ correspond to a directory on your machine, running the function
 `ess-sqpe-versions-create' will create a function, for example, `M-x
 splus70', that will start the corresponding version Sqpe inside an
 emacs buffer in iESS[S] mode.  If you have versions of S-Plus in
+locations other than these default values, redefine this variable with
+a `custom-set-variables' statement in your site-start.el or .emacs
+file.  The list of functions actually created appears in the *ESS*
+buffer and should appear in the \"ESS / Start Process / Other\"
+menu."
+  :group 'ess-SPLUS
+  :type '(repeat string))
+
+(defcustom ess-SHOME-versions-64
+    ;;   ess-program-files-64  ~= "c:/progra~1"  for typical locales/languages
+    (mapcar
+     '(lambda (ch) (concat ess-program-files-64 ch))
+     '("/TIBCO/splus82"
+))
+  "List of possible values of the environment variable SHOME for recent
+releases of 64-bit S-Plus.  These are the default locations for several
+current and recent releases of S-Plus.  If any of these pathnames
+correspond to a directory on your machine, running the function
+`ess-sqpe-versions-create' will create a function, for example, `M-x
+splus70', that will start the corresponding version Sqpe inside an
+emacs buffer in iESS[S] mode.  If you have versions of 64-bit S-Plus in
 locations other than these default values, redefine this variable with
 a `custom-set-variables' statement in your site-start.el or .emacs
 file.  The list of functions actually created appears in the *ESS*
@@ -921,7 +977,7 @@ different computer."
 
 (if ess-microsoft-p
     (defcustom inferior-S+6-program-name
-      (concat ess-program-files "/TIBCO/splus81/cmd/Splus.exe")
+      (concat ess-program-files "/TIBCO/splus82/cmd/Splus.exe")
       "Program name to invoke an external GUI S+6 for Windows.
 The default value is correct for a default installation of
 S-Plus 8.1 and with bash as the shell.
@@ -960,13 +1016,13 @@ in S+6 for Windows Commands window and in Sqpe+6 for Windows buffer."
   :type 'string)
 
 (defcustom inferior-Sqpe+6-program-name
-  (concat ess-program-files "/TIBCO/splus81/cmd/Sqpe.exe")
+  (concat ess-program-files "/TIBCO/splus82/cmd/Sqpe.exe")
   "Program name for invoking an inferior ESS with Sqpe+6() for Windows."
   :group 'ess-S
   :type 'string)
 
 (defcustom inferior-Sqpe+6-SHOME-name
-  (if ess-microsoft-p (concat ess-program-files "/TIBCO/splus81" ""))
+  (if ess-microsoft-p (concat ess-program-files "/TIBCO/splus82" ""))
   "SHOME name for invoking an inferior ESS with Sqpe+6() for Windows.
 The default value is correct for a default installation of
 S-Plus 8.1.  For any other version or location,
@@ -1046,7 +1102,7 @@ order for it to work right.  And Emacs is too smart for it."
 ;;; ess-editor and ess-pager,
 ;;; and inferior-ess-language-start
 ;;; apply in principle to the 15 files essd[s-]*.el
-;;; Several of the files (essd-sp4.el and essd-sp6w.el) have more
+;;; Several of the files (ess-sp4-d.el and ess-sp6w-d.el) have more
 ;;; than one *-customize-alist.
 ;;; These variables are currently used only with the S language files for
 ;;; S S-Plus R.
@@ -1157,6 +1213,10 @@ corresponding program.")
 (setq-default inferior-ess-program inferior-S-program-name)
 
 
+(defvar inferior-R-version "R (newest)"
+  "A (short) name of the current R version.  A global variable for
+ESS internal communication.")
+
 (defvar inferior-ess-start-args ""
   "String of arguments passed to the ESS process.
 If you wish to pass arguments to a process, see e.g. `inferior-R-args'.")
@@ -1204,14 +1264,16 @@ Otherwise, they get their own temporary buffer."
   :type 'boolean)
 
 (defcustom ess-eval-visibly-p t
-  "Non-nil means ess-eval- commands display commands in the process buffer."
+  "Non-nil means ess-eval- commands display commands in the process buffer.
+Experienced users often change / customize it to 'nil'."
   :group 'ess-proc
   :type 'boolean)
 
-(defcustom ess-eval-deactivate-mark nil
+(defcustom ess-eval-deactivate-mark (fboundp 'deactivate-mark); was nil till 2010-03-22
   "Non-nil means that after ess-eval- commands the mark is deactivated,
- (see \[[deactivate-mark]).  This only affects the situation where
-`transient-mark-mode' is non-nil."
+ (see \\[deactivate-mark]).  The default is true since ESS version 5.9,
+ except on XEmacs which doesn't have \\[deactivate-mark] and friends:
+ only affects the situation where `transient-mark-mode' is non-nil."
   :group 'ess-proc
   :type 'boolean)
 
@@ -1237,7 +1299,7 @@ of Emacs until the code has been successfully evaluated."
 
 (defcustom ess-eval-ddeclient-sleep 0.06
   "If non-nil, a number specifying *seconds* to wait after certain
-\[[ess-eval-linewise-ddeclient] calls, such as those at startup."
+\\[ess-eval-linewise-ddeclient] calls, such as those at startup."
 ;; i.e this currently only applies to (if microsoft-p ...) !
   :group 'ess-proc
   :type '(choice (const nil) number))
@@ -1413,6 +1475,12 @@ session.")
 
 (make-variable-buffer-local 'ess-object-list)
 
+(defvar ess-help-topics-list nil
+  ;; List of currently known help topics.
+  "Cache of help topics")
+
+(make-variable-buffer-local 'ess-help-topics-list)
+
 ;;*;; Miscellaneous system variables
 
 (defvar ess-temp-point nil
@@ -1464,7 +1532,7 @@ dialects' alists.  Increase this, if you have a fast(er) machine."
   :type 'integer)
 
 ;; NOTA BENE: Other languages/dialect currently set `ess-loop-timeout'
-;;            **directly** in their essd-*.el alist !!
+;;            **directly** in their ess-*-d.el alist !!
 
 ;;;*;;; Font-lock support
 
@@ -1737,7 +1805,7 @@ Defaults to `ess-S-non-functions'."
  ; ess-mode: editing S source
 
 ;;; This syntax table is required by ess-mode.el, ess-inf.el and
-;;; ess-trans.el, so we provide it here.
+;;; ess-trns.el, so we provide it here.
 (defvar ess-mode-syntax-table nil "Syntax table for `ess-mode'.")
 (make-variable-buffer-local 'ess-mode-syntax-table)
 
