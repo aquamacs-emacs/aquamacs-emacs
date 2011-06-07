@@ -937,7 +937,10 @@ ns_frame_list ()
     XSETFRAME (frame, f);
 
     if (!FRAMEP (frame))
-      abort ();
+      { /* Can this occur when in fullscreen mode? */
+	message1("ns_frame_list: window in NS window list is an EmacsWindow without valid frame.\n");
+	continue;
+      }
     frame_list = Fcons (frame, frame_list);
   }
   /* go through Vframe_list and add any missing frames */
