@@ -20,6 +20,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Miscellanea.   */
 
+#include "systime.h" /* for Time */
+
 struct glyph;
 struct frame;
 
@@ -235,7 +237,7 @@ struct input_event
   int modifiers;		/* See enum below for interpretation.  */
 
   Lisp_Object x, y;
-  unsigned long timestamp;
+  Time timestamp;
 
   /* This is padding just to put the frame_or_window field
      past the size of struct selection_input_event.  */
@@ -334,6 +336,22 @@ struct terminal
      Fset_terminal_coding_system_internal along with
      the member terminal_coding.  */
   Lisp_Object charset_list;
+
+  /* This is an association list containing the X selections that
+     Emacs might own on this terminal.  Each element has the form
+       (SELECTION-NAME SELECTION-VALUE SELECTION-TIMESTAMP FRAME)
+     SELECTION-NAME is a lisp symbol, whose name is the name of an X Atom.
+     SELECTION-VALUE is the value that emacs owns for that selection.
+      It may be any kind of Lisp object.
+     SELECTION-TIMESTAMP is the time at which emacs began owning this
+      selection, as a cons of two 16-bit numbers (making a 32 bit
+      time.)
+     FRAME is the frame for which we made the selection.  If there is
+      an entry in this alist, then it can be assumed that Emacs owns
+      that selection.
+     The only (eq) parts of this list that are visible from Lisp are
+    the selection-values.  */
+  Lisp_Object Vselection_alist;
 
   /* All fields before `next_terminal' should be Lisp_Object and are traced
      by the GC.  All fields afterwards are ignored by the GC.  */
@@ -465,7 +483,7 @@ struct terminal
                                enum scroll_bar_part *part,
                                Lisp_Object *x,
                                Lisp_Object *y,
-                               unsigned long *);
+                               Time *);
 
   /* The window system handling code should set this if the mouse has
      moved since the last call to the mouse_position_hook.  Calling that

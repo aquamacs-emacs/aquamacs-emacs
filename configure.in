@@ -364,17 +364,6 @@ case "${srcdir}" in
   *  ) srcdir="`(cd ${srcdir}; pwd)`" ;;
 esac
 
-#### Check if the source directory already has a configured system in it.
-if test `pwd` != `(cd ${srcdir} && pwd)` \
-   && test -f "${srcdir}/src/config.h" ; then
-  AC_MSG_WARN([[The directory tree `${srcdir}' is being used
-   as a build directory right now; it has been configured in its own
-   right.  To configure in another directory as well, you MUST
-   use GNU make.  If you do not have GNU make, then you must
-   now do `make distclean' in ${srcdir},
-   and then run $0 again.]])
-fi
-
 #### Given the configuration name, set machfile and opsysfile to the
 #### names of the m/*.h and s/*.h files we should use.
 
@@ -1370,6 +1359,10 @@ AC_SUBST(DEPFLAGS)
 AC_SUBST_FILE(deps_frag)
 
 
+lisp_frag=$srcdir/src/lisp.mk
+AC_SUBST_FILE(lisp_frag)
+
+
 dnl checks for operating system services
 AC_SYS_LONG_FILE_NAMES
 
@@ -1503,7 +1496,6 @@ AC_SUBST(TEMACS_LDFLAGS2)
 ns_frag=/dev/null
 NS_OBJ=
 NS_OBJC_OBJ=
-NS_SUPPORT=
 if test "${HAVE_NS}" = yes; then
   window_system=nextstep
   with_xft=no
@@ -1516,13 +1508,11 @@ if test "${HAVE_NS}" = yes; then
   ns_frag=$srcdir/src/ns.mk
   NS_OBJ="fontset.o fringe.o image.o"
   NS_OBJC_OBJ="nsterm.o nsfns.o nsmenu.o nsselect.o nsimage.o nsfont.o"
-  NS_SUPPORT="\${lispsource}/emacs-lisp/easymenu.elc \${lispsource}/term/ns-win.elc"
 fi
 CFLAGS="$tmp_CFLAGS"
 CPPFLAGS="$tmp_CPPFLAGS"
 AC_SUBST(NS_OBJ)
 AC_SUBST(NS_OBJC_OBJ)
-AC_SUBST(NS_SUPPORT)
 AC_SUBST(LIB_STANDARD)
 AC_SUBST_FILE(ns_frag)
 
@@ -1977,7 +1967,7 @@ AC_SUBST(LIBSELINUX_LIBS)
 HAVE_GNUTLS=no
 HAVE_GNUTLS_CALLBACK_CERTIFICATE_VERIFY=no
 if test "${with_gnutls}" = "yes" ; then
-  PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 2.2.4], HAVE_GNUTLS=yes, HAVE_GNUTLS=no)
+  PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 2.6.0], HAVE_GNUTLS=yes, HAVE_GNUTLS=no)
   if test "${HAVE_GNUTLS}" = "yes"; then
     AC_DEFINE(HAVE_GNUTLS, 1, [Define if using GnuTLS.])
   fi
@@ -2036,8 +2026,11 @@ if test x"${USE_X_TOOLKIT}" = xmaybe || test x"${USE_X_TOOLKIT}" = xLUCID; then
     elif test x"${USE_X_TOOLKIT}" = xLUCID; then
       AC_MSG_ERROR([Lucid toolkit requires X11/Xaw include files])
     else
-      AC_MSG_RESULT([no; do not use toolkit by default])
-      USE_X_TOOLKIT=none
+      AC_MSG_ERROR([No X toolkit could be found.
+If you are sure you want Emacs compiled without an X toolkit, pass
+  --with-x-toolkit=no
+to configure.  Otherwise, install the development libraries for the toolkit
+that you want to use (e.g. Gtk+) and re-run configure.])
     fi
   fi
 fi
@@ -2473,7 +2466,6 @@ fi
 ### Use -lgpm if available, unless `--with-gpm=no'.
 HAVE_GPM=no
 LIBGPM=
-MOUSE_SUPPORT=
 if test "${with_gpm}" != "no"; then
   AC_CHECK_HEADER(gpm.h,
     [AC_CHECK_LIB(gpm, Gpm_Open, HAVE_GPM=yes)])
@@ -2481,8 +2473,6 @@ if test "${with_gpm}" != "no"; then
   if test "${HAVE_GPM}" = "yes"; then
     AC_DEFINE(HAVE_GPM, 1, [Define to 1 if you have the gpm library (-lgpm).])
     LIBGPM=-lgpm
-    ## May be reset below.
-    MOUSE_SUPPORT="\$(GPM_MOUSE_SUPPORT)"
   fi
 fi
 AC_SUBST(LIBGPM)
@@ -3418,23 +3408,11 @@ fi                              dnl if $GCC
 AC_SUBST(LIB_GCC)
 
 
-TOOLTIP_SUPPORT=
-WINDOW_SUPPORT=
 ## If we're using X11/GNUstep, define some consequences.
 if test "$HAVE_X_WINDOWS" = "yes" || test "$HAVE_NS" = "yes"; then
   AC_DEFINE(HAVE_WINDOW_SYSTEM, 1, [Define if you have a window system.])
   AC_DEFINE(HAVE_MOUSE, 1, [Define if you have mouse support.])
-  MOUSE_SUPPORT="\$(REAL_MOUSE_SUPPORT)"
-  TOOLTIP_SUPPORT="\${lispsource}/mouse.elc"
-
-  WINDOW_SUPPORT="\$(BASE_WINDOW_SUPPORT)"
-  test "$HAVE_X_WINDOWS" = "yes" && \
-    WINDOW_SUPPORT="$WINDOW_SUPPORT \$(X_WINDOW_SUPPORT)"
-
 fi
-AC_SUBST(MOUSE_SUPPORT)
-AC_SUBST(TOOLTIP_SUPPORT)
-AC_SUBST(WINDOW_SUPPORT)
 
 
 AH_TOP([/* GNU Emacs site configuration template file.
@@ -3518,7 +3496,8 @@ AH_BOTTOM([
 #endif
 
 /* These default definitions are good for almost all machines.
-   The exceptions override them in m/MACHINE.h.  */
+   Any exceptions should override them in m/MACHINE.h.
+   They must be usable in preprocessor conditionals.  */
 
 #ifndef BITS_PER_CHAR
 #define BITS_PER_CHAR 8
@@ -3528,9 +3507,6 @@ AH_BOTTOM([
 #define BITS_PER_SHORT 16
 #endif
 
-/* Note that lisp.h uses this in a preprocessor conditional, so it
-   would not work to use sizeof.  That being so, we do all of them
-   without sizeof, for uniformity's sake.  */
 #ifndef BITS_PER_INT
 #define BITS_PER_INT 32
 #endif
@@ -3541,6 +3517,10 @@ AH_BOTTOM([
 #else
 #define BITS_PER_LONG 32
 #endif
+#endif
+
+#if !defined BITS_PER_LONG_LONG && HAVE_LONG_LONG_INT
+#define BITS_PER_LONG_LONG 64
 #endif
 
 /* Define if the compiler supports function prototypes.  It may do so but
@@ -3681,7 +3661,7 @@ echo "  Does Emacs use -lgpm?                                   ${HAVE_GPM}"
 echo "  Does Emacs use -ldbus?                                  ${HAVE_DBUS}"
 echo "  Does Emacs use -lgconf?                                 ${HAVE_GCONF}"
 echo "  Does Emacs use -lselinux?                               ${HAVE_LIBSELINUX}"
-echo "  Does Emacs use -lgnutls?                                ${HAVE_GNUTLS}"
+echo "  Does Emacs use -lgnutls (2.6.x or higher)?              ${HAVE_GNUTLS}"
 echo "  Does Emacs use -lxml2?                                  ${HAVE_LIBXML2}"
 
 echo "  Does Emacs use -lfreetype?                              ${HAVE_FREETYPE}"
@@ -3721,10 +3701,34 @@ fi
 test "${exec_prefix}" != NONE &&
   exec_prefix=`echo "${exec_prefix}" | sed 's,\([^/]\)/*$,\1,'`]
 
+dnl Obviously there is duplication here wrt $SUBDIR_MAKEFILES.
+dnl You _can_ use that variable in AC_CONFIG_FILES, so long as any directory
+dnl using automake (ie lib/) is explicitly listed and not "hidden" in a variable
+dnl (else you get "no `Makefile.am' found for any configure output").
+dnl This will work, but you get a config.status that is not quite right
+dnl (see http://lists.gnu.org/archive/html/bug-autoconf/2008-08/msg00028.html).
+dnl That doesn't have any obvious consequences for Emacs, but on the whole
+dnl it seems better to just live with the duplication.
+SUBDIR_MAKEFILES="lib/Makefile lib-src/Makefile oldXMenu/Makefile doc/emacs/Makefile doc/misc/Makefile doc/lispintro/Makefile doc/lispref/Makefile src/Makefile lwlib/Makefile lisp/Makefile leim/Makefile"
+
 AC_CONFIG_FILES([Makefile lib/Makefile lib-src/Makefile oldXMenu/Makefile \
-	doc/emacs/Makefile doc/misc/Makefile doc/lispintro/Makefile \
-	doc/lispref/Makefile src/Makefile \
-	lwlib/Makefile lisp/Makefile leim/Makefile test/automated/Makefile])
+       doc/emacs/Makefile doc/misc/Makefile doc/lispintro/Makefile \
+       doc/lispref/Makefile src/Makefile lwlib/Makefile lisp/Makefile \
+       leim/Makefile])
+
+dnl test/ is not present in release tarfiles.
+opt_makefile=test/automated/Makefile
+
+if test -f $srcdir/${opt_makefile}.in; then
+  SUBDIR_MAKEFILES="$SUBDIR_MAKEFILES $opt_makefile"
+  dnl Again, it's best not to use a variable.  Though you can add
+  dnl ", [], [opt_makefile='$opt_makefile']" and it should work.
+  AC_CONFIG_FILES([test/automated/Makefile])
+fi
+
+SUBDIR_MAKEFILES_IN=`echo " ${SUBDIR_MAKEFILES}" | sed -e 's| | $(srcdir)/|g' -e 's|Makefile|Makefile.in|g'`
+
+AC_SUBST(SUBDIR_MAKEFILES_IN)
 
 dnl Make the necessary directories, if they don't exist.
 AC_CONFIG_COMMANDS([mkdirs], [

@@ -326,7 +326,9 @@ Keymap to display on column and line numbers.")
        (standard-mode-line-format
 	(list
 	 "%e"
-	 (propertize "-" 'help-echo help-echo)
+	 `(:eval (if (display-graphic-p)
+		     ,(propertize " " 'help-echo help-echo)
+		   ,(propertize "-" 'help-echo help-echo)))
 	 'mode-line-mule-info
 	 'mode-line-client
 	 'mode-line-modified
@@ -651,9 +653,10 @@ is okay.  See `mode-line-format'.")
 
 (make-variable-buffer-local 'indent-tabs-mode)
 
-;; We have base64 and md5 functions built in now.
+;; We have base64, md5 and sha1 functions built in now.
 (provide 'base64)
 (provide 'md5)
+(provide 'sha1)
 (provide 'overlay '(display syntax-table field))
 (provide 'text-properties '(display syntax-table field point-entered))
 

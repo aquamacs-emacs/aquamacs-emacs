@@ -20,6 +20,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <setjmp.h>
+
+#include <intprops.h>
+
 #include "lisp.h"
 #include "intervals.h"
 #include "buffer.h"
@@ -566,32 +569,6 @@ copy_text (const unsigned char *from_addr, unsigned char *to_addr,
 	}
       return to_addr - initial_to_addr;
     }
-}
-
-/* Return the number of bytes it would take
-   to convert some single-byte text to multibyte.
-   The single-byte text consists of NBYTES bytes at PTR.  */
-
-EMACS_INT
-count_size_as_multibyte (const unsigned char *ptr, EMACS_INT nbytes)
-{
-  EMACS_INT i;
-  EMACS_INT outgoing_nbytes = 0;
-
-  for (i = 0; i < nbytes; i++)
-    {
-      unsigned int c = *ptr++;
-
-      if (ASCII_CHAR_P (c))
-	outgoing_nbytes++;
-      else
-	{
-	  c = BYTE8_TO_CHAR (c);
-	  outgoing_nbytes += CHAR_BYTES (c);
-	}
-    }
-
-  return outgoing_nbytes;
 }
 
 /* Insert a string of specified length before point.

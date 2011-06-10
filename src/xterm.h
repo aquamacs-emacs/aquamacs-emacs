@@ -254,7 +254,7 @@ struct x_display_info
   Atom Xatom_CLIPBOARD, Xatom_TIMESTAMP, Xatom_TEXT, Xatom_DELETE,
   Xatom_COMPOUND_TEXT, Xatom_UTF8_STRING,
   Xatom_MULTIPLE, Xatom_INCR, Xatom_EMACS_TMP, Xatom_TARGETS, Xatom_NULL,
-  Xatom_ATOM_PAIR;
+  Xatom_ATOM, Xatom_ATOM_PAIR, Xatom_CLIPBOARD_MANAGER;
 
   /* More atoms for font properties.  The last three are private
      properties, see the comments in src/fontset.h.  */
@@ -989,8 +989,7 @@ extern void x_mouse_leave (struct x_display_info *);
 #ifdef USE_X_TOOLKIT
 extern int x_dispatch_event (XEvent *, Display *);
 #endif
-extern unsigned int x_x_to_emacs_modifiers (struct x_display_info *,
-                                            unsigned);
+extern EMACS_INT x_x_to_emacs_modifiers (struct x_display_info *, int);
 extern int x_display_pixel_height (struct x_display_info *);
 extern int x_display_pixel_width (struct x_display_info *);
 
@@ -1025,10 +1024,12 @@ extern Lisp_Object x_property_data_to_lisp (struct frame *,
                                             Atom,
                                             int,
                                             unsigned long);
+extern void x_clipboard_manager_save_frame (Lisp_Object);
+extern void x_clipboard_manager_save_all (void);
 
 /* Defined in xfns.c */
 
-extern struct x_display_info * check_x_display_info (Lisp_Object frame);
+extern struct x_display_info * check_x_display_info (Lisp_Object);
 extern Lisp_Object x_get_focus_frame (struct frame *);
 
 #ifdef USE_GTK

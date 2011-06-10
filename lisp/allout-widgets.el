@@ -246,6 +246,7 @@ Table is maintained iff `allout-widgets-maintain-tally' is non-nil.
 The table contents will be out of sync if any widgets are created
 or deleted while this variable is nil.")
 (make-variable-buffer-local 'allout-widgets-tally)
+(defvar allout-widgets-mode-inhibit)    ; defined below
 ;;;_   > allout-widgets-tally-string
 (defun allout-widgets-tally-string ()
   "Return a string giving the number of tracked widgets, or empty string if not tracking.
@@ -301,7 +302,7 @@ buffers where this is set to enable and disable widget
 enhancements, directly.")
 ;;;###autoload
 (put 'allout-widgets-mode-inhibit 'safe-local-variable
-     (if (fboundp 'booleanp) 'booleanp '(lambda (x) (member x '(t nil)))))
+     (if (fboundp 'booleanp) 'booleanp (lambda (x) (member x '(t nil)))))
 (make-variable-buffer-local 'allout-widgets-mode-inhibit)
 ;;;_    = allout-inhibit-body-modification-hook
 (defvar allout-inhibit-body-modification-hook nil

@@ -29,6 +29,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <setjmp.h>
 #include <unistd.h>
 
+#include "lisp.h"
+
 #ifdef WINDOWSNT
 #include <fcntl.h>
 #include <windows.h> /* just for w32.h */
@@ -41,7 +43,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <GNUstepBase/GSConfig.h>
 #endif
 
-#include "lisp.h"
 #include "commands.h"
 #include "intervals.h"
 #include "buffer.h"
@@ -62,6 +63,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef HAVE_NS
 #include "nsterm.h"
+#endif
+
+#ifdef HAVE_X_WINDOWS
+#include "xterm.h"
 #endif
 
 #ifdef HAVE_SETLOCALE
@@ -1983,6 +1988,11 @@ all of which are called before Emacs is actually killed.  */)
   Frun_hooks (1, &hook);
 
   UNGCPRO;
+
+#ifdef HAVE_X_WINDOWS
+  /* Transfer any clipboards we own to the clipboard manager.  */
+  x_clipboard_manager_save_all ();
+#endif
 
   shut_down_emacs (0, 0, STRINGP (arg) ? arg : Qnil);
 

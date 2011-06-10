@@ -26,7 +26,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/file.h>
 #include <unistd.h>
 #include <signal.h>
-#include <stdarg.h>
 #include <setjmp.h>
 
 #include "lisp.h"
@@ -2596,6 +2595,7 @@ frame's terminal). */)
 	  FRAME_SET_VISIBLE (XFRAME (t->display_info.tty->top_frame), 1);
 	}
 
+      set_tty_hooks (t);
       init_sys_modes (t->display_info.tty);
 
       {
@@ -2699,9 +2699,10 @@ term_mouse_movement (FRAME_PTR frame, Gpm_Event *event)
 static void
 term_mouse_position (FRAME_PTR *fp, int insist, Lisp_Object *bar_window,
 		     enum scroll_bar_part *part, Lisp_Object *x,
-		     Lisp_Object *y, unsigned long *timeptr)
+		     Lisp_Object *y, Time *timeptr)
 {
   struct timeval now;
+  Time sec, usec;
 
   *fp = SELECTED_FRAME ();
   (*fp)->mouse_moved = 0;
@@ -2712,7 +2713,9 @@ term_mouse_position (FRAME_PTR *fp, int insist, Lisp_Object *bar_window,
   XSETINT (*x, last_mouse_x);
   XSETINT (*y, last_mouse_y);
   gettimeofday(&now, 0);
-  *timeptr = (now.tv_sec * 1000) + (now.tv_usec / 1000);
+  sec = now.tv_sec;
+  usec = now.tv_usec;
+  *timeptr = (sec * 1000) + (usec / 1000);
 }
 
 /* Prepare a mouse-event in *RESULT for placement in the input queue.
@@ -3619,7 +3622,6 @@ vfatal (const char *str, va_list ap)
   vfprintf (stderr, str, ap);
   if (!(strlen (str) > 0 && str[strlen (str) - 1] == '\n'))
     fprintf (stderr, "\n");
-  va_end (ap);
   fflush (stderr);
   exit (1);
 }

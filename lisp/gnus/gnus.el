@@ -2910,7 +2910,8 @@ gnus-registry.el will populate this if it's loaded.")
       gnus-agent-save-active gnus-agent-method-p
       gnus-agent-get-undownloaded-list gnus-agent-fetch-session
       gnus-summary-set-agent-mark gnus-agent-save-group-info
-      gnus-agent-request-article gnus-agent-retrieve-headers)
+      gnus-agent-request-article gnus-agent-retrieve-headers
+      gnus-agent-store-article gnus-agent-group-covered-p)
      ("gnus-agent" :interactive t
       gnus-unplugged gnus-agentize gnus-agent-batch)
      ("gnus-vm" :interactive t gnus-summary-save-in-vm
@@ -4356,11 +4357,11 @@ current display is used."
 	  (switch-to-buffer gnus-group-buffer)
 	(funcall gnus-other-frame-function arg)
 	(add-hook 'gnus-exit-gnus-hook
-		  '(lambda nil
-		     (when (and (frame-live-p gnus-other-frame-object)
-				(cdr (frame-list)))
-		       (delete-frame gnus-other-frame-object))
-		     (setq gnus-other-frame-object nil)))))))
+		  (lambda nil
+                    (when (and (frame-live-p gnus-other-frame-object)
+                               (cdr (frame-list)))
+                      (delete-frame gnus-other-frame-object))
+                    (setq gnus-other-frame-object nil)))))))
 
 ;;;###autoload
 (defun gnus (&optional arg dont-connect slave)

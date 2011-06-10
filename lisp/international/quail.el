@@ -818,7 +818,7 @@ The format of KBD-LAYOUT is the same as `quail-keyboard-layout'."
 	  (bar "|")
 	  lower upper row)
       ;; Make table without horizontal lines.  Each column for a key
-      ;; has the form "| LU |" where L is for lower key and and U is
+      ;; has the form "| LU |" where L is for lower key and U is
       ;; for a upper key.  If width of L (U) is greater than 1,
       ;; preceding (following) space is not inserted.
       (put-text-property 0 1 'face 'bold bar)
@@ -2458,10 +2458,10 @@ should be made by `quail-build-decode-map' (which see)."
 
 (define-button-type 'quail-keyboard-layout-button
   :supertype 'help-xref
-  'help-function '(lambda (layout)
-		    (help-setup-xref `(quail-keyboard-layout-button ,layout)
-				     nil)
-		    (quail-show-keyboard-layout layout))
+  'help-function (lambda (layout)
+                   (help-setup-xref `(quail-keyboard-layout-button ,layout)
+                                    nil)
+                   (quail-show-keyboard-layout layout))
   'help-echo (purecopy "mouse-2, RET: show keyboard layout"))
 
 (define-button-type 'quail-keyboard-customize-button

@@ -295,9 +295,14 @@ try to refine the current hunk, as well."
 (defvar diff-added-face 'diff-added)
 
 (defface diff-changed
-  '((((type tty pc) (class color) (background light))
+  ;; We normally apply a `shadow'-based face on the `diff-context'
+  ;; face, and keep `diff-changed' the default.
+  '((((class color grayscale) (min-colors 88)))
+    ;; If the terminal lacks sufficient colors for shadowing,
+    ;; highlight changed lines explicitly.
+    (((class color) (background light))
      :foreground "magenta" :weight bold :slant italic)
-    (((type tty pc) (class color) (background dark))
+    (((class color) (background dark))
      :foreground "yellow" :weight bold :slant italic))
   "`diff-mode' face used to highlight changed lines."
   :group 'diff-mode)
@@ -1136,12 +1141,14 @@ else cover the whole buffer."
 		     (old2 (match-string 4))
 		     (new1 (number-to-string (+ space minus)))
 		     (new2 (number-to-string (+ space plus))))
-                (if old2
-                    (unless (string= new2 old2) (replace-match new2 t t nil 4))
-                  (goto-char (match-end 4)) (insert "," new2))
-                (if old1
-                    (unless (string= new1 old1) (replace-match new1 t t nil 2))
-                  (goto-char (match-end 2)) (insert "," new1))))
+		(if old2
+		    (unless (string= new2 old2) (replace-match new2 t t nil 4))
+		  (goto-char (match-end 3))
+		  (insert "," new2))
+		(if old1
+		    (unless (string= new1 old1) (replace-match new1 t t nil 2))
+		  (goto-char (match-end 1))
+		  (insert "," new1))))
 	     ((looking-at diff-context-mid-hunk-header-re)
 	      (when (> (+ space bang plus) 0)
 		(let* ((old1 (match-string 1))
@@ -1825,10 +1832,13 @@ For use in `add-log-current-defun-function'."
     (replace-match (cdr (assq (char-before) '((?+ . "-") (?> . "<"))))))
   )
 
+(declare-function smerge-refine-subst "smerge-mode"
+                  (beg1 end1 beg2 end2 props &optional preproc))
+
 (defun diff-refine-hunk ()
   "Highlight changes of hunk at point at a finer granularity."
   (interactive)
-  (eval-and-compile (require 'smerge-mode))
+  (require 'smerge-mode)
   (save-excursion
     (diff-beginning-of-hunk 'try-harder)
     (let* ((start (point))

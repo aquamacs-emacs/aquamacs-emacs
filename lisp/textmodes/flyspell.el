@@ -748,7 +748,7 @@ Also turns off flyspell-mode in all existing buffers."
 ;;*    using flyspell with mail-mode add the following expression       */
 ;;*    in your .emacs file:                                             */
 ;;*       (add-hook 'mail-mode                                          */
-;;*    	     '(lambda () (setq flyspell-generic-check-word-predicate    */
+;;*    	     (lambda () (setq flyspell-generic-check-word-predicate    */
 ;;*    			       'mail-mode-flyspell-verify)))            */
 ;;*---------------------------------------------------------------------*/
 (defvar flyspell-generic-check-word-predicate nil

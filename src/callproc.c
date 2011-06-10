@@ -29,6 +29,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/file.h>
 #include <fcntl.h>
 
+#include "lisp.h"
+
 #ifdef WINDOWSNT
 #define NOMINMAX
 #include <windows.h>
@@ -41,7 +43,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/param.h>
 #endif /* MSDOS */
 
-#include "lisp.h"
 #include "commands.h"
 #include "buffer.h"
 #include "character.h"
@@ -113,6 +114,7 @@ call_process_cleanup (Lisp_Object arg)
   Lisp_Object fdpid = Fcdr (arg);
 #if defined (MSDOS)
   Lisp_Object file;
+  int fd;
 #else
   int pid;
 #endif
@@ -121,9 +123,13 @@ call_process_cleanup (Lisp_Object arg)
 
 #if defined (MSDOS)
   /* for MSDOS fdpid is really (fd . tempfile)  */
+  fd = XFASTINT (Fcar (fdpid));
   file = Fcdr (fdpid);
-  emacs_close (XFASTINT (Fcar (fdpid)));
-  if (strcmp (SDATA (file), NULL_DEVICE) != 0)
+  /* FD is -1 and FILE is "" when we didn't actually create a
+     temporary file in call-process.  */
+  if (fd >= 0)
+    emacs_close (fd);
+  if (!(strcmp (SDATA (file), NULL_DEVICE) == 0 || SREF (file, 0) == '\0'))
     unlink (SDATA (file));
 #else /* not MSDOS */
   pid = XFASTINT (Fcdr (fdpid));
@@ -192,14 +198,13 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
   int count = SPECPDL_INDEX ();
   volatile USE_SAFE_ALLOCA;
 
-  const unsigned char **volatile new_argv_volatile;
   register const unsigned char **new_argv;
   /* File to use for stderr in the child.
      t means use same as standard output.  */
   Lisp_Object error_file;
   Lisp_Object output_file = Qnil;
 #ifdef MSDOS	/* Demacs 1.1.1 91/10/16 HIRANO Satoshi */
-  char *outf, *tempfile;
+  char *outf, *tempfile = NULL;
   int outfilefd;
 #endif
   int fd_output = -1;
@@ -415,7 +420,6 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 
   SAFE_ALLOCA (new_argv, const unsigned char **,
 	       (nargs > 4 ? nargs - 2 : 2) * sizeof *new_argv);
-  new_argv_volatile = new_argv;
   if (nargs > 4)
     {
       register size_t i;
@@ -440,22 +444,23 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
   new_argv[0] = SDATA (path);
 
 #ifdef MSDOS /* MW, July 1993 */
-  if ((outf = egetenv ("TMPDIR")))
-    strcpy (tempfile = alloca (strlen (outf) + 20), outf);
-  else
-    {
-      tempfile = alloca (20);
-      *tempfile = '\0';
-    }
-  dostounix_filename (tempfile);
-  if (*tempfile == '\0' || tempfile[strlen (tempfile) - 1] != '/')
-    strcat (tempfile, "/");
-  strcat (tempfile, "detmp.XXX");
-  mktemp (tempfile);
 
-  /* If we're redirecting STDOUT to a file, this is already opened. */
+  /* If we're redirecting STDOUT to a file, that file is already open
+     on fd_output.  */
   if (fd_output < 0)
     {
+      if ((outf = egetenv ("TMPDIR")))
+	strcpy (tempfile = alloca (strlen (outf) + 20), outf);
+      else
+	{
+	  tempfile = alloca (20);
+	  *tempfile = '\0';
+	}
+      dostounix_filename (tempfile);
+      if (*tempfile == '\0' || tempfile[strlen (tempfile) - 1] != '/')
+	strcat (tempfile, "/");
+      strcat (tempfile, "detmp.XXX");
+      mktemp (tempfile);
       outfilefd = creat (tempfile, S_IREAD | S_IWRITE);
       if (outfilefd < 0) {
 	emacs_close (filefd);
@@ -562,15 +567,21 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
     if (fd_error != outfilefd)
       emacs_close (fd_error);
     fd1 = -1; /* No harm in closing that one!  */
-    /* Since CRLF is converted to LF within `decode_coding', we can
-       always open a file with binary mode.  */
-    fd[0] = emacs_open (tempfile, O_RDONLY | O_BINARY, 0);
-    if (fd[0] < 0)
+    if (tempfile)
       {
-	unlink (tempfile);
-	emacs_close (filefd);
-	report_file_error ("Cannot re-open temporary file", Qnil);
+	/* Since CRLF is converted to LF within `decode_coding', we
+	   can always open a file with binary mode.  */
+	fd[0] = emacs_open (tempfile, O_RDONLY | O_BINARY, 0);
+	if (fd[0] < 0)
+	  {
+	    unlink (tempfile);
+	    emacs_close (filefd);
+	    report_file_error ("Cannot re-open temporary file",
+			       Fcons (build_string (tempfile), Qnil));
+	  }
       }
+    else
+      fd[0] = -1; /* We are not going to read from tempfile.   */
 #else /* not MSDOS */
 #ifdef WINDOWSNT
     pid = child_setup (filefd, fd1, fd_error, (char **) new_argv,
@@ -590,9 +601,20 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 
     BLOCK_INPUT;
 
-    pid = vfork ();
+    /* vfork, and prevent local vars from being clobbered by the vfork.  */
+    {
+      int volatile fd_error_volatile = fd_error;
+      int volatile fd_output_volatile = fd_output;
+      int volatile output_to_buffer_volatile = output_to_buffer;
+      unsigned char const **volatile new_argv_volatile = new_argv;
 
-    new_argv = new_argv_volatile;
+      pid = vfork ();
+
+      fd_error = fd_error_volatile;
+      fd_output = fd_output_volatile;
+      output_to_buffer = output_to_buffer_volatile;
+      new_argv = new_argv_volatile;
+    }
 
     if (pid == 0)
       {
@@ -666,7 +688,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
   record_unwind_protect (call_process_cleanup,
 			 Fcons (Fcurrent_buffer (),
 				Fcons (make_number (fd[0]),
-				       build_string (tempfile))));
+				       build_string (tempfile ? tempfile : ""))));
 #else
   record_unwind_protect (call_process_cleanup,
 			 Fcons (Fcurrent_buffer (),

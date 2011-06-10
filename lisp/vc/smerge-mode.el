@@ -566,7 +566,7 @@ major modes.  Uses `smerge-resolve-function' to do the actual work."
 	      (with-current-buffer buf
 		(zerop (call-process-region
 			(point-min) (point-max) "patch" t nil nil
-			"-r" "/dev/null" "--no-backup-if-mismatch"
+			"-r" null-device "--no-backup-if-mismatch"
 			"-fl" o))))
 	    (save-restriction
 	      (narrow-to-region m0b m0e)
@@ -582,7 +582,7 @@ major modes.  Uses `smerge-resolve-function' to do the actual work."
 	      (with-current-buffer buf
 		(zerop (call-process-region
 			(point-min) (point-max) "patch" t nil nil
-			"-r" "/dev/null" "--no-backup-if-mismatch"
+			"-r" null-device "--no-backup-if-mismatch"
 			"-fl" m))))
 	    (save-restriction
 	      (narrow-to-region m0b m0e)
@@ -991,6 +991,7 @@ a copy of a region, just before preparing it to for `diff'.  It can be
 used to replace chars to try and eliminate some spurious differences."
   (let* ((buf (current-buffer))
          (pos (point))
+         deactivate-mark         ; The code does not modify any visible buffer.
          (file1 (make-temp-file "diff1"))
          (file2 (make-temp-file "diff2")))
     ;; Chop up regions into smaller elements and save into files.

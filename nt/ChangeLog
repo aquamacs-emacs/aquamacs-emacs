@@ -1,3 +1,65 @@
+2011-05-17  Eli Zaretskii  <eliz@gnu.org>
+
+	* README.W32: Add information about GnuTLS libraries.
+
+2011-05-09  Eli Zaretskii  <eliz@gnu.org>
+
+	* config.nt [_MSC_VER] (va_copy): Replacement for the MS compiler.
+
+2011-05-07  Ben Key  <bkey76@gmail.com>
+
+	* configure.bat: Renamed the fusercflags variable to escusercflags
+	so that the variable name better matches its purpose, to be
+	identical to usercflags with the exception that all quotes are
+	escaped by the \ character.
+
+	Renamed the fuserldflags variable to escuserldflags so that the
+	variable name better matches its purpose, to be identical to
+	userldflags with the exception that all quotes are escaped by
+	the \ character.
+
+	A new ESC_USER_CFLAGS variable is written to config.settings.
+	This variable has the same value as the escusercflags variable.
+
+	* gmake.defs, nmake.defs: Added the variable ESC_CFLAGS.  This
+	variable is identical to the CFLAGS variable except that it
+	includes the new ESC_USER_CFLAGS variable instead of USER_CFLAGS.
+
+	These changes, along with some changes to src/makefile.w32-in,
+	are required to extend my earlier fix to add support for
+	--cflags and --ldflags options that include quotes so that it
+	works whether make uses cmd or sh as the shell.
+
+2011-05-06  Eli Zaretskii  <eliz@gnu.org>
+
+	* inc/inttypes.h [!__MINGW32__]: Include stdint.h.  Move the
+	definition of uintmax_t from here...
+	* inc/stdint.h (uintmax_t): ...to here.
+	(intptr_t) [!__GNUC__]: New typedef.
+
+2011-05-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* config.nt: Prepare to configure 64-bit integers for older compilers.
+	However, temporarily disable this change unless the temporary
+	symbol WIDE_EMACS_INT is defined.
+	(EMACS_INT, BITS_PER_EMACS_INT, pI): Define these if __int64 and
+	"%I64d" work but long long and "%lld" do not.
+
+2011-05-05  Ben Key  <bkey76@gmail.com>
+
+	* configure.bat: Added support for --cflags and --ldflags
+	options that include quotes as long as command extensions are
+	enabled.  Specifically when -I, -L, and similar flags are used
+	to specify supplementary include and library directories a
+	directory name that includes spaces may now be used if it is
+	enclosed in quotes.
+
+	* INSTALL: Documented the change to configure.bat.
+
+2011-05-04  Juanma Barranquero  <lekktu@gmail.com>
+
+	* INSTALL: Clarify GnuTLS support.
+
 2011-04-30  Eli Zaretskii  <eliz@gnu.org>
 
 	* config.nt (HAVE_LONG_LONG_INT, HAVE_UNSIGNED_LONG_LONG_INT):
@@ -2067,4 +2129,3 @@
 
   You should have received a copy of the GNU General Public License
   along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
-

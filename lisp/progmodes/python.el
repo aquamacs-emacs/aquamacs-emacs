@@ -99,7 +99,9 @@
 	     "import" "in" "is" "lambda" "not" "or" "pass" "print"
 	     "raise" "return" "try" "while" "with" "yield"
              ;; Not real keywords, but close enough to be fontified as such
-             "self" "True" "False")
+             "self" "True" "False"
+             ;; Python 3
+             "nonlocal")
 	 symbol-end)
     (,(rx symbol-start "None" symbol-end)	; see § Keywords in 2.7 manual
      . font-lock-constant-face)
@@ -2361,6 +2363,7 @@ Interactively, prompt for the name with completion."
 
 (autoload 'pymacs-load "pymacs" nil t)
 (autoload 'brm-init "bikemacs")
+(defvar brm-menu)
 
 ;; I'm not sure how useful BRM really is, and it's certainly dangerous
 ;; the way it modifies files outside Emacs...  Also note that the
@@ -2380,7 +2383,7 @@ without confirmation."
 	      (features (cons 'python-mode features))) ; and requires this
 	  (brm-init)			; second line of normal recipe
 	  (remove-hook 'python-mode-hook ; undo this from `brm-init'
-		       '(lambda () (easy-menu-add brm-menu)))
+		       (lambda () (easy-menu-add brm-menu)))
 	  (easy-menu-define
 	    python-brm-menu python-mode-map
 	    "Bicycle Repair Man"

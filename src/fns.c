@@ -75,7 +75,7 @@ Other values of LIMIT are ignored.  */)
 {
   EMACS_INT val;
   Lisp_Object lispy_val;
-  unsigned long denominator;
+  EMACS_UINT denominator;
 
   if (EQ (limit, Qt))
     seed_random (getpid () + time (NULL));
@@ -88,7 +88,7 @@ Other values of LIMIT are ignored.  */)
 	 it's possible to get a quotient larger than n; discarding
 	 these values eliminates the bias that would otherwise appear
 	 when using a large n.  */
-      denominator = ((unsigned long)1 << VALBITS) / XFASTINT (limit);
+      denominator = ((EMACS_UINT) 1 << VALBITS) / XFASTINT (limit);
       do
 	val = get_random () / denominator;
       while (val >= XFASTINT (limit));
@@ -457,10 +457,10 @@ concat (size_t nargs, Lisp_Object *args,
   Lisp_Object prev;
   int some_multibyte;
   /* When we make a multibyte string, we can't copy text properties
-     while concatinating each string because the length of resulting
-     string can't be decided until we finish the whole concatination.
+     while concatenating each string because the length of resulting
+     string can't be decided until we finish the whole concatenation.
      So, we record strings that have text properties to be copied
-     here, and copy the text properties after the concatination.  */
+     here, and copy the text properties after the concatenation.  */
   struct textprop_rec  *textprops = NULL;
   /* Number of elements in textprops.  */
   int num_textprops = 0;
@@ -704,7 +704,7 @@ concat (size_t nargs, Lisp_Object *args,
 				      make_number (0),
 				      make_number (SCHARS (this)),
 				      Qnil);
-	  /* If successive arguments have properites, be sure that the
+	  /* If successive arguments have properties, be sure that the
 	     value of `composition' property be the copy.  */
 	  if (last_to_end == textprops[argnum].to)
 	    make_composition_value_copy (props);
@@ -898,7 +898,7 @@ string_to_multibyte (Lisp_Object string)
   if (STRING_MULTIBYTE (string))
     return string;
 
-  nbytes = parse_str_to_multibyte (SDATA (string), SBYTES (string));
+  nbytes = count_size_as_multibyte (SDATA (string), SBYTES (string));
   /* If all the chars are ASCII, they won't need any more bytes once
      converted.  */
   if (nbytes == SBYTES (string))
@@ -2076,7 +2076,7 @@ internal_equal (register Lisp_Object o1, register Lisp_Object o2, int depth, int
 	  return compare_window_configurations (o1, o2, 0);
 
 	/* Aside from them, only true vectors, char-tables, compiled
-	   functions, and fonts (font-spec, font-entity, font-ojbect)
+	   functions, and fonts (font-spec, font-entity, font-object)
 	   are sensible to compare, so eliminate the others now.  */
 	if (size & PSEUDOVECTOR_FLAG)
 	  {
@@ -2782,7 +2782,7 @@ ITEM should be one of the following:
 `months', returning a 12-element vector of month names (locale items MON_n);
 
 `paper', returning a list (WIDTH HEIGHT) for the default paper size,
-  both measured in milimeters (locale items PAPER_WIDTH, PAPER_HEIGHT).
+  both measured in millimeters (locale items PAPER_WIDTH, PAPER_HEIGHT).
 
 If the system can't provide such information through a call to
 `nl_langinfo', or if ITEM isn't from the list above, return nil.
@@ -4514,42 +4514,22 @@ including negative integers.  */)
 
 
 /************************************************************************
-				 MD5
+			     MD5 and SHA1
  ************************************************************************/
 
 #include "md5.h"
+#include "sha1.h"
 
-DEFUN ("md5", Fmd5, Smd5, 1, 5, 0,
-       doc: /* Return MD5 message digest of OBJECT, a buffer or string.
+/* Convert a possibly-signed character to an unsigned character.  This is
+   a bit safer than casting to unsigned char, since it catches some type
+   errors that the cast doesn't.  */
+static inline unsigned char to_uchar (char ch) { return ch; }
 
-A message digest is a cryptographic checksum of a document, and the
-algorithm to calculate it is defined in RFC 1321.
+/* TYPE: 0 for md5, 1 for sha1. */
 
-The two optional arguments START and END are character positions
-specifying for which part of OBJECT the message digest should be
-computed.  If nil or omitted, the digest is computed for the whole
-OBJECT.
-
-The MD5 message digest is computed from the result of encoding the
-text in a coding system, not directly from the internal Emacs form of
-the text.  The optional fourth argument CODING-SYSTEM specifies which
-coding system to encode the text with.  It should be the same coding
-system that you used or will use when actually writing the text into a
-file.
-
-If CODING-SYSTEM is nil or omitted, the default depends on OBJECT.  If
-OBJECT is a buffer, the default for CODING-SYSTEM is whatever coding
-system would be chosen by default for writing this text into a file.
-
-If OBJECT is a string, the most preferred coding system (see the
-command `prefer-coding-system') is used.
-
-If NOERROR is non-nil, silently assume the `raw-text' coding if the
-guesswork fails.  Normally, an error is signaled in such case.  */)
-  (Lisp_Object object, Lisp_Object start, Lisp_Object end, Lisp_Object coding_system, Lisp_Object noerror)
+static Lisp_Object
+crypto_hash_function (int type, Lisp_Object object, Lisp_Object start, Lisp_Object end, Lisp_Object coding_system, Lisp_Object noerror, Lisp_Object binary)
 {
-  unsigned char digest[16];
-  char value[33];
   int i;
   EMACS_INT size;
   EMACS_INT size_byte = 0;
@@ -4558,6 +4538,7 @@ guesswork fails.  Normally, an error is signaled in such case.  */)
   register EMACS_INT b, e;
   register struct buffer *bp;
   EMACS_INT temp;
+  Lisp_Object res=Qnil;
 
   if (STRINGP (object))
     {
@@ -4728,15 +4709,91 @@ guesswork fails.  Normally, an error is signaled in such case.  */)
 	object = code_convert_string (object, coding_system, Qnil, 1, 0, 0);
     }
 
-  md5_buffer (SSDATA (object) + start_byte,
-	      SBYTES (object) - (size_byte - end_byte),
-	      digest);
+  switch (type)
+    {
+    case 0:			/* MD5 */
+      {
+	char digest[16];
+	md5_buffer (SSDATA (object) + start_byte,
+		    SBYTES (object) - (size_byte - end_byte),
+		    digest);
 
-  for (i = 0; i < 16; i++)
-    sprintf (&value[2 * i], "%02x", digest[i]);
-  value[32] = '\0';
+	if (NILP (binary))
+	  {
+	    char value[33];
+	    for (i = 0; i < 16; i++)
+	      sprintf (&value[2 * i], "%02x", to_uchar (digest[i]));
+	    res = make_string (value, 32);
+	  }
+	else
+	  res = make_string (digest, 16);
+	break;
+      }
 
-  return make_string (value, 32);
+    case 1:			/* SHA1 */
+      {
+	char digest[20];
+	sha1_buffer (SSDATA (object) + start_byte,
+		     SBYTES (object) - (size_byte - end_byte),
+		     digest);
+	if (NILP (binary))
+	  {
+	    char value[41];
+	    for (i = 0; i < 20; i++)
+	      sprintf (&value[2 * i], "%02x", to_uchar (digest[i]));
+	    res = make_string (value, 40);
+	  }
+	else
+	  res = make_string (digest, 20);
+	break;
+      }
+    }
+
+  return res;
+}
+
+DEFUN ("md5", Fmd5, Smd5, 1, 5, 0,
+       doc: /* Return MD5 message digest of OBJECT, a buffer or string.
+
+A message digest is a cryptographic checksum of a document, and the
+algorithm to calculate it is defined in RFC 1321.
+
+The two optional arguments START and END are character positions
+specifying for which part of OBJECT the message digest should be
+computed.  If nil or omitted, the digest is computed for the whole
+OBJECT.
+
+The MD5 message digest is computed from the result of encoding the
+text in a coding system, not directly from the internal Emacs form of
+the text.  The optional fourth argument CODING-SYSTEM specifies which
+coding system to encode the text with.  It should be the same coding
+system that you used or will use when actually writing the text into a
+file.
+
+If CODING-SYSTEM is nil or omitted, the default depends on OBJECT.  If
+OBJECT is a buffer, the default for CODING-SYSTEM is whatever coding
+system would be chosen by default for writing this text into a file.
+
+If OBJECT is a string, the most preferred coding system (see the
+command `prefer-coding-system') is used.
+
+If NOERROR is non-nil, silently assume the `raw-text' coding if the
+guesswork fails.  Normally, an error is signaled in such case.  */)
+  (Lisp_Object object, Lisp_Object start, Lisp_Object end, Lisp_Object coding_system, Lisp_Object noerror)
+{
+  return crypto_hash_function (0, object, start, end, coding_system, noerror, Qnil);
+}
+
+DEFUN ("sha1", Fsha1, Ssha1, 1, 4, 0,
+       doc: /* Return the SHA-1 (Secure Hash Algorithm) of an OBJECT.
+
+OBJECT is either a string or a buffer.  Optional arguments START and
+END are character positions specifying which portion of OBJECT for
+computing the hash.  If BINARY is non-nil, return a string in binary
+form.  */)
+     (Lisp_Object object, Lisp_Object start, Lisp_Object end, Lisp_Object binary)
+{
+  return crypto_hash_function (1, object, start, end, Qnil, Qnil, binary);
 }
 
 
@@ -4911,6 +4968,7 @@ this variable.  */);
   defsubr (&Sbase64_encode_string);
   defsubr (&Sbase64_decode_string);
   defsubr (&Smd5);
+  defsubr (&Ssha1);
   defsubr (&Slocale_info);
 }
 
