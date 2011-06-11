@@ -286,7 +286,7 @@ Blind aliases or users from /etc/passwd are not expanded."
              (the-name (buffer-substring-no-properties beg (point))))
         (if (mh-assoc-string the-name mh-alias-alist t)
             (message "%s -> %s" the-name (mh-alias-expand the-name))
-          ;; Check if if was a single word likely to be an alias
+          ;; Check if it was a single word likely to be an alias
           (if (and (equal mh-alias-flash-on-comma 1)
                    (not (string-match " " the-name)))
               (message "No alias for %s" the-name))))))
@@ -638,10 +638,10 @@ filing messages."
         (message "Making passwd aliases...")
         (setq passwd-matches
               (mapconcat
-               '(lambda (elem)
-                  (if (or (string-match regexp (car elem))
-                          (string-match regexp (cadr elem)))
-                      (format "%s: %s\n" (car elem) (cadr elem))))
+               (lambda (elem)
+                 (if (or (string-match regexp (car elem))
+                         (string-match regexp (cadr elem)))
+                     (format "%s: %s\n" (car elem) (cadr elem))))
                mh-alias-passwd-alist ""))
         (message "Making passwd aliases...done")))
     (if (and (string-equal "" matches)

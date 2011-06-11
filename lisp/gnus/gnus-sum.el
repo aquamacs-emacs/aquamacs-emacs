@@ -11533,8 +11533,12 @@ will not be hidden."
   (interactive)
   (save-excursion
     (goto-char (point-min))
-    (let ((end nil))
+    (let ((end nil)
+          (count 0))
       (while (not end)
+        (incf count)
+        (when (zerop (mod count 1000))
+          (message "Hiding all threads... %d" count))
 	(when (or (not predicate)
 		  (gnus-map-articles
 		   predicate (gnus-summary-article-children)))
@@ -11565,7 +11569,10 @@ Returns nil if no threads were there to be hidden."
 	      (let ((ol (gnus-make-overlay starteol (point) nil t nil)))
 		(gnus-overlay-put ol 'invisible 'gnus-sum)
 		(gnus-overlay-put ol 'evaporate t)))
-	    (gnus-summary-goto-subject article))
+	    (gnus-summary-goto-subject article)
+            (when (> start (point))
+              (message "Hiding the thread moved us backwards, aborting!")
+              (goto-char (point-max))))
 	(goto-char start)
 	nil))))
 

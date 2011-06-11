@@ -87,8 +87,16 @@ used."
 This is used for cid: URLs, and the function is called with the
 cid: URL as the argument.")
 
+(defvar shr-put-image-function 'shr-put-image
+  "Function called to put image and alt string.")
+
 (defface shr-strike-through '((t (:strike-through t)))
   "Font for <s> elements."
+  :group 'shr)
+
+(defface shr-link
+  '((t (:inherit link)))
+  "Font for link elements."
   :group 'shr)
 
 ;;; Internal variables.
@@ -495,10 +503,11 @@ redirects somewhere else."
 		  (inhibit-read-only t))
 	      (delete-region start end)
 	      (goto-char start)
-	      (shr-put-image data alt)))))))
+	      (funcall shr-put-image-function data alt)))))))
   (kill-buffer (current-buffer)))
 
 (defun shr-put-image (data alt)
+  "Put image DATA with a string ALT.  Return image."
   (if (display-graphic-p)
       (let ((image (ignore-errors
                      (shr-rescale-image data))))
@@ -508,7 +517,8 @@ redirects somewhere else."
 	  (when (and (> (current-column) 0)
 		     (> (car (image-size image t)) 400))
 	    (insert "\n"))
-	  (insert-image image (or alt "*"))))
+	  (insert-image image (or alt "*")))
+	image)
     (insert alt)))
 
 (defun shr-rescale-image (data)
@@ -571,8 +581,8 @@ START, and END.  Note that START and END should be merkers."
 				     (substring url (match-end 0)))))
 		 (when image
 		   (goto-char start)
-		   (shr-put-image image
-				  (buffer-substring-no-properties start end))
+		   (funcall shr-put-image-function
+			    image (buffer-substring start end))
 		   (delete-region (point) end))))
 	 (url-retrieve url 'shr-image-fetched
 		       (list (current-buffer) start end)
@@ -591,6 +601,7 @@ START, and END.  Note that START and END should be merkers."
    :help-echo (if title (format "%s (%s)" url title) url)
    :keymap shr-map
    url)
+  (put-text-property start (point) 'face 'shr-link)
   (put-text-property start (point) 'shr-url url))
 
 (defun shr-encode-url (url)
@@ -632,7 +643,7 @@ ones, in case fg and bg are nil."
 	  (shr-put-color start end :background (car new-colors))))
       new-colors)))
 
-;; Put a color in the region, but avoid putting colors on on blank
+;; Put a color in the region, but avoid putting colors on blank
 ;; text at the start of the line, and the newline at the end, to avoid
 ;; ugliness.  Also, don't overwrite any existing color information,
 ;; since this can be called recursively, and we want the "inner" color
@@ -705,7 +716,8 @@ ones, in case fg and bg are nil."
 
 (defun shr-put-color-1 (start end type color)
   (let* ((old-props (get-text-property start 'face))
-	 (do-put (not (memq type old-props)))
+	 (do-put (and (listp old-props)
+                      (not (memq type old-props))))
 	 change)
     (while (< start end)
       (setq change (next-single-property-change start 'face nil end))
@@ -713,7 +725,8 @@ ones, in case fg and bg are nil."
 	(put-text-property start change 'face
 			   (nconc (list type color) old-props)))
       (setq old-props (get-text-property change 'face))
-      (setq do-put (not (memq type old-props)))
+      (setq do-put (and (listp old-props)
+                        (not (memq type old-props))))
       (setq start change))
     (when (and do-put
 	       (> end start))
@@ -765,6 +778,9 @@ ones, in case fg and bg are nil."
   (shr-ensure-newline))
 
 (defun shr-tag-s (cont)
+  (shr-fontize-cont cont 'shr-strike-through))
+
+(defun shr-tag-del (cont)
   (shr-fontize-cont cont 'shr-strike-through))
 
 (defun shr-tag-b (cont)
@@ -858,7 +874,7 @@ ones, in case fg and bg are nil."
 	    (if (or (not shr-content-function)
 		    (not (setq image (funcall shr-content-function url))))
 		(insert alt)
-	      (shr-put-image image alt))))
+	      (funcall shr-put-image-function image alt))))
 	 ((or shr-inhibit-images
 	      (and shr-blocked-images
 		   (string-match shr-blocked-images url)))
@@ -868,13 +884,16 @@ ones, in case fg and bg are nil."
 		(shr-insert (truncate-string-to-width alt 8))
 	      (shr-insert alt))))
 	 ((url-is-cached (shr-encode-url url))
-	  (shr-put-image (shr-get-image-data url) alt))
+	  (funcall shr-put-image-function (shr-get-image-data url) alt))
 	 (t
 	  (insert alt)
-	  (ignore-errors
-	    (url-retrieve (shr-encode-url url) 'shr-image-fetched
-			  (list (current-buffer) start (point-marker))
-			  t))))
+	  (funcall
+	   (if (fboundp 'url-queue-retrieve)
+	       'url-queue-retrieve
+	     'url-retrieve)
+	   (shr-encode-url url) 'shr-image-fetched
+	   (list (current-buffer) start (point-marker))
+	   t)))
 	(put-text-property start (point) 'keymap shr-map)
 	(put-text-property start (point) 'shr-alt alt)
 	(put-text-property start (point) 'image-url url)

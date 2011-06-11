@@ -1,3 +1,978 @@
+2011-05-29  Deniz Dogan  <deniz@dogan.se>
+
+	* net/rcirc.el (rcirc): Use the user's stored encryption method by
+	default.
+
+2011-05-29  Chong Yidong  <cyd@stupidchicken.com>
+
+	* select.el: Don't perform clipboard-manager saving in hooks;
+	leave the hooks empty.
+
+2011-05-28  Leo Liu  <sdl.web@gmail.com>
+
+	* replace.el (occur-menu-map, occur-edit-mode-map): New vars.
+	(occur-mode-map): Bind occur-edit-mode.  Use occur-menu-map.
+	(occur-edit-mode): New major mode (Bug#8463).
+	(occur-after-change-function): New function.
+	(occur-engine): Give Occur tags a read-only property.
+
+2011-05-28  Kevin Ryde  <user42@zip.com.au>
+
+	* subr.el (def-edebug-spec): Doc fix (Bug#8430).
+
+2011-05-28  Chong Yidong  <cyd@stupidchicken.com>
+
+	* bindings.el (help-echo): Make the initial non-indicator dash
+	empty on graphical terminals (Bug#7295).
+
+	* files.el (auto-mode-alist): Move config rule after the
+	in-stripping one (Bug#8547).
+
+	* newcomment.el (comment-end-skip): Doc fix (Bug#8659).
+
+	* startup.el (normal-splash-screen): Remove gratuitous mode-line
+	setting (Bug#8740).
+
+2011-05-28  Alp Aker  <aker@pitt.edu>  (tiny change)
+
+	* buff-menu.el (Buffer-menu-revert-function, Buffer-menu-sort)
+	(Buffer-menu-buffer+size): Use Buffer-menu-buffer-column
+	(Bug#8539).
+
+2011-05-28  Chong Yidong  <cyd@stupidchicken.com>
+
+
+	* emacs-lisp/re-builder.el (re-builder): Improve doc (Bug#8286).
+
+2011-05-28  Dima Kogan  <dkogan@cds.caltech.edu>  (tiny change)
+
+	* progmodes/hideshow.el (hs-looking-at-block-start-p): New fun.
+	(hs-hide-block-at-point, hs-find-block-beginning)
+	(hs-already-hidden-p, hs-hide-block, hs-show-block): Use it
+	(Bug#8279).
+
+2011-05-28  Glenn Morris  <rgm@gnu.org>
+
+	* startup.el (fancy-about-screen): Use standard mode line.  (Bug#8740)
+
+2011-05-28  Chong Yidong  <cyd@stupidchicken.com>
+
+	* help-fns.el (describe-function-1): If the function is a derived
+	major mode, print the parent mode.
+
+	* progmodes/cc-mode.el (c-mode, c++-mode, objc-mode, java-mode)
+	(idl-mode, pike-mode, awk-mode): Inherit from prog-mode.
+
+2011-05-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion--capf-wrapper): Check applicability before
+	retuning non-nil for non-exclusive completion data.
+	* progmodes/etags.el (tags-completion-at-point-function):
+	* info-look.el (info-lookup-completions-at-point): Mark as
+	non-exclusive.
+	(info-complete): Adjust accordingly.
+
+	* info-look.el: Convert to lexical-binding and completion-at-point.
+	(info-lookup-completions-at-point): New function.
+	(info-complete): Use it and completion-in-region.
+
+2011-05-28  Drew Adams  <drew.adams@oracle.com>
+
+	* isearch.el: Let M-e start with point at the first mismatched char.
+	(isearch-fail-pos): New function.
+	(isearch-edit-string): Use it.
+
+2011-05-28  Dmitry Kurochkin  <dmitry.kurochkin@gmail.com>  (tiny change)
+
+	* isearch.el (isearch-range-invisible): Use invisible-p (bug#8721).
+
+2009-11-23  Toby Cubitt  <toby-predictive@dr-qubit.org>
+
+	* emacs-lisp/avl-tree.el: New avl-tree-stack datatype.  Add new
+	traversal functions for avl-trees.
+	(avl-tree--stack): New struct.
+	(avl-tree-stack-p, avl-tree--stack-repopulate): New funs.
+	(avl-tree-enter): Add optional `updatefun' arg.
+	(avl-tree--do-enter): Add optional `updatefun' arg.
+	Change return value.
+	(avl-tree-delete): Add optional `test' and `nilflag' args.
+	(avl-tree--do-delete): Add `test' and `nilflag' args.
+	Change return value.
+	(avl-tree-member): Add optional `nilflag'
+	(avl-tree-member-p): New function.
+	(avl-tree-mapc, avl-tree-mapf, avl-tree-mapcar): New functions.
+	(avl-tree-stack, avl-tree-stack-pop, avl-tree-stack-first)
+	(avl-tree-stack-empty-p): New functions.
+
+2009-11-23  Toby Cubitt  <toby-predictive@dr-qubit.org>
+
+	* emacs-lisp/avl-tree.el (avl-tree--del-balance): Rename from
+	avl-tree--del-balance1 and make it work both ways.
+	(avl-tree--del-balance2): Remove.
+	(avl-tree--enter-balance): Rename from avl-tree--enter-balance1 and
+	make it work both ways.
+	(avl-tree--enter-balance2): Remove.
+	(avl-tree--switch-dir, avl-tree--dir-to-sign, avl-tree--sign-to-dir):
+	New macros.
+	(avl-tree--mapc, avl-tree-map): Add direction argument.
+
+2011-05-27  David Michael  <fedora.dm0@gmail.com>  (tiny change)
+
+	* files.el (interpreter-mode-alist): Add rbash (bug#8745).
+
+2011-05-27  Chong Yidong  <cyd@stupidchicken.com>
+
+	* select.el: Support clipboard managers with built-in function
+	x-clipboard-manager-save, via delete-frame-functions and
+	kill-emacs-hook.
+	(xselect-convert-to-targets): Add MULTIPLE target to list.
+	(xselect-convert-to-save-targets): New function.
+
+2011-05-27  Kenichi Handa  <handa@m17n.org>
+
+	* mail/sendmail.el (mail-encode-header): Avoid double encoding by
+	let-binding rfc2047-encode-encoded-words to nil.
+
+2011-05-27  Glenn Morris  <rgm@gnu.org>
+
+	* mail/emacsbug.el: Don't require url-util.
+
+	* shell.el (shell-directory-tracker): Case matters.  (Bug#8735)
+
+	* files.el (set-auto-mode):
+	Also respect mode: entries at the end of the file.  (Bug#8586)
+
+2011-05-26  Glenn Morris  <rgm@gnu.org>
+
+	* files.el (hack-local-variables-prop-line, hack-local-variables):
+	Downcase mode names, as seems to be traditional.
+	(hack-local-variables, hack-local-variables-apply): Doc fixes.
+
+	* mail/emacsbug.el (report-emacs-bug): Mention checking From address.
+	(report-emacs-bug-hook): Try to validate the From address.  (Bug#8038)
+
+2011-05-25  Julien Danjou  <julien@danjou.info>
+
+	* textmodes/rst.el (rst-define-level-faces): Do not define face
+	symbol if it is already defined.
+
+2011-05-24  Vincent Belaïche  <vincentb1@users.sourceforge.net>
+
+	* play/5x5.el (5x5-new-game, 5x5-randomize):
+	Reset 5x5-solver-output to nil when a new grid is cast.
+	(5x5-log-init, 5x5-log): Use defsubst instead of defmacro to shunt
+	these debugging traces, as defmacro breaks the compiled code.
+
+2011-05-24  Dmitry Kurochkin  <dmitry.kurochkin@gmail.com>  (tiny change)
+
+	* isearch.el (isearch-range-invisible): Use invisible-p (bug#8721).
+
+2011-05-24  Leo Liu  <sdl.web@gmail.com>
+
+	* vc/vc-bzr.el (vc-bzr-sha1-program): Rename from sha1-program.
+	(vc-bzr-sha1): Adapt.
+
+	* sha1.el: Remove. Function `sha1' is now builtin.
+
+	* bindings.el: Provide sha1 feature.
+
+2011-05-24  Kenichi Handa  <handa@m17n.org>
+
+	* mail/sendmail.el: Require `rfc2047'.
+	(mail-insert-from-field): Do not perform RFC2047 encoding.
+	(mail-encode-header): New function.
+	(sendmail-send-it): Set buffer-file-coding-system of the work
+	buffer to the return value of select-message-coding-system.
+	Call mail-encode-header.
+
+	* mail/smtpmail.el (smtpmail-send-it): Call mail-encode-header.
+
+2011-05-24  Sean Neakums  <sneakums@zork.net>  (tiny change)
+
+	* mail/supercite.el (sc-default-cite-frame):
+	Handle sc-nested-citation-p when sc-cite-blank-lines-p is non-nil.
+
+2011-05-24  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/python.el (brm-menu): Declare.
+
+	* emulation/viper.el (viper-set-hooks): Declare.
+
+	* play/5x5.el (5x5-log-init, 5x5-log): Evaluate when compiling.
+	(5x5-log-init, 5x5-log, 5x5-solver): Doc fixes.
+	(math-map-vec, math-sub, math-mul, math-make-intv, math-reduce-vec)
+	(math-format-number, math-pow, calcFunc-arrange, calcFunc-cvec)
+	(calcFunc-diag, calcFunc-trn, calcFunc-inv, calcFunc-mrow)
+	(calcFunc-mcol, calcFunc-vconcat, calcFunc-index): Declare.
+
+2011-05-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Add an :exit-function for completion-at-point.
+
+	* minibuffer.el (completion--done): New fun.
+	(completion--do-completion): Use it.  New arg `expect-exact'.
+	(minibuffer-complete, minibuffer-complete-word): Don't output message,
+	since completion--do-completion does it for us now.
+	(minibuffer-force-complete): Use completion--done and
+	completion--replace.  Handle sole-completion case with more care.
+	(minibuffer-complete-and-exit): Use new `expect-exact' arg.
+	(completion-extra-properties): New var.
+	(completion-annotate-function): Make obsolete.
+	(minibuffer-completion-help): Adjust accordingly.
+	Use completion-list-insert-choice-function.
+	(completion-at-point, completion-help-at-point):
+	Bind completion-extra-properties.
+	(completion-pcm-word-delimiters): Add | (for uniquify, for example).
+	* simple.el (completion-list-insert-choice-function): New var.
+	(completion-setup-function): Preserve it.
+	(choose-completion): Pay attention to it, shuffle the code a bit.
+	(choose-completion-string): New arg `insert-function'.
+
+	* textmodes/bibtex.el: Convert to lexical binding.
+	(bibtex-mode-map): Use completion-at-point.
+	(bibtex-mode): Use define-derived-mode&completion-at-point-functions.
+	(bibtex-completion-at-point-function): New fun, from bibtex-complete.
+	(bibtex-complete): Define as obsolete alias.
+	(bibtex-complete-internal): Remove.
+	(bibtex-format-entry): Remove unused sub-group in regexp.
+	* shell.el (shell--command-completion-data)
+	(shell-environment-variable-completion):
+	* pcomplete.el (pcomplete-completions-at-point):
+	* comint.el (comint--complete-file-name-data): Use :exit-function
+	instead of completion-table-with-terminator so it also works for
+	choose-completion.
+
+2011-05-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* <lots-of-files>.el: Don't quote lambda expressions with `quote'.
+
+	* vc/smerge-mode.el (smerge-refine-subst): Don't deactivate the mark
+	(bug#8710).
+
+	* emacs-lisp/lisp.el (up-list): Fix forward movement (bug#8708).
+
+2011-05-23  Ken Manheimer  <ken.manheimer@gmail.com>
+
+	* allout.el (allout-inhibit-auto-fill-on-headline): Create new
+	customization variable and implement: If non-nil, auto-fill will
+	be inhibited while on topic's header line.
+
+2011-05-23  Vincent Belaïche  <vincentb1@users.sourceforge.net>
+
+	* play/5x5.el: I/ Add an arithmetic solver to suggest positions to
+	click on. II/ Make 5x5 multisession. III/ Ensure that random grids
+	always have a solution in grid size = 5 cases.
+	(5x5-mode-map): Add keybinding to function `5x5-solve-suggest'.
+	(5x5-solver-output, 5x5-log-buffer): New vars.
+	(5x5-grid, 5x5-x-pos, 5x5-y-pos, 5x5-moves, 5x5-cracking):
+	Make these variables buffer local to achieve 5x5 multi-session-ness.
+	(5x5): Set 5x5-grid-size only if SIZE is non-negative.
+	(5x5-grid-to-vec, 5x5-vec-to-grid, 5x5-log-init, 5x5-log, 5x5-solver)
+	(5x5-solve-suggest): New funs.
+	(5x5-randomize): Use 5x5-make-move instead of 5x5-flip-cell to
+	randomize a grid so that we ensure that there is always a solution.
+	(5x5-make-random-grid): Allow other movement than flipping.
+
+2011-05-23  Kevin Ryde  <user42@zip.com.au>
+
+	* emacs-lisp/advice.el (ad-read-advised-function):
+	Use `function-called-at-point' as the default default, if it has
+	advice and passes PREDICATE.
+
+2011-05-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/bytecomp.el (byte-compile-function-form): Only call
+	byte-compile-lambda if it's actually a lambda.
+
+	* emacs-lisp/eieio.el (eieio-defgeneric-form-primary-only-one):
+	Fix function quoting.  Use backquote better.
+
+2011-05-22  Yuanle Song  <sylecn@gmail.com>
+
+	* nxml/rng-xsd.el (rng-xsd-check-pattern): Use case-sensitive
+	matching (Bug#8516).
+
+2011-01-22  Jari Aalto  <jari.aalto@cante.net>
+
+	* vc/vc-dir.el (vc-default-dir-printer): Give edited tag a
+	different face (Bug#8178).
+
+2011-05-22  Chong Yidong  <cyd@stupidchicken.com>
+
+	* vc/diff-mode.el (diff-changed): Don't use terminal specs for
+	defface (Bug#8144).
+
+2011-05-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/macroexp.el (macroexpand-all-1): Convert ' to #' for
+	funcall as well (bug#8712).  Warn when performing those conversions.
+	* emacs-lisp/bytecomp.el (byte-compile-form): Fix error report.
+
+	* progmodes/grep.el (grep-mode): Fix it for good (bug#8684)!
+
+2011-05-22  Glenn Morris  <rgm@gnu.org>
+
+	* files.el (hack-local-variables-prop-line): Small simplifications.
+	(hack-local-variables, hack-local-variables-prop-line):
+	If MODE-ONLY, return the mode, rather than just `t'.
+
+2011-05-21  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/grep.el (grep-mode): Fix last change (bug#8684).
+
+2011-05-21  Glenn Morris  <rgm@gnu.org>
+
+	* files.el (hack-local-variables-prop-line, hack-local-variables):
+	If only interested in the mode, don't bother doing the other stuff.
+
+	* image-mode.el (image-after-revert-hook):
+	Redraw all frames on which the image is visible.  (Bug#8567)
+
+	* dired-aux.el (dired-touch-initial): Just use current-time.  (Bug#6887)
+
+	* wid-edit.el (widget-checklist-match-inline):
+	Fix 2011-04-19 change.  (Bug#8649)
+
+2011-05-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/checkdoc.el (checkdoc-sentencespace-region-engine):
+	Also allow singlespace after single-letter capitals followed by a dot.
+
+	* nxml/nxml-mode.el (nxml-electric-slash): Reindent when completion is
+	enabled.  Suggested by James Ahlborn <jahlborn@gmail.com> (bug#8704).
+
+2011-05-20  Nix  <nix@esperi.org.uk>
+
+	* files.el (basic-save-buffer-2):
+	Fix handling of break-hardlink-on-save with non-existent files.
+
+2011-05-19  Deniz Dogan  <deniz@dogan.se>
+
+	* net/rcirc.el (rcirc-mode): Initialize rcirc-urls to nil.
+	(rcirc-markup-urls): Check if rcirc-url-regexp is nil.
+
+2011-05-19  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/f90.el (f90-type-def-re):
+	Handle "type, bind(c)".  (Bug#8691)
+
+	* emacs-lisp/autoload.el (batch-update-autoloads):
+	Set autoload-excludes by parsing loadup.el rather than Makefiles.
+
+2011-05-18  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-process-actions): Set "first-password-request"
+	property for the correct connection in case of multihops.
+
+2011-05-18  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/authors.el (authors-fixed-entries): Remove fakemail.c.
+	* mail/sendmail.el (sendmail-program): Fall back to just "sendmail".
+
+	Rationalize calendar handling of day and month abbrev-arrays.
+	* calendar/calendar.el (calendar-customized-p): New function.
+	(calendar-abbrev-construct, calendar-make-alist): Change what it does.
+	(calendar-day-name-array, calendar-month-name-array): Doc fix.
+	Add :set function.
+	(calendar-abbrev-length, calendar-day-abbrev-array)
+	(calendar-month-abbrev-array): Make defcustoms, with appropriate :set.
+	(calendar-day-abbrev-array, calendar-month-abbrev-array):
+	Elements may no longer be nil.
+	(calendar-day-name, calendar-month-name):
+	Update for changed nature of abbrev arrays.
+	* calendar/diary-lib.el (diary-name-pattern):
+	Update for changed nature of abbrev arrays.
+	(diary-mark-entries-1): Update calendar-make-alist calls.
+	(diary-font-lock-date-forms): Doc fix for changed abbrev arrays.
+	* calendar/cal-html.el (cal-html-day-abbrev-array):
+	Simply inherit from calendar-day-abbrev-array.
+
+2011-05-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/grep.el (grep-mode): Disable default
+	compilation-directory-matcher setting (bug#8684).
+
+2011-05-17  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-handle-insert-file-contents): Use "dd"
+	instead of "head" and "tail".  There were problems with SunOS 5.9,
+	and it performs better.
+
+2011-05-17  Glenn Morris  <rgm@gnu.org>
+
+	* mail/mail-utils.el (mail-dont-reply-to): Silence compiler.
+
+	* progmodes/idlw-shell.el (idlwave-shell-complete-filename):
+	Replace obsolete function.
+
+	* shell.el (pcomplete-parse-arguments-function): Declare.
+
+	* calendar/appt.el (appt-message-warning-time, appt-display-mode-line)
+	(appt-display-diary, appt-display-interval, appt-prev-comp-time)
+	(appt-check): Doc fixes.
+	(appt-disp-window-function, appt-delete-window-function):
+	Remove needless special case in custom :type.
+	(appt-display-count): Default to 0, not nil.
+	(appt-check): Reset appt-display-count to 0, not nil.
+
+2011-05-17  Juanma Barranquero  <lekktu@gmail.com>
+
+	* progmodes/python.el (python-font-lock-keywords):
+	Add the Python 3.X keyword "nonlocal" (bug#8639).
+
+2011-05-16  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/eieio.el (defmethod): Fix quoting of code (bug#8677).
+
+2011-05-16  Kevin Ryde  <user42@zip.com.au>
+
+	* info-look.el (makefile-automake-mode): New setups, looking in
+	automake manual, then makefile-mode.
+	(makefile-mode): Remove automake manual, have it just in
+	makefile-automake-mode since there's various things different or
+	not relevant to plain make.
+	(makefile-mode): Remove "other-modes" non-existent automake-mode,
+	believe a hypothetical automake-mode would go to makefile-mode,
+	not the other way around.
+
+2011-05-15  Chong Yidong  <cyd@stupidchicken.com>
+
+	* vc/diff-mode.el (diff-fixup-modifs): Locate correct position for
+	hunk-end tags (Bug#8672).
+
+	* vc/vc-annotate.el (vc-annotate-mode-map): Bind = to
+	vc-annotate-show-diff-revision-at-line (Bug#8671).
+
+2011-05-14  Glenn Morris  <rgm@gnu.org>
+
+	* vc/add-log.el (add-change-log-entry): Don't start adding a new entry
+	in the middle of an existing one with multiple authors.  (Bug#8645)
+	(change-log-font-lock-keywords): Also handle multiple author lines
+	with leading tabs.  (Bug#8644)
+
+	* calendar/appt.el (appt-check): Rename some local variables.
+	Some simplification/reordering.
+
+	* mail/feedmail.el (feedmail-confirm-outgoing-timeout)
+	(feedmail-sendmail-f-doesnt-sell-me-out)
+	(feedmail-queue-slug-suspect-regexp, feedmail-debug)
+	(feedmail-debug-sit-for, feedmail-queue-express-hook)
+	(feedmail-queue-runner-message-sender): Set :version.
+	(bbdb-search, bbdb-records, smtp-via-smtp, smtp-server)
+	(bbdb-dwim-net-address, vm-mail): Declare.
+	(feedmail-binmail-gnulinuxish-template):
+	Rename from feedmail-binmail-linuxish-template.
+	(feedmail-buffer-to-smtp, feedmail-vm-mail-mode):
+	Use insert-buffer-substring.
+
+2011-05-14  Bill Carpenter  <bill@carpenter.org>
+
+	* mail/feedmail.el (feedmail-patch-level): Increase.
+	(feedmail-debug): New custom group.
+	(feedmail-confirm-outgoing-timeout)
+	(feedmail-sendmail-f-doesnt-sell-me-out)
+	(feedmail-queue-slug-suspect-regexp, feedmail-debug)
+	(feedmail-debug-sit-for, feedmail-queue-express-hook): New options.
+	(feedmail-sender-line, feedmail-from-line)
+	(feedmail-fiddle-headers-upwardly, feedmail-enable-spray)
+	(feedmail-spray-this-address)
+	(feedmail-spray-address-fiddle-plex-list)
+	(feedmail-queue-use-send-time-for-date)
+	(feedmail-queue-use-send-time-for-message-id)
+	(feedmail-last-chance-hook, feedmail-queue-runner-mode-setter)
+	(feedmail-buffer-eating-function):
+	Doc fixes.
+	(feedmail-spray-via-bbdb, feedmail-buffer-to-smtp)
+	(feedmail-vm-mail-mode, feedmail-message-action-scroll-up)
+	(feedmail-message-action-scroll-down): New functions.
+	(feedmail-queue-directory, feedmail-queue-draft-directory):
+	Use expand-file-name.
+	(feedmail-prompt-before-queue-standard-alist): Add scroll entries.
+	Remove C-v help entry.
+	(feedmail-queue-buffer-file-name): New variable.
+	(feedmail-mail-send-hook-splitter, feedmail-buffer-to-binmail)
+	(feedmail-buffer-to-smtpmail, feedmail-queue-express-to-draft)
+	(feedmail-message-action-send-strong, feedmail-message-action-edit)
+	(feedmail-message-action-draft, feedmail-message-action-draft-strong)
+	(feedmail-message-action-queue, feedmail-message-action-queue-strong)
+	(feedmail-message-action-toggle-spray)
+	(feedmail-run-the-queue-no-prompts)
+	(feedmail-run-the-queue-global-prompt, feedmail-queue-reminder)
+	(feedmail-look-at-queue-directory, feedmail-queue-subject-slug-maker)
+	(feedmail-create-queue-filename, feedmail-rfc822-time-zone):
+	(feedmail-fiddle-header, feedmail-give-it-to-buffer-eater)
+	(feedmail-envelope-deducer, feedmail-fiddle-from)
+	(feedmail-fiddle-sender, feedmail-default-date-generator)
+	(feedmail-fiddle-date, feedmail-fiddle-message-id)
+	(feedmail-fiddle-spray-address)
+	(feedmail-fiddle-list-of-spray-fiddle-plexes)
+	(feedmail-fiddle-list-of-fiddle-plexes)
+	(feedmail-fill-to-cc-function, feedmail-fill-this-one)
+	(feedmail-one-last-look, feedmail-fqm-p): Add debug calls.
+	(feedmail-queue-runner-message-sender, feedmail-binmail-template):
+	Change default.  Doc fix.
+	(feedmail-queue-runner-cleaner-upper): Use feedmail-say-chatter.
+	(feedmail-binmail-linuxish-template): New constant.
+	(feedmail-buffer-to-sendmail): Doc fix.  Add debug call.
+	Respect feedmail-sendmail-f-doesnt-sell-me-out.
+	(feedmail-send-it): Add debug call.
+	Use feedmail-queue-buffer-file-name, and
+	feedmail-send-it-immediately-wrapper.
+	(feedmail-message-action-send): Add debug call.
+	Use feedmail-send-it-immediately-wrapper.
+	(feedmail-queue-express-to-queue): Add debug call.
+	Run feedmail-queue-express-hook.
+	(feedmail-message-action-help): Add debug call.  Use feedmail-p-h-b-n.
+	(feedmail-message-action-help-blat):
+	Rename from feedmail-queue-send-edit-prompt-help-first.
+	(feedmail-run-the-queue): Add debug call.  Set buffer-file-type.
+	Check line-endings.  Handle errors better.
+	(feedmail-queue-reminder-brief, feedmail-queue-reminder-medium):
+	Doc fix.  Add debug call.
+	(feedmail-queue-send-edit-prompt): Doc fix.  Add debug call.
+	Use feedmail-queue-send-edit-prompt-inner.
+	(feedmail-queue-runner-prompt, feedmail-scroll-buffer): New functions.
+	(feedmail-queue-send-edit-prompt-inner): New function, extracted
+	from feedmail-queue-send-edit-prompt.
+	(feedmail-queue-send-edit-prompt-help)
+	(feedmail-queue-send-edit-prompt-help-later): Remove functions.
+	(feedmail-tidy-up-slug): Add debug call.
+	Respect feedmail-queue-slug-suspect-regexp.
+	(feedmail-queue-subject-slug-maker): Use buffer-substring-no-properties.
+	(feedmail-dump-message-to-queue): Add debug call.
+	Expand queue-directory.
+	(feedmail-dump-message-to-queue): Change message slightly.
+	Use feedmail-say-chatter.
+	(feedmail-rfc822-date): Add debug call.  Bind system-time-locale.
+	(feedmail-send-it-immediately-wrapper): New function.
+	(feedmail-send-it-immediately): Add debug calls.  Use let not let*.
+	Insert empty string rather than newline.  Handle full-frame case.
+	Use catch/throw.  Use feedmail-say-chatter.
+	(feedmail-fiddle-from): Try mail-host-address.
+	(feedmail-default-message-id-generator): Doc fix.
+	Bind system-time-locale.  Handle missing end.
+	(feedmail-fiddle-x-mailer): Add debug call.
+	Handle feedmail-x-mailer-line being nil.
+	(feedmail-accume-n-nuke-header, feedmail-deduce-address-list):
+	Add debug call.  Use buffer-substring-no-properties.
+	(feedmail-say-debug, feedmail-say-chatter): New functions.
+	(feedmail-find-eoh): Give an explicit error.
+
+2011-05-13  Ulf Jasper  <ulf.jasper@web.de>
+
+	* net/newst-treeview.el (newsticker-treeview-face): Change default
+	family from helvetica to sans.
+	(newsticker-treeview-tool-bar-map): Move tool-bar icons to
+	etc/images/newsticker.
+
+	* net/newst-reader.el (newsticker-feed-face): Change default
+	family from helvetica to sans.
+
+	* net/newst-plainview.el (newsticker-new-item-face)
+	(newsticker-old-item-face, newsticker-immortal-item-face)
+	(newsticker-obsolete-item-face, newsticker-date-face)
+	(newsticker-statistics-face): Change default family from
+	helvetica to sans.
+	(newsticker--plainview-tool-bar-map): Move tool-bar icons to
+	etc/images/newsticker.
+
+	* net/newst-backend.el (newsticker--do-run-auto-mark-filter),
+	(newsticker--process-auto-mark-filter-match): : Tell user about
+	auto-marking.
+
+2011-05-13  Didier Verna  <didier@xemacs.org>
+
+	Common Lisp indentation improvements on defmethod and lambda-lists.
+	* cl-indent.el: Advertise the changes and remove obsolete TODO entries.
+	(lisp-lambda-list-keyword-parameter-indentation)
+	(lisp-lambda-list-keyword-parameter-alignment)
+	(lisp-lambda-list-keyword-alignment): New customizable user options.
+	(lisp-indent-defun-method): Improve docstring.
+	(extended-loop-p): Fix comment.
+	(lisp-indent-lambda-list-keywords-regexp): New variable.
+	(lisp-indent-lambda-list): New function.
+	(lisp-indent-259): Use it.
+	(lisp-indent-defmethod): Support for more than one
+	method qualifier and properly indent methods lambda-lists.
+	(defgeneric): Provide a missing common-lisp-indent-function property.
+
+2011-05-13  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* thingatpt.el (bounds-of-thing-at-point): Return nil rather than
+	bounds for the empty string (bug#8667).
+
+2011-05-13  Glenn Morris  <rgm@gnu.org>
+
+	* mail/feedmail.el (feedmail-buffer-to-sendmail): Require sendmail.
+
+	* mail/sendmail.el (sendmail-program): Try executable-find first.
+	(sendmail-send-it): `sendmail-program' cannot be unbound.
+
+	* calendar/appt.el (appt-make-list): Simplify.
+	(appt-time-msg-list): Doc fix.
+	(appt-check): Change mode-line message at the time of the appointment.
+
+2011-05-12  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* progmodes/ld-script.el (ld-script-keywords)
+	(ld-script-builtins): Update keywords list.
+
+2011-05-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/grep.el (grep-filter): Don't trip on partial lines.
+
+	* shell.el (shell-completion-vars): New function.
+	(shell-mode):
+	* simple.el (read-shell-command): Use it.
+	(blink-matching-open): No need for " [...]" in minibuffer-message.
+
+2011-05-12  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/appt.el (appt-now-displayed): Remove pointless variable.
+	(appt-check): Simplify.
+
+2011-05-12  Eli Zaretskii  <eliz@gnu.org>
+
+	* smerge-mode.el (smerge-resolve): Use null-device rather than a
+	literal "/dev/null".
+
+2011-05-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/lisp.el (lisp-complete-symbol, lisp-completion-at-point):
+	Fix typo.
+
+2011-05-12  Ralph Schleicher  <rs@ralph-schleicher.de>
+
+	* progmodes/which-func.el (which-function):
+	Use add-log-current-defun instead of add-log-current-defun-function,
+	which might not be defined (Bug#8260).
+
+2011-05-12  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/bytecomp.el (byte-compile-file-form-defmumble):
+	Let byte-compile-initial-macro-environment always take precedence.
+
+2011-05-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* net/rcirc.el: Add support for SSL/TLS connections.
+	(rcirc-server-alist): New field `encryption'.
+	(rcirc): Check `encryption' settings.
+	(rcirc-connect): New arg `encryption'.  Use open-network-stream.
+	Merge make-local-variable into `set'.
+	(rcirc--connection-open-p): New function.
+	(rcirc-send-string, rcirc-clean-up-buffer): Use it to handle case where
+	the process is not a network process (e.g. running gnutls-cli).
+	(set-rcirc-decode-coding-system, set-rcirc-encode-coding-system):
+	Make rcirc-(en|de)code-coding-system local here.
+	(rcirc-mode): Merge make-local-variable into `set'.
+	(rcirc-parent-buffer): Make permanent buffer-local.
+	(rcirc-multiline-minor-mode): Don't do it here.
+	(rcirc-switch-to-server-buffer): Don't switch to a random buffer if
+	there's no server buffer.
+
+2011-05-11  Glenn Morris  <rgm@gnu.org>
+
+	* newcomment.el (comment-kill): Prefix "unused" local.
+
+	* term/w32console.el (get-screen-color): Declare.
+
+	* emacs-lisp/bytecomp.el (byte-compile-arglist-warn):
+	Handle symbol elements of byte-compile-initial-macro-environment.
+
+2011-05-10  Leo Liu  <sdl.web@gmail.com>
+
+	* bookmark.el (bookmark-bmenu-mode-map):
+	Bind bookmark-bmenu-search to `/'.
+
+	* mail/footnote.el: Convert to utf-8 encoding.
+	(footnote-unicode-string, footnote-unicode-regexp): New variable.
+	(Footnote-unicode): New function.
+	(footnote-style-alist): Add unicode style to the list.
+	(footnote-style): Doc fix.
+
+2011-05-10  Jim Meyering  <meyering@redhat.com>
+
+	Fix doubled-word typos.
+	* international/quail.el (quail-insert-kbd-layout): and and -> and
+	* kermit.el: and and -> and
+	* net/ldap.el (ldap-search-internal): to to -> to
+	* progmodes/vhdl-mode.el (vhdl-offsets-alist): Likewise.
+	* progmodes/js.el (js-mode): and and -> and
+	* textmodes/artist.el (artist-move-to-xy): at at -> at
+	(artist-draw-region-trim-line-endings): if if -> if
+	And Safetyc -> Safety.
+	* textmodes/reftex-dcr.el (reftex-view-crossref): at at -> at a
+
+2011-05-10  Glenn Morris  <rgm@gnu.org>
+            Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* files.el (hack-one-local-variable-eval-safep):
+	Consider "eval: (foo-mode)" to be safe.  (Bug#8613)
+
+2011-05-10  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/diary-lib.el (diary-list-entries-hook)
+	(diary-mark-entries-hook, diary-nongregorian-listing-hook)
+	(diary-nongregorian-marking-hook, diary-list-entries)
+	(diary-include-other-diary-files, diary-mark-entries)
+	(diary-mark-included-diary-files): Doc fixes.
+
+2011-05-09  Juanma Barranquero  <lekktu@gmail.com>
+
+	* misc.el: Require tabulated-list.el during compilation.
+
+2011-05-09  Chong Yidong  <cyd@stupidchicken.com>
+
+	* progmodes/compile.el (compilation-start):
+	Run compilation-filter-hook for the async case too.
+	(compilation-filter-hook): Doc fix.
+
+2011-05-09  Deniz Dogan  <deniz@dogan.se>
+
+	* wdired.el: Remove outdated installation comment.  Fix usage
+	comment.
+
+2011-05-09  Juanma Barranquero  <lekktu@gmail.com>
+
+	* misc.el: Implement new command `list-dynamic-libraries'.
+	(list-dynamic-libraries--loaded-only-p): New variable.
+	(list-dynamic-libraries--refresh): New function.
+	(list-dynamic-libraries): New command.
+
+2011-05-09  Chong Yidong  <cyd@stupidchicken.com>
+
+	* progmodes/compile.el (compilation-error-regexp-alist-alist):
+	Fix the ant regexp to handle end-line and end-column info from jikes.
+	Re-introduce maven regexp.  Give the ruby-Test::Unit regexp a
+	higher priority to avoid clobbering by gnu.
+
+2011-05-08  Chong Yidong  <cyd@stupidchicken.com>
+
+	* cus-face.el (custom-declare-face): Call custom-theme-recalc-face
+	if the face has existing theme settings (Bug#8454).
+
+2011-05-08  Ralph Schleicher  <rs@ralph-schleicher.de>
+
+	* progmodes/perl-mode.el (perl-imenu-generic-expression):
+	Only match variables declared via `my' or `our' (Bug#8261).
+
+	* net/browse-url.el (browse-url-of-dired-file): Allow browsing of
+	special file names `.' and `..' (Bug#8259).
+
+2011-05-08  Chong Yidong  <cyd@stupidchicken.com>
+
+	* progmodes/grep.el (grep-mode-font-lock-keywords):
+	Remove buffer-changing entries.
+	(grep-filter): New function.
+	(grep-mode): Add it to compilation-filter-hook.
+
+	* progmodes/compile.el (compilation-filter-hook)
+	(compilation-filter-start): New defvars.
+	(compilation-filter): Call compilation-filter-hook prior to
+	updating the process mark.
+
+2011-05-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/eieio.el (defmethod): Fix typo in last change.
+
+2011-05-07  Eli Zaretskii  <eliz@gnu.org>
+
+	* mail/sendmail.el (send-mail-function): On MS-Windows, default to
+	mailclient-send-it even if window-system is nil.  (Bug#8595)
+
+	* term/w32console.el (terminal-init-w32console):
+	Call get-screen-color and use its output to set the frame
+	background-mode.  (Bug#8597)
+
+2011-05-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Make bytecomp.el understand that defmethod defines funs (bug#8631).
+	* emacs-lisp/eieio.el (eieio--defalias, eieio--defgeneric-init-form):
+	New functions.
+	(defgeneric, eieio--defmethod): Use them.
+	(eieio-defgeneric): Remove.
+	(defmethod): Call defgeneric in a way visible to the byte-compiler.
+
+2011-05-07  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/timeclock.el (timeclock-log-data): Remove unused local.
+	Use let rather than let*.
+	(timeclock-find-discrep): Remove unused local.
+
+	* calendar/diary-lib.el (diary-comment-start): Doc fix.
+
+	* calendar/appt.el (appt-time-msg-list): Doc fix.
+
+2011-05-06  Noah Friedman  <friedman@splode.com>
+
+	* apropos.el (apropos-print-doc): Only use
+	emacs-lisp-docstring-fill-column when it is bound to an integer,
+	per that variable's documentation.
+
+2011-05-06  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* lpr.el (print-region-1): Echo lpr-program's output, so error messages
+	and warnings are not silently discarded (e.g. use -d instead of -P).
+
+2011-05-06  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/appt.el (appt-message-warning-time): Doc fix.
+	(appt-warning-time-regexp): New option.
+	(appt-make-list): Respect appt-message-warning-time.
+
+	* calendar/diary-lib.el (diary-comment-start, diary-comment-end):
+	New options.
+	(diary-add-to-list): Strip comments from the displayed string.
+	(diary-mode): Set comment-start and comment-end.
+
+	* vc/diff-mode.el (smerge-refine-subst): Declare.
+	(diff-refine-hunk): Don't require smerge-mode when compiling.
+
+2011-05-06  Juanma Barranquero  <lekktu@gmail.com>
+
+	* simple.el (list-processes): Return nil as the docstring says.
+
+2011-05-05  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/ange-ftp.el (ange-ftp-binary-file-name-regexp): Set default
+	to "".
+	(ange-ftp-write-region, ange-ftp-insert-file-contents)
+	(ange-ftp-copy-file-internal): Use only `ange-ftp-binary-file' for
+	determining of binary transfer.  (Bug#7383)
+
+2011-05-05  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-do-copy-or-rename-file-out-of-band):
+	Fix port computation bug.  (Bug#8618)
+
+2011-05-05  Glenn Morris  <rgm@gnu.org>
+
+	* allout-widgets.el (allout-widgets-mode-inhibit): Declare before use.
+
+	* simple.el (shell-dynamic-complete-functions)
+	(comint-dynamic-complete-functions): Declare.
+
+	* net/network-stream.el (gnutls-negotiate):
+	* simple.el (tabulated-list-print): Fix declarations.
+
+	* progmodes/gud.el (syntax-symbol, syntax-point):
+	Remove unnecessary and incorrect declarations.
+
+	* emacs-lisp/check-declare.el (check-declare-scan):
+	Handle byte-compile-initial-macro-environment in bytecomp.el
+
+2011-05-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Fix earlier half-done eieio-defmethod change (bug#8338).
+	* emacs-lisp/eieio.el (eieio--defmethod): Rename from eieio-defmethod.
+	Streamline and change calling convention.
+	(defmethod): Adjust accordingly and simplify.
+	(eieio-defclass): Fix broken calls to eieio-defmethod and redirect to
+	new eieio--defmethod.
+	(slot-boundp): Minor CSE simplification.
+
+2011-05-05  Milan Zamazal  <pdm@zamazal.org>
+
+	* progmodes/glasses.el (glasses-separate-capital-groups): New option.
+	(glasses-make-readable): Use glasses-separate-capital-groups.
+
+2011-05-05  Juanma Barranquero  <lekktu@gmail.com>
+
+	* emacs-lisp/warnings.el (warning-level-aliases): Reflow docstring.
+	(warning-series): Doc fix.
+	(display-warning): Don't try to create the buffer if we just found it.
+
+2011-05-04  Chong Yidong  <cyd@stupidchicken.com>
+
+	* emacs-lisp/autoload.el (generated-autoload-file): Set to nil.
+	(autoload-find-generated-file): New function.
+	(generate-file-autoloads): Bind generated-autoload-file to
+	buffer-file-name.
+	(update-file-autoloads, update-directory-autoloads):
+	Use autoload-find-generated-file.  If called interactively, prompt for
+	output file (Bug#7989).
+	(batch-update-autoloads): Doc fix.
+
+2011-05-04  Juanma Barranquero  <lekktu@gmail.com>
+
+	* term/w32-win.el (dynamic-library-alist): Add `gnutls'.
+
+2011-05-04  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/diary-lib.el (diary-fancy-date-pattern): Turn it into a
+	function, so it follows changes in calendar-date-style.
+	(diary-fancy-date-matcher): New function.
+	(diary-fancy-font-lock-keywords): Use diary-fancy-date-matcher.
+	(diary-fancy-font-lock-fontify-region-function):
+	Use diary-fancy-date-pattern as a function.
+
+	* calendar/diary-lib.el (diary-fancy-date-pattern): Do not use
+	non-numbers for `year' etc pseudo-variables.  (Bug#8583)
+
+2011-05-04  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* net/gnutls.el (gnutls-negotiate): Use CL-style keyword arguments
+	instead of positional arguments.  Allow :keylist and :crlfiles
+	arguments.
+	(open-gnutls-stream): Call it.
+
+	* net/network-stream.el (network-stream-open-starttls): Adjust to
+	call `gnutls-negotiate' with :process and :hostname arguments.
+
+2011-05-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion--message): New function.
+	(completion--do-completion, minibuffer-complete)
+	(minibuffer-force-complete, minibuffer-complete-word): Use it.
+	(completion--do-completion): Don't ignore completion-auto-help when in
+	icomplete-mode.
+
+	* whitespace.el (whitespace-trailing-regexp): Don't rely on the
+	internal encoding (e.g. tibetan zero is not whitespace).
+	(global-whitespace-mode): Prefer save-current-buffer.
+	(whitespace-trailing-regexp): Remove useless save-match-data.
+	(whitespace-empty-at-bob-regexp): Minor simplification.
+
+2011-05-03  Chong Yidong  <cyd@stupidchicken.com>
+
+	* emacs-lisp/autoload.el (generated-autoload-file): Doc fix (Bug#7989).
+
+2011-05-03  Agustín Martín Domingo  <agustin.martin@hispalinux.es>
+
+	* textmodes/ispell.el (ispell-add-per-file-word-list):
+	Use `concat' to create string for insertion.
+
+2011-05-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* textmodes/bibtex.el (bibtex-fill-field-bounds, bibtex-fill-entry):
+	Avoid open-line which runs post-self-insert-hook.
+	(bibtex-fill-entry): Remove unused `end' var.
+
+2011-05-03  Dirk Ullrich  <dirk.ullrich@googlemail.com>  (tiny change)
+
+	* textmodes/ispell.el (ispell-add-per-file-word-list):
+	Protect against `nil' value of `comment-start' (Bug#8579).
+
+2011-05-03  Leo Liu  <sdl.web@gmail.com>
+
+	* isearch.el (isearch-yank-pop): New command.
+	(isearch-mode-map): Bind it to `M-y'.
+	(isearch-forward): Mention it.
+
+2011-05-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* simple.el (minibuffer-complete-shell-command): Remove.
+	(minibuffer-local-shell-command-map): Use completion-at-point.
+	(read-shell-command): Setup completion vars here instead.
+	(read-expression-map): Bind TAB to symbol completion.
+
+	* textmodes/ispell.el (lookup-words): Use with-temp-buffer; signal
+	error directly rather via storing it into `results'.
+
+2011-05-02  Leo Liu  <sdl.web@gmail.com>
+
+	* vc/diff.el: Fix description.
+
 2011-05-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* server.el (server-eval-at): New function.
@@ -1779,7 +2754,7 @@
 	(emerge-protect-metachars): Quote correctly for ms-dos and
 	windows-nt systems.
 
-2011-03-19  Ralph Schleicher  <rs@ralph-schleicher.de>  (tiny change)
+2011-03-19  Ralph Schleicher  <rs@ralph-schleicher.de>
 
 	* info.el (info-initialize): Replace all uses of `:' with
 	path-separator for compatibility with non-Unix systems.

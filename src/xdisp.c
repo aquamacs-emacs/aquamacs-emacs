@@ -254,7 +254,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    still left to right, i.e. the iterator "thinks" the first character
    is at the leftmost pixel position.  The iterator does not know that
    PRODUCE_GLYPHS reverses the order of the glyphs that the iterator
-   delivers.  This is important when functions from the the move_it_*
+   delivers.  This is important when functions from the move_it_*
    family are used to get to certain screen position or to match
    screen coordinates with buffer coordinates: these functions use the
    iterator geometry, which is left to right even in R2L paragraphs.
@@ -5892,11 +5892,23 @@ get_next_display_element (struct it *it)
       else
 	{
 	  EMACS_INT pos = (it->s ? -1
-			   : STRINGP (it->string) ? IT_STRING_CHARPOS (*it)
-			   : IT_CHARPOS (*it));
+		     : STRINGP (it->string) ? IT_STRING_CHARPOS (*it)
+		     : IT_CHARPOS (*it));
+	  int c;
 
-	  it->face_id = FACE_FOR_CHAR (it->f, face, it->char_to_display, pos,
-				       it->string);
+	  if (it->what == IT_CHARACTER)
+	    c = it->char_to_display;
+	  else
+	    {
+	      struct composition *cmp = composition_table[it->cmp_it.id];
+	      int i;
+
+	      c = ' ';
+	      for (i = 0; i < cmp->glyph_len; i++)
+		if ((c = COMPOSITION_GLYPH (cmp, i)) != '\t')
+		  break;
+	    }
+	  it->face_id = FACE_FOR_CHAR (it->f, face, c, pos, it->string);
 	}
     }
     }
@@ -8740,7 +8752,7 @@ display_echo_area (struct window *w)
   window_height_changed_p
     = with_echo_area_buffer (w, display_last_displayed_message_p,
 			     display_echo_area_1,
-			     (EMACS_INT) w, Qnil, 0, 0);
+			     (intptr_t) w, Qnil, 0, 0);
 
   if (no_message_p)
     echo_area_buffer[i] = Qnil;
@@ -8759,7 +8771,8 @@ display_echo_area (struct window *w)
 static int
 display_echo_area_1 (EMACS_INT a1, Lisp_Object a2, EMACS_INT a3, EMACS_INT a4)
 {
-  struct window *w = (struct window *) a1;
+  intptr_t i1 = a1;
+  struct window *w = (struct window *) i1;
   Lisp_Object window;
   struct text_pos start;
   int window_height_changed_p = 0;
@@ -8801,7 +8814,8 @@ resize_echo_area_exactly (void)
 	resize_exactly = Qnil;
 
       resized_p = with_echo_area_buffer (w, 0, resize_mini_window_1,
-					 (EMACS_INT) w, resize_exactly, 0, 0);
+					 (intptr_t) w, resize_exactly,
+					 0, 0);
       if (resized_p)
 	{
 	  ++windows_or_buffers_changed;
@@ -8821,7 +8835,8 @@ resize_echo_area_exactly (void)
 static int
 resize_mini_window_1 (EMACS_INT a1, Lisp_Object exactly, EMACS_INT a3, EMACS_INT a4)
 {
-  return resize_mini_window ((struct window *) a1, !NILP (exactly));
+  intptr_t i1 = a1;
+  return resize_mini_window ((struct window *) i1, !NILP (exactly));
 }
 
 
@@ -8987,7 +9002,7 @@ current_message (void)
   else
     {
       with_echo_area_buffer (0, 0, current_message_1,
-			     (EMACS_INT) &msg, Qnil, 0, 0);
+			     (intptr_t) &msg, Qnil, 0, 0);
       if (NILP (msg))
 	echo_area_buffer[0] = Qnil;
     }
@@ -8999,7 +9014,8 @@ current_message (void)
 static int
 current_message_1 (EMACS_INT a1, Lisp_Object a2, EMACS_INT a3, EMACS_INT a4)
 {
-  Lisp_Object *msg = (Lisp_Object *) a1;
+  intptr_t i1 = a1;
+  Lisp_Object *msg = (Lisp_Object *) i1;
 
   if (Z > BEG)
     *msg = make_buffer_string (BEG, Z, 1);
@@ -9130,7 +9146,7 @@ set_message (const char *s, Lisp_Object string,
        || (STRINGP (string) && STRING_MULTIBYTE (string)));
 
   with_echo_area_buffer (0, -1, set_message_1,
-			 (EMACS_INT) s, string, nbytes, multibyte_p);
+			 (intptr_t) s, string, nbytes, multibyte_p);
   message_buf_print = 0;
   help_echo_showing_p = 0;
 }
@@ -9144,7 +9160,8 @@ set_message (const char *s, Lisp_Object string,
 static int
 set_message_1 (EMACS_INT a1, Lisp_Object a2, EMACS_INT nbytes, EMACS_INT multibyte_p)
 {
-  const char *s = (const char *) a1;
+  intptr_t i1 = a1;
+  const char *s = (const char *) i1;
   const unsigned char *msg = (const unsigned char *) s;
   Lisp_Object string = a2;
 
@@ -14816,7 +14833,8 @@ try_window_reusing_current_matrix (struct window *w)
 		row->visible_height -= min_y - row->y;
 	      if (row->y + row->height > max_y)
 		row->visible_height -= row->y + row->height - max_y;
-	      row->redraw_fringe_bitmaps_p = 1;
+	      if (row->fringe_bitmap_periodic_p)
+		row->redraw_fringe_bitmaps_p = 1;
 
 	      it.current_y += row->height;
 
@@ -14978,7 +14996,8 @@ try_window_reusing_current_matrix (struct window *w)
 	    row->visible_height -= min_y - row->y;
 	  if (row->y + row->height > max_y)
 	    row->visible_height -= row->y + row->height - max_y;
-	  row->redraw_fringe_bitmaps_p = 1;
+	  if (row->fringe_bitmap_periodic_p)
+	    row->redraw_fringe_bitmaps_p = 1;
 	}
 
       /* Scroll the current matrix.  */
@@ -26254,7 +26273,7 @@ x_intersect_rectangles (XRectangle *r1, XRectangle *r2, XRectangle *result)
     {
       result->x = right->x;
 
-      /* The right end of the intersection is the minimum of the
+      /* The right end of the intersection is the minimum of
 	 the right ends of left and right.  */
       result->width = (min (left->x + left->width, right->x + right->width)
 		       - result->x);

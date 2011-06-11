@@ -29,7 +29,7 @@
 ;;; Code:
 (require 'mail-utils)
 
-(autoload 'rfc2047-encode-string "rfc2047")
+(require 'rfc2047)
 
 (defgroup sendmail nil
   "Mail sending commands for Emacs."
@@ -43,12 +43,14 @@
   :version "22.1")
 
 (defcustom sendmail-program
-  (cond
-    ((file-exists-p "/usr/sbin/sendmail") "/usr/sbin/sendmail")
-    ((file-exists-p "/usr/lib/sendmail") "/usr/lib/sendmail")
-    ((file-exists-p "/usr/ucblib/sendmail") "/usr/ucblib/sendmail")
-    (t "fakemail"))			;In ../etc, to interface to /bin/mail.
+  (or (executable-find "sendmail")
+      (cond
+       ((file-exists-p "/usr/sbin/sendmail") "/usr/sbin/sendmail")
+       ((file-exists-p "/usr/lib/sendmail") "/usr/lib/sendmail")
+       ((file-exists-p "/usr/ucblib/sendmail") "/usr/ucblib/sendmail")
+       (t "sendmail")))
   "Program used to send messages."
+  :version "24.1"		; add executable-find, remove fakemail
   :group 'mail
   :type 'file)
 
@@ -141,14 +143,18 @@ Otherwise, let mailer send back a message to report errors."
 ;; standard value.
 ;;;###autoload
 (put 'send-mail-function 'standard-value
-     '((if (and window-system (memq system-type '(darwin windows-nt)))
+     ;; MS-Windows can access the clipboard even under -nw.
+     '((if (or (and window-system (eq system-type 'darwin))
+	       (eq system-type 'windows-nt))
 	   'mailclient-send-it
 	 'sendmail-send-it)))
 
 ;; Useful to set in site-init.el
 ;;;###autoload
 (defcustom send-mail-function
-  (if (and window-system (memq system-type '(darwin windows-nt)))
+  (if (or (and window-system (eq system-type 'darwin))
+	  ;; MS-Windows can access the clipboard even under -nw.
+	  (eq system-type 'windows-nt))
       'mailclient-send-it
     'sendmail-send-it)
   "Function to call to send the current buffer as mail.
@@ -859,9 +865,9 @@ the user from the mailer."
 			  (let ((l))
 			    (mapc
 			     ;; remove duplicates
-			     '(lambda (e)
-				(unless (member e l)
-				  (push e l)))
+			     (lambda (e)
+                               (unless (member e l)
+                                 (push e l)))
 			     (split-string new-header-values
 					   ",[[:space:]]+" t))
 			    (mapconcat 'identity l ", "))
@@ -940,12 +946,14 @@ of outgoing mails regardless of the current language environment.
 See also the function `select-message-coding-system'.")
 
 (defun mail-insert-from-field ()
+  "Insert the \"From:\" field of a mail header.
+The style of the field is determined by the variable `mail-from-style'.
+This function does not perform RFC2047 encoding."
   (let* ((login user-mail-address)
 	 (fullname (user-full-name))
 	 (quote-fullname nil))
     (if (string-match "[^\0-\177]" fullname)
-	(setq fullname (rfc2047-encode-string fullname)
-	      quote-fullname t))
+	(setq quote-fullname t))
     (cond ((null mail-from-style)
 	   (insert "From: " login "\n"))
 	  ;; This is deprecated.
@@ -1005,6 +1013,21 @@ See also the function `select-message-coding-system'.")
 		 (goto-char fullname-start))))
 	   (insert ")\n")))))
 
+(defun mail-encode-header (beg end)
+  "Encode the mail header between BEG and END according to RFC2047.
+Return non-nil if and only if some part of the header is encoded."
+  (save-restriction
+    (narrow-to-region beg end)
+    (let* ((selected (select-message-coding-system))
+	   (mm-coding-system-priorities
+	    (if (and selected (coding-system-get selected :mime-charset))
+		(cons selected mm-coding-system-priorities)
+	      mm-coding-system-priorities))
+	   (tick (buffer-chars-modified-tick))
+	   (rfc2047-encode-encoded-words nil))
+      (rfc2047-encode-message-header)
+      (= tick (buffer-chars-modified-tick)))))
+
 ;; Normally you will not need to modify these options unless you are
 ;; using some non-genuine substitute for sendmail which does not
 ;; implement each and every option that the original supports.
@@ -1034,9 +1057,6 @@ external program defined by `sendmail-program'."
 	delimline
 	fcc-was-found
 	(mailbuf (current-buffer))
-	(program (if (boundp 'sendmail-program)
-		     sendmail-program
-		   "/usr/lib/sendmail"))
 	;; Examine these variables now, so that
 	;; local binding in the mail buffer will take effect.
 	(envelope-from
@@ -1048,6 +1068,7 @@ external program defined by `sendmail-program'."
 	  (unless multibyte
 	    (set-buffer-multibyte nil))
 	  (insert-buffer-substring mailbuf)
+	  (set-buffer-file-coding-system selected-coding)
 	  (goto-char (point-max))
 	  ;; require one newline at the end.
 	  (or (= (preceding-char) ?\n)
@@ -1153,6 +1174,8 @@ external program defined by `sendmail-program'."
 	    (if mail-interactive
 		(with-current-buffer errbuf
 		  (erase-buffer))))
+	  ;; Encode the header according to RFC2047.
+	  (mail-encode-header (point-min) delimline)
 	  (goto-char (point-min))
 	  (if (let ((case-fold-search t))
 		(or resend-to-addresses
@@ -1162,7 +1185,7 @@ external program defined by `sendmail-program'."
 		     (coding-system-for-write selected-coding)
 		     (args
 		      (append (list (point-min) (point-max)
-				    program
+				    sendmail-program
 				    nil errbuf nil "-oi")
 			      (and envelope-from
 				   (list "-f" envelope-from))

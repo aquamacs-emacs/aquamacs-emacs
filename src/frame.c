@@ -1370,7 +1370,14 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
       = Fcons (list3 (Qrun_hook_with_args, Qdelete_frame_functions, frame),
 	       pending_funcalls);
   else
-    safe_call2 (Qrun_hook_with_args, Qdelete_frame_functions, frame);
+    {
+#ifdef HAVE_X_WINDOWS
+      /* Also, save clipboard to the the clipboard manager.  */
+      x_clipboard_manager_save_frame (frame);
+#endif
+
+      safe_call2 (Qrun_hook_with_args, Qdelete_frame_functions, frame);
+    }
 
   /* The hook may sometimes (indirectly) cause the frame to be deleted.  */
   if (! FRAME_LIVE_P (f))
@@ -1655,7 +1662,7 @@ and returns whatever that function returns.  */)
   enum scroll_bar_part party_dummy;
   Lisp_Object x, y, retval;
   int col, row;
-  unsigned long long_dummy;
+  Time long_dummy;
   struct gcpro gcpro1;
 
   f = SELECTED_FRAME ();
@@ -1700,7 +1707,7 @@ and nil for X and Y.  */)
   Lisp_Object lispy_dummy;
   enum scroll_bar_part party_dummy;
   Lisp_Object x, y;
-  unsigned long long_dummy;
+  Time long_dummy;
 
   f = SELECTED_FRAME ();
   x = y = Qnil;

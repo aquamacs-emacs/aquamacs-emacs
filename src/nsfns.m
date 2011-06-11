@@ -1987,9 +1987,10 @@ when `ns-popup-save-panel' was called.
 DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 4, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
 Optional arg DIR, if non-nil, supplies a default directory.
-Optional arg ISLOAD, if non-nil, means read a file name for loading.
+Optional arg MUSTMATCH, if non-nil, means the returned file or
+directory must exist.
 Optional arg INIT, if non-nil, provides a default file name to use.  */)
-     (Lisp_Object prompt, Lisp_Object dir, Lisp_Object isLoad, Lisp_Object init)
+     (Lisp_Object prompt, Lisp_Object dir, Lisp_Object mustmatch, Lisp_Object init)
 {
   static id fileDelegate = nil;
   int ret;
@@ -2011,7 +2012,7 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
   if ([dirS characterAtIndex: 0] == '~')
     dirS = [dirS stringByExpandingTildeInPath];
 
-  panel = NILP (isLoad) ?
+  panel = NILP (mustmatch) ?
     (id)[EmacsSavePanel savePanel] : (id)[EmacsOpenPanel openPanel];
 
   [panel setTitle: promptS];
@@ -2027,7 +2028,7 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
 
   panelOK = 0;
   BLOCK_INPUT;
-  if (NILP (isLoad))
+  if (NILP (mustmatch))
     {
       ret = [panel runModalForDirectory: dirS file: initS];
     }

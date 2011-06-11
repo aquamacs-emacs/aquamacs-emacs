@@ -57,6 +57,16 @@
 ;; You should also consider using the nnregistry backend to look up
 ;; articles.  See the Gnus manual for more information.
 
+;; Finally, you can put %uM in your summary line format to show the
+;; registry marks if you do this:
+
+;; show the marks as single characters (see the :char property in
+;; `gnus-registry-marks'):
+;; (defalias 'gnus-user-format-function-M 'gnus-registry-user-format-function-M)
+
+;; show the marks by name (see `gnus-registry-marks'):
+;; (defalias 'gnus-user-format-function-M 'gnus-registry-user-format-function-M2)
+
 ;; TODO:
 
 ;; - get the correct group on spool actions
@@ -244,6 +254,8 @@ the Bit Bucket."
       (oset db :max-hard
             (or gnus-registry-max-entries
                 most-positive-fixnum))
+      (oset db :prune-factor
+            0.1)
       (oset db :max-soft
             (or gnus-registry-max-pruned-entries
                 most-positive-fixnum))
@@ -383,7 +395,7 @@ This is not required after changing `gnus-registry-cache-file'."
     (gnus-message 10 "Gnus registry: new entry for %s is %S"
                   id
                   entry)
-    (registry-insert db id entry)))
+    (gnus-registry-insert db id entry)))
 
 ;; Function for nn{mail|imap}-split-fancy: look up all references in
 ;; the cache and if a match is found, return that group.
@@ -885,22 +897,26 @@ Uses `gnus-registry-marks' to find what shortcuts to install."
                  nil
                  (cons "Registry Marks" gnus-registry-misc-menus))))))
 
-;;; use like this:
-;;; (defalias 'gnus-user-format-function-M
-;;;           'gnus-registry-user-format-function-M)
+;; use like this:
+;; (defalias 'gnus-user-format-function-M 'gnus-registry-user-format-function-M)
 (defun gnus-registry-user-format-function-M (headers)
+  "Show the marks for an article by the :char property"
   (let* ((id (mail-header-message-id headers))
          (marks (when id (gnus-registry-get-id-key id 'mark))))
-    (apply 'concat (mapcar (lambda (mark)
-                             (let ((c
-                                    (plist-get
-                                     (cdr-safe
-                                      (assoc mark gnus-registry-marks))
-                                     :char)))
-                               (if c
-                                   (list c)
-                                 nil)))
-                           marks))))
+    (mapconcat (lambda (mark)
+                 (plist-get
+                  (cdr-safe
+                   (assoc mark gnus-registry-marks))
+                  :char))
+               marks "")))
+
+;; use like this:
+;; (defalias 'gnus-user-format-function-M 'gnus-registry-user-format-function-M2)
+(defun gnus-registry-user-format-function-M2 (headers)
+  "Show the marks for an article by name"
+  (let* ((id (mail-header-message-id headers))
+         (marks (when id (gnus-registry-get-id-key id 'mark))))
+    (mapconcat (lambda (mark) (symbol-name mark)) marks ",")))
 
 (defun gnus-registry-read-mark ()
   "Read a mark name from the user with completion."
@@ -962,8 +978,8 @@ only the last one's marks are returned."
          (entries (registry-lookup db (list id))))
 
     (when (null entries)
-      (registry-insert db id (list (list 'creation-time (current-time))
-                                   '(group) '(sender) '(subject)))
+      (gnus-registry-insert db id (list (list 'creation-time (current-time))
+                                        '(group) '(sender) '(subject)))
       (setq entries (registry-lookup db (list id))))
 
     (nth 1 (assoc id entries))))
@@ -979,8 +995,16 @@ only the last one's marks are returned."
          (entry (gnus-registry-get-or-make-entry id)))
     (registry-delete db (list id) nil)
     (setq entry (cons (cons key vals) (assq-delete-all key entry)))
-    (registry-insert db id entry)
+    (gnus-registry-insert db id entry)
     entry))
+
+(defun gnus-registry-insert (db id entry)
+  "Just like `registry-insert' but tries to prune on error."
+  (when (registry-full db)
+    (message "Trying to prune the registry because it's full")
+    (registry-prune db))
+  (registry-insert db id entry)
+  entry)
 
 (defun gnus-registry-import-eld (file)
   (interactive "fOld registry file to import? ")
@@ -1075,7 +1099,7 @@ only the last one's marks are returned."
     (should (equal (gnus-registry-get-id-key "34" 'group) '("togroup")))
     (should (equal (gnus-registry-get-id-key "34" 'subject) '("subject 4")))
     (message "Trying to insert a duplicate key")
-    (should-error (registry-insert db "55" '()))
+    (should-error (gnus-registry-insert db "55" '()))
     (message "Looking up individual keys (gnus-registry-get-or-make-entry)")
     (should (gnus-registry-get-or-make-entry "22"))
     (message "Saving the Gnus registry to %s" tempfile)

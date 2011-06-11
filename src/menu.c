@@ -21,6 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 #include <stdio.h>
 #include <setjmp.h>
+#include <limits.h> /* for INT_MAX */
 
 #include "lisp.h"
 #include "keyboard.h"
@@ -176,6 +177,8 @@ save_menu_items (void)
 static void
 grow_menu_items (void)
 {
+  if ((INT_MAX - MENU_ITEMS_PANE_LENGTH) / 2 < menu_items_allocated)
+    memory_full ();
   menu_items_allocated *= 2;
   menu_items = larger_vector (menu_items, menu_items_allocated, Qnil);
 }
@@ -800,9 +803,9 @@ digest_single_submenu (int start, int end, int top_level_items)
 	  if (!NILP (descrip))
 	    wv->lkey = descrip;
 	  wv->value = 0;
-	  /* The EMACS_INT cast avoids a warning.  There's no problem
+	  /* The intptr_t cast avoids a warning.  There's no problem
 	     as long as pointers have enough bits to hold small integers.  */
-	  wv->call_data = (!NILP (def) ? (void *) (EMACS_INT) i : 0);
+	  wv->call_data = (!NILP (def) ? (void *) (intptr_t) i : 0);
 	  wv->enabled = !NILP (enable);
 
 	  if (NILP (type))
@@ -911,9 +914,9 @@ find_and_call_menu_selection (FRAME_PTR f, int menu_bar_items_used, Lisp_Object 
       else
 	{
 	  entry = XVECTOR (vector)->contents[i + MENU_ITEMS_ITEM_VALUE];
-	  /* The EMACS_INT cast avoids a warning.  There's no problem
+	  /* Treat the pointer as an integer.  There's no problem
 	     as long as pointers have enough bits to hold small integers.  */
-	  if ((int) (EMACS_INT) client_data == i)
+	  if ((intptr_t) client_data == i)
 	    {
 	      int j;
 	      struct input_event buf;
@@ -1145,13 +1148,13 @@ no quit occurs and `x-popup-menu' returns nil.  */)
 #else /* not HAVE_X_WINDOWS */
 	Lisp_Object bar_window;
 	enum scroll_bar_part part;
-	unsigned long time;
+	Time time;
         void (*mouse_position_hook) (struct frame **, int,
                                      Lisp_Object *,
                                      enum scroll_bar_part *,
                                      Lisp_Object *,
                                      Lisp_Object *,
-                                     unsigned long *) =
+                                     Time *) =
 	  FRAME_TERMINAL (new_f)->mouse_position_hook;
 
 	if (mouse_position_hook)

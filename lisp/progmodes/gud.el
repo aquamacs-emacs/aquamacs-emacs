@@ -116,11 +116,11 @@ Used to grey out relevant toolbar icons.")
 	(display-buffer-reuse-frames t))
     (catch 'info-found
       (walk-windows
-       '(lambda (window)
-	  (if (eq (window-buffer window) (get-buffer "*info*"))
-	      (progn
-		(setq same-window-regexps nil)
-		(throw 'info-found nil))))
+       (lambda (window)
+         (if (eq (window-buffer window) (get-buffer "*info*"))
+             (progn
+               (setq same-window-regexps nil)
+               (throw 'info-found nil))))
        nil 0)
       (select-frame (make-frame)))
     (if (eq gud-minor-mode 'gdbmi)
@@ -3042,8 +3042,6 @@ Link exprs of the form:
 
 (declare-function c-langelem-sym "cc-defs" (langelem))
 (declare-function c-langelem-pos "cc-defs" (langelem))
-(declare-function syntax-symbol  "gud"     (x))
-(declare-function syntax-point   "gud"     (x))
 
 (defun gud-find-class (f _line)
   "Find fully qualified class in file F at line LINE.

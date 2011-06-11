@@ -342,7 +342,7 @@ static struct scroll_bar *x_window_to_scroll_bar (Display *, Window);
 static void x_scroll_bar_report_motion (struct frame **, Lisp_Object *,
                                         enum scroll_bar_part *,
                                         Lisp_Object *, Lisp_Object *,
-                                        unsigned long *);
+                                        Time *);
 static void x_handle_net_wm_state (struct frame *, XPropertyEvent *);
 static void x_check_fullscreen (struct frame *);
 static void x_check_expected_move (struct frame *, int, int);
@@ -453,11 +453,6 @@ x_set_frame_alpha (struct frame *f)
   double alpha = 1.0;
   double alpha_min = 1.0;
   unsigned long opac;
-
-  if (FRAME_X_DISPLAY_INFO (f)->root_window != FRAME_X_OUTPUT (f)->parent_desc)
-    /* Since the WM decoration lies under the FRAME_OUTER_WINDOW,
-       we must treat the former instead of the latter. */
-    win = FRAME_X_OUTPUT (f)->parent_desc;
 
   if (dpyinfo->x_highlight_frame == f)
     alpha = f->alpha[0];
@@ -758,22 +753,22 @@ x_draw_fringe_bitmap (struct window *w, struct glyph_row *row, struct draw_fring
 
 	  if (sb_width > 0)
 	    {
-	      int left = WINDOW_SCROLL_BAR_AREA_X (w);
-	      int width = (WINDOW_CONFIG_SCROLL_BAR_COLS (w)
-			   * FRAME_COLUMN_WIDTH (f));
+	      int bar_area_x = WINDOW_SCROLL_BAR_AREA_X (w);
+	      int bar_area_width = (WINDOW_CONFIG_SCROLL_BAR_COLS (w)
+				    * FRAME_COLUMN_WIDTH (f));
 
 	      if (bx < 0)
 		{
 		  /* Bitmap fills the fringe.  */
-		  if (left + width == p->x)
-		    bx = left + sb_width;
-		  else if (p->x + p->wd == left)
-		    bx = left;
+		  if (bar_area_x + bar_area_width == p->x)
+		    bx = bar_area_x + sb_width;
+		  else if (p->x + p->wd == bar_area_x)
+		    bx = bar_area_x;
 		  if (bx >= 0)
 		    {
 		      int header_line_height = WINDOW_HEADER_LINE_HEIGHT (w);
 
-		      nx = width - sb_width;
+		      nx = bar_area_width - sb_width;
 		      by = WINDOW_TO_FRAME_PIXEL_Y (w, max (header_line_height,
 							    row->y));
 		      ny = row->visible_height;
@@ -781,13 +776,13 @@ x_draw_fringe_bitmap (struct window *w, struct glyph_row *row, struct draw_fring
 		}
 	      else
 		{
-		  if (left + width == bx)
+		  if (bar_area_x + bar_area_width == bx)
 		    {
-		      bx = left + sb_width;
-		      nx += width - sb_width;
+		      bx = bar_area_x + sb_width;
+		      nx += bar_area_width - sb_width;
 		    }
-		  else if (bx + nx == left)
-		    nx += width - sb_width;
+		  else if (bx + nx == bar_area_x)
+		    nx += bar_area_width - sb_width;
 		}
 	    }
 	}
@@ -3237,6 +3232,34 @@ x_scroll_run (struct window *w, struct run *run)
      fringe of W.  */
   window_box (w, -1, &x, &y, &width, &height);
 
+#ifdef USE_TOOLKIT_SCROLL_BARS
+  /* If the fringe is adjacent to the left (right) scroll bar of a
+     leftmost (rightmost, respectively) window, then extend its
+     background to the gap between the fringe and the bar.  */
+  if ((WINDOW_LEFTMOST_P (w)
+       && WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w))
+      || (WINDOW_RIGHTMOST_P (w)
+	  && WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (w)))
+    {
+      int sb_width = WINDOW_CONFIG_SCROLL_BAR_WIDTH (w);
+
+      if (sb_width > 0)
+	{
+	  int bar_area_x = WINDOW_SCROLL_BAR_AREA_X (w);
+	  int bar_area_width = (WINDOW_CONFIG_SCROLL_BAR_COLS (w)
+				* FRAME_COLUMN_WIDTH (f));
+
+	  if (bar_area_x + bar_area_width == x)
+	    {
+	      x = bar_area_x + sb_width;
+	      width += bar_area_width - sb_width;
+	    }
+	  else if (x + width == bar_area_x)
+	    width += bar_area_width - sb_width;
+	}
+    }
+#endif
+
   from_y = WINDOW_TO_FRAME_PIXEL_Y (w, run->current_y);
   to_y = WINDOW_TO_FRAME_PIXEL_Y (w, run->desired_y);
   bottom_y = y + height;
@@ -3614,23 +3637,23 @@ x_find_modifier_meanings (struct x_display_info *dpyinfo)
 /* Convert between the modifier bits X uses and the modifier bits
    Emacs uses.  */
 
-unsigned int
-x_x_to_emacs_modifiers (struct x_display_info *dpyinfo, unsigned int state)
+EMACS_INT
+x_x_to_emacs_modifiers (struct x_display_info *dpyinfo, int state)
 {
-  EMACS_UINT mod_meta = meta_modifier;
-  EMACS_UINT mod_alt  = alt_modifier;
-  EMACS_UINT mod_hyper = hyper_modifier;
-  EMACS_UINT mod_super = super_modifier;
+  EMACS_INT mod_meta = meta_modifier;
+  EMACS_INT mod_alt  = alt_modifier;
+  EMACS_INT mod_hyper = hyper_modifier;
+  EMACS_INT mod_super = super_modifier;
   Lisp_Object tem;
 
   tem = Fget (Vx_alt_keysym, Qmodifier_value);
-  if (! EQ (tem, Qnil)) mod_alt = XUINT (tem);
+  if (INTEGERP (tem)) mod_alt = XINT (tem);
   tem = Fget (Vx_meta_keysym, Qmodifier_value);
-  if (! EQ (tem, Qnil)) mod_meta = XUINT (tem);
+  if (INTEGERP (tem)) mod_meta = XINT (tem);
   tem = Fget (Vx_hyper_keysym, Qmodifier_value);
-  if (! EQ (tem, Qnil)) mod_hyper = XUINT (tem);
+  if (INTEGERP (tem)) mod_hyper = XINT (tem);
   tem = Fget (Vx_super_keysym, Qmodifier_value);
-  if (! EQ (tem, Qnil)) mod_super = XUINT (tem);
+  if (INTEGERP (tem)) mod_super = XINT (tem);
 
 
   return (  ((state & (ShiftMask | dpyinfo->shift_lock_mask)) ? shift_modifier : 0)
@@ -3641,24 +3664,24 @@ x_x_to_emacs_modifiers (struct x_display_info *dpyinfo, unsigned int state)
             | ((state & dpyinfo->hyper_mod_mask)	? mod_hyper	: 0));
 }
 
-static unsigned int
-x_emacs_to_x_modifiers (struct x_display_info *dpyinfo, unsigned int state)
+static int
+x_emacs_to_x_modifiers (struct x_display_info *dpyinfo, EMACS_INT state)
 {
-  EMACS_UINT mod_meta = meta_modifier;
-  EMACS_UINT mod_alt  = alt_modifier;
-  EMACS_UINT mod_hyper = hyper_modifier;
-  EMACS_UINT mod_super = super_modifier;
+  int mod_meta = meta_modifier;
+  int mod_alt  = alt_modifier;
+  int mod_hyper = hyper_modifier;
+  int mod_super = super_modifier;
 
   Lisp_Object tem;
 
   tem = Fget (Vx_alt_keysym, Qmodifier_value);
-  if (! EQ (tem, Qnil)) mod_alt = XUINT (tem);
+  if (INTEGERP (tem)) mod_alt = XINT (tem);
   tem = Fget (Vx_meta_keysym, Qmodifier_value);
-  if (! EQ (tem, Qnil)) mod_meta = XUINT (tem);
+  if (INTEGERP (tem)) mod_meta = XINT (tem);
   tem = Fget (Vx_hyper_keysym, Qmodifier_value);
-  if (! EQ (tem, Qnil)) mod_hyper = XUINT (tem);
+  if (INTEGERP (tem)) mod_hyper = XINT (tem);
   tem = Fget (Vx_super_keysym, Qmodifier_value);
-  if (! EQ (tem, Qnil)) mod_super = XUINT (tem);
+  if (INTEGERP (tem)) mod_super = XINT (tem);
 
 
   return (  ((state & mod_alt)		? dpyinfo->alt_mod_mask   : 0)
@@ -3804,7 +3827,7 @@ redo_mouse_highlight (void)
 static void
 XTmouse_position (FRAME_PTR *fp, int insist, Lisp_Object *bar_window,
 		  enum scroll_bar_part *part, Lisp_Object *x, Lisp_Object *y,
-		  long unsigned int *timestamp)
+		  Time *timestamp)
 {
   FRAME_PTR f1;
 
@@ -5539,7 +5562,7 @@ x_scroll_bar_note_movement (struct scroll_bar *bar, XEvent *event)
 static void
 x_scroll_bar_report_motion (FRAME_PTR *fp, Lisp_Object *bar_window,
 			    enum scroll_bar_part *part, Lisp_Object *x,
-			    Lisp_Object *y, long unsigned int *timestamp)
+			    Lisp_Object *y, Time *timestamp)
 {
   struct scroll_bar *bar = XSCROLL_BAR (last_mouse_scroll_bar);
   Window w = bar->x_window;
@@ -10163,7 +10186,9 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
       { "_EMACS_TMP_",  &dpyinfo->Xatom_EMACS_TMP },
       { "TARGETS", &dpyinfo->Xatom_TARGETS },
       { "NULL", &dpyinfo->Xatom_NULL },
+      { "ATOM", &dpyinfo->Xatom_ATOM },
       { "ATOM_PAIR", &dpyinfo->Xatom_ATOM_PAIR },
+      { "CLIPBOARD_MANAGER", &dpyinfo->Xatom_CLIPBOARD_MANAGER },
       { "_XEMBED_INFO", &dpyinfo->Xatom_XEMBED_INFO },
       /* For properties of font.  */
       { "PIXEL_SIZE", &dpyinfo->Xatom_PIXEL_SIZE },

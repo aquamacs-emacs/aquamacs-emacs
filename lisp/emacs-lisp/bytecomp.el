@@ -1314,7 +1314,14 @@ extra args."
 ;; number of arguments.
 (defun byte-compile-arglist-warn (form macrop)
   (let* ((name (nth 1 form))
-         (old (byte-compile-fdefinition name macrop)))
+         (old (byte-compile-fdefinition name macrop))
+         (initial (and macrop
+                       (cdr (assq name
+                                  byte-compile-initial-macro-environment)))))
+    ;; Assumes an element of b-c-i-macro-env that is a symbol points
+    ;; to a defined function.  (Bug#8646)
+    (and initial (symbolp initial)
+         (setq old (byte-compile-fdefinition initial nil)))
     (if (and old (not (eq old t)))
 	(progn
 	  (and (eq 'macro (car-safe old))
@@ -2414,7 +2421,11 @@ by side-effects."
 
     (let* ((code (byte-compile-lambda (nthcdr 2 form) t)))
       (if this-one
-	  (setcdr this-one code)
+	  ;; A definition in b-c-initial-m-e should always take precedence
+	  ;; during compilation, so don't let it be redefined.  (Bug#8647)
+	  (or (and macrop
+		   (assq name byte-compile-initial-macro-environment))
+	      (setcdr this-one code))
 	(set this-kind
 	     (cons (cons name code)
 		   (symbol-value this-kind))))
@@ -2881,8 +2892,8 @@ If FORM is a lambda or a macro, byte-compile it as a function."
 That command is designed for interactive use only" fn))
         (if (and (fboundp (car form))
                  (eq (car-safe (symbol-function (car form))) 'macro))
-            (byte-compile-report-error
-             (format "Forgot to expand macro %s" (car form))))
+            (byte-compile-log-warning
+             (format "Forgot to expand macro %s" (car form)) nil :error))
         (if (and handler
                  ;; Make sure that function exists.  This is important
                  ;; for CL compiler macros since the symbol may be
@@ -3514,9 +3525,9 @@ discarding."
 ;; and (funcall (function foo)) will lose with autoloads.
 
 (defun byte-compile-function-form (form)
-  (byte-compile-constant (if (symbolp (nth 1 form))
-                             (nth 1 form)
-                           (byte-compile-lambda (nth 1 form)))))
+  (byte-compile-constant (if (eq 'lambda (car-safe (nth 1 form)))
+                             (byte-compile-lambda (nth 1 form))
+                           (nth 1 form))))
 
 (defun byte-compile-indent-to (form)
   (let ((len (length form)))
@@ -4173,6 +4184,7 @@ binding slots have been popped."
 
 ;; Compile normally, but deal with warnings for the function being defined.
 (put 'defalias 'byte-hunk-handler 'byte-compile-file-form-defalias)
+;; Used for eieio--defalias as well.
 (defun byte-compile-file-form-defalias (form)
   (if (and (consp (cdr form)) (consp (nth 1 form))
 	   (eq (car (nth 1 form)) 'quote)

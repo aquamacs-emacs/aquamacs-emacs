@@ -244,8 +244,14 @@ bootstrap: bootstrap-emacs
 #
 # WARNING: Do NOT split the part inside $(ARGQUOTE)s into multiple lines as
 #          this can break with GNU Make 3.81 and later if sh.exe is used.
-bootstrap-temacs:
+bootstrap-temacs-CMD:
+	$(MAKE) $(MFLAGS) $(XMFLAGS) temacs CFLAGS=$(ARGQUOTE)$(ESC_CFLAGS) -DPURESIZE=5000000$(ARGQUOTE)
+
+bootstrap-temacs-SH:
 	$(MAKE) $(MFLAGS) $(XMFLAGS) temacs CFLAGS=$(ARGQUOTE)$(CFLAGS) -DPURESIZE=5000000$(ARGQUOTE)
+
+bootstrap-temacs:
+	$(MAKE) $(MFLAGS) bootstrap-temacs-$(SHELLTYPE)
 
 #
 # Dump an Emacs executable named bootstrap-emacs containing the
@@ -380,8 +386,13 @@ CONFIG_H   = $(EMACS_ROOT)/src/s/ms-w32.h \
 	     $(EMACS_ROOT)/src/m/intel386.h \
 	     $(EMACS_ROOT)/src/config.h \
 	     $(EMACS_ROOT)/nt/inc/sys/stat.h
-LISP_H     = $(SRC)/lisp.h $(SRC)/globals.h
-PROCESS_H  = $(SRC)/process.h $(SRC)/gnutls.h
+LISP_H     = $(SRC)/lisp.h \
+	     $(SRC)/globals.h \
+	     $(EMACS_ROOT)/nt/inc/inttypes.h \
+	     $(EMACS_ROOT)/nt/inc/stdint.h
+PROCESS_H  = $(SRC)/process.h \
+	     $(EMACS_ROOT)/nt/inc/unistd.h \
+	     $(SRC)/gnutls.h
 
 $(BLD)/alloc.$(O) : \
 	$(SRC)/alloc.c \
@@ -422,12 +433,14 @@ $(BLD)/atimer.$(O) : \
 $(BLD)/bidi.$(O) : \
 	$(SRC)/bidi.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/bidimirror.h \
 	$(SRC)/biditype.h \
 	$(SRC)/buffer.h \
 	$(SRC)/character.h \
 	$(SRC)/dispextern.h \
+	$(SRC)/systime.h \
 	$(SRC)/w32gui.h
 
 $(BLD)/buffer.$(O) : \
@@ -458,11 +471,13 @@ $(BLD)/buffer.$(O) : \
 $(BLD)/bytecode.$(O) : \
 	$(SRC)/bytecode.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/buffer.h \
 	$(SRC)/character.h \
 	$(SRC)/dispextern.h \
 	$(SRC)/syntax.h \
+	$(SRC)/systime.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/window.h
 
@@ -551,6 +566,7 @@ $(BLD)/ccl.$(O) : \
 $(BLD)/character.$(O) : \
 	$(SRC)/character.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/lib/intprops.h \
 	$(LISP_H) \
 	$(SRC)/buffer.h \
 	$(SRC)/character.h \
@@ -600,6 +616,7 @@ $(BLD)/cmds.$(O) : \
 $(BLD)/coding.$(O) : \
 	$(SRC)/coding.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/buffer.h \
 	$(SRC)/ccl.h \
@@ -609,6 +626,7 @@ $(BLD)/coding.$(O) : \
 	$(SRC)/composite.h \
 	$(SRC)/dispextern.h \
 	$(SRC)/frame.h \
+	$(SRC)/systime.h \
 	$(SRC)/termhooks.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/window.h
@@ -616,6 +634,7 @@ $(BLD)/coding.$(O) : \
 $(BLD)/composite.$(O) : \
 	$(SRC)/composite.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/buffer.h \
 	$(SRC)/ccl.h \
@@ -626,6 +645,7 @@ $(BLD)/composite.$(O) : \
 	$(SRC)/font.h \
 	$(SRC)/frame.h \
 	$(SRC)/intervals.h \
+	$(SRC)/systime.h \
 	$(SRC)/termhooks.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/window.h
@@ -843,10 +863,10 @@ $(BLD)/fns.$(O) : \
 	$(CONFIG_H) \
 	$(EMACS_ROOT)/nt/inc/langinfo.h \
 	$(EMACS_ROOT)/nt/inc/nl_types.h \
-	$(EMACS_ROOT)/nt/inc/stdint.h \
 	$(EMACS_ROOT)/nt/inc/unistd.h \
 	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(EMACS_ROOT)/lib/md5.h \
+	$(EMACS_ROOT)/lib/sha1.h \
 	$(LISP_H) \
 	$(SRC)/atimer.h \
 	$(SRC)/blockinput.h \
@@ -867,6 +887,7 @@ $(BLD)/fns.$(O) : \
 $(BLD)/font.$(O) : \
 	$(SRC)/font.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/buffer.h \
 	$(SRC)/ccl.h \
@@ -877,6 +898,7 @@ $(BLD)/font.$(O) : \
 	$(SRC)/font.h \
 	$(SRC)/fontset.h \
 	$(SRC)/frame.h \
+	$(SRC)/systime.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/w32term.h \
 	$(SRC)/window.h
@@ -978,6 +1000,7 @@ $(BLD)/image.$(O) : \
 	$(SRC)/frame.h \
 	$(SRC)/systime.h \
 	$(SRC)/termhooks.h \
+	$(SRC)/w32.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/w32term.h \
 	$(SRC)/window.h
@@ -1009,6 +1032,7 @@ $(BLD)/insdel.$(O) : \
 	$(SRC)/insdel.c \
 	$(CONFIG_H) \
 	$(EMACS_ROOT)/nt/inc/sys/time.h \
+	$(EMACS_ROOT)/lib/intprops.h \
 	$(LISP_H) \
 	$(SRC)/atimer.h \
 	$(SRC)/blockinput.h \
@@ -1103,8 +1127,6 @@ $(BLD)/lastfile.$(O) : \
 $(BLD)/lread.$(O) : \
 	$(SRC)/lread.c \
 	$(CONFIG_H) \
-	$(EMACS_ROOT)/nt/inc/inttypes.h \
-	$(EMACS_ROOT)/nt/inc/stdint.h \
 	$(EMACS_ROOT)/nt/inc/unistd.h \
 	$(EMACS_ROOT)/nt/inc/sys/file.h \
 	$(EMACS_ROOT)/nt/inc/sys/time.h \
@@ -1261,6 +1283,7 @@ $(BLD)/w32proc.$(O) : \
 $(BLD)/w32console.$(O) : \
 	$(SRC)/w32console.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/character.h \
 	$(SRC)/coding.h \
@@ -1268,6 +1291,7 @@ $(BLD)/w32console.$(O) : \
 	$(SRC)/dispextern.h \
 	$(SRC)/disptab.h \
 	$(SRC)/frame.h \
+	$(SRC)/systime.h \
 	$(SRC)/termchar.h \
 	$(SRC)/termhooks.h \
 	$(SRC)/w32gui.h \
@@ -1415,6 +1439,7 @@ $(BLD)/sound.$(O) : \
 $(BLD)/syntax.$(O) : \
 	$(SRC)/syntax.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/buffer.h \
 	$(SRC)/category.h \
@@ -1426,6 +1451,7 @@ $(BLD)/syntax.$(O) : \
 	$(SRC)/keymap.h \
 	$(SRC)/regex.h \
 	$(SRC)/syntax.h \
+	$(SRC)/systime.h \
 	$(SRC)/w32gui.h
 
 $(BLD)/sysdep.$(O) : \
@@ -1515,11 +1541,13 @@ $(BLD)/terminal.$(O) : \
 $(BLD)/textprop.$(O) : \
 	$(SRC)/textprop.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/buffer.h \
 	$(SRC)/composite.h \
 	$(SRC)/dispextern.h \
 	$(SRC)/intervals.h \
+	$(SRC)/systime.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/window.h
 
@@ -1532,10 +1560,12 @@ $(BLD)/tparam.$(O) : \
 $(BLD)/undo.$(O) : \
 	$(SRC)/undo.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/buffer.h \
 	$(SRC)/commands.h \
 	$(SRC)/dispextern.h \
+	$(SRC)/systime.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/window.h
 
@@ -1772,6 +1802,7 @@ $(BLD)/w32xfns.$(O) : \
 $(BLD)/w32font.$(O) : \
 	$(SRC)/w32font.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/ccl.h \
 	$(SRC)/character.h \
@@ -1782,6 +1813,7 @@ $(BLD)/w32font.$(O) : \
 	$(SRC)/font.h \
 	$(SRC)/fontset.h \
 	$(SRC)/frame.h \
+	$(SRC)/systime.h \
 	$(SRC)/w32font.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/w32term.h
@@ -1789,6 +1821,7 @@ $(BLD)/w32font.$(O) : \
 $(BLD)/w32uniscribe.$(O) : \
 	$(SRC)/w32uniscribe.c \
 	$(CONFIG_H) \
+	$(EMACS_ROOT)/nt/inc/sys/time.h \
 	$(LISP_H) \
 	$(SRC)/ccl.h \
 	$(SRC)/character.h \
@@ -1798,6 +1831,7 @@ $(BLD)/w32uniscribe.$(O) : \
 	$(SRC)/font.h \
 	$(SRC)/fontset.h \
 	$(SRC)/frame.h \
+	$(SRC)/systime.h \
 	$(SRC)/w32font.h \
 	$(SRC)/w32gui.h \
 	$(SRC)/w32term.h

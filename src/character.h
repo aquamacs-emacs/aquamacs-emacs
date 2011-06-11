@@ -602,7 +602,7 @@ extern int translate_char (Lisp_Object, int c);
 extern int char_printable_p (int c);
 extern void parse_str_as_multibyte (const unsigned char *,
 				    EMACS_INT, EMACS_INT *, EMACS_INT *);
-extern EMACS_INT parse_str_to_multibyte (const unsigned char *, EMACS_INT);
+extern EMACS_INT count_size_as_multibyte (const unsigned char *, EMACS_INT);
 extern EMACS_INT str_as_multibyte (unsigned char *, EMACS_INT, EMACS_INT,
 			     EMACS_INT *);
 extern EMACS_INT str_to_multibyte (unsigned char *, EMACS_INT, EMACS_INT);
@@ -612,7 +612,7 @@ extern EMACS_INT str_to_unibyte (const unsigned char *, unsigned char *,
 extern EMACS_INT strwidth (const char *, EMACS_INT);
 extern EMACS_INT c_string_width (const unsigned char *, EMACS_INT, int,
 				 EMACS_INT *, EMACS_INT *);
-extern EMACS_INT lisp_string_width (Lisp_Object, int,
+extern EMACS_INT lisp_string_width (Lisp_Object, EMACS_INT,
 				    EMACS_INT *, EMACS_INT *);
 
 extern Lisp_Object Qcharacterp;
