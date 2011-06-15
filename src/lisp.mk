@@ -45,6 +45,7 @@
 
 ### Code:
 
+
 ## NB: This list is parsed by sed in the main src/Makefile.
 ## Do not change the formatting.
 lisp = \
@@ -154,7 +155,21 @@ lisp = \
 	$(lispsource)/emacs-lisp/float-sup.elc \
 	$(lispsource)/vc/vc-hooks.elc \
 	$(lispsource)/vc/ediff-hook.elc \
-	$(lispsource)/tooltip.elc
+	$(lispsource)/tooltip.elc \
+	$(lispsource)/image-file.elc \
+	$(lispsource)/emacs-lisp/regexp-opt.elc \
+	$(lispsource)/emacs-lisp/easymenu.elc \
+	$(lispsource)/emulation/cua-base.elc \
+	$(lispsource)/emulation/pc-select.elc \
+	$(lispsource)/delsel.elc \
+	$(lispsource)/paren.elc \
+	$(lispsource)/calendar/time-date.elc \
+	$(lispsource)/calendar/parse-time.elc \
+	$(lispsource)/emacs-lisp/easy-mmode.elc \
+	$(lispsource)/aquamacs/aquamacs-autoface-mode.elc
 
+
+# entries starting with image-file.elc are specific to Aquamacs
+# where these files are pre-loaded.
 
 ### lisp.mk ends here
