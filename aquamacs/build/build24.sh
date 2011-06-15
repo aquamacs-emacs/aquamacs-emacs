@@ -13,7 +13,7 @@
 # link statically
 # can't make a X86_64 64-bit build on Braeburn
 autoconf
-PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386' LDFLAGS='-arch i386 -static'
+PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386' LDFLAGS='-arch i386'
 make clean # get rid of binaries 
 make all
 
