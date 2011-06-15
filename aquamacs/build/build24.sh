@@ -7,10 +7,13 @@
 
 
 
-# do not use MacPorts / fink libraries (but do use their binaries)
+# do not use MacPorts / fink libraries
+# do not use binaries either (e.g., gnutls would be recognized)
+# autoconf must be run via macports
 # link statically
 # can't make a X86_64 64-bit build on Braeburn
-PATH=/opt/local/bin:/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386' LDFLAGS='-arch i386 -static'
+autoconf
+PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386' LDFLAGS='-arch i386 -static'
 make clean # get rid of binaries 
 make all
 
