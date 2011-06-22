@@ -1097,6 +1097,21 @@ DO-MOUSE-DRAG-REGION-POST-PROCESS should only be used by
 	   (set-mark beg)
 	   (goto-char end)))))
 
+(defun mouse--remap-link-click-p (start-event end-event)
+  (or (and (eq mouse-1-click-follows-link 'double)
+	   (= (event-click-count start-event) 2))
+      (and
+       (not (eq mouse-1-click-follows-link 'double))
+       (= (event-click-count start-event) 1)
+       (= (event-click-count end-event) 1)
+       (or (not (integerp mouse-1-click-follows-link))
+	   (let ((t0 (posn-timestamp (event-start start-event)))
+		 (t1 (posn-timestamp (event-end   end-event))))
+	     (and (integerp t0) (integerp t1)
+		  (if (> mouse-1-click-follows-link 0)
+		      (<= (- t1 t0) mouse-1-click-follows-link)
+		    (< (- t0 t1) mouse-1-click-follows-link))))))))
+
 
 ;; Commands to handle xterm-style multiple clicks.
 (defun mouse-skip-word (dir)
