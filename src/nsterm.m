@@ -6036,7 +6036,7 @@ typedef struct
   [self allocateGState];
 
   [NSApp registerServicesMenuSendTypes: ns_send_types
-                           returnTypes: ns_return_types];
+                           returnTypes: nil];
 
   ns_window_num++;
   return self;
@@ -6412,8 +6412,7 @@ typedef struct
 {
   NSTRACE (validRequestorForSendType);
   if (typeSent != nil && [ns_send_types indexOfObject: typeSent] != NSNotFound
-      && (typeReturned == nil
-          || [ns_return_types indexOfObject: typeSent] != NSNotFound))
+      && typeReturned == nil)
     {
       if (! NILP (ns_get_local_selection (QPRIMARY, QUTF8_STRING)))
         return self;
