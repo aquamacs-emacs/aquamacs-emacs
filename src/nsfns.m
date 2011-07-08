@@ -1,6 +1,6 @@
 /* Functions for the NeXT/Open/GNUstep and MacOSX window system.
    Copyright (C) 1989, 1992, 1993, 1994, 2005, 2006, 2008, 2009, 2010, 2011
-     Free Software Foundation, Inc.
+  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -224,7 +224,7 @@ ns_get_screen (Lisp_Object screen)
   else
     {
       struct ns_display_info *dpyinfo = terminal->display_info.ns;
-      f = dpyinfo->x_focus_frame 
+      f = dpyinfo->x_focus_frame
         ? dpyinfo->x_focus_frame : dpyinfo->x_highlight_frame;
     }
 
@@ -490,7 +490,7 @@ ns_set_name_internal (FRAME_PTR f, Lisp_Object name)
   if (!STRINGP (f->icon_name))
     encoded_icon_name = encoded_name;
   else
-    encoded_icon_name = ENCODE_UTF_8 (f->icon_name);    
+    encoded_icon_name = ENCODE_UTF_8 (f->icon_name);
 
   str = [NSString stringWithUTF8String: SDATA (encoded_icon_name)];
 
@@ -644,7 +644,7 @@ ns_set_name_as_filename (struct frame *f)
 
   if (FRAME_ICONIFIED_P (f))
     [[view window] setMiniwindowTitle: str];
-  else 
+  else
     {
       NSString *fstr;
 
@@ -995,7 +995,7 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_fullscreen,  /* generic OK */
   x_set_font_backend, /* generic OK */
   x_set_alpha,
-  0, /* x_set_sticky */  
+  0, /* x_set_sticky */
 };
 
 
@@ -2316,9 +2316,8 @@ Optional arguments XRM-STRING and MUST-SUCCEED are currently ignored.  */)
 
   /* Register our external input/output types, used for determining
      applicable services and also drag/drop eligibility. */
-  ns_send_types = [[NSArray arrayWithObject: 
-			    NSStringPboardType] retain];
-  ns_return_types = [[NSArray arrayWithObject: NSStringPboardType] retain];
+  ns_send_types = [[NSArray arrayWithObjects: NSStringPboardType, nil] retain];
+  ns_return_types = [[NSArray arrayWithObjects: nil] retain];
   ns_drag_types = [[NSArray arrayWithObjects:
                             NSStringPboardType,
                             NSTabularTextPboardType,
@@ -2469,6 +2468,10 @@ DEFUN ("ns-list-services", Fns_list_services, Sns_list_services, 0, 0, 0,
        doc: /* List available Nextstep services by querying NSApp.  */)
      ()
 {
+#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+  /* You can't get services like this in 10.6+.  */
+  return Qnil;
+#else
   Lisp_Object ret = Qnil;
   NSMenu *svcs;
   id delegate;
@@ -2512,6 +2515,7 @@ DEFUN ("ns-list-services", Fns_list_services, Sns_list_services, 0, 0, 0,
 
   ret = interpret_services_menu (svcs, Qnil, ret);
   return ret;
+#endif
 }
 
 
@@ -3208,9 +3212,9 @@ compute_tip_xy (f, parms, dx, dy, width, height, root_x, root_y)
   else
     pt.y = last_mouse_motion_position.y;
 
-  /* Convert to screen coordinates */
-  pt = [view convertPoint: pt toView: nil];
-  pt = [[view window] convertBaseToScreen: pt];
+      /* Convert to screen coordinates */
+      pt = [view convertPoint: pt toView: nil];
+      pt = [[view window] convertBaseToScreen: pt];
 
   vScreen = [[[view window] screen] visibleFrame];
 
@@ -3298,24 +3302,24 @@ Text larger than the specified size is clipped.  */)
 
   if (strlen (str) > 0)
     {
-      BLOCK_INPUT;
+  BLOCK_INPUT;
       if (ns_tooltip)
 	Fx_hide_tip ();  /* closes and releases ns_tooltip */
 
       /* must initialize every time in order to keep tooltip on
 	 the screen with key focus. */
-      ns_tooltip = [[EmacsTooltip alloc] init];
-      [ns_tooltip setText: str];
-      size = [ns_tooltip frame].size;
+    ns_tooltip = [[EmacsTooltip alloc] init];
+  [ns_tooltip setText: str];
+  size = [ns_tooltip frame].size;
 
-      /* Move the tooltip window where the mouse pointer is.  Resize and
-	 show it.  */
-      compute_tip_xy (f, parms, dx, dy, (int)size.width, (int)size.height,
-		      &root_x, &root_y);
+  /* Move the tooltip window where the mouse pointer is.  Resize and
+     show it.  */
+  compute_tip_xy (f, parms, dx, dy, (int)size.width, (int)size.height,
+		  &root_x, &root_y);
 
-      [ns_tooltip showAtX: root_x Y: root_y for: XINT (timeout)];
+  [ns_tooltip showAtX: root_x Y: root_y for: XINT (timeout)];
 
-      UNBLOCK_INPUT;
+  UNBLOCK_INPUT;
     }
   UNGCPRO;
   return unbind_to (count, Qnil);

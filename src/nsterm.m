@@ -149,7 +149,7 @@ Lisp_Object ns_save_panel_file, ns_save_panel_buffer;
 Lisp_Object Vx_toolkit_scroll_bars;
 static Lisp_Object Qmodifier_value;
 Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qnone;
-extern Lisp_Object Qcursor_color, Qcursor_type, Qns;
+extern Lisp_Object Qcursor_color, Qcursor_type, Qns, Qleft;
 
 /* Specifies which emacs modifier should be generated when NS receives
    the Alternate modifier.  May be Qnone or any of the modifier lisp symbols. */
@@ -193,6 +193,8 @@ Lisp_Object ns_emulate_three_button_mouse;
 
 /* Control via default 'GSFontAntiAlias' on OS X and GNUstep. */
 Lisp_Object ns_antialias_text;
+
+static Lisp_Object QUTF8_STRING;
 
 /* On OS X picks up the default NSGlobalDomain AppleAntiAliasingThreshold,
    the maximum font size to NOT antialias.  On GNUstep there is currently
@@ -249,7 +251,7 @@ static NSMutableArray *ns_pending_files, *ns_pending_service_names,
   *ns_pending_service_args;
 static BOOL inNsSelect = 0;
 
-/* Convert modifiers in a NeXTSTEP event to emacs style modifiers.  */
+/* Convert modifiers in a NeXTstep event to emacs style modifiers.  */
 #define NS_FUNCTION_KEY_MASK 0x800000
 #define NSLeftControlKeyMask    (0x000001 )
 #define NSRightControlKeyMask   (0x002000 )
@@ -1176,7 +1178,7 @@ x_set_offset (struct frame *f, int xoff, int yoff, int change_grav)
         : f->left_pos;
       /* We use visibleFrame here to take menu bar into account.
 	 Ideally we should also adjust left/top with visibleFrame.offset.  */
-	 
+
       f->top_pos = f->size_hint_flags & YNegative
         ? ([screen visibleFrame].size.height + f->top_pos
            - FRAME_PIXEL_HEIGHT (f) - FRAME_NS_TITLEBAR_HEIGHT (f)
@@ -1262,7 +1264,7 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
     FRAME_TOOLBAR_HEIGHT (f) = 0;
 
   wr.size.width = pixelwidth + f->border_width;
-  wr.size.height = pixelheight + FRAME_NS_TITLEBAR_HEIGHT (f) 
+  wr.size.height = pixelheight + FRAME_NS_TITLEBAR_HEIGHT (f)
                   + FRAME_TOOLBAR_HEIGHT (f);
 
   /* constrain to screen if we can */
@@ -1303,12 +1305,12 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
      difference between the real width and Emacs' imagined one.  For
      right-hand bars, don't worry about it since the extra is never used.
      (Obviously doesn't work for vertically split windows tho..) */
-  NSPoint origin = FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (f)
-    ? NSMakePoint (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)
-                  - NS_SCROLL_BAR_WIDTH (f), 0)
-    : NSMakePoint (0, 0);
-  [view setFrame: NSMakeRect (0, 0, pixelwidth, pixelheight)];
-  [view setBoundsOrigin: origin];
+    NSPoint origin = FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (f)
+      ? NSMakePoint (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)
+                     - NS_SCROLL_BAR_WIDTH (f), 0)
+      : NSMakePoint (0, 0);
+    [view setFrame: NSMakeRect (0, 0, pixelwidth, pixelheight)];
+    [view setBoundsOrigin: origin];
 
   change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
   FRAME_PIXEL_WIDTH (f) = pixelwidth;
@@ -1896,7 +1898,7 @@ ns_frame_up_to_date (struct frame *f)
                                   dpyinfo->mouse_face_mouse_x,
                                   dpyinfo->mouse_face_mouse_y);
           dpyinfo->mouse_face_deferred_gc = 0;
-         ns_update_end(f);
+	  ns_update_end(f);
 	    }
           UNBLOCK_INPUT;
         }
@@ -2391,7 +2393,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
 //fprintf(stderr, "drawcursor (%d,%d) activep = %d\tonp = %d\tc_type = %d\twidth = %d\n",x,y, active_p,on_p,cursor_type,cursor_width);
 
   if (!on_p)
-	return;
+    return;
 
   w->phys_cursor_type = cursor_type;
   w->phys_cursor_on_p = on_p;
@@ -2422,7 +2424,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
   /* FIXME: if we overwrite the internal border area, it does not get erased;
      fix by truncating cursor, but better would be to erase properly */
   overspill = r.origin.x + r.size.width -
-    WINDOW_TEXT_TO_FRAME_PIXEL_X (w, WINDOW_BOX_RIGHT_EDGE_X (w) 
+    WINDOW_TEXT_TO_FRAME_PIXEL_X (w, WINDOW_BOX_RIGHT_EDGE_X (w)
       - WINDOW_TOTAL_FRINGE_WIDTH (w) - FRAME_INTERNAL_BORDER_WIDTH (f));
   if (overspill > 0)
     r.size.width -= overspill;
@@ -2430,7 +2432,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
   /* TODO: only needed in rare cases with last-resort font in HELLO..
      should we do this more efficiently? */
   ns_clip_to_row (w, glyph_row, -1, NO); /* do ns_focus(f, &r, 1); if remove */
-  [FRAME_CURSOR_COLOR (f) set];
+    [FRAME_CURSOR_COLOR (f) set];
 
 #ifdef NS_IMPL_COCOA
   /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
@@ -3926,7 +3928,7 @@ ns_term_init (Lisp_Object display_name)
   strncpy (terminal->name, SDATA (display_name), SBYTES (display_name));
   terminal->name[SBYTES (display_name)] = 0;
 
-  UNBLOCK_INPUT; 
+  UNBLOCK_INPUT;
 
   if (!inhibit_x_resources)
     {
@@ -3943,7 +3945,7 @@ ns_term_init (Lisp_Object display_name)
 			 stringForKey: @"AppleHighlightColor"];
   if (ns_selection_color == nil)
     ns_selection_color = NS_SELECTION_COLOR_DEFAULT;
-  
+
   {
     NSColorList *cl = [NSColorList colorListNamed: @"Emacs"];
 
@@ -4110,7 +4112,7 @@ ns_term_init (Lisp_Object display_name)
                    keyEquivalent: @"q"
                          atIndex: 10];
 
-    item = [mainMenu insertItemWithTitle: ns_app_name                       
+    item = [mainMenu insertItemWithTitle: ns_app_name
                                   action: @selector (menuDown:)
                            keyEquivalent: @""
                                  atIndex: 0];
@@ -4606,7 +4608,7 @@ typedef struct
         -appShouldTerminate
           Cancel -> Nothing else
           Accept ->
-	  
+
 	  -terminate
 	  KEY_NS_POWER_OFF, (save-buffers-kill-emacs)
 	  ns_term_shutdown()
@@ -4616,10 +4618,10 @@ typedef struct
 - (void) terminate: (id)sender
 {
   struct frame *emacsframe = SELECTED_FRAME ();
-  
+
   if (!emacs_event)
     return;
-  
+
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_POWER_OFF;
   emacs_event->arg = Qt; /* mark as non-key event */
@@ -5239,26 +5241,26 @@ typedef struct
 	    {
 
 	      if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
-		{
+        {
 		   if (!fnKeysym)
 		    {
 		  /* accept pre-interp alt comb */
-		  if ([[theEvent characters] length] > 0)
-		    code = [[theEvent characters] characterAtIndex: 0];
-		  /*HACK: clear lone shift modifier to stop next if from firing */
-		  if (emacs_event->modifiers == shift_modifier)
-		    emacs_event->modifiers = 0;
-	}
+              if ([[theEvent characters] length] > 0)
+                code = [[theEvent characters] characterAtIndex: 0];
+              /*HACK: clear lone shift modifier to stop next if from firing */
+              if (emacs_event->modifiers == shift_modifier)
+                emacs_event->modifiers = 0;
+            }
 		} 
-	      else
+          else
 		emacs_event->modifiers |= meta_modifier;
 	    }
 	  else
 	    emacs_event->modifiers |=
 	      parse_solitary_modifier (EQ (ns_right_alternate_modifier, Qnone) ?
 				       ns_alternate_modifier
-				       : ns_right_alternate_modifier);
-	}
+               : ns_right_alternate_modifier);
+        }
       if (flags & NSLeftAlternateKeyMask || (flags & NSAlternateKeyMask && ! (flags & NSRightAlternateKeyMask))) /* default = meta */
         {
 	  /* The better way to do this would be to add Meta to every key for 
@@ -5267,9 +5269,9 @@ typedef struct
 	     (UCKeyTranslate seems to be needed).
 	     Thus, we have to use the manual route via 
 	     ns_alternate_meta_special_codes. */
-	 
+
 	  if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone)))
-	    {
+        {
 	      if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
 		{
 		  if (!fnKeysym)
@@ -5833,7 +5835,7 @@ typedef struct
      a "windowDidResize" which calls x_set_window_size).  */
 #ifndef NS_IMPL_GNUSTEP
   if (cols > 0 && rows > 0)
-     x_set_window_size (emacsframe, 0, cols, rows);
+    x_set_window_size (emacsframe, 0, cols, rows);
 #endif
 
   ns_send_appdefined (-1);
@@ -6033,6 +6035,9 @@ typedef struct
 
   [self allocateGState];
 
+  [NSApp registerServicesMenuSendTypes: ns_send_types
+                           returnTypes: ns_return_types];
+
   ns_window_num++;
   return self;
 }
@@ -6096,7 +6101,7 @@ typedef struct
         result = defaultFrame;  /* second click */
       else
         result = ns_userRect.size.height ? ns_userRect : result;  /* restore */
-    }
+        }
 
   [self windowWillResize: sender toSize: result.size];
   return result;
@@ -6254,7 +6259,7 @@ typedef struct
 
   /*
     drawRect: may be called (at least in OS X 10.5) for invisible
-    views as well for some reason.  Thus, do not infer visibility 
+    views as well for some reason.  Thus, do not infer visibility
     here.
 
     emacsframe->async_visible = 1;
@@ -6402,13 +6407,17 @@ typedef struct
 }
 
 
-- validRequestorForSendType: (NSString *)typeSent
-                 returnType: (NSString *)typeReturned
+- (id) validRequestorForSendType: (NSString *)typeSent
+                      returnType: (NSString *)typeReturned
 {
   NSTRACE (validRequestorForSendType);
-  if ([ns_send_types indexOfObjectIdenticalTo: typeSent] != NSNotFound &&
-      [ns_return_types indexOfObjectIdenticalTo: typeSent] != NSNotFound)
-    return self;
+  if (typeSent != nil && [ns_send_types indexOfObject: typeSent] != NSNotFound
+      && (typeReturned == nil
+          || [ns_return_types indexOfObject: typeSent] != NSNotFound))
+    {
+      if (! NILP (ns_get_local_selection (QPRIMARY, QUTF8_STRING)))
+        return self;
+    }
 
   return [super validRequestorForSendType: typeSent
                                returnType: typeReturned];
@@ -6432,8 +6441,28 @@ typedef struct
 
 - (BOOL) writeSelectionToPasteboard: (NSPasteboard *)pb types: (NSArray *)types
 {
-  /* supposed to write for as many of types as we are able */
-  return NO;
+  NSArray *typesDeclared;
+  Lisp_Object val;
+
+  /* We only support NSStringPboardType */
+  if ([types containsObject:NSStringPboardType] == NO) {
+    return NO;
+  }
+
+  val = ns_get_local_selection (QPRIMARY, QUTF8_STRING);
+  if (CONSP (val) && SYMBOLP (XCAR (val)))
+    {
+      val = XCDR (val);
+      if (CONSP (val) && NILP (XCDR (val)))
+        val = XCAR (val);
+    }
+  if (! STRINGP (val))
+    return NO;
+
+  typesDeclared = [NSArray arrayWithObject:NSStringPboardType];
+  [pb declareTypes:typesDeclared owner:nil];
+  ns_string_to_pasteboard (pb, val);
+  return YES;
 }
 
 
@@ -6507,7 +6536,7 @@ typedef struct
         }
     }
     else if (flag && ! isFullscreen)
-      {
+{
         [self deminiaturize:nil];
 
         if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
@@ -6531,7 +6560,7 @@ typedef struct
         [f makeKeyAndOrderFront:nil];
 
         win = f;
-    }
+}
 
     return win;
 }
@@ -6582,10 +6611,10 @@ typedef struct
       vettedSize = [[self delegate] windowWillResize: self toSize: size];
       if (vettedSize.width != size.width || vettedSize.height != size.height)
         {
-          [[NSNotificationCenter defaultCenter]
+      [[NSNotificationCenter defaultCenter]
             postNotificationName: NSWindowDidResizeNotification
                           object: self];
-        }
+    }
     }
   else
     [super mouseDragged: theEvent];
@@ -7124,6 +7153,8 @@ syms_of_nsterm ()
   DEFSYM (Qsuper, "super");
   DEFSYM (Qcontrol, "control");
   DEFSYM (Qnone, "none");
+  DEFSYM (QUTF8_STRING, "UTF8_STRING");
+
   Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
   Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier));
   Fput (Qmeta, Qmodifier_value, make_number (meta_modifier));
