@@ -757,9 +757,13 @@ prompting.  If file is a directory perform a `find-file' on it."
    "ODB External Editor tokens stored with this buffer."))
 
 (defun ns-odb-save-function ()
-  (ns-send-odb-notification 'saved (current-buffer) buffer-odb-parameters))
+  (condition-case error-val
+      (ns-send-odb-notification 'saved (current-buffer) buffer-odb-parameters)
+    (error (message "Error during ODB application communication: %s" error-val))))
 (defun ns-odb-kill-function ()
-  (ns-send-odb-notification 'closed (current-buffer) buffer-odb-parameters))
+  (condition-case error-val
+      (ns-send-odb-notification 'closed (current-buffer) buffer-odb-parameters)
+    (error (message "Error during ODB application communication: %s" error-val))))
 
 (defvar ns-input-parms) 			; nsterm.m
 
