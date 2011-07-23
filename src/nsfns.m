@@ -3265,25 +3265,27 @@ Text larger than the specified size is clipped.  */)
   else
     CHECK_NUMBER (dy);
 
-  BLOCK_INPUT;
-  if (ns_tooltip)
-    Fx_hide_tip ();  /* closes and releases ns_tooltip */
+  if (strlen (str) > 0)
+    {
+      BLOCK_INPUT;
+      if (ns_tooltip)
+	Fx_hide_tip ();  /* closes and releases ns_tooltip */
 
-  /* must initialize every time in order to keep tooltip on
-     the screen with key focus. */
-    ns_tooltip = [[EmacsTooltip alloc] init];
-  [ns_tooltip setText: str];
-  size = [ns_tooltip frame].size;
+      /* must initialize every time in order to keep tooltip on
+	 the screen with key focus. */
+      ns_tooltip = [[EmacsTooltip alloc] init];
+      [ns_tooltip setText: str];
+      size = [ns_tooltip frame].size;
 
-  /* Move the tooltip window where the mouse pointer is.  Resize and
-     show it.  */
-  compute_tip_xy (f, parms, dx, dy, (int)size.width, (int)size.height,
-		  &root_x, &root_y);
+      /* Move the tooltip window where the mouse pointer is.  Resize and
+	 show it.  */
+      compute_tip_xy (f, parms, dx, dy, (int)size.width, (int)size.height,
+		      &root_x, &root_y);
 
-  [ns_tooltip showAtX: root_x Y: root_y for: XINT (timeout)];
+      [ns_tooltip showAtX: root_x Y: root_y for: XINT (timeout)];
 
-  UNBLOCK_INPUT;
-
+      UNBLOCK_INPUT;
+    }
   UNGCPRO;
   return unbind_to (count, Qnil);
 }
