@@ -4330,10 +4330,14 @@ typedef struct _AppleEventSelectionRange {
       NSAppleEventDescriptor *p =
 	[odbdesc paramDescriptorForKeyword:keyFileSender];
       if (p)
-	ns_input_parms = Fcons (Fcons (intern("remote-id"),
-				       make_number ([p typeCodeValue])),
-				ns_input_parms);
-
+	{
+	  NSString *str = [NSString alloc];
+	  ns_input_parms = Fcons (Fcons (intern("remote-id"),
+					 build_string ([[str initWithData:[p data] encoding:NSNonLossyASCIIStringEncoding]
+							 UTF8String])),
+				  ns_input_parms);
+	  [str release];
+	}
 	// [dict setObject:[NSNumber numberWithUnsignedInt:[p typeCodeValue]]
 	// 	 forKey:@"remoteID"];
       p = [odbdesc paramDescriptorForKeyword:keyFileCustomPath];
@@ -4347,11 +4351,14 @@ typedef struct _AppleEventSelectionRange {
 	ns_input_parms = Fcons (Fcons (intern("remote-token-type"),
 				       make_number ([p descriptorType])),
 				ns_input_parms);
+
+	NSString *str = [NSString alloc];
 	ns_input_parms = Fcons (Fcons (intern("remote-token-data"),
 				       /* To do: check that this doesn't lose data. */
-            build_string ([[[NSString string] initWithData:[p data] encoding:NSNonLossyASCIIStringEncoding]
+            build_string ([[str initWithData:[p data] encoding:NSNonLossyASCIIStringEncoding]
 			    UTF8String])),
 				ns_input_parms);
+	[str release];
 
 	// [dict setObject:[NSNumber numberWithUnsignedLong:[p descriptorType]]
 	// 	 forKey:@"remoteTokenDescType"];
