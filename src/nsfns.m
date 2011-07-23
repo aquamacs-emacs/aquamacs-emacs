@@ -2658,7 +2658,6 @@ OSStatus odb_event (struct buffer *buffer,
   Lisp_Object Qremote_token_type = intern("remote-token-type");
 
   Lisp_Object remote_id, remote_token_data, remote_token_type;
-  uint32_t rid;
 
   remote_id = Fcdr (Fassq (Qremote_id, parms));
   remote_token_data = Fcdr (Fassq (Qremote_token_data, parms));
@@ -2666,14 +2665,13 @@ OSStatus odb_event (struct buffer *buffer,
 
   if (NILP (remote_id))
     return -1000;
-        
-  rid = XUINT (remote_id);
+  CHECK_STRING (remote_id);
 
   /* Destination Process */
     NSAppleEventDescriptor *targetDesc = [NSAppleEventDescriptor
             descriptorWithDescriptorType:typeApplSignature
-                                   bytes:&rid
-                                  length:sizeof(unsigned int)];
+					   bytes:SDATA (remote_id)
+					   length:strlen (SDATA (remote_id))];
 
 
     /* file name */
