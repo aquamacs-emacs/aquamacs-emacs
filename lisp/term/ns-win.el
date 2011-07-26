@@ -755,6 +755,7 @@ prompting.  If file is a directory perform a `find-file' on it."
 (make-variable-buffer-local
  (defvar buffer-odb-parameters nil 
    "ODB External Editor tokens stored with this buffer."))
+(put 'buffer-odb-parameters 'permanent-local t)
 
 (defun ns-odb-save-function ()
   (condition-case error-val
