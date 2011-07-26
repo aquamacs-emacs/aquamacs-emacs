@@ -240,7 +240,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
       /* Save the frame's previous menu bar contents data */
       if (previous_menu_items_used)
 	bcopy (XVECTOR (f->menu_bar_vector)->contents, previous_items,
-		previous_menu_items_used * sizeof (Lisp_Object));
+	       previous_menu_items_used * sizeof (Lisp_Object));
 
       /* parse stage 1: extract from lisp */
       save_menu_items ();
@@ -845,14 +845,14 @@ static int trackingMenu = 0;
   p.y = NSHeight ([view frame]) - p.y;
   NSEvent *e = [[view window] currentEvent];
   NSEvent *event = [NSEvent mouseEventWithType: NSRightMouseDown
-                              location: p
-                         modifierFlags: 0
-                             timestamp: [e timestamp]
-                          windowNumber: [[view window] windowNumber]
-                               context: [e context]
-                           eventNumber: 0/*[e eventNumber] */
-                            clickCount: 1
-                              pressure: 0];
+                                      location: p
+                                 modifierFlags: 0
+                                     timestamp: [e timestamp]
+                                  windowNumber: [[view window] windowNumber]
+                                       context: [e context]
+                                   eventNumber: 0/*[e eventNumber] */
+                                    clickCount: 1
+                                      pressure: 0];
   long retVal;
 
   context_menu_value = -1;

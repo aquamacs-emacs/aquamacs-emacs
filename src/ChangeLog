@@ -1,3 +1,50 @@
+2011-07-26  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* fontset.c (fontset_get_font_group): Add proper type checks.
+	(Bug#9172)
+
+2011-07-23  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* unexmacosx.c (print_load_command_name): Add cases LC_FUNCTION_STARTS
+	and LC_VERSION_MIN_MACOSX.
+	(copy_linkedit_data) [LC_FUNCTION_STARTS]: New function.
+	(dump_it) [LC_FUNCTION_STARTS]: Use it.
+
+2011-07-22  Chong Yidong  <cyd@stupidchicken.com>
+
+	* frame.c (Fmodify_frame_parameters): In tty case, update the
+	default face if necessary (Bug#4238).
+
+2011-07-11  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* s/darwin.h (LD_SWITCH_SYSTEM_TEMACS): Add -fno-pie so as to suppress
+	address randomization (Bug#8395).
+
+2011-07-07  Kenichi Handa  <handa@m17n.org>
+
+	* composite.c (composition_compute_stop_pos): Ignore a static
+	composition starting before CHARPOS (Bug#8915).
+
+	* xdisp.c (handle_composition_prop): Likewise.
+
+2011-06-18  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* dispnew.c (scrolling_window): Before scrolling, turn off a
+	mouse-highlight in the window being scrolled.
+
+2011-06-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* nsmenu.m: Replace all uses of XVECTOR with ASIZE and AREF.  (Bug#8839)
+
+2011-06-02  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* emacs.c (main): Warn when starting a GTK emacs in daemon mode.
+
+2011-06-01  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* fringe.c (update_window_fringes): Don't update overlay arrow bitmap
+	in the current matrix if keep_current_p is non-zero.
+
 2011-05-25  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
 
 	* dispextern.h (struct glyph_row): New member fringe_bitmap_periodic_p.
