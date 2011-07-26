@@ -247,8 +247,7 @@ static int zero_length;
 INTERVAL search_interval, found_interval;
 
 void
-check_for_interval (i)
-     register INTERVAL i;
+check_for_interval (INTERVAL i)
 {
   if (i == search_interval)
     {
@@ -258,8 +257,7 @@ check_for_interval (i)
 }
 
 INTERVAL
-search_for_interval (i, tree)
-     register INTERVAL i, tree;
+search_for_interval (INTERVAL i, INTERVAL tree)
 {
   icount = 0;
   search_interval = i;
@@ -269,8 +267,7 @@ search_for_interval (i, tree)
 }
 
 static void
-inc_interval_count (i)
-     INTERVAL i;
+inc_interval_count (INTERVAL i)
 {
   icount++;
   if (LENGTH (i) == 0)
@@ -280,8 +277,7 @@ inc_interval_count (i)
 }
 
 int
-count_intervals (i)
-     register INTERVAL i;
+count_intervals (INTERVAL i)
 {
   icount = 0;
   idepth = 0;
@@ -292,8 +288,7 @@ count_intervals (i)
 }
 
 static INTERVAL
-root_interval (interval)
-     INTERVAL interval;
+root_interval (INTERVAL interval)
 {
   register INTERVAL i = interval;
 
@@ -313,7 +308,7 @@ root_interval (interval)
      c		  c
 */
 
-static INLINE INTERVAL
+static inline INTERVAL
 rotate_right (INTERVAL interval)
 {
   INTERVAL i;
@@ -360,7 +355,7 @@ rotate_right (INTERVAL interval)
     c               c
 */
 
-static INLINE INTERVAL
+static inline INTERVAL
 rotate_left (INTERVAL interval)
 {
   INTERVAL i;
@@ -438,7 +433,7 @@ balance_an_interval (INTERVAL i)
 /* Balance INTERVAL, potentially stuffing it back into its parent
    Lisp Object.  */
 
-static INLINE INTERVAL
+static inline INTERVAL
 balance_possible_root_interval (register INTERVAL interval)
 {
   Lisp_Object parent;
@@ -804,9 +799,8 @@ update_interval (register INTERVAL i, EMACS_INT pos)
    to the root.  */
 
 static INTERVAL
-adjust_intervals_for_insertion (tree, position, length)
-     INTERVAL tree;
-     EMACS_INT position, length;
+adjust_intervals_for_insertion (INTERVAL tree, EMACS_INT position,
+				EMACS_INT length)
 {
   register EMACS_INT relative_position;
   register INTERVAL this;
@@ -1425,10 +1419,15 @@ adjust_intervals_for_deletion (struct buffer *buffer,
 /* Make the adjustments necessary to the interval tree of BUFFER to
    represent an addition or deletion of LENGTH characters starting
    at position START.  Addition or deletion is indicated by the sign
-   of LENGTH.  */
+   of LENGTH.
 
-INLINE void
-offset_intervals (struct buffer *buffer, EMACS_INT start, EMACS_INT length)
+   The two inline functions (one static) pacify Sun C 5.8, a pre-C99
+   compiler that does not allow calling a static function (here,
+   adjust_intervals_for_deletion) from a non-static inline function.  */
+
+static inline void
+static_offset_intervals (struct buffer *buffer, EMACS_INT start,
+			 EMACS_INT length)
 {
   if (NULL_INTERVAL_P (BUF_INTERVALS (buffer)) || length == 0)
     return;
@@ -1440,6 +1439,12 @@ offset_intervals (struct buffer *buffer, EMACS_INT start, EMACS_INT length)
       IF_LINT (if (length < - TYPE_MAXIMUM (EMACS_INT)) abort ();)
       adjust_intervals_for_deletion (buffer, start, -length);
     }
+}
+
+inline void
+offset_intervals (struct buffer *buffer, EMACS_INT start, EMACS_INT length)
+{
+  static_offset_intervals (buffer, start, length);
 }
 
 /* Merge interval I with its lexicographic successor. The resulting
@@ -1604,9 +1609,7 @@ reproduce_tree_obj (INTERVAL source, Lisp_Object parent)
    interval.  */
 
 static INTERVAL
-make_new_interval (intervals, start, length)
-     INTERVAL intervals;
-     EMACS_INT start, length;
+make_new_interval (INTERVAL intervals, EMACS_INT start, EMACS_INT length)
 {
   INTERVAL slot;
 
@@ -1883,7 +1886,7 @@ lookup_char_property (Lisp_Object plist, register Lisp_Object prop, int textprop
 /* Set point in BUFFER "temporarily" to CHARPOS, which corresponds to
    byte position BYTEPOS.  */
 
-INLINE void
+inline void
 temp_set_point_both (struct buffer *buffer,
 		     EMACS_INT charpos, EMACS_INT bytepos)
 {
@@ -1903,7 +1906,7 @@ temp_set_point_both (struct buffer *buffer,
 
 /* Set point "temporarily", without checking any text properties.  */
 
-INLINE void
+inline void
 temp_set_point (struct buffer *buffer, EMACS_INT charpos)
 {
   temp_set_point_both (buffer, charpos,
@@ -2392,7 +2395,7 @@ copy_intervals (INTERVAL tree, EMACS_INT start, EMACS_INT length)
 
 /* Give STRING the properties of BUFFER from POSITION to LENGTH.  */
 
-INLINE void
+inline void
 copy_intervals_to_string (Lisp_Object string, struct buffer *buffer,
 			  EMACS_INT position, EMACS_INT length)
 {

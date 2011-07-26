@@ -373,67 +373,67 @@ for the definition of the menu frame."
       `(menu-item ,(purecopy "Text Properties") facemenu-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
-    (defvar menu-bar-goto-menu
-      (let ((menu (make-sparse-keymap "Go To")))
-   
+(defvar menu-bar-goto-menu
+  (let ((menu (make-sparse-keymap "Go To")))
 
-	(define-key menu [set-tags-name]
-	  `(menu-item ,(purecopy "Set Tags File Name...") visit-tags-table
-		      :help ,(purecopy "Tell Tags commands which tag table file to use")))
 
-	(define-key menu [separator-tag-file]
-	  menu-bar-separator)
+    (define-key menu [set-tags-name]
+      `(menu-item ,(purecopy "Set Tags File Name...") visit-tags-table
+                  :help ,(purecopy "Tell Tags commands which tag table file to use")))
 
-	(define-key menu [apropos-tags]
-	  `(menu-item ,(purecopy "Tags Apropos...") tags-apropos
-		      :help ,(purecopy "Find function/variables whose names match regexp")))
-	(define-key menu [next-tag-otherw]
-	  `(menu-item ,(purecopy "Next Tag in Other Window")
-		      menu-bar-next-tag-other-window
-		      :enable (and (boundp 'tags-location-ring)
-				   (not (ring-empty-p tags-location-ring)))
-		      :help ,(purecopy "Find next function/variable matching last tag name in another window")))
+    (define-key menu [separator-tag-file]
+      menu-bar-separator)
 
-	(define-key menu [next-tag]
-	  `(menu-item ,(purecopy "Find Next Tag")
-		      menu-bar-next-tag
-		      :enable (and (boundp 'tags-location-ring)
-				   (not (ring-empty-p tags-location-ring)))
-		      :help ,(purecopy "Find next function/variable matching last tag name")))
-	(define-key menu [find-tag-otherw]
-	  `(menu-item ,(purecopy "Find Tag in Other Window...") find-tag-other-window
-		      :help ,(purecopy "Find function/variable definition in another window")))
-	(define-key menu [find-tag]
-	  `(menu-item ,(purecopy "Find Tag...") find-tag
-		      :help ,(purecopy "Find definition of function or variable")))
+    (define-key menu [apropos-tags]
+      `(menu-item ,(purecopy "Tags Apropos...") tags-apropos
+                  :help ,(purecopy "Find function/variables whose names match regexp")))
+    (define-key menu [next-tag-otherw]
+      `(menu-item ,(purecopy "Next Tag in Other Window")
+                  menu-bar-next-tag-other-window
+                  :enable (and (boundp 'tags-location-ring)
+                               (not (ring-empty-p tags-location-ring)))
+                  :help ,(purecopy "Find next function/variable matching last tag name in another window")))
 
-	(define-key menu [separator-tags]
-	  menu-bar-separator)
+    (define-key menu [next-tag]
+      `(menu-item ,(purecopy "Find Next Tag")
+                  menu-bar-next-tag
+                  :enable (and (boundp 'tags-location-ring)
+                               (not (ring-empty-p tags-location-ring)))
+                  :help ,(purecopy "Find next function/variable matching last tag name")))
+    (define-key menu [find-tag-otherw]
+      `(menu-item ,(purecopy "Find Tag in Other Window...") find-tag-other-window
+                  :help ,(purecopy "Find function/variable definition in another window")))
+    (define-key menu [find-tag]
+      `(menu-item ,(purecopy "Find Tag...") find-tag
+                  :help ,(purecopy "Find definition of function or variable")))
 
-	(define-key menu [end-of-buf]
-	  `(menu-item ,(purecopy "Goto End of Buffer") end-of-buffer))
-	(define-key menu [beg-of-buf]
-	  `(menu-item ,(purecopy "Goto Beginning of Buffer") beginning-of-buffer))
-	(define-key menu [go-to-pos]
-	  `(menu-item ,(purecopy "Goto Buffer Position...") goto-char
-		      :help ,(purecopy "Read a number N and go to buffer position N")))
-	(define-key menu [go-to-line]
-	  `(menu-item ,(purecopy "Goto Line...") goto-line
-		      :help ,(purecopy "Read a line number and go to that line")))
-	menu))
+    (define-key menu [separator-tags]
+      menu-bar-separator)
+
+    (define-key menu [end-of-buf]
+      `(menu-item ,(purecopy "Goto End of Buffer") end-of-buffer))
+    (define-key menu [beg-of-buf]
+      `(menu-item ,(purecopy "Goto Beginning of Buffer") beginning-of-buffer))
+    (define-key menu [go-to-pos]
+      `(menu-item ,(purecopy "Goto Buffer Position...") goto-char
+                  :help ,(purecopy "Read a number N and go to buffer position N")))
+    (define-key menu [go-to-line]
+      `(menu-item ,(purecopy "Goto Line...") goto-line
+                  :help ,(purecopy "Read a line number and go to that line")))
+    menu))
 
     (define-key menu [goto]
       `(menu-item ,(purecopy "Go To") ,menu-bar-goto-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
-    
+
     (define-key menu [replace]
       `(menu-item ,(purecopy "Replace") ,menu-bar-replace-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
-    
+
     (define-key menu [search]
       `(menu-item ,(purecopy "Search") ,menu-bar-search-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
-    
+
     (define-key menu [separator-search]
       menu-bar-separator)
 
@@ -1172,17 +1172,18 @@ mail status in mode line"))
   (let ((menu (make-sparse-keymap "Line Wrapping")))
 
     (define-key menu [word-wrap]
-      `(menu-item ,(purecopy "Word Wrap (Visual Line mode)")
-                  (lambda ()
-                    (interactive)
-                    (unless visual-line-mode
-                      (visual-line-mode 1))
-                    (message ,(purecopy "Visual-Line mode enabled")))
-                  :help ,(purecopy "Wrap long lines at word boundaries")
-                  :button (:radio . (and (null truncate-lines)
-                                         (not (truncated-partial-width-window-p))
-                                         word-wrap))
-                  :visible (menu-bar-menu-frame-live-and-visible-p)))
+      `(menu-item
+	,(purecopy "Word Wrap (Visual Line mode)")
+	(lambda ()
+	  (interactive)
+	  (unless visual-line-mode
+	    (visual-line-mode 1))
+	  (message ,(purecopy "Visual-Line mode enabled")))
+	:help ,(purecopy "Wrap long lines at word boundaries")
+	:button (:radio . (and (null truncate-lines)
+			       (not (truncated-partial-width-window-p))
+			       word-wrap))
+	:visible (menu-bar-menu-frame-live-and-visible-p)))
 
     (define-key menu [truncate]
       `(menu-item ,(purecopy "Truncate Long Lines")
@@ -1279,8 +1280,8 @@ mail status in mode line"))
 (define-key menu-bar-search-menu [case-fold-search]
       (menu-bar-make-toggle toggle-case-fold-search case-fold-search
                             "Case-Insensitive Search"
-                            "Case-Insensitive Search %s"
-                            "Ignore letter-case in search commands"))
+       "Case-Insensitive Search %s"
+       "Ignore letter-case in search commands"))
 
 (defvar menu-bar-line-wrapping-menu (make-sparse-keymap "Line Wrapping"))
 ;(setq menu-bar-line-wrapping-menu (make-sparse-keymap "Line Wrapping"))
@@ -1306,7 +1307,7 @@ for future buffers."
 ; mode-line
 (setq minor-mode-alist (cons (list 'truncate-lines " Trunc")
 			   minor-mode-alist))
-
+
 (defun menu-bar-set-wrapping-default ()
   "Set current buffer's line wrapping style as default."
   (interactive)
@@ -1922,16 +1923,19 @@ using `abort-recursive-edit'."
     (abort-recursive-edit)))
 
 (defun kill-this-buffer-enabled-p ()
-  (let ((count 0)
-	(buffers (buffer-list)))
-    (while buffers
-      (or (string-match "^ " (buffer-name (car buffers)))
-	  (setq count (1+ count)))
-      (setq buffers (cdr buffers)))
-    (and 
-     (menu-bar-menu-frame-live-and-visible-p)
-    (or (not (menu-bar-non-minibuffer-window-p))
-	 (> count 1)))))
+  "Return non-nil if the `kill-this-buffer' menu item should be enabled."
+  (and (menu-bar-menu-frame-live-and-visible-p)
+  (or (not (menu-bar-non-minibuffer-window-p))
+      (let (found-1)
+	;; Instead of looping over entire buffer list, stop once we've
+	;; found two "killable" buffers (Bug#8184).
+	(catch 'found-2
+	  (dolist (buffer (buffer-list))
+	    (unless (string-match-p "^ " (buffer-name buffer))
+	      (if (not found-1)
+		  (setq found-1 t)
+		(throw 'found-2 t))))))))
+  )
 
 (put 'dired 'menu-enable '(menu-bar-non-minibuffer-window-p))
 
@@ -2085,6 +2089,10 @@ Buffers menu is regenerated."
 ;; Used to cache the menu entries for commands in the Buffers menu
 (defvar menu-bar-buffers-menu-command-entries nil)
 
+(defvar menu-bar-select-buffer-function 'switch-to-buffer
+  "Function to select the buffer chosen from the `Buffers' menu-bar menu.
+It must accept a buffer as its only required argument.")
+
 (defun menu-bar-update-buffers (&optional force)
   ;; If user discards the Buffers item, play along.
   (and (lookup-key (current-global-map) [menu-bar buffer])
@@ -2132,10 +2140,8 @@ Buffers menu is regenerated."
 					 (car pair)
 				  `(lambda ()
                                      (interactive)
-					    (menu-bar-select-buffer ,(cdr pair))))
-					(if (eq (window-buffer) (cdr pair)) ;  menu-updating-frame is incorrect
-					    (list :button '(:toggle . t)))
-					))))
+                                     (funcall menu-bar-select-buffer-function ,(cdr pair))))))
+			   ))
                    (list buffers-vec))))
 
 	 ;; Make a Frames menu if we have more than one frame.

@@ -138,11 +138,11 @@ static unsigned convert_ns_to_X_keysym[] =
   0x1B,				0x1B   /* escape */
 };
 
-
-/* Lisp communications */
 static Lisp_Object Qmodifier_value;
 Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qnone;
 extern Lisp_Object Qcursor_color, Qcursor_type, Qns, Qleft;
+
+static Lisp_Object QUTF8_STRING;
 
 /* On OS X picks up the default NSGlobalDomain AppleAntiAliasingThreshold,
    the maximum font size to NOT antialias.  On GNUstep there is currently
@@ -5246,7 +5246,9 @@ typedef struct
   unsigned fnKeysym = 0;
   int flags;
   static NSMutableArray *nsEvArray;
+#if !defined (NS_IMPL_COCOA) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_6
   static BOOL firstTime = YES;
+#endif
   int left_is_none;
 
   NSTRACE (keyDown);
@@ -5320,8 +5322,8 @@ typedef struct
 	    {
 	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 	    }
-	  if ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)
-	    {
+      if ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)
+        {
 	      emacs_event->modifiers |= 
 		parse_solitary_modifier ((EQ (ns_right_command_modifier, Qleft) ? 
 					  ns_command_modifier : ns_right_command_modifier));
@@ -5364,7 +5366,7 @@ typedef struct
 	  if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask || ! (flags & NSRightControlKeyMask))
 	    emacs_event->modifiers |=
 	      parse_solitary_modifier (ns_control_modifier);
-	  if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
+      if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
 	    emacs_event->modifiers |=
 	      parse_solitary_modifier ((EQ (ns_right_control_modifier, Qleft) ? 
 					  ns_control_modifier : ns_right_control_modifier));
@@ -5489,13 +5491,15 @@ typedef struct
         }
     }
 
+  
+#if !defined (NS_IMPL_COCOA) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_6
   /* if we get here we should send the key for input manager processing */
   if (firstTime && [[NSInputManager currentInputManager]
                      wantsToDelayTextChangeNotifications] == NO)
     fprintf (stderr,
           "Emacs: WARNING: TextInput mgr wants marked text to be permanent!\n");
   firstTime = NO;
-
+#endif
   if (NS_KEYLOG && !processingCompose)
     fprintf (stderr, "keyDown: Begin compose sequence.\n");
 
@@ -6136,6 +6140,9 @@ typedef struct
   win = [[EmacsWindow alloc]
             initWithContentRect: r
                       styleMask: (NSResizableWindowMask |
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+                                  NSTitledWindowMask |
+#endif
                                   NSMiniaturizableWindowMask |
                                   NSClosableWindowMask)
                         backing: NSBackingStoreBuffered
@@ -6202,6 +6209,9 @@ typedef struct
     [win setOpaque: NO];
 
   [self allocateGState];
+
+  [NSApp registerServicesMenuSendTypes: ns_send_types
+                           returnTypes: nil];
 
   ns_window_num++;
   return self;
@@ -6572,13 +6582,16 @@ typedef struct
 }
 
 
-- validRequestorForSendType: (NSString *)typeSent
-                 returnType: (NSString *)typeReturned
+- (id) validRequestorForSendType: (NSString *)typeSent
+                      returnType: (NSString *)typeReturned
 {
   NSTRACE (validRequestorForSendType);
-  if ([ns_send_types indexOfObjectIdenticalTo: typeSent] != NSNotFound &&
-      [ns_return_types indexOfObjectIdenticalTo: typeSent] != NSNotFound)
-    return self;
+  if (typeSent != nil && [ns_send_types indexOfObject: typeSent] != NSNotFound
+      && typeReturned == nil)
+    {
+      if (! NILP (ns_get_local_selection (QPRIMARY, QUTF8_STRING)))
+        return self;
+    }
 
   return [super validRequestorForSendType: typeSent
                                returnType: typeReturned];
@@ -6602,8 +6615,28 @@ typedef struct
 
 - (BOOL) writeSelectionToPasteboard: (NSPasteboard *)pb types: (NSArray *)types
 {
-  /* supposed to write for as many of types as we are able */
-  return NO;
+  NSArray *typesDeclared;
+  Lisp_Object val;
+
+  /* We only support NSStringPboardType */
+  if ([types containsObject:NSStringPboardType] == NO) {
+    return NO;
+  }
+
+  val = ns_get_local_selection (QPRIMARY, QUTF8_STRING);
+  if (CONSP (val) && SYMBOLP (XCAR (val)))
+    {
+      val = XCDR (val);
+      if (CONSP (val) && NILP (XCDR (val)))
+        val = XCAR (val);
+    }
+  if (! STRINGP (val))
+    return NO;
+
+  typesDeclared = [NSArray arrayWithObject:NSStringPboardType];
+  [pb declareTypes:typesDeclared owner:nil];
+  ns_string_to_pasteboard (pb, val);
+  return YES;
 }
 
 
@@ -6958,14 +6991,26 @@ typedef struct
   em_whole = whole;
 
   if (portion >= whole)
-    [self setFloatValue: 0.0 knobProportion: 1.0];
+    {
+#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_5
+      [self setKnobProportion: 1.0];
+      [self setDoubleValue: 1.0];
+#else
+      [self setFloatValue: 0.0 knobProportion: 1.0];
+#endif
+    }
   else
     {
       float pos, por;
       portion = max ((float)whole*min_portion/(pixel_height > 0 ? pixel_height : 1), portion);
       pos = (float)position / (whole - portion);
       por = (float)portion/whole;
+#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_5
+      [self setKnobProportion: por];
+      [self setDoubleValue: pos];
+#else
       [self setFloatValue: pos knobProportion: por];
+#endif
     }
   return self;
 }
@@ -7310,6 +7355,8 @@ syms_of_nsterm (void)
   DEFSYM (Qsuper, "super");
   DEFSYM (Qcontrol, "control");
   DEFSYM (Qnone, "none");
+  DEFSYM (QUTF8_STRING, "UTF8_STRING");
+
   Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
   Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier));
   Fput (Qmeta, Qmodifier_value, make_number (meta_modifier));

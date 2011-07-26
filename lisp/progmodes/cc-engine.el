@@ -1301,12 +1301,13 @@ This function does not do any hidden buffer changes."
       ;; same line.
       (re-search-forward "\\=\\s *[\n\r]" start t)
 
-      (if (if (forward-comment -1)
+      (if (if (let (open-paren-in-column-0-is-defun-start) (forward-comment -1))
 	      (if (eolp)
 		  ;; If forward-comment above succeeded and we're at eol
 		  ;; then the newline we moved over above didn't end a
 		  ;; line comment, so we give it another go.
-		  (forward-comment -1)
+		  (let (open-paren-in-column-0-is-defun-start)
+		    (forward-comment -1))
 		t))
 
 	  ;; Emacs <= 20 and XEmacs move back over the closer of a
@@ -1333,7 +1334,8 @@ comment at the start of cc-engine.el for more info."
 	    ;; return t when moving backwards at bob.
 	    (not (bobp))
 
-	    (if (forward-comment -1)
+	    (if (let (open-paren-in-column-0-is-defun-start)
+		  (forward-comment -1))
 		(if (looking-at "\\*/")
 		    ;; Emacs <= 20 and XEmacs move back over the
 		    ;; closer of a block comment that lacks an opener.
@@ -8712,6 +8714,35 @@ comment at the start of cc-engine.el for more info."
        (c-beginning-of-statement-1 containing-sexp)
        (c-add-syntax 'annotation-var-cont (point)))
 
+     ;; CASE G: a template list continuation?
+     ;; Mostly a duplication of case 5D.3 to fix templates-19:
+     ((and (c-major-mode-is 'c++-mode)
+	   (save-excursion
+	     (goto-char indent-point)
+	     (c-with-syntax-table c++-template-syntax-table
+	       (setq placeholder (c-up-list-backward)))
+	     (and placeholder
+		  (eq (char-after placeholder) ?<)
+		  (/= (char-before placeholder) ?<)
+		  (progn
+		    (goto-char (1+ placeholder))
+		    (not (looking-at c-<-op-cont-regexp))))))
+      (c-with-syntax-table c++-template-syntax-table
+	(goto-char placeholder)
+	(c-beginning-of-statement-1 containing-sexp t)
+	(if (save-excursion
+	      (c-backward-syntactic-ws containing-sexp)
+	      (eq (char-before) ?<))
+	    ;; In a nested template arglist.
+	    (progn
+	      (goto-char placeholder)
+	      (c-syntactic-skip-backward "^,;" containing-sexp t)
+	      (c-forward-syntactic-ws))
+	  (back-to-indentation)))
+      ;; FIXME: Should use c-add-stmt-syntax, but it's not yet
+      ;; template aware.
+      (c-add-syntax 'template-args-cont (point) placeholder))
+     
      ;; CASE D: continued statement.
      (t
       (c-beginning-of-statement-1 containing-sexp)

@@ -109,10 +109,14 @@ Use `visual-line-mode' instead."
 
 ;;;###autoload
 (define-minor-mode longlines-mode
-  "Toggle Long Lines mode.
+  "Minor mode to wrap long lines.
 In Long Lines mode, long lines are wrapped if they extend beyond
 `fill-column'.  The soft newlines used for line wrapping will not
 show up when the text is yanked or saved to disk.
+
+With no argument, this command toggles Flyspell mode.
+With a prefix argument ARG, turn Flyspell minor mode on if ARG is positive,
+otherwise turn it off.
 
 If the variable `longlines-auto-wrap' is non-nil, lines are automatically
 wrapped whenever the buffer is changed.  You can always call

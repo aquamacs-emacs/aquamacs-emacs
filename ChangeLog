@@ -1,6 +1,182 @@
+2011-07-13  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* configure.in (GSETTINGS): Check for gio-2.0 >= 2.26.
+
+2011-07-11  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* configure.in (LD_SWITCH_SYSTEM_TEMACS): Add -fno-pie on Darwin
+	so as to suppress address randomization (Bug#8395).
+
+2011-07-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/stdint.in.h: Merge from gnulib (Bug#9025).
+	This fixes a build problem on older Mac OS X hosts.
+
+	* m4/pthread_sigmask.m4 (gl_FUNC_PTHREAD_SIGMASK): Omit gl_THREADLIB
+	test, which runs afoul of Automake installations where, for example,
+	/usr/share/aclocal contains a copy of gl_THREADLIB.
+	Problem reported by Sven Joachim in
+	<http://lists.gnu.org/archive/html/emacs-devel/2011-07/msg00529.html>.
+	This is just a quick temporary fix, specific to Emacs; I'll work
+	with the other gnulib maintainers to get a more-permanent fix.
+
+	Add gnulib's strtoimax module, needed on Solaris 8.
+	* Makefile.in (GNULIB_MODULES): Add strtoimax.
+	* lib/strtoll.c, m4/strtoimax.m4, m4/strtoll.m4: New files,
+	automatically imported from gnulib.
+	* lib/gnulib.mk, m4/gl-comp.m4: Regenerate.
+
+2011-07-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Add gnulib support for pthread_sigmask (Bug#9010).
+	* Makefile.in (GNULIB_MODULES): Add pthread_sigmask.
+	* configure.in (AC_TYPE_UID_T): New dummy macro.
+	Configure gnulib after adjusting LIBS,
+	so that gnulib can assume the libraries in LIBS.
+	* lib/signal.in.h, m4/pthread_sigmask.m4, m4/signal_h.m4:
+	* lib/pthread_sigprocmask.c, lib/sigprocmask.c, m4/signalblocking.m4:
+	* lib/pthread_sigmask.c:
+	New files, automatically imported from gnulib.
+	* lib/gnulib.mk, m4/gl-comp.m4: Automatically-imported update
+	due to the above changes.
+	* .bzrignore: Add lib/signal.h.
+
+	* lib/getopt.c, lib/unistd.in.h, m4/getopt.m4: Merge from gnulib.
+
+2011-07-07  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* configure.in (maintainer-mode): Reflect default in help string.
+
+2011-07-07  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure.in: Remove reference to iris4d.h.
+
+2011-07-05  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* configure.in (HAVE_GCONF): Allow both HAVE_GCONF and HAVE_GSETTINGS.
+
+2011-07-01  Glenn Morris  <rgm@gnu.org>
+
+	* configure.in (SETTINGS_CFLAGS, SETTINGS_LIBS) [HAVE_GCONF]: Fix typo.
+
+2011-06-30  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* configure.in (HAVE_GSETTINGS): Fix syntax for GSETTINGS tests,
+	which made ./configure infloop.
+
+2011-06-30  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* configure.in (gsettings): New option and check for GSettings.
+
+2011-06-29  Glenn Morris  <rgm@gnu.org>
+
+	* configure.in: Try to test for the required crt*.o files.
+
+2011-06-27  Bill Wohler  <wohler@newt.com>
+
+	* .bzrignore: Add lisp/mh-e/mh-autoloads.el and lisp/mh-e/mh-cus-load.el.
+
+2011-06-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use gnulib's dup2 module instead of rolling our own.
+	* Makefile.in (GNULIB_MODULES): Add dup2.
+	* configure.in: Do not check for dup2; gnulib does that now.
+	* lib/dup2.c, m4/dup2.m4: New files, from gnulib.
+
+2011-06-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/getopt.c, lib/stat.c, m4/gl-comp.m4: Merge from gnulib.
+
+2011-06-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use gnulib's alloca-opt module.
+	* .bzrignore: Add lib/alloca.h.
+	* Makefile.in (GNULIB_MODULES): Add alloca-opt.
+	* configure.in (AC_FUNC_ALLOCA): Remove almost all the alloca stuff,
+	as gnulib now does that for us.  Put alloca check in config.h.
+	Include <alloca.h> before any other include file, for AIX 3.
+	* lib/gnulib.mk, m4/gl-comp.m4: Regenerate.
+	* lib/alloca.in.h, m4/alloca.m4: New files, from gnulib.
+
+2011-06-21  Leo Liu  <sdl.web@gmail.com>
+
+	* m4/sha256.m4:
+	* m4/sha512.m4:
+	* m4/gl-comp.m4:
+	* lib/u64.h:
+	* lib/sha256.c:
+	* lib/sha256.h:
+	* lib/sha512.c:
+	* lib/sha512.h:
+	* lib/makefile.w32-in (GNULIBOBJS):
+	* lib/gnulib.mk:
+	* Makefile.in (GNULIB_MODULES): Add crypto/sha256 and
+	crypto/sha512 modules from gnulib.
+
+2011-06-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/unistd.in.h, m4/getloadavg.m4: Merge from gnulib.
+
+2011-06-17  Glenn Morris  <rgm@gnu.org>
+
+	* configure.in: Restore the behavior of checking crt-dir only
+	when the user specified it (not all platforms use it).
+
+2011-06-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* m4/lstat.m4: Merge from gnulib (Bug#8878).
+
+2011-06-16  Miles Bader <miles@gnu.org>
+
+	* configure.in: Try to determine CRT_DIR automatically when
+	using gcc.
+
+2011-06-15  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/ftoastr.c, lib/stdio.in.h, lib/verify.h:
+	* lib/gnulib.mk, m4/c-strtod.m4, m4/filemode.m4, m4/getloadavg.m4:
+	* m4/getopt.m4, m4/gl-comp.m4, m4/lstat.m4, m4/md5.m4, m4/mktime.m4:
+	* m4/readlink.m4, m4/sha1.m4, m4/stat.m4, m4/strftime.m4:
+	* m4/strtoull.m4, m4/strtoumax.m4, m4/symlink.m4, m4/time_r.m4:
+	Merge from gnulib.
+
+2011-06-14  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* configure.in: Add emacsgtkfixed.o to GTK_OBJ if HAVE_GTK3.
+
+2011-06-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/gnulib.mk, m4/gnulib-common.m4: Merge from gnulib.
+
+2011-06-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* configure.in: Add --with-wide-int.
+	* INSTALL: Mention this.
+
+2011-06-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Merge from gnulib.
+	* lib/careadlinkat.c, lib/careadlinkat.h, m4/gnulib-common.m4: Merge.
+
+2011-06-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/allocator.h, lib/careadlinkat.c: Merge from gnulib.
+
+2011-05-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use 'inline', not 'INLINE'.
+	* configure.in (INLINE): Remove.
+
+2011-05-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Adjust to recent gnulib change for @GUARD_PREFIX@.
+	* lib/makefile.w32-in (getopt_h): Substitute @GUARD_PREFIX@, too.
+	All uses of _GL_ for guard prefixes in lib/*.h replaced with
+	_@GUARD_PREFIX@_.
+
 2011-05-27  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* doc/misc/texinfo.tex, lib/getopt.c, lib/intprops.h: Merge from gnulib.
+	* lib/getopt.c, lib/intprops.h: Merge from gnulib.
 
 2011-05-24  Glenn Morris  <rgm@gnu.org>
 

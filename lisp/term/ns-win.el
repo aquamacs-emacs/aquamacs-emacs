@@ -1002,6 +1002,7 @@ EVENT is a mouse event, and ATTRIBUTE is either
 (declare-function ns-list-services "nsfns.m" ())
 (declare-function x-open-connection "nsfns.m"
                   (display &optional xrm-string must-succeed))
+(declare-function ns-set-resource "nsfns.m" (owner name value))
 
 ;; Do the actual Nextstep Windows setup here; the above code just
 ;; defines functions and variables that we use now.
@@ -1025,6 +1026,11 @@ EVENT is a mouse event, and ATTRIBUTE is either
 
   ;; FIXME: This will surely lead to "MODIFIED OUTSIDE CUSTOM" warnings.
   (menu-bar-mode (if (get-lisp-resource nil "Menus") 1 -1))
+
+  ;; OS X Lion introduces PressAndHold, which is unsupported by this port.
+  ;; See this thread for more details:
+  ;; http://lists.gnu.org/archive/html/emacs-devel/2011-06/msg00505.html
+  (ns-set-resource nil "ApplePressAndHoldEnabled" "NO")
 
   (setq ns-initialized t))
 

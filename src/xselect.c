@@ -20,6 +20,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Rewritten by jwz */
 
 #include <config.h>
+#include <limits.h>
 #include <stdio.h>      /* termhooks.h needs this */
 #include <setjmp.h>
 
@@ -111,6 +112,7 @@ static Lisp_Object QUTF8_STRING;	/* This is a type of selection.  */
 static Lisp_Object Qcompound_text_with_extensions;
 
 static Lisp_Object Qforeign_selection;
+static Lisp_Object Qx_lost_selection_functions, Qx_sent_selection_functions;
 
 /* If this is a smaller number than the max-request-size of the display,
    emacs will use INCR selection transfer when the selection is larger
@@ -335,7 +337,7 @@ x_own_selection (Lisp_Object selection_name, Lisp_Object selection_value,
     Lisp_Object prev_value;
 
     selection_data = list4 (selection_name, selection_value,
-			    long_to_cons (timestamp), frame);
+			    INTEGER_TO_CONS (timestamp), frame);
     prev_value = LOCAL_SELECTION (selection_name, dpyinfo);
 
     dpyinfo->terminal->Vselection_alist
@@ -419,7 +421,7 @@ x_get_local_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
       || INTEGERP (check)
       || NILP (value))
     return value;
-  /* Check for a value that cons_to_long could handle.  */
+  /* Check for a value that CONS_TO_INTEGER could handle.  */
   else if (CONSP (check)
 	   && INTEGERP (XCAR (check))
 	   && (INTEGERP (XCDR (check))
@@ -782,8 +784,8 @@ x_handle_selection_request (struct input_event *event)
   if (NILP (local_selection_data)) goto DONE;
 
   /* Decline requests issued prior to our acquiring the selection.  */
-  local_selection_time
-    = (Time) cons_to_long (XCAR (XCDR (XCDR (local_selection_data))));
+  CONS_TO_INTEGER (XCAR (XCDR (XCDR (local_selection_data))),
+		   Time, local_selection_time);
   if (SELECTION_EVENT_TIME (event) != CurrentTime
       && local_selection_time > SELECTION_EVENT_TIME (event))
     goto DONE;
@@ -854,7 +856,7 @@ x_handle_selection_request (struct input_event *event)
       && !EQ (Vx_sent_selection_functions, Qunbound))
     {
       Lisp_Object args[4];
-      args[0] = Vx_sent_selection_functions;
+      args[0] = Qx_sent_selection_functions;
       args[1] = selection_symbol;
       args[2] = target_symbol;
       args[3] = success ? Qt : Qnil;
@@ -950,8 +952,8 @@ x_handle_selection_clear (struct input_event *event)
   /* Well, we already believe that we don't own it, so that's just fine.  */
   if (NILP (local_selection_data)) return;
 
-  local_selection_time = (Time)
-    cons_to_long (XCAR (XCDR (XCDR (local_selection_data))));
+  CONS_TO_INTEGER (XCAR (XCDR (XCDR (local_selection_data))),
+		   Time, local_selection_time);
 
   /* We have reasserted the selection since this SelectionClear was
      generated, so we can disregard it.  */
@@ -978,7 +980,7 @@ x_handle_selection_clear (struct input_event *event)
   /* Run the `x-lost-selection-functions' abnormal hook.  */
   {
     Lisp_Object args[2];
-    args[0] = Vx_lost_selection_functions;
+    args[0] = Qx_lost_selection_functions;
     args[1] = selection_symbol;
     Frun_hook_with_args (2, args);
   }
@@ -1019,7 +1021,7 @@ x_clear_frame_selections (FRAME_PTR f)
     {
       /* Run the `x-lost-selection-functions' abnormal hook.  */
       Lisp_Object args[2];
-      args[0] = Vx_lost_selection_functions;
+      args[0] = Qx_lost_selection_functions;
       args[1] = Fcar (Fcar (t->Vselection_alist));
       Frun_hook_with_args (2, args);
 
@@ -1032,7 +1034,7 @@ x_clear_frame_selections (FRAME_PTR f)
 	&& EQ (frame, XCAR (XCDR (XCDR (XCDR (XCAR (XCDR (rest))))))))
       {
 	Lisp_Object args[2];
-	args[0] = Vx_lost_selection_functions;
+	args[0] = Qx_lost_selection_functions;
 	args[1] = XCAR (XCAR (XCDR (rest)));
 	Frun_hook_with_args (2, args);
 	XSETCDR (rest, XCDR (XCDR (rest)));
@@ -1207,38 +1209,23 @@ x_get_foreign_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
 		    ? symbol_to_x_atom (dpyinfo, XCAR (target_type))
 		    : symbol_to_x_atom (dpyinfo, target_type));
   int secs, usecs;
-  int count = SPECPDL_INDEX ();
 
   if (!FRAME_LIVE_P (f))
     return Qnil;
 
   if (! NILP (time_stamp))
-    {
-      if (CONSP (time_stamp))
-        requestor_time = (Time) cons_to_long (time_stamp);
-      else if (INTEGERP (time_stamp))
-        requestor_time = (Time) XUINT (time_stamp);
-      else if (FLOATP (time_stamp))
-        requestor_time = (Time) XFLOAT_DATA (time_stamp);
-      else
-        error ("TIME_STAMP must be cons or number");
-    }
+    CONS_TO_INTEGER (time_stamp, Time, requestor_time);
 
   BLOCK_INPUT;
-
-  /* The protected block contains wait_reading_process_output, which
-     can run random lisp code (process handlers) or signal.
-     Therefore, we put the x_uncatch_errors call in an unwind.  */
-  record_unwind_protect (x_catch_errors_unwind, Qnil);
-  x_catch_errors (display);
-
   TRACE2 ("Get selection %s, type %s",
 	  XGetAtomName (display, type_atom),
 	  XGetAtomName (display, target_property));
 
+  x_catch_errors (display);
   XConvertSelection (display, selection_atom, type_atom, target_property,
 		     requestor_window, requestor_time);
-  XFlush (display);
+  x_check_errors (display, "Can't convert selection: %s");
+  x_uncatch_errors ();
 
   /* Prepare to block until the reply has been read.  */
   reading_selection_window = requestor_window;
@@ -1263,13 +1250,6 @@ x_get_foreign_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
   wait_reading_process_output (secs, usecs, 0, 0,
 			       reading_selection_reply, NULL, 0);
   TRACE1 ("  Got event = %d", !NILP (XCAR (reading_selection_reply)));
-
-  BLOCK_INPUT;
-  if (x_had_errors_p (display))
-    error ("Cannot get selection");
-  /* This calls x_uncatch_errors.  */
-  unbind_to (count, Qnil);
-  UNBLOCK_INPUT;
 
   if (NILP (XCAR (reading_selection_reply)))
     error ("Timed out waiting for reply from selection owner");
@@ -1652,7 +1632,7 @@ selection_data_to_lisp_data (Display *display, const unsigned char *data,
      convert it to a cons of integers, 16 bits in each half.
    */
   else if (format == 32 && size == sizeof (int))
-    return long_to_cons (((unsigned int *) data) [0]);
+    return INTEGER_TO_CONS (((unsigned int *) data) [0]);
   else if (format == 16 && size == sizeof (short))
     return make_number ((int) (((unsigned short *) data) [0]));
 
@@ -1678,7 +1658,7 @@ selection_data_to_lisp_data (Display *display, const unsigned char *data,
       for (i = 0; i < size / 4; i++)
 	{
 	  unsigned int j = ((unsigned int *) data) [i];
-	  Faset (v, make_number (i), long_to_cons (j));
+	  Faset (v, make_number (i), INTEGER_TO_CONS (j));
 	}
       return v;
     }
@@ -1755,7 +1735,7 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
       *size_ret = 1;
       *data_ret = (unsigned char *) xmalloc (sizeof (long) + 1);
       (*data_ret) [sizeof (long)] = 0;
-      (*(unsigned long **) data_ret) [0] = cons_to_long (obj);
+      (*(unsigned long **) data_ret) [0] = cons_to_unsigned (obj, ULONG_MAX);
       if (NILP (type)) type = QINTEGER;
     }
   else if (VECTORP (obj))
@@ -1803,11 +1783,11 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
 	  *data_ret = (unsigned char *) xmalloc (*size_ret * data_size);
 	  for (i = 0; i < *size_ret; i++)
 	    if (*format_ret == 32)
-	      (*((unsigned long **) data_ret)) [i]
-		= cons_to_long (XVECTOR (obj)->contents [i]);
+	      (*((unsigned long **) data_ret)) [i] =
+		cons_to_unsigned (XVECTOR (obj)->contents [i], ULONG_MAX);
 	    else
-	      (*((unsigned short **) data_ret)) [i]
-		= (unsigned short) cons_to_long (XVECTOR (obj)->contents [i]);
+	      (*((unsigned short **) data_ret)) [i] =
+		cons_to_unsigned (XVECTOR (obj)->contents [i], USHRT_MAX);
 	}
     }
   else
@@ -2025,8 +2005,10 @@ frame's display, or the first available X display.  */)
   selection_atom = symbol_to_x_atom (dpyinfo, selection);
 
   BLOCK_INPUT;
-  timestamp = (NILP (time_object) ? last_event_timestamp
-	       : cons_to_long (time_object));
+  if (NILP (time_object))
+    timestamp = last_event_timestamp;
+  else
+    CONS_TO_INTEGER (time_object, Time, timestamp);
   XSetSelectionOwner (dpyinfo->display, selection_atom, None, timestamp);
   UNBLOCK_INPUT;
 
@@ -2108,15 +2090,14 @@ frame's display, or the first available X display.  */)
 }
 
 
-/* Send the clipboard manager a SAVE_TARGETS request with a
-   UTF8_STRING property, as described by
-   http://www.freedesktop.org/wiki/ClipboardManager */
+/* Send clipboard manager a SAVE_TARGETS request with a UTF8_STRING
+   property (http://www.freedesktop.org/wiki/ClipboardManager).  */
 
-static void
-x_clipboard_manager_save (struct x_display_info *dpyinfo,
-			  Lisp_Object frame)
+static Lisp_Object
+x_clipboard_manager_save (Lisp_Object frame)
 {
   struct frame *f = XFRAME (frame);
+  struct x_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
   Atom data = dpyinfo->Xatom_UTF8_STRING;
 
   XChangeProperty (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
@@ -2125,6 +2106,31 @@ x_clipboard_manager_save (struct x_display_info *dpyinfo,
 		   (unsigned char *) &data, 1);
   x_get_foreign_selection (QCLIPBOARD_MANAGER, QSAVE_TARGETS,
 			   Qnil, frame);
+  return Qt;
+}
+
+/* Error handler for x_clipboard_manager_save_frame.  */
+
+static Lisp_Object
+x_clipboard_manager_error_1 (Lisp_Object err)
+{
+  Lisp_Object args[2];
+  args[0] = build_string ("X clipboard manager error: %s\n\
+If the problem persists, set `x-select-enable-clipboard-manager' to nil.");
+  args[1] = CAR (CDR (err));
+  Fmessage (2, args);
+  return Qnil;
+}
+
+/* Error handler for x_clipboard_manager_save_all.  */
+
+static Lisp_Object
+x_clipboard_manager_error_2 (Lisp_Object err)
+{
+  fprintf (stderr, "Error saving to X clipboard manager.\n\
+If the problem persists, set `x-select-enable-clipboard-manager' \
+to nil.\n");
+  return Qnil;
 }
 
 /* Called from delete_frame: save any clipboard owned by FRAME to the
@@ -2136,7 +2142,8 @@ x_clipboard_manager_save_frame (Lisp_Object frame)
 {
   struct frame *f;
 
-  if (FRAMEP (frame)
+  if (!NILP (Vx_select_enable_clipboard_manager)
+      && FRAMEP (frame)
       && (f = XFRAME (frame), FRAME_X_P (f))
       && FRAME_LIVE_P (f))
     {
@@ -2148,7 +2155,8 @@ x_clipboard_manager_save_frame (Lisp_Object frame)
 	  && EQ (frame, XCAR (XCDR (XCDR (XCDR (local_selection)))))
 	  && XGetSelectionOwner (dpyinfo->display,
 				 dpyinfo->Xatom_CLIPBOARD_MANAGER))
-	x_clipboard_manager_save (dpyinfo, frame);
+	internal_condition_case_1 (x_clipboard_manager_save, frame, Qt,
+				   x_clipboard_manager_error_1);
     }
 }
 
@@ -2162,6 +2170,10 @@ x_clipboard_manager_save_all (void)
   /* Loop through all X displays, saving owned clipboards.  */
   struct x_display_info *dpyinfo;
   Lisp_Object local_selection, local_frame;
+
+  if (NILP (Vx_select_enable_clipboard_manager))
+    return;
+
   for (dpyinfo = x_display_list; dpyinfo; dpyinfo = dpyinfo->next)
     {
       local_selection = LOCAL_SELECTION (QCLIPBOARD, dpyinfo);
@@ -2172,7 +2184,8 @@ x_clipboard_manager_save_all (void)
 
       local_frame = XCAR (XCDR (XCDR (XCDR (local_selection))));
       if (FRAME_LIVE_P (XFRAME (local_frame)))
-	x_clipboard_manager_save (dpyinfo, local_frame);
+	internal_condition_case_1 (x_clipboard_manager_save, local_frame,
+				   Qt, x_clipboard_manager_error_2);
     }
 }
 
@@ -2232,12 +2245,8 @@ x_fill_property_data (Display *dpy, Lisp_Object data, void *ret, int format)
     {
       Lisp_Object o = XCAR (iter);
 
-      if (INTEGERP (o))
-        val = (long) XFASTINT (o);
-      else if (FLOATP (o))
-        val = (long) XFLOAT_DATA (o);
-      else if (CONSP (o))
-        val = (long) cons_to_long (o);
+      if (INTEGERP (o) || FLOATP (o) || CONSP (o))
+	val = cons_to_signed (o, LONG_MIN, LONG_MAX);
       else if (STRINGP (o))
         {
           BLOCK_INPUT;
@@ -2248,9 +2257,19 @@ x_fill_property_data (Display *dpy, Lisp_Object data, void *ret, int format)
         error ("Wrong type, must be string, number or cons");
 
       if (format == 8)
-        *d08++ = (char) val;
+	{
+	  if (CHAR_MIN <= val && val <= CHAR_MAX)
+	    *d08++ = val;
+	  else
+	    error ("Out of 'char' range");
+	}
       else if (format == 16)
-        *d16++ = (short) val;
+	{
+	  if (SHRT_MIN <= val && val <= SHRT_MAX)
+	    *d16++ = val;
+	  else
+	    error ("Out of 'short' range");
+	}
       else
         *d32++ = val;
     }
@@ -2334,14 +2353,7 @@ If the value is 0 or the atom is not known, return the empty string.  */)
   Atom atom;
   int had_errors;
 
-  if (INTEGERP (value))
-    atom = (Atom) XUINT (value);
-  else if (FLOATP (value))
-    atom = (Atom) XFLOAT_DATA (value);
-  else if (CONSP (value))
-    atom = (Atom) cons_to_long (value);
-  else
-    error ("Wrong type, value must be number or cons");
+  CONS_TO_INTEGER (value, Atom, atom);
 
   BLOCK_INPUT;
   x_catch_errors (dpy);
@@ -2350,7 +2362,7 @@ If the value is 0 or the atom is not known, return the empty string.  */)
   x_uncatch_errors ();
 
   if (!had_errors)
-    ret = make_string (name, strlen (name));
+    ret = build_string (name);
 
   if (atom && name) XFree (name);
   if (NILP (ret)) ret = empty_unibyte_string;
@@ -2531,17 +2543,8 @@ x_send_client_event (Lisp_Object display, Lisp_Object dest, Lisp_Object from, At
       else
         error ("DEST as a string must be one of PointerWindow or InputFocus");
     }
-  else if (INTEGERP (dest))
-    wdest = (Window) XFASTINT (dest);
-  else if (FLOATP (dest))
-    wdest =  (Window) XFLOAT_DATA (dest);
-  else if (CONSP (dest))
-    {
-      if (! NUMBERP (XCAR (dest)) || ! NUMBERP (XCDR (dest)))
-        error ("Both car and cdr for DEST must be numbers");
-      else
-        wdest = (Window) cons_to_long (dest);
-    }
+  else if (INTEGERP (dest) || FLOATP (dest) || CONSP (dest))
+    CONS_TO_INTEGER (dest, Window, wdest);
   else
     error ("DEST must be a frame, nil, string, number or cons");
 
@@ -2641,6 +2644,14 @@ This hook doesn't let you change the behavior of Emacs's selection replies,
 it merely informs you that they have happened.  */);
   Vx_sent_selection_functions = Qnil;
 
+  DEFVAR_LISP ("x-select-enable-clipboard-manager",
+	       Vx_select_enable_clipboard_manager,
+	       doc: /* Whether to enable X clipboard manager support.
+If non-nil, then whenever Emacs is killed or an Emacs frame is deleted
+while owning the X clipboard, the clipboard contents are saved to the
+clipboard manager if one is present.  */);
+  Vx_select_enable_clipboard_manager = Qt;
+
   DEFVAR_INT ("x-selection-timeout", x_selection_timeout,
 	      doc: /* Number of milliseconds to wait for a selection reply.
 If the selection owner doesn't reply in this time, we give up.
@@ -2669,4 +2680,6 @@ A value of 0 means wait as long as necessary.  This is initialized from the
   DEFSYM (QNULL, "NULL");
   DEFSYM (Qcompound_text_with_extensions, "compound-text-with-extensions");
   DEFSYM (Qforeign_selection, "foreign-selection");
+  DEFSYM (Qx_lost_selection_functions, "x-lost-selection-functions");
+  DEFSYM (Qx_sent_selection_functions, "x-sent-selection-functions");
 }

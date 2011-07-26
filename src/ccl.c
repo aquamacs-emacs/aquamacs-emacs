@@ -79,9 +79,8 @@ static Lisp_Object Vccl_program_table;
 #define CCL_HEADER_EOF		1
 #define CCL_HEADER_MAIN		2
 
-/* CCL code is a sequence of 28-bit non-negative integers (i.e. the
-   MSB is always 0), each contains CCL command and/or arguments in the
-   following format:
+/* CCL code is a sequence of 28-bit integers.  Each contains a CCL
+   command and/or arguments in the following format:
 
 	|----------------- integer (28-bit) ------------------|
 	|------- 17-bit ------|- 3-bit --|- 3-bit --|- 5-bit -|
@@ -94,12 +93,13 @@ static Lisp_Object Vccl_program_table;
 	|------------- constant or other args ----------------|
                      cccccccccccccccccccccccccccc
 
-   where, `cc...c' is a non-negative integer indicating constant value
-   (the left most `c' is always 0) or an absolute jump address, `RRR'
+   where `cc...c' is a 17-bit, 20-bit, or 28-bit integer indicating a
+   constant value or a relative/absolute jump address, `RRR'
    and `rrr' are CCL register number, `XXXXX' is one of the following
    CCL commands.  */
 
 #define CCL_CODE_MAX ((1 << (28 - 1)) - 1)
+#define CCL_CODE_MIN (-1 - CCL_CODE_MAX)
 
 /* CCL commands
 
@@ -745,23 +745,27 @@ while(0)
 
 #endif
 
+/* Use "&" rather than "&&" to suppress a bogus GCC warning; see
+   <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43772>.  */
+#define ASCENDING_ORDER(lo, med, hi) (((lo) <= (med)) & ((med) <= (hi)))
+
 #define GET_CCL_RANGE(var, ccl_prog, ic, lo, hi)		\
   do								\
     {								\
       EMACS_INT prog_word = XINT ((ccl_prog)[ic]);		\
-      if (! ((lo) <= prog_word && prog_word <= (hi)))		\
+      if (! ASCENDING_ORDER (lo, prog_word, hi))		\
 	CCL_INVALID_CMD;					\
       (var) = prog_word;					\
     }								\
   while (0)
 
 #define GET_CCL_CODE(code, ccl_prog, ic)			\
-  GET_CCL_RANGE (code, ccl_prog, ic, 0, CCL_CODE_MAX)
+  GET_CCL_RANGE (code, ccl_prog, ic, CCL_CODE_MIN, CCL_CODE_MAX)
 
 #define GET_CCL_INT(var, ccl_prog, ic)				\
   GET_CCL_RANGE (var, ccl_prog, ic, INT_MIN, INT_MAX)
 
-#define IN_INT_RANGE(val) (INT_MIN <= (val) && (val) <= INT_MAX)
+#define IN_INT_RANGE(val) ASCENDING_ORDER (INT_MIN, val, INT_MAX)
 
 /* Encode one character CH to multibyte form and write to the current
    output buffer.  If CH is less than 256, CH is written as is.  */
@@ -1307,15 +1311,15 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 				: -1));
 		h = GET_HASH_TABLE (eop);
 
-		op = hash_lookup (h, make_number (reg[RRR]), NULL);
-		if (op >= 0)
+		eop = hash_lookup (h, make_number (reg[RRR]), NULL);
+		if (eop >= 0)
 		  {
 		    Lisp_Object opl;
-		    opl = HASH_VALUE (h, op);
-		    if (! CHARACTERP (opl))
+		    opl = HASH_VALUE (h, eop);
+		    if (! (IN_INT_RANGE (eop) && CHARACTERP (opl)))
 		      CCL_INVALID_CMD;
 		    reg[RRR] = charset_unicode;
-		    reg[rrr] = op;
+		    reg[rrr] = eop;
 		    reg[7] = 1; /* r7 true for success */
 		  }
 		else
@@ -1334,11 +1338,11 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 		i = CCL_DECODE_CHAR (reg[RRR], reg[rrr]);
 		h = GET_HASH_TABLE (eop);
 
-		op = hash_lookup (h, make_number (i), NULL);
-		if (op >= 0)
+		eop = hash_lookup (h, make_number (i), NULL);
+		if (eop >= 0)
 		  {
 		    Lisp_Object opl;
-		    opl = HASH_VALUE (h, op);
+		    opl = HASH_VALUE (h, eop);
 		    if (! (INTEGERP (opl) && IN_INT_RANGE (XINT (opl))))
 		      CCL_INVALID_CMD;
 		    reg[RRR] = XINT (opl);
@@ -2301,23 +2305,12 @@ syms_of_ccl (void)
   staticpro (&Vccl_program_table);
   Vccl_program_table = Fmake_vector (make_number (32), Qnil);
 
-  Qccl = intern_c_string ("ccl");
-  staticpro (&Qccl);
-
-  Qcclp = intern_c_string ("cclp");
-  staticpro (&Qcclp);
-
-  Qccl_program = intern_c_string ("ccl-program");
-  staticpro (&Qccl_program);
-
-  Qccl_program_idx = intern_c_string ("ccl-program-idx");
-  staticpro (&Qccl_program_idx);
-
-  Qcode_conversion_map = intern_c_string ("code-conversion-map");
-  staticpro (&Qcode_conversion_map);
-
-  Qcode_conversion_map_id = intern_c_string ("code-conversion-map-id");
-  staticpro (&Qcode_conversion_map_id);
+  DEFSYM (Qccl, "ccl");
+  DEFSYM (Qcclp, "cclp");
+  DEFSYM (Qccl_program, "ccl-program");
+  DEFSYM (Qccl_program_idx, "ccl-program-idx");
+  DEFSYM (Qcode_conversion_map, "code-conversion-map");
+  DEFSYM (Qcode_conversion_map_id, "code-conversion-map-id");
 
   DEFVAR_LISP ("code-conversion-map-vector", Vcode_conversion_map_vector,
 	       doc: /* Vector of code conversion maps.  */);

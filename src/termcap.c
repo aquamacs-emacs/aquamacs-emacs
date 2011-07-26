@@ -323,10 +323,10 @@ tputs (register const char *str, int nlines, int (*outfun) (int))
 struct termcap_buffer
   {
     char *beg;
-    int size;
+    ptrdiff_t size;
     char *ptr;
     int ateof;
-    int full;
+    ptrdiff_t full;
   };
 
 /* Forward declarations of static functions.  */
@@ -338,8 +338,7 @@ static int name_match (char *line, char *name);
 
 #ifdef MSDOS /* MW, May 1993 */
 static int
-valid_filename_p (fn)
-     char *fn;
+valid_filename_p (char *fn)
 {
   return *fn == '/' || fn[1] == ':';
 }
@@ -367,7 +366,7 @@ tgetent (char *bp, const char *name)
   register char *bp1;
   char *tc_search_point;
   char *term;
-  int malloc_size = 0;
+  ptrdiff_t malloc_size = 0;
   register int c;
   char *tcenv = NULL;		/* TERMCAP value, if it contains :tc=.  */
   char *indirect = NULL;	/* Terminal type in :tc= in TERMCAP value.  */
@@ -637,6 +636,8 @@ gobble_line (int fd, register struct termcap_buffer *bufp, char *append_end)
 	{
 	  if (bufp->full == bufp->size)
 	    {
+	      if ((PTRDIFF_MAX - 1) / 2 < bufp->size)
+		memory_full (SIZE_MAX);
 	      bufp->size *= 2;
 	      /* Add 1 to size to ensure room for terminating null.  */
 	      tem = (char *) xrealloc (buf, bufp->size + 1);
@@ -667,9 +668,29 @@ gobble_line (int fd, register struct termcap_buffer *bufp, char *append_end)
 
 #include <stdio.h>
 
-main (argc, argv)
-     int argc;
-     char **argv;
+static void
+tprint (char *cap)
+{
+  char *x = tgetstr (cap, 0);
+  register char *y;
+
+  printf ("%s: ", cap);
+  if (x)
+    {
+      for (y = x; *y; y++)
+	if (*y <= ' ' || *y == 0177)
+	  printf ("\\%0o", *y);
+	else
+	  putchar (*y);
+      free (x);
+    }
+  else
+    printf ("none");
+  putchar ('\n');
+}
+
+int
+main (int argc, char **argv)
 {
   char *term;
   char *buf;
@@ -691,28 +712,8 @@ main (argc, argv)
 
   printf ("co: %d\n", tgetnum ("co"));
   printf ("am: %d\n", tgetflag ("am"));
-}
 
-tprint (cap)
-     char *cap;
-{
-  char *x = tgetstr (cap, 0);
-  register char *y;
-
-  printf ("%s: ", cap);
-  if (x)
-    {
-      for (y = x; *y; y++)
-	if (*y <= ' ' || *y == 0177)
-	  printf ("\\%0o", *y);
-	else
-	  putchar (*y);
-      free (x);
-    }
-  else
-    printf ("none");
-  putchar ('\n');
+  return 0;
 }
 
 #endif /* TEST */
-

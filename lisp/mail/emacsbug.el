@@ -150,8 +150,8 @@ Prompts for bug subject.  Leaves you in a mail buffer."
         ;; Put these properties on semantically-void text.
         ;; report-emacs-bug-hook deletes these regions before sending.
         (prompt-properties '(field emacsbug-prompt
-                                   intangible but-helpful
-                                   rear-nonsticky t))
+                             intangible but-helpful
+                             rear-nonsticky t))
 	(can-insert-mail (or (report-emacs-bug-can-use-xdg-email)
 			     (report-emacs-bug-can-use-osx-open)))
         user-point message-end-point)
@@ -175,21 +175,11 @@ Prompts for bug subject.  Leaves you in a mail buffer."
       (backward-char (length signature)))
     (unless report-emacs-bug-no-explanations
       ;; Insert warnings for novice users.
-      (when (string-match "@gnu\\.org$" report-emacs-bug-address)
-	(insert "This bug report will be sent to the Free Software Foundation,\n")
-	(let ((pos (point)))
-	  (insert "not to your local site managers!")
-          (overlay-put (make-overlay pos (point)) 'face 'highlight)))
-      (insert "\nPlease write in ")
-      (let ((pos (point)))
-	(insert "English")
-        (overlay-put (make-overlay pos (point)) 'face 'highlight))
-      (insert " if possible, because the Emacs maintainers
-usually do not have translators to read other languages for them.\n\n")
-      (insert "Please check that the From: line gives an address where you can be reached.\n")
-      (insert (format "Your report will be posted to the %s mailing list"
-		      report-emacs-bug-address))
-	(insert ",\nand may appear in other public locations.\n\n"))
+      (if (not (equal "bug-gnu-emacs@gnu.org" report-emacs-bug-address))
+	  (insert (format "The report will be sent to %s
+and may appear in other public locations.\n\n"
+			  report-emacs-bug-address))
+	(insert "The report may appear in public locations.\n\n")))
 
     (insert "Please describe exactly what actions triggered the bug\n"
 	    "and the precise symptoms of the bug.  If you can, give\n"
@@ -332,6 +322,7 @@ usually do not have translators to read other languages for them.\n\n")
 
 ;; It's the default mail mode, so it seems OK to use its features.
 (autoload 'message-bogus-recipient-p "message")
+(defvar message-send-mail-function)
 
 (defun report-emacs-bug-hook ()
   "Do some checking before sending a bug report."
@@ -344,6 +335,10 @@ usually do not have translators to read other languages for them.\n\n")
                        report-emacs-bug-orig-text)
          (error "No text entered in bug report"))
     (or report-emacs-bug-no-confirmation
+	;; mailclient.el does not handle From (at present).
+	(if (derived-mode-p 'message-mode)
+	    (eq message-send-mail-function 'message-send-mail-with-mailclient)
+	  (eq send-mail-function 'mailclient-send-it))
 	;; Not narrowing to the headers, but that's OK.
 	(let ((from (mail-fetch-field "From")))
 	  (and (or (not from)

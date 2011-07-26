@@ -93,7 +93,7 @@ reinserts the fill prefix in each resulting line."
   ;; Added `!' for doxygen comments starting with `//!' or `/*!'.
   ;; Added `%' for TeX comments.
   ;; RMS: deleted the code to match `1.' and `(1)'.
-  (purecopy "[ \t]*\\([-!|#%;>*·•‣⁃◦]+[ \t]*\\)*")
+  (purecopy "[ \t]*\\([-–!|#%;>*·•‣⁃◦]+[ \t]*\\)*")
   "Regexp to match text at start of line that constitutes indentation.
 If Adaptive Fill mode is enabled, a prefix matching this pattern
 on the first and second lines of a paragraph is used as the
@@ -988,7 +988,7 @@ can take care of filling.  JUSTIFY is used as in `fill-paragraph'."
 (defun fill-region (from to &optional justify nosqueeze to-eop)
   "Fill each of the paragraphs in the region.
 A prefix arg means justify as well.
-Ordinarily the variable `fill-column' controls the width.
+The `fill-column' variable controls the width.
 
 Noninteractively, the third argument JUSTIFY specifies which
 kind of justification to do: `full', `left', `right', `center',
@@ -1054,6 +1054,7 @@ The `justification' text-property can locally override this variable."
 		 (const full)
 		 (const center)
 		 (const none))
+  :safe 'symbolp
   :group 'fill)
 (make-variable-buffer-local 'default-justification)
 

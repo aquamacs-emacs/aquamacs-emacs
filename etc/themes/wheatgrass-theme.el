@@ -20,7 +20,7 @@
 ;;; Code:
 
 (deftheme wheatgrass
-  "A high-contrast theme with a black background.
+  "High-contrast green/blue/brown faces on a black background.
 Basic, Font Lock, Isearch, Gnus, and Message faces are included.
 The default face foreground is wheat, with other faces in shades
 of green, brown, and blue.")
@@ -47,7 +47,6 @@ of green, brown, and blue.")
    `(font-lock-variable-name-face ((,class (:foreground "yellow green"))))
    `(font-lock-warning-face ((,class (:foreground "salmon1"))))
    ;; Button and link faces
-   `(button ((,class (:underline t :foreground "cyan"))))
    `(link ((,class (:underline t :foreground "cyan"))))
    `(link-visited ((,class (:underline t :foreground "dark cyan"))))
    ;; Gnus faces

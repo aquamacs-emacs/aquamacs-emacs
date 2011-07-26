@@ -549,7 +549,8 @@ Each set is a vector of the form:
 (defvar isearch-error nil)	; Error message for failed search.
 (defvar isearch-other-end nil)	; Start (end) of match if forward (backward).
 (defvar isearch-wrapped nil)	; Searching restarted from the top (bottom).
-(defvar isearch-barrier 0)
+(defvar isearch-barrier 0
+  "Recorded minimum/maximal point for the current search.")
 (defvar isearch-just-started nil)
 (defvar isearch-start-hscroll 0)	; hscroll when starting the search.
 
@@ -2228,10 +2229,13 @@ If there is no completion possible, say so and continue searching."
 ;; Searching
 
 (defvar isearch-search-fun-function nil
-  "Override `isearch-search-fun'.
-This function should return the search function for Isearch to use.
-It will call this function with three arguments
-as if it were `search-forward'.")
+  "Overrides the default `isearch-search-fun' behaviour.
+This variable's value should be a function, which will be called
+with no arguments, and should return a function that takes three
+arguments: STRING, BOUND, and NOERROR.
+
+This returned function will be used by `isearch-search-string' to
+search for the first occurrence of STRING or its translation.")
 
 (defun isearch-search-fun ()
   "Return the function to use for the search.

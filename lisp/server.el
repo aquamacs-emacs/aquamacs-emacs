@@ -237,9 +237,10 @@ If local sockets are not supported, this is nil.")
 (defun server-clients-with (property value)
   "Return a list of clients with PROPERTY set to VALUE."
   (let (result)
-    (dolist (proc server-clients result)
+    (dolist (proc server-clients)
       (when (equal value (process-get proc property))
-	(push proc result)))))
+	(push proc result)))
+    result))
 
 (defun server-add-client (proc)
   "Create a client for process PROC, if it doesn't already have one.
@@ -680,7 +681,7 @@ Server mode runs a process that accepts commands from the
 (defun server-eval-and-print (expr proc)
   "Eval EXPR and send the result back to client PROC."
   (let ((v (eval (car (read-from-string expr)))))
-    (when (and v proc)
+    (when proc
       (with-temp-buffer
         (let ((standard-output (current-buffer)))
           (pp v)
@@ -737,7 +738,8 @@ Server mode runs a process that accepts commands from the
 
     frame))
 
-(defun server-create-window-system-frame (display nowait proc parent-id)
+(defun server-create-window-system-frame (display nowait proc parent-id
+						  &optional parameters)
   (add-to-list 'frame-inherited-parameters 'client)
   (if (not (fboundp 'make-frame-on-display))
       (progn
@@ -752,7 +754,8 @@ Server mode runs a process that accepts commands from the
     ;; killing emacs on that frame.
     (let* ((params `((client . ,(if nowait 'nowait proc))
                      ;; This is a leftover, see above.
-                     (environment . ,(process-get proc 'env))))
+                     (environment . ,(process-get proc 'env))
+                     ,@parameters))
 	   (display (or display
 			(frame-parameter nil 'display)
 			(getenv "DISPLAY")
@@ -832,6 +835,9 @@ The following commands are accepted by the server:
 
 `-current-frame'
   Forbid the creation of new frames.
+
+`-frame-parameters ALIST'
+  Set the parameters of the created frame.
 
 `-nowait'
   Request that the next frame created should not be
@@ -941,6 +947,7 @@ The following commands are accepted by the client:
 		commands
 		dir
 		use-current-frame
+		frame-parameters  ;parameters for newly created frame
 		tty-name   ; nil, `window-system', or the tty name.
 		tty-type   ; string.
 		files
@@ -960,6 +967,13 @@ The following commands are accepted by the client:
 
                 ;; -current-frame:  Don't create frames.
                 (`"-current-frame" (setq use-current-frame t))
+
+                ;; -frame-parameters: Set frame parameters
+                (`"-frame-parameters"
+                 (let ((alist (pop args-left)))
+                   (if coding-system
+                       (setq alist (decode-coding-string alist coding-system)))
+                   (setq frame-parameters (car (read-from-string alist)))))
 
                 ;; -display DISPLAY:
                 ;; Open X frames on the given display instead of the default.
@@ -1076,7 +1090,8 @@ The following commands are accepted by the client:
 		    (if display (server-select-display display)))
 		   ((eq tty-name 'window-system)
 		    (server-create-window-system-frame display nowait proc
-						       parent-id))
+						       parent-id
+						       frame-parameters))
 		   ;; When resuming on a tty, tty-name is nil.
 		   (tty-name
 		    (server-create-tty-frame tty-name tty-type proc))))
@@ -1140,7 +1155,10 @@ The following commands are accepted by the client:
                              "When done with a buffer, type \\[server-edit]")))))
           (when (and frame (null tty-name))
             (server-unselect-display frame)))
-      (error (server-return-error proc err)))))
+      ((quit error)
+       (when (eq (car err) 'quit)
+         (message "Quit emacsclient request"))
+       (server-return-error proc err)))))
 
 (defun server-return-error (proc err)
   (ignore-errors
@@ -1154,15 +1172,15 @@ The following commands are accepted by the client:
     (delete-process proc)))
 
 (defun server-goto-line-column (line-col)
-"Move point to the position indicated in LINE-COL.
+  "Move point to the position indicated in LINE-COL.
 LINE-COL should be a pair (LINE . COL)."
-(when line-col
+  (when line-col
   (deactivate-mark)
-  (goto-char (point-min))
-  (forward-line (1- (car line-col)))
-  (let ((column-number (cdr line-col)))
-    (when (> column-number 0)
-      (move-to-column (1- column-number))))))
+    (goto-char (point-min))
+    (forward-line (1- (car line-col)))
+    (let ((column-number (cdr line-col)))
+      (when (> column-number 0)
+        (move-to-column (1- column-number))))))
 
 (defun server-visit-files (files proc &optional nowait)
   "Find FILES and return a list of buffers created.
@@ -1188,12 +1206,12 @@ so don't mark these buffers specially, just visit them normally."
 	  (add-to-history 'file-name-history filen)
 	  (if (null obuf)
 	      (progn
-		(run-hooks 'pre-command-hook)  
+		(run-hooks 'pre-command-hook)
 		(set-buffer (find-file-noselect filen)))
             (set-buffer obuf)
 	    ;; separately for each file, in sync with post-command hooks,
 	    ;; with the new buffer current:
-	    (run-hooks 'pre-command-hook)  
+	    (run-hooks 'pre-command-hook)
             (cond ((file-exists-p filen)
                    (when (not (verify-visited-file-modtime obuf))
                      (revert-buffer t nil)))
@@ -1207,7 +1225,7 @@ so don't mark these buffers specially, just visit them normally."
           (server-goto-line-column (cdr file))
           (run-hooks 'server-visit-hook)
 	  ;; hooks may be specific to current buffer:
-	  (run-hooks 'post-command-hook)) 
+	  (run-hooks 'post-command-hook))
 	(unless nowait
 	  ;; When the buffer is killed, inform the clients.
 	  (add-hook 'kill-buffer-hook 'server-kill-buffer nil t)
@@ -1325,10 +1343,10 @@ specifically for the clients and did not exist before their request for it."
   "Ask before killing a server buffer."
   (or (not server-buffer-clients)
       (let ((res t))
-	(dolist (proc server-buffer-clients res)
+	(dolist (proc server-buffer-clients)
           (when (and (memq proc server-clients)
-                     (eq (process-status proc) 'open))
-            (setq res nil))))
+                     (eq (process-status proc) 'open)))
+	  res))
       (not (aquamacs-ask-for-confirmation
 	    (format "Buffer `%s' still has clients; keep the buffer? "
 		    (buffer-name (current-buffer)))
@@ -1338,10 +1356,11 @@ specifically for the clients and did not exist before their request for it."
   "Ask before exiting Emacs if it has live clients."
   (or (not server-clients)
       (let (live-client)
-	(dolist (proc server-clients live-client)
+	(dolist (proc server-clients)
 	  (when (memq t (mapcar 'buffer-live-p (process-get
 						proc 'buffers)))
-	    (setq live-client t))))
+	    (setq live-client t)))
+        live-client)
       (yes-or-no-p "This Emacs session has clients; exit anyway? ")))
 
 (defun server-kill-buffer ()

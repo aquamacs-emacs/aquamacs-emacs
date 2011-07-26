@@ -184,7 +184,7 @@ unsigned int msh_mousewheel = 0;
 static unsigned menu_free_timer = 0;
 
 #if GLYPH_DEBUG
-int image_cache_refcount, dpyinfo_refcount;
+static int image_cache_refcount, dpyinfo_refcount;
 #endif
 
 static HWND w32_visible_system_caret_hwnd;
@@ -1596,7 +1596,7 @@ x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
     }
 
   FRAME_TOOL_BAR_LINES (f) = nlines;
-  change_window_heights (root_window, delta);
+  resize_frame_windows (f, FRAME_LINES (f), 0);
   adjust_glyphs (f);
 
   /* We also have to make sure that the internal border at the top of
@@ -1631,6 +1631,9 @@ x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
       if (WINDOWP (f->tool_bar_window))
 	clear_glyph_matrix (XWINDOW (f->tool_bar_window)->current_matrix);
     }
+
+  run_window_configuration_change_hook (f);
+
 }
 
 
@@ -3270,7 +3273,8 @@ w32_wnd_proc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	    {
 	      /* Free memory used by owner-drawn and help-echo strings.  */
 	      w32_free_menu_strings (hwnd);
-	      f->output_data.w32->menubar_active = 0;
+	      if (f)
+		f->output_data.w32->menubar_active = 0;
               menubar_in_use = 0;
 	    }
 	}
@@ -3620,10 +3624,10 @@ w32_wnd_proc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       if (LOWORD (lParam) == HTCLIENT)
 	{
 	  f = x_window_to_frame (dpyinfo, hwnd);
-	  if (f->output_data.w32->hourglass_p && !menubar_in_use
-	      && !current_popup_menu)
+	  if (f && f->output_data.w32->hourglass_p
+	      && !menubar_in_use && !current_popup_menu)
 	    SetCursor (f->output_data.w32->hourglass_cursor);
-	  else
+	  else if (f)
 	    SetCursor (f->output_data.w32->current_cursor);
 	  return 0;
 	}
@@ -5822,8 +5826,6 @@ Value is t if tooltip was open, nil otherwise.  */)
   UNGCPRO;
   return unbind_to (count, deleted);
 }
-
-
 
 /***********************************************************************
 			File selection dialog
@@ -6803,10 +6805,6 @@ syms_of_w32fns (void)
   DEFSYM (Qshift, "shift");
   DEFSYM (Qfont_param, "font-parameter");
   /* This is the end of symbol initialization.  */
-
-  /* Text property `display' should be nonsticky by default.  */
-  Vtext_property_default_nonsticky
-    = Fcons (Fcons (Qdisplay, Qt), Vtext_property_default_nonsticky);
 
 
   Fput (Qundefined_color, Qerror_conditions,

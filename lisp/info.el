@@ -32,7 +32,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'jka-compr) (require 'cl))
+(eval-when-compile (require 'cl))
 
 (defgroup info nil
   "Info subsystem."
@@ -464,6 +464,7 @@ be last in the list.")
   "Insert the contents of an Info file in the current buffer.
 Do the right thing if the file has been compressed or zipped."
   (let* ((tail Info-suffix-list)
+	 (jka-compr-verbose nil)
 	 (lfn (if (fboundp 'msdos-long-file-names)
 		  (msdos-long-file-names)
 		t))
@@ -621,7 +622,7 @@ in `Info-file-supports-index-cookies-list'."
 Optional argument FILE-OR-NODE specifies the file to examine;
 the default is the top-level directory of Info.
 Called from a program, FILE-OR-NODE may specify an Info node of the form
-`(FILENAME)NODENAME'.
+\"(FILENAME)NODENAME\".
 Optional argument BUFFER specifies the Info buffer name;
 the default buffer name is *info*.  If BUFFER exists,
 just switch to BUFFER.  Otherwise, create a new buffer
@@ -728,6 +729,11 @@ just return nil (no error)."
 			  (append Info-directory-list
 				  Info-additional-directory-list)
 			Info-directory-list)))))
+	;; Fall back on the installation directory if we can't find
+	;; the info node anywhere else.
+	(when installation-directory
+	  (setq dirs (append dirs (list (expand-file-name
+					 "info" installation-directory)))))
 	;; Search the directory list for file FILENAME.
 	(while (and dirs (not found))
 	  (setq temp (expand-file-name filename (car dirs)))
@@ -1572,7 +1578,12 @@ If FORK is a string, it is the name to use for the new buffer."
 (defvar Info-read-node-completion-table)
 
 (defun Info-read-node-name-2 (dirs suffixes string pred action)
-  "Virtual completion table for file names input in Info node names."
+  "Internal function used to complete Info node names.
+Return a completion table for Info files---the FILENAME part of a
+node named \"(FILENAME)NODENAME\".  DIRS is a list of Info
+directories to search if FILENAME is not absolute; SUFFIXES is a
+list of valid filename suffixes for Info files.  See
+`try-completion' for a description of the remaining arguments."
   (setq suffixes (remove "" suffixes))
   (when (file-name-absolute-p string)
     (setq dirs (list (file-name-directory string))))
@@ -1602,10 +1613,9 @@ If FORK is a string, it is the name to use for the new buffer."
 	    (push (if string-dir (concat string-dir file) file) names)))))
     (complete-with-action action names string pred)))
 
-;; This function is used as the "completion table" while reading a node name.
-;; It does completion using the alist in Info-read-node-completion-table
-;; unless STRING starts with an open-paren.
 (defun Info-read-node-name-1 (string predicate code)
+  "Internal function used by `Info-read-node-name'.
+See `completing-read' for a description of arguments and usage."
   (cond
    ;; First complete embedded file names.
    ((string-match "\\`([^)]*\\'" string)
@@ -1618,7 +1628,6 @@ If FORK is a string, it is the name to use for the new buffer."
      (substring string 1)
      predicate
      code))
-
    ;; If a file name was given, then any node is fair game.
    ((string-match "\\`(" string)
     (cond
@@ -1630,9 +1639,10 @@ If FORK is a string, it is the name to use for the new buffer."
        code Info-read-node-completion-table string predicate))))
 
 ;; Arrange to highlight the proper letters in the completion list buffer.
-
-
 (defun Info-read-node-name (prompt)
+  "Read an Info node name with completion, prompting with PROMPT.
+A node name can have the form \"NODENAME\", referring to a node
+in the current Info file, or \"(FILENAME)NODENAME\"."
   (let* ((completion-ignore-case t)
 	 (Info-read-node-completion-table (Info-build-node-completions))
 	 (nodename (completing-read prompt 'Info-read-node-name-1 nil t)))
@@ -2092,7 +2102,7 @@ If SAME-FILE is non-nil, do not move to a different Info file."
 	       ))
 
 (defun Info-directory-toc-nodes (filename)
-  "Directory-specific implementation of `Info-directory-toc-nodes'."
+  "Directory-specific implementation of `Info-toc-nodes'."
   `(,filename
     ("Top" nil nil nil)))
 
@@ -2779,6 +2789,11 @@ N is the digit argument used to invoke this command."
 	       (goto-char (point-max)))))
 	(t (error "No previous nodes"))))
 
+(defun Info-beginning-of-buffer ()
+  "Go to the beginnning of the buffer."
+  (interactive)
+  (goto-char (point-min)))
+
 (defun Info-scroll-up ()
   "Scroll one screenful forward in Info, considering all nodes as one sequence.
 Once you scroll far enough in a node that its menu appears on the screen
@@ -3230,7 +3245,7 @@ STRING is the search string given as an argument to `info-apropos',
 MATCHES is a list of index matches found by `Info-apropos-matches'.")
 
 (defun Info-apropos-toc-nodes (filename)
-  "Apropos-specific implementation of `Info-apropos-toc-nodes'."
+  "Apropos-specific implementation of `Info-toc-nodes'."
   (let ((nodes (mapcar 'car (reverse Info-apropos-nodes))))
     `(,filename
       ("Top" nil nil ,nodes)
@@ -3281,7 +3296,6 @@ MATCHES is a list of index matches found by `Info-apropos-matches'.")
   "Collect STRING matches from all known Info files on your system.
 Return a list of matches where each element is in the format
 \((FILENAME INDEXTEXT NODENAME LINENUMBER))."
-  (interactive "sIndex apropos: ")
   (unless (string= string "")
     (let ((pattern (format "\n\\* +\\([^\n]*%s[^\n]*\\):[ \t]+\\([^\n]+\\)\\.\\(?:[ \t\n]*(line +\\([0-9]+\\))\\)?"
 			   (regexp-quote string)))
@@ -3641,12 +3655,11 @@ If FORK is non-nil, it is passed to `Info-goto-node'."
 (defvar Info-mode-map
   (let ((map (make-keymap)))
     (suppress-keymap map)
-    (define-key map "." 'beginning-of-buffer)
+    (define-key map "." 'Info-beginning-of-buffer)
     (define-key map " " 'Info-scroll-up)
     (define-key map "\C-m" 'Info-follow-nearest-node)
     (define-key map "\t" 'Info-next-reference)
     (define-key map "\e\t" 'Info-prev-reference)
-    (define-key map [(shift tab)] 'Info-prev-reference)
     (define-key map [backtab] 'Info-prev-reference)
     (define-key map "1" 'Info-nth-menu-item)
     (define-key map "2" 'Info-nth-menu-item)
@@ -3663,7 +3676,8 @@ If FORK is non-nil, it is passed to `Info-goto-node'."
     (define-key map "[" 'Info-backward-node)
     (define-key map "<" 'Info-top-node)
     (define-key map ">" 'Info-final-node)
-    (define-key map "b" 'beginning-of-buffer)
+    (define-key map "b" 'Info-beginning-of-buffer)
+    (put 'Info-beginning-of-buffer :advertised-binding "b")
     (define-key map "d" 'Info-directory)
     (define-key map "e" 'Info-edit)
     (define-key map "f" 'Info-follow-reference)
@@ -3717,7 +3731,7 @@ If FORK is non-nil, it is passed to `Info-goto-node'."
     :help "Go backward one node, considering all as a sequence"]
    ["Forward" Info-forward-node
     :help "Go forward one node, considering all as a sequence"]
-   ["Beginning" beginning-of-buffer
+   ["Beginning" Info-beginning-of-buffer
     :help "Go to beginning of this node"]
    ["Top" Info-top-node
     :help "Go to top node of file"]
@@ -3923,7 +3937,7 @@ Moving within a node:
 \\[Info-scroll-down]	Normally, scroll backward.  If the beginning of the buffer is
 	  already visible, try to go to the previous menu entry, or up
 	  if there is none.
-\\[beginning-of-buffer]	Go to beginning of node.
+\\[Info-beginning-of-buffer]	Go to beginning of node.
 
 Advanced commands:
 \\[Info-search]	Search through this Info file for specified regexp,

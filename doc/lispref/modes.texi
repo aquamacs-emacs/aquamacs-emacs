@@ -101,6 +101,11 @@ one, with no arguments.
 The hook variable's value can also be a single function---either a
 lambda expression or a symbol with a function definition---which
 @code{run-hooks} calls.  But this usage is obsolete.
+
+If the hook variable is buffer-local, the buffer-local variable will
+be used instead of the global variable.  However, if the buffer-local
+variable contains the element @code{t}, the global hook variable will
+be run as well.
 @end defun
 
 @defun run-hook-with-args hook &rest args
@@ -169,11 +174,11 @@ function goes at the end of the hook list and will be executed last.
 value is a single function; it sets or changes the value to a list of
 functions.
 
-If @var{local} is non-@code{nil}, that says to add @var{function} to
-the buffer-local hook list instead of to the global hook list.  If
-needed, this makes the hook buffer-local and adds @code{t} to the
-buffer-local value.  The latter acts as a flag to run the hook
-functions in the default value as well as in the local value.
+If @var{local} is non-@code{nil}, that says to add @var{function} to the
+buffer-local hook list instead of to the global hook list.  This makes
+the hook buffer-local and adds @code{t} to the buffer-local value.  The
+latter acts as a flag to run the hook functions in the default value as
+well as in the local value.
 @end defun
 
 @defun remove-hook hook function &optional local
@@ -1046,8 +1051,8 @@ Turning on text-mode runs the hook `text-mode-hook'."
 @end group
 @group
   ;; @r{These four lines are absent from the current version}
-  ;; @r{not because this is done some other way, but rather}
-  ;; @r{because nowadays Text mode uses the normal definition of paragraphs.}
+  ;; @r{not because this is done some other way, but because}
+  ;; @r{nowadays Text mode uses the normal definition of paragraphs.}
   (set (make-local-variable 'paragraph-start)
        (concat "[ \t]*$\\|" page-delimiter))
   (set (make-local-variable 'paragraph-separate) paragraph-start)
@@ -1139,12 +1144,15 @@ modes should understand the Lisp conventions for comments.  The rest of
 
 @smallexample
 @group
-  (set (make-local-variable 'paragraph-start) (concat page-delimiter "\\|$" ))
-  (set (make-local-variable 'paragraph-separate) paragraph-start)
+  (set (make-local-variable 'paragraph-start)
+       (concat page-delimiter "\\|$" ))
+  (set (make-local-variable 'paragraph-separate)
+       paragraph-start)
   @dots{}
 @end group
 @group
-  (set (make-local-variable 'comment-indent-function) 'lisp-comment-indent))
+  (set (make-local-variable 'comment-indent-function)
+       'lisp-comment-indent))
   @dots{}
 @end group
 @end smallexample
@@ -1861,6 +1869,15 @@ line, or @code{nil} for no version control.
 This variable displays the buffer's major and minor modes.  Its
 default value also displays the recursive editing level, information
 on the process status, and whether narrowing is in effect.
+@end defopt
+
+@defopt mode-line-remote
+This variable is used to show whether @code{default-directory} for the
+current buffer is remote.
+@end defopt
+
+@defopt mode-line-client
+This variable is used to identify @code{emacsclient} frames.
 @end defopt
 
   The following three variables are used in @code{mode-line-modes}:
@@ -3619,7 +3636,9 @@ natural to have a BNF grammar that looks like this:
   (inst ("IF" exp "THEN" insts "ELSE" insts "END")
         ("CASE" exp "OF" cases "END")
         ...)
-  (cases (cases "|" cases) (caselabel ":" insts) ("ELSE" insts))
+  (cases (cases "|" cases)
+         (caselabel ":" insts)
+         ("ELSE" insts))
   ...
 @end example
 
@@ -3894,9 +3913,10 @@ and is always at the beginning of a line, we can use a more efficient
 rule:
 @example
 ((equal token "if")
- (and (not (smie-rule-bolp)) (smie-rule-prev-p "else")
+ (and (not (smie-rule-bolp))
+      (smie-rule-prev-p "else")
       (save-excursion
-        (sample-smie-backward-token)  ;Jump before the "else".
+        (sample-smie-backward-token)
         (cons 'column (current-column)))))
 @end example
 

@@ -1,3 +1,41 @@
+2011-07-09  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* update-game-score.c (usage): Update usage line.
+
+2011-07-02  Jason Rumney  <jasonr@gnu.org>
+
+	* emacsclient.c (decode_options) [WINDOWSNT]: Avoid tty mode on
+	Windows (Bug#5486).
+
+2011-06-25  Glenn Morris  <rgm@gnu.org>
+
+	* emacsclient.c (decode_options) <opt>: Add `F:'.
+	(print_help_and_exit): Mention --frame-parameters.
+
+2011-06-25  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	* emacsclient.c (longopts, decode_options, main): Add frame-parameters.
+
+2011-06-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* movemail.c: Fix race condition and related bugs (Bug#8836).
+	(main) [!MAIL_USE_SYSTEM_LOCK]: Prefer mkstemp to mktemp, as this
+	fixes some race conditions.  Report mkstemp/mktemp errno rather
+	than a possibly-garbage errno.  Reinitialize the template each
+	time through the loop, as earlier mkstemp/mktemp calls could have
+	trashed it.  Pass 0600 (not 0666) to mktemp, for consistency
+	with mkstemp; the permissions don't matter anyway.
+
+2011-06-01  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* emacsclient.c (socket_status): Use constant pointer.
+
+2011-05-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use 'inline', not 'INLINE'.
+	* etags.c (hash): Now inline unconditionally.
+	* make-docfile.c (put_char): inline, not INLINE.
+
 2011-05-25  Glenn Morris  <rgm@gnu.org>
 
 	* Makefile.in (.c.o): Remove (every .o file has an explicit rule).

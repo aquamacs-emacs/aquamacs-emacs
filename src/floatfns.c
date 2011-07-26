@@ -507,7 +507,7 @@ DEFUN ("expt", Fexpt, Sexpt, 2, 2, 0,
 	      if (y & 1)
 		acc *= x;
 	      x *= x;
-	      y = (unsigned)y >> 1;
+	      y >>= 1;
 	    }
 	}
       XSETINT (val, acc);
@@ -961,8 +961,7 @@ Rounds the value toward zero.  */)
 
 #ifdef FLOAT_CATCH_SIGILL
 static void
-float_error (signo)
-     int signo;
+float_error (int signo)
 {
   if (! in_float)
     fatal_error_signal (signo);

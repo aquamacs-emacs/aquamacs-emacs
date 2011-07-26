@@ -222,7 +222,7 @@ if the variable `help-downcase-arguments' is non-nil."
 (defun help-do-arg-highlight (doc args)
   (with-syntax-table (make-syntax-table emacs-lisp-mode-syntax-table)
     (modify-syntax-entry ?\- "w")
-    (dolist (arg args doc)
+    (dolist (arg args)
       (setq doc (replace-regexp-in-string
                  ;; This is heuristic, but covers all common cases
                  ;; except ARG1-ARG2
@@ -236,7 +236,8 @@ if the variable `help-downcase-arguments' is non-nil."
                          "\\(?:-[{([<`\"].*?\\)?"; for ARG-{x}, (x), <x>, [x], `x'
                          "\\>")                  ; end of word
                  (help-highlight-arg arg)
-                 doc t t 1)))))
+                 doc t t 1)))
+    doc))
 
 (defun help-highlight-arguments (usage doc &rest args)
   (when (and usage (string-match "^(" usage))
@@ -732,12 +733,18 @@ it is displayed along with the global value."
 	    (terpri)
 
 	    (when locus
-	      (if (bufferp locus)
-		  (princ (format "%socal in buffer %s; "
-				 (if (get variable 'permanent-local)
-				     "Permanently l" "L")
-				 (buffer-name)))
-		(princ (format "It is a frame-local variable; ")))
+	      (cond
+               ((bufferp locus)
+                (princ (format "%socal in buffer %s; "
+                               (if (get variable 'permanent-local)
+                                   "Permanently l" "L")
+                               (buffer-name))))
+               ((framep locus)
+                (princ (format "It is a frame-local variable; ")))
+               ((terminal-live-p locus)
+                (princ (format "It is a terminal-local variable; ")))
+               (t
+                (princ (format "It is local to %S" locus))))
 	      (if (not (default-boundp variable))
 		  (princ "globally void")
 		(let ((val (default-value variable)))
@@ -806,7 +813,8 @@ it is displayed along with the global value."
               (when obsolete
                 (setq extra-line t)
                 (princ "  This variable is obsolete")
-                (if (cdr obsolete) (princ (format " since %s" (cdr obsolete))))
+                (if (nth 2 obsolete)
+                    (princ (format " since %s" (nth 2 obsolete))))
 		(princ (cond ((stringp use) (concat ";\n  " use))
 			     (use (format ";\n  use `%s' instead." (car obsolete)))
 			     (t ".")))

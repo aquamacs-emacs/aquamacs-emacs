@@ -2284,6 +2284,10 @@ The match found must start at or after that position.
 Optional third argument, if t, means if fail just return nil (no error).
   If not nil and not t, move to limit of search and return nil.
 Optional fourth argument is repeat count--search for successive occurrences.
+
+Search case-sensitivity is determined by the value of the variable
+`case-fold-search', which see.
+
 See also the functions `match-beginning', `match-end', `match-string',
 and `replace-match'.  */)
   (Lisp_Object regexp, Lisp_Object bound, Lisp_Object noerror, Lisp_Object count)
@@ -2300,6 +2304,10 @@ The match found must not extend after that position.
 Optional third argument, if t, means if fail just return nil (no error).
   If not nil and not t, move to limit of search and return nil.
 Optional fourth argument is repeat count--search for successive occurrences.
+
+Search case-sensitivity is determined by the value of the variable
+`case-fold-search', which see.
+
 See also the functions `match-beginning', `match-end', `match-string',
 and `replace-match'.  */)
   (Lisp_Object regexp, Lisp_Object bound, Lisp_Object noerror, Lisp_Object count)
@@ -2319,6 +2327,10 @@ The match found must start at or after that position.
 Optional third argument, if t, means if fail just return nil (no error).
   If not nil and not t, move to limit of search and return nil.
 Optional fourth argument is repeat count--search for successive occurrences.
+
+Search case-sensitivity is determined by the value of the variable
+`case-fold-search', which see.
+
 See also the functions `match-beginning', `match-end', `match-string',
 and `replace-match'.  */)
   (Lisp_Object regexp, Lisp_Object bound, Lisp_Object noerror, Lisp_Object count)
@@ -2336,6 +2348,10 @@ The match found must not extend after that position.
 Optional third argument, if t, means if fail just return nil (no error).
   If not nil and not t, move to limit of search and return nil.
 Optional fourth argument is repeat count--search for successive occurrences.
+
+Search case-sensitivity is determined by the value of the variable
+`case-fold-search', which see.
+
 See also the functions `match-beginning', `match-end', `match-string',
 and `replace-match'.  */)
   (Lisp_Object regexp, Lisp_Object bound, Lisp_Object noerror, Lisp_Object count)
@@ -3181,10 +3197,8 @@ syms_of_search (void)
     }
   searchbuf_head = &searchbufs[0];
 
-  Qsearch_failed = intern_c_string ("search-failed");
-  staticpro (&Qsearch_failed);
-  Qinvalid_regexp = intern_c_string ("invalid-regexp");
-  staticpro (&Qinvalid_regexp);
+  DEFSYM (Qsearch_failed, "search-failed");
+  DEFSYM (Qinvalid_regexp, "invalid-regexp");
 
   Fput (Qsearch_failed, Qerror_conditions,
 	pure_cons (Qsearch_failed, pure_cons (Qerror, Qnil)));
