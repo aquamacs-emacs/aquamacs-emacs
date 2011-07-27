@@ -285,7 +285,7 @@ This variable is used in the AUCTeX configuration.")
      (visible-frame-list))))
 
 (defun tool-bar-hash ()
-  (logand ?\x3FFFFFF  ;; ensure compatibility across machines
+  (logand 67108863 ;; \x3FFFFFF  ;; ensure compatibility across machines
 	  (sxhash (sort (apply #'append
 			       (mapcar
 				(lambda (m)

@@ -163,8 +163,7 @@
   "*All headers that start with this regexp will be hidden.
 This variable can also be a list of regexps of headers to be ignored.
 If `gnus-visible-headers' is non-nil, this variable will be ignored."
-  :type '(choice :custom-show nil
-		 regexp
+  :type '(choice regexp
 		 (repeat regexp))
   :group 'gnus-article-hiding)
 
@@ -2268,6 +2267,8 @@ unfolded."
       (dolist (elem gnus-article-image-alist)
 	(gnus-delete-images (car elem))))))
 
+(autoload 'w3m-toggle-inline-images "w3m")
+
 (defun gnus-article-show-images ()
   "Show any images that are in the HTML-rendered article buffer.
 This only works if the article in question is HTML."
@@ -2275,11 +2276,14 @@ This only works if the article in question is HTML."
   (gnus-with-article-buffer
     (save-restriction
       (widen)
-      (dolist (region (gnus-find-text-property-region (point-min) (point-max)
-						      'image-displayer))
-	(destructuring-bind (start end function) region
-	  (funcall function (get-text-property start 'image-url)
-		   start end))))))
+      (if (eq mm-text-html-renderer 'w3m)
+	  (let ((mm-inline-text-html-with-images nil))
+	    (w3m-toggle-inline-images))
+	(dolist (region (gnus-find-text-property-region (point-min) (point-max)
+							'image-displayer))
+	  (destructuring-bind (start end function) region
+	    (funcall function (get-text-property start 'image-url)
+		     start end)))))))
 
 (defun gnus-article-treat-fold-newsgroups ()
   "Unfold folded message headers.
@@ -4509,6 +4513,7 @@ commands:
 		 t)))
 	(with-current-buffer name
 	  (set (make-local-variable 'gnus-article-edit-mode) nil)
+	  (gnus-article-stop-animations)
 	  (when gnus-article-mime-handles
 	    (mm-destroy-parts gnus-article-mime-handles)
 	    (setq gnus-article-mime-handles nil))
@@ -4532,6 +4537,12 @@ commands:
 	(when gnus-article-update-date-headers
 	  (gnus-start-date-timer gnus-article-update-date-headers))
 	(current-buffer)))))
+
+(defun gnus-article-stop-animations ()
+  (dolist (timer (and (boundp 'timer-list)
+		      timer-list))
+    (when (eq (aref timer 5) 'image-animate-timeout)
+      (cancel-timer timer))))
 
 ;; Set article window start at LINE, where LINE is the number of lines
 ;; from the head of the article.
@@ -6825,23 +6836,16 @@ If given a prefix, show the hidden text instead."
 		(numberp article))
 	    (let ((gnus-override-method gnus-override-method)
 		  (methods (and (stringp article)
-				gnus-refer-article-method))
+				(with-current-buffer gnus-summary-buffer
+				  (gnus-refer-article-methods))))
 		  (backend (car (gnus-find-method-for-group
 				 gnus-newsgroup-name)))
 		  result
 		  (inhibit-read-only t))
-	      (if (or (not (listp methods))
-		      (and (symbolp (car methods))
-			   (assq (car methods) nnoo-definition-alist)))
-		  (setq methods (list methods)))
 	      (when (and (null gnus-override-method)
 			 methods)
 		(setq gnus-override-method (pop methods)))
 	      (while (not result)
-		(when (eq gnus-override-method 'current)
-		  (setq gnus-override-method
-			(with-current-buffer gnus-summary-buffer
-			  gnus-current-select-method)))
 		(erase-buffer)
 		(gnus-kill-all-overlays)
 		(let ((gnus-newsgroup-name group))

@@ -214,13 +214,7 @@
 
 ;;;###autoload
 (defcustom browse-url-browser-function
-  (cond
-   ((memq system-type '(windows-nt ms-dos cygwin))
-    'browse-url-default-windows-browser)
-   ((memq system-type '(darwin))
-    'browse-url-default-macosx-browser)
-   (t
-    'browse-url-default-browser))
+  'browse-url-default-browser
   "Function to display the current buffer in a WWW browser.
 This is used by the `browse-url-at-point', `browse-url-at-mouse', and
 `browse-url-of-file' commands.
@@ -322,7 +316,7 @@ Defaults to the value of `browse-url-mozilla-arguments' at the time
   :group 'browse-url)
 
 (defcustom browse-url-firefox-program
-  (let ((candidates '("firefox" "iceweasel")))
+  (let ((candidates '("firefox" "iceweasel" "icecat")))
     (while (and candidates (not (executable-find (car candidates))))
       (setq candidates (cdr candidates)))
     (or (car candidates) "firefox"))
@@ -915,12 +909,13 @@ a random existing one.  A non-nil interactive prefix argument reverses
 the effect of `browse-url-new-window-flag'.
 
 When called non-interactively, optional second argument NEW-WINDOW is
-used instead of `browse-url-new-window-flag'.
-
-The order attempted is gnome-moz-remote, Mozilla, Firefox,
-Galeon, Konqueror, Netscape, Mosaic, Lynx in an xterm, and then W3."
+used instead of `browse-url-new-window-flag'."
   (apply
    (cond
+    ((memq system-type '(windows-nt ms-dos cygwin))
+     'browse-url-default-windows-browser)
+    ((memq system-type '(darwin))
+     'browse-url-default-macosx-browser)
     ((browse-url-can-use-xdg-open) 'browse-url-xdg-open)
     ((executable-find browse-url-gnome-moz-program) 'browse-url-gnome-moz)
     ((executable-find browse-url-mozilla-program) 'browse-url-mozilla)
@@ -965,7 +960,7 @@ Galeon, Konqueror, Netscape, Mosaic, Lynx in an xterm, and then W3."
 ;;;###autoload
 (defun browse-url-xdg-open (url &optional new-window)
   (interactive (browse-url-interactive-arg "URL: "))
-  (call-process "nohup" nil nil nil "xdg-open" url))
+  (call-process "xdg-open" nil 0 nil url))
 
 ;;;###autoload
 (defun browse-url-netscape (url &optional new-window)

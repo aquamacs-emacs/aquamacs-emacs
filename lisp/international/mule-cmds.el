@@ -397,7 +397,11 @@ If CODING-SYSTEM specifies a certain type of EOL conversion, the coding
 systems set by this function will use that type of EOL conversion.
 
 A coding system that requires automatic detection of text+encoding
-\(e.g. undecided, unix) can't be preferred."
+\(e.g. undecided, unix) can't be preferred.
+
+To prefer, for instance, utf-8, say the following:
+
+  \(prefer-coding-system 'utf-8)"
   (interactive "zPrefer coding system: ")
   (if (not (and coding-system (coding-system-p coding-system)))
       (error "Invalid coding system `%s'" coding-system))
@@ -1308,11 +1312,11 @@ This is the input method activated automatically by the command
 `toggle-input-method' (\\[toggle-input-method])."
   :link  '(custom-manual "(emacs)Input Methods")
   :group 'mule
-  :type '(choice (const nil) (string
-			      :completion-ignore-case t
-			      :complete-function widget-string-complete
-			      :completion-alist input-method-alist
-			      :prompt-history input-method-history))
+  :type '(choice (const nil)
+          (string
+           :completions (apply-partially
+                         #'completion-table-case-fold input-method-alist)
+           :prompt-history input-method-history))
   :set-after '(current-language-environment))
 
 (put 'input-method-function 'permanent-local t)
@@ -1875,10 +1879,10 @@ specifies the character set for the major languages of Western Europe."
 (define-widget 'charset 'symbol
   "An Emacs charset."
   :tag "Charset"
-  :complete-function (lambda ()
-		       (interactive)
-		       (lisp-complete-symbol 'charsetp))
-  :completion-ignore-case t
+  :completions (apply-partially #'completion-table-with-predicate
+                                (apply-partially #'completion-table-case-fold
+                                                 obarray)
+                                #'charsetp 'strict)
   :value 'ascii
   :validate (lambda (widget)
 	      (unless (charsetp (widget-value widget))
@@ -1912,9 +1916,9 @@ See `set-language-info-alist' for use in programs."
 	   (set-language-environment current-language-environment)))
   :type `(alist
 	  :key-type (string :tag "Language environment"
-			    :completion-ignore-case t
-			    :complete-function widget-string-complete
-			    :completion-alist language-info-alist)
+			    :completions
+                            (apply-partially #'completion-table-case-fold
+                                             language-info-alist))
 	  :value-type
 	  (alist :key-type symbol
 		 :options ((documentation string)
@@ -1927,9 +1931,9 @@ See `set-language-info-alist' for use in programs."
 			   (nonascii-translation charset)
 			   (input-method
 			    (string
-			     :completion-ignore-case t
-			     :complete-function widget-string-complete
-			     :completion-alist input-method-alist
+			     :completions
+                             (apply-partially #'completion-table-case-fold
+                                              input-method-alist)
 			     :prompt-history input-method-history))
 			   (features (repeat symbol))
 			   (unibyte-display coding-system)))))
@@ -2055,7 +2059,7 @@ See `set-language-info-alist' for use in programs."
 		  (or (not (eq last-command-event 'Default))
 		      (setq last-command-event 'English))
 		  (setq language-name (symbol-name last-command-event))))
-	(error "Bogus calling sequence"))
+	(error "This command should only be called from the menu bar"))
     (describe-language-environment language-name)))
 
 (defun describe-language-environment (language-name)
@@ -2710,16 +2714,6 @@ See also `locale-charset-language-names', `locale-language-names',
 
 ;;; Character property
 
-;; Each element has the form (PROP . TABLE).
-;; PROP is a symbol representing a character property.
-;; TABLE is a char-table containing the property value for each character.
-;; TABLE may be a name of file to load to build a char-table.
-;; Don't modify this variable directly but use `define-char-code-property'.
-
-(defvar char-code-property-alist nil
-  "Alist of character property name vs char-table containing property values.
-Internal use only.")
-
 (put 'char-code-property-table 'char-table-extra-slots 5)
 
 (defun define-char-code-property (name table &optional docstring)
@@ -2771,32 +2765,23 @@ See also the documentation of `get-char-code-property' and
 
 (defun get-char-code-property (char propname)
   "Return the value of CHAR's PROPNAME property."
-  (let ((slot (assq propname char-code-property-alist)))
-    (if slot
-	(let (table value func)
-	  (if (stringp (cdr slot))
-	      (load (cdr slot) nil t))
-	  (setq table (cdr slot)
-		value (aref table char)
-		func (char-table-extra-slot table 1))
+  (let ((table (unicode-property-table-internal propname)))
+    (if table
+	(let ((func (char-table-extra-slot table 1)))
 	  (if (functionp func)
-	      (setq value (funcall func char value table)))
-	  value)
+	      (funcall func char (aref table char) table)
+	    (get-unicode-property-internal table char)))
       (plist-get (aref char-code-property-table char) propname))))
 
 (defun put-char-code-property (char propname value)
   "Store CHAR's PROPNAME property with VALUE.
 It can be retrieved with `(get-char-code-property CHAR PROPNAME)'."
-  (let ((slot (assq propname char-code-property-alist)))
-    (if slot
-	(let (table func)
-	  (if (stringp (cdr slot))
-	      (load (cdr slot) nil t))
-	  (setq table (cdr slot)
-		func (char-table-extra-slot table 2))
+  (let ((table (unicode-property-table-internal propname)))
+    (if table
+	(let ((func (char-table-extra-slot table 2)))
 	  (if (functionp func)
 	      (funcall func char value table)
-	    (aset table char value)))
+	    (put-unicode-property-internal table char value)))
       (let* ((plist (aref char-code-property-table char))
 	     (x (plist-put plist propname value)))
 	(or (eq x plist)
@@ -2806,13 +2791,9 @@ It can be retrieved with `(get-char-code-property CHAR PROPNAME)'."
 (defun char-code-property-description (prop value)
   "Return a description string of character property PROP's value VALUE.
 If there's no description string for VALUE, return nil."
-  (let ((slot (assq prop char-code-property-alist)))
-    (if slot
-	(let (table func)
-	  (if (stringp (cdr slot))
-	      (load (cdr slot) nil t))
-	  (setq table (cdr slot)
-		func (char-table-extra-slot table 3))
+  (let ((table (unicode-property-table-internal prop)))
+    (if table
+	(let ((func (char-table-extra-slot table 3)))
 	  (if (functionp func)
 	      (funcall func value))))))
 

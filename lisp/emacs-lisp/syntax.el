@@ -100,7 +100,7 @@ Put first the functions more likely to cause a change and cheaper to compute.")
   (cons beg end))
 
 (defvar syntax-propertize--done -1
-  "Position upto which syntax-table properties have been set.")
+  "Position up to which syntax-table properties have been set.")
 (make-variable-buffer-local 'syntax-propertize--done)
 
 (defun syntax-propertize--shift-groups (re n)
@@ -283,7 +283,7 @@ The return value is a function suitable for `syntax-propertize-function'."
           (setq keywords font-lock-syntactic-keywords))))))
 
 (defun syntax-propertize (pos)
-  "Ensure that syntax-table properties are set upto POS."
+  "Ensure that syntax-table properties are set until POS."
   (when (and syntax-propertize-function
              (< syntax-propertize--done pos))
     ;; (message "Needs to syntax-propertize from %s to %s"
@@ -398,8 +398,9 @@ point (where the PPSS is equivalent to nil).")
 
 (defun syntax-ppss (&optional pos)
   "Parse-Partial-Sexp State at POS, defaulting to point.
-The returned value is the same as `parse-partial-sexp' except that
-the 2nd and 6th values of the returned state cannot be relied upon.
+The returned value is the same as that of `parse-partial-sexp'
+run from point-min to POS except that values at positions 2 and 6
+in the returned list (counting from 0) cannot be relied upon.
 Point is at POS when this function returns."
   ;; Default values.
   (unless pos (setq pos (point)))

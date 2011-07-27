@@ -659,6 +659,7 @@ Done before generating the new subject of a forward."
 (defcustom message-send-mail-function
   (cond ((eq send-mail-function 'smtpmail-send-it) 'message-smtpmail-send-it)
 	((eq send-mail-function 'feedmail-send-it) 'feedmail-send-it)
+	((eq send-mail-function 'sendmail-query-once) 'sendmail-query-once)
 	((eq send-mail-function 'mailclient-send-it)
 	 'message-send-mail-with-mailclient)
 	(t (message-send-mail-function)))
@@ -1091,7 +1092,7 @@ Note: Many newsgroups frown upon nontraditional reply styles. You
 probably want to set this variable only for specific groups,
 e.g. using `gnus-posting-styles':
 
-  (eval (set (make-local-variable 'message-cite-reply-above) 'above))"
+  (eval (set (make-local-variable 'message-cite-reply-position) 'above))"
   :type '(choice (const :tag "Reply inline" 'traditional)
 		 (const :tag "Reply above" 'above)
 		 (const :tag "Reply below" 'below))
@@ -1184,7 +1185,7 @@ It is a vector of the following headers:
 (defvar message-send-actions nil
   "A list of actions to be performed upon successful sending of a message.")
 (defvar message-return-action nil
-  "Action to return to the caller after sending or postphoning a message.")
+  "Action to return to the caller after sending or postponing a message.")
 (defvar message-exit-actions nil
   "A list of actions to be performed upon exiting after sending a message.")
 (defvar message-kill-actions nil
@@ -1309,7 +1310,9 @@ text and it replaces `self-insert-command' with the other command, e.g.
   :type '(repeat function))
 
 (defcustom message-auto-save-directory
-  (file-name-as-directory (expand-file-name "drafts" message-directory))
+  (if (file-exists-p message-directory)
+      (file-name-as-directory (expand-file-name "drafts" message-directory))
+    "~/")
   "*Directory where Message auto-saves buffers if Gnus isn't running.
 If nil, Message won't auto-save."
   :group 'message-buffers
@@ -3424,8 +3427,12 @@ Message buffers and is not meant to be called directly."
 (defun message-point-in-header-p ()
   "Return t if point is in the header."
   (save-excursion
-    (not (re-search-backward
-	  (concat "^" (regexp-quote mail-header-separator) "\n") nil t))))
+    (and
+     (not
+      (re-search-backward
+       (concat "^" (regexp-quote mail-header-separator) "\n") nil t))
+     (re-search-forward
+      (concat "^" (regexp-quote mail-header-separator) "\n") nil t))))
 
 (defun message-do-auto-fill ()
   "Like `do-auto-fill', but don't fill in message header."
@@ -4778,7 +4785,9 @@ Do not use this for anything important, it is cryptographically weak."
   (require 'sha1)
   (let (sha1-maximum-internal-length)
     (sha1 (concat (message-unique-id)
-		  (format "%x%x%x" (random) (random t) (random))
+		  (format "%x%x%x" (random)
+			  (progn (random t) (random))
+			  (random))
 		  (prin1-to-string (recent-keys))
 		  (prin1-to-string (garbage-collect))))))
 
@@ -5481,10 +5490,12 @@ In posting styles use `(\"Expires\" (make-expires-date 30))'."
 ;; You might for example insert a "." somewhere (not next to another dot
 ;; or string boundary), or modify the "fsf" string.
 (defun message-unique-id ()
+  (random t)
   ;; Don't use microseconds from (current-time), they may be unsupported.
   ;; Instead we use this randomly inited counter.
   (setq message-unique-id-char
-	(% (1+ (or message-unique-id-char (logand (random t) (1- (lsh 1 20)))))
+	(% (1+ (or message-unique-id-char
+		   (logand (random most-positive-fixnum) (1- (lsh 1 20)))))
 	   ;; (current-time) returns 16-bit ints,
 	   ;; and 2^16*25 just fits into 4 digits i base 36.
 	   (* 25 25)))
@@ -6744,10 +6755,13 @@ want to get rid of this query permanently.")))
 				  addr))
 		 (cons (downcase (mail-strip-quoted-names addr)) addr)))
 	     (message-tokenize-header recipients)))
-      ;; Remove first duplicates.  (Why not all duplicates?  Is this a bug?)
+      ;; Remove all duplicates.
       (let ((s recipients))
 	(while s
-	  (setq recipients (delq (assoc (car (pop s)) s) recipients))))
+	  (let ((address (car (pop s))))
+	    (while (assoc address s)
+	      (setq recipients (delq (assoc address s) recipients)
+		    s (delq (assoc address s) s))))))
 
       ;; Remove hierarchical lists that are contained within each other,
       ;; if message-hierarchical-addresses is defined.
@@ -6870,20 +6884,19 @@ Useful functions to put in this list include:
       (unless follow-to
 	(setq follow-to (message-get-reply-headers wide to-address))))
 
-    (unless (message-mail-user-agent)
-      (message-pop-to-buffer
-       (message-buffer-name
-	(if wide "wide reply" "reply") from
-	(if wide to-address nil))
-       switch-function))
-
-    (setq message-reply-headers
-	  (vector 0 subject from date message-id references 0 0 ""))
-
-    (message-setup
-     `((Subject . ,subject)
-       ,@follow-to)
-     cur)))
+    (let ((headers
+	   `((Subject . ,subject)
+	     ,@follow-to)))
+      (unless (message-mail-user-agent)
+	(message-pop-to-buffer
+	 (message-buffer-name
+	  (if wide "wide reply" "reply") from
+	  (if wide to-address nil))
+	 switch-function))
+      (setq message-reply-headers
+	    (vector 0 (cdr (assq 'Subject headers))
+		    from date message-id references 0 0 ""))
+      (message-setup headers cur))))
 
 ;;;###autoload
 (defun message-wide-reply (&optional to-address)

@@ -1534,7 +1534,7 @@ sigset_t
 sys_sigblock (sigset_t new_mask)
 {
   sigset_t old_mask;
-  sigprocmask (SIG_BLOCK, &new_mask, &old_mask);
+  pthread_sigmask (SIG_BLOCK, &new_mask, &old_mask);
   return (old_mask);
 }
 
@@ -1542,7 +1542,7 @@ sigset_t
 sys_sigunblock (sigset_t new_mask)
 {
   sigset_t old_mask;
-  sigprocmask (SIG_UNBLOCK, &new_mask, &old_mask);
+  pthread_sigmask (SIG_UNBLOCK, &new_mask, &old_mask);
   return (old_mask);
 }
 
@@ -1550,7 +1550,7 @@ sigset_t
 sys_sigsetmask (sigset_t new_mask)
 {
   sigset_t old_mask;
-  sigprocmask (SIG_SETMASK, &new_mask, &old_mask);
+  pthread_sigmask (SIG_SETMASK, &new_mask, &old_mask);
   return (old_mask);
 }
 
@@ -1783,7 +1783,8 @@ seed_random (long int arg)
 }
 
 /*
- * Build a full Emacs-sized word out of whatever we've got.
+ * Return a nonnegative random integer out of whatever we've got.
+ * It contains enough bits to make a random (signed) Emacs fixnum.
  * This suffices even for a 64-bit architecture with a 15-bit rand.
  */
 EMACS_INT
@@ -1791,16 +1792,17 @@ get_random (void)
 {
   EMACS_UINT val = 0;
   int i;
-  for (i = 0; i < (VALBITS + RAND_BITS - 1) / RAND_BITS; i++)
-    val = (val << RAND_BITS) ^ random ();
-  return val & (((EMACS_INT) 1 << VALBITS) - 1);
+  for (i = 0; i < (FIXNUM_BITS + RAND_BITS - 1) / RAND_BITS; i++)
+    val = (random () ^ (val << RAND_BITS)
+	   ^ (val >> (BITS_PER_EMACS_INT - RAND_BITS)));
+  val ^= val >> (BITS_PER_EMACS_INT - FIXNUM_BITS);
+  return val & INTMASK;
 }
 
 #ifndef HAVE_STRERROR
 #ifndef WINDOWSNT
 char *
-strerror (errnum)
-     int errnum;
+strerror (int errnum)
 {
   extern char *sys_errlist[];
   extern int sys_nerr;
@@ -2011,37 +2013,6 @@ perror (void)
 {
 }
 #endif /* HPUX and not HAVE_PERROR */
-
-#ifndef HAVE_DUP2
-
-/*
- *	Emulate BSD dup2.  First close newd if it already exists.
- *	Then, attempt to dup oldd.  If not successful, call dup2 recursively
- *	until we are, then close the unsuccessful ones.
- */
-
-int
-dup2 (int oldd, int newd)
-{
-  register int fd, ret;
-
-  emacs_close (newd);
-
-#ifdef F_DUPFD
-  return fcntl (oldd, F_DUPFD, newd);
-#else
-  fd = dup (old);
-  if (fd == -1)
-    return -1;
-  if (fd == new)
-    return new;
-  ret = dup2 (old,new);
-  emacs_close (fd);
-  return ret;
-#endif
-}
-
-#endif /* not HAVE_DUP2 */
 
 /*
  *	Gettimeofday.  Simulate as much as possible.  Only accurate

@@ -151,7 +151,7 @@ enum window_part
 
 #if GLYPH_DEBUG
 
-extern int trace_redisplay_p;
+extern int trace_redisplay_p EXTERNALLY_VISIBLE;
 #include <stdio.h>
 
 #define TRACE(X)				\
@@ -1537,12 +1537,12 @@ struct face
 
   /* Background stipple or bitmap used for this face.  This is
      an id as returned from load_pixmap.  */
-  int stipple;
+  ptrdiff_t stipple;
 
 #else /* not HAVE_WINDOW_SYSTEM */
 
   /* Dummy.  */
-  int stipple;
+  ptrdiff_t stipple;
 
 #endif /* not HAVE_WINDOW_SYSTEM */
 
@@ -1734,7 +1734,7 @@ struct face_cache
    face doesn't exist.  */
 
 #define FACE_FROM_ID(F, ID)				\
-     (((unsigned) (ID) < FRAME_FACE_CACHE (F)->used)	\
+     (UNSIGNED_CMP (ID, <, FRAME_FACE_CACHE (F)->used)	\
       ? FRAME_FACE_CACHE (F)->faces_by_id[ID]		\
       : NULL)
 
@@ -1778,7 +1778,11 @@ extern int face_change_count;
 /* Data type for describing the bidirectional character types.  The
    first 7 must be at the beginning, because they are the only values
    valid in the `bidi_type' member of `struct glyph'; we only reserve
-   3 bits for it, so we cannot use there values larger than 7.  */
+   3 bits for it, so we cannot use there values larger than 7.
+
+   The order of members must be in sync with the 8th element of the
+   member of unidata-prop-alist (in admin/unidata/unidata-getn.el) for
+   Unicode character property `bidi-class'.  */
 typedef enum {
   UNKNOWN_BT = 0,
   STRONG_L,	/* strong left-to-right */
@@ -1821,12 +1825,28 @@ struct bidi_stack {
   bidi_dir_t override;
 };
 
-/* Data type for iterating over bidi text.  */
+/* Data type for storing information about a string being iterated on.  */
+struct bidi_string_data {
+  Lisp_Object lstring;		/* Lisp string to reorder, or nil */
+  const unsigned char *s;	/* string data, or NULL if reordering buffer */
+  EMACS_INT schars;		/* the number of characters in the string,
+				   excluding the terminating null */
+  EMACS_INT bufpos;		/* buffer position of lstring, or 0 if N/A */
+  unsigned from_disp_str : 1;	/* 1 means the string comes from a
+				   display property */
+  unsigned unibyte : 1;		/* 1 means the string is unibyte */
+};
+
+/* Data type for reordering bidirectional text.  */
 struct bidi_it {
-  EMACS_INT bytepos;		/* iterator's position in buffer */
+  EMACS_INT bytepos;		/* iterator's position in buffer/string */
   EMACS_INT charpos;
-  int ch;			/* character itself */
-  int ch_len;			/* length of its multibyte sequence */
+  int ch;			/* character at that position, or u+FFFC
+				   ("object replacement character") for a run
+				   of characters covered by a display string */
+  EMACS_INT nchars;		/* its "length", usually 1; it's > 1 for a run
+				   of characters covered by a display string */
+  EMACS_INT ch_len;		/* its length in bytes */
   bidi_type_t type;		/* bidi type of this character, after
 				   resolving weak and neutral types */
   bidi_type_t type_after_w1;	/* original type, after overrides and W1 */
@@ -1849,10 +1869,13 @@ struct bidi_it {
      iterator state is saved, pushed, or popped.  So only put here
      stuff that is not part of the bidi iterator's state!  */
   struct bidi_stack level_stack[BIDI_MAXLEVEL]; /* stack of embedding levels */
-  int first_elt;		/* if non-zero, examine current char first */
+  struct bidi_string_data string;	/* string to reorder */
   bidi_dir_t paragraph_dir;	/* current paragraph direction */
-  int new_paragraph;		/* if non-zero, we expect a new paragraph */
   EMACS_INT separator_limit;	/* where paragraph separator should end */
+  EMACS_INT disp_pos;		/* position of display string after ch */
+  unsigned first_elt : 1;	/* if non-zero, examine current char first */
+  unsigned new_paragraph : 1;	/* if non-zero, we expect a new paragraph */
+  unsigned frame_window_p : 1;	/* non-zero if displaying on a GUI frame */
 };
 
 /* Value is non-zero when the bidi iterator is at base paragraph
@@ -2129,6 +2152,10 @@ struct it
      Don't handle some `display' properties in these strings.  */
   unsigned string_from_display_prop_p : 1;
 
+  /* 1 means we are iterating an object that came from a value of a
+     `display' property.  */
+  unsigned from_disp_prop_p : 1;
+
   /* When METHOD == next_element_from_display_vector,
      this is 1 if we're doing an ellipsis.  Otherwise meaningless.  */
   unsigned ellipsis_p : 1;
@@ -2148,7 +2175,9 @@ struct it
   Lisp_Object *dpvec, *dpend;
 
   /* Length in bytes of the char that filled dpvec.  A value of zero
-     means that no such character is involved.  */
+     means that no such character is involved.  A negative value means
+     the rest of the line from the current iterator position onwards
+     is hidden by selective display or ellipsis.  */
   int dpvec_char_len;
 
   /* Face id to use for all characters in display vector.  -1 if unused. */
@@ -2182,7 +2211,7 @@ struct it
      be set at the same time as n_overlay_strings.  It is needed
      because we show before-strings at the start of invisible text;
      see handle_invisible_prop in xdisp.c.  */
-  int overlay_strings_charpos;
+  EMACS_INT overlay_strings_charpos;
 
   /* Vector of overlays to process.  Overlay strings are processed
      OVERLAY_STRING_CHUNK_SIZE at a time.  */
@@ -2240,10 +2269,13 @@ struct it
     Lisp_Object from_overlay;
     enum glyph_row_area area;
     enum it_method method;
+    bidi_dir_t paragraph_embedding;
     unsigned multibyte_p : 1;
     unsigned string_from_display_prop_p : 1;
     unsigned display_ellipsis_p : 1;
     unsigned avoid_cursor_p : 1;
+    unsigned bidi_p:1;
+    unsigned from_disp_prop_p : 1;
     enum line_wrap_method line_wrap;
 
     /* properties from display property that are reset by another display property. */
@@ -2258,7 +2290,7 @@ struct it
 
   /* -1 means selective display hides everything between a \r and the
      next newline; > 0 means hide lines indented more than that value.  */
-  int selective;
+  EMACS_INT selective;
 
   /* An enumeration describing what the next display element is
      after a call to get_next_display_element.  */
@@ -2464,7 +2496,7 @@ struct it
 
   /* Non-zero means we need to reorder bidirectional text for display
      in the visual order.  */
-  int bidi_p;
+  unsigned bidi_p : 1;
 
   /* For iterating over bidirectional text.  */
   struct bidi_it bidi_it;
@@ -2791,19 +2823,12 @@ struct image
   /* 1 means that loading the image failed.  Don't try again.  */
   unsigned load_failed_p;
 
-  /* A place for image types to store additional data.  The member
-     data.lisp_val is marked during GC, so it's safe to store Lisp data
-     there.  Image types should free this data when their `free'
-     function is called.  */
-  struct
-  {
-    int int_val;
-    void *ptr_val;
-    Lisp_Object lisp_val;
-  } data;
+  /* A place for image types to store additional data.  It is marked
+     during GC.  */
+  Lisp_Object lisp_data;
 
   /* Hash value of image specification to speed up comparisons.  */
-  unsigned hash;
+  EMACS_UINT hash;
 
   /* Image id of this image.  */
   int id;
@@ -2952,10 +2977,14 @@ enum tool_bar_item_image
 
 /* Defined in bidi.c */
 
-extern void bidi_init_it (EMACS_INT, EMACS_INT, struct bidi_it *);
+extern void bidi_init_it (EMACS_INT, EMACS_INT, int, struct bidi_it *);
 extern void bidi_move_to_visually_next (struct bidi_it *);
 extern void bidi_paragraph_init (bidi_dir_t, struct bidi_it *, int);
 extern int  bidi_mirror_char (int);
+extern void bidi_push_it (struct bidi_it *);
+extern void bidi_pop_it (struct bidi_it *);
+extern void *bidi_shelve_cache (void);
+extern void bidi_unshelve_cache (void *);
 
 /* Defined in xdisp.c */
 
@@ -2963,7 +2992,7 @@ struct glyph_row *row_containing_pos (struct window *, EMACS_INT,
                                       struct glyph_row *,
                                       struct glyph_row *, int);
 int line_bottom_y (struct it *);
-int display_prop_intangible_p (Lisp_Object);
+int display_prop_intangible_p (Lisp_Object, Lisp_Object, EMACS_INT, EMACS_INT);
 void resize_echo_area_exactly (void);
 int resize_mini_window (struct window *, int);
 #if defined USE_TOOLKIT_SCROLL_BARS && !defined USE_GTK
@@ -3013,11 +3042,15 @@ extern void reseat_at_previous_visible_line_start (struct it *);
 extern Lisp_Object lookup_glyphless_char_display (int, struct it *);
 extern int calc_pixel_width_or_height (double *, struct it *, Lisp_Object,
                                        struct font *, int, int *);
+extern EMACS_INT compute_display_string_pos (struct text_pos *,
+					     struct bidi_string_data *, int);
+extern EMACS_INT compute_display_string_end (EMACS_INT,
+					     struct bidi_string_data *);
 
 #ifdef HAVE_WINDOW_SYSTEM
 
 #if GLYPH_DEBUG
-extern void dump_glyph_string (struct glyph_string *);
+extern void dump_glyph_string (struct glyph_string *) EXTERNALLY_VISIBLE;
 #endif
 
 extern void x_get_glyph_overhangs (struct glyph *, struct frame *,
@@ -3089,21 +3122,21 @@ void w32_reset_fringes (void);
 
 #ifdef HAVE_WINDOW_SYSTEM
 
-extern int x_bitmap_height (struct frame *, int);
-extern int x_bitmap_width (struct frame *, int);
-extern int x_bitmap_pixmap (struct frame *, int);
+extern int x_bitmap_height (struct frame *, ptrdiff_t);
+extern int x_bitmap_width (struct frame *, ptrdiff_t);
+extern int x_bitmap_pixmap (struct frame *, ptrdiff_t);
 extern void x_reference_bitmap (struct frame *, int);
-extern int x_create_bitmap_from_data (struct frame *, char *,
-                                      unsigned int, unsigned int);
-extern int x_create_bitmap_from_file (struct frame *, Lisp_Object);
+extern ptrdiff_t x_create_bitmap_from_data (struct frame *, char *,
+					    unsigned int, unsigned int);
+extern ptrdiff_t x_create_bitmap_from_file (struct frame *, Lisp_Object);
 #if defined HAVE_XPM && defined HAVE_X_WINDOWS && !defined USE_GTK
-extern int x_create_bitmap_from_xpm_data (struct frame *f, const char **bits);
+extern ptrdiff_t x_create_bitmap_from_xpm_data (struct frame *, const char **);
 #endif
 #ifndef x_destroy_bitmap
-extern void x_destroy_bitmap (struct frame *, int);
+extern void x_destroy_bitmap (struct frame *, ptrdiff_t);
 #endif
 extern void x_destroy_all_bitmaps (Display_Info *);
-extern int x_create_bitmap_mask (struct frame * , int);
+extern int x_create_bitmap_mask (struct frame *, ptrdiff_t);
 extern Lisp_Object x_find_image_file (Lisp_Object);
 
 void x_kill_gs_process (Pixmap, struct frame *);
@@ -3170,7 +3203,7 @@ int face_at_string_position (struct window *w, Lisp_Object string,
                              EMACS_INT pos, EMACS_INT bufpos,
                              EMACS_INT region_beg, EMACS_INT region_end,
                              EMACS_INT *endptr, enum face_id, int mouse);
-int merge_faces (struct frame *, Lisp_Object, int, int);
+int merge_faces (struct frame *, Lisp_Object, EMACS_INT, int);
 int compute_char_face (struct frame *, int, Lisp_Object);
 void free_all_realized_faces (Lisp_Object);
 extern Lisp_Object Qforeground_color, Qbackground_color;

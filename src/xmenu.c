@@ -347,6 +347,8 @@ for instance using the window manager, then this produces a quit and
 
 #ifndef MSDOS
 
+#if defined USE_GTK || defined USE_MOTIF
+
 /* Set menu_items_inuse so no other popup menu or dialog is created.  */
 
 void
@@ -359,6 +361,8 @@ x_menu_set_in_use (int in_use)
     x_activate_timeout_atimer ();
 #endif
 }
+
+#endif
 
 /* Wait for an X event to arrive or for a timer to expire.  */
 
@@ -736,10 +740,13 @@ menu_highlight_callback (GtkWidget *widget, gpointer call_data)
   help = call_data ? cb_data->help : Qnil;
 
   /* If popup_activated_flag is greater than 1 we are in a popup menu.
-     Don't show help for them, they won't appear before the
-     popup is popped down.  */
-  if (popup_activated_flag <= 1)
-    show_help_event (cb_data->cl_data->f, widget, help);
+     Don't pass the frame to show_help_event for those.
+     Passing frame creates an Emacs event.  As we are looping in
+     popup_widget_loop, it won't be handeled.  Passing NULL shows the tip
+     directly without using an Emacs event.  This is what the Lucid code
+     does below.  */
+  show_help_event (popup_activated_flag <= 1 ? cb_data->cl_data->f : NULL,
+                   widget, help);
 }
 #else
 static void
@@ -1919,9 +1926,9 @@ create_and_show_dialog (FRAME_PTR f, widget_value *first_wv)
 static void
 dialog_selection_callback (Widget widget, LWLIB_ID id, XtPointer client_data)
 {
-  /* The EMACS_INT cast avoids a warning.  There's no problem
+  /* Treat the pointer as an integer.  There's no problem
      as long as pointers have enough bits to hold small integers.  */
-  if ((int) (EMACS_INT) client_data != -1)
+  if ((intptr_t) client_data != -1)
     menu_item_selection = (Lisp_Object *) client_data;
 
   BLOCK_INPUT;
@@ -2555,8 +2562,7 @@ DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_
 void
 syms_of_xmenu (void)
 {
-  Qdebug_on_next_call = intern_c_string ("debug-on-next-call");
-  staticpro (&Qdebug_on_next_call);
+  DEFSYM (Qdebug_on_next_call, "debug-on-next-call");
 
 #ifdef USE_X_TOOLKIT
   widget_id_tick = (1<<16);

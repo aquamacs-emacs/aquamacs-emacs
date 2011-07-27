@@ -474,7 +474,6 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
             {
               /* but we need to make sure it will update on demand */
               [svcsMenu setFrame: f];
-              [svcsMenu setDelegate: svcsMenu];
             }
           else
 #endif
@@ -809,10 +808,11 @@ static int trackingMenu = 0;
   if ([[self window] isVisible])
     [self sizeToFit];
 #else
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_2
   if ([self supermenu] == nil)
     [self sizeToFit];
 #endif
-
+#endif
 }
 
 
@@ -1746,9 +1746,11 @@ Lisp_Object
 ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 {
   EmacsAlertPanel *dialog;
-  Lisp_Object window, tem=Qnil;
+  Lisp_Object window, tem, title;
   struct frame *f;
   BOOL useSheet = YES;
+
+  NSPoint p;
 
   NSTRACE (x-popup-dialog);
 
@@ -1792,6 +1794,17 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       CHECK_LIVE_WINDOW (window);
       f = XFRAME (WINDOW_FRAME (XWINDOW (window)));
     }
+
+  p.x = (int)f->left_pos + ((int)FRAME_COLUMN_WIDTH (f) * f->text_cols)/2;
+  p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
+
+  title = Fcar (contents);
+  CHECK_STRING (title);
+
+  if (NILP (Fcar (Fcdr (contents))))
+    /* No buttons specified, add an "Ok" button so users can pop down
+       the dialog.  */
+    contents = Fcons (title, Fcons (Fcons (build_string ("Ok"), Qt), Qnil));
 
   BLOCK_INPUT;
   dialog = [[EmacsAlertPanel alloc] init];
@@ -1875,7 +1888,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   if (ret == -1 && ret2 != -1)
     ret = ret2;
 
-  if (ret>=0 && ret<dialog->returnValueCount)
+  if (ret>=0 && ret < ((EmacsAlertPanel *) dialog)->returnValueCount)
         {
       // *(EMACS_INT*)(&tem)
       tem = (Lisp_Object) dialog->returnValues[ret];

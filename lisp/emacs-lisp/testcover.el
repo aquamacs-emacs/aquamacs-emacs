@@ -28,7 +28,7 @@
 ;; * Use `testcover-mark-all' to add overlay "splotches" to the Lisp file's
 ;;   buffer to show where coverage is lacking.  Normally, a red splotch
 ;;   indicates the form was never evaluated; a brown splotch means it always
-;;   evaluted to the same value.
+;;   evaluated to the same value.
 ;; * Use `testcover-next-mark' (bind it to a key!) to jump to the next spot
 ;;   that has a splotch.
 
@@ -430,7 +430,7 @@ FUN should be `testcover-reinstrument' for compositional functions,
   "Turn off instrumentation of all macros and functions in FILENAME."
   (interactive "fStop covering file: ")
   (let ((buf (find-file-noselect filename)))
-    (eval-buffer buf t)))
+    (eval-buffer buf)))
 
 
 ;;;=========================================================================

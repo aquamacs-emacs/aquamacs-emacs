@@ -93,6 +93,7 @@
 (cc-require 'cc-cmds)
 (cc-require 'cc-align)
 (cc-require 'cc-menus)
+(cc-require 'cc-guess)
 
 ;; Silence the compiler.
 (cc-bytecomp-defvar adaptive-fill-first-line-regexp) ; Emacs
@@ -118,11 +119,6 @@
 ; (eval-after-load "font-lock" ; 2006-07-09: font-lock is now preloaded.
 ;   '
 (require 'cc-fonts) ;)
-
-;; cc-langs isn't loaded when we're byte compiled, so add autoload
-;; directives for the interface functions.
-(autoload 'c-make-init-lang-vars-fun "cc-langs")
-(autoload 'c-init-language-vars "cc-langs" nil nil 'macro)
 
 
 ;; Other modes and packages which depend on CC Mode should do the
@@ -553,11 +549,7 @@ that requires a literal mode spec at compile time."
   (c-clear-found-types)
 
   ;; now set the mode style based on default-style
-  (let ((style (if (stringp default-style)
-		   default-style
-		 (or (cdr (assq mode default-style))
-		     (cdr (assq 'other default-style))
-		     "gnu"))))
+  (let ((style (cc-choose-style-for-mode mode default-style)))
     ;; Override style variables if `c-old-style-variable-behavior' is
     ;; set.  Also override if we are using global style variables,
     ;; have already initialized a style once, and are switching to a
@@ -692,7 +684,8 @@ This function is called from the hook `before-hack-local-variables-hook'."
 		   (c-count-cfss file-local-variables-alist))
 		  (cfs-in-dir-count (c-count-cfss dir-local-variables-alist)))
 	      (c-set-style stile
-			   (= cfs-in-file-and-dir-count cfs-in-dir-count)))
+			   (and (= cfs-in-file-and-dir-count cfs-in-dir-count)
+				'keep-defaults)))
 	  (c-set-style stile)))
       (when offsets
 	(mapc

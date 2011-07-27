@@ -151,6 +151,7 @@ Automatically local in all buffers."
   :type 'boolean
   :group 'backup)
 (make-variable-buffer-local 'buffer-offer-save)
+(put 'buffer-offer-save 'permanent-local t)
 
 (defcustom find-file-existing-other-name t
   "Non-nil means find a file under alternative names, in existing buffers.
@@ -1290,8 +1291,6 @@ With argument, do this that many times."
   (interactive "p")
   (kill-filename (- arg)))
 
-(define-key minibuffer-local-filename-completion-map 
-  [remap backward-kill-word] 'backward-kill-filename)
 
 (defcustom confirm-nonexistent-file-or-buffer 'after-completion
   "Whether confirmation is requested before visiting a new file or buffer.
@@ -1318,100 +1317,6 @@ return value, which may be passed as the REQUIRE-MATCH arg to
 	(confirm-nonexistent-file-or-buffer
 	 'confirm)
 	(t nil)))
-
-(defun read-buffer-to-switch (prompt)
-  "Read the name of a buffer to switch to and return as a string.
-It is intended for `switch-to-buffer' family of commands since they
-need to omit the name of current buffer from the list of completions
-and default values."
-  (let ((rbts-completion-table (internal-complete-buffer-except)))
-    (minibuffer-with-setup-hook
-        (lambda ()
-          (setq minibuffer-completion-table rbts-completion-table)
-          ;; Since rbts-completion-table is built dynamically, we
-          ;; can't just add it to the default value of
-          ;; icomplete-with-completion-tables, so we add it
-          ;; here manually.
-          (if (and (boundp 'icomplete-with-completion-tables)
-                   (listp icomplete-with-completion-tables))
-              (set (make-local-variable 'icomplete-with-completion-tables)
-                   (cons rbts-completion-table
-                         icomplete-with-completion-tables))))
-      (read-buffer prompt (other-buffer (current-buffer))
-                   (confirm-nonexistent-file-or-buffer)))))
-
-(defun switch-to-buffer-other-window (buffer-or-name &optional norecord)
-  "Select the buffer specified by BUFFER-OR-NAME in another window.
-BUFFER-OR-NAME may be a buffer, a string \(a buffer name), or
-nil.  Return the buffer switched to.
-
-If called interactively, prompt for the buffer name using the
-minibuffer.  The variable `confirm-nonexistent-file-or-buffer'
-determines whether to request confirmation before creating a new
-buffer.
-
-If BUFFER-OR-NAME is a string and does not identify an existing
-buffer, create a new buffer with that name.  If BUFFER-OR-NAME is
-nil, switch to the buffer returned by `other-buffer'.
-
-Optional second argument NORECORD non-nil means do not put this
-buffer at the front of the list of recently selected ones.
-
-This uses the function `display-buffer' as a subroutine; see its
-documentation for additional customization information."
-  (interactive
-   (list (read-buffer-to-switch "Switch to buffer in other window: ")))
-  (let ((pop-up-windows t)
-	same-window-buffer-names same-window-regexps)
-    (pop-to-buffer buffer-or-name t norecord)))
-
-(defun switch-to-buffer-other-frame (buffer-or-name &optional norecord)
-  "Switch to buffer BUFFER-OR-NAME in another frame.
-BUFFER-OR-NAME may be a buffer, a string \(a buffer name), or
-nil.  Return the buffer switched to.
-
-If called interactively, prompt for the buffer name using the
-minibuffer.  The variable `confirm-nonexistent-file-or-buffer'
-determines whether to request confirmation before creating a new
-buffer.
-
-If BUFFER-OR-NAME is a string and does not identify an existing
-buffer, create a new buffer with that name.  If BUFFER-OR-NAME is
-nil, switch to the buffer returned by `other-buffer'.
-
-Optional second arg NORECORD non-nil means do not put this
-buffer at the front of the list of recently selected ones.
-
-This uses the function `display-buffer' as a subroutine; see its
-documentation for additional customization information."
-  (interactive
-   (list (read-buffer-to-switch "Switch to buffer in other frame: ")))
-  (let ((pop-up-frames t)
-	same-window-buffer-names same-window-regexps)
-    (pop-to-buffer buffer-or-name t norecord)))
-
-(defun display-buffer-other-frame (buffer)
-  "Display buffer BUFFER in another frame.
-This uses the function `display-buffer' as a subroutine; see
-its documentation for additional customization information."
-  (interactive "BDisplay buffer in other frame: ")
-  (let ((pop-up-frames t)
-	same-window-buffer-names same-window-regexps
-        ;;(old-window (selected-window))
-	new-window)
-    (setq new-window (display-buffer buffer t))
-    ;; This may have been here in order to prevent the new frame from hiding
-    ;; the old frame.  But it does more harm than good.
-    ;; Maybe we should call `raise-window' on the old-frame instead?  --Stef
-    ;;(lower-frame (window-frame new-window))
-
-    ;; This may have been here in order to make sure the old-frame gets the
-    ;; focus.  But not only can it cause an annoying flicker, with some
-    ;; window-managers it just makes the window invisible, with no easy
-    ;; way to recover it.  --Stef
-    ;;(make-frame-invisible (window-frame old-window))
-    ;;(make-frame-visible (window-frame old-window))
-    ))
 
 (defmacro minibuffer-with-setup-hook (fun &rest body)
   "Temporarily add FUN to `minibuffer-setup-hook' while executing BODY.
@@ -1466,8 +1371,8 @@ automatically choosing a major mode, use \\[find-file-literally]."
                         (confirm-nonexistent-file-or-buffer)))
   (let ((value (find-file-noselect filename nil nil wildcards)))
     (if (listp value)
-	(mapcar 'switch-to-buffer (nreverse value))
-      (switch-to-buffer value))))
+	(mapcar #'pop-to-buffer-same-window (nreverse value))
+      (pop-to-buffer-same-window value))))
 
 (defun find-file-other-window (filename &optional wildcards)
   "Edit file FILENAME, in another window.
@@ -2185,7 +2090,11 @@ unless NOMODES is non-nil."
 	     ((not warn) nil)
 	     ((and error (file-attributes buffer-file-name))
 	      (setq buffer-read-only t)
-	      "File exists, but cannot be read")
+	      (if (and (file-symlink-p buffer-file-name)
+		       (not (file-exists-p
+			     (file-chase-links buffer-file-name))))
+		  "Symbolic link that points to nonexistent file"
+		"File exists, but cannot be read"))
 	     ((not buffer-read-only)
 	      (if (and warn
 		       ;; No need to warn if buffer is auto-saved
@@ -2393,7 +2302,12 @@ since only a single case-insensitive search through the alist is made."
      ("\\.icn\\'" . icon-mode)
      ("\\.sim\\'" . simula-mode)
      ("\\.mss\\'" . scribe-mode)
+     ;; The Fortran standard does not say anything about file extensions.
+     ;; .f90 was widely used for F90, now we seem to be trapped into
+     ;; using a different extension for each language revision.
+     ;; Anyway, the following extensions are supported by gfortran.
      ("\\.f9[05]\\'" . f90-mode)
+     ("\\.f0[38]\\'" . f90-mode)
      ("\\.indent\\.pro\\'" . fundamental-mode) ; to avoid idlwave-mode
      ("\\.\\(pro\\|PRO\\)\\'" . idlwave-mode)
      ("\\.srt\\'" . srecode-template-mode)
@@ -2458,6 +2372,7 @@ ARC\\|ZIP\\|LZH\\|LHA\\|ZOO\\|[JEW]AR\\|XPI\\|RAR\\|7Z\\)\\'" . archive-mode)
      ("\\.ebrowse\\'" . ebrowse-tree-mode)
      ("#\\*mail\\*" . mail-mode)
      ("\\.g\\'" . antlr-mode)
+     ("\\.mod\\'" . m2-mode)
      ("\\.ses\\'" . ses-mode)
      ("\\.docbook\\'" . sgml-mode)
      ("\\.com\\'" . dcl-mode)
@@ -2666,7 +2581,7 @@ we don't actually set it to the same mode the buffer already has."
   ;; Look for -*-MODENAME-*- or -*- ... mode: MODENAME; ... -*-
   (let (end done mode modes)
     ;; Once we drop the deprecated feature where mode: is also allowed to
-    ;; specify minor-modes (ie, there can be more than one "mode:), we can
+    ;; specify minor-modes (ie, there can be more than one "mode:"), we can
     ;; remove this section and just let (hack-local-variables t) handle it.
     ;; Find a -*- mode tag.
     (save-excursion
@@ -3062,16 +2977,7 @@ n  -- to ignore the local variables list.")
 	    (setq char nil)))
 	(kill-buffer buf)
 	(when (and offer-save (= char ?!) unsafe-vars)
-	  (dolist (elt unsafe-vars)
-	    (add-to-list 'safe-local-variable-values elt))
-	  ;; When this is called from desktop-restore-file-buffer,
-	  ;; coding-system-for-read may be non-nil.  Reset it before
-	  ;; writing to .emacs.
-	  (if (or custom-file user-init-file)
-	      (let ((coding-system-for-read nil))
-		(customize-save-variable
-		 'safe-local-variable-values
-		 safe-local-variable-values))))
+	  (customize-push-and-save 'safe-local-variable-values unsafe-vars))
 	(memq char '(?! ?\s ?y))))))
 
 (defun hack-local-variables-prop-line (&optional mode-only)
@@ -3398,7 +3304,7 @@ It is dangerous if either of these conditions are met:
       (and (symbolp (car exp))
 	   ;; Allow (minor)-modes calls with no arguments.
 	   ;; This obsoletes the use of "mode:" for such things.  (Bug#8613)
-	   (or (and (null (cdr exp))
+	   (or (and (member (cdr exp) '(nil (1) (-1)))
 		    (string-match "-mode\\'" (symbol-name (car exp))))
 	       (let ((prop (get (car exp) 'safe-local-eval-function)))
 		 (cond ((eq prop t)
@@ -4833,7 +4739,7 @@ and `view-read-only' is non-nil, enter view mode."
       (view-mode-enter))
      (t (setq buffer-read-only (not buffer-read-only))
         (force-mode-line-update)))
-    (if (vc-backend buffer-file-name)
+    (if (memq (vc-backend buffer-file-name) '(RCS SCCS))
         (message "%s" (substitute-command-keys
                   (concat "File is under version-control; "
                           "use \\[vc-next-action] to check in/out"))))))
@@ -4913,7 +4819,10 @@ visited a file in a nonexistent directory.
 
 Noninteractively, the second (optional) argument PARENTS, if
 non-nil, says whether to create parent directories that don't
-exist.  Interactively, this happens by default."
+exist.  Interactively, this happens by default.
+
+If creating the directory or directories fail, an error will be
+raised."
   (interactive
    (list (read-file-name "Make directory: " default-directory default-directory
 			 nil nil)
@@ -5298,7 +5207,7 @@ non-nil, it is called instead of rereading visited file contents."
 	       (save-excursion
 		 (let ((switches dired-listing-switches))
 		   (if (file-symlink-p file)
-		       (setq switches (concat switches "L")))
+		       (setq switches (concat switches " -L")))
 		   (set-buffer standard-output)
 		   ;; Use insert-directory-safely, not insert-directory,
 		   ;; because these files might not exist.  In particular,
@@ -5341,7 +5250,7 @@ Then you'll be asked about a number of files to recover."
       (error "No previous sessions to recover")))
   (let ((ls-lisp-support-shell-wildcards t))
     (dired (concat auto-save-list-file-prefix "*")
-	   (concat dired-listing-switches "t")))
+	   (concat dired-listing-switches " -t")))
   (save-excursion
     (goto-char (point-min))
     (or (looking-at " Move to the session you want to recover,")
@@ -5716,7 +5625,8 @@ default directory.  However, if FULL is non-nil, they are absolute."
 	   contents)
       (while dirs
 	(when (or (null (car dirs))	; Possible if DIRPART is not wild.
-		  (file-directory-p (directory-file-name (car dirs))))
+		  (and (file-directory-p (directory-file-name (car dirs)))
+		       (file-readable-p (car dirs))))
 	  (let ((this-dir-contents
 		 ;; Filter out "." and ".."
 		 (delq nil

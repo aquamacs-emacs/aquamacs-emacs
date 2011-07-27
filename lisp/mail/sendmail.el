@@ -138,25 +138,9 @@ Otherwise, let mailer send back a message to report errors."
   :group 'sendmail
   :version "23.1")
 
-;; Prevent problems with `window-system' not having the correct value
-;; when loaddefs.el is loaded. `custom-reevaluate-setting' needs the
-;; standard value.
-;;;###autoload
-(put 'send-mail-function 'standard-value
-     ;; MS-Windows can access the clipboard even under -nw.
-     '((if (or (and window-system (eq system-type 'darwin))
-	       (eq system-type 'windows-nt))
-	   'mailclient-send-it
-	 'sendmail-send-it)))
-
 ;; Useful to set in site-init.el
 ;;;###autoload
-(defcustom send-mail-function
-  (if (or (and window-system (eq system-type 'darwin))
-	  ;; MS-Windows can access the clipboard even under -nw.
-	  (eq system-type 'windows-nt))
-      'mailclient-send-it
-    'sendmail-send-it)
+(defcustom send-mail-function 'sendmail-query-once
   "Function to call to send the current buffer as mail.
 The headers should be delimited by a line which is
 not a valid RFC822 header or continuation line,
@@ -164,14 +148,56 @@ that matches the variable `mail-header-separator'.
 This is used by the default mail-sending commands.  See also
 `message-send-mail-function' for use with the Message package."
   :type '(radio (function-item sendmail-send-it :tag "Use Sendmail package")
+		(function-item sendmail-query-once :tag "Query the user")
 		(function-item smtpmail-send-it :tag "Use SMTPmail package")
 		(function-item feedmail-send-it :tag "Use Feedmail package")
 		(function-item mailclient-send-it :tag "Use Mailclient package")
 		function)
-  :initialize 'custom-initialize-delay
+  :version "24.1"
   :group 'sendmail)
 
-;;;###autoload(custom-initialize-delay 'send-mail-function nil)
+(defvar sendmail-query-once-function 'query
+  "Either a function to send email, or the symbol `query'.")
+
+;;;###autoload
+(defun sendmail-query-once ()
+  "Send an email via `sendmail-query-once-function'.
+If `sendmail-query-once-function' is `query', ask the user what
+function to use, and then save that choice."
+  (when (equal sendmail-query-once-function 'query)
+    (let* ((default
+	     (cond
+	      ((or (and window-system (eq system-type 'darwin))
+		   (eq system-type 'windows-nt))
+	       'mailclient-send-it)
+	      ((and sendmail-program
+		    (executable-find sendmail-program))
+	       'sendmail-send-it)))
+	   (function
+	    (if (or (not default)
+		    ;; We have detected no OS-level mail senders, or we
+		    ;; have already configured smtpmail, so we use the
+		    ;; internal SMTP service.
+		    (and (boundp 'smtpmail-smtp-server)
+			 smtpmail-smtp-server))
+		'smtpmail-send-it
+	      ;; Query the user.
+	      (unwind-protect
+		  (progn
+		    (pop-to-buffer "*Mail Help*")
+		    (erase-buffer)
+		    (insert "Sending mail from Emacs hasn't been set up yet.\n\n"
+			    "Type `y' to configure outgoing SMTP, or `n' to use\n"
+			    "the default mail sender on your system.\n\n"
+			    "To change this again at a later date, customize the\n"
+			    "`send-mail-function' variable.\n")
+		    (goto-char (point-min))
+		    (if (y-or-n-p "Configure outgoing SMTP in Emacs? ")
+			'smtpmail-send-it
+		      default))
+		(kill-buffer (current-buffer))))))
+      (customize-save-variable 'sendmail-query-once-function function)))
+  (funcall sendmail-query-once-function))
 
 ;;;###autoload
 (defcustom mail-header-separator (purecopy "--text follows this line--")
@@ -470,7 +496,8 @@ by Emacs.)")
 
 (put 'mail-mailer-swallows-blank-line 'risky-local-variable t) ; gets evalled
 (make-obsolete-variable 'mail-mailer-swallows-blank-line
-			"no need to set this on any modern system." "24.1")
+			"no need to set this on any modern system."
+                        "24.1" 'set)
 
 (defvar mail-mode-syntax-table
   ;; define-derived-mode will make it inherit from text-mode-syntax-table.
@@ -805,10 +832,18 @@ Prefix arg means don't delete this window."
 
 (defun mail-bury (&optional arg)
   "Bury this mail buffer."
-  (let ((newbuf (other-buffer (current-buffer))))
+  (let ((newbuf (other-buffer (current-buffer)))
+	(return-action mail-return-action)
+	some-rmail)
     (bury-buffer (current-buffer))
-    (if (and (null arg) mail-return-action)
-	(apply (car mail-return-action) (cdr mail-return-action))
+    ;; If there is an Rmail buffer, return to it nicely
+    ;; even if this message was not started by an Rmail command.
+    (unless return-action
+      (dolist (buffer (buffer-list))
+	(if (eq (buffer-local-value 'major-mode buffer) 'rmail-mode)
+	    (setq return-action `(rmail-mail-return ,newbuf)))))
+    (if (and (null arg) return-action)
+	(apply (car return-action) (cdr return-action))
       (switch-to-buffer newbuf))))
 
 (defcustom mail-send-hook nil
@@ -1801,7 +1836,7 @@ The seventh argument ACTIONS is a list of actions to take
       ;; unbound on exit from the let.
       (require 'dired)
       (let ((dired-trivial-filenames t))
-	(dired-other-window wildcard (concat dired-listing-switches "t")))
+	(dired-other-window wildcard (concat dired-listing-switches " -t")))
       (rename-buffer "*Auto-saved Drafts*" t)
       (save-excursion
 	(goto-char (point-min))
@@ -1881,7 +1916,7 @@ you can move to one of them and type C-c C-c to recover that one."
 		  ;; `ls' is not a standard program (it will use
 		  ;; ls-lisp instead).
 		  (dired-noselect file-name
-				  (concat dired-listing-switches "t"))))
+				  (concat dired-listing-switches " -t"))))
 	     (save-selected-window
 	       (select-window (display-buffer dispbuf t))
 	       (goto-char (point-min))

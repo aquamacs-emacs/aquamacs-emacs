@@ -155,7 +155,6 @@ static int update_text_area (struct window *, int);
 static void make_current (struct glyph_matrix *, struct glyph_matrix *,
                           int);
 static void mirror_make_current (struct window *, int);
-void check_window_matrix_pointers (struct window *);
 #if GLYPH_DEBUG
 static void check_matrix_pointers (struct glyph_matrix *,
                                    struct glyph_matrix *);
@@ -290,7 +289,6 @@ static int history_idx;
 static unsigned history_tick;
 
 static void add_frame_display_history (struct frame *, int);
-static void add_window_display_history (struct window *, char *, int);
 
 /* Add to the redisplay history how window W has been displayed.
    MSG is a trace containing the information how W's glyph matrix
@@ -298,7 +296,7 @@ static void add_window_display_history (struct window *, char *, int);
    has been interrupted for pending input.  */
 
 static void
-add_window_display_history (struct window *w, char *msg, int paused_p)
+add_window_display_history (struct window *w, const char *msg, int paused_p)
 {
   char *buf;
 
@@ -311,8 +309,8 @@ add_window_display_history (struct window *w, char *msg, int paused_p)
 	   history_tick++,
 	   w,
 	   ((BUFFERP (w->buffer)
-	     && STRINGP (XBUFFER (w->buffer)->name))
-	    ? SSDATA (XBUFFER (w->buffer)->name)
+	     && STRINGP (BVAR (XBUFFER (w->buffer), name)))
+	    ? SSDATA (BVAR (XBUFFER (w->buffer), name))
 	    : "???"),
 	   paused_p ? " ***paused***" : "");
   strcat (buf, msg);
@@ -1064,8 +1062,7 @@ increment_row_positions (struct glyph_row *row,
    B without changing glyph pointers in A and B.  */
 
 static void
-swap_glyphs_in_rows (a, b)
-     struct glyph_row *a, *b;
+swap_glyphs_in_rows (struct glyph_row *a, struct glyph_row *b)
 {
   int area;
 
@@ -1101,7 +1098,7 @@ swap_glyphs_in_rows (a, b)
 
 /* Exchange pointers to glyph memory between glyph rows A and B.  */
 
-static INLINE void
+static inline void
 swap_glyph_pointers (struct glyph_row *a, struct glyph_row *b)
 {
   int i;
@@ -1117,7 +1114,7 @@ swap_glyph_pointers (struct glyph_row *a, struct glyph_row *b)
 /* Copy glyph row structure FROM to glyph row structure TO, except
    that glyph pointers in the structures are left unchanged.  */
 
-static INLINE void
+static inline void
 copy_row_except_pointers (struct glyph_row *to, struct glyph_row *from)
 {
   struct glyph *pointers[1 + LAST_AREA];
@@ -1138,7 +1135,7 @@ copy_row_except_pointers (struct glyph_row *to, struct glyph_row *from)
    exchanged between TO and FROM.  Pointers must be exchanged to avoid
    a memory leak.  */
 
-static INLINE void
+static inline void
 assign_row (struct glyph_row *to, struct glyph_row *from)
 {
   swap_glyph_pointers (to, from);
@@ -1304,7 +1301,7 @@ line_draw_cost (struct glyph_matrix *matrix, int vpos)
    and B have equal contents.  MOUSE_FACE_P non-zero means compare the
    mouse_face_p flags of A and B, too.  */
 
-static INLINE int
+static inline int
 row_equal_p (struct glyph_row *a, struct glyph_row *b, int mouse_face_p)
 {
   if (a == b)
@@ -1478,6 +1475,8 @@ realloc_glyph_pool (struct glyph_pool *pool, struct dim matrix_dim)
    XXX Maybe this should be changed to flush the current terminal instead of
    stdout.
 */
+
+void flush_stdout (void) EXTERNALLY_VISIBLE;
 
 void
 flush_stdout (void)
@@ -1934,13 +1933,13 @@ adjust_frame_glyphs_initially (void)
 
   /* Do it for the root window.  */
   XSETFASTINT (root->top_line, top_margin);
+  XSETFASTINT (root->total_lines, frame_lines - 1 - top_margin);
   XSETFASTINT (root->total_cols, frame_cols);
-  set_window_height (sf->root_window, frame_lines - 1 - top_margin, 0);
 
   /* Do it for the mini-buffer window.  */
   XSETFASTINT (mini->top_line, frame_lines - 1);
+  XSETFASTINT (mini->total_lines, 1);
   XSETFASTINT (mini->total_cols, frame_cols);
-  set_window_height (root->next, 1, 0);
 
   adjust_frame_glyphs (sf);
   glyphs_initialized_initially_p = 1;
@@ -2729,7 +2728,7 @@ fill_up_frame_row_with_spaces (struct glyph_row *row, int upto)
    function must be called before updates to make explicit that we are
    working on frame matrices or not.  */
 
-static INLINE void
+static inline void
 set_frame_matrix_frame (struct frame *f)
 {
   frame_matrix_frame = f;
@@ -2744,7 +2743,7 @@ set_frame_matrix_frame (struct frame *f)
    done in frame matrices, and that we have to perform analogous
    operations in window matrices of frame_matrix_frame.  */
 
-static INLINE void
+static inline void
 make_current (struct glyph_matrix *desired_matrix, struct glyph_matrix *current_matrix, int row)
 {
   struct glyph_row *current_row = MATRIX_ROW (current_matrix, row);
@@ -3053,7 +3052,7 @@ mirror_line_dance (struct window *w, int unchanged_at_top, int nlines, int *copy
    matrices of leaf window agree with their frame matrices about
    glyph pointers.  */
 
-void
+static void
 check_window_matrix_pointers (struct window *w)
 {
   while (w)
@@ -3117,12 +3116,10 @@ check_matrix_pointers (struct glyph_matrix *window_matrix,
 static int
 window_to_frame_vpos (struct window *w, int vpos)
 {
-  struct frame *f = XFRAME (w->frame);
-
-  xassert (!FRAME_WINDOW_P (f));
+  xassert (!FRAME_WINDOW_P (XFRAME (w->frame)));
   xassert (vpos >= 0 && vpos <= w->desired_matrix->nrows);
   vpos += WINDOW_TOP_EDGE_LINE (w);
-  xassert (vpos >= 0 && vpos <= FRAME_LINES (f));
+  xassert (vpos >= 0 && vpos <= FRAME_LINES (XFRAME (w->frame)));
   return vpos;
 }
 
@@ -4248,7 +4245,7 @@ static struct run **runs;
 
 /* Add glyph row ROW to the scrolling hash table.  */
 
-static INLINE struct row_entry *
+static inline struct row_entry *
 add_row_entry (struct glyph_row *row)
 {
   struct row_entry *entry;
@@ -4547,6 +4544,7 @@ scrolling_window (struct window *w, int header_line_p)
 	/* Copy on the display.  */
 	if (r->current_y != r->desired_y)
 	  {
+	    rif->clear_window_mouse_face (w);
 	    rif->scroll_run_hook (w, r);
 
 	    /* Invalidate runs that copy from where we copied to.  */
@@ -5279,10 +5277,12 @@ buffer_posn_from_coords (struct window *w, int *x, int *y, struct display_pos *p
   struct image *img = 0;
 #endif
   int x0, x1, to_x;
+  void *itdata = NULL;
 
   /* We used to set current_buffer directly here, but that does the
      wrong thing with `face-remapping-alist' (bug#2044).  */
   Fset_buffer (w->buffer);
+  itdata = bidi_shelve_cache ();
   SET_TEXT_POS_FROM_MARKER (startp, w->start);
   CHARPOS (startp) = min (ZV, max (BEGV, CHARPOS (startp)));
   BYTEPOS (startp) = min (ZV_BYTE, max (BEGV_BYTE, BYTEPOS (startp)));
@@ -5316,6 +5316,7 @@ buffer_posn_from_coords (struct window *w, int *x, int *y, struct display_pos *p
      argument is ZV to prevent move_it_in_display_line from matching
      based on buffer positions.  */
   move_it_in_display_line (&it, ZV, to_x, MOVE_TO_X);
+  bidi_unshelve_cache (itdata);
 
   Fset_buffer (old_current_buffer);
 
@@ -5718,24 +5719,7 @@ change_frame_size_1 (register struct frame *f, int newheight, int newwidth, int 
 
   if (newheight != FRAME_LINES (f))
     {
-      if (FRAME_HAS_MINIBUF_P (f) && !FRAME_MINIBUF_ONLY_P (f))
-	{
-	  /* Frame has both root and mini-buffer.  */
-	  XSETFASTINT (XWINDOW (FRAME_ROOT_WINDOW (f))->top_line,
-		       FRAME_TOP_MARGIN (f));
-	  set_window_height (FRAME_ROOT_WINDOW (f),
-			     (newheight
-			      - 1
-			      - FRAME_TOP_MARGIN (f)),
-			     2);
-	  XSETFASTINT (XWINDOW (FRAME_MINIBUF_WINDOW (f))->top_line,
-		       newheight - 1);
-	  set_window_height (FRAME_MINIBUF_WINDOW (f), 1, 0);
-	}
-      else
-	/* Frame has just one top-level window.  */
-	set_window_height (FRAME_ROOT_WINDOW (f),
-			   newheight - FRAME_TOP_MARGIN (f), 2);
+      resize_frame_windows (f, newheight, 0);
 
       /* MSDOS frames cannot PRETEND, as they change frame size by
 	 manipulating video hardware.  */
@@ -5745,9 +5729,7 @@ change_frame_size_1 (register struct frame *f, int newheight, int newwidth, int 
 
   if (new_frame_total_cols != FRAME_TOTAL_COLS (f))
     {
-      set_window_width (FRAME_ROOT_WINDOW (f), new_frame_total_cols, 2);
-      if (FRAME_HAS_MINIBUF_P (f))
-	set_window_width (FRAME_MINIBUF_WINDOW (f), new_frame_total_cols, 0);
+      resize_frame_windows (f, new_frame_total_cols, 1);
 
       /* MSDOS frames cannot PRETEND, as they change frame size by
 	 manipulating video hardware.  */
@@ -6236,11 +6218,7 @@ init_display (void)
 	}
     }
 
-  if (!inhibit_window_system && display_arg
-#ifndef CANNOT_DUMP
-     && initialized
-#endif
-     )
+  if (!inhibit_window_system && display_arg)
     {
       Vinitial_window_system = Qx;
 #ifdef HAVE_X11
@@ -6465,10 +6443,8 @@ syms_of_display (void)
   frame_and_buffer_state = Fmake_vector (make_number (20), Qlambda);
   staticpro (&frame_and_buffer_state);
 
-  Qdisplay_table = intern_c_string ("display-table");
-  staticpro (&Qdisplay_table);
-  Qredisplay_dont_pause = intern_c_string ("redisplay-dont-pause");
-  staticpro (&Qredisplay_dont_pause);
+  DEFSYM (Qdisplay_table, "display-table");
+  DEFSYM (Qredisplay_dont_pause, "redisplay-dont-pause");
 
   DEFVAR_INT ("baud-rate", baud_rate,
 	      doc: /* *The output baud rate of the terminal.

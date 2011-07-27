@@ -391,6 +391,7 @@ temacs:
 extern void fatal (const char *msgid, ...);
 
 #include <sys/types.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <memory.h>
@@ -784,7 +785,7 @@ unexec (const char *new_name, const char *old_name)
   fprintf (stderr, "new_data2_incr %x\n", new_data2_incr);
 #endif
 
-  if ((unsigned) new_bss_addr < (unsigned) old_bss_addr + old_bss_size)
+  if ((uintptr_t) new_bss_addr < (uintptr_t) old_bss_addr + old_bss_size)
     fatal (".bss shrank when undumping???\n", 0, 0);
 
   /* Set the output file to the right size.  Allocate a buffer to hold
@@ -1052,7 +1053,7 @@ temacs:
       memcpy (NEW_SECTION_H (nn).sh_offset + new_base, src,
 	      NEW_SECTION_H (nn).sh_size);
 
-#ifdef __alpha__
+#if defined __alpha__ && !defined __OpenBSD__
       /* Update Alpha COFF symbol table: */
       if (strcmp (old_section_names + OLD_SECTION_H (n).sh_name, ".mdebug")
 	  == 0)
@@ -1071,7 +1072,7 @@ temacs:
 	  symhdr->cbRfdOffset += new_data2_size;
 	  symhdr->cbExtOffset += new_data2_size;
 	}
-#endif /* __alpha__ */
+#endif /* __alpha__ && !__OpenBSD__ */
 
 #if defined (_SYSTYPE_SYSV)
       if (NEW_SECTION_H (nn).sh_type == SHT_MIPS_DEBUG

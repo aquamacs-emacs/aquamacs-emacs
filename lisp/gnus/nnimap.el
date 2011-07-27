@@ -190,7 +190,7 @@ textual parts.")
   (let (article bytes lines size string)
     (block nil
       (while (not (eobp))
-	(while (not (looking-at "^\\* [0-9]+ FETCH.*UID \\([0-9]+\\)"))
+	(while (not (looking-at "\\* [0-9]+ FETCH.+UID \\([0-9]+\\)"))
 	  (delete-region (point) (progn (forward-line 1) (point)))
 	  (when (eobp)
 	    (return)))
@@ -420,9 +420,9 @@ textual parts.")
 			(nnimap-login (car credentials) (cadr credentials))))
 		(if (car login-result)
 		    (progn
-                    ;; Save the credentials if a save function exists
-                    ;; (such a function will only be passed if a new
-                    ;; token was created).
+		      ;; Save the credentials if a save function exists
+		      ;; (such a function will only be passed if a new
+		      ;; token was created).
 		      (when (functionp (nth 2 credentials))
 			(funcall (nth 2 credentials)))
 		      ;; See if CAPABILITY is set as part of login
@@ -880,15 +880,18 @@ textual parts.")
 	  (with-temp-buffer
 	    (mm-disable-multibyte)
 	    (when (nnimap-request-article article group server (current-buffer))
-	      (nnheader-message 7 "Expiring article %s:%d" group article)
 	      (when (functionp target)
 		(setq target (funcall target group)))
-	      (when (and target
-			 (not (eq target 'delete)))
-		(if (or (gnus-request-group target t)
-			(gnus-request-create-group target))
-		    (nnmail-expiry-target-group target group)
-		  (setq target nil)))
+	      (if (and target
+		       (not (eq target 'delete)))
+		  (if (or (gnus-request-group target t)
+			  (gnus-request-create-group target))
+		      (progn
+			(nnmail-expiry-target-group target group)
+			(nnheader-message 7 "Expiring article %s:%d to %s"
+					  group article target))
+		    (setq target nil))
+		(nnheader-message 7 "Expiring article %s:%d" group article))
 	      (when target
 		(push article deleted-articles))))))))
     ;; Change back to the current group again.
@@ -929,7 +932,7 @@ textual parts.")
 		 (car (setq result (nnimap-parse-response))))
 	;; Select the last instance of the message in the group.
 	(and (setq article
-		   (car (last (assoc "SEARCH" (cdr result)))))
+		   (car (last (cdr (assoc "SEARCH" (cdr result))))))
 	     (string-to-number article))))))
 
 (defun nnimap-delete-article (articles)
@@ -953,7 +956,8 @@ textual parts.")
 	     nnimap-inbox
 	     nnimap-split-methods)
     (nnheader-message 7 "nnimap %s splitting mail..." server)
-    (nnimap-split-incoming-mail)))
+    (nnimap-split-incoming-mail)
+    (nnheader-message 7 "nnimap %s splitting mail...done" server)))
 
 (defun nnimap-marks-to-flags (marks)
   (let (flags flag)
@@ -1227,6 +1231,10 @@ textual parts.")
 
 (deffoo nnimap-finish-retrieve-group-infos (server infos sequences)
   (when (and sequences
+	     ;; Check that the process is still alive.
+	     (get-buffer-process (nnimap-buffer))
+	     (memq (process-status (get-buffer-process (nnimap-buffer)))
+		   '(open run))
 	     (nnimap-possibly-change-group nil server))
     (with-current-buffer (nnimap-buffer)
       ;; Wait for the final data to trickle in.
@@ -1557,26 +1565,18 @@ textual parts.")
 (declare-function gnus-fetch-headers "gnus-sum"
 		  (articles &optional limit force-new dependencies))
 
-(deffoo nnimap-request-thread (header)
-  (let* ((id (mail-header-id header))
-	 (refs (split-string
-		(or (mail-header-references header)
-		    "")))
-	 (cmd (let ((value
-		     (format
-		      "(OR HEADER REFERENCES %s HEADER Message-Id %s)"
-		      id id)))
-		(dolist (refid refs value)
-		  (setq value (format
-			       "(OR (OR HEADER Message-Id %s HEADER REFERENCES %s) %s)"
-			       refid refid value)))))
-	 (result (with-current-buffer (nnimap-buffer)
-		   (nnimap-command  "UID SEARCH %s" cmd))))
-    (when result
-      (gnus-fetch-headers
-       (and (car result) (delete 0 (mapcar #'string-to-number
-					   (cdr (assoc "SEARCH" (cdr result))))))
-       nil t))))
+(deffoo nnimap-request-thread (header &optional group server)
+  (if gnus-refer-thread-use-nnir 
+      (nnir-search-thread header)
+    (when (nnimap-possibly-change-group group server)
+      (let* ((cmd (nnimap-make-thread-query header))
+             (result (with-current-buffer (nnimap-buffer)
+                       (nnimap-command  "UID SEARCH %s" cmd))))
+        (when result
+          (gnus-fetch-headers
+           (and (car result) (delete 0 (mapcar #'string-to-number
+                                               (cdr (assoc "SEARCH" (cdr result))))))
+           nil t))))))
 
 (defun nnimap-possibly-change-group (group server)
   (let ((open-result t))
@@ -1798,9 +1798,14 @@ textual parts.")
 (defun nnimap-split-incoming-mail ()
   (with-current-buffer (nnimap-buffer)
     (let ((nnimap-incoming-split-list nil)
-	  (nnmail-split-methods (if (eq nnimap-split-methods 'default)
-				    nnmail-split-methods
-				  nnimap-split-methods))
+	  (nnmail-split-methods
+	   (cond
+	    ((eq nnimap-split-methods 'default)
+	     nnmail-split-methods)
+	    (nnimap-split-methods
+	     nnimap-split-methods)
+	    (nnimap-split-fancy
+	     'nnmail-split-fancy)))
 	  (nnmail-split-fancy (or nnimap-split-fancy
 				  nnmail-split-fancy))
 	  (nnmail-inhibit-default-split-group t)
@@ -1904,7 +1909,7 @@ textual parts.")
   (let (article bytes)
     (block nil
       (while (not (eobp))
-	(while (not (looking-at "^\\* [0-9]+ FETCH.*UID \\([0-9]+\\)"))
+	(while (not (looking-at "\\* [0-9]+ FETCH.+UID \\([0-9]+\\)"))
 	  (delete-region (point) (progn (forward-line 1) (point)))
 	  (when (eobp)
 	    (return)))
@@ -1936,6 +1941,21 @@ textual parts.")
 		    (list (cons 'junk 1))
 		  group-art))
 	  nnimap-incoming-split-list)))
+
+(defun nnimap-make-thread-query (header)
+  (let* ((id  (mail-header-id header))
+	 (refs (split-string
+		(or (mail-header-references header)
+		    "")))
+	 (value
+	  (format
+	   "(OR HEADER REFERENCES %S HEADER Message-Id %S)"
+	   id id)))
+    (dolist (refid refs value)
+      (setq value (format
+		   "(OR (OR HEADER Message-Id %S HEADER REFERENCES %S) %s)"
+		   refid refid value)))))
+
 
 (provide 'nnimap)
 

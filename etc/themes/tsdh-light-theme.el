@@ -20,7 +20,8 @@
 ;;; Code:
 
 (deftheme tsdh-light
-  "Black on white theme used and created by Tassilo Horn.")
+  "Minor tweaks to the Emacs white-background defaults.
+Used and created by Tassilo Horn.")
 
 (custom-theme-set-faces
  'tsdh-light
@@ -32,6 +33,8 @@
  '(diff-indicator-removed ((t (:inherit diff-indicator-changed))))
  '(diff-removed ((t (:inherit diff-changed :background "sandy brown"))))
  '(dired-directory ((t (:inherit font-lock-function-name-face :weight bold))))
+ '(gnus-button ((t (:inherit button))))
+ '(gnus-header-name ((t (:box (:line-width 1 :style released-button) :weight bold))))
  '(header-line ((t (:inherit mode-line :inverse-video t))))
  '(hl-line ((t (:background "grey95"))))
  '(minibuffer-prompt ((t (:background "yellow" :foreground "medium blue" :box (:line-width -1 :color "red" :style released-button) :weight bold))))
@@ -51,6 +54,7 @@
  '(outline-6 ((t (:inherit font-lock-constant-face :weight bold))))
  '(outline-7 ((t (:inherit font-lock-builtin-face :weight bold))))
  '(outline-8 ((t (:inherit font-lock-string-face :weight bold))))
+ '(rcirc-my-nick ((t (:foreground "LightSkyBlue" :weight bold))))
  '(region ((t (:background "lightgoldenrod1"))))
  '(show-paren-match ((t (:background "LightCyan2"))))
  '(show-paren-mismatch ((t (:background "deep pink"))))

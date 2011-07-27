@@ -260,6 +260,12 @@ The arguments FIXEDCASE, SUBEXP, and START, used by
 `replace-in-string' are ignored."
   (replace-in-string string regexp rep literal))
 
+(defun-mh mh-test-completion
+  test-completion (string collection &optional predicate)
+  "Return non-nil if STRING is a valid completion.
+XEmacs does not have `test-completion'. This function returns nil
+on that system." nil)
+
 ;; Copy of constant from url-util.el in Emacs 22; needed by Emacs 21.
 (if (not (boundp 'url-unreserved-chars))
     (defconst mh-url-unreserved-chars
@@ -295,6 +301,16 @@ The arguments RETURN-TO and EXIT-ACTION are ignored."
   (if return-to nil)
   (if exit-action nil)
   (view-mode 1))
+
+(defun-mh mh-window-full-height-p
+  window-full-height-p (&optional WINDOW)
+  "Return non-nil if WINDOW is not the result of a vertical split.
+This function is defined in XEmacs as it lacks
+`window-full-height-p'. The values of the functions
+`window-height' and `frame-height' are compared instead. The
+argument WINDOW is ignored."
+  (= (1+ (window-height))
+     (frame-height)))
 
 (defmacro mh-write-file-functions ()
   "Return `write-file-functions' if it exists.

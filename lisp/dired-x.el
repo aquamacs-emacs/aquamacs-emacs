@@ -546,11 +546,14 @@ This functions works by temporarily binding `dired-marker-char' to
 ;; Returns t if any work was done, nil otherwise.
 (defun dired-mark-unmarked-files (regexp msg &optional unflag-p localp)
   "Mark unmarked files matching REGEXP, displaying MSG.
-REGEXP is matched against the entire file name.
-Does not re-mark files which already have a mark.
+REGEXP is matched against the entire file name.  When called
+interactively, prompt for REGEXP.
 With prefix argument, unflag all those files.
 Optional fourth argument LOCALP is as in `dired-get-filename'."
-  (interactive "P")
+  (interactive
+   (list (dired-read-regexp
+	  "Mark unmarked files matching regexp (default all): ")
+	 nil current-prefix-arg nil))
   (let ((dired-marker-char (if unflag-p ?\s dired-marker-char)))
     (dired-mark-if
      (and
@@ -1053,12 +1056,11 @@ You can set this variable in your ~/.emacs.  For example, to add rules for
 `.foo' and `.bar' files, write
 
  \(setq dired-guess-shell-alist-user
-       (list (list \"\\\\.foo\\\\'\" \"FOO-COMMAND\");; fixed rule
-              ;; possibly more rules ...
-              (list \"\\\\.bar\\\\'\";; rule with condition test
-                    '(if condition
-                          \"BAR-COMMAND-1\"
-                        \"BAR-COMMAND-2\")))\)"
+        '((\"\\\\.foo\\\\'\" \"FOO-COMMAND\")
+          (\"\\\\.bar\\\\'\"
+           (if condition
+              \"BAR-COMMAND-1\"
+            \"BAR-COMMAND-2\"))))"
   :group 'dired-x
   :type '(alist :key-type regexp :value-type (repeat sexp)))
 
@@ -1069,7 +1071,7 @@ You can set this variable in your ~/.emacs.  For example, to add rules for
   :type 'boolean)
 
 (defun dired-guess-default (files)
-  "Guess a shell commands for FILES.  Return command or list of commands.
+  "Return a shell command, or a list of commands, appropriate for FILES.
 See `dired-guess-shell-alist-user'."
 
   (let* ((case-fold-search dired-guess-shell-case-fold-search)
@@ -1101,8 +1103,8 @@ See `dired-guess-shell-alist-user'."
     ;; Return commands or nil if flist is still non-nil.
     ;; Evaluate the commands in order that any logical testing will be done.
     (if (cdr cmds)
-        (mapcar #'eval cmds)
-      (eval (car cmds))))) ; single command
+	(delete-dups (mapcar #'eval cmds))
+      (eval (car cmds)))))		; single command
 
 (defun dired-guess-shell-command (prompt files)
   "Ask user with PROMPT for a shell command, guessing a default from FILES."
@@ -1403,7 +1405,7 @@ Considers buffers closer to the car of `buffer-list' to be more recent."
 
 (defun dired-mark-sexp (predicate &optional unflag-p)
   "Mark files for which PREDICATE returns non-nil.
-With a prefix arg, unflag those files instead.
+With a prefix arg, unmark or unflag those files instead.
 
 PREDICATE is a lisp expression that can refer to the following symbols:
 

@@ -126,6 +126,8 @@ after updating this variable.")
 (defun x-select-text (text &optional push)
   "Put TEXT, a string, on the pasteboard.
 Ignored if text was selected by mouse. PUSH is ignored."
+  ;; ensure Services know the data type
+  (x-own-selection-internal 'PRIMARY text)
   (when x-select-enable-clipboard
     (ns-set-pasteboard text))
   (setq ns-last-selected-text text))
