@@ -6412,7 +6412,8 @@ typedef struct
 {
   NSTRACE (validRequestorForSendType);
   if (typeSent != nil && [ns_send_types indexOfObject: typeSent] != NSNotFound
-      && typeReturned == nil)
+      && typeReturned == nil
+)
     {
       if (! NILP (ns_get_local_selection (QPRIMARY, QUTF8_STRING)))
         return self;

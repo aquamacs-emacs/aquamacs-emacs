@@ -427,6 +427,9 @@ extern Lisp_Object Qscroll_bar_movement;
 /* Symbols to use for non-text mouse positions.  */
 extern Lisp_Object Qmode_line, Qvertical_line, Qheader_line;
 
+/* The primary selection.  */
+extern Lisp_Object QPRIMARY;
+
 /* Forward declaration for prototypes.  */
 struct input_event;
 
