@@ -980,6 +980,7 @@ yes-or-no prompts - y or n will do."
      (save-place-limit 500) ;; speed on quit
      (save-place-forget-unreadable-files nil) ;; too slow
      (mail-setup-with-from nil)  
+     (send-mail-function mailclient-send-it)
 					; Colorized fonts
 					; Turn on font-lock in all modes that support it
      (global-font-lock-mode t)
