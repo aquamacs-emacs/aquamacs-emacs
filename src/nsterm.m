@@ -5471,7 +5471,8 @@ typedef struct
       if (flags & NSCommandKeyMask)
         {
 	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
-	  if ((flags & NSLeftCommandKeyMask) == NSLeftCommandKeyMask || ! (flags & NSRightCommandKeyMask))
+	  if ((flags & NSLeftCommandKeyMask) == NSLeftCommandKeyMask ||
+	      ! ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask))
 	    {
 	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 	    }
@@ -5516,7 +5517,8 @@ typedef struct
 
       if (flags & NSControlKeyMask)
 	{
-	  if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask || ! (flags & NSRightControlKeyMask))
+	  if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask || 
+	      ! ((flags & NSRightControlKeyMask) == NSRightControlKeyMask))
 	    emacs_event->modifiers |=
 	      parse_solitary_modifier (ns_control_modifier);
       if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
@@ -5586,7 +5588,8 @@ typedef struct
 				       ns_alternate_modifier
 				       : ns_right_alternate_modifier);
 	}
-      if (flags & NSLeftAlternateKeyMask || (flags & NSAlternateKeyMask && ! (flags & NSRightAlternateKeyMask))) /* default = meta */
+      if (flags & NSLeftAlternateKeyMask || (flags & NSAlternateKeyMask && 
+					     ! ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask))) /* default = meta */
 	{
 	  /* The better way to do this would be to add Meta to every key for 
 	     which the Option modifier doesn't change the character code.
