@@ -23,7 +23,7 @@ echo "Building Aquamacs documentation." >>aquamacs-build.log
 
 # update documentation: requires latex (tetex with nonfreefonts package)
 cd aquamacs/doc/latex
-make 2>>aquamacs-build.log
+PATH=/usr/texbin/:/usr/local/bin/:$PATH make 2>>aquamacs-build.log
 cd -
 
 echo "Building Aquamacs (incremental build)." >>aquamacs-build.log
