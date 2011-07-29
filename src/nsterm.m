@@ -54,6 +54,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 #include "keyboard.h"
 
 #include "font.h"
+#include "buffer.h"
 
 /* show size in window titles while resizing */
 /* #define AQUAMACS_RESIZING_HINT 1 */
@@ -6194,7 +6195,8 @@ typedef struct
 }
 
 
-/* this gets called on toolbar button click */
+/* this gets call- training machine
+ed on toolbar button click */
 - toolbarClicked: (id)item
 {
   NSEvent *theEvent;
@@ -6411,14 +6413,19 @@ typedef struct
                       returnType: (NSString *)typeReturned
 {
   NSTRACE (validRequestorForSendType);
-  if (typeSent != nil && [ns_send_types indexOfObject: typeSent] != NSNotFound
-      && typeReturned == nil
-)
-    {
-      if (! NILP (ns_get_local_selection (QPRIMARY, QUTF8_STRING)))
-        return self;
-    }
-
+  // if (typeSent != nil && [ns_send_types indexOfObject: typeSent] != NSNotFound
+//       && typeReturned == nil
+// )
+//     {
+//       if (! NILP (ns_get_local_selection (QPRIMARY, QUTF8_STRING)))
+//         return self;
+//     }
+  if ((!typeReturned || [typeSent isEqual:NSStringPboardType])
+       && (!typeSent || [typeSent isEqual:NSStringPboardType])) {
+    //if (! NILP (XBUFFER ((EmacsWindow *) [FRAME_NS_VIEW (f) window])->mark_active))
+    // if (! NILP (current_buffer->mark_active))
+      return self;
+  }
   return [super validRequestorForSendType: typeSent
                                returnType: typeReturned];
 }
@@ -6431,37 +6438,56 @@ typedef struct
    Nonetheless, it appeared to happen (under strange circumstances): bug#1435.
    So let's at least stub them out until further investigation can be done. */
 
+extern Lisp_Object Vmark_even_if_inactive;
+
 - (BOOL) readSelectionFromPasteboard: (NSPasteboard *)pb
 {
   /* we could call ns_string_from_pasteboard(pboard) here but then it should
      be written into the buffer in place of the existing selection..
      ordinary service calls go through functions defined in ns-win.el */
-  return NO;
+  //return NO;
+
+  Lisp_Object str = ns_string_from_pasteboard (pb);
+
+  if (! (!NILP (Vtransient_mark_mode)
+	 && NILP (Vmark_even_if_inactive)
+	 && NILP (current_buffer->mark_active)))
+    if (! NILP (Fmarker_position (current_buffer->mark)))
+      Fdelete_region (Fregion_beginning (), Fregion_end ());
+
+  Finsert (1, &str);
+
+  return YES;
+
 }
 
 - (BOOL) writeSelectionToPasteboard: (NSPasteboard *)pb types: (NSArray *)types
 {
   NSArray *typesDeclared;
-  Lisp_Object val;
+  Lisp_Object region_string;
+  Lisp_Object m;
+  int b, e;
 
   /* We only support NSStringPboardType */
   if ([types containsObject:NSStringPboardType] == NO) {
     return NO;
   }
-
-  val = ns_get_local_selection (QPRIMARY, QUTF8_STRING);
-  if (CONSP (val) && SYMBOLP (XCAR (val)))
-    {
-      val = XCDR (val);
-      if (CONSP (val) && NILP (XCDR (val)))
-        val = XCAR (val);
-    }
-  if (! STRINGP (val))
+  if (!NILP (Vtransient_mark_mode)
+      && NILP (Vmark_even_if_inactive)
+      && NILP (current_buffer->mark_active))
+    return NO;
+  m = Fmarker_position (current_buffer->mark);
+  if (NILP (m))
     return NO;
 
-  typesDeclared = [NSArray arrayWithObject:NSStringPboardType];
-  [pb declareTypes:typesDeclared owner:nil];
-  ns_string_to_pasteboard (pb, val);
+  region_string = make_buffer_string ( XINT (Fregion_beginning ()), XINT (Fregion_end ()), 0);
+  if (! STRINGP (region_string))
+    return NO;
+
+  // not needed - ns_string_to_pasteboard does this already
+  // typesDeclared = [NSArray arrayWithObject:NSStringPboardType];
+  // [pb declareTypes:typesDeclared owner:nil];
+  ns_string_to_pasteboard (pb, region_string);
   return YES;
 }
 
