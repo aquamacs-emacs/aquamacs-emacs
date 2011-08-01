@@ -3,7 +3,8 @@
 # Build Aquamacs
 
 # use Macports build of AUTOCONF
-export PATH=$(dirname $0)/autoconf:$PATH
+AUTOTOOLS=$(dirname $0)/autotools
+export PATH=$AUTOTOOLS:$PATH
 
 OMIT_AUTOGEN=1
 FLAGS=
@@ -11,7 +12,7 @@ FLAGS=
 if [ "$1" = "-release" ];
 then  
   # do not use MacPorts / fink libraries for binary compatibility
-  PATH=/bin:/sbin:/usr/bin   
+  PATH=$AUTOTOOLS:/bin:/sbin:/usr/bin   
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
@@ -33,8 +34,8 @@ fi
 
 # autoconf must be run via macports to allow its upgrade
 test $OMIT_AUTOGEN || ./autogen.sh ; \
-echo ./configure --with-ns --without-x CFLAGS="$FLAGS" LDFLAGS="$FLAGS"; \
-echo make clean ; \
-echo make all ; \
+./configure --with-ns --without-x CFLAGS="$FLAGS" LDFLAGS="$FLAGS"; \
+make clean ; \
+make all ; \
 rm etc/DOC-* ; \
 make install
