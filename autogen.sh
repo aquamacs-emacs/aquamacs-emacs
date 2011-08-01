@@ -27,6 +27,9 @@
 ## run this script to generate the necessary files.
 ## For more details, see the file INSTALL.BZR.
 
+## Set the AUTOCONFPATH environment variable to specify 
+## an additional search path for autoconf.
+
 ### Code:
 
 ## Tools we need:
@@ -38,6 +41,9 @@ autoconf_min=`sed -n 's/^ *AC_PREREQ(\([0-9\.]*\)).*/\1/p' configure.in`
 
 ## FIXME how to determine this from the sources?
 automake_min=1.11
+
+
+[ x"$AUTOCONFPATH" = x ] || PATH=$AUTOCONFPATH:$PATH
 
 
 ## $1 = program, eg "autoconf".

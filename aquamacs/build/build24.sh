@@ -2,6 +2,8 @@
 
 # Build Aquamacs
 
+# use Macports build of AUTOCONF
+export AUTOCONFPATH=/opt/local/bin/
 
 OMIT_AUTOGEN=1
 FLAGS=
