@@ -6,10 +6,13 @@
 
 
 
+# use Macports build of AUTOCONF
+export PATH=$(dirname $0)/autoconf:$PATH
+
 
 ./autogen.sh # find MacPorts installation
 # do not use MacPorts / fink libraries
-PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386 -arch ppc' LDFLAGS='-arch i386 -arch ppc'
+PATH=$(dirname $0)/autoconf:/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386 -arch ppc' LDFLAGS='-arch i386 -arch ppc'
 make clean # get rid of binaries - apparently needed for universal build
 make
 # will fail
