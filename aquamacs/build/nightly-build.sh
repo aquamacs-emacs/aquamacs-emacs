@@ -19,8 +19,9 @@ git pull origin aquamacs24  >>aquamacs-build.log  2>>aquamacs-build.log
 echo "Building Aquamacs documentation." >>aquamacs-build.log
 
 # update documentation: requires latex (tetex with nonfreefonts package)
-PATH=/usr/texbin/:/usr/local/bin/:$PATH make 2>>../../../aquamacs-build.log
-cd -
+(   cd aquamacs/doc/latex ; \
+ PATH=/usr/texbin/:/usr/local/bin/:$PATH make 2>>../../../aquamacs-build.log ; \
+ cd - )
 
 echo "Building Aquamacs (incremental build)." >>aquamacs-build.log
 
