@@ -1792,9 +1792,6 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       f = XFRAME (WINDOW_FRAME (XWINDOW (window)));
     }
 
-  p.x = (int)f->left_pos + ((int)FRAME_COLUMN_WIDTH (f) * f->text_cols)/2;
-  p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
-
   title = Fcar (contents);
   CHECK_STRING (title);
 
