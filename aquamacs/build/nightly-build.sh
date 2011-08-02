@@ -31,7 +31,7 @@ DATE=`date +"%Y-%b-%d-%a-%H%M"`
 BLD=`pwd`/builds/Aquamacs-${DATE}.tar.bz2
 
 # one step builds on the next:
-aquamacs/build/build24.sh -release >>aquamacs-build.log 2>>aquamacs-build.log ; \
+aquamacs/build/build24.sh -nightly >>aquamacs-build.log 2>>aquamacs-build.log ; \
 date >>aquamacs-build.log ; \
 echo "Packaging Aquamacs." >>aquamacs-build.log ; \
 mkdir builds 2>/dev/null ; \

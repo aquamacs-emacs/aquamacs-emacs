@@ -9,25 +9,35 @@ export PATH=$AUTOTOOLS:$PATH
 OMIT_AUTOGEN=1
 FLAGS=
 
-if [ "$1" = "-release" ];
-then  
+case "$1" in
+'-release')
   # do not use MacPorts / fink libraries for binary compatibility
   PATH=$AUTOTOOLS:/bin:/sbin:/usr/bin   
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
-  FLAGS='-arch i386'
-else
+  FLAGS='-arch i386 -g'
+  ;;
+'-nightly')
+  # do not use MacPorts / fink libraries for binary compatibility
+  PATH=$AUTOTOOLS:/bin:/sbin:/usr/bin   
+  export GZIP_PROG=`which gzip`
+  echo "Building Aquamacs (nightly build)."
+  OMIT_AUTOGEN=
+  FLAGS="-arch i386 -g -O0 $FLAGS"
+  ;;
+*)
   # during development, do not compress .el files to speed up the build
   export GZIP_PROG=
-  echo "Building Aquamacs (development)."
-  
+  echo "Building Aquamacs (development, local architecture)."
+  FLAGS="-g -O0 $FLAGS"
   if [ ! -e "configure" ];
   then
     OMIT_AUTOGEN=
   fi
-fi
-
+  ;;
+esac
+echo "Compiler flags: $FLAGS"
 
 # do not use MacPorts / fink libraries
 # do not use binaries either (e.g., gnutls would be recognized)
