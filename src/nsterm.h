@@ -197,7 +197,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    ========================================================================== */
 
 @interface EmacsTooltip : NSObject  /* 10.6+: <NSWindowDelegate> */
-  {
+   {
     NSWindow *win;
     NSTextField *textField;
     NSTimer *timer;
@@ -789,6 +789,15 @@ extern Lisp_Object ns_popup_dialog (Lisp_Object position, Lisp_Object contents,
 extern void set_frame_menubar (struct frame *f, int first_time, int deep_p);
 extern void x_set_window_size (struct frame *f, int change_grav,
                               int cols, int rows);
+
+#define NSAPP_DATA2_RUNASSCRIPT 10
+extern void ns_run_ascript (void);
+
+extern void ns_init_paths (void);
+extern void syms_of_nsterm (void);
+extern void syms_of_nsfns (void);
+extern void syms_of_nsmenu (void);
+extern void syms_of_nsselect (void);
 
 /* From nsimage.m, needed in image.c */
 struct image;
