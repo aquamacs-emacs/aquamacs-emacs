@@ -3508,37 +3508,6 @@ FRAME 0 means change the face on all frames, and change the default
 }
 
 
-#ifdef HAVE_WINDOW_SYSTEM
-
-/* Set the `font' frame parameter of FRAME determined from the
-   font-object set in `default' face attributes LFACE.  */
-
-static void
-set_font_frame_param (frame, lface)
-     Lisp_Object frame, lface;
-{
-  struct frame *f = XFRAME (frame);
-  Lisp_Object font;
-
-  if (FRAME_WINDOW_P (f)
-      /* Don't do anything if the font is `unspecified'.  This can
-	 happen during frame creation.  */
-      && (font = LFACE_FONT (lface),
-	  ! UNSPECIFIEDP (font)))
-    {
-      if (FONT_SPEC_P (font))
-	{
-	  font = font_load_for_lface (f, XVECTOR (lface)->contents, font);
-	  if (NILP (font))
-	    return;
-	  LFACE_FONT (lface) = font;
-	}
-      f->default_face_done_p = 0;
-      Fmodify_frame_parameters (frame, Fcons (Fcons (Qfont, font), Qnil));
-    }
-}
-
-
 /* Update the corresponding face when frame parameter PARAM on frame F
    has been assigned the value NEW_VALUE.  */
 
@@ -3580,6 +3549,7 @@ update_face_from_frame_parameter (f, param, new_value)
 				  ? new_value : Qunspecified);
       realize_basic_faces (f);
     }
+#ifdef HAVE_WINDOW_SYSTEM
   else if (EQ (param, Qborder_color))
     {
       face = Qborder;
@@ -3601,6 +3571,7 @@ update_face_from_frame_parameter (f, param, new_value)
       LFACE_BACKGROUND (lface) = (STRINGP (new_value)
 				  ? new_value : Qunspecified);
     }
+#endif
 
   /* Changing a named face means that all realized faces depending on
      that face are invalid.  Since we cannot tell which realized faces
@@ -3612,6 +3583,37 @@ update_face_from_frame_parameter (f, param, new_value)
     {
       ++face_change_count;
       ++windows_or_buffers_changed;
+    }
+}
+
+
+#ifdef HAVE_WINDOW_SYSTEM
+
+/* Set the `font' frame parameter of FRAME determined from the
+   font-object set in `default' face attributes LFACE.  */
+
+static void
+set_font_frame_param (frame, lface)
+     Lisp_Object frame, lface;
+{
+  struct frame *f = XFRAME (frame);
+  Lisp_Object font;
+
+  if (FRAME_WINDOW_P (f)
+      /* Don't do anything if the font is `unspecified'.  This can
+	 happen during frame creation.  */
+      && (font = LFACE_FONT (lface),
+	  ! UNSPECIFIEDP (font)))
+    {
+      if (FONT_SPEC_P (font))
+	{
+	  font = font_load_for_lface (f, XVECTOR (lface)->contents, font);
+	  if (NILP (font))
+	    return;
+	  LFACE_FONT (lface) = font;
+	}
+      f->default_face_done_p = 0;
+      Fmodify_frame_parameters (frame, Fcons (Fcons (Qfont, font), Qnil));
     }
 }
 
