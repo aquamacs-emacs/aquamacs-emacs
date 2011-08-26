@@ -1,6 +1,6 @@
 ;;; org-capture.el --- Fast note taking in Org-mode
 
-;; Copyright (C) 2010  Free Software Foundation, Inc.
+;; Copyright (C) 2010-2011  Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -1505,6 +1505,6 @@ The template may still contain \"%?\" for cursor positioning."
 
 (provide 'org-capture)
 
-;; arch-tag: 986bf41b-8ada-4e28-bf20-e8388a7205a0
+
 
 ;;; org-capture.el ends here

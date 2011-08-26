@@ -4715,15 +4715,12 @@ documentation of `display-buffer-alist' for a description."
   (setq window (window-normalize-live-window window))
   (let* ((old-frame (selected-frame))
 	 (new-frame (window-frame window))
-	 (dedicate (cdr (assq 'dedicate specifiers)))
 	 (no-other-window (cdr (assq 'no-other-window specifiers))))
     ;; Show BUFFER in WINDOW.
     (unless (eq buffer (window-buffer window))
       ;; If we show another buffer in WINDOW, undedicate it first.
       (set-window-dedicated-p window nil))
     (set-window-buffer window buffer)
-    (when dedicate
-      (set-window-dedicated-p window dedicate))
     (when no-other-window
       (set-window-parameter window 'no-other-window t))
     (unless (or (eq old-frame new-frame)
@@ -4965,7 +4962,7 @@ Return the new window, nil if it could not be created."
 	(selected-window (selected-window))
 	root new new-parent)
 
-      ;; We are in an atomic window.
+    ;; We are in an atomic window.
     (when (and (window-parameter window 'window-atom) (not nest))
       ;; Split the root window.
       (setq window (window-atom-root window)))
@@ -5059,6 +5056,10 @@ description."
 	      (setq display-buffer-window (cons window 'new-window))
 	      ;; Install BUFFER in the new window.
 	      (display-buffer-in-window buffer window specifiers)
+	      (let ((dedicate (cdr (assq 'dedicate specifiers))))
+		(when dedicate
+		  ;; Dedicate window to buffer.
+		  (set-window-dedicated-p window dedicate)))
 	      ;; Adjust sizes if asked for (for `fit-window-to-buffer'
 	      ;; and friends BUFFER must be already shown in the new
 	      ;; window).
@@ -5086,15 +5087,21 @@ documentation of `display-buffer-alist' for a description."
 	    (when (symbolp function)
 	      (cdr (assq 'pop-up-frame-alist specifiers))))
 	   (frame
-	    (if (symbolp function)
-		(funcall function parameters)
-	      (funcall function))))
+	    (with-current-buffer buffer
+	      (if (symbolp function)
+		  (funcall function parameters)
+		(funcall function)))))
       (when frame
 	(let ((window (frame-selected-window frame)))
 	  (set-window-parameter
 	   window 'quit-restore (list 'new-frame buffer selected-window))
 	  (setq display-buffer-window (cons window 'new-frame))
-	  (display-buffer-in-window buffer window specifiers))))))
+	  (display-buffer-in-window buffer window specifiers)
+	  (let ((dedicate (cdr (assq 'dedicate specifiers))))
+	    (when dedicate
+	      ;; Dedicate window to buffer.
+	      (set-window-dedicated-p window dedicate)))
+	  window)))))
 
 (defun display-buffer-pop-up-side-window (buffer side slot &optional specifiers)
   "Display BUFFER in a new window on SIDE of the selected frame.
@@ -5142,6 +5149,10 @@ failed."
       (setq display-buffer-window (cons window 'new-window))
       ;; Install BUFFER in new window.
       (display-buffer-in-window buffer window specifiers)
+      (let ((dedicate (cdr (assq 'dedicate specifiers))))
+	(when dedicate
+	  ;; Dedicate window to buffer.
+	  (set-window-dedicated-p window dedicate)))
       ;; Adjust sizes of new window if asked for.
       (display-buffer-set-height window specifiers)
       (display-buffer-set-width window specifiers)
@@ -5282,6 +5293,10 @@ SPECIFIERS must be a list of buffer display specifiers."
 	  (set-window-parameter window 'window-slot slot))
 	;; Install BUFFER in the window.
 	(display-buffer-in-window buffer window specifiers)
+	(let ((dedicate (cdr (assq 'dedicate specifiers))))
+	  (when dedicate
+	    ;; Dedicate window to buffer.
+	    (set-window-dedicated-p window dedicate)))
 	(when new-window
 	  ;; Adjust sizes if asked for (for `fit-window-to-buffer' and
 	  ;; friends BUFFER must be already shown in the new window).
@@ -5782,7 +5797,7 @@ this list as arguments."
 	  ;; regardless of graphic-only restrictions.
 	  (display-buffer-pop-up-frame buffer)))))
 
-(defsubst display-buffer-same-window (&optional buffer-or-name label)
+(defun display-buffer-same-window (&optional buffer-or-name label)
   "Display buffer specified by BUFFER-OR-NAME in the selected window.
 Another window will be used only if the buffer can't be shown in
 the selected window, usually because it is dedicated to another
@@ -5791,7 +5806,7 @@ buffer.  Optional argument BUFFER-OR-NAME and LABEL are as for
   (interactive "BDisplay buffer in same window:\nP")
   (display-buffer buffer-or-name 'same-window label))
 
-(defsubst display-buffer-same-frame (&optional buffer-or-name label)
+(defun display-buffer-same-frame (&optional buffer-or-name label)
   "Display buffer specified by BUFFER-OR-NAME in a window on the same frame.
 Another frame will be used only if there is no other choice.
 Optional argument BUFFER-OR-NAME and LABEL are as for
@@ -5799,7 +5814,7 @@ Optional argument BUFFER-OR-NAME and LABEL are as for
   (interactive "BDisplay buffer on same frame:\nP")
   (display-buffer buffer-or-name 'same-frame label))
 
-(defsubst display-buffer-other-window (&optional buffer-or-name label)
+(defun display-buffer-other-window (&optional buffer-or-name label)
   "Display buffer specified by BUFFER-OR-NAME in another window.
 The selected window will be used only if there is no other
 choice.  Windows on the selected frame are preferred to windows
@@ -5873,7 +5888,7 @@ additional information."
       (select-frame-set-input-focus new-frame norecord))
     buffer))
 
-(defsubst pop-to-buffer-same-window (&optional buffer-or-name norecord label)
+(defun pop-to-buffer-same-window (&optional buffer-or-name norecord label)
   "Pop to buffer specified by BUFFER-OR-NAME in the selected window.
 Another window will be used only if the buffer can't be shown in
 the selected window, usually because it is dedicated to another
@@ -5882,7 +5897,7 @@ as for `pop-to-buffer'."
   (interactive "BPop to buffer in selected window:\nP")
   (pop-to-buffer buffer-or-name 'same-window norecord label))
 
-(defsubst pop-to-buffer-same-frame (&optional buffer-or-name norecord label)
+(defun pop-to-buffer-same-frame (&optional buffer-or-name norecord label)
   "Pop to buffer specified by BUFFER-OR-NAME in a window on the selected frame.
 Another frame will be used only if there is no other choice.
 Optional arguments BUFFER-OR-NAME, NORECORD and LABEL are as for
@@ -5890,7 +5905,7 @@ Optional arguments BUFFER-OR-NAME, NORECORD and LABEL are as for
   (interactive "BPop to buffer on same frame:\nP")
   (pop-to-buffer buffer-or-name 'same-frame norecord label))
 
-(defsubst pop-to-buffer-other-window (&optional buffer-or-name norecord label)
+(defun pop-to-buffer-other-window (&optional buffer-or-name norecord label)
   "Pop to buffer specified by BUFFER-OR-NAME in another window.
 The selected window will be used only if there is no other
 choice.  Windows on the selected frame are preferred to windows
@@ -5899,7 +5914,7 @@ LABEL are as for `pop-to-buffer'."
   (interactive "BPop to buffer in another window:\nP")
   (pop-to-buffer buffer-or-name 'other-window norecord))
 
-(defsubst pop-to-buffer-same-frame-other-window (&optional buffer-or-name norecord label)
+(defun pop-to-buffer-same-frame-other-window (&optional buffer-or-name norecord label)
   "Pop to buffer specified by BUFFER-OR-NAME in another window on the selected frame.
 The selected window or another frame will be used only if there
 is no other choice.  Optional arguments BUFFER-OR-NAME, NORECORD
@@ -5907,7 +5922,7 @@ and LABEL are as for `pop-to-buffer'."
   (interactive "BPop to buffer in another window on same frame:\nP")
   (pop-to-buffer buffer-or-name 'same-frame-other-window norecord label))
 
-(defsubst pop-to-buffer-other-frame (&optional buffer-or-name norecord label)
+(defun pop-to-buffer-other-frame (&optional buffer-or-name norecord label)
   "Pop to buffer specified by BUFFER-OR-NAME on another frame.
 The selected frame will be used only if there's no other choice.
 Optional arguments BUFFER-OR-NAME, NORECORD and LABEL are as for
@@ -5980,8 +5995,7 @@ Return the buffer switched to."
   (let ((buffer (window-normalize-buffer-to-switch-to buffer-or-name)))
     (if (null force-same-window)
 	(pop-to-buffer
-	 buffer '(same-window (reuse-window-dedicated . weak))
-	 norecord 'switch-to-buffer)
+	 buffer '(same-window (reuse-window-dedicated . weak)) norecord)
       (cond
        ;; Don't call set-window-buffer if it's not needed since it
        ;; might signal an error (e.g. if the window is dedicated).
@@ -5991,6 +6005,7 @@ Return the buffer switched to."
        ((eq (window-dedicated-p) t)
 	(error "Cannot switch buffers in a dedicated window"))
        (t (set-window-buffer nil buffer)))
+
       (unless norecord
 	(select-window (selected-window)))
       (set-buffer buffer))))

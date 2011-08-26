@@ -79,6 +79,11 @@ typedef enum {
   STRONG
 } bidi_category_t;
 
+/* UAX#9 says to search only for L, AL, or R types of characters, and
+   ignore RLE, RLO, LRE, and LRO, when determining the base paragraph
+   level.  Yudit indeed ignores them.  This variable is therefore set
+   by default to ignore them, but setting it to zero will take them
+   into account.  */
 extern int bidi_ignore_explicit_marks_for_paragraph_level EXTERNALLY_VISIBLE;
 int bidi_ignore_explicit_marks_for_paragraph_level = 1;
 
@@ -103,6 +108,8 @@ bidi_get_type (int ch, bidi_dir_t override)
     abort ();
 
   default_type = (bidi_type_t) XINT (CHAR_TABLE_REF (bidi_type_table, ch));
+  if (default_type == 0)
+    default_type = STRONG_L;
 
   if (override == NEUTRAL_DIR)
     return default_type;
@@ -620,12 +627,15 @@ bidi_pop_it (struct bidi_it *bidi_it)
   bidi_cache_last_idx = -1;
 }
 
+static ptrdiff_t bidi_cache_total_alloc;
+
 /* Stash away a copy of the cache and its control variables.  */
 void *
 bidi_shelve_cache (void)
 {
   unsigned char *databuf;
 
+  /* Empty cache.  */
   if (bidi_cache_idx == 0)
     return NULL;
 
@@ -634,6 +644,12 @@ bidi_shelve_cache (void)
 		     + sizeof (bidi_cache_start_stack)
 		     + sizeof (bidi_cache_sp) + sizeof (bidi_cache_start)
 		     + sizeof (bidi_cache_last_idx));
+  bidi_cache_total_alloc +=
+    sizeof (bidi_cache_idx) + bidi_cache_idx * sizeof (struct bidi_it)
+    + sizeof (bidi_cache_start_stack)
+    + sizeof (bidi_cache_sp) + sizeof (bidi_cache_start)
+    + sizeof (bidi_cache_last_idx);
+
   memcpy (databuf, &bidi_cache_idx, sizeof (bidi_cache_idx));
   memcpy (databuf + sizeof (bidi_cache_idx),
 	  bidi_cache, bidi_cache_idx * sizeof (struct bidi_it));
@@ -657,45 +673,69 @@ bidi_shelve_cache (void)
   return databuf;
 }
 
-/* Restore the cache state from a copy stashed away by bidi_shelve_cache.  */
+/* Restore the cache state from a copy stashed away by
+   bidi_shelve_cache, and free the buffer used to stash that copy.
+   JUST_FREE non-zero means free the buffer, but don't restore the
+   cache; used when the corresponding iterator is discarded instead of
+   being restored.  */
 void
-bidi_unshelve_cache (void *databuf)
+bidi_unshelve_cache (void *databuf, int just_free)
 {
   unsigned char *p = databuf;
 
   if (!p)
     {
-      /* A NULL pointer means an empty cache.  */
-      bidi_cache_start = 0;
-      bidi_cache_sp = 0;
-      bidi_cache_reset ();
+      if (!just_free)
+	{
+	  /* A NULL pointer means an empty cache.  */
+	  bidi_cache_start = 0;
+	  bidi_cache_sp = 0;
+	  bidi_cache_reset ();
+	}
     }
   else
     {
-      memcpy (&bidi_cache_idx, p, sizeof (bidi_cache_idx));
-      bidi_cache_ensure_space (bidi_cache_idx);
-      memcpy (bidi_cache, p + sizeof (bidi_cache_idx),
-	      bidi_cache_idx * sizeof (struct bidi_it));
-      memcpy (bidi_cache_start_stack,
-	      p + sizeof (bidi_cache_idx)
-	      + bidi_cache_idx * sizeof (struct bidi_it),
-	      sizeof (bidi_cache_start_stack));
-      memcpy (&bidi_cache_sp,
-	      p + sizeof (bidi_cache_idx)
-	      + bidi_cache_idx * sizeof (struct bidi_it)
-	      + sizeof (bidi_cache_start_stack),
-	      sizeof (bidi_cache_sp));
-      memcpy (&bidi_cache_start,
-	      p + sizeof (bidi_cache_idx)
-	      + bidi_cache_idx * sizeof (struct bidi_it)
-	      + sizeof (bidi_cache_start_stack) + sizeof (bidi_cache_sp),
-	      sizeof (bidi_cache_start));
-      memcpy (&bidi_cache_last_idx,
-	      p + sizeof (bidi_cache_idx)
-	      + bidi_cache_idx * sizeof (struct bidi_it)
-	      + sizeof (bidi_cache_start_stack) + sizeof (bidi_cache_sp)
-	      + sizeof (bidi_cache_start),
-	      sizeof (bidi_cache_last_idx));
+      if (just_free)
+	{
+	  ptrdiff_t idx;
+
+	  memcpy (&idx, p, sizeof (bidi_cache_idx));
+	  bidi_cache_total_alloc -=
+	    sizeof (bidi_cache_idx) + idx * sizeof (struct bidi_it)
+	    + sizeof (bidi_cache_start_stack) + sizeof (bidi_cache_sp)
+	    + sizeof (bidi_cache_start) + sizeof (bidi_cache_last_idx);
+	}
+      else
+	{
+	  memcpy (&bidi_cache_idx, p, sizeof (bidi_cache_idx));
+	  bidi_cache_ensure_space (bidi_cache_idx);
+	  memcpy (bidi_cache, p + sizeof (bidi_cache_idx),
+		  bidi_cache_idx * sizeof (struct bidi_it));
+	  memcpy (bidi_cache_start_stack,
+		  p + sizeof (bidi_cache_idx)
+		  + bidi_cache_idx * sizeof (struct bidi_it),
+		  sizeof (bidi_cache_start_stack));
+	  memcpy (&bidi_cache_sp,
+		  p + sizeof (bidi_cache_idx)
+		  + bidi_cache_idx * sizeof (struct bidi_it)
+		  + sizeof (bidi_cache_start_stack),
+		  sizeof (bidi_cache_sp));
+	  memcpy (&bidi_cache_start,
+		  p + sizeof (bidi_cache_idx)
+		  + bidi_cache_idx * sizeof (struct bidi_it)
+		  + sizeof (bidi_cache_start_stack) + sizeof (bidi_cache_sp),
+		  sizeof (bidi_cache_start));
+	  memcpy (&bidi_cache_last_idx,
+		  p + sizeof (bidi_cache_idx)
+		  + bidi_cache_idx * sizeof (struct bidi_it)
+		  + sizeof (bidi_cache_start_stack) + sizeof (bidi_cache_sp)
+		  + sizeof (bidi_cache_start),
+		  sizeof (bidi_cache_last_idx));
+	  bidi_cache_total_alloc -=
+	    sizeof (bidi_cache_idx) + bidi_cache_idx * sizeof (struct bidi_it)
+	    + sizeof (bidi_cache_start_stack) + sizeof (bidi_cache_sp)
+	    + sizeof (bidi_cache_start) + sizeof (bidi_cache_last_idx);
+	}
 
       xfree (p);
     }
@@ -708,25 +748,15 @@ bidi_unshelve_cache (void *databuf)
 static void
 bidi_initialize (void)
 {
-
-#include "biditype.h"
-#include "bidimirror.h"
-
-  int i;
-
-  bidi_type_table = Fmake_char_table (Qnil, make_number (STRONG_L));
+  bidi_type_table = uniprop_table (intern ("bidi-class"));
+  if (NILP (bidi_type_table))
+    abort ();
   staticpro (&bidi_type_table);
 
-  for (i = 0; i < sizeof bidi_type / sizeof bidi_type[0]; i++)
-    char_table_set_range (bidi_type_table, bidi_type[i].from, bidi_type[i].to,
-			  make_number (bidi_type[i].type));
-
-  bidi_mirror_table = Fmake_char_table (Qnil, Qnil);
+  bidi_mirror_table = uniprop_table (intern ("mirroring"));
+  if (NILP (bidi_mirror_table))
+    abort ();
   staticpro (&bidi_mirror_table);
-
-  for (i = 0; i < sizeof bidi_mirror / sizeof bidi_mirror[0]; i++)
-    char_table_set (bidi_mirror_table, bidi_mirror[i].from,
-		    make_number (bidi_mirror[i].to));
 
   Qparagraph_start = intern ("paragraph-start");
   staticpro (&Qparagraph_start);
@@ -742,6 +772,7 @@ bidi_initialize (void)
   staticpro (&paragraph_separate_re);
 
   bidi_cache_sp = 0;
+  bidi_cache_total_alloc = 0;
 
   bidi_initialized = 1;
 }
@@ -792,6 +823,7 @@ bidi_init_it (EMACS_INT charpos, EMACS_INT bytepos, int frame_window_p,
     bidi_it->prev_for_neutral.orig_type = UNKNOWN_BT;
   bidi_it->sor = L2R;	 /* FIXME: should it be user-selectable? */
   bidi_it->disp_pos = -1;	/* invalid/unknown */
+  bidi_it->disp_prop_p = 0;
   /* We can only shrink the cache if we are at the bottom level of its
      "stack".  */
   if (bidi_cache_start == 0)
@@ -874,14 +906,16 @@ bidi_char_at_pos (EMACS_INT bytepos, const unsigned char *s, int unibyte)
    covered characters as a single character u+FFFC, and return their
    combined length in CH_LEN and NCHARS.  DISP_POS specifies the
    character position of the next display string, or -1 if not yet
-   computed.  When the next character is at or beyond that position,
-   the function updates DISP_POS with the position of the next display
-   string.  STRING->s is the C string to iterate, or NULL if iterating
-   over a buffer or a Lisp string; in the latter case, STRING->lstring
-   is the Lisp string.  */
+   computed.  DISP_PROP_P non-zero means that there's really a display
+   string at DISP_POS, as opposed to when we searched till DISP_POS
+   without findingone.  When the next character is at or beyond that
+   position, the function updates DISP_POS with the position of the
+   next display string.  STRING->s is the C string to iterate, or NULL
+   if iterating over a buffer or a Lisp string; in the latter case,
+   STRING->lstring is the Lisp string.  */
 static inline int
 bidi_fetch_char (EMACS_INT bytepos, EMACS_INT charpos, EMACS_INT *disp_pos,
-		 struct bidi_string_data *string,
+		 int *disp_prop_p, struct bidi_string_data *string,
 		 int frame_window_p, EMACS_INT *ch_len, EMACS_INT *nchars)
 {
   int ch;
@@ -894,7 +928,8 @@ bidi_fetch_char (EMACS_INT bytepos, EMACS_INT charpos, EMACS_INT *disp_pos,
   if (charpos < endpos && charpos > *disp_pos)
     {
       SET_TEXT_POS (pos, charpos, bytepos);
-      *disp_pos = compute_display_string_pos (&pos, string, frame_window_p);
+      *disp_pos = compute_display_string_pos (&pos, string, frame_window_p,
+					      disp_prop_p);
     }
 
   /* Fetch the character at BYTEPOS.  */
@@ -904,8 +939,9 @@ bidi_fetch_char (EMACS_INT bytepos, EMACS_INT charpos, EMACS_INT *disp_pos,
       *ch_len = 1;
       *nchars = 1;
       *disp_pos = endpos;
+      *disp_prop_p = 0;
     }
-  else if (charpos >= *disp_pos)
+  else if (charpos >= *disp_pos && *disp_prop_p)
     {
       EMACS_INT disp_end_pos;
 
@@ -972,10 +1008,12 @@ bidi_fetch_char (EMACS_INT bytepos, EMACS_INT charpos, EMACS_INT *disp_pos,
 
   /* If we just entered a run of characters covered by a display
      string, compute the position of the next display string.  */
-  if (charpos + *nchars <= endpos && charpos + *nchars > *disp_pos)
+  if (charpos + *nchars <= endpos && charpos + *nchars > *disp_pos
+      && *disp_prop_p)
     {
       SET_TEXT_POS (pos, charpos + *nchars, bytepos + *ch_len);
-      *disp_pos = compute_display_string_pos (&pos, string, frame_window_p);
+      *disp_pos = compute_display_string_pos (&pos, string, frame_window_p,
+					      disp_prop_p);
     }
 
   return ch;
@@ -1083,6 +1121,7 @@ bidi_paragraph_init (bidi_dir_t dir, struct bidi_it *bidi_it, int no_default_p)
       int ch;
       EMACS_INT ch_len, nchars;
       EMACS_INT pos, disp_pos = -1;
+      int disp_prop_p = 0;
       bidi_type_t type;
       const unsigned char *s;
 
@@ -1130,15 +1169,12 @@ bidi_paragraph_init (bidi_dir_t dir, struct bidi_it *bidi_it, int no_default_p)
 	bytepos = pstartbyte;
 	if (!string_p)
 	  pos = BYTE_TO_CHAR (bytepos);
-	ch = bidi_fetch_char (bytepos, pos, &disp_pos, &bidi_it->string,
+	ch = bidi_fetch_char (bytepos, pos, &disp_pos, &disp_prop_p,
+			      &bidi_it->string,
 			      bidi_it->frame_window_p, &ch_len, &nchars);
 	type = bidi_get_type (ch, NEUTRAL_DIR);
 
 	for (pos += nchars, bytepos += ch_len;
-	     /* NOTE: UAX#9 says to search only for L, AL, or R types
-		of characters, and ignore RLE, RLO, LRE, and LRO.
-		However, I'm not sure it makes sense to omit those 4;
-		should try with and without that to see the effect.  */
 	     (bidi_get_category (type) != STRONG)
 	       || (bidi_ignore_explicit_marks_for_paragraph_level
 		   && (type == RLE || type == RLO
@@ -1157,14 +1193,19 @@ bidi_paragraph_init (bidi_dir_t dir, struct bidi_it *bidi_it, int no_default_p)
 		&& bidi_at_paragraph_end (pos, bytepos) >= -1)
 	      break;
 	    /* Fetch next character and advance to get past it.  */
-	    ch = bidi_fetch_char (bytepos, pos, &disp_pos, &bidi_it->string,
+	    ch = bidi_fetch_char (bytepos, pos, &disp_pos,
+				  &disp_prop_p, &bidi_it->string,
 				  bidi_it->frame_window_p, &ch_len, &nchars);
 	    pos += nchars;
 	    bytepos += ch_len;
 	  }
-	if (type == STRONG_R || type == STRONG_AL) /* P3 */
+	if ((type == STRONG_R || type == STRONG_AL) /* P3 */
+	    || (!bidi_ignore_explicit_marks_for_paragraph_level
+		&& (type == RLO || type == RLE)))
 	  bidi_it->paragraph_dir = R2L;
-	else if (type == STRONG_L)
+	else if (type == STRONG_L
+		 || (!bidi_ignore_explicit_marks_for_paragraph_level
+		     && (type == LRO || type == LRE)))
 	  bidi_it->paragraph_dir = L2R;
 	if (!string_p
 	    && no_default_p && bidi_it->paragraph_dir == NEUTRAL_DIR)
@@ -1290,6 +1331,7 @@ bidi_resolve_explicit_1 (struct bidi_it *bidi_it)
       bidi_it->ch_len = 1;
       bidi_it->nchars = 1;
       bidi_it->disp_pos = (string_p ? bidi_it->string.schars : ZV);
+      bidi_it->disp_prop_p = 0;
     }
   else
     {
@@ -1297,8 +1339,8 @@ bidi_resolve_explicit_1 (struct bidi_it *bidi_it)
 	 display string, treat the entire run of covered characters as
 	 a single character u+FFFC.  */
       curchar = bidi_fetch_char (bidi_it->bytepos, bidi_it->charpos,
-				 &bidi_it->disp_pos, &bidi_it->string,
-				 bidi_it->frame_window_p,
+				 &bidi_it->disp_pos, &bidi_it->disp_prop_p,
+				 &bidi_it->string, bidi_it->frame_window_p,
 				 &bidi_it->ch_len, &bidi_it->nchars);
     }
   bidi_it->ch = curchar;
@@ -2032,12 +2074,13 @@ bidi_level_of_next_char (struct bidi_it *bidi_it)
       struct bidi_string_data bs = bidi_it->string;
       bidi_type_t chtype;
       int fwp = bidi_it->frame_window_p;
+      int dpp = bidi_it->disp_prop_p;
 
       if (bidi_it->nchars <= 0)
 	abort ();
       do {
-	ch = bidi_fetch_char (bpos += clen, cpos += nc, &disp_pos, &bs, fwp,
-			      &clen, &nc);
+	ch = bidi_fetch_char (bpos += clen, cpos += nc, &disp_pos, &dpp, &bs,
+			      fwp, &clen, &nc);
 	if (ch == '\n' || ch == BIDI_EOB /* || ch == LINESEP_CHAR */)
 	  chtype = NEUTRAL_B;
 	else

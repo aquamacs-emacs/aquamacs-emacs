@@ -1781,7 +1781,7 @@ extern int face_change_count;
    3 bits for it, so we cannot use there values larger than 7.
 
    The order of members must be in sync with the 8th element of the
-   member of unidata-prop-alist (in admin/unidata/unidata-getn.el) for
+   member of unidata-prop-alist (in admin/unidata/unidata-gen.el) for
    Unicode character property `bidi-class'.  */
 typedef enum {
   UNKNOWN_BT = 0,
@@ -1864,6 +1864,9 @@ struct bidi_it {
   EMACS_INT ignore_bn_limit;	/* position until which to ignore BNs */
   bidi_dir_t sor;		/* direction of start-of-run in effect */
   int scan_dir;			/* direction of text scan, 1: forw, -1: back */
+  EMACS_INT disp_pos;		/* position of display string after ch */
+  int disp_prop_p;		/* if non-zero, there really is a
+				   `display' property/string at disp_pos */
   int stack_idx;		/* index of current data on the stack */
   /* Note: Everything from here on is not copied/saved when the bidi
      iterator state is saved, pushed, or popped.  So only put here
@@ -1872,7 +1875,6 @@ struct bidi_it {
   struct bidi_string_data string;	/* string to reorder */
   bidi_dir_t paragraph_dir;	/* current paragraph direction */
   EMACS_INT separator_limit;	/* where paragraph separator should end */
-  EMACS_INT disp_pos;		/* position of display string after ch */
   unsigned first_elt : 1;	/* if non-zero, examine current char first */
   unsigned new_paragraph : 1;	/* if non-zero, we expect a new paragraph */
   unsigned frame_window_p : 1;	/* non-zero if displaying on a GUI frame */
@@ -2984,7 +2986,7 @@ extern int  bidi_mirror_char (int);
 extern void bidi_push_it (struct bidi_it *);
 extern void bidi_pop_it (struct bidi_it *);
 extern void *bidi_shelve_cache (void);
-extern void bidi_unshelve_cache (void *);
+extern void bidi_unshelve_cache (void *, int);
 
 /* Defined in xdisp.c */
 
@@ -3043,7 +3045,8 @@ extern Lisp_Object lookup_glyphless_char_display (int, struct it *);
 extern int calc_pixel_width_or_height (double *, struct it *, Lisp_Object,
                                        struct font *, int, int *);
 extern EMACS_INT compute_display_string_pos (struct text_pos *,
-					     struct bidi_string_data *, int);
+					     struct bidi_string_data *,
+					     int, int *);
 extern EMACS_INT compute_display_string_end (EMACS_INT,
 					     struct bidi_string_data *);
 
@@ -3207,7 +3210,6 @@ int merge_faces (struct frame *, Lisp_Object, EMACS_INT, int);
 int compute_char_face (struct frame *, int, Lisp_Object);
 void free_all_realized_faces (Lisp_Object);
 extern Lisp_Object Qforeground_color, Qbackground_color;
-extern Lisp_Object Qframe_set_background_mode;
 extern char unspecified_fg[], unspecified_bg[];
 
 /* Defined in xfns.c  */

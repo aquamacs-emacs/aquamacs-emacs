@@ -55,15 +55,12 @@
 ;;; Code:
 
 (require 'sendmail)
+(require 'auth-source)
 (autoload 'mail-strip-quoted-names "mail-utils")
 (autoload 'message-make-date "message")
 (autoload 'message-make-message-id "message")
 (autoload 'rfc2104-hash "rfc2104")
-(autoload 'netrc-parse "netrc")
-(autoload 'netrc-machine "netrc")
-(autoload 'netrc-get "netrc")
 (autoload 'password-read "password-cache")
-(autoload 'auth-source-search "auth-source")
 
 ;;;
 (defgroup smtpmail nil
@@ -582,7 +579,7 @@ The list is in preference order.")
 
 (defun smtpmail-query-smtp-server ()
   (let ((server (read-string "Outgoing SMTP mail server: "))
-	(ports '(587 "smtp"))
+	(ports '("smtp" 587))
 	stream port)
     (when (and smtpmail-smtp-server
 	       (not (member smtpmail-smtp-server ports)))
