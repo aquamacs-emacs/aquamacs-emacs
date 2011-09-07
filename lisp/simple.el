@@ -3044,6 +3044,9 @@ argument should still be a \"useful\" string for such uses."
 If BEFORE-P is non-nil, prepend STRING to the kill.
 If `interprogram-cut-function' is set, pass the resulting kill to it."
   (let* ((cur (car kill-ring)))
+    ;; when conjoining words, add spaces where appropriate.
+    (if (equal (car-safe (get-text-property 0 'yank-handler cur)) 'smart-spacing-yank-handler)
+	(setq string (concat (if before-p "" " ") string (if before-p " " ""))))
     (kill-new (if before-p (concat string cur) (concat cur string))
 	      (or (= (length cur) 0)
 		  (equal yank-handler (get-text-property 0 'yank-handler cur)))
@@ -6943,7 +6946,8 @@ the point is when the command is called.")
 			'yank-handler 
 			'(smart-spacing-yank-handler nil nil nil) 
 			string)
-     (when (and (not end-of-line) delete) (smart-remove-remaining-spaces from point-at-end)))
+     (when (and (not end-of-line) delete) 
+       (smart-remove-remaining-spaces from point-at-end)))
     string))
 
 (defun smart-delete-region (from to)
@@ -6960,7 +6964,9 @@ the point is when the command is called.")
   "Remove remaining spaces.
 Adheres to `smart-spacing-rules'.
 If POINT-AT-END, behaves as if point was at then end of
-a previously deleted region (now at POS)."
+a previously deleted region (now at POS).
+Returns non-nil if spaces were deleted - 1 for forwards, -1 for backwards
+or a cons with a combination."
   (unless (eq (point-min) (point-max))
     (let ((del (assoc (buffer-substring-no-properties
 		       (max (point-min) (- pos 1)) 
@@ -6978,7 +6984,8 @@ a previously deleted region (now at POS)."
 	    (setq del (- (cdr del)))))
 	;; delete either to the left or to the right
 	;; this deletion will keep point in the right place.
-	(delete-region pos (+ del pos))))))
+	(delete-region pos (+ del pos))
+	del))))
 
 (defun smart-spacing-char-is-word-boundary (pos &optional side)
   (or (< pos (point-min))
