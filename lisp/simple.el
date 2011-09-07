@@ -6860,11 +6860,15 @@ the point is when the command is called.")
   "Evaluate to t if buffer BUF is not an internal buffer."
   `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
 
+(defsubst smart-spacing-end-of-line (pos)
+  (equal "\n" (buffer-substring-no-properties (max 1 (1- pos)) pos)))
+
 (defun smart-spacing-filter-buffer-substring (beg end &optional delete noprops )   
  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
  (let* ((from (min beg end)) (to (max beg end))
 	;; (move-point (memq (point) (list beg end))) 
 	(point-at-end (eq (point) end))
+	(end-of-line (smart-spacing-end-of-line to))
 	(use-smart-string 
 	 (and
 	  smart-spacing-mode
@@ -6879,16 +6883,17 @@ the point is when the command is called.")
 			'yank-handler 
 			'(smart-spacing-yank-handler nil nil nil) 
 			string)
-     (when delete (smart-remove-remaining-spaces from point-at-end)))
+     (when (and (not end-of-line) delete) (smart-remove-remaining-spaces from point-at-end)))
     string))
 
 (defun smart-delete-region (from to)
-  (if (and smart-spacing-mode 
+  (if (and smart-spacing-mode
 	   (memq this-command '(cua-delete-region mouse-save-then-kill)))
-      (progn
+      (let ((end-of-line (smart-spacing-end-of-line to)))
 	(delete-region from to)
-	(smart-remove-remaining-spaces (min from to)
-				       (eq (point) (max from to))))
+	(unless end-of-line
+	  (smart-remove-remaining-spaces (min from to)
+					 (eq (point) (max from to)))))
     (delete-region from to)))
 
 (defun smart-remove-remaining-spaces (pos point-at-end)
