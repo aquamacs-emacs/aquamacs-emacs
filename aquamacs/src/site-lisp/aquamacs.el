@@ -1090,9 +1090,12 @@ Use this argument instead of explicitly setting `view-exit-action'."
 (autoload 'turn-off-follow-mouse "follow-mouse.el"   "Moving the mouse will not automatically select the window under it" 'interactive nil)
 (autoload 'toggle-follow-mouse "follow-mouse.el"   "Toggle whether moving the mouse automatically selects the window under it" 'interactive nil)
 
+;; ensure calc is loaded from the right place (and not from calc.el)
+(autoload 'calc (concat (file-name-directory (locate-library "select")) "calc/calc")  "The Emacs Calculator." t)
 
-  (provide 'drews_init)	; migration from 0.9.1 (require in customizations)
- (ats "drew done")
+
+(provide 'drews_init)	; migration from 0.9.1 (require in customizations)
+(ats "drew done")
 
   ;; http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries
   
