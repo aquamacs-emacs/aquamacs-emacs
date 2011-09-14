@@ -100,23 +100,26 @@
 		;; go over all properties of item
 		(let ((img (aq-list-has-property-element item :image))
 		      (vis (aq-list-has-property-element item :visible 'none))
+		      (lab (aq-list-has-property-element item :label))
 		      (ena (aq-list-has-property-element item :enable 'none)))
 		  (list (car item) 
 			:title (nth 2 item)
 			:command (nth 3 item)
 		  :visible (if (eq vis 'none) t vis)
 		  :enable (if (eq ena 'none) t ena)
+		  :label lab
 		  :image (vector img (elt img 1)) ;; 1st: Emacs, 2nd: XEma
 		  :help (aq-list-has-property-element item :help)))
 	     (let ((img (aq-list-has-property-element item :image)))
 		  (list 'separator
 			:command (lambda nil (interactive) t)
-			:visible t
-			:enable nil
+			:label "--"
+			:enable t
 			:image (vector img img) ;; 1st: Emacs, 2nd: XEma
-			:help ""))))))
+			))))))
    (reverse (cdr keymap))) meaning))
- 
+;; (setq  aquamacs-default-toolbarx-meaning-alist (aquamacs-toolbar-x-create-meaning-list tool-bar-map))
+
 ;; this to overwrite the tool-bar setup function
 ;  (aquamacs-tool-bar-setup)
 (defun aquamacs-tool-bar-setup ()
