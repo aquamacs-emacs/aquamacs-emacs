@@ -1932,7 +1932,7 @@ get_phys_cursor_geometry (struct window *w, struct glyph_row *row,
     wd = min (FRAME_COLUMN_WIDTH (f), wd);
   w->phys_cursor_width = wd;
 
-  y = w->phys_cursor.y + row->ascent - glyph->ascent + (row->extra_line_spacing / 2);
+  y = w->phys_cursor.y + row->ascent - glyph->ascent;
 
   /* If y is below window bottom, ensure that we still see a cursor.  */
   h0 = min (FRAME_LINE_HEIGHT (f), row->visible_height);
