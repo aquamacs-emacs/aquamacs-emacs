@@ -703,13 +703,12 @@ it is displayed along with the global value."
 		(if valvoid
 		    (princ " is void as a variable.")
 		  (princ "'s "))))
-	    (if valvoid
-		nil
+	    (unless valvoid
 	      (with-current-buffer standard-output
 		(setq val-start-pos (point))
 		(princ "value is ")
-		  (terpri)
 		(let ((from (point)))
+		  (terpri)
 		  (pp val)
 		  (if (< (point) (+ 68 (line-beginning-position 0)))
 		      (delete-region from (1+ from))
@@ -728,7 +727,6 @@ it is displayed along with the global value."
 		      (if (< (point) (+ from 20))
 			  (delete-region (1- from) from)))))))
 	    (terpri)
-
 	    (when locus
 	      (cond
                ((bufferp locus)
