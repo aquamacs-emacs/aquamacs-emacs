@@ -228,7 +228,8 @@ end tell"
 		  (let* ((xdir (directory-file-name (expand-file-name dir) ) )
 			 (default-directory xdir)) 
 		    (and xdir
-			 (not (file-exists-p (concat xdir "/.ignore")))
+			 (not (file-exists-p (concat xdir "/.nosearch")))
+			 (not (file-exists-p (concat xdir "/.ignore")))  ;; backwards compatiblity (Aq2.3 and lower)
 			 (add-to-list 'load-path xdir) ;; add at beginning of list
 			 ;; Now add subdirectories.
 			 (condition-case nil
