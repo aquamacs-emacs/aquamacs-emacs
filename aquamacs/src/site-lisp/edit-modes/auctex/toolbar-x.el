@@ -634,6 +634,7 @@ object VAL of a dropdown group (see documentation of function
 	    (:title	      toolbarx-test-string-or-nil)
 	    (:enable	      toolbarx-test-any-type)
 	    (:visible	      toolbarx-test-any-type)
+	    (:label	      toolbarx-test-string-or-nil)
 	    (:help	      toolbarx-test-string-or-nil)
 	    (:insert	      toolbarx-test-any-type	   . and)
 	    (:toolbar	      toolbarx-test-toolbar-type)
@@ -1238,6 +1239,8 @@ function `toolbar-install-toolbar'."
 			     (cadr (memq :enable filtered-props))))
 	       (visible (cons (memq :visible filtered-props)
 			      (cadr (memq :visible filtered-props))))
+	       (label (cons (memq :label filtered-props)
+			      (cadr (memq :label filtered-props))))
 	       (button (cons (memq :button filtered-props)
 			     (cadr (memq :button filtered-props))))
 	       (menuitem (append
@@ -1252,6 +1255,8 @@ function `toolbar-install-toolbar'."
 			    (list :enable (cdr enable)))
 			  (when (car visible)
 			    (list :visible (cdr visible)))
+			  (when (car label)
+			    (list :label (cdr label)))
 			  (when (car button)
 			    (list :button (cdr button)))))
 	       (key-not-used
