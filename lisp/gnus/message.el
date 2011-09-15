@@ -4254,8 +4254,10 @@ conformance."
 		 "Invisible text found and made visible; continue sending? ")
 	  (error "Invisible text found and made visible")))))
   (message-check 'illegible-text
-    (let (char found choice)
+    (let (char found choice nul-chars)
       (message-goto-body)
+      (setq nul-chars (save-excursion
+			(search-forward "\000" nil t)))
       (while (progn
 	       (skip-chars-forward mm-7bit-chars)
 	       (when (get-text-property (point) 'no-illegible-text)
@@ -4281,7 +4283,9 @@ conformance."
       (when found
 	(setq choice
 	      (gnus-multiple-choice
-	       "Non-printable characters found.  Continue sending?"
+	       (if nul-chars
+		   "NUL characters found, which may cause problems.  Continue sending?"
+		 "Non-printable characters found.  Continue sending?")
 	       `((?d "Remove non-printable characters and send")
 		 (?r ,(format
 		       "Replace non-printable characters with \"%s\" and send"
@@ -6325,7 +6329,7 @@ between beginning of field and beginning of line."
 	      (progn
 		(gnus-select-frame-set-input-focus (window-frame window))
 		(select-window window))
-	    (funcall (or switch-function 'pop-to-buffer) buffer)
+	    (funcall (or switch-function 'switch-to-buffer) buffer)
 	    (set-buffer buffer))
 	  (when (and (buffer-modified-p)
 		     (not (prog1
@@ -6333,7 +6337,7 @@ between beginning of field and beginning of line."
 			       "Message already being composed; erase? ")
 			    (message nil))))
 	    (error "Message being composed")))
-      (funcall (or switch-function 'pop-to-buffer) name)
+      (funcall (or switch-function 'switch-to-buffer) name)
       (set-buffer name))
     (erase-buffer)
     (message-mode)))
@@ -6526,7 +6530,9 @@ are not included."
   (message-position-point)
   ;; Allow correct handling of `message-checksum' in `message-yank-original':
   (set-buffer-modified-p nil)
-  (undo-boundary))
+  (undo-boundary)
+  ;; rmail-start-mail expects message-mail to return t (Bug#9392)
+  t)
 
 (defun message-set-auto-save-file-name ()
   "Associate the message buffer with a file in the drafts directory."
@@ -7613,12 +7619,8 @@ you."
   "Like `message-mail' command, but display mail buffer in another window."
   (interactive)
   (unless (message-mail-user-agent)
-    (let ((pop-up-windows t)
-	  (special-display-buffer-names nil)
-	  (special-display-regexps nil)
-	  (same-window-buffer-names nil)
-	  (same-window-regexps nil))
-      (message-pop-to-buffer (message-buffer-name "mail" to))))
+    (message-pop-to-buffer (message-buffer-name "mail" to)
+			   'switch-to-buffer-other-window))
   (let ((message-this-is-mail t))
     (message-setup `((To . ,(or to "")) (Subject . ,(or subject "")))
 		   nil nil nil 'switch-to-buffer-other-window)))
@@ -7628,12 +7630,8 @@ you."
   "Like `message-mail' command, but display mail buffer in another frame."
   (interactive)
   (unless (message-mail-user-agent)
-    (let ((pop-up-frames t)
-	  (special-display-buffer-names nil)
-	  (special-display-regexps nil)
-	  (same-window-buffer-names nil)
-	  (same-window-regexps nil))
-      (message-pop-to-buffer (message-buffer-name "mail" to))))
+    (message-pop-to-buffer (message-buffer-name "mail" to)
+			   'switch-to-buffer-other-frame))
   (let ((message-this-is-mail t))
     (message-setup `((To . ,(or to "")) (Subject . ,(or subject "")))
 		   nil nil nil 'switch-to-buffer-other-frame)))
@@ -7642,12 +7640,8 @@ you."
 (defun message-news-other-window (&optional newsgroups subject)
   "Start editing a news article to be sent."
   (interactive)
-  (let ((pop-up-windows t)
-	(special-display-buffer-names nil)
-	(special-display-regexps nil)
-	(same-window-buffer-names nil)
-	(same-window-regexps nil))
-    (message-pop-to-buffer (message-buffer-name "posting" nil newsgroups)))
+  (message-pop-to-buffer (message-buffer-name "posting" nil newsgroups)
+			 'switch-to-buffer-other-window)
   (let ((message-this-is-news t))
     (message-setup `((Newsgroups . ,(or newsgroups ""))
 		     (Subject . ,(or subject ""))))))
@@ -7656,12 +7650,8 @@ you."
 (defun message-news-other-frame (&optional newsgroups subject)
   "Start editing a news article to be sent."
   (interactive)
-  (let ((pop-up-frames t)
-	(special-display-buffer-names nil)
-	(special-display-regexps nil)
-	(same-window-buffer-names nil)
-	(same-window-regexps nil))
-    (message-pop-to-buffer (message-buffer-name "posting" nil newsgroups)))
+  (message-pop-to-buffer (message-buffer-name "posting" nil newsgroups)
+			 'switch-to-buffer-other-frame)
   (let ((message-this-is-news t))
     (message-setup `((Newsgroups . ,(or newsgroups ""))
 		     (Subject . ,(or subject ""))))))

@@ -1078,12 +1078,15 @@ It also eliminates runs of equal strings."
            (column 0)
 	   (rows (/ (length strings) columns))
 	   (row 0)
+           (first t)
 	   (laststring nil))
       ;; The insertion should be "sensible" no matter what choices were made
       ;; for the parameters above.
       (dolist (str strings)
 	(unless (equal laststring str) ; Remove (consecutive) duplicates.
 	  (setq laststring str)
+          ;; FIXME: `string-width' doesn't pay attention to
+          ;; `display' properties.
           (let ((length (if (consp str)
                             (+ (string-width (car str))
                                (string-width (cadr str)))
@@ -1102,11 +1105,11 @@ It also eliminates runs of equal strings."
 		    (forward-line 1)
 		    (end-of-line)))
 		(insert " \t")
-		(set-text-properties (- (point) 1) (point)
+		(set-text-properties (1- (point)) (point)
 				     `(display (space :align-to ,column)))))
 	     (t
 	      ;; Horizontal format
-	      (unless (bolp)
+	      (unless first
 		(if (< wwidth (+ (max colwidth length) column))
 		    ;; No space for `str' at point, move to next line.
 		    (progn (insert "\n") (setq column 0))
@@ -1114,34 +1117,21 @@ It also eliminates runs of equal strings."
 		  ;; Leave the space unpropertized so that in the case we're
 		  ;; already past the goal column, there is still
 		  ;; a space displayed.
-		  (set-text-properties (- (point) 1) (point)
+		  (set-text-properties (1- (point)) (point)
 				       ;; We can't just set tab-width, because
 				       ;; completion-setup-function will kill
 				       ;; all local variables :-(
 				       `(display (space :align-to ,column)))
 		  nil))))
+            (setq first nil)
             (if (not (consp str))
-                (put-text-property (point)
-				   (progn
-				     (insert (bidi-string-mark-left-to-right
-					      str))
-				     (point))
+                (put-text-property (point) (progn (insert str) (point))
                                    'mouse-face 'highlight)
-              (put-text-property (point)
-				 (progn
-				   (insert
-				    (bidi-string-mark-left-to-right
-				     (car str)))
-				   (point))
+              (put-text-property (point) (progn (insert (car str)) (point))
                                  'mouse-face 'highlight)
-              (add-text-properties (point)
-				   (progn
-				     (insert
-				      (bidi-string-mark-left-to-right
-				       (cadr str)))
-				     (point))
+              (add-text-properties (point) (progn (insert (cadr str)) (point))
                                    '(mouse-face nil
-						face completions-annotations)))
+                                     face completions-annotations)))
 	    (cond
 	     ((eq completions-format 'vertical)
 	      ;; Vertical format

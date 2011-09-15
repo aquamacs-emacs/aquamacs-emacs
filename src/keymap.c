@@ -1399,7 +1399,7 @@ silly_event_symbol_error (Lisp_Object c)
    some systems, static gets macro-defined to be the empty string.
    Ickypoo.  */
 static Lisp_Object *cmm_modes = NULL, *cmm_maps = NULL;
-static int cmm_size = 0;
+static ptrdiff_t cmm_size = 0;
 
 /* Store a pointer to an array of the currently active minor modes in
    *modeptr, a pointer to an array of the keymaps of the currently
@@ -1419,10 +1419,10 @@ static int cmm_size = 0;
    loop.  Instead, we'll use realloc/malloc and silently truncate the
    list, let the key sequence be read, and hope some other piece of
    code signals the error.  */
-int
+ptrdiff_t
 current_minor_maps (Lisp_Object **modeptr, Lisp_Object **mapptr)
 {
-  int i = 0;
+  ptrdiff_t i = 0;
   int list_number = 0;
   Lisp_Object alist, assoc, var, val;
   Lisp_Object emulation_alists;
@@ -1465,8 +1465,15 @@ current_minor_maps (Lisp_Object **modeptr, Lisp_Object **mapptr)
 
 	    if (i >= cmm_size)
 	      {
-		int newsize, allocsize;
+		ptrdiff_t newsize, allocsize;
 		Lisp_Object *newmodes, *newmaps;
+
+		/* Check for size calculation overflow.  Other code
+		   (e.g., read_key_sequence) adds 3 to the count
+		   later, so subtract 3 from the limit here.  */
+		if (min (PTRDIFF_MAX, SIZE_MAX) / (2 * sizeof *newmodes) - 3
+		    < cmm_size)
+		  break;
 
 		newsize = cmm_size == 0 ? 30 : cmm_size * 2;
 		allocsize = newsize * sizeof *newmodes;
@@ -2159,12 +2166,12 @@ extern Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qmodifier_value, Qnone
 #endif
 
 char *
-push_key_description (register unsigned int c, register char *p, int force_multibyte)
+push_key_description (EMACS_INT ch, char *p, int force_multibyte)
 {
-  unsigned c2;
+  int c, c2;
 
   /* Clear all the meaningless bits above the meta bit.  */
-  c &= meta_modifier | ~ - meta_modifier;
+  c = ch & (meta_modifier | ~ - meta_modifier);
   c2 = c & ~(alt_modifier | ctrl_modifier | hyper_modifier
 	     | meta_modifier | shift_modifier | super_modifier);
 
@@ -2387,10 +2394,15 @@ around function keys and event symbols.  */)
 
       if (NILP (no_angles))
 	{
-	  char *buffer
-	    = (char *) alloca (SBYTES (SYMBOL_NAME (key)) + 5);
-	  sprintf (buffer, "<%s>", SDATA (SYMBOL_NAME (key)));
-	  return build_string (buffer);
+	  char *buffer;
+	  Lisp_Object result;
+	  USE_SAFE_ALLOCA;
+	  SAFE_ALLOCA (buffer, char *,
+		       sizeof "<>" + SBYTES (SYMBOL_NAME (key)));
+	  esprintf (buffer, "<%s>", SDATA (SYMBOL_NAME (key)));
+	  result = build_string (buffer);
+	  SAFE_FREE ();
+	  return result;
 	}
       else
 	return Fsymbol_name (key);

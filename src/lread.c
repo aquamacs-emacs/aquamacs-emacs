@@ -1284,7 +1284,7 @@ Return t if the file exists and loads successfully.  */)
     }
 
   if (! NILP (Vpurify_flag))
-    Vpreloaded_file_list = Fcons (Fpurecopy(file), Vpreloaded_file_list);
+    Vpreloaded_file_list = Fcons (Fpurecopy (file), Vpreloaded_file_list);
 
   if (NILP (nomessage) || force_load_messages)
     {
@@ -2637,14 +2637,14 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 
 	      if (saved_doc_string_size == 0)
 		{
+		  saved_doc_string = (char *) xmalloc (nskip + extra);
 		  saved_doc_string_size = nskip + extra;
-		  saved_doc_string = (char *) xmalloc (saved_doc_string_size);
 		}
 	      if (nskip > saved_doc_string_size)
 		{
-		  saved_doc_string_size = nskip + extra;
 		  saved_doc_string = (char *) xrealloc (saved_doc_string,
-							saved_doc_string_size);
+							nskip + extra);
+		  saved_doc_string_size = nskip + extra;
 		}
 
 	      saved_doc_string_position = file_tell (instream);
@@ -2907,7 +2907,8 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 		if (min (PTRDIFF_MAX, SIZE_MAX) / 2 < read_buffer_size)
 		  memory_full (SIZE_MAX);
 		read_buffer = (char *) xrealloc (read_buffer,
-						 read_buffer_size *= 2);
+						 read_buffer_size * 2);
+		read_buffer_size *= 2;
 		p = read_buffer + offset;
 		end = read_buffer + read_buffer_size;
 	      }
@@ -3050,7 +3051,8 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 		  if (min (PTRDIFF_MAX, SIZE_MAX) / 2 < read_buffer_size)
 		    memory_full (SIZE_MAX);
 		  read_buffer = (char *) xrealloc (read_buffer,
-						   read_buffer_size *= 2);
+						   read_buffer_size * 2);
+		  read_buffer_size *= 2;
 		  p = read_buffer + offset;
 		  end = read_buffer + read_buffer_size;
 		}
@@ -3080,7 +3082,8 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 	      if (min (PTRDIFF_MAX, SIZE_MAX) / 2 < read_buffer_size)
 		memory_full (SIZE_MAX);
 	      read_buffer = (char *) xrealloc (read_buffer,
-					       read_buffer_size *= 2);
+					       read_buffer_size * 2);
+	      read_buffer_size *= 2;
 	      p = read_buffer + offset;
 	      end = read_buffer + read_buffer_size;
 	    }
@@ -3962,6 +3965,7 @@ void
 init_obarray (void)
 {
   Lisp_Object oblength;
+  ptrdiff_t size = 100 + MAX_MULTIBYTE_LENGTH;
 
   XSETFASTINT (oblength, OBARRAY_SIZE);
 
@@ -3994,8 +3998,8 @@ init_obarray (void)
 
   DEFSYM (Qvariable_documentation, "variable-documentation");
 
-  read_buffer_size = 100 + MAX_MULTIBYTE_LENGTH;
-  read_buffer = (char *) xmalloc (read_buffer_size);
+  read_buffer = (char *) xmalloc (size);
+  read_buffer_size = size;
 }
 
 void
@@ -4291,14 +4295,20 @@ init_lread (void)
 void
 dir_warning (const char *format, Lisp_Object dirname)
 {
-  char *buffer
-    = (char *) alloca (SCHARS (dirname) + strlen (format) + 5);
-
   fprintf (stderr, format, SDATA (dirname));
-  sprintf (buffer, format, SDATA (dirname));
+
   /* Don't log the warning before we've initialized!! */
   if (initialized)
-    message_dolog (buffer, strlen (buffer), 0, STRING_MULTIBYTE (dirname));
+    {
+      char *buffer;
+      ptrdiff_t message_len;
+      USE_SAFE_ALLOCA;
+      SAFE_ALLOCA (buffer, char *,
+		   SBYTES (dirname) + strlen (format) - (sizeof "%s" - 1) + 1);
+      message_len = esprintf (buffer, format, SDATA (dirname));
+      message_dolog (buffer, message_len, 0, STRING_MULTIBYTE (dirname));
+      SAFE_FREE ();
+    }
 }
 
 void

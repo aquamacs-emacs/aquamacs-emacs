@@ -403,7 +403,7 @@ static int next_lface_id;
 /* A vector mapping Lisp face Id's to face names.  */
 
 static Lisp_Object *lface_id_to_name;
-static int lface_id_to_name_size;
+static ptrdiff_t lface_id_to_name_size;
 
 /* TTY color-related functions (defined in tty-colors.el).  */
 
@@ -2579,7 +2579,7 @@ merge_face_ref (struct frame *f, Lisp_Object face_ref, Lisp_Object *to,
 		}
 	      else if (EQ (keyword, QCstipple))
 		{
-#if defined(HAVE_X_WINDOWS) || defined(HAVE_NS)
+#if defined (HAVE_X_WINDOWS) || defined (HAVE_NS)
 		  Lisp_Object pixmap_p = Fbitmap_spec_p (value);
 		  if (!NILP (pixmap_p))
 		    to[LFACE_STIPPLE_INDEX] = value;
@@ -2682,12 +2682,10 @@ Value is a vector of face attributes.  */)
 	 The mapping from Lisp face to Lisp face id is given by the
 	 property `face' of the Lisp face name.  */
       if (next_lface_id == lface_id_to_name_size)
-	{
-	  int new_size = max (50, 2 * lface_id_to_name_size);
-	  int sz = new_size * sizeof *lface_id_to_name;
-	  lface_id_to_name = (Lisp_Object *) xrealloc (lface_id_to_name, sz);
-	  lface_id_to_name_size = new_size;
-	}
+	lface_id_to_name =
+	  xpalloc (lface_id_to_name, &lface_id_to_name_size, 1,
+		   min (INT_MAX, MOST_POSITIVE_FIXNUM),
+		   sizeof *lface_id_to_name);
 
       lface_id_to_name[next_lface_id] = face;
       Fput (face, Qface, make_number (next_lface_id));
@@ -3098,7 +3096,7 @@ FRAME 0 means change the face on all frames, and change the default
     }
   else if (EQ (attr, QCstipple))
     {
-#if defined(HAVE_X_WINDOWS) || defined(HAVE_NS)
+#if defined (HAVE_X_WINDOWS) || defined (HAVE_NS)
       if (!UNSPECIFIEDP (value) && !IGNORE_DEFFACE_P (value)
 	  && !NILP (value)
 	  && NILP (Fbitmap_spec_p (value)))
@@ -3552,6 +3550,8 @@ x_update_menu_appearance (struct frame *f)
 	  rdb != NULL))
     {
       char line[512];
+      char *buf = line;
+      ptrdiff_t bufsize = sizeof line;
       Lisp_Object lface = lface_from_face_name (f, Qmenu, 1);
       struct face *face = FACE_FROM_ID (f, MENU_FACE_ID);
       const char *myname = SSDATA (Vx_resource_name);
@@ -3564,24 +3564,25 @@ x_update_menu_appearance (struct frame *f)
 
       if (STRINGP (LFACE_FOREGROUND (lface)))
 	{
-	  sprintf (line, "%s.%s*foreground: %s",
-		   myname, popup_path,
-		   SDATA (LFACE_FOREGROUND (lface)));
+	  exprintf (&buf, &bufsize, line, -1, "%s.%s*foreground: %s",
+		    myname, popup_path,
+		    SDATA (LFACE_FOREGROUND (lface)));
 	  XrmPutLineResource (&rdb, line);
-	  sprintf (line, "%s.pane.menubar*foreground: %s",
-		   myname, SDATA (LFACE_FOREGROUND (lface)));
+	  exprintf (&buf, &bufsize, line, -1, "%s.pane.menubar*foreground: %s",
+		    myname, SDATA (LFACE_FOREGROUND (lface)));
 	  XrmPutLineResource (&rdb, line);
 	  changed_p = 1;
 	}
 
       if (STRINGP (LFACE_BACKGROUND (lface)))
 	{
-	  sprintf (line, "%s.%s*background: %s",
-		   myname, popup_path,
-		   SDATA (LFACE_BACKGROUND (lface)));
+	  exprintf (&buf, &bufsize, line, -1, "%s.%s*background: %s",
+		    myname, popup_path,
+		    SDATA (LFACE_BACKGROUND (lface)));
 	  XrmPutLineResource (&rdb, line);
-	  sprintf (line, "%s.pane.menubar*background: %s",
-		   myname, SDATA (LFACE_BACKGROUND (lface)));
+
+	  exprintf (&buf, &bufsize, line, -1, "%s.pane.menubar*background: %s",
+		    myname, SDATA (LFACE_BACKGROUND (lface)));
 	  XrmPutLineResource (&rdb, line);
 	  changed_p = 1;
 	}
@@ -3619,11 +3620,12 @@ x_update_menu_appearance (struct frame *f)
 #else
 	      char *fontsetname = SSDATA (xlfd);
 #endif
-	      sprintf (line, "%s.pane.menubar*font%s: %s",
-		       myname, suffix, fontsetname);
+	      exprintf (&buf, &bufsize, line, -1, "%s.pane.menubar*font%s: %s",
+			myname, suffix, fontsetname);
 	      XrmPutLineResource (&rdb, line);
-	      sprintf (line, "%s.%s*font%s: %s",
-		       myname, popup_path, suffix, fontsetname);
+
+	      exprintf (&buf, &bufsize, line, -1, "%s.%s*font%s: %s",
+			myname, popup_path, suffix, fontsetname);
 	      XrmPutLineResource (&rdb, line);
 	      changed_p = 1;
 	      if (fontsetname != SSDATA (xlfd))
@@ -3633,6 +3635,9 @@ x_update_menu_appearance (struct frame *f)
 
       if (changed_p && f->output_data.x->menubar_widget)
 	free_frame_menubar (f);
+
+      if (buf != line)
+	xfree (buf);
     }
 }
 
@@ -4429,15 +4434,8 @@ cache_face (struct face_cache *c, struct face *face, unsigned int hash)
   if (i == c->used)
     {
       if (c->used == c->size)
-	{
-	  int new_size, sz;
-	  new_size = min (2 * c->size, MAX_FACE_ID);
-	  if (new_size == c->size)
-	    abort ();  /* Alternatives?  ++kfs */
-	  sz = new_size * sizeof *c->faces_by_id;
-	  c->faces_by_id = (struct face **) xrealloc (c->faces_by_id, sz);
-	  c->size = new_size;
-	}
+	c->faces_by_id = xpalloc (c->faces_by_id, &c->size, 1, MAX_FACE_ID,
+				  sizeof *c->faces_by_id);
       c->used++;
     }
 

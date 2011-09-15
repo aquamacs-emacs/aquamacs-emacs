@@ -910,8 +910,8 @@ The elements of the list may include `meta', `control',
 and `down'.
 EVENT may be an event or an event type.  If EVENT is a symbol
 that has never been used in an event that has been read as input
-in the current Emacs session, then this function can return nil,
-even when EVENT actually has modifiers."
+in the current Emacs session, then this function may fail to include
+the `click' modifier."
   (let ((type event))
     (if (listp type)
 	(setq type (car type)))
@@ -1769,7 +1769,7 @@ Return nil if there isn't one."
 
 (put 'eval-after-load 'lisp-indent-function 1)
 (defun eval-after-load (file form)
-  "Arrange that, if FILE is ever loaded, FORM will be run at that time.
+  "Arrange that if FILE is loaded, FORM will be run immediately afterwards.
 If FILE is already loaded, evaluate FORM right now.
 
 If a matching file is loaded again, FORM will be evaluated again.
@@ -1926,8 +1926,10 @@ Value is t if a query was formerly required."
     (or (not process)
         (not (memq (process-status process) '(run stop open listen)))
         (not (process-query-on-exit-flag process))
-        (not (aquamacs-ask-for-confirmation "Buffer has a running process; keep the buffer? 
-Discarding the buffer would also stop the process." nil "Keep" "Discard"  t 'no-cancel)))))
+        (not (aquamacs-ask-for-confirmation 
+	      (format "Buffer %S has a running process; keep the buffer? 
+Discarding the buffer would also stop the process." (buffer-name (current-buffer)))
+	      nil "Keep" "Discard"  t 'no-cancel)))))
 
 (add-hook 'kill-buffer-query-functions 'process-kill-buffer-query-function)
 
@@ -2277,7 +2279,7 @@ is nil and `use-dialog-box' is non-nil."
              (listp last-nonmenu-event)
              use-dialog-box)
         (setq answer
-              (x-popup-dialog t `(,prompt ("yes" . act) ("No" . skip))))
+              (x-popup-dialog t `(,prompt ("Yes" . act) ("No" . skip))))
       (setq prompt (concat prompt
                            (if (eq ?\s (aref prompt (1- (length prompt))))
                                "" " ")
@@ -3272,7 +3274,9 @@ The value returned is the value of the last form in BODY."
 NUM specifies which parenthesized expression in the last regexp.
  Value is nil if NUMth pair didn't match, or there were less than NUM pairs.
 Zero means the entire text matched by the whole regexp or whole string.
-STRING should be given if the last search was by `string-match' on STRING."
+STRING should be given if the last search was by `string-match' on STRING.
+If STRING is nil, the current buffer should be the same buffer
+the search/match was performed in."
   (if (match-beginning num)
       (if string
 	  (substring string (match-beginning num) (match-end num))
@@ -3283,7 +3287,9 @@ STRING should be given if the last search was by `string-match' on STRING."
 NUM specifies which parenthesized expression in the last regexp.
  Value is nil if NUMth pair didn't match, or there were less than NUM pairs.
 Zero means the entire text matched by the whole regexp or whole string.
-STRING should be given if the last search was by `string-match' on STRING."
+STRING should be given if the last search was by `string-match' on STRING.
+If STRING is nil, the current buffer should be the same buffer
+the search/match was performed in."
   (if (match-beginning num)
       (if string
 	  (substring-no-properties string (match-beginning num)

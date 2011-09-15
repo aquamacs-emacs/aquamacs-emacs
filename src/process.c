@@ -54,16 +54,16 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 #include <sys/ioctl.h>
-#if defined(HAVE_NET_IF_H)
+#if defined (HAVE_NET_IF_H)
 #include <net/if.h>
 #endif /* HAVE_NET_IF_H */
 
-#if defined(HAVE_IFADDRS_H)
+#if defined (HAVE_IFADDRS_H)
 /* Must be after net/if.h */
 #include <ifaddrs.h>
 
 /* We only use structs from this header when we use getifaddrs.  */
-#if defined(HAVE_NET_IF_DL_H)
+#if defined (HAVE_NET_IF_DL_H)
 #include <net/if_dl.h>
 #endif
 
@@ -256,7 +256,7 @@ static void create_pty (Lisp_Object);
 
 /* If we support a window system, turn on the code to poll periodically
    to detect C-g.  It isn't actually used when doing interrupt input.  */
-#if defined(HAVE_WINDOW_SYSTEM) && !defined(USE_ASYNC_EVENTS)
+#if defined (HAVE_WINDOW_SYSTEM) && !defined (USE_ASYNC_EVENTS)
 #define POLL_FOR_INPUT
 #endif
 
@@ -616,8 +616,8 @@ make_process (Lisp_Object name)
 {
   register Lisp_Object val, tem, name1;
   register struct Lisp_Process *p;
-  char suffix[10];
-  register int i;
+  char suffix[sizeof "<>" + INT_STRLEN_BOUND (printmax_t)];
+  printmax_t i;
 
   p = allocate_process ();
 
@@ -651,7 +651,7 @@ make_process (Lisp_Object name)
     {
       tem = Fget_process (name1);
       if (NILP (tem)) break;
-      sprintf (suffix, "<%d>", i);
+      sprintf (suffix, "<%"pMd">", i);
       name1 = concat2 (name, build_string (suffix));
     }
   name = name1;
@@ -2921,7 +2921,7 @@ usage: (make-network-process &rest ARGS)  */)
     {
       /* Don't support network sockets when non-blocking mode is
 	 not available, since a blocked Emacs is not useful.  */
-#if !defined(O_NONBLOCK) && !defined(O_NDELAY)
+#if !defined (O_NONBLOCK) && !defined (O_NDELAY)
       error ("Network servers not supported");
 #else
       is_server = 1;
@@ -2975,7 +2975,7 @@ usage: (make-network-process &rest ARGS)  */)
   tem = Fplist_get (contact, QCfamily);
   if (NILP (tem))
     {
-#if defined(HAVE_GETADDRINFO) && defined(AF_INET6)
+#if defined (HAVE_GETADDRINFO) && defined (AF_INET6)
       family = AF_UNSPEC;
 #else
       family = AF_INET;
@@ -3560,7 +3560,7 @@ usage: (make-network-process &rest ARGS)  */)
 }
 
 
-#if defined(HAVE_NET_IF_H)
+#if defined (HAVE_NET_IF_H)
 
 #ifdef SIOCGIFCONF
 DEFUN ("network-interface-list", Fnetwork_interface_list, Snetwork_interface_list, 0, 0, 0,
@@ -3573,52 +3573,27 @@ format; see the description of ADDRESS in `make-network-process'.  */)
   struct ifconf ifconf;
   struct ifreq *ifreq;
   void *buf = NULL;
-  int buf_size = 512, s, i;
+  ptrdiff_t buf_size = 512;
+  int s, i;
   Lisp_Object res;
 
   s = socket (AF_INET, SOCK_STREAM, 0);
   if (s < 0)
     return Qnil;
 
-  ifconf.ifc_buf = 0;
-  ifconf.ifc_len = 0;
-  if (ioctl (s, SIOCGIFCONF, &ifconf) == 0 && ifconf.ifc_len > 0)
+  do
     {
-      ifconf.ifc_buf = xmalloc (ifconf.ifc_len);
-      if (ifconf.ifc_buf == NULL)
-	{
-	  close (s);
-	  return Qnil;
-	}
+      buf = xpalloc (buf, &buf_size, 1, INT_MAX, 1);
+      ifconf.ifc_buf = buf;
+      ifconf.ifc_len = buf_size;
       if (ioctl (s, SIOCGIFCONF, &ifconf))
 	{
 	  close (s);
-	  xfree (ifconf.ifc_buf);
+	  xfree (buf);
 	  return Qnil;
 	}
     }
-  else
-    do
-      {
-	buf_size *= 2;
-	buf = xrealloc (buf, buf_size);
-	if (!buf)
-	  {
-	    close (s);
-	    return Qnil;
-	  }
-
-	ifconf.ifc_buf = buf;
-	ifconf.ifc_len = buf_size;
-	if (ioctl (s, SIOCGIFCONF, &ifconf))
-	  {
-	    close (s);
-	    xfree (buf);
-	    return Qnil;
-	  }
-
-      }
-    while (ifconf.ifc_len == buf_size);
+  while (ifconf.ifc_len == buf_size);
 
   close (s);
 
@@ -3656,7 +3631,7 @@ format; see the description of ADDRESS in `make-network-process'.  */)
 }
 #endif /* SIOCGIFCONF */
 
-#if defined(SIOCGIFADDR) || defined(SIOCGIFHWADDR) || defined(SIOCGIFFLAGS)
+#if defined (SIOCGIFADDR) || defined (SIOCGIFHWADDR) || defined (SIOCGIFFLAGS)
 
 struct ifflag_def {
   int flag_bit;
@@ -3763,7 +3738,7 @@ FLAGS is the current flags of the interface.  */)
     return Qnil;
 
   elt = Qnil;
-#if defined(SIOCGIFFLAGS) && defined(HAVE_STRUCT_IFREQ_IFR_FLAGS)
+#if defined (SIOCGIFFLAGS) && defined (HAVE_STRUCT_IFREQ_IFR_FLAGS)
   if (ioctl (s, SIOCGIFFLAGS, &rq) == 0)
     {
       int flags = rq.ifr_flags;
@@ -3797,7 +3772,7 @@ FLAGS is the current flags of the interface.  */)
   res = Fcons (elt, res);
 
   elt = Qnil;
-#if defined(SIOCGIFHWADDR) && defined(HAVE_STRUCT_IFREQ_IFR_HWADDR)
+#if defined (SIOCGIFHWADDR) && defined (HAVE_STRUCT_IFREQ_IFR_HWADDR)
   if (ioctl (s, SIOCGIFHWADDR, &rq) == 0)
     {
       Lisp_Object hwaddr = Fmake_vector (make_number (6), Qnil);
@@ -3809,7 +3784,7 @@ FLAGS is the current flags of the interface.  */)
 	p->contents[n] = make_number (((unsigned char *)&rq.ifr_hwaddr.sa_data[0])[n]);
       elt = Fcons (make_number (rq.ifr_hwaddr.sa_family), hwaddr);
     }
-#elif defined(HAVE_GETIFADDRS) && defined(LLADDR)
+#elif defined (HAVE_GETIFADDRS) && defined (LLADDR)
   if (getifaddrs (&ifap) != -1)
     {
       Lisp_Object hwaddr = Fmake_vector (make_number (6), Qnil);
@@ -3827,7 +3802,7 @@ FLAGS is the current flags of the interface.  */)
               || sdl->sdl_alen != 6)
             continue;
 
-          memcpy (linkaddr, LLADDR(sdl), sdl->sdl_alen);
+          memcpy (linkaddr, LLADDR (sdl), sdl->sdl_alen);
           for (n = 0; n < 6; n++)
             p->contents[n] = make_number (linkaddr[n]);
 
@@ -3844,7 +3819,7 @@ FLAGS is the current flags of the interface.  */)
   res = Fcons (elt, res);
 
   elt = Qnil;
-#if defined(SIOCGIFNETMASK) && (defined(HAVE_STRUCT_IFREQ_IFR_NETMASK) || defined(HAVE_STRUCT_IFREQ_IFR_ADDR))
+#if defined (SIOCGIFNETMASK) && (defined (HAVE_STRUCT_IFREQ_IFR_NETMASK) || defined (HAVE_STRUCT_IFREQ_IFR_ADDR))
   if (ioctl (s, SIOCGIFNETMASK, &rq) == 0)
     {
       any = 1;
@@ -3858,7 +3833,7 @@ FLAGS is the current flags of the interface.  */)
   res = Fcons (elt, res);
 
   elt = Qnil;
-#if defined(SIOCGIFBRDADDR) && defined(HAVE_STRUCT_IFREQ_IFR_BROADADDR)
+#if defined (SIOCGIFBRDADDR) && defined (HAVE_STRUCT_IFREQ_IFR_BROADADDR)
   if (ioctl (s, SIOCGIFBRDADDR, &rq) == 0)
     {
       any = 1;
@@ -3868,7 +3843,7 @@ FLAGS is the current flags of the interface.  */)
   res = Fcons (elt, res);
 
   elt = Qnil;
-#if defined(SIOCGIFADDR) && defined(HAVE_STRUCT_IFREQ_IFR_ADDR)
+#if defined (SIOCGIFADDR) && defined (HAVE_STRUCT_IFREQ_IFR_ADDR)
   if (ioctl (s, SIOCGIFADDR, &rq) == 0)
     {
       any = 1;
@@ -3882,7 +3857,7 @@ FLAGS is the current flags of the interface.  */)
   return any ? res : Qnil;
 }
 #endif
-#endif	/* defined(HAVE_NET_IF_H) */
+#endif	/* defined (HAVE_NET_IF_H) */
 
 /* Turn off input and output for process PROC.  */
 
@@ -5186,6 +5161,9 @@ read_process_output (Lisp_Object proc, register int channel)
 	  p->decoding_carryover = coding->carryover_bytes;
 	}
       if (SBYTES (text) > 0)
+	/* FIXME: It's wrong to wrap or not based on debug-on-error, and
+	   sometimes it's simply wrong to wrap (e.g. when called from
+	   accept-process-output).  */
 	internal_condition_case_1 (read_process_output_call,
 				   Fcons (outstream,
 					  Fcons (proc, Fcons (text, Qnil))),
@@ -7302,7 +7280,7 @@ init_process (void)
 #ifdef HAVE_GETSOCKNAME
    ADD_SUBFEATURE (QCservice, Qt);
 #endif
-#if defined(O_NONBLOCK) || defined(O_NDELAY)
+#if defined (O_NONBLOCK) || defined (O_NDELAY)
    ADD_SUBFEATURE (QCserver, Qt);
 #endif
 
@@ -7494,14 +7472,14 @@ The variable takes effect when `start-process' is called.  */);
   defsubr (&Sset_network_process_option);
   defsubr (&Smake_network_process);
   defsubr (&Sformat_network_address);
-#if defined(HAVE_NET_IF_H)
+#if defined (HAVE_NET_IF_H)
 #ifdef SIOCGIFCONF
   defsubr (&Snetwork_interface_list);
 #endif
-#if defined(SIOCGIFADDR) || defined(SIOCGIFHWADDR) || defined(SIOCGIFFLAGS)
+#if defined (SIOCGIFADDR) || defined (SIOCGIFHWADDR) || defined (SIOCGIFFLAGS)
   defsubr (&Snetwork_interface_info);
 #endif
-#endif /* defined(HAVE_NET_IF_H) */
+#endif /* defined (HAVE_NET_IF_H) */
 #ifdef DATAGRAM_SOCKETS
   defsubr (&Sprocess_datagram_address);
   defsubr (&Sset_process_datagram_address);

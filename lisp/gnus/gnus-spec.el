@@ -91,8 +91,10 @@ text properties. This is only needed on XEmacs, as Emacs does this anyway."
                   (header gnus-tmp-from))
 
 (defmacro gnus-lrm-string-p (string)
-  (if (fboundp 'string-mark-left-to-rigth)
-      `(eq (aref ,string (1- (length ,string))) 8206)
+  (if (fboundp 'bidi-string-mark-left-to-right)
+      ;; LRM, RLM, PDF characters as integers to avoid breaking Emacs
+      ;; 23.
+      `(memq (aref ,string (1- (length ,string))) '(8206 8207 8236))
     nil))
 
 (defvar gnus-lrm-string (if (ignore-errors (string 8206))
@@ -264,11 +266,30 @@ Return a list of updated types."
       (push (cons 'version emacs-version) gnus-format-specs))
     updated))
 
-(defvar gnus-mouse-face-0 'highlight)
-(defvar gnus-mouse-face-1 'highlight)
-(defvar gnus-mouse-face-2 'highlight)
-(defvar gnus-mouse-face-3 'highlight)
-(defvar gnus-mouse-face-4 'highlight)
+(defcustom gnus-mouse-face-0 'highlight
+  "The \"%(hello%)\" face."
+  :group 'gnus-format
+  :type 'face)
+
+(defcustom gnus-mouse-face-1 'highlight
+  "The \"%1(hello%)\" face."
+  :group 'gnus-format
+  :type 'face)
+
+(defcustom gnus-mouse-face-2 'highlight
+  "The \"%2(hello%)\" face."
+  :group 'gnus-format
+  :type 'face)
+
+(defcustom gnus-mouse-face-3 'highlight
+  "The \"%3(hello%)\" face."
+  :group 'gnus-format
+  :type 'face)
+
+(defcustom gnus-mouse-face-4 'highlight
+  "The \"%4(hello%)\" face."
+  :group 'gnus-format
+  :type 'face)
 
 (defun gnus-mouse-face-function (form type)
   `(gnus-put-text-property
@@ -278,11 +299,30 @@ Return a list of updated types."
 	 'gnus-mouse-face
        `(quote ,(symbol-value (intern (format "gnus-mouse-face-%d" type)))))))
 
-(defvar gnus-face-0 'bold)
-(defvar gnus-face-1 'italic)
-(defvar gnus-face-2 'bold-italic)
-(defvar gnus-face-3 'bold)
-(defvar gnus-face-4 'bold)
+(defcustom gnus-face-0 'bold
+  "The \"%{hello%}\" face."
+  :group 'gnus-format
+  :type 'face)
+
+(defcustom gnus-face-1 'italic
+  "The \"%1{hello%}\" face."
+  :group 'gnus-format
+  :type 'face)
+
+(defcustom gnus-face-2 'bold-italic
+  "The \"%2{hello%}\" face."
+  :group 'gnus-format
+  :type 'face)
+
+(defcustom gnus-face-3 'bold
+  "The \"%3{hello%}\" face."
+  :group 'gnus-format
+  :type 'face)
+
+(defcustom gnus-face-4 'bold
+  "The \"%4{hello%}\" face."
+  :group 'gnus-format
+  :type 'face)
 
 (defun gnus-face-face-function (form type)
   `(gnus-add-text-properties

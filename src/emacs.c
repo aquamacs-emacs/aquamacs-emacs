@@ -82,6 +82,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/personality.h>
 #endif
 
+#ifdef HAVE_LIBXML2
+#include <libxml/parser.h>
+#endif
+
 #ifndef O_RDWR
 #define O_RDWR 2
 #endif
@@ -158,7 +162,7 @@ int inhibit_window_system;
    data on the first attempt to change it inside asynchronous code.  */
 int running_asynch_code;
 
-#if defined(HAVE_X_WINDOWS) || defined(HAVE_NS)
+#if defined (HAVE_X_WINDOWS) || defined (HAVE_NS)
 /* If non-zero, -d was specified, meaning we're using some window system.  */
 int display_arg;
 #endif
@@ -167,8 +171,10 @@ int display_arg;
    Tells GC how to save a copy of the stack.  */
 char *stack_bottom;
 
+#if defined (DOUG_LEA_MALLOC) || defined (GNU_LINUX)
 /* The address where the heap starts (from the first sbrk (0) call).  */
 static void *my_heap_start;
+#endif
 
 #ifdef GNU_LINUX
 /* The gap between BSS end and heap start as far as we can tell.  */
@@ -802,7 +808,7 @@ main (int argc, char **argv)
     {
       static char heapexec[] = "EMACS_HEAP_EXEC=true";
       /* Set this so we only do this once.  */
-      putenv(heapexec);
+      putenv (heapexec);
 
       /* A flag to turn off address randomization which is introduced
          in linux kernel shipped with fedora core 4 */
@@ -842,7 +848,7 @@ main (int argc, char **argv)
        stack allocation routine for new process that the allocation
        fails if stack limit is not on page boundary.  So, round up the
        new limit to page boundary.  */
-      newlim = (newlim + getpagesize () - 1) / getpagesize () * getpagesize();
+      newlim = (newlim + getpagesize () - 1) / getpagesize () * getpagesize ();
 #endif
       if (newlim > rlim.rlim_max)
 	{
@@ -1068,15 +1074,17 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
         if (!dname_arg || !strchr (dname_arg, '\n'))
           {  /* In orig, child: now exec w/special daemon name. */
             char fdStr[80];
+	    int fdStrlen =
+	      snprintf (fdStr, sizeof fdStr,
+			"--daemon=\n%d,%d\n%s", daemon_pipe[0],
+			daemon_pipe[1], dname_arg ? dname_arg : "");
 
-            if (dname_arg && strlen (dname_arg) > 70)
+	    if (! (0 <= fdStrlen && fdStrlen < sizeof fdStr))
               {
                 fprintf (stderr, "daemon: child name too long\n");
                 exit (1);
               }
 
-            sprintf (fdStr, "--daemon=\n%d,%d\n%s", daemon_pipe[0],
-                     daemon_pipe[1], dname_arg ? dname_arg : "");
             argv[skip_args] = fdStr;
 
             execv (argv[0], argv);
@@ -1089,7 +1097,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
             || strlen (dname_arg) < 1 || strlen (dname_arg) > 70)
           {
             fprintf (stderr, "emacs daemon: daemon name absent or too long\n");
-            exit(1);
+            exit (1);
           }
         dname_arg2[0] = '\0';
         sscanf (dname_arg, "\n%d,%d\n%s", &(daemon_pipe[0]), &(daemon_pipe[1]),
@@ -1107,7 +1115,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
       fcntl (daemon_pipe[1], F_SETFD, FD_CLOEXEC);
 
 #ifdef HAVE_SETSID
-      setsid();
+      setsid ();
 #endif
 #else /* DOS_NT */
       fprintf (stderr, "This platform does not support the -daemon flag.\n");
@@ -1308,7 +1316,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
     = argmatch (argv, argc, "-nsl", "--no-site-lisp", 11, NULL, &skip_args);
 
 #ifdef HAVE_NS
-  ns_alloc_autorelease_pool();
+  ns_alloc_autorelease_pool ();
   if (!noninteractive)
     {
 #ifdef NS_IMPL_COCOA
@@ -1316,12 +1324,12 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
         {
 	  /* FIXME: Do the right thing if getenv returns NULL, or if
 	     chdir fails.  */
-          if (!strncmp(argv[skip_args], "-psn", 4))
+          if (!strncmp (argv[skip_args], "-psn", 4))
             {
               skip_args += 1;
               chdir (getenv ("HOME"));
             }
-          else if (skip_args+1 < argc && !strncmp(argv[skip_args+1], "-psn", 4))
+          else if (skip_args+1 < argc && !strncmp (argv[skip_args+1], "-psn", 4))
             {
               skip_args += 2;
               chdir (getenv ("HOME"));
@@ -1358,24 +1366,17 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
     /* If we have the form --display=NAME,
        convert it into  -d name.
        This requires inserting a new element into argv.  */
-    if (displayname != 0 && skip_args - count_before == 1)
+    if (displayname && count_before < skip_args)
       {
-	char **new = (char **) xmalloc (sizeof (char *) * (argc + 2));
-	int j;
-
-	for (j = 0; j < count_before + 1; j++)
-	  new[j] = argv[j];
-	new[count_before + 1] = (char *) "-d";
-	new[count_before + 2] = displayname;
-	for (j = count_before + 2; j <argc; j++)
-	  new[j + 1] = argv[j];
-	argv = new;
-	argc++;
+	if (skip_args == count_before + 1)
+	  {
+	    memmove (argv + count_before + 3, argv + count_before + 2,
+		     (argc - (count_before + 2)) * sizeof *argv);
+	    argv[count_before + 2] = displayname;
+	    argc++;
+	  }
+	argv[count_before + 1] = (char *) "-d";
       }
-    /* Change --display to -d, when its arg is separate.  */
-    else if (displayname != 0 && skip_args > count_before
-	     && argv[count_before + 1][1] == '-')
-      argv[count_before + 1] = (char *) "-d";
 
     if (! no_site_lisp)
       {
@@ -1553,9 +1554,9 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 
 #ifdef MSDOS
       syms_of_xmenu ();
-      syms_of_dosfns();
-      syms_of_msdos();
-      syms_of_win16select();
+      syms_of_dosfns ();
+      syms_of_msdos ();
+      syms_of_win16select ();
 #endif	/* MSDOS */
 
 #ifdef HAVE_NS
@@ -1654,7 +1655,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
      GNU/Linux and MinGW.  It might work on some other systems too.
      Give it a try and tell us if it works on your system.  To compile
      for profiling, use the configure option --enable-profiling.  */
-#if defined (__FreeBSD__) || defined (GNU_LINUX) || defined(__MINGW32__)
+#if defined (__FreeBSD__) || defined (GNU_LINUX) || defined (__MINGW32__)
 #ifdef PROFILING
   if (initialized)
     {
@@ -1838,8 +1839,8 @@ sort_args (int argc, char **argv)
      0 for an option that takes no arguments,
      1 for an option that takes one argument, etc.
      -1 for an ordinary non-option argument.  */
-  int *options = (int *) xmalloc (sizeof (int) * argc);
-  int *priority = (int *) xmalloc (sizeof (int) * argc);
+  int *options = xnmalloc (argc, sizeof *options);
+  int *priority = xnmalloc (argc, sizeof *priority);
   int to = 1;
   int incoming_used = 1;
   int from;
@@ -2103,6 +2104,10 @@ shut_down_emacs (int sig, int no_x, Lisp_Object stuff)
 
 #ifdef HAVE_NS
   ns_term_shutdown (sig);
+#endif
+
+#ifdef HAVE_LIBXML2
+  xmlCleanupParser ();
 #endif
 }
 

@@ -456,7 +456,7 @@ static struct fringe_bitmap standard_bitmaps[] =
 
 #define NO_FRINGE_BITMAP 0
 #define UNDEF_FRINGE_BITMAP 1
-#define MAX_STANDARD_FRINGE_BITMAPS (sizeof(standard_bitmaps)/sizeof(standard_bitmaps[0]))
+#define MAX_STANDARD_FRINGE_BITMAPS (sizeof (standard_bitmaps)/sizeof (standard_bitmaps[0]))
 
 static struct fringe_bitmap **fringe_bitmaps;
 static Lisp_Object *fringe_faces;
@@ -1173,7 +1173,7 @@ update_window_fringes (struct window *w, int keep_current_p)
 	}
       else if ((!row->reversed_p && row->truncated_on_left_p)
 	       || (row->reversed_p && row->truncated_on_right_p))
-	left = LEFT_FRINGE(0, Qtruncation, 0);
+	left = LEFT_FRINGE (0, Qtruncation, 0);
       else if (row->indicate_bob_p && EQ (boundary_top, Qleft))
 	{
 	  left = ((row->indicate_eob_p && EQ (boundary_bot, Qleft))
@@ -1624,22 +1624,25 @@ If BITMAP already exists, the existing definition is replaced.  */)
 
 	  if (n == max_fringe_bitmaps)
 	    {
-	      if ((max_fringe_bitmaps + 20) > MAX_FRINGE_BITMAPS)
+	      int bitmaps = max_fringe_bitmaps + 20;
+	      if (MAX_FRINGE_BITMAPS < bitmaps)
 		error ("No free fringe bitmap slots");
 
 	      i = max_fringe_bitmaps;
-	      max_fringe_bitmaps += 20;
 	      fringe_bitmaps
 		= ((struct fringe_bitmap **)
-		   xrealloc (fringe_bitmaps, max_fringe_bitmaps * sizeof (struct fringe_bitmap *)));
+		   xrealloc (fringe_bitmaps, bitmaps * sizeof *fringe_bitmaps));
 	      fringe_faces
-		= (Lisp_Object *) xrealloc (fringe_faces, max_fringe_bitmaps * sizeof (Lisp_Object));
+		= (Lisp_Object *) xrealloc (fringe_faces,
+					    bitmaps * sizeof *fringe_faces);
 
-	      for (; i < max_fringe_bitmaps; i++)
+	      for (i = max_fringe_bitmaps; i < bitmaps; i++)
 		{
 		  fringe_bitmaps[i] = NULL;
 		  fringe_faces[i] = Qnil;
 		}
+
+	      max_fringe_bitmaps = bitmaps;
 	    }
 	}
 
@@ -1798,7 +1801,7 @@ init_fringe_once (void)
   int bt;
 
   for (bt = NO_FRINGE_BITMAP + 1; bt < MAX_STANDARD_FRINGE_BITMAPS; bt++)
-    init_fringe_bitmap(bt, &standard_bitmaps[bt], 1);
+    init_fringe_bitmap (bt, &standard_bitmaps[bt], 1);
 }
 
 void

@@ -383,6 +383,39 @@ to `dirtrack-mode'."
   :group 'shell
   :type '(choice (const nil) regexp))
 
+(defun shell-parse-pcomplete-arguments ()
+  "Parse whitespace separated arguments in the current region."
+  (let ((begin (save-excursion (shell-backward-command 1) (point)))
+	(end (point))
+	begins args)
+    (save-excursion
+      (goto-char begin)
+      (while (< (point) end)
+	(skip-chars-forward " \t\n")
+	(push (point) begins)
+        (let ((arg ()))
+          (while (looking-at
+                  (eval-when-compile
+                    (concat
+                     "\\(?:[^\s\t\n\\\"']+"
+                     "\\|'\\([^']*\\)'?"
+                     "\\|\"\\(\\(?:[^\"\\]\\|\\\\.\\)*\\)\"?"
+                     "\\|\\\\\\(\\(?:.\\|\n\\)?\\)\\)")))
+            (goto-char (match-end 0))
+            (cond
+             ((match-beginning 3)       ;Backslash escape.
+              (push (if (= (match-beginning 3) (match-end 3))
+                        "\\" (match-string 3))
+                    arg))
+             ((match-beginning 2)       ;Double quote.
+              (push (replace-regexp-in-string
+                     "\\\\\\(.\\)" "\\1" (match-string 2))
+                    arg))
+             ((match-beginning 1)       ;Single quote.
+              (push (match-string 1) arg))
+             (t (push (match-string 0) arg))))
+          (push (mapconcat #'identity (nreverse arg) "") args)))
+      (cons (nreverse args) (nreverse begins)))))
 
 (defun shell-completion-vars ()
   "Setup completion vars for `shell-mode' and `read-shell-command'."
@@ -396,8 +429,9 @@ to `dirtrack-mode'."
   (set (make-local-variable 'comint-dynamic-complete-functions)
        shell-dynamic-complete-functions)
   (set (make-local-variable 'pcomplete-parse-arguments-function)
-       ;; FIXME: This function should be moved to shell.el.
-       #'pcomplete-parse-comint-arguments)
+       #'shell-parse-pcomplete-arguments)
+  (set (make-local-variable 'pcomplete-arg-quote-list)
+       (append "\\ \t\n\r\"'`$|&;(){}[]<>#" nil))
   (set (make-local-variable 'pcomplete-termination-string)
        (cond ((not comint-completion-addsuffix) "")
              ((stringp comint-completion-addsuffix)
@@ -616,9 +650,9 @@ Otherwise, one argument `-i' is passed to the shell.
 		t shell-file-name))
 	      'localname))))
 
-  ;; Pop to buffer, so that the buffer's window will be correctly set
-  ;; when we call comint (so that comint sets the COLUMNS env var properly).
-  (pop-to-buffer buffer)
+  ;; The buffer's window must be correctly set when we call comint (so
+  ;; that comint sets the COLUMNS env var properly).
+  (switch-to-buffer buffer)
   (unless (comint-check-proc buffer)
     (let* ((prog (or explicit-shell-file-name
 		     (getenv "ESHELL") shell-file-name))
@@ -634,9 +668,6 @@ Otherwise, one argument `-i' is passed to the shell.
 	       '("-i")))
       (shell-mode)))
   buffer)
-
-;; Don't do this when shell.el is loaded, only while dumping.
-;;;###autoload (add-hook 'same-window-buffer-names (purecopy "*shell*"))
 
 ;;; Directory tracking
 ;;

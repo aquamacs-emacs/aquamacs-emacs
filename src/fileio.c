@@ -1470,7 +1470,7 @@ search_embedded_absfilename (char *nm, char *endp)
       if ((0
 	   || IS_DIRECTORY_SEP (p[-1]))
 	  && file_name_absolute_p (p)
-#if defined (WINDOWSNT) || defined(CYGWIN)
+#if defined (WINDOWSNT) || defined (CYGWIN)
 	  /* // at start of file name is meaningful in Apollo,
 	     WindowsNT and Cygwin systems.  */
 	  && !(IS_DIRECTORY_SEP (p[0]) && p - 1 == nm)
@@ -2495,7 +2495,7 @@ See also `file-exists-p' and `file-attributes'.  */)
 
   absname = ENCODE_FILE (absname);
 
-#if defined(DOS_NT) || defined(macintosh)
+#if defined (DOS_NT) || defined (macintosh)
   /* Under MS-DOS, Windows, and Macintosh, open does not work for
      directories.  */
   if (access (SDATA (absname), 0) == 0)
@@ -2780,7 +2780,7 @@ if file does not exist, is not accessible, or SELinux is disabled */)
     }
 #endif
 
-  return Flist (sizeof(values) / sizeof(values[0]), values);
+  return Flist (sizeof (values) / sizeof (values[0]), values);
 }
 
 DEFUN ("set-file-selinux-context", Fset_file_selinux_context,
@@ -2851,7 +2851,7 @@ is disabled. */)
 	  context_free (parsed_con);
 	}
       else
-	report_file_error("Doing lgetfilecon", Fcons (absname, Qnil));
+	report_file_error ("Doing lgetfilecon", Fcons (absname, Qnil));
 
       if (con)
 	freecon (con);
@@ -2910,7 +2910,7 @@ symbolic notation, like the `chmod' command from GNU Coreutils.  */)
 
   encoded_absname = ENCODE_FILE (absname);
 
-  if (chmod (SSDATA (encoded_absname), XINT (mode)) < 0)
+  if (chmod (SSDATA (encoded_absname), XINT (mode) & 07777) < 0)
     report_file_error ("Doing chmod", Fcons (absname, Qnil));
 
   return Qnil;
@@ -3177,6 +3177,7 @@ variable `last-coding-system-used' to the coding system actually used.  */)
   EMACS_INT inserted = 0;
   int nochange = 0;
   register EMACS_INT how_much;
+  off_t beg_offset, end_offset;
   register EMACS_INT unprocessed;
   int count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4, gcpro5;
@@ -3250,6 +3251,7 @@ variable `last-coding-system-used' to the coding system actually used.  */)
       if (NILP (visit))
 	report_file_error ("Opening input file", Fcons (orig_filename, Qnil));
       st.st_mtime = -1;
+      st.st_size = -1;
       how_much = 0;
       if (!NILP (Vcoding_system_for_read))
 	Fset (Qbuffer_file_coding_system, Vcoding_system_for_read);
@@ -3282,15 +3284,6 @@ variable `last-coding-system-used' to the coding system actually used.  */)
   record_unwind_protect (close_file_unwind, make_number (fd));
 
 
-  /* Check whether the size is too large or negative, which can happen on a
-     platform that allows file sizes greater than the maximum off_t value.  */
-  if (! not_regular
-      && ! (0 <= st.st_size && st.st_size <= BUF_BYTES_MAX))
-    buffer_overflow ();
-
-  /* Prevent redisplay optimizations.  */
-  current_buffer->clip_changed = 1;
-
   if (!NILP (visit))
     {
       if (!NILP (beg) || !NILP (end))
@@ -3300,25 +3293,63 @@ variable `last-coding-system-used' to the coding system actually used.  */)
     }
 
   if (!NILP (beg))
-    CHECK_NUMBER (beg);
+    {
+      if (! (RANGED_INTEGERP (0, beg, TYPE_MAXIMUM (off_t))))
+	wrong_type_argument (intern ("file-offset"), beg);
+      beg_offset = XFASTINT (beg);
+    }
   else
-    XSETFASTINT (beg, 0);
+    beg_offset = 0;
 
   if (!NILP (end))
-    CHECK_NUMBER (end);
+    {
+      if (! (RANGED_INTEGERP (0, end, TYPE_MAXIMUM (off_t))))
+	wrong_type_argument (intern ("file-offset"), end);
+      end_offset = XFASTINT (end);
+    }
   else
     {
-      if (! not_regular)
+      if (not_regular)
+	end_offset = TYPE_MAXIMUM (off_t);
+      else
 	{
-	  XSETINT (end, st.st_size);
+	  end_offset = st.st_size;
+
+	  /* A negative size can happen on a platform that allows file
+	     sizes greater than the maximum off_t value.  */
+	  if (end_offset < 0)
+	    buffer_overflow ();
 
 	  /* The file size returned from stat may be zero, but data
 	     may be readable nonetheless, for example when this is a
 	     file in the /proc filesystem.  */
-	  if (st.st_size == 0)
-	    XSETINT (end, READ_BUF_SIZE);
+	  if (end_offset == 0)
+	    end_offset = READ_BUF_SIZE;
 	}
     }
+
+  /* Check now whether the buffer will become too large,
+     in the likely case where the file's length is not changing.
+     This saves a lot of needless work before a buffer overflow.  */
+  if (! not_regular)
+    {
+      /* The likely offset where we will stop reading.  We could read
+	 more (or less), if the file grows (or shrinks) as we read it.  */
+      off_t likely_end = min (end_offset, st.st_size);
+
+      if (beg_offset < likely_end)
+	{
+	  ptrdiff_t buf_bytes =
+	    Z_BYTE - (!NILP (replace) ? ZV_BYTE - BEGV_BYTE  : 0);
+	  ptrdiff_t buf_growth_max = BUF_BYTES_MAX - buf_bytes;
+	  off_t likely_growth = likely_end - beg_offset;
+	  if (buf_growth_max < likely_growth)
+	    buffer_overflow ();
+	}
+    }
+
+  /* Prevent redisplay optimizations.  */
+  current_buffer->clip_changed = 1;
 
   if (EQ (Vcoding_system_for_read, Qauto_save_coding))
     {
@@ -3463,9 +3494,9 @@ variable `last-coding-system-used' to the coding system actually used.  */)
 	 give up on handling REPLACE in the optimized way.  */
       int giveup_match_end = 0;
 
-      if (XINT (beg) != 0)
+      if (beg_offset != 0)
 	{
-	  if (emacs_lseek (fd, XINT (beg), SEEK_SET) < 0)
+	  if (lseek (fd, beg_offset, SEEK_SET) < 0)
 	    report_file_error ("Setting file position",
 			       Fcons (orig_filename, Qnil));
 	}
@@ -3513,7 +3544,7 @@ variable `last-coding-system-used' to the coding system actually used.  */)
       immediate_quit = 0;
       /* If the file matches the buffer completely,
 	 there's no need to replace anything.  */
-      if (same_at_start - BEGV_BYTE == XINT (end))
+      if (same_at_start - BEGV_BYTE == end_offset)
 	{
 	  emacs_close (fd);
 	  specpdl_ptr--;
@@ -3528,16 +3559,17 @@ variable `last-coding-system-used' to the coding system actually used.  */)
 	 already found that decoding is necessary, don't waste time.  */
       while (!giveup_match_end)
 	{
-	  EMACS_INT total_read, nread, bufpos, curpos, trial;
+	  int total_read, nread, bufpos, trial;
+	  off_t curpos;
 
 	  /* At what file position are we now scanning?  */
-	  curpos = XINT (end) - (ZV_BYTE - same_at_end);
+	  curpos = end_offset - (ZV_BYTE - same_at_end);
 	  /* If the entire file matches the buffer tail, stop the scan.  */
 	  if (curpos == 0)
 	    break;
 	  /* How much can we scan in the next step?  */
 	  trial = min (curpos, sizeof buffer);
-	  if (emacs_lseek (fd, curpos - trial, SEEK_SET) < 0)
+	  if (lseek (fd, curpos - trial, SEEK_SET) < 0)
 	    report_file_error ("Setting file position",
 			       Fcons (orig_filename, Qnil));
 
@@ -3604,13 +3636,14 @@ variable `last-coding-system-used' to the coding system actually used.  */)
 
 	  /* Don't try to reuse the same piece of text twice.  */
 	  overlap = (same_at_start - BEGV_BYTE
-		     - (same_at_end + st.st_size - ZV));
+		     - (same_at_end
+			+ (! NILP (end) ? end_offset : st.st_size) - ZV_BYTE));
 	  if (overlap > 0)
 	    same_at_end += overlap;
 
 	  /* Arrange to read only the nonmatching middle part of the file.  */
-	  XSETFASTINT (beg, XINT (beg) + (same_at_start - BEGV_BYTE));
-	  XSETFASTINT (end, XINT (end) - (ZV_BYTE - same_at_end));
+	  beg_offset += same_at_start - BEGV_BYTE;
+	  end_offset -= ZV_BYTE - same_at_end;
 
 	  del_range_byte (same_at_start, same_at_end, 0);
 	  /* Insert from the file at the proper position.  */
@@ -3655,7 +3688,7 @@ variable `last-coding-system-used' to the coding system actually used.  */)
       /* First read the whole file, performing code conversion into
 	 CONVERSION_BUFFER.  */
 
-      if (emacs_lseek (fd, XINT (beg), SEEK_SET) < 0)
+      if (lseek (fd, beg_offset, SEEK_SET) < 0)
 	report_file_error ("Setting file position",
 			   Fcons (orig_filename, Qnil));
 
@@ -3822,7 +3855,7 @@ variable `last-coding-system-used' to the coding system actually used.  */)
     }
 
   if (! not_regular)
-    total = XINT (end) - XINT (beg);
+    total = end_offset - beg_offset;
   else
     /* For a special file, all we can do is guess.  */
     total = READ_BUF_SIZE;
@@ -3843,9 +3876,9 @@ variable `last-coding-system-used' to the coding system actually used.  */)
   if (GAP_SIZE < total)
     make_gap (total - GAP_SIZE);
 
-  if (XINT (beg) != 0 || !NILP (replace))
+  if (beg_offset != 0 || !NILP (replace))
     {
-      if (emacs_lseek (fd, XINT (beg), SEEK_SET) < 0)
+      if (lseek (fd, beg_offset, SEEK_SET) < 0)
 	report_file_error ("Setting file position",
 			   Fcons (orig_filename, Qnil));
     }
@@ -4574,7 +4607,7 @@ This calls `write-region-annotate-functions' at the start, and
 
   if (!NILP (append) && !NILP (Ffile_regular_p (filename)))
     {
-      long ret;
+      off_t ret;
 
       if (NUMBERP (append))
 	ret = emacs_lseek (desc, XINT (append), SEEK_CUR);
@@ -5010,9 +5043,10 @@ Next attempt to save will certainly not complain of a discrepancy.  */)
 DEFUN ("visited-file-modtime", Fvisited_file_modtime,
        Svisited_file_modtime, 0, 0, 0,
        doc: /* Return the current buffer's recorded visited file modification time.
-The value is a list of the form (HIGH LOW), like the time values
-that `file-attributes' returns.  If the current buffer has no recorded
-file modification time, this function returns 0.
+The value is a list of the form (HIGH LOW), like the time values that
+`file-attributes' returns.  If the current buffer has no recorded file
+modification time, this function returns 0.  If the visited file
+doesn't exist, HIGH will be -1.
 See Info node `(elisp)Modification Time' for more details.  */)
   (void)
 {
@@ -5112,11 +5146,11 @@ auto_save_1 (void)
     {
       if (stat (SSDATA (BVAR (current_buffer, filename)), &st) >= 0)
 	/* But make sure we can overwrite it later!  */
-	auto_save_mode_bits = st.st_mode | 0600;
+	auto_save_mode_bits = (st.st_mode | 0600) & 0777;
       else if ((modes = Ffile_modes (BVAR (current_buffer, filename)),
 		INTEGERP (modes)))
 	/* Remote files don't cooperate with stat.  */
-	auto_save_mode_bits = XINT (modes) | 0600;
+	auto_save_mode_bits = (XINT (modes) | 0600) & 0777;
     }
 
   return

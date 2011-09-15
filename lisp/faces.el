@@ -1447,6 +1447,8 @@ If FRAME is nil, the current FRAME is used."
 	    options (cdr conjunct)
 	    match (cond ((eq req 'type)
 			 (or (memq (window-system frame) options)
+			     (and (memq 'graphic options)
+				  (memq (window-system frame) '(x w32 ns)))
 			     ;; FIXME: This should be revisited to use
 			     ;; display-graphic-p, provided that the
 			     ;; color selection depends on the number
@@ -2454,7 +2456,7 @@ It is used for characters of no fonts too."
 
 (defface success
   '((((class color) (min-colors 16) (background light))
-     (:foreground "Green3" :weight bold))
+     (:foreground "ForestGreen" :weight bold))
     (((class color) (min-colors 88) (background dark))
      (:foreground "Green1" :weight bold))
     (((class color) (min-colors 16) (background dark))

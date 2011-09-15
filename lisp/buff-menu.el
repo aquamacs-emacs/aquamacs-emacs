@@ -586,22 +586,16 @@ in the selected frame."
   "Make the other window select this line's buffer.
 The current window remains selected."
   (interactive)
-  (let ((pop-up-windows t)
-	same-window-buffer-names
-	same-window-regexps)
-    (display-buffer (Buffer-menu-buffer t))))
+  (display-buffer (Buffer-menu-buffer t) t))
 
 (defun Buffer-menu-2-window ()
   "Select this line's buffer, with previous buffer in second window."
   (interactive)
   (let ((buff (Buffer-menu-buffer t))
-	(menu (current-buffer))
-	(pop-up-windows t)
-	same-window-buffer-names
-	same-window-regexps)
+	(menu (current-buffer)))
     (delete-other-windows)
     (switch-to-buffer (other-buffer))
-    (pop-to-buffer buff)
+    (switch-to-buffer-other-window buff)
     (bury-buffer menu)))
 
 (defun Buffer-menu-toggle-read-only ()
@@ -681,9 +675,9 @@ For more information, see the function `buffer-menu'."
                           (string-width tail)
                           2))
                       Buffer-menu-short-ellipsis
-                      (bidi-string-mark-left-to-right tail))))
+                      tail)))
     ;; Don't put properties on (buffer-name).
-    (setq name (bidi-string-mark-left-to-right name)))
+    (setq name (copy-sequence name)))
   (add-text-properties 0 (length name) name-props name)
   (add-text-properties 0 (length size) size-props size)
   (let ((name+space-width (- Buffer-menu-buffer+size-width

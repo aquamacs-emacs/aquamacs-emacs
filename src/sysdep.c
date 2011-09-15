@@ -300,7 +300,7 @@ wait_for_termination_1 (int pid, int interruptible)
 {
   while (1)
     {
-#if (defined (BSD_SYSTEM) || defined (HPUX)) && !defined(__GNU__)
+#if (defined (BSD_SYSTEM) || defined (HPUX)) && !defined (__GNU__)
       /* Note that kill returns -1 even if the process is just a zombie now.
 	 But inevitably a SIGCHLD interrupt should be generated
 	 and child_sig will do wait3 and make the process go away. */
@@ -1326,7 +1326,7 @@ setup_pty (int fd)
      Since the latter lossage is more benign, we may as well
      lose that way.  -- cph */
 #ifdef FIONBIO
-#if defined(UNIX98_PTYS)
+#if defined (UNIX98_PTYS)
   {
     int on = 1;
     ioctl (fd, FIONBIO, &on);
@@ -1499,7 +1499,7 @@ sys_signal (int signal_number, signal_handler_t action)
      after a signal that sets the interrupt_input_pending flag.  */
   /* Non-interactive keyboard input goes through stdio, where we always
      want restartable system calls.  */
-# if defined (BROKEN_SA_RESTART) || defined(SYNC_INPUT)
+# if defined (BROKEN_SA_RESTART) || defined (SYNC_INPUT)
   if (noninteractive)
 # endif
     new_action.sa_flags = SA_RESTART;
@@ -1811,6 +1811,45 @@ strerror (int errnum)
 }
 #endif /* not WINDOWSNT */
 #endif /* ! HAVE_STRERROR */
+
+#ifndef HAVE_SNPRINTF
+/* Approximate snprintf as best we can on ancient hosts that lack it.  */
+int
+snprintf (char *buf, size_t bufsize, char const *format, ...)
+{
+  ptrdiff_t size = min (bufsize, PTRDIFF_MAX);
+  ptrdiff_t nbytes = size - 1;
+  va_list ap;
+
+  if (size)
+    {
+      va_start (ap, format);
+      nbytes = doprnt (buf, size, format, 0, ap);
+      va_end (ap);
+    }
+
+  if (nbytes == size - 1)
+    {
+      /* Calculate the length of the string that would have been created
+	 had the buffer been large enough.  */
+      char stackbuf[4000];
+      char *b = stackbuf;
+      ptrdiff_t bsize = sizeof stackbuf;
+      va_start (ap, format);
+      nbytes = evxprintf (&b, &bsize, stackbuf, -1, format, ap);
+      va_end (ap);
+      if (b != stackbuf)
+	xfree (b);
+    }
+
+  if (INT_MAX < nbytes)
+    {
+      errno = EOVERFLOW;
+      return -1;
+    }
+  return nbytes;
+}
+#endif
 
 int
 emacs_open (const char *path, int oflag, int mode)
@@ -2001,7 +2040,7 @@ rename (const char *from, const char *to)
 #endif
 
 
-#if defined(HPUX) && !defined(HAVE_PERROR)
+#if defined (HPUX) && !defined (HAVE_PERROR)
 
 /* HPUX curses library references perror, but as far as we know
    it won't be called.  Anyway this definition will do for now.  */
@@ -2640,7 +2679,7 @@ system_process_attributes (Lisp_Object pid)
   ssize_t nread;
   const char *cmd = NULL;
   char *cmdline = NULL;
-  size_t cmdsize = 0, cmdline_size;
+  ptrdiff_t cmdsize = 0, cmdline_size;
   unsigned char c;
   int proc_id, ppid, uid, gid, pgrp, sess, tty, tpgid, thcount;
   unsigned long long u_time, s_time, cutime, cstime, start;
@@ -2822,8 +2861,10 @@ system_process_attributes (Lisp_Object pid)
   if (fd >= 0)
     {
       char ch;
-      for (cmdline_size = 0; emacs_read (fd, &ch, 1) == 1; cmdline_size++)
+      for (cmdline_size = 0; cmdline_size < STRING_BYTES_BOUND; cmdline_size++)
 	{
+	  if (emacs_read (fd, &ch, 1) != 1)
+	    break;
 	  c = ch;
 	  if (isspace (c) || c == '\\')
 	    cmdline_size++;	/* for later quoting, see below */
@@ -2844,7 +2885,7 @@ system_process_attributes (Lisp_Object pid)
 	      nread = 0;
 	    }
 	  /* We don't want trailing null characters.  */
-	  for (p = cmdline + nread - 1; p > cmdline && !*p; p--)
+	  for (p = cmdline + nread; p > cmdline + 1 && !p[-1]; p--)
 	    nread--;
 	  for (p = cmdline; p < cmdline + nread; p++)
 	    {

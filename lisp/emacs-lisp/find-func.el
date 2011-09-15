@@ -198,13 +198,14 @@ If FUNC is not the symbol of an advised function, just returns FUNC."
 (defun find-function-C-source (fun-or-var file type)
   "Find the source location where FUN-OR-VAR is defined in FILE.
 TYPE should be nil to find a function, or `defvar' to find a variable."
-  (unless find-function-C-source-directory
-    (setq find-function-C-source-directory
-	  (read-directory-name "Emacs C source dir: " nil nil t)))
-  (setq file (expand-file-name file find-function-C-source-directory))
-  (unless (file-readable-p file)
-    (error "The C source file %s is not available"
-	   (file-name-nondirectory file)))
+  (let ((dir (or find-function-C-source-directory
+                 (read-directory-name "Emacs C source dir: " nil nil t))))
+    (setq file (expand-file-name file dir))
+    (if (file-readable-p file)
+        (if (null find-function-C-source-directory)
+            (setq find-function-C-source-directory dir))
+      (error "The C source file %s is not available"
+             (file-name-nondirectory file))))
   (unless type
     ;; Either or both an alias and its target might be advised.
     (setq fun-or-var (find-function-advised-original
@@ -312,13 +313,17 @@ The search is done in the source for library LIBRARY."
 	      (cons (current-buffer) nil))))))))
 
 ;;;###autoload
-(defun find-function-noselect (function)
+(defun find-function-noselect (function &optional lisp-only)
   "Return a pair (BUFFER . POINT) pointing to the definition of FUNCTION.
 
 Finds the source file containing the definition of FUNCTION
 in a buffer and the point of the definition.  The buffer is
 not selected.  If the function definition can't be found in
 the buffer, returns (BUFFER).
+
+If FUNCTION is a built-in function, this function normally
+attempts to find it in the Emacs C sources; however, if LISP-ONLY
+is non-nil, signal an error instead.
 
 If the file where FUNCTION is defined is not known, then it is
 searched for in `find-function-source-path' if non-nil, otherwise
@@ -345,6 +350,8 @@ in `load-path'."
 	   (cond ((eq (car-safe def) 'autoload)
 		  (nth 1 def))
 		 ((subrp def)
+		  (if lisp-only
+		      (error "%s is a built-in function" function))
 		  (help-C-file-name def 'subr))
 		 ((symbol-file function 'defun)))))
       (find-function-search-for-symbol function nil library))))
