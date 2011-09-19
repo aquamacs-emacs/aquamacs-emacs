@@ -4631,15 +4631,15 @@ typedef struct _AppleEventSelectionRange {
 	[odbdesc paramDescriptorForKeyword:keyFileSender];
       if (p)
 	{
-	  NSString *str = [NSString alloc];
+	  /* Compiled for 32bit architectures, Emacs does not support full
+	     long values in EMACS_INT.  make_number() produces a float if
+	     numbers are large, which may lose significant bits (or at least
+	     can't be simply converted with XUINT on the other end. */
 	  ns_input_parms = Fcons (Fcons (intern("remote-id"),
-					 build_string ([[str initWithData:[p data] encoding:NSNonLossyASCIIStringEncoding]
-							 UTF8String])),
-				  ns_input_parms);
-	  [str release];
+				       Fcons(make_number ((unsigned long) ([p typeCodeValue] >> 16)),
+					     make_number ((unsigned long) ([p typeCodeValue]) & 0xFFFF))),
+				ns_input_parms);
 	}
-	// [dict setObject:[NSNumber numberWithUnsignedInt:[p typeCodeValue]]
-	// 	 forKey:@"remoteID"];
       p = [odbdesc paramDescriptorForKeyword:keyFileCustomPath];
       if (p)
 	ns_input_parms = Fcons (Fcons (intern("remote-path"),
@@ -4649,16 +4649,14 @@ typedef struct _AppleEventSelectionRange {
       p = [odbdesc paramDescriptorForKeyword:keyFileSenderToken];
       if (p) {
 	ns_input_parms = Fcons (Fcons (intern("remote-token-type"),
-				       make_number ([p descriptorType])),
+				       Fcons(make_number ((unsigned long) ([p descriptorType] >> 16)),
+					     make_number ((unsigned long) ([p descriptorType]) & 0xFFFF))),
 				ns_input_parms);
-
-	NSString *str = [NSString alloc];
 	ns_input_parms = Fcons (Fcons (intern("remote-token-data"),
 				       /* To do: check that this doesn't lose data. */
-            build_string ([[str initWithData:[p data] encoding:NSNonLossyASCIIStringEncoding]
+            build_string ([[[NSString string] initWithData:[p data] encoding:NSNonLossyASCIIStringEncoding]
 			    UTF8String])),
 				ns_input_parms);
-	[str release];
 
 	// [dict setObject:[NSNumber numberWithUnsignedLong:[p descriptorType]]
 	// 	 forKey:@"remoteTokenDescType"];

@@ -2709,6 +2709,7 @@ OSStatus odb_event (struct buffer *buffer,
   Lisp_Object Qremote_token_type = intern("remote-token-type");
 
   Lisp_Object remote_id, remote_token_data, remote_token_type;
+  OSType rid;
 
   remote_id = Fcdr (Fassq (Qremote_id, parms));
   remote_token_data = Fcdr (Fassq (Qremote_token_data, parms));
@@ -2716,13 +2717,17 @@ OSStatus odb_event (struct buffer *buffer,
 
   if (NILP (remote_id))
     return -1000;
-  CHECK_STRING (remote_id);
+        
+  if (Fcdr (remote_id))
+    rid = (XUINT (Fcar (remote_id)) << 16) | XUINT (Fcdr (remote_id));
+  else
+    rid = XUINT (remote_id);
 
   /* Destination Process */
     NSAppleEventDescriptor *targetDesc = [NSAppleEventDescriptor
             descriptorWithDescriptorType:typeApplSignature
-					   bytes:SDATA (remote_id)
-					   length:strlen (SDATA (remote_id))];
+                                   bytes:&rid
+                                  length:sizeof(OSType)];
 
 
     /* file name */
@@ -2748,7 +2753,13 @@ OSStatus odb_event (struct buffer *buffer,
 			      dataUsingEncoding:NSNonLossyASCIIStringEncoding];
 	if (tokenData)
 	  {
-	    DescType tokenType = (unsigned int) XUINT (remote_token_type);
+	    DescType tokenType;
+
+	    if (Fcdr (remote_token_type))
+	      tokenType = (XUINT (Fcar (remote_token_type)) << 16) | XUINT (Fcdr (remote_token_type));
+	    else
+	      tokenType = XUINT (remote_token_type);
+
 	    [event setParamDescriptor: 
 		     [NSAppleEventDescriptor descriptorWithDescriptorType:tokenType
 								     data:tokenData]
