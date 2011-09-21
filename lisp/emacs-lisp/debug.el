@@ -98,6 +98,16 @@ and `debugger-reenable' to temporarily disable debug-on-entry.")
 
 (defvar inhibit-trace)                  ;Not yet implemented.
 
+(defvar debugger-args nil
+  "Arguments with which the debugger was called.
+It is a list expected to take the form (CAUSE . REST)
+where CAUSE can be:
+- debug: called for entry to a flagged function.
+- t: called because of debug-on-next-call.
+- lambda: same thing but via `funcall'.
+- exit: called because of exit of a flagged function.
+- error: called because of `debug-on-error'.")
+
 ;;;###autoload
 (setq debugger 'debug)
 ;;;###autoload
@@ -296,32 +306,33 @@ That buffer should be current already."
   (insert "Debugger entered")
   ;; lambda is for debug-on-call when a function call is next.
   ;; debug is for debug-on-entry function called.
-  (cond ((memq (car debugger-args) '(lambda debug))
-	 (insert "--entering a function:\n"))
-	;; Exiting a function.
-	((eq (car debugger-args) 'exit)
-	 (insert "--returning value: ")
-	 (setq debugger-value (nth 1 debugger-args))
-	 (prin1 debugger-value (current-buffer))
-	 (insert ?\n)
-	 (delete-char 1)
-	 (insert ? )
-	 (beginning-of-line))
-	;; Debugger entered for an error.
-	((eq (car debugger-args) 'error)
-	 (insert "--Lisp error: ")
-	 (prin1 (nth 1 debugger-args) (current-buffer))
-	 (insert ?\n))
-	;; debug-on-call, when the next thing is an eval.
-	((eq (car debugger-args) t)
-	 (insert "--beginning evaluation of function call form:\n"))
-	;; User calls debug directly.
-	(t
-	 (insert ": ")
-	 (prin1 (if (eq (car debugger-args) 'nil)
-		    (cdr debugger-args) debugger-args)
-		(current-buffer))
-	 (insert ?\n)))
+  (pcase (car debugger-args)
+    ((or `lambda `debug)
+     (insert "--entering a function:\n"))
+    ;; Exiting a function.
+    (`exit
+     (insert "--returning value: ")
+     (setq debugger-value (nth 1 debugger-args))
+     (prin1 debugger-value (current-buffer))
+     (insert ?\n)
+     (delete-char 1)
+     (insert ? )
+     (beginning-of-line))
+    ;; Debugger entered for an error.
+    (`error
+     (insert "--Lisp error: ")
+     (prin1 (nth 1 debugger-args) (current-buffer))
+     (insert ?\n))
+    ;; debug-on-call, when the next thing is an eval.
+    (`t
+     (insert "--beginning evaluation of function call form:\n"))
+    ;; User calls debug directly.
+    (_
+     (insert ": ")
+     (prin1 (if (eq (car debugger-args) 'nil)
+                (cdr debugger-args) debugger-args)
+            (current-buffer))
+     (insert ?\n)))
   ;; After any frame that uses eval-buffer,
   ;; insert a line that states the buffer position it's reading at.
   (save-excursion
@@ -342,71 +353,72 @@ That buffer should be current already."
   "Attach cross-references to function names in the `*Backtrace*' buffer."
   (interactive "b")
   (with-current-buffer (or buffer (current-buffer))
-    (setq buffer (current-buffer))
-    (let ((inhibit-read-only t)
-	  (old-end (point-min)) (new-end (point-min)))
-      ;; If we saved an old backtrace, find the common part
-      ;; between the new and the old.
-      ;; Compare line by line, starting from the end,
-      ;; because that's the part that is likely to be unchanged.
-      (if debugger-previous-backtrace
-	  (let (old-start new-start (all-match t))
-	    (goto-char (point-max))
-	    (with-temp-buffer
-	      (insert debugger-previous-backtrace)
-	      (while (and all-match (not (bobp)))
-		(setq old-end (point))
-		(forward-line -1)
-		(setq old-start (point))
-		(with-current-buffer buffer
-		  (setq new-end (point))
+    (save-excursion
+      (setq buffer (current-buffer))
+      (let ((inhibit-read-only t)
+	    (old-end (point-min)) (new-end (point-min)))
+	;; If we saved an old backtrace, find the common part
+	;; between the new and the old.
+	;; Compare line by line, starting from the end,
+	;; because that's the part that is likely to be unchanged.
+	(if debugger-previous-backtrace
+	    (let (old-start new-start (all-match t))
+	      (goto-char (point-max))
+	      (with-temp-buffer
+		(insert debugger-previous-backtrace)
+		(while (and all-match (not (bobp)))
+		  (setq old-end (point))
 		  (forward-line -1)
-		  (setq new-start (point)))
-		(if (not (zerop
-                          (let ((case-fold-search nil))
-                            (compare-buffer-substrings
-                             (current-buffer) old-start old-end
-                             buffer new-start new-end))))
-		    (setq all-match nil))))
-	    ;; Now new-end is the position of the start of the
-	    ;; unchanged part in the current buffer, and old-end is
-	    ;; the position of that same text in the saved old
-	    ;; backtrace.  But we must subtract (point-min) since strings are
-	    ;; indexed in origin 0.
+		  (setq old-start (point))
+		  (with-current-buffer buffer
+		    (setq new-end (point))
+		    (forward-line -1)
+		    (setq new-start (point)))
+		  (if (not (zerop
+			    (let ((case-fold-search nil))
+			      (compare-buffer-substrings
+			       (current-buffer) old-start old-end
+			       buffer new-start new-end))))
+		      (setq all-match nil))))
+	      ;; Now new-end is the position of the start of the
+	      ;; unchanged part in the current buffer, and old-end is
+	      ;; the position of that same text in the saved old
+	      ;; backtrace.  But we must subtract (point-min) since strings are
+	      ;; indexed in origin 0.
 
-	    ;; Replace the unchanged part of the backtrace
-	    ;; with the text from debugger-previous-backtrace,
-	    ;; since that already has the proper xrefs.
-	    ;; With this optimization, we only need to scan
-	    ;; the changed part of the backtrace.
-	    (delete-region new-end (point-max))
-	    (goto-char (point-max))
-	    (insert (substring debugger-previous-backtrace
-			       (- old-end (point-min))))
-	    ;; Make the unchanged part of the backtrace inaccessible
-	    ;; so it won't be scanned.
-	    (narrow-to-region (point-min) new-end)))
+	      ;; Replace the unchanged part of the backtrace
+	      ;; with the text from debugger-previous-backtrace,
+	      ;; since that already has the proper xrefs.
+	      ;; With this optimization, we only need to scan
+	      ;; the changed part of the backtrace.
+	      (delete-region new-end (point-max))
+	      (goto-char (point-max))
+	      (insert (substring debugger-previous-backtrace
+				 (- old-end (point-min))))
+	      ;; Make the unchanged part of the backtrace inaccessible
+	      ;; so it won't be scanned.
+	      (narrow-to-region (point-min) new-end)))
 
-      ;; Scan the new part of the backtrace, inserting xrefs.
-      (goto-char (point-min))
-      (while (progn
-	       (goto-char (+ (point) 2))
-	       (skip-syntax-forward "^w_")
-	       (not (eobp)))
-	(let* ((beg (point))
-	       (end (progn (skip-syntax-forward "w_") (point)))
-	       (sym (intern-soft (buffer-substring-no-properties
-				  beg end)))
-	       (file (and sym (symbol-file sym 'defun))))
-	  (when file
-	    (goto-char beg)
-	    ;; help-xref-button needs to operate on something matched
-	    ;; by a regexp, so set that up for it.
-	    (re-search-forward "\\(\\sw\\|\\s_\\)+")
-	    (help-xref-button 0 'help-function-def sym file)))
-	(forward-line 1))
-      (widen))
-    (setq debugger-previous-backtrace (buffer-string))))
+	;; Scan the new part of the backtrace, inserting xrefs.
+	(goto-char (point-min))
+	(while (progn
+		 (goto-char (+ (point) 2))
+		 (skip-syntax-forward "^w_")
+		 (not (eobp)))
+	  (let* ((beg (point))
+		 (end (progn (skip-syntax-forward "w_") (point)))
+		 (sym (intern-soft (buffer-substring-no-properties
+				    beg end)))
+		 (file (and sym (symbol-file sym 'defun))))
+	    (when file
+	      (goto-char beg)
+	      ;; help-xref-button needs to operate on something matched
+	      ;; by a regexp, so set that up for it.
+	      (re-search-forward "\\(\\sw\\|\\s_\\)+")
+	      (help-xref-button 0 'help-function-def sym file)))
+	  (forward-line 1))
+	(widen))
+      (setq debugger-previous-backtrace (buffer-string)))))
 
 (defun debugger-step-through ()
   "Proceed, stepping through subexpressions of this expression.
@@ -438,6 +450,10 @@ Enter another debugger on next entry to eval, apply or funcall."
 This is only useful when the value returned from the debugger
 will be used, such as in a debug on exit from a frame."
   (interactive "XReturn value (evaluated): ")
+  (when (memq (car debugger-args) '(t lambda error debug))
+    (error "Cannot return a value %s"
+           (if (eq (car debugger-args) 'error)
+               "from an error" "at function entrance")))
   (setq debugger-value val)
   (princ "Returning " t)
   (prin1 debugger-value)

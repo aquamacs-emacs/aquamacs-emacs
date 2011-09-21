@@ -2403,9 +2403,19 @@ struct it
   Lisp_Object font_height;
 
   /* Object and position where the current display element came from.
-     Object can be a Lisp string in case the current display element
-     comes from an overlay string, or it is buffer.  It may also be nil
-     during mode-line update.  Position is a position in object.  */
+     Object is normally the buffer which is being rendered, but it can
+     also be a Lisp string in case the current display element comes
+     from an overlay string or from a display string (before- or
+     after-string).  It may also be nil when a C string is being
+     rendered, e.g., during mode-line or header-line update.  It can
+     also be a cons cell of the form `(space ...)', when we produce a
+     stretch glyph from a `display' specification.  Finally, it can be
+     a zero-valued Lisp integer, but only temporarily, when we are
+     producing special glyphs for display purposes, like truncation
+     and continuation glyphs, or blanks that extend each line to the
+     edge of the window on a TTY.
+
+     Position is the current iterator position in object.  */
   Lisp_Object object;
   struct text_pos position;
 
@@ -3044,8 +3054,6 @@ extern struct frame *last_mouse_frame;
 extern int last_tool_bar_item;
 extern void reseat_at_previous_visible_line_start (struct it *);
 extern Lisp_Object lookup_glyphless_char_display (int, struct it *);
-extern int calc_pixel_width_or_height (double *, struct it *, Lisp_Object,
-                                       struct font *, int, int *);
 extern EMACS_INT compute_display_string_pos (struct text_pos *,
 					     struct bidi_string_data *,
 					     int, int *);

@@ -1022,7 +1022,7 @@ Only available in Aquamacs."
     (let ((menu (make-sparse-keymap "Tool-bar")))
 
       (define-key menu [showhide-tool-bar-left]
-        `(menu-item ,(purecopy "On the left")
+        `(menu-item ,(purecopy "On the Left")
                     menu-bar-showhide-tool-bar-menu-customize-enable-left
                     :help ,(purecopy "Tool-bar at the left side")
                     :visible (display-graphic-p)
@@ -1034,7 +1034,7 @@ Only available in Aquamacs."
                                        'left)))))
 
       (define-key menu [showhide-tool-bar-right]
-        `(menu-item ,(purecopy "On the right")
+        `(menu-item ,(purecopy "On the Right")
                     menu-bar-showhide-tool-bar-menu-customize-enable-right
                     :help ,(purecopy "Tool-bar at the right side")
                     :visible (display-graphic-p)
@@ -1046,7 +1046,7 @@ Only available in Aquamacs."
                                        'right)))))
 
       (define-key menu [showhide-tool-bar-bottom]
-        `(menu-item ,(purecopy "On the bottom")
+        `(menu-item ,(purecopy "On the Bottom")
                     menu-bar-showhide-tool-bar-menu-customize-enable-bottom
                     :help ,(purecopy "Tool-bar at the bottom")
                     :visible (display-graphic-p)
@@ -1058,7 +1058,7 @@ Only available in Aquamacs."
                                        'bottom)))))
 
       (define-key menu [showhide-tool-bar-top]
-        `(menu-item ,(purecopy "On the top")
+        `(menu-item ,(purecopy "On the Top")
                     menu-bar-showhide-tool-bar-menu-customize-enable-top
                     :help ,(purecopy "Tool-bar at the top")
                     :visible (display-graphic-p)
@@ -1235,7 +1235,7 @@ mail status in mode line"))
         (define-key menu [menu-system-font]
           (menu-bar-make-toggle
            toggle-use-system-font font-use-system-font
-           "Use system font"
+           "Use System Font"
            "Use system font: %s"
            "Use the monospaced font defined by the system")))
 
@@ -1307,7 +1307,7 @@ for future buffers."
 ; mode-line
 (setq minor-mode-alist (cons (list 'truncate-lines " Trunc")
 			   minor-mode-alist))
-
+
 (defun menu-bar-set-wrapping-default ()
   "Set current buffer's line wrapping style as default."
   (interactive)
@@ -1329,7 +1329,7 @@ for future buffers."
 	  (set-default 'fringe-indicator-alist
 		       (remove (cons 'continuation visual-line-fringe-indicators)
 			       (default-value 'fringe-indicator-alist))))))
-
+
     ;; create local bindings in all buffers
     ;; in order to just set the default for future buffers
     ;; WE DON'T NEED THIS IF USERS CALL THIS FUNCTION EXPLICITLY
