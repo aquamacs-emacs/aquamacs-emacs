@@ -61,7 +61,7 @@ static Lisp_Object Vccl_program_table;
 
 /* Return a hash table of id number ID.  */
 #define GET_HASH_TABLE(id) \
-  (XHASH_TABLE (XCDR(XVECTOR(Vtranslation_hash_table_vector)->contents[(id)])))
+  (XHASH_TABLE (XCDR (XVECTOR (Vtranslation_hash_table_vector)->contents[(id)])))
 
 /* CCL (Code Conversion Language) is a simple language which has
    operations on one input buffer, one output buffer, and 7 registers.
@@ -706,7 +706,7 @@ do					\
     ccl->status = CCL_STAT_SUCCESS;	\
     goto ccl_finish;			\
   }					\
-while(0)
+while (0)
 
 /* Suspend CCL program because of reading from empty input buffer or
    writing to full output buffer.  When this program is resumed, the
@@ -730,7 +730,7 @@ do					\
     ccl->status = CCL_STAT_INVALID_CMD;	\
     goto ccl_error_handler;	     	\
   }					\
-while(0)
+while (0)
 
 #else
 
@@ -741,7 +741,7 @@ do					\
     ccl->status = CCL_STAT_INVALID_CMD;	\
     goto ccl_error_handler;	     	\
   }					\
-while(0)
+while (0)
 
 #endif
 
@@ -1303,7 +1303,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 
 	    case CCL_LookupIntConstTbl:
 	      {
-		EMACS_INT eop;
+		ptrdiff_t eop;
 		struct Lisp_Hash_Table *h;
 		GET_CCL_RANGE (eop, ccl_prog, ic++, 0,
 			       (VECTORP (Vtranslation_hash_table_vector)
@@ -1329,7 +1329,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 
 	    case CCL_LookupCharConstTbl:
 	      {
-		EMACS_INT eop;
+		ptrdiff_t eop;
 		struct Lisp_Hash_Table *h;
 		GET_CCL_RANGE (eop, ccl_prog, ic++, 0,
 			       (VECTORP (Vtranslation_hash_table_vector)
@@ -1419,7 +1419,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 		    else if (INTEGERP (content) && IN_INT_RANGE (XINT (content)))
 		      {
 			reg[RRR] = i;
-			reg[rrr] = XINT(content);
+			reg[rrr] = XINT (content);
 			break;
 		      }
 		    else if (EQ (content, Qt) || EQ (content, Qlambda))
@@ -1692,7 +1692,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 		    value = XCDR (content);
 		    if (!INTEGERP (attrib) || !INTEGERP (value))
 		      continue;
-		    reg[rrr] = XINT(value);
+		    reg[rrr] = XINT (value);
 		    break;
 		  }
 		else if (SYMBOLP (content))
@@ -1729,8 +1729,8 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
       switch (ccl->status)
 	{
 	case CCL_STAT_INVALID_CMD:
-	  sprintf(msg, "\nCCL: Invalid command %x (ccl_code = %x) at %d.",
-		  code & 0x1F, code, this_ic);
+	  sprintf (msg, "\nCCL: Invalid command %x (ccl_code = %x) at %d.",
+                   code & 0x1F, code, this_ic);
 #ifdef CCL_DEBUG
 	  {
 	    int i = ccl_backtrace_idx - 1;
@@ -1748,7 +1748,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 		if (i < 0) i = CCL_DEBUG_BACKTRACE_LEN - 1;
 		if (ccl_backtrace_table[i] == 0)
 		  break;
-		sprintf(msg, " %d", ccl_backtrace_table[i]);
+		sprintf (msg, " %d", ccl_backtrace_table[i]);
 		msglen = strlen (msg);
 		if (dst + msglen > (dst_bytes ? dst_end : src))
 		  break;
@@ -1762,15 +1762,15 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 
 	case CCL_STAT_QUIT:
 	  if (! ccl->quit_silently)
-	    sprintf(msg, "\nCCL: Quited.");
+	    sprintf (msg, "\nCCL: Quited.");
 	  break;
 
 	default:
-	  sprintf(msg, "\nCCL: Unknown error type (%d)", ccl->status);
+	  sprintf (msg, "\nCCL: Unknown error type (%d)", ccl->status);
 	}
 
       msglen = strlen (msg);
-      if (dst + msglen <= dst_end)
+      if (msglen <= dst_end - dst)
 	{
 	  for (i = 0; i < msglen; i++)
 	    *dst++ = msg[i];
@@ -2061,12 +2061,13 @@ usage: (ccl-execute-on-string CCL-PROGRAM STATUS STRING &optional CONTINUE UNIBY
   Lisp_Object val;
   struct ccl_program ccl;
   int i;
-  EMACS_INT outbufsize;
+  ptrdiff_t outbufsize;
   unsigned char *outbuf, *outp;
-  EMACS_INT str_chars, str_bytes;
+  ptrdiff_t str_chars, str_bytes;
 #define CCL_EXECUTE_BUF_SIZE 1024
   int source[CCL_EXECUTE_BUF_SIZE], destination[CCL_EXECUTE_BUF_SIZE];
-  EMACS_INT consumed_chars, consumed_bytes, produced_chars;
+  ptrdiff_t consumed_chars, consumed_bytes, produced_chars;
+  int buf_magnification;
 
   if (setup_ccl_program (&ccl, ccl_prog) < 0)
     error ("Invalid CCL program");
@@ -2093,6 +2094,10 @@ usage: (ccl-execute-on-string CCL-PROGRAM STATUS STRING &optional CONTINUE UNIBY
 	ccl.ic = i;
     }
 
+  buf_magnification = ccl.buf_magnification ? ccl.buf_magnification : 1;
+
+  if ((min (PTRDIFF_MAX, SIZE_MAX) - 256) / buf_magnification < str_bytes)
+    memory_full (SIZE_MAX);
   outbufsize = (ccl.buf_magnification
 		? str_bytes * ccl.buf_magnification + 256
 		: str_bytes + 256);
@@ -2122,31 +2127,25 @@ usage: (ccl-execute-on-string CCL-PROGRAM STATUS STRING &optional CONTINUE UNIBY
       src_size = j;
       while (1)
 	{
+	  int max_expansion = NILP (unibyte_p) ? MAX_MULTIBYTE_LENGTH : 1;
+	  ptrdiff_t offset, shortfall;
 	  ccl_driver (&ccl, src, destination, src_size, CCL_EXECUTE_BUF_SIZE,
 		      Qnil);
 	  produced_chars += ccl.produced;
+	  offset = outp - outbuf;
+	  shortfall = ccl.produced * max_expansion - (outbufsize - offset);
+	  if (0 < shortfall)
+	    {
+	      outbuf = xpalloc (outbuf, &outbufsize, shortfall, -1, 1);
+	      outp = outbuf + offset;
+	    }
 	  if (NILP (unibyte_p))
 	    {
-	      if (outp - outbuf + MAX_MULTIBYTE_LENGTH * ccl.produced
-		  > outbufsize)
-		{
-		  EMACS_INT offset = outp - outbuf;
-		  outbufsize += MAX_MULTIBYTE_LENGTH * ccl.produced;
-		  outbuf = (unsigned char *) xrealloc (outbuf, outbufsize);
-		  outp = outbuf + offset;
-		}
 	      for (j = 0; j < ccl.produced; j++)
 		CHAR_STRING_ADVANCE (destination[j], outp);
 	    }
 	  else
 	    {
-	      if (outp - outbuf + ccl.produced > outbufsize)
-		{
-		  EMACS_INT offset = outp - outbuf;
-		  outbufsize += ccl.produced;
-		  outbuf = (unsigned char *) xrealloc (outbuf, outbufsize);
-		  outp = outbuf + offset;
-		}
 	      for (j = 0; j < ccl.produced; j++)
 		*outp++ = destination[j];
 	    }

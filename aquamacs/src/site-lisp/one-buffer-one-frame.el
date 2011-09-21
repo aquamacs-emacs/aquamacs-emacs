@@ -450,7 +450,6 @@ the current window is switched to the new buffer."
 	  ;; make sure we don't make *empty* visible
 	  (if (not (string= (substring (get-bufname (car args)) 0 1) " "))
 	      (make-frame-visible (selected-frame)))))))
-
 ;; (select-window wts)
 
 ;; some exception for the speedbar
@@ -1092,3 +1091,10 @@ An Aquamacs-only function."
   (other-window -1))
 
 (provide 'one-buffer-one-frame)
+
+
+
+;; for ae24windowing branch
+
+(ad-disable-advice 'switch-to-buffer 'around 'sw-force-other-frame)
+(setq display-buffer-function nil)

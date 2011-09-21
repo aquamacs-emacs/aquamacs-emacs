@@ -160,7 +160,7 @@ set_menu_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
 
-  if (INTEGERP (value))
+  if (TYPE_RANGED_INTEGERP (int, value))
     nlines = XINT (value);
   else
     nlines = 0;
@@ -497,7 +497,7 @@ make_minibuffer_frame (void)
 
 /* Construct a frame that refers to a terminal.  */
 
-static int tty_frame_count;
+static printmax_t tty_frame_count;
 
 struct frame *
 make_initial_frame (void)
@@ -551,7 +551,7 @@ make_terminal_frame (struct terminal *terminal)
 {
   register struct frame *f;
   Lisp_Object frame;
-  char name[20];
+  char name[sizeof "F" + INT_STRLEN_BOUND (printmax_t)];
 
   if (!terminal->name)
     error ("Terminal is not live, can't create new frames on it");
@@ -562,7 +562,7 @@ make_terminal_frame (struct terminal *terminal)
   Vframe_list = Fcons (frame, Vframe_list);
 
   tty_frame_count++;
-  sprintf (name, "F%d", tty_frame_count);
+  sprintf (name, "F%"pMd, tty_frame_count);
   f->name = build_string (name);
 
   f->visible = 1;		/* FRAME_SET_VISIBLE wd set frame_garbaged. */
@@ -2098,7 +2098,7 @@ set_term_frame_name (struct frame *f, Lisp_Object name)
   /* If NAME is nil, set the name to F<num>.  */
   if (NILP (name))
     {
-      char namebuf[20];
+      char namebuf[sizeof "F" + INT_STRLEN_BOUND (printmax_t)];
 
       /* Check for no change needed in this very common case
 	 before we do any consing.  */
@@ -2107,7 +2107,7 @@ set_term_frame_name (struct frame *f, Lisp_Object name)
 	return;
 
       tty_frame_count++;
-      sprintf (namebuf, "F%d", tty_frame_count);
+      sprintf (namebuf, "F%"pMd, tty_frame_count);
       name = build_string (namebuf);
     }
   else
@@ -3016,7 +3016,7 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
 	f->size_hint_flags &= ~ (XNegative | YNegative);
 	if (EQ (left, Qminus))
 	  f->size_hint_flags |= XNegative;
-	else if (INTEGERP (left))
+	else if (TYPE_RANGED_INTEGERP (int, left))
 	  {
 	    leftpos = XINT (left);
 	    if (leftpos < 0)
@@ -3024,21 +3024,21 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
 	  }
 	else if (CONSP (left) && EQ (XCAR (left), Qminus)
 		 && CONSP (XCDR (left))
-		 && INTEGERP (XCAR (XCDR (left))))
+		 && RANGED_INTEGERP (-INT_MAX, XCAR (XCDR (left)), INT_MAX))
 	  {
 	    leftpos = - XINT (XCAR (XCDR (left)));
 	    f->size_hint_flags |= XNegative;
 	  }
 	else if (CONSP (left) && EQ (XCAR (left), Qplus)
 		 && CONSP (XCDR (left))
-		 && INTEGERP (XCAR (XCDR (left))))
+		 && TYPE_RANGED_INTEGERP (int, XCAR (XCDR (left))))
 	  {
 	    leftpos = XINT (XCAR (XCDR (left)));
 	  }
 
 	if (EQ (top, Qminus))
 	  f->size_hint_flags |= YNegative;
-	else if (INTEGERP (top))
+	else if (TYPE_RANGED_INTEGERP (int, top))
 	  {
 	    toppos = XINT (top);
 	    if (toppos < 0)
@@ -3046,14 +3046,14 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
 	  }
 	else if (CONSP (top) && EQ (XCAR (top), Qminus)
 		 && CONSP (XCDR (top))
-		 && INTEGERP (XCAR (XCDR (top))))
+		 && RANGED_INTEGERP (-INT_MAX, XCAR (XCDR (top)), INT_MAX))
 	  {
 	    toppos = - XINT (XCAR (XCDR (top)));
 	    f->size_hint_flags |= YNegative;
 	  }
 	else if (CONSP (top) && EQ (XCAR (top), Qplus)
 		 && CONSP (XCDR (top))
-		 && INTEGERP (XCAR (XCDR (top))))
+		 && TYPE_RANGED_INTEGERP (int, XCAR (XCDR (top))))
 	  {
 	    toppos = XINT (XCAR (XCDR (top)));
 	  }
@@ -3089,6 +3089,7 @@ x_report_frame_params (struct frame *f, Lisp_Object *alistptr)
 {
   char buf[16];
   Lisp_Object tem;
+  unsigned long w;
 
   /* Represent negative positions (off the top or left screen edge)
      in a way that Fmodify_frame_parameters will understand correctly.  */
@@ -3121,7 +3122,12 @@ x_report_frame_params (struct frame *f, Lisp_Object *alistptr)
 		      for non-toolkit scroll bar.
 		      ruler-mode.el depends on this.  */
 		   : Qnil));
-  sprintf (buf, "%ld", (long) FRAME_X_WINDOW (f));
+  /* FRAME_X_WINDOW is not guaranteed to return an integer.  E.g., on
+     MS-Windows it returns a value whose type is HANDLE, which is
+     actually a pointer.  Explicit casting avoids compiler
+     warnings.  */
+  w = (unsigned long) FRAME_X_WINDOW (f);
+  sprintf (buf, "%lu", w);
   store_in_alist (alistptr, Qwindow_id,
 		  build_string (buf));
 #ifdef HAVE_X_WINDOWS
@@ -3129,7 +3135,10 @@ x_report_frame_params (struct frame *f, Lisp_Object *alistptr)
   /* Tooltip frame may not have this widget.  */
   if (FRAME_X_OUTPUT (f)->widget)
 #endif
-    sprintf (buf, "%ld", (long) FRAME_OUTER_WINDOW (f));
+    {
+      w = (unsigned long) FRAME_OUTER_WINDOW (f);
+      sprintf (buf, "%lu", w);
+    }
   store_in_alist (alistptr, Qouter_window_id,
 		  build_string (buf));
 #endif
@@ -3505,7 +3514,7 @@ x_set_scroll_bar_width (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
         x_set_window_size (f, 0, FRAME_COLS (f), FRAME_LINES (f));
       do_pending_window_change (0);
     }
-  else if (INTEGERP (arg) && XINT (arg) > 0
+  else if (RANGED_INTEGERP (1, arg, INT_MAX)
 	   && XFASTINT (arg) != FRAME_CONFIG_SCROLL_BAR_WIDTH (f))
     {
       if (XFASTINT (arg) <= 2 * VERTICAL_SCROLL_BAR_WIDTH_TRIM)
@@ -3544,7 +3553,7 @@ x_set_alpha (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   double alpha = 1.0;
   double newval[2];
-  int i, ialpha;
+  int i;
   Lisp_Object item;
 
   for (i = 0; i < 2; i++)
@@ -3568,7 +3577,7 @@ x_set_alpha (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 	}
       else if (INTEGERP (item))
 	{
-	  ialpha = XINT (item);
+	  EMACS_INT ialpha = XINT (item);
 	  if (ialpha < 0 || 100 < ialpha)
 	    args_out_of_range (make_number (0), make_number (100));
 	  else
@@ -3600,13 +3609,13 @@ x_set_alpha (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 void
 validate_x_resource_name (void)
 {
-  int len = 0;
+  ptrdiff_t len = 0;
   /* Number of valid characters in the resource name.  */
-  int good_count = 0;
+  ptrdiff_t good_count = 0;
   /* Number of invalid characters in the resource name.  */
-  int bad_count = 0;
+  ptrdiff_t bad_count = 0;
   Lisp_Object new;
-  int i;
+  ptrdiff_t i;
 
   if (!STRINGP (Vx_resource_class))
     Vx_resource_class = build_string (EMACS_CLASS);
@@ -3639,8 +3648,9 @@ validate_x_resource_name (void)
   if (bad_count == 0)
     return;
 
-  /* If name is entirely invalid, or nearly so, use `emacs'.  */
-  if (good_count < 2)
+  /* If name is entirely invalid, or nearly so, or is so implausibly
+     large that alloca might not work, use `emacs'.  */
+  if (good_count < 2 || MAX_ALLOCA - sizeof ".customization" < len)
     {
       Vx_resource_name = build_string ("emacs");
       return;
@@ -3769,20 +3779,24 @@ x_get_resource_string (const char *attribute, const char *class)
 {
   char *name_key;
   char *class_key;
+  char *result;
   struct frame *sf = SELECTED_FRAME ();
+  ptrdiff_t invocation_namelen = SBYTES (Vinvocation_name);
+  USE_SAFE_ALLOCA;
 
   /* Allocate space for the components, the dots which separate them,
      and the final '\0'.  */
-  name_key = (char *) alloca (SBYTES (Vinvocation_name)
-			      + strlen (attribute) + 2);
+  SAFE_ALLOCA (name_key, char *, invocation_namelen + strlen (attribute) + 2);
   class_key = (char *) alloca ((sizeof (EMACS_CLASS) - 1)
 			       + strlen (class) + 2);
 
-  sprintf (name_key, "%s.%s", SSDATA (Vinvocation_name), attribute);
+  esprintf (name_key, "%s.%s", SSDATA (Vinvocation_name), attribute);
   sprintf (class_key, "%s.%s", EMACS_CLASS, class);
 
-  return x_get_string_resource (FRAME_X_DISPLAY_INFO (sf)->xrdb,
-				name_key, class_key);
+  result = x_get_string_resource (FRAME_X_DISPLAY_INFO (sf)->xrdb,
+				  name_key, class_key);
+  SAFE_FREE ();
+  return result;
 }
 #endif
 
@@ -4055,11 +4069,15 @@ x_figure_window_size (struct frame *f, Lisp_Object parms, int toolbar_p)
       if (!EQ (tem0, Qunbound))
 	{
 	  CHECK_NUMBER (tem0);
+	  if (! (0 <= XINT (tem0) && XINT (tem0) <= INT_MAX))
+	    xsignal1 (Qargs_out_of_range, tem0);
 	  FRAME_LINES (f) = XINT (tem0);
 	}
       if (!EQ (tem1, Qunbound))
 	{
 	  CHECK_NUMBER (tem1);
+	  if (! (0 <= XINT (tem1) && XINT (tem1) <= INT_MAX))
+	    xsignal1 (Qargs_out_of_range, tem1);
 	  SET_FRAME_COLS (f, XINT (tem1));
 	}
       if (!NILP (tem2) && !EQ (tem2, Qunbound))
@@ -4090,12 +4108,10 @@ x_figure_window_size (struct frame *f, Lisp_Object parms, int toolbar_p)
 		? tool_bar_button_relief
 		: DEFAULT_TOOL_BAR_BUTTON_RELIEF);
 
-      if (INTEGERP (Vtool_bar_button_margin)
-	  && XINT (Vtool_bar_button_margin) > 0)
+      if (RANGED_INTEGERP (1, Vtool_bar_button_margin, INT_MAX))
 	margin = XFASTINT (Vtool_bar_button_margin);
       else if (CONSP (Vtool_bar_button_margin)
-	       && INTEGERP (XCDR (Vtool_bar_button_margin))
-	       && XINT (XCDR (Vtool_bar_button_margin)) > 0)
+	       && RANGED_INTEGERP (1, XCDR (Vtool_bar_button_margin), INT_MAX))
 	margin = XFASTINT (XCDR (Vtool_bar_button_margin));
       else
 	margin = 0;
@@ -4121,14 +4137,14 @@ x_figure_window_size (struct frame *f, Lisp_Object parms, int toolbar_p)
 	}
       else if (CONSP (tem0) && EQ (XCAR (tem0), Qminus)
 	       && CONSP (XCDR (tem0))
-	       && INTEGERP (XCAR (XCDR (tem0))))
+	       && RANGED_INTEGERP (-INT_MAX, XCAR (XCDR (tem0)), INT_MAX))
 	{
 	  f->top_pos = - XINT (XCAR (XCDR (tem0)));
 	  window_prompting |= YNegative;
 	}
       else if (CONSP (tem0) && EQ (XCAR (tem0), Qplus)
 	       && CONSP (XCDR (tem0))
-	       && INTEGERP (XCAR (XCDR (tem0))))
+	       && TYPE_RANGED_INTEGERP (int, XCAR (XCDR (tem0))))
 	{
 	  f->top_pos = XINT (XCAR (XCDR (tem0)));
 	}
@@ -4149,14 +4165,14 @@ x_figure_window_size (struct frame *f, Lisp_Object parms, int toolbar_p)
 	}
       else if (CONSP (tem1) && EQ (XCAR (tem1), Qminus)
 	       && CONSP (XCDR (tem1))
-	       && INTEGERP (XCAR (XCDR (tem1))))
+	       && RANGED_INTEGERP (-INT_MAX, XCAR (XCDR (tem1)), INT_MAX))
 	{
 	  f->left_pos = - XINT (XCAR (XCDR (tem1)));
 	  window_prompting |= XNegative;
 	}
       else if (CONSP (tem1) && EQ (XCAR (tem1), Qplus)
 	       && CONSP (XCDR (tem1))
-	       && INTEGERP (XCAR (XCDR (tem1))))
+	       && TYPE_RANGED_INTEGERP (int, XCAR (XCDR (tem1))))
 	{
 	  f->left_pos = XINT (XCAR (XCDR (tem1)));
 	}
@@ -4382,7 +4398,7 @@ Setting this variable does not affect existing frames, only new ones.  */);
   DEFVAR_LISP ("default-frame-scroll-bars", Vdefault_frame_scroll_bars,
 	       doc: /* Default position of scroll bars on this window-system.  */);
 #ifdef HAVE_WINDOW_SYSTEM
-#if defined(HAVE_NTGUI) || defined(NS_IMPL_COCOA) || (defined(USE_GTK) && defined(USE_TOOLKIT_SCROLL_BARS))
+#if defined (HAVE_NTGUI) || defined (NS_IMPL_COCOA) || (defined (USE_GTK) && defined (USE_TOOLKIT_SCROLL_BARS))
   /* MS-Windows, Mac OS X, and GTK have scroll bars on the right by
      default.  */
   Vdefault_frame_scroll_bars = Qright;

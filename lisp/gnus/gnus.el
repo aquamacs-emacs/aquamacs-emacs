@@ -1245,7 +1245,12 @@ REST is a plist of following:
 
 (defcustom gnus-home-directory "~/"
   "Directory variable that specifies the \"home\" directory.
-All other Gnus file and directory variables are initialized from this variable."
+All other Gnus file and directory variables are initialized from this variable.
+
+Note that Gnus is mostly loaded when the `.gnus.el' file is read.
+This means that other directory variables that are initialized
+from this variable won't be set properly if you set this variable
+in `.gnus.el'.  Set this variable in `.emacs' instead."
   :group 'gnus-files
   :type 'directory)
 
@@ -1586,7 +1591,9 @@ commands will still require prompting."
   :type 'boolean)
 
 (defcustom gnus-interactive-exit t
-  "*If non-nil, require your confirmation when exiting Gnus."
+  "*If non-nil, require your confirmation when exiting Gnus.
+If `quiet', update any active summary buffers automatically
+first before exiting."
   :group 'gnus-exit
   :type 'boolean)
 
@@ -2618,7 +2625,7 @@ a string, be sure to use a valid format, see RFC 2616."
     (scored . score) (saved . save)
     (cached . cache) (downloadable . download)
     (unsendable . unsend) (forwarded . forward)
-    (recent . recent) (seen . seen)))
+    (seen . seen)))
 
 (defconst gnus-article-special-mark-lists
   '((seen range)
@@ -2684,8 +2691,7 @@ such as a mark that says whether an article is stored in the cache
 			gnus-newsrc-last-checked-date
 			gnus-newsrc-alist gnus-server-alist
 			gnus-killed-list gnus-zombie-list
-			gnus-topic-topology gnus-topic-alist
-			gnus-format-specs)
+			gnus-topic-topology gnus-topic-alist)
   "Gnus variables saved in the quick startup file.")
 
 (defvar gnus-newsrc-alist nil

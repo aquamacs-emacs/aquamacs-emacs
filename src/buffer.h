@@ -18,7 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
-#include <time.h> /* for time_t */
+#include <sys/types.h> /* for off_t, time_t */
 
 /* Accessing the parameters of the current buffer.  */
 
@@ -559,7 +559,7 @@ struct buffer
      is still the same (since it's rounded up to seconds) but we're actually
      not up-to-date.  -1 means the size is unknown.  Only meaningful if
      modtime is actually set.  */
-  EMACS_INT modtime_size;
+  off_t modtime_size;
   /* The value of text->modiff at the last auto-save.  */
   int auto_save_modified;
   /* The value of text->modiff at the last display error.

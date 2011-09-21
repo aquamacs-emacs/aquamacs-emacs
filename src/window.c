@@ -779,7 +779,7 @@ of just the text area, use `window-inside-pixel-edges'.  */)
 }
 
 static void
-calc_absolute_offset(struct window *w, int *add_x, int *add_y)
+calc_absolute_offset (struct window *w, int *add_x, int *add_y)
 {
   struct frame *f = XFRAME (w->frame);
   *add_y = f->top_pos;
@@ -1686,7 +1686,7 @@ PREV-BUFFERS should be either nil or a list of <buffer, window-start,
 window-point> triples where buffer was previously shown in WINDOW.  */)
      (Lisp_Object window, Lisp_Object prev_buffers)
 {
-  return decode_any_window (window)->prev_buffers = prev_buffers;
+  return decode_window (window)->prev_buffers = prev_buffers;
 }
 
 DEFUN ("window-next-buffers", Fwindow_next_buffers, Swindow_next_buffers,
@@ -1708,7 +1708,7 @@ NEXT-BUFFERS should be either nil or a list of buffers that have been
 recently re-shown in WINDOW.  */)
      (Lisp_Object window, Lisp_Object next_buffers)
 {
-  return decode_any_window (window)->next_buffers = next_buffers;
+  return decode_window (window)->next_buffers = next_buffers;
 }
 
 DEFUN ("window-parameters", Fwindow_parameters, Swindow_parameters,
@@ -4666,14 +4666,9 @@ window_scroll_line_based (Lisp_Object window, int n, int whole, int noerror)
 
   if (pos < ZV)
     {
-      int this_scroll_margin = scroll_margin;
-
       /* Don't use a scroll margin that is negative or too large.  */
-      if (this_scroll_margin < 0)
-	this_scroll_margin = 0;
-
-      if (XINT (w->total_lines) < 4 * scroll_margin)
-	this_scroll_margin = XINT (w->total_lines) / 4;
+      int this_scroll_margin =
+	max (0, min (scroll_margin, XINT (w->total_lines) / 4));
 
       set_marker_restricted_both (w->start, w->buffer, pos, pos_byte);
       w->start_at_line_beg = bolp;
@@ -5061,7 +5056,7 @@ and redisplay normally--don't erase and redraw the frame.  */)
   struct buffer *obuf = current_buffer;
   int center_p = 0;
   EMACS_INT charpos, bytepos;
-  int iarg IF_LINT (= 0);
+  EMACS_INT iarg IF_LINT (= 0);
   int this_scroll_margin;
 
   /* If redisplay is suppressed due to an error, try again.  */
@@ -5073,7 +5068,7 @@ and redisplay normally--don't erase and redraw the frame.  */)
 	  && (!EQ (Vrecenter_redisplay, Qtty)
 	      || !NILP (Ftty_type (selected_frame))))
 	{
-	  int i;
+	  ptrdiff_t i;
 
 	  /* Invalidate pixel data calculated for all compositions.  */
 	  for (i = 0; i < n_compositions; i++)
@@ -5100,9 +5095,8 @@ and redisplay normally--don't erase and redraw the frame.  */)
 
   /* Do this after making BUF current
      in case scroll_margin is buffer-local.  */
-  this_scroll_margin = max (0, scroll_margin);
-  this_scroll_margin = min (this_scroll_margin,
-			    XFASTINT (w->total_lines) / 4);
+  this_scroll_margin =
+    max (0, min (scroll_margin, XFASTINT (w->total_lines) / 4));
 
   /* Handle centering on a graphical frame specially.  Such frames can
      have variable-height lines and centering point on the basis of
@@ -5126,7 +5120,7 @@ and redisplay normally--don't erase and redraw the frame.  */)
 	{
 	  struct it it;
 	  struct text_pos pt;
-	  int nlines = -iarg;
+	  int nlines = min (INT_MAX, -iarg);
 	  int extra_line_spacing;
 	  int h = window_box_height (w);
 	  void *itdata = bidi_shelve_cache ();
@@ -5292,15 +5286,14 @@ zero means top of window, negative means relative to bottom of window.  */)
   lines = displayed_window_lines (w);
 
 #if 0
-  this_scroll_margin = max (0, scroll_margin);
-  this_scroll_margin = min (this_scroll_margin, lines / 4);
+  this_scroll_margin = max (0, min (scroll_margin, lines / 4));
 #endif
 
   if (NILP (arg))
     XSETFASTINT (arg, lines / 2);
   else
     {
-      int iarg = XINT (Fprefix_numeric_value (arg));
+      EMACS_INT iarg = XINT (Fprefix_numeric_value (arg));
 
       if (iarg < 0)
 	iarg = iarg + lines;
@@ -5491,7 +5484,8 @@ the return value is nil.  Otherwise the value is t.  */)
       struct window *root_window;
       struct window **leaf_windows;
       int n_leaf_windows;
-      int k, i, n;
+      ptrdiff_t k;
+      int i, n;
 
       /* If the frame has been resized since this window configuration was
 	 made, we change the frame to the size specified in the
@@ -6367,7 +6361,7 @@ compare_window_configurations (Lisp_Object configuration1, Lisp_Object configura
 {
   register struct save_window_data *d1, *d2;
   struct Lisp_Vector *sws1, *sws2;
-  int i;
+  ptrdiff_t i;
 
   CHECK_WINDOW_CONFIGURATION (configuration1);
   CHECK_WINDOW_CONFIGURATION (configuration2);

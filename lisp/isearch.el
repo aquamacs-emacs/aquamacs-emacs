@@ -952,7 +952,7 @@ NOPUSH is t and EDIT is t."
       (or (and transient-mark-mode mark-active)
 	  (progn
 	    (push-mark isearch-opoint t)
-	    (or executing-kbd-macro (> (minibuffer-depth) 0)
+	    (or executing-kbd-macro (> (minibuffer-depth) 0) edit
 		(message "Mark saved where search started")))))
 
   (and (not edit) isearch-recursive-edit (exit-recursive-edit)))
@@ -1087,9 +1087,7 @@ The following additional command keys are active while editing.
 \\[isearch-nonincremental-exit-minibuffer] to do one nonincremental search.
 \\[isearch-forward-exit-minibuffer] to resume isearching forward.
 \\[isearch-reverse-exit-minibuffer] to resume isearching backward.
-\\[isearch-complete-edit] to complete the search string using the search ring.
-\\<isearch-mode-map>
-If first char entered is \\[isearch-yank-word-or-char], then do word search instead."
+\\[isearch-complete-edit] to complete the search string using the search ring."
 
   ;; This code is very hairy for several reasons, explained in the code.
   ;; Mainly, isearch-mode must be terminated while editing and then restarted.
@@ -1132,6 +1130,14 @@ If first char entered is \\[isearch-yank-word-or-char], then do word search inst
 	      ;; Save current configuration so we can restore it here.
 	      (isearch-window-configuration (current-window-configuration))
 
+	      ;; This could protect the index of the search rings,
+	      ;; but we can't reliably count the number of typed M-p
+	      ;; in `read-from-minibuffer' to adjust the index accordingly.
+	      ;; So when the following is commented out, `isearch-mode'
+	      ;; below resets the index to the predictable value nil.
+	      ;; (search-ring-yank-pointer search-ring-yank-pointer)
+	      ;; (regexp-search-ring-yank-pointer regexp-search-ring-yank-pointer)
+
 	      ;; Temporarily restore `minibuffer-message-timeout'.
 	      (minibuffer-message-timeout
 	       isearch-original-minibuffer-message-timeout)
@@ -1152,13 +1158,18 @@ If first char entered is \\[isearch-yank-word-or-char], then do word search inst
 
 	  (unwind-protect
 	      (let* ((message-log-max nil)
+		     ;; Protect global value of search rings from updating
+		     ;; by `read-from-minibuffer'.  It should be updated only
+		     ;; by `isearch-update-ring' in `isearch-done', not here.
+		     (search-ring search-ring)
+		     (regexp-search-ring regexp-search-ring)
 		     ;; Binding minibuffer-history-symbol to nil is a work-around
 		     ;; for some incompatibility with gmhist.
 		     (minibuffer-history-symbol))
 		(setq isearch-new-string
                       (read-from-minibuffer
                        (isearch-message-prefix nil nil isearch-nonincremental)
-                        (cons isearch-string (1+ (isearch-fail-pos)))
+		       (cons isearch-string (1+ (isearch-fail-pos)))
                        minibuffer-local-isearch-map nil
                        (if isearch-regexp
 			   (cons 'regexp-search-ring
@@ -1191,19 +1202,17 @@ If first char entered is \\[isearch-yank-word-or-char], then do word search inst
 		  isearch-word isearch-new-word))
 
 	  ;; Empty isearch-string means use default.
-	  (if (= 0 (length isearch-string))
-	      (setq isearch-string (or (car (if isearch-regexp
-						regexp-search-ring
-					      search-ring))
-				       "")
+	  (when (= 0 (length isearch-string))
+	    (setq isearch-string (or (car (if isearch-regexp
+					      regexp-search-ring
+					    search-ring))
+				     "")
 
-		    isearch-message
-		    (mapconcat 'isearch-text-char-description
-			       isearch-string ""))
-	    ;; This used to set the last search string,
-	    ;; but I think it is not right to do that here.
-	    ;; Only the string actually used should be saved.
-	    ))
+		  isearch-message
+		  (mapconcat 'isearch-text-char-description
+			     isearch-string ""))
+	    ;; After taking the last element, adjust ring to previous one.
+	    (isearch-ring-adjust1 nil)))
 
 	;; This used to push the state as of before this C-s, but it adds
 	;; an inconsistent state where part of variables are from the
@@ -1290,7 +1299,9 @@ Use `isearch-exit' to quit without signaling."
 		  isearch-message
 		  (mapconcat 'isearch-text-char-description
 			     isearch-string "")
-		  isearch-case-fold-search isearch-last-case-fold-search))
+		  isearch-case-fold-search isearch-last-case-fold-search)
+	    ;; After taking the last element, adjust ring to previous one.
+	    (isearch-ring-adjust1 nil))
 	;; If already have what to search for, repeat it.
 	(or isearch-success
 	    (progn
@@ -1368,8 +1379,8 @@ Use `isearch-exit' to quit without signaling."
   "Start `query-replace' with string to replace from last search string.
 The arg DELIMITED (prefix arg if interactive), if non-nil, means replace
 only matches surrounded by word boundaries.  Note that using the prefix arg
-is possible only when `isearch-allow-scroll' is non-nil, and it don't
-always provides the correct matches for `query-replace', so the preferred
+is possible only when `isearch-allow-scroll' is non-nil, and it doesn't
+always provide the correct matches for `query-replace', so the preferred
 way to run word replacements from Isearch is `M-s w ... M-%'."
   (interactive
    (list current-prefix-arg))
@@ -1432,9 +1443,10 @@ string.  NLINES has the same meaning as in `occur'."
      (t (regexp-quote isearch-string)))
     (if current-prefix-arg (prefix-numeric-value current-prefix-arg))))
   (let ((case-fold-search isearch-case-fold-search)
-	;; set `search-upper-case' to nil to not call
-	;; `isearch-no-upper-case-p' in `occur-1'
-	(search-upper-case nil))
+	;; Set `search-upper-case' to nil to not call
+	;; `isearch-no-upper-case-p' in `occur-1'.
+	(search-upper-case nil)
+	(search-spaces-regexp search-whitespace-regexp))
     (occur regexp nlines)))
 
 (declare-function hi-lock-read-face-name "hi-lock" ())
@@ -1908,6 +1920,7 @@ Isearch mode."
 	   (if (lookup-key global-map key)
 	       (progn
 		 (isearch-done)
+		 (setq prefix-arg arg)
 		 (apply 'isearch-unread keylist))
 	     (setq keylist
 		   (listify-key-sequence (lookup-key local-function-key-map key)))
@@ -1923,6 +1936,7 @@ Isearch mode."
 		     (setq keylist (cdr keylist)))
 		 ;; As the remaining keys in KEYLIST can't be handled
 		 ;; here, we must reread them.
+		 (setq prefix-arg arg)
 		 (apply 'isearch-unread keylist)
 		 (setq keylist nil)))))
 	  (
@@ -1945,8 +1959,10 @@ Isearch mode."
 			       isearch-other-control-char)))))
 	   (setcar keylist (- main-event (- ?\C-\S-a ?\C-a)))
 	   (cancel-kbd-macro-events)
+	   (setq prefix-arg arg)
 	   (apply 'isearch-unread keylist))
 	  ((eq search-exit-option 'edit)
+	   (setq prefix-arg arg)
 	   (apply 'isearch-unread keylist)
 	   (isearch-edit-string))
           ;; Handle a scrolling function.
@@ -1975,6 +1991,7 @@ Isearch mode."
 	   (isearch-edit-string))
 	  (search-exit-option
 	   (let (window)
+	     (setq prefix-arg arg)
              (isearch-unread-key-sequence keylist)
              (setq main-event (car unread-command-events))
 
@@ -2073,7 +2090,7 @@ Isearch mode."
 	()
       (set yank-pointer-name
 	   (setq yank-pointer
-		 (mod (+ (or yank-pointer 0)
+		 (mod (+ (or yank-pointer (if advance 0 -1))
 			 (if advance -1 1))
 		      length)))
       (setq isearch-string (nth yank-pointer ring)

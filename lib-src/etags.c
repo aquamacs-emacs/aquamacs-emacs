@@ -103,7 +103,7 @@ char pot_etags_version[] = "@(#) pot revision number is 17.38.1.4";
 #   define PTR void *
 # endif
 #else  /* no config.h */
-# if defined(__STDC__) && (__STDC__ || defined(__SUNPRO_C))
+# if defined (__STDC__) && (__STDC__ || defined (__SUNPRO_C))
 #   define PTR void *		/* for generic pointers */
 # else /* not standard C */
 #   define const		/* remove const for old compilers' sake */
@@ -202,25 +202,25 @@ If you want regular expression support, you should delete this notice and
 # define CTAGS FALSE
 #endif
 
-#define streq(s,t)	(assert((s)!=NULL || (t)!=NULL), !strcmp (s, t))
-#define strcaseeq(s,t)	(assert((s)!=NULL && (t)!=NULL), !etags_strcasecmp (s, t))
-#define strneq(s,t,n)	(assert((s)!=NULL || (t)!=NULL), !strncmp (s, t, n))
-#define strncaseeq(s,t,n) (assert((s)!=NULL && (t)!=NULL), !etags_strncasecmp (s, t, n))
+#define streq(s,t)	(assert ((s)!=NULL || (t)!=NULL), !strcmp (s, t))
+#define strcaseeq(s,t)	(assert ((s)!=NULL && (t)!=NULL), !etags_strcasecmp (s, t))
+#define strneq(s,t,n)	(assert ((s)!=NULL || (t)!=NULL), !strncmp (s, t, n))
+#define strncaseeq(s,t,n) (assert ((s)!=NULL && (t)!=NULL), !etags_strncasecmp (s, t, n))
 
 #define CHARS 256		/* 2^sizeof(char) */
 #define CHAR(x)		((unsigned int)(x) & (CHARS - 1))
-#define	iswhite(c)	(_wht[CHAR(c)]) /* c is white (see white) */
-#define notinname(c)	(_nin[CHAR(c)]) /* c is not in a name (see nonam) */
-#define	begtoken(c)	(_btk[CHAR(c)]) /* c can start token (see begtk) */
-#define	intoken(c)	(_itk[CHAR(c)]) /* c can be in token (see midtk) */
-#define	endtoken(c)	(_etk[CHAR(c)]) /* c ends tokens (see endtk) */
+#define	iswhite(c)	(_wht[CHAR (c)]) /* c is white (see white) */
+#define notinname(c)	(_nin[CHAR (c)]) /* c is not in a name (see nonam) */
+#define	begtoken(c)	(_btk[CHAR (c)]) /* c can start token (see begtk) */
+#define	intoken(c)	(_itk[CHAR (c)]) /* c can be in token (see midtk) */
+#define	endtoken(c)	(_etk[CHAR (c)]) /* c ends tokens (see endtk) */
 
-#define ISALNUM(c)	isalnum (CHAR(c))
-#define ISALPHA(c)	isalpha (CHAR(c))
-#define ISDIGIT(c)	isdigit (CHAR(c))
-#define ISLOWER(c)	islower (CHAR(c))
+#define ISALNUM(c)	isalnum (CHAR (c))
+#define ISALPHA(c)	isalpha (CHAR (c))
+#define ISDIGIT(c)	isdigit (CHAR (c))
+#define ISLOWER(c)	islower (CHAR (c))
 
-#define lowcase(c)	tolower (CHAR(c))
+#define lowcase(c)	tolower (CHAR (c))
 
 
 /*
@@ -414,8 +414,8 @@ static bool filename_is_absolute (char *f);
 static void canonicalize_filename (char *);
 static void linebuffer_init (linebuffer *);
 static void linebuffer_setlen (linebuffer *, int);
-static PTR xmalloc (unsigned int);
-static PTR xrealloc (char *, unsigned int);
+static PTR xmalloc (size_t);
+static PTR xrealloc (char *, size_t);
 
 
 static char searchar = '/';	/* use /.../ searches */
@@ -425,6 +425,7 @@ static char *progname;		/* name this program was invoked with */
 static char *cwd;		/* current working directory */
 static char *tagfiledir;	/* directory of tagfile */
 static FILE *tagf;		/* ioptr for tags file */
+static ptrdiff_t whatlen_max;	/* maximum length of any 'what' member */
 
 static fdesc *fdhead;		/* head of file description list */
 static fdesc *curfdp;		/* current file description */
@@ -1066,6 +1067,7 @@ main (int argc, char **argv)
   int current_arg, file_count;
   linebuffer filename_lb;
   bool help_asked = FALSE;
+  ptrdiff_t len;
  char *optstring;
  int opt;
 
@@ -1110,6 +1112,9 @@ main (int argc, char **argv)
 	/* This means that a file name has been seen.  Record it. */
 	argbuffer[current_arg].arg_type = at_filename;
 	argbuffer[current_arg].what     = optarg;
+	len = strlen (optarg);
+	if (whatlen_max < len)
+	  whatlen_max = len;
 	++current_arg;
 	++file_count;
 	break;
@@ -1118,6 +1123,9 @@ main (int argc, char **argv)
 	/* Parse standard input.  Idea by Vivek <vivek@etla.org>. */
 	argbuffer[current_arg].arg_type = at_stdin;
 	argbuffer[current_arg].what     = optarg;
+	len = strlen (optarg);
+	if (whatlen_max < len)
+	  whatlen_max = len;
 	++current_arg;
 	++file_count;
 	if (parsing_stdin)
@@ -1160,6 +1168,9 @@ main (int argc, char **argv)
       case 'r':
 	argbuffer[current_arg].arg_type = at_regexp;
 	argbuffer[current_arg].what = optarg;
+	len = strlen (optarg);
+	if (whatlen_max < len)
+	  whatlen_max = len;
 	++current_arg;
 	break;
       case 'R':
@@ -1198,6 +1209,9 @@ main (int argc, char **argv)
     {
       argbuffer[current_arg].arg_type = at_filename;
       argbuffer[current_arg].what = argv[optind];
+      len = strlen (argv[optind]);
+      if (whatlen_max < len)
+	whatlen_max = len;
       ++current_arg;
       ++file_count;
     }
@@ -1331,7 +1345,9 @@ main (int argc, char **argv)
   /* From here on, we are in (CTAGS && !cxref_style) */
   if (update)
     {
-      char cmd[BUFSIZ];
+      char *cmd =
+	xmalloc (strlen (tagfile) + whatlen_max +
+		 sizeof "mv..OTAGS;fgrep -v '\t\t' OTAGS >;rm OTAGS");
       for (i = 0; i < current_arg; ++i)
 	{
 	  switch (argbuffer[i].arg_type)
@@ -1342,12 +1358,17 @@ main (int argc, char **argv)
 	    default:
 	      continue;		/* the for loop */
 	    }
-	  sprintf (cmd,
-		   "mv %s OTAGS;fgrep -v '\t%s\t' OTAGS >%s;rm OTAGS",
-		   tagfile, argbuffer[i].what, tagfile);
+	  strcpy (cmd, "mv ");
+	  strcat (cmd, tagfile);
+	  strcat (cmd, " OTAGS;fgrep -v '\t");
+	  strcat (cmd, argbuffer[i].what);
+	  strcat (cmd, "\t' OTAGS >");
+	  strcat (cmd, tagfile);
+	  strcat (cmd, ";rm OTAGS");
 	  if (system (cmd) != EXIT_SUCCESS)
 	    fatal ("failed to execute shell command", (char *)NULL);
 	}
+      free (cmd);
       append_to_tagfile = TRUE;
     }
 
@@ -1363,11 +1384,14 @@ main (int argc, char **argv)
   if (CTAGS)
     if (append_to_tagfile || update)
       {
-	char cmd[2*BUFSIZ+20];
+	char *cmd = xmalloc (2 * strlen (tagfile) + sizeof "sort -u -o..");
 	/* Maybe these should be used:
 	   setenv ("LC_COLLATE", "C", 1);
 	   setenv ("LC_ALL", "C", 1); */
-	sprintf (cmd, "sort -u -o %.*s %.*s", BUFSIZ, tagfile, BUFSIZ, tagfile);
+	strcpy (cmd, "sort -u -o ");
+	strcat (cmd, tagfile);
+	strcat (cmd, " ");
+	strcat (cmd, tagfile);
 	exit (system (cmd));
       }
   return EXIT_SUCCESS;
@@ -1701,16 +1725,16 @@ init (void)
   register int i;
 
   for (i = 0; i < CHARS; i++)
-    iswhite(i) = notinname(i) = begtoken(i) = intoken(i) = endtoken(i) = FALSE;
+    iswhite (i) = notinname (i) = begtoken (i) = intoken (i) = endtoken (i) = FALSE;
   for (sp = white; *sp != '\0'; sp++) iswhite (*sp) = TRUE;
   for (sp = nonam; *sp != '\0'; sp++) notinname (*sp) = TRUE;
-  notinname('\0') = notinname('\n');
+  notinname ('\0') = notinname ('\n');
   for (sp = begtk; *sp != '\0'; sp++) begtoken (*sp) = TRUE;
-  begtoken('\0') = begtoken('\n');
+  begtoken ('\0') = begtoken ('\n');
   for (sp = midtk; *sp != '\0'; sp++) intoken (*sp) = TRUE;
-  intoken('\0') = intoken('\n');
+  intoken ('\0') = intoken ('\n');
   for (sp = endtk; *sp != '\0'; sp++) endtoken (*sp) = TRUE;
-  endtoken('\0') = endtoken('\n');
+  endtoken ('\0') = endtoken ('\n');
 }
 
 /*
@@ -3935,16 +3959,16 @@ Yacc_entries (FILE *inf)
       )
 
 #define LOOKING_AT(cp, kw)  /* kw is the keyword, a literal string */	\
-  ((assert("" kw), TRUE)   /* syntax error if not a literal string */	\
-   && strneq ((cp), kw, sizeof(kw)-1)		/* cp points at kw */	\
-   && notinname ((cp)[sizeof(kw)-1])		/* end of kw */		\
-   && ((cp) = skip_spaces((cp)+sizeof(kw)-1)))	/* skip spaces */
+  ((assert ("" kw), TRUE)   /* syntax error if not a literal string */	\
+   && strneq ((cp), kw, sizeof (kw)-1)		/* cp points at kw */	\
+   && notinname ((cp)[sizeof (kw)-1])		/* end of kw */		\
+   && ((cp) = skip_spaces ((cp)+sizeof (kw)-1))) /* skip spaces */
 
 /* Similar to LOOKING_AT but does not use notinname, does not skip */
 #define LOOKING_AT_NOCASE(cp, kw) /* the keyword is a literal string */	\
-  ((assert("" kw), TRUE)     /* syntax error if not a literal string */	\
-   && strncaseeq ((cp), kw, sizeof(kw)-1)	/* cp points at kw */	\
-   && ((cp) += sizeof(kw)-1))			/* skip spaces */
+  ((assert ("" kw), TRUE) /* syntax error if not a literal string */	\
+   && strncaseeq ((cp), kw, sizeof (kw)-1)	/* cp points at kw */	\
+   && ((cp) += sizeof (kw)-1))			/* skip spaces */
 
 /*
  * Read a file, but do no processing.  This is used to do regexp
@@ -4022,6 +4046,12 @@ Fortran_functions (FILE *inf)
 	continue;
 
       if (LOOKING_AT_NOCASE (dbp, "recursive"))
+	dbp = skip_spaces (dbp);
+
+      if (LOOKING_AT_NOCASE (dbp, "pure"))
+	dbp = skip_spaces (dbp);
+
+      if (LOOKING_AT_NOCASE (dbp, "elemental"))
 	dbp = skip_spaces (dbp);
 
       switch (lowcase (*dbp))
@@ -4111,7 +4141,7 @@ Ada_getit (FILE *inf, const char *name_qualifier)
 	  readline (&lb, inf);
 	  dbp = lb.buffer;
 	}
-      switch (lowcase(*dbp))
+      switch (lowcase (*dbp))
         {
         case 'b':
           if (nocase_tail ("body"))
@@ -4215,7 +4245,7 @@ Ada_funcs (FILE *inf)
 	    }
 
 	  /* We are at the beginning of a token. */
-	  switch (lowcase(*dbp))
+	  switch (lowcase (*dbp))
 	    {
 	    case 'f':
 	      if (!packages_only && nocase_tail ("function"))
@@ -4341,7 +4371,7 @@ Perl_functions (FILE *inf)
 	      *cp = '\0';
 	      name = concat (package, "::", sp);
 	      *cp = savechar;
-	      make_tag (name, strlen(name), TRUE,
+	      make_tag (name, strlen (name), TRUE,
 			lb.buffer, cp - lb.buffer + 1, lineno, linecharno);
 	      free (name);
 	    }
@@ -4436,9 +4466,9 @@ PHP_functions (FILE *inf)
 	}
       else if (LOOKING_AT (cp, "function"))
 	{
-	  if(*cp == '&')
+	  if (*cp == '&')
 	    cp = skip_spaces (cp+1);
-	  if(*cp != '\0')
+	  if (*cp != '\0')
 	    {
 	      name = cp;
 	      while (!notinname (*cp))
@@ -4479,7 +4509,7 @@ PHP_functions (FILE *inf)
 	       && *cp == '$')
 	{
 	  name = cp;
-	  while (!notinname(*cp))
+	  while (!notinname (*cp))
 	    cp++;
 	  make_tag (name, cp - name, FALSE,
 		    lb.buffer, cp - lb.buffer + 1, lineno, linecharno);
@@ -4860,13 +4890,13 @@ Forth_words (FILE *inf)
 
   LOOP_ON_INPUT_LINES (inf, lb, bp)
     while ((bp = skip_spaces (bp))[0] != '\0')
-      if (bp[0] == '\\' && iswhite(bp[1]))
+      if (bp[0] == '\\' && iswhite (bp[1]))
 	break;			/* read next line */
-      else if (bp[0] == '(' && iswhite(bp[1]))
+      else if (bp[0] == '(' && iswhite (bp[1]))
 	do			/* skip to ) or eol */
 	  bp++;
 	while (*bp != ')' && *bp != '\0');
-      else if ((bp[0] == ':' && iswhite(bp[1]) && bp++)
+      else if ((bp[0] == ':' && iswhite (bp[1]) && bp++)
 	       || LOOKING_AT_NOCASE (bp, "constant")
 	       || LOOKING_AT_NOCASE (bp, "code")
 	       || LOOKING_AT_NOCASE (bp, "create")
@@ -5255,7 +5285,7 @@ Prolog_functions (FILE *inf)
 	  /* Predicate or rule.  Store the function name so that we
 	     only generate a tag for the first clause.  */
 	  if (last == NULL)
-	    last = xnew(len + 1, char);
+	    last = xnew (len + 1, char);
 	  else if (len + 1 > allocated)
 	    xrnew (last, len + 1, char);
 	  allocated = len + 1;
@@ -5279,7 +5309,7 @@ prolog_skip_comment (linebuffer *plb, FILE *inf)
 	  return;
       readline (plb, inf);
     }
-  while (!feof(inf));
+  while (!feof (inf));
 }
 
 /*
@@ -5338,11 +5368,11 @@ prolog_atom (char *s, size_t pos)
 
   origpos = pos;
 
-  if (ISLOWER(s[pos]) || (s[pos] == '_'))
+  if (ISLOWER (s[pos]) || (s[pos] == '_'))
     {
       /* The atom is unquoted. */
       pos++;
-      while (ISALNUM(s[pos]) || (s[pos] == '_'))
+      while (ISALNUM (s[pos]) || (s[pos] == '_'))
 	{
 	  pos++;
 	}
@@ -5685,7 +5715,7 @@ add_regex (char *regexp_pattern, language *lang)
     single_line = FALSE;	/* dot does not match newline */
 
 
-  if (strlen(regexp_pattern) < 3)
+  if (strlen (regexp_pattern) < 3)
     {
       error ("null regexp", (char *)NULL);
       return;
@@ -6596,7 +6626,7 @@ filename_is_absolute (char *fn)
 {
   return (fn[0] == '/'
 #ifdef DOS_NT
-	  || (ISALPHA(fn[0]) && fn[1] == ':' && fn[2] == '/')
+	  || (ISALPHA (fn[0]) && fn[1] == ':' && fn[2] == '/')
 #endif
 	  );
 }
@@ -6611,7 +6641,7 @@ canonicalize_filename (register char *fn)
 
 #ifdef DOS_NT
   /* Canonicalize drive letter case.  */
-# define ISUPPER(c)	isupper (CHAR(c))
+# define ISUPPER(c)	isupper (CHAR (c))
   if (fn[0] != '\0' && fn[1] == ':' && ISUPPER (fn[0]))
     fn[0] = lowcase (fn[0]);
 
@@ -6656,7 +6686,7 @@ linebuffer_setlen (linebuffer *lbp, int toksize)
 
 /* Like malloc but get fatal error if memory is exhausted. */
 static PTR
-xmalloc (unsigned int size)
+xmalloc (size_t size)
 {
   PTR result = (PTR) malloc (size);
   if (result == NULL)
@@ -6665,7 +6695,7 @@ xmalloc (unsigned int size)
 }
 
 static PTR
-xrealloc (char *ptr, unsigned int size)
+xrealloc (char *ptr, size_t size)
 {
   PTR result = (PTR) realloc (ptr, size);
   if (result == NULL)

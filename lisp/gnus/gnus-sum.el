@@ -375,7 +375,8 @@ place point on some subject line."
 		 (const unread)
 		 (const first)
 		 (const unseen)
-	         (const unseen-or-unread)))
+	         (const unseen-or-unread)
+		 (function :tag "Function to call")))
 
 (defcustom gnus-auto-select-next t
   "*If non-nil, offer to go to the next group from the end of the previous.
@@ -1498,9 +1499,6 @@ the type of the variable (string, integer, character, etc).")
 (defvar gnus-newsgroup-forwarded nil
   "List of articles that have been forwarded in the current newsgroup.")
 
-(defvar gnus-newsgroup-recent nil
-  "List of articles that have are recent in the current newsgroup.")
-
 (defvar gnus-newsgroup-expirable nil
   "Sorted list of articles in the current newsgroup that can be expired.")
 
@@ -1577,7 +1575,6 @@ This list will always be a subset of gnus-newsgroup-undownloaded.")
     gnus-newsgroup-saved
     gnus-newsgroup-replied
     gnus-newsgroup-forwarded
-    gnus-newsgroup-recent
     gnus-newsgroup-expirable
     gnus-newsgroup-killed
     gnus-newsgroup-unseen
@@ -3742,8 +3739,6 @@ buffer that was in action when the last article was fetched."
 		 gnus-forwarded-mark)
 		((memq gnus-tmp-current gnus-newsgroup-saved)
 		 gnus-saved-mark)
-		((memq gnus-tmp-number gnus-newsgroup-recent)
-		 gnus-recent-mark)
 		((memq gnus-tmp-number gnus-newsgroup-unseen)
 		 gnus-unseen-mark)
 		(t gnus-no-mark)))
@@ -5394,8 +5389,6 @@ or a straight list of headers."
 		    gnus-forwarded-mark)
 		   ((memq number gnus-newsgroup-saved)
 		    gnus-saved-mark)
-		   ((memq number gnus-newsgroup-recent)
-		    gnus-recent-mark)
 		   ((memq number gnus-newsgroup-unseen)
 		    gnus-unseen-mark)
 		   (t gnus-no-mark))
@@ -5806,8 +5799,6 @@ If SELECT-ARTICLES, only select those articles from GROUP."
       (memq article gnus-newsgroup-forwarded))
      ((eq type 'seen)
       (not (memq article gnus-newsgroup-unseen)))
-     ((eq type 'recent)
-      (memq article gnus-newsgroup-recent))
      (t t))))
 
 (defun gnus-articles-to-read (group &optional read-all)
@@ -7213,6 +7204,7 @@ If FORCE (the prefix), also save the .newsrc file(s)."
 	 (quit-config (gnus-group-quit-config gnus-newsgroup-name))
 	 (gnus-group-is-exiting-p t)
 	 (article-buffer gnus-article-buffer)
+	 (original-article-buffer gnus-original-article-buffer)
 	 (mode major-mode)
 	 (group-point nil)
 	 (buf (current-buffer))
@@ -7289,7 +7281,7 @@ If FORCE (the prefix), also save the .newsrc file(s)."
 	    (unless (eq major-mode 'gnus-sticky-article-mode)
 	      (gnus-kill-buffer article-buffer)
 	      (setq gnus-article-current nil))))
-	(gnus-kill-buffer gnus-original-article-buffer))
+	(gnus-kill-buffer original-article-buffer))
 
       ;; Clear the current group name.
       (unless quit-config
@@ -8629,6 +8621,8 @@ fetched for this group."
 	   'list gnus-newsgroup-headers
 	   (gnus-fetch-headers articles nil t)
 	   'gnus-article-sort-by-number))
+    (setq gnus-newsgroup-articles
+	  (gnus-sorted-nunion gnus-newsgroup-articles articles))
     (gnus-summary-limit (append articles gnus-newsgroup-limit))))
 
 (defun gnus-summary-limit-exclude-dormant ()
@@ -9021,9 +9015,11 @@ non-numeric or nil fetch the number specified by the
 		      (keep-lines
 		       (regexp-opt ',(append refs (list id subject)))))))
 	      (gnus-fetch-headers (list last) (if (numberp limit)
-						  (* 2 limit) limit) t)))))
+						  (* 2 limit) limit) t))))
+	 article-ids)
     (when (listp new-headers)
       (dolist (header new-headers)
+	(push (mail-header-number header) article-ids)
 	(when (member (mail-header-number header) gnus-newsgroup-unselected)
           (push (mail-header-number header) gnus-newsgroup-unreads)
           (setq gnus-newsgroup-unselected
@@ -9034,6 +9030,8 @@ non-numeric or nil fetch the number specified by the
              (gnus-merge
               'list gnus-newsgroup-headers new-headers
               'gnus-article-sort-by-number)))
+      (setq gnus-newsgroup-articles
+      	    (gnus-sorted-nunion gnus-newsgroup-articles (nreverse article-ids)))
       (gnus-summary-limit-include-thread id))))
 
 (defun gnus-summary-refer-article (message-id)
@@ -10286,34 +10284,33 @@ This will be the case if the article has both been mailed and posted."
 	;; There are expirable articles in this group, so we run them
 	;; through the expiry process.
 	(gnus-message 6 "Expiring articles...")
-	(unless (gnus-check-group gnus-newsgroup-name)
-	  (error "Can't open server for %s" gnus-newsgroup-name))
-	;; The list of articles that weren't expired is returned.
-	(save-excursion
-	  (if expiry-wait
-	      (let ((nnmail-expiry-wait-function nil)
-		    (nnmail-expiry-wait expiry-wait))
-		(setq es (gnus-request-expire-articles
-			  expirable gnus-newsgroup-name)))
-	    (setq es (gnus-request-expire-articles
-		      expirable gnus-newsgroup-name)))
-	  (unless total
-	    (setq gnus-newsgroup-expirable es))
-	  ;; We go through the old list of expirable, and mark all
-	  ;; really expired articles as nonexistent.
-	  (unless (eq es expirable) ;If nothing was expired, we don't mark.
-	    (let ((gnus-use-cache nil))
-	      (dolist (article expirable)
-		(when (and (not (memq article es))
-			   (gnus-data-find article))
-		  (gnus-summary-mark-article article gnus-canceled-mark)
-		  (run-hook-with-args 'gnus-summary-article-expire-hook
-				      'delete
-				      (gnus-data-header
-				       (assoc article (gnus-data-list nil)))
-				      gnus-newsgroup-name
-				      nil
-				      nil))))))
+	(when (gnus-check-group gnus-newsgroup-name)
+	  ;; The list of articles that weren't expired is returned.
+	  (save-excursion
+	    (if expiry-wait
+		(let ((nnmail-expiry-wait-function nil)
+		      (nnmail-expiry-wait expiry-wait))
+		  (setq es (gnus-request-expire-articles
+			    expirable gnus-newsgroup-name)))
+	      (setq es (gnus-request-expire-articles
+			expirable gnus-newsgroup-name)))
+	    (unless total
+	      (setq gnus-newsgroup-expirable es))
+	    ;; We go through the old list of expirable, and mark all
+	    ;; really expired articles as nonexistent.
+	    (unless (eq es expirable) ;If nothing was expired, we don't mark.
+	      (let ((gnus-use-cache nil))
+		(dolist (article expirable)
+		  (when (and (not (memq article es))
+			     (gnus-data-find article))
+		    (gnus-summary-mark-article article gnus-canceled-mark)
+		    (run-hook-with-args 'gnus-summary-article-expire-hook
+					'delete
+					(gnus-data-header
+					 (assoc article (gnus-data-list nil)))
+					gnus-newsgroup-name
+					nil
+					nil)))))))
 	(gnus-message 6 "Expiring articles...done")))))
 
 (defun gnus-summary-expire-articles-now ()
@@ -10978,8 +10975,6 @@ If NO-EXPIRE, auto-expiry will be inhibited."
 	  gnus-forwarded-mark)
 	 ((memq article gnus-newsgroup-saved)
 	  gnus-saved-mark)
-	 ((memq article gnus-newsgroup-recent)
-	  gnus-recent-mark)
 	 ((memq article gnus-newsgroup-unseen)
 	  gnus-unseen-mark)
 	 (t gnus-no-mark))
@@ -12587,12 +12582,16 @@ UNREAD is a sorted list."
     ;; Go through all these summary buffers and offer to save them.
     (when buffers
       (save-excursion
-	(map-y-or-n-p
-	 "Update summary buffer %s? "
-	 (lambda (buf)
-	   (switch-to-buffer buf)
-	   (gnus-summary-exit))
-	 buffers)))))
+	(if (eq gnus-interactive-exit 'quiet)
+	    (dolist (buffer buffers)
+	      (switch-to-buffer buffer)
+	      (gnus-summary-exit))
+	  (map-y-or-n-p
+	   "Update summary buffer %s? "
+	   (lambda (buf)
+	     (switch-to-buffer buf)
+	     (gnus-summary-exit))
+	   buffers))))))
 
 (defun gnus-summary-setup-default-charset ()
   "Setup newsgroup default charset."
@@ -12743,6 +12742,8 @@ returned."
 		      gnus-newsgroup-headers
 		      (gnus-fetch-headers articles)
 		      'gnus-article-sort-by-number))
+    (setq gnus-newsgroup-articles
+	  (gnus-sorted-nunion gnus-newsgroup-articles articles))
     ;; Suppress duplicates?
     (when gnus-suppress-duplicates
       (gnus-dup-suppress-articles))

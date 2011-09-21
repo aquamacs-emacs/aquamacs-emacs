@@ -145,7 +145,7 @@ of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
 
     (ant
      "^[ \t]*\\[[^] \n]+\\][ \t]*\\([^: \n]+\\):\\([0-9]+\\):\\(?:\\([0-9]+\\):\\([0-9]+\\):\\([0-9]+\\):\\)?\
-\\( warning\\)?" 1 (2 . 4) (3 . 5) (4))
+\\( warning\\)?" 1 (2 . 4) (3 . 5) (6))
 
     (bash
      "^\\([^: \n\t]+\\): line \\([0-9]+\\):" 1 2)
@@ -523,7 +523,7 @@ you may also want to change `compilation-page-delimiter'.")
      ;; Command output lines.  Recognize `make[n]:' lines too.
      ("^\\([[:alnum:]_/.+-]+\\)\\(\\[\\([0-9]+\\)\\]\\)?[ \t]*:"
       (1 font-lock-function-name-face) (3 compilation-line-face nil t))
-     (" -\\(?:o[= ]?\\|-\\(?:outfile\\|output\\)[= ]\\)\\(\\S +\\)" . 1)
+     (" --?o\\(?:utfile\\|utput\\)?[= ]\\(\\S +\\)" . 1)
      ("^Compilation \\(finished\\).*"
       (0 '(face nil compilation-message nil help-echo nil mouse-face nil) t)
       (1 compilation-info-face))
@@ -637,11 +637,15 @@ This should be a function of three arguments: process status, exit status,
 and exit message; it returns a cons (MESSAGE . MODELINE) of the strings to
 write into the compilation buffer, and to put in its mode line.")
 
-(defvar compilation-environment nil
-  "*List of environment variables for compilation to inherit.
+(defcustom compilation-environment nil
+  "List of environment variables for compilation to inherit.
 Each element should be a string of the form ENVVARNAME=VALUE.
 This list is temporarily prepended to `process-environment' prior to
-starting the compilation process.")
+starting the compilation process."
+  :type '(repeat (string :tag "ENVVARNAME=VALUE"))
+  :options '(("LANG=C"))
+  :group 'compilation
+  :version "24.1")
 
 ;; History of compile commands.
 (defvar compile-history nil)
@@ -985,12 +989,15 @@ POS and RES.")
 	    (let* ((prev
 		    (or (get-text-property (1- prev-pos) 'compilation-message)
 			(get-text-property prev-pos 'compilation-message)))
-		   (prev-struct
-		    (car (nth 2 (car prev)))))
+		   (prev-file-struct
+		    (and prev
+			 (compilation--loc->file-struct
+			  (compilation--message->loc prev)))))
+
 	      ;; Construct FILE . DIR from that.
-	      (if prev-struct
-		  (setq file (cons (car prev-struct)
-				   (cadr prev-struct))))))
+	      (if prev-file-struct
+		  (setq file (cons (caar prev-file-struct)
+				   (cadr (car prev-file-struct)))))))
 	(unless file
 	  (setq file '("*unknown*")))))
     ;; All of these fields are optional, get them only if we have an index, and
@@ -1479,6 +1486,7 @@ Returns the compilation buffer created."
 	      "compilation"
 	    (replace-regexp-in-string "-mode\\'" "" (symbol-name mode))))
 	 (thisdir default-directory)
+	 (thisenv compilation-environment)
 	 outwin outbuf)
     (with-current-buffer
 	(setq outbuf
@@ -1525,8 +1533,9 @@ Returns the compilation buffer created."
         ;; Remember the original dir, so we can use it when we recompile.
         ;; default-directory' can't be used reliably for that because it may be
         ;; affected by the special handling of "cd ...;".
-        ;; NB: must be fone after (funcall mode) as that resets local variables
+        ;; NB: must be done after (funcall mode) as that resets local variables
         (set (make-local-variable 'compilation-directory) thisdir)
+	(set (make-local-variable 'compilation-environment) thisenv)
 	(if highlight-regexp
 	    (set (make-local-variable 'compilation-highlight-regexp)
 		 highlight-regexp))
@@ -2399,9 +2408,8 @@ and overlay is highlighted between MK and END-MK."
 			     ;; also do this while we change buffer
 			     (compilation-set-window w msg)
 			     compilation-highlight-regexp)))
-    ;; Ideally, the window-size should be passed to `display-buffer' (via
-    ;; something like special-display-buffer) so it's only used when
-    ;; creating a new window.
+    ;; Ideally, the window-size should be passed to `display-buffer'
+    ;; so it's only used when creating a new window.
     (unless pre-existing (compilation-set-window-height w))
 
     (if from-compilation-buffer
@@ -2410,7 +2418,7 @@ and overlay is highlighted between MK and END-MK."
         ;; display the source in another window.
         (let ((pop-up-windows t))
           (pop-to-buffer (marker-buffer mk) 'other-window))
-      (pop-to-buffer-same-window (marker-buffer mk)))
+      (switch-to-buffer (marker-buffer mk)))
     (unless (eq (goto-char mk) (point))
       ;; If narrowing gets in the way of going to the right place, widen.
       (widen)

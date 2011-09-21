@@ -1170,10 +1170,12 @@ HAVE_MAKEINFO
 GZIP_PROG
 INSTALL_INFO
 C_WARNINGS_SWITCH
+RANLIB
+ARFLAGS
+AR
 EGREP
 GREP
 CPP
-RANLIB
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
@@ -3111,7 +3113,6 @@ as_fn_append ac_header_list " stdlib.h"
 as_fn_append ac_header_list " unistd.h"
 as_fn_append ac_header_list " sys/param.h"
 as_fn_append ac_func_list " readlinkat"
-as_fn_append ac_func_list " dup2"
 gl_getopt_required=GNU
 as_fn_append ac_header_list " getopt.h"
 as_fn_append ac_header_list " wchar.h"
@@ -3123,6 +3124,8 @@ as_fn_append ac_func_list " pthread_sigmask"
 as_fn_append ac_func_list " readlink"
 as_fn_append ac_header_list " sys/socket.h"
 as_fn_append ac_func_list " tzset"
+as_fn_append ac_func_list " strtoimax"
+as_fn_append ac_func_list " strtoumax"
 as_fn_append ac_func_list " symlink"
 as_fn_append ac_header_list " sys/stat.h"
 as_fn_append ac_header_list " sys/time.h"
@@ -3198,10 +3201,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ac_config_headers="$ac_config_headers src/config.h:src/config.in"
 
 
-am__api_version='1.11'
-
 ac_aux_dir=
-for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
+for ac_dir in build-aux "$srcdir"/build-aux; do
   for ac_t in install-sh install.sh shtool; do
     if test -f "$ac_dir/$ac_t"; then
       ac_aux_dir=$ac_dir
@@ -3211,7 +3212,7 @@ for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
   done
 done
 if test -z "$ac_aux_dir"; then
-  as_fn_error "cannot find install-sh, install.sh, or shtool in \"$srcdir\" \"$srcdir/..\" \"$srcdir/../..\"" "$LINENO" 5
+  as_fn_error "cannot find install-sh, install.sh, or shtool in build-aux \"$srcdir\"/build-aux" "$LINENO" 5
 fi
 
 # These three variables are undocumented and unsupported,
@@ -3222,6 +3223,8 @@ ac_config_guess="$SHELL $ac_aux_dir/config.guess"  # Please don't use this var.
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
 ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
+
+am__api_version='1.11'
 
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -4375,8 +4378,8 @@ configuration=${host_alias-${build_alias-$host}}
 machine='' opsys='' unported=no
 case "${canonical}" in
 
-  ## GNU/Linux ports
-  *-*-linux-gnu*)
+  ## GNU/Linux and similar ports
+  *-*-linux* )
     opsys=gnu-linux
     case ${canonical} in
       alpha*)	machine=alpha ;;
@@ -4471,17 +4474,6 @@ case "${canonical}" in
   hppa*-hp-hpux1[1-9]* )
     opsys=hpux11
     CFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CFLAGS"
-  ;;
-
-  ia64*-hp-hpux1[1-9]* )
-    machine=hp800 opsys=hpux11
-    ## FIXME.  Peter O'Gorman reports that dumping using unexelf.o doesn't
-    ## work either: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6811
-    CANNOT_DUMP=yes
-  ;;
-
-  hppa*-*-linux-gnu* )
-    machine=hp800 opsys=gnu-linux
   ;;
 
   ## IBM machines
@@ -5713,98 +5705,6 @@ fi
 
 
 # Initialize gnulib right after verifying that the C compiler works.
-if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
-set dummy ${ac_tool_prefix}ranlib; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if test "${ac_cv_prog_RANLIB+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$RANLIB"; then
-  ac_cv_prog_RANLIB="$RANLIB" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_RANLIB="${ac_tool_prefix}ranlib"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-RANLIB=$ac_cv_prog_RANLIB
-if test -n "$RANLIB"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RANLIB" >&5
-$as_echo "$RANLIB" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_prog_RANLIB"; then
-  ac_ct_RANLIB=$RANLIB
-  # Extract the first word of "ranlib", so it can be a program name with args.
-set dummy ranlib; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if test "${ac_cv_prog_ac_ct_RANLIB+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$ac_ct_RANLIB"; then
-  ac_cv_prog_ac_ct_RANLIB="$ac_ct_RANLIB" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_ac_ct_RANLIB="ranlib"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-ac_ct_RANLIB=$ac_cv_prog_ac_ct_RANLIB
-if test -n "$ac_ct_RANLIB"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_RANLIB" >&5
-$as_echo "$ac_ct_RANLIB" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_ct_RANLIB" = x; then
-    RANLIB=":"
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    RANLIB=$ac_ct_RANLIB
-  fi
-else
-  RANLIB="$ac_cv_prog_RANLIB"
-fi
-
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -6074,6 +5974,244 @@ $as_echo "$ac_cv_path_EGREP" >&6; }
  EGREP="$ac_cv_path_EGREP"
 
 
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Minix Amsterdam compiler" >&5
+$as_echo_n "checking for Minix Amsterdam compiler... " >&6; }
+if test "${gl_cv_c_amsterdam_compiler+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+
+      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifdef __ACK__
+Amsterdam
+#endif
+
+_ACEOF
+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+  $EGREP "Amsterdam" >/dev/null 2>&1; then :
+  gl_cv_c_amsterdam_compiler=yes
+else
+  gl_cv_c_amsterdam_compiler=no
+fi
+rm -f conftest*
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_c_amsterdam_compiler" >&5
+$as_echo "$gl_cv_c_amsterdam_compiler" >&6; }
+  if test -z "$AR"; then
+    if test $gl_cv_c_amsterdam_compiler = yes; then
+      AR='cc -c.a'
+      if test -z "$ARFLAGS"; then
+        ARFLAGS='-o'
+      fi
+    else
+                  if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.
+set dummy ${ac_tool_prefix}ar; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_prog_AR+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$AR"; then
+  ac_cv_prog_AR="$AR" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_AR="${ac_tool_prefix}ar"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+AR=$ac_cv_prog_AR
+if test -n "$AR"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $AR" >&5
+$as_echo "$AR" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_prog_AR"; then
+  ac_ct_AR=$AR
+  # Extract the first word of "ar", so it can be a program name with args.
+set dummy ar; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_prog_ac_ct_AR+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$ac_ct_AR"; then
+  ac_cv_prog_ac_ct_AR="$ac_ct_AR" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_ac_ct_AR="ar"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+ac_ct_AR=$ac_cv_prog_ac_ct_AR
+if test -n "$ac_ct_AR"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_AR" >&5
+$as_echo "$ac_ct_AR" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+  if test "x$ac_ct_AR" = x; then
+    AR="ar"
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ac_tool_warned=yes ;;
+esac
+    AR=$ac_ct_AR
+  fi
+else
+  AR="$ac_cv_prog_AR"
+fi
+
+      if test -z "$ARFLAGS"; then
+        ARFLAGS='cru'
+      fi
+    fi
+  else
+    if test -z "$ARFLAGS"; then
+      ARFLAGS='cru'
+    fi
+  fi
+
+
+  if test -z "$RANLIB"; then
+    if test $gl_cv_c_amsterdam_compiler = yes; then
+      RANLIB=':'
+    else
+            if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
+set dummy ${ac_tool_prefix}ranlib; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_prog_RANLIB+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$RANLIB"; then
+  ac_cv_prog_RANLIB="$RANLIB" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_RANLIB="${ac_tool_prefix}ranlib"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+RANLIB=$ac_cv_prog_RANLIB
+if test -n "$RANLIB"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RANLIB" >&5
+$as_echo "$RANLIB" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_prog_RANLIB"; then
+  ac_ct_RANLIB=$RANLIB
+  # Extract the first word of "ranlib", so it can be a program name with args.
+set dummy ranlib; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_prog_ac_ct_RANLIB+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$ac_ct_RANLIB"; then
+  ac_cv_prog_ac_ct_RANLIB="$ac_ct_RANLIB" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_ac_ct_RANLIB="ranlib"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+ac_ct_RANLIB=$ac_cv_prog_ac_ct_RANLIB
+if test -n "$ac_ct_RANLIB"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_RANLIB" >&5
+$as_echo "$ac_ct_RANLIB" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+  if test "x$ac_ct_RANLIB" = x; then
+    RANLIB=":"
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ac_tool_warned=yes ;;
+esac
+    RANLIB=$ac_ct_RANLIB
+  fi
+else
+  RANLIB="$ac_cv_prog_RANLIB"
+fi
+
+    fi
+  fi
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
 $as_echo_n "checking for ANSI C header files... " >&6; }
 if test "${ac_cv_header_stdc+set}" = set; then :
@@ -6268,6 +6406,8 @@ $as_echo "$ac_cv_safe_to_define___extensions__" >&6; }
 
   $as_echo "#define _ALL_SOURCE 1" >>confdefs.h
 
+  $as_echo "#define _DARWIN_C_SOURCE 1" >>confdefs.h
+
   $as_echo "#define _GNU_SOURCE 1" >>confdefs.h
 
   $as_echo "#define _POSIX_PTHREAD_SEMANTICS 1" >>confdefs.h
@@ -6280,6 +6420,206 @@ $as_echo "$ac_cv_safe_to_define___extensions__" >&6; }
 
 
 
+
+# Check whether --enable-largefile was given.
+if test "${enable_largefile+set}" = set; then :
+  enableval=$enable_largefile;
+fi
+
+if test "$enable_largefile" != no; then
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for special C compiler options needed for large files" >&5
+$as_echo_n "checking for special C compiler options needed for large files... " >&6; }
+if test "${ac_cv_sys_largefile_CC+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_cv_sys_largefile_CC=no
+     if test "$GCC" != yes; then
+       ac_save_CC=$CC
+       while :; do
+         # IRIX 6.2 and later do not support large files by default,
+         # so use the C compiler's -n32 option if that helps.
+         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/types.h>
+ /* Check that off_t can represent 2**63 - 1 correctly.
+    We can't simply define LARGE_OFF_T to be 9223372036854775807,
+    since some C++ compilers masquerading as C compilers
+    incorrectly reject 9223372036854775807.  */
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+         if ac_fn_c_try_compile "$LINENO"; then :
+  break
+fi
+rm -f core conftest.err conftest.$ac_objext
+         CC="$CC -n32"
+         if ac_fn_c_try_compile "$LINENO"; then :
+  ac_cv_sys_largefile_CC=' -n32'; break
+fi
+rm -f core conftest.err conftest.$ac_objext
+         break
+       done
+       CC=$ac_save_CC
+       rm -f conftest.$ac_ext
+    fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_sys_largefile_CC" >&5
+$as_echo "$ac_cv_sys_largefile_CC" >&6; }
+  if test "$ac_cv_sys_largefile_CC" != no; then
+    CC=$CC$ac_cv_sys_largefile_CC
+  fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for _FILE_OFFSET_BITS value needed for large files" >&5
+$as_echo_n "checking for _FILE_OFFSET_BITS value needed for large files... " >&6; }
+if test "${ac_cv_sys_file_offset_bits+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  while :; do
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/types.h>
+ /* Check that off_t can represent 2**63 - 1 correctly.
+    We can't simply define LARGE_OFF_T to be 9223372036854775807,
+    since some C++ compilers masquerading as C compilers
+    incorrectly reject 9223372036854775807.  */
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ac_cv_sys_file_offset_bits=no; break
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#define _FILE_OFFSET_BITS 64
+#include <sys/types.h>
+ /* Check that off_t can represent 2**63 - 1 correctly.
+    We can't simply define LARGE_OFF_T to be 9223372036854775807,
+    since some C++ compilers masquerading as C compilers
+    incorrectly reject 9223372036854775807.  */
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ac_cv_sys_file_offset_bits=64; break
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  ac_cv_sys_file_offset_bits=unknown
+  break
+done
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_sys_file_offset_bits" >&5
+$as_echo "$ac_cv_sys_file_offset_bits" >&6; }
+case $ac_cv_sys_file_offset_bits in #(
+  no | unknown) ;;
+  *)
+cat >>confdefs.h <<_ACEOF
+#define _FILE_OFFSET_BITS $ac_cv_sys_file_offset_bits
+_ACEOF
+;;
+esac
+rm -rf conftest*
+  if test $ac_cv_sys_file_offset_bits = unknown; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for _LARGE_FILES value needed for large files" >&5
+$as_echo_n "checking for _LARGE_FILES value needed for large files... " >&6; }
+if test "${ac_cv_sys_large_files+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  while :; do
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/types.h>
+ /* Check that off_t can represent 2**63 - 1 correctly.
+    We can't simply define LARGE_OFF_T to be 9223372036854775807,
+    since some C++ compilers masquerading as C compilers
+    incorrectly reject 9223372036854775807.  */
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ac_cv_sys_large_files=no; break
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#define _LARGE_FILES 1
+#include <sys/types.h>
+ /* Check that off_t can represent 2**63 - 1 correctly.
+    We can't simply define LARGE_OFF_T to be 9223372036854775807,
+    since some C++ compilers masquerading as C compilers
+    incorrectly reject 9223372036854775807.  */
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ac_cv_sys_large_files=1; break
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  ac_cv_sys_large_files=unknown
+  break
+done
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_sys_large_files" >&5
+$as_echo "$ac_cv_sys_large_files" >&6; }
+case $ac_cv_sys_large_files in #(
+  no | unknown) ;;
+  *)
+cat >>confdefs.h <<_ACEOF
+#define _LARGE_FILES $ac_cv_sys_large_files
+_ACEOF
+;;
+esac
+rm -rf conftest*
+  fi
+
+
+fi
 
    case $ac_cv_prog_cc_stdc in #(
   no) :
@@ -6578,8 +6918,6 @@ esac
 
   # Code from module alloca-opt:
   # Code from module allocator:
-  # Code from module arg-nonnull:
-  # Code from module c++defs:
   # Code from module careadlinkat:
   # Code from module crypto/md5:
   # Code from module crypto/sha1:
@@ -6599,13 +6937,20 @@ esac
   # Code from module include_next:
   # Code from module intprops:
   # Code from module inttypes-incomplete:
+  # Code from module largefile:
+
   # Code from module lstat:
   # Code from module mktime:
   # Code from module multiarch:
+  # Code from module nocrash:
   # Code from module pthread_sigmask:
   # Code from module readlink:
   # Code from module signal:
   # Code from module sigprocmask:
+  # Code from module snippet/_Noreturn:
+  # Code from module snippet/arg-nonnull:
+  # Code from module snippet/c++defs:
+  # Code from module snippet/warn-on-use:
   # Code from module socklen:
   # Code from module ssize_t:
   # Code from module stat:
@@ -6628,7 +6973,6 @@ esac
   # Code from module u64:
   # Code from module unistd:
   # Code from module verify:
-  # Code from module warn-on-use:
 
 
 # On Suns, sometimes $CPP names a directory.
@@ -7502,9 +7846,9 @@ else
      if test "$GCC" != yes; then
        ac_save_CC=$CC
        while :; do
-	 # IRIX 6.2 and later do not support large files by default,
-	 # so use the C compiler's -n32 option if that helps.
-	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+         # IRIX 6.2 and later do not support large files by default,
+         # so use the C compiler's -n32 option if that helps.
+         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/types.h>
  /* Check that off_t can represent 2**63 - 1 correctly.
@@ -7513,8 +7857,8 @@ else
     incorrectly reject 9223372036854775807.  */
 #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
-		       && LARGE_OFF_T % 2147483647 == 1)
-		      ? 1 : -1];
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
 int
 main ()
 {
@@ -7523,16 +7867,16 @@ main ()
   return 0;
 }
 _ACEOF
-	 if ac_fn_c_try_compile "$LINENO"; then :
+         if ac_fn_c_try_compile "$LINENO"; then :
   break
 fi
 rm -f core conftest.err conftest.$ac_objext
-	 CC="$CC -n32"
-	 if ac_fn_c_try_compile "$LINENO"; then :
+         CC="$CC -n32"
+         if ac_fn_c_try_compile "$LINENO"; then :
   ac_cv_sys_largefile_CC=' -n32'; break
 fi
 rm -f core conftest.err conftest.$ac_objext
-	 break
+         break
        done
        CC=$ac_save_CC
        rm -f conftest.$ac_ext
@@ -7559,8 +7903,8 @@ else
     incorrectly reject 9223372036854775807.  */
 #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
-		       && LARGE_OFF_T % 2147483647 == 1)
-		      ? 1 : -1];
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
 int
 main ()
 {
@@ -7583,8 +7927,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     incorrectly reject 9223372036854775807.  */
 #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
-		       && LARGE_OFF_T % 2147483647 == 1)
-		      ? 1 : -1];
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
 int
 main ()
 {
@@ -7628,8 +7972,8 @@ else
     incorrectly reject 9223372036854775807.  */
 #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
-		       && LARGE_OFF_T % 2147483647 == 1)
-		      ? 1 : -1];
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
 int
 main ()
 {
@@ -7652,8 +7996,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     incorrectly reject 9223372036854775807.  */
 #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
-		       && LARGE_OFF_T % 2147483647 == 1)
-		      ? 1 : -1];
+                       && LARGE_OFF_T % 2147483647 == 1)
+                      ? 1 : -1];
 int
 main ()
 {
@@ -7682,6 +8026,8 @@ _ACEOF
 esac
 rm -rf conftest*
   fi
+
+
 fi
 
 
@@ -9113,7 +9459,7 @@ $as_echo "$HAVE_GNU_MAKE" >&6; }
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether gcc understands -MMD -MF" >&5
 $as_echo_n "checking whether gcc understands -MMD -MF... " >&6; }
       SAVE_CFLAGS="$CFLAGS"
-      CFLAGS="$CFLAGS -MMD -MF deps.d"
+      CFLAGS="$CFLAGS -MMD -MF deps.d -MP"
       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -9138,7 +9484,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo "$ac_enable_autodepend" >&6; }
    fi
    if test $ac_enable_autodepend = yes; then
-      DEPFLAGS='-MMD -MF ${DEPDIR}/$*.d'
+      DEPFLAGS='-MMD -MF ${DEPDIR}/$*.d -MP'
       ## In parallel builds, another make might create depdir between
       ## the first test and mkdir, so stick another test on the end.
       ## Or use install-sh -d?  mkdir -p is not portable.
@@ -13746,7 +14092,7 @@ __fpending mblen mbrlen mbsinit strsignal setitimer ualarm \
 sendto recvfrom getsockopt setsockopt getsockname getpeername \
 gai_strerror mkstemp getline getdelim mremap fsync sync \
 difftime mempcpy mblen mbrlen posix_memalign \
-cfmakeraw cfsetspeed isnan copysign __executable_start
+cfmakeraw cfsetspeed copysign __executable_start
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -15324,6 +15670,18 @@ $as_echo "#define HAVE_WORKING_FORK 1" >>confdefs.h
 fi
 
 
+for ac_func in snprintf
+do :
+  ac_fn_c_check_func "$LINENO" "snprintf" "ac_cv_func_snprintf"
+if test "x$ac_cv_func_snprintf" = x""yes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_SNPRINTF 1
+_ACEOF
+
+fi
+done
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for nl_langinfo and CODESET" >&5
 $as_echo_n "checking for nl_langinfo and CODESET... " >&6; }
 if test "${emacs_cv_langinfo_codeset+set}" = set; then :
@@ -15667,6 +16025,7 @@ fi
 
 
 # Configure gnulib here, now that we know LIBS.
+
 
 
 
@@ -16314,8 +16673,6 @@ $as_echo "#define HAVE_C99_STRTOLD 1" >>confdefs.h
   UNISTD_H_HAVE_WINSOCK2_H_AND_USE_SOCKETS=0;
 
 
-
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for st_dm_mode in struct stat" >&5
 $as_echo_n "checking for st_dm_mode in struct stat... " >&6; }
 if test "${ac_cv_struct_st_dm_mode+set}" = set; then :
@@ -16842,11 +17199,99 @@ else
                            #include <stddef.h>
                            #include <string.h>
 
+#include <stdlib.h>
+#if defined __MACH__ && defined __APPLE__
+/* Avoid a crash on MacOS X.  */
+#include <mach/mach.h>
+#include <mach/mach_error.h>
+#include <mach/thread_status.h>
+#include <mach/exception.h>
+#include <mach/task.h>
+#include <pthread.h>
+/* The exception port on which our thread listens.  */
+static mach_port_t our_exception_port;
+/* The main function of the thread listening for exceptions of type
+   EXC_BAD_ACCESS.  */
+static void *
+mach_exception_thread (void *arg)
+{
+  /* Buffer for a message to be received.  */
+  struct {
+    mach_msg_header_t head;
+    mach_msg_body_t msgh_body;
+    char data[1024];
+  } msg;
+  mach_msg_return_t retval;
+  /* Wait for a message on the exception port.  */
+  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
+                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
+  if (retval != MACH_MSG_SUCCESS)
+    abort ();
+  exit (1);
+}
+static void
+nocrash_init (void)
+{
+  mach_port_t self = mach_task_self ();
+  /* Allocate a port on which the thread shall listen for exceptions.  */
+  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
+      == KERN_SUCCESS) {
+    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
+    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
+                                MACH_MSG_TYPE_MAKE_SEND)
+        == KERN_SUCCESS) {
+      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
+         for us.  */
+      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
+      /* Create the thread listening on the exception port.  */
+      pthread_attr_t attr;
+      pthread_t thread;
+      if (pthread_attr_init (&attr) == 0
+          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
+          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
+        pthread_attr_destroy (&attr);
+        /* Replace the exception port info for these exceptions with our own.
+           Note that we replace the exception port for the entire task, not only
+           for a particular thread.  This has the effect that when our exception
+           port gets the message, the thread specific exception port has already
+           been asked, and we don't need to bother about it.
+           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
+        task_set_exception_ports (self, mask, our_exception_port,
+                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
+      }
+    }
+  }
+}
+#else
+/* Avoid a crash on POSIX systems.  */
+#include <signal.h>
+/* A POSIX signal handler.  */
+static void
+exception_handler (int sig)
+{
+  exit (1);
+}
+static void
+nocrash_init (void)
+{
+#ifdef SIGSEGV
+  signal (SIGSEGV, exception_handler);
+#endif
+#ifdef SIGBUS
+  signal (SIGBUS, exception_handler);
+#endif
+}
+#endif
+
+
 int
 main ()
 {
 
              int result = 0;
+
+             nocrash_init();
+
              /* This code succeeds on glibc 2.8, OpenBSD 4.0, Cygwin, mingw,
                 and fails on MacOS X 10.5, AIX 5.2, HP-UX 11, IRIX 6.5,
                 OSF/1 5.1, Solaris 10.  */
@@ -18353,6 +18798,8 @@ fi
 
 
 
+
+
 ac_fn_c_check_decl "$LINENO" "strtoimax" "ac_cv_have_decl_strtoimax" "$ac_includes_default"
 if test "x$ac_cv_have_decl_strtoimax" = x""yes; then :
   ac_have_decl=1
@@ -18363,6 +18810,8 @@ fi
 cat >>confdefs.h <<_ACEOF
 #define HAVE_DECL_STRTOIMAX $ac_have_decl
 _ACEOF
+
+
 
 ac_fn_c_check_decl "$LINENO" "strtoumax" "ac_cv_have_decl_strtoumax" "$ac_includes_default"
 if test "x$ac_cv_have_decl_strtoumax" = x""yes; then :
@@ -18814,12 +19263,12 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_dup2_works" >&5
 $as_echo "$gl_cv_func_dup2_works" >&6; }
     if test "$gl_cv_func_dup2_works" = no; then
-
-
-
-  if test $ac_cv_func_dup2 = yes; then
-    REPLACE_DUP2=1
+      REPLACE_DUP2=1
+    fi
   fi
+
+
+if test $HAVE_DUP2 = 0 || test $REPLACE_DUP2 = 1; then
 
 
 
@@ -18830,10 +19279,7 @@ $as_echo "$gl_cv_func_dup2_works" >&6; }
 
   gl_LIBOBJS="$gl_LIBOBJS dup2.$ac_objext"
 
-
-    fi
-  fi
-
+fi
 
 
 
@@ -19768,72 +20214,206 @@ fi
 
 
   LIB_PTHREAD_SIGMASK=
-            if test $ac_cv_func_pthread_sigmask != yes; then
-      gl_save_LIBS=$LIBS
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing pthread_sigmask" >&5
-$as_echo_n "checking for library containing pthread_sigmask... " >&6; }
-if test "${ac_cv_search_pthread_sigmask+set}" = set; then :
+
+
+                    if test $ac_cv_func_pthread_sigmask = yes; then
+                  :
+    else
+            HAVE_PTHREAD_SIGMASK=0
+                        REPLACE_PTHREAD_SIGMASK=1
+    fi
+
+
+
+
+    if test $HAVE_PTHREAD_SIGMASK = 1; then
+
+
+                if test -z "$LIB_PTHREAD_SIGMASK"; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether pthread_sigmask works without -lpthread" >&5
+$as_echo_n "checking whether pthread_sigmask works without -lpthread... " >&6; }
+if test "${gl_cv_func_pthread_sigmask_in_libc_works+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+          if test "$cross_compiling" = yes; then :
+
+             case "$host_os" in
+               freebsd* | hpux* | solaris | solaris2.[2-9]*)
+                 gl_cv_func_pthread_sigmask_in_libc_works="guessing no";;
+               *)
+                 gl_cv_func_pthread_sigmask_in_libc_works="guessing yes";;
+             esac
+
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char pthread_sigmask ();
-int
-main ()
+#include <pthread.h>
+#include <signal.h>
+#include <stddef.h>
+int main ()
 {
-return pthread_sigmask ();
-  ;
+  sigset_t set;
+  sigemptyset (&set);
+  return pthread_sigmask (1729, &set, NULL) != 0;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  gl_cv_func_pthread_sigmask_in_libc_works=no
+else
+  gl_cv_func_pthread_sigmask_in_libc_works=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_pthread_sigmask_in_libc_works" >&5
+$as_echo "$gl_cv_func_pthread_sigmask_in_libc_works" >&6; }
+      case "$gl_cv_func_pthread_sigmask_in_libc_works" in
+        *no)
+          REPLACE_PTHREAD_SIGMASK=1
+
+$as_echo "#define PTHREAD_SIGMASK_INEFFECTIVE 1" >>confdefs.h
+
+          ;;
+      esac
+    fi
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether pthread_sigmask returns error numbers" >&5
+$as_echo_n "checking whether pthread_sigmask returns error numbers... " >&6; }
+if test "${gl_cv_func_pthread_sigmask_return_works+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+
+        gl_save_LIBS="$LIBS"
+        LIBS="$LIBS $LIB_PTHREAD_SIGMASK"
+        if test "$cross_compiling" = yes; then :
+  case "$host_os" in
+             cygwin*)
+               gl_cv_func_pthread_sigmask_return_works="guessing no";;
+             *)
+               gl_cv_func_pthread_sigmask_return_works="guessing yes";;
+           esac
+
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <pthread.h>
+#include <signal.h>
+#include <stddef.h>
+int main ()
+{
+  sigset_t set;
+  sigemptyset (&set);
+  if (pthread_sigmask (1729, &set, NULL) == -1)
+    return 1;
   return 0;
 }
 _ACEOF
-for ac_lib in '' pthread c_r; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_pthread_sigmask=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if test "${ac_cv_search_pthread_sigmask+set}" = set; then :
-  break
-fi
-done
-if test "${ac_cv_search_pthread_sigmask+set}" = set; then :
-
+if ac_fn_c_try_run "$LINENO"; then :
+  gl_cv_func_pthread_sigmask_return_works=yes
 else
-  ac_cv_search_pthread_sigmask=no
+  gl_cv_func_pthread_sigmask_return_works=no
 fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_pthread_sigmask" >&5
-$as_echo "$ac_cv_search_pthread_sigmask" >&6; }
-ac_res=$ac_cv_search_pthread_sigmask
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
 
-      LIBS=$gl_save_LIBS
-      if test "$ac_cv_search_pthread_sigmask" = no; then
-        HAVE_PTHREAD_SIGMASK=0
-      elif test "$ac_cv_search_pthread_sigmask" != 'none required'; then
-        LIB_PTHREAD_SIGMASK=$ac_cv_search_pthread_sigmask
-      fi
-    fi
+        LIBS="$gl_save_LIBS"
 
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_pthread_sigmask_return_works" >&5
+$as_echo "$gl_cv_func_pthread_sigmask_return_works" >&6; }
+    case "$gl_cv_func_pthread_sigmask_return_works" in
+      *no)
+        REPLACE_PTHREAD_SIGMASK=1
+
+$as_echo "#define PTHREAD_SIGMASK_FAILS_WITH_ERRNO 1" >>confdefs.h
+
+        ;;
+    esac
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether pthread_sigmask unblocks signals correctly" >&5
+$as_echo_n "checking whether pthread_sigmask unblocks signals correctly... " >&6; }
+if test "${gl_cv_func_pthread_sigmask_unblock_works+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+
+        case "$host_os" in
+          irix*)
+            gl_cv_func_pthread_sigmask_unblock_works="guessing no";;
+          *)
+            gl_cv_func_pthread_sigmask_unblock_works="guessing yes";;
+        esac
+                                gl_save_LIBS="$LIBS"
+        LIBS="$LIBS $LIBMULTITHREAD"
+        if test "$cross_compiling" = yes; then :
+  :
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <pthread.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+static volatile int sigint_occurred;
+static void
+sigint_handler (int sig)
+{
+  sigint_occurred++;
+}
+int main ()
+{
+  sigset_t set;
+  int pid = getpid ();
+  char command[80];
+  signal (SIGINT, sigint_handler);
+  sigemptyset (&set);
+  sigaddset (&set, SIGINT);
+  if (!(pthread_sigmask (SIG_BLOCK, &set, NULL) == 0))
+    return 1;
+  sprintf (command, "sh -c 'sleep 1; kill -%d %d' &", SIGINT, pid);
+  if (!(system (command) == 0))
+    return 2;
+  sleep (2);
+  if (!(sigint_occurred == 0))
+    return 3;
+  if (!(pthread_sigmask (SIG_UNBLOCK, &set, NULL) == 0))
+    return 4;
+  if (!(sigint_occurred == 1)) /* This fails on IRIX.  */
+    return 5;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  :
+else
+  gl_cv_func_pthread_sigmask_unblock_works=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+        LIBS="$gl_save_LIBS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_pthread_sigmask_unblock_works" >&5
+$as_echo "$gl_cv_func_pthread_sigmask_unblock_works" >&6; }
+    case "$gl_cv_func_pthread_sigmask_unblock_works" in
+      *no)
+        REPLACE_PTHREAD_SIGMASK=1
+
+$as_echo "#define PTHREAD_SIGMASK_UNBLOCK_BUG 1" >>confdefs.h
+
+        ;;
+    esac
+  fi
 
 if test $HAVE_PTHREAD_SIGMASK = 0 || test $REPLACE_PTHREAD_SIGMASK = 1; then
 
@@ -19845,6 +20425,13 @@ if test $HAVE_PTHREAD_SIGMASK = 0 || test $REPLACE_PTHREAD_SIGMASK = 1; then
 
 
   gl_LIBOBJS="$gl_LIBOBJS pthread_sigmask.$ac_objext"
+
+
+  if test $HAVE_PTHREAD_SIGMASK = 1; then
+
+$as_echo "#define HAVE_PTHREAD_SIGMASK 1" >>confdefs.h
+
+  fi
 
 fi
 
@@ -20601,23 +21188,12 @@ $as_echo "#define my_strftime nstrftime" >>confdefs.h
 
 
 
+
   if test "$ac_cv_have_decl_strtoimax" != yes; then
     HAVE_DECL_STRTOIMAX=0
-
-    for ac_func in strtoimax
-do :
-  ac_fn_c_check_func "$LINENO" "strtoimax" "ac_cv_func_strtoimax"
-if test "x$ac_cv_func_strtoimax" = x""yes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_STRTOIMAX 1
-_ACEOF
-
-fi
-done
-
   fi
 
-if test "$ac_cv_have_decl_strtoimax" != yes && test $ac_cv_func_strtoimax = no; then
+if test $ac_cv_func_strtoimax = no; then
 
 
 
@@ -20657,23 +21233,12 @@ fi
 
 
 
+
   if test "$ac_cv_have_decl_strtoumax" != yes; then
     HAVE_DECL_STRTOUMAX=0
-
-    for ac_func in strtoumax
-do :
-  ac_fn_c_check_func "$LINENO" "strtoumax" "ac_cv_func_strtoumax"
-if test "x$ac_cv_func_strtoumax" = x""yes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_STRTOUMAX 1
-_ACEOF
-
-fi
-done
-
   fi
 
-if test "$ac_cv_have_decl_strtoumax" != yes && test $ac_cv_func_strtoumax = no; then
+if test $ac_cv_func_strtoumax = no; then
 
 
 
@@ -21354,16 +21919,16 @@ fi
   if test $HAVE_READLINK = 0 || test $REPLACE_READLINK = 1; then
     func_gl_gnulib_m4code_stat
   fi
-  if test "$ac_cv_have_decl_strtoimax" != yes && test $ac_cv_func_strtoimax = no; then
+  if test $ac_cv_func_strtoimax = no; then
     func_gl_gnulib_m4code_verify
   fi
-  if test "$ac_cv_have_decl_strtoimax" != yes && test $ac_cv_func_strtoimax = no && test $ac_cv_type_long_long_int = yes; then
+  if test $ac_cv_func_strtoimax = no && test $ac_cv_type_long_long_int = yes; then
     func_gl_gnulib_m4code_strtoll
   fi
-  if test "$ac_cv_have_decl_strtoumax" != yes && test $ac_cv_func_strtoumax = no; then
+  if test $ac_cv_func_strtoumax = no; then
     func_gl_gnulib_m4code_verify
   fi
-  if test "$ac_cv_have_decl_strtoumax" != yes && test $ac_cv_func_strtoumax = no && test $ac_cv_type_unsigned_long_long_int = yes; then
+  if test $ac_cv_func_strtoumax = no && test $ac_cv_type_unsigned_long_long_int = yes; then
     func_gl_gnulib_m4code_strtoull
   fi
 

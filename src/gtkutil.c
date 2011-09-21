@@ -20,6 +20,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 
 #ifdef USE_GTK
+#include <float.h>
 #include <signal.h>
 #include <stdio.h>
 #include <setjmp.h>
@@ -421,7 +422,7 @@ xg_get_image_for_pixmap (FRAME_PTR f,
 static void
 xg_set_cursor (GtkWidget *w, GdkCursor *cursor)
 {
-  GdkWindow *window = gtk_widget_get_window(w);
+  GdkWindow *window = gtk_widget_get_window (w);
   GList *children = gdk_window_peek_children (window);
 
   gdk_window_set_cursor (window, cursor);
@@ -487,7 +488,8 @@ get_utf8_string (const char *str)
   if (!utf8_str)
     {
       /* Probably some control characters in str.  Escape them. */
-      size_t nr_bad = 0;
+      ptrdiff_t len;
+      ptrdiff_t nr_bad = 0;
       gsize bytes_read;
       gsize bytes_written;
       unsigned char *p = (unsigned char *)str;
@@ -511,7 +513,10 @@ get_utf8_string (const char *str)
         }
       if (cp) g_free (cp);
 
-      up = utf8_str = xmalloc (strlen (str) + nr_bad * 4 + 1);
+      len = strlen (str);
+      if ((min (PTRDIFF_MAX, SIZE_MAX) - len - 1) / 4 < nr_bad)
+	memory_full (SIZE_MAX);
+      up = utf8_str = xmalloc (len + nr_bad * 4 + 1);
       p = (unsigned char *)str;
 
       while (! (cp = g_locale_to_utf8 ((char *)p, -1, &bytes_read,
@@ -563,7 +568,7 @@ xg_check_special_colors (struct frame *f,
     GtkStyleContext *gsty
       = gtk_widget_get_style_context (FRAME_GTK_OUTER_WIDGET (f));
     GdkRGBA col;
-    char buf[64];
+    char buf[sizeof "rgbi://" + 3 * (DBL_MAX_10_EXP + sizeof "-1.000000" - 1)];
     int state = GTK_STATE_FLAG_SELECTED|GTK_STATE_FLAG_FOCUSED;
     if (get_fg)
       gtk_style_context_get_color (gsty, state, &col);
@@ -793,7 +798,7 @@ xg_set_geometry (FRAME_PTR f)
       int xneg = f->size_hint_flags & XNegative;
       int top = f->top_pos;
       int yneg = f->size_hint_flags & YNegative;
-      char geom_str[32];
+      char geom_str[sizeof "=x--" + 4 * INT_STRLEN_BOUND (int)];
 
       if (xneg)
         left = -left;
@@ -3296,8 +3301,8 @@ static int scroll_bar_width_for_theme;
 static struct
 {
   GtkWidget **widgets;
-  int max_size;
-  int used;
+  ptrdiff_t max_size;
+  ptrdiff_t used;
 } id_to_widget;
 
 /* Grow this much every time we need to allocate more  */
@@ -3306,17 +3311,20 @@ static struct
 
 /* Store the widget pointer W in id_to_widget and return the integer index.  */
 
-static int
+static ptrdiff_t
 xg_store_widget_in_map (GtkWidget *w)
 {
-  int i;
+  ptrdiff_t i;
 
   if (id_to_widget.max_size == id_to_widget.used)
     {
-      int new_size = id_to_widget.max_size + ID_TO_WIDGET_INCR;
+      ptrdiff_t new_size;
+      if (TYPE_MAXIMUM (Window) - ID_TO_WIDGET_INCR < id_to_widget.max_size)
+	memory_full (SIZE_MAX);
 
-      id_to_widget.widgets = xrealloc (id_to_widget.widgets,
-                                       sizeof (GtkWidget *)*new_size);
+      new_size = id_to_widget.max_size + ID_TO_WIDGET_INCR;
+      id_to_widget.widgets = xnrealloc (id_to_widget.widgets,
+					new_size, sizeof (GtkWidget *));
 
       for (i = id_to_widget.max_size; i < new_size; ++i)
         id_to_widget.widgets[i] = 0;
@@ -3345,7 +3353,7 @@ xg_store_widget_in_map (GtkWidget *w)
    Called when scroll bar is destroyed.  */
 
 static void
-xg_remove_widget_from_map (int idx)
+xg_remove_widget_from_map (ptrdiff_t idx)
 {
   if (idx < id_to_widget.max_size && id_to_widget.widgets[idx] != 0)
     {
@@ -3357,7 +3365,7 @@ xg_remove_widget_from_map (int idx)
 /* Get the widget pointer at IDX from id_to_widget. */
 
 static GtkWidget *
-xg_get_widget_from_map (int idx)
+xg_get_widget_from_map (ptrdiff_t idx)
 {
   if (idx < id_to_widget.max_size && id_to_widget.widgets[idx] != 0)
     return id_to_widget.widgets[idx];
@@ -3396,10 +3404,10 @@ xg_get_default_scrollbar_width (void)
 /* Return the scrollbar id for X Window WID on display DPY.
    Return -1 if WID not in id_to_widget.  */
 
-int
+ptrdiff_t
 xg_get_scroll_id_for_window (Display *dpy, Window wid)
 {
-  int idx;
+  ptrdiff_t idx;
   GtkWidget *w;
 
   w = xg_win_to_widget (dpy, wid);
@@ -3421,7 +3429,7 @@ xg_get_scroll_id_for_window (Display *dpy, Window wid)
 static void
 xg_gtk_scroll_destroy (GtkWidget *widget, gpointer data)
 {
-  int id = (intptr_t) data;
+  intptr_t id = (intptr_t) data;
   xg_remove_widget_from_map (id);
 }
 
@@ -3496,7 +3504,7 @@ xg_create_scroll_bar (FRAME_PTR f,
 /* Remove the scroll bar represented by SCROLLBAR_ID from the frame F.  */
 
 void
-xg_remove_scroll_bar (FRAME_PTR f, int scrollbar_id)
+xg_remove_scroll_bar (FRAME_PTR f, ptrdiff_t scrollbar_id)
 {
   GtkWidget *w = xg_get_widget_from_map (scrollbar_id);
   if (w)
@@ -3515,7 +3523,7 @@ xg_remove_scroll_bar (FRAME_PTR f, int scrollbar_id)
 
 void
 xg_update_scrollbar_pos (FRAME_PTR f,
-                         int scrollbar_id,
+                         ptrdiff_t scrollbar_id,
                          int top,
                          int left,
                          int width,
@@ -4211,6 +4219,7 @@ xg_make_tool_item (FRAME_PTR f,
   GtkToolItem *ti = gtk_tool_item_new ();
   GtkWidget *vb = horiz ? gtk_hbox_new (FALSE, 0) : gtk_vbox_new (FALSE, 0);
   GtkWidget *wb = gtk_button_new ();
+  /* The eventbox is here so we can have tooltips on disabled items.  */
   GtkWidget *weventbox = gtk_event_box_new ();
 
   if (wimage && !text_image)
@@ -4429,7 +4438,7 @@ update_frame_tool_bar (FRAME_PTR f)
       int enabled_p = !NILP (PROP (TOOL_BAR_ITEM_ENABLED_P));
       int selected_p = !NILP (PROP (TOOL_BAR_ITEM_SELECTED_P));
       int idx;
-      int img_id;
+      ptrdiff_t img_id;
       int icon_size = 0;
       struct image *img = NULL;
       Lisp_Object image;

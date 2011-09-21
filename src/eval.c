@@ -133,8 +133,9 @@ static Lisp_Object Ffetch_bytecode (Lisp_Object);
 void
 init_eval_once (void)
 {
-  specpdl_size = 50;
-  specpdl = (struct specbinding *) xmalloc (specpdl_size * sizeof (struct specbinding));
+  enum { size = 50 };
+  specpdl = (struct specbinding *) xmalloc (size * sizeof (struct specbinding));
+  specpdl_size = size;
   specpdl_ptr = specpdl;
   /* Don't forget to update docs (lispref node "Local Variables").  */
   max_specpdl_size = 1300; /* 1000 is not enough for CEDET's c-by.el.  */
@@ -192,7 +193,7 @@ call_debugger (Lisp_Object arg)
   if (lisp_eval_depth + 40 > max_lisp_eval_depth)
     max_lisp_eval_depth = lisp_eval_depth + 40;
 
-  if (SPECPDL_INDEX () + 100 > max_specpdl_size)
+  if (max_specpdl_size - 100 < SPECPDL_INDEX ())
     max_specpdl_size = SPECPDL_INDEX () + 100;
 
 #ifdef HAVE_WINDOW_SYSTEM
@@ -466,7 +467,7 @@ usage: (setq [SYM VAL]...)  */)
 
       args_left = Fcdr (Fcdr (args_left));
     }
-  while (!NILP(args_left));
+  while (!NILP (args_left));
 
   UNGCPRO;
   return val;
@@ -1357,8 +1358,12 @@ A handler is applicable to an error
 if CONDITION-NAME is one of the error's condition names.
 If an error happens, the first applicable handler is run.
 
-The car of a handler may be a list of condition names
-instead of a single condition name.  Then it handles all of them.
+The car of a handler may be a list of condition names instead of a
+single condition name; then it handles all of them.  If the special
+condition name `debug' is present in this list, it allows another
+condition in the list to run the debugger if `debug-on-error' and the
+other usual mechanisms says it should (otherwise, `condition-case'
+suppresses the debugger).
 
 When a handler handles an error, control returns to the `condition-case'
 and it executes the handler's BODY...
@@ -1699,6 +1704,10 @@ See also the function `condition-case'.  */)
       && (!NILP (Vdebug_on_signal)
 	  /* If no handler is present now, try to run the debugger.  */
 	  || NILP (clause)
+	  /* A `debug' symbol in the handler list disables the normal
+	     suppression of the debugger.  */
+	  || (CONSP (clause) && CONSP (XCAR (clause))
+	      && !NILP (Fmemq (Qdebug, XCAR (clause))))
 	  /* Special handler that means "print a message and run debugger
 	     if requested".  */
 	  || EQ (h->handler, Qerror)))
@@ -1942,35 +1951,11 @@ verror (const char *m, va_list ap)
   char buf[4000];
   ptrdiff_t size = sizeof buf;
   ptrdiff_t size_max = STRING_BYTES_BOUND + 1;
-  char const *m_end = m + strlen (m);
   char *buffer = buf;
   ptrdiff_t used;
   Lisp_Object string;
 
-  while (1)
-    {
-      va_list ap_copy;
-      va_copy (ap_copy, ap);
-      used = doprnt (buffer, size, m, m_end, ap_copy);
-      va_end (ap_copy);
-
-      /* Note: the -1 below is because `doprnt' returns the number of bytes
-	 excluding the terminating null byte, and it always terminates with a
-	 null byte, even when producing a truncated message.  */
-      if (used < size - 1)
-	break;
-      if (size <= size_max / 2)
-	size *= 2;
-      else if (size < size_max)
-	size = size_max;
-      else
-	break;	/* and leave the message truncated */
-
-      if (buffer != buf)
-	xfree (buffer);
-      buffer = (char *) xmalloc (size);
-    }
-
+  used = evxprintf (&buffer, &size, buf, size_max, m, ap);
   string = make_string (buffer, used);
   if (buffer != buf)
     xfree (buffer);
@@ -3246,17 +3231,21 @@ static void
 grow_specpdl (void)
 {
   register int count = SPECPDL_INDEX ();
-  if (specpdl_size >= max_specpdl_size)
+  int max_size =
+    min (max_specpdl_size,
+	 min (max (PTRDIFF_MAX, SIZE_MAX) / sizeof (struct specbinding),
+	      INT_MAX));
+  int size;
+  if (max_size <= specpdl_size)
     {
       if (max_specpdl_size < 400)
-	max_specpdl_size = 400;
-      if (specpdl_size >= max_specpdl_size)
+	max_size = max_specpdl_size = 400;
+      if (max_size <= specpdl_size)
 	signal_error ("Variable binding depth exceeds max-specpdl-size", Qnil);
     }
-  specpdl_size *= 2;
-  if (specpdl_size > max_specpdl_size)
-    specpdl_size = max_specpdl_size;
-  specpdl = (struct specbinding *) xrealloc (specpdl, specpdl_size * sizeof (struct specbinding));
+  size = specpdl_size < max_size / 2 ? 2 * specpdl_size : max_size;
+  specpdl = xnrealloc (specpdl, size, sizeof *specpdl);
+  specpdl_size = size;
   specpdl_ptr = specpdl + count;
 }
 

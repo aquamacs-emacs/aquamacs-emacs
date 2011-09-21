@@ -46,6 +46,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "syssignal.h"
 #include "termhooks.h"		/* For struct terminal.  */
 #include <setjmp.h>
+#include <verify.h>
 
 /* GC_MALLOC_CHECK defined means perform validity checks of malloc'd
    memory.  Can do this only if using gmalloc.c.  */
@@ -730,6 +731,93 @@ xfree (POINTER_TYPE *block)
   /* We don't call refill_memory_reserve here
      because that duplicates doing so in emacs_blocked_free
      and the criterion should go there.  */
+}
+
+
+/* Other parts of Emacs pass large int values to allocator functions
+   expecting ptrdiff_t.  This is portable in practice, but check it to
+   be safe.  */
+verify (INT_MAX <= PTRDIFF_MAX);
+
+
+/* Allocate an array of NITEMS items, each of size ITEM_SIZE.
+   Signal an error on memory exhaustion, and block interrupt input.  */
+
+void *
+xnmalloc (ptrdiff_t nitems, ptrdiff_t item_size)
+{
+  xassert (0 <= nitems && 0 < item_size);
+  if (min (PTRDIFF_MAX, SIZE_MAX) / item_size < nitems)
+    memory_full (SIZE_MAX);
+  return xmalloc (nitems * item_size);
+}
+
+
+/* Reallocate an array PA to make it of NITEMS items, each of size ITEM_SIZE.
+   Signal an error on memory exhaustion, and block interrupt input.  */
+
+void *
+xnrealloc (void *pa, ptrdiff_t nitems, ptrdiff_t item_size)
+{
+  xassert (0 <= nitems && 0 < item_size);
+  if (min (PTRDIFF_MAX, SIZE_MAX) / item_size < nitems)
+    memory_full (SIZE_MAX);
+  return xrealloc (pa, nitems * item_size);
+}
+
+
+/* Grow PA, which points to an array of *NITEMS items, and return the
+   location of the reallocated array, updating *NITEMS to reflect its
+   new size.  The new array will contain at least NITEMS_INCR_MIN more
+   items, but will not contain more than NITEMS_MAX items total.
+   ITEM_SIZE is the size of each item, in bytes.
+
+   ITEM_SIZE and NITEMS_INCR_MIN must be positive.  *NITEMS must be
+   nonnegative.  If NITEMS_MAX is -1, it is treated as if it were
+   infinity.
+
+   If PA is null, then allocate a new array instead of reallocating
+   the old one.  Thus, to grow an array A without saving its old
+   contents, invoke xfree (A) immediately followed by xgrowalloc (0,
+   &NITEMS, ...).
+
+   Block interrupt input as needed.  If memory exhaustion occurs, set
+   *NITEMS to zero if PA is null, and signal an error (i.e., do not
+   return).  */
+
+void *
+xpalloc (void *pa, ptrdiff_t *nitems, ptrdiff_t nitems_incr_min,
+	 ptrdiff_t nitems_max, ptrdiff_t item_size)
+{
+  /* The approximate size to use for initial small allocation
+     requests.  This is the largest "small" request for the GNU C
+     library malloc.  */
+  enum { DEFAULT_MXFAST = 64 * sizeof (size_t) / 4 };
+
+  /* If the array is tiny, grow it to about (but no greater than)
+     DEFAULT_MXFAST bytes.  Otherwise, grow it by about 50%.  */
+  ptrdiff_t n = *nitems;
+  ptrdiff_t tiny_max = DEFAULT_MXFAST / item_size - n;
+  ptrdiff_t half_again = n >> 1;
+  ptrdiff_t incr_estimate = max (tiny_max, half_again);
+
+  /* Adjust the increment according to three constraints: NITEMS_INCR_MIN,
+     NITEMS_MAX, and what the C language can represent safely.  */
+  ptrdiff_t C_language_max = min (PTRDIFF_MAX, SIZE_MAX) / item_size;
+  ptrdiff_t n_max = (0 <= nitems_max && nitems_max < C_language_max
+		     ? nitems_max : C_language_max);
+  ptrdiff_t nitems_incr_max = n_max - n;
+  ptrdiff_t incr = max (nitems_incr_min, min (incr_estimate, nitems_incr_max));
+
+  xassert (0 < item_size && 0 < nitems_incr_min && 0 <= n && -1 <= nitems_max);
+  if (! pa)
+    *nitems = 0;
+  if (nitems_incr_max < incr)
+    memory_full (SIZE_MAX);
+  n += incr;
+  pa = xrealloc (pa, n * item_size);
+  *nitems = n;
+  return pa;
 }
 
 
@@ -1792,7 +1880,7 @@ check_string_free_list (void)
   while (s != NULL)
     {
       if ((uintptr_t) s < 1024)
-	abort();
+	abort ();
       s = NEXT_FREE_LISP_STRING (s);
     }
 }
@@ -2443,17 +2531,17 @@ make_uninit_multibyte_string (EMACS_INT nchars, EMACS_INT nbytes)
    / (sizeof (struct Lisp_Float) * CHAR_BIT + 1))
 
 #define GETMARKBIT(block,n)				\
-  (((block)->gcmarkbits[(n) / (sizeof(int) * CHAR_BIT)]	\
-    >> ((n) % (sizeof(int) * CHAR_BIT)))		\
+  (((block)->gcmarkbits[(n) / (sizeof (int) * CHAR_BIT)]	\
+    >> ((n) % (sizeof (int) * CHAR_BIT)))		\
    & 1)
 
 #define SETMARKBIT(block,n)				\
-  (block)->gcmarkbits[(n) / (sizeof(int) * CHAR_BIT)]	\
-  |= 1 << ((n) % (sizeof(int) * CHAR_BIT))
+  (block)->gcmarkbits[(n) / (sizeof (int) * CHAR_BIT)]	\
+  |= 1 << ((n) % (sizeof (int) * CHAR_BIT))
 
 #define UNSETMARKBIT(block,n)				\
-  (block)->gcmarkbits[(n) / (sizeof(int) * CHAR_BIT)]	\
-  &= ~(1 << ((n) % (sizeof(int) * CHAR_BIT)))
+  (block)->gcmarkbits[(n) / (sizeof (int) * CHAR_BIT)]	\
+  &= ~(1 << ((n) % (sizeof (int) * CHAR_BIT)))
 
 #define FLOAT_BLOCK(fptr) \
   ((struct float_block *) (((uintptr_t) (fptr)) & ~(BLOCK_ALIGN - 1)))
@@ -2465,7 +2553,7 @@ struct float_block
 {
   /* Place `floats' at the beginning, to ease up FLOAT_INDEX's job.  */
   struct Lisp_Float floats[FLOAT_BLOCK_SIZE];
-  int gcmarkbits[1 + FLOAT_BLOCK_SIZE / (sizeof(int) * CHAR_BIT)];
+  int gcmarkbits[1 + FLOAT_BLOCK_SIZE / (sizeof (int) * CHAR_BIT)];
   struct float_block *next;
 };
 
@@ -2571,7 +2659,7 @@ struct cons_block
 {
   /* Place `conses' at the beginning, to ease up CONS_INDEX's job.  */
   struct Lisp_Cons conses[CONS_BLOCK_SIZE];
-  int gcmarkbits[1 + CONS_BLOCK_SIZE / (sizeof(int) * CHAR_BIT)];
+  int gcmarkbits[1 + CONS_BLOCK_SIZE / (sizeof (int) * CHAR_BIT)];
   struct cons_block *next;
 };
 
@@ -2876,7 +2964,7 @@ allocate_hash_table (void)
 struct window *
 allocate_window (void)
 {
-  return ALLOCATE_PSEUDOVECTOR(struct window, current_matrix, PVEC_WINDOW);
+  return ALLOCATE_PSEUDOVECTOR (struct window, current_matrix, PVEC_WINDOW);
 }
 
 
@@ -4071,7 +4159,7 @@ mark_maybe_pointer (void *p)
 	  break;
 
 	case MEM_TYPE_BUFFER:
-	  if (live_buffer_p (m, p) && !VECTOR_MARKED_P((struct buffer *)p))
+	  if (live_buffer_p (m, p) && !VECTOR_MARKED_P ((struct buffer *)p))
 	    XSETVECTOR (obj, p);
 	  break;
 
