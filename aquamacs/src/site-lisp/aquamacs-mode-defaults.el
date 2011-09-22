@@ -24,7 +24,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 David Reitter
 
 ;; Add edit-modes file hierarchy to load-path
 
@@ -66,6 +66,14 @@
 (defvar LaTeX-mode-hook nil)
 (add-hook 'LaTeX-mode-hook 'smart-dnd-latex)
 
+(defun smart-dnd-setup-always-insert-quoted-file-name ()
+  "Setup `smart-dnd-mode' so that drag&drop always inserts the file path."
+  (smart-dnd-setup '((".*" . "\"%r\""))))
+
+;; Eshell
+(add-hook 'eshell-mode-hook 'smart-dnd-setup-always-insert-quoted-file-name)
+;; shell mode, and friends
+(add-hook 'comint-mode-hook 'smart-dnd-setup-always-insert-quoted-file-name)
 
 
 ;; NXHTML
