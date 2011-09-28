@@ -271,3 +271,7 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 
 (autoload (quote jython-mode) "python-mode" 
   "Major mode for editing Jython/Jython files." t nil)
+
+(autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
+(assq-set-equal "\\.\\(frm\\|bas\\|cls\\)$" 
+		'visual-basic-mode 'auto-mode-alist)
