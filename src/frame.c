@@ -3056,6 +3056,7 @@ x_set_frame_parameters (f, alist)
 	      if (NATNUMP (param_index)
 		  && (XFASTINT (param_index)
 		      < sizeof (frame_parms)/sizeof (frame_parms[0]))
+		  && FRAME_TERMINAL(f)
                   && FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])
                 (*(FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])) (f, val, old_value);
 	    }
@@ -3105,6 +3106,7 @@ x_set_frame_parameters (f, alist)
 	  if (NATNUMP (param_index)
 	      && (XFASTINT (param_index)
 		  < sizeof (frame_parms)/sizeof (frame_parms[0]))
+	      && FRAME_TERMINAL(f)
 	      && FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])
 	    (*(FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])) (f, val, old_value);
 	}
@@ -3382,6 +3384,7 @@ x_set_screen_gamma (f, new_value, old_value)
       if (NATNUMP (index)
 	  && (XFASTINT (index)
 	      < sizeof (frame_parms)/sizeof (frame_parms[0]))
+	  && FRAME_TERMINAL(f)
 	  && FRAME_RIF (f)->frame_parm_handlers[XFASTINT (index)])
 	  (*FRAME_RIF (f)->frame_parm_handlers[XFASTINT (index)])
 	    (f, bgcolor, Qnil);
