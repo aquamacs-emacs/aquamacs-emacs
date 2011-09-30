@@ -2884,6 +2884,7 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
 	      if (NATNUMP (param_index)
 		  && (XFASTINT (param_index)
 		      < sizeof (frame_parms)/sizeof (frame_parms[0]))
+		  && FRAME_TERMINAL(f)
                   && FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])
                 (*(FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])) (f, val, old_value);
 	    }
@@ -2933,6 +2934,7 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
 	  if (NATNUMP (param_index)
 	      && (XFASTINT (param_index)
 		  < sizeof (frame_parms)/sizeof (frame_parms[0]))
+	      && FRAME_TERMINAL(f)
 	      && FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])
 	    (*(FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])) (f, val, old_value);
 	}
@@ -3212,6 +3214,7 @@ x_set_screen_gamma (struct frame *f, Lisp_Object new_value, Lisp_Object old_valu
       if (NATNUMP (parm_index)
 	  && (XFASTINT (parm_index)
 	      < sizeof (frame_parms)/sizeof (frame_parms[0]))
+	  && FRAME_TERMINAL(f)
 	  && FRAME_RIF (f)->frame_parm_handlers[XFASTINT (parm_index)])
 	  (*FRAME_RIF (f)->frame_parm_handlers[XFASTINT (parm_index)])
 	    (f, bgcolor, Qnil);
