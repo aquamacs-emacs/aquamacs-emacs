@@ -1,3 +1,5 @@
+;; -*-mode:emacs-lisp; coding: utf-8;-*-'
+
 ;; utf-8-emacs
 ;; aquamacs-menu
 ;; redefines and modifies the menu bar
@@ -28,7 +30,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 David Reitter
  
 
 (require 'easymenu)
@@ -981,7 +983,7 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 
 
 (define-key menu-bar-help-menu [menu-aquamacs-help]
-  `(menu-item "Aquamacs Help" 
+  `(menu-item "Aquamacs Manual" 
 	      aquamacs-user-help
 	      :help "Show Aquamacs Manual in Apple Help"))
   
@@ -1372,12 +1374,12 @@ that should be represented in the Aquamacs menus."
                   (interactive)
                   (show-refcard "calccard.pdf"))))
 (define-key menu-bar-help-refcards-menu [sk-refcard]
-             (list 'menu-item "GNU Emacs -- Referen्nे karta"
+             (list 'menu-item "GNU Emacs -- Referenèná karta"
                 (defun show-refcard-sk-refcard () 
                   (interactive)
                   (show-refcard "sk-refcard.pdf"))))
 (define-key menu-bar-help-refcards-menu [cs-refcard]
-             (list 'menu-item "GNU Emacs -- Referen्n���� karta"
+             (list 'menu-item "GNU Emacs -- Referenèní karta"
                 (defun show-refcard-cs-refcard () 
                   (interactive)
                   (show-refcard "cs-refcard.pdf"))))
@@ -1412,12 +1414,12 @@ that should be represented in the Aquamacs menus."
                   (interactive)
                   (show-refcard "de-refcard.pdf"))))
 (define-key menu-bar-help-refcards-menu [sk-dired-ref]
-             (list 'menu-item "Referen्nे karta pre Dired"
+             (list 'menu-item "Referenèná karta pre Dired"
                 (defun show-refcard-sk-dired-ref () 
                   (interactive)
                   (show-refcard "sk-dired-ref.pdf"))))
 (define-key menu-bar-help-refcards-menu [cs-dired-ref]
-             (list 'menu-item "Referen्n���� karta pro Dired"
+             (list 'menu-item "Referenèní karta pro Dired"
                 (defun show-refcard-cs-dired-ref () 
                   (interactive)
                   (show-refcard "cs-dired-ref.pdf"))))
