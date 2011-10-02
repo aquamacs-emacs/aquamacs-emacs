@@ -471,7 +471,7 @@ $DISCARD_PS = 1;
 # as standalone documents. In this case the cross reference to a section 
 # is shown using the default symbol rather than the section number.
 #
-$SHOW_SECTION_NUMBERS = 0;
+$SHOW_SECTION_NUMBERS = 1;
 
 
 # -short_index
