@@ -898,6 +898,8 @@ which key is mapped to command. The value of
     ;; workaround for bug in menu key description
     (define-key map `[(,osxkeys-command-key shift 13)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key shift return)] 'aquamacs-toggle-full-frame)
+    (define-key map `[(,osxkeys-command-key control f)] 'aquamacs-toggle-full-frame) ;; Lion default
+    (define-key map `[ns-toggle-fullscreen] 'aquamacs-toggle-full-frame) ;; replace basic ns-toggle-fullscreen
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit) 
     (define-key map `[(,osxkeys-command-key :)] 'spellchecker-panel-or-ispell) 
     (define-key map `[(,osxkeys-command-key \;)] 'spellcheck-now)

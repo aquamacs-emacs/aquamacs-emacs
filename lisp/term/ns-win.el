@@ -270,6 +270,7 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [ns-show-prefs] 'customize)
 (define-key global-map [ns-about] 'about-emacs)
 (define-key global-map [ns-toggle-toolbar] 'ns-toggle-toolbar)
+(define-key global-map [ns-toggle-fullscreen] 'ns-toggle-fullscreen)
 (define-key global-map [ns-show-prefs] 'customize)
 (define-key global-map [ns-save-panel-closed] 'ns-handle-save-panel-closed)
 
@@ -315,6 +316,7 @@ The properties returned may include `top', `left', `height', and `width'."
 	     (cons (logior (lsh 0 16)  17) 'ns-change-color)
 	     (cons (logior (lsh 0 16)  20) 'ns-check-spelling)
 	     (cons (logior (lsh 0 16)  21) 'ns-spelling-change)
+	     (cons (logior (lsh 0 16)  22) 'ns-toggle-fullscreen)
 	     (cons (logior (lsh 0 16)  90) 'ns-application-activated)
 	     (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
 	     (cons (logior (lsh 0 16)  92) 'ns-application-reopen)
@@ -998,6 +1000,13 @@ unless the current buffer is a scratch buffer."
   ;; trigger update of toolbar
   (force-mode-line-update))
 
+
+(defun ns-toggle-fullscreen (&optional frame)
+  "Toggles Fullscreen on and off in frame FRAME.
+ If FRAME is nil, the change applies to the selected frame."
+  (interactive)
+  (modify-frame-parameters 
+   nil (list (cons 'fullscreen (if (frame-parameter nil 'fullscreen) nil 'fullboth)))))
 
 ;;;; Dialog-related functions.
 
