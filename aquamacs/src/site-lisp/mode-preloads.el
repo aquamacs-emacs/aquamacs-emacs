@@ -207,9 +207,10 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 (autoload 'rails-minor-mode "rails.el" "Enter Ruby on Rails mode" 'interactive nil)
 
 ;; Matlab
-(autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
-(autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
-(assq-set-equal "\\.m$" 'matlab-mode 'auto-mode-alist) 
+;; (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
+;; (autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
+;; (assq-set-equal "\\.m$" 'matlab-mode 'auto-mode-alist) 
+(load "matlab-emacs/matlab-load.el")
 
 ;; Objective C
 
