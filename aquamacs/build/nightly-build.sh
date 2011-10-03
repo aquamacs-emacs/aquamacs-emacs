@@ -4,8 +4,11 @@
 
 cd ~/Nightly/Cocoa24ub/aquamacs-emacs.git
 
+BRANCH=aquamacs24
 EMACS_ROOT=`pwd`
 AQUAMACS_ROOT=`pwd`/aquamacs
+# find git:
+PATH=/usr/local/bin:$PATH
 
 rm aquamacs-build.log
 echo "Begin building Aquamacs." >>aquamacs-build.log
@@ -13,8 +16,18 @@ date >>aquamacs-build.log
 
 echo "Updating working directory from Git repository." >>aquamacs-build.log
 
-git checkout -f aquamacs24 >>aquamacs-build.log  2>>aquamacs-build.log
-git pull origin aquamacs24  >>aquamacs-build.log  2>>aquamacs-build.log
+git fetch origin $BRANCH
+git checkout -f --track -b new-$BRANCH origin/$BRANCH \
+&& git branch -D $BRANCH \
+&& git branch -m new-$BRANCH $BRANCH
+
+# this version will merge
+# git checkout -f aquamacs24 >>aquamacs-build.log  2>>aquamacs-build.log
+# git pull origin aquamacs24  >>aquamacs-build.log  2>>aquamacs-build.log
+
+# make doc often creates stuff, which subsequent "git-pull" refuses to overwrite
+git clean -f aquamacs/doc/  >>aquamacs-build.log  2>>aquamacs-build.log
+
 
 echo "Building Aquamacs documentation." >>aquamacs-build.log
 
