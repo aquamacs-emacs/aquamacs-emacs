@@ -16,7 +16,7 @@ date >>aquamacs-build.log
 
 echo "Updating working directory from Git repository." >>aquamacs-build.log
 
-git fetch origin $BRANCH
+git fetch -f origin
 git checkout -f --track -b new-$BRANCH origin/$BRANCH \
 && git branch -D $BRANCH \
 && git branch -m new-$BRANCH $BRANCH
