@@ -6269,18 +6269,14 @@ typedef struct
 
   /* Enable build on older systems */
 #ifndef NSWindowCollectionBehaviorParticipatesInCycle
-  enum {
-    NSWindowCollectionBehaviorManaged = 1 << 2,
-    NSWindowCollectionBehaviorParticipatesInCycle = 1 << 5,
-    NSWindowCollectionBehaviorIgnoresCycle = 1 << 6
-  }
+const int NSWindowCollectionBehaviorManaged = 1 << 2;
+const int NSWindowCollectionBehaviorParticipatesInCycle = 1 << 5;
+const int NSWindowCollectionBehaviorIgnoresCycle = 1 << 6;
 #endif
 
 #ifndef NSWindowCollectionBehaviorFullScreenPrimary
-    enum {
-      NSWindowCollectionBehaviorFullScreenPrimary = 1 << 7,
-      NSWindowCollectionBehaviorFullScreenAuxiliary = 1 << 8
-    };
+const int NSWindowCollectionBehaviorFullScreenPrimary = 1 << 7;
+const int NSWindowCollectionBehaviorFullScreenAuxiliary = 1 << 8;
 #endif
 
 - initFrameFromEmacs: (struct frame *)f
