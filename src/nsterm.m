@@ -6845,59 +6845,57 @@ typedef struct
 
 -(EmacsWindow *)setFullscreen:(BOOL) flag {
   BOOL isFullscreen = [[self className] isEqualToString:@"EmacsFullWindow"];
-    NSWindow *win;
-    EmacsFullWindow *f;
-    EmacsWindow *w;
-    EmacsView *view;
+  EmacsFullWindow *f;
+  EmacsWindow *w;
+  EmacsView *view;
 
-    if (isFullscreen && ! flag) {
-        f = (EmacsFullWindow *)self;
-        w = [f getNormalWindow];
-
-        [w setContentView:[f contentView]];
-        [w makeKeyAndOrderFront:nil];
-
-        [f close];
-
-        win = w;
-
-        if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
-            if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
-                [NSApp setPresentationOptions:NSApplicationPresentationDefault];
-            }
-            else {
-                [NSMenu setMenuBarVisible:YES];
-            }
-        }
-    }
-    else if (flag && ! isFullscreen)
+  if (isFullscreen) {
+    f = (EmacsFullWindow *)self;
+    w = [f getNormalWindow];
+    if (! flag)
       {
-        [self deminiaturize:nil];
+	[w setContentView:[f contentView]];
+	[w makeKeyAndOrderFront:nil];
+	[f close];
+	if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
+	  if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
+	    [NSApp setPresentationOptions:NSApplicationPresentationDefault];
+	  }
+	  else {
+	    [NSMenu setMenuBarVisible:YES];
+	  }
+	}
+      }
+    return w;
+  }
+  else if (flag && ! isFullscreen)
+    {
+      [self deminiaturize:nil];
+      
+      if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
+	if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
+	  [NSApp setPresentationOptions:NSApplicationPresentationAutoHideDock 
+		 | NSApplicationPresentationAutoHideMenuBar];
+	}
+	else {
+	  [NSMenu setMenuBarVisible:NO];
+	}
+      }
+      
+      [self orderOut:nil];
+      
+      f = [[EmacsFullWindow alloc] initWithNormalWindow:self];
+      view = (EmacsView *)[self delegate];
+      [f setDelegate:view];
+      [f makeFirstResponder:view];
+      [f setContentView:[self contentView]];
+      [f setContentSize:[[self screen] frame].size];
+      [f setTitle:[self title]];
+      [f makeKeyAndOrderFront:nil];
 
-        if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
-            if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
-                [NSApp setPresentationOptions:NSApplicationPresentationAutoHideDock | NSApplicationPresentationAutoHideMenuBar];
-            }
-            else {
-                [NSMenu setMenuBarVisible:NO];
-            }
-        }
-
-        [self orderOut:nil];
-
-        f = [[EmacsFullWindow alloc] initWithNormalWindow:self];
-        view = (EmacsView *)[self delegate];
-        [f setDelegate:view];
-        [f makeFirstResponder:view];
-        [f setContentView:[self contentView]];
-        [f setContentSize:[[self screen] frame].size];
-        [f setTitle:[self title]];
-        [f makeKeyAndOrderFront:nil];
-
-        win = f;
+      return f;
     }
-
-    return win;
+  return self;
 }
 
 /* If we have multiple monitors, one above the other, we don't want to
