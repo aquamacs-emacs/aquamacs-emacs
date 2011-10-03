@@ -1138,7 +1138,7 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 (define-key menu-bar-window-extras-menu [full-frame]
   `(menu-item "Full Screen Editing" 
 	      aquamacs-toggle-full-frame
-	      :key-sequence [(,osxkeys-command-key shift 13)]
+	      :key-sequence [(,osxkeys-command-key control f)]
 	      :button (:toggle . (eq (frame-parameter nil 'fullscreen) 'fullboth))
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Use full screen for the selected frame"))

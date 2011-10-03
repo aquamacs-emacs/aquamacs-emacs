@@ -130,6 +130,7 @@ is not used)."
 	       (cons (logior (lsh 0 16)  17) 'ns-change-color)
 	       (cons (logior (lsh 0 16)  20) 'ns-check-spelling)
 	       (cons (logior (lsh 0 16)  21) 'ns-spelling-change)
+	       (cons (logior (lsh 0 16)  22) 'ns-toggle-fullscreen)
 	       (cons (logior (lsh 0 16)  90) 'ns-application-activated)
 	       (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
 	       (cons (logior (lsh 0 16)  92) 'ns-application-reopen)

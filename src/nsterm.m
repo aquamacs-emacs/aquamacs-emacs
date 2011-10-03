@@ -6301,9 +6301,9 @@ typedef struct
   win = [[EmacsWindow alloc]
             initWithContentRect: r
                       styleMask: (NSResizableWindowMask |
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+				  //#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
                                   NSTitledWindowMask |
-#endif
+				  //#endif
                                   NSMiniaturizableWindowMask |
                                   NSClosableWindowMask)
                         backing: NSBackingStoreBuffered
@@ -6338,10 +6338,35 @@ typedef struct
   [win setToolbar: toolbar];
   [toolbar setVisible: NO];
 #ifdef NS_IMPL_COCOA
+
+  /* The following settings have no effect on 10.7.
+     tool-bar button is not shown, and "show/hide toolbar" item from
+     menu is always bound to NSWindow toggleToolbarShown: */
+
+  [win setShowsToolbarButton:YES];
   toggleButton = [win standardWindowButton: NSWindowToolbarButton];
-  [toggleButton setTarget: self];
-  [toggleButton setAction: @selector (toggleToolbar: )];
+  if (toggleButton)
+    {
+      [toggleButton setTarget: self];
+      [toggleButton setAction: @selector (toggleToolbarShown: )];
+    }
+
 #endif
+
+  /* Enable build on older systems */
+#ifndef NSWindowCollectionBehaviorParticipatesInCycle
+  enum {
+    NSWindowCollectionBehaviorFullScreenPrimary = 1 << 7,
+    NSWindowCollectionBehaviorFullScreenAuxiliary = 1 << 8
+  };
+#endif
+
+  /* enable fullscreen button */
+  [win setCollectionBehavior:NSWindowCollectionBehaviorManaged
+       | NSWindowCollectionBehaviorFullScreenPrimary
+       | NSWindowCollectionBehaviorParticipatesInCycle
+       | NSWindowCollectionBehaviorFullScreenAuxiliary];
+
   FRAME_TOOLBAR_HEIGHT (f) = 0;
 
   /* the following would be nonstandard on OSX */
@@ -6568,17 +6593,27 @@ typedef struct
 }
 
 
-- toggleToolbar: (id)sender
+- (void)toggleToolbarShown: (id)sender
+{
+  if (!emacs_event)
+    return;
+
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_TOGGLE_TOOLBAR;
+  EV_TRAILER ((id)nil);
+  return;
+}
+
+- toggleFullScreen: (id)sender
 {
   if (!emacs_event)
     return self;
 
   emacs_event->kind = NS_NONKEY_EVENT;
-  emacs_event->code = KEY_NS_TOGGLE_TOOLBAR;
+  emacs_event->code = KEY_NS_TOGGLE_FULLSCREEN;
   EV_TRAILER ((id)nil);
   return self;
 }
-
 
 - (void)drawRect: (NSRect)rect
 {
@@ -6843,6 +6878,34 @@ typedef struct
 
 @implementation EmacsWindow
 
+
+// In 10.7, the following two are called (can't be bound to View?!)
+- (void)toggleToolbarShown: (id)sender
+{
+  struct frame *f = ((EmacsView *) [self delegate])->emacsframe;
+  [FRAME_NS_VIEW (f) toggleToolbarShown: sender];
+}
+
+- (void)toggleFullScreen: (id)sender
+{
+  struct frame *f = ((EmacsView *) [self delegate])->emacsframe;
+  [FRAME_NS_VIEW (f) toggleFullScreen: sender];
+}
+
+
+- (void)windowWillEnterFullScreen:(NSNotification *)notification
+{
+  struct frame *f = ((EmacsView *) [self delegate])->emacsframe;
+  f->want_fullscreen = FULLSCREEN_BOTH;
+  ns_fullscreen_hook (f);
+}
+- (void)windowWillExitFullScreen:(NSNotification *)notification
+{
+  struct frame *f = ((EmacsView *) [self delegate])->emacsframe;
+  f->want_fullscreen = 0;
+  ns_fullscreen_hook (f);
+}
+
 -(EmacsWindow *)setFullscreen:(BOOL) flag {
   BOOL isFullscreen = [[self className] isEqualToString:@"EmacsFullWindow"];
   EmacsFullWindow *f;
@@ -6892,6 +6955,11 @@ typedef struct
       [f setContentSize:[[self screen] frame].size];
       [f setTitle:[self title]];
       [f makeKeyAndOrderFront:nil];
+      [f setCollectionBehavior:NSWindowCollectionBehaviorManaged
+	    | NSWindowCollectionBehaviorFullScreenPrimary
+	    | NSWindowCollectionBehaviorParticipatesInCycle
+	    | NSWindowCollectionBehaviorFullScreenAuxiliary];
+
 
       return f;
     }
@@ -6987,7 +7055,6 @@ typedef struct
         [self setAcceptsMouseMovedEvents: YES];
         [self useOptimizedDrawing: YES];
     }
-
     return self;
 }
 

@@ -109,15 +109,15 @@ The properties returned may include `top', `left', `height', and `width'."
    ;; NS-Style specification
    (if (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
 \\( \\([0-9]+\\) ?\\)?\\)?\\)?"
-		     geom)
+		      geom)
        (append
-	 (list (cons 'top (string-to-number (match-string 1 geom))))
-	 (if (match-string 3 geom)
-	     (list (cons 'left (string-to-number (match-string 3 geom)))))
-	 (if (match-string 5 geom)
-	     (list (cons 'height (string-to-number (match-string 5 geom)))))
-	 (if (match-string 7 geom)
-	     (list (cons 'width (string-to-number (match-string 7 geom)))))))))
+      (list (cons 'top (string-to-number (match-string 1 geom))))
+      (if (match-string 3 geom)
+	  (list (cons 'left (string-to-number (match-string 3 geom)))))
+      (if (match-string 5 geom)
+	  (list (cons 'height (string-to-number (match-string 5 geom)))))
+      (if (match-string 7 geom)
+	  (list (cons 'width (string-to-number (match-string 7 geom)))))))))
 
 ;;;; Keyboard mapping.
 
@@ -200,6 +200,7 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [ns-show-prefs] 'customize)
 (define-key global-map [ns-about] 'about-emacs)
 (define-key global-map [ns-toggle-toolbar] 'ns-toggle-toolbar)
+(define-key global-map [ns-toggle-fullscreen] 'ns-toggle-fullscreen)
 (define-key global-map [ns-show-prefs] 'customize)
 (define-key global-map [ns-save-panel-closed] 'ns-handle-save-panel-closed)
 
@@ -592,7 +593,7 @@ unless the current buffer is a scratch buffer."
   (interactive)
   (let* ((f (file-truename
 	     (expand-file-name (pop ns-input-file)
-			       command-line-default-directory)))
+					     command-line-default-directory)))
          (file (find-file-noselect f))
          (bufwin1 (get-buffer-window file 'visible))
          (bufwin2 (get-buffer-window "*scratch*" 'visibile)))
@@ -669,11 +670,18 @@ unless the current buffer is a scratch buffer."
   (modify-frame-parameters
    (or frame (selected-frame))
    (list (cons 'tool-bar-lines
-	       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
-		   0 1)) ))
+		       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
+				   0 1)) ))
   ;; trigger update of toolbar
   (force-mode-line-update))
 
+
+(defun ns-toggle-fullscreen (&optional frame)
+  "Toggles Fullscreen on and off in frame FRAME.
+ If FRAME is nil, the change applies to the selected frame."
+  (interactive)
+  (modify-frame-parameters 
+   nil (list (cons 'fullscreen (if (frame-parameter nil 'fullscreen) nil 'fullboth)))))
 
 ;;;; Dialog-related functions.
 
@@ -939,9 +947,9 @@ TYPE may be `txt', `html', `pdf' or `rtf', or nil (text string)."
      ((eq area 'vertical-line)
       'default)
      ((and (not area) (eq p (window-point window)))
-      'cursor)
+            'cursor)
      ((and (not area) mark-active (< (region-beginning) p) (< p (region-end)))
-      'region)
+            'region)
      ((not area)
       (let* ((faces (or (get-char-property p 'face window) 'default))
 	     (face (if (consp faces) (car faces) faces)))
@@ -960,14 +968,14 @@ EVENT is a mouse event, and ATTRIBUTE is either
 	(error "Position not in text area of window"))
     (let* ((face (ns-face-at-pos position))
 	   (frame (window-frame (posn-window position))))
-      (cond
-       ((eq face 'cursor)
-	(modify-frame-parameters frame (list (cons 'cursor-color
-						   ns-input-color))))
-       ((not face)
+    (cond
+     ((eq face 'cursor)
+      (modify-frame-parameters frame (list (cons 'cursor-color
+                                                 ns-input-color))))
+     ((not face)
 	(modify-frame-parameters frame (list (cons attribute
-						   ns-input-color))))
-       (t
+                                                 ns-input-color))))
+     (t
 	(if (eq attribute 'foreground-color)
 	    (set-face-foreground face ns-input-color frame)
 	  (set-face-background face ns-input-color frame))
