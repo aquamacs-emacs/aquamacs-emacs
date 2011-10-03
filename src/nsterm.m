@@ -5941,6 +5941,22 @@ typedef struct
 }
 
 
+  /* Enable build on older systems */
+#ifndef NSWindowCollectionBehaviorParticipatesInCycle
+  enum {
+    NSWindowCollectionBehaviorManaged = 1 << 2,
+    NSWindowCollectionBehaviorParticipatesInCycle = 1 << 5,
+    NSWindowCollectionBehaviorIgnoresCycle = 1 << 6
+  }
+#endif
+
+#ifndef NSWindowCollectionBehaviorFullScreenPrimary
+    enum {
+      NSWindowCollectionBehaviorFullScreenPrimary = 1 << 7,
+      NSWindowCollectionBehaviorFullScreenAuxiliary = 1 << 8
+    };
+#endif
+
 - initFrameFromEmacs: (struct frame *)f
 {
   NSRect r, wr;
@@ -6026,13 +6042,6 @@ typedef struct
 
 #endif
 
-  /* Enable build on older systems */
-#ifndef NSWindowCollectionBehaviorParticipatesInCycle
-  enum {
-    NSWindowCollectionBehaviorFullScreenPrimary = 1 << 7,
-    NSWindowCollectionBehaviorFullScreenAuxiliary = 1 << 8
-  };
-#endif
 
   /* enable fullscreen button */
   [win setCollectionBehavior:NSWindowCollectionBehaviorManaged
