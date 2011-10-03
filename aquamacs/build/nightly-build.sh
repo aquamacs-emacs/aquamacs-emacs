@@ -18,7 +18,7 @@ echo "Updating working directory from Git repository." >>aquamacs-build.log
 # make doc often creates stuff, which subsequent "git-pull" refuses to overwrite
 git clean -f aquamacs/doc/  >>aquamacs-build.log  2>>aquamacs-build.log
 
-git fetch origin master
+git fetch -f origin
 git checkout -f --track -b new-master origin/master \
 && git branch -D master \
 && git branch -m new-master master
