@@ -5942,16 +5942,11 @@ typedef struct
 
 
   /* Enable build on older systems */
-#ifndef NSWindowCollectionBehaviorParticipatesInCycle
-const int NSWindowCollectionBehaviorManaged = 1 << 2;
-const int NSWindowCollectionBehaviorParticipatesInCycle = 1 << 5;
-const int NSWindowCollectionBehaviorIgnoresCycle = 1 << 6;
-#endif
-
-#ifndef NSWindowCollectionBehaviorFullScreenPrimary
-const int NSWindowCollectionBehaviorFullScreenPrimary = 1 << 7;
-const int NSWindowCollectionBehaviorFullScreenAuxiliary = 1 << 8;
-#endif
+#define __NSWindowCollectionBehaviorManaged 1 << 2
+#define __NSWindowCollectionBehaviorParticipatesInCycle 1 << 5
+#define __NSWindowCollectionBehaviorIgnoresCycle 1 << 6
+#define __NSWindowCollectionBehaviorFullScreenPrimary 1 << 7
+#define __NSWindowCollectionBehaviorFullScreenAuxiliary 1 << 8
 
 - initFrameFromEmacs: (struct frame *)f
 {
@@ -6040,10 +6035,10 @@ const int NSWindowCollectionBehaviorFullScreenAuxiliary = 1 << 8;
 
 
   /* enable fullscreen button */
-  [win setCollectionBehavior:NSWindowCollectionBehaviorManaged
-       | NSWindowCollectionBehaviorFullScreenPrimary
-       | NSWindowCollectionBehaviorParticipatesInCycle
-       | NSWindowCollectionBehaviorFullScreenAuxiliary];
+  [win setCollectionBehavior:__NSWindowCollectionBehaviorManaged
+       | __NSWindowCollectionBehaviorFullScreenPrimary
+       | __NSWindowCollectionBehaviorParticipatesInCycle
+       | __NSWindowCollectionBehaviorFullScreenAuxiliary];
 
   FRAME_TOOLBAR_HEIGHT (f) = 0;
 
@@ -6658,10 +6653,10 @@ extern Lisp_Object Vmark_even_if_inactive;
       [f setContentSize:[[self screen] frame].size];
       [f setTitle:[self title]];
       [f makeKeyAndOrderFront:nil];
-      [f setCollectionBehavior:NSWindowCollectionBehaviorManaged
-	    | NSWindowCollectionBehaviorFullScreenPrimary
-	    | NSWindowCollectionBehaviorParticipatesInCycle
-	    | NSWindowCollectionBehaviorFullScreenAuxiliary];
+      [f setCollectionBehavior:__NSWindowCollectionBehaviorManaged
+	    | __NSWindowCollectionBehaviorFullScreenPrimary
+	    | __NSWindowCollectionBehaviorParticipatesInCycle
+	    | __NSWindowCollectionBehaviorFullScreenAuxiliary];
 
 
       return f;
