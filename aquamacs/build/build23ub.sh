@@ -31,6 +31,8 @@ XC_PPC_OPT='-fdefer-pop -fguess-branch-probability -fcprop-registers   -fif-conv
 # an Aquamacs that crashes when started even with -Q.
 # for now, we're leaving out -fomit-frame-pointer, -fstrict-aliasing, -momit-leaf-frame-pointer
 
+
+
 architectures="i386 ppc"
 
 i386_CC='gcc'
@@ -42,6 +44,29 @@ ppc_CFLAGS="$XC_PPC_OPT -arch ppc"
 ppc_LDFLAGS="$XC_PPC_OPT -arch ppc"
 
 bin_dest="nextstep/Aquamacs.app/Contents/MacOS"
+
+
+OMIT_SYMB=1
+
+case "$1" in
+'-release')
+  echo "Building Aquamacs (release)."
+  OMIT_SYMB=
+  ;;
+'-nightly')
+  echo "Building Aquamacs (nightly build)."
+  i386_CFLAGS="-O0 -g -arch i386"
+  i386_LDFLAGS="-O0 -g -arch i386"
+  OMIT_SYMB=
+  ;;
+*)
+  # during development, do not compress .el files to speed up the build
+  export GZIP_PROG=
+  echo "Building Aquamacs (development, local architecture)."
+  i386_CFLAGS="-O0 -g -arch i386"
+  i386_LDFLAGS="-O0 -g -arch i386"
+  ;;
+esac
 
 
 # The per-architecture build process is relatively transparent:
@@ -117,5 +142,9 @@ lipo -create src/emacs.arch.* -o src/emacs
 
 make install
 
+# generate symbol archive
+test $OMIT_SYMB || dsymutil src/emacs
+
 echo "Finished building for the following architectures:"
 lipo -info nextstep/Aquamacs.app/Contents/MacOS/Aquamacs
+
