@@ -8,6 +8,7 @@ export PATH=$AUTOTOOLS:$PATH
 
 OMIT_AUTOGEN=1
 FLAGS=
+OMIT_SYMB=1
 
 case "$1" in
 '-release')
@@ -17,6 +18,7 @@ case "$1" in
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
   FLAGS='-arch i386 -g'
+  OMIT_SYMB=
   ;;
 '-nightly')
   # do not use MacPorts / fink libraries for binary compatibility
@@ -25,6 +27,7 @@ case "$1" in
   echo "Building Aquamacs (nightly build)."
   OMIT_AUTOGEN=
   FLAGS="-arch i386 -g -O0 $FLAGS"
+  OMIT_SYMB=
   ;;
 *)
   # during development, do not compress .el files to speed up the build
@@ -47,5 +50,9 @@ test $OMIT_AUTOGEN || ./autogen.sh ; \
 ./configure --with-ns --without-x CFLAGS="$FLAGS" LDFLAGS="$FLAGS"; \
 make clean ; \
 make all ; \
+make install ; \
 rm etc/DOC-* ; \
-make install
+
+
+# generate symbol archive
+test $OMIT_SYMB || dsymutil src/emacs

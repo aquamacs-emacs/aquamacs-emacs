@@ -4,6 +4,8 @@
 
 cd ~/Nightly/Cocoa24ub/aquamacs-emacs.git
 
+DSYM_ROOT=~/Aquamacs.dSYM.archive
+
 BRANCH=aquamacs24
 EMACS_ROOT=`pwd`
 AQUAMACS_ROOT=`pwd`/aquamacs
@@ -52,3 +54,7 @@ cd `dirname ${APP}` ; \
 tar cjf ${BLD} Aquamacs.app ; \
 cd ${EMACS_ROOT} ; \
 aquamacs/build/copy-build-to-server.sh $DATE # $SHORTDATE  - only needed for GNU Emacs
+
+echo "Archiving symbol table into ${BRANCH}-${DATE}"
+mkdir ${DSYM_ROOT}/${BRANCH}-${DATE}
+mv src/emacs.dSYM ${DSYM_ROOT}/${BRANCH}-${DATE}/
