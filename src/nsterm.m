@@ -1346,31 +1346,9 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
   wr.size.height = pixelheight + FRAME_NS_TITLEBAR_HEIGHT (f)
                   + FRAME_TOOLBAR_HEIGHT (f);
 
-  /* constrain to screen if we can */
-  if (screen && ![window isKindOfClass:[EmacsFullWindow class]])
-    {
-      NSSize sz = [screen visibleFrame].size;
-      NSSize ez = { wr.size.width - sz.width, wr.size.height - sz.height };
-      if (ez.width > 0)
-        {
-          int cr = ez.width / FRAME_COLUMN_WIDTH (f) + 1;
-          cols -= cr;
-          oldCols = cols;
-          wr.size.width -= cr * FRAME_COLUMN_WIDTH (f);
-          pixelwidth -= cr * FRAME_COLUMN_WIDTH (f);
-        }
-      if (ez.height > 0)
-        {
-          int rr = ez.height / FRAME_LINE_HEIGHT (f) + 1;
-          rows -= rr;
-          oldRows = rows;
-          wr.size.height -= rr * FRAME_LINE_HEIGHT (f);
-          pixelheight -= rr * FRAME_LINE_HEIGHT (f);
-        }
-      wr.origin.x = f->left_pos;
-      wr.origin.y = [screen frame].size.height - NS_TOP_POS (f)
-        - wr.size.height;
-    }
+ /* We no longer constrain the frame to screen. 
+    This didn't work for changes of X/Y position (starting with OS X 10.7),
+    and is not necessary. */
 
   [view setRows: rows andColumns: cols];
   [window setFrame: wr display: YES];
