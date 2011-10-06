@@ -58,3 +58,4 @@ aquamacs/build/copy-build-to-server.sh $DATE # $SHORTDATE  - only needed for GNU
 echo "Archiving symbol table into ${BRANCH}-${DATE}"
 mkdir ${DSYM_ROOT}/${BRANCH}-${DATE}
 mv src/emacs.dSYM ${DSYM_ROOT}/${BRANCH}-${DATE}/
+cp src/emacs ${DSYM_ROOT}/${BRANCH}-${DATE}/
