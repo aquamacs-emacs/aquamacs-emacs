@@ -137,7 +137,8 @@ $TEXEXPAND = "$PERL /usr/local/bin${dd}texexpand";
 
 # Location of pstoimg, supplied with the translator
 #
-$PSTOIMG = "$PERL /opt/local/bin${dd}pstoimg";
+#$PSTOIMG = "$PERL " . `which pstoimg`;
+$PSTOIMG = "$PERL /usr/local/bin${dd}pstoimg";
 
 
 # This is used to "autoload" perl code to deal with specific style files
