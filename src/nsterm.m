@@ -4185,6 +4185,7 @@ ns_term_shutdown (int sig)
       return;
     }
 
+#if 0  /* don't do this in Aquamacs - doesn't look good, and breaks in Lion for bottom right handle. */
 #ifdef NS_IMPL_COCOA
   /* pass mouse down in resize handle and subsequent drags directly to
      EmacsWindow so we can generate continuous redisplays */
@@ -4211,6 +4212,7 @@ ns_term_shutdown (int sig)
           return;
         }
     }
+#endif
 #endif
 
   if (type == NSApplicationDefined)
@@ -5729,6 +5731,8 @@ typedef struct
   NSTRACE (windowWillResize);
 /*fprintf (stderr,"Window will resize: %.0f x %.0f\n",frameSize.width,frameSize.height); */
 
+  /* update rows, cols in EmacsView */
+
   cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (emacsframe,
 #ifdef NS_IMPL_GNUSTEP
                                         frameSize.width + 3);
@@ -5821,6 +5825,7 @@ typedef struct
      (x_set_window_size causes a resize which causes
      a "windowDidResize" which calls x_set_window_size).  */
 #ifndef NS_IMPL_GNUSTEP
+  // cols, rows defined in EmacsView
   if (cols > 0 && rows > 0)
     x_set_window_size (emacsframe, 0, cols, rows);
 #endif
