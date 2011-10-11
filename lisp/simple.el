@@ -358,8 +358,8 @@ Other major modes are defined by comparison with this one."
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map)
     (define-key map "q" 'quit-window)
-    (define-key map " " 'scroll-up)
-    (define-key map "\C-?" 'scroll-down)
+    (define-key map " " 'scroll-up-command)
+    (define-key map "\C-?" 'scroll-down-command)
     (define-key map "?" 'describe-mode)
     (define-key map "h" 'describe-mode)
     (define-key map ">" 'end-of-buffer)
@@ -590,9 +590,9 @@ If the region is active, only delete whitespace within the region."
         ;; Delete trailing empty lines.
         (goto-char end-marker)
         (when (and (not end)
-                   (<= (skip-chars-backward "\n") -2)
                    ;; Really the end of buffer.
-                   (save-restriction (widen) (eobp)))
+                   (save-restriction (widen) (eobp))
+                   (<= (skip-chars-backward "\n") -2))
           (delete-region (1+ (point)) end-marker))
         (set-marker end-marker nil))))
   ;; Return nil for the benefit of `write-file-functions'.
@@ -946,28 +946,46 @@ rather than line counts."
       (forward-line (1- line)))))
 
 (defun count-words-region (start end)
-  "Count the number of words in the active region.
-If the region is not active, counts the number of words in the buffer."
-  (interactive (if (use-region-p) (list (region-beginning) (region-end))
-                 (list (point-min) (point-max))))
-  (let ((count 0))
+  "Return the number of words between START and END.
+If called interactively, print a message reporting the number of
+lines, words, and characters in the region."
+  (interactive "r")
+  (let ((words 0))
     (save-excursion
       (save-restriction
         (narrow-to-region start end)
         (goto-char (point-min))
         (while (forward-word 1)
-          (setq count (1+ count)))))
+          (setq words (1+ words)))))
     (when (called-interactively-p 'interactive)
-      (message "%s has %d words"
-               (if (use-region-p) "Region" "Buffer")
-               count))
-    count))
+      (count-words--message "Region"
+			    (count-lines start end)
+			    words
+			    (- end start)))
+    words))
 
-(defun count-lines-region (start end)
-  "Print number of lines and characters in the region."
-  (interactive "r")
-  (message "Region has %d lines, %d characters"
-	   (count-lines start end) (- end start)))
+(defun count-words ()
+  "Display the number of lines, words, and characters in the buffer.
+In Transient Mark mode when the mark is active, display the
+number of lines, words, and characters in the region."
+  (interactive)
+  (if (use-region-p)
+      (call-interactively 'count-words-region)
+    (let* ((beg (point-min))
+	   (end (point-max))
+	   (lines (count-lines beg end))
+	   (words (count-words-region beg end))
+	   (chars (- end beg)))
+      (count-words--message "Buffer" lines words chars))))
+
+(defun count-words--message (str lines words chars)
+  (message "%s has %d line%s, %d word%s, and %d character%s."
+	   str
+	   lines (if (= lines 1) "" "s")
+	   words (if (= words 1) "" "s")
+	   chars (if (= chars 1) "" "s")))
+
+(defalias 'count-lines-region 'count-words-region)
 
 (defun what-line ()
   "Print the current buffer line number and narrowed line number of point."
@@ -4248,7 +4266,9 @@ screen, instead of relying on buffer contents alone.  It takes
 into account variable-width characters and line continuation.
 If nil, `line-move' moves point by logical lines.
 A non-nil setting of `goal-column' overrides the value of this variable
-and forces movement by logical lines."
+and forces movement by logical lines.
+Disabling `auto-hscroll-mode' also overrides forces movement by logical
+lines when the window is horizontally scrolled."
   :type 'boolean
   :group 'editing-basics
   :version "23.1")
@@ -4325,7 +4345,15 @@ and forces movement by logical lines."
 	       (not executing-kbd-macro)
 	       (line-move-partial arg noerror to-end))
     (set-window-vscroll nil 0 t)
-    (if (and line-move-visual (not goal-column))
+    (if (and line-move-visual
+	     ;; Display-based column are incompatible with goal-column.
+	     (not goal-column)
+	     ;; When auto-hscroll-mode is turned off and the text in
+	     ;; the window is scrolled to the left, display-based
+	     ;; motion doesn't make sense (because each logical line
+	     ;; occupies exactly one screen line).
+	     (not (and (null auto-hscroll-mode)
+		       (> (window-hscroll) 0))))
 	(line-move-visual arg noerror)
       (line-move-1 arg noerror to-end))))
 

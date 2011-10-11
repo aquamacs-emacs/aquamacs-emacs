@@ -1,3 +1,136 @@
+2011-10-08  Glenn Morris  <rgm@gnu.org>
+
+	* callint.c (Fcall_interactively): Give a more explicit error for the
+	'c' case with a non-character input.  (Bug#8479)
+
+2011-10-08  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (hscroll_window_tree): Support hscroll in right-to-left
+	lines.
+	(set_cursor_from_row): Fix cursor positioning in mixed L2R+R2L
+	lines that are hscrolled on the left.
+
+	* dispnew.c (buffer_posn_from_coords): Account for a possible
+	presence of header-line.  (Bug#4426)
+
+2011-10-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* buffer.c (syms_of_buffer) <enable-multibyte-characters>: Don't
+	advertise functionality which we discourage or doesn't work.
+
+2011-10-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* alloc.c (GC_LISP_OBJECT_ALIGNMENT): Use offsetof, not __alignof__
+	or sizeof.  __alignof__ gives the wrong answer on Fedora x86-64
+	with GCC 4.6.1 when configured with CC='gcc -m32' --with-wide-int;
+	this makes Emacs dump core during garbage collection on rare
+	occasions.  sizeof is obviously inferior to offsetof here, so
+	stick with offsetof.
+	(GC_POINTER_ALIGNMENT): New macro.
+	(mark_memory): Omit 3rd (offset) arg; caller changed.
+	Don't assume EMACS_INT alignment is the same as pointer alignment.
+
+2011-10-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* keyboard.c (read_key_sequence_remapped): New var.
+	(read_key_sequence): Compute remapping in the right buffer.
+	(command_loop_1): Use read_key_sequence's remapping directly.
+
+2011-10-02  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* dired.c (file_name_completion): Don't expand file name.
+	(Ffile_name_completion, Ffile_name_all_completions): Expand file name
+	before checking file name handler.
+
+	* minibuf.c (Finternal_complete_buffer): Only show internal buffers if
+	they've been requested explicitly (bug#9591).
+
+2011-10-01  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* keymap.c (Fsingle_key_description): Use make_specified_string
+	instead of build_string to build string from push_key_description.
+	(Bug#5193)
+
+2011-09-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* buffer.h (struct buffer): Use time_t, not int, for a time stamp.
+	This fixes a Y2038 bug on 64-bit hosts.
+	* buffer.c (reset_buffer):
+	* fileio.c (Fdo_auto_save, Fset_buffer_auto_saved)
+	(Fclear_buffer_auto_save_failure):
+	Use 0, not -1, to represent an unset failure time, since time_t
+	might not be signed.
+
+	Remove dependency on glibc malloc internals.
+	* alloc.c (XMALLOC_OVERRUN_CHECK_OVERHEAD, XMALLOC_OVERRUN_CHECK_SIZE):
+	Move back here from lisp.h, but with their new implementations.
+	(XMALLOC_BASE_ALIGNMENT, COMMON_MULTIPLE, XMALLOC_HEADER_ALIGNMENT)
+	(XMALLOC_OVERRUN_SIZE_SIZE): Move these new lisp.h macros here.
+	* charset.c (charset_table_init): New static var.
+	(syms_of_charset): Use it instead of xmalloc.  This removes a
+	dependency on glibc malloc internals.  See Eli Zaretskii's comment in
+	<http://lists.gnu.org/archive/html/emacs-devel/2011-09/msg00815.html>.
+	* lisp.h (XMALLOC_OVERRUN_CHECK_OVERHEAD, XMALLOC_OVERRUN_CHECK_SIZE):
+	Move back to alloc.c.
+	(XMALLOC_BASE_ALIGNMENT, COMMON_MULTIPLE, XMALLOC_HEADER_ALIGNMENT)
+	(XMALLOC_OVERRUN_SIZE_SIZE): Move to alloc.c.
+
+2011-09-30  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* nsterm.m (windowDidResize): Call x_set_window_size only when
+	ns_in_resize is true.  Otherwise set pixelwidth/height and
+	call change_frame_size (Bug#9628).
+
+2011-09-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port --enable-checking=all to Fedora 14 x86-64.
+	* charset.c (syms_of_charset): Also account for glibc malloc's
+	internal overhead when calculating the initial malloc maximum.
+
+	Port --enable-checking=all to Fedora 14 x86.
+	* alloc.c (XMALLOC_OVERRUN_CHECK_OVERHEAD, XMALLOC_OVERRUN_CHECK_SIZE):
+	Move to lisp.h.
+	(xmalloc_put_size, xmalloc_get_size, overrun_check_malloc)
+	(overrun_check_realloc, overrun_check_free):
+	Use XMALLOC_OVERRUN_SIZE_SIZE, not sizeof (size_t).
+	That way, xmalloc returns a properly-aligned pointer even if
+	XMALLOC_OVERRUN_CHECK is defined.  The old debugging code happened
+	to align OK on typical 64-bit hosts, but not on Fedora 14 x86.
+	* charset.c (syms_of_charset): Take XMALLOC_OVERRUN_CHECK_OVERHEAD
+	into account when calculating the initial malloc maximum.
+	* lisp.h (XMALLOC_OVERRUN_CHECK_OVERHEAD, XMALLOC_OVERRUN_CHECK_SIZE):
+	Move here from alloc.c, so that charset.c can use it too.
+	Properly align; the old code wasn't right for common 32-bit hosts
+	when configured with --enable-checking=all.
+	(XMALLOC_BASE_ALIGNMENT, COMMON_MULTIPLE, XMALLOC_HEADER_ALIGNMENT)
+	(XMALLOC_OVERRUN_SIZE_SIZE): New macros.
+
+2011-09-29  Eli Zaretskii  <eliz@gnu.org>
+
+	* sysdep.c (snprintf) [!EOVERFLOW]: If EOVERFLOW is not defined,
+	use EDOM.
+
+2011-09-28  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (compute_display_string_end): If there's no display
+	string at CHARPOS, return -1.
+
+	* bidi.c (bidi_fetch_char): When compute_display_string_end
+	returns a negative value, treat the character as a normal
+	character not covered by a display string.  (Bug#9624)
+
+2011-09-28  Juanma Barranquero  <lekktu@gmail.com>
+
+	* lread.c (Fread_from_string): Fix typo in docstring.
+
+2011-09-27  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (handle_invisible_prop): If invisible text ends on a
+	newline, reseat the iterator instead of bidi-iterating there one
+	character at a time.  (Bug#9610)
+	(BUFFER_POS_REACHED_P, move_it_in_display_line_to): Bail when past
+	TO_CHARPOS if the bidi iterator is at base embedding level.
+
 2011-09-27  Andreas Schwab  <schwab@linux-m68k.org>
 
 	* lread.c (readevalloop): Use correct code for NBSP.
@@ -29,8 +162,8 @@
 
 2011-09-24  Eli Zaretskii  <eliz@gnu.org>
 
-	* dispnew.c (syms_of_display) <redisplay-dont-pause>: Default
-	value is now t.  Doc fix.
+	* dispnew.c (syms_of_display) <redisplay-dont-pause>:
+	Default value is now t.  Doc fix.
 
 	* indent.c (Fvertical_motion): Compute and apply the overshoot
 	logic when moving up, not only when moving down.  Fix the
@@ -46,8 +179,8 @@
 
 	* dbusbind.c (Fdbus_register_signal): Add match rule to
 	Vdbus_registered_objects_table.  (Bug#9581)
-	(Fdbus_register_method, Vdbus_registered_objects_table): Fix
-	docstring.
+	(Fdbus_register_method, Vdbus_registered_objects_table):
+	Fix docstring.
 
 2011-09-24  Jim Meyering  <meyering@redhat.com>
 
@@ -527,15 +660,15 @@
 	* term.c (tty_append_glyph): New function.
 	(produce_stretch_glyph): Static function and its prototype deleted.
 
-	* dispextern.h (produce_stretch_glyph, tty_append_glyph): Add
-	prototypes.
+	* dispextern.h (produce_stretch_glyph, tty_append_glyph):
+	Add prototypes.
 
 2011-08-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* image.c (parse_image_spec): Check for nonnegative, not for positive,
 	when checking :margin (Bug#9390).
 	(IMAGE_NON_NEGATIVE_INTEGER_VALUE_OR_PAIR):
-	Renamed from IMAGE_POSITIVE_INTEGER_VALUE_OR_PAIR,
+	Rename from IMAGE_POSITIVE_INTEGER_VALUE_OR_PAIR,
 	so that the name doesn't mislead.  All uses changed.
 
 2011-08-28  Johan Bockgård  <bojohan@gnu.org>
@@ -737,8 +870,8 @@
 	(read_char_minibuf_menu_prompt, follow_key, read_key_sequence):
 	Use ptrdiff_t, not int, to count maps.
 	(read_char_minibuf_menu_prompt): Check for overflow in size
-	calculations.  Don't update size until allocation succeeds.  Redo
-	calculations to avoid overflow.
+	calculations.  Don't update size until allocation succeeds.
+	Redo calculations to avoid overflow.
 	* keyboard.h: Change prototypes to match the above.
 
 	* keymap.c (cmm_size, current_minor_maps): Use ptrdiff_t, not int,
@@ -907,7 +1040,7 @@
 	* indent.c (MULTIBYTE_BYTES_WIDTH):
 	Use sanitize_char_width to avoid undefined and/or bad behavior
 	with outlandish widths.
-	* character.h (sanitize_tab_width): Renamed from sanitize_width,
+	* character.h (sanitize_tab_width): Rename from sanitize_width,
 	now that we have two such functions.  All uses changed.
 	(sanitize_char_width): New inline function.
 
@@ -973,8 +1106,8 @@
 	(png_load, gif_load, svg_load_image):
 	Prefer int to unsigned where either will do.
 	(tiff_handler): New function, combining the cores of the
-	old tiff_error_handler and tiff_warning_handler.  This
-	function is rewritten to use vsnprintf and thereby avoid
+	old tiff_error_handler and tiff_warning_handler.
+	This function is rewritten to use vsnprintf and thereby avoid
 	stack buffer overflows.  It uses only the features of vsnprintf
 	that are common to both POSIX and native Microsoft.
 	(tiff_error_handler, tiff_warning_handler): Use it.
@@ -1003,8 +1136,8 @@
 	`(space ...)', and specifies display in the text area, return 2
 	rather than 1.
 	(try_cursor_movement): Check for the need to scroll more
-	accurately, and prefer exact match for point under bidi.  Don't
-	advance `row' beyond the last row of the window.
+	accurately, and prefer exact match for point under bidi.
+	Don't advance `row' beyond the last row of the window.
 
 	* dispextern.h (struct bidi_it): Rename the disp_prop_p member
 	into disp_prop; all users changed.
