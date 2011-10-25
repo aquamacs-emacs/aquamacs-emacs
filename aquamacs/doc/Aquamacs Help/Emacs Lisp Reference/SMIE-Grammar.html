@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>SMIE Grammar - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SMIE.html#SMIE" title="SMIE">
+<link rel="prev" href="Operator-Precedence-Grammars.html#Operator-Precedence-Grammars" title="Operator Precedence Grammars">
+<link rel="next" href="SMIE-Lexer.html#SMIE-Lexer" title="SMIE Lexer">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="SMIE-Grammar"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SMIE-Lexer.html#SMIE-Lexer">SMIE Lexer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Operator-Precedence-Grammars.html#Operator-Precedence-Grammars">Operator Precedence Grammars</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SMIE.html#SMIE">SMIE</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">23.7.1.3 Defining the Grammar of a Language</h5>
+
+<p>The usual way to define the SMIE grammar of a language is by
+defining a new global variable that holds the precedence table by
+giving a set of BNF rules. 
+For example, the grammar definition for a small Pascal-like language
+could look like:
+<pre class="example">     (require 'smie)
+     (defvar sample-smie-grammar
+       (smie-prec2-&gt;grammar
+        (smie-bnf-&gt;prec2
+         '((id)
+           (inst ("begin" insts "end")
+                 ("if" exp "then" inst "else" inst)
+                 (id ":=" exp)
+                 (exp))
+           (insts (insts ";" insts) (inst))
+           (exp (exp "+" exp)
+                (exp "*" exp)
+                ("(" exps ")"))
+           (exps (exps "," exps) (exp)))
+         '((assoc ";"))
+         '((assoc ","))
+         '((assoc "+") (assoc "*")))))
+</pre>
+   <p class="noindent">A few things to note:
+
+     <ul>
+<li>The above grammar does not explicitly mention the syntax of function
+calls: SMIE will automatically allow any sequence of sexps, such as
+identifiers, balanced parentheses, or <code>begin ... end</code> blocks
+to appear anywhere anyway. 
+<li>The grammar category <code>id</code> has no right hand side: this does not
+mean that it can match only the empty string, since as mentioned any
+sequence of sexps can appear anywhere anyway. 
+<li>Because non terminals cannot appear consecutively in the BNF grammar, it
+is difficult to correctly handle tokens that act as terminators, so the
+above grammar treats <code>";"</code> as a statement <em>separator</em> instead,
+which SMIE can handle very well. 
+<li>Separators used in sequences (such as <code>","</code> and <code>";"</code> above)
+are best defined with BNF rules such as <code>(foo (foo "separator" foo) ...)</code>
+which generate precedence conflicts which are then resolved by giving
+them an explicit <code>(assoc "separator")</code>. 
+<li>The <code>("(" exps ")")</code> rule was not needed to pair up parens, since
+SMIE will pair up any characters that are marked as having paren syntax
+in the syntax table.  What this rule does instead (together with the
+definition of <code>exps</code>) is to make it clear that <code>","</code> should
+not appear outside of parentheses. 
+<li>Rather than have a single <em>precs</em> table to resolve conflicts, it is
+preferable to have several tables, so as to let the BNF part of the
+grammar specify relative precedences where possible. 
+<li>Unless there is a very good reason to prefer <code>left</code> or
+<code>right</code>, it is usually preferable to mark operators as associative,
+using <code>assoc</code>.  For that reason <code>"+"</code> and <code>"*"</code> are
+defined above as <code>assoc</code>, although the language defines them
+formally as left associative. 
+</ul>
+
+   </body></html>
+

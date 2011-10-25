@@ -37,16 +37,13 @@
 
 ;; Version information
 
-(defvar aquamacs-version "2.4dev"
+(defvar aquamacs-version "2.4"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 214
+(defvar aquamacs-version-id 215
 "A float indicating Aquamacs' version number.
-Full integers correspond to the third position of the public
-version number, e.g. version 0.9.7 is represented as `97.x'.
-Minor version numbers are reflected in the decimals. 
 It is guaranteed that for any two Aquamacs releases A and B,
 if aquamacs-version-id for B is higher than aquamacs-version-id 
 for A, then B is newer than A.")

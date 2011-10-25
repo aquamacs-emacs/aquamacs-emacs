@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Auto-Indentation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Modes.html#Modes" title="Modes">
+<link rel="prev" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
+<link rel="next" href="Desktop-Save-Mode.html#Desktop-Save-Mode" title="Desktop Save Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Auto-Indentation"></a>
+<a name="Auto_002dIndentation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Desktop-Save-Mode.html#Desktop-Save-Mode">Desktop Save Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
+<hr>
+</div>
+
+<h3 class="section">23.7 Auto-indention of code</h3>
+
+<p>For programming languages, an important feature of a major mode is to
+provide automatic indentation.  This is controlled in Emacs by
+<code>indent-line-function</code> (see <a href="Mode_002dSpecific-Indent.html#Mode_002dSpecific-Indent">Mode-Specific Indent</a>). 
+Writing a good indentation function can be difficult and to a large
+extent it is still a black art.
+
+   <p>Many major mode authors will start by writing a simple indentation
+function that works for simple cases, for example by comparing with the
+indentation of the previous text line.  For most programming languages
+that are not really line-based, this tends to scale very poorly:
+improving such a function to let it handle more diverse situations tends
+to become more and more difficult, resulting in the end with a large,
+complex, unmaintainable indentation function which nobody dares to touch.
+
+   <p>A good indentation function will usually need to actually parse the
+text, according to the syntax of the language.  Luckily, it is not
+necessary to parse the text in as much detail as would be needed
+for a compiler, but on the other hand, the parser embedded in the
+indentation code will want to be somewhat friendly to syntactically
+incorrect code.
+
+   <p>Good maintainable indentation functions usually fall into 2 categories:
+either parsing forward from some &ldquo;safe&rdquo; starting point until the
+position of interest, or parsing backward from the position of interest. 
+Neither of the two is a clearly better choice than the other: parsing
+backward is often more difficult than parsing forward because
+programming languages are designed to be parsed forward, but for the
+purpose of indentation it has the advantage of not needing to
+guess a &ldquo;safe&rdquo; starting point, and it generally enjoys the property
+that only a minimum of text will be analyzed to decide the indentation
+of a line, so indentation will tend to be unaffected by syntax errors in
+some earlier unrelated piece of code.  Parsing forward on the other hand
+is usually easier and has the advantage of making it possible to
+reindent efficiently a whole region at a time, with a single parse.
+
+   <p>Rather than write your own indentation function from scratch, it is
+often preferable to try and reuse some existing ones or to rely
+on a generic indentation engine.  There are sadly few such
+engines.  The CC-mode indentation code (used with C, C++, Java, Awk
+and a few other such modes) has been made more generic over the years,
+so if your language seems somewhat similar to one of those languages,
+you might try to use that engine.  <!-- FIXME: documentation? -->
+Another one is SMIE which takes an approach in the spirit
+of Lisp sexps and adapts it to non-Lisp languages.
+
+<ul class="menu">
+<li><a accesskey="1" href="SMIE.html#SMIE">SMIE</a>:                         A simple minded indentation engine
+</ul>
+
+   </body></html>
+

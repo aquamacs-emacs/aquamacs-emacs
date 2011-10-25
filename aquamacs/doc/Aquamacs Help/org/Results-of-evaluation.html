@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Results of evaluation - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Working-With-Source-Code.html#Working-With-Source-Code" title="Working With Source Code">
+<link rel="prev" href="Header-arguments.html#Header-arguments" title="Header arguments">
+<link rel="next" href="Noweb-reference-syntax.html#Noweb-reference-syntax" title="Noweb reference syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 7.4.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Results-of-evaluation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb reference syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Header-arguments.html#Header-arguments">Header arguments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Working-With-Source-Code.html#Working-With-Source-Code">Working With Source Code</a>
+<hr>
+</div>
+
+<h3 class="section">14.9 Results of evaluation</h3>
+
+<p><a name="index-code-block_002c-results-of-evaluation-1715"></a><a name="index-source-code_002c-results-of-evaluation-1716"></a>
+The way in which results are handled depends on whether a session is invoked,
+as well as on whether <code>:results value</code> or <code>:results output</code> is
+used. The following table shows the possibilities:
+
+   <p><table summary=""><tr align="left"><td valign="top" width="26%"></td><td valign="top" width="33%"><b>Non-session</b> </td><td valign="top" width="41%"><b>Session</b>
+<br></td></tr><tr align="left"><td valign="top" width="26%"><code>:results value</code> </td><td valign="top" width="33%">value of last expression </td><td valign="top" width="41%">value of last expression
+<br></td></tr><tr align="left"><td valign="top" width="26%"><code>:results output</code> </td><td valign="top" width="33%">contents of STDOUT </td><td valign="top" width="41%">concatenation of interpreter output
+   <br></td></tr></table>
+
+   <p>Note: With <code>:results value</code>, the result in both <code>:session</code> and
+non-session is returned to Org-mode as a table (a one- or two-dimensional
+vector of strings or numbers) when appropriate.
+
+<h4 class="subsection">14.9.1 Non-session</h4>
+
+<h5 class="subsubsection">14.9.1.1 <code>:results value</code></h5>
+
+<p>This is the default. Internally, the value is obtained by wrapping the code
+in a function definition in the external language, and evaluating that
+function. Therefore, code should be written as if it were the body of such a
+function. In particular, note that Python does not automatically return a
+value from a function unless a <code>return</code> statement is present, and so a
+&lsquo;<samp><span class="samp">return</span></samp>&rsquo; statement will usually be required in Python.
+
+   <p>This is the only one of the four evaluation contexts in which the code is
+automatically wrapped in a function definition.
+
+<h5 class="subsubsection">14.9.1.2 <code>:results output</code></h5>
+
+<p>The code is passed to the interpreter as an external process, and the
+contents of the standard output stream are returned as text. (In certain
+languages this also contains the error output stream; this is an area for
+future work.)
+
+<h4 class="subsection">14.9.2 Session</h4>
+
+<h5 class="subsubsection">14.9.2.1 <code>:results value</code></h5>
+
+<p>The code is passed to the interpreter running as an interactive Emacs
+inferior process. The result returned is the result of the last evaluation
+performed by the interpreter. (This is obtained in a language-specific
+manner: the value of the variable <code>_</code> in Python and Ruby, and the value
+of <code>.Last.value</code> in R).
+
+<h5 class="subsubsection">14.9.2.2 <code>:results output</code></h5>
+
+<p>The code is passed to the interpreter running as an interactive Emacs
+inferior process. The result returned is the concatenation of the sequence of
+(text) output from the interactive interpreter. Notice that this is not
+necessarily the same as what would be sent to <code>STDOUT</code> if the same code
+were passed to a non-interactive interpreter running as an external
+process. For example, compare the following two blocks:
+
+<pre class="example">     #+begin_src python :results output
+      print "hello"
+      2
+      print "bye"
+     #+end_src
+     
+     #+resname:
+     : hello
+     : bye
+</pre>
+   <p>In non-session mode, the `2' is not printed and does not appear.
+<pre class="example">     #+begin_src python :results output :session
+      print "hello"
+      2
+      print "bye"
+     #+end_src
+     
+     #+resname:
+     : hello
+     : 2
+     : bye
+</pre>
+   <p>But in <code>:session</code> mode, the interactive interpreter receives input `2'
+and prints out its value, `2'. (Indeed, the other print statements are
+unnecessary here).
+
+   </body></html>
+

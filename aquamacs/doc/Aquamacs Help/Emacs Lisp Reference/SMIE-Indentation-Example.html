@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>SMIE Indentation Example - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SMIE.html#SMIE" title="SMIE">
+<link rel="prev" href="SMIE-Indentation-Helpers.html#SMIE-Indentation-Helpers" title="SMIE Indentation Helpers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="SMIE-Indentation-Example"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="SMIE-Indentation-Helpers.html#SMIE-Indentation-Helpers">SMIE Indentation Helpers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SMIE.html#SMIE">SMIE</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">23.7.1.8 Sample Indentation Rules</h5>
+
+<p>Here is an example of an indentation function:
+
+<pre class="example">     (defun sample-smie-rules (kind token)
+       (pcase (cons kind token)
+         (`(:elem . basic) sample-indent-basic)
+         (`(,_ . ",") (smie-rule-separator kind))
+         (`(:after . ":=") sample-indent-basic)
+         (`(:before . ,(or `"begin" `"(" `"{")))
+          (if (smie-rule-hanging-p) (smie-rule-parent)))
+         (`(:before . "if")
+          (and (not (smie-rule-bolp)) (smie-rule-prev-p "else")
+               (smie-rule-parent)))))
+</pre>
+   <p class="noindent">A few things to note:
+
+     <ul>
+<li>The first case indicates the basic indentation increment to use. 
+If <code>sample-indent-basic</code> is nil, then SMIE uses the global
+setting <code>smie-indent-basic</code>.  The major mode could have set
+<code>smie-indent-basic</code> buffer-locally instead, but that
+is discouraged.
+
+     <li>The rule for the token <code>","</code> make SMIE try to be more clever when
+the comma separator is placed at the beginning of lines.  It tries to
+outdent the separator so as to align the code after the comma; for
+example:
+
+     <pre class="example">          x = longfunctionname (
+                  arg1
+                , arg2
+              );
+</pre>
+     <li>The rule for indentation after <code>":="</code> exists because otherwise
+SMIE would treat <code>":="</code> as an infix operator and would align the
+right argument with the left one.
+
+     <li>The rule for indentation before <code>"begin"</code> is an example of the use
+of virtual indentation:  This rule is used only when <code>"begin"</code> is
+hanging, which can happen only when <code>"begin"</code> is not at the
+beginning of a line.  So this is not used when indenting
+<code>"begin"</code> itself but only when indenting something relative to this
+<code>"begin"</code>.  Concretely, this rule changes the indentation from:
+
+     <pre class="example">              if x &gt; 0 then begin
+                      dosomething(x);
+                  end
+</pre>
+     <p>to
+     <pre class="example">              if x &gt; 0 then begin
+                  dosomething(x);
+              end
+</pre>
+     <li>The rule for indentation before <code>"if"</code> is similar to the one for
+<code>"begin"</code>, but where the purpose is to treat <code>"else if"</code>
+as a single unit, so as to align a sequence of tests rather than indent
+each test further to the right.  This function does this only in the
+case where the <code>"if"</code> is not placed on a separate line, hence the
+<code>smie-rule-bolp</code> test.
+
+     <p>If we know that the <code>"else"</code> is always aligned with its <code>"if"</code>
+and is always at the beginning of a line, we can use a more efficient
+rule:
+     <pre class="example">          ((equal token "if")
+           (and (not (smie-rule-bolp)) (smie-rule-prev-p "else")
+                (save-excursion
+                  (sample-smie-backward-token)  ;Jump before the "else".
+                  (cons 'column (current-column)))))
+</pre>
+     <p>The advantage of this formulation is that it reuses the indentation of
+the previous <code>"else"</code>, rather than going all the way back to the
+first <code>"if"</code> of the sequence. 
+</ul>
+
+   </body></html>
+

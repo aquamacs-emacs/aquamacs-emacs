@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Multi-file Packages - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Packaging.html#Packaging" title="Packaging">
+<link rel="prev" href="Simple-Packages.html#Simple-Packages" title="Simple Packages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Multi-file-Packages"></a>
+<a name="Multi_002dfile-Packages"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-Packages.html#Simple-Packages">Simple Packages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Packaging.html#Packaging">Packaging</a>
+<hr>
+</div>
+
+<h3 class="section">40.3 Multi-file Packages</h3>
+
+<p><a name="index-multi_002dfile-packages-3914"></a>
+  A multi-file package is just a <samp><span class="file">.tar</span></samp> file.  While less
+convenient to create than a single-file package, a multi-file package
+also offers more features: it can include an Info manual, multiple
+Emacs Lisp files, and also other data files needed by a package.
+
+   <p>The contents of the <samp><span class="file">.tar</span></samp> file must all appear beneath a
+single directory, named after the package and version.  Files can
+appear in subdirectories of this top-most directory, but Emacs Lisp
+code will only be found (and thus byte-compiled) at the top-most
+level.  Also, the <samp><span class="file">.tar</span></samp> file is typically also given this same
+name.  For example, if you are distributing version 1.3 of the
+superfrobnicator, the package file would be named
+&ldquo;superfrobnicator-1.3.tar&rdquo; and the contents would all appear in the
+directory <samp><span class="file">superfrobnicator-1.3</span></samp> in that <samp><span class="file">.tar</span></samp>.
+
+   <p>The package must include a <samp><span class="file">-pkg.el</span></samp> file, named after the
+package.  In our example above, this file would be called
+<samp><span class="file">superfrobnicator-pkg.el</span></samp>.  This file must have a single form in
+it, a call to <code>define-package</code>.  The package dependencies and
+brief description are taken from this form.
+
+<div class="defun">
+&mdash; Function: <b>define-package</b><var> name version &amp;optional docstring requirements<a name="index-define_002dpackage-3915"></a></var><br>
+<blockquote><p>Define a package.  <var>name</var> is the name of the package, a string. 
+<var>version</var> is the package's version, a string.  It must be in a
+form that can be understood by <code>version-to-list</code>. 
+<var>docstring</var> is the short description of the package. 
+<var>requirements</var> is a list of required packages and their versions. 
+</p></blockquote></div>
+
+   <p>If a <samp><span class="file">README</span></samp> file exists in the content directory, then it is
+used as the long description.
+
+   <p>If the package has an Info manual, you should distribute the needed
+info files, plus a <samp><span class="file">dir</span></samp> file made with <samp><span class="command">install-info</span></samp>. 
+See <a href="../texinfo/Invoking-install_002dinfo.html#Invoking-install_002dinfo">Invoking install-info</a>.
+
+   <p>Do not include any <samp><span class="file">.elc</span></samp> files in the package.  Those will be
+created at install time.  Note that there is no way to control the
+order in which files are byte-compiled; your package must be robust
+here.
+
+   <p>The installation process will scan all the <samp><span class="file">.el</span></samp> files in the
+package for autoload cookies.  See <a href="Autoload.html#Autoload">Autoload</a>.  They are extracted
+into a <samp><span class="file">-autoloads.el</span></samp> file (e.g.,
+<samp><span class="file">superfrobnicator-autoloads.el</span></samp>), so do not include a file of
+that name in your package.
+
+   <p>Any other files in the <samp><span class="file">.tar</span></samp> file are simply unpacked when the
+package is installed.  This can be useful if your package needs
+auxiliary data files &mdash; e.g., icons or sounds.
+
+   <p>Emacs Lisp code installed via the package manager must take special
+care to be location-independent.  One easy way to do this is to make
+references to auxiliary data files relative to <var>load-file-name</var>. 
+For example:
+
+<pre class="smallexample">     (defconst superfrobnicator-base (file-name-directory load-file-name))
+     
+     (defun superfrobnicator-fetch-image (file)
+       (expand-file-name file superfrobnicator-base))
+</pre>
+   <!-- MOVE to Emacs Manual:  include misc-modes.texi -->
+<!-- appendices -->
+<!-- REMOVE this:  include non-hacker.texi -->
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1999, 2002, 2003, 2004, 2005, 2006, 2007, 2008, -->
+<!-- 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+<!-- This node must have no pointers. -->
+   </body></html>
+

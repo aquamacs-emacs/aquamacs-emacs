@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Parsing HTML - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="MD5-Checksum.html#MD5-Checksum" title="MD5 Checksum">
+<link rel="next" href="Atomic-Changes.html#Atomic-Changes" title="Atomic Changes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 24.0.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Parsing-HTML"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MD5-Checksum.html#MD5-Checksum">MD5 Checksum</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.25 Parsing HTML</h3>
+
+<p><a name="index-parsing-html-2832"></a><a name="index-parsing-xml-2833"></a>
+Emacs provides an interface to the <code>libxml2</code> library via two
+functions: <code>html-parse-buffer</code> and <code>xml-parse-buffer</code>.  The
+HTML function will parse &ldquo;real world&rdquo; HTML and try to return a
+sensible parse tree, while the XML function is somewhat stricter about
+syntax.
+
+   <p>They both take a two optional parameter.  The first is a buffer, and
+the second is a base URL to be used to expand relative URLs in the
+document, if any.
+
+   <p>Here's an example demonstrating the structure of the parsed data you
+get out.  Given this HTML document:
+
+<pre class="example">     &lt;html&gt;&lt;hEad&gt;&lt;/head&gt;&lt;body width=101&gt;&lt;div class=thing&gt;Foo&lt;div&gt;Yes
+</pre>
+   <p>You get this parse tree:
+
+<pre class="example">     (html
+      (head)
+      (body
+       (:width . "101")
+       (div
+        (:class . "thing")
+        (text . "Foo")
+        (div
+         (text . "Yes\n")))))
+</pre>
+   <p>It's a simple tree structure, where the <code>car</code> for each node is
+the name of the node, and the <code>cdr</code> is the value, or the list of
+values.
+
+   <p>Attributes are coded the same way as child nodes, but with &lsquo;<samp><span class="samp">:</span></samp>&rsquo; as
+the first character.
+
+   </body></html>
+

@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+<title>Multithreaded Debugging - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" title="GDB Graphical Interface">
+<link rel="prev" href="Watch-Expressions.html#Watch-Expressions" title="Watch Expressions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 24.0.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Multithreaded-Debugging"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Watch-Expressions.html#Watch-Expressions">Watch Expressions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">31.6.5.8 Stopping and Starting Multi-threaded Programs</h5>
+
+<p><a name="index-Multithreaded-debugging-in-GDB-2411"></a>
+
+<h5 class="subsubheading">All-stop Debugging</h5>
+
+<p>In all-stop mode, whenever your program stops, <em>all</em> threads of
+execution stop.  Likewise, whenever you restart the program, all
+threads start executing.  See <a href="../gdb/All_002dStop-Mode.html#All_002dStop-Mode">All-Stop Mode</a>.  You can enable this behaviour in Emacs by setting
+<code>gdb-non-stop-setting</code> to <code>nil</code> before starting a debugging
+session.
+
+<h5 class="subsubheading">Non-stop Debugging</h5>
+
+<p><a name="index-Non_002dstop-debugging-in-GDB-2412"></a>
+For some multi-threaded targets, GDB supports a further mode of
+operation in which you can examine stopped program threads in the
+debugger while other threads continue to execute freely. 
+See <a href="../gdb/Non_002dStop-Mode.html#Non_002dStop-Mode">Non-Stop Mode</a>. 
+This is referred to as <dfn>non-stop</dfn> mode.
+
+   <p>Versions of GDB prior to 7.0 do not support non-stop mode and it does
+not work on all targets.  In such cases, Emacs uses all-stop mode
+regardless of the value of <code>gdb-non-stop-setting</code>.
+
+   <p><a name="index-gdb_002dnon_002dstop_002dsetting-2413"></a>If the variable <code>gdb-non-stop-setting</code> is non-<code>nil</code> (the
+default value), Emacs tries to start GDB in non-stop mode.  Note that
+GDB debugging session needs to be restarted for change of this setting
+to take effect.
+
+   <p><a name="index-gdb_002dswitch_002dwhen_002danother_002dstopped-2414"></a>When a thread stops in non-stop mode, Emacs automatically switches to
+that thread.  It may be undesirable to allow switching of current
+thread when some other stopped thread is already selected.  Set
+<code>gdb-switch-when-another-stopped</code> to <code>nil</code> to prevent this.
+
+   <p><a name="index-gdb_002dswitch_002dreasons-2415"></a>Emacs can decide whether or not to switch to the stopped thread
+depending on the reason which caused the stop.  Customize
+<code>gdb-switch-reasons</code> to select stop reasons which make Emacs
+switch thread.
+
+   <p><a name="index-gdb_002dstopped_002dhooks-2416"></a>The variable <code>gdb-stopped-hooks</code> allows you to execute your
+functions whenever some thread stops.
+
+   <p>In non-stop mode, you can switch between different modes for GUD
+execution control commands.
+
+   <p><a name="index-gdb_002dgud_002dcontrol_002dall_002dthreads-2417"></a>
+     <dl>
+<dt><dfn>Non-stop/A</dfn><dd>
+When <code>gdb-gud-control-all-threads</code> is <code>t</code> (the default
+value), interruption and continuation commands apply to all threads,
+so you can halt or continue all your threads with one command using
+<code>gud-stop-subjob</code> and <code>gud-cont</code>, respectively.  The
+&lsquo;<samp><span class="samp">Go</span></samp>&rsquo; button is shown on the toolbar when at least one thread is
+stopped, whereas &lsquo;<samp><span class="samp">Stop</span></samp>&rsquo; button is shown when at least one thread
+is running.
+
+     <br><dt><dfn>Non-stop/T</dfn><dd>
+When <code>gdb-gud-control-all-threads</code> is <code>nil</code>, only the
+current thread is stopped/continued.  &lsquo;<samp><span class="samp">Go</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Stop</span></samp>&rsquo;
+buttons on the GUD toolbar are shown depending on the state of current
+thread. 
+</dl>
+
+   <p>You can change the current value of <code>gdb-gud-control-all-threads</code>
+from the tool bar or from &lsquo;<samp><span class="samp">GUD-&gt;GDB-MI</span></samp>&rsquo; menu.
+
+   <p>Stepping commands always apply to the current thread.
+
+<h5 class="subsubheading">Fine Thread Control</h5>
+
+<p>In non-stop mode, you can interrupt/continue your threads without
+selecting them.  Hitting <kbd>i</kbd> in threads buffer interrupts thread
+under point, <kbd>c</kbd> continues it, <kbd>s</kbd> steps through.  More such
+commands may be added in the future.
+
+   <p>Combined with creating bound buffers for any thread, this allows you
+to change and track state of many threads in the same time.
+
+   <p>Note that when you interrupt a thread, it stops with &lsquo;<samp><span class="samp">signal
+received</span></samp>&rsquo; reason.  If that reason is included in your
+<code>gdb-switch-reasons</code> (it is by default), Emacs will switch to
+that thread.
+
+   </body></html>
+
