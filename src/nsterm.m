@@ -3555,10 +3555,22 @@ ns_fullscreen_hook  (f)
 FRAME_PTR f;
 {
 #ifdef NS_IMPL_COCOA
-  EmacsWindow *new_window;
-  NSRect r;
-  int rows, cols;
+  EmacsWindow *new_window = (EmacsWindow *) [FRAME_NS_VIEW (f) window];
 
+  /* Lion full-screen implementation available? */
+  if ([new_window respondsToNativeFullScreen])  /* just disable this to get old fullscreen back! */
+	  {
+	    if (f && FRAME_NS_WINDOW(f))
+	      if ((f->want_fullscreen & FULLSCREEN_BOTH) ^ [new_window isFullScreen])
+		{
+		  if ([new_window isVisible])
+		    [new_window toggleActualFullScreen: new_window];
+		}
+	  }
+  else
+    {
+      NSRect r;
+  int rows, cols;
   new_window = [(EmacsWindow *) [FRAME_NS_VIEW (f) window]
 		 setFullscreen:(f->want_fullscreen & FULLSCREEN_BOTH ? YES : NO)];
   FRAME_NS_WINDOW(f) = new_window;
@@ -3576,7 +3588,7 @@ FRAME_PTR f;
     [new_window frame].size.height - r.size.height;
 
   [[new_window delegate] windowDidMove:nil];
-
+   }
 #endif
     return;
 }
@@ -6271,6 +6283,46 @@ typedef struct
   return self;
 }
 
+- (NSApplicationPresentationOptions)window:(NSWindow *)window willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions {
+    return proposedOptions | NSApplicationPresentationAutoHideToolbar;
+}
+
+- (NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize {
+
+ 
+    NSRect r = NSMakeRect(0.f, 0.f, proposedSize.width, proposedSize.height);
+    int cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
+    int rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
+
+    change_frame_size (emacsframe, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+    FRAME_PIXEL_WIDTH (emacsframe) = (int)r.size.width;
+    FRAME_PIXEL_HEIGHT (emacsframe) = (int)r.size.height;
+
+    emacsframe->border_width = [window frame].size.width - r.size.width;
+    FRAME_NS_TITLEBAR_HEIGHT (emacsframe) = 0;
+
+    return proposedSize;
+}
+
+- (void)windowDidExitFullScreen:(NSNotification *)notification {
+ 
+   NSWindow* window = [notification object];
+
+    NSRect r = [window contentRectForFrameRect:[window frame]];
+    int cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
+    int rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
+
+    change_frame_size (emacsframe, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+    FRAME_PIXEL_WIDTH (emacsframe) = (int)r.size.width;
+    FRAME_PIXEL_HEIGHT (emacsframe) = (int)r.size.height;
+
+    emacsframe->border_width = [window frame].size.width - r.size.width;
+    FRAME_NS_TITLEBAR_HEIGHT (emacsframe) =
+        [window frame].size.height - r.size.height;
+
+    [[window delegate] windowDidMove:nil];
+}
+
 - (void)drawRect: (NSRect)rect
 {
   int x = NSMinX (rect), y = NSMinY (rect);
@@ -6567,25 +6619,32 @@ extern Lisp_Object Vmark_even_if_inactive;
   [FRAME_NS_VIEW (f) toggleToolbarShown: sender];
 }
 
+- (BOOL) respondsToNativeFullScreen
+{
+  return [super respondsToSelector:@selector(toggleFullScreen:)];
+}
+
 - (void)toggleFullScreen: (id)sender
 {
   struct frame *f = ((EmacsView *) [self delegate])->emacsframe;
   [FRAME_NS_VIEW (f) toggleFullScreen: sender];
 }
+- (void)toggleActualFullScreen: (id)sender
+{
+  if ([self respondsToNativeFullScreen])
+    [super toggleFullScreen: sender];
+}
 
 
-- (void)windowWillEnterFullScreen:(NSNotification *)notification
+enum {
+   __NSFullScreenWindowMask = 1 << 14
+};
+
+- (BOOL)isFullScreen
 {
-  struct frame *f = ((EmacsView *) [self delegate])->emacsframe;
-  f->want_fullscreen = FULLSCREEN_BOTH;
-  ns_fullscreen_hook (f);
+    return (([self styleMask] & __NSFullScreenWindowMask) == __NSFullScreenWindowMask);
 }
-- (void)windowWillExitFullScreen:(NSNotification *)notification
-{
-  struct frame *f = ((EmacsView *) [self delegate])->emacsframe;
-  f->want_fullscreen = 0;
-  ns_fullscreen_hook (f);
-}
+
 
 -(EmacsWindow *)setFullscreen:(BOOL) flag {
   BOOL isFullscreen = [[self className] isEqualToString:@"EmacsFullWindow"];

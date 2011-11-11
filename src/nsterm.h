@@ -103,7 +103,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 {
   NSPoint grabOffset;
 }
-
+- (BOOL) respondsToNativeFullScreen;
+- (BOOL)isFullScreen;
 -(EmacsWindow *)setFullscreen: (BOOL) flag;
 - (void)toggleToolbarShown: (id)sender;
 - (void)toggleFullScreen: (id)sender;
