@@ -6626,8 +6626,10 @@ typedef struct
   return self;
 }
 
+#define __NSApplicationPresentationAutoHideToolbar  (1 << 11)
+
 - (NSApplicationPresentationOptions)window:(NSWindow *)window willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions {
-    return proposedOptions | NSApplicationPresentationAutoHideToolbar;
+    return proposedOptions | __NSApplicationPresentationAutoHideToolbar;
 }
 
 - (NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize {
