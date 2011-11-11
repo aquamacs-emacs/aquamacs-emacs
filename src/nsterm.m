@@ -6939,7 +6939,9 @@ typedef struct
 
 - (BOOL) respondsToNativeFullScreen
 {
-  return [super respondsToSelector:@selector(toggleFullScreen:)];
+  return (floor (NSAppKitVersionNumber) >= 1110); /*NSAppKitVersionNumber10_7*/
+  /* the following won't work when older build environments are used */
+  // return [super respondsToSelector:@selector(toggleFullScreen:)];
 }
 
 - (void)toggleFullScreen: (id)sender
@@ -6962,6 +6964,7 @@ enum {
 {
     return (([self styleMask] & __NSFullScreenWindowMask) == __NSFullScreenWindowMask);
 }
+
 
 
 -(EmacsWindow *)setFullscreen:(BOOL) flag {
