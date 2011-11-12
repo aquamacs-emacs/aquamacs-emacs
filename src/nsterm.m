@@ -3840,7 +3840,11 @@ FRAME_PTR f;
   EmacsWindow *new_window = (EmacsWindow *) [FRAME_NS_VIEW (f) window];
 
   /* Lion full-screen implementation available? */
-  if ([new_window respondsToNativeFullScreen])  /* just disable this to get old fullscreen back! */
+  if ([new_window respondsToNativeFullScreen]
+      /* just disable this to get old fullscreen back! */
+      && (f->want_fullscreen == FULLSCREEN_BOTH  // not just maximized
+	  || ( [(EmacsWindow *) [FRAME_NS_VIEW (f) window] isFullScreen]
+	       &&  [(EmacsWindow *) [FRAME_NS_VIEW (f) window] shouldUseNativeFullScreen])))
 	  {
 	    if (f && FRAME_NS_WINDOW(f))
 	      if ((f->want_fullscreen & FULLSCREEN_BOTH) ^ [new_window isFullScreen])
@@ -6943,6 +6947,11 @@ typedef struct
   /* the following won't work when older build environments are used */
   // return [super respondsToSelector:@selector(toggleFullScreen:)];
 }
+- (BOOL) shouldUseNativeFullScreen
+{
+  return usingLionScreen;
+}
+
 
 - (void)toggleFullScreen: (id)sender
 {
@@ -6952,7 +6961,11 @@ typedef struct
 - (void)toggleActualFullScreen: (id)sender
 {
   if ([self respondsToNativeFullScreen])
-    [super toggleFullScreen: sender];
+    {
+      usingLionScreen = ! ([self isFullScreen]);
+
+      [super toggleFullScreen: sender];
+    }
 }
 
 
@@ -6972,6 +6985,9 @@ enum {
   EmacsFullWindow *f;
   EmacsWindow *w;
   EmacsView *view;
+
+
+  usingLionScreen = NO;
 
   if (isFullscreen) {
     f = (EmacsFullWindow *)self;
@@ -7007,7 +7023,7 @@ enum {
       }
       
       [self orderOut:nil];
-      
+
       f = [[EmacsFullWindow alloc] initWithNormalWindow:self];
       view = (EmacsView *)[self delegate];
       [f setDelegate:view];

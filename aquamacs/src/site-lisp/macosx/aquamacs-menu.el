@@ -1247,18 +1247,21 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 (easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
 
 
-(defun aquamacs-toggle-full-frame ()
+(defun aquamacs-toggle-full-frame (arg)
   "Enlarge the selected frame to the full screen.
-Unlike `mac-toggle-full-frame', this will do a better job at remembering
-the previous frame size."
-  (interactive)
+With prefix arg (enter C-u before this command), uses
+a fullscreen mode that allows additional frames in front of
+the current one as well as other applications' windows in this
+and other displays in case multiple monitors are used."
+
+  (interactive "P")
   (if (frame-parameter nil 'fullscreen)    ;(frame-full-screen-p)
       (modify-frame-parameters 
        nil (list (cons 'fullscreen nil)))
     ;; save small frame position
     (smart-move-frame-inside-screen)
     (modify-frame-parameters 
-     nil (list (cons 'fullscreen 'fullboth))))
+     nil (list (cons 'fullscreen (if arg 'maximized 'fullboth)))))
   
   (if (frame-parameter nil 'fullscreen) ; (frame-full-screen-p)
       (message (substitute-command-keys 
