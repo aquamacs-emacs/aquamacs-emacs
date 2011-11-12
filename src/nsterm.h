@@ -102,13 +102,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 @interface EmacsWindow : NSWindow
 {
   NSPoint grabOffset;
+  BOOL usingLionScreen;
 }
 - (BOOL) respondsToNativeFullScreen;
+- (BOOL) shouldUseNativeFullScreen;
 - (BOOL)isFullScreen;
 -(EmacsWindow *)setFullscreen: (BOOL) flag;
 - (void)toggleToolbarShown: (id)sender;
 - (void)toggleFullScreen: (id)sender;
-
+- (void)toggleActualFullScreen: (id)sender;
 @end
 
 /* 10.5 or below is not supported [NSWindow setStyleMask:], so require content swap hack */
