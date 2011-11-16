@@ -1471,7 +1471,7 @@ ns_get_color (const char *name, NSColor **col)
   if (hex[0])
     {
       int rr, gg, bb;
-      float fscale = scaling == 4 ? 65535.0 : (scaling == 2 ? 255.0 : 15.0);
+      float fscale = scaling == 4 ? 65535.0 : (scaling == 2 ? 255.0f : 15.0);
       if (sscanf (hex, "%x/%x/%x", &rr, &gg, &bb))
         {
           r = rr / fscale;
@@ -1482,7 +1482,7 @@ ns_get_color (const char *name, NSColor **col)
 
   if (r >= 0.0)
     {
-      *col = [NSColor colorWithCalibratedRed: r green: g blue: b alpha: 1.0];
+      *col = [NSColor colorWithDeviceRed: r green: g blue: b alpha: 1.0];
       UNBLOCK_INPUT;
       return 0;
     }
@@ -1570,7 +1570,7 @@ ns_color_to_lisp (NSColor *col)
           return build_string ((char *)str);
         }
 
-    [[col colorUsingColorSpaceName: NSCalibratedRGBColorSpace]
+    [[col colorUsingColorSpaceName: NSDeviceRGBColorSpace]
         getRed: &red green: &green blue: &blue alpha: &alpha];
   if (red ==green && red ==blue)
     {
@@ -1656,7 +1656,7 @@ ns_get_rgb_color (struct frame *f, float r, float g, float b, float a)
   if (a < 0.0) a = 0.0;
   else if (a > 1.0) a = 1.0;
   return (unsigned long) ns_index_color(
-    [NSColor colorWithCalibratedRed: r green: g blue: b alpha: a], f);
+    [NSColor colorWithDeviceRed: r green: g blue: b alpha: a], f);
 }
 
 
@@ -3942,7 +3942,7 @@ ns_term_init (Lisp_Object display_name)
     ns_selection_color = NS_SELECTION_COLOR_DEFAULT;
 
   {
-    NSColorList *cl = [NSColorList colorListNamed: @"Emacs"];
+    NSColorList *cl = [NSColorList colorListNamed: @"Aquamacs"];
 
     if ( cl == nil )
       {
@@ -3960,16 +3960,16 @@ ns_term_init (Lisp_Object display_name)
         if (NILP (color_map))
           fatal ("Could not read %s.\n", SDATA (color_file));
 
-        cl = [[NSColorList alloc] initWithName: @"Emacs"];
+        cl = [[NSColorList alloc] initWithName: @"Aquamacs"];
         for ( ; CONSP (color_map); color_map = XCDR (color_map))
           {
             color = XCAR (color_map);
             name = SDATA (XCAR (color));
             c = XINT (XCDR (color));
             [cl setColor:
-                  [NSColor colorWithCalibratedRed: RED_FROM_ULONG (c) / 255.0
-                                            green: GREEN_FROM_ULONG (c) / 255.0
-                                             blue: BLUE_FROM_ULONG (c) / 255.0
+                  [NSColor colorWithDeviceRed: RED_FROM_ULONG (c) / 255.0f
+                                            green: GREEN_FROM_ULONG (c) / 255.0f
+                                             blue: BLUE_FROM_ULONG (c) / 255.0f
                                             alpha: 1.0]
                   forKey: [NSString stringWithUTF8String: name]];
           }
