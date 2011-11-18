@@ -621,7 +621,7 @@ shown in DEST-WINDOW."
 	   (cdr-safe (window-list frame 'no-minibuf window))))) 
 ;; exclude current window
 
-(defun tabbar-desktop-list-tabsets-to-save ()
+(defun tabbar-window-list-tabsets-to-save (&optional current-win)
   (let* ((tabset-names (tabbar-tabset-names))
 	 (ntabsets (length tabset-names))
 	 (current-tabset (tabbar-current-tabset t))
@@ -632,7 +632,8 @@ shown in DEST-WINDOW."
 	 (current-tabs (copy-alist (nth current-tabset-position tabset-tabs)))
 	 ;; reorder list of tabs such that current tabset's tabs are 1st
 	 (tabs-reordered (cons current-tabs
-			       (copy-tree (remove current-tabs tabset-tabs))))
+			       (unless current-win
+				 (copy-tree (remove current-tabs tabset-tabs)))))
 	 (selected-tab-buffer (car (tabbar-selected-tab current-tabset)))
 	 tabset-save-list)
     ;; extract nested list of buffers in tabs (i.e. remove tabset identifiers)
@@ -659,38 +660,16 @@ shown in DEST-WINDOW."
   ;; remove nils left behind for unsaved buffers
   (setq tabset-save-list (remove nil tabset-save-list))))
 
-(defvar tabbar-desktop-saved-tabsets nil
-  "List of tabsets, each a list of buffer names represented by tabs in
-one Aquamacs window.  This variable is saved by desktop-save-mode
-for restoration of tab and windows combinations upon relaunch.")
-
-(defun tabbar-desktop-save-tabset-list ()
-  (setq tabbar-desktop-saved-tabsets (tabbar-desktop-list-tabsets-to-save))
-  (add-to-list 'desktop-globals-to-save 'tabbar-desktop-saved-tabsets))
-
-(defun tabbar-desktop-restore-saved-tabsets ()
-  (or tabbar-mode (tabbar-mode 1))
-  (when (and (boundp 'tabbar-desktop-saved-tabsets) tabbar-desktop-saved-tabsets)
-    (let* ((tabsets (reverse tabbar-desktop-saved-tabsets))
-	   ;; reverse tabset order, so first saved ends up selected
-	   (starting-window (selected-window)))
-      (dolist (tablist tabsets)
-	;; create new frame with blank buffer
-	(new-frame-with-new-scratch t)
-	;; updating tabsets is taken care of by tabbar-current-tabset
-	(let ((temp-tab (car (tabbar-tabs (tabbar-current-tabset t)))))
-	  ;; create new tabs corresponding to buffer-names in saved list
-	  (dolist (bufname tablist)
-	    (let ((buffer (get-buffer bufname))
-		  (tabset (tabbar-current-tabset)))
-	      (tabbar-window-add-tab tabset buffer t)))
-	  ;; close blank buffer and its tab
-	  (tabbar-close-tab temp-tab)))
-      ;; delete initial window -- usually *scratch* after startup
-      (delete-window starting-window))))
-
-(defun tabbar-desktop-restore-tabsets-when-idle ()
-  (run-with-idle-timer 0 nil 'tabbar-desktop-restore-saved-tabsets)) 
+(defun tabbar-window-restore-tabs-in-window (tablist)
+  (let ((temp-tab (car (tabbar-tabs (tabbar-current-tabset t)))))
+    ;; create new tabs corresponding to buffer-names in saved list
+    (dolist (bufname tablist)
+      (let ((buffer (get-buffer bufname))
+	    (tabset (tabbar-current-tabset)))
+	(tabbar-window-add-tab tabset buffer t)))
+    ;; ;; close blank buffer and its tab
+    ;; (tabbar-window-delete-tab temp-tab)
+    ))
 
 ;; (defun tabbar-window-new-buffer (&optional mode)
 ;;   "Create a new buffer, with different behavior depending on the value of
@@ -788,8 +767,6 @@ Run as `tabbar-init-hook'."
   (add-hook 'after-undo-hook 'tabbar-update-if-changes-undone)
   (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (add-hook 'kill-buffer-hook 'tabbar-window-track-killed)
-  (add-hook 'desktop-save-hook 'tabbar-desktop-save-tabset-list)
-  (add-hook 'desktop-after-read-hook 'tabbar-desktop-restore-tabsets-when-idle)
   (tabbar-window-update-tabsets))
 
 (defun tabbar-window-quit ()
@@ -820,8 +797,6 @@ Run as `tabbar-quit-hook'."
   (remove-hook 'after-undo-hook 'tabbar-update-if-changes-undone)
   (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (remove-hook 'kill-buffer-hook 'tabbar-window-track-killed)
-  (remove-hook 'desktop-save-hook 'tabbar-desktop-save-tabset-list)
-  (remove-hook 'desktop-after-read-hook 'tabbar-desktop-restore-tabsets-when-idle)
   )
 
 ;;-----------------------------------------------

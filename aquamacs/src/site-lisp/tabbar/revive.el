@@ -1,9 +1,9 @@
 ;;; -*- Emacs-Lisp -*-
 ;;; <plaintext>
-;;; revive.el: Resume Emacs.
+;;; revive.el: Resume Aquamacs.
 ;;; (c) 1994-2003 by HIROSE Yuuji [yuuji@gentei.org]
-;;; $Id: revive.el,v 2.19 2008/05/13 01:19:16 yuuji Exp yuuji $
-;;; Last modified Wed May  4 07:25:06 2011 on firestorm
+;;; (c) 2011 by David Reitter [david.reitter@gmail.com]
+;;; $Id: revive.el,v 2.20aquamacs 2011/11/17 davidswelt $
 
 ;;;[[[   NOTICE ���� NOTICE ���� NOTICE ���� NOTICE ���� NOTICE ����   ]]]
 ;;;--------------------------------------------------------------------------
@@ -534,7 +534,8 @@ property list is formed as
 				       (buffer-file-name))
 				     (buffer-name)
 				     (point)
-				     (window-start))))
+				     (window-start)
+				     (car (tabbar-window-list-tabsets-to-save t)))))
 	      wlist (cdr wlist)))
       (select-window curwin)
       (list (revive:screen-width) (revive:screen-height) edges buflist))))
@@ -547,6 +548,8 @@ property list is formed as
   (list 'nth 2 x))
 (defmacro revive:get-window-start (x)
   (list 'nth 3 x))
+(defmacro revive:get-tabs (x)
+  (list 'nth 4 x))
 
 (defun revive:find-file (file)
   "Make the best effort to find-file FILE."
@@ -570,7 +573,8 @@ property list is formed as
   "Restore the window configuration.
 Configuration CONFIG should be created by
 current-window-configuration-printable."
-  (let ((width (car config)) (height (nth 1 config))
+  (let ((one-buffer-one-frame-inhibit t) (one-buffer-one-frame-mode nil)
+	(width (car config)) (height (nth 1 config))
 	(edges (nth 2 config)) (buflist (nth 3 config)) buf)
     (set-buffer (get-buffer-create "*scratch*"))
     (setq edges (revive:normalize-edges width height edges))
@@ -578,18 +582,20 @@ current-window-configuration-printable."
     (revive:select-window-by-edge (revive:minx) (revive:miny))
     (while buflist
       (setq buf (car buflist))
-      (cond
-       ((and (revive:get-buffer buf)
-	     (get-buffer (revive:get-buffer buf)))
-	(switch-to-buffer (revive:get-buffer buf))
-	(goto-char (revive:get-window-start buf)) ;to prevent high-bit missing
-	(set-window-start nil (point))
-	(goto-char (revive:get-point buf)))
-       ((and (stringp (revive:get-file buf))
-	     (not (file-directory-p (revive:get-file buf)))
-	     (revive:find-file (revive:get-file buf)))
-	(set-window-start nil (revive:get-window-start buf))
-	(goto-char (revive:get-point buf))))
+      (let ((target-buffer (or (find-buffer-visiting (revive:get-file buf))
+			       (get-buffer buf))))
+	(cond
+	 (target-buffer
+	  (tabbar-window-restore-tabs (revive:get-tabs buf))
+	  (switch-to-buffer target-buffer)
+	  (goto-char (revive:get-window-start buf)) ;to prevent high-bit missing
+	  (set-window-start nil (point))
+	  (goto-char (revive:get-point buf)))
+	 ((and (stringp (revive:get-file buf))
+	       (not (file-directory-p (revive:get-file buf)))
+	       (revive:find-file (revive:get-file buf)))
+	  (set-window-start nil (revive:get-window-start buf))
+	  (goto-char (revive:get-point buf)))))
       (setq buflist (cdr buflist))
       (other-window 1))))
 
@@ -887,12 +893,65 @@ Configuration should be saved by save-current-configuration."
   (c-set-style (or (revive:prop-get-value x 'c-indentation-style) "gnu"))
 )
 
+(defvar revive:app-restore-path "~/.emacs.d/")
+(defun revive:restore-application-state ()
+  "Restores the application state."
+  (message "Restoring application state.")
+  (interactive)
+  (condition-case nil
+      (flet ((y-or-n-p (&rest args) t)
+	     (yes-or-no-p (&rest args) t)) 
+	(desktop-read revive:app-restore-path))
+    (error nil)))
+
+(defun revive:restore-frame (fp fc)
+  (restore-window-configuration fc))
+
+(defun revive:print-frame-states ()
+  (mapc (lambda (ft)
+	  (let ((f (first ft)) (p (second ft)))
+	  (insert (format "(revive:restore-frame '%S '%S)" 
+			  (mapcon (lambda (x)
+				    (unless (memq (caar x) '(buried-buffer-list buffer-list minibuffer))
+				      (list (car x))))
+				  p)
+			  (with-selected-frame f
+			    ;; this function from revive.el
+			    (current-window-configuration-printable))))))
+	(cdr (current-frame-configuration))))
+
+(defun revive:store-application-state ()
+  "Save application state with `desktop' and `revive'."
+  (interactive)
+  (message "Storing app state...")
+  (condition-case nil
+      (let ((desktop-save-hook (cons
+				'revive:print-frame-states
+				desktop-save-hook)))
+	(flet ((y-or-n-p (&rest args) t)
+	       (yes-or-no-p (&rest args) t)) 
+	  (desktop-save revive:app-restore-path 'release)))
+    (error nil))
+  
+  (message "Storing app state... done"))
+
+(define-key global-map [ns-application-restore] 'ns-restore-application-state)
+(define-key global-map [ns-application-store-state] 'ns-store-application-state)
+(defun ns-handle-power-off ()
+  (interactive)
+  (revive:store-application-state)
+  (save-buffers-kill-emacs))
+
+
 ;;(provide 'resume)
 (provide 'revive)
 
 
-;; $Id: revive.el,v 2.19 2008/05/13 01:19:16 yuuji Exp yuuji $
+;; $Id: revive.el,v 2.20aquamacs 2011/11/17 davidswelt $
 ;; $Log: revive.el,v $
+;; Revision 2.20aquamacs  2011/11/17 davidswelt
+;; Store/restore full application state.  Use Revive for windows, tabbar for tabs.
+;;
 ;; Revision 2.19  2008/05/13 01:19:16  yuuji
 ;; Add below to revive:save-variables-global-default.
 ;; * file-name-history buffer-name-history minibuffer-history
