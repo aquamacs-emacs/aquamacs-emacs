@@ -4594,6 +4594,9 @@ typedef struct
    -------------------------------------------------------------------------- */
 {
   NSTRACE (applicationDidFinishLaunching);
+  if ([NSApp respondsToSelector:@selector(invalidateRestorableState)])
+    [NSApp invalidateRestorableState];
+
   [NSApp setServicesProvider: NSApp];
   ns_send_appdefined (-2);
 }
@@ -4670,6 +4673,38 @@ typedef struct
 
   return YES;
 }
+
+/* post 10.7 Application restore feature */
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+
+  struct frame *emacsframe = SELECTED_FRAME ();
+
+  [super encodeRestorableStateWithCoder: coder];
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_STORE_STATE;
+  EV_TRAILER ((id)nil);
+
+  return;
+}
+- (void)restoreStateWithCoder:(NSCoder *)coder
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+
+  [super restoreStateWithCoder: coder];
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_RESTORE;
+  EV_TRAILER ((id)nil);
+
+  return;
+}
+
 
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification
 {

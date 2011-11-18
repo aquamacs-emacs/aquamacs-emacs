@@ -254,7 +254,7 @@ The properties returned may include `top', `left', `height', and `width'."
 
 ;; Special Nextstep-generated events are converted to function keys.  Here
 ;; are the bindings for them.
-(define-key global-map [ns-power-off] 'save-buffers-kill-emacs)
+(define-key global-map [ns-power-off] 'ns-handle-power-off)
 (define-key global-map [ns-open-file] 'ns-handle-open-file)
 (define-key global-map [ns-open-temp-file] [ns-open-file])
 (define-key global-map [ns-drag-file] 'ns-handle-drag-file)
@@ -320,6 +320,8 @@ The properties returned may include `top', `left', `height', and `width'."
 	     (cons (logior (lsh 0 16)  90) 'ns-application-activated)
 	     (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
 	     (cons (logior (lsh 0 16)  92) 'ns-application-reopen)
+	     (cons (logior (lsh 0 16)  93) 'ns-application-restore)
+	     (cons (logior (lsh 0 16)  94) 'ns-application-store-state)
 	     (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  132) 'ns-tool-bar-customized) ;; Aquamacs only
@@ -730,7 +732,9 @@ See `ns-insert-working-text'."
 	(write-file ns-save-panel-file))
     (message "File not saved.")))
 
-
+(defun ns-handle-power-off ()
+  (interactive)
+  (save-buffers-kill-emacs))
 
 ;;;; Inter-app communications support.
 
