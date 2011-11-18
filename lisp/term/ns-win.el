@@ -184,7 +184,7 @@ The properties returned may include `top', `left', `height', and `width'."
 ;; Special Nextstep-generated events are converted to function keys.  Here
 ;; are the bindings for them.  Note, these keys are actually declared in
 ;; x-setup-function-keys in common-win.
-(define-key global-map [ns-power-off] 'save-buffers-kill-emacs)
+(define-key global-map [ns-power-off] 'ns-handle-power-off)
 (define-key global-map [ns-open-file] 'ns-handle-open-file)
 (define-key global-map [ns-open-temp-file] [ns-open-file])
 (define-key global-map [ns-drag-file] 'ns-handle-drag-file)
@@ -406,7 +406,9 @@ See `ns-insert-working-text'."
 	(write-file ns-save-panel-file))
     (message "File not saved.")))
 
-
+(defun ns-handle-power-off ()
+  (interactive)
+  (save-buffers-kill-emacs))
 
 ;;;; Inter-app communications support.
 
