@@ -515,7 +515,7 @@ window-edges whose first member is always of north west window.
 Buffer-List is a list of buffer property list of all windows.  This
 property lists are stored in order corresponding to Edge-List.  Buffer
 property list is formed as
-'((buffer-file-name) (buffer-name) (point) (window-start)).
+'((buffer-file-name) (buffer-name) (point) (window-start) tabs).
 "
   (let ((curwin (selected-window))
 	(wlist (revive:window-list)) (edges (revive:all-window-edges)) buflist)
@@ -582,11 +582,11 @@ current-window-configuration-printable."
     (revive:select-window-by-edge (revive:minx) (revive:miny))
     (while buflist
       (setq buf (car buflist))
-      (let ((target-buffer (or (find-buffer-visiting (revive:get-file buf))
-			       (get-buffer buf))))
+      (let ((target-buffer (or (and (revive:get-file buf) (find-buffer-visiting (revive:get-file buf)))
+			       (get-buffer (revive:get-buffer buf)))))
 	(cond
 	 (target-buffer
-	  (tabbar-window-restore-tabs (revive:get-tabs buf))
+	  (tabbar-window-restore-tabs-in-window (revive:get-tabs buf))
 	  (switch-to-buffer target-buffer)
 	  (goto-char (revive:get-window-start buf)) ;to prevent high-bit missing
 	  (set-window-start nil (point))
@@ -890,53 +890,83 @@ Configuration should be saved by save-current-configuration."
   (require 'cc-mode)
   (revive:find-file (revive:prop-file-name x))
   (funcall (revive:prop-major-mode x))
-  (c-set-style (or (revive:prop-get-value x 'c-indentation-style) "gnu"))
-)
+  (c-set-style (or (revive:prop-get-value x 'c-indentation-style) "gnu")))
 
-(defvar revive:app-restore-path "~/.emacs.d/")
+(defcustom retain-application-state t
+  "Retain application state between sessions if supported by the OS.
+Under Mac OS X 10.7 `Lion' or later, sessions are stored regularly and retrieved
+upon application start in case the system reboots or the application exists
+unexpectedly.
+
+As application state, Aquamacs stores all buffers showing a file, all tabs,
+windows and frames and their exact locations, and some customization variables.
+Process buffers are not stored.
+
+This function is disabled for Aquamacs if this variable is set to NIL."
+
+  :version "23.3"
+  :type 'boolean
+  :group 'Aquamacs)
+
+
+
+(defvar revive:app-restore-path "~/Library/Application Support/Aquamacs Emacs/")
+(defvar revive:desktop-base-file-name "SessionDesktop.el")
 (defun revive:restore-application-state ()
   "Restores the application state."
-  (message "Restoring application state.")
   (interactive)
-  (condition-case nil
-      (flet ((y-or-n-p (&rest args) t)
-	     (yes-or-no-p (&rest args) t)) 
-	(desktop-read revive:app-restore-path))
-    (error nil)))
+  (when retain-application-state
+    (message "Restoring application state.")
+    (interactive)
+    (let ((desktop-base-file-name revive:desktop-base-file-name)
+	  (desktop-missing-file-warning nil)
+	  (desktop-load-locked-desktop t))
+      (condition-case err
+	  (flet ((y-or-n-p (&rest args) t)
+		 (yes-or-no-p (&rest args) t)) 
+	    (desktop-read revive:app-restore-path))
+	(error (message "Error while restoring application state: %s" err)))
+    )))
 
 (defun revive:restore-frame (fp fc)
-  (restore-window-configuration fc))
+  (make-frame)
+  (restore-window-configuration fc)
+  ;; return t to continue restoration
+  t)
 
 (defun revive:print-frame-states ()
-  (mapc (lambda (ft)
-	  (let ((f (first ft)) (p (second ft)))
-	  (insert (format "(revive:restore-frame '%S '%S)" 
-			  (mapcon (lambda (x)
-				    (unless (memq (caar x) '(buried-buffer-list buffer-list minibuffer))
-				      (list (car x))))
-				  p)
-			  (with-selected-frame f
-			    ;; this function from revive.el
-			    (current-window-configuration-printable))))))
-	(cdr (current-frame-configuration))))
+  (insert "(and (require 'revive)")
+  (condition-case err
+      (mapc (lambda (ft)
+	      (let ((f (first ft)) (p (second ft)))
+		(insert (format "\n     (revive:restore-frame '%S '%S)"
+				(mapcon (lambda (x)
+					  (unless (memq (caar x) '(buried-buffer-list buffer-list minibuffer))
+					    (list (car x))))
+					p)
+				(with-selected-frame f
+				  ;; this function from revive.el
+				  (current-window-configuration-printable))))))
+	    (cdr (current-frame-configuration)))
+    (error (message "Error: %s" err)))
+  (insert ")\n"))
 
 (defun revive:store-application-state ()
   "Save application state with `desktop' and `revive'."
   (interactive)
-  (message "Storing app state...")
-  (condition-case nil
-      (let ((desktop-save-hook (cons
-				'revive:print-frame-states
-				desktop-save-hook)))
-	(flet ((y-or-n-p (&rest args) t)
-	       (yes-or-no-p (&rest args) t)) 
-	  (desktop-save revive:app-restore-path 'release)))
-    (error nil))
-  
-  (message "Storing app state... done"))
+  (when retain-application-state
+    (condition-case err
+	(let ((desktop-base-file-name revive:desktop-base-file-name)
+	      (desktop-save-hook (cons
+				  'revive:print-frame-states
+				  desktop-save-hook)))
+	  (flet ((y-or-n-p (&rest args) t)
+		 (yes-or-no-p (&rest args) t)) 
+	    (desktop-save revive:app-restore-path 'release)))
+      (error (message "Error while saving application state: %s" err)))))
 
-(define-key global-map [ns-application-restore] 'ns-restore-application-state)
-(define-key global-map [ns-application-store-state] 'ns-store-application-state)
+(define-key global-map [ns-application-restore] 'revive:restore-application-state)
+(define-key global-map [ns-application-store-state] 'revive:store-application-state)
 (defun ns-handle-power-off ()
   (interactive)
   (revive:store-application-state)
