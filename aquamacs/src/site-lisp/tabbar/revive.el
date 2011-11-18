@@ -912,36 +912,55 @@ This function is disabled for Aquamacs if this variable is set to NIL."
 
 (defvar revive:app-restore-path "~/Library/Application Support/Aquamacs Emacs/")
 (defvar revive:desktop-base-file-name "SessionDesktop.el")
+(defvar revive:frame-configuration-to-restore nil "This variable is typically set by the desktop file.
+Its value is evaluated after loading the file in `revive:restore-application-state'.")
+
 (defun revive:restore-application-state ()
   "Restores the application state."
   (interactive)
   (when retain-application-state
     (message "Restoring application state.")
     (interactive)
-    (let ((desktop-base-file-name revive:desktop-base-file-name)
+    (let ((one-buffer-one-frame-mode nil)
+	  (desktop-base-file-name revive:desktop-base-file-name)
 	  (desktop-missing-file-warning nil)
 	  (desktop-load-locked-desktop t))
       (condition-case err
 	  (flet ((y-or-n-p (&rest args) t)
-		 (yes-or-no-p (&rest args) t)) 
-	    (desktop-read revive:app-restore-path))
+		 (yes-or-no-p (&rest args) t)
+		 (desktop-clear nil)) 
+	   ; (save-excursion (current-buffer)
+	      (desktop-read revive:app-restore-path)
+	    ;; restore window config, if any
+	    (eval revive:frame-configuration-to-restore)
+	    (setq revive:frame-configuration-to-restore nil))
 	(error (message "Error while restoring application state: %s" err)))
     )))
 
 (defun revive:restore-frame (fp fc)
-  (make-frame)
-  (restore-window-configuration fc)
-  ;; return t to continue restoration
-  t)
+  (let ((f (make-frame (append '((visibility . nil)) fp)))) ; needed in Emacs 23 (iconified)
+    (select-frame f)
+    (sit-for 0) ; needed in Emacs 23 for various frames
+    (set-frame-parameter f 'visibility t) ; needed in Emacs 23 (iconified frames)
+    (sit-for 0) ; needed in Emacs 23 for various frames
+    (set-frame-parameter f 'visibility (or (cdr (assq 'visibility fp)) t)) ; Emacs 23
+    (restore-window-configuration fc)
+    ;; (if (eq 'icon (cdr (assq 'visibility fp)))
+    ;; 	(iconify-frame f)))
+  t))
 
 (defun revive:print-frame-states ()
-  (insert "(and (require 'revive)")
+  (insert "(setq revive:frame-configuration-to-restore\n  '(progn ")
   (condition-case err
       (mapc (lambda (ft)
 	      (let ((f (first ft)) (p (second ft)))
 		(insert (format "\n     (revive:restore-frame '%S '%S)"
 				(mapcon (lambda (x)
-					  (unless (memq (caar x) '(buried-buffer-list buffer-list minibuffer))
+					  (unless (memq (caar x) '(buried-buffer-list 
+								   buffer-list minibuffer 
+								   display display-type window-system 
+								   parent-id window-id font-backend
+								   name))
 					    (list (car x))))
 					p)
 				(with-selected-frame f
@@ -949,7 +968,7 @@ This function is disabled for Aquamacs if this variable is set to NIL."
 				  (current-window-configuration-printable))))))
 	    (cdr (current-frame-configuration)))
     (error (message "Error: %s" err)))
-  (insert ")\n"))
+  (insert "))\n"))
 
 (defun revive:store-application-state ()
   "Save application state with `desktop' and `revive'."
@@ -966,7 +985,7 @@ This function is disabled for Aquamacs if this variable is set to NIL."
       (error (message "Error while saving application state: %s" err)))))
 
 (define-key global-map [ns-application-restore] 'revive:restore-application-state)
-(define-key global-map [ns-application-store-state] 'revive:store-application-state)
+;(define-key global-map [ns-application-store-state] 'revive:store-application-state)
 (defun ns-handle-power-off ()
   (interactive)
   (revive:store-application-state)
