@@ -845,15 +845,30 @@ This function is disabled for Aquamacs if this variable is set to NIL."
 Its value is evaluated after loading the file in `revive:restore-application-state'.")
 
 ;;;###autoload
-(defun revive-desktop ()
+(defun revive-desktop (&optional file auto)
   "Restores the application state.
 Similar to `resume', though using `desktop' to restore buffers."
   (interactive)
+  (when (and (called-interactively-p) (not auto))
+    (setq file
+	  (expand-file-name
+	  (if (or  
+	       (and last-nonmenu-event 
+		    (not (consp last-nonmenu-event))) 
+	       ;;(not (eq (car-safe last-nonmenu-event)  
+	       ;;	  'mac-apple-event)))
+	       (not use-dialog-box)
+	       (not window-system))
+	      (read-file-name "Session file to load: " nil revive:desktop-base-file-name 'mustmatch)
+	    (ns-read-file-name "Session file to load" nil 'mustmatch revive:desktop-base-file-name)))))
+
   (when retain-application-state
     (message "Restoring application state.")
     (interactive)
     (let ((one-buffer-one-frame-mode nil)
-	  (desktop-base-file-name revive:desktop-base-file-name)
+	  (desktop-base-file-name (if (and file (not (file-directory-p file)))
+					  (file-name-nondirectory file)
+					revive:desktop-base-file-name))
 	  (desktop-missing-file-warning nil)
 	  (desktop-load-locked-desktop t))
       (condition-case err
@@ -861,7 +876,7 @@ Similar to `resume', though using `desktop' to restore buffers."
 		 (yes-or-no-p (&rest args) t)
 		 (desktop-clear nil)) 
 	   ; (save-excursion (current-buffer)
-	      (desktop-read revive:app-restore-path)
+	      (desktop-read (if file (if (file-directory-p file) file (file-name-directory file)) revive:app-restore-path))
 	    ;; restore window config, if any
 	    (eval revive:frame-configuration-to-restore)
 	    (setq revive:frame-configuration-to-restore nil))
@@ -906,20 +921,36 @@ Suitable for use in `desktop-save-hook'"
   (insert "))\n"))
 
 ;;;###autoload
-(defun revive-save-desktop ()
+(defun revive-save-desktop (&optional file auto)
   "Save application state with `desktop' and `revive'.
 Similar to `save-current-configuration', 
 though uses `desktop' to restore buffers."
-  (interactive)
+  (interactive "")
+  (when (and (called-interactively-p) (not auto))
+    (setq file
+	  (if (or  
+	       (and last-nonmenu-event 
+		    (not (consp last-nonmenu-event))) 
+	       ;;(not (eq (car-safe last-nonmenu-event)  
+	       ;;	  'mac-apple-event)))
+	       (not use-dialog-box)
+	       (not window-system))
+	      (read-file-name "Session file for saving: ")
+	    (ns-read-file-name "Session file for saving" nil nil revive:desktop-base-file-name))))
   (when retain-application-state
     (condition-case err
-	(let ((desktop-base-file-name revive:desktop-base-file-name)
+	(let ((desktop-base-file-name (if (and file (not (file-directory-p file)))
+					  (file-name-nondirectory file)
+					revive:desktop-base-file-name))
 	      (desktop-save-hook (cons
 				  'revive:print-frame-states
 				  desktop-save-hook)))
 	  (flet ((y-or-n-p (&rest args) t)
 		 (yes-or-no-p (&rest args) t)) 
-	    (desktop-save revive:app-restore-path 'release)))
+	    (desktop-save (if file (if (file-directory-p file)
+				       file
+				     (file-name-directory file)) revive:app-restore-path) 
+			  'release)))
       (error (message "Error while saving application state: %s" err)))))
 
 (defun revive:handle-power-off ()
@@ -928,10 +959,18 @@ though uses `desktop' to restore buffers."
   (revive:store-application-state)
   (save-buffers-kill-emacs))
 
+(defun revive:ns-revive-desktop ()
+  (interactive)
+  (revive-desktop nil 'auto))
+
+(defun revive:ns-revive-save-desktop ()
+  (interactive)
+  (revive-save-desktop nil 'auto))
+
 (defun revive:setup ()
   (when (featurep 'ns)
-    (define-key global-map [ns-application-restore] 'revive-desktop)
-    (define-key global-map [ns-application-store-state] 'revive-save-desktop)
+    (define-key global-map [ns-application-restore] 'revive:ns-revive-desktop)
+    (define-key global-map [ns-application-store-state] 'revive:ns-revive-save-desktop)
     (define-key global-map [ns-power-off] 'revive:handle-power-off)))
 
 
