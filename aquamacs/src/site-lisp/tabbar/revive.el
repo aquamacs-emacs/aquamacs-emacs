@@ -928,10 +928,11 @@ though uses `desktop' to restore buffers."
   (revive:store-application-state)
   (save-buffers-kill-emacs))
 
-(when (featurep 'ns)
+(defun revive:setup ()
+  (when (featurep 'ns)
     (define-key global-map [ns-application-restore] 'revive-desktop)
     (define-key global-map [ns-application-store-state] 'revive-save-desktop)
-    (define-key global-map [ns-power-off] 'revive:handle-power-off))
+    (define-key global-map [ns-power-off] 'revive:handle-power-off)))
 
 
 ;;(provide 'resume)

@@ -662,8 +662,7 @@ shown in DEST-WINDOW."
 
 (defun tabbar-window-restore-tabs-in-window (tablist)
   (let ((temp-tab (car (tabbar-tabs (tabbar-current-tabset t))))
-	(prev-tab (tabbar-selected-tab (tabbar-current-tabset)))
-	(tab-count 0))
+	(prev-tab (tabbar-selected-tab (tabbar-current-tabset))))
 ;; delete tabbar here: (leads to unexplained slowdown/recursion, probably
 ;; when tabbar is being displayed)
 ;;   (let* ((tabset (tabbar-current-tabset t))

@@ -87,7 +87,8 @@
 
 ;(aq-preload "oneonone/strings")  ; loads cl must be compiled
 (aq-preload "filladapt")
- 
+
+(aq-preload "revive") ; load/save sessions 
 
 (let ((load-path (cons (concat default-directory "../lisp/aquamacs/edit-modes/")
 		       load-path)))
