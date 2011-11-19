@@ -653,36 +653,53 @@ shown in DEST-WINDOW."
 					      (with-current-buffer buffer
 						(if (or (buffer-file-name buffer)
 							desktop-save-buffer)
-						    (buffer-name buffer)
+						    (list 'tab (buffer-name buffer) (buffer-file-name buffer))
 						  nil)))))
 				tabset))))
 	   tabs-reordered))
   ;; remove nils left behind for unsaved buffers
   (setq tabset-save-list (remove nil tabset-save-list))))
 
-(defun tabbar-window-restore-tabs-in-window (tablist)
-  (let ((temp-tab (car (tabbar-tabs (tabbar-current-tabset t))))
-	(prev-tab (tabbar-selected-tab (tabbar-current-tabset))))
-;; delete tabbar here: (leads to unexplained slowdown/recursion, probably
-;; when tabbar is being displayed)
-;;   (let* ((tabset (tabbar-current-tabset t))
-;; 	 (wnumber (string-to-number (symbol-name tabset)))
-;; 	 (wind (window-number-get-window wnumber))
-;; 	 (window-elt (assq wnumber tabbar-window-alist)))
-;; 	 (setcdr window-elt nil)
-;; 	 (tabbar-window-update-tabsets))
-    ;; create new tabs corresponding to buffer-names in saved list
-  (dolist (bufname tablist)
-    (let ((buffer (get-buffer bufname))
-	  (tabset (tabbar-current-tabset)))
-      (and tabset buffer
-	     (tabbar-window-add-tab tabset buffer t))))
+(defun tabbar-find-buffer (name file)
+  (or (and file 
+	   (find-buffer-visiting file))
+      (get-buffer name)))
 
-    ;; (let ((tabbar-retain-windows-when-tab-deleted t))
-    ;;   (tabbar-window-delete-tab prev-tab))
-  ;; ;; close blank buffer and its tab
-   (tabbar-window-delete-tab temp-tab)  ;; this is insufficient.
-  ))
+(defun tabbar-window-restore-tabs-in-window (tablist)
+  ;; We do not force tabs on unless we need them.
+  (if (or tabbar-mode ; if tabs on, always check for restorability
+	  (and tablist (> (length tablist) 1))) ; turn on tabs if tabs present
+      (progn
+	(unless tabbar-mode (tabbar-mode 1))
+	(let ((temp-tab (car (tabbar-tabs (tabbar-current-tabset t))))
+	      (prev-tab (tabbar-selected-tab (tabbar-current-tabset)))
+	      (at-least-one-tab nil))
+	  ;; delete tabbar here: (leads to unexplained slowdown/recursion, probably
+	  ;; when tabbar is being displayed)
+	  ;;   (let* ((tabset (tabbar-current-tabset t))
+	  ;; 	 (wnumber (string-to-number (symbol-name tabset)))
+	  ;; 	 (wind (window-number-get-window wnumber))
+	  ;; 	 (window-elt (assq wnumber tabbar-window-alist)))
+	  ;; 	 (setcdr window-elt nil)
+	  ;; 	 (tabbar-window-update-tabsets))
+	  ;; create new tabs corresponding to buffer-names in saved list
+	  (dolist (spec tablist)
+	    (let ((filename) (bufname))
+	      (if (and (consp spec)
+		       (eq 'tab (car spec)))
+		  (setq bufname (second spec)
+			filename (third spec))
+		(setq bufname spec))
+	      (let ((buffer (tabbar-find-buffer bufname filename))
+		    (tabset (tabbar-current-tabset)))
+		(and tabset buffer
+		     (setq at-least-one-tab t)
+		     (tabbar-window-add-tab tabset buffer t)))))
+	  (tabbar-window-delete-tab temp-tab)  ;; this is insufficient.
+	  ;; t if at least one was restored
+	  at-least-one-tab))
+    ;; keep window if tabs turned off
+    t))
 
 ;; (defun tabbar-window-new-buffer (&optional mode)
 ;;   "Create a new buffer, with different behavior depending on the value of

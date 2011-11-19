@@ -3,7 +3,7 @@
 ;;; revive.el: Resume Emacs and Aquamacs.
 ;;; (c) 1994-2003 by HIROSE Yuuji [yuuji@gentei.org]
 ;;; (c) 2011 by David Reitter [david.reitter@gmail.com]
-;;; $Id: revive.el,v 2.20aquamacs 2011/11/17 davidswelt $
+;;; revive.el 2.20aquamacs 2011/11/17
 
 ;;;[[[   NOTICE ���� NOTICE ���� NOTICE ���� NOTICE ���� NOTICE ����   ]]]
 ;;;--------------------------------------------------------------------------
@@ -327,15 +327,12 @@ EDGES is a list of sub-windows' edges."
 	  (revive:select-window-by-edge x1 y1)
 	  (revive:split-window-safe nil (- div-y y1))
 	  (revive:restore-winconf x1 y1 x2 div-y former)
-	  (revive:restore-winconf x1 div-y x2 y2 latter)
-	  (message "=="))
+	  (revive:restore-winconf x1 div-y x2 y2 latter))
 	 ((= y1 (nth 1 divwin))
 	  (revive:select-window-by-edge x1 y1)
 	  (revive:split-window-safe nil (- div-x x1) t)
 	  (revive:restore-winconf x1 y1 div-x y2 former)
-	  (revive:restore-winconf div-x y1 x2 y2 latter)
-	  (message "||"))
-	 (t (message "dame!"))))))))
+	  (revive:restore-winconf div-x y1 x2 y2 latter))))))))
 
 (defvar revive:major-mode-command-alist-default
   '((gnus-Group-mode	. gnus)
@@ -496,6 +493,11 @@ property list is formed as
 	       (current-buffer))))
    (t nil)))
 
+(defun revive:find-buffer (name file)
+  (or (and file 
+	   (find-buffer-visiting file))
+      (get-buffer name)))
+
 ;;;###autoload
 (defun restore-window-configuration (config)
   "Restore the window configuration.
@@ -503,30 +505,35 @@ Configuration CONFIG should be created by
 current-window-configuration-printable."
   (let ((one-buffer-one-frame-inhibit t) (one-buffer-one-frame-mode nil)
 	(width (car config)) (height (nth 1 config))
-	(edges (nth 2 config)) (buflist (nth 3 config)) buf)
+	(edges (nth 2 config)) (winlist (nth 3 config)) winspec (num 1)
+	(windows-to-delete))
     (set-buffer (get-buffer-create "*scratch*"))
     (setq edges (revive:normalize-edges width height edges))
     (construct-window-configuration edges)
     (revive:select-window-by-edge (revive:minx) (revive:miny))
-    (while buflist
-      (setq buf (car buflist))
-      (let ((target-buffer (or (and (revive:get-file buf) (find-buffer-visiting (revive:get-file buf)))
-			       (get-buffer (revive:get-buffer buf)))))
+    (while winlist
+      (setq winspec (car winlist))
+      (if (fboundp 'tabbar-window-restore-tabs-in-window)
+	  (unless (tabbar-window-restore-tabs-in-window (revive:get-tabs winspec))
+	    (setq winspec nil)
+	    (add-to-list 'windows-to-delete (selected-window))))
+      (if winspec
+	  (let ((target-buffer (revive:find-buffer (revive:get-buffer winspec) (revive:get-file winspec))))
 	(cond
 	 (target-buffer
-	  (if (fboundp 'tabbar-window-restore-tabs-in-window)
-	      (tabbar-window-restore-tabs-in-window (revive:get-tabs buf)))
 	  (switch-to-buffer target-buffer)
-	  (goto-char (revive:get-window-start buf)) ;to prevent high-bit missing
+	  (goto-char (revive:get-window-start winspec)) ;to prevent high-bit missing
 	  (set-window-start nil (point))
-	  (goto-char (revive:get-point buf)))
-	 ((and (stringp (revive:get-file buf))
-	       (not (file-directory-p (revive:get-file buf)))
-	       (revive:find-file (revive:get-file buf)))
-	  (set-window-start nil (revive:get-window-start buf))
-	  (goto-char (revive:get-point buf)))))
-      (setq buflist (cdr buflist))
-      (other-window 1))))
+	  (goto-char (revive:get-point winspec)))
+	 ((and (stringp (revive:get-file winspec))
+	       (not (file-directory-p (revive:get-file winspec)))
+		 (revive:find-file (revive:get-file winspec)))
+	  (set-window-start nil (revive:get-window-start winspec))
+	  (goto-char (revive:get-point winspec))))))
+      (setq winlist (cdr winlist))
+      (other-window 1))
+    (mapc (lambda (w) (if (window-live-p w) (delete-window w))) windows-to-delete)
+    ))
 
 ;;;	
 (defun revive:buffer-list ()
@@ -871,7 +878,6 @@ Similar to `resume', though using `desktop' to restore buffers."
 					revive:desktop-base-file-name))
 	  (desktop-missing-file-warning nil)
 	  (desktop-load-locked-desktop t))
-      (condition-case err
 	  (flet ((y-or-n-p (&rest args) t)
 		 (yes-or-no-p (&rest args) t)
 		 (desktop-clear nil)) 
@@ -879,9 +885,7 @@ Similar to `resume', though using `desktop' to restore buffers."
 	      (desktop-read (if file (if (file-directory-p file) file (file-name-directory file)) revive:app-restore-path))
 	    ;; restore window config, if any
 	    (eval revive:frame-configuration-to-restore)
-	    (setq revive:frame-configuration-to-restore nil))
-	(error (message "Error while restoring application state: %s" err)))
-    )))
+	    (setq revive:frame-configuration-to-restore nil)))))
 
 (defun revive:restore-frame (fp fc)
   "Restores configuration of a single frame.
@@ -902,30 +906,34 @@ Uses frame parameters FP and window configuration FC."
 Suitable for use in `desktop-save-hook'"
   (insert "(setq revive:frame-configuration-to-restore\n  '(progn ")
   (condition-case err
-      (mapc (lambda (ft)
-	      (let ((f (first ft)) (p (second ft)))
-		(insert (format "\n     (revive:restore-frame '%S '%S)"
-				(mapcon (lambda (x)
-					  (unless (memq (caar x) '(buried-buffer-list 
-								   buffer-list minibuffer 
-								   display display-type window-system 
-								   parent-id window-id font-backend
-								   name))
-					    (list (car x))))
-					p)
-				(with-selected-frame f
-				  ;; this function from revive.el
-				  (current-window-configuration-printable))))))
-	    (cdr (current-frame-configuration)))
+      (mapc (lambda (f)
+	      (and (frame-visible-p f) ; do not store invisible frames
+		   (let ((p (frame-parameters f)))
+		     (insert 
+		      (format "\n     \(revive:restore-frame '%S '%S\)"
+			      (mapcon (lambda (x)
+					(unless (memq (caar x) 
+						      '(buried-buffer-list 
+							buffer-list minibuffer 
+							display display-type window-system 
+							parent-id window-id font-backend
+							name))
+					  (list (car x))))
+				      p)
+			      (with-selected-frame f
+				;; this function from revive.el
+				(current-window-configuration-printable)))))))
+	    (frame-list))
     (error (message "Error while saving application state: %s" err)))
   (insert "))\n"))
+
 
 ;;;###autoload
 (defun revive-save-desktop (&optional file auto)
   "Save application state with `desktop' and `revive'.
 Similar to `save-current-configuration', 
 though uses `desktop' to restore buffers."
-  (interactive "")
+  (interactive)
   (when (and (called-interactively-p) (not auto))
     (setq file
 	  (if (or  
@@ -938,34 +946,37 @@ though uses `desktop' to restore buffers."
 	      (read-file-name "Session file for saving: ")
 	    (ns-read-file-name "Session file for saving" nil nil revive:desktop-base-file-name))))
   (when retain-application-state
-    (condition-case err
-	(let ((desktop-base-file-name (if (and file (not (file-directory-p file)))
-					  (file-name-nondirectory file)
-					revive:desktop-base-file-name))
-	      (desktop-save-hook (cons
-				  'revive:print-frame-states
-				  desktop-save-hook)))
-	  (flet ((y-or-n-p (&rest args) t)
-		 (yes-or-no-p (&rest args) t)) 
-	    (desktop-save (if file (if (file-directory-p file)
-				       file
-				     (file-name-directory file)) revive:app-restore-path) 
-			  'release)))
-      (error (message "Error while saving application state: %s" err)))))
+    (let ((desktop-base-file-name (if (and file (not (file-directory-p file)))
+				      (file-name-nondirectory file)
+				    revive:desktop-base-file-name))
+	  (desktop-save-hook (cons
+			      'revive:print-frame-states
+			      desktop-save-hook)))
+      (flet ((y-or-n-p (&rest args) t)
+	     (yes-or-no-p (&rest args) t)) 
+	(desktop-save (if file (if (file-directory-p file)
+				   file
+				 (file-name-directory file)) revive:app-restore-path) 
+		      'release)))))
 
 (defun revive:handle-power-off ()
   "Terminate application, saving state."
   (interactive)
-  (revive:store-application-state)
+  (revive:ns-revive-save-desktop)
   (save-buffers-kill-emacs))
 
 (defun revive:ns-revive-desktop ()
   (interactive)
-  (revive-desktop nil 'auto))
+  (condition-case err
+      (revive-desktop nil 'auto)
+    (error (message "Error while restoring application state: %s" err))))
 
 (defun revive:ns-revive-save-desktop ()
   (interactive)
-  (revive-save-desktop nil 'auto))
+  (condition-case err
+      (revive-save-desktop nil 'auto)
+    (error (message "Error while saving application state: %s" err))))
+
 
 (defun revive:setup ()
   (when (featurep 'ns)
