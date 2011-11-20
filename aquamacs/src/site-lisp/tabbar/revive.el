@@ -959,38 +959,62 @@ though uses `desktop' to restore buffers."
 				 (file-name-directory file)) revive:app-restore-path) 
 		      'release)))))
 
-(defun revive:handle-power-off ()
-  "Terminate application, saving state."
-  (interactive)
-  (revive:ns-revive-save-desktop)
-  (save-buffers-kill-emacs))
 
-(defun revive:ns-revive-desktop ()
-  (interactive)
-  (condition-case err
-      (revive-desktop nil 'auto)
-    (error (message "Error while restoring application state: %s" err))))
+(defcustom revive-desktop-after-launching nil
+  "Control whether to restore the desktop after application launch.
+If set to nil (default), the system control this behavior, and the
+desktop state is saved when required by the system and upon exiting
+Emacs.  If set to `never', the desktop is never stored nor restored.
+If set to t, desktop is always saved and restored."
+  :group 'Aquamacs
+  :type '(choice :tag "Restore desktop..."
+		 (const :tag "always" t)
+		 (const :tag "automatically" nil)
+		 (const :tag "never" 'never)))
 
-(defun revive:ns-revive-save-desktop ()
+(defun revive:revive-desktop ()
+  "Automatically restores desktop.
+Does nothing if `revive-desktop-after-launching' is set to `never'."
   (interactive)
-  (condition-case err
-      (revive-save-desktop nil 'auto)
-    (error (message "Error while saving application state: %s" err))))
+  (unless (eq 'never revive-desktop-after-launching)
+    (message "revive: restoring desktop.")
+    (condition-case err
+	(revive-desktop nil 'auto)
+      (error (message "Error while restoring application state: %s" err)))))
 
+(defun revive:revive-save-desktop ()
+  "Automatically save desktop.
+Does nothing if `revive-desktop-after-launching' is set to `never'."
+  (interactive)
+  (unless (eq 'never revive-desktop-after-launching)
+    (condition-case err
+	(revive-save-desktop nil 'auto)
+      (error (message "Error while saving application state: %s" err)))))
+
+(defun revive:after-application-start ()
+  "Restore desktop after application start, if so requested.
+See also `revive-desktop-after-launching'."
+  (unless (eq 'never revive-desktop-after-launching)
+    (when (or revive-desktop-after-launching
+	      (and (boundp 'ns-session-restore-request)
+		   ns-session-restore-request))
+      (setq ns-session-restore-request nil)
+      (revive:revive-desktop))))
 
 (defun revive:setup ()
   (when (featurep 'ns)
-    (define-key global-map [ns-application-restore] 'revive:ns-revive-desktop)
-    (define-key global-map [ns-application-store-state] 'revive:ns-revive-save-desktop)
-    (define-key global-map [ns-power-off] 'revive:handle-power-off)))
+    (define-key global-map [ns-application-restore] 'revive:revive-desktop)
+    (define-key global-map [ns-application-store-state] 'revive:revive-save-desktop)))
 
+(add-hook 'after-init-hook #'revive:after-application-start 'append)
+(add-hook 'kill-emacs-hook #'revive:revive-save-desktop)
 
 ;;(provide 'resume)
 (provide 'revive)
 
 
-;; $Id: revive.el,v 2.20aquamacs 2011/11/17 davidswelt $
-;; $Log: revive.el,v $
+;; revive.el,v 2.20aquamacs
+
 ;; Revision 2.20aquamacs  2011/11/17 davidswelt
 ;; Store/restore full application state.  Use Revive for windows, tabbar for tabs.
 ;;
