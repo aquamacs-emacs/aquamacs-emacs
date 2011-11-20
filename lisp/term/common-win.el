@@ -204,7 +204,7 @@ This function returns ARGS minus the arguments that have been processed."
 ;; of grey.
 
 (defvar x-colors
-  (purecopy 
+  (purecopy
    '("gray100" "gray99" "gray98" "gray97" "gray96" "gray95" "gray94" "gray93" "gray92"
     "gray91" "gray90" "gray89" "gray88" "gray87" "gray86" "gray85" "gray84" "gray83"
     "gray82" "gray81" "gray80" "gray79" "gray78" "gray77" "gray76" "gray75" "gray74"

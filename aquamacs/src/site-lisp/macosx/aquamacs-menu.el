@@ -429,6 +429,18 @@ left and right margin"))
 		      ) 'my-file-separator)
 (define-key-after menu-bar-file-menu [reveal-in-finder-fill]
   '(menu-item "--") 'mac-show-in-finder)
+
+
+(define-key-after menu-bar-file-menu [revive-desktop-save]
+  '(menu-item "Save Session As..." revive-save-desktop)
+  'reveal-in-finder-fill)
+(define-key-after menu-bar-file-menu [revive-desktop-load]
+  '(menu-item "Load Session..." revive-desktop)
+  'reveal-in-finder-fill)
+;; To Do: add Recent Sessions menu
+(define-key-after menu-bar-file-menu [revive-separator]
+  '(menu-item "--") 'revive-desktop-save)
+
   
 ;; save as (redefinition for :enable)
 

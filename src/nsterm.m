@@ -208,6 +208,10 @@ NSString *ns_selection_color;
 /* Confirm on exit. */
 Lisp_Object ns_confirm_quit;
 
+/* Session restore */
+Lisp_Object ns_session_restore_request;
+
+
 NSArray *ns_send_types =0, *ns_return_types =0, *ns_drag_types =0;
 NSString *ns_app_name = @"Aquamacs";  /* default changed later */
 
@@ -4594,6 +4598,9 @@ typedef struct
    -------------------------------------------------------------------------- */
 {
   NSTRACE (applicationDidFinishLaunching);
+  if ([NSApp respondsToSelector:@selector(invalidateRestorableState)])
+    [NSApp invalidateRestorableState];
+
   [NSApp setServicesProvider: NSApp];
   ns_send_appdefined (-2);
 }
@@ -4670,6 +4677,61 @@ typedef struct
 
   return YES;
 }
+
+/* post 10.7 Application restore feature */
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+
+  struct frame *emacsframe = SELECTED_FRAME ();
+
+  [coder encodeBycopyObject:@"AquamacsSessionDesktop"];
+
+  [super encodeRestorableStateWithCoder: coder];
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_STORE_STATE;
+  EV_TRAILER ((id)nil);
+
+  return;
+}
+- (void)restoreStateWithCoder:(NSCoder *)coder
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+
+  [super restoreStateWithCoder: coder];
+
+  ns_session_restore_request = Qt;
+
+  /* The following event is typically not received by
+     the Lisp side.  It probably arrives too early. */
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_RESTORE;
+  EV_TRAILER ((id)nil);
+
+  return;
+}
+// + (void)restoreWindowWithIdentifier:(NSString *)identifier
+//         state:(NSCoder *)state
+//         completionHandler:(void (^)(NSWindow *, NSError *))completionHandler
+// {
+//   struct frame *emacsframe = SELECTED_FRAME ();
+
+//   NSLog(@"restoreWindowWithIdentifier called");
+//   if (!emacs_event)
+//     return;
+//   emacs_event->kind = NS_NONKEY_EVENT;
+//   emacs_event->code = KEY_NS_APPLICATION_RESTORE;
+//   EV_TRAILER ((id)nil);
+//   // We will not restore the window right now
+//   // To Do: call completionHandler later (once restored) for each frame.
+//   completionHandler(nil, nil);
+// }
+
+
 
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification
 {
@@ -6299,10 +6361,10 @@ typedef NSUInteger NSApplicationPresentationOptions;
 
  
     NSRect r = NSMakeRect(0.f, 0.f, proposedSize.width, proposedSize.height);
-    int cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
-    int rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
+    int newcols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
+    int newrows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
 
-    change_frame_size (emacsframe, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+    change_frame_size (emacsframe, newrows, newcols, 0, 1, 0); /* pretend, delay, safe */
     FRAME_PIXEL_WIDTH (emacsframe) = (int)r.size.width;
     FRAME_PIXEL_HEIGHT (emacsframe) = (int)r.size.height;
 
@@ -6317,10 +6379,10 @@ typedef NSUInteger NSApplicationPresentationOptions;
    NSWindow* window = [notification object];
 
     NSRect r = [window contentRectForFrameRect:[window frame]];
-    int cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
-    int rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
+    int newcols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
+    int newrows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
 
-    change_frame_size (emacsframe, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+    change_frame_size (emacsframe, newrows, newcols, 0, 1, 0); /* pretend, delay, safe */
     FRAME_PIXEL_WIDTH (emacsframe) = (int)r.size.width;
     FRAME_PIXEL_HEIGHT (emacsframe) = (int)r.size.height;
 
@@ -7455,6 +7517,15 @@ antialiased. Only has an effect on OS X Panther and above.  */);
   DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
                "Whether to confirm application quit using dialog.");
   ns_confirm_quit = Qnil;
+
+  DEFVAR_LISP ("ns-session-restore-request", &ns_session_restore_request,
+               doc: /* Non-nil if a sesion restore request was received.
+This system-level event is usually received while the
+application launches.  */);
+  ns_session_restore_request = Qnil;
+
+
+
 
   DEFVAR_LISP ("ns-emulate-three-button-mouse", &ns_emulate_three_button_mouse,
                doc: /* Non-nil (the default) means to use control and
