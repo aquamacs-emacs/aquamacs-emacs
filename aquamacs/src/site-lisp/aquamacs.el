@@ -26,21 +26,18 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, 2007, 2008, 2009, 2010, 2011: David Reitter
+;; Copyright (C) 2005-2011: David Reitter
 
 
 (require 'aquamacs-tools)
- 
 (require 'aquamacs-macros)
 
-(defvar aq-starttime 0)
-
+;; Profiling code
 (defmacro ats (txt) nil)
-
+;; (defvar aq-starttime 0)
 ;; (defun ats (txt) 
 ;;   (message "ATS %s:  %s" (time-since aq-starttime) txt))
-
-(setq aq-starttime (current-time))
+;; (setq aq-starttime (current-time))
 (ats "started")
 
 
@@ -1569,6 +1566,18 @@ to write the `custom-file'.")
   (require 'aquamacs-tool-bar)
   (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")
+
+
+;; Session restoration
+
+(require 'revive) ;; is usually preloaded
+(revive:setup)
+(unless (boundp 'revive:app-restore-path)
+  (message "Inadequate version of Revive package loaded: %s.
+The one that comes with Aquamacs will restore tabs and all frames and supports post-OSX 10.7 application resume."
+	   (locate-library "revive")))
+;; this will bind all necessary 
+
 
 ;; finish reading environment vars
 

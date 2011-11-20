@@ -151,7 +151,7 @@ is not used)."
 (defun x-handle-switch (switch &optional numeric)
   (let ((aelt (assoc switch command-line-x-option-alist)))
     (if aelt
-	(setq default-frame-alist
+	      (setq default-frame-alist
 	      (cons (cons (nth 3 aelt)
 			  (if numeric
 			      (string-to-number (pop x-invocation-args))
@@ -166,7 +166,7 @@ is not used)."
 (defun x-handle-initial-switch (switch)
   (let ((aelt (assoc switch command-line-x-option-alist)))
     (if aelt
-	(setq initial-frame-alist
+	      (setq initial-frame-alist
 	      (cons (cons (nth 3 aelt)
 			  (or (nth 4 aelt) (pop x-invocation-args)))
 		    initial-frame-alist)))))
@@ -304,7 +304,7 @@ have been processed."
 
 (defvar x-colors
   (if (featurep 'ns) (ns-list-colors)
-    (purecopy
+  (purecopy
      '("gray100" "grey100" "gray99" "grey99" "gray98" "grey98" "gray97"
        "grey97" "gray96" "grey96" "gray95" "grey95" "gray94" "grey94"
        "gray93" "grey93" "gray92" "grey92" "gray91" "grey91" "gray90"

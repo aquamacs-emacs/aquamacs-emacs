@@ -3064,7 +3064,7 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
   else
     face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
 
-  [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
+    [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
 
   if (bg_height > s->slice.height || s->img->hmargin || s->img->vmargin
       || s->img->mask || s->img->pixmap == 0 || s->width != s->background_width)
@@ -3196,8 +3196,8 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
 
               /* truncate to avoid overwriting fringe and/or scrollbar */
 	      overrun = max (0, (s->x + s->background_width)
-			     - (WINDOW_BOX_RIGHT_EDGE_X (s->w)
-				- WINDOW_RIGHT_FRINGE_WIDTH (s->w)));
+                                  - (WINDOW_BOX_RIGHT_EDGE_X (s->w)
+                                    - WINDOW_RIGHT_FRINGE_WIDTH (s->w)));
               r[i].size.width -= overrun;
 
 	      /* truncate to avoid overwriting to left of the window box */
@@ -3249,9 +3249,9 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
                 ns_draw_text_decoration (s, face, fgCol, width, x);
             }
           else
-            {
+       {
               NSRectFill (r[i]);
-            }
+       }
 
           /* Draw overlining, etc. on the stretch glyph (or the part
              of the stretch glyph after the cursor). */
@@ -4961,6 +4961,8 @@ typedef struct
 
   struct frame *emacsframe = SELECTED_FRAME ();
 
+  [coder encodeBycopyObject:@"AquamacsSessionDesktop"];
+
   [super encodeRestorableStateWithCoder: coder];
 
   if (!emacs_event)
@@ -4977,6 +4979,10 @@ typedef struct
 
   [super restoreStateWithCoder: coder];
 
+  ns_session_restore_request = Qt;
+
+  /* The following event is typically not received by
+     the Lisp side.  It probably arrives too early. */
   if (!emacs_event)
     return;
   emacs_event->kind = NS_NONKEY_EVENT;
@@ -4985,6 +4991,23 @@ typedef struct
 
   return;
 }
+// + (void)restoreWindowWithIdentifier:(NSString *)identifier
+//         state:(NSCoder *)state
+//         completionHandler:(void (^)(NSWindow *, NSError *))completionHandler
+// {
+//   struct frame *emacsframe = SELECTED_FRAME ();
+
+//   NSLog(@"restoreWindowWithIdentifier called");
+//   if (!emacs_event)
+//     return;
+//   emacs_event->kind = NS_NONKEY_EVENT;
+//   emacs_event->code = KEY_NS_APPLICATION_RESTORE;
+//   EV_TRAILER ((id)nil);
+//   // We will not restore the window right now
+//   // To Do: call completionHandler later (once restored) for each frame.
+//   completionHandler(nil, nil);
+// }
+
 
 
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification
@@ -5508,10 +5531,10 @@ typedef struct
 	  if ((flags & NSLeftCommandKeyMask) == NSLeftCommandKeyMask ||
 	      ! ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask))
 	    {
-	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
+          emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 	    }
       if ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)
-        {
+	    {
 	      emacs_event->modifiers |= 
 		parse_solitary_modifier ((EQ (ns_right_command_modifier, Qleft) ? 
 					  ns_command_modifier : ns_right_command_modifier));
@@ -5553,8 +5576,8 @@ typedef struct
 	{
 	  if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask || 
 	      ! ((flags & NSRightControlKeyMask) == NSRightControlKeyMask))
-	    emacs_event->modifiers |=
-	      parse_solitary_modifier (ns_control_modifier);
+          emacs_event->modifiers |=
+            parse_solitary_modifier (ns_control_modifier);
       if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
 	    emacs_event->modifiers |=
 	      parse_solitary_modifier ((EQ (ns_right_control_modifier, Qleft) ? 
@@ -5569,15 +5592,15 @@ typedef struct
         || EQ (ns_alternate_modifier, Qnone);
 
       if ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)
-        {
-          if ((NILP (ns_right_alternate_modifier)
+	{
+	  if ((NILP (ns_right_alternate_modifier)
 	       || (EQ (ns_right_alternate_modifier, Qnone)
 		   && (NILP (ns_alternate_modifier) 
 		       || EQ (ns_alternate_modifier, Qnone)))))
 	    {
 
 	      if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
-		{
+        {
 		   if (!fnKeysym)
 		    {
 		  /* accept pre-interp alt comb */
@@ -5587,11 +5610,11 @@ typedef struct
               if (emacs_event->modifiers == shift_modifier)
                 emacs_event->modifiers = 0;
             }
-		}
+		} 
           else
-		emacs_event->modifiers |= meta_modifier; 
+		emacs_event->modifiers |= meta_modifier;
 	    }
-          else
+	  else
             emacs_event->modifiers |= parse_solitary_modifier
               (EQ (ns_right_alternate_modifier, Qleft)
                ? ns_alternate_modifier
@@ -5617,40 +5640,40 @@ typedef struct
 		emacs_event->modifiers |= meta_modifier; 
             }
           else
-              emacs_event->modifiers |=
+	    emacs_event->modifiers |=
 	      parse_solitary_modifier (EQ (ns_right_alternate_modifier, Qnone) ?
 				       ns_alternate_modifier
-				       : ns_right_alternate_modifier);
-	}
+               : ns_right_alternate_modifier);
+        }
       if (flags & NSLeftAlternateKeyMask || (flags & NSAlternateKeyMask && 
 					     ! ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask))) /* default = meta */
-	{
+        {
 	  /* The better way to do this would be to add Meta to every key for 
 	     which the Option modifier doesn't change the character code.
 	     However, we can't find out about this in pure Cocoa
 	     (UCKeyTranslate seems to be needed).
 	     Thus, we have to use the manual route via 
 	     ns_alternate_meta_special_codes. */
-	 
+
 	  if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone)))
-	    {
+        {
 	      if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
 		{
 		  if (!fnKeysym)
 		    {
 		  /* accept pre-interp alt comb */
-		  if ([[theEvent characters] length] > 0)
-		    code = [[theEvent characters] characterAtIndex: 0];
-		  /*HACK: clear lone shift modifier to stop next if from firing */
-		  if (emacs_event->modifiers == shift_modifier)
-		    emacs_event->modifiers = 0;
-		    }		    
+              if ([[theEvent characters] length] > 0)
+                code = [[theEvent characters] characterAtIndex: 0];
+              /*HACK: clear lone shift modifier to stop next if from firing */
+              if (emacs_event->modifiers == shift_modifier)
+                emacs_event->modifiers = 0;
+            }
 		}
-	      else
+          else
 		emacs_event->modifiers |= meta_modifier;
 	    }
 	  else
-	    emacs_event->modifiers |=
+              emacs_event->modifiers |=
                 parse_solitary_modifier (ns_alternate_modifier);
         }
 
@@ -6204,7 +6227,7 @@ typedef struct
   if (cols > 0 && rows > 0)
     {
       if (ns_in_resize)
-        x_set_window_size (emacsframe, 0, cols, rows);
+    x_set_window_size (emacsframe, 0, cols, rows);
       else
         {
           NSWindow *window = [self window];
@@ -6673,10 +6696,10 @@ typedef struct
 
  
     NSRect r = NSMakeRect(0.f, 0.f, proposedSize.width, proposedSize.height);
-    int cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
-    int rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
+    int newcols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
+    int newrows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
 
-    change_frame_size (emacsframe, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+    change_frame_size (emacsframe, newrows, newcols, 0, 1, 0); /* pretend, delay, safe */
     FRAME_PIXEL_WIDTH (emacsframe) = (int)r.size.width;
     FRAME_PIXEL_HEIGHT (emacsframe) = (int)r.size.height;
 
@@ -6691,10 +6714,10 @@ typedef struct
    NSWindow* window = [notification object];
 
     NSRect r = [window contentRectForFrameRect:[window frame]];
-    int cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
-    int rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
+    int newcols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
+    int newrows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
 
-    change_frame_size (emacsframe, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+    change_frame_size (emacsframe, newrows, newcols, 0, 1, 0); /* pretend, delay, safe */
     FRAME_PIXEL_WIDTH (emacsframe) = (int)r.size.width;
     FRAME_PIXEL_HEIGHT (emacsframe) = (int)r.size.height;
 
@@ -6876,8 +6899,8 @@ typedef struct
       && typeReturned == nil)
     {
       if (! NILP (ns_get_local_selection (QPRIMARY, QUTF8_STRING)))
-        return self;
-    }
+      return self;
+  }
 
   return [super validRequestorForSendType: typeSent
                                returnType: typeReturned];
@@ -7334,7 +7357,7 @@ enum {
       [self setKnobProportion: 1.0];
       [self setDoubleValue: 1.0];
 #else
-      [self setFloatValue: 0.0 knobProportion: 1.0];
+    [self setFloatValue: 0.0 knobProportion: 1.0];
 #endif
     }
   else
@@ -7833,6 +7856,12 @@ Only has an effect on OS X Panther and above.");
   DEFVAR_LISP ("ns-confirm-quit", ns_confirm_quit,
                "Whether to confirm application quit using dialog.");
   ns_confirm_quit = Qnil;
+
+  DEFVAR_LISP ("ns-session-restore-request", ns_session_restore_request,
+               "Non-nil if a sesion restore request was received.\n\
+This system-level event is usually received while the\n\
+application launches.");
+  ns_session_restore_request = Qnil;
 
   DEFVAR_LISP ("ns-emulate-three-button-mouse", ns_emulate_three_button_mouse,
                "Non-nil (the default) means to use mouse button emulation with modifiers.\n\

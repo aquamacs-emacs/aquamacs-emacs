@@ -166,9 +166,9 @@ should be used as the interface to this function."
 	(select-window (frame-first-window f))
 	(set-buffer (window-buffer (selected-window)))
 	  (run-hooks 'window-configuration-change-hook)))
-    (unless  (and (assq 'visibility parameters)
-		  (eq (cdr (assq 'visibility parameters)) nil))
-      (make-frame-visible f))
+  
+    (set-frame-parameter f 'visibility (or (cdr (assq 'visibility parameters)) t))
+    ;; (make-frame-visible f)
     f)	; return the frame
   ;; not in s-m-p-mode
   (funcall smart-frame-positioning-old-frame-creation-function

@@ -203,6 +203,8 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [ns-toggle-fullscreen] 'ns-toggle-fullscreen)
 (define-key global-map [ns-show-prefs] 'customize)
 (define-key global-map [ns-save-panel-closed] 'ns-handle-save-panel-closed)
+(define-key global-map [ns-application-restore] 'ignore)
+(define-key global-map [ns-application-store-state] 'ignore)
 
 ;; Set up a number of aliases and other layers to pretend we're using
 ;; the Choi/Mitsuharu Carbon port.
