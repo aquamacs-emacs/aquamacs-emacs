@@ -24,6 +24,9 @@ git checkout -f --track -b new-$BRANCH origin/$BRANCH  >>aquamacs-build.log \
 && git branch -D $BRANCH  >>aquamacs-build.log \
 && git branch -m new-$BRANCH $BRANCH  >>aquamacs-build.log
 
+echo "Latest change:" >>aquamacs-build.log
+git log --oneline -1  >>aquamacs-build.log
+
 # this version will merge
 # git checkout -f aquamacs24 >>aquamacs-build.log  2>>aquamacs-build.log
 # git pull origin aquamacs24  >>aquamacs-build.log  2>>aquamacs-build.log
