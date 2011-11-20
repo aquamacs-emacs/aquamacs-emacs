@@ -856,6 +856,7 @@ Its value is evaluated after loading the file in `revive:restore-application-sta
   "Restores the application state.
 Similar to `resume', though using `desktop' to restore buffers."
   (interactive)
+  (require 'desktop)
   (when (and (called-interactively-p) (not auto))
     (setq file
 	  (expand-file-name
@@ -934,6 +935,7 @@ Suitable for use in `desktop-save-hook'"
 Similar to `save-current-configuration', 
 though uses `desktop' to restore buffers."
   (interactive)
+  (require 'desktop)
   (when (and (called-interactively-p) (not auto))
     (setq file
 	  (if (or  
@@ -994,7 +996,7 @@ Does nothing if `revive-desktop-after-launching' is set to `never'."
 (defun revive:after-application-start ()
   "Restore desktop after application start, if so requested.
 See also `revive-desktop-after-launching'."
-  (unless (eq 'never revive-desktop-after-launching)
+  (unless (or (eq 'never revive-desktop-after-launching) noninteractive)
     (when (or revive-desktop-after-launching
 	      (and (boundp 'ns-session-restore-request)
 		   ns-session-restore-request))
@@ -1002,12 +1004,13 @@ See also `revive-desktop-after-launching'."
       (revive:revive-desktop))))
 
 (defun revive:setup ()
-  (when (featurep 'ns)
-    (define-key global-map [ns-application-restore] 'revive:revive-desktop)
-    (define-key global-map [ns-application-store-state] 'revive:revive-save-desktop)))
+  (when (not noninteractive)
+    (add-hook 'kill-emacs-hook #'revive:revive-save-desktop)
+    (add-hook 'after-init-hook #'revive:after-application-start 'append)
+    (when (featurep 'ns)
+      (define-key global-map [ns-application-restore] 'revive:revive-desktop)
+      (define-key global-map [ns-application-store-state] 'revive:revive-save-desktop))))
 
-(add-hook 'after-init-hook #'revive:after-application-start 'append)
-(add-hook 'kill-emacs-hook #'revive:revive-save-desktop)
 
 ;;(provide 'resume)
 (provide 'revive)
