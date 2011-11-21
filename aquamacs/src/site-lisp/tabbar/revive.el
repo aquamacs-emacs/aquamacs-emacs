@@ -828,23 +828,6 @@ Configuration should be saved by save-current-configuration."
   (funcall (revive:prop-major-mode x))
   (c-set-style (or (revive:prop-get-value x 'c-indentation-style) "gnu")))
 
-(defcustom retain-application-state t
-  "Retain application state between sessions if supported by the OS.
-Under Mac OS X 10.7 `Lion' or later, sessions are stored regularly and retrieved
-upon application start in case the system reboots or the application exists
-unexpectedly.
-
-As application state, Aquamacs stores all buffers showing a file, all tabs,
-windows and frames and their exact locations, and some customization variables.
-Process buffers are not stored.
-
-This function is disabled for Aquamacs if this variable is set to NIL."
-
-  :version "23.3"
-  :type 'boolean
-  :group 'Aquamacs)
-
-
 
 (defvar revive:app-restore-path "~/Library/Application Support/Aquamacs Emacs/")
 (defvar revive:desktop-base-file-name "SessionDesktop.el")
@@ -870,23 +853,21 @@ Similar to `resume', though using `desktop' to restore buffers."
 	      (read-file-name "Session file to load: " nil revive:desktop-base-file-name 'mustmatch)
 	    (ns-read-file-name "Session file to load" nil 'mustmatch revive:desktop-base-file-name)))))
 
-  (when retain-application-state
-    (message "Restoring application state.")
-    (interactive)
-    (let ((one-buffer-one-frame-mode nil)
-	  (desktop-base-file-name (if (and file (not (file-directory-p file)))
-					  (file-name-nondirectory file)
-					revive:desktop-base-file-name))
-	  (desktop-missing-file-warning nil)
-	  (desktop-load-locked-desktop t))
-	  (flet ((y-or-n-p (&rest args) t)
-		 (yes-or-no-p (&rest args) t)
+  (message "Restoring application state.")
+  (interactive)
+  (let ((one-buffer-one-frame-mode nil)
+	(desktop-base-file-name (if (and file (not (file-directory-p file)))
+				    (file-name-nondirectory file)
+				  revive:desktop-base-file-name))
+	(desktop-missing-file-warning nil)
+	(desktop-load-locked-desktop t))
+    (flet ((y-or-n-p (&rest args) t)
+	   (yes-or-no-p (&rest args) t)
 		 (desktop-clear nil)) 
-	   ; (save-excursion (current-buffer)
-	      (desktop-read (if file (if (file-directory-p file) file (file-name-directory file)) revive:app-restore-path))
-	    ;; restore window config, if any
-	    (eval revive:frame-configuration-to-restore)
-	    (setq revive:frame-configuration-to-restore nil)))))
+      (desktop-read (if file (if (file-directory-p file) file (file-name-directory file)) revive:app-restore-path))
+      ;; restore window config, if any
+      (eval revive:frame-configuration-to-restore)
+      (setq revive:frame-configuration-to-restore nil))))
 
 (defun revive:restore-frame (fp fc)
   "Restores configuration of a single frame.
@@ -936,7 +917,7 @@ Similar to `save-current-configuration',
 though uses `desktop' to restore buffers."
   (interactive)
   (require 'desktop)
-  (when (and (called-interactively-p) (not auto))
+  (when (and (called-interactively-p) (not auto) (not file))
     (setq file
 	  (if (or  
 	       (and last-nonmenu-event 
@@ -947,19 +928,17 @@ though uses `desktop' to restore buffers."
 	       (not window-system))
 	      (read-file-name "Session file for saving: ")
 	    (ns-read-file-name "Session file for saving" nil nil revive:desktop-base-file-name))))
-  (when retain-application-state
-    (let ((desktop-base-file-name (if (and file (not (file-directory-p file)))
-				      (file-name-nondirectory file)
-				    revive:desktop-base-file-name))
-	  (desktop-save-hook (cons
-			      'revive:print-frame-states
-			      desktop-save-hook)))
-      (flet ((y-or-n-p (&rest args) t)
-	     (yes-or-no-p (&rest args) t)) 
-	(desktop-save (if file (if (file-directory-p file)
-				   file
-				 (file-name-directory file)) revive:app-restore-path) 
-		      'release)))))
+  (let ((desktop-base-file-name (if (and file (not (file-directory-p file)))
+				    (file-name-nondirectory file)
+				  revive:desktop-base-file-name))
+	(desktop-save-hook desktop-save-hook))
+    (add-hook 'desktop-save-hook #'revive:print-frame-states)
+    (flet ((y-or-n-p (&rest args) t)
+	   (yes-or-no-p (&rest args) t)) 
+      (desktop-save (if file (if (file-directory-p file)
+				 file
+			       (file-name-directory file)) revive:app-restore-path) 
+		    'release))))
 
 
 (defcustom revive-desktop-after-launching nil
@@ -967,28 +946,44 @@ though uses `desktop' to restore buffers."
 If set to nil (default), the system control this behavior, and the
 desktop state is saved when required by the system and upon exiting
 Emacs.  If set to `never', the desktop is never stored nor restored.
-If set to t, desktop is always saved and restored."
+If set to t, desktop is always saved and restored.
+
+Under Mac OS X 10.7 `Lion' or later, sessions are stored regularly and retrieved
+upon application start in case the system reboots or the application exists
+unexpectedly.
+
+As application state, Aquamacs stores all buffers showing a file, all tabs,
+windows and frames and their exact locations, and some customization variables.
+Process buffers are not stored."
   :group 'Aquamacs
+  :version 23.3
   :type '(choice :tag "Restore desktop..."
 		 (const :tag "always" t)
 		 (const :tag "automatically" nil)
 		 (const :tag "never" 'never)))
 
-(defun revive:revive-desktop ()
+(defun revive:revive-desktop (&optional delete-frames)
   "Automatically restores desktop.
-Does nothing if `revive-desktop-after-launching' is set to `never'."
+Does nothing if `revive-desktop-after-launching' is set to `never'.
+If DELETE-FRAMES is non-nil, delete all pre-existing frames."
   (interactive)
   (unless (eq 'never revive-desktop-after-launching)
-    (message "revive: restoring desktop.")
+    (if (boundp 'ns-session-restore-request)
+	(setq ns-session-restore-request 'restored))
     (condition-case err
-	(revive-desktop nil 'auto)
+	(let ((frames (visible-frame-list)))
+	  (revive-desktop nil 'auto)
+	  (mapcar #'delete-frame frames))
       (error (message "Error while restoring application state: %s" err)))))
 
-(defun revive:revive-save-desktop ()
+(defun revive:auto-save-desktop ()
   "Automatically save desktop.
 Does nothing if `revive-desktop-after-launching' is set to `never'."
   (interactive)
-  (unless (eq 'never revive-desktop-after-launching)
+  (unless (or (eq 'never revive-desktop-after-launching)
+	      ;; do not save before restoring, if requested
+	      (and (boundp 'ns-session-restore-request)
+		   (eq 'requested ns-session-restore-request)))
     (condition-case err
 	(revive-save-desktop nil 'auto)
       (error (message "Error while saving application state: %s" err)))))
@@ -999,17 +994,16 @@ See also `revive-desktop-after-launching'."
   (unless (or (eq 'never revive-desktop-after-launching) noninteractive)
     (when (or revive-desktop-after-launching
 	      (and (boundp 'ns-session-restore-request)
-		   ns-session-restore-request))
-      (setq ns-session-restore-request nil)
-      (revive:revive-desktop))))
+		   (eq 'requested ns-session-restore-request)))
+      (revive:revive-desktop 'delete-frames))))
 
 (defun revive:setup ()
   (when (not noninteractive)
-    (add-hook 'kill-emacs-hook #'revive:revive-save-desktop)
+    (add-hook 'kill-emacs-hook #'revive:auto-save-desktop)
     (add-hook 'after-init-hook #'revive:after-application-start 'append)
     (when (featurep 'ns)
       (define-key global-map [ns-application-restore] 'revive:revive-desktop)
-      (define-key global-map [ns-application-store-state] 'revive:revive-save-desktop))))
+      (define-key global-map [ns-application-store-state] 'revive:auto-save-desktop))))
 
 
 ;;(provide 'resume)
