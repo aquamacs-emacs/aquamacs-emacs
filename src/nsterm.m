@@ -4696,41 +4696,25 @@ typedef struct
 
   return;
 }
-- (void)restoreStateWithCoder:(NSCoder *)coder
+
+/* because we're the restoration class for EmacsWindow, we get this: */
++ (void)restoreWindowWithIdentifier:(NSString *)identifier
+        state:(NSCoder *)state
+        completionHandler:(void (^)(NSWindow *, NSError *))completionHandler
 {
   struct frame *emacsframe = SELECTED_FRAME ();
 
-  [super restoreStateWithCoder: coder];
+  ns_session_restore_request = intern ("requested");
 
-  ns_session_restore_request = Qt;
-
-  /* The following event is typically not received by
-     the Lisp side.  It probably arrives too early. */
   if (!emacs_event)
     return;
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_APPLICATION_RESTORE;
   EV_TRAILER ((id)nil);
-
-  return;
+  // We will not restore the window right now
+  // To Do: call completionHandler later (once restored) for each frame.
+  completionHandler(nil, nil);
 }
-// + (void)restoreWindowWithIdentifier:(NSString *)identifier
-//         state:(NSCoder *)state
-//         completionHandler:(void (^)(NSWindow *, NSError *))completionHandler
-// {
-//   struct frame *emacsframe = SELECTED_FRAME ();
-
-//   NSLog(@"restoreWindowWithIdentifier called");
-//   if (!emacs_event)
-//     return;
-//   emacs_event->kind = NS_NONKEY_EVENT;
-//   emacs_event->code = KEY_NS_APPLICATION_RESTORE;
-//   EV_TRAILER ((id)nil);
-//   // We will not restore the window right now
-//   // To Do: call completionHandler later (once restored) for each frame.
-//   completionHandler(nil, nil);
-// }
-
 
 
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification
@@ -6053,6 +6037,11 @@ typedef struct
   wr = [win frame];
   f->border_width = wr.size.width - r.size.width;
   FRAME_NS_TITLEBAR_HEIGHT (f) = wr.size.height - r.size.height;
+
+  if ([win respondsToSelector:@selector(setRestorationClass:)])
+    {
+      [win setRestorationClass: [EmacsApp class]];
+    }
 
   [win setAcceptsMouseMovedEvents: YES];
   [win setDelegate: self];
