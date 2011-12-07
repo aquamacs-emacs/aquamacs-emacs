@@ -4947,7 +4947,7 @@ typedef struct
   struct frame *emacsframe = SELECTED_FRAME ();
 
   if (!emacs_event)
-    return;
+    return YES;
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_APPLICATION_REOPEN;
   EV_TRAILER ((id)nil);
@@ -4974,10 +4974,15 @@ typedef struct
   return;
 }
 
+/* Defining this function type in order to be able o compile
+   on older ObjC where Blocks are not yet known. */
+
+typedef void(*rwwi_compHand)(NSWindow *, NSError *);
+
 /* because we're the restoration class for EmacsWindow, we get this: */
 + (void)restoreWindowWithIdentifier:(NSString *)identifier
         state:(NSCoder *)state
-        completionHandler:(void (^)(NSWindow *, NSError *))completionHandler
+		  completionHandler:(rwwi_compHand) completionHandler
 {
   struct frame *emacsframe = SELECTED_FRAME ();
 
@@ -5015,7 +5020,7 @@ typedef struct
   struct frame *emacsframe = SELECTED_FRAME ();
   
   if (!emacs_event)
-    return;
+    return YES;
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_APPLICATION_OPEN_UNTITLED;
   emacs_event->modifiers = 0;
