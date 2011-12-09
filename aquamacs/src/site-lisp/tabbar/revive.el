@@ -941,7 +941,7 @@ though uses `desktop' to restore buffers."
 		    'release))))
 
 
-(defcustom revive-desktop-after-launching nil
+(defcustom revive-desktop-after-launching 'never
   "Control whether to restore the desktop after application launch.
 If set to nil (default), the system control this behavior, and the
 desktop state is saved when required by the system and upon exiting
