@@ -161,16 +161,25 @@ This command is part of `%s'." string-rep language mode-name mode-name)
 				`(if (aq-list-contains (event-modifiers 
 						     last-command-event)
 						    'meta)
-				     (execute-kbd-macro ,vec-rep)
+				     (emkm-execute-kbd-macro ,vec-rep)
 				   ;; otherwise: called using Esc prefix.
 				   ;; call original binding 
 				   (let ((,mode-name nil))
-				     (execute-kbd-macro (this-command-keys)))
+				     (emkm-execute-kbd-macro (this-command-keys)))
 				   ))))))
 	      (reverse (cdr 
 			(assq language 
 			      emulate-mac-keyboard-mode-maps))))
-      map))) 
+      map)))
+
+(defun emkm-execute-kbd-macro (macro)
+  "Like `execute-kbd-macro'
+Does not terminate when bell is rung."
+  (let ((kbd-macro-termination-hook nil))
+    (execute-kbd-macro macro)
+    ;; special rule for isearch mode (ugly hack!)
+    (if isearch-mode
+	(isearch-update))))
 
 (defun emkm-name (lang &optional suf)
   (if suf
