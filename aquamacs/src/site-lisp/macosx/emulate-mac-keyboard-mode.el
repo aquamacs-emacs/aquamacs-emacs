@@ -176,7 +176,9 @@ This command is part of `%s'." string-rep language mode-name mode-name)
   "Like `execute-kbd-macro'
 Does not terminate when bell is rung."
   (let ((kbd-macro-termination-hook nil))
-    (execute-kbd-macro macro)
+    (condition-case nil
+	(execute-kbd-macro macro)
+      (error nil))
     ;; special rule for isearch mode (ugly hack!)
     (if isearch-mode
 	(isearch-update))))
