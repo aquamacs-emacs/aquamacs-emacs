@@ -59,6 +59,8 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 /* show size in window titles while resizing */
 /* #define AQUAMACS_RESIZING_HINT 1 */
 
+// #define AQUAMACS_RESUME 1
+
 
 /* call tracing */
 #if 0
@@ -210,7 +212,6 @@ Lisp_Object ns_confirm_quit;
 
 /* Session restore */
 Lisp_Object ns_session_restore_request;
-
 
 NSArray *ns_send_types =0, *ns_return_types =0, *ns_drag_types =0;
 NSString *ns_app_name = @"Aquamacs";  /* default changed later */
@@ -4697,6 +4698,8 @@ typedef struct
   return;
 }
 
+#ifdef AQUAMACS_RESUME
+
 /* Defining this function type in order to be able o compile
    on older ObjC where Blocks are not yet known. */
 
@@ -4720,7 +4723,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   // To Do: call completionHandler later (once restored) for each frame.
   completionHandler(nil, nil);
 }
-
+#endif
 
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification
 {
@@ -6043,10 +6046,12 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   f->border_width = wr.size.width - r.size.width;
   FRAME_NS_TITLEBAR_HEIGHT (f) = wr.size.height - r.size.height;
 
+#ifdef AQUAMACS_RESUME
   if ([win respondsToSelector:@selector(setRestorationClass:)])
     {
       [win setRestorationClass: [EmacsApp class]];
     }
+#endif
 
   [win setAcceptsMouseMovedEvents: YES];
   [win setDelegate: self];
@@ -7517,7 +7522,6 @@ antialiased. Only has an effect on OS X Panther and above.  */);
 This system-level event is usually received while the
 application launches.  */);
   ns_session_restore_request = Qnil;
-
 
 
 
