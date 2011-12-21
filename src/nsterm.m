@@ -6095,10 +6095,15 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 
 
   /* enable fullscreen button */
-  [win setCollectionBehavior:__NSWindowCollectionBehaviorManaged
-       | __NSWindowCollectionBehaviorFullScreenPrimary
-       | __NSWindowCollectionBehaviorParticipatesInCycle
-       | __NSWindowCollectionBehaviorFullScreenAuxiliary];
+  if (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_5) {
+    [win setCollectionBehavior:__NSWindowCollectionBehaviorManaged
+         | __NSWindowCollectionBehaviorFullScreenPrimary
+         | __NSWindowCollectionBehaviorFullScreenAuxiliary];
+  } else {
+    [win setCollectionBehavior:__NSWindowCollectionBehaviorManaged
+	 | __NSWindowCollectionBehaviorParticipatesInCycle];
+  }
+
 
   FRAME_TOOLBAR_HEIGHT (f) = 0;
 
@@ -6779,10 +6784,15 @@ enum {
       [f setContentSize:[[self screen] frame].size];
       [f setTitle:[self title]];
       [f makeKeyAndOrderFront:nil];
-      [f setCollectionBehavior:__NSWindowCollectionBehaviorManaged
-	    | __NSWindowCollectionBehaviorFullScreenPrimary
-	    | __NSWindowCollectionBehaviorParticipatesInCycle
-	    | __NSWindowCollectionBehaviorFullScreenAuxiliary];
+
+      if (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_5) {
+        [f setCollectionBehavior:__NSWindowCollectionBehaviorManaged
+	   | __NSWindowCollectionBehaviorFullScreenPrimary
+	   | __NSWindowCollectionBehaviorFullScreenAuxiliary];
+      } else {
+        [f setCollectionBehavior:__NSWindowCollectionBehaviorManaged
+	   | __NSWindowCollectionBehaviorParticipatesInCycle];
+      }
 
 
       return f;
