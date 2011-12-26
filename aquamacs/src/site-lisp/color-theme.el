@@ -4,7 +4,7 @@
 ;; Copyright (C) 2000, 2001, 2002, 2003  Alex Schroeder <alex@gnu.org>
 ;; Copyright (C) 2003, 2004, 2005, 2006  Xavier Maillard <zedek@gnu.org>
 
-;; Version: 6.6.0/Aquamacs
+;; Version: 6.6.0b/Aquamacs
 ;; Keywords: faces
 ;; Author: Jonadab the Unsightly One <jonadab@bright.net>
 ;; Maintainer: Xavier Maillard <zedek@gnu.org>
@@ -781,7 +781,7 @@ OLD is the current setting, NEW is the setting inherited from."
     ;; merged into the face like an underlying face would be." --
     ;; therefore properties of the inherited face only add missing
     ;; attributes.
-    (when face
+    (when (and face (facep face))
       ;; remove :inherit face from atts -- this assumes only one
       ;; :inherit attribute.
       (setq atts (delq ':inherit (delq face atts)))
