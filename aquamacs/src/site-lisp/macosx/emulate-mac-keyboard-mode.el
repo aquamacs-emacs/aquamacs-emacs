@@ -30,6 +30,8 @@ Example:
 (setq emulate-mac-keyboard-mode-maps
  `((german . (("\M-l" . "@")
 	       ("\M-/" . "\\")
+	       ("\M-2" .  "“")
+	       ("\M-\"" . "”")
 	       ("\M-5" . "[")
 	       ("\M-6" . "]")
 	       ("\M-7" . "|")
