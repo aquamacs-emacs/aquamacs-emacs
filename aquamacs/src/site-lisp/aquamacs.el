@@ -991,7 +991,7 @@ yes-or-no prompts - y or n will do."
 
 					; scroll just one line when hitting the bottom of the window
      (scroll-step 1)
-     (scroll-conservatively 10000)
+     (scroll-conservatively 99)
      ;; Start scrolling when 2 lines from top/bottom 
      (scroll-margin 0)
      (visual-scroll-margin 2)
