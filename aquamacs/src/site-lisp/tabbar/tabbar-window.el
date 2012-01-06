@@ -622,43 +622,51 @@ shown in DEST-WINDOW."
 ;; exclude current window
 
 (defun tabbar-window-list-tabsets-to-save (&optional current-win)
-  (let* ((tabset-names (tabbar-tabset-names))
-	 (ntabsets (length tabset-names))
-	 (current-tabset (tabbar-current-tabset t))
-	 (current-tabset-name (symbol-name current-tabset))
-	 (current-tabset-position
-	  (1- (length (member current-tabset-name (reverse tabset-names)))))
-	 (tabset-tabs (tabbar-map-tabsets 'tabbar-tabs))
-	 (current-tabs (copy-alist (nth current-tabset-position tabset-tabs)))
-	 ;; reorder list of tabs such that current tabset's tabs are 1st
-	 (tabs-reordered (cons current-tabs
-			       (unless current-win
-				 (copy-tree (remove current-tabs tabset-tabs)))))
-	 (selected-tab-buffer (car (tabbar-selected-tab current-tabset)))
-	 tabset-save-list)
-    ;; extract nested list of buffers in tabs (i.e. remove tabset identifiers)
-    (setq tabset-save-list
-	  ;; loop through tabsets.  For each...
-	  (mapcar
-	   (function (lambda (tabset)
-		       (remove nil
-			       ;; ... loop through tabs.  Store buffer-name, or
-			       ;;   set to nil if this buffer won't be restored by
-			       ;;   desktop (i.e. not visiting a file, nor listed
-			       ;;   in desktop-save-buffer)
-			       (mapcar
-				(function (lambda (tab)
-					    (let ((buffer (tabbar-tab-value tab)))
-					      (setcdr tab nil)
-					      (with-current-buffer buffer
-						(if (or (buffer-file-name buffer)
-							desktop-save-buffer)
-						    (list 'tab (buffer-name buffer) (buffer-file-name buffer))
-						  nil)))))
-				tabset))))
-	   tabs-reordered))
-  ;; remove nils left behind for unsaved buffers
-  (setq tabset-save-list (remove nil tabset-save-list))))
+  (if tabbar-current-tabset-function ;; has been initialized
+      (let* ((tabset-names (tabbar-tabset-names))
+	     (ntabsets (length tabset-names))
+	     (current-tabset (tabbar-current-tabset t))
+	     (current-tabset-name (symbol-name current-tabset))
+	     (current-tabset-position
+	      (1- (length (member current-tabset-name (reverse tabset-names)))))
+	     (tabset-tabs (tabbar-map-tabsets 'tabbar-tabs))
+	     (current-tabs (copy-alist (nth current-tabset-position tabset-tabs)))
+	     ;; reorder list of tabs such that current tabset's tabs are 1st
+	     (tabs-reordered (cons current-tabs
+				   (unless current-win
+				     (copy-tree (remove current-tabs tabset-tabs)))))
+	     (selected-tab-buffer (car (tabbar-selected-tab current-tabset)))
+	     tabset-save-list)
+	;; extract nested list of buffers in tabs (i.e. remove tabset identifiers)
+	(setq tabset-save-list
+	      ;; loop through tabsets.  For each...
+	      (mapcar
+	       (function (lambda (tabset)
+			   (remove nil
+				   ;; ... loop through tabs.  Store buffer-name, or
+				   ;;   set to nil if this buffer won't be restored by
+				   ;;   desktop (i.e. not visiting a file, nor listed
+				   ;;   in desktop-save-buffer)
+				   (mapcar
+				    (function (lambda (tab)
+						(let ((buffer (tabbar-tab-value tab)))
+						  (setcdr tab nil)
+						  (with-current-buffer buffer
+						    (if (or (buffer-file-name buffer)
+							    desktop-save-buffer)
+							(list 'tab (buffer-name buffer) (buffer-file-name buffer))
+						      nil)))))
+				    tabset))))
+	       tabs-reordered))
+	;; remove nils left behind for unsaved buffers
+	(setq tabset-save-list (remove nil tabset-save-list)))
+    ;; ELSE
+    (list (list
+	   (if (or (buffer-file-name)
+		   desktop-save-buffer)
+	       (list 'tab (buffer-name) (buffer-file-name))
+	     nil)))))
+
 
 (defun tabbar-find-buffer (name file)
   (or (and file 
@@ -838,3 +846,4 @@ Run as `tabbar-quit-hook'."
 (add-hook 'tabbar-quit-hook 'tabbar-window-quit)
 
 (provide 'tabbar-window)
+(tabbar-window-list-tabsets-to-save (selected-window))
