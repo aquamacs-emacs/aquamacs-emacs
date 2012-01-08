@@ -1,6 +1,6 @@
 ;;; eshell.el --- the Emacs command shell
 
-;; Copyright (C) 1999-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2012 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 ;; Version: 2.4.2
@@ -349,11 +349,9 @@ With prefix ARG, insert output into the current buffer at point."
     (minibuffer-with-setup-hook #'(lambda ()
                                     (eshell-mode)
                                     (eshell-return-exits-minibuffer))
-      (unwind-protect
-           (unless command
-             (setq command (read-from-minibuffer "Emacs shell command: ")))
-        (when command
-          (eshell-add-input-to-history command)))))
+      (unless command
+        (setq command (read-from-minibuffer "Emacs shell command: "))
+        (eshell-add-input-to-history command))))
   (unless command
     (error "No command specified!"))
   ;; redirection into the current buffer is achieved by adding an

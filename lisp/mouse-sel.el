@@ -1,6 +1,6 @@
 ;;; mouse-sel.el --- multi-click selection support
 
-;; Copyright (C) 1993-1995, 2001-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1993-1995, 2001-2012  Free Software Foundation, Inc.
 
 ;; Author: Mike Williams <mdub@bigfoot.com>
 ;; Keywords: mouse
@@ -60,7 +60,7 @@
 ;;
 ;; Thanks to KevinB@bartley.demon.co.uk for his useful input.
 ;;
-;;--- Customisation -------------------------------------------------------
+;;--- Customization -------------------------------------------------------
 ;;
 ;; * You may want to use none or more of following:
 ;;
@@ -199,11 +199,12 @@ If nil, point will always be placed at the beginning of the region."
 ;;;###autoload
 (define-minor-mode mouse-sel-mode
   "Toggle Mouse Sel mode.
-With prefix ARG, turn Mouse Sel mode on if and only if ARG is positive.
-Returns the new status of Mouse Sel mode (non-nil means on).
+With a prefix argument ARG, enable Mouse Sel mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
-When Mouse Sel mode is enabled, mouse selection is enhanced in
-various ways:
+Mouse Sel mode is a global minor mode.  When enabled, mouse
+selection is enhanced in various ways:
 
 - Double-clicking on symbol constituents selects symbols.
 Double-clicking on quotes or parentheses selects sexps.

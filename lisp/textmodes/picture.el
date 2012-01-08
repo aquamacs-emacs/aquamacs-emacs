@@ -1,6 +1,6 @@
 ;;; picture.el --- "Picture mode" -- editing using quarter-plane screen model
 
-;; Copyright (C) 1985, 1994, 2001-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1994, 2001-2012  Free Software Foundation, Inc.
 
 ;; Author: K. Shane Hartman
 ;; Maintainer: FSF
@@ -742,7 +742,7 @@ by supplying an argument.
 Entry to this mode calls the value of `picture-mode-hook' if non-nil.
 
 Note that Picture mode commands will work outside of Picture mode, but
-they are not defaultly assigned to keys."
+they are not by default assigned to keys."
   (interactive)
   (if (eq major-mode 'picture-mode)
       (error "You are already editing a picture")

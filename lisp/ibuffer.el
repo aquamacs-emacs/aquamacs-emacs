@@ -1,6 +1,6 @@
 ;;; ibuffer.el --- operate on buffers like dired
 
-;; Copyright (C) 2000-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2000-2012  Free Software Foundation, Inc.
 
 ;; Author: Colin Walters <walters@verbum.org>
 ;; Maintainer: John Paul Wallington <jpw@gnu.org>
@@ -426,7 +426,7 @@ directory, like `default-directory'."
       '(menu-item "Save current filter groups permanently..."
         ibuffer-save-filter-groups
         :enable (and (featurep 'ibuf-ext) ibuffer-filter-groups)
-        :help "Use a mnemnonic name to store current filter groups"))
+        :help "Use a mnemonic name to store current filter groups"))
     (define-key-after groups-map [switch-to-saved-filter-groups]
       '(menu-item "Restore permanently saved filters..."
         ibuffer-switch-to-saved-filter-groups
@@ -676,7 +676,7 @@ directory, like `default-directory'."
     (define-key-after map [menu-bar view filter save-filters]
       '(menu-item "Save current filters permanently..." ibuffer-save-filters
         :enable (and (featurep 'ibuf-ext) ibuffer-filtering-qualifiers)
-        :help "Use a mnemnonic name to store current filter stack"))
+        :help "Use a mnemonic name to store current filter stack"))
     (define-key-after map [menu-bar view filter switch-to-saved-filters]
       '(menu-item "Restore permanently saved filters..."
         ibuffer-switch-to-saved-filters
@@ -2504,7 +2504,7 @@ Other commands:
 
 ** Information on Filtering:
 
- You can filter your ibuffer view via different critera.  Each Ibuffer
+ You can filter your ibuffer view via different criteria.  Each Ibuffer
 buffer has its own stack of active filters.  For example, suppose you
 are working on an Emacs Lisp project.  You can create an Ibuffer
 buffer displays buffers in just `emacs-lisp' modes via
@@ -2648,12 +2648,14 @@ will be inserted before the group at point."
 ;;;;;;  ibuffer-backward-filter-group ibuffer-forward-filter-group
 ;;;;;;  ibuffer-toggle-filter-group ibuffer-mouse-toggle-filter-group
 ;;;;;;  ibuffer-interactive-filter-by-mode ibuffer-mouse-filter-by-mode
-;;;;;;  ibuffer-auto-mode) "ibuf-ext" "ibuf-ext.el" "617b36fc8479547d679cf0103f82e3ff")
+;;;;;;  ibuffer-auto-mode) "ibuf-ext" "ibuf-ext.el" "1400db1bc3d4a3010cbc4807a6725072")
 ;;; Generated autoloads from ibuf-ext.el
 
 (autoload 'ibuffer-auto-mode "ibuf-ext" "\
-Toggle use of Ibuffer's auto-update facility.
-With numeric ARG, enable auto-update if and only if ARG is positive.
+Toggle use of Ibuffer's auto-update facility (Ibuffer Auto mode).
+With a prefix argument ARG, enable Ibuffer Auto mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
 \(fn &optional ARG)" t nil)
 

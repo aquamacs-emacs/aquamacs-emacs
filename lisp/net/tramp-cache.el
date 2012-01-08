@@ -1,6 +1,6 @@
 ;;; tramp-cache.el --- file information caching for Tramp
 
-;; Copyright (C) 2000, 2005-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2000, 2005-2012 Free Software Foundation, Inc.
 
 ;; Author: Daniel Pittman <daniel@inanna.danann.net>
 ;;         Michael Albinus <michael.albinus@gmx.de>
@@ -162,6 +162,11 @@ FILE must be a local file name on a connection identified via VEC."
 ;;;###tramp-autoload
 (defun tramp-flush-file-property (vec file)
   "Remove all properties of FILE in the cache context of VEC."
+  ;; Remove file property of symlinks.
+  (let ((truename (tramp-get-file-property vec file "file-truename" nil)))
+    (when (and (stringp truename)
+	       (not (string-equal file truename)))
+      (tramp-flush-file-property vec truename)))
   ;; Unify localname.
   (setq vec (copy-sequence vec))
   (aset vec 3 (tramp-run-real-handler 'directory-file-name (list file)))
@@ -383,7 +388,8 @@ for all methods.  Resulting data are derived from connection history."
 	   ;; When "emacs -Q" has been called, both variables are nil.
 	   ;; We do not load the persistency file then, in order to
 	   ;; have a clean test environment.
-	   (or init-file-user site-run-file))
+	   (or (and (boundp 'init-file-user) (symbol-value 'init-file-user))
+	       (and (boundp 'site-run-file) (symbol-value 'site-run-file))))
   (condition-case err
       (with-temp-buffer
 	(insert-file-contents tramp-persistency-file-name)

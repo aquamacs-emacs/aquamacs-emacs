@@ -1,6 +1,6 @@
 ;;; vc-bzr.el --- VC backend for the bzr revision control system
 
-;; Copyright (C) 2006-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2006-2012  Free Software Foundation, Inc.
 
 ;; Author: Dave Love <fx@gnu.org>
 ;; 	   Riccardo Murri <riccardo.murri@gmail.com>
@@ -124,7 +124,8 @@ Use the current Bzr root directory as the ROOT argument to
 ;; Used in the autoloaded vc-bzr-registered; see below.
 ;;;###autoload
 (defconst vc-bzr-admin-checkout-format-file
-  (concat vc-bzr-admin-dirname "/checkout/format"))
+  (concat vc-bzr-admin-dirname "/checkout/format")
+  "Name of the format file in a .bzr directory.")
 (defconst vc-bzr-admin-dirstate
   (concat vc-bzr-admin-dirname "/checkout/dirstate"))
 (defconst vc-bzr-admin-branch-format-file
@@ -444,7 +445,7 @@ If any error occurred in running `bzr status', then return nil."
       (let ((warnings (cdr result)))
         (when warnings
           ;; bzr 2.3.0 returns info about shelves, which is not really a warning
-          (when (string-match "[1-9]+ shel\\(f\\|ves\\) exists?\\..*?\n" warnings)
+          (when (string-match "[0-9]+ shel\\(f\\|ves\\) exists?\\..*?\n" warnings)
             (setq warnings (replace-match "" nil nil warnings)))
           (unless (string= warnings "")
             (message "Warnings in `bzr' output: %s" warnings))))
@@ -763,7 +764,10 @@ REV non-nil gets an error."
 
 (defun vc-bzr-rename-file (old new)
   "Rename file from OLD to NEW using `bzr mv'."
-  (vc-bzr-command "mv" nil 0 new old))
+  (setq old (expand-file-name old))
+  (setq new (expand-file-name new))
+  (vc-bzr-command "mv" nil 0 new old)
+  (message "Renamed %s => %s" old new))
 
 (defvar vc-bzr-annotation-table nil
   "Internal use.")
@@ -866,7 +870,7 @@ stream.  Standard error output is discarded."
 		       (" M " . edited) ;; file text modified
 		       ("  *" . edited) ;; execute bit changed
 		       (" M*" . edited) ;; text modified + execute bit changed
-		       ;; FIXME: what about ignored files?
+		       ("I  " . ignored)
 		       (" D " . missing)
                        ;; For conflicts, should we list the .THIS/.BASE/.OTHER?
 		       ("C  " . conflict)
@@ -891,7 +895,7 @@ stream.  Standard error output is discarded."
       (goto-char (point-min))
       (while (not (eobp))
         ;; Bzr 2.3.0 added this if there are shelves.  (Bug#8170)
-        (unless (looking-at "[1-9]+ shel\\(f\\|ves\\) exists?\\.")
+        (unless (looking-at "[0-9]+ shel\\(f\\|ves\\) exists?\\.")
           (setq status-str
                 (buffer-substring-no-properties (point) (+ (point) 3)))
           (setq translated (cdr (assoc status-str translation)))
@@ -916,7 +920,7 @@ stream.  Standard error output is discarded."
               (push (list new-name 'edited
                           (vc-bzr-create-extra-fileinfo old-name)) result)))
            ;; do nothing for non existent files
-           ((eq translated 'not-found))
+           ((memq translated '(not-found ignored)))
            (t
             (push (list (file-relative-name
                          (buffer-substring-no-properties

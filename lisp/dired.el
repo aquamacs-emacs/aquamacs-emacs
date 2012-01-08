@@ -1,6 +1,6 @@
 ;;; dired.el --- directory-browsing commands -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1986, 1992-1997, 2000-2011
+;; Copyright (C) 1985-1986, 1992-1997, 2000-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Sebastian Kremer <sk@thp.uni-koeln.de>
@@ -704,7 +704,7 @@ Don't use that together with FILTER."
 
 (defun dired-file-name-at-point ()
   "Try to get a file name at point in the current dired buffer.
-This hook is inteneded to be put in `file-name-at-point-functions'."
+This hook is intended to be put in `file-name-at-point-functions'."
   (let ((filename (dired-get-filename nil t)))
     (when filename
       (if (file-directory-p filename)
@@ -1025,7 +1025,7 @@ BEG..END is the line where the file info is located."
   ;; spaces there (and within the filename as well, of course).
   (save-excursion
     (let (file file-col other other-col)
-      ;; Check that there is indeed a file, and that there is anoter adjacent
+      ;; Check that there is indeed a file, and that there is another adjacent
       ;; file with which to align, and that additional spaces are needed to
       ;; align the filenames.
       (when (and (setq file (progn (goto-char beg)
@@ -2678,7 +2678,7 @@ Anything else means ask for each directory."
 (defvar dired-re-no-dot "^\\([^.]\\|\\.\\([^.]\\|\\..\\)\\).*")
 
 ;; Delete file, possibly delete a directory and all its files.
-;; This function is usefull outside of dired.  One could change it's name
+;; This function is useful outside of dired.  One could change its name
 ;; to e.g. recursive-delete-file and put it somewhere else.
 (defun dired-delete-file (file &optional recursive trash) "\
 Delete FILE or directory (possibly recursively if optional RECURSIVE is true.)
@@ -2879,7 +2879,7 @@ or \"* [3 files]\"."
 		      (window-splittable-p (selected-window)))
 		    ;; Try to split the selected window vertically if
 		    ;; that's possible.  (Bug#1806)
-		    (split-window-vertically))
+		    (split-window-below))
 	       ;; Otherwise, try to split WINDOW sensibly.
 	       (split-window-sensibly window))))
 	pop-up-frames)
@@ -3667,7 +3667,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;;;  dired-run-shell-command dired-do-shell-command dired-do-async-shell-command
 ;;;;;;  dired-clean-directory dired-do-print dired-do-touch dired-do-chown
 ;;;;;;  dired-do-chgrp dired-do-chmod dired-compare-directories dired-backup-diff
-;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "0ffe89ae728efb341dfacff6c85e2ba4")
+;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "cdcae8f5f4ea69fa7b0231f640c13163")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\
@@ -4128,7 +4128,7 @@ instead.
 ;;;***
 
 ;;;### (autoloads (dired-do-relsymlink dired-jump-other-window dired-jump)
-;;;;;;  "dired-x" "dired-x.el" "219648338c42c7912fa336680b434db0")
+;;;;;;  "dired-x" "dired-x.el" "85900e333d980b376bf820108ae1a1fc")
 ;;; Generated autoloads from dired-x.el
 
 (autoload 'dired-jump "dired-x" "\

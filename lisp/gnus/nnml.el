@@ -1,6 +1,6 @@
 ;;; nnml.el --- mail spool access for Gnus
 
-;; Copyright (C) 1995-2011 Free Software
+;; Copyright (C) 1995-2012 Free Software
 ;;   Foundation, Inc.
 
 ;; Authors: Didier Verna <didier@xemacs.org> (adding compaction)
@@ -1213,7 +1213,7 @@ Use the nov database for the current group if available."
 		;; #### already belongs to a range, whereas the corresponding
 		;; #### article doesn't exist (for example, if you delete an
 		;; #### article). For that reason, it is important to update
-		;; #### the ranges (meaning remove inexistent articles) before
+		;; #### the ranges (meaning remove nonexistent articles) before
 		;; #### doing anything on them.
 		;; 2 a/ read articles:
 		(let ((read (gnus-info-read info)))

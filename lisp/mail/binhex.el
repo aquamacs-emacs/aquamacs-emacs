@@ -1,6 +1,6 @@
 ;;; binhex.el --- elisp native binhex decode
 
-;; Copyright (C) 1998-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012 Free Software Foundation, Inc.
 
 ;; Author: Shenghuo Zhu <zsh@cs.rochester.edu>
 ;; Keywords: binhex news
@@ -74,10 +74,11 @@ input and write the converted data to its standard output."
 
 ;;;###autoload
 (defconst binhex-begin-line
-  "^:...............................................................$")
+  "^:...............................................................$"
+  "Regular expression matching the start of a BinHex encoded region.")
 (defconst binhex-body-line
   "^[^:]...............................................................$")
-(defconst binhex-end-line ":$")
+(defconst binhex-end-line ":$")		; unused
 
 (defvar binhex-temporary-file-directory
   (cond ((fboundp 'temp-directory) (temp-directory))

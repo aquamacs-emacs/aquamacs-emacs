@@ -1,6 +1,6 @@
 ;;; tramp-cmds.el --- Interactive commands for Tramp
 
-;; Copyright (C) 2007-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2012 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, processes
@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; This package provides all interactive commands which are releated
+;; This package provides all interactive commands which are related
 ;; to Tramp.
 
 ;;; Code:

@@ -1,5 +1,5 @@
 /* CCL (Code Conversion Language) interpreter.
-   Copyright (C) 2001-2011 Free Software Foundation, Inc.
+   Copyright (C) 2001-2012 Free Software Foundation, Inc.
    Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
      2005, 2006, 2007, 2008, 2009, 2010, 2011
      National Institute of Advanced Industrial Science and Technology (AIST)
@@ -47,7 +47,7 @@ static Lisp_Object Qcode_conversion_map;
 static Lisp_Object Qcode_conversion_map_id;
 
 /* Symbols of ccl program have this property, a value of the property
-   is an index for Vccl_protram_table. */
+   is an index for Vccl_program_table. */
 static Lisp_Object Qccl_program_idx;
 
 /* Table of registered CCL programs.  Each element is a vector of
@@ -210,8 +210,8 @@ static Lisp_Object Vccl_program_table;
 #define CCL_WriteArrayReadJump	0x0B /* Write an array element, read, and jump:
 					1:A--D--D--R--E--S--S-rrrXXXXX
 					2:LENGTH
-					3:ELEMENET[0]
-					4:ELEMENET[1]
+					3:ELEMENT[0]
+					4:ELEMENT[1]
 					...
 					N:A--D--D--R--E--S--S-rrrYYYYY
 					------------------------------
@@ -429,7 +429,7 @@ static Lisp_Object Vccl_program_table;
 
 #define CCL_Extension		0x1F /* Extended CCL code
 					1:ExtendedCOMMNDRrrRRRrrrXXXXX
-					2:ARGUEMENT
+					2:ARGUMENT
 					3:...
 					------------------------------
 					extended_command (rrr,RRR,Rrr,ARGS)
@@ -484,7 +484,7 @@ static Lisp_Object Vccl_program_table;
    If the element is t or lambda, finish without changing reg[rrr].
    If the element is a number, set reg[rrr] to the number and finish.
 
-   Detail of the map structure is descibed in the comment for
+   Detail of the map structure is described in the comment for
    CCL_MapMultiple below.  */
 
 #define CCL_IterateMultipleMap	0x10 /* Iterate multiple maps
@@ -552,7 +552,7 @@ static Lisp_Object Vccl_program_table;
    But, when VALm is mapped to VALn and VALn is not a number, the
    mapping proceed as below:
 
-   If VALn is nil, the lastest map is ignored and the mapping of VALm
+   If VALn is nil, the last map is ignored and the mapping of VALm
    proceed to the next map.
 
    In VALn is t, VALm is reverted to reg[rrr] and the mapping of VALm
@@ -561,7 +561,7 @@ static Lisp_Object Vccl_program_table;
    If VALn is lambda, move to the next map set like reaching to the
    end of the current map set.
 
-   If VALn is a symbol, call the CCL program refered by it.
+   If VALn is a symbol, call the CCL program referred by it.
    Then, use reg[rrr] as a mapped value except for -1, -2 and -3.
    Such special values are regarded as nil, t, and lambda respectively.
 
@@ -826,7 +826,7 @@ while (0)
    : (charset = CHARSET_FROM_ID ((id)), DECODE_CHAR (charset, (code))))
 
 /* Encode character C by some of charsets in CHARSET_LIST.  Set ID to
-   the id of the used charset, ENCODED to the resulf of encoding.
+   the id of the used charset, ENCODED to the result of encoding.
    Assume that we can use the variable `charset'.  */
 
 #define CCL_ENCODE_CHAR(c, charset_list, id, encoded)		\
@@ -1762,7 +1762,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 
 	case CCL_STAT_QUIT:
 	  if (! ccl->quit_silently)
-	    sprintf (msg, "\nCCL: Quited.");
+	    sprintf (msg, "\nCCL: Quitted.");
 	  break;
 
 	default:
@@ -1808,7 +1808,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 
 /* Resolve symbols in the specified CCL code (Lisp vector).  This
    function converts symbols of code conversion maps and character
-   translation tables embeded in the CCL code into their ID numbers.
+   translation tables embedded in the CCL code into their ID numbers.
 
    The return value is a vector (CCL itself or a new vector in which
    all symbols are resolved), Qt if resolving of some symbol failed,

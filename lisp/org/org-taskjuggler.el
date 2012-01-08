@@ -1,10 +1,9 @@
 ;;; org-taskjuggler.el --- TaskJuggler exporter for org-mode
 ;;
-;; Copyright (C) 2007-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2012 Free Software Foundation, Inc.
 ;;
 ;; Emacs Lisp Archive Entry
 ;; Filename: org-taskjuggler.el
-;; Version: 7.7
 ;; Author: Christian Egli
 ;; Maintainer: Christian Egli
 ;; Keywords: org, taskjuggler, project planning
@@ -278,6 +277,7 @@ defined in `org-export-taskjuggler-default-reports'."
 		      (file-name-nondirectory buffer-file-name))
 		     org-export-taskjuggler-extension)))
 	 (buffer (find-file-noselect filename))
+	 (old-buffer (current-buffer))
 	 (org-export-taskjuggler-old-level 0)
 	 task resource)
     (unless tasks
@@ -305,6 +305,7 @@ defined in `org-export-taskjuggler-default-reports'."
 	(setcar tasks (push (cons "version" version) task))))
     (with-current-buffer buffer
       (erase-buffer)
+      (org-clone-local-variables old-buffer "^org-")
       (org-taskjuggler-open-project (car tasks))
       (insert org-export-taskjuggler-default-global-properties)
       (insert "\n")
@@ -354,8 +355,8 @@ information, all the properties, etc."
   (let* ((props (org-entry-properties))
 	 (components (org-heading-components))
 	 (level (nth 1 components))
-	 (headline 
-	  (replace-regexp-in-string 
+	 (headline
+	  (replace-regexp-in-string
 	   "\"" "\\\"" (nth 4 components) t t)) ; quote double quotes in headlines
 	 (parent-ordered (org-taskjuggler-parent-is-ordered-p)))
     (push (cons "level" level) props)
@@ -405,10 +406,10 @@ deeper), then it's not a leaf."
 	    (successor (car (cdr tasks))))
 	(cond
 	 ;; if a task has no successors it is a leaf
-	 ((null successor) 
+	 ((null successor)
 	  (push (cons (cons "leaf-node" t) task) new-list))
 	 ;; if the successor has a lower level than task it is a leaf
-	 ((<= (cdr (assoc "level" successor)) (cdr (assoc "level" task))) 
+	 ((<= (cdr (assoc "level" successor)) (cdr (assoc "level" task)))
 	  (push (cons (cons "leaf-node" t) task) new-list))
 	 ;; otherwise examine the rest of the tasks
 	 (t (push task new-list))))

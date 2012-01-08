@@ -1,6 +1,6 @@
 ;;; bookmark.el --- set bookmarks, maybe annotate them, jump to them later
 
-;; Copyright (C) 1993-1997, 2001-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1993-1997, 2001-2012  Free Software Foundation, Inc.
 
 ;; Author: Karl Fogel <kfogel@red-bean.com>
 ;; Maintainer: Karl Fogel <kfogel@red-bean.com>
@@ -83,7 +83,7 @@ To specify the file in which to save them, modify the variable
   "The `.emacs.bmk' file used to be called this name.")
 
 
-;; defvarred to avoid a compilation warning:
+;; defvared to avoid a compilation warning:
 (defvar bookmark-file nil
   "Old name for `bookmark-default-file'.")
 

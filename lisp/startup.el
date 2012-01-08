@@ -1,6 +1,6 @@
 ;;; startup.el --- process Emacs shell arguments  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1986, 1992, 1994-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1985-1986, 1992, 1994-2012  Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: internal
@@ -979,7 +979,7 @@ opening the first frame (e.g. open a connection to an X server).")
   (normal-erase-is-backspace-setup-frame)
 
   ;; Register default TTY colors for the case the terminal hasn't a
-  ;; terminal init file.  We do this regardles of whether the terminal
+  ;; terminal init file.  We do this regardless of whether the terminal
   ;; supports colors or not and regardless the current display type,
   ;; since users can connect to color-capable terminals and also
   ;; switch color support on or off in mid-session by setting the
@@ -1161,7 +1161,7 @@ the `--debug-init' option to view a complete error backtrace."
 		  (eq orig-enable-multibyte (default-value
 					      'enable-multibyte-characters)))
 	;; Init file changed to unibyte.  Reset existing multibyte
-	;; buffers (probably *scratch*, *Messages*, *Minibuff-0*).
+	;; buffers (probably *scratch*, *Messages*, *Minibuf-0*).
 	;; Arguably this should only be done if they're free of
 	;; multibyte characters.
 	(mapc (lambda (buffer)

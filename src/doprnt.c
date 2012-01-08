@@ -1,7 +1,7 @@
 /* Output like sprintf to a buffer of specified size.
    Also takes args differently: pass one pointer to the end
    of the format string in addition to the format string itself.
-   Copyright (C) 1985, 2001-2011  Free Software Foundation, Inc.
+   Copyright (C) 1985, 2001-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -26,7 +26,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
      of the (`int') argument, suitable for display in an Emacs buffer.
 
    . For %s and %c, when field width is specified (e.g., %25s), it accounts for
-     the diplay width of each character, according to char-width-table.  That
+     the display width of each character, according to char-width-table.  That
      is, it does not assume that each character takes one column on display.
 
    . If the size of the buffer is not enough to produce the formatted string in

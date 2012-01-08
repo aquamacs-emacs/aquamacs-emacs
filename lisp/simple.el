@@ -1,6 +1,6 @@
 ;;; simple.el --- basic editing commands for Emacs
 
-;; Copyright (C) 1985-1987, 1993-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1985-1987, 1993-2012  Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: internal
@@ -350,7 +350,8 @@ location."
 Other major modes are defined by comparison with this one."
   (interactive)
   (kill-all-local-variables)
-  (run-mode-hooks 'fundamental-mode-hook))
+  (unless delay-mode-hooks
+    (run-hooks 'after-change-major-mode-hook)))
 
 ;; Special major modes to view specially formatted data rather than files.
 
@@ -878,6 +879,7 @@ KILLFLAG is set if N was explicitly specified."
 
 (defun mark-whole-buffer ()
   "Put point at beginning and mark at end of buffer.
+If narrowing is in effect, only uses the accessible part of the buffer.
 You probably should not use this function in Lisp programs;
 it is usually a mistake for a Lisp function to use any subroutine
 that uses or sets the mark."
@@ -1051,6 +1053,23 @@ In addition, with prefix argument, show details about that character
 in *Help* buffer.  See also the command `describe-char'."
   (interactive "P")
   (let* ((char (following-char))
+	 (bidi-fixer
+	  (cond ((memq char '(?\x202a ?\x202b ?\x202d ?\x202e))
+		 ;; If the character is one of LRE, LRO, RLE, RLO, it
+		 ;; will start a directional embedding, which could
+		 ;; completely disrupt the rest of the line (e.g., RLO
+		 ;; will display the rest of the line right-to-left).
+		 ;; So we put an invisible PDF character after these
+		 ;; characters, to end the embedding, which eliminates
+		 ;; any effects on the rest of the line.
+		 (propertize (string ?\x202c) 'invisible t))
+		;; Strong right-to-left characters cause reordering of
+		;; the following numerical characters which show the
+		;; codepoint, so append LRM to countermand that.
+		((memq (get-char-code-property char 'bidi-class) '(R AL))
+		 (propertize (string ?\x200e) 'invisible t))
+		(t
+		 "")))
 	 (beg (point-min))
 	 (end (point-max))
          (pos (point))
@@ -1110,18 +1129,19 @@ in *Help* buffer.  See also the command `describe-char'."
 	    ;; We show the detailed information about CHAR.
 	    (describe-char (point)))
 	(if (or (/= beg 1) (/= end (1+ total)))
-	    (message "Char: %s %s point=%d of %d (%d%%) <%d-%d> column=%d%s"
+	    (message "Char: %s%s %s point=%d of %d (%d%%) <%d-%d> column=%d%s"
 		     (if (< char 256)
 			 (single-key-description char)
 		       (buffer-substring-no-properties (point) (1+ (point))))
+		     bidi-fixer
 		     encoding-msg pos total percent beg end col hscroll)
-	  (message "Char: %s %s point=%d of %d (%d%%) column=%d%s"
+	  (message "Char: %s%s %s point=%d of %d (%d%%) column=%d%s"
 		   (if enable-multibyte-characters
 		       (if (< char 128)
 			   (single-key-description char)
 			 (buffer-substring-no-properties (point) (1+ (point))))
 		     (single-key-description char))
-		   encoding-msg pos total percent col hscroll))))))
+		   bidi-fixer encoding-msg pos total percent col hscroll))))))
 
 ;; Initialize read-expression-map.  It is defined at C level.
 (let ((m (make-sparse-keymap)))
@@ -1206,11 +1226,11 @@ this command arranges for all errors to enter the debugger."
       (push (eval eval-expression-arg lexical-binding) values)
     (let ((old-value (make-symbol "t")) new-value)
       ;; Bind debug-on-error to something unique so that we can
-      ;; detect when evaled code changes it.
+      ;; detect when evalled code changes it.
       (let ((debug-on-error old-value))
 	(push (eval eval-expression-arg lexical-binding) values)
 	(setq new-value debug-on-error))
-      ;; If evaled code has changed the value of debug-on-error,
+      ;; If evalled code has changed the value of debug-on-error,
       ;; propagate that change to the global binding.
       (unless (eq old-value new-value)
 	(setq debug-on-error new-value))))
@@ -1571,7 +1591,7 @@ by the new completion."
      n)
     ;; next-matching-history-element always puts us at (point-min).
     ;; Move to the position we were at before changing the buffer contents.
-    ;; This is still sensical, because the text before point has not changed.
+    ;; This is still sensible, because the text before point has not changed.
     (goto-char point-at-start)))
 
 (defun previous-complete-history-element (n)
@@ -2398,7 +2418,7 @@ and only used if a buffer is displayed."
 					    1))
 				   1)))
 			 ;; Don't use the echo area if the output buffer is
-			 ;; already dispayed in the selected frame.
+			 ;; already displayed in the selected frame.
 			 (not (get-buffer-window (current-buffer))))
 		    ;; Echo area
 		    (goto-char (point-max))
@@ -2647,7 +2667,7 @@ value passed."
 Per default, this variable is always set to `t', meaning that a
 call of `process-file' could potentially change any file on a
 remote host.  When set to `nil', a file handler could optimize
-its behaviour with respect to remote file attributes caching.
+its behavior with respect to remote file attributes caching.
 
 This variable should never be changed by `setq'.  Instead of, it
 shall be set only by let-binding.")
@@ -2896,11 +2916,11 @@ These commands include \\[set-mark-command] and \\[start-kbd-macro]."
 
 (defvar filter-buffer-substring-functions nil
   "Wrapper hook around `filter-buffer-substring'.
-The functions on this special hook are called with 4 arguments:
+The functions on this special hook are called with four arguments:
   NEXT-FUN BEG END DELETE
-NEXT-FUN is a function of 3 arguments (BEG END DELETE)
-that performs the default operation.  The other 3 arguments are like
-the ones passed to `filter-buffer-substring'.")
+NEXT-FUN is a function of three arguments (BEG END DELETE)
+that performs the default operation.  The other three arguments
+are like the ones passed to `filter-buffer-substring'.")
 
 (defvar buffer-substring-filters nil
   "List of filter functions for `filter-buffer-substring'.
@@ -4080,13 +4100,15 @@ its earlier value."
 
 (define-minor-mode transient-mark-mode
   "Toggle Transient Mark mode.
-With ARG, turn Transient Mark mode on if ARG is positive, off otherwise.
+With a prefix argument ARG, enable Transient Mark mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+Transient Mark mode if ARG is omitted or nil.
 
-In Transient Mark mode, when the mark is active, the region is highlighted.
-Changing the buffer \"deactivates\" the mark.
-So do certain other operations that set the mark
-but whose main purpose is something else--for example,
-incremental search, \\[beginning-of-buffer], and \\[end-of-buffer].
+Transient Mark mode is a global minor mode.  When enabled, the
+region is highlighted whenever the mark is active.  The mark is
+\"deactivated\" by changing the buffer, and after certain other
+operations that set the mark but whose main purpose is something
+else--for example, incremental search, \\[beginning-of-buffer], and \\[end-of-buffer].
 
 You can also deactivate the mark by typing \\[keyboard-quit] or
 \\[keyboard-escape-quit].
@@ -4267,8 +4289,8 @@ into account variable-width characters and line continuation.
 If nil, `line-move' moves point by logical lines.
 A non-nil setting of `goal-column' overrides the value of this variable
 and forces movement by logical lines.
-Disabling `auto-hscroll-mode' also overrides forces movement by logical
-lines when the window is horizontally scrolled."
+A window that is  horizontally scrolled also forces movement by logical
+lines."
   :type 'boolean
   :group 'editing-basics
   :version "23.1")
@@ -4314,7 +4336,7 @@ lines when the window is horizontally scrolled."
 	  (when (> rbot 0)
 	    (set-window-vscroll nil (+ vs (min rbot (frame-char-height))) t)))
 	 ;; If cursor just entered the bottom scroll margin, move forward,
-	 ;; but also vscroll one line so redisplay wont recenter.
+	 ;; but also vscroll one line so redisplay won't recenter.
 	 ((and (> vpos 0)
 	       (= py (min (- (window-text-height) scroll-margin 1)
 			  (1- vpos))))
@@ -4348,12 +4370,10 @@ lines when the window is horizontally scrolled."
     (if (and line-move-visual
 	     ;; Display-based column are incompatible with goal-column.
 	     (not goal-column)
-	     ;; When auto-hscroll-mode is turned off and the text in
-	     ;; the window is scrolled to the left, display-based
-	     ;; motion doesn't make sense (because each logical line
-	     ;; occupies exactly one screen line).
-	     (not (and (null auto-hscroll-mode)
-		       (> (window-hscroll) 0))))
+	     ;; When the text in the window is scrolled to the left,
+	     ;; display-based motion doesn't make sense (because each
+	     ;; logical line occupies exactly one screen line).
+	     (not (> (window-hscroll) 0)))
 	(line-move-visual arg noerror)
       (line-move-1 arg noerror to-end))))
 
@@ -4713,7 +4733,7 @@ To ignore intangibility, bind `inhibit-point-motion-hooks' to t."
 	(let ((line-move-visual nil))
 	  (line-move (1- arg) t)))
 
-    ;; Move to beginning-of-line, ignoring fields and invisibles.
+    ;; Move to beginning-of-line, ignoring fields and invisible text.
     (skip-chars-backward "^\n")
     (while (and (not (bobp)) (invisible-p (1- (point))))
       (goto-char (previous-char-property-change (point)))
@@ -4905,8 +4925,15 @@ other purposes."
 (defvar visual-line--saved-state nil)
 
 (define-minor-mode visual-line-mode
-  "Redefine simple editing commands to act on visual lines, not logical lines.
-This also turns on `word-wrap' in the buffer."
+  "Toggle visual line based editing (Visual Line mode).
+With a prefix argument ARG, enable Visual Line mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+When Visual Line mode is enabled, `word-wrap' is turned on in
+this buffer, and simple editing commands are redefined to act on
+visual lines, not logical lines.  See Info node `Visual Line
+Mode' for details."
   :keymap visual-line-mode-map
   :group 'visual-line
   :lighter " WordWrap"
@@ -5303,10 +5330,14 @@ Some major modes set this.")
 (put 'auto-fill-function 'safe-local-variable 'null)
 
 (define-minor-mode auto-fill-mode
-  "Toggle Auto Fill mode.
-With ARG, turn Auto Fill mode on if and only if ARG is positive.
-In Auto Fill mode, inserting a space at a column beyond `current-fill-column'
-automatically breaks the line at a previous space.
+  "Toggle automatic line breaking (Auto Fill mode).
+With a prefix argument ARG, enable Auto Fill mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+When Auto Fill mode is enabled, inserting a space at a column
+beyond `current-fill-column' automatically breaks the line at a
+previous space.
 
 When `auto-fill-mode' is on, the `auto-fill-function' variable is
 non-`nil'.
@@ -5519,36 +5550,44 @@ To turn on the classic `longlines-mode', use `turn-on-longlines*'."
   "The string displayed in the mode line when in binary overwrite mode.")
 
 (define-minor-mode overwrite-mode
-  "Toggle overwrite mode.
-With prefix argument ARG, turn overwrite mode on if ARG is positive,
-otherwise turn it off.  In overwrite mode, printing characters typed
-in replace existing text on a one-for-one basis, rather than pushing
-it to the right.  At the end of a line, such characters extend the line.
-Before a tab, such characters insert until the tab is filled in.
-\\[quoted-insert] still inserts characters in overwrite mode; this
-is supposed to make it easier to insert characters when necessary."
+  "Toggle Overwrite mode.
+With a prefix argument ARG, enable Overwrite mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+When Overwrite mode is enabled, printing characters typed in
+replace existing text on a one-for-one basis, rather than pushing
+it to the right.  At the end of a line, such characters extend
+the line.  Before a tab, such characters insert until the tab is
+filled in.  \\[quoted-insert] still inserts characters in
+overwrite mode; this is supposed to make it easier to insert
+characters when necessary."
   :variable (eq overwrite-mode 'overwrite-mode-textual))
 
 (define-minor-mode binary-overwrite-mode
-  "Toggle binary overwrite mode.
-With prefix argument ARG, turn binary overwrite mode on if ARG is
-positive, otherwise turn it off.  In binary overwrite mode, printing
-characters typed in replace existing text.  Newlines are not treated
-specially, so typing at the end of a line joins the line to the next,
-with the typed character between them.  Typing before a tab character
-simply replaces the tab with the character typed.  \\[quoted-insert]
-replaces the text at the cursor, just as ordinary typing characters do.
+  "Toggle Binary Overwrite mode.
+With a prefix argument ARG, enable Binary Overwrite mode if ARG
+is positive, and disable it otherwise.  If called from Lisp,
+enable the mode if ARG is omitted or nil.
 
-Note that binary overwrite mode is not its own minor mode; it is a
-specialization of overwrite mode, entered by setting the
+When Binary Overwrite mode is enabled, printing characters typed
+in replace existing text.  Newlines are not treated specially, so
+typing at the end of a line joins the line to the next, with the
+typed character between them.  Typing before a tab character
+simply replaces the tab with the character typed.
+\\[quoted-insert] replaces the text at the cursor, just as
+ordinary typing characters do.
+
+Note that Binary Overwrite mode is not its own minor mode; it is
+a specialization of overwrite mode, entered by setting the
 `overwrite-mode' variable to `overwrite-mode-binary'."
   :variable (eq overwrite-mode 'overwrite-mode-binary))
 
 (define-minor-mode line-number-mode
-  "Toggle Line Number mode.
-With ARG, turn Line Number mode on if ARG is positive, otherwise
-turn it off.  When Line Number mode is enabled, the line number
-appears in the mode line.
+  "Toggle line number display in the mode line (Line Number mode).
+With a prefix argument ARG, enable Line Number mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
 Line numbers do not appear for very large buffers and buffers
 with very long lines; see variables `line-number-display-limit'
@@ -5556,22 +5595,27 @@ and `line-number-display-limit-width'."
   :init-value t :global t :group 'mode-line)
 
 (define-minor-mode column-number-mode
-  "Toggle Column Number mode.
-With ARG, turn Column Number mode on if ARG is positive,
-otherwise turn it off.  When Column Number mode is enabled, the
-column number appears in the mode line."
+  "Toggle column number display in the mode line (Column Number mode).
+With a prefix argument ARG, enable Column Number mode if ARG is
+positive, and disable it otherwise.
+
+If called from Lisp, enable the mode if ARG is omitted or nil."
   :global t :group 'mode-line)
 
 (define-minor-mode size-indication-mode
-  "Toggle Size Indication mode.
-With ARG, turn Size Indication mode on if ARG is positive,
-otherwise turn it off.  When Size Indication mode is enabled, the
-size of the accessible part of the buffer appears in the mode line."
+  "Toggle buffer size display in the mode line (Size Indication mode).
+With a prefix argument ARG, enable Size Indication mode if ARG is
+positive, and disable it otherwise.
+
+If called from Lisp, enable the mode if ARG is omitted or nil."
   :global t :group 'mode-line)
 
 (define-minor-mode auto-save-mode
-  "Toggle auto-saving of contents of current buffer.
-With prefix argument ARG, turn auto-saving on if positive, else off."
+  "Toggle auto-saving in the current buffer (Auto Save mode).
+With a prefix argument ARG, enable Auto Save mode if ARG is
+positive, and disable it otherwise.
+
+If called from Lisp, enable the mode if ARG is omitted or nil."
   :variable ((and buffer-auto-save-file-name
                   ;; If auto-save is off because buffer has shrunk,
                   ;; then toggling should turn it on.
@@ -5785,7 +5829,7 @@ At top-level, as an editor command, this simply beeps."
 (defvar buffer-quit-function nil
   "Function to call to \"quit\" the current buffer, or nil if none.
 \\[keyboard-escape-quit] calls this function when its more local actions
-\(such as cancelling a prefix argument, minibuffer or region) do not apply.")
+\(such as canceling a prefix argument, minibuffer or region) do not apply.")
 
 (defun keyboard-escape-quit ()
   "Exit the current \"mode\" (in a generalized sense of the word).
@@ -6096,7 +6140,7 @@ of the text to replace.  If END is nil, point is used instead.")
 
 (defvar completion-list-insert-choice-function #'completion--replace
   "Function to use to insert the text chosen in *Completions*.
-Called with 3 arguments (BEG END TEXT), it should replace the text
+Called with three arguments (BEG END TEXT), it should replace the text
 between BEG and END with TEXT.  Expected to be set buffer-locally
 in the *Completions* buffer.")
 
@@ -6290,7 +6334,7 @@ BASE-POSITION, says where to insert the completion."
 	       choice buffer base-position nil)
         ;; This remove-text-properties should be unnecessary since `choice'
         ;; comes from buffer-substring-no-properties.
-        ;;(remove-text-properties 0 (lenth choice) '(mouse-face nil) choice)
+        ;;(remove-text-properties 0 (length choice) '(mouse-face nil) choice)
 	;; Insert the completion into the buffer where it was requested.
         (funcall (or insert-function completion-list-insert-choice-function)
                  (or (car base-position) (point))
@@ -6741,8 +6785,9 @@ call `normal-erase-is-backspace-mode' (which see) instead."
 
 (define-minor-mode normal-erase-is-backspace-mode
   "Toggle the Erase and Delete mode of the Backspace and Delete keys.
-
-With numeric ARG, turn the mode on if and only if ARG is positive.
+With a prefix argument ARG, enable this feature if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
 On window systems, when this mode is on, Delete is mapped to C-d
 and Backspace is mapped to DEL; when this mode is off, both
@@ -6816,13 +6861,13 @@ See also `normal-erase-is-backspace'."
   "Saved value of `buffer-invisibility-spec' when Visible mode is on.")
 
 (define-minor-mode visible-mode
-  "Toggle Visible mode.
-With argument ARG turn Visible mode on if ARG is positive, otherwise
-turn it off.
+  "Toggle making all invisible text temporarily visible (Visible mode).
+With a prefix argument ARG, enable Visible mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
-Enabling Visible mode makes all invisible text temporarily visible.
-Disabling Visible mode turns off that effect.  Visible mode works by
-saving the value of `buffer-invisibility-spec' and setting it to nil."
+This mode works by saving the value of `buffer-invisibility-spec'
+and setting it to nil."
   :lighter " Vis"
   :group 'editing-basics
   (when (local-variable-p 'vis-mode-saved-buffer-invisibility-spec)

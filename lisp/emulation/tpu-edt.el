@@ -1,6 +1,6 @@
 ;;; tpu-edt.el --- Emacs emulating TPU emulating EDT
 
-;; Copyright (C) 1993-1995, 2000-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1993-1995, 2000-2012  Free Software Foundation, Inc.
 
 ;; Author: Rob Riepel <riepel@networking.stanford.edu>
 ;; Maintainer: Rob Riepel <riepel@networking.stanford.edu>
@@ -459,7 +459,7 @@ Otherwise, use `spell-region'."
     ;; (define-key map "\\" nil)			; \
     (define-key map "]" 'blink-matching-open)		; ]
     (define-key map "^" 'tpu-add-at-bol)		; ^
-    (define-key map "_" 'split-window-vertically)	; -
+    (define-key map "_" 'split-window-below)	        ; -
     (define-key map "`" 'what-line)			; `
     (define-key map "a" 'tpu-toggle-newline-and-indent)	; a
     (define-key map "b" 'tpu-next-buffer)		; b
@@ -487,7 +487,7 @@ Otherwise, use `spell-region'."
     (define-key map "y" 'copy-region-as-kill)		; y
     (define-key map "z" 'suspend-emacs)			; z
     ;; (define-key map "{" nil)				; {
-    (define-key map "|" 'split-window-horizontally)	; |
+    (define-key map "|" 'split-window-right)	        ; |
     ;; (define-key map "}" nil)				; }
     (define-key map "~" 'exchange-point-and-mark)	; ~
     (define-key map "\177" 'delete-window)		; <X]
@@ -2437,7 +2437,7 @@ If FILE is nil, try to load a default file.  The default file names are
 
 
 ;;;### (autoloads (tpu-set-cursor-bound tpu-set-cursor-free tpu-set-scroll-margins
-;;;;;;  tpu-cursor-free-mode) "tpu-extras" "tpu-extras.el" "0d2f0cd1c728d2eb9028a6e01b1a5df1")
+;;;;;;  tpu-cursor-free-mode) "tpu-extras" "tpu-extras.el" "512b5771d29a538e69567644413951a8")
 ;;; Generated autoloads from tpu-extras.el
 
 (autoload 'tpu-cursor-free-mode "tpu-extras" "\

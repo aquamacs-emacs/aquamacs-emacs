@@ -1,6 +1,6 @@
 ;;; gnus-art.el --- article mode commands for Gnus
 
-;; Copyright (C) 1996-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -268,11 +268,14 @@ This can also be a list of the above values."
       (if (or (gnus-image-type-available-p 'xface)
 	      (gnus-image-type-available-p 'pbm))
 	  'gnus-display-x-face-in-from
-	"{ echo '/* Width=48, Height=48 */'; uncompface; } | icontopbm | ee -")
+	"{ echo \
+'/* Format_version=1, Width=48, Height=48, Depth=1, Valid_bits_per_item=16 */'\
+; uncompface; } | icontopbm | ee -")
     (if (gnus-image-type-available-p 'pbm)
 	'gnus-display-x-face-in-from
-      "{ echo '/* Width=48, Height=48 */'; uncompface; } | icontopbm | \
-display -"))
+      "{ echo \
+'/* Format_version=1, Width=48, Height=48, Depth=1, Valid_bits_per_item=16 */'\
+; uncompface; } | icontopbm | display -"))
   "*String or function to be executed to display an X-Face header.
 If it is a string, the command will be executed in a sub-shell
 asynchronously.  The compressed face will be piped to this command."
@@ -535,7 +538,7 @@ that the symbol of the saver function, which is specified by
 
 ;; Note that "Rmail format" is mbox since Emacs 23, but Babyl before.
 (defcustom gnus-default-article-saver 'gnus-summary-save-in-rmail
-  "A function to save articles in your favourite format.
+  "A function to save articles in your favorite format.
 The function will be called by way of the `gnus-summary-save-article'
 command, and friends such as `gnus-summary-save-article-rmail'.
 
@@ -666,7 +669,7 @@ non-nil.
 If the match is a string, it is used as a regexp match on the
 article.  If the match is a symbol, that symbol will be funcalled
 from the buffer of the article to be saved with the newsgroup as the
-parameter.  If it is a list, it will be evaled in the same buffer.
+parameter.  If it is a list, it will be evalled in the same buffer.
 
 If this form or function returns a string, this string will be used as a
 possible file name; and if it returns a non-nil list, that list will be
@@ -1559,7 +1562,7 @@ node `(gnus)Gravatars' for details."
 	  gnus-treat-from-picon
           gnus-treat-from-gravatar
           gnus-treat-mail-gravatar)
-      ;; If there's much decoration, the user might prefer a boundery.
+      ;; If there's much decoration, the user might prefer a boundary.
       'head
     nil)
   "Draw a boundary at the end of the headers.
@@ -2879,6 +2882,14 @@ message header will be added to the bodies of the \"text/html\" parts."
 				(with-current-buffer gnus-article-buffer
 				  gnus-article-mime-handles)
 				cid-dir))
+		     (when (eq system-type 'cygwin)
+		       (setq cid-file
+			     (concat "/" (substring
+					  (with-output-to-string
+					    (call-process "cygpath" nil
+							  standard-output
+							  nil "-m" cid-file))
+					  0 -1))))
 		     (replace-match (concat "file://" cid-file)
 				    nil nil nil 1))))
 	       (unless content (setq content (buffer-string))))
@@ -4497,7 +4508,9 @@ commands:
 (defun gnus-article-setup-buffer ()
   "Initialize the article buffer."
   (let* ((name (if gnus-single-article-buffer "*Article*"
-		 (concat "*Article " gnus-newsgroup-name "*")))
+		 (concat "*Article "
+			 (gnus-group-decoded-name gnus-newsgroup-name)
+			 "*")))
 	 (original
 	  (progn (string-match "\\*Article" name)
 		 (concat " *Original Article"
@@ -5418,8 +5431,8 @@ If no internal viewer is available, use an external viewer."
 
 (defun gnus-article-part-wrapper (n function &optional no-handle interactive)
   "Call FUNCTION on MIME part N.
-Unless NO-HANDLE, call FUNCTION with N-th MIME handle as it's only argument.
-If INTERACTIVE, call FUNCTION interactivly."
+Unless NO-HANDLE, call FUNCTION with N-th MIME handle as its only argument.
+If INTERACTIVE, call FUNCTION interactively."
   (let (window frame)
     ;; Check whether the article is displayed.
     (unless (and (gnus-buffer-live-p gnus-article-buffer)

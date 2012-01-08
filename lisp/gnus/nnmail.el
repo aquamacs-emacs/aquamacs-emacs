@@ -1,6 +1,6 @@
 ;;; nnmail.el --- mail support functions for the Gnus mail backends
 
-;; Copyright (C) 1995-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1995-2012  Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news, mail
@@ -1799,7 +1799,7 @@ See the Info node `(gnus)Fancy Mail Splitting' for more details."
 	 (i 0)
 	 (new 0)
 	 (total 0)
-	 incoming incomings source)
+	 source)
     (when (and (nnmail-get-value "%s-get-new-mail" method)
 	       sources)
       (while (setq source (pop sources))

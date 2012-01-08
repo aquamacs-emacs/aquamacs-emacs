@@ -1,5 +1,5 @@
 /* Buffer insertion/deletion and gap motion for GNU Emacs.
-   Copyright (C) 1985-1986, 1993-1995, 1997-2011
+   Copyright (C) 1985-1986, 1993-1995, 1997-2012
                  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -1316,7 +1316,7 @@ replace_range (EMACS_INT from, EMACS_INT to, Lisp_Object new,
 
   UNGCPRO;
 
-  /* Make args be valid */
+  /* Make args be valid.  */
   if (from < BEGV)
     from = BEGV;
   if (to > ZV)

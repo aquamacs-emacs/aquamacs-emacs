@@ -1,6 +1,6 @@
 ;;; cc-langs.el --- language specific settings for CC Mode
 
-;; Copyright (C) 1985, 1987, 1992-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1987, 1992-2012  Free Software Foundation, Inc.
 
 ;; Authors:    2002- Alan Mackenzie
 ;;             1998- Martin Stjernholm
@@ -221,7 +221,7 @@ the evaluated constant value at compile time."
     ;;
     ;; OPS either has the structure of `c-operators', is a single
     ;; group in `c-operators', or is a plain list of operators.
-    ;; 
+    ;;
     ;; OPGROUP-FILTER specifies how to select the operator groups.  It
     ;; can be t to choose all groups, a list of group type symbols
     ;; (such as 'prefix) to accept, or a function which will be called
@@ -433,7 +433,7 @@ element is a cons where the car is the character to modify and the cdr
 the new syntax, as accepted by `modify-syntax-entry'."
   ;; The $ character is not allowed in most languages (one exception
   ;; is Java which allows it for legacy reasons) but we still classify
-  ;; it as an indentifier character since it's often used in various
+  ;; it as an identifier character since it's often used in various
   ;; machine generated identifiers.
   t    '((?_ . "w") (?$ . "w"))
   (objc java) (append '((?@ . "w"))
@@ -485,28 +485,81 @@ The functions are called even when font locking isn't enabled.
 When the mode is initialized, the functions are called with
 parameters \(point-min) and \(point-max).")
 
-(c-lang-defconst c-before-font-lock-function
-  "If non-nil, a function called just before font locking.
-Typically it will extend the region about to be fontified \(see
+(c-lang-defconst c-before-font-lock-functions
+  ;; For documentation see the following c-lang-defvar of the same name.
+  ;; The value here may be a list of functions or a single function.
+  t 'c-change-set-fl-decl-start
+  (c c++ objc) '(c-neutralize-syntax-in-and-mark-CPP
+		 c-change-set-fl-decl-start)
+  awk 'c-awk-extend-and-syntax-tablify-region)
+(c-lang-defvar c-before-font-lock-functions
+	       (let ((fs (c-lang-const c-before-font-lock-functions)))
+		 (if (listp fs)
+		     fs
+		   (list fs)))
+  "If non-nil, a list of functions called just before font locking.
+Typically they will extend the region about to be fontified \(see
 below) and will set `syntax-table' text properties on the region.
 
-It takes 3 parameters, the BEG, END, and OLD-LEN supplied to
-every after-change function; point is undefined on both entry and
-exit; on entry, the buffer will have been widened and match-data
-will have been saved; the return value is ignored.
+These functions will be run in the order given.  Each of them
+takes 3 parameters, the BEG, END, and OLD-LEN supplied to every
+after-change function; point is undefined on both entry and exit;
+on entry, the buffer will have been widened and match-data will
+have been saved; the return value is ignored.
 
-The function may extend the region to be fontified by setting the
+The functions may extend the region to be fontified by setting the
 buffer local variables c-new-BEG and c-new-END.
 
-The function is called even when font locking is disabled.
+The functions are called even when font locking is disabled.
 
-When the mode is initialized, this function is called with
-parameters \(point-min), \(point-max) and <buffer size>."
+When the mode is initialized, these functions are called with
+parameters \(point-min), \(point-max) and <buffer size>.")
+
+(c-lang-defconst c-before-context-fontification-functions
+  awk nil
+  t 'c-context-set-fl-decl-start)
+  ;; For documentation see the following c-lang-defvar of the same name.
+  ;; The value here may be a list of functions or a single function.
+(c-lang-defvar c-before-context-fontification-functions
+  (let ((fs (c-lang-const c-before-context-fontification-functions)))
+    (if (listp fs)
+	fs
+      (list fs)))
+  "If non-nil, a list of functions called just before context (or
+other non-change) fontification is done.  Typically they will
+extend the region.
+
+These functions will be run in the order given.  Each of them
+takes 2 parameters, the BEG and END of the region to be
+fontified.  Point is undefined on both entry and exit.  On entry,
+the buffer will have been widened and match-data will have been
+saved; the return value is a cons of the adjusted
+region, (NEW-BEG . NEW-END).")
+
+
+;;; Syntactic analysis ("virtual semicolons") for line-oriented languages (AWK).
+(c-lang-defconst c-at-vsemi-p-fn
+  "Contains a function \"Is there a virtual semicolon at POS or point?\".
+Such a function takes one optional parameter, a buffer position (defaults to
+point), and returns nil or t.  This variable contains nil for languages which
+don't have EOL terminated statements. "
   t nil
-  (c c++ objc) 'c-neutralize-syntax-in-and-mark-CPP
-  awk 'c-awk-extend-and-syntax-tablify-region)
-(c-lang-defvar c-before-font-lock-function
-	       (c-lang-const c-before-font-lock-function))
+  (c c++ objc) 'c-at-macro-vsemi-p
+  awk 'c-awk-at-vsemi-p)
+(c-lang-defvar c-at-vsemi-p-fn (c-lang-const c-at-vsemi-p-fn))
+
+(c-lang-defconst c-vsemi-status-unknown-p-fn
+  "Contains a function \"are we unsure whether there is a virtual semicolon on this line?\".
+The (admittedly kludgy) purpose of such a function is to prevent an infinite
+recursion in c-beginning-of-statement-1 when point starts at a `while' token.
+The function MUST NOT UNDER ANY CIRCUMSTANCES call c-beginning-of-statement-1,
+even indirectly.  This variable contains nil for languages which don't have
+EOL terminated statements."
+  t nil
+  (c c++ objc) 'c-macro-vsemi-status-unknown-p
+  awk 'c-awk-vsemi-status-unknown-p)
+(c-lang-defvar c-vsemi-status-unknown-p-fn
+  (c-lang-const c-vsemi-status-unknown-p-fn))
 
 
 ;;; Lexer-level syntax (identifiers, tokens etc).
@@ -737,11 +790,17 @@ literal are multiline."
 (c-lang-defvar c-multiline-string-start-char
   (c-lang-const c-multiline-string-start-char))
 
+(c-lang-defconst c-opt-cpp-symbol
+  "The symbol which starts preprocessor constructs when in the margin."
+  t "#"
+  (java awk) nil)
+(c-lang-defvar c-opt-cpp-symbol (c-lang-const c-opt-cpp-symbol))
+
 (c-lang-defconst c-opt-cpp-prefix
   "Regexp matching the prefix of a cpp directive in the languages that
 normally use that macro preprocessor.  Tested at bol or at boi.
 Assumed to not contain any submatches or \\| operators."
-  ;; TODO (ACM, 2005-04-01).  Amend the following to recognise escaped NLs;
+  ;; TODO (ACM, 2005-04-01).  Amend the following to recognize escaped NLs;
   ;; amend all uses of c-opt-cpp-prefix which count regexp-depth.
   t "\\s *#\\s *"
   (java awk) nil)
@@ -785,6 +844,8 @@ file name in angle brackets or quotes."
 definition, or nil if the language doesn't have any."
   t (if (c-lang-const c-opt-cpp-prefix)
 	"define"))
+(c-lang-defvar c-opt-cpp-macro-define
+  (c-lang-const c-opt-cpp-macro-define))
 
 (c-lang-defconst c-opt-cpp-macro-define-start
   ;; Regexp matching everything up to the macro body of a cpp define, or the
@@ -1171,14 +1232,12 @@ operators."
   ;; optimize `c-crosses-statement-barrier-p' somewhat, it's assumed to
   ;; begin with "^" to negate the set.  If ? : operators should be
   ;; detected then the string must end with "?:".
-  t    "^;{}?:"
-  awk  "^;{}#\n\r?:") ; The newline chars gets special treatment.
+  t "^;{}?:")
 (c-lang-defvar c-stmt-delim-chars (c-lang-const c-stmt-delim-chars))
 
 (c-lang-defconst c-stmt-delim-chars-with-comma
   ;; Variant of `c-stmt-delim-chars' that additionally contains ','.
-  t    "^;,{}?:"
-  awk  "^;,{}\n\r?:") ; The newline chars gets special treatment.
+  t    "^;,{}?:")
 (c-lang-defvar c-stmt-delim-chars-with-comma
   (c-lang-const c-stmt-delim-chars-with-comma))
 
@@ -1238,7 +1297,6 @@ properly."
 	re)))
 (c-lang-defvar c-comment-start-regexp (c-lang-const c-comment-start-regexp))
 
-;;;; Added by ACM, 2003/9/18.
 (c-lang-defconst c-block-comment-start-regexp
   ;; Regexp which matches the start of a block comment (if such exists in the
   ;; language)
@@ -1247,6 +1305,15 @@ properly."
       "\\<\\>"))
 (c-lang-defvar c-block-comment-start-regexp
   (c-lang-const c-block-comment-start-regexp))
+
+(c-lang-defconst c-line-comment-start-regexp
+  ;; Regexp which matches the start of a line comment (if such exists in the
+  ;; language; it does in all 7 CC Mode languages).
+  t (if (c-lang-const c-line-comment-starter)
+	(regexp-quote (c-lang-const c-line-comment-starter))
+      "\\<\\>"))
+(c-lang-defvar c-line-comment-start-regexp
+	       (c-lang-const c-line-comment-start-regexp))
 
 (c-lang-defconst c-literal-start-regexp
   ;; Regexp to match the start of comments and string literals.
@@ -1475,36 +1542,13 @@ properly."
 (c-lang-defvar c-syntactic-eol (c-lang-const c-syntactic-eol))
 
 
-;;; Syntactic analysis ("virtual semicolons") for line-oriented languages (AWK).
-(c-lang-defconst c-at-vsemi-p-fn
-  "Contains a function \"Is there a virtual semicolon at POS or point?\".
-Such a function takes one optional parameter, a buffer position (defaults to
-point), and returns nil or t.  This variable contains nil for languages which
-don't have EOL terminated statements. "
-  t nil
-  awk 'c-awk-at-vsemi-p)
-(c-lang-defvar c-at-vsemi-p-fn (c-lang-const c-at-vsemi-p-fn))
-
-(c-lang-defconst c-vsemi-status-unknown-p-fn
-  "Contains a function \"are we unsure whether there is a virtual semicolon on this line?\".
-The (admittedly kludgey) purpose of such a function is to prevent an infinite
-recursion in c-beginning-of-statement-1 when point starts at a `while' token.
-The function MUST NOT UNDER ANY CIRCUMSTANCES call c-beginning-of-statement-1,
-even indirectly.  This variable contains nil for languages which don't have
-EOL terminated statements."
-  t nil
-  awk 'c-awk-vsemi-status-unknown-p)
-(c-lang-defvar c-vsemi-status-unknown-p-fn
-  (c-lang-const c-vsemi-status-unknown-p-fn))
-
-
 ;;; Defun functions
 
 ;; The Emacs variables beginning-of-defun-function and
 ;; end-of-defun-function will be set so that commands like
 ;; `mark-defun' and `narrow-to-defun' work right.  The key sequences
 ;; C-M-a and C-M-e are, however, bound directly to the CC Mode
-;; functions, allowing optimisation for large n.
+;; functions, allowing optimization for large n.
 (c-lang-defconst beginning-of-defun-function
   "Function to which beginning-of-defun-function will be set."
   t 'c-beginning-of-defun
@@ -2226,8 +2270,7 @@ This construct is \"<keyword> <expression> :\"."
 
 (c-lang-defconst c-label-kwds
   "Keywords introducing colon terminated labels in blocks."
-  t '("case" "default")
-  awk nil)
+  t '("case" "default"))
 
 (c-lang-defconst c-label-kwds-regexp
   ;; Adorned regexp matching any keyword that introduces a label.
@@ -2514,7 +2557,7 @@ Note that Java specific rules are currently applied to tell this from
        "\\.?[0-9]"
 
        "\\|"
-       ;; The nonambiguous operators from `prefix-ops'.
+       ;; The unambiguous operators from `prefix-ops'.
        (c-make-keywords-re nil
 	 (set-difference nonkeyword-prefix-ops in-or-postfix-ops
 			 :test 'string-equal))
@@ -2665,7 +2708,7 @@ possible for good performance."
 			       pos (match-end 0)))
 		       res))))
 
-  ;; Allow cpp operatios (where applicable).
+  ;; Allow cpp operations (where applicable).
   t (if (c-lang-const c-opt-cpp-prefix)
 	(set-difference (c-lang-const c-block-prefix-disallowed-chars)
 			'(?#))
@@ -2982,19 +3025,28 @@ neither in a statement nor in a declaration context.  The regexp is
 tested at the beginning of every sexp in a suspected label,
 i.e. before \":\".  Only used if `c-recognize-colon-labels' is set."
   t (concat
-     ;; Don't allow string literals.
-     "\"\\|"
      ;; All keywords except `c-label-kwds' and `c-protection-kwds'.
      (c-make-keywords-re t
        (set-difference (c-lang-const c-keywords)
 		       (append (c-lang-const c-label-kwds)
 			       (c-lang-const c-protection-kwds))
 		       :test 'string-equal)))
+  ;; Don't allow string literals, except in AWK.  Character constants are OK.
+  (c objc java pike idl) (concat "\"\\|"
+				 (c-lang-const c-nonlabel-token-key))
   ;; Also check for open parens in C++, to catch member init lists in
   ;; constructors.  We normally allow it so that macros with arguments
   ;; work in labels.
-  c++ (concat "\\s\(\\|" (c-lang-const c-nonlabel-token-key)))
+  c++ (concat "\\s\(\\|\"\\|" (c-lang-const c-nonlabel-token-key)))
 (c-lang-defvar c-nonlabel-token-key (c-lang-const c-nonlabel-token-key))
+
+(c-lang-defconst c-nonlabel-token-2-key
+  "Regexp matching things that can't occur two symbols before a colon in
+a label construct.  This catches C++'s inheritance construct \"class foo
+: bar\".  Only used if `c-recognize-colon-labels' is set."
+  t "\\<\\>"				; matches nothing
+  c++ (c-make-keywords-re t '("class")))
+(c-lang-defvar c-nonlabel-token-2-key (c-lang-const c-nonlabel-token-2-key))
 
 (c-lang-defconst c-opt-extra-label-key
   "Optional regexp matching labels.

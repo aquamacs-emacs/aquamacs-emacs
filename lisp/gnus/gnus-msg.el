@@ -1,6 +1,6 @@
 ;;; gnus-msg.el --- mail and post interface for Gnus
 
-;; Copyright (C) 1995-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1995-2012  Free Software Foundation, Inc.
 
 ;; Author: Masanobu UMEDA <umerin@flab.flab.fujitsu.junet>
 ;;	Lars Magne Ingebrigtsen <larsi@gnus.org>
@@ -1129,7 +1129,7 @@ If VERY-WIDE, make a very wide reply."
 	    (insert headers))
 	  (goto-char (point-max)))
 	(mml-quote-region (point) (point-max))
-	(message-reply nil wide 'switch-to-buffer)
+	(message-reply nil wide)
 	(when yank
 	  (gnus-inews-yank-articles yank))
 	(gnus-summary-handle-replysign)))))
@@ -1549,7 +1549,7 @@ this is a reply."
       (message-narrow-to-headers)
       (let ((gcc (or gcc (mail-fetch-field "gcc" nil t)))
 	    (cur (current-buffer))
-	    groups group method group-art
+	    groups group method group-art options
 	    mml-externalize-attachments)
 	(when gcc
 	  (message-remove-header "gcc")
@@ -1573,6 +1573,7 @@ this is a reply."
 		    gnus-gcc-externalize-attachments))
 	    (save-excursion
 	      (nnheader-set-temp-buffer " *acc*")
+	      (setq message-options (with-current-buffer cur message-options))
 	      (insert-buffer-substring cur)
 	      (message-encode-message-body)
 	      (save-restriction
@@ -1587,7 +1588,7 @@ this is a reply."
 		       ;; BUG: We really need to get the charset for
 		       ;; each name in the Newsgroups and Followup-To
 		       ;; lines to allow crossposting between group
-		       ;; namess with incompatible character sets.
+		       ;; names with incompatible character sets.
 		       ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2001-10-08.
 		       (group-field-charset
 			(gnus-group-name-charset
@@ -1629,6 +1630,8 @@ this is a reply."
 			      (boundp 'gnus-inews-mark-gcc-as-read)
 			      (symbol-value 'gnus-inews-mark-gcc-as-read))))
 		(gnus-group-mark-article-read group (cdr group-art)))
+	      (setq options message-options)
+	      (with-current-buffer cur (setq message-options options))
 	      (kill-buffer (current-buffer)))))))))
 
 (defun gnus-inews-insert-gcc (&optional group)
@@ -1781,7 +1784,7 @@ this is a reply."
 			     (and header
 				  (string-match (nth 2 match) header)))))))
 		 (t
-		  ;; This is a form to be evaled.
+		  ;; This is a form to be evalled.
 		  (eval match)))))
 	  ;; We have a match, so we set the variables.
 	  (dolist (attribute style)

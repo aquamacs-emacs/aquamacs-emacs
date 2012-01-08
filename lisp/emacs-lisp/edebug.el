@@ -1,6 +1,6 @@
 ;;; edebug.el --- a source-level debugger for Emacs Lisp
 
-;; Copyright (C) 1988-1995, 1997, 1999-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1988-1995, 1997, 1999-2012  Free Software Foundation, Inc.
 
 ;; Author: Daniel LaLiberte <liberte@holonexus.org>
 ;; Maintainer: FSF
@@ -1285,7 +1285,7 @@ expressions; a `progn' form will be returned enclosing these forms."
   ;; Wrap a form, usually a defining form, but any evaluated one.
   ;; If speclist is non-nil, this is being called by edebug-defining-form.
   ;; Otherwise it is being called from edebug-read-and-maybe-wrap-form1.
-  ;; This is a hack, but I havent figured out a simpler way yet.
+  ;; This is a hack, but I haven't figured out a simpler way yet.
   (let* ((form-data-entry (edebug-get-form-data-entry form-begin form-end))
 	 ;; Set this marker before parsing.
 	 (edebug-form-begin-marker
@@ -3448,7 +3448,7 @@ instrumented.  Then it does `edebug-on-entry' and switches to `go' mode."
 (defun edebug-on-entry (function &optional flag)
   "Cause Edebug to stop when FUNCTION is called.
 With prefix argument, make this temporary so it is automatically
-cancelled the first time the function is entered."
+canceled the first time the function is entered."
   (interactive "aEdebug on entry to: \nP")
   ;; Could store this in the edebug data instead.
   (put function 'edebug-on-entry (if flag 'temp t)))

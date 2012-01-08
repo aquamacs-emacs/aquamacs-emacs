@@ -1,5 +1,5 @@
 /* Elisp bindings for D-Bus.
-   Copyright (C) 2007-2011 Free Software Foundation, Inc.
+   Copyright (C) 2007-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -184,7 +184,7 @@ static int xd_in_read_queued_messages = 0;
 #endif
 
 /* This was a macro.  On Solaris 2.11 it was said to compile for
-   hours, when optimzation is enabled.  So we have transferred it into
+   hours, when optimization is enabled.  So we have transferred it into
    a function.  */
 /* Determine the DBusType of a given Lisp symbol.  OBJECT must be one
    of the predefined D-Bus type symbols.  */
@@ -968,7 +968,7 @@ DEFUN ("dbus-init-bus", Fdbus_init_bus, Sdbus_init_bus, 1, 1, 0,
   connection = xd_initialize (bus, TRUE);
 
   /* Add the watch functions.  We pass also the bus as data, in order
-     to distinguish between the busses in xd_remove_watch.  */
+     to distinguish between the buses in xd_remove_watch.  */
   if (!dbus_connection_set_watch_functions (connection,
 					    xd_add_watch,
 					    xd_remove_watch,

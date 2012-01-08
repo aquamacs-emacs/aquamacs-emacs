@@ -1,6 +1,6 @@
 ;;; deeper-blue-theme.el --- Custom theme for faces
 
-;; Copyright (C) 2011 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2012 Free Software Foundation, Inc.
 
 ;; Author: Scott Frazer <frazer.scott@gmail.com>
 
@@ -22,7 +22,7 @@
 ;;; Code:
 
 (deftheme deeper-blue
-  "Face colors using a deep blue backgound.")
+  "Face colors using a deep blue background.")
 
 (let ((class '((class color) (min-colors 89))))
   (custom-theme-set-faces
@@ -37,7 +37,7 @@
    `(compilation-line-number ((,class (:foreground "LightGreen"))))
    `(cperl-array-face ((,class (:foreground "yellow2"))))
    `(cperl-hash-face ((,class (:foreground "coral1"))))
-   `(cursor ((,class (:background "green" :foreground "black"))))
+   `(cursor ((,class (:background "green"))))
    `(default ((,class (:background "#181a26" :foreground "gray80"))))
    `(diff-added ((,class (nil))))
    `(diff-changed ((,class (nil))))

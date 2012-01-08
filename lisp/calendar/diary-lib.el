@@ -1,6 +1,6 @@
 ;;; diary-lib.el --- diary functions
 
-;; Copyright (C) 1989-1990, 1992-1995, 2001-2011
+;; Copyright (C) 1989-1990, 1992-1995, 2001-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Edward M. Reingold <reingold@cs.uiuc.edu>
@@ -147,7 +147,7 @@ See the documentation for the function `diary-list-sexp-entries'."
 Nil means there are no comments.  The diary does not display
 parts of entries that are inside comments.  You can use comments
 for whatever you like, e.g. for meta-data that packages such as
-`appt.el' can use.  Comments may not span mutliple lines, and there
+`appt.el' can use.  Comments may not span multiple lines, and there
 can be only one comment on any line.
 See also `diary-comment-end'."
   :version "24.1"

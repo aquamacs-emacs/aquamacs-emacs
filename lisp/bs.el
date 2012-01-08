@@ -1,6 +1,6 @@
 ;;; bs.el --- menu for selecting and displaying buffers -*- lexical-binding: t -*-
 
-;; Copyright (C) 1998-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012  Free Software Foundation, Inc.
 ;; Author: Olaf Sylvester <Olaf.Sylvester@netsurf.de>
 ;; Maintainer: Olaf Sylvester <Olaf.Sylvester@netsurf.de>
 ;; Keywords: convenience
@@ -25,7 +25,7 @@
 ;; Version: 1.17
 ;; X-URL: http://www.geekware.de/software/emacs
 ;;
-;; The bs-package contains a main function bs-show for poping up a
+;; The bs-package contains a main function bs-show for popping up a
 ;; buffer in a way similar to `list-buffers' and `electric-buffer-list':
 ;; The new buffer offers a Buffer Selection Menu for manipulating
 ;; the buffer list and buffers.
@@ -1414,8 +1414,7 @@ for buffer selection."
 	(bs--restore-window-config)
 	(setq bs--window-config-coming-from (current-window-configuration))
 	(when (> (window-height (selected-window)) 7)
-          (split-window-vertically)
-          (other-window 1)))
+          (select-window (split-window-below))))
       (bs-show-in-buffer liste)
       (bs-message-without-log "%s" (bs--current-config-message)))))
 

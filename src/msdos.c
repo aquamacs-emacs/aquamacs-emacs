@@ -1,6 +1,6 @@
 /* MS-DOS specific C utilities.          -*- coding: raw-text -*-
 
-Copyright (C) 1993-1997, 1999-2011  Free Software Foundation, Inc.
+Copyright (C) 1993-1997, 1999-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -1342,7 +1342,7 @@ static void
 IT_copy_glyphs (int xfrom, int xto, size_t len, int ypos)
 {
   /* The offsets of source and destination relative to the
-     conventional memorty selector.  */
+     conventional memory selector.  */
   int from = 2 * (xfrom + screen_size_X * ypos) + ScreenPrimary;
   int to = 2 * (xto + screen_size_X * ypos) + ScreenPrimary;
 
@@ -1558,7 +1558,7 @@ IT_set_terminal_window (struct frame *f, int foo)
 {
 }
 
-/* Remember the screen colors of the curent frame, to serve as the
+/* Remember the screen colors of the current frame, to serve as the
    default colors for newly-created frames.  */
 DEFUN ("msdos-remember-default-colors", Fmsdos_remember_default_colors,
        Smsdos_remember_default_colors, 1, 1, 0,

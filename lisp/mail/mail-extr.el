@@ -1,6 +1,6 @@
 ;;; mail-extr.el --- extract full name and address from RFC 822 mail header -*- coding: utf-8 -*-
 
-;; Copyright (C) 1991-1994, 1997, 2001-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1991-1994, 1997, 2001-2012  Free Software Foundation, Inc.
 
 ;; Author: Joe Wells <jbw@cs.bu.edu>
 ;; Maintainer: FSF
@@ -1961,7 +1961,7 @@ place.  It affects how `mail-extract-address-components' works."
        ("gw" "Guinea-Bissau")
        ("gy" "Guyana")
        ("hk" "Hong Kong")
-       ("hm" "Heard Island and Mcdonald Islands")
+       ("hm" "Heard Island and McDonald Islands")
        ("hn" "Honduras")
        ("hr" "Croatia"		"Croatia (Hrvatska)")
        ("ht" "Haiti")

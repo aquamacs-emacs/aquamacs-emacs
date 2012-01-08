@@ -1,6 +1,6 @@
 ;;; mixal-mode.el --- Major mode for the mix asm language.
 
-;; Copyright (C) 2003-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2003-2012  Free Software Foundation, Inc.
 
 ;; Author: Pieter E.J. Pareit <pieter.pareit@gmail.com>
 ;; Maintainer: Pieter E.J. Pareit <pieter.pareit@gmail.com>
@@ -1058,7 +1058,7 @@ EXECUTION-TIME holds info about the time it takes, number or string.")
    (list
     (let* ((completion-ignore-case t)
 	   ;; we already have a list, but it is not in the right format
-	   ;; transform it to a valid table so completition can use it
+	   ;; transform it to a valid table so completion can use it
 	   (table (mapcar (lambda (elm) (cons (symbol-name (car elm)) nil))
 			  mixal-operation-codes-alist))
 	   ;; prompt is different depending on we are close to a valid op-code

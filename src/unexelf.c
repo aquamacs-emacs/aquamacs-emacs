@@ -1,4 +1,4 @@
-/* Copyright (C) 1985-1988, 1990, 1992, 1999-2011
+/* Copyright (C) 1985-1988, 1990, 1992, 1999-2012
                  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -1019,7 +1019,7 @@ temacs:
 	  /* The conditional bit below was in Oliva's original code
 	     (1999-08-25) and seems to have been dropped by mistake
 	     subsequently.  It prevents a crash at startup under X in
-	     `IRIX64 6.5 6.5.17m', whether compiled on that relase or
+	     `IRIX64 6.5 6.5.17m', whether compiled on that release or
 	     an earlier one.  It causes no trouble on the other ELF
 	     platforms I could test (Irix 6.5.15m, Solaris 8, Debian
 	     Potato x86, Debian Woody SPARC); however, it's reported
@@ -1219,9 +1219,15 @@ temacs:
 	      nn = symp->st_shndx;
 	      if (nn > old_bss_index)
 		nn--;
-	      old = ((symp->st_value - NEW_SECTION_H (symp->st_shndx).sh_addr)
-		     + OLD_SECTION_H (nn).sh_offset + old_base);
-	      memcpy (new, old, symp->st_size);
+	      if (nn == old_bss_index)
+		memset (new, 0, symp->st_size);
+	      else
+		{
+		  old = ((symp->st_value
+			  - NEW_SECTION_H (symp->st_shndx).sh_addr)
+			 + OLD_SECTION_H (nn).sh_offset + old_base);
+		  memcpy (new, old, symp->st_size);
+		}
 	    }
 #endif
 	}

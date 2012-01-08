@@ -1,6 +1,6 @@
 ;;; prolog.el --- major mode for editing and running Prolog (and Mercury) code
 
-;; Copyright (C) 1986-1987, 1997-1999, 2002-2003, 2011
+;; Copyright (C) 1986-1987, 1997-1999, 2002-2003, 2011-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Authors: Emil Åström <emil_astrom(at)hotmail(dot)com>
@@ -116,7 +116,7 @@
 ;; Version 1.22:
 ;;  o  Allowed both 'swipl' and 'pl' as names for the SWI Prolog
 ;;     interpreter.
-;;  o  Atoms that start a line are not blindly coloured as
+;;  o  Atoms that start a line are not blindly colored as
 ;;     predicates.  Instead we check that they are followed by ( or
 ;;     :- first.  Patch suggested by Guy Wiener.
 ;; Version 1.21:
@@ -147,11 +147,11 @@
 ;;  o  Introduced three new customizable variables: electric colon
 ;;     (`prolog-electric-colon-flag', default nil), electric dash
 ;;     (`prolog-electric-dash-flag', default nil), and a possibility
-;;     to prevent the predicate template insertion from adding commata
+;;     to prevent the predicate template insertion from adding commas
 ;;     (`prolog-electric-dot-full-predicate-template', defaults to t
-;;     since it seems quicker to me to just type those commata).  A
+;;     since it seems quicker to me to just type those commas).  A
 ;;     trivial adaptation of a patch by Markus Triska.
-;;  o  Improved the behaviour of electric if-then-else to only skip
+;;  o  Improved the behavior of electric if-then-else to only skip
 ;;     forward if the parenthesis/semicolon is preceded by
 ;;     whitespace.  Once more a trivial adaptation of a patch by
 ;;     Markus Triska.
@@ -164,12 +164,12 @@
 ;;     with the original form).  My code on the matter was improved
 ;;     considerably by Markus Triska.
 ;;  o  Fixed `prolog-insert-spaces-after-paren' (which used an
-;;     unitialized variable).
+;;     uninitialized variable).
 ;;  o  Minor changes to clean up the code and avoid some implicit
 ;;     package requirements.
 ;; Version 1.13:
 ;;  o  Removed the use of `map-char-table' in `prolog-build-case-strings'
-;;     which appears to cause prblems in (at least) Emacs 23.0.0.1.
+;;     which appears to cause problems in (at least) Emacs 23.0.0.1.
 ;;  o  Added if-then-else indentation + corresponding electric
 ;;     characters.  New customization: `prolog-electric-if-then-else-flag'
 ;;  o  Align support (requires `align').  New customization:
@@ -391,7 +391,7 @@ Otherwise indent to `prolog-indent-width'."
 
 (defcustom prolog-left-indent-regexp "\\(;\\|\\*?->\\)"
   "*Regexp for character sequences after which next line is indented.
-Next line after such a regexp is indented to the opening paranthesis level."
+Next line after such a regexp is indented to the opening parenthesis level."
   :group 'prolog-indentation
   :type 'regexp)
 
@@ -512,7 +512,7 @@ It does not apply in strings and comments."
 (defcustom prolog-electric-dot-full-predicate-template nil
   "*If nil, electric dot inserts only the current predicate's name and `('
 for recursive calls or new clause heads.  Non-nil means to also
-insert enough commata to cover the predicate's arity and `)',
+insert enough commas to cover the predicate's arity and `)',
 and dot and newline for recursive calls."
   :group 'prolog-keyboard
   :type 'boolean)
@@ -691,7 +691,7 @@ nil means send actual operating system end of file."
 (defcustom prolog-use-standard-consult-compile-method-flag t
   "*Non-nil means use the standard compilation method.
 Otherwise the new compilation method will be used.  This
-utilises a special compilation buffer with the associated
+utilizes a special compilation buffer with the associated
 features such as parsing of error messages and automatically
 jumping to the source code responsible for the error.
 
@@ -868,8 +868,9 @@ VERSION is of the format (Major . Minor)"
 (defun prolog-find-value-by-system (alist)
   "Get value from ALIST according to `prolog-system'."
   (let ((system (or prolog-system
-                    (buffer-local-value 'prolog-system
-                                        (prolog-inferior-buffer 'dont-run)))))
+                    (let ((infbuf (prolog-inferior-buffer 'dont-run)))
+                      (when infbuf
+                        (buffer-local-value 'prolog-system infbuf))))))
     (if (listp alist)
         (let (result
               id)
@@ -1023,7 +1024,7 @@ VERSION is of the format (Major . Minor)"
 
 
 (defvar prolog-mode-hook nil
-  "List of functions to call after the prolog mode has initialised.")
+  "List of functions to call after the prolog mode has initialized.")
 
 (unless (fboundp 'prog-mode)
   (defalias 'prog-mode 'fundamental-mode))
@@ -1090,7 +1091,7 @@ Actually this is just customized `prolog-mode'."
     map))
 
 (defvar prolog-inferior-mode-hook nil
-  "List of functions to call after the inferior prolog mode has initialised.")
+  "List of functions to call after the inferior prolog mode has initialized.")
 
 (defvar prolog-inferior-error-regexp-alist
   '(;; GNU Prolog used to not follow the GNU standard format.
@@ -1522,7 +1523,7 @@ This function must be called from the source code buffer."
           ;; Emacs-20).
             (set (make-local-variable 'compilation-parse-errors-function)
                'prolog-parse-sicstus-compilation-errors))
-      (toggle-read-only 0)
+      (setq buffer-read-only nil)
       (insert command-string "\n"))
     (save-selected-window
       (pop-to-buffer buffer))
@@ -1569,7 +1570,7 @@ For use with the `compilation-parse-errors-function' variable."
          limit t)
         (setq filepath (match-string 2)))
 
-      ;; ###### Does this work with SICStus under Windows (i.e. backslahes and stuff?)
+      ;; ###### Does this work with SICStus under Windows (i.e. backslashes and stuff?)
       (if (string-match "\\(.*/\\)\\([^/]*\\)$" filepath)
           (progn
             (setq dir (match-string 1 filepath))
@@ -3261,7 +3262,7 @@ STRING should be given if the last search was by `string-match' on STRING."
 (defun prolog-clause-start (&optional not-allow-methods)
   "Return the position at the start of the head of the current clause.
 If NOTALLOWMETHODS is non-nil then do not match on methods in
-objects (relevent only if 'prolog-system' is set to 'sicstus)."
+objects (relevant only if 'prolog-system' is set to 'sicstus)."
   (save-excursion
     (let ((notdone t)
           (retval (point-min)))
@@ -3327,7 +3328,7 @@ objects (relevent only if 'prolog-system' is set to 'sicstus)."
 (defun prolog-clause-end (&optional not-allow-methods)
   "Return the position at the end of the current clause.
 If NOTALLOWMETHODS is non-nil then do not match on methods in
-objects (relevent only if 'prolog-system' is set to 'sicstus)."
+objects (relevant only if 'prolog-system' is set to 'sicstus)."
   (save-excursion
     (beginning-of-line) ; Necessary since we use "^...." for the search.
     (if (re-search-forward

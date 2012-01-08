@@ -1,6 +1,6 @@
 ;;; ispell.el --- interface to International Ispell Versions 3.1 and 3.2
 
-;; Copyright (C) 1994-1995, 1997-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1994-1995, 1997-2012  Free Software Foundation, Inc.
 
 ;; Author:           Ken Stevens <k.stevens@ieee.org>
 ;; Maintainer:       Ken Stevens <k.stevens@ieee.org>
@@ -981,7 +981,7 @@ and return a list of lists (one for each misspelled word) of the format:
    (cons "Marathi" "mr")
    (cons "Malay" "ms")
    (cons "Maltese" "mt")
-   (cons "Norwegian Bokmål" "nb")
+   (cons "Norwegian Bokm√•l" "nb")
    (cons "Low German; Low Saxon" "nds")
    (cons "Dutch" "nl")
    (cons "Norwegian Nynorsk" "nn")
@@ -2945,7 +2945,7 @@ Otherwise the variable `ispell-grep-command' contains the command used to
 search for the words (usually egrep).
 
 Optional second argument contains the dictionary to use; the default is
-`ispell-alternate-dictionary', overriden by `ispell-complete-word-dict'
+`ispell-alternate-dictionary', overridden by `ispell-complete-word-dict'
 if defined."
   ;; We don't use the filter for this function, rather the result is written
   ;; into a buffer.  Hence there is no need to save the filter values.
@@ -3060,7 +3060,8 @@ Optional REFRESH will unhighlighted then highlight, using block cursor
 	   (setq start (1+ start))))	; On block non-refresh, inc start.
   (let ((modified (buffer-modified-p))	; don't allow this fn to modify buffer
 	(buffer-read-only nil)		; Allow highlighting read-only buffers.
-	(text (buffer-substring-no-properties start end)) ; Save hilight region
+	(text (buffer-substring-no-properties start end))
+					; Save highlight region.
 	(inhibit-quit t)		; inhibit interrupt processing here.
 	(buffer-undo-list t))		; don't clutter the undo list.
     (goto-char end)
@@ -3159,7 +3160,7 @@ scrolling the current window.  Leave the new window selected."
       ;; hidden by new window, scroll it to just below new win
       ;; otherwise set top line of other win so it doesn't scroll.
       (if (< oldot top) (setq top oldot))
-      ;; if frame is unsplitable, temporarily disable that...
+      ;; if frame is unsplittable, temporarily disable that...
       (if (cdr (assq 'unsplittable (frame-parameters (selected-frame))))
 	  (let ((frame (selected-frame)))
 	    (modify-frame-parameters frame '((unsplittable . nil)))
@@ -4125,15 +4126,21 @@ available on the net."
 
 ;;;###autoload
 (define-minor-mode ispell-minor-mode
-  "Toggle Ispell minor mode.
-With prefix argument ARG, turn Ispell minor mode on if ARG is positive,
-otherwise turn it off.
+  "Toggle last-word spell checking (Ispell minor mode).
+With a prefix argument ARG, enable Ispell minor mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
-In Ispell minor mode, pressing SPC or RET
-warns you if the previous word is incorrectly spelled.
+Ispell minor mode is a buffer-local mior mode.  When enabled,
+typing SPC or RET warns you if the previous word is incorrectly
+spelled.
 
-All the buffer-local variables and dictionaries are ignored -- to read
-them into the running ispell process, type \\[ispell-word] SPC."
+All the buffer-local variables and dictionaries are ignored.  To
+read them into the running ispell process, type \\[ispell-word]
+SPC.
+
+For spell-checking \"on the fly\", not just after typing SPC or
+RET, use `flyspell-mode'."
   nil " Spell" ispell-minor-keymap)
 
 (defun ispell-minor-check ()
@@ -4160,7 +4167,7 @@ Don't read buffer-local settings or word lists."
 	     '(
 	       ;; Don't spell check signatures
 	       "^-- $"
-	       ;; Matches postscript files.
+	       ;; Matches PostScript files.
 	       ;;"^%!PS-Adobe-[123].0"
 	       ;; Matches uuencoded text
 	       ;;"^begin [0-9][0-9][0-9] .*\nM.*\nM.*\nM"
@@ -4649,8 +4656,8 @@ Both should not be used to define a buffer-local dictionary."
 ; LocalWords:  Francais Nederlands charset autoloaded popup nonmenu regexp num
 ; LocalWords:  AMStex hspace includeonly nocite epsfig displaymath eqnarray reg
 ; LocalWords:  minipage modeline pers dict unhighlight buf grep sync prev inc
-; LocalWords:  fn hilight oldot NB AIX msg init read's bufs pt cmd Quinlan eg
-; LocalWords:  uuencoded unidiff sc nn VM SGML eval IspellPersDict unsplitable
+; LocalWords:  fn oldot NB AIX msg init read's bufs pt cmd Quinlan eg
+; LocalWords:  uuencoded unidiff sc nn VM SGML eval IspellPersDict
 ; LocalWords:  lns XEmacs HTML casechars Multibyte
 
 ;;; ispell.el ends here

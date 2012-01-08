@@ -1,5 +1,5 @@
 /* Client process that communicates with GNU Emacs acting as server.
-   Copyright (C) 1986-1987, 1994, 1999-2011 Free Software Foundation, Inc.
+   Copyright (C) 1986-1987, 1994, 1999-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -359,7 +359,7 @@ w32_getenv (char *envvar)
   char *value;
   DWORD dwType;
 
-  if (value = getenv (envvar))
+  if ((value = getenv (envvar)))
     /* Found in the environment.  strdup it, because values returned
        by getenv cannot be free'd.  */
     return xstrdup (value);
@@ -382,7 +382,7 @@ w32_getenv (char *envvar)
     {
       DWORD size;
 
-      if (size = ExpandEnvironmentStrings (value, NULL, 0))
+      if ((size = ExpandEnvironmentStrings (value, NULL, 0)))
 	{
 	  char *buffer = (char *) xmalloc (size);
 	  if (ExpandEnvironmentStrings (value, buffer, size))
@@ -638,6 +638,22 @@ decode_options (int argc, char **argv)
   if (display && strlen (display) == 0)
     display = NULL;
 
+#ifdef WINDOWSNT
+  /* Emacs on Windows does not support GUI and console frames in the same
+     instance.  So, it makes sense to treat the -t and -c options as
+     equivalent, and open a new frame regardless of whether the running
+     instance is GUI or console.  Ideally, we would only set tty = 1 when
+     the instance is running in a console, but alas we don't know that.
+     The simplest workaround is to always ask for a tty frame, and let
+     server.el check whether it makes sense.  */
+  if (tty || !current_frame)
+    {
+      display = (const char *) ttyname;
+      current_frame = 0;
+      tty = 1;
+    }
+#endif
+
   /* If no display is available, new frames are tty frames.  */
   if (!current_frame && !display)
     tty = 1;
@@ -654,14 +670,6 @@ decode_options (int argc, char **argv)
 an empty string");
       exit (EXIT_FAILURE);
     }
-
-  /* TTY frames not supported on Windows.  Continue using GUI rather than
-     forcing the user to change their command-line.  This is required since
-     tty is set above if certain options are given and $DISPLAY is not set,
-     which is not obvious to users.  */
-  if (tty)
-      tty = 0;
-
 #endif /* WINDOWSNT */
 }
 
@@ -1193,7 +1201,7 @@ handle_sigtstp (int signalnum)
     send_to_emacs (emacs_socket, "-suspend \n");
 
   /* Unblock this signal and call the default handler by temporarily
-     changing the handler and resignalling. */
+     changing the handler and resignaling.  */
   sigprocmask (SIG_BLOCK, NULL, &set);
   sigdelset (&set, signalnum);
   signal (signalnum, SIG_DFL);
@@ -1635,7 +1643,11 @@ main (int argc, char **argv)
   /* Send over our environment and current directory. */
   if (!current_frame)
     {
+#ifndef WINDOWSNT
+      /* This is defined in stdlib.h on MS-Windows.  It's defined in
+	 unistd.h on some POSIX hosts, but not all (Bug#10155).  */
       extern char **environ;
+#endif
       int i;
       for (i = 0; environ[i]; i++)
         {

@@ -1,6 +1,6 @@
 ;;; dired-aux.el --- less commonly used parts of dired
 
-;; Copyright (C) 1985-1986, 1992, 1994, 1998, 2000-2011
+;; Copyright (C) 1985-1986, 1992, 1994, 1998, 2000-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Sebastian Kremer <sk@thp.uni-koeln.de>.
@@ -347,7 +347,7 @@ This calls touch."
 		  ;; Do the operation and record failures.
 		  failures (nconc (apply function (append args pending))
 				  failures)
-		  ;; Transfer the elemens of PENDING onto PAST
+		  ;; Transfer the elements of PENDING onto PAST
 		  ;; and clear it out.  Now PAST contains the first N files
 		  ;; specified (for some N), and FILES contains the rest.
 		  past (nconc past pending)
@@ -927,8 +927,7 @@ return t; if SYM is q or ESC, return nil."
 		 (concat (apply 'format prompt args)
 			 (if help-form
 			     (format " [Type yn!q or %s] "
-				     (key-description
-				      (char-to-string help-char)))
+				     (key-description (vector help-char)))
 			   " [Type y, n, q or !] ")))
 	   (set sym (setq char (read-char-choice prompt char-choices)))
 	   (if (memq char '(?y ?\s ?!)) t)))))
@@ -1490,7 +1489,7 @@ ARG as in `dired-get-marked-files'.
 Optional arg MARKER-CHAR as in `dired-create-files'.
 Optional arg OP1 is an alternate form for OPERATION if there is
   only one file.
-Optional arg HOW-TO determiness how to treat the target.
+Optional arg HOW-TO determines how to treat the target.
   If HOW-TO is nil, use `file-directory-p' to determine if the
    target is a directory.  If so, the marked file(s) are created
    inside that directory.  Otherwise, the target is a plain file;

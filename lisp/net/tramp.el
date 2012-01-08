@@ -1,6 +1,6 @@
 ;;; tramp.el --- Transparent Remote Access, Multiple Protocol
 
-;; Copyright (C) 1998-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012 Free Software Foundation, Inc.
 
 ;; Author: Kai Großjohann <kai.grossjohann@gmx.net>
 ;;         Michael Albinus <michael.albinus@gmx.de>
@@ -152,7 +152,7 @@ local host, so if you want to use `~' in those commands, you should
 choose a shell here which groks tilde expansion.  `/bin/sh' normally
 does not understand tilde expansion.
 
-For encoding and deocding, commands like the following are executed:
+For encoding and decoding, commands like the following are executed:
 
     /bin/sh -c COMMAND < INPUT > OUTPUT
 
@@ -298,8 +298,8 @@ shouldn't return t when it isn't."
       (search-forward-regexp "Missing ControlMaster argument" nil t))))
 
 (defcustom tramp-default-method
-  ;; An external copy method seems to be preferred, because it is much
-  ;; more performant for large files, and it hasn't too serious delays
+  ;; An external copy method seems to be preferred, because it performs
+  ;; much better for large files, and it hasn't too serious delays
   ;; for small files.  But it must be ensured that there aren't
   ;; permanent password queries.  Either a password agent like
   ;; "ssh-agent" or "Pageant" shall run, or the optional
@@ -1331,7 +1331,7 @@ ARGS to actually emit the message (if applicable)."
 		(setq fn nil)))
 	    (setq btn (1+ btn))))
 	;; The following code inserts filename and line number.
-	;; Should be deactivated by default, because it is time
+	;; Should be inactive by default, because it is time
 	;; consuming.
 ;	(let ((ffn (find-function-noselect (intern fn))))
 ;	  (insert
@@ -1606,24 +1606,28 @@ This is intended to be used as a minibuffer `post-command-hook' for
 `file-name-shadow-mode'; the minibuffer should have already
 been set up by `rfn-eshadow-setup-minibuffer'."
   ;; In remote files name, there is a shadowing just for the local part.
-  (let ((end (or (tramp-compat-funcall
-		  'overlay-end (symbol-value 'rfn-eshadow-overlay))
-		 (tramp-compat-funcall 'minibuffer-prompt-end))))
-    (when
-	(file-remote-p
-	 (tramp-compat-funcall 'buffer-substring-no-properties end (point-max)))
-      (save-excursion
-	(save-restriction
-	  (narrow-to-region
-	   (1+ (or (string-match
-		    tramp-rfn-eshadow-update-overlay-regexp (buffer-string) end)
-		   end))
-	   (point-max))
-	  (let ((rfn-eshadow-overlay tramp-rfn-eshadow-overlay)
-		(rfn-eshadow-update-overlay-hook nil))
-	    (tramp-compat-funcall
-	     'move-overlay rfn-eshadow-overlay (point-max) (point-max))
-	    (tramp-compat-funcall 'rfn-eshadow-update-overlay)))))))
+  (ignore-errors
+    (let ((end (or (tramp-compat-funcall
+		    'overlay-end (symbol-value 'rfn-eshadow-overlay))
+		   (tramp-compat-funcall 'minibuffer-prompt-end))))
+      (when
+	  (file-remote-p
+	   (tramp-compat-funcall
+	    'buffer-substring-no-properties end (point-max)))
+	(save-excursion
+	  (save-restriction
+	    (narrow-to-region
+	     (1+ (or (string-match
+		      tramp-rfn-eshadow-update-overlay-regexp
+		      (buffer-string) end)
+		     end))
+	     (point-max))
+	    (let ((rfn-eshadow-overlay tramp-rfn-eshadow-overlay)
+		  (rfn-eshadow-update-overlay-hook nil)
+		  file-name-handler-alist)
+	      (tramp-compat-funcall
+	       'move-overlay rfn-eshadow-overlay (point-max) (point-max))
+	      (tramp-compat-funcall 'rfn-eshadow-update-overlay))))))))
 
 (when (boundp 'rfn-eshadow-update-overlay-hook)
   (add-hook 'rfn-eshadow-update-overlay-hook
@@ -1882,7 +1886,7 @@ Falls back to normal file name handler if no Tramp file name handler exists."
 		      (when (and (listp sf) (eq (car sf) 'autoload))
 			(let ((default-directory
 				(tramp-compat-temporary-file-directory)))
-			  (load (cadr sf) 'noerror)))
+			  (load (cadr sf) 'noerror 'nomessage)))
 		      (apply foreign operation args))
 
 		  ;; Trace that somebody has interrupted the operation.
@@ -2099,8 +2103,9 @@ This is true, if either the remote host is already connected, or if we are
 not in completion mode."
   (and (tramp-tramp-file-p filename)
        (with-parsed-tramp-file-name filename nil
-	 (or (get-buffer (tramp-buffer-name v))
-	     (not (tramp-completion-mode-p))))))
+	 (or (not (tramp-completion-mode-p))
+	     (let ((p (tramp-get-connection-process v)))
+	       (and p (processp p) (memq (process-status p) '(run open))))))))
 
 ;; Method, host name and user name completion.
 ;; `tramp-completion-dissect-file-name' returns a list of
@@ -3501,7 +3506,7 @@ If the `tramp-methods' entry does not exist, return nil."
        (cond
          ((char-equal other-write ?w) (tramp-compat-octal-to-decimal "00002"))
 	 ((char-equal other-write ?-) 0)
-         (t (error "Nineth char `%c' must be one of `w-'" other-write)))
+         (t (error "Ninth char `%c' must be one of `w-'" other-write)))
        (cond
 	((char-equal other-execute-or-sticky ?x)
 	 (tramp-compat-octal-to-decimal "00001"))
@@ -3846,7 +3851,7 @@ Only works for Bourne-like shells."
 ;;   expects English?  Or just to set LC_MESSAGES to "C" if Tramp
 ;;   expects only English messages?  (Juri Linkov)
 ;; * Make shadowfile.el grok Tramp filenames.  (Bug#4526, Bug#4846)
-;; * I was wondering it it would be possible to use tramp even if I'm
+;; * I was wondering if it would be possible to use tramp even if I'm
 ;;   actually using sshfs.  But when I launch a command I would like
 ;;   to get it executed on the remote machine where the files really
 ;;   are.  (Andrea Crotti)

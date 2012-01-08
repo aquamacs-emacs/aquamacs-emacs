@@ -1,6 +1,6 @@
 ;;; replace.el --- replace commands for Emacs
 
-;; Copyright (C) 1985-1987, 1992, 1994, 1996-1997, 2000-2011
+;; Copyright (C) 1985-1987, 1992, 1994, 1996-1997, 2000-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
@@ -1225,7 +1225,7 @@ See also `multi-occur'."
 
     (with-current-buffer occur-buf
       (if (stringp nlines)
-	  (fundamental-mode) ;; This is for collect opeartion.
+	  (fundamental-mode) ;; This is for collect operation.
 	(occur-mode))
       (let ((inhibit-read-only t)
 	    ;; Don't generate undo entries for creation of the initial contents.
@@ -1663,7 +1663,7 @@ with the `noescape' argument set.
 			      t t)))
 
 (defun replace-loop-through-replacements (data count)
-  ;; DATA is a vector contaning the following values:
+  ;; DATA is a vector containing the following values:
   ;;   0 next-rotate-count
   ;;   1 repeat-count
   ;;   2 next-replacement

@@ -1,6 +1,6 @@
 ;;; wdired.el --- Rename files editing their names in dired buffers
 
-;; Copyright (C) 2004-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2004-2012  Free Software Foundation, Inc.
 
 ;; Filename: wdired.el
 ;; Author: Juan León Lahoz García <juanleon1@gmail.com>
@@ -32,7 +32,7 @@
 ;; the files in a "dired" buffer? Now you can do this.  All the power
 ;; of Emacs commands are available to renaming files!
 ;;
-;; This package provides a function that makes the filenames of a a
+;; This package provides a function that makes the filenames of a
 ;; dired buffer editable, by changing the buffer mode (which inhibits
 ;; all of the commands of dired mode). Here you can edit the names of
 ;; one or more files and directories, and when you press C-c C-c, the

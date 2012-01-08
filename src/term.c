@@ -1,5 +1,5 @@
 /* Terminal control module for terminals described by TERMCAP
-   Copyright (C) 1985-1987, 1993-1995, 1998, 2000-2011
+   Copyright (C) 1985-1987, 1993-1995, 1998, 2000-2012
                  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -1809,7 +1809,7 @@ append_glyphless_glyph (struct it *it, int face_id, const char *str)
    glyphless_display_method in dispextern.h for the details.
 
    FOR_NO_FONT is nonzero if and only if this is for a character that
-   is not supproted by the coding system of the terminal.  ACRONYM, if
+   is not supported by the coding system of the terminal.  ACRONYM, if
    non-nil, is an acronym string for the character.
 
    The glyphs actually produced are of type CHAR_GLYPH.  */
@@ -3236,7 +3236,7 @@ use the Bourne shell command `TERM=... export TERM' (C-shell:\n\
   MultiLeft (tty) = tgetstr ("LE", address);
   MultiRight (tty) = tgetstr ("RI", address);
 
-  /* SVr4/ANSI color suppert.  If "op" isn't available, don't support
+  /* SVr4/ANSI color support.  If "op" isn't available, don't support
      color because we can't switch back to the default foreground and
      background.  */
   tty->TS_orig_pair = tgetstr ("op", address);

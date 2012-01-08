@@ -1,6 +1,6 @@
 /* X Communication module for terminals which understand the X protocol.
 
-Copyright (C) 1989, 1993-2011  Free Software Foundation, Inc.
+Copyright (C) 1989, 1993-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -93,6 +93,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef USE_GTK
 #include "gtkutil.h"
+#ifdef HAVE_GTK3
+#include <X11/Xproto.h>
+#endif
 #endif
 
 #ifdef USE_LUCID
@@ -343,7 +346,7 @@ static void x_scroll_bar_report_motion (struct frame **, Lisp_Object *,
                                         enum scroll_bar_part *,
                                         Lisp_Object *, Lisp_Object *,
                                         Time *);
-static void x_handle_net_wm_state (struct frame *, XPropertyEvent *);
+static int x_handle_net_wm_state (struct frame *, XPropertyEvent *);
 static void x_check_fullscreen (struct frame *);
 static void x_check_expected_move (struct frame *, int, int);
 static void x_sync_with_move (struct frame *, int, int, int);
@@ -2960,9 +2963,7 @@ x_clear_frame (struct frame *f)
      follow an explicit cursor_to.  */
   BLOCK_INPUT;
 
-  /* The following call is commented out because it does not seem to accomplish
-     anything, apart from causing flickering during window resize.  */
-  /* XClearWindow (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f)); */
+  XClearWindow (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f));
 
   /* We have to clear the scroll bars.  If we have changed colors or
      something like that, then they should be notified.  */
@@ -3316,7 +3317,7 @@ x_scroll_run (struct window *w, struct run *run)
     }
   else
     {
-      /* Scolling down.  Make sure we don't copy over the mode line.
+      /* Scrolling down.  Make sure we don't copy over the mode line.
 	 at the bottom.  */
       if (to_y + run->height > bottom_y)
 	height = bottom_y - to_y;
@@ -3355,8 +3356,14 @@ frame_highlight (struct frame *f)
      and border pixel are window attributes which are "private to the
      client", so we can always change it to whatever we want.  */
   BLOCK_INPUT;
+  /* I recently started to get errors in this XSetWindowBorder, depending on
+     the window-manager in use, tho something more is at play since I've been
+     using that same window-manager binary for ever.  Let's not crash just
+     because of this (bug#9310).  */
+  x_catch_errors (FRAME_X_DISPLAY (f));
   XSetWindowBorder (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
 		    f->output_data.x->border_pixel);
+  x_uncatch_errors ();
   UNBLOCK_INPUT;
   x_update_cursor (f, 1);
   x_set_frame_alpha (f);
@@ -3370,8 +3377,11 @@ frame_unhighlight (struct frame *f)
      and border pixel are window attributes which are "private to the
      client", so we can always change it to whatever we want.  */
   BLOCK_INPUT;
+  /* Same as above for XSetWindowBorder (bug#9310).  */
+  x_catch_errors (FRAME_X_DISPLAY (f));
   XSetWindowBorderPixmap (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
 			  f->output_data.x->border_tile);
+  x_uncatch_errors ();
   UNBLOCK_INPUT;
   x_update_cursor (f, 1);
   x_set_frame_alpha (f);
@@ -4172,7 +4182,7 @@ static Boolean xaw3d_arrow_scroll;
 
 /* Whether the drag scrolling maintains the mouse at the top of the
    thumb.  If not, resizing the thumb needs to be done more carefully
-   to avoid jerkyness.  */
+   to avoid jerkiness.  */
 
 static Boolean xaw3d_pick_top;
 
@@ -5141,7 +5151,7 @@ x_scroll_bar_remove (struct scroll_bar *bar)
   XDestroyWindow (FRAME_X_DISPLAY (f), bar->x_window);
 #endif
 
-  /* Disassociate this scroll bar from its window.  */
+  /* Dissociate this scroll bar from its window.  */
   XWINDOW (bar->window)->vertical_scroll_bar = Qnil;
 
   UNBLOCK_INPUT;
@@ -6104,7 +6114,21 @@ handle_one_xevent (struct x_display_info *dpyinfo, XEvent *eventptr,
       last_user_time = event.xproperty.time;
       f = x_top_window_to_frame (dpyinfo, event.xproperty.window);
       if (f && event.xproperty.atom == dpyinfo->Xatom_net_wm_state)
-        x_handle_net_wm_state (f, &event.xproperty);
+        if (x_handle_net_wm_state (f, &event.xproperty) && f->iconified
+            && f->output_data.x->net_wm_state_hidden_seen)
+          {
+            /* Gnome shell does not iconify us when C-z is pressed.  It hides
+               the frame.  So if our state says we aren't hidden anymore,
+               treat it as deiconified.  */
+            if (! f->async_iconified)
+              SET_FRAME_GARBAGED (f);
+            f->async_visible = 1;
+            f->async_iconified = 0;
+            f->output_data.x->has_been_visible = 1;
+            f->output_data.x->net_wm_state_hidden_seen = 0;
+            inev.ie.kind = DEICONIFY_EVENT;
+            XSETFRAME (inev.ie.frame_or_window, f);
+          }
 
       x_handle_property_notify (&event.xproperty);
       xft_settings_event (dpyinfo, &event);
@@ -7848,6 +7872,15 @@ static void x_error_quitter (Display *, XErrorEvent *);
 static int
 x_error_handler (Display *display, XErrorEvent *event)
 {
+#ifdef HAVE_GTK3
+  if (event->error_code == BadMatch
+      && event->request_code == X_SetInputFocus
+      && event->minor_code == 0)
+    {
+      return 0;
+    }
+#endif
+
   if (x_error_message)
     x_error_catcher (display, event);
   else
@@ -8406,9 +8439,11 @@ x_set_sticky (struct frame *f, Lisp_Object new_value, Lisp_Object old_value)
 
 /* Return the current _NET_WM_STATE.
    SIZE_STATE is set to one of the FULLSCREEN_* values.
-   STICKY is set to 1 if the sticky state is set, 0 if not.  */
+   STICKY is set to 1 if the sticky state is set, 0 if not.
 
-static void
+   Return non-zero if we are not hidden, zero if we are.  */
+
+static int
 get_current_wm_state (struct frame *f,
                       Window window,
                       int *size_state,
@@ -8416,7 +8451,7 @@ get_current_wm_state (struct frame *f,
 {
   Atom actual_type;
   unsigned long actual_size, bytes_remaining;
-  int i, rc, actual_format;
+  int i, rc, actual_format, is_hidden = 0;
   struct x_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
   long max_len = 65536;
   Display *dpy = FRAME_X_DISPLAY (f);
@@ -8438,7 +8473,7 @@ get_current_wm_state (struct frame *f,
       if (tmp_data) XFree (tmp_data);
       x_uncatch_errors ();
       UNBLOCK_INPUT;
-      return;
+      return ! f->iconified;
     }
 
   x_uncatch_errors ();
@@ -8446,7 +8481,12 @@ get_current_wm_state (struct frame *f,
   for (i = 0; i < actual_size; ++i)
     {
       Atom a = ((Atom*)tmp_data)[i];
-      if (a == dpyinfo->Xatom_net_wm_state_maximized_horz)
+      if (a == dpyinfo->Xatom_net_wm_state_hidden)
+        {
+          is_hidden = 1;
+          f->output_data.x->net_wm_state_hidden_seen = 1;
+        }
+      else if (a == dpyinfo->Xatom_net_wm_state_maximized_horz)
         {
           if (*size_state == FULLSCREEN_HEIGHT)
             *size_state = FULLSCREEN_MAXIMIZED;
@@ -8468,6 +8508,7 @@ get_current_wm_state (struct frame *f,
 
   if (tmp_data) XFree (tmp_data);
   UNBLOCK_INPUT;
+  return ! is_hidden;
 }
 
 /* Do fullscreen as specified in extended window manager hints */
@@ -8479,7 +8520,7 @@ do_ewmh_fullscreen (struct frame *f)
   int have_net_atom = wm_supports (f, dpyinfo->Xatom_net_wm_state);
   int cur, dummy;
 
-  get_current_wm_state (f, FRAME_OUTER_WINDOW (f), &cur, &dummy);
+  (void)get_current_wm_state (f, FRAME_OUTER_WINDOW (f), &cur, &dummy);
 
   /* Some window managers don't say they support _NET_WM_STATE, but they do say
      they support _NET_WM_STATE_FULLSCREEN.  Try that also.  */
@@ -8554,14 +8595,14 @@ XTfullscreen_hook (FRAME_PTR f)
 }
 
 
-static void
+static int
 x_handle_net_wm_state (struct frame *f, XPropertyEvent *event)
 {
   int value = FULLSCREEN_NONE;
   Lisp_Object lval;
   int sticky = 0;
+  int not_hidden = get_current_wm_state (f, event->window, &value, &sticky);
 
-  get_current_wm_state (f, event->window, &value, &sticky);
   lval = Qnil;
   switch (value)
     {
@@ -8581,6 +8622,8 @@ x_handle_net_wm_state (struct frame *f, XPropertyEvent *event)
 
   store_frame_param (f, Qfullscreen, lval);
   store_frame_param (f, Qsticky, sticky ? Qt : Qnil);
+
+  return not_hidden;
 }
 
 /* Check if we need to resize the frame due to a fullscreen request.
@@ -8725,7 +8768,7 @@ x_wait_for_event (struct frame *f, int eventtype)
   pending_event_wait.f = f;
   pending_event_wait.eventtype = eventtype;
 
-  /* Set timeout to 0.1 second.  Hopefully not noticable.
+  /* Set timeout to 0.1 second.  Hopefully not noticeable.
      Maybe it should be configurable.  */
   EMACS_SET_SECS_USECS (tmo, 0, 100000);
   EMACS_GET_TIME (tmo_at);
@@ -9264,7 +9307,7 @@ x_iconify_frame (struct frame *f)
   if (!NILP (type))
     x_bitmap_icon (f, type);
 
-#ifdef USE_GTK
+#if defined (USE_GTK)
   if (FRAME_GTK_OUTER_WIDGET (f))
     {
       if (! FRAME_VISIBLE_P (f))
@@ -9517,6 +9560,14 @@ x_wm_set_size_hint (struct frame *f, long flags, int user_position)
 {
   XSizeHints size_hints;
   Window window = FRAME_OUTER_WINDOW (f);
+
+#ifdef USE_X_TOOLKIT
+  if (f->output_data.x->widget)
+    {
+      widget_update_wm_size_hints (f->output_data.x->widget);
+      return;
+    }
+#endif
 
   /* Setting PMaxSize caused various problems.  */
   size_hints.flags = PResizeInc | PMinSize /* | PMaxSize */;
@@ -9910,6 +9961,11 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
            https://bugzilla.gnome.org/show_bug.cgi?id=563627.  */
         id = g_log_set_handler ("GLib", G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL
                                   | G_LOG_FLAG_RECURSION, my_log_handler, NULL);
+
+        /* NULL window -> events for all windows go to our function.
+           Call before gtk_init so Gtk+ event filters comes after our.  */
+        gdk_window_add_filter (NULL, event_handler_gdk, NULL);
+
         gtk_init (&argc, &argv2);
         g_log_remove_handler ("GLib", id);
 
@@ -9918,9 +9974,6 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
         xg_initialize ();
 
         dpy = DEFAULT_GDK_DISPLAY ();
-
-        /* NULL window -> events for all windows go to our function */
-        gdk_window_add_filter (NULL, event_handler_gdk, NULL);
 
 #if GTK_MAJOR_VERSION <= 2 && GTK_MINOR_VERSION <= 90
         /* Load our own gtkrc if it exists.  */
@@ -10244,6 +10297,7 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
       { "_NET_WM_STATE_MAXIMIZED_VERT",
         &dpyinfo->Xatom_net_wm_state_maximized_vert },
       { "_NET_WM_STATE_STICKY", &dpyinfo->Xatom_net_wm_state_sticky },
+      { "_NET_WM_STATE_HIDDEN", &dpyinfo->Xatom_net_wm_state_hidden },
       { "_NET_WM_WINDOW_TYPE", &dpyinfo->Xatom_net_window_type },
       { "_NET_WM_WINDOW_TYPE_TOOLTIP",
         &dpyinfo->Xatom_net_window_type_tooltip },

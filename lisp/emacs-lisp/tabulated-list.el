@@ -1,6 +1,6 @@
 ;;; tabulated-list.el --- generic major mode for tabulated lists.
 
-;; Copyright (C) 2011 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2012 Free Software Foundation, Inc.
 
 ;; Author: Chong Yidong <cyd@stupidchicken.com>
 ;; Keywords: extensions, lisp
@@ -146,7 +146,7 @@ If ADVANCE is non-nil, move forward by one line afterwards."
 (defvar tabulated-list-glyphless-char-display
   (let ((table (make-char-table 'glyphless-char-display nil)))
     (set-char-table-parent table glyphless-char-display)
-    ;; Some text terminals can't display the unicode arrows; be safe.
+    ;; Some text terminals can't display the Unicode arrows; be safe.
     (aset table 9650 (cons nil "^"))
     (aset table 9660 (cons nil "v"))
     table)
@@ -321,7 +321,7 @@ This mode is usually not used directly; instead, other major
 modes are derived from it, using `define-derived-mode'.
 
 In this major mode, the buffer is divided into multiple columns,
-which are labelled using the header line.  Each non-empty line
+which are labeled using the header line.  Each non-empty line
 belongs to one \"entry\", and the entries can be sorted according
 to their column values.
 

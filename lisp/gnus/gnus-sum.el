@@ -1,6 +1,6 @@
 ;;; gnus-sum.el --- summary mode commands for Gnus
 
-;; Copyright (C) 1996-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -364,7 +364,7 @@ newsgroups, set the variable to nil in `gnus-select-group-hook'."
 This variable can either be the symbols `first' (place point on the
 first subject), `unread' (place point on the subject line of the first
 unread article), `best' (place point on the subject line of the
-higest-scored article), `unseen' (place point on the subject line of
+highest-scored article), `unseen' (place point on the subject line of
 the first unseen article), `unseen-or-unread' (place point on the subject
 line of the first unseen article or, if all articles have been seen, on the
 subject line of the first unread article), or a function to be called to
@@ -1657,7 +1657,7 @@ For example:
 
 This variable is a list of FUNCTION or (REGEXP . FUNCTION).  If item
 is FUNCTION, FUNCTION will be apply to all newsgroups.  If item is a
-\(REGEXP . FUNCTION), FUNCTION will be only apply to thes newsgroups
+\(REGEXP . FUNCTION), FUNCTION will be applied only to the newsgroups
 whose names match REGEXP.
 
 For example:
@@ -2529,7 +2529,7 @@ gnus-summary-show-article-from-menu-as-charset-%s" cs))))
 	      ["Unshar and save" gnus-uu-decode-unshar-and-save t]
 	      ["Save" gnus-uu-decode-save t]
 	      ["Binhex" gnus-uu-decode-binhex t]
-	      ["Postscript" gnus-uu-decode-postscript t]
+	      ["PostScript" gnus-uu-decode-postscript t]
 	      ["All MIME parts" gnus-summary-save-parts t])
 	     ("Cache"
 	      ["Enter article" gnus-cache-enter-article t]
@@ -2835,7 +2835,7 @@ Setter function for custom variables."
 				   'gnus-summary-tool-bar-retro)
   "Specifies the Gnus summary tool bar.
 
-It can be either a list or a symbol refering to a list.  See
+It can be either a list or a symbol referring to a list.  See
 `gmm-tool-bar-from-list' for the format of the list.  The
 default key map is `gnus-summary-mode-map'.
 
@@ -2969,7 +2969,7 @@ When FORCE, rebuild the tool bar."
 					'gnus-summary-mode-map)))
       (when map
 	;; Need to set `gnus-summary-tool-bar-map' because `gnus-article-mode'
-	;; uses it's value.
+	;; uses its value.
 	(setq gnus-summary-tool-bar-map map))))
   (set (make-local-variable 'tool-bar-map) gnus-summary-tool-bar-map))
 
@@ -4257,7 +4257,7 @@ If NO-DISPLAY, don't generate a summary buffer."
     result))
 
 (defun gnus-sort-gathered-threads (threads)
-  "Sort subtreads inside each gathered thread by `gnus-sort-gathered-threads-function'."
+  "Sort subthreads inside each gathered thread by `gnus-sort-gathered-threads-function'."
   (let ((result threads))
     (while threads
       (when (stringp (caar threads))
@@ -4727,7 +4727,7 @@ If LINE, insert the rebuilt thread starting on line LINE."
       (car headers))))
 
 (defun gnus-parent-headers (in-headers &optional generation)
-  "Return the headers of the GENERATIONeth parent of HEADERS."
+  "Return the headers of the GENERATIONth parent of HEADERS."
   (unless generation
     (setq generation 1))
   (let ((parent t)
@@ -5859,15 +5859,15 @@ If SELECT-ARTICLES, only select those articles from GROUP."
 			  (read-string
 			   (if only-read-p
 			       (format
-			      "How many articles from %s (available %d, default %d): "
-			      (gnus-group-decoded-name
-			       (gnus-group-real-name gnus-newsgroup-name))
-			      number default)
-			     (format
-				"How many articles from %s (%d available): "
+				"How many articles from %s (available %d, default %d): "
 				(gnus-group-decoded-name
 				 (gnus-group-real-name gnus-newsgroup-name))
-				default))
+				number default)
+			     (format
+			      "How many articles from %s (%d default): "
+			      (gnus-group-decoded-name
+			       (gnus-group-real-name gnus-newsgroup-name))
+			      default))
 			   nil
 			   nil
 			   (number-to-string default))))
@@ -7087,7 +7087,7 @@ With ARG, turn line truncation on if ARG is positive."
 (defun gnus-summary-find-for-reselect ()
   "Return the number of an article to stay on across a reselect.
 The current article is considered, then following articles, then previous
-articles.  An article is sought which is not cancelled and isn't a temporary
+articles.  An article is sought which is not canceled and isn't a temporary
 insertion from another group.  If there's no such then return a dummy 0."
   (let (found)
     (dolist (rev '(nil t))
@@ -9611,9 +9611,12 @@ C-u g', show the raw article."
 	(when (gnus-summary-goto-subject (cdr gnus-article-current) nil t)
 	  (gnus-summary-update-secondary-mark (cdr gnus-article-current))))))
    ((not arg)
-    (require 'shr)
-    (let ((shr-ignore-cache t))
-      ;; Select the article the normal way.
+    ;; Select the article the normal way.
+    (if (eq mm-text-html-renderer 'shr)
+	(progn
+	  (require 'shr)
+	  (let ((shr-ignore-cache t))
+	    (gnus-summary-select-article nil 'force)))
       (gnus-summary-select-article nil 'force)))
    ((equal arg '(16))
     ;; C-u C-u g
@@ -11913,7 +11916,7 @@ will not be marked as saved."
 	  ;; This is a pseudo-article.
 	  (if (assq 'name header)
 	      (gnus-copy-file (cdr (assq 'name header)))
-	    (gnus-message 1 "Article %d is unsaveable" article))
+	    (gnus-message 1 "Article %d is unsavable" article))
 	;; This is a real article.
 	(save-window-excursion
 	  (gnus-summary-select-article decode decode nil article)

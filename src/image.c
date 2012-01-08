@@ -1,5 +1,5 @@
 /* Functions for image support on window system.
-   Copyright (C) 1989, 1992-2011 Free Software Foundation, Inc.
+   Copyright (C) 1989, 1992-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -2015,7 +2015,7 @@ x_create_x_image_and_pixmap (struct frame *f, int width, int height, int depth,
   /* Bitmaps with a depth less than 16 need a palette.  */
   /* BITMAPINFO structure already contains the first RGBQUAD.  */
   if (depth < 16)
-    palette_colors = 1 << depth - 1;
+    palette_colors = 1 << (depth - 1);
 
   *ximg = xmalloc (sizeof (XImage) + palette_colors * sizeof (RGBQUAD));
 
@@ -7552,7 +7552,7 @@ imagemagick_image_p (Lisp_Object object)
 }
 
 /* The GIF library also defines DrawRectangle, but its never used in Emacs.
-   Therefore rename the function so it doesnt collide with ImageMagick.  */
+   Therefore rename the function so it doesn't collide with ImageMagick.  */
 #define DrawRectangle DrawRectangleGif
 #include <wand/MagickWand.h>
 
@@ -7563,6 +7563,22 @@ imagemagick_image_p (Lisp_Object object)
 extern WandExport void PixelGetMagickColor (const PixelWand *,
 					    MagickPixelPacket *);
 #endif
+
+/* Log ImageMagick error message.
+   Useful when a ImageMagick function returns the status `MagickFalse'.  */
+
+static void
+imagemagick_error (MagickWand *wand)
+{
+  char *description;
+  ExceptionType severity;
+
+  description = MagickGetException (wand, &severity);
+  image_error ("ImageMagick error: %s",
+	       make_string (description, strlen (description)),
+	       Qnil);
+  description = (char *) MagickRelinquishMemory (description);
+}
 
 /* Helper function for imagemagick_load, which does the actual loading
    given contents and size, apart from frame and image structures,
@@ -7618,7 +7634,8 @@ imagemagick_load_image (struct frame *f, struct image *img,
   image = image_spec_value (img->spec, QCindex, NULL);
   ino = INTEGERP (image) ? XFASTINT (image) : 0;
   ping_wand = NewMagickWand ();
-  MagickSetResolution (ping_wand, 2, 2);
+  /* MagickSetResolution (ping_wand, 2, 2);   (Bug#10112)  */
+
   if (filename != NULL)
     {
       status = MagickPingImage (ping_wand, filename);
@@ -7626,6 +7643,13 @@ imagemagick_load_image (struct frame *f, struct image *img,
   else
     {
       status = MagickPingImageBlob (ping_wand, contents, size);
+    }
+
+  if (status == MagickFalse)
+    {
+      imagemagick_error (ping_wand);
+      DestroyMagickWand (ping_wand);
+      return 0;
     }
 
   if (! (0 <= ino && ino < MagickGetNumberImages (ping_wand)))
@@ -7667,7 +7691,10 @@ imagemagick_load_image (struct frame *f, struct image *img,
     {
       image_wand = NewMagickWand ();
       if (MagickReadImageBlob (image_wand, contents, size) == MagickFalse)
-	goto imagemagick_error;
+	{
+	  imagemagick_error (image_wand);
+	  goto imagemagick_error;
+	}
     }
 
   /* If width and/or height is set in the display spec assume we want
@@ -7695,6 +7722,7 @@ imagemagick_load_image (struct frame *f, struct image *img,
       if (status == MagickFalse)
 	{
 	  image_error ("Imagemagick scale failed", Qnil, Qnil);
+	  imagemagick_error (image_wand);
 	  goto imagemagick_error;
 	}
     }
@@ -7749,12 +7777,13 @@ imagemagick_load_image (struct frame *f, struct image *img,
       if (status == MagickFalse)
         {
           image_error ("Imagemagick image rotate failed", Qnil, Qnil);
+	  imagemagick_error (image_wand);
           goto imagemagick_error;
         }
     }
 
   /* Finally we are done manipulating the image.  Figure out the
-     resulting width/height and transfer ownerwship to Emacs.  */
+     resulting width/height and transfer ownership to Emacs.  */
   height = MagickGetImageHeight (image_wand);
   width = MagickGetImageWidth (image_wand);
 
@@ -7786,7 +7815,7 @@ imagemagick_load_image (struct frame *f, struct image *img,
           goto imagemagick_error;
         }
 
-      /* Copy imagegmagick image to x with primitive yet robust pixel
+      /* Copy imagemagick image to x with primitive yet robust pixel
          pusher loop.  This has been tested a lot with many different
          images.  */
 
@@ -7824,7 +7853,7 @@ imagemagick_load_image (struct frame *f, struct image *img,
 
   if (imagemagick_rendermethod == 1)
     {
-      /* Magicexportimage is normaly faster than pixelpushing.  This
+      /* Magicexportimage is normally faster than pixelpushing.  This
          method is also well tested. Some aspects of this method are
          ad-hoc and needs to be more researched. */
       int imagedepth = 24;/*MagickGetImageDepth(image_wand);*/
@@ -7841,7 +7870,7 @@ imagemagick_load_image (struct frame *f, struct image *img,
 	}
 
 
-      /* Oddly, the below code doesnt seem to work:*/
+      /* Oddly, the below code doesn't seem to work:*/
       /* switch(ximg->bitmap_unit){ */
       /* case 8: */
       /*   pixelwidth=CharPixel; */
@@ -7870,7 +7899,7 @@ imagemagick_load_image (struct frame *f, struct image *img,
 			       /*&(img->pixmap));*/
 			       ximg->data);
 #else
-      image_error ("You dont have MagickExportImagePixels, upgrade ImageMagick!",
+      image_error ("You don't have MagickExportImagePixels, upgrade ImageMagick!",
 		   Qnil, Qnil);
 #endif
     }
@@ -7973,7 +8002,7 @@ recognize as images, such as C.  See `imagemagick-types-inhibit'.  */)
       Qimagemagicktype = intern (imtypes[i]);
       typelist = Fcons (Qimagemagicktype, typelist);
     }
-  return typelist;
+  return Fnreverse (typelist);
 }
 
 #endif	/* defined (HAVE_IMAGEMAGICK) */
@@ -8781,7 +8810,7 @@ syms_of_image (void)
      operation on GNU/Linux of calling dump-emacs after loading some images.  */
   image_types = NULL;
 
-  /* Must be defined now becase we're going to update it below, while
+  /* Must be defined now because we're going to update it below, while
      defining the supported image types.  */
   DEFVAR_LISP ("image-types", Vimage_types,
     doc: /* List of potentially supported image types.

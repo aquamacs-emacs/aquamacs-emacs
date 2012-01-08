@@ -1,6 +1,6 @@
 ;;; js.el --- Major mode for editing JavaScript
 
-;; Copyright (C) 2008-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2012 Free Software Foundation, Inc.
 
 ;; Author: Karl Landstrom <karl.landstrom@brgeight.se>
 ;;         Daniel Colascione <dan.colascione@gmail.com>
@@ -369,7 +369,8 @@ Match group 1 is the name of the macro.")
 ;; must be h-end.
 ;;
 ;; js--pitem instances are never modified (with the exception
-;; of the b-end field). Instead, modified copies are added at subseqnce parse points.
+;; of the b-end field). Instead, modified copies are added at
+;; subsequence parse points.
 ;; (The exception for b-end and its caveats is described below.)
 ;;
 
@@ -1295,7 +1296,7 @@ LIMIT defaults to point."
 ;; Like (up-list -1), but only considers lists that end nearby"
 (defun js--up-nearby-list ()
   (save-restriction
-    ;; Look at a very small region so our compuation time doesn't
+    ;; Look at a very small region so our computation time doesn't
     ;; explode in pathological cases.
     (narrow-to-region (max (point-min) (- (point) 500)) (point))
     (up-list -1)))
@@ -1599,7 +1600,7 @@ will be returned."
 
 (defun js-syntactic-context ()
   "Return the JavaScript syntactic context at point.
-When called interatively, also display a message with that
+When called interactively, also display a message with that
 context."
   (interactive)
   (let* ((syntactic-context (js--syntactic-context-from-pstate
@@ -3000,7 +3001,7 @@ browser, respectively."
                       '(js> ((fifth hitab) "selectedTab") (fourth hitab))
                       cmds)))
 
-                  ;; Hilighting whole window
+                  ;; Highlighting whole window
                   ((third hitab)
                    (push '(js! ((third hitab) "document"
                                 "documentElement" "setAttribute")
@@ -3352,7 +3353,7 @@ If one hasn't been set, or if it's stale, prompt for a new one."
   ;; etc. and produce maddening "unbalanced parenthesis" errors.
   ;; When we attempt to find the error and scroll to the portion of
   ;; the buffer containing the problem, JIT-lock will apply the
-  ;; correct syntax to the regular expresion literal and the problem
+  ;; correct syntax to the regular expression literal and the problem
   ;; will mysteriously disappear.
   ;; FIXME: We should actually do this fontification lazily by adding
   ;; calls to syntax-propertize wherever it's really needed.

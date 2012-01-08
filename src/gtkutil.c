@@ -1,6 +1,6 @@
 /* Functions for creating and updating GTK widgets.
 
-Copyright (C) 2003-2011  Free Software Foundation, Inc.
+Copyright (C) 2003-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -127,7 +127,7 @@ xg_set_screen (GtkWidget *w, FRAME_PTR f)
 
    Returns non-zero if display could be opened, zero if display could not
    be opened, and less than zero if the GTK version doesn't support
-   multipe displays.  */
+   multiple displays.  */
 
 void
 xg_display_open (char *display_name, Display **dpy)
@@ -348,7 +348,7 @@ file_for_image (Lisp_Object image)
 
 /* For the image defined in IMG, make and return a GtkImage.  For displays with
    8 planes or less we must make a GdkPixbuf and apply the mask manually.
-   Otherwise the highlightning and dimming the tool bar code in GTK does
+   Otherwise the highlighting and dimming the tool bar code in GTK does
    will look bad.  For display with more than 8 planes we just use the
    pixmap and mask directly.  For monochrome displays, GTK doesn't seem
    able to use external pixmaps, it looks bad whatever we do.
@@ -891,7 +891,7 @@ xg_frame_resized (FRAME_PTR f, int pixelwidth, int pixelheight)
     }
 }
 
-/* Resize the outer window of frame F after chainging the height.
+/* Resize the outer window of frame F after changing the height.
    COLUMNS/ROWS is the size the edit area shall have after the resize.  */
 
 void
@@ -987,6 +987,7 @@ xg_win_to_widget (Display *dpy, Window wdesc)
     {
       GdkEvent event;
       event.any.window = gdkwin;
+      event.any.type = GDK_NOTHING;
       gwdesc = gtk_get_event_widget (&event);
     }
 
@@ -1098,6 +1099,14 @@ xg_create_frame_widgets (FRAME_PTR f)
     wtop = gtk_plug_new (f->output_data.x->parent_desc);
   else
     wtop = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  /* gtk_window_set_has_resize_grip is a Gtk+ 3.0 function but Ubuntu
+     has backported it to Gtk+ 2.0 and they add the resize grip for
+     Gtk+ 2.0 applications also.  But it has a bug that makes Emacs loop
+     forever, so disable the grip.  */
+#if GTK_MAJOR_VERSION < 3 && defined (HAVE_GTK_WINDOW_SET_HAS_RESIZE_GRIP)
+  gtk_window_set_has_resize_grip (GTK_WINDOW (wtop), FALSE);
+#endif
 
   xg_set_screen (wtop, f);
 
@@ -1422,7 +1431,7 @@ get_dialog_title (char key)
 /* Callback for dialogs that get WM_DELETE_WINDOW.  We pop down
    the dialog, but return TRUE so the event does not propagate further
    in GTK.  This prevents GTK from destroying the dialog widget automatically
-   and we can always destrou the widget manually, regardles of how
+   and we can always destroy the widget manually, regardless of how
    it was popped down (button press or WM_DELETE_WINDOW).
    W is the dialog widget.
    EVENT is the GdkEvent that represents WM_DELETE_WINDOW (not used).
@@ -2293,7 +2302,7 @@ tearoff_activate (GtkWidget *widget, gpointer client_data)
 
 
 /* Create a menu item widget, and connect the callbacks.
-   ITEM decribes the menu item.
+   ITEM describes the menu item.
    F is the frame the created menu belongs to.
    SELECT_CB is the callback to use when a menu item is selected.
    HIGHLIGHT_CB is the callback to call when entering/leaving menu items.
@@ -2362,7 +2371,7 @@ xg_create_one_menuitem (widget_value *item,
    HIGHLIGHT_CB is the callback to call when entering/leaving menu items.
    POP_UP_P is non-zero if we shall create a popup menu.
    MENU_BAR_P is non-zero if we shall create a menu bar.
-   ADD_TEAROFF_P is non-zero if we shall add a teroff menu item.  Ignored
+   ADD_TEAROFF_P is non-zero if we shall add a tearoff menu item.  Ignored
    if MENU_BAR_P is non-zero.
    TOPMENU is the topmost GtkWidget that others shall be placed under.
    It may be NULL, in that case we create the appropriate widget
@@ -3043,7 +3052,7 @@ xg_update_submenu (GtkWidget *submenu,
       }
   }
 
-  /* Remove widgets from first structual change.  */
+  /* Remove widgets from first structural change.  */
   if (iter)
     {
       /* If we are adding new menu items below, we must remove from
@@ -3254,6 +3263,7 @@ xg_event_is_for_menubar (FRAME_PTR f, XEvent *event)
   gw = gdk_x11_window_lookup_for_display (gdpy, event->xbutton.window);
   if (! gw) return 0;
   gevent.any.window = gw;
+  gevent.any.type = GDK_NOTHING;
   gwdesc = gtk_get_event_widget (&gevent);
   if (! gwdesc) return 0;
   if (! GTK_IS_MENU_BAR (gwdesc)
@@ -4235,7 +4245,7 @@ xg_make_tool_item (FRAME_PTR f,
   gtk_container_add (GTK_CONTAINER (weventbox), wb);
   gtk_container_add (GTK_CONTAINER (ti), weventbox);
 
-  if (wimage)
+  if (wimage || label)
     {
       intptr_t ii = i;
       gpointer gi = (gpointer) ii;
@@ -4260,7 +4270,7 @@ xg_make_tool_item (FRAME_PTR f,
 #endif
       gtk_tool_item_set_homogeneous (ti, FALSE);
 
-      /* Callback to save modifyer mask (Shift/Control, etc).  GTK makes
+      /* Callback to save modifier mask (Shift/Control, etc).  GTK makes
          no distinction based on modifiers in the activate callback,
          so we have to do it ourselves.  */
       g_signal_connect (wb, "button-release-event",
@@ -4300,21 +4310,21 @@ xg_tool_item_stale_p (GtkWidget *wbutton, const char *stock_name,
   GtkWidget *wlbl = xg_get_tool_bar_widgets (vb, &wimage);
 
   /* Check if the tool icon matches.  */
-  if (stock_name)
+  if (stock_name && wimage)
     {
       old = g_object_get_data (G_OBJECT (wimage),
 			       XG_TOOL_BAR_STOCK_NAME);
       if (!old || strcmp (old, stock_name))
 	return 1;
     }
-  else if (icon_name)
+  else if (icon_name && wimage)
     {
       old = g_object_get_data (G_OBJECT (wimage),
 			       XG_TOOL_BAR_ICON_NAME);
       if (!old || strcmp (old, icon_name))
 	return 1;
     }
-  else
+  else if (wimage)
     {
       gpointer gold_img = g_object_get_data (G_OBJECT (wimage),
 					    XG_TOOL_BAR_IMAGE_DATA);
@@ -4329,7 +4339,7 @@ xg_tool_item_stale_p (GtkWidget *wbutton, const char *stock_name,
     return 1;
 
   /* Ensure label is correct.  */
-  if (label)
+  if (label && wlbl)
     gtk_label_set_text (GTK_LABEL (wlbl), label);
   return 0;
 }

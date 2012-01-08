@@ -1,6 +1,6 @@
 ;;; bibtex.el --- BibTeX mode for GNU Emacs -*- lexical-binding: t -*-
 
-;; Copyright (C) 1992, 1994-1999, 2001-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1992, 1994-1999, 2001-2012  Free Software Foundation, Inc.
 
 ;; Author: Stefan Schoef <schoef@offis.uni-oldenburg.de>
 ;;      Bengt Martensson <bengt@mathematik.uni-Bremen.de>
@@ -1451,12 +1451,12 @@ Set this variable before loading BibTeX mode."
 (defvar bibtex-field-braces-opt nil
   "Optimized value of `bibtex-field-braces-alist'.
 Created by `bibtex-field-re-init'.
-It is a an alist with elements (FIELD . REGEXP).")
+It is an alist with elements (FIELD . REGEXP).")
 
 (defvar bibtex-field-strings-opt nil
   "Optimized value of `bibtex-field-strings-alist'.
 Created by `bibtex-field-re-init'.
-It is a an alist with elements (FIELD RULE1 RULE2 ...),
+It is an alist with elements (FIELD RULE1 RULE2 ...),
 where each RULE is (REGEXP . TO-STR).")
 
 (defvar bibtex-pop-previous-search-point nil
@@ -3595,7 +3595,7 @@ If optional arg CONTENT is non-nil extract content of text fields."
 (defun bibtex-autofill-entry ()
   "Try to fill fields of current BibTeX entry based on neighboring entries.
 The current entry must have a key.  Determine the neighboring entry
-\(previouse or next\) whose key is more similar to the key of the current
+\(previous or next\) whose key is more similar to the key of the current
 entry.  For all empty fields of the current entry insert the corresponding
 field contents of the neighboring entry.  Finally try to update the text
 based on the difference between the keys of the neighboring and the current
@@ -3941,7 +3941,7 @@ If `bibtex-files' is non-nil, search all these files.
 Otherwise the search is limited to the current buffer.
 Return position of entry if CROSSREF-KEY is found or nil otherwise.
 If CROSSREF-KEY is in the same buffer like current entry but before it
-an error is signaled.  If NOERRER is non-nil this error is suppressed.
+an error is signaled.  If NOERROR is non-nil this error is suppressed.
 Optional arg PNT is the position of the referencing entry.  It defaults
 to position of point.  If optional arg SPLIT is non-nil, split window
 so that both the referencing and the crossrefed entry are displayed.
@@ -5140,7 +5140,7 @@ Return the URL or nil if none can be generated."
 	  (message "No URL known."))
       url)))
 
-;; We could combine multiple seach results with set operations
+;; We could combine multiple search results with set operations
 ;; AND, OR, MINUS, and NOT.  Would this be useful?
 ;; How complicated are searches in real life?
 ;; We could also have other searches such as "publication year newer than...".

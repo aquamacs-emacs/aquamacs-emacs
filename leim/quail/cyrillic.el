@@ -1,6 +1,6 @@
 ;;; cyrillic.el --- Quail package for inputting Cyrillic characters
 
-;; Copyright (C) 1997-1998, 2001-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1997-1998, 2001-2012  Free Software Foundation, Inc.
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 ;;   2006, 2007, 2008, 2009, 2010, 2011
 ;;   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -27,7 +27,7 @@
 ;;; Commentary:
 
 ;; These methods use a mixture of 8859-5 and Unicode.  Quail, used
-;; with ucs-tables provides suport for translating on the fly to
+;; with ucs-tables provides support for translating on the fly to
 ;; what's appropriate for aa buffer's file coding system, so the
 ;; encoding shouldn't matter too much provided it supports the
 ;; necessary characters.
@@ -42,7 +42,7 @@
 ;; in typewriters for ages but it has been superseded on desktops by
 ;; a variation of this layout, implemented in M$ Windows software.
 ;; The Windows layout is greatly preferred because of the comma and
-;; period being placed more conviniently and, of course, because of
+;; period being placed more conveniently and, of course, because of
 ;; the popularity of Windows software. This layout is a common option
 ;; in X Windows and console layouts for GNU/Linux.  [See
 ;; `russian-computer' below.]
@@ -163,7 +163,7 @@
 ;; commented out because quail-update-leim-list-file ignores
 ;; commented-out lines.
 (if nil
-    (quail-define-package 
+    (quail-define-package
      "cyrillic-jcuken" "Russian" ",L69(B" nil
      ",L9FC:5=(B Russian typewriter layout (ISO 8859-5 encoding)."))
 
@@ -608,7 +608,7 @@
 ;; layout.  In fact, Microsoft shipped for a while a layout that was lacking
 ;; two characters, precisely the "GHE_WITH_UPTURN" and the apostrophe.  The
 ;; latest versions of Windows software do have the "GHE_WITH_UPTURN" in the
-;; ukrainian keyborad layout but the apostrophe is still not there, whereas
+;; ukrainian keyboard layout but the apostrophe is still not there, whereas
 ;; there is one letter, "Cyrillic_YO", not used in ukrainian.  Ukrainians
 ;; normally replace the "Cyrillic_YO" by the apostrophe sign and live
 ;; happily with this little change.  [See "ukrainian-computer" below.]

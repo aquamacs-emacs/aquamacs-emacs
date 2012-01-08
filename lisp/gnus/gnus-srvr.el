@@ -1,6 +1,6 @@
 ;;; gnus-srvr.el --- virtual server support for Gnus
 
-;; Copyright (C) 1995-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1995-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -553,7 +553,7 @@ The following commands are available:
   (gnus-server-list-servers))
 
 (defun gnus-server-copy-server (from to)
-  "Copy a server definiton to a new name."
+  "Copy a server definition to a new name."
   (interactive
    (list
     (or (gnus-server-server-name)

@@ -1,6 +1,6 @@
 ;;; ucs-normalize.el --- Unicode normalization NFC/NFD/NFKD/NFKC
 
-;; Copyright (C) 2009-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2009-2012  Free Software Foundation, Inc.
 
 ;; Author: Taichi Kawabata <kawabata.taichi@gmail.com>
 ;; Keywords: unicode, normalization
@@ -227,7 +227,7 @@ Note that Hangul are excluded.")
          (eval-when-compile decomposition-pair-to-composition)))
 
 (defun ucs-normalize-primary-composite (decomposition-pair composition-predicate)
-  "Convert DECOMPOSITION-PAIR to primay composite using COMPOSITION-PREDICATE."
+  "Convert DECOMPOSITION-PAIR to primary composite using COMPOSITION-PREDICATE."
   (let ((char (or (gethash decomposition-pair
                            ucs-normalize-decomposition-pair-to-primary-composite)
                   (and (<= #x1100 (car decomposition-pair))

@@ -1,6 +1,6 @@
 ;;; font-lock.el --- Electric font lock mode
 
-;; Copyright (C) 1992-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1992-2012  Free Software Foundation, Inc.
 
 ;; Author: Jamie Zawinski
 ;;	Richard Stallman
@@ -228,8 +228,11 @@
 ;; User variables.
 
 (defcustom font-lock-maximum-size 256000
-  "Maximum size of a buffer for buffer fontification.
-Only buffers less than this can be fontified when Font Lock mode is turned on.
+  "Maximum buffer size for unsupported buffer fontification.
+When `font-lock-support-mode' is nil, only buffers smaller than
+this are fontified.  This variable has no effect if a Font Lock
+support mode (usually `jit-lock-mode') is enabled.
+
 If nil, means size is irrelevant.
 If a list, each element should be a cons pair of the form (MAJOR-MODE . SIZE),
 where MAJOR-MODE is a symbol or t (meaning the default).  For example:
@@ -248,6 +251,7 @@ for buffers in Rmail mode, and size is irrelevant otherwise."
 				      (const :tag "none" nil)
 				      (integer :tag "size")))))
   :group 'font-lock)
+(make-obsolete-variable 'font-lock-maximum-size nil "24.1")
 
 (defcustom font-lock-maximum-decoration t
   "Maximum decoration level for fontification.
@@ -290,7 +294,7 @@ If a number, only buffers greater than this size have fontification messages."
 ;; and they give users another mechanism for changing face appearance.
 ;; We now allow a FACENAME in `font-lock-keywords' to be any expression that
 ;; returns a face.  So the easiest thing is to continue using these variables,
-;; rather than sometimes evaling FACENAME and sometimes not.  sm.
+;; rather than sometimes evalling FACENAME and sometimes not.  sm.
 
 ;; Note that in new code, in the vast majority of cases there is no
 ;; need to create variables that specify face names.  Simply using
@@ -977,7 +981,7 @@ The value of this variable is used when Font Lock mode is turned on."
 ;; rules one way and C code another.  Neat!
 ;;
 ;; A further reason to use the fontification indirection feature is when the
-;; default syntactual fontification, or the default fontification in general,
+;; default syntactic fontification, or the default fontification in general,
 ;; is not flexible enough for a particular major mode.  For example, perhaps
 ;; comments are just too hairy for `font-lock-fontify-syntactically-region' to
 ;; cope with.  You need to write your own version of that function, e.g.,
@@ -1738,7 +1742,7 @@ If SYNTACTIC-KEYWORDS is non-nil, it means these keywords are used for
 	 keyword)))
 
 (defun font-lock-eval-keywords (keywords)
-  "Evalulate KEYWORDS if a function (funcall) or variable (eval) name."
+  "Evaluate KEYWORDS if a function (funcall) or variable (eval) name."
   (if (listp keywords)
       keywords
     (font-lock-eval-keywords (if (fboundp keywords)

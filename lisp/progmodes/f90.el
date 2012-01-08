@@ -1,6 +1,6 @@
 ;;; f90.el --- Fortran-90 mode (free format)
 
-;; Copyright (C) 1995-1997, 2000-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1995-1997, 2000-2012  Free Software Foundation, Inc.
 
 ;; Author: Torbjörn Einarsson <Torbjorn.Einarsson@era.ericsson.se>
 ;; Maintainer: Glenn Morris <rgm@gnu.org>
@@ -724,7 +724,7 @@ Can be overridden by the value of `font-lock-maximum-decoration'.")
          ["Reset to Saved" Custom-reset-saved :active t
           :help "Reset all edited or set settings to saved"]
          ["Reset to Standard Settings" Custom-reset-standard :active t
-          :help "Erase all cusomizations in buffer"]
+          :help "Erase all customizations in buffer"]
          )
         "--"
         ["Indent Subprogram" f90-indent-subprogram t]
@@ -1578,7 +1578,7 @@ Return nil if no later statement is found."
     (while (and (setq not-last-statement
                       (and (zerop (forward-line 1))
                            (not (eobp))))
-                (looking-at "[ \t0-9]*\\(!\\|$\\)")))
+                (looking-at "[ \t0-9]*\\(!\\|$\\|#\\)")))
     not-last-statement))
 
 (defun f90-beginning-of-subprogram ()
@@ -1837,7 +1837,7 @@ after indenting."
     (and (< (point) pos)
          (goto-char pos))
     (if auto-fill-function
-        ;; GM NO-UPDATE not honoured, since this calls f90-update-line.
+        ;; GM NO-UPDATE not honored, since this calls f90-update-line.
         (f90-do-auto-fill)
       (or no-update (f90-update-line)))
     (set-marker pos nil)))

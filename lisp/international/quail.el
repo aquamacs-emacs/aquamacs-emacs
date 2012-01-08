@@ -1,6 +1,6 @@
 ;;; quail.el --- provides simple input method for multilingual text
 
-;; Copyright (C) 1997-1998, 2000-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1997-1998, 2000-2012  Free Software Foundation, Inc.
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
 ;;   2005, 2006, 2007, 2008, 2009, 2010, 2011
 ;;   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -43,7 +43,7 @@
 ;; CONVERSION-KEYS argument of the Quail package.
 
 ;; [There was an input method for Mule 2.3 called `Tamago' from the
-;; Japanese `TAkusan MAtasete GOmenasai', or `Sorry for having you
+;; Japanese `TAkusan MAtasete GOmen-nasai', or `Sorry for having you
 ;; wait so long'; this couldn't be included in Emacs 20.  `Tamago' is
 ;; Japanese for `egg' (implicitly a hen's egg).  Handa-san made a
 ;; smaller and simpler system; the smaller quail egg is also eaten in
@@ -1377,7 +1377,7 @@ Return the input string."
 	  (set-buffer-modified-p modified-p)
 	  (quail-show-guidance)
 	  (let* ((prompt (if input-method-use-echo-area
-			     (format "%s%s %s" 
+			     (format "%s%s %s"
 				     (or input-method-previous-message "")
 				     quail-current-str
 				     quail-guidance-str)))
@@ -1443,7 +1443,7 @@ Return the input string."
 		(quail-setup-overlays nil)))
 	  (quail-show-guidance)
 	  (let* ((prompt (if input-method-use-echo-area
-			     (format "%s%s%s %s" 
+			     (format "%s%s%s %s"
 				     (or input-method-previous-message "")
 				     quail-conversion-str
 				     quail-current-str
@@ -2011,7 +2011,7 @@ minibuffer and the selected frame has no other windows)."
                 (set-window-dedicated-p win t))
 	      (quail-minibuffer-message
 	       (format " [%s]" current-input-method-title)))
-	  ;; Show the guidance in the next line of the currrent
+	  ;; Show the guidance in the next line of the current
 	  ;; minibuffer.
 	  (quail-minibuffer-message
 	   (format "  [%s]\n%s"
@@ -2125,7 +2125,7 @@ minibuffer and the selected frame has no other windows)."
 			       (- quail-guidance-translations-starting-column
 				  7 (string-width str))
 			       32))))
-	    (setq str (format "%s(%02d/%s)" 
+	    (setq str (format "%s(%02d/%s)"
 			      str (nth 3 indices)
 			      (if (nth 4 indices)
 				  (format "%02d" (nth 4 indices))
@@ -2135,7 +2135,7 @@ minibuffer and the selected frame has no other windows)."
 		    (trans (aref (cdr quail-current-translations) idx)))
 		(or (stringp trans)
 		    (setq trans (string trans)))
-		(setq str (format "%s %d.%s" 
+		(setq str (format "%s %d.%s"
 				  str
 				  (if (= (- idx start) 9) 0
 				    (1+ (- idx start)))
@@ -2701,9 +2701,9 @@ KEY BINDINGS FOR CONVERSION
 
 (put 'quail-decode-map 'char-table-extra-slots 0)
 
-;; Generate a halfly-cooked decode map (char-table) for the current
+;; Generate a half-cooked decode map (char-table) for the current
 ;; Quail map.  An element for a character C is a key string or a list
-;; of a key strings to type to input C.  The lenth of key string is at
+;; of a key strings to type to input C.  The length of key string is at
 ;; most 2.  If it is 2, more keys may be required to input C.
 
 (defun quail-gen-decode-map ()
@@ -2787,7 +2787,7 @@ If CHAR is an ASCII character and can be input by typing itself, return t."
 		(cdr decode-map)))
       (let ((key-head (aref decode-map char)))
 	(if (stringp key-head)
-	    (setq key-list (quail-find-key1 
+	    (setq key-list (quail-find-key1
 			    (quail-lookup-key key-head nil t)
 			    key-head char nil))
 	  (mapc #'(lambda (elt)
@@ -2832,7 +2832,7 @@ STATE-n are symbols to denote state.  STATE-0 is the initial state.
 TRANSITION-n-m are transition rules from STATE-n, and have the form
 \(RULES . STATE-x) or RULES, where STATE-x is one of STATE-n above,
 RULES is a symbol whose value is an alist of keys \(string) vs the
-correponding characters or strings.  The format of the symbol value of
+corresponding characters or strings.  The format of the symbol value of
 RULES is the same as arguments to `quail-define-rules'.
 
 If TRANSITION-n-m has the form (RULES . STATE-x), it means that
@@ -2846,7 +2846,7 @@ The generated map can be set for the current Quail package by the
 function `quail-install-map' (which see)."
   (let ((state-alist (mapcar (lambda (x) (list (car x))) table))
 	tail elt)
-    ;; STATE-ALIST is an alist of states vs the correponding sub Quail
+    ;; STATE-ALIST is an alist of states vs the corresponding sub Quail
     ;; map.  It is now initialized to ((STATE-0) (STATE-1) ...).
     ;; Set key sequence mapping rules in cdr part of each element.
     (while table
@@ -2974,7 +2974,7 @@ of each directory."
       (if (not (re-search-forward leim-list-entry-regexp nil t))
 	  nil
 
-	;; Remove garbages after the header.
+	;; Remove garbage after the header.
 	(goto-char (match-beginning 0))
 	(if (< pos (point))
 	    (delete-region pos (point)))

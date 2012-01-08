@@ -1,6 +1,6 @@
 ;;; rcirc.el --- default, simple IRC client.
 
-;; Copyright (C) 2005-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2005-2012  Free Software Foundation, Inc.
 
 ;; Author: Ryan Yeske <rcyeske@gmail.com>
 ;; Maintainers: Ryan Yeske <rcyeske@gmail.com>,
@@ -659,7 +659,7 @@ Functions are called with PROCESS and SENTINEL arguments.")
 (defun rcirc-disconnect-buffer (&optional buffer)
   (with-current-buffer (or buffer (current-buffer))
     ;; set rcirc-target to nil for each channel so cleanup
-    ;; doesnt happen when we reconnect
+    ;; doesn't happen when we reconnect
     (setq rcirc-target nil)
     (setq mode-line-process ":disconnected")))
 
@@ -979,6 +979,7 @@ This number is independent of the number of lines in the buffer.")
   (set (make-local-variable 'rcirc-recent-quit-alist) nil)
   (set (make-local-variable 'rcirc-current-line) 0)
 
+  (use-hard-newlines t)
   (set (make-local-variable 'rcirc-short-buffer-name) nil)
   (set (make-local-variable 'rcirc-urls) nil)
 

@@ -1,6 +1,6 @@
 ;;; vc-cvs.el --- non-resident support for CVS version-control
 
-;; Copyright (C) 1995, 1998-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1995, 1998-2012 Free Software Foundation, Inc.
 
 ;; Author:      FSF (see vc.el for full credits)
 ;; Maintainer:  Andre Spiegel <spiegel@gnu.org>
@@ -189,7 +189,8 @@ See also variable `vc-cvs-sticky-date-format-string'."
 ;;; State-querying functions
 ;;;
 
-;;;###autoload (defun vc-cvs-registered (f)
+;;;###autoload(defun vc-cvs-registered (f)
+;;;###autoload   "Return non-nil if file F is registered with CVS."
 ;;;###autoload   (when (file-readable-p (expand-file-name
 ;;;###autoload 			  "CVS/Entries" (file-name-directory f)))
 ;;;###autoload       (load "vc-cvs")
@@ -318,7 +319,7 @@ its parents."
   (unless (or (not rev) (vc-cvs-valid-revision-number-p rev))
     (if (not (vc-cvs-valid-symbolic-tag-name-p rev))
 	(error "%s is not a valid symbolic tag name" rev)
-      ;; If the input revison is a valid symbolic tag name, we create it
+      ;; If the input revision is a valid symbolic tag name, we create it
       ;; as a branch, commit and switch to it.
       (apply 'vc-cvs-command nil 0 files "tag" "-b" (list rev))
       (apply 'vc-cvs-command nil 0 files "update" "-r" (list rev))

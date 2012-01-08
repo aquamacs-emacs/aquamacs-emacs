@@ -1,6 +1,6 @@
 ;;; dired-x.el --- extra Dired functionality
 
-;; Copyright (C) 1993-1994, 1997, 2001-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1993-1994, 1997, 2001-2012 Free Software Foundation, Inc.
 
 ;; Author: Sebastian Kremer <sk@thp.uni-koeln.de>
 ;;	Lawrence R. Dodd <dodd@roebling.poly.edu>
@@ -133,16 +133,20 @@ If nil, there is no maximum size."
   :group 'dired-x)
 
 (define-minor-mode dired-omit-mode
-  "Toggle Dired-Omit mode.
-With numeric ARG, enable Dired-Omit mode if ARG is positive, disable
-otherwise.  Enabling and disabling is buffer-local.
-If enabled, \"uninteresting\" files are not listed.
-Uninteresting files are those whose filenames match regexp `dired-omit-files',
-plus those ending with extensions in `dired-omit-extensions'.
+  "Toggle omission of uninteresting files in Dired (Dired-Omit mode).
+With a prefix argument ARG, enable Dired-Omit mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
-To enable omitting in every Dired buffer, you can put in your ~/.emacs
+Dired-Omit mode is a buffer-local minor mode.  When enabled in a
+Dired buffer, Dired does not list files whose filenames match
+regexp `dired-omit-files', nor files ending with extensions in
+`dired-omit-extensions'.
 
-  (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+To enable omitting in every Dired buffer, you can put this in
+your init file:
+
+  (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
 
 See Info node `(dired-x) Omitting Variables' for more information."
   :group 'dired-x
@@ -1255,7 +1259,7 @@ Remaining lines go to bottom-most window.  The number of files that can be
 displayed this way is restricted by the height of the current window and
 `window-min-height'.
 
-To keep dired buffer displayed, type \\[split-window-vertically] first.
+To keep dired buffer displayed, type \\[split-window-below] first.
 To display just marked files, type \\[delete-other-windows] first."
   (interactive "P")
   (dired-simultaneous-find-file (dired-get-marked-files) noselect))
@@ -1388,7 +1392,7 @@ Considers buffers closer to the car of `buffer-list' to be more recent."
 ;; Apparently people do use it. - lrd 12/22/97.
 
 (with-no-warnings
-  ;; Warnings are suppresed to avoid "global/dynamic var `X' lacks a prefix".
+  ;; Warnings are suppressed to avoid "global/dynamic var `X' lacks a prefix".
   ;; This is unbearably ugly, but not more than having global variables
   ;; named size, time, name or s, however practical it can be while writing
   ;; `dired-mark-sexp' predicates.

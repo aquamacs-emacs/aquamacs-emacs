@@ -1,6 +1,6 @@
 ;;; pcvs.el --- a front-end to CVS
 
-;; Copyright (C) 1991-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1991-2012 Free Software Foundation, Inc.
 
 ;; Author: (The PCL-CVS Trust) pcl-cvs@cyclic.com
 ;;	(Per Cederqvist) ceder@lysator.liu.se
@@ -322,7 +322,7 @@ The argument is added (or not) to the list of FLAGS and is constructed
 by appending the branch to ARG which defaults to \"-r\".
 Since the `cvs-secondary-branch-prefix' is only active if the primary
 prefix is active, it is important to read the secondary prefix before
-the primay since reading the primary can deactivate it."
+the primary since reading the primary can deactivate it."
   (let ((branch (and (cvs-prefix-get 'cvs-branch-prefix 'read-only)
 		     (cvs-prefix-get 'cvs-secondary-branch-prefix))))
     (if branch (cons (concat (or arg "-r") branch) flags) flags)))
@@ -620,7 +620,7 @@ If non-nil, NEW means to create a new buffer no matter what."
 	 (str (car hf))
 	 (done "")
 	 (tin (ewoc-nth cvs-cookies 0)))
-    ;; look for the first *real* fileinfo (to determine emptyness)
+    ;; look for the first *real* fileinfo (to determine emptiness)
     (while
 	(and tin
 	     (memq (cvs-fileinfo->type (ewoc-data tin))

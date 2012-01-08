@@ -1,6 +1,6 @@
 ;;; frame.el --- multi-frame management independent of window systems
 
-;; Copyright (C) 1993-1994, 1996-1997, 2000-2011
+;; Copyright (C) 1993-1994, 1996-1997, 2000-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
@@ -396,7 +396,7 @@ there (in decreasing order of priority)."
 	    ;; Finally, get rid of the old frame.
 	    (delete-frame frame-initial-frame t))
 
-	;; Otherwise, we don't need all that rigamarole; just apply
+	;; Otherwise, we don't need all that rigmarole; just apply
 	;; the new parameters.
 	(let (newparms allparms tail)
 	  (setq allparms (append initial-frame-alist
@@ -1142,23 +1142,41 @@ To get the frame's current border color, use `frame-parameters'."
 			   (list (cons 'border-color color-name))))
 
 (define-minor-mode auto-raise-mode
-  "Toggle whether or not the selected frame should auto-raise.
-With ARG, turn auto-raise mode on if and only if ARG is positive.
-Note that this controls Emacs's own auto-raise feature.
-Some window managers allow you to enable auto-raise for certain windows.
-You can use that for Emacs windows if you wish, but if you do,
-that is beyond the control of Emacs and this command has no effect on it."
+  "Toggle whether or not selected frames should auto-raise.
+With a prefix argument ARG, enable Auto Raise mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+Auto Raise mode does nothing under most window managers, which
+switch focus on mouse clicks.  It only has an effect if your
+window manager switches focus on mouse movement (in which case
+you should also change `focus-follows-mouse' to t).  Then,
+enabling Auto Raise mode causes any graphical Emacs frame which
+acquires focus to be automatically raised.
+
+Note that this minor mode controls Emacs's own auto-raise
+feature.  Window managers that switch focus on mouse movement
+often have their own auto-raise feature."
   :variable (frame-parameter nil 'auto-raise)
   (if (frame-parameter nil 'auto-raise)
       (raise-frame)))
 
 (define-minor-mode auto-lower-mode
   "Toggle whether or not the selected frame should auto-lower.
-With ARG, turn auto-lower mode on if and only if ARG is positive.
-Note that this controls Emacs's own auto-lower feature.
-Some window managers allow you to enable auto-lower for certain windows.
-You can use that for Emacs windows if you wish, but if you do,
-that is beyond the control of Emacs and this command has no effect on it."
+With a prefix argument ARG, enable Auto Lower mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+Auto Lower mode does nothing under most window managers, which
+switch focus on mouse clicks.  It only has an effect if your
+window manager switches focus on mouse movement (in which case
+you should also change `focus-follows-mouse' to t).  Then,
+enabling Auto Lower Mode causes any graphical Emacs frame which
+loses focus to be automatically lowered.
+
+Note that this minor mode controls Emacs's own auto-lower
+feature.  Window managers that switch focus on mouse movement
+often have their own features for raising or lowering frames."
   :variable (frame-parameter nil 'auto-lower))
 
 (defun set-frame-name (name)
@@ -1302,7 +1320,7 @@ Each element of the alist has the form (display . (width . height)),
 e.g. (\":0.0\" . (287 . 215)).
 
 If `display' equals t, it specifies dimensions for all graphical
-displays not explicitely specified."
+displays not explicitly specified."
   :version "22.1"
   :type '(alist :key-type (choice (string :tag "Display name")
 				  (const :tag "Default" t))
@@ -1565,14 +1583,13 @@ itself as a pre-command hook."
     (setq blink-cursor-timer nil)))
 
 (define-minor-mode blink-cursor-mode
-  "Toggle blinking cursor mode.
-With a numeric argument, turn blinking cursor mode on if ARG is positive,
-otherwise turn it off.  When blinking cursor mode is enabled, the
-cursor of the selected window blinks.
+  "Toggle cursor blinking (Blink Cursor mode).
+With a prefix argument ARG, enable Blink Cursor mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
-Note that this command is effective only when Emacs
-displays through a window system, because then Emacs does its own
-cursor display.  On a text-only terminal, this is not implemented."
+This command is effective only on graphical frames.  On text-only
+terminals, cursor blinking is controlled by the terminal."
   :init-value (not (or noninteractive
 		       no-blinking-cursor
 		       (eq system-type 'ms-dos)

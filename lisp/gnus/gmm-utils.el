@@ -1,6 +1,6 @@
 ;;; gmm-utils.el --- Utility functions for Gnus, Message and MML
 
-;; Copyright (C) 2006-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2006-2012  Free Software Foundation, Inc.
 
 ;; Author: Reiner Steib <reiner.steib@gmx.de>
 ;; Keywords: news
@@ -140,7 +140,7 @@ This is a copy of the `lazy' widget in Emacs 22.1 provided for compatibility."
 ;;   :mouse-2 command-on-mouse-2-press
 ;;   :mouse-3 command-on-mouse-3-press) ;; typically a menu of related commands
 ;;
-;; Combinations of mouse-[23] plus shift and/or controll might be overkill.
+;; Combinations of mouse-[23] plus shift and/or control might be overkill.
 ;;
 ;; Then use (plist-get rs-command :none), (plist-get rs-command :shift)
 
@@ -217,7 +217,7 @@ This is a copy of the `lazy' widget in Emacs 22.1 provided for compatibility."
 				 'static-color 'pseudo-color)))))
       'gnome
     'retro)
-  "Prefered tool bar style."
+  "Preferred tool bar style."
   :type '(choice (const :tag "GNOME style" gnome)
 		 (const :tag "Retro look"  retro))
   :group 'gmm)

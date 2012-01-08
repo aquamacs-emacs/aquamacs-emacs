@@ -1,6 +1,6 @@
 ;;; proced.el --- operate on system processes like dired
 
-;; Copyright (C) 2008-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2012 Free Software Foundation, Inc.
 
 ;; Author: Roland Winkler <winkler@gnu.org>
 ;; Keywords: Processes, Unix
@@ -1332,7 +1332,7 @@ Prefix ARG controls sort order, see `proced-sort-interactive'."
             (proced-sort-interactive key arg)
           (message "No sorter defined here."))))))
 
-;;; Formating
+;;; Formatting
 
 (defun proced-format-time (time)
   "Format time interval TIME."

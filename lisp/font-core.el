@@ -1,6 +1,6 @@
 ;;; font-core.el --- Core interface to font-lock
 
-;; Copyright (C) 1992-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1992-2012  Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: languages, faces
@@ -86,12 +86,12 @@ It will be passed one argument, which is the current value of
 
 ;; The mode for which font-lock was initialized, or nil if none.
 (defvar font-lock-major-mode)
+
 (define-minor-mode font-lock-mode
-  "Toggle Font Lock mode.
-With arg, turn Font Lock mode off if and only if arg is a non-positive
-number; if arg is nil, toggle Font Lock mode; anything else turns Font
-Lock on.
-\(Font Lock is also known as \"syntax highlighting\".)
+  "Toggle syntax highlighting in this buffer (Font Lock mode).
+With a prefix argument ARG, enable Font Lock mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
 
 When Font Lock mode is enabled, text is fontified as you type it:
 
@@ -210,7 +210,7 @@ this function onto `change-major-mode-hook'."
 ;; A few people have hassled in the past for a way to make it easier to turn on
 ;; Font Lock mode, without the user needing to know for which modes s/he has to
 ;; turn it on, perhaps the same way hilit19.el/hl319.el does.  I've always
-;; balked at that way, as I see it as just re-moulding the same problem in
+;; balked at that way, as I see it as just re-molding the same problem in
 ;; another form.  That is; some person would still have to keep track of which
 ;; modes (which may not even be distributed with Emacs) support Font Lock mode.
 ;; The list would always be out of date.  And that person might have to be me.

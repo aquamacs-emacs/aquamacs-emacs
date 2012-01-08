@@ -1,5 +1,5 @@
 /* Definitions and headers for communication with X protocol.
-   Copyright (C) 1989, 1993-1994, 1998-2011 Free Software Foundation, Inc.
+   Copyright (C) 1989, 1993-1994, 1998-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -330,7 +330,7 @@ struct x_display_info
   ptrdiff_t x_dnd_atoms_length;
 
   /* Extended window manager hints, Atoms supported by the window manager and
-     atoms for settig the window type.  */
+     atoms for setting the window type.  */
   Atom Xatom_net_supported, Xatom_net_supporting_wm_check;
   Atom *net_supported_atoms;
   int nr_net_supported_atoms;
@@ -341,7 +341,8 @@ struct x_display_info
   /* Atoms dealing with EWMH (i.e. _NET_...) */
   Atom Xatom_net_wm_state, Xatom_net_wm_state_fullscreen,
     Xatom_net_wm_state_maximized_horz, Xatom_net_wm_state_maximized_vert,
-    Xatom_net_wm_state_sticky, Xatom_net_frame_extents;
+    Xatom_net_wm_state_sticky, Xatom_net_wm_state_hidden,
+    Xatom_net_frame_extents;
 
   /* XSettings atoms and windows.  */
   Atom Xatom_xsettings_sel, Xatom_xsettings_prop, Xatom_xsettings_mgr;
@@ -631,6 +632,9 @@ struct x_output
      x_check_expected_move.  */
   int left_before_move;
   int top_before_move;
+
+  /* Non-zero if _NET_WM_STATE_HIDDEN is set for this frame.  */
+  int net_wm_state_hidden_seen;
 };
 
 #define No_Cursor (None)
@@ -639,7 +643,7 @@ enum
 {
   /* Values for focus_state, used as bit mask.
      EXPLICIT means we received a FocusIn for the frame and know it has
-     the focus.  IMPLICIT means we recevied an EnterNotify and the frame
+     the focus.  IMPLICIT means we received an EnterNotify and the frame
      may have the focus if no window manager is running.
      FocusOut and LeaveNotify clears EXPLICIT/IMPLICIT. */
   FOCUS_NONE     = 0,

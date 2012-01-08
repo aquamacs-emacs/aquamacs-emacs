@@ -1,6 +1,6 @@
 ;;; quickurl.el --- insert a URL based on text at point in buffer
 
-;; Copyright (C) 1999-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1999-2012  Free Software Foundation, Inc.
 
 ;; Author: Dave Pearson <davep@davep.org>
 ;; Maintainer: Dave Pearson <davep@davep.org>
@@ -26,7 +26,7 @@
 ;;
 ;; This package provides a simple method of inserting a URL based on the
 ;; text at point in the current buffer. This is part of an on-going effort
-;; to increase the information I provide people while reducing the ammount
+;; to increase the information I provide people while reducing the amount
 ;; of typing I need to do. No-doubt there are undiscovered Emacs packages
 ;; out there that do all of this and do it better, feel free to point me to
 ;; them, in the mean time I'm having fun playing with Emacs Lisp.
@@ -189,7 +189,7 @@ in your ~/.emacs (after loading/requiring quickurl).")
   "Local keymap for a `quickurl-list-mode' buffer.")
 
 (defvar quickurl-list-buffer-name "*quickurl-list*"
-  "Name for the URL listinig buffer.")
+  "Name for the URL listing buffer.")
 
 (defvar quickurl-list-last-buffer nil
   "`current-buffer' when `quickurl-list' was called.")
@@ -201,7 +201,7 @@ in your ~/.emacs (after loading/requiring quickurl).")
   (listp (cdr url)))
 
 (defun quickurl-make-url (keyword url &optional comment)
-  "Create a URL from KEYWORD, URL and (optionaly) COMMENT."
+  "Create a URL from KEYWORD, URL and (optionally) COMMENT."
   (if (and comment (not (zerop (length comment))))
       (list keyword url comment)
     (cons keyword url)))

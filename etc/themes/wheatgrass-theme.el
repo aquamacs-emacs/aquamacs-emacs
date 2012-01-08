@@ -1,6 +1,6 @@
 ;;; wheatgrass-theme.el --- custom theme for faces
 
-;; Copyright (C) 2010-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2012 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -29,7 +29,7 @@ of green, brown, and blue.")
   (custom-theme-set-faces
    'wheatgrass
    `(default ((,class (:foreground "wheat" :background "black"))))
-   `(cursor ((,class (:foreground "black" :background "thistle"))))
+   `(cursor ((,class (:background "thistle"))))
    `(error ((,class (:foreground "salmon1"))))
    `(warning ((,class (:foreground "orange"))))
    `(success ((,class (:foreground "yellow green"))))

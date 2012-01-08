@@ -1,6 +1,6 @@
 ;;; help.el --- help commands for Emacs
 
-;; Copyright (C) 1985-1986, 1993-1994, 1998-2011
+;; Copyright (C) 1985-1986, 1993-1994, 1998-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
@@ -969,7 +969,7 @@ This is effective only when Temp Buffer Resize mode is enabled.
 The value is the maximum height (in lines) which
 `resize-temp-buffer-window' will give to a window displaying a
 temporary buffer.  It can also be a function to be called to
-choose the height for such a buffer.  It gets one argumemt, the
+choose the height for such a buffer.  It gets one argument, the
 buffer, and should return a positive integer.  At the time the
 function is called, the window to be resized is selected."
   :type '(choice integer function)
@@ -977,13 +977,15 @@ function is called, the window to be resized is selected."
   :version "20.4")
 
 (define-minor-mode temp-buffer-resize-mode
-  "Toggle mode which makes windows smaller for temporary buffers.
-With prefix argument ARG, turn the resizing of windows displaying
-temporary buffers on if ARG is positive or off otherwise.
+  "Toggle auto-shrinking temp buffer windows (Temp Buffer Resize mode).
+With a prefix argument ARG, enable Temp Buffer Resize mode if ARG
+is positive, and disable it otherwise.  If called from Lisp,
+enable the mode if ARG is omitted or nil.
 
-This mode makes a window the right height for its contents, but
-never more than `temp-buffer-max-height' nor less than
-`window-min-height'.
+When Temp Buffer Resize mode is enabled, the windows in which we
+show a temporary buffer are automatically reduced in height to
+fit the buffer's contents, but never more than
+`temp-buffer-max-height' nor less than `window-min-height'.
 
 This mode is used by `help', `apropos' and `completion' buffers,
 and some others."
@@ -1001,7 +1003,7 @@ than `window-min-height'.  Do nothing if the selected window is
 not vertically combined or some of its contents are scrolled out
 of view."
   (when (and (pos-visible-in-window-p (point-min))
-	     (window-iso-combined-p))
+	     (window-combined-p))
     (fit-window-to-buffer
      nil
      (if (functionp temp-buffer-max-height)
@@ -1123,10 +1125,7 @@ HELP-WINDOW is the window used for displaying the help buffer."
 (defmacro with-help-window (buffer-name &rest body)
   "Display buffer with name BUFFER-NAME in a help window evaluating BODY.
 Select help window if the actual value of the user option
-`help-window-select' says so.  Return last value in BODY.
-
-You can specify where and how to show the buffer by binding the
-variable `temp-buffer-show-specifiers' to an appropriate value."
+`help-window-select' says so.  Return last value in BODY."
   (declare (indent 1) (debug t))
   `(progn
      ;; Make `help-window-point-marker' point nowhere.  The only place

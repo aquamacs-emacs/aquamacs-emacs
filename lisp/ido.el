@@ -1,6 +1,6 @@
 ;;; ido.el --- interactively do things with buffers and files
 
-;; Copyright (C) 1996-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
 
 ;; Author: Kim F. Storm <storm@cua.dk>
 ;; Based on: iswitchb by Stephen Eglen <stephen@cns.ed.ac.uk>
@@ -258,7 +258,7 @@
 ;; The highlighting of matching items is controlled via ido-use-faces.
 ;; The faces used are ido-first-match, ido-only-match and
 ;; ido-subdir.
-;; Colouring of the matching item was suggested by
+;; Coloring of the matching item was suggested by
 ;; Carsten Dominik (dominik@strw.leidenuniv.nl).
 
 ;; Replacement for read-buffer and read-file-name
@@ -308,7 +308,7 @@
 ;; ifindf package back into iswitchb.
 ;;
 ;; This is basically what ido (interactively do) is all about; but I
-;; found it ackward to merge my changes into the "iswitchb-" namespace,
+;; found it awkward to merge my changes into the "iswitchb-" namespace,
 ;; so I invented a common "ido-" namespace for the merged packages.
 ;;
 ;; This version is based on ido.el version 1.57 released on
@@ -461,12 +461,6 @@ See `ido-default-file-method' for details."
 		   (const :tag "Show in other frame" other-frame)
 		   (const :tag "Ask to show in other frame" maybe-frame)
 		   (const :tag "Raise frame if already shown" raise-frame))
-    :type '(choice (const selected-window)
-		   (const other-window)
-		   (const display)
-		   (const other-frame)
-		   (const maybe-frame)
-		   (const raise-frame))
     :group 'ido)
 
 (defcustom ido-enable-flex-matching nil
@@ -776,7 +770,7 @@ can be completed using TAB,
 (defcustom ido-use-virtual-buffers nil
   "If non-nil, refer to past buffers as well as existing ones.
 Essentially it works as follows: Say you are visiting a file and
-the buffer gets cleaned up by mignight.el.  Later, you want to
+the buffer gets cleaned up by midnight.el.  Later, you want to
 switch to that buffer, but find it's no longer open.  With
 virtual buffers enabled, the buffer name stays in the buffer
 list (using the `ido-virtual' face, and always at the end), and if
@@ -1475,8 +1469,10 @@ Removes badly formatted data and ignored directories."
   (add-hook 'choose-completion-string-functions 'ido-choose-completion-string))
 
 (define-minor-mode ido-everywhere
-  "Toggle using ido-mode everywhere file and directory names are read.
-With ARG, turn ido-mode on if arg is positive, off otherwise."
+  "Toggle use of Ido for all buffer/file reading.
+With a prefix argument ARG, enable this feature if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil."
   :global t
   :group 'ido
   (when (get 'ido-everywhere 'file)
@@ -1696,7 +1692,7 @@ This function also adds a hook to the minibuffer."
 (defun ido-nonreadable-directory-p (dir)
   ;; Return t if dir is a directory, but not readable
   ;; Do not check for non-readable directories via tramp, as this causes a premature
-  ;; connect on incomplete tramp paths (after entring just method:).
+  ;; connect on incomplete tramp paths (after entering just method:).
   (let ((ido-enable-tramp-completion nil))
     (and (ido-final-slash dir)
 	 (not (ido-is-unc-host dir))
@@ -1706,7 +1702,7 @@ This function also adds a hook to the minibuffer."
 (defun ido-directory-too-big-p (dir)
   ;; Return t if dir is a directory, but too big to show
   ;; Do not check for non-readable directories via tramp, as this causes a premature
-  ;; connect on incomplete tramp paths (after entring just method:).
+  ;; connect on incomplete tramp paths (after entering just method:).
   (let ((ido-enable-tramp-completion nil))
     (and (numberp ido-max-directory-size)
 	 (ido-final-slash dir)
@@ -3156,7 +3152,7 @@ for first matching file."
 ;;; CREATE LIST OF ALL CURRENT FILES
 
 (defun ido-all-completions ()
-  ;; Return unsorted list of all competions.
+  ;; Return unsorted list of all completions.
   (let ((ido-process-ignore-lists nil)
 	(ido-directory-too-big nil))
     (cond
@@ -3461,8 +3457,6 @@ This is to make them appear as if they were \"virtual buffers\"."
       (nconc ido-temp-list items)
     (setq ido-temp-list items)))
 
-(declare-function tramp-tramp-file-p "tramp" (name))
-
 (defun ido-file-name-all-completions-1 (dir)
   (cond
    ((ido-nonreadable-directory-p dir) '())
@@ -3470,8 +3464,6 @@ This is to make them appear as if they were \"virtual buffers\"."
    ;; Caller must have done that if necessary.
 
    ((and ido-enable-tramp-completion
-	 (or (fboundp 'tramp-completion-mode-p)
-	     (require 'tramp nil t))
 	 (string-match "\\`/[^/]+[:@]\\'" dir))
     ;; Strip method:user@host: part of tramp completions.
     ;; Tramp completions do not include leading slash.
@@ -3484,7 +3476,9 @@ This is to make them appear as if they were \"virtual buffers\"."
 		;; /ftp:user@host:./ => ok
 		(and
 		 (not (string= "/ftp:" dir))
-		 (tramp-tramp-file-p dir)
+		 (file-remote-p dir)
+		 ;; tramp-ftp-file-name-p is available only when tramp
+		 ;; has been loaded.
 		 (fboundp 'tramp-ftp-file-name-p)
 		 (funcall 'tramp-ftp-file-name-p dir)
 		 (string-match ":\\'" dir)

@@ -1,6 +1,6 @@
 ;;; man.el --- browse UNIX manual pages -*- coding: iso-8859-1 -*-
 
-;; Copyright (C) 1993-1994, 1996-1997, 2001-2011
+;; Copyright (C) 1993-1994, 1996-1997, 2001-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Barry A. Warsaw <bwarsaw@cen.com>
@@ -687,7 +687,7 @@ POS defaults to `point'."
 	  ;; Otherwise record the current column and look backwards.
 	  (setq column (current-column))
 	  (skip-chars-backward ",; \t")
-	  ;; Record the distance travelled.
+	  ;; Record the distance traveled.
 	  (setq distance (- column (current-column)))
 	  (when (looking-back
 		 (concat "([ \t]*\\(?:" Man-section-regexp "\\)[ \t]*)"))
@@ -754,8 +754,10 @@ POS defaults to `point'."
 
 (defun Man-completion-table (string pred action)
   (cond
-   ((eq action 'lambda)
-    (not (string-match "([^)]*\\'" string)))
+   ;; This ends up returning t for pretty much any string, and hence leads to
+   ;; spurious "complete but not unique" messages.  And since `man' doesn't
+   ;; require-match anyway, there's not point being clever.
+   ;;((eq action 'lambda) (not (string-match "([^)]*\\'" string)))
    ((equal string "-k")
     ;; Let SPC (minibuffer-complete-word) insert the space.
     (complete-with-action action '("-k ") string pred))
@@ -931,7 +933,8 @@ Return the buffer in which the manpage will appear."
 	;;               minal (using an ioctl(2) if available, the value of
 	;;               $COLUMNS,  or falling back to 80 characters if nei-
 	;;               ther is available).
-	(unless (or (getenv "MANWIDTH") (getenv "COLUMNS"))
+	(when (or window-system
+                  (not (or (getenv "MANWIDTH") (getenv "COLUMNS"))))
 	  ;; This isn't strictly correct, since we don't know how
 	  ;; the page will actually be displayed, but it seems
 	  ;; reasonable.
@@ -1095,7 +1098,7 @@ Same for the ANSI bold and normal escape sequences."
       (replace-match "+")
       (put-text-property (1- (point)) (point) 'face 'bold))
     ;; When the header is longer than the manpage name, groff tries to
-    ;; condense it to a shorter line interspered with ^H.  Remove ^H with
+    ;; condense it to a shorter line interspersed with ^H.  Remove ^H with
     ;; their preceding chars (but don't put Man-overstrike-face).  (Bug#5566)
     (goto-char (point-min))
     (while (re-search-forward ".\b" nil t) (backward-delete-char 2))
@@ -1189,7 +1192,7 @@ script would have done them."
   (goto-char (point-min))
   (while (re-search-forward "[-|]\\(\b[-|]\\)+" nil t) (replace-match "+"))
   ;; When the header is longer than the manpage name, groff tries to
-  ;; condense it to a shorter line interspered with ^H.  Remove ^H with
+  ;; condense it to a shorter line interspersed with ^H.  Remove ^H with
   ;; their preceding chars (but don't put Man-overstrike-face).  (Bug#5566)
   (goto-char (point-min))
   (while (re-search-forward ".\b" nil t) (backward-delete-char 2))

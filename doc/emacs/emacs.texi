@@ -11,7 +11,7 @@
 This is the @value{EDITION} edition of the @cite{GNU Emacs Manual},@*
 updated for Emacs version @value{EMACSVER}.
 
-Copyright @copyright{} 1985-1987, 1993-2011  Free Software Foundation, Inc.
+Copyright @copyright{} 1985-1987, 1993-2012  Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -112,25 +112,6 @@ Emacs Lisp Reference Manual}.
 
 @insertcopying
 @end ifnottex
-
-@ignore
-These subcategories have been deleted for simplicity
-and to avoid conflicts.
-Completion
-Backup Files
-Auto-Saving: Protection Against Disasters
-Tags
-Text Mode
-Outline Mode
-@TeX{} Mode
-Formatted Text
-Shell Command History
-
-The ones for Dired and Rmail have had the items turned into :: items
-to avoid conflicts.
-Also Running Shell Commands from Emacs
-and Sending Mail and Registers and Minibuffer.
-@end ignore
 
 @menu
 * Distrib::             How to get the latest Emacs distribution.
@@ -281,7 +262,7 @@ Completion
 
 * Completion Example::  Examples of using completion.
 * Completion Commands:: A list of completion commands.
-* Strict Completion::   Different types of completion.
+* Completion Exit::     Completion and minibuffer text submission.
 * Completion Styles::   How completion matches are chosen.
 * Completion Options::  Options for completion.
 
@@ -292,10 +273,10 @@ Help
 * Name Help::           Asking about a command, variable or function name.
 * Apropos::             Asking what pertains to a given topic.
 * Help Mode::           Special features of Help mode and Help buffers.
-* Library Keywords::    Finding Lisp libraries by keywords (topics).
+* Package Keywords::    Finding Lisp libraries by keywords (topics).
 * Language Help::       Help relating to international language support.
 * Misc Help::           Other help commands.
-* Help Files::          Commands to display pre-written help files.
+* Help Files::          Commands to display auxiliary help files.
 * Help Echo::           Help on active text and tooltips (`balloon help').
 
 The Mark and the Region
@@ -306,7 +287,7 @@ The Mark and the Region
 * Mark Ring::           Previous mark positions saved so you can go back there.
 * Global Mark Ring::    Previous mark positions in various buffers.
 * Shift Selection::     Using shifted cursor motion keys.
-* Persistent Mark::     Keeping the mark active all the time.
+* Disabled Transient Mark:: Leaving regions unhighlighted by default.
 
 Killing and Moving Text
 
@@ -319,9 +300,9 @@ Killing and Moving Text
 
 Yanking
 
-* Kill Ring::           Where killed text is stored.  Basic yanking.
-* Appending Kills::     Several kills in a row all yank together.
+* Kill Ring::           Where killed text is stored.
 * Earlier Kills::       Yanking something killed some time ago.
+* Appending Kills::     Several kills in a row all yank together.
 
 Killing and Yanking on Graphical Displays
 
@@ -342,6 +323,7 @@ Registers
 Controlling the Display
 
 * Scrolling::              Commands to move text up and down in a window.
+* Recentering::            A scrolling command that centers the current line.
 * Auto Scrolling::         Redisplay scrolls text automatically when needed.
 * Horizontal Scrolling::   Moving text left and right in a window.
 * Narrowing::              Restricting display and editing to a portion
@@ -349,8 +331,9 @@ Controlling the Display
 * View Mode::              Viewing read-only buffers.
 * Follow Mode::            Follow mode lets two windows scroll as one.
 * Faces::                  How to change the display style using faces.
+* Colors::                 Specifying colors for faces.
 * Standard Faces::         Emacs' predefined faces.
-* Temporary Face Changes:: Commands to temporarily modify the default text face
+* Text Scale::             Increasing or decreasing text size in a buffer.
 * Font Lock::              Minor mode for syntactic highlighting using faces.
 * Highlight Interactively:: Tell Emacs what text to highlight.
 * Fringes::                Enabling or disabling window fringes.
@@ -388,7 +371,6 @@ Incremental Search
                           or else edit the search string.
 * Isearch Scroll::      Scrolling during an incremental search.
 * Isearch Minibuffer::  Incremental search of the minibuffer history.
-* Slow Isearch::        Incremental search features for slow terminals.
 
 Replacement Commands
 
@@ -505,10 +487,8 @@ Frames and Graphical Displays
 * Fonts::               Changing the frame font.
 * Speedbar::            How to make and use a speedbar frame.
 * Multiple Displays::   How one Emacs job can talk to several displays.
-* Special Buffer Frames::  You can make certain buffers have their own frames.
 * Frame Parameters::    Changing the colors and other modes of frames.
 * Scroll Bars::         How to enable and disable scroll bars; how to use them.
-* Wheeled Mice::        Using mouse wheels for scrolling.
 * Drag and Drop::       Using drag and drop to open files and insert text.
 * Menu Bars::           Enabling and disabling the menu bar.
 * Tool Bars::           Enabling and disabling the tool bar.
@@ -553,10 +533,10 @@ Modes
 
 Indentation
 
-* Indentation Commands::  Various commands and techniques for indentation.
-* Tab Stops::             You can set arbitrary "tab stops" and then
-                            indent to the next tab stop when you want to.
-* Just Spaces::           You can request indentation using just spaces.
+* Indentation Commands::  More commands for performing indentation.
+* Tab Stops::             Stop points for indentation in Text modes.
+* Just Spaces::           Using only space characters for indentation.
+* Indent Convenience::    Optional indentation features.
 
 Commands for Human Languages
 
@@ -568,11 +548,12 @@ Commands for Human Languages
 * Case::                Changing the case of text.
 * Text Mode::           The major modes for editing text files.
 * Outline Mode::        Editing outlines.
+* Org Mode::            The Emacs organizer.
 * TeX Mode::            Editing input to the formatter TeX.
 * HTML Mode::           Editing HTML and SGML files.
 * Nroff Mode::          Editing input to the formatter nroff.
-* Formatted Text::      Editing formatted text directly in WYSIWYG fashion.
-* Text Based Tables::   Editing text-based tables in WYSIWYG fashion.
+* Enriched Text::       Editing text ``enriched'' with fonts, colors, etc.
+* Text Based Tables::   Commands for editing text-based tables.
 * Two-Column::          Splitting text columns into separate windows.
 
 Filling Text
@@ -599,18 +580,16 @@ Outline Mode
 * TeX Print::           Commands for printing part of a file with TeX.
 * TeX Misc::            Customization of TeX mode, and related features.
 
-Editing Formatted Text
+Editing Enriched Text
 
-* Requesting Formatted Text::   Entering and exiting Enriched mode.
-* Hard and Soft Newlines::      There are two different kinds of newlines.
-* Editing Format Info::         How to edit text properties.
-* Format Faces::                Bold, italic, underline, etc.
-* Format Colors::               Changing the color of text.
-* Format Indentation::          Changing the left and right margins.
-* Format Justification::        Centering, setting text flush with the
-                                  left or right margin, etc.
-* Format Properties::           The "special" text properties submenu.
-* Forcing Enriched Mode::       How to force use of Enriched mode.
+* Enriched Mode::           Entering and exiting Enriched mode.
+* Hard and Soft Newlines::  There are two different kinds of newlines.
+* Editing Format Info::     How to edit text properties.
+* Enriched Faces::          Bold, italic, underline, etc.
+* Enriched Indentation::    Changing the left and right margins.
+* Enriched Justification::  Centering, setting text flush with the
+                              left or right margin, etc.
+* Enriched Properties::     The "special" text properties submenu.
 
 @c The automatic texinfo menu update inserts some duplicate items here
 @c (faces, colors, indentation, justification, properties), because
@@ -624,11 +603,8 @@ Editing Text-based Tables
 * Table Recognition::   How to activate and deactivate tables.
 * Cell Commands::       Cell-oriented commands in a table.
 * Cell Justification::  Justifying cell contents.
-* Row Commands::        Manipulating rows of table cell.
-* Column Commands::     Manipulating columns of table cell.
-* Fixed Width Mode::    Fixing cell width.
+* Table Rows and Columns:: Inserting and deleting rows and columns.
 * Table Conversion::    Converting between plain text and tables.
-* Measuring Tables::    Analyzing table dimension.
 * Table Misc::          Table miscellany.
 
 Editing Programs
@@ -724,7 +700,7 @@ Compiling and Testing Programs
 * Executing Lisp::      Various modes for editing Lisp programs,
                           with different facilities for running
                           the Lisp programs.
-* Lisp Libraries::      Creating Lisp programs to run in Emacs.
+* Lisp Libraries::      How Lisp programs are loaded into Emacs.
 * Lisp Eval::           Executing a single Lisp expression in Emacs.
 * Lisp Interaction::    Executing Lisp in an Emacs buffer.
 * External Lisp::       Communicating through Emacs with a separate Lisp.
@@ -742,14 +718,13 @@ Running Debuggers Under Emacs
 GDB Graphical Interface
 
 * GDB User Interface Layout::   Control the number of displayed buffers.
-* Source Buffers::      Use the mouse in the fringe/margin to
-                          control your program.
-* Breakpoints Buffer::  A breakpoint control panel.
+* Source Buffers::              Use the mouse in the fringe/margin to
+                                control your program.
+* Breakpoints Buffer::          A breakpoint control panel.
 * Threads Buffer::              Displays your threads.
-* Stack Buffer::        Select a frame from the call stack.
-* Other GDB Buffers::           Input/output, locals, registers,
-                          assembler, threads and memory buffers.
-* Watch Expressions::   Monitor variable values in the speedbar.
+* Stack Buffer::                Select a frame from the call stack.
+* Other GDB Buffers::           Other buffers for controlling the GDB state.
+* Watch Expressions::           Monitor variable values in the speedbar.
 * Multithreaded Debugging::     Debugging programs with several threads.
 
 Maintaining Large Programs
@@ -767,15 +742,16 @@ Version Control
 * VC Mode Line::        How the mode line shows version control status.
 * Basic VC Editing::    How to edit a file under version control.
 * Log Buffer::          Features available in log entry buffers.
+* Registering::         Putting a file under version control.
 * Old Revisions::       Examining and comparing old versions.
-* Secondary VC Commands:: The commands used a little less frequently.
+* VC Change Log::       Viewing the VC Change Log.
+* VC Undo::             Canceling changes before or after committing.
 * VC Directory Mode::   Listing files managed by version control.
 * Branches::            Multiple lines of development.
-* Remote Repositories:: Efficient access to remote CVS servers.
 * Revision Tags::       Symbolic names for revisions.
 * Miscellaneous VC::    Various other commands and features of VC.
 * Customizing VC::      Variables that change VC's behavior.
-  
+
 Introduction to Version Control
 
 * Why Version Control?::    Understanding the problems it addresses.
@@ -792,12 +768,6 @@ Basic Editing under Version Control
 * VC With A Locking VCS::  RCS in its default mode, SCCS, and optionally CVS.
 * Advanced C-x v v::       Advanced features available with a prefix argument.
 
-The Secondary Commands of VC
-
-* Registering::         Putting a file under version control.
-* VC Change Log::       Viewing the VC Change Log.
-* VC Undo::             Canceling changes before or after check-in.
-
 VC Directory Mode
 
 * VC Directory Buffer::   What the buffer looks like and means.
@@ -806,26 +776,15 @@ VC Directory Mode
 Multiple Branches of a File
 
 * Switching Branches::    How to get to another existing branch.
-* Creating Branches::     How to start a new branch.
+* VC Pull::               Updating a branch from another branch.
 * Merging::               Transferring changes between branches.
-* Multi-User Branching::  Multiple users working at multiple branches
-                            in parallel.
-
-Remote Repositories
-
-* Version Backups::       Keeping local copies of repository versions.
-* Local Version Control:: Using another version system for local editing.
-
-Revision Tags
-
-* Making Revision Tags::  The tag facilities.
-* Revision Tag Caveats::  Things to be careful of when using tags.
+* Creating Branches::     How to start a new branch.
 
 Miscellaneous Commands and Features of VC
 
 * Change Logs and VC::    Generating a change log file from log entries.
-* Renaming and VC::       A command to rename both the source and master
-                            file correctly.
+* VC Delete/Rename::      Deleting and renaming version-controlled files.
+* Revision Tags::         Symbolic names for revisions.
 * Version Headers::       Inserting version control headers into working files.
 
 Customizing VC
@@ -960,10 +919,10 @@ Customizing the Calendar and Diary
 
 Document Viewing
 
-* Navigation::  Navigation inside DocView buffers.
-* Searching::   Searching inside documents.
-* Slicing::     Specifying which part of pages should be displayed.
-* Conversion::  Influencing and triggering conversion.
+* DocView Navigation::  Navigating DocView buffers.
+* DocView Searching::   Searching inside documents.
+* DocView Slicing::     Specifying which part of a page is displayed.
+* DocView Conversion::  Influencing and triggering conversion.
 
 Sending Mail
 
@@ -1015,7 +974,8 @@ Gnus
 
 * Buffers of Gnus::     The group, summary, and article buffers.
 * Gnus Startup::        What you should know about starting Gnus.
-* Summary of Gnus::     A short description of the basic Gnus commands.
+* Gnus Group Buffer::   A short description of Gnus group commands.
+* Gnus Summary Buffer:: A short description of Gnus summary commands.
 
 Running Shell Commands from Emacs
 
@@ -1028,7 +988,6 @@ Running Shell Commands from Emacs
 * Shell Options::       Options for customizing Shell mode.
 * Terminal emulator::   An Emacs window as a terminal emulator.
 * Term Mode::           Special Emacs commands used in Term mode.
-* Paging in Term::      Paging in the terminal emulator.
 * Remote Host::         Connecting to another computer.
 * Serial Terminal::     Connecting to a serial port.
 
@@ -1074,15 +1033,14 @@ Customization
 
 Easy Customization Interface
 
-* Customization Groups::     How settings are classified in a structure.
+* Customization Groups::     How settings are classified.
 * Browsing Custom::          Browsing and searching for settings.
 * Changing a Variable::      How to edit an option's value and set the option.
-* Saving Customizations::    Specifying the file for saving customizations.
+* Saving Customizations::    Saving customizations for future Emacs sessions.
 * Face Customization::       How to edit the attributes of a face.
-* Specific Customization::   Making a customization buffer for specific
-                                variables, faces, or groups.
-* Custom Themes::            How to define collections of customized options
-                                that can be loaded and unloaded together.
+* Specific Customization::   Customizing specific settings or groups.
+* Custom Themes::            Collections of customization settings.
+* Creating Custom Themes::   How to create a new custom theme.
 
 Variables
 
@@ -1152,7 +1110,7 @@ Command Line Arguments for Emacs Invocation
 * Environment::         Environment variables that Emacs uses.
 * Display X::           Changing the default display and using remote login.
 * Font X::              Choosing a font for text, under X.
-* Colors::              Choosing display colors.
+* Colors X::            Choosing display colors.
 * Window Size X::       Start-up window size, under X.
 * Borders X::           Internal and external borders, under X.
 * Title X::             Specifying the initial frame's title.
@@ -1412,7 +1370,7 @@ Shapiro, Richard Sharman, Olin Shivers, Espen Skoglund, Rick Sladkey,
 Lynn Slater, Chris Smith, David Smith, Paul D.@: Smith, William
 Sommerfeld, Andre Spiegel, Michael Staats, Ulf Stegemann, Reiner Steib,
 Sam Steingold, Ake Stenhoff, Peter Stephenson, Ken Stevens, Andy Stewart,
-Jonathan Stigelman, Martin Stjernholm, Kim F.@: Storm, Steve Strassman,
+Jonathan Stigelman, Martin Stjernholm, Kim F.@: Storm, Steve Strassmann,
 Olaf Sylvester, Naoto Takahashi, Steven Tamm, Jean-Philippe Theberge,
 Jens T.@: Berger Thielemann, Spencer Thomas, Jim Thompson, Luc
 Teirlinck, David O'Toole, Tom Tromey, Enami Tsugutomo, Eli Tziperman,

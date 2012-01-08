@@ -1,6 +1,6 @@
 ;;; nnir.el --- search mail with various search engines -*- coding: iso-8859-1 -*-
 
-;; Copyright (C) 1998-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012 Free Software Foundation, Inc.
 
 ;; Author: Kai Groﬂjohann <grossjohann@ls6.cs.uni-dortmund.de>
 ;; Swish-e and Swish++ backends by:
@@ -290,9 +290,7 @@ is `(valuefunc member)'."
   (autoload 'nnimap-command "nnimap")
   (autoload 'nnimap-possibly-change-group "nnimap")
   (autoload 'nnimap-make-thread-query "nnimap")
-  (autoload 'gnus-registry-action "gnus-registry")
-  (defvar gnus-registry-install))
-
+  (autoload 'gnus-registry-action "gnus-registry"))
 
 (nnoo-declare nnir)
 (nnoo-define-basics nnir)
@@ -306,7 +304,7 @@ is `(valuefunc member)'."
 ;;; User Customizable Variables:
 
 (defgroup nnir nil
-  "Search groups in Gnus with assorted seach engines."
+  "Search groups in Gnus with assorted search engines."
   :group 'gnus)
 
 (defcustom nnir-ignored-newsgroups ""
@@ -672,7 +670,8 @@ Add an entry here when adding a new search engine.")
 	  (goto-char (point-min))
 	  (while (not (eobp))
 	    (let* ((novitem (funcall parsefunc))
-		   (artno (mail-header-number novitem))
+		   (artno (and novitem
+			       (mail-header-number novitem)))
 		   (art (car (rassq artno articleids))))
 	      (when art
 		(mail-header-set-number novitem art)
@@ -1271,12 +1270,12 @@ Tested with swish-e-2.0.1 on Windows NT 4.0."
           ;; nnir-search failure reason is in this buffer, show it if
           ;; the user wants it.
           (when (> gnus-verbose 6)
-            (display-buffer nnir-tmp-buffer)))) ;; FIXME: Dont clear buffer !
+            (display-buffer nnir-tmp-buffer)))) ;; FIXME: Don't clear buffer !
       (message "Doing hyrex-search query \"%s\"...done" qstring)
       (sit-for 0)
       ;; nnir-search returns:
-      ;;   for nnml/nnfolder: "filename mailid weigth"
-      ;;   for nnimap:        "group mailid weigth"
+      ;;   for nnml/nnfolder: "filename mailid weight"
+      ;;   for nnimap:        "group mailid weight"
       (goto-char (point-min))
       (delete-non-matching-lines "^\\S + [0-9]+ [0-9]+$")
       ;; HyREX doesn't search directly in groups -- so filter out here.
@@ -1741,8 +1740,7 @@ environment unless `not-global' is non-nil."
   (when (eq (car (gnus-find-method-for-group gnus-newsgroup-name)) 'nnir)
     (setq gnus-summary-line-format
 	  (or nnir-summary-line-format gnus-summary-line-format))
-    (when (and (boundp 'gnus-registry-install)
-		       (eq gnus-registry-install t))
+    (when (gnus-bound-and-true-p 'gnus-registry-enabled)
       (remove-hook 'gnus-summary-article-delete-hook 'gnus-registry-action t)
       (remove-hook 'gnus-summary-article-move-hook 'gnus-registry-action t)
       (remove-hook 'gnus-summary-article-expire-hook 'gnus-registry-action t)

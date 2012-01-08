@@ -1,3 +1,87 @@
+2011-11-27  Fabrice Popineau  <fabrice.popineau@supelec.fr>  (tiny change)
+
+	* inc/stdint.h (uint32_t, uint64_t) [_WIN64]: New typedefs.
+	(UINT64_MAX) [_WIN64]: Fix definition.
+	(uintmax_t, intmax_t): Fix definitions.
+
+	* inc/inttypes.h (strtoumax, strtoimax) [!__MINGW32__]: Provide
+	correct definitions.
+
+	* config.nt (HAVE_DECL_STRTOLL): Define.
+	(va_copy) [_WIN64]: Provide a better definition.
+
+2011-11-25  Juanma Barranquero  <lekktu@gmail.com>
+
+	* configure.bat: Fix typos.
+
+2011-11-25  Eli Zaretskii  <eliz@gnu.org>
+
+	* INSTALL: Elaborate on debugging fatal errors.
+
+2011-11-15  Eli Zaretskii  <eliz@gnu.org>
+
+	* README.W32: Update the GTK Windows download URL for libpng.
+
+2011-11-13  Christoph Scholtes  <cschol2112@googlemail.com>
+
+	* inc/stdint.h (UINT64_MAX, UINT32_MAX): Fix values.
+
+2011-11-05  Christoph Scholtes  <cschol2112@googlemail.com>
+
+	* inc/stdint.h (UINT64_MAX, UINT64_MIN, INT64_MIN, UINTMAX_MAX)
+	(UINTMAX_MIN, INTMAX_MAX, INTMAX_MIN, UINT32_MIN, UINT32_MAX)
+	(INT32_MIN, UINTMAX_MAX, UINTMAX_MIN, INTMAX_MAX, INTMAX_MIN)
+	(intmax_t, INT64_MAX): Add for MSVC.
+
+	* config.nt (mode_t) [!__GNUC__]: Define mode_t for MSVC.
+
+2011-11-05  Eli Zaretskii  <eliz@gnu.org>
+
+	* config.nt (inline) [!__GNUC__]: Define to __inline for MSVC.
+
+	Support MSVC build with newer versions of Visual Studio.
+	* makefile.w32-in (clean-other-dirs-nmake)
+	(distclean-other-dirs-nmake, maintainer-clean-other-dirs-nmake):
+	Update for current structure of doc/ subdirectories.
+
+	* gmake.defs (OBJ0_c, OBJ1_c, OBJ2_c): New variables.
+
+	* INSTALL: Update for newer versions of MSVC.
+
+2011-11-05  Fabrice Popineau  <fabrice.popineau@supelec.fr>  (tiny change)
+
+	Support MSVC build with newer versions of Visual Studio.
+	* nmake.defs (USE_CRT_DLL): Define to 1.
+	(libc, EMACS_EXTRA_C_FLAGS, SYS_LDFLAGS, ARCH_CFLAGS): Update values.
+	(D): New variable.
+
+2011-11-04  Eli Zaretskii  <eliz@gnu.org>
+
+	* runemacs.c (ensure_unicows_dll): New function, tries to load
+	UNICOWS.DLL on Windows 9X.
+	(WinMain): If ensure_unicows_dll fails to find UNICOWS.DLL,
+	display a dialog to the effect that Emacs cannot be started.
+	(Bug#8562)
+
+2011-10-28  Eli Zaretskii  <eliz@gnu.org>
+
+	* README.W32: Mention UNICOWS.DLL as prerequisite for running
+	Emacs on Windows 9X.
+
+2011-10-25  Eli Zaretskii  <eliz@gnu.org>
+
+	* makefile.w32-in (dist): Don't put the top-level INSTALL into the
+	distribution.  (Bug#9861)
+
+2011-10-25  Christoph Scholtes  <cschol2112@googlemail.com>
+
+	* INSTALL: Update URL for GTK download page.
+
+2011-10-19  Eli Zaretskii  <eliz@gnu.org>
+
+	* config.nt (HAVE_TZNAME, HAVE_DECL_TZNAME): Define.
+	(Bug#9794) (Bug#641)
+
 2011-09-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* config.nt (HAVE_SNPRINTF): New macro.
@@ -1720,7 +1804,7 @@
 
 1998-12-08  Geoff Voelker  <voelker@cs.washington.edu>
 
-	* makefile.nt: Do string comparision of _NMAKE_VER.
+	* makefile.nt: Do string comparison of _NMAKE_VER.
 
 1998-12-02  Geoff Voelker  <voelker@cs.washington.edu>
 
@@ -2134,7 +2218,7 @@
 ;; add-log-time-zone-rule: t
 ;; End:
 
-  Copyright (C) 1995-1999, 2001-2011  Free Software Foundation, Inc.
+  Copyright (C) 1995-1999, 2001-2012  Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

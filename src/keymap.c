@@ -1,5 +1,5 @@
 /* Manipulation of keymaps
-   Copyright (C) 1985-1988, 1993-1995, 1998-2011 Free Software Foundation, Inc.
+   Copyright (C) 1985-1988, 1993-1995, 1998-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -998,7 +998,7 @@ copy_keymap_item (Lisp_Object elt)
     }
   else
     {
-      /* It may be an old fomat menu item.
+      /* It may be an old format menu item.
 	 Skip the optional menu string.  */
       if (STRINGP (XCAR (tem)))
 	{
@@ -2735,11 +2735,11 @@ remapped command in the returned list.  */)
       /* We have a list of advertised bindings.  */
       while (CONSP (tem))
 	if (EQ (shadow_lookup (keymaps, XCAR (tem), Qnil, 0), definition))
-	  return XCAR (tem);
+	  RETURN_UNGCPRO (XCAR (tem));
 	else
 	  tem = XCDR (tem);
       if (EQ (shadow_lookup (keymaps, tem, Qnil, 0), definition))
-	return tem;
+	RETURN_UNGCPRO (tem);
     }
 
   sequences = Freverse (where_is_internal (definition, keymaps,

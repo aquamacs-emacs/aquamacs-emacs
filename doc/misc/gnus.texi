@@ -11,7 +11,7 @@
 @documentencoding ISO-8859-1
 
 @copying
-Copyright @copyright{} 1995-2011 Free Software Foundation, Inc.
+Copyright @copyright{} 1995-2012 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -891,7 +891,6 @@ Appendices
 History
 
 * Gnus Versions::               What Gnus versions have been released.
-* Other Gnus Versions::         Other Gnus versions that also have been released.
 * Why?::                        What's the point of Gnus?
 * Compatibility::               Just how compatible is Gnus with @sc{gnus}?
 * Conformity::                  Gnus tries to conform to all standards.
@@ -1002,7 +1001,7 @@ press @kbd{^} from the Group buffer to see it.  In the Server buffer,
 you can press @kbd{RET} on a defined server to see all the groups it
 serves (subscribed or not!).  You can also add or delete servers, edit
 a foreign server's definition, agentize or de-agentize a server, and
-do many other neat things.  @xref{Server Buffer}.  
+do many other neat things.  @xref{Server Buffer}.
 @xref{Foreign Groups}.  @xref{Agent Basics}.
 
 @vindex gnus-select-method
@@ -1329,7 +1328,7 @@ variable to @code{nil}.
 
 @vindex gnus-auto-subscribed-categories
 As if that wasn't enough, @code{gnus-auto-subscribed-categories} also
-allows you to specify that new groups should be subcribed based on the
+allows you to specify that new groups should be subscribed based on the
 category their select methods belong to.  The default is @samp{(mail
 post-mail)}, meaning that all new groups from mail-like backends
 should be subscribed automatically.
@@ -3188,8 +3187,10 @@ For example:
          (broken-reply-to . t))))
 @end lisp
 
-String value of parameters will be subjected to regexp substitution, as
-the @code{to-group} example shows.
+The first clause that matches the group name will be used.
+
+Parameters that are strings will be subjected to regexp substitution,
+as the @code{to-group} example shows.
 
 @vindex gnus-parameters-case-fold-search
 By default, whether comparing the group name and one of those regexps
@@ -4492,23 +4493,6 @@ news.
 @table @kbd
 
 
-@item H f
-@kindex H f (Group)
-@findex gnus-group-fetch-faq
-@vindex gnus-group-faq-directory
-@cindex FAQ
-@cindex ange-ftp
-Try to fetch the @acronym{FAQ} for the current group
-(@code{gnus-group-fetch-faq}).  Gnus will try to get the @acronym{FAQ}
-from @code{gnus-group-faq-directory}, which is usually a directory on
-a remote machine.  This variable can also be a list of directories.
-In that case, giving a prefix to this command will allow you to choose
-between the various sites.  @code{ange-ftp} (or @code{efs}) will be
-used for fetching the file.
-
-If fetching from the first site is unsuccessful, Gnus will attempt to go
-through @code{gnus-group-faq-directory} and try to open them one by one.
-
 @item H d
 @itemx C-c C-d
 @c @icon{gnus-group-describe-group}
@@ -4640,7 +4624,7 @@ Sieve is a server-side mail filtering language.  In Gnus you can use
 the @code{sieve} group parameter (@pxref{Group Parameters}) to specify
 sieve rules that should apply to each group.  Gnus provides two
 commands to translate all these group parameters into a proper Sieve
-script that can be transfered to the server somehow.
+script that can be transferred to the server somehow.
 
 @vindex gnus-sieve-file
 @vindex gnus-sieve-region-start
@@ -7666,7 +7650,7 @@ has its own article buffer.
 This implies that it's not possible to have more than one article buffer
 in a group at a time.  But sometimes you might want to display all the
 latest emails from your mother, your father, your aunt, your uncle and
-your 17 cousins to coordinate the next christmas party.
+your 17 cousins to coordinate the next Christmas party.
 
 That's where sticky articles come in handy.  A sticky article buffer
 basically is a normal article buffer, but it won't be reused when you
@@ -8350,7 +8334,7 @@ Files with name matching this regular expression won't be viewed.
 Files with a @acronym{MIME} type matching this variable won't be viewed.
 Note that Gnus tries to guess what type the file is based on the name.
 @code{gnus-uu} is not a @acronym{MIME} package (yet), so this is slightly
-kludgey.
+kludgy.
 
 @item gnus-uu-tmp-dir
 @vindex gnus-uu-tmp-dir
@@ -8993,8 +8977,8 @@ apostrophe or quotation mark, then try this wash.
 Translate many non-@acronym{ASCII} characters into their
 @acronym{ASCII} equivalents (@code{gnus-article-treat-non-ascii}).
 This is mostly useful if you're on a terminal that has a limited font
-and does't show accented characters, ``advanced'' punctuation, and the
-like.  For instance, @samp{»} is tranlated into @samp{>>}, and so on.
+and doesn't show accented characters, ``advanced'' punctuation, and the
+like.  For instance, @samp{»} is translated into @samp{>>}, and so on.
 
 @item W Y f
 @kindex W Y f (Summary)
@@ -11652,7 +11636,7 @@ message/external-body @acronym{MIME} type.
 @item r (Article)
 @kindex r (Article)
 Prompt for a file name, replace the @acronym{MIME} object with an
-external body refering to the file via the message/external-body
+external body referring to the file via the message/external-body
 @acronym{MIME} type.  (@code{gnus-mime-replace-part}).
 
 @findex gnus-mime-delete-part
@@ -11806,7 +11790,7 @@ fit these criteria.
 
 To use this, make sure that you have @code{w3m} and @code{curl}
 installed.  If you have, then Gnus should display @acronym{HTML}
-automatically. 
+automatically.
 
 
 
@@ -13779,7 +13763,7 @@ The same as the above, but don't do automatic @acronym{STARTTLS} upgrades.
 @findex nntp-open-tls-stream
 @item nntp-open-tls-stream
 Opens a connection to a server over a @dfn{secure} channel.  To use
-this you must have @uref{http://www.gnu.org/software/gnutls/, GNUTLS}
+this you must have @uref{http://www.gnu.org/software/gnutls/, GnuTLS}
 installed.  You then define a server as follows:
 
 @lisp
@@ -15051,7 +15035,7 @@ number.
 
 @item mail-source-default-file-modes
 @vindex mail-source-default-file-modes
-All new mail files will get this file mode.  The default is 384.
+All new mail files will get this file mode.  The default is @code{#o600}.
 
 @item mail-source-movemail-program
 @vindex mail-source-movemail-program
@@ -15141,10 +15125,10 @@ default file modes the new mail files get:
 
 @lisp
 (add-hook 'nnmail-pre-get-new-mail-hook
-          (lambda () (set-default-file-modes 511)))
+          (lambda () (set-default-file-modes #o700)))
 
 (add-hook 'nnmail-post-get-new-mail-hook
-          (lambda () (set-default-file-modes 551)))
+          (lambda () (set-default-file-modes #o775)))
 @end lisp
 
 @item nnmail-use-long-file-names
@@ -18002,7 +17986,7 @@ see the event's date.
   @code{gnus-diary} provides two supplemental user formats to be used in
 summary line formats.  @code{D} corresponds to a formatted time string
 for the next occurrence of the event (e.g. ``Sat, Sep 22 01, 12:00''),
-while @code{d} corresponds to an approximative remaining time until the
+while @code{d} corresponds to an approximate remaining time until the
 next occurrence of the event (e.g. ``in 6 months, 1 week'').
 
   For example, here's how Joe's birthday is displayed in my
@@ -18106,7 +18090,7 @@ mail sending with @code{nndiary}:
 @itemize @bullet
 @item
 @code{nndiary} is a @emph{real} mail back end.  You really send real diary
-messsages for real.  This means for instance that you can give
+messages for real.  This means for instance that you can give
 appointments to anybody (provided they use Gnus and @code{nndiary}) by
 sending the diary message to them as well.
 @item
@@ -20061,7 +20045,7 @@ matches will use the @code{Message-ID}s of these matching articles.)
 This will ensure that you can raise/lower the score of an entire thread,
 even though some articles in the thread may not have complete
 @code{References} headers.  Note that using this may lead to
-undeterministic scores of the articles in the thread.  (Using this match
+nondeterministic scores of the articles in the thread.  (Using this match
 key will lead to creation of @file{ADAPT} files.)
 @end table
 @end enumerate
@@ -21079,8 +21063,8 @@ as well.
 
 This chapter describes tools for searching groups and servers for
 articles matching a query and then retrieving those articles. Gnus
-provides a simpler mechanism for searching through articles in a summary buffer 
-to find those matching a pattern. @xref{Searching for Articles}. 
+provides a simpler mechanism for searching through articles in a summary buffer
+to find those matching a pattern. @xref{Searching for Articles}.
 
 @menu
 * nnir::                     Searching with various engines.
@@ -21111,7 +21095,7 @@ interface.
 
 The @code{nnimap} and @code{gmane} search engines should work with no
 configuration. Other engines require a local index that needs to be
-created and maintained outside of Gnus. 
+created and maintained outside of Gnus.
 
 
 @node Basic Usage
@@ -21151,7 +21135,7 @@ One more thing: individual search engines may have special search
 features. You can access these special features by giving a prefix-arg
 to @code{gnus-group-make-nnir-group}. If you are searching multiple
 groups with different search engines you will be prompted for the
-special search features for each engine separately. 
+special search features for each engine separately.
 
 
 @node Setting up nnir
@@ -21192,7 +21176,7 @@ named @code{home} you can use
 
 @lisp
 (setq gnus-secondary-select-methods
-      '((nnml "home" 
+      '((nnml "home"
          (nnimap-address "localhost")
          (nnir-search-engine namazu))))
 @end lisp
@@ -21217,9 +21201,9 @@ could change this to
 @node The imap Engine
 @subsubsection The imap Engine
 
-The @code{imap} engine requires no configuration. 
+The @code{imap} engine requires no configuration.
 
-Queries using the @code{imap} engine follow a simple query language. 
+Queries using the @code{imap} engine follow a simple query language.
 The search is always case-insensitive and supports the following
 features (inspired by the Google search input language):
 
@@ -21229,10 +21213,10 @@ features (inspired by the Google search input language):
 AND, OR, and NOT are supported, and parentheses can be used to control
 operator precedence, e.g. (emacs OR xemacs) AND linux. Note that
 operators must be written with all capital letters to be
-recognised. Also preceding a term with a - sign is equivalent to NOT
+recognized. Also preceding a term with a - sign is equivalent to NOT
 term.
 
-@item Automatic AND queries 
+@item Automatic AND queries
 If you specify multiple words then they will be treated as an AND
 expression intended to match all components.
 
@@ -21265,7 +21249,7 @@ customize @code{nnir-imap-default-search-key}. For example to use
 @node The gmane Engine
 @subsubsection The gmane Engine
 
-The @code{gmane} engine requires no configuration. 
+The @code{gmane} engine requires no configuration.
 
 Gmane queries follow a simple query language:
 
@@ -21274,16 +21258,16 @@ Gmane queries follow a simple query language:
 AND, OR, NOT (or AND NOT), and XOR are supported, and brackets can be
 used to control operator precedence, e.g. (emacs OR xemacs) AND linux.
 Note that operators must be written with all capital letters to be
-recognised.
+recognized.
 
 @item Required and excluded terms
 + and - can be used to require or exclude terms, e.g. football -american
 
-@item Unicode handling 
+@item Unicode handling
 The search engine converts all text to utf-8, so searching should work
 in any language.
 
-@item Stopwords 
+@item Stopwords
 Common English words (like 'the' and 'a') are ignored by default. You
 can override this by prefixing such words with a + (e.g. +the) or
 enclosing the word in quotes (e.g. "the").
@@ -21297,7 +21281,7 @@ name (or part of a name) to match.
 @node The swish++ Engine
 @subsubsection The swish++ Engine
 
-FIXEM: Say something more here.
+FIXME: Say something more here.
 
 Documentation for swish++ may be found at the swish++ sourceforge page:
 @uref{http://swishplusplus.sourceforge.net}
@@ -21320,7 +21304,7 @@ to get a group name. By default this is @code{$HOME/Mail}.
 @node The swish-e Engine
 @subsubsection The swish-e Engine
 
-FIXEM: Say something more here.
+FIXME: Say something more here.
 
 Documentation for swish-e may be found at the swish-e homepage
 @uref{http://swish-e.org}
@@ -21346,7 +21330,7 @@ to get a group name. By default this is @code{$HOME/Mail}.
 Using the namazu engine requires creating and maintaining index files.
 One directory should contain all the index files, and nnir must be told
 where to find them by setting the @code{nnir-namazu-index-directory}
-variable.  
+variable.
 
 To work correctly the @code{nnir-namazu-remove-prefix} variable must
 also be correct. This is the prefix to remove from each file name
@@ -21409,7 +21393,7 @@ this command periodically, say every four hours.
 This engine is obsolete.
 
 @node Customizations
-@subsubsection Custimozations
+@subsubsection Customizations
 
 @table @code
 
@@ -21913,7 +21897,7 @@ Clearly, the easiest way would be if marks could somehow be
 automatically set for the original article. This is exactly what
 @emph{marks propagation} is about.
 
-Marks propagation is deactivated by default. You can activate it for a
+Marks propagation is inactive by default. You can activate it for a
 certain @code{nnmairix} group with
 @code{nnmairix-group-toggle-propmarks-this-group} (bound to @kbd{G b
 p}). This function will warn you if you try to use it with your default
@@ -22065,7 +22049,7 @@ an example server definition:
 (nnml "mairix" (nnml-directory "mairix") (nnml-get-new-mail nil))
 @end lisp
 
-(The @code{nnmaildir} back end also has a server variabe
+(The @code{nnmaildir} back end also has a server variable
 @code{get-new-mail}, but its default value is @code{nil}, so you don't
 have to explicitly set it if you use a @code{nnmaildir} server just for
 mairix.)
@@ -25472,7 +25456,7 @@ Write @code{spam-check-blackbox} if Blackbox can check incoming mail.
 
 Write @code{spam-blackbox-register-routine} and
 @code{spam-blackbox-unregister-routine} using the bogofilter
-register/unregister routines as a start, or other restister/unregister
+register/unregister routines as a start, or other register/unregister
 routines more appropriate to Blackbox, if Blackbox can
 register/unregister spam and ham.
 
@@ -26382,7 +26366,6 @@ renamed it back again to ``Gnus''.  But in mixed case.  ``Gnus'' vs.
 
 @menu
 * Gnus Versions::               What Gnus versions have been released.
-* Other Gnus Versions::         Other Gnus versions that also have been released.
 * Why?::                        What's the point of Gnus?
 * Compatibility::               Just how compatible is Gnus with @sc{gnus}?
 * Conformity::                  Gnus tries to conform to all standards.
@@ -26436,22 +26419,6 @@ If you happen upon a version of Gnus that has a prefixed name --
 Don't let it know that you're frightened.  Back away.  Slowly.  Whatever
 you do, don't run.  Walk away, calmly, until you're out of its reach.
 Find a proper released version of Gnus and snuggle up to that instead.
-
-
-@node Other Gnus Versions
-@subsection Other Gnus Versions
-@cindex Semi-gnus
-
-In addition to the versions of Gnus which have had their releases
-coordinated by Lars, one major development has been Semi-gnus from
-Japan.  It's based on a library called @acronym{SEMI}, which provides
-@acronym{MIME} capabilities.
-
-These Gnusae are based mainly on Gnus 5.6 and Pterodactyl Gnus.
-Collectively, they are called ``Semi-gnus'', and different strains are
-called T-gnus, ET-gnus, Nana-gnus and Chaos.  These provide powerful
-@acronym{MIME} and multilingualization things, especially important for
-Japanese users.
 
 
 @node Why?
@@ -26774,7 +26741,7 @@ Sudish Joseph---innumerable bug fixes.
 Ilja Weis---@file{gnus-topic.el}.
 
 @item
-Steven L. Baur---lots and lots and lots of bugs detections and fixes.
+Steven L. Baur---lots and lots and lots of bug detection and fixes.
 
 @item
 Vladimir Alexiev---the refcard and reference booklets.
@@ -27443,7 +27410,7 @@ considered home score and adapt files (@pxref{Home Score File}) have
 been added.
 
 @item
-@code{nndoc} was rewritten to be easily extendable (@pxref{Document
+@code{nndoc} was rewritten to be easily extensible (@pxref{Document
 Server Internals}).
 
 @item
@@ -27836,7 +27803,7 @@ The revised Gnus @acronym{FAQ} is included in the manual,
 @acronym{TLS} wrapper shipped with Gnus
 
 @acronym{TLS}/@acronym{SSL} is now supported in @acronym{IMAP} and
-@acronym{NNTP} via @file{tls.el} and GNUTLS.
+@acronym{NNTP} via @file{tls.el} and GnuTLS.
 
 @item
 Improved anti-spam features.
@@ -30047,8 +30014,8 @@ this:
 @node Score File Syntax
 @subsection Score File Syntax
 
-Score files are meant to be easily parseable, but yet extremely
-mallable.  It was decided that something that had the same read syntax
+Score files are meant to be easily parsable, but yet extremely
+malleable.  It was decided that something that had the same read syntax
 as an Emacs Lisp list would fit that spec.
 
 Here's a typical score file:

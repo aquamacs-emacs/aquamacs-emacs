@@ -1,6 +1,6 @@
 ;;; tango-dark-theme.el --- Tango-based custom theme for faces
 
-;; Copyright (C) 2010-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2012 Free Software Foundation, Inc.
 
 ;; Authors: Chong Yidong <cyd@stupidchicken>
 ;;          Jan Moringen <jan.moringen@uni-bielefeld.de>
@@ -56,7 +56,7 @@ Semantic, and Ansi-Color faces are included.")
 	       (:foreground ,alum-1 :background "#222"))
 	      (,class
 	       (:foreground ,alum-1 :background "black"))))
-   `(cursor ((,class (:foreground ,alum-6 :background ,butter-1))))
+   `(cursor ((,class (:background ,butter-1))))
    ;; Highlighting faces
    `(fringe ((,class (:background ,alum-7))))
    `(highlight ((,class (:foreground ,alum-6 :background ,butter-2))))

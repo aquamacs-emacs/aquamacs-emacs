@@ -1,6 +1,6 @@
 ;;; wid-edit.el --- Functions for creating and using widgets -*-byte-compile-dynamic: t; lexical-binding:t -*-
 ;;
-;; Copyright (C) 1996-1997, 1999-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1996-1997, 1999-2012  Free Software Foundation, Inc.
 ;;
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
 ;; Maintainer: FSF
@@ -295,10 +295,10 @@ minibuffer."
 	     (error "Canceled"))
 	   value))))
 
-(defun widget-remove-if (predictate list)
+(defun widget-remove-if (predicate list)
   (let (result (tail list))
     (while tail
-      (or (funcall predictate (car tail))
+      (or (funcall predicate (car tail))
 	  (setq result (cons (car tail) result)))
       (setq tail (cdr tail)))
     (nreverse result)))
@@ -577,7 +577,7 @@ This is only meaningful for radio buttons or checkboxes in a list."
   "Map FUNCTION over the buttons in BUFFER.
 FUNCTION is called with the arguments WIDGET and MAPARG.
 
-If FUNCTION returns non-nil, the walk is cancelled.
+If FUNCTION returns non-nil, the walk is canceled.
 
 The arguments MAPARG, and BUFFER default to nil and (current-buffer),
 respectively."
@@ -1687,7 +1687,7 @@ The value of the :type attribute should be an unconverted widget type."
   (eval-minibuffer prompt))
 
 (defun widget-docstring (widget)
-  "Return the documentation string specificied by WIDGET, or nil if none.
+  "Return the documentation string specified by WIDGET, or nil if none.
 If WIDGET has a `:doc' property, that specifies the documentation string.
 Otherwise, try the `:documentation-property' property.  If this
 is a function, call it with the widget's value as an argument; if
@@ -2363,7 +2363,7 @@ Return an alist of (TYPE MATCH)."
     result))
 
 (defun widget-checklist-validate (widget)
-  ;; Ticked chilren must be valid.
+  ;; Ticked children must be valid.
   (let ((children (widget-get widget :children))
 	child button found)
     (while (and children (not found))

@@ -1,7 +1,12 @@
 * COPYRIGHT
 
-Copyright (C) 2001-2011  Free Software Foundation, Inc.
+Copyright (C) 2001-2012  Free Software Foundation, Inc.
 See the end of the file for license conditions.
+
+* Changes in MH-E 8.3.1
+
+This version of MH-E fixes typos in the documentation and is packaged
+with GNU Emacs 24.1
 
 * Changes in MH-E 8.3
 
@@ -27,14 +32,22 @@ from SourceForge and explicitly load MH-E will have to be change their
 `load-path' to "/path/to/mh-e/emacs/trunk/lisp/mh-e" instead. Note the
 addition of "trunk."
 
-This version of MH-E is packaged with GNU Emacs 24.1
-
 ** Bug Fixes in MH-E 8.3
 
 *** Make mh-showing a legitimate minor mode
 
 The `mh-showing-mode' variable is now defined with `define-minor-mode'
 (closes SF #482666).
+
+*** Desktop fails to restore MH-Folder buffers
+
+When restoring MH folders from ".emacs.desktop", Emacs now opens them in
+the expected `mh-folder' mode instead of `dired-mode' (closes SF #1510145)
+
+*** *MH-E Log* buffer can point to removed directory
+This was caused by using `set-buffer' instead of
+`with-current-buffer.' This has been fixed thanks to Stefan Monnier
+(closes SF #1903293).
 
 
 
@@ -1581,7 +1594,7 @@ message (closes SF #701756).
 MH-E now supports several spam filters including Bogofilter,
 SpamProbe, and SpamAssassin. Spam that is mistakenly considered to be
 good mail can be reclassified as spam with "J b (mh-junk-blacklist)".
-Conversely, good mail that is accidently considered to be spam can be
+Conversely, good mail that is accidentally considered to be spam can be
 reclassified with "J w (mh-junk-whitelist)" (closes SF #669518).
 
 If a message is blacklisted, and `mh-junk-mail-folder' is a string,
@@ -2666,7 +2679,7 @@ consistent mnemonics were realized that should make it easier to
 remember key bindings.
 
 Added new sub-keymaps for folder commands, sequence commands,
-extraction commands, and digest commands which begin with with F, S,
+extraction commands, and digest commands which begin with F, S,
 X, and D, respectively. These sub-keymaps allowed some consistency
 (e.g., especially with l(ist) and k(ill)).
 

@@ -1,6 +1,6 @@
 ;;; gnus-util.el --- utility functions for Gnus
 
-;; Copyright (C) 1996-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -1985,6 +1985,11 @@ definitions to shadow the loaded ones for use in file byte-compilation."
 		form
 	      (gnus-macroexpand-all expanded environment)))
 	form))))
+
+;; Simple check: can be a macro but this way, although slow, it's really clear.
+;; We don't use `bound-and-true-p' because it's not in XEmacs.
+(defun gnus-bound-and-true-p (sym)
+  (and (boundp sym) (symbol-value sym)))
 
 (provide 'gnus-util)
 

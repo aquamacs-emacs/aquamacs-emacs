@@ -1,6 +1,6 @@
 ;;; easy-mmode.el --- easy definition for major and minor modes
 
-;; Copyright (C) 1997, 2000-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1997, 2000-2012  Free Software Foundation, Inc.
 
 ;; Author: Georges Brun-Cottan <Georges.Brun-Cottan@inria.fr>
 ;; Maintainer: Stefan Monnier <monnier@gnu.org>
@@ -94,8 +94,9 @@ Optional LIGHTER is displayed in the modeline when the mode is on.
 Optional KEYMAP is the default keymap bound to the mode keymap.
   If non-nil, it should be a variable name (whose value is a keymap),
   or an expression that returns either a keymap or a list of
-  arguments for `easy-mmode-define-keymap'.  If KEYMAP is not a symbol,
-  this also defines the variable MODE-map.
+  arguments for `easy-mmode-define-keymap'.  If you supply a KEYMAP
+  argument that is not a symbol, this macro defines the variable
+  MODE-map and gives it the value that KEYMAP specifies.
 
 BODY contains code to execute each time the mode is enabled or disabled.
   It is executed after toggling the mode, and before running MODE-hook.
@@ -232,10 +233,10 @@ or call the function `%s'."))))
        (defun ,modefun (&optional arg ,@extra-args)
 	 ,(or doc
 	      (format (concat "Toggle %s on or off.
-Interactively, with no prefix argument, toggle the mode.
-With universal prefix ARG turn mode on.
-With zero or negative ARG turn mode off.
-\\{%s}") pretty-name keymap-sym))
+With a prefix argument ARG, enable %s if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+\\{%s}") pretty-name pretty-name keymap-sym))
 	 ;; Use `toggle' rather than (if ,mode 0 1) so that using
 	 ;; repeat-command still does the toggling correctly.
 	 (interactive (list (or current-prefix-arg 'toggle)))
@@ -350,14 +351,16 @@ call another major mode in their body."
        (define-minor-mode ,global-mode
 	 ;; Very short lines to avoid too long lines in the generated
 	 ;; doc string.
-	 ,(format "Toggle %s in every possible buffer.
-With prefix ARG, turn %s on if and only if
-ARG is positive.
+	 ,(format "Toggle %s in all buffers.
+With prefix ARG, enable %s if ARG is positive;
+otherwise, disable it.  If called from Lisp, enable the mode if
+ARG is omitted or nil.
+
 %s is enabled in all buffers where
 \`%s' would do it.
 See `%s' for more information on %s."
-		  pretty-name pretty-global-name pretty-name turn-on
-		  mode pretty-name)
+		  pretty-name pretty-global-name
+		  pretty-name turn-on mode pretty-name)
 	 :global t ,@group ,@(nreverse extra-keywords)
 
 	 ;; Setup hook to handle future mode changes and new buffers.
@@ -365,11 +368,13 @@ See `%s' for more information on %s."
 	     (progn
 	       (add-hook 'after-change-major-mode-hook
 			 ',MODE-enable-in-buffers)
-	       (add-hook 'fundamental-mode-hook ',MODE-enable-in-buffers)
+	       (add-hook 'change-major-mode-after-body-hook
+			 ',MODE-enable-in-buffers)
 	       (add-hook 'find-file-hook ',MODE-check-buffers)
 	       (add-hook 'change-major-mode-hook ',MODE-cmhh))
 	   (remove-hook 'after-change-major-mode-hook ',MODE-enable-in-buffers)
-           (remove-hook 'fundamental-mode-hook ',MODE-enable-in-buffers)
+	   (remove-hook 'change-major-mode-after-body-hook
+			',MODE-enable-in-buffers)
 	   (remove-hook 'find-file-hook ',MODE-check-buffers)
 	   (remove-hook 'change-major-mode-hook ',MODE-cmhh))
 

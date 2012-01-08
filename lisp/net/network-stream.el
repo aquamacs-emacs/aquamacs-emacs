@@ -1,6 +1,6 @@
 ;;; network-stream.el --- open network processes, possibly with encryption
 
-;; Copyright (C) 2010-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: network
@@ -115,7 +115,7 @@ values:
   capability command, and should return the command to switch on
   STARTTLS if the server supports STARTTLS, and nil otherwise.
 
-:always-query-capabilies says whether to query the server for
+:always-query-capabilities says whether to query the server for
   capabilities, even if we're doing a `plain' network connection.
 
 :client-certificate should either be a list where the first
@@ -218,7 +218,7 @@ functionality.
 	 (resulting-type 'plain)
 	 (builtin-starttls (and (fboundp 'gnutls-available-p)
 				(gnutls-available-p)))
-	 starttls-command error)
+	 starttls-available starttls-command error)
 
     ;; First check whether the server supports STARTTLS at all.
     (when (and capabilities success-string starttls-function)
@@ -227,10 +227,11 @@ functionality.
     ;; If we have built-in STARTTLS support, try to upgrade the
     ;; connection.
     (when (and starttls-command
-	       (or builtin-starttls
-		   (and (or require-tls
-			    (plist-get parameters :use-starttls-if-possible))
-			(starttls-available-p)))
+	       (setq starttls-available
+		     (or builtin-starttls
+			 (and (or require-tls
+				  (plist-get parameters :use-starttls-if-possible))
+			      (starttls-available-p))))
 	       (not (eq (plist-get parameters :type) 'plain)))
       ;; If using external STARTTLS, drop this connection and start
       ;; anew with `starttls-open-stream'.
@@ -298,9 +299,13 @@ functionality.
 	       ;; support, or no gnutls-cli installed.
 	       (eq resulting-type 'plain))
       (setq error
-	    (if require-tls
+	    (if starttls-available
 		"Server does not support TLS"
-	      "Server supports STARTTLS, but Emacs does not have support for it"))
+	      (concat "Emacs does not support TLS, and no external `"
+		      (if starttls-use-gnutls
+			  starttls-gnutls-program
+			starttls-program)
+		      "' program was found")))
       (delete-process stream)
       (setq stream nil))
     ;; Return value:

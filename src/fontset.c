@@ -1,6 +1,6 @@
 /* Fontset handler.
 
-Copyright (C) 2001-2011  Free Software Foundation, Inc.
+Copyright (C) 2001-2012  Free Software Foundation, Inc.
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
   2005, 2006, 2007, 2008, 2009, 2010, 2011
   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -166,7 +166,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    These structures are hidden from the other codes than this file.
    The other codes handle fontsets only by their ID numbers.  They
    usually use the variable name `fontset' for IDs.  But, in this
-   file, we always use varialbe name `id' for IDs, and name `fontset'
+   file, we always use variable name `id' for IDs, and name `fontset'
    for an actual fontset object, i.e., char-table.
 
 */
@@ -631,7 +631,7 @@ fontset_find_font (Lisp_Object fontset, int c, struct face *face, int id, int fa
 	    {
 	      /* Something strange happened, perhaps because of a
 		 Font-backend problem.  Too avoid crashing, record
-		 that this spec is unsable.  It may be better to find
+		 that this spec is unusable.  It may be better to find
 		 another font of the same spec, but currently we don't
 		 have such an API.  */
 	      RFONT_DEF_SET_FACE (rfont_def, -1);
@@ -643,7 +643,7 @@ fontset_find_font (Lisp_Object fontset, int c, struct face *face, int id, int fa
       if (font_has_char (f, font_object, c))
 	goto found;
 
-      /* Find a font already opened, maching with the current spec,
+      /* Find a font already opened, matching with the current spec,
 	 and supporting C. */
       font_def = RFONT_DEF_FONT_DEF (rfont_def);
       for (; found_index + 1 < ASIZE (vec); found_index++)
@@ -905,7 +905,7 @@ face_suitable_for_char_p (struct face *face, int c)
 
 
 /* Return ID of face suitable for displaying character C on frame F.
-   FACE must be reazlied for ASCII characters in advance.  Called from
+   FACE must be realized for ASCII characters in advance.  Called from
    the macro FACE_FOR_CHAR.  */
 
 int
@@ -1088,7 +1088,7 @@ fontset_pattern_regexp (Lisp_Object pattern)
 	    nescs++;
 	}
 
-      /* If PATTERN is not full XLFD we conert "*" to ".*".  Otherwise
+      /* If PATTERN is not full XLFD we convert "*" to ".*".  Otherwise
 	 we convert "*" to "[^-]*" which is much faster in regular
 	 expression matching.  */
       if (ndashes < 14)
@@ -1346,7 +1346,7 @@ accumulate_script_ranges (Lisp_Object arg, Lisp_Object range, Lisp_Object val)
 
    In FONTSET, set FONT_DEF in a fashion specified by ADD for
    characters in RANGE and ranges in SCRIPT_RANGE_LIST before RANGE.
-   The consumed ranges are poped up from SCRIPT_RANGE_LIST, and the
+   The consumed ranges are popped up from SCRIPT_RANGE_LIST, and the
    new SCRIPT_RANGE_LIST is stored in ARG.
 
    If ASCII is nil, don't set FONT_DEF for ASCII characters.  It is
@@ -1702,7 +1702,7 @@ static Lisp_Object auto_fontset_alist;
 /* Number of automatically created fontsets.  */
 static printmax_t num_auto_fontsets;
 
-/* Retun a fontset synthesized from FONT-OBJECT.  This is called from
+/* Return a fontset synthesized from FONT-OBJECT.  This is called from
    x_new_font when FONT-OBJECT is used for the default ASCII font of a
    frame, and the returned fontset is used for the default fontset of
    that frame.  The fontset specifies a font of the same registry as
@@ -1788,7 +1788,7 @@ update_auto_fontset_alist (Lisp_Object font_object, Lisp_Object fontset)
 /* Return a cons (FONT-OBJECT . GLYPH-CODE).
    FONT-OBJECT is the font for the character at POSITION in the current
    buffer.  This is computed from all the text properties and overlays
-   that apply to POSITION.  POSTION may be nil, in which case,
+   that apply to POSITION.  POSITION may be nil, in which case,
    FONT-SPEC is the font for displaying the character CH with the
    default face.
 

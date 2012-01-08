@@ -1,6 +1,6 @@
 ;;; viper-util.el --- Utilities used by viper.el
 
-;; Copyright (C) 1994-1997, 1999-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1994-1997, 1999-2012  Free Software Foundation, Inc.
 
 ;; Author: Michael Kifer <kifer@cs.stonybrook.edu>
 ;; Package: viper
@@ -871,7 +871,7 @@ Otherwise return the normal value."
     (abbreviate-file-name file)))
 
 ;; Sit for VAL milliseconds.  XEmacs doesn't support the millisecond arg
-;; in sit-for, so this function smoothes out the differences.
+;; in sit-for, so this function smooths out the differences.
 (defsubst viper-sit-for-short (val &optional nodisp)
   (sit-for (/ val 1000.0) nodisp))
 
@@ -1112,7 +1112,7 @@ Otherwise return the normal value."
        lis)))
 
 
-;; Smoothes out the difference between Emacs' unread-command-events
+;; Smooths out the difference between Emacs' unread-command-events
 ;; and XEmacs unread-command-event.  Arg is a character, an event, a list of
 ;; events or a sequence of keys.
 ;;

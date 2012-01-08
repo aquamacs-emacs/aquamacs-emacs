@@ -1,6 +1,6 @@
 /* font.c -- "Font" primitives.
 
-Copyright (C) 2006-2011  Free Software Foundation, Inc.
+Copyright (C) 2006-2012  Free Software Foundation, Inc.
 Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011
   National Institute of Advanced Industrial Science and Technology (AIST)
   Registration Number H13PRO009
@@ -162,7 +162,7 @@ static struct font_driver_list *font_driver_list;
 
 
 
-/* Creaters of font-related Lisp object.  */
+/* Creators of font-related Lisp object.  */
 
 static Lisp_Object
 font_make_spec (void)
@@ -614,7 +614,7 @@ static const struct
   /* Function to validate PROP's value VAL, or NULL if any value is
      ok.  The value is VAL or its regularized value if VAL is valid,
      and Qerror if not.  */
-  Lisp_Object (*validater) (Lisp_Object prop, Lisp_Object val);
+  Lisp_Object (*validator) (Lisp_Object prop, Lisp_Object val);
 } font_property_table[] =
   { { &QCtype, font_prop_validate_symbol },
     { &QCfoundry, font_prop_validate_symbol },
@@ -672,7 +672,7 @@ font_prop_validate (int idx, Lisp_Object prop, Lisp_Object val)
       if (idx < 0)
 	return val;
     }
-  validated = (font_property_table[idx].validater) (prop, val);
+  validated = (font_property_table[idx].validator) (prop, val);
   if (EQ (validated, Qerror))
     signal_error ("invalid font property", Fcons (prop, val));
   return validated;
@@ -802,7 +802,7 @@ font_expand_wildcards (Lisp_Object *field, int n)
   struct {
     /* Minimum possible field.  */
     int from;
-    /* Maxinum possible field.  */
+    /* Maximum possible field.  */
     int to;
     /* Bit mask of possible field.  Nth bit corresponds to Nth field.  */
     int mask;
@@ -825,7 +825,7 @@ font_expand_wildcards (Lisp_Object *field, int n)
     range_mask = (range_mask << 1) | 1;
 
   /* The triplet RANGE_FROM, RANGE_TO, and RANGE_MASK is a
-     position-based retriction for FIELD[I].  */
+     position-based restriction for FIELD[I].  */
   for (i = 0, range_from = 0, range_to = 14 - n; i < n;
        i++, range_from++, range_to++, range_mask <<= 1)
     {
@@ -842,7 +842,7 @@ font_expand_wildcards (Lisp_Object *field, int n)
       else
 	{
 	  /* The triplet FROM, TO, and MASK is a value-based
-	     retriction for FIELD[I].  */
+	     restriction for FIELD[I].  */
 	  int from, to;
 	  unsigned mask;
 
@@ -954,7 +954,7 @@ font_expand_wildcards (Lisp_Object *field, int n)
 	}
     }
 
-  /* Decide all fileds from restrictions in RANGE.  */
+  /* Decide all fields from restrictions in RANGE.  */
   for (i = j = 0; i < n ; i++)
     {
       if (j < range[i].from)
@@ -3160,14 +3160,7 @@ font_find_for_lface (FRAME_PTR f, Lisp_Object *attrs, Lisp_Object spec, int c)
   else
     {
       Lisp_Object alters
-	= Fassoc_string (val, Vface_alternative_font_family_alist,
-                         /* Font family names are case-sensitive under NS. */
-#ifndef HAVE_NS
-			 Qt
-#else
-			 Qnil
-#endif
-			 );
+	= Fassoc_string (val, Vface_alternative_font_family_alist, Qt);
 
       if (! NILP (alters))
 	{
@@ -5144,7 +5137,7 @@ the corresponding glyph code.  If ENCODING is a char-table, looking up
 the table by a character gives the corresponding glyph code.
 
 REPERTORY specifies a repertory of characters supported by the font.
-If REPERTORY is a charset, all characters beloging to the charset are
+If REPERTORY is a charset, all characters belonging to the charset are
 supported.  If REPERTORY is a char-table, all characters who have a
 non-nil value in the table are supported.  If REPERTORY is nil, Emacs
 gets the repertory information by an opened font and ENCODING.  */);

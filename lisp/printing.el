@@ -1,6 +1,6 @@
 ;;; printing.el --- printing utilities
 
-;; Copyright (C) 2000-2001, 2003-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2000-2001, 2003-2012  Free Software Foundation, Inc.
 
 ;; Author: Vinicius Jose Latorre <viniciusjl@ig.com.br>
 ;; Maintainer: Vinicius Jose Latorre <viniciusjl@ig.com.br>
@@ -547,7 +547,7 @@ Please send all bug fixes and enhancements to
 ;; `pr-auto-region'		Non-nil means region is automagically detected.
 ;;
 ;; `pr-auto-mode'		Non-nil means major-mode specific printing is
-;;				prefered over normal printing.
+;;				preferred over normal printing.
 ;;
 ;; `pr-mode-alist'		Specify an alist for a major-mode and printing
 ;;				function.
@@ -2426,7 +2426,7 @@ marked instead of all buffer."
 
 
 (defcustom pr-auto-mode t
-  "Non-nil means major-mode specific printing is prefered over normal printing.
+  "Non-nil means major-mode specific printing is preferred over normal printing.
 
 That is, if current major-mode is declared in `pr-mode-alist', the `*-buffer*'
 and `*-region*' commands will behave like `*-mode*' commands; otherwise,
@@ -2536,7 +2536,7 @@ LPR-PRINT	It's a symbol function for text printing.  It's invoked with
 		nil, it's used (point-max).
 
 PS-PRINT	It's a symbol function for PostScript printing.  It's invoked
-		with 3 arguments: n-up printing, file name and the list:
+		with three arguments: n-up printing, file name and the list:
 		(HEADER-LINES  LEFT-HEADER  RIGHT-HEADER DEFAULT...).
 
 		Usually PS-PRINT function prepares the environment or buffer
@@ -3692,7 +3692,7 @@ VI. Customization:
 	  "\n\n
 The printing interface buffer has the same functionality as the printing menu.
 The major difference is that the states (like sending PostScript generated to a
-file, n-up printing, etc.) are set and saved between priting buffer
+file, n-up printing, etc.) are set and saved between printing buffer
 activation.  Also, the landscape, duplex and tumble values are the same for
 PostScript file and directory/buffer/region/mode processing; using menu, there
 are different value sets for PostScript file and directory/buffer/region/mode
@@ -4667,7 +4667,7 @@ bottom."
   "Interactively select a PostScript utility."
   (interactive)
   (pr-menu-set-utility-title
-   (pr-complete-alist "Postscript utility"
+   (pr-complete-alist "PostScript utility"
 		      pr-ps-utility-alist pr-ps-utility)))
 
 
@@ -4710,12 +4710,12 @@ Interactively, you have the following situations:
 
    M-x pr-ps-fast-fire RET
       The command prompts the user for a N-UP value and printing will
-      immediatelly be done using the current active printer.
+      immediately be done using the current active printer.
 
    C-u   M-x pr-ps-fast-fire RET
    C-u 0 M-x pr-ps-fast-fire RET
       The command prompts the user for a N-UP value and also for a current
-      PostScript printer, then printing will immediatelly be done using the new
+      PostScript printer, then printing will immediately be done using the new
       current active printer.
 
    C-u 1 M-x pr-ps-fast-fire RET
@@ -4736,7 +4736,7 @@ zero and the argument SELECT is treated as follows:
    If it's nil, send the image to the printer.
 
    If it's a list or an integer lesser or equal to zero, the command prompts
-   the user for a current PostScript printer, then printing will immediatelly
+   the user for a current PostScript printer, then printing will immediately
    be done using the new current active printer.
 
    If it's an integer equal to 1, the command prompts the user for a file name
@@ -4749,7 +4749,7 @@ zero and the argument SELECT is treated as follows:
    instead of sending it to the printer.
 
    If it's a symbol which it's defined in `pr-ps-printer-alist', it's the new
-   active printer and printing will immediatelly be done using the new active
+   active printer and printing will immediately be done using the new active
    printer.
 
    Otherwise, send the image to the printer.
@@ -4800,7 +4800,7 @@ Noninteractively, the argument SELECT-PRINTER is treated as follows:
    If it's nil, the printing is sent to the current active text printer.
 
    If it's a symbol which it's defined in `pr-txt-printer-alist', it's the new
-   active printer and printing will immediatelly be done using the new active
+   active printer and printing will immediately be done using the new active
    printer.
 
    If it's non-nil, the command prompts the user for a new active text printer.
@@ -5458,7 +5458,7 @@ If menu binding was not done, calls `pr-menu-bind'."
 
 
 (defun pr-toggle-mode-menu (&optional no-menu)
-  "Toggle whether major-mode specific printing is prefered over normal printing."
+  "Toggle whether major-mode specific printing is preferred over normal printing."
   (interactive)
   (pr-toggle 'pr-auto-mode "Auto mode"
 	     'printing 1 12 'toggle nil no-menu))

@@ -1,11 +1,10 @@
 ;;; org-freemind.el --- Export Org files to freemind
 
-;; Copyright (C) 2009-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2012 Free Software Foundation, Inc.
 
 ;; Author: Lennart Borgman (lennart O borgman A gmail O com)
 ;; Keywords: outlines, hypermedia, calendar, wp
 ;; Homepage: http://orgmode.org
-;; Version: 7.7
 ;;
 ;; This file is part of GNU Emacs.
 ;;
@@ -660,7 +659,7 @@ Otherwise give an error say the file exists."
         (with-current-buffer mm-buffer
           (erase-buffer)
           (setq buffer-file-coding-system 'utf-8)
-          ;; Fix-me: Currentl Freemind (ver 0.9.0 RC9) does not support this:
+          ;; Fix-me: Currently Freemind (ver 0.9.0 RC9) does not support this:
           ;;(insert "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
           (insert "<map version=\"0.9.0\">\n")
           (insert "<!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->\n"))
@@ -1220,4 +1219,5 @@ PATH should be a list of steps, where each step has the form
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;; org-freemind.el ends here

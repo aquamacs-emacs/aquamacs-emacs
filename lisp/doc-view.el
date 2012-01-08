@@ -1,7 +1,7 @@
 ;;; doc-view.el --- View PDF/PostScript/DVI files in Emacs -*- lexical-binding: t -*-
 
 
-;; Copyright (C) 2007-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2012 Free Software Foundation, Inc.
 ;;
 ;; Author: Tassilo Horn <tassilo@member.fsf.org>
 ;; Maintainer: Tassilo Horn <tassilo@member.fsf.org>
@@ -124,7 +124,7 @@
 ;; (except the tooltip) if the next match is on the same page.
 
 ;; And it's much slower than the current search facility, because
-;; isearch really searches for each step forward or backward wheras
+;; isearch really searches for each step forward or backward whereas
 ;; the current approach searches once and then it knows to which
 ;; pages to jump.
 
@@ -149,7 +149,7 @@
   :group 'multimedia
   :prefix "doc-view-")
 
-(defcustom doc-view-ghostscript-program (executable-find "gs")
+(defcustom doc-view-ghostscript-program "gs"
   "Program to convert PS and PDF files to PNG."
   :type 'file
   :group 'doc-view)
@@ -175,7 +175,7 @@ Has only an effect if imagemagick support is compiled into emacs."
   :type 'number
   :group 'doc-view)
 
-(defcustom doc-view-dvipdfm-program (executable-find "dvipdfm")
+(defcustom doc-view-dvipdfm-program "dvipdfm"
   "Program to convert DVI files to PDF.
 
 DVI file will be converted to PDF before the resulting PDF is
@@ -186,7 +186,7 @@ If this and `doc-view-dvipdf-program' are set,
   :type 'file
   :group 'doc-view)
 
-(defcustom doc-view-dvipdf-program (executable-find "dvipdf")
+(defcustom doc-view-dvipdf-program "dvipdf"
   "Program to convert DVI files to PDF.
 
 DVI file will be converted to PDF before the resulting PDF is
@@ -197,21 +197,21 @@ If this and `doc-view-dvipdfm-program' are set,
   :type 'file
   :group 'doc-view)
 
-(defcustom doc-view-unoconv-program (executable-find "unoconv")
+(defcustom doc-view-unoconv-program "unoconv"
   "Program to convert any file type readable by OpenOffice.org to PDF.
 
 Needed for viewing OpenOffice.org (and MS Office) files."
   :type 'file
   :group 'doc-view)
 
-(defcustom doc-view-ps2pdf-program (executable-find "ps2pdf")
+(defcustom doc-view-ps2pdf-program "ps2pdf"
   "Program to convert PS files to PDF.
 
 PS files will be converted to PDF before searching is possible."
   :type 'file
   :group 'doc-view)
 
-(defcustom doc-view-pdftotext-program (executable-find "pdftotext")
+(defcustom doc-view-pdftotext-program "pdftotext"
   "Program to convert PDF files to plain text.
 
 Needed for searching."
@@ -881,7 +881,7 @@ Start by converting PAGES, and then the rest."
 
 (defun doc-view-pdf->txt (pdf txt callback)
   "Convert PDF to TXT asynchronously and call CALLBACK when finished."
-  (or doc-view-pdftotext-program
+  (or (executable-find doc-view-pdftotext-program)
       (error "You need the `pdftotext' program to convert a PDF to text"))
   (doc-view-start-process "pdf->txt" doc-view-pdftotext-program
                           (list "-raw" pdf txt)
@@ -917,7 +917,7 @@ Start by converting PAGES, and then the rest."
 
 (defun doc-view-ps->pdf (ps pdf callback)
   "Convert PS to PDF asynchronously and call CALLBACK when finished."
-  (or doc-view-ps2pdf-program
+  (or (executable-find doc-view-ps2pdf-program)
       (error "You need the `ps2pdf' program to convert PS to PDF"))
   (doc-view-start-process "ps->pdf" doc-view-ps2pdf-program
                           (list
@@ -1502,8 +1502,11 @@ to the next best mode."
 
 ;;;###autoload
 (define-minor-mode doc-view-minor-mode
-  "Toggle Doc view minor mode.
-With arg, turn Doc view minor mode on if arg is positive, off otherwise.
+  "Toggle displaying buffer via Doc View (Doc View minor mode).
+With a prefix argument ARG, enable Doc View minor mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
 See the command `doc-view-mode' for more information on this mode."
   nil " DocView" doc-view-minor-mode-map
   :group 'doc-view

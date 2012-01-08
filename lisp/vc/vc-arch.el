@@ -1,6 +1,6 @@
 ;;; vc-arch.el --- VC backend for the Arch version-control system
 
-;; Copyright (C) 2004-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2004-2012  Free Software Foundation, Inc.
 
 ;; Author:      FSF (see vc.el for full credits)
 ;; Maintainer:  Stefan Monnier <monnier@gnu.org>
@@ -398,7 +398,7 @@ CALLBACK expects (ENTRIES &optional MORE-TO-COME); see
 	 (with-temp-buffer
 	   (insert-file-contents rej)
 	   (goto-char (point-min))
-	   (looking-at "Conflicts occured, diff3 conflict markers left in file\\.")))))
+	   (looking-at "Conflicts occurred, diff3 conflict markers left in file\\.")))))
 
 (defun vc-arch-delete-rej-if-obsolete ()
   "For use in `after-save-hook'."

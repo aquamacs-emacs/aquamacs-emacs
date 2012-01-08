@@ -1,6 +1,6 @@
 ;;; dbus.el --- Elisp bindings for D-Bus.
 
-;; Copyright (C) 2007-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2012 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, hardware
@@ -101,7 +101,7 @@ Otherwise, return result of last form in BODY, or all other errors."
 (defvar dbus-event-error-hooks nil
   "Functions to be called when a D-Bus error happens in the event handler.
 Every function must accept two arguments, the event and the error variable
-catched in `condition-case' by `dbus-error'.")
+caught in `condition-case' by `dbus-error'.")
 
 
 ;;; Hash table of registered functions.
@@ -145,12 +145,12 @@ association to the service from D-Bus."
 	 (service (car value))
 	 (entry (gethash key dbus-registered-objects-table))
 	 ret)
-    ;; key has the structure (BUS INTERRFACE MEMBER).
+    ;; key has the structure (BUS INTERFACE MEMBER).
     ;; value has the structure (SERVICE PATH [HANDLER]).
     ;; entry has the structure ((UNAME SERVICE PATH MEMBER [RULE]) ...).
     ;; MEMBER is either a string (the handler), or a cons cell (a
     ;; property value).  UNAME and property values are not taken into
-    ;; account for comparision.
+    ;; account for comparison.
 
     ;; Loop over the registered functions.
     (dolist (elt entry)
@@ -505,7 +505,7 @@ not well formed."
 
 (defun dbus-event-member-name (event)
   "Return the member name the event is coming from.
-It is either a signal name or a method name. The result is is a
+It is either a signal name or a method name. The result is a
 string.  EVENT is a D-Bus event, see `dbus-check-event'.  This
 function raises a `dbus-error' signal in case the event is not
 well formed."

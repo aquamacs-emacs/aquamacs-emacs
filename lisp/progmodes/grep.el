@@ -1,6 +1,6 @@
 ;;; grep.el --- run `grep' and display the results
 
-;; Copyright (C) 1985-1987, 1993-1999, 2001-2011
+;; Copyright (C) 1985-1987, 1993-1999, 2001-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Roland McGrath <roland@gnu.org>
@@ -108,7 +108,7 @@ To change the default value, use Customize or call the function
 
 Setting it causes the grep commands to put point at the end of their
 output window so that the end of the output is always visible rather
-than the begining."
+than the beginning."
   :type 'boolean
   :version "22.1"
   :group 'grep)
@@ -339,7 +339,7 @@ See `compilation-error-screen-columns'"
   "The most recent grep buffer.
 A grep buffer becomes most recent when you select Grep mode in it.
 Notice that using \\[next-error] or \\[compile-goto-error] modifies
-`complation-last-buffer' rather than `grep-last-buffer'.")
+`compilation-last-buffer' rather than `grep-last-buffer'.")
 
 ;;;###autoload
 (defconst grep-regexp-alist
@@ -438,9 +438,9 @@ This variable's value takes effect when `grep-compute-defaults' is called.")
 
 ;; History of grep commands.
 ;;;###autoload
-(defvar grep-history nil)
+(defvar grep-history nil "History list for grep.")
 ;;;###autoload
-(defvar grep-find-history nil)
+(defvar grep-find-history nil "History list for grep-find.")
 
 ;; History of lgrep and rgrep regexp and files args.
 (defvar grep-regexp-history nil)
@@ -959,7 +959,10 @@ can use \\[next-error] (M-x next-error), or \\<grep-mode-map>\\[compile-goto-err
 in the grep output buffer,
 to go to the lines where grep found matches.
 
-This command shares argument histories with \\[lgrep] and \\[grep-find]."
+This command shares argument histories with \\[lgrep] and \\[grep-find].
+
+When called programmatically and FILES is nil, REGEXP is expected
+to specify a command to run."
   (interactive
    (progn
      (grep-compute-defaults)

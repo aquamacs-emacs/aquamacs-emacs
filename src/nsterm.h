@@ -1,5 +1,5 @@
 /* Definitions and headers for communication with NeXT/Open/GNUstep API.
-   Copyright (C) 1989, 1993, 2005, 2008-2011 Free Software Foundation, Inc.
+   Copyright (C) 1989, 1993, 2005, 2008-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -498,7 +498,7 @@ struct nsfont_info
 {
   struct font font;
 
-  char *name;  /* postscript name, uniquely identifies on NS systems */
+  char *name;  /* PostScript name, uniquely identifies on NS systems */
   float width;  /* this and following metrics stored as float rather than int */
   float height;
   float underpos;
@@ -521,7 +521,7 @@ struct nsfont_info
   XCharStruct max_bounds;
   /* we compute glyph codes and metrics on-demand in blocks of 256 indexed
      by hibyte, lobyte */
-  unsigned short **glyphs; /* map unicode index to glyph */
+  unsigned short **glyphs; /* map Unicode index to glyph */
   struct font_metrics **metrics;
 };
 
@@ -809,6 +809,7 @@ extern void  ns_release_object (void *obj);
 extern void  ns_retain_object (void *obj);
 extern void *ns_alloc_autorelease_pool ();
 extern void ns_release_autorelease_pool ();
+extern const char *ns_get_defaults_value ();
 
 /* in nsmenu */
 extern void update_frame_tool_bar (FRAME_PTR f);
@@ -843,6 +844,7 @@ extern void x_set_tool_bar_lines (struct frame *f,
                                   Lisp_Object oldval);
 extern void x_activate_menubar (struct frame *);
 extern void free_frame_menubar (struct frame *);
+extern void x_free_frame_resources (struct frame *);
 
 #define NSAPP_DATA2_RUNASSCRIPT 10
 extern void ns_run_ascript (void);

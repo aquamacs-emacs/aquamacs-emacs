@@ -10,7 +10,7 @@
 ;;;;;;  ceiling* floor* isqrt lcm gcd cl-progv-before cl-set-frame-visible-p
 ;;;;;;  cl-map-overlays cl-map-intervals cl-map-keymap-recursively
 ;;;;;;  notevery notany every some mapcon mapcan mapl maplist map
-;;;;;;  cl-mapcar-many equalp coerce) "cl-extra" "cl-extra.el" "26339d9571f9485bf34fa6d2ae38fc84")
+;;;;;;  cl-mapcar-many equalp coerce) "cl-extra" "cl-extra.el" "c172dda6770ce18b556561481bfefbb2")
 ;;; Generated autoloads from cl-extra.el
 
 (autoload 'coerce "cl-extra" "\
@@ -28,7 +28,7 @@ strings case-insensitively.
 \(fn X Y)" nil nil)
 
 (autoload 'cl-mapcar-many "cl-extra" "\
-Not documented
+
 
 \(fn CL-FUNC CL-SEQS)" nil nil)
 
@@ -84,27 +84,27 @@ Return true if PREDICATE is false of some element of SEQ or SEQs.
 (defalias 'cl-map-keymap 'map-keymap)
 
 (autoload 'cl-map-keymap-recursively "cl-extra" "\
-Not documented
+
 
 \(fn CL-FUNC-REC CL-MAP &optional CL-BASE)" nil nil)
 
 (autoload 'cl-map-intervals "cl-extra" "\
-Not documented
+
 
 \(fn CL-FUNC &optional CL-WHAT CL-PROP CL-START CL-END)" nil nil)
 
 (autoload 'cl-map-overlays "cl-extra" "\
-Not documented
+
 
 \(fn CL-FUNC &optional CL-BUFFER CL-START CL-END CL-ARG)" nil nil)
 
 (autoload 'cl-set-frame-visible-p "cl-extra" "\
-Not documented
+
 
 \(fn FRAME VAL)" nil nil)
 
 (autoload 'cl-progv-before "cl-extra" "\
-Not documented
+
 
 \(fn SYMS VALUES)" nil nil)
 
@@ -180,7 +180,11 @@ Return t if OBJECT is a random-state object.
 \(fn OBJECT)" nil nil)
 
 (autoload 'cl-float-limits "cl-extra" "\
-Not documented
+Initialize the Common Lisp floating-point parameters.
+This sets the values of: `most-positive-float', `most-negative-float',
+`least-positive-float', `least-negative-float', `float-epsilon',
+`float-negative-epsilon', `least-positive-normalized-float', and
+`least-negative-normalized-float'.
 
 \(fn)" nil nil)
 
@@ -228,12 +232,12 @@ PROPLIST is a list of the sort returned by `symbol-plist'.
 \(fn PROPLIST PROPNAME &optional DEFAULT)" nil nil)
 
 (autoload 'cl-set-getf "cl-extra" "\
-Not documented
+
 
 \(fn PLIST TAG VAL)" nil nil)
 
 (autoload 'cl-do-remf "cl-extra" "\
-Not documented
+
 
 \(fn PLIST TAG)" nil nil)
 
@@ -267,7 +271,7 @@ This also does some trivial optimizations to make the form prettier.
 \(fn FORM &optional ENV)" nil nil)
 
 (autoload 'cl-prettyexpand "cl-extra" "\
-Not documented
+
 
 \(fn FORM &optional FULL)" nil nil)
 
@@ -282,7 +286,7 @@ Not documented
 ;;;;;;  flet progv psetq do-all-symbols do-symbols dotimes dolist
 ;;;;;;  do* do loop return-from return block etypecase typecase ecase
 ;;;;;;  case load-time-value eval-when destructuring-bind function*
-;;;;;;  defmacro* defun* gentemp gensym) "cl-macs" "cl-macs.el" "cc8cbd8c86e2facbe61986e992e6c508")
+;;;;;;  defmacro* defun* gentemp gensym) "cl-macs" "cl-macs.el" "91b45885535a73dd8015973cb8c988e1")
 ;;; Generated autoloads from cl-macs.el
 
 (autoload 'gensym "cl-macs" "\
@@ -766,7 +770,7 @@ surrounded by (block NAME ...).
 ;;;;;;  find nsubstitute-if-not nsubstitute-if nsubstitute substitute-if-not
 ;;;;;;  substitute-if substitute delete-duplicates remove-duplicates
 ;;;;;;  delete-if-not delete-if delete* remove-if-not remove-if remove*
-;;;;;;  replace fill reduce) "cl-seq" "cl-seq.el" "df375ddc313f0c1c262cacab5cffd3e4")
+;;;;;;  replace fill reduce) "cl-seq" "cl-seq.el" "99095e49c83af1c8bec0fdcf517b3f95")
 ;;; Generated autoloads from cl-seq.el
 
 (autoload 'reduce "cl-seq" "\
@@ -1044,7 +1048,7 @@ Keywords supported:  :key
 \(fn PREDICATE LIST [KEYWORD VALUE]...)" nil nil)
 
 (autoload 'cl-adjoin "cl-seq" "\
-Not documented
+
 
 \(fn CL-ITEM CL-LIST &rest CL-KEYS)" nil nil)
 

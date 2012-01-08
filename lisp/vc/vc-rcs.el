@@ -1,6 +1,6 @@
 ;;; vc-rcs.el --- support for RCS version-control
 
-;; Copyright (C) 1992-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1992-2012  Free Software Foundation, Inc.
 
 ;; Author:     FSF (see vc.el for full credits)
 ;; Maintainer: Andre Spiegel <spiegel@gnu.org>
@@ -1399,7 +1399,7 @@ The `:insn' key is a keyword to distinguish it as a vc-rcs.el extension."
               ;; `incg' or `buffer-substring-no-properties'.  (This is
               ;; for speed; strictly speaking, it is sufficient to use
               ;; only the former since it behaves identically to the
-              ;; latter in the absense of "@@".)
+              ;; latter in the absence of "@@".)
               sub)
           (flet ((incg (beg end) (let ((b beg) (e end) @-holes)
                                    (while (and asc (< (car asc) e))

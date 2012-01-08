@@ -1,6 +1,6 @@
 ;;; ns-win.el --- lisp side of interface with NeXT/Open/GNUstep/MacOS X window system
 
-;; Copyright (C) 1993-1994, 2005-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1993-1994, 2005-2012  Free Software Foundation, Inc.
 
 ;; Authors: Carl Edman
 ;;	Christian Limpach
@@ -43,7 +43,7 @@
 
 (or (featurep 'ns)
     (error "%s: Loading ns-win.el but not compiled for GNUstep/MacOS"
-	   (invocation-name)))
+           (invocation-name)))
 
 (eval-when-compile (require 'cl))       ; lexical-let
 
@@ -380,22 +380,22 @@ See `ns-insert-working-text'."
 ;; Lisp code based on utf-8m.el, by Seiji Zenitani, Eiji Honjoh, and
 ;; Carsten Bormann.
 (when (eq system-type 'darwin)
-      (defun ns-utf8-nfd-post-read-conversion (length)
-	"Calls `ns-convert-utf8-nfd-to-nfc' to compose char sequences."
-	(save-excursion
-	  (save-restriction
-	    (narrow-to-region (point) (+ (point) length))
-	    (let ((str (buffer-string)))
-	      (delete-region (point-min) (point-max))
-	      (insert (ns-convert-utf8-nfd-to-nfc str))
+  (defun ns-utf8-nfd-post-read-conversion (length)
+    "Calls `ns-convert-utf8-nfd-to-nfc' to compose char sequences."
+    (save-excursion
+      (save-restriction
+        (narrow-to-region (point) (+ (point) length))
+        (let ((str (buffer-string)))
+          (delete-region (point-min) (point-max))
+          (insert (ns-convert-utf8-nfd-to-nfc str))
           (- (point-max) (point-min))))))
 
-      (define-coding-system 'utf-8-nfd
-	"UTF-8 NFD (decomposed) encoding."
-	:coding-type 'utf-8
-	:mnemonic ?U
-	:charset-list '(unicode)
-	:post-read-conversion 'ns-utf8-nfd-post-read-conversion)
+  (define-coding-system 'utf-8-nfd
+    "UTF-8 NFD (decomposed) encoding."
+    :coding-type 'utf-8
+    :mnemonic ?U
+    :charset-list '(unicode)
+    :post-read-conversion 'ns-utf8-nfd-post-read-conversion)
   (set-file-name-coding-system 'utf-8-nfd))
 
 
@@ -597,10 +597,10 @@ unless the current buffer is a scratch buffer."
   (interactive)
   (let* ((f (file-truename
 	     (expand-file-name (pop ns-input-file)
-					     command-line-default-directory)))
+			       command-line-default-directory)))
          (file (find-file-noselect f))
          (bufwin1 (get-buffer-window file 'visible))
-         (bufwin2 (get-buffer-window "*scratch*" 'visibile)))
+         (bufwin2 (get-buffer-window "*scratch*" 'visible)))
     (cond
      (bufwin1
       (select-frame (window-frame bufwin1))
@@ -620,9 +620,6 @@ unless the current buffer is a scratch buffer."
       (find-file f)))))
 
 ;;;; Frame-related functions.
-
-;; Don't show the frame name; that's redundant with Nextstep.
-(setq-default mode-line-frame-identification '("  "))
 
 ;; nsterm.m
 (defvar ns-alternate-modifier)
@@ -751,14 +748,14 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
 ;; Conditional on new-fontset so bootstrapping works on non-GUI compiles.
 (when (fboundp 'new-fontset)
-      ;; Setup the default fontset.
-      (create-default-fontset)
-      ;; Create the standard fontset.
-      (condition-case err
-	  (create-fontset-from-fontset-spec ns-standard-fontset-spec t)
-	(error (display-warning
-		'initialization
-		(format "Creation of the standard fontset failed: %s" err)
+  ;; Setup the default fontset.
+  (create-default-fontset)
+  ;; Create the standard fontset.
+  (condition-case err
+      (create-fontset-from-fontset-spec ns-standard-fontset-spec t)
+    (error (display-warning
+            'initialization
+            (format "Creation of the standard fontset failed: %s" err)
             :error))))
 
 (defvar ns-reg-to-script)               ; nsfont.m
@@ -790,7 +787,7 @@ panel immediately after correcting a word in a buffer."
   ) 
 
 ;; This maps font registries (not exposed by NS APIs for font selection) to
-;; unicode scripts (which can be mapped to unicode character ranges which are).
+;; Unicode scripts (which can be mapped to Unicode character ranges which are).
 ;; See ../international/fontset.el
 (setq ns-reg-to-script
       '(("iso8859-1" . latin)
@@ -830,20 +827,24 @@ panel immediately after correcting a word in a buffer."
 
 ;;;; Pasteboard support.
 
-(declare-function ns-get-cut-buffer-internal "nsselect.m" (buffer))
+(declare-function ns-get-selection-internal "nsselect.m" (buffer))
+(declare-function ns-store-selection-internal "nsselect.m" (buffer string))
+
+(define-obsolete-function-alias 'ns-get-cut-buffer-internal
+  'ns-get-selection-internal "24.1")
+(define-obsolete-function-alias 'ns-store-cut-buffer-internal
+  'ns-store-selection-internal "24.1")
+
 
 (defun ns-get-pasteboard ()
   "Returns the value of the pasteboard."
-  (ns-get-cut-buffer-internal 'CLIPBOARD))
+  (ns-get-selection-internal 'CLIPBOARD))
 
-(declare-function ns-store-cut-buffer-internal "nsselect.m" (buffer string &optional type))
-
-(defun ns-set-pasteboard (string &optional type)
-  "Store STRING into the pasteboard of the Nextstep display server.
-TYPE may be `txt', `html', `pdf' or `rtf', or nil (text string)."
+(defun ns-set-pasteboard (string)
+  "Store STRING into the pasteboard of the Nextstep display server."
   ;; Check the data type of STRING.
   (if (not (stringp string)) (error "Nonstring given to pasteboard"))
-  (ns-store-cut-buffer-internal 'CLIPBOARD string))
+  (ns-store-selection-internal 'CLIPBOARD string))
 
 ;; We keep track of the last text selected here, so we can check the
 ;; current selection against it, and avoid passing back our own text
@@ -871,11 +872,11 @@ TYPE may be `txt', `html', `pdf' or `rtf', or nil (text string)."
 (defun ns-copy-including-secondary ()
   (interactive)
   (call-interactively 'kill-ring-save)
-  (ns-store-cut-buffer-internal 'SECONDARY
-				(buffer-substring (point) (mark t))))
+  (ns-store-selection-internal 'SECONDARY
+			       (buffer-substring (point) (mark t))))
 (defun ns-paste-secondary ()
   (interactive)
-  (insert (ns-get-cut-buffer-internal 'SECONDARY)))
+  (insert (ns-get-selection-internal 'SECONDARY)))
 
 
 ;;;; Scrollbar handling.

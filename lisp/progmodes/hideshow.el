@@ -1,6 +1,6 @@
 ;;; hideshow.el --- minor mode cmds to selectively display code/comment blocks
 
-;; Copyright (C) 1994-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1994-2012  Free Software Foundation, Inc.
 
 ;; Author: Thien-Thi Nguyen <ttn@gnu.org>
 ;;      Dan Nicolaescu <dann@ics.uci.edu>
@@ -194,9 +194,9 @@
 ;;     Unfortunately, these workarounds do not restore hideshow state.
 ;;     If someone figures out a better way, please let me know.
 
-;; * Correspondance
+;; * Correspondence
 ;;
-;; Correspondance welcome; please indicate version number.  Send bug
+;; Correspondence welcome; please indicate version number.  Send bug
 ;; reports and inquiries to <ttn@gnu.org>.
 
 ;; * Thanks

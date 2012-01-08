@@ -1,6 +1,6 @@
 ;;; gomoku.el --- Gomoku game between you and Emacs
 
-;; Copyright (C) 1988, 1994, 1996, 2001-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1988, 1994, 1996, 2001-2012  Free Software Foundation, Inc.
 
 ;; Author: Philippe Schnoebelen <phs@lsv.ens-cachan.fr>
 ;; Maintainer: FSF
@@ -379,7 +379,7 @@ Other useful commands:\n
 		  best-square square
 		  score-max   score)
 	    (aset gomoku-score-table square -1))) ; no: kill it !
-       ;; If score is equally good, choose randomly. But first check freeness:
+       ;; If score is equally good, choose randomly. But first check freedom:
        ((not (zerop (aref gomoku-board square)))
 	(aset gomoku-score-table square -1))
        ((zerop (random (setq count (1+ count))))

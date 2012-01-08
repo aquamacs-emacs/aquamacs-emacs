@@ -1,6 +1,6 @@
 ;;; url-future.el --- general futures facility for url.el
 
-;; Copyright (C) 2011  Free Software Foundation, Inc.
+;; Copyright (C) 2011-2012  Free Software Foundation, Inc.
 
 ;; Author: Teodor Zlatanov <tzz@lifelogs.com>
 ;; Keywords: data
@@ -36,7 +36,7 @@
 ;; So, to get the value:
 ;; (when (url-future-completed-p future) (url-future-value future))
 
-;; See the ERT tests and the code for futher details.
+;; See the ERT tests and the code for further details.
 
 ;;; Code:
 

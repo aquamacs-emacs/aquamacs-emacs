@@ -1,6 +1,6 @@
 ;;; notifications.el --- Client interface to desktop notifications.
 
-;; Copyright (C) 2010-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2012 Free Software Foundation, Inc.
 
 ;; Author: Julien Danjou <julien@danjou.info>
 ;; Keywords: comm desktop notifications
@@ -29,6 +29,9 @@
 ;; into your .emacs:
 ;;
 ;;   (require 'notifications)
+
+;; For proper usage, Emacs must be started in an environment with an
+;; active D-Bus session bus.
 
 ;;; Code:
 (eval-when-compile
@@ -160,7 +163,7 @@ Various PARAMS can be set:
                  only URI schema supported right now) or a name
                  in a freedesktop.org-compliant icon theme.
  :sound-file     The path to a sound file to play when the notification pops up.
- :sound-name     A themeable named sound from the freedesktop.org sound naming
+ :sound-name     A themable named sound from the freedesktop.org sound naming
                  specification to play when the notification pops up.
                  Similar to icon-name,only for sounds. An example would
                  be \"message-new-instant\".

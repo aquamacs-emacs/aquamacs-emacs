@@ -1,5 +1,5 @@
 /* Synchronous subprocess invocation for GNU Emacs.
-   Copyright (C) 1985-1988, 1993-1995, 1999-2011
+   Copyright (C) 1985-1988, 1993-1995, 1999-2012
 		 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -712,6 +712,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
       /* If BUFFER is nil, we must read process output once and then
 	 discard it, so setup coding system but with nil.  */
       setup_coding_system (Qnil, &process_coding);
+      process_coding.dst_multibyte = 0;
     }
   else
     {
@@ -747,7 +748,10 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 	  && !NILP (val))
 	val = raw_text_coding_system (val);
       setup_coding_system (val, &process_coding);
+      process_coding.dst_multibyte
+	= ! NILP (BVAR (current_buffer, enable_multibyte_characters));
     }
+  process_coding.src_multibyte = 0;
 
   immediate_quit = 1;
   QUIT;

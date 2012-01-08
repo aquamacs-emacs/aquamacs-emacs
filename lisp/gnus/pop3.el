@@ -1,6 +1,6 @@
 ;;; pop3.el --- Post Office Protocol (RFC 1460) interface
 
-;; Copyright (C) 1996-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
 
 ;; Author: Richard L. Pieri <ratinox@peorth.gweep.net>
 ;; Maintainer: FSF
@@ -270,11 +270,11 @@ Use streaming commands."
     message-count))
 
 (defcustom pop3-stream-type nil
-  "*Transport security type for POP3 connexions.
-This may be either nil (plain connexion), `ssl' (use an
+  "*Transport security type for POP3 connections.
+This may be either nil (plain connection), `ssl' (use an
 SSL/TSL-secured stream) or `starttls' (use the starttls mechanism
 to turn on TLS security after opening the stream).  However, if
-this is nil, `ssl' is assumed for connexions to port
+this is nil, `ssl' is assumed for connections to port
 995 (pop3s)."
   :version "23.1" ;; No Gnus
   :group 'pop3

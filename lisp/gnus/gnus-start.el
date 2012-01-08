@@ -1,6 +1,6 @@
 ;;; gnus-start.el --- startup functions for Gnus
 
-;; Copyright (C) 1996-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -1678,7 +1678,7 @@ If SCAN, request a scan of that group as well."
 
     ;; Sort the methods based so that the primary and secondary
     ;; methods come first.  This is done for legacy reasons to try to
-    ;; ensure that side-effect behaviour doesn't change from previous
+    ;; ensure that side-effect behavior doesn't change from previous
     ;; Gnus versions.
     (setq type-cache
 	  (sort (nreverse type-cache)
@@ -2533,7 +2533,7 @@ If FORCE is non-nil, the .newsrc file is read."
        ((or (eq symbol options-symbol)
 	    (eq symbol Options-symbol))
 	(setq gnus-newsrc-options
-	      ;; This concating is quite inefficient, but since our
+	      ;; This concatting is quite inefficient, but since our
 	      ;; thorough studies show that approx 99.37% of all
 	      ;; .newsrc files only contain a single options line, we
 	      ;; don't give a damn, frankly, my dear.

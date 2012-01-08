@@ -1,6 +1,6 @@
 ;;; mm-decode.el --- Functions for decoding MIME things
 
-;; Copyright (C) 1998-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012  Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;;	MORIOKA Tomohiko <morioka@jaist.ac.jp>
@@ -275,7 +275,7 @@ before the external MIME handler is invoked."
 		     (ignore-errors
 		       (if (fboundp 'create-image)
 			   (create-image (buffer-string) 'imagemagick 'data-p)
-			 (mm-create-image-xemacs type)))))
+			 (mm-create-image-xemacs (mm-handle-media-subtype handle))))))
 		(when image
 		  (setcar (cdr handle) (list "image/imagemagick"))
 		  (mm-image-fit-p handle)))))))
@@ -360,7 +360,7 @@ to:
  (\"text/html\" \"text/richtext\")
 
 Adding \"image/.*\" might also be useful.  Spammers use it as the
-prefered part of multipart/alternative messages.  See also
+preferred part of multipart/alternative messages.  See also
 `gnus-buttonized-mime-types', to which adding \"multipart/alternative\"
 enables you to choose manually one of two types those mails include."
   :type '(repeat regexp) ;; See `mm-preferred-alternative-precedence'.
@@ -1494,7 +1494,7 @@ be determined."
     (or (not image)
 	(if (featurep 'xemacs)
 	    ;; XEmacs' glyphs can actually tell us about their width, so
-	    ;; lets be nice and smart about them.
+	    ;; let's be nice and smart about them.
 	    (or mm-inline-large-images
 		(and (<= (glyph-width image) (window-pixel-width))
 		     (<= (glyph-height image) (window-pixel-height))))
@@ -1724,6 +1724,7 @@ If RECURSIVE, search recursively."
 				      (buffer-string))))))
 	shr-inhibit-images shr-blocked-images charset char)
     (if (and (boundp 'gnus-summary-buffer)
+	     (bufferp gnus-summary-buffer)
 	     (buffer-name gnus-summary-buffer))
 	(with-current-buffer gnus-summary-buffer
 	  (setq shr-inhibit-images gnus-inhibit-images

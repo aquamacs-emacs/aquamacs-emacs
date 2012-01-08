@@ -1,6 +1,6 @@
 ;;; cl-indent.el --- enhanced lisp-indent mode
 
-;; Copyright (C) 1987, 2000-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1987, 2000-2012 Free Software Foundation, Inc.
 
 ;; Author: Richard Mlynarik <mly@eddie.mit.edu>
 ;; Created: July 1987
@@ -159,12 +159,16 @@ is set to `defun'.")
 			     (current-column))))
     (goto-char indent-point)
     (beginning-of-line)
-    (cond ((not (extended-loop-p (elt state 1)))
-	   (+ loop-indentation lisp-simple-loop-indentation))
-	  ((looking-at "^\\s-*\\(:?\\sw+\\|;\\)")
-	   (+ loop-indentation lisp-loop-keyword-indentation))
-	  (t
-	   (+ loop-indentation lisp-loop-forms-indentation)))))
+    (list
+     (cond ((not (extended-loop-p (elt state 1)))
+	    (+ loop-indentation lisp-simple-loop-indentation))
+	   ((looking-at "^\\s-*\\(:?\\sw+\\|;\\)")
+	    (+ loop-indentation lisp-loop-keyword-indentation))
+	   (t
+	    (+ loop-indentation lisp-loop-forms-indentation)))
+     ;; Tell the caller that the next line needs recomputation, even
+     ;; though it doesn't start a sexp.
+     loop-indentation)))
 
 
 ;; Cf (info "(elisp)Specification List")

@@ -1,5 +1,5 @@
 /* Utility and Unix shadow routines for GNU Emacs on the Microsoft W32 API.
-   Copyright (C) 1994-1995, 2000-2011  Free Software Foundation, Inc.
+   Copyright (C) 1994-1995, 2000-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -94,7 +94,9 @@ typedef struct _MEMORY_STATUS_EX {
 
 #include <tlhelp32.h>
 #include <psapi.h>
+#ifndef _MSC_VER
 #include <w32api.h>
+#endif
 #if !defined (__MINGW32__) || __W32API_MAJOR_VERSION < 3 || (__W32API_MAJOR_VERSION == 3 && __W32API_MINOR_VERSION < 15)
 /* This either is not in psapi.h or guarded by higher value of
    _WIN32_WINNT than what we use.  w32api supplied with MinGW 3.15
@@ -1547,7 +1549,12 @@ init_environment (char ** argv)
 	 read-only filesystem, like CD-ROM or a write-protected floppy.
 	 The only way to be really sure is to actually create a file and
 	 see if it succeeds.  But I think that's too much to ask.  */
+#ifdef _MSC_VER
+      /* MSVC's _access crashes with D_OK.  */
+      if (tmp && sys_access (tmp, D_OK) == 0)
+#else
       if (tmp && _access (tmp, D_OK) == 0)
+#endif
 	{
 	  char * var = alloca (strlen (tmp) + 8);
 	  sprintf (var, "TMPDIR=%s", tmp);
@@ -1642,6 +1649,24 @@ init_environment (char ** argv)
           if (strcmp (env_vars[i].name, "LANG") == 0)
             {
               env_vars[i].def_value = locale_name;
+              break;
+            }
+        }
+    }
+
+  /* When Emacs is invoked with --no-site-lisp, we must remove the
+     site-lisp directories from the default value of EMACSLOADPATH.
+     This assumes that the site-lisp entries are at the front, and
+     that additional entries do exist.  */
+  if (no_site_lisp)
+    {
+      for (i = 0; i < N_ENV_VARS; i++)
+        {
+          if (strcmp (env_vars[i].name, "EMACSLOADPATH") == 0)
+            {
+              char *site;
+              while ((site = strstr (env_vars[i].def_value, "site-lisp")))
+                env_vars[i].def_value = strchr (site, ';') + 1;
               break;
             }
         }
@@ -2892,12 +2917,12 @@ sys_rename (const char * oldname, const char * newname)
       int    i = 0;
 
       oldname = map_w32_filename (oldname, NULL);
-      if (o = strrchr (oldname, '\\'))
+      if ((o = strrchr (oldname, '\\')))
 	o++;
       else
 	o = (char *) oldname;
 
-      if (p = strrchr (temp, '\\'))
+      if ((p = strrchr (temp, '\\')))
 	p++;
       else
 	p = temp;
@@ -3050,7 +3075,7 @@ generate_inode_val (const char * name)
   unsigned hash;
 
   /* Get the truly canonical filename, if it exists.  (Note: this
-     doesn't resolve aliasing due to subst commands, or recognise hard
+     doesn't resolve aliasing due to subst commands, or recognize hard
      links.  */
   if (!w32_get_long_filename ((char *)name, fullname, MAX_PATH))
     abort ();
@@ -3396,7 +3421,7 @@ stat (const char * path, struct stat * buf)
 			   FILE_FLAG_BACKUP_SEMANTICS, NULL))
          != INVALID_HANDLE_VALUE)
     {
-      /* This is more accurate in terms of gettting the correct number
+      /* This is more accurate in terms of getting the correct number
 	 of links, but is quite slow (it is noticeable when Emacs is
 	 making a list of file name completions). */
       BY_HANDLE_FILE_INFORMATION info;
@@ -5756,7 +5781,7 @@ w32_delayed_load (Lisp_Object libraries, Lisp_Object library_id)
         for (dlls = XCDR (dlls); CONSP (dlls); dlls = XCDR (dlls))
           {
             CHECK_STRING_CAR (dlls);
-            if (library_dll = LoadLibrary (SDATA (XCAR (dlls))))
+            if ((library_dll = LoadLibrary (SDATA (XCAR (dlls)))))
               {
                 found = XCAR (dlls);
                 break;
@@ -5777,7 +5802,10 @@ check_windows_init_file (void)
      it cannot find the Windows installation file.  If this file does
      not exist in the expected place, tell the user.  */
 
-  if (!noninteractive && !inhibit_window_system)
+  if (!noninteractive && !inhibit_window_system
+      /* Vload_path is not yet initialized when we are loading
+	 loadup.el.  */
+      && NILP (Vpurify_flag))
     {
       Lisp_Object objs[2];
       Lisp_Object full_load_path;
@@ -5835,7 +5863,7 @@ term_ntproc (void)
 void
 init_ntproc (void)
 {
-  /* Initialise the socket interface now if available and requested by
+  /* Initialize the socket interface now if available and requested by
      the user by defining PRELOAD_WINSOCK; otherwise loading will be
      delayed until open-network-stream is called (w32-has-winsock can
      also be used to dynamically load or reload winsock).

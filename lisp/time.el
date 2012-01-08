@@ -1,6 +1,6 @@
 ;;; time.el --- display time, load and mail indicator in mode line of Emacs -*-coding: utf-8 -*-
 
-;; Copyright (C) 1985-1987, 1993-1994, 1996, 2000-2011
+;; Copyright (C) 1985-1987, 1993-1994, 1996, 2000-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
@@ -64,13 +64,14 @@ directory `display-time-mail-directory' contains nonempty files."
 
 (defcustom display-time-default-load-average 0
   "Which load average value will be shown in the mode line.
-Almost every system can provide values of load for past 1 minute, past 5 or
-past 15 minutes.  The default is to display 1 minute load average.
+Almost every system can provide values of load for the past 1 minute,
+past 5 or past 15 minutes.  The default is to display 1-minute load average.
 The value can be one of:
 
   0   => 1 minute load
   1   => 5 minutes load
-  2   => 15 minutes load"
+  2   => 15 minutes load
+  nil => None (do not display the load average)"
   :type '(choice (const :tag "1 minute load" 0)
 		 (const :tag "5 minutes load" 1)
 		 (const :tag "15 minutes load" 2)
@@ -78,7 +79,10 @@ The value can be one of:
   :group 'display-time)
 
 (defvar display-time-load-average nil
-  "Load average currently being shown in mode line.")
+  "Value of the system's load average currently shown on the mode line.
+See `display-time-default-load-average'.
+
+This is an internal variable; setting it has no effect.")
 
 (defcustom display-time-load-average-threshold 0.1
   "Load-average values below this value won't be shown in the mode line."
@@ -349,6 +353,8 @@ would give mode line times like `94/12/30 21:07:48 (UTC)'."
 	  (timer-activate timer)))))
 
 (defun display-time-next-load-average ()
+  "Switch between different load averages in the mode line.
+Switches from the 1 to 5 to 15 minute load average, and then back to 1."
   (interactive)
   (if (= 3 (setq display-time-load-average (1+ display-time-load-average)))
       (setq display-time-load-average 0))
@@ -369,7 +375,7 @@ would give mode line times like `94/12/30 21:07:48 (UTC)'."
       nil)))
 
 (with-no-warnings
-  ;; Warnings are suppresed to avoid "global/dynamic var `X' lacks a prefix".
+  ;; Warnings are suppressed to avoid "global/dynamic var `X' lacks a prefix".
   (defvar now)
   (defvar time)
   (defvar load)
@@ -484,14 +490,15 @@ update which can wait for the next redisplay."
 ;;;###autoload
 (define-minor-mode display-time-mode
   "Toggle display of time, load level, and mail flag in mode lines.
-With a numeric arg, enable this display if arg is positive.
+With a prefix argument ARG, enable Display Time mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+it if ARG is omitted or nil.
 
-When this display is enabled, it updates automatically every minute
-\(you can control the number of seconds between updates by
-customizing `display-time-interval').
-If `display-time-day-and-date' is non-nil, the current day and date
-are displayed as well.
-This runs the normal hook `display-time-hook' after each update."
+When Display Time mode is enabled, it updates every minute (you
+can control the number of seconds between updates by customizing
+`display-time-interval').  If `display-time-day-and-date' is
+non-nil, the current day and date are displayed as well.  This
+runs the normal hook `display-time-hook' after each update."
   :global t :group 'display-time
   (and display-time-timer (cancel-timer display-time-timer))
   (setq display-time-timer nil)

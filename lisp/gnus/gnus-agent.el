@@ -1,6 +1,6 @@
 ;;; gnus-agent.el --- unplugged support for Gnus
 
-;; Copyright (C) 1997-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1997-2012  Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; This file is part of GNU Emacs.
@@ -1130,7 +1130,7 @@ article's mark is toggled."
 		   (setq alist (cdr alist)))
 		  ((> a h)
                    ;; Headers that are not in the alist should be
-                   ;; fictious (see nnagent-retrieve-headers); they
+                   ;; fictitious (see nnagent-retrieve-headers); they
                    ;; imply that this article isn't in the agent.
 		   (gnus-agent-append-to-list tail-undownloaded h)
 		   (gnus-agent-append-to-list tail-unfetched    h)
@@ -1368,7 +1368,7 @@ downloaded into the agent."
           ;; disable the set read each time this server is opened.
           ;; NOTE: Opening this group will restore the valid local
           ;; range but it will also expand the local range to
-          ;; incompass the new active range.
+          ;; encompass the new active range.
           (gnus-agent-set-local group agent-min (1- active-min)))))))
 
 (defun gnus-agent-save-group-info (method group active)
@@ -2229,7 +2229,10 @@ doesn't exist, to valid the overview buffer."
 article counts for each of the method's subscribed groups."
   (let ((gnus-command-method (or method gnus-command-method)))
     (when (or (null gnus-agent-article-local-times)
-	      (zerop gnus-agent-article-local-times))
+	      (zerop gnus-agent-article-local-times)
+	      (not (gnus-methods-equal-p
+		    gnus-command-method
+		    (symbol-value (intern "+method" gnus-agent-article-local)))))
       (setq gnus-agent-article-local
 	    (gnus-cache-file-contents
 	     (gnus-agent-lib-file "local")
@@ -3232,7 +3235,7 @@ FORCE is equivalent to setting the expiration predicates to true."
 
 	 ;; Convert the keep lists to elements that look like (article#
 	 ;; nil keep_flag nil) then append it to the expanded dlist
-	 ;; These statements are sorted by ascending precidence of the
+	 ;; These statements are sorted by ascending precedence of the
 	 ;; keep_flag.
 	 (setq dlist (nconc dlist
 			    (mapcar (lambda (e)
@@ -3613,7 +3616,7 @@ articles in every agentized group? "))
                                 (setq r d
                                       d (directory-file-name d)))
                               ;; if ANY ancestor was NOT in keep hash and
-                              ;; it it's already in to-remove, add it to
+                              ;; it's already in to-remove, add it to
                               ;; to-remove.
                               (if (and r
                                        (not (member r to-remove)))
@@ -4031,7 +4034,7 @@ If REREAD is not nil, downloaded articles are marked as unread."
 	;; gnus-agent-regenerate-group can remove the article ID of every
 	;; article (with the exception of the last ID in the list - it's
 	;; special) that no longer appears in the overview.  In this
-	;; situtation, the last article ID in the list implies that it,
+	;; situation, the last article ID in the list implies that it,
 	;; and every article ID preceding it, have been fetched from the
 	;; server.
 

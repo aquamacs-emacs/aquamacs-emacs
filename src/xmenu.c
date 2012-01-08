@@ -1,6 +1,6 @@
 /* X Communication module for terminals which understand the X protocol.
 
-Copyright (C) 1986, 1988, 1993-1994, 1996, 1999-2011
+Copyright (C) 1986, 1988, 1993-1994, 1996, 1999-2012
   Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -102,6 +102,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef USE_GTK
 #include "gtkutil.h"
+#ifdef HAVE_GTK3
+#include "xgselect.h"
+#endif
 #endif
 
 #include "menu.h"
@@ -408,7 +411,15 @@ x_menu_wait_for_event (void *data)
       else
         ntp = &next_time;
 
+#ifdef HAVE_GTK3
+      /* Gtk3 have arrows on menus when they don't fit.  When the pointer is
+         over an arrow, a timeout scrolls it a bit.  Use xg_select so that
+         timeout gets triggered.  */
+
+      xg_select (n + 1, &read_fds, (SELECT_TYPE *)0, (SELECT_TYPE *)0, ntp);
+#else
       select (n + 1, &read_fds, (SELECT_TYPE *)0, (SELECT_TYPE *)0, ntp);
+#endif
     }
 }
 #endif /* ! MSDOS */
@@ -1304,7 +1315,7 @@ free_frame_menubar (FRAME_PTR f)
 #ifdef USE_MOTIF
       /* Removing the menu bar magically changes the shell widget's x
 	 and y position of (0, 0) which, when the menu bar is turned
-	 on again, leads to pull-down menuss appearing in strange
+	 on again, leads to pull-down menus appearing in strange
 	 positions near the upper-left corner of the display.  This
 	 happens only with some window managers like twm and ctwm,
 	 but not with other like Motif's mwm or kwm, because the
@@ -1435,6 +1446,13 @@ create_and_show_popup_menu (FRAME_PTR f, widget_value *first_wv, int x, int y,
   GtkMenuPositionFunc pos_func = 0;  /* Pop up at pointer.  */
   struct next_popup_x_y popup_x_y;
   int specpdl_count = SPECPDL_INDEX ();
+  int use_pos_func = ! for_click;
+
+#ifdef HAVE_GTK3
+  /* Always use position function for Gtk3.  Otherwise menus may become
+     too small to show anything.  */
+  use_pos_func = 1;
+#endif
 
   if (! FRAME_X_P (f))
     abort ();
@@ -1446,7 +1464,7 @@ create_and_show_popup_menu (FRAME_PTR f, widget_value *first_wv, int x, int y,
                            G_CALLBACK (menu_highlight_callback));
   xg_crazy_callback_abort = 0;
 
-  if (! for_click)
+  if (use_pos_func)
     {
       /* Not invoked by a click.  pop up at x/y.  */
       pos_func = menu_position_func;
@@ -1461,7 +1479,8 @@ create_and_show_popup_menu (FRAME_PTR f, widget_value *first_wv, int x, int y,
 
       i = 0;  /* gtk_menu_popup needs this to be 0 for a non-button popup.  */
     }
-  else
+
+  if (for_click)
     {
       for (i = 0; i < 5; i++)
         if (FRAME_X_DISPLAY_INFO (f)->grabbed & (1 << i))
@@ -1604,6 +1623,17 @@ create_and_show_popup_menu (FRAME_PTR f, widget_value *first_wv,
 
 #endif /* not USE_GTK */
 
+static Lisp_Object
+cleanup_widget_value_tree (Lisp_Object arg)
+{
+  struct Lisp_Save_Value *p = XSAVE_VALUE (arg);
+  widget_value *wv = p->pointer;
+
+  free_menubar_widget_value_tree (wv);
+
+  return Qnil;
+}
+
 Lisp_Object
 xmenu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	    Lisp_Object title, const char **error_name, Time timestamp)
@@ -1617,6 +1647,8 @@ xmenu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
   int submenu_depth = 0;
 
   int first_pane;
+
+  int specpdl_count = SPECPDL_INDEX ();
 
   if (! FRAME_X_P (f))
     abort ();
@@ -1812,11 +1844,15 @@ xmenu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
   /* No selection has been chosen yet.  */
   menu_item_selection = 0;
 
+  /* Make sure to free the widget_value objects we used to specify the
+     contents even with longjmp.  */
+  record_unwind_protect (cleanup_widget_value_tree,
+			 make_save_value (first_wv, 0));
+
   /* Actually create and show the menu until popped down.  */
   create_and_show_popup_menu (f, first_wv, x, y, for_click, timestamp);
 
-  /* Free the widget_value objects we used to specify the contents.  */
-  free_menubar_widget_value_tree (first_wv);
+  unbind_to (specpdl_count, Qnil);
 
   /* Find the selected item, and its pane, to return
      the proper value.  */
@@ -2003,6 +2039,8 @@ xdialog_show (FRAME_PTR f,
   /* 1 means we've seen the boundary between left-hand elts and right-hand.  */
   int boundary_seen = 0;
 
+  int specpdl_count = SPECPDL_INDEX ();
+
   if (! FRAME_X_P (f))
     abort ();
 
@@ -2116,11 +2154,15 @@ xdialog_show (FRAME_PTR f,
   /* No selection has been chosen yet.  */
   menu_item_selection = 0;
 
+  /* Make sure to free the widget_value objects we used to specify the
+     contents even with longjmp.  */
+  record_unwind_protect (cleanup_widget_value_tree,
+			 make_save_value (first_wv, 0));
+
   /* Actually create and show the dialog.  */
   create_and_show_dialog (f, first_wv);
 
-  /* Free the widget_value objects we used to specify the contents.  */
-  free_menubar_widget_value_tree (first_wv);
+  unbind_to (specpdl_count, Qnil);
 
   /* Find the selected item, and its pane, to return
      the proper value.  */

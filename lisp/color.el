@@ -1,6 +1,6 @@
 ;;; color.el --- Color manipulation library -*- coding: utf-8; -*-
 
-;; Copyright (C) 2010-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2012 Free Software Foundation, Inc.
 
 ;; Authors: Julien Danjou <julien@danjou.info>
 ;;          Drew Adams <drew.adams@oracle.com>
@@ -28,7 +28,7 @@
 ;; complements, and computing CIEDE2000 color distances.
 ;;
 ;; Supported color representations include RGB (red, green, blue), HSV
-;; (hue, saturation, value), HSL (hue, saturation, luminence), sRGB,
+;; (hue, saturation, value), HSL (hue, saturation, luminance), sRGB,
 ;; CIE XYZ, and CIE L*a*b* color components.
 
 ;;; Code:
@@ -128,8 +128,8 @@ inclusive."
 RED, GREEN, and BLUE should each be numbers between 0.0 and 1.0,
 inclusive.
 
-Return a list (HUE, SATURATION, LUMINENCE), where HUE is in radians
-and both SATURATION and LUMINENCE are between 0.0 and 1.0,
+Return a list (HUE, SATURATION, LUMINANCE), where HUE is in radians
+and both SATURATION and LUMINANCE are between 0.0 and 1.0,
 inclusive."
   (let* ((r red)
          (g green)

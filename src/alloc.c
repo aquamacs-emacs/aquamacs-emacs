@@ -1,5 +1,5 @@
 /* Storage allocation and gc for GNU Emacs Lisp interpreter.
-   Copyright (C) 1985-1986, 1988, 1993-1995, 1997-2011
+   Copyright (C) 1985-1986, 1988, 1993-1995, 1997-2012
       Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -203,9 +203,6 @@ static int malloc_hysteresis;
    remapping on more recent systems because this is less important
    nowadays than in the days of small memories and timesharing.  */
 
-#ifndef VIRT_ADDR_VARIES
-static
-#endif
 EMACS_INT pure[(PURESIZE + sizeof (EMACS_INT) - 1) / sizeof (EMACS_INT)] = {1,};
 #define PUREBEG (char *) pure
 
@@ -222,10 +219,7 @@ static ptrdiff_t pure_bytes_used_before_overflow;
 /* Value is non-zero if P points into pure space.  */
 
 #define PURE_POINTER_P(P)					\
-     (((PNTR_COMPARISON_TYPE) (P)				\
-       < (PNTR_COMPARISON_TYPE) ((char *) purebeg + pure_size))	\
-      && ((PNTR_COMPARISON_TYPE) (P)				\
-	  >= (PNTR_COMPARISON_TYPE) purebeg))
+  ((uintptr_t) (P) - (uintptr_t) purebeg <= pure_size)
 
 /* Index in pure at which next pure Lisp object will be allocated.. */
 
@@ -279,6 +273,7 @@ static void compact_small_strings (void);
 static void free_large_strings (void);
 static void sweep_strings (void);
 static void free_misc (Lisp_Object);
+extern Lisp_Object which_symbols (Lisp_Object, EMACS_INT) EXTERNALLY_VISIBLE;
 
 /* When scanning the C stack for live Lisp objects, Emacs keeps track
    of what memory allocated via lisp_malloc is intended for what
@@ -314,6 +309,7 @@ static POINTER_TYPE *lisp_malloc (size_t, enum mem_type);
    on free lists recognizable in O(1).  */
 
 static Lisp_Object Vdead;
+#define DEADP(x) EQ (x, Vdead)
 
 #ifdef GC_MALLOC_CHECK
 
@@ -409,6 +405,10 @@ static void check_gcpros (void);
 #endif
 
 #endif /* GC_MARK_STACK || GC_MALLOC_CHECK */
+
+#ifndef DEADP
+# define DEADP(x) 0
+#endif
 
 /* Recording what needs to be marked for gc.  */
 
@@ -876,7 +876,7 @@ safe_alloca_unwind (Lisp_Object arg)
 
 /* Like malloc but used for allocating Lisp data.  NBYTES is the
    number of bytes to allocate, TYPE describes the intended use of the
-   allcated memory block (for strings, for conses, ...).  */
+   allocated memory block (for strings, for conses, ...).  */
 
 #ifndef USE_LSB_TAG
 static void *lisp_malloc_loser;
@@ -1406,7 +1406,7 @@ uninterrupt_malloc (void)
 #ifdef DOUG_LEA_MALLOC
   pthread_mutexattr_t attr;
 
-  /*  GLIBC has a faster way to do this, but lets keep it portable.
+  /*  GLIBC has a faster way to do this, but let's keep it portable.
       This is according to the Single UNIX Specification.  */
   pthread_mutexattr_init (&attr);
   pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE);
@@ -4071,7 +4071,7 @@ DEFUN ("gc-status", Fgc_status, Sgc_status, 0, 0, "",
 {
   Lisp_Object args[8], zombie_list = Qnil;
   EMACS_INT i;
-  for (i = 0; i < nzombies; i++)
+  for (i = 0; i < min (MAX_ZOMBIES, nzombies); i++)
     zombie_list = Fcons (zombies[i], zombie_list);
   args[0] = build_string ("%d GCs, avg live/zombies = %.2f/%.2f (%f%%), max %d/%d\nzombies: %S");
   args[1] = make_number (ngcs);
@@ -4410,7 +4410,7 @@ dump_zombies (void)
 {
   int i;
 
-  fprintf (stderr, "\nZombies kept alive = %"pI":\n", nzombies);
+  fprintf (stderr, "\nZombies kept alive = %"pI"d:\n", nzombies);
   for (i = 0; i < min (MAX_ZOMBIES, nzombies); ++i)
     {
       fprintf (stderr, "  %d = ", i);
@@ -6250,6 +6250,55 @@ Frames, windows, buffers, and subprocesses count as vectors
   return Flist (8, consed);
 }
 
+/* Find at most FIND_MAX symbols which have OBJ as their value or
+   function.  This is used in gdbinit's `xwhichsymbols' command.  */
+
+Lisp_Object
+which_symbols (Lisp_Object obj, EMACS_INT find_max)
+{
+   struct symbol_block *sblk;
+   int gc_count = inhibit_garbage_collection ();
+   Lisp_Object found = Qnil;
+
+   if (! DEADP (obj))
+     {
+       for (sblk = symbol_block; sblk; sblk = sblk->next)
+	 {
+	   struct Lisp_Symbol *sym = sblk->symbols;
+	   int bn;
+
+	   for (bn = 0; bn < SYMBOL_BLOCK_SIZE; bn++, sym++)
+	     {
+	       Lisp_Object val;
+	       Lisp_Object tem;
+
+	       if (sblk == symbol_block && bn >= symbol_block_index)
+		 break;
+
+	       XSETSYMBOL (tem, sym);
+	       val = find_symbol_value (tem);
+	       if (EQ (val, obj)
+		   || EQ (sym->function, obj)
+		   || (!NILP (sym->function)
+		       && COMPILEDP (sym->function)
+		       && EQ (AREF (sym->function, COMPILED_BYTECODE), obj))
+		   || (!NILP (val)
+		       && COMPILEDP (val)
+		       && EQ (AREF (val, COMPILED_BYTECODE), obj)))
+		 {
+		   found = Fcons (tem, found);
+		   if (--find_max == 0)
+		     goto out;
+		 }
+	     }
+	 }
+     }
+
+  out:
+   unbind_to (gc_count, Qnil);
+   return found;
+}
+
 #ifdef ENABLE_CHECKING
 int suppress_checking;
 
@@ -6350,7 +6399,7 @@ If this portion is smaller than `gc-cons-threshold', this is ignored.  */);
   Vgc_cons_percentage = make_float (0.1);
 
   DEFVAR_INT ("pure-bytes-used", pure_bytes_used,
-	      doc: /* Number of bytes of sharable Lisp data allocated so far.  */);
+	      doc: /* Number of bytes of shareable Lisp data allocated so far.  */);
 
   DEFVAR_INT ("cons-cells-consed", cons_cells_consed,
 	      doc: /* Number of cons cells that have been consed so far.  */);

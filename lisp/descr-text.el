@@ -1,6 +1,6 @@
 ;;; descr-text.el --- describe text mode
 
-;; Copyright (C) 1994-1996, 2001-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1994-1996, 2001-2012 Free Software Foundation, Inc.
 
 ;; Author: Boris Goldowsky <boris@gnu.org>
 ;; Maintainer: FSF
@@ -221,7 +221,7 @@ At the time of writing it is at the URL
 		 file))
 
 (defun describe-char-unicode-data (char)
-  "Return a list of Unicode data for unicode CHAR.
+  "Return a list of Unicode data for Unicode CHAR.
 Each element is a list of a property description and the property value.
 The list is null if CHAR isn't found in `describe-char-unicodedata-file'.
 This function is semi-obsolete.  Use `get-char-code-property'."
@@ -358,7 +358,7 @@ This function is semi-obsolete.  Use `get-char-code-property'."
       (compose-string (string ch) 0 1 (format "\t%c\t" ch))
     (string ch)))
 
-;; Return a nicely formated list of categories; extended category
+;; Return a nicely formatted list of categories; extended category
 ;; description is added to the category name as a tooltip
 (defsubst describe-char-categories (category-set)
   (let ((mnemonics (category-set-mnemonics category-set)))
@@ -422,6 +422,20 @@ as well as widgets, buttons, overlays, and text properties."
               (setq charset (char-charset char)
                     code (encode-char char charset)))
         (setq code char))
+      (cond
+       ;; Append a PDF character to directional embeddings and
+       ;; overrides, to prevent potential messup of the following
+       ;; text.
+       ((memq char '(?\x202a ?\x202b ?\x202d ?\x202e))
+	(setq char-description
+	      (concat char-description
+		      (propertize (string ?\x202c) 'invisible t))))
+       ;; Append a LRM character to any strong character to avoid
+       ;; messing up the numerical codepoint.
+       ((memq (get-char-code-property char 'bidi-class) '(R AL))
+	(setq char-description
+	      (concat char-description
+		      (propertize (string ?\x200e) 'invisible t)))))
       (when composition
         ;; When the composition is trivial (i.e. composed only with the
         ;; current character itself without any alternate characters),
@@ -606,7 +620,8 @@ as well as widgets, buttons, overlays, and text properties."
                              'trailing-whitespace)
                             ((and nobreak-char-display char (eq char '#xa0))
                              'nobreak-space)
-                            ((and nobreak-char-display char (eq char '#xad))
+                            ((and nobreak-char-display char
+				  (memq char '(#xad #x2010 #x2011)))
                              'escape-glyph)
                             ((and (< char 32) (not (memq char '(9 10))))
                              'escape-glyph)))))

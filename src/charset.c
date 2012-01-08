@@ -1,5 +1,5 @@
 /* Basic character set support.
-   Copyright (C) 2001-2011  Free Software Foundation, Inc.
+   Copyright (C) 2001-2012  Free Software Foundation, Inc.
    Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
      2005, 2006, 2007, 2008, 2009, 2010, 2011
      National Institute of Advanced Industrial Science and Technology (AIST)
@@ -162,13 +162,13 @@ static struct
   /* 1 iff the following table is used for encoder.  */
   short for_encoder;
 
-  /* When the following table is used for encoding, mininum and
-     maxinum character of the current charset.  */
+  /* When the following table is used for encoding, minimum and
+     maximum character of the current charset.  */
   int min_char, max_char;
 
-  /* A Unicode character correspoinding to the code indice 0 (i.e. the
+  /* A Unicode character corresponding to the code index 0 (i.e. the
      minimum code-point) of the current charset, or -1 if the code
-     indice 0 is not a Unicode character.  This is checked when
+     index 0 is not a Unicode character.  This is checked when
      table.encoder[CHAR] is zero.  */
   int zero_index_char;
 
@@ -1660,7 +1660,7 @@ maybe_unify_char (int c, Lisp_Object val)
 }
 
 
-/* Return a character correponding to the code-point CODE of
+/* Return a character corresponding to the code-point CODE of
    CHARSET.  */
 
 int
@@ -2082,7 +2082,7 @@ that case, find the charset from what supported by that coding system.  */)
 DEFUN ("charset-after", Fcharset_after, Scharset_after, 0, 1, 0,
        doc: /*
 Return charset of a character in the current buffer at position POS.
-If POS is nil, it defauls to the current point.
+If POS is nil, it defaults to the current point.
 If POS is out of range, the value is nil.  */)
   (Lisp_Object pos)
 {

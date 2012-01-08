@@ -1,3 +1,288 @@
+2012-01-06  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-msg.el (gnus-summary-reply): Do not give a `switch-to-buffer'
+	argument to `message-reply'.  This broke `special-display-*' frame
+	pop-uping (bug#10238).
+
+2012-01-05  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* starttls.el (starttls-available-p): Return nil on Windows/MS-DOS
+	systems, since these allegedly don't work there.
+
+2012-01-04  Chris Gray  <chrismgray@gmail.com>  (tiny change)
+
+	* mm-decode.el (mm-shr): Check that `gnus-summary-buffer' really is a
+	live buffer.
+
+2012-01-04  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* nnir.el (nnir-retrieve-headers): Protect against the article not
+	existing on the server (bug#10335).
+
+2012-01-04  Wolfgang Jenkner  <wjenkner@inode.at>  (tiny change)
+
+	* gnus-agent.el (gnus-agent-load-local): Recompute
+	gnus-agent-article-local on changing method.
+
+2012-01-04  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus.el (gnus-parameters): Note precedence.
+
+2012-01-04  Leo  <sdl.web@gmail.com>
+
+	* nndraft.el (nndraft-update-unread-articles): Don't move point around
+	in the group buffer.
+
+2012-01-04  Julien Danjou  <julien@danjou.info>
+
+	* nnimap.el (nnimap-update-info): Fix an error when all articles UIDs
+	change.
+
+2012-01-04  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* shr.el (shr-rescale-image): Add :ascent 100 to the rescaled picture,
+	too.
+
+	* nntp.el (nntp-retrieve-group-data-early): Use it.
+
+2012-01-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* nntp.el (nntp-retrieval-in-progress): New variable.
+	(nntp-make-process-buffer): Make it buffer-local.
+
+	* gnus-demon.el (gnus-demon-time-to-step): Resurrect function lost in
+	2010.
+	(gnus-demon-init): Use it to compute the time if time is on the form
+	"04:23".
+
+	* gnus-topic.el (gnus-topic-history): Define `gnus-topic-history'.
+
+	* nnimap.el (nnimap-finish-retrieve-group-infos): Check the connection
+	status in the correct buffer.
+
+2012-01-03  Leo  <sdl.web@gmail.com>
+
+	* gnus-topic.el (gnus-topic-goto-next-group): Don't move point around
+	when opening topics (bug#10407).
+
+2011-12-28  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mm-view.el (mm-display-inline-fontify): Add comment.
+
+2011-12-15  Juri Linkov  <juri@jurta.org>
+
+	* mm-decode.el (mm-inline-media-tests): Add missing
+	`mm-handle-media-subtype'.
+
+2011-12-09  Tassilo Horn  <tassilo@member.fsf.org>
+
+	* message.el (message-valid-fqdn-regexp): Update with newly approved
+	top-level domain names ".tel" and ".asia".
+
+2011-12-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-sum.el (gnus-summary-show-article): Don't load shr
+	unconditionally.
+
+2011-12-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* message.el (message-pop-to-buffer): Use pop-to-buffer instead of
+	pop-to-buffer-same-window for old Emacsen.
+
+2011-12-04  Chong Yidong  <cyd@gnu.org>
+
+	* message.el (message-pop-to-buffer): Partially revert 2011-11-30
+	change (Bug#10200).
+
+2011-12-02  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* compface.el (uncompface):
+	* gnus-art.el (gnus-article-x-face-command): Update the header format
+	of icon data for the most recent icontopbm program.
+
+2011-12-01  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-msg.el (gnus-inews-do-gcc):
+	* message.el (message-send-mail):
+	* mml.el (mml-generate-mime): Share the value of the buffer-local
+	`message-options' variable between a draft buffer and temprary working
+	buffers.
+
+2011-11-30  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* message.el (message-pop-to-buffer): Revert 2011-09-11 change.
+
+2011-11-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-article-browse-html-parts): Convert link file names
+	for Cygwin.
+
+2011-11-24  Glenn Morris  <rgm@gnu.org>
+
+	* starttls.el: Fix case of "GnuTLS".
+
+2011-11-24  Juanma Barranquero  <lekktu@gmail.com>
+
+	* gnus-group.el (gnus-group-highlight): Fix typo.
+
+2011-11-24  Adam W  <adam_w67@yahoo.com>  (tiny change)
+
+	* mail-source.el (mail-source-fetch-maildir): Don't expect the return
+	value of `delete-file', that returns nil for a local file but returns t
+	for a remote file using ssh.
+
+2011-11-22  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* shr.el (shr-table-horizontal-line): Use "?\s" instead of "? " to
+	avoid later breakage.
+
+2011-11-22  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-article-setup-buffer): Decode group name used for
+	article buffers' name.
+
+2011-11-22  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* shr.el (shr-table-horizontal-line): Revert infinite loops introduced
+	by Paul Eggert's spellfixes two days ago.
+
+2011-11-21  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* mm-view.el (mm-display-inline-fontify): Make the font-lock variables
+	buffer-local instead of binding them to avoid warnings.  Also demote
+	errors (bug#10063).
+	(font-lock-mode-hook): Shut up byte compiler.
+
+2011-11-20  Juanma Barranquero  <lekktu@gmail.com>
+
+	* mm-util.el (mm-charset-after): Fix typo.
+
+2011-11-16  Juanma Barranquero  <lekktu@gmail.com>
+
+	* gnus-sum.el (gnus-summary-make-menu-bar):
+	* gnus-uu.el (gnus-uu-decode-postscript)
+	(gnus-uu-decode-postscript-and-save):
+	* mailcap.el (mailcap-print-command):
+	* registry.el (registry-lookup, registry-lookup-breaks-before-lexbind):
+	Fix typos.
+
+2011-11-15  Juanma Barranquero  <lekktu@gmail.com>
+
+	* gnus-art.el (gnus-article-part-wrapper):
+	* shr-color.el (shr-color-visible-distance-min)
+	(shr-color-relative-to-absolute, set-minimum-interval)
+	(shr-color-visible): Fix typos.
+
+2011-11-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-sum.el (gnus-articles-to-read): Change wording in prompt to be
+	slightly clearer.
+
+2011-11-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* message.el (message-send-and-exit): Document `arg'.
+
+2011-11-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* nnimap.el (nnimap-open-connection-1): Use tcp-keealive if possible.
+
+2011-11-02  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* gnus-util.el (gnus-bound-and-true-p): Another comment to explain why
+	we don't use `bound-and-true-p'.
+
+2011-11-01  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* gnus-util.el (gnus-bound-and-true-p): Remove.
+	(gnus-bound-and-true-dumber-p): Rename to `gnus-bound-and-true-p'.
+	* nnir.el: Use it.
+	* nnmairix.el: Use it.
+
+2011-10-31  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* gnus-util.el (gnus-bound-and-true-dumber-p): Define new, slower, dumb
+	function because `gnus-bound-and-true-p' doesn't work well in XEmacs
+	for reasons unknown.
+	* nnir.el: Use it.
+	* nnmairix.el: Use it.
+
+	* nnregistry.el: Remove unnecessary `gnus-registry-enabled' defvar.
+	* nnir.el: Ditto.
+	* nnmairix.el: Ditto.
+
+	* gnus-registry.el (gnus-registry-enabled): Default to nil.
+
+2011-10-26  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* message.el (message-completion-function): Make sure
+	message-tab-body-function is not attempted if one of
+	message-completion-alist fails to find a completion (bug#9158).
+
+2011-10-26  Daiki Ueno  <ueno@unixuser.org>
+
+	* mml.el (mml-quote-region): Quote <#secure> tag.
+	(mml-generate-mime-1): Unquote <#secure> tag.
+
+2011-10-20  Chong Yidong  <cyd@gnu.org>
+
+	* gnus-cite.el (gnus-message-citation-mode): Doc fix (in Emacs 24,
+	calling a minor mode from Lisp with nil arg enables it, so we have to
+	make the wording a bit ambiguous here).
+
+2011-10-18  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* gnus-util.el (gnus-bound-and-true-p): Macro for XEmacs compatibility.
+	* nnir.el (nnir-mode): Use it.
+	* nnmairix.el (nnmairix-determine-original-group-from-registry):
+	Use it.
+
+	* nnir.el (gnus-registry-enabled): Defvar to keep the compiler happy.
+	* nnmairix.el (gnus-registry-enabled): Ditto.
+
+2011-10-17  Dave Abrahams  <dave@boostpro.com>  (tiny change)
+
+	* gnus-registry.el (gnus-registry-enabled): Add new variable (bug#9691).
+	(gnus-registry-install-shortcuts): Set `gnus-registry-install' to 'ask
+	only while we need to find out if it should be t or nil.
+	(gnus-registry-initialize): Don't set `gnus-registry-install' to t.
+	(gnus-registry-install-hooks): Set `gnus-registry-enabled' to t when
+	the registry is installed.  Set it to nil when it's unloaded.
+	(gnus-registry-install-p): Provide user guidance for the initial value
+	of `gnus-registry-install' when it's 'ask, otherwise return its value.
+	* nnregistry.el (nnregistry-open-server, nnregistry-server-opened):
+	Use `gnus-registry-enabled' instead of `gnus-registry-install'.
+	* nnmairix.el (nnmairix-determine-original-group-from-registry):
+	Use `gnus-registry-enabled' instead of `gnus-registry-install'.
+	* nnir.el (nnir-mode): Use `gnus-registry-enabled' instead of
+	`gnus-registry-install'.
+
+2011-10-17  Daiki Ueno  <ueno@unixuser.org>
+
+	* mml2015.el (mml2015-epg-find-usable-key): Add comment about the
+	previous change.
+	* mml1991.el (mml1991-epg-find-usable-key): Skip the whole key if the
+	primary key is marked as disabled.
+
+2011-10-17  Christian von Roques  <roques@mti.ag>  (tiny change)
+
+	* mml2015.el (mml2015-epg-find-usable-key): Skip the whole key if the
+	primary key is marked as disabled.
+
+2011-10-11  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* html2text.el (html2text-clean-anchor): Check for quotes around
+	`href' value.
+
+2011-10-11  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* spam.el (spam-check-BBDB): Simplify and support BBDB 3.x when
+	searching.  Drop `bbdb-cache'.
+
+2011-10-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* message.el (message-signed-or-encrypted-p): Exclude header when
+	checking if there is signed or encrypted body in text/plain message.
+
 2011-10-09  Andreas Schwab  <schwab@linux-m68k.org>
 
 	* html2text.el (html2text-get-attr): Correctly handle attribute values
@@ -115,7 +400,7 @@
 2011-09-20  Julien Danjou  <julien@danjou.info>
 
 	* auth-source.el (auth-source-netrc-create): Use default value for
-	password if specified. Evaluate default.
+	password if specified.  Evaluate default.
 	(auth-source-plstore-create): Ditto.
 	(auth-source-plstore-create, auth-source-netrc-create): Fix default
 	value evaluation.
@@ -171,7 +456,7 @@
 	(message-mail-other-window, message-mail-other-frame)
 	(message-news-other-window, message-news-other-frame):
 	Use switch-to-buffer-other-frame and switch-to-buffer-other-window
-	instead of setting buffer display varibles.
+	instead of setting buffer display variables.
 
 2011-09-11  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -206,7 +491,7 @@
 	decoding nnimap groups.
 
 	* gnus.el (gnus-variable-list): Don't save `gnus-format-specs' in the
-	newsrc file.  It doesn't seem like an important optimisation any more.
+	newsrc file.  It doesn't seem like an important optimization any more.
 
 2011-09-10  Dave Abrahams  <dave@boostpro.com>  (tiny change)
 
@@ -432,8 +717,8 @@
 
 2011-08-05  Andrew Cohen  <cohen@andy.bu.edu>
 
-	* gnus-sum.el (gnus-summary-refer-article): Warp to article. This
-	allows article-referral to work from an nnir group.
+	* gnus-sum.el (gnus-summary-refer-article): Warp to article.
+	This allows article-referral to work from an nnir group.
 
 2011-08-04  Andrew Cohen  <cohen@andy.bu.edu>
 
@@ -449,7 +734,7 @@
 2011-08-03  Andrew Cohen  <cohen@andy.bu.edu>
 
 	* nnir.el (nnir-read-server-parm): Add an argument to restrict to
-	server-variables only. This should fix a bug introduced with commit
+	server-variables only.  This should fix a bug introduced with commit
 	e1889675b7f4adf057833c5513c9374134c4e053.
 	(nnir-run-query): 'nnir-search-engine should not be set from the global
 	environment.
@@ -859,7 +1144,7 @@
 	* nnimap.el (nnimap-process-expiry-targets): Say what target we're
 	expiring articles to.
 
-	* mm-util.el (mm-charset-to-coding-system): Recognise all ANSI.x3.4
+	* mm-util.el (mm-charset-to-coding-system): Recognize all ANSI.x3.4
 	variations as ASCII (bug#5458).
 
 2011-06-30  Katsumi Yamaoka  <yamaoka@jpl.org>
@@ -1649,7 +1934,7 @@
 2011-03-21  Julien Danjou  <julien@danjou.info>
 
 	* mm-view.el (mm-display-inline-fontify): Make mode optional, and call
-	normal-mode if not set. Set temp buffer unmodified to avoid kill-buffer
+	normal-mode if not set.  Set temp buffer unmodified to avoid kill-buffer
 	query.
 	(mm-inline-text): Render normal text with fontification whenever
 	possible.
@@ -1710,7 +1995,7 @@
 
 2011-03-15  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* gnus-sum.el (gnus-articles-to-read): Revert back to old behaviour if
+	* gnus-sum.el (gnus-articles-to-read): Revert back to old behavior if
 	we're selecting a group with unread articles.
 
 	* nnimap.el (nnimap-open-connection-1): Allow `network-only', too.
@@ -2119,7 +2404,7 @@
 	* gnus-art.el (gnus-article-next-page-1): Because customized mode-line
 	face with line-width greater than zero will cause RET in gnus summary
 	buffer to scroll down article page-wise because auto vscroll happens,
-	it should be temporalily disabled when doing a scroll-up.
+	it should be temporally disabled when doing a scroll-up.
 
 2011-02-19  Lars Ingebrigtsen  <larsi@gnus.org>
 
@@ -2449,7 +2734,7 @@
 	* gnus-sum.el (gnus-user-date): Rename back from
 	gnus-summary-user-date since user code refers to it.
 
-	* shr.el (shr-render-td): Store the actual background colour used.
+	* shr.el (shr-render-td): Store the actual background color used.
 
 	* message.el (message-setup-1): Don't bind the constant
 	-forbidden-properties.
@@ -2493,9 +2778,9 @@
 	* gnus.el (gnus-summary-line-format): Mention &user-date format in
 	docstring.
 
-	* gnus.el (gnus-user-date-format-alist): Change default value. Use
-	defcustom, with type and group. Move from gnus-util.el. Rename to
-	gnus-summary-user-date-format-alist.
+	* gnus.el (gnus-user-date-format-alist): Change default value.
+	Use defcustom, with type and group.  Move from gnus-util.el.
+	Rename to gnus-summary-user-date-format-alist.
 
 2011-02-03  Glenn Morris  <rgm@gnu.org>
 
@@ -2537,9 +2822,9 @@
 
 2011-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
 
-	* shr.el (shr-render-td): Only do colours at the final rendering.
+	* shr.el (shr-render-td): Only do colors at the final rendering.
 	Should be slightly faster.
-	(shr-insert-table): Fix up TD background colours when doing the
+	(shr-insert-table): Fix up TD background colors when doing the
 	vertical padding.
 
 	* gnus-art.el (article-date-ut): Protect against articles with no Date
@@ -2612,7 +2897,7 @@
 2011-01-28  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-sum.el (gnus-select-newsgroup): Don't try to alter the active
-	data if the group is unactivated.
+	data if the group is inactive.
 
 2011-01-28  Julien Danjou  <julien@danjou.info>
 
@@ -2667,7 +2952,7 @@
 
 2011-01-27  Lars Ingebrigtsen  <larsi@gnus.org>
 
-	* shr.el (shr-put-color): Special-case background colours: Do put them
+	* shr.el (shr-put-color): Special-case background colors: Do put them
 	at the blank parts at the front of the lines.
 
 	* gnus-draft.el (gnus-draft-clear-marks): New function to be run as an
@@ -2703,7 +2988,7 @@
 	we're using an encrypted connection.
 
 	* proto-stream.el: Alter the interface functions to also return the
-	actual stream type used: network or tls.
+	actual stream type used: network or TLS.
 
 2011-01-25  Julien Danjou  <julien@danjou.info>
 
@@ -2723,7 +3008,7 @@
 
 2011-01-24  Lars Ingebrigtsen  <larsi@gnus.org>
 
-	* shr.el (shr-expand-newlines): Proof of concept implemantation of boxy
+	* shr.el (shr-expand-newlines): Proof of concept implementation of boxy
 	backgrounds.
 	(shr-expand-newlines): Switch to using overlays to enable kill'n'yank
 	in a more sensible manner.
@@ -3022,12 +3307,12 @@
 2010-12-17  Julien Danjou  <julien@danjou.info>
 
 	* gnus-util.el (gnus-rescale-image): Allow to resize images even if
-	they are from file. Can also scale up.
+	they are from file.  Can also scale up.
 
 2010-12-17  Andrew Cohen  <cohen@andy.bu.edu>
 
-	* gnus-sum.el (gnus-summary-refer-thread): Simplify code. Restore
-	gnus-use-agent.
+	* gnus-sum.el (gnus-summary-refer-thread): Simplify code.
+	Restore gnus-use-agent.
 	(gnus-get-newsgroup-headers): Avoid unwanted spaces at eol.
 
 	* nnir.el (nnir-get-active): Ignore nnir-ignored-newsgroups if null.
@@ -3385,8 +3670,8 @@
 	* nnir.el: Update to handle the registry better.
 	(autoload): Silence byte-compiler.
 	(nnir-open-server): Add a hook for nnir groups.
-	(nnir-request-move-article): Don't mangle the header. Better to use
-	formating variables (which will be added in the future).
+	(nnir-request-move-article): Don't mangle the header.  Better to use
+	formatting variables (which will be added in the future).
 	(nnir-registry-action): Update the registry using the original article
 	group name.
 	(nnir-mode): Install nnir-specific hooks for updating the registry.
@@ -3432,7 +3717,7 @@
 
 2010-11-30  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* proto-stream.el (open-protocol-stream): All starttls connections are
+	* proto-stream.el (open-protocol-stream): All STARTTLS connections are
 	handled by the network handler.
 
 2010-11-30  Julien Danjou  <julien@danjou.info>
@@ -3521,9 +3806,9 @@
 	(nnimap-open-connection): Be more backwards-compatible.
 
 	* proto-stream.el (proto-stream-always-use-starttls): New variable.
-	(proto-stream-open-starttls): De-duplicate the starttls code.
+	(proto-stream-open-starttls): De-duplicate the STARTTLS code.
 	(proto-stream-open-starttls): Folded back into the main function.
-	(proto-stream-open-network): Fix typo in the gnutls path.
+	(proto-stream-open-network): Fix typo in the GnuTLS path.
 	(proto-stream-command): Refactor out.
 
 	* nntp.el (nntp-open-connection): Fix the STARTTLS command syntax.
@@ -3535,7 +3820,7 @@
 
 	* proto-stream.el (proto-stream-open-tls): Delete output from openssl
 	if we're using tls.el.
-	(proto-stream-open-network): If we don't have gnutls-cli or gnutls
+	(proto-stream-open-network): If we don't have gnutls-cli or GnuTLS
 	built in, then don't try to establish a STARTTLS connection.
 
 	* nntp.el (nntp-open-connection): Switch on STARTTLS on supported
@@ -3672,7 +3957,7 @@
 
 2010-11-25  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* shr-color.el (shr-color-visible): Don't bug out if the colour names
+	* shr-color.el (shr-color-visible): Don't bug out if the color names
 	don't exist.
 
 2010-11-25  Katsumi Yamaoka  <yamaoka@jpl.org>
@@ -3744,7 +4029,7 @@
 
 2010-11-24  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* shr.el (shr-color-check): Protect against non-existent colour names.
+	* shr.el (shr-color-check): Protect against non-existent color names.
 
 2010-11-24  Julien Danjou  <julien@danjou.info>
 
@@ -3770,7 +4055,7 @@
 2010-11-23  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* shr.el (shr-insert-color-overlay): Split stuff like
-	"#444444 !important" to find the real colour.
+	"#444444 !important" to find the real color.
 	(shr-tag-font): Resurrect shr-tag-font again, since it's needed to
 	parse <font color="red"> entries.
 
@@ -3821,7 +4106,7 @@
 2010-11-21  Andrew Cohen  <cohen@andy.bu.edu>
 
 	* nnir.el: Fix typo in comments.
-	(nnir-run-imap): Simplify code. No need to reverse artlist.
+	(nnir-run-imap): Simplify code.  No need to reverse artlist.
 	(nnir-run-gmane): Use nnir-tmp-buffer for web results.
 
 2010-11-21  Lars Magne Ingebrigtsen  <larsi@gnus.org>
@@ -3853,8 +4138,8 @@
 
 2010-11-19  Katsumi Yamaoka  <yamaoka@jpl.org>
 
-	* gnus-art.el (gnus-mime-display-single)
-	* gnus-html.el (gnus-html-wash-images, gnus-html-prefetch-images)
+	* gnus-art.el (gnus-mime-display-single):
+	* gnus-html.el (gnus-html-wash-images, gnus-html-prefetch-images):
 	* mm-decode.el (mm-shr): Assume that gnus-inhibit-images may be a group
 	parameter.
 
@@ -4209,7 +4494,7 @@
 	* gnus-util.el (gnus-string-match-p): New function, that is an alias to
 	string-match-p in Emacs >=23.
 
-	* gnus-msg.el (gnus-configure-posting-styles)
+	* gnus-msg.el (gnus-configure-posting-styles):
 	* nnir.el (nnir-run-gmane): Use gnus-string-match-p.
 
 2010-11-01  Glenn Morris  <rgm@gnu.org>
@@ -4312,7 +4597,7 @@
 	gnus-original-article-buffer is alive.
 
 	* nndoc.el (nndoc-dissect-buffer): Reverse the order of the articles to
-	reflect the order they're in in the digest.
+	reflect the order they are in the digest.
 
 	* gnus.el (gnus-group-startup-message): Move point to the start of the
 	buffer.
@@ -4378,7 +4663,7 @@
 
 2010-10-30  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* shr.el (shr-tag-span): Drop colorisation of regions since we don't
+	* shr.el (shr-tag-span): Drop colorization of regions since we don't
 	control the background color.
 	(shr-tag-img): Ignore very small web bug type images.
 	(shr-put-image): Add help-echo alt texts to the images.
@@ -4447,7 +4732,7 @@
 
 	* shr.el (shr-put-image): Use point even if only inserting text.
 	(shr-put-image): Save excursion when inserting alt text on non-graphic
-	display, so the behaviour is the same when we are on a graphic display.
+	display, so the behavior is the same when we are on a graphic display.
 
 	* nnir.el (nnir-run-swish-e): Remove hyrex support.
 
@@ -4495,7 +4780,7 @@
 2010-10-24  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* nnimap.el (nnimap-request-head): New function.
-	(nnimap-request-move-article): Try to be slighly faster by not
+	(nnimap-request-move-article): Try to be slightly faster by not
 	requesting the entire message when moving.
 	(nnimap-transform-headers): Don't bug out on bodiless articles.
 	(nnimap-send-command): Have no outstanding messages if the IMAP server
@@ -4935,7 +5220,7 @@
 	* gnus-sum.el (gnus-summary-set-local-parameters): Ignore the `active'
 	non-variable, too.
 
-	* nnimap.el (nnimap-open-connection): Use gnutls STARTTLS, if
+	* nnimap.el (nnimap-open-connection): Use GnuTLS STARTTLS, if
 	available.
 	(nnimap-update-info): Rely more on the current active than the param
 	active to avoid marking articles as read too much.
@@ -4984,8 +5269,8 @@
 	group is the "last", so that the backends like nnfolder actually save
 	their folders.
 
-	* nnimap.el (nnimap-open-connection): If we have gnutls loaded, then
-	try to use that for the tls stream.
+	* nnimap.el (nnimap-open-connection): If we have GnuTLS loaded, then
+	try to use that for the TLS stream.
 	(nnimap-retrieve-group-data-early): Rework the marks code to heed
 	UIDVALIDITY and find out which groups are read-only and not.
 	(nnimap-get-flags): Use the same marks parsing code as the rest of
@@ -5068,7 +5353,7 @@
 	bidning gnus-agent variables.
 
 	* shr.el (shr-render-td): Use a cache for the table rendering function
-	to avoid getting an exponential rendering behaviour in nested tables.
+	to avoid getting an exponential rendering behavior in nested tables.
 	(shr-insert): Rework the line-breaking algorithm.
 	(shr-insert): Don't leave trailing spaces.
 	(shr-insert-table): Also insert empty TDs.
@@ -5157,8 +5442,8 @@
 	* gnus-util.el (gnus-remove-if): Allow hash table.
 	(gnus-remove-if-not): New function.
 
-	* gnus-art.el (gnus-mime-view-part-as-type)
-	* gnus-score.el (gnus-summary-score-effect)
+	* gnus-art.el (gnus-mime-view-part-as-type):
+	* gnus-score.el (gnus-summary-score-effect):
 	* gnus-sum.el (gnus-read-move-group-name):
 	Replace remove-if-not with gnus-remove-if-not.
 
@@ -5647,8 +5932,8 @@
 2010-09-29  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* mm-util.el (mm-codepage-iso-8859-list, mm-charset-eval-alist)
-	(mm-mime-charset)
-	* rfc2047.el (rfc2047-syntax-table)
+	(mm-mime-charset):
+	* rfc2047.el (rfc2047-syntax-table):
 	* utf7.el (utf7-utf-16-coding-system): Comment fix.
 
 	* nnrss.el (nnrss-read-server-data, nnrss-read-group-data): Use `load'
@@ -5663,8 +5948,8 @@
 
 2010-09-28  Katsumi Yamaoka  <yamaoka@jpl.org>
 
-	* mail-source.el (mail-source-report-new-mail)
-	* message.el (message-default-mail-headers)
+	* mail-source.el (mail-source-report-new-mail):
+	* message.el (message-default-mail-headers):
 	* mm-decode.el (mm-valid-image-format-p): Comment fix.
 
 	* mml2015.el (mml2015-use): Don't bind recursive-load-depth-limit.
@@ -5881,15 +6166,15 @@
 	highlight again, so that the highlight is correct.
 
 	* gnus-picon.el (gnus-picon): Remove again.
-	(gnus-picon-create-glyph): Set the background XPM colour explicitly.
+	(gnus-picon-create-glyph): Set the background XPM color explicitly.
 
 	* gnus-art.el (gnus-treatment-function-alist): Insert picons after
-	doing the header highlightling, so that the background colour of the
+	doing the header highlightling, so that the background color of the
 	picon is correct.
 
 	* gnus-picon.el (gnus-picon-xbm): Remove obsolete face.
 	(gnus-picon): Ditto.
-	(gnus-picon): Reinstate.  The background colour for picons is white.
+	(gnus-picon): Reinstate.  The background color for picons is white.
 	(gnus-picon-insert-glyph): Make the background white.
 
 	* nnml.el (nnml-open-nov): Don't return dead buffers.
@@ -6160,8 +6445,8 @@
 	(gnus-article-next-page-1): No need to adjust the number of lines.
 	(gnus-article-describe-bindings): Always use help-buffer.
 
-	* gnus-audio.el (gnus-audio-inline-sound)
-	* gnus-cus.el (gnus-custom-mode)
+	* gnus-audio.el (gnus-audio-inline-sound):
+	* gnus-cus.el (gnus-custom-mode):
 	* gnus-group.el (gnus-group-update-tool-bar): Comment fix.
 
 	* gnus-sum.el (gnus-remove-overlays): Doc fix.
@@ -6204,8 +6489,8 @@
 	* gnus-int.el (gnus-request-update-info): Protect against backends not
 	having the function.
 
-	* nnimap.el (nnimap-stream): Mention starttls.
-	(nnimap-open-connection): Add starttls support.
+	* nnimap.el (nnimap-stream): Mention STARTTLS.
+	(nnimap-open-connection): Add STARTTLS support.
 
 2010-09-23  Andrew Cohen  <cohen@andy.bu.edu>
 
@@ -6357,9 +6642,9 @@
 
 2010-09-22  Katsumi Yamaoka  <yamaoka@jpl.org>
 
-	* mailcap.el (mailcap-parse-mailcap, mailcap-parse-mimetypes)
-	* mm-util.el (mm-decompress-buffer)
-	* nnir.el (nnir-run-find-grep)
+	* mailcap.el (mailcap-parse-mailcap, mailcap-parse-mimetypes):
+	* mm-util.el (mm-decompress-buffer):
+	* nnir.el (nnir-run-find-grep):
 	* pop3.el (pop3-list): Use 3rd arg of split-string.
 
 2010-09-21  Lars Magne Ingebrigtsen  <larsi@gnus.org>
@@ -6673,7 +6958,7 @@
 
 	* gnus-start.el (gnus-get-unread-articles): Allow the backends to
 	update the group info.  This makes the nndraft groups, for instance, go
-	back to their old behaviour.
+	back to their old behavior.
 
 	* gnus-sum.el (gnus-select-newsgroup): Indent.
 
@@ -6934,7 +7219,7 @@
 
 	* gnus-start.el (gnus-activate-group): Take an optional parameter to
 	say that you don't want to call gnus-request-group with don-check, but
-	do check the reponse.  This is for virtual groups only.
+	do check the response.  This is for virtual groups only.
 	(gnus-get-unread-articles): Count the archive groups as secondary, so
 	that they're activated the same way as before.
 
@@ -7065,7 +7350,7 @@
 
 	* gnus-agent.el (gnus-agent-auto-agentize-methods): Change the default
 	so that nnimap methods aren't agentized by default.  There's apparently
-	many problems related to agent/imap behaviour.
+	many problems related to agent/imap behavior.
 
 	* gnus-art.el (gnus-article-copy-string): New command and key binding.
 
@@ -7110,7 +7395,7 @@
 	storage than before.
 
 	* gnus.el (gnus-refer-article-method): Change default to 'current.
-	When referring an article, the common behaviour is to refer it from the
+	When referring an article, the common behavior is to refer it from the
 	current select method, not the native select method.  The chances of
 	the native select method having the message in question is rather slim
 	these days.
@@ -7126,7 +7411,7 @@
 	* gnus-sum.el (gnus-summary-goto-unread): Change default to nil, so
 	that commands like `d' (and the like) go to the next line in the
 	buffer, instead of the next unread article.  I think this is the
-	behaviour that is most natural for most users.
+	behavior that is most natural for most users.
 	(gnus-single-article-buffer): Change default to nil, so that people can
 	have as many article buffers open as they have summary buffer.  I think
 	this is the most natural way for the groups to behave.
@@ -7225,7 +7510,7 @@
 2010-09-01  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-html.el (gnus-html-cache-directory, gnus-html-cache-size)
-	(gnus-html-frame-width, gnus-blocked-images)
+	(gnus-html-frame-width, gnus-blocked-images):
 	* message.el (message-prune-recipient-rules): Add custom version.
 	* gnus-sum.el (gnus-auto-expirable-marks): Bump custom version.
 
@@ -7275,11 +7560,11 @@
 	* gnus-ems.el: Provide compatibility functions for
 	gnus-set-process-plist.
 
-	* gnus-sum.el (gnus-summary-stop-at-end-of-message)
-	* gnus.el (gnus-valid-select-methods)
-	* message.el (message-send-mail-partially-limit)
-	* mm-decode.el (mm-text-html-renderer)
-	* mml.el (mml-insert-mime-headers-always)
+	* gnus-sum.el (gnus-summary-stop-at-end-of-message):
+	* gnus.el (gnus-valid-select-methods):
+	* message.el (message-send-mail-partially-limit):
+	* mm-decode.el (mm-text-html-renderer):
+	* mml.el (mml-insert-mime-headers-always):
 	* smiley.el (smiley-regexp-alist): Bump custom version.
 
 2010-08-31  Lars Magne Ingebrigtsen  <larsi@gnus.org>
@@ -7301,7 +7586,7 @@
 	UTF-8.  This seems to fix problems with some German web feeds.
 
 	* gnus.el (gnus-group-startup-message): Put the xpm version of the logo
-	at the top so that the proper colours are applied.
+	at the top so that the proper colors are applied.
 
 	* gnus-art.el (gnus-article-view-part): Doc fix.
 
@@ -7611,7 +7896,7 @@
 
 2010-05-13  Katsumi Yamaoka  <yamaoka@jpl.org>
 
-	* mml1991.el (mml1991-mailcrypt-encrypt, mml1991-gpg-encrypt)
+	* mml1991.el (mml1991-mailcrypt-encrypt, mml1991-gpg-encrypt):
 	* mml2015.el (mml2015-gpg-encrypt): Disable multibyte in buffers
 	generated within the mm-with-unibyte-current-buffer macro.
 
@@ -7686,11 +7971,11 @@
 
 2010-05-07  Katsumi Yamaoka  <yamaoka@jpl.org>
 
-	* nnweb.el (nnweb-gmane-search)
+	* nnweb.el (nnweb-gmane-search):
 	* yenc.el (yenc-decode-region): Don't run set-buffer-multibyte for
 	XEmacs.
 
-	* gnus-art.el (gnus-article-browse-html-parts)
+	* gnus-art.el (gnus-article-browse-html-parts):
 	* gnus-group.el (gnus-read-ephemeral-gmane-group)
 	(gnus-read-ephemeral-bug-grou): Use mm-make-temp-file instead of
 	make-temp-file.
@@ -10398,10 +10683,10 @@
 
 2007-12-05  Katsumi Yamaoka  <yamaoka@jpl.org>
 
-	* gnus-art.el (gnus-use-idna)
-	* gnus-start.el (gnus-site-init-file)
-	* message.el (message-use-idna)
-	* mm-uu.el (mm-uu-hide-markers)
+	* gnus-art.el (gnus-use-idna):
+	* gnus-start.el (gnus-site-init-file):
+	* message.el (message-use-idna):
+	* mm-uu.el (mm-uu-hide-markers):
 	* smiley.el (smiley-style): Revert changes that suppress warnings.
 
 2007-12-05  Katsumi Yamaoka  <yamaoka@jpl.org>
@@ -10795,7 +11080,7 @@
 2007-11-14  Denys Duchier  <denys.duchier@univ-orleans.fr>  (tiny change)
 
 	* pop3.el (pop3-open-server): Accept and process data more robustly at
-	connexion start to avoid spurious "POP SSL connexion failed" errors.
+	connection start to avoid spurious "POP SSL connection failed" errors.
 
 2007-11-14  Katsumi Yamaoka  <yamaoka@jpl.org>
 
@@ -11542,7 +11827,7 @@
 	(nntp-open-marks): Decode group names when bootstrapping marks.
 
 	* rfc2047.el (rfc2047-encode-message-header): Make XEmacs decode
-	Newsgroups and Folowup-To headers.
+	Newsgroups and Followup-To headers.
 
 2007-07-13  Katsumi Yamaoka  <yamaoka@jpl.org>
 
@@ -11703,13 +11988,13 @@
 2007-05-25  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-art.el (gnus-header-from, gnus-header-subject, gnus-header-name)
-	(gnus-header-content)
-	* gnus-cite.el (gnus-cite-10)
-	* gnus-srvr.el (gnus-server-closed)
+	(gnus-header-content):
+	* gnus-cite.el (gnus-cite-10):
+	* gnus-srvr.el (gnus-server-closed):
 	* gnus.el (gnus-group-mail-1, gnus-group-mail-1-empty)
 	(gnus-group-mail-2, gnus-group-mail-2-empty, gnus-group-mail-3)
 	(gnus-group-mail-3-empty, gnus-group-mail-low)
-	(gnus-group-mail-low-empty, gnus-splash)
+	(gnus-group-mail-low-empty, gnus-splash):
 	* message.el (message-header-to, message-header-cc)
 	(message-header-subject, message-header-other, message-header-name)
 	(message-header-xheader, message-separator, message-cited-text)
@@ -11734,7 +12019,7 @@
 
 	* message.el (message-font-lock-keywords): Use message-header-xheader
 	face for "X-Foo", its apparent intended purpose.  Move "X-" pattern
-	ahead of the anything pattern, to get it recognised.
+	ahead of the anything pattern, to get it recognized.
 
 2007-05-12  Michaël Cadilhac  <michael@cadilhac.name>
 
@@ -13049,13 +13334,11 @@
 	(mml-secure-cache-passphrase): New user option.
 	(mml-secure-passphrase-cache-expiry): New user option.
 
-2006-07-24  Daiki Ueno  <ueno@unixuser.org>
+2006-07-24  David Smith  <davidsmith@acm.org>  (tiny change)
+	    Andreas Vögele  <andreas@altroot.de>   (tiny change)
 
-	* pgg-def.el (pgg-truncate-key-identifier): Truncate the key ID to 8
-	letters from the end.  Thanks to "David Smith" <davidsmith@acm.org> and
-	andreas@altroot.de (Andreas Vögele).
-
-	FIXME: Use `tiny change'?
+	* pgg-def.el (pgg-truncate-key-identifier):
+	Truncate the key ID to 8 letters from the end.
 
 2006-07-19  Andreas Seltenreich  <uwi7@rz.uni-karlsruhe.de>
 
@@ -14781,7 +15064,7 @@
 	(nnweb-request-list): Don't list bogus groups.  There can only be one.
 	(nnweb-request-create-group): Don't use ARGS.
 	(nnweb-possibly-change-server, nnweb-request-group): Remove some
-	initialisations.  Let nnoo do the work.
+	initializations.  Let nnoo do the work.
 
 2006-01-31  Katsumi Yamaoka  <yamaoka@jpl.org>
 
@@ -16352,7 +16635,7 @@
 2005-07-01  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-art.el (article-display-face): Improve the efficiency.
-	(article-display-x-face): Ditto; remove grey x-face stuff.
+	(article-display-x-face): Ditto; remove gray x-face stuff.
 
 2005-06-30  Katsumi Yamaoka  <yamaoka@jpl.org>
 
@@ -16409,7 +16692,7 @@
 2005-06-16  Arne Jørgensen  <arne@arnested.dk>
 
 	* smime.el (smime-cert-by-ldap-1): Detect PEM format without
-	header by looking for magic "MII" at the beginnig.
+	header by looking for magic "MII" at the beginning.
 
 2005-06-16  Miles Bader  <miles@gnu.org>
 
@@ -18383,7 +18666,7 @@
 2004-10-05  Jesper Harder  <harder@ifa.au.dk>
 
 	* nnsoup.el (nnsoup-read-active-file): Use dolist, mapc or last
-	where approriate.
+	where appropriate.
 
 	* nnml.el (nnml-generate-active-info): do.
 
@@ -18487,10 +18770,10 @@
 2004-09-28  Kevin Greiner  <kgreiner@compsol.cc>
 
 	* gnus-agent.el (gnus-agent-synchronize-group-flags): Replace
-	gnus-requst-update-info with explicit code to sync the in-memory
+	gnus-request-update-info with explicit code to sync the in-memory
 	info read flags with the marks being sync'd to the backend.
 
-	*gnus-util.el (gnus-pp): Add optional stream to match pp API.
+	* gnus-util.el (gnus-pp): Add optional stream to match pp API.
 
 2004-09-28  Teodor Zlatanov  <tzz@lifelogs.com>
 
@@ -19274,7 +19557,7 @@
 	* gnus-group.el (gnus-group-get-new-news-this-group):
 	Don't update info that isn't there.
 
-2004-06-29  Ilya N. Golubev  <gin@mo.msk.ru>.
+2004-06-29  Ilya N. Golubev  <gin@mo.msk.ru>
 
 	* mm-util.el (mm-mime-mule-charset-alist): Add the windows-1251
 	entry.
@@ -19601,7 +19884,7 @@
 
 2004-05-26  Simon Josefsson  <jas@extundo.com>
 
-	* starttls.el: Merge with my GNUTLS based starttls.el.
+	* starttls.el: Merge with my GnuTLS based starttls.el.
 	(starttls-gnutls-program, starttls-use-gnutls)
 	(starttls-extra-arguments, starttls-process-connection-type)
 	(starttls-connect, starttls-failure, starttls-success):
@@ -19751,7 +20034,7 @@
 
 	* dns.el (dns-read-type): Add support for SVR.  (small patch)
 
-2004-05-20  Teodor Zlatanov  <tzz@lifelogs.com>
+2004-05-20  Adam Sjøgren  <asjo@koldfront.dk>
 
 	* spam.el (spam-use-crm114, spam-crm114, spam-crm114-program)
 	(spam-crm114-header, spam-crm114-spam-switch)
@@ -19768,7 +20051,8 @@
 	(spam-crm114-unregister-spam-routine)
 	(spam-crm114-register-ham-routine)
 	(spam-crm114-unregister-ham-routine): Add CRM114 support.
-	From asjo@koldfront.dk (Adam Sjøgren).
+
+2004-05-20  Teodor Zlatanov  <tzz@lifelogs.com>
 
 	* gnus.el: Add spam-use-crm114.
 
@@ -19905,10 +20189,13 @@
 
 2004-05-18  Reiner Steib  <Reiner.Steib@gmx.de>
 
+	* gnus-picon.el (gnus-picon-insert-glyph):
+	Add optional `nostring' argument.
+
+2004-05-18  Jesper Harder  <harder@ifa.au.dk>
+
 	* gnus-picon.el (gnus-picon-style): New variable.
-	(gnus-picon-insert-glyph): Add optional `nostring' argument.
 	(gnus-picon-transform-address): Support `gnus-picon-style'.
-	From Jesper Harder <harder@ifa.au.dk>.
 
 2004-05-18  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -19934,7 +20221,7 @@
 	* mail-source.el (mail-source-delete-crash-box): Refactor.
 	(mail-source-fetch): Use it.
 	(mail-source-fetch-file): Ditto.
-	(mail-source-fetch-directory): Run postscript in loop.
+	(mail-source-fetch-directory): Run PostScript in loop.
 	(mail-source-fetch-pop): Delete.
 	(mail-source-fetch-maildir): Ditto.
 	(mail-source-fetch-imap): Ditto.
@@ -20167,13 +20454,10 @@
 	* spam-stat.el (spam-stat-score-buffer): Simplify mapcar usage.
 	Use mapc when appropriate.
 
-2004-04-22  Teodor Zlatanov  <tzz@lifelogs.com>
-
-	FIXME: Make separate entries for each person.
-
-	From Dan Christensen <jdc@uwo.ca>, asjo@koldfront.dk (Adam
-	Sjøgren), Wes Hardaker <wes@hardakers.net>, and Michael Shields
-	<shields@msrl.com>:
+2004-04-22  Dan Christensen  <jdc@uwo.ca>
+	    Adam Sjøgren  <asjo@koldfront.dk>
+	    Wes Hardaker  <wes@hardakers.net>
+	    Michael Shields  <shields@msrl.com>
 
 	* spam.el (spam-necessary-extra-headers): Get the extra headers we
 	may need for spam sorting and scoring.
@@ -20183,7 +20467,7 @@
 	sorting.
 	(spam-extra-header-to-number): Add function to get a score from a
 	header.
-	(spam-summary-score): Add function to  get a numeric score from the
+	(spam-summary-score): Add function to get a numeric score from the
 	headers.
 	(spam-generic-score): Fix function doc, was in wrong place.
 	(spam-initialize): Take symbols when it's run, and install the
@@ -21127,7 +21411,7 @@
 	(gnus-agent-cat-groups): Use eval-and-compile, not
 	eval-when-compile, to define gnus-agent-set-cat-groups as the setf
 	method of gnus-agent-cat-groups even when the buffer has been
-	evaled.
+	evalled.
 	(gnus-agent-save-active, gnus-agent-save-active-1): Merge to
 	delete gnus-agent-save-active-1.
 	(gnus-agent-save-groups): Delete.  Identical to
@@ -21643,7 +21927,7 @@
 
 2004-01-06  Steve Youngs  <sryoungs@bigpond.net.au>
 
-	* gnus-ems.el (gnus-mode-line-modified): Don't conditionalise on
+	* gnus-ems.el (gnus-mode-line-modified): Don't conditionalize on
 	XEmacs version.
 
 	* dns.el (dns-make-network-process): Use `open-network-stream'
@@ -21910,7 +22194,7 @@
 
 See ChangeLog.2 for earlier changes.
 
-  Copyright (C) 2004-2011  Free Software Foundation, Inc.
+  Copyright (C) 2004-2012  Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

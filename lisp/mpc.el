@@ -1,6 +1,6 @@
 ;;; mpc.el --- A client for the Music Player Daemon   -*- coding: utf-8; lexical-binding: t -*-
 
-;; Copyright (C) 2006-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2006-2012  Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Keywords: multimedia
@@ -1589,7 +1589,7 @@ when constructing the set of constraints."
 (defvar mpc--changed-selection)
 
 (defun mpc-reorder (&optional nodeactivate)
-  "Reorder entries based on thre currently active selections.
+  "Reorder entries based on the currently active selections.
 I.e. split the current browser buffer into a first part containing the
 entries included in the selection, then a separator, and then the entries
 not included in the selection.
@@ -1651,7 +1651,7 @@ Return non-nil if a selection was deactivated."
 ;;; Hierarchical tagbrowser ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Todo:
 ;; - Add a button on each dir to open/close it (?)
-;; - add the parent dir on the previous line, greyed-out, if it's not
+;; - add the parent dir on the previous line, grayed-out, if it's not
 ;;   present (because we're in the non-selected part and the parent is
 ;;   in the selected part).
 
@@ -1996,12 +1996,14 @@ This is used so that they can be compared with `eq', which is needed for
        (list (get-text-property (point) 'mpc-file)
              posn))))
   (let* ((plbuf (mpc-proc-cmd "playlist"))
-         (re (concat "^\\([0-9]+\\):" (regexp-quote song-file) "$"))
+         (re (if song-file
+		 (concat "^\\([0-9]+\\):" (regexp-quote song-file) "$")))
          (sn (with-current-buffer plbuf
                (goto-char (point-min))
-               (when (re-search-forward re nil t)
+               (when (and re (re-search-forward re nil t))
                  (match-string 1)))))
     (cond
+     ((null re) (posn-set-point posn))
      ((null sn) (error "This song is not in the playlist"))
      ((null (with-current-buffer plbuf (re-search-forward re nil t)))
       ;; song-file only appears once in the playlist: no ambiguity,
@@ -2356,7 +2358,7 @@ This is used so that they can be compared with `eq', which is needed for
         (let* ((currenttime (float-time))
                (last-time (- currenttime (car mpc-last-seek-time))))
           (if (< last-time (* 0.9 repeat-delay))
-              nil ;; Trottle
+              nil ;; Throttle
             (let* ((status (if (< last-time 1.0)
                                mpc-status (mpc-cmd-status)))
                    (songid (cdr (assq 'songid status)))
@@ -2410,7 +2412,7 @@ This is used so that they can be compared with `eq', which is needed for
     (let* (songid       ;The ID of the currently ffwd/rewinding song.
            songduration ;The duration of that song.
            songtime     ;The time of the song last time we ran.
-           oldtime      ;The timeoftheday last time we ran.
+           oldtime      ;The time of day last time we ran.
            prevsongid)  ;The song we're in the process leaving.
       (let ((fun
              (lambda ()

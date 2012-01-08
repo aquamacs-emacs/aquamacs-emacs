@@ -1,6 +1,6 @@
 ;;; erc-backend.el --- Backend network communication for ERC
 
-;; Copyright (C) 2004-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2012 Free Software Foundation, Inc.
 
 ;; Filename: erc-backend.el
 ;; Author: Lawrence Mitchell <wence@gmx.li>
@@ -79,7 +79,7 @@
 
 ;;; TODO:
 
-;; o Generalise the display-line code so that we can use it to
+;; o Generalize the display-line code so that we can use it to
 ;;   display the stuff we send, as well as the stuff we receive.
 ;;   Then, move all display-related code into another backend-like
 ;;   file, erc-display.el, say.
@@ -991,7 +991,7 @@ Hands off to helper functions via `erc-call-hooks'."
   (if (member (erc-response.command parsed-response)
               erc-server-prevent-duplicates)
       (let ((m (erc-response.unparsed parsed-response)))
-        ;; duplicate supression
+        ;; duplicate suppression
         (if (< (or (gethash m erc-server-duplicates) 0)
                (- (erc-current-time) erc-server-duplicate-timeout))
             (erc-call-hooks process parsed-response))
@@ -1432,7 +1432,7 @@ add things to `%s' instead."
         (when (string= cmd "PRIVMSG")
           (erc-auto-query proc parsed))))))
 
-;; FIXME: need clean way of specifiying extra hooks in
+;; FIXME: need clean way of specifying extra hooks in
 ;; define-erc-response-handler.
 (add-hook 'erc-server-PRIVMSG-functions 'erc-auto-query)
 
@@ -2000,4 +2000,3 @@ See `erc-display-error-notice'." nil
 ;; Local Variables:
 ;; indent-tabs-mode: nil
 ;; End:
-

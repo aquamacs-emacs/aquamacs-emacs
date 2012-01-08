@@ -1,5 +1,5 @@
 /* NeXT/Open/GNUstep and MacOSX Cocoa menu and toolbar module.
-   Copyright (C) 2007-2011 Free Software Foundation, Inc.
+   Copyright (C) 2007-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -76,6 +76,10 @@ NSMenu *panelMenu;
 static int popup_activated_flag;
 static NSModalSession popupSession;
 static EmacsAlertPanel *popupSheetAlert;
+
+/* Nonzero means we are tracking and updating menus.  */
+static int trackingMenu;
+
 
 /* NOTE: toolbar implementation is at end,
   following complete menu implementation. */
@@ -417,6 +421,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
       items = FRAME_MENU_BAR_ITEMS (f);
       if (NILP (items))
         {
+          free_menubar_widget_value_tree (first_wv);
           [pool release];
           UNBLOCK_INPUT;
           return;
@@ -444,6 +449,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 
           if (i == n)
             {
+              free_menubar_widget_value_tree (first_wv);
               [pool release];
               UNBLOCK_INPUT;
               return;
@@ -574,16 +580,24 @@ name_is_separator (name)
 {
   frame = f;
 }
-/* delegate method called when a submenu is being opened: run a 'deep' call
-   to set_frame_menubar */
 
-static int trackingMenu = 0;
-/* NSMenuDidBeginTrackingNotification */
+#ifdef NS_IMPL_COCOA
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+extern NSString *NSMenuDidBeginTrackingNotification;
+#endif
+#endif
+
+#ifdef NS_IMPL_COCOA
 -(void)trackingNotification:(NSNotification *)notification
 {
-  trackingMenu = (([notification name] == NSMenuDidBeginTrackingNotification) ? 1 : 0);
-  /* update menu in menuNeedsUpdate only while tracking menus*/
+  /* Update menu in menuNeedsUpdate only while tracking menus.  */
+  trackingMenu = ([notification name] == NSMenuDidBeginTrackingNotification
+                  ? 1 : 0);
 }
+#endif
+
+/* delegate method called when a submenu is being opened: run a 'deep' call
+   to set_frame_menubar */
 - (void)menuNeedsUpdate: (NSMenu *)menu
 {
   /* events may be sent to recently deleted frames,
@@ -591,13 +605,9 @@ static int trackingMenu = 0;
   if (! (frame && FRAME_LIVE_P (frame) && FRAME_NS_VIEW (frame)))
     return;
 
-  // NSEvent *event = [[FRAME_NS_VIEW (frame) window] currentEvent];
-  // fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); 
-
-  /* Cocoa/Carbon will request update on every keystroke via
-     IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
+  /* Cocoa/Carbon will request update on every keystroke
+     via IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
      since key equivalents are handled through emacs.
-     
      On Leopard, even keystroke events generate SystemDefined event.
      Third-party applications that enhance mouse / trackpad
      interaction, or also VNC/Remote Desktop will send events
@@ -2098,6 +2108,11 @@ DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_
 void
 syms_of_nsmenu (void)
 {
+#ifndef NS_IMPL_COCOA
+  /* Don't know how to keep track of this in Next/Open/Gnustep.  Always
+     update menus there.  */
+  trackingMenu = 1;
+#endif
   DEFVAR_LISP ("ns-tool-bar-size-mode", Vns_tool_bar_size_mode,
 	       doc: /* *Specify the size of the tool bar items.
 The value can be `small' (for small items), `regular' 

@@ -28,7 +28,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-Copyright (C) 1984, 1987-1989, 1993-1995, 1998-2011
+Copyright (C) 1984, 1987-1989, 1993-1995, 1998-2012
   Free Software Foundation, Inc.
 
 This file is not considered part of GNU Emacs.
@@ -326,7 +326,7 @@ typedef struct regexp
   struct re_pattern_buffer *pat; /* the compiled pattern */
   struct re_registers regs;	/* re registers */
   bool error_signaled;		/* already signaled for this regexp */
-  bool force_explicit_name;	/* do not allow implict tag name */
+  bool force_explicit_name;	/* do not allow implicit tag name */
   bool ignore_case;		/* ignore case when matching */
   bool multi_line;		/* do a multi-line match on the whole file */
 } regexp;
@@ -611,7 +611,7 @@ using `--declarations'.";
 static const char *Cplusplus_suffixes [] =
   { "C", "c++", "cc", "cpp", "cxx", "H", "h++", "hh", "hpp", "hxx",
     "M",			/* Objective C++ */
-    "pdb",			/* Postscript with C syntax */
+    "pdb",			/* PostScript with C syntax */
     NULL };
 static const char Cplusplus_help [] =
 "In C++ code, all the tag constructs of C code are tagged.  (Use\n\
@@ -867,7 +867,7 @@ static void
 print_version (void)
 {
   /* Makes it easier to update automatically. */
-  char emacs_copyright[] = "Copyright (C) 2011 Free Software Foundation, Inc.";
+  char emacs_copyright[] = "Copyright (C) 2012 Free Software Foundation, Inc.";
 
   printf ("%s (%s %s)\n", (CTAGS) ? "ctags" : "etags", EMACS_NAME, VERSION);
   puts (emacs_copyright);
@@ -1862,10 +1862,10 @@ find_entries (FILE *inf)
 
   assert (parser != NULL);
 
-  /* Generic initialisations before reading from file. */
+  /* Generic initializations before reading from file. */
   linebuffer_setlen (&filebuf, 0); /* reset the file buffer */
 
-  /* Generic initialisations before parsing file with readline. */
+  /* Generic initializations before parsing file with readline. */
   lineno = 0;		       /* reset global line number */
   charno = 0;		       /* reset global char number */
   linecharno = 0;	       /* reset global char number of line start */
@@ -1895,7 +1895,7 @@ find_entries (FILE *inf)
  *  4. the character, if any, immediately after NAME in LINESTART must
  *     also be a character in NONAM.
  *
- * The implementation uses the notinname() macro, which recognises the
+ * The implementation uses the notinname() macro, which recognizes the
  * characters stored in the string `nonam'.
  * etags.el needs to use the same characters that are in NONAM.
  */
@@ -3057,7 +3057,7 @@ make_C_tag (int isfun)
     make_tag (token_name.buffer, token_name.len, isfun, token.line,
 	      token.offset+token.length+1, token.lineno, token.linepos);
   else if (DEBUG)
-    {				  /* this branch is optimised away if !DEBUG */
+    {				  /* this branch is optimized away if !DEBUG */
       make_tag (concat ("INVALID TOKEN:-->", token_name.buffer, ""),
 		token_name.len + 17, isfun, token.line,
 		token.offset+token.length+1, token.lineno, token.linepos);
@@ -3189,24 +3189,12 @@ C_entries (int c_ext, FILE *inf)
 	    }
 	  continue;
 	}
-      else if (bracketlev > 0)
-	{
-	  switch (c)
-	    {
-	    case ']':
-	      if (--bracketlev > 0)
-		continue;
-	      break;
-	    case '\0':
-	      CNL_SAVE_DEFINEDEF ();
-	      break;
-	    }
-	  continue;
-	}
       else switch (c)
 	{
 	case '"':
 	  inquote = TRUE;
+	  if (bracketlev > 0)
+	    continue;
 	  if (inattribute)
 	    break;
 	  switch (fvdef)
@@ -3224,9 +3212,11 @@ C_entries (int c_ext, FILE *inf)
 	  continue;
 	case '\'':
 	  inchar = TRUE;
+	  if (bracketlev > 0)
+	    continue;
 	  if (inattribute)
 	    break;
-	  if (fvdef != finlist && fvdef != fignore && fvdef !=vignore)
+	  if (fvdef != finlist && fvdef != fignore && fvdef != vignore)
 	    {
 	      fvextern = FALSE;
 	      fvdef = fvnone;
@@ -3238,6 +3228,8 @@ C_entries (int c_ext, FILE *inf)
 	      incomm = TRUE;
 	      lp++;
 	      c = ' ';
+	      if (bracketlev > 0)
+		continue;
 	    }
 	  else if (/* cplpl && */ *lp == '/')
 	    {
@@ -3270,7 +3262,7 @@ C_entries (int c_ext, FILE *inf)
 	      for (cp = newlb.buffer; cp < lp-1; cp++)
 		if (!iswhite (*cp))
 		  {
-		    if (*cp == '*' && *(cp+1) == '/')
+		    if (*cp == '*' && cp[1] == '/')
 		      {
 			cp++;
 			cpptoken = TRUE;
@@ -3284,7 +3276,17 @@ C_entries (int c_ext, FILE *inf)
 	  continue;
 	case '[':
 	  bracketlev++;
-	    continue;
+	  continue;
+	default:
+	  if (bracketlev > 0)
+	    {
+	      if (c == ']')
+		--bracketlev;
+	      else if (c == '\0')
+		CNL_SAVE_DEFINEDEF ();
+	      continue;
+	    }
+	  break;
 	} /* switch (c) */
 
 
@@ -3304,7 +3306,7 @@ C_entries (int c_ext, FILE *inf)
 		  if (c == ':' && *lp == ':' && begtoken (lp[1]))
 		    /* This handles :: in the middle,
 		       but not at the beginning of an identifier.
-		       Also, space-separated :: is not recognised. */
+		       Also, space-separated :: is not recognized. */
 		    {
 		      if (c_ext & C_AUTO) /* automatic detection of C++ */
 			c_ext = (c_ext | C_PLPL) & ~C_AUTO;
@@ -4846,7 +4848,7 @@ Lua_functions (FILE *inf)
 
 
 /*
- * Postscript tags
+ * PostScript tags
  * Just look for lines where the first character is '/'
  * Also look at "defineps" for PSWrap
  * Ideas by:
@@ -5900,7 +5902,7 @@ regex_tag_multiline (void)
       if (!rp->multi_line)
 	continue;		/* skip normal regexps */
 
-      /* Generic initialisations before parsing file from memory. */
+      /* Generic initializations before parsing file from memory. */
       lineno = 1;		/* reset global line number */
       charno = 0;		/* reset global char number */
       linecharno = 0;		/* reset global char number of line start */
@@ -6097,7 +6099,7 @@ readline (linebuffer *lbp, FILE *stream)
   lineno += 1;			/* increment global line number */
   charno += result;		/* increment global char number */
 
-  /* Honour #line directives. */
+  /* Honor #line directives. */
   if (!no_line_directive)
     {
       static bool discard_until_line_directive;

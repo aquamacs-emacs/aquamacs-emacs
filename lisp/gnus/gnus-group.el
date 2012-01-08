@@ -1,6 +1,6 @@
 ;;; gnus-group.el --- group mode commands for Gnus
 
-;; Copyright (C) 1996-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1996-2012  Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -362,7 +362,7 @@ If you want to modify the group buffer, you can use this hook."
      gnus-group-news-low))
   "*Controls the highlighting of group buffer lines.
 
-Below is a list of `Form'/`Face' pairs.  When deciding how a a
+Below is a list of `Form'/`Face' pairs.  When deciding how a
 particular group line should be displayed, each form is
 evaluated.  The content of the face field after the first true form is
 used.  You can change how those group lines are displayed by
@@ -992,7 +992,7 @@ Setter function for custom variables."
 				 'gnus-group-tool-bar-retro)
   "Specifies the Gnus group tool bar.
 
-It can be either a list or a symbol refering to a list.  See
+It can be either a list or a symbol referring to a list.  See
 `gmm-tool-bar-from-list' for the format of the list.  The
 default key map is `gnus-group-mode-map'.
 
@@ -1354,14 +1354,14 @@ if it is a string, only list groups matching REGEXP."
 		     (predicate t)	; We list all groups?
 		     (t
 		      (or
-		       (if (eq unread t) ; Unactivated?
+		       (if (eq unread t) ; Inactive?
 			   gnus-group-list-inactive-groups
-					; We list unactivated
+					; We list inactive
 			 (and (numberp unread) (> unread 0)))
 					; We list groups with unread articles
 		       (and gnus-list-groups-with-ticked-articles
 			    (cdr (assq 'tick (gnus-info-marks info))))
-					; And groups with tickeds
+					; And groups with ticked articles
 		       ;; Check for permanent visibility.
 		       (and gnus-permanently-visible-groups
 			    (string-match gnus-permanently-visible-groups

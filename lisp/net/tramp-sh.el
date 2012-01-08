@@ -1,6 +1,6 @@
 ;;; tramp-sh.el --- Tramp access functions for (s)sh-like connections
 
-;; Copyright (C) 1998-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012 Free Software Foundation, Inc.
 
 ;; (copyright statements below in code to be updated with the above notice)
 
@@ -44,7 +44,7 @@
 
 (defcustom tramp-inline-compress-start-size 4096
   "*The minimum size of compressing where inline transfer.
-When inline transfer, compress transfered data of file
+When inline transfer, compress transferred data of file
 whose size is this value or above (up to `tramp-copy-size-limit').
 If it is nil, no compression at all will be applied."
   :group 'tramp
@@ -549,7 +549,7 @@ as given in your `~/.profile'."
   "*List of environment variables to be set on the remote host.
 
 Each element should be a string of the form ENVVARNAME=VALUE.  An
-entry ENVVARNAME= diables the corresponding environment variable,
+entry ENVVARNAME= disables the corresponding environment variable,
 which might have been set in the init files like ~/.profile.
 
 Special handling is applied to the PATH environment, which should
@@ -806,7 +806,7 @@ on the remote host.")
 (defconst tramp-perl-encode
   "%s -e '
 # This script contributed by Juanma Barranquero <lektu@terra.es>.
-# Copyright (C) 2002-2011 Free Software Foundation, Inc.
+# Copyright (C) 2002-2012 Free Software Foundation, Inc.
 use strict;
 
 my %%trans = do {
@@ -847,7 +847,7 @@ This string is passed to `format', so percent characters need to be doubled.")
 (defconst tramp-perl-decode
   "%s -e '
 # This script contributed by Juanma Barranquero <lektu@terra.es>.
-# Copyright (C) 2002-2011 Free Software Foundation, Inc.
+# Copyright (C) 2002-2012 Free Software Foundation, Inc.
 use strict;
 
 my %%trans = do {
@@ -1042,9 +1042,9 @@ target of the symlink differ."
       (tramp-flush-file-property l (file-name-directory l-localname))
       (tramp-flush-file-property l l-localname)
 
-      ;; Right, they are on the same host, regardless of user, method, etc.
-      ;; We now make the link on the remote machine. This will occur as the user
-      ;; that FILENAME belongs to.
+      ;; Right, they are on the same host, regardless of user, method,
+      ;; etc.  We now make the link on the remote machine. This will
+      ;; occur as the user that FILENAME belongs to.
       (tramp-send-command-and-check
        l
        (format
@@ -1058,106 +1058,110 @@ target of the symlink differ."
 (defun tramp-sh-handle-file-truename (filename &optional counter prev-dirs)
   "Like `file-truename' for Tramp files."
   (with-parsed-tramp-file-name (expand-file-name filename) nil
-    (with-file-property v localname "file-truename"
-      (let ((result nil))			; result steps in reverse order
-	(tramp-message v 4 "Finding true name for `%s'" filename)
-	(cond
-	 ;; Use GNU readlink --canonicalize-missing where available.
-	 ((tramp-get-remote-readlink v)
-	  (setq result
-		(tramp-send-command-and-read
-		 v
-		 (format "echo \"\\\"`%s --canonicalize-missing %s`\\\"\""
-			 (tramp-get-remote-readlink v)
-			 (tramp-shell-quote-argument localname)))))
+    (tramp-make-tramp-file-name method user host
+      (with-file-property v localname "file-truename"
+	(let ((result nil))			; result steps in reverse order
+	  (tramp-message v 4 "Finding true name for `%s'" filename)
+	  (cond
+	   ;; Use GNU readlink --canonicalize-missing where available.
+	   ((tramp-get-remote-readlink v)
+	    (setq result
+		  (tramp-send-command-and-read
+		   v
+		   (format "echo \"\\\"`%s --canonicalize-missing %s`\\\"\""
+			   (tramp-get-remote-readlink v)
+			   (tramp-shell-quote-argument localname)))))
 
-	 ;; Use Perl implementation.
-	 ((and (tramp-get-remote-perl v)
-	       (tramp-get-connection-property v "perl-file-spec" nil)
-	       (tramp-get-connection-property v "perl-cwd-realpath" nil))
-	  (tramp-maybe-send-script
-	   v tramp-perl-file-truename "tramp_perl_file_truename")
-	  (setq result
-		(tramp-send-command-and-read
-		 v
-		 (format "tramp_perl_file_truename %s"
-			 (tramp-shell-quote-argument localname)))))
+	   ;; Use Perl implementation.
+	   ((and (tramp-get-remote-perl v)
+		 (tramp-get-connection-property v "perl-file-spec" nil)
+		 (tramp-get-connection-property v "perl-cwd-realpath" nil))
+	    (tramp-maybe-send-script
+	     v tramp-perl-file-truename "tramp_perl_file_truename")
+	    (setq result
+		  (tramp-send-command-and-read
+		   v
+		   (format "tramp_perl_file_truename %s"
+			   (tramp-shell-quote-argument localname)))))
 
-	 ;; Do it yourself.  We bind `directory-sep-char' here for
-	 ;; XEmacs on Windows, which would otherwise use backslash.
-	 (t (let* ((directory-sep-char ?/)
-		   (steps (tramp-compat-split-string localname "/"))
-		   (localnamedir (tramp-run-real-handler
-				  'file-name-as-directory (list localname)))
-		   (is-dir (string= localname localnamedir))
-		   (thisstep nil)
-		   (numchase 0)
-		   ;; Don't make the following value larger than
-		   ;; necessary.  People expect an error message in a
-		   ;; timely fashion when something is wrong;
-		   ;; otherwise they might think that Emacs is hung.
-		   ;; Of course, correctness has to come first.
-		   (numchase-limit 20)
-		   symlink-target)
-	      (while (and steps (< numchase numchase-limit))
-		(setq thisstep (pop steps))
-		(tramp-message
-		 v 5 "Check %s"
-		 (mapconcat 'identity
-			    (append '("") (reverse result) (list thisstep))
-			    "/"))
-		(setq symlink-target
-		      (nth 0 (file-attributes
-			      (tramp-make-tramp-file-name
-			       method user host
-			       (mapconcat 'identity
-					  (append '("")
-						  (reverse result)
-						  (list thisstep))
-					  "/")))))
-		(cond ((string= "." thisstep)
-		       (tramp-message v 5 "Ignoring step `.'"))
-		      ((string= ".." thisstep)
-		       (tramp-message v 5 "Processing step `..'")
-		       (pop result))
-		      ((stringp symlink-target)
-		       ;; It's a symlink, follow it.
-		       (tramp-message v 5 "Follow symlink to %s" symlink-target)
-		       (setq numchase (1+ numchase))
-		       (when (file-name-absolute-p symlink-target)
-			 (setq result nil))
-		       ;; If the symlink was absolute, we'll get a string like
-		       ;; "/user@host:/some/target"; extract the
-		       ;; "/some/target" part from it.
-		       (when (tramp-tramp-file-p symlink-target)
-			 (unless (tramp-equal-remote filename symlink-target)
-			   (tramp-error
-			    v 'file-error
-			    "Symlink target `%s' on wrong host" symlink-target))
-			 (setq symlink-target localname))
-		       (setq steps
-			     (append (tramp-compat-split-string
-				      symlink-target "/")
-				     steps)))
-		      (t
-		       ;; It's a file.
-		       (setq result (cons thisstep result)))))
-	      (when (>= numchase numchase-limit)
-		(tramp-error
-		 v 'file-error
-		 "Maximum number (%d) of symlinks exceeded" numchase-limit))
-	      (setq result (reverse result))
-	      ;; Combine list to form string.
-	      (setq result
-		    (if result
-			(mapconcat 'identity (cons "" result) "/")
-		      "/"))
-	      (when (and is-dir (or (string= "" result)
-				    (not (string= (substring result -1) "/"))))
-		(setq result (concat result "/"))))))
+	   ;; Do it yourself.  We bind `directory-sep-char' here for
+	   ;; XEmacs on Windows, which would otherwise use backslash.
+	   (t (let* ((directory-sep-char ?/)
+		     (steps (tramp-compat-split-string localname "/"))
+		     (localnamedir (tramp-run-real-handler
+				    'file-name-as-directory (list localname)))
+		     (is-dir (string= localname localnamedir))
+		     (thisstep nil)
+		     (numchase 0)
+		     ;; Don't make the following value larger than
+		     ;; necessary.  People expect an error message in
+		     ;; a timely fashion when something is wrong;
+		     ;; otherwise they might think that Emacs is hung.
+		     ;; Of course, correctness has to come first.
+		     (numchase-limit 20)
+		     symlink-target)
+		(while (and steps (< numchase numchase-limit))
+		  (setq thisstep (pop steps))
+		  (tramp-message
+		   v 5 "Check %s"
+		   (mapconcat 'identity
+			      (append '("") (reverse result) (list thisstep))
+			      "/"))
+		  (setq symlink-target
+			(nth 0 (file-attributes
+				(tramp-make-tramp-file-name
+				 method user host
+				 (mapconcat 'identity
+					    (append '("")
+						    (reverse result)
+						    (list thisstep))
+					    "/")))))
+		  (cond ((string= "." thisstep)
+			 (tramp-message v 5 "Ignoring step `.'"))
+			((string= ".." thisstep)
+			 (tramp-message v 5 "Processing step `..'")
+			 (pop result))
+			((stringp symlink-target)
+			 ;; It's a symlink, follow it.
+			 (tramp-message
+			  v 5 "Follow symlink to %s" symlink-target)
+			 (setq numchase (1+ numchase))
+			 (when (file-name-absolute-p symlink-target)
+			   (setq result nil))
+			 ;; If the symlink was absolute, we'll get a
+			 ;; string like "/user@host:/some/target";
+			 ;; extract the "/some/target" part from it.
+			 (when (tramp-tramp-file-p symlink-target)
+			   (unless (tramp-equal-remote filename symlink-target)
+			     (tramp-error
+			      v 'file-error
+			      "Symlink target `%s' on wrong host"
+			      symlink-target))
+			   (setq symlink-target localname))
+			 (setq steps
+			       (append (tramp-compat-split-string
+					symlink-target "/")
+				       steps)))
+			(t
+			 ;; It's a file.
+			 (setq result (cons thisstep result)))))
+		(when (>= numchase numchase-limit)
+		  (tramp-error
+		   v 'file-error
+		   "Maximum number (%d) of symlinks exceeded" numchase-limit))
+		(setq result (reverse result))
+		;; Combine list to form string.
+		(setq result
+		      (if result
+			  (mapconcat 'identity (cons "" result) "/")
+			"/"))
+		(when (and is-dir
+			   (or (string= "" result)
+			       (not (string= (substring result -1) "/"))))
+		  (setq result (concat result "/"))))))
 
-        (tramp-message v 4 "True name of `%s' is `%s'" filename result)
-        (tramp-make-tramp-file-name method user host result)))))
+	  (tramp-message v 4 "True name of `%s' is `%s'" localname result)
+	  result)))))
 
 ;; Basic functions.
 
@@ -1594,17 +1598,14 @@ and gid of the corresponding user is taken.  Both parameters must be integers."
 
 (defun tramp-sh-handle-file-directory-p (filename)
   "Like `file-directory-p' for Tramp files."
-  ;; Care must be taken that this function returns `t' for symlinks
-  ;; pointing to directories.  Surely the most obvious implementation
-  ;; would be `test -d', but that returns false for such symlinks.
-  ;; CCC: Stefan Monnier says that `test -d' follows symlinks.  And
-  ;; I now think he's right.  So we could be using `test -d', couldn't
-  ;; we?
-  ;;
-  ;; Alternatives: `cd %s', `test -d %s'
   (with-parsed-tramp-file-name filename nil
-    (with-file-property v localname "file-directory-p"
-      (tramp-run-test "-d" filename))))
+    ;; `file-directory-p' is used as predicate for filename completion.
+    ;; Sometimes, when a connection is not established yet, it is
+    ;; desirable to return t immediately for "/method:foo:".  It can
+    ;; be expected that this is always a directory.
+    (or (zerop (length localname))
+	(with-file-property v localname "file-directory-p"
+	  (tramp-run-test "-d" filename)))))
 
 (defun tramp-sh-handle-file-writable-p (filename)
   "Like `file-writable-p' for Tramp files."
@@ -3525,7 +3526,7 @@ variable PATH."
 Here, we are looking for a command which has zero exit status if the
 file exists and nonzero exit status otherwise."
   (let ((existing "/")
-        (nonexisting
+        (nonexistent
 	 (tramp-shell-quote-argument "/ this file does not exist "))
 	result)
     ;; The algorithm is as follows: we try a list of several commands.
@@ -3550,22 +3551,22 @@ file exists and nonzero exit status otherwise."
 		  (tramp-send-command-and-check
 		   vec (format "%s %s" result existing))
                   (not (tramp-send-command-and-check
-			vec (format "%s %s" result nonexisting))))
+			vec (format "%s %s" result nonexistent))))
              (and (setq result "/bin/test -e")
 		  (tramp-send-command-and-check
 		   vec (format "%s %s" result existing))
                   (not (tramp-send-command-and-check
-			vec (format "%s %s" result nonexisting))))
+			vec (format "%s %s" result nonexistent))))
              (and (setq result "/usr/bin/test -e")
 		  (tramp-send-command-and-check
 		   vec (format "%s %s" result existing))
                   (not (tramp-send-command-and-check
-			vec (format "%s %s" result nonexisting))))
+			vec (format "%s %s" result nonexistent))))
              (and (setq result (format "%s -d" (tramp-get-ls-command vec)))
 		  (tramp-send-command-and-check
 		   vec (format "%s %s" result existing))
                   (not (tramp-send-command-and-check
-			vec (format "%s %s" result nonexisting)))))
+			vec (format "%s %s" result nonexistent)))))
       (tramp-error
        vec 'file-error "Couldn't find command to check if file exists"))
     result))
@@ -3617,7 +3618,8 @@ file exists and nonzero exit status otherwise."
 	     vec 'file-error
 	     "Couldn't find a shell which groks tilde expansion"))
 	  (tramp-message
-	   vec 5 "Starting remote shell `%s' for tilde expansion" shell)
+	   vec 5 "Starting remote shell `%s' for tilde expansion"
+	   (tramp-set-connection-property vec "remote-shell" shell))
 	  (tramp-open-shell vec shell))
 
 	 (t (tramp-message
@@ -3725,7 +3727,7 @@ process to set up.  VEC specifies the connection."
   ;; Check whether the output of "uname -sr" has been changed.  If
   ;; yes, this is a strong indication that we must expire all
   ;; connection properties.  We start again with
-  ;; `tramp-maybe-open-connection', it will be catched there.
+  ;; `tramp-maybe-open-connection', it will be caught there.
   (tramp-message vec 5 "Checking system information")
   (let ((old-uname (tramp-get-connection-property vec "uname" nil))
 	(new-uname
@@ -3783,6 +3785,17 @@ process to set up.  VEC specifies the connection."
 
   ;; Disable unexpected output.
   (tramp-send-command vec "mesg n; biff n" t)
+
+  ;; Busyboxes tend to behave strange.  We check for the existence.
+  (with-connection-property vec "busybox"
+    (tramp-send-command
+     vec
+     (format
+      "%s --version" (tramp-get-connection-property vec "remote-shell" "echo"))
+     t)
+    (with-current-buffer (process-buffer proc)
+      (let ((case-fold-search t))
+	(and (string-match "busybox" (buffer-string)) t))))
 
   ;; IRIX64 bash expands "!" even when in single quotes.  This
   ;; destroys our shell functions, we must disable it.  See
@@ -4214,7 +4227,7 @@ connection if a previous connection has died for some reason."
 	    (tramp-send-command vec "echo are you awake" t t)
 	    (unless (and (memq (process-status p) '(run open))
 			 (tramp-wait-for-output p 10))
-	      ;; The error will be catched locally.
+	      ;; The error will be caught locally.
 	      (tramp-error vec 'file-error "Awake did fail")))
 	(file-error
 	 (tramp-flush-connection-property vec)
@@ -4223,148 +4236,166 @@ connection if a previous connection has died for some reason."
 	 (setq p nil)))
 
       ;; New connection must be opened.
-      (unless (and p (processp p) (memq (process-status p) '(run open)))
+      (condition-case err
+	  (unless (and p (processp p) (memq (process-status p) '(run open)))
 
-	;; We call `tramp-get-buffer' in order to get a debug buffer for
-	;; messages from the beginning.
-	(tramp-get-buffer vec)
-	(tramp-with-progress-reporter
-	    vec 3
-	    (if (zerop (length (tramp-file-name-user vec)))
-		(format "Opening connection for %s using %s"
-			(tramp-file-name-host vec)
-			(tramp-file-name-method vec))
-	      (format "Opening connection for %s@%s using %s"
-		      (tramp-file-name-user vec)
-		      (tramp-file-name-host vec)
-		      (tramp-file-name-method vec)))
+	    ;; We call `tramp-get-buffer' in order to get a debug
+	    ;; buffer for messages from the beginning.
+	    (tramp-get-buffer vec)
+	    (tramp-with-progress-reporter
+		vec 3
+		(if (zerop (length (tramp-file-name-user vec)))
+		    (format "Opening connection for %s using %s"
+			    (tramp-file-name-host vec)
+			    (tramp-file-name-method vec))
+		  (format "Opening connection for %s@%s using %s"
+			  (tramp-file-name-user vec)
+			  (tramp-file-name-host vec)
+			  (tramp-file-name-method vec)))
 
-	  ;; Start new process.
-	  (when (and p (processp p))
-	    (delete-process p))
-	  (setenv "TERM" tramp-terminal-type)
-	  (setenv "LC_ALL" "C")
-	  (setenv "PROMPT_COMMAND")
-	  (setenv "PS1" tramp-initial-end-of-output)
-	  (let* ((target-alist (tramp-compute-multi-hops vec))
-		 (process-connection-type tramp-process-connection-type)
-		 (process-adaptive-read-buffering nil)
-		 (coding-system-for-read nil)
-		 ;; This must be done in order to avoid our file name handler.
-		 (p (let ((default-directory
-			    (tramp-compat-temporary-file-directory)))
-		      (apply
-		       'start-process
-		       (tramp-get-connection-name vec)
-		       (tramp-get-connection-buffer vec)
-		       (if tramp-encoding-command-interactive
-			   (list tramp-encoding-shell
-				 tramp-encoding-command-interactive)
-			 (list tramp-encoding-shell))))))
+	      ;; Start new process.
+	      (when (and p (processp p))
+		(delete-process p))
+	      (setenv "TERM" tramp-terminal-type)
+	      (setenv "LC_ALL" "C")
+	      (setenv "PROMPT_COMMAND")
+	      (setenv "PS1" tramp-initial-end-of-output)
+	      (let* ((target-alist (tramp-compute-multi-hops vec))
+		     (process-connection-type tramp-process-connection-type)
+		     (process-adaptive-read-buffering nil)
+		     (coding-system-for-read nil)
+		     ;; This must be done in order to avoid our file
+		     ;; name handler.
+		     (p (let ((default-directory
+				(tramp-compat-temporary-file-directory)))
+			  (apply
+			   'start-process
+			   (tramp-get-connection-name vec)
+			   (tramp-get-connection-buffer vec)
+			   (if tramp-encoding-command-interactive
+			       (list tramp-encoding-shell
+				     tramp-encoding-command-interactive)
+			     (list tramp-encoding-shell))))))
 
-	    ;; Set sentinel and query flag.
-	    (tramp-set-connection-property p "vector" vec)
-	    (set-process-sentinel p 'tramp-process-sentinel)
-	    (tramp-compat-set-process-query-on-exit-flag p nil)
+		;; Set sentinel and query flag.
+		(tramp-set-connection-property p "vector" vec)
+		(set-process-sentinel p 'tramp-process-sentinel)
+		(tramp-compat-set-process-query-on-exit-flag p nil)
 
-	    (tramp-message
-	     vec 6 "%s" (mapconcat 'identity (process-command p) " "))
-
-	    ;; Check whether process is alive.
-	    (tramp-barf-if-no-shell-prompt
-	     p 60 "Couldn't find local shell prompt %s" tramp-encoding-shell)
-
-	    ;; Now do all the connections as specified.
-	    (while target-alist
-	      (let* ((hop (car target-alist))
-		     (l-method (tramp-file-name-method hop))
-		     (l-user (tramp-file-name-user hop))
-		     (l-host (tramp-file-name-host hop))
-		     (l-port nil)
-		     (login-program
-		      (tramp-get-method-parameter
-		       l-method 'tramp-login-program))
-		     (login-args
-		      (tramp-get-method-parameter l-method 'tramp-login-args))
-		     (async-args
-		      (tramp-get-method-parameter l-method 'tramp-async-args))
-		     (gw-args
-		      (tramp-get-method-parameter l-method 'tramp-gw-args))
-		     (gw (tramp-get-file-property hop "" "gateway" nil))
-		     (g-method (and gw (tramp-file-name-method gw)))
-		     (g-user (and gw (tramp-file-name-user gw)))
-		     (g-host (and gw (tramp-file-name-real-host gw)))
-		     (command login-program)
-		     ;; We don't create the temporary file.  In fact,
-		     ;; it is just a prefix for the ControlPath option
-		     ;; of ssh; the real temporary file has another
-		     ;; name, and it is created and protected by ssh.
-		     ;; It is also removed by ssh when the connection
-		     ;; is closed.
-		     (tmpfile
-		      (tramp-set-connection-property
-		       p "temp-file"
-		       (make-temp-name
-			(expand-file-name
-			 tramp-temp-name-prefix
-			 (tramp-compat-temporary-file-directory)))))
-		     spec)
-
-		;; Add arguments for asynchrononous processes.
-		(when (and process-name async-args)
-		  (setq login-args (append async-args login-args)))
-
-		;; Add gateway arguments if necessary.
-		(when (and gw gw-args)
-		  (setq login-args (append gw-args login-args)))
-
-		;; Check for port number.  Until now, there's no need
-		;; for handling like method, user, host.
-		(when (string-match tramp-host-with-port-regexp l-host)
-		(setq l-port (match-string 2 l-host)
-		      l-host (match-string 1 l-host)))
-
-		;; Set variables for computing the prompt for reading
-		;; password.  They can also be derived from a gateway.
-		(setq tramp-current-method (or g-method l-method)
-		      tramp-current-user   (or g-user   l-user)
-		      tramp-current-host   (or g-host   l-host))
-
-		;; Replace login-args place holders.
-		(setq
-		 l-host (or l-host "")
-		 l-user (or l-user "")
-		 l-port (or l-port "")
-		 spec (format-spec-make
-		       ?h l-host ?u l-user ?p l-port ?t tmpfile)
-		 command
-		 (concat
-		  ;; We do not want to see the trailing local prompt in
-		  ;; `start-file-process'.
-		  (unless (memq system-type '(windows-nt)) "exec ")
-		  command " "
-		  (mapconcat
-		   (lambda (x)
-		     (setq x (mapcar (lambda (y) (format-spec y spec)) x))
-		     (unless (member "" x) (mapconcat 'identity x " ")))
-		   login-args " ")
-		  ;; Local shell could be a Windows COMSPEC.  It
-		  ;; doesn't know the ";" syntax, but we must exit
-		  ;; always for `start-file-process'.  "exec" does not
-		  ;; work either.
-		  (if (memq system-type '(windows-nt)) " && exit || exit")))
-
-		;; Send the command.
-		(tramp-message vec 3 "Sending command `%s'" command)
-		(tramp-send-command vec command t t)
-		(tramp-process-actions p vec pos tramp-actions-before-shell 60)
 		(tramp-message
-		 vec 3 "Found remote shell prompt on `%s'" l-host))
-	      ;; Next hop.
-	      (setq target-alist (cdr target-alist)))
+		 vec 6 "%s" (mapconcat 'identity (process-command p) " "))
 
-	    ;; Make initial shell settings.
-	    (tramp-open-connection-setup-interactive-shell p vec)))))))
+		;; Check whether process is alive.
+		(tramp-barf-if-no-shell-prompt
+		 p 60
+		 "Couldn't find local shell prompt %s" tramp-encoding-shell)
+
+		;; Now do all the connections as specified.
+		(while target-alist
+		  (let* ((hop (car target-alist))
+			 (l-method (tramp-file-name-method hop))
+			 (l-user (tramp-file-name-user hop))
+			 (l-host (tramp-file-name-host hop))
+			 (l-port nil)
+			 (login-program
+			  (tramp-get-method-parameter
+			   l-method 'tramp-login-program))
+			 (login-args
+			  (tramp-get-method-parameter
+			   l-method 'tramp-login-args))
+			 (async-args
+			  (tramp-get-method-parameter
+			   l-method 'tramp-async-args))
+			 (gw-args
+			  (tramp-get-method-parameter l-method 'tramp-gw-args))
+			 (gw (tramp-get-file-property hop "" "gateway" nil))
+			 (g-method (and gw (tramp-file-name-method gw)))
+			 (g-user (and gw (tramp-file-name-user gw)))
+			 (g-host (and gw (tramp-file-name-real-host gw)))
+			 (command login-program)
+			 ;; We don't create the temporary file.  In
+			 ;; fact, it is just a prefix for the
+			 ;; ControlPath option of ssh; the real
+			 ;; temporary file has another name, and it is
+			 ;; created and protected by ssh.  It is also
+			 ;; removed by ssh when the connection is
+			 ;; closed.
+			 (tmpfile
+			  (tramp-set-connection-property
+			   p "temp-file"
+			   (make-temp-name
+			    (expand-file-name
+			     tramp-temp-name-prefix
+			     (tramp-compat-temporary-file-directory)))))
+			 spec)
+
+		    ;; Add arguments for asynchronous processes.
+		    (when (and process-name async-args)
+		      (setq login-args (append async-args login-args)))
+
+		    ;; Add gateway arguments if necessary.
+		    (when (and gw gw-args)
+		      (setq login-args (append gw-args login-args)))
+
+		    ;; Check for port number.  Until now, there's no
+		    ;; need for handling like method, user, host.
+		    (when (string-match tramp-host-with-port-regexp l-host)
+		      (setq l-port (match-string 2 l-host)
+			    l-host (match-string 1 l-host)))
+
+		    ;; Set variables for computing the prompt for
+		    ;; reading password.  They can also be derived
+		    ;; from a gateway.
+		    (setq tramp-current-method (or g-method l-method)
+			  tramp-current-user   (or g-user   l-user)
+			  tramp-current-host   (or g-host   l-host))
+
+		    ;; Replace login-args place holders.
+		    (setq
+		     l-host (or l-host "")
+		     l-user (or l-user "")
+		     l-port (or l-port "")
+		     spec (format-spec-make
+			   ?h l-host ?u l-user ?p l-port ?t tmpfile)
+		     command
+		     (concat
+		      ;; We do not want to see the trailing local
+		      ;; prompt in `start-file-process'.
+		      (unless (memq system-type '(windows-nt)) "exec ")
+		      command " "
+		      (mapconcat
+		       (lambda (x)
+			 (setq x (mapcar (lambda (y) (format-spec y spec)) x))
+			 (unless (member "" x) (mapconcat 'identity x " ")))
+		       login-args " ")
+		      ;; Local shell could be a Windows COMSPEC.  It
+		      ;; doesn't know the ";" syntax, but we must exit
+		      ;; always for `start-file-process'.  "exec" does
+		      ;; not work either.
+		      (if (memq system-type '(windows-nt)) " && exit || exit")))
+
+		    ;; Send the command.
+		    (tramp-message vec 3 "Sending command `%s'" command)
+		    (tramp-send-command vec command t t)
+		    (tramp-process-actions
+		     p vec pos tramp-actions-before-shell 60)
+		    (tramp-message
+		     vec 3 "Found remote shell prompt on `%s'" l-host))
+		  ;; Next hop.
+		  (setq target-alist (cdr target-alist)))
+
+		;; Make initial shell settings.
+		(tramp-open-connection-setup-interactive-shell p vec))))
+
+	;; When the user did interrupt, we must cleanup.
+	(quit
+	 (let ((p (tramp-get-connection-process vec)))
+	   (when (and p (processp p))
+	     (tramp-flush-connection-property vec)
+	     (tramp-flush-connection-property p)
+	     (delete-process p)))
+	 ;; Propagate the quit signal.
+	 (signal (car err) (cdr err)))))))
 
 (defun tramp-send-command (vec command &optional neveropen nooutput)
   "Send the COMMAND to connection VEC.
@@ -4378,7 +4409,8 @@ function waits for output unless NOOUTPUT is set."
       ;; We mark the command string that it can be erased in the output buffer.
       (tramp-set-connection-property p "check-remote-echo" t)
       (setq command (format "%s%s%s" tramp-echo-mark command tramp-echo-mark)))
-    (when (string-match "<<'EOF'" command)
+    (when (and (string-match "<<'EOF'" command)
+	       (not (tramp-get-connection-property vec "busybox" nil)))
       ;; Unset $PS1 when using here documents, in order to avoid
       ;; multiple prompts.
       (setq command (concat "(PS1= ; " command "\n)")))
@@ -4904,7 +4936,7 @@ If no corresponding command is found, nil is returned."
 
 (defun tramp-get-inline-coding (vec prop size)
   "Return the coding command related to PROP.
-PROP is either `remote-encoding', `remode-decoding',
+PROP is either `remote-encoding', `remote-decoding',
 `local-encoding' or `local-decoding'.
 
 SIZE is the length of the file to be coded.  Depending on SIZE,
@@ -5032,11 +5064,11 @@ function cell is returned to be applied on a buffer."
 ;;   until the last but one hop via `start-file-process'.  Apply it
 ;;   also for ftp and smb.
 ;; * WIBNI if we had a command "trampclient"?  If I was editing in
-;;   some shell with root priviledges, it would be nice if I could
+;;   some shell with root privileges, it would be nice if I could
 ;;   just call
 ;;     trampclient filename.c
 ;;   as an editor, and the _current_ shell would connect to an Emacs
-;;   server and would be used in an existing non-priviledged Emacs
+;;   server and would be used in an existing non-privileged Emacs
 ;;   session for doing the editing in question.
 ;;   That way, I need not tell Emacs my password again and be afraid
 ;;   that it makes it into core dumps or other ugly stuff (I had Emacs

@@ -1,6 +1,6 @@
 ;;; image-mode.el --- support for visiting image files
 ;;
-;; Copyright (C) 2005-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2005-2012 Free Software Foundation, Inc.
 ;;
 ;; Author: Richard Stallman <rms@gnu.org>
 ;; Keywords: multimedia
@@ -396,11 +396,14 @@ to toggle between display as an image and display as text."
 
 ;;;###autoload
 (define-minor-mode image-minor-mode
-  "Toggle Image minor mode.
-With arg, turn Image minor mode on if arg is positive, off otherwise.
-It provides the key \\<image-mode-map>\\[image-toggle-display] \
-to switch back to `image-mode'
-to display an image file as the actual image."
+  "Toggle Image minor mode in this buffer.
+With a prefix argument ARG, enable Image minor mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+Image minor mode provides the key \\<image-mode-map>\\[image-toggle-display],
+to switch back to `image-mode' and display an image file as the
+actual image."
   nil (:eval (if image-type (format " Image[%s]" image-type) " Image"))
   image-minor-mode-map
   :group 'image
@@ -635,7 +638,7 @@ These properties are determined by the Image mode variables
 `image-transform-resize' and `image-transform-rotation'.  The
 return value is suitable for appending to an image spec.
 
-Recaling and rotation properties only take effect if Emacs is
+Rescaling and rotation properties only take effect if Emacs is
 compiled with ImageMagick support."
   (when (or image-transform-resize
 	    (not (equal image-transform-rotation 0.0)))

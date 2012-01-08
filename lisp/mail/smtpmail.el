@@ -1,6 +1,6 @@
 ;;; smtpmail.el --- simple SMTP protocol (RFC 821) for sending mail
 
-;; Copyright (C) 1995-1996, 2001-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1995-1996, 2001-2012  Free Software Foundation, Inc.
 
 ;; Author: Tomoji Kagatani <kagatani@rbc.ncl.omron.co.jp>
 ;; Maintainer: Simon Josefsson <simon@josefsson.org>
@@ -103,12 +103,14 @@ don't define this value."
   "Connection type SMTP connections.
 This may be either nil (possibly upgraded to STARTTLS if
 possible), or `starttls' (refuse to send if STARTTLS isn't
-available), or `plain' (never use STARTTLS).."
+available), or `plain' (never use STARTTLS), or `ssl' (to use
+TLS/SSL)."
   :version "24.1"
   :group 'smtpmail
   :type '(choice (const :tag "Possibly upgrade to STARTTLS" nil)
 		 (const :tag "Always use STARTTLS" starttls)
-		 (const :tag "Never use STARTTLS" plain)))
+		 (const :tag "Never use STARTTLS" plain)
+		 (const :tag "Use TLS/SSL" ssl)))
 
 (defcustom smtpmail-sendto-domain nil
   "Local domain name without a host name.
@@ -968,7 +970,7 @@ The list is in preference order.")
 	  (subst-char-in-region (point-min) (point-max)  9 ?  t) ; tab     --> blank
 
 	  (goto-char (point-min))
-	  ;; tidyness in case hook is not robust when it looks at this
+	  ;; tidiness in case hook is not robust when it looks at this
 	  (while (re-search-forward "[ \t]+" header-end t) (replace-match " "))
 
 	  (goto-char (point-min))

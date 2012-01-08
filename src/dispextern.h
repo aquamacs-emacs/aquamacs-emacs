@@ -1,6 +1,6 @@
 /* Interface definitions for display code.
 
-Copyright (C) 1985, 1993-1994, 1997-2011  Free Software Foundation, Inc.
+Copyright (C) 1985, 1993-1994, 1997-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -405,7 +405,7 @@ struct glyph
   {
     /* Metrics of a partial glyph of an image (type == IMAGE_GLYPH).  */
     struct glyph_slice img;
-    /* Start and end indices of glyphs of a graphme cluster of a
+    /* Start and end indices of glyphs of a grapheme cluster of a
        composition (type == COMPOSITE_GLYPH).  */
     struct { int from, to; } cmp;
     /* Pixel offsets for upper and lower part of the acronym.  */
@@ -1861,7 +1861,8 @@ struct bidi_it {
   struct bidi_saved_info next_for_neutral; /* surrounding characters for... */
   struct bidi_saved_info prev_for_neutral; /* ...resolving neutrals */
   struct bidi_saved_info next_for_ws; /* character after sequence of ws */
-  EMACS_INT next_en_pos;	/* position of next EN char for ET */
+  EMACS_INT next_en_pos;	/* pos. of next char for determining ET type */
+  bidi_type_t next_en_type;	/* type of char at next_en_pos */
   EMACS_INT ignore_bn_limit;	/* position until which to ignore BNs */
   bidi_dir_t sor;		/* direction of start-of-run in effect */
   int scan_dir;			/* direction of text scan, 1: forw, -1: back */
@@ -2653,11 +2654,11 @@ struct redisplay_interface
   void (*flush_display) (struct frame *f);
 
   /* Flush the display of frame F if non-NULL.  This is called
-     during redisplay, and should be NULL on systems which flushes
+     during redisplay, and should be NULL on systems which flush
      automatically before reading input.  */
   void (*flush_display_optional) (struct frame *f);
 
-  /* Clear the mouse hightlight in window W, if there is any.  */
+  /* Clear the mouse highlight in window W, if there is any.  */
   void (*clear_window_mouse_face) (struct window *w);
 
   /* Set *LEFT and *RIGHT to the left and right overhang of GLYPH on
@@ -3133,6 +3134,9 @@ void compute_fringe_widths (struct frame *, int);
 void w32_init_fringe (struct redisplay_interface *);
 void w32_reset_fringes (void);
 #endif
+
+extern unsigned row_hash (struct glyph_row *);
+
 /* Defined in image.c */
 
 #ifdef HAVE_WINDOW_SYSTEM
@@ -3353,6 +3357,7 @@ extern int tty_capable_p (struct tty_display_info *, unsigned, unsigned long, un
 extern void set_tty_color_mode (struct tty_display_info *, struct frame *);
 extern struct terminal *get_named_tty (const char *);
 EXFUN (Ftty_type, 1);
+EXFUN (Fcontrolling_tty_p, 1);
 extern void create_tty_output (struct frame *);
 extern struct terminal *init_tty (const char *, const char *, int);
 extern void tty_append_glyph (struct it *);

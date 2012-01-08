@@ -1,6 +1,6 @@
 ;;; compile.el --- run compiler as inferior of Emacs, parse error messages
 
-;; Copyright (C) 1985-1987, 1993-1999, 2001-2011
+;; Copyright (C) 1985-1987, 1993-1999, 2001-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Authors: Roland McGrath <roland@gnu.org>,
@@ -157,7 +157,7 @@ of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
 
     (python-tracebacks-and-caml
      "^[ \t]*File \\(\"?\\)\\([^,\" \n\t<>]+\\)\\1, lines? \\([0-9]+\\)-?\\([0-9]+\\)?\\(?:$\\|,\
-\\(?: characters? \\([0-9]+\\)-?\\([0-9]+\\)?:\\)?\\([ \n]Warning:\\)?\\)"
+\\(?: characters? \\([0-9]+\\)-?\\([0-9]+\\)?:\\)?\\([ \n]Warning\\(?: [0-9]+\\)?:\\)?\\)"
      2 (3 . 4) (5 . 6) (7))
 
     (comma
@@ -1013,11 +1013,11 @@ POS and RES.")
             (setq col (funcall col))
           (and
            (setq col (match-string-no-properties col))
-           (setq col (- (string-to-number col) compilation-first-column)))))
+           (setq col (string-to-number col)))))
     (if (and end-col (functionp end-col))
         (setq end-col (funcall end-col))
       (if (and end-col (setq end-col (match-string-no-properties end-col)))
-          (setq end-col (- (string-to-number end-col) compilation-first-column -1))
+          (setq end-col (- (string-to-number end-col) -1))
         (if end-line (setq end-col -1))))
     (if (consp type)			; not a static type, check what it is.
 	(setq type (or (and (car type) (match-end (car type)) 1)
@@ -1037,6 +1037,7 @@ POS and RES.")
   "Go to column COL on the current line.
 If SCREEN is non-nil, columns are screen columns, otherwise, they are
 just char-counts."
+  (setq col (- col compilation-first-column))
   (if screen
       (move-to-column (max col 0))
     (goto-char (min (+ (line-beginning-position) col) (line-end-position)))))
@@ -1056,7 +1057,7 @@ FMTS is a list of format specs for transforming the file name.
           (cadr (compilation--file-struct->loc-tree file-struct)))
 	 (marker
           (if marker-line (compilation--loc->marker (cadr marker-line))))
-	 (compilation-error-screen-columns compilation-error-screen-columns)
+	 (screen-columns compilation-error-screen-columns)
 	 end-marker loc end-loc)
     (if (not (and marker (marker-buffer marker)))
 	(setq marker nil)		; no valid marker for this file
@@ -1064,16 +1065,21 @@ FMTS is a list of format specs for transforming the file name.
       (catch 'marker			; find nearest loc, at least one exists
 	(dolist (x (cddr (compilation--file-struct->loc-tree
                           file-struct)))	; Loop over remaining lines.
-	  (if (> (car x) loc)		; still bigger
+	  (if (> (car x) loc)		; Still bigger.
 	      (setq marker-line x)
 	    (if (> (- (or (car marker-line) 1) loc)
-		   (- loc (car x)))	; current line is nearer
+		   (- loc (car x)))	; Current line is nearer.
 		(setq marker-line x))
 	    (throw 'marker t))))
       (setq marker (compilation--loc->marker (cadr marker-line))
 	    marker-line (or (car marker-line) 1))
       (with-current-buffer (marker-buffer marker)
-	(save-excursion
+        (let ((screen-columns
+               ;; Obey the compilation-error-screen-columns of the target
+               ;; buffer if its major mode set it buffer-locally.
+               (if (local-variable-p 'compilation-error-screen-columns)
+                   compilation-error-screen-columns screen-columns)))
+          (save-excursion
 	  (save-restriction
 	    (widen)
 	    (goto-char (marker-position marker))
@@ -1081,17 +1087,15 @@ FMTS is a list of format specs for transforming the file name.
 	      (beginning-of-line (- (or end-line line) marker-line -1))
 	      (if (or (null end-col) (< end-col 0))
 		  (end-of-line)
-		(compilation-move-to-column
-		 end-col compilation-error-screen-columns))
+		(compilation-move-to-column end-col screen-columns))
 	      (setq end-marker (point-marker)))
 	    (beginning-of-line (if end-line
 				   (- line end-line -1)
 				 (- loc marker-line -1)))
 	    (if col
-		(compilation-move-to-column
-		 col compilation-error-screen-columns)
+		(compilation-move-to-column col screen-columns)
 	      (forward-to-indentation 0))
-	    (setq marker (point-marker))))))
+	    (setq marker (point-marker)))))))
 
     (setq loc (compilation-assq line (compilation--file-struct->loc-tree
                                       file-struct)))
@@ -1968,12 +1972,15 @@ Optional argument MINOR indicates this is called from
 
 ;;;###autoload
 (define-minor-mode compilation-shell-minor-mode
-  "Toggle compilation shell minor mode.
-With arg, turn compilation mode on if and only if arg is positive.
-In this minor mode, all the error-parsing commands of the
-Compilation major mode are available but bound to keys that don't
-collide with Shell mode.  See `compilation-mode'.
-Turning the mode on runs the normal hook `compilation-shell-minor-mode-hook'."
+  "Toggle Compilation Shell minor mode.
+With a prefix argument ARG, enable Compilation Shell minor mode
+if ARG is positive, and disable it otherwise.  If called from
+Lisp, enable the mode if ARG is omitted or nil.
+
+When Compilation Shell minor mode is enabled, all the
+error-parsing commands of the Compilation major mode are
+available but bound to keys that don't collide with Shell mode.
+See `compilation-mode'."
   nil " Shell-Compile"
   :group 'compilation
   (if compilation-shell-minor-mode
@@ -1982,11 +1989,14 @@ Turning the mode on runs the normal hook `compilation-shell-minor-mode-hook'."
 
 ;;;###autoload
 (define-minor-mode compilation-minor-mode
-  "Toggle compilation minor mode.
-With arg, turn compilation mode on if and only if arg is positive.
-In this minor mode, all the error-parsing commands of the
-Compilation major mode are available.  See `compilation-mode'.
-Turning the mode on runs the normal hook `compilation-minor-mode-hook'."
+  "Toggle Compilation minor mode.
+With a prefix argument ARG, enable Compilation minor mode if ARG
+is positive, and disable it otherwise.  If called from Lisp,
+enable the mode if ARG is omitted or nil.
+
+When Compilation minor mode is enabled, all the error-parsing
+commands of Compilation major mode are available.  See
+`compilation-mode'."
   nil " Compilation"
   :group 'compilation
   (if compilation-minor-mode
@@ -2260,7 +2270,7 @@ This is the value of `next-error-function' in Compilation buffers."
   (interactive "p")
   (when reset
     (setq compilation-current-error nil))
-  (let* ((columns compilation-error-screen-columns) ; buffer's local value
+  (let* ((screen-columns compilation-error-screen-columns)
 	 (last 1)
 	 (msg (compilation-next-error (or n 1) nil
 				      (or compilation-current-error
@@ -2295,29 +2305,34 @@ This is the value of `next-error-function' in Compilation buffers."
            marker
            (caar (compilation--loc->file-struct loc))
            (cadr (car (compilation--loc->file-struct loc))))
-	(save-restriction
-	  (widen)
-	  (goto-char (point-min))
-	  ;; Treat file's found lines in forward order, 1 by 1.
-	  (dolist (line (reverse (cddr (compilation--loc->file-struct loc))))
-	    (when (car line)		; else this is a filename w/o a line#
-	      (beginning-of-line (- (car line) last -1))
-	      (setq last (car line)))
-	    ;; Treat line's found columns and store/update a marker for each.
-	    (dolist (col (cdr line))
-	      (if (compilation--loc->col col)
-		  (if (eq (compilation--loc->col col) -1)
-                      ;; Special case for range end.
-		      (end-of-line)
-		    (compilation-move-to-column (compilation--loc->col col)
-                                                columns))
-		(beginning-of-line)
-		(skip-chars-forward " \t"))
-	      (if (compilation--loc->marker col)
-                  (set-marker (compilation--loc->marker col) (point))
-		(setf (compilation--loc->marker col) (point-marker)))
-              ;; (setf (compilation--loc->timestamp col) timestamp)
-              )))))
+        (let ((screen-columns
+               ;; Obey the compilation-error-screen-columns of the target
+               ;; buffer if its major mode set it buffer-locally.
+               (if (local-variable-p 'compilation-error-screen-columns)
+                   compilation-error-screen-columns screen-columns)))
+          (save-restriction
+            (widen)
+            (goto-char (point-min))
+            ;; Treat file's found lines in forward order, 1 by 1.
+            (dolist (line (reverse (cddr (compilation--loc->file-struct loc))))
+              (when (car line)		; else this is a filename w/o a line#
+                (beginning-of-line (- (car line) last -1))
+                (setq last (car line)))
+              ;; Treat line's found columns and store/update a marker for each.
+              (dolist (col (cdr line))
+                (if (compilation--loc->col col)
+                    (if (eq (compilation--loc->col col) -1)
+                        ;; Special case for range end.
+                        (end-of-line)
+                      (compilation-move-to-column (compilation--loc->col col)
+                                                  screen-columns))
+                  (beginning-of-line)
+                  (skip-chars-forward " \t"))
+                (if (compilation--loc->marker col)
+                    (set-marker (compilation--loc->marker col) (point))
+                  (setf (compilation--loc->marker col) (point-marker)))
+                ;; (setf (compilation--loc->timestamp col) timestamp)
+                ))))))
     (compilation-goto-locus marker (compilation--loc->marker loc)
                             (compilation--loc->marker end-loc))
     (setf (compilation--loc->visited loc) t)))

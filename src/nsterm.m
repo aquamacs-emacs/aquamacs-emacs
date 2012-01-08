@@ -1,5 +1,5 @@
 /* NeXT/Open/GNUstep / MacOSX communication module.
-   Copyright (C) 1989, 1993-1994, 2005-2006, 2008-2011
+   Copyright (C) 1989, 1993-1994, 2005-2006, 2008-2012
      Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -170,7 +170,7 @@ static Lisp_Object last_mouse_motion_frame;
 static EmacsScroller *last_mouse_scroll_bar = nil;
 static struct frame *ns_updating_frame;
 static NSView *focus_view = NULL;
-static int ns_window_num =0;
+static int ns_window_num = 0;
 #ifdef NS_IMPL_GNUSTEP
 static NSRect uRect;
 #endif
@@ -568,7 +568,7 @@ ns_constrain_all_frames (void)
         {
           NSView *view = FRAME_NS_VIEW (f);
           /* This no-op will trigger the default window placing
-           * constriant system. */
+           * constraint system. */
           f->output_data.ns->dont_constrain = 0;
           [[view window] setFrameOrigin:[[view window] frame].origin];
         }
@@ -1184,12 +1184,10 @@ x_iconify_frame (struct frame *f)
   [[view window] miniaturize: NSApp];
 }
 
+/* Free X resources of frame F.  */
 
 void
-x_destroy_window (struct frame *f)
-/* --------------------------------------------------------------------------
-     External: Delete the window
-   -------------------------------------------------------------------------- */
+x_free_frame_resources (struct frame *f)
 {
   NSView *view = FRAME_NS_VIEW (f);
   struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
@@ -1221,11 +1219,25 @@ x_destroy_window (struct frame *f)
 
   xfree (f->output_data.ns);
 
+  if (f->output_data.ns->miniimage != nil)
+    [f->output_data.ns->miniimage release];
+
   [[view window] close];
   [view release];
 
-  ns_window_num--;
   UNBLOCK_INPUT;
+}
+
+void
+x_destroy_window (struct frame *f)
+/* --------------------------------------------------------------------------
+     External: Delete the window
+   -------------------------------------------------------------------------- */
+{
+  NSTRACE (x_destroy_window);
+  check_ns ();
+  x_free_frame_resources (f);
+  ns_window_num--;
 }
 
 
@@ -1415,7 +1427,7 @@ ns_index_color (NSColor *color, struct frame *f)
 {
   struct ns_color_table *color_table = FRAME_NS_DISPLAY_INFO (f)->color_table;
   ptrdiff_t idx;
-  NSNumber *index;
+  ptrdiff_t i;
 
   if (!color_table->colors)
     {
@@ -1428,21 +1440,13 @@ ns_index_color (NSColor *color, struct frame *f)
     }
 
   /* do we already have this color ? */
-  {
-    ptrdiff_t i;
-    for (i = 1; i < color_table->avail; i++)
-      {
-        if (color_table->colors[i] && [color_table->colors[i] isEqual: color])
-          {
-            [color_table->colors[i] retain];
-            return i;
-          }
-      }
-  }
+  for (i = 1; i < color_table->avail; i++)
+    if (color_table->colors[i] && [color_table->colors[i] isEqual: color])
+      return i;
 
   if ([color_table->empty_indices count] > 0)
     {
-      index = [color_table->empty_indices anyObject];
+      NSNumber *index = [color_table->empty_indices anyObject];
       [color_table->empty_indices removeObject: index];
       idx = [index unsignedLongValue];
     }
@@ -1474,20 +1478,20 @@ ns_free_indexed_color (unsigned long idx, struct frame *f)
   color_table = FRAME_NS_DISPLAY_INFO (f)->color_table;
 
   if (idx <= 0 || idx >= color_table->size) {
-    message1("ns_free_indexed_color: Color index out of range.\n");
+    message1 ("ns_free_indexed_color: Color index out of range.\n");
     return;
   }
 
   index = [NSNumber numberWithUnsignedInt: idx];
   if ([color_table->empty_indices containsObject: index]) {
-    message1("ns_free_indexed_color: attempt to free already freed color.\n");
+    message1 ("ns_free_indexed_color: attempt to free already freed color.\n");
     return;
   }
 
   color = color_table->colors[idx];
   [color release];
   color_table->colors[idx] = nil;
-  [color_table->empty_indices addObject: [NSNumber numberWithUnsignedInt: idx]];
+  [color_table->empty_indices addObject: index];
 /*fprintf(stderr, "color_table: FREED %d\n",idx);*/
 }
 
@@ -2183,7 +2187,7 @@ ns_scroll_run (struct window *w, struct run *run)
     }
   else
     {
-      /* Scolling down.  Make sure we don't copy over the mode line.
+      /* Scrolling down.  Make sure we don't copy over the mode line.
 	 at the bottom.  */
       if (to_y + run->height > bottom_y)
 	height = bottom_y - to_y;
@@ -3066,7 +3070,7 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
   else
     face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
 
-    [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
+  [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
 
   if (bg_height > s->slice.height || s->img->hmargin || s->img->vmargin
       || s->img->mask || s->img->pixmap == 0 || s->width != s->background_width)
@@ -3113,7 +3117,7 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
       /* Currently on NS img->mask is always 0. Since
          get_window_cursor_type specifies a hollow box cursor when on
          a non-masked image we never reach this clause. But we put it
-         in in antipication of better support for image masks on
+         in in anticipation of better support for image masks on
          NS. */
       tdCol = ns_lookup_indexed_color (NS_FACE_FOREGROUND (face), s->f);
     }
@@ -3153,7 +3157,7 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
 
   /* If there is no mask, the background won't be seen,
      so draw a rectangle on the image for the cursor.
-     Do this for all images, getting trancparency right is not reliable.  */
+     Do this for all images, getting transparency right is not reliable.  */
   if (s->hl == DRAW_CURSOR)
     {
       int thickness = abs (s->img->relief);
@@ -3198,8 +3202,8 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
 
               /* truncate to avoid overwriting fringe and/or scrollbar */
 	      overrun = max (0, (s->x + s->background_width)
-                                  - (WINDOW_BOX_RIGHT_EDGE_X (s->w)
-                                    - WINDOW_RIGHT_FRINGE_WIDTH (s->w)));
+			     - (WINDOW_BOX_RIGHT_EDGE_X (s->w)
+				- WINDOW_RIGHT_FRINGE_WIDTH (s->w)));
               r[i].size.width -= overrun;
 
 	      /* truncate to avoid overwriting to left of the window box */
@@ -3251,9 +3255,9 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
                 ns_draw_text_decoration (s, face, fgCol, width, x);
             }
           else
-       {
+            {
               NSRectFill (r[i]);
-       }
+            }
 
           /* Draw overlining, etc. on the stretch glyph (or the part
              of the stretch glyph after the cursor). */
@@ -3953,11 +3957,9 @@ ns_default (const char *parameter, Lisp_Object *result,
       Check a parameter value in user's preferences
    -------------------------------------------------------------------------- */
 {
-  const char *value;
+  const char *value = ns_get_defaults_value (parameter);
 
-  if ( (value =[[[NSUserDefaults standardUserDefaults]
-                   stringForKey: [NSString stringWithUTF8String: parameter]]
-                UTF8String]) )
+  if (value)
     {
       double f;
       char *pos;
@@ -4406,12 +4408,14 @@ ns_term_init (Lisp_Object display_name)
     /* Needed at least on Cocoa, to get dock menu to show windows */
     [NSApp setWindowsMenu: [[NSMenu alloc] init]];
 
-    [[NSNotificationCenter defaultCenter] addObserver: mainMenu
-					     selector: @selector (trackingNotification:)
-                                             name: NSMenuDidBeginTrackingNotification object: mainMenu];
-    [[NSNotificationCenter defaultCenter] addObserver: mainMenu
-					     selector: @selector (trackingNotification:)
-                                             name: NSMenuDidEndTrackingNotification object: mainMenu];
+    [[NSNotificationCenter defaultCenter]
+      addObserver: mainMenu
+         selector: @selector (trackingNotification:)
+             name: NSMenuDidBeginTrackingNotification object: mainMenu];
+    [[NSNotificationCenter defaultCenter]
+      addObserver: mainMenu
+         selector: @selector (trackingNotification:)
+             name: NSMenuDidEndTrackingNotification object: mainMenu];
   }
 #endif /* MAC OS X menu setup */
 
@@ -5116,7 +5120,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   //ns_app_active=YES;
 
   ns_update_auto_hide_menu_bar ();
-  // No constrining takes place when the application is not active.
+  // No constraining takes place when the application is not active.
   ns_constrain_all_frames ();
 }
 
@@ -5583,7 +5587,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
       if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
           emacs_event->modifiers |=
 	    SPECCHECK ((EQ (ns_right_control_modifier, Qleft)
-			? ns_control_modifier
+               ? ns_control_modifier
 			: ns_right_control_modifier), ctrl_modifier);
 
       if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask ||
@@ -5614,7 +5618,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
           else
             emacs_event->modifiers |=
 	      SPECCHECK ((EQ (ns_right_alternate_modifier, Qleft)
-			  ? ns_alternate_modifier
+               ? ns_alternate_modifier
 			  : ns_right_alternate_modifier), meta_modifier);
         }
 
@@ -6182,7 +6186,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   if (cols > 0 && rows > 0)
     {
       if (ns_in_resize)
-    x_set_window_size (emacsframe, 0, cols, rows);
+        x_set_window_size (emacsframe, 0, cols, rows);
       else
         {
           NSWindow *window = [self window];
@@ -6387,7 +6391,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   toggleButton = [win standardWindowButton: NSWindowToolbarButton];
   if (toggleButton)
     {
-      [toggleButton setTarget: self];
+  [toggleButton setTarget: self];
       [toggleButton setAction: @selector (toggleToolbarShown: )];
     }
 
@@ -6640,7 +6644,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 - toggleFullScreen: (id)sender
 {
   if (!emacs_event)
-    return self;
+  return self;
 
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_TOGGLE_FULLSCREEN;
@@ -6861,8 +6865,8 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
       && typeReturned == nil)
     {
       if (! NILP (ns_get_local_selection (QPRIMARY, QUTF8_STRING)))
-      return self;
-  }
+        return self;
+    }
 
   return [super validRequestorForSendType: typeSent
                                returnType: typeReturned];
@@ -7319,7 +7323,7 @@ enum {
       [self setKnobProportion: 1.0];
       [self setDoubleValue: 1.0];
 #else
-    [self setFloatValue: 0.0 knobProportion: 1.0];
+      [self setFloatValue: 0.0 knobProportion: 1.0];
 #endif
     }
   else

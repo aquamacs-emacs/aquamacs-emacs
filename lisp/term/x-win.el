@@ -1,6 +1,6 @@
 ;;; x-win.el --- parse relevant switches and set up for X  -*-coding: iso-2022-7bit;-*-
 
-;; Copyright (C) 1993-1994, 2001-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1993-1994, 2001-2012 Free Software Foundation, Inc.
 
 ;; Author: FSF
 ;; Keywords: terminals, i18n
@@ -126,7 +126,7 @@ a file in the home directory."
 
 (defun emacs-session-save ()
   "This function is called when the window system is shutting down.
-If this function returns non-nil, the window system shutdown is cancelled.
+If this function returns non-nil, the window system shutdown is canceled.
 
 When a session manager tells Emacs that the window system is shutting
 down, this function is called.  It calls the functions in the hook
@@ -1226,7 +1226,7 @@ The value nil is the same as the list (UTF8_STRING COMPOUND_TEXT STRING)."
         (if (string= clip-text "") (setq clip-text nil))
 
         ;; Check the CLIPBOARD selection for 'newness', is it different
-        ;; from what we remebered them to be last time we did a
+        ;; from what we remembered them to be last time we did a
         ;; cut/paste operation.
         (setq clip-text
               (cond ;; check clipboard
@@ -1243,7 +1243,7 @@ The value nil is the same as the list (UTF8_STRING COMPOUND_TEXT STRING)."
       (when x-select-enable-primary
 	(setq primary-text (x-selection-value-internal 'PRIMARY))
 	;; Check the PRIMARY selection for 'newness', is it different
-	;; from what we remebered them to be last time we did a
+	;; from what we remembered them to be last time we did a
 	;; cut/paste operation.
 	(setq primary-text
 	      (cond ;; check primary selection

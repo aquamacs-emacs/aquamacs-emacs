@@ -1,6 +1,6 @@
 /* Asynchronous subprocess control for GNU Emacs.
 
-Copyright (C) 1985-1988, 1993-1996, 1998-1999, 2001-2011
+Copyright (C) 1985-1988, 1993-1996, 1998-1999, 2001-2012
   Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -642,6 +642,9 @@ make_process (Lisp_Object name)
   p->gnutls_initstage = GNUTLS_STAGE_EMPTY;
   p->gnutls_log_level = 0;
   p->gnutls_p = 0;
+  p->gnutls_state = NULL;
+  p->gnutls_x509_cred = NULL;
+  p->gnutls_anon_cred = NULL;
 #endif
 
   /* If name is already in use, modify it until it is unused.  */
@@ -1411,7 +1414,7 @@ usage: (start-process NAME BUFFER PROGRAM &rest PROGRAM-ARGS)  */)
 	  val = XCDR (Vdefault_process_coding_system);
       }
     XPROCESS (proc)->encode_coding_system = val;
-    /* Note: At this momemnt, the above coding system may leave
+    /* Note: At this moment, the above coding system may leave
        text-conversion or eol-conversion unspecified.  They will be
        decided after we read output from the process and decode it by
        some coding system, or just before we actually send a text to
@@ -1518,8 +1521,9 @@ start_process_unwind (Lisp_Object proc)
   if (!PROCESSP (proc))
     abort ();
 
-  /* Was PROC started successfully?  */
-  if (XPROCESS (proc)->pid == -1)
+  /* Was PROC started successfully?
+     -2 is used for a pty with no process, eg for gdb.  */
+  if (XPROCESS (proc)->pid <= 0 && XPROCESS (proc)->pid != -2)
     remove_process (proc);
 
   return Qnil;
@@ -3117,7 +3121,7 @@ usage: (make-network-process &rest ARGS)  */)
     {
       struct hostent *host_info_ptr;
 
-      /* gethostbyname may fail with TRY_AGAIN, but we don't honour that,
+      /* gethostbyname may fail with TRY_AGAIN, but we don't honor that,
 	 as it may `hang' Emacs for a very long time.  */
       immediate_quit = 1;
       QUIT;
@@ -3471,7 +3475,7 @@ usage: (make-network-process &rest ARGS)  */)
 
   {
     /* Setup coding systems for communicating with the network stream.  */
-    struct gcpro inner_gcpro1;
+    struct gcpro gcpro1;
     /* Qt denotes we have not yet called Ffind_operation_coding_system.  */
     Lisp_Object coding_systems = Qt;
     Lisp_Object fargs[5], val;
@@ -3488,7 +3492,7 @@ usage: (make-network-process &rest ARGS)  */)
 	     || (NILP (buffer) && NILP (BVAR (&buffer_defaults, enable_multibyte_characters))))
       /* We dare not decode end-of-line format by setting VAL to
 	 Qraw_text, because the existing Emacs Lisp libraries
-	 assume that they receive bare code including a sequene of
+	 assume that they receive bare code including a sequence of
 	 CR LF.  */
       val = Qnil;
     else
@@ -3499,9 +3503,9 @@ usage: (make-network-process &rest ARGS)  */)
 	  {
 	    fargs[0] = Qopen_network_stream, fargs[1] = name,
 	      fargs[2] = buffer, fargs[3] = host, fargs[4] = service;
-	    GCPRO1_VAR (proc, inner_gcpro);
+	    GCPRO1 (proc);
 	    coding_systems = Ffind_operation_coding_system (5, fargs);
-	    UNGCPRO_VAR (inner_gcpro);
+	    UNGCPRO;
 	  }
 	if (CONSP (coding_systems))
 	  val = XCAR (coding_systems);
@@ -3532,9 +3536,9 @@ usage: (make-network-process &rest ARGS)  */)
 	      {
 		fargs[0] = Qopen_network_stream, fargs[1] = name,
 		  fargs[2] = buffer, fargs[3] = host, fargs[4] = service;
-		GCPRO1_VAR (proc, inner_gcpro);
+		GCPRO1 (proc);
 		coding_systems = Ffind_operation_coding_system (5, fargs);
-		UNGCPRO_VAR (inner_gcpro);
+		UNGCPRO;
 	      }
 	  }
 	if (CONSP (coding_systems))
@@ -3714,7 +3718,7 @@ DEFUN ("network-interface-info", Fnetwork_interface_info, Snetwork_interface_inf
        doc: /* Return information about network interface named IFNAME.
 The return value is a list (ADDR BCAST NETMASK HWADDR FLAGS),
 where ADDR is the layer 3 address, BCAST is the layer 3 broadcast address,
-NETMASK is the layer 3 network mask, HWADDR is the layer 2 addres, and
+NETMASK is the layer 3 network mask, HWADDR is the layer 2 address, and
 FLAGS is the current flags of the interface.  */)
   (Lisp_Object ifname)
 {
@@ -3866,6 +3870,11 @@ deactivate_process (Lisp_Object proc)
 {
   register int inchannel, outchannel;
   register struct Lisp_Process *p = XPROCESS (proc);
+
+#ifdef HAVE_GNUTLS
+  /* Delete GnuTLS structures in PROC, if any.  */
+  emacs_gnutls_deinit (proc);
+#endif /* HAVE_GNUTLS */
 
   inchannel  = p->infd;
   outchannel = p->outfd;
@@ -4612,15 +4621,46 @@ wait_reading_process_output (int time_limit, int microsecs, int read_kbd,
              some data in the TCP buffers so that select works, but
              with custom pull/push functions we need to check if some
              data is available in the buffers manually.  */
-          if (nfds == 0 &&
-              wait_proc && wait_proc->gnutls_p /* Check for valid process.  */
-              /* Do we have pending data?  */
-              && emacs_gnutls_record_check_pending (wait_proc->gnutls_state) > 0)
-          {
-              nfds = 1;
-              /* Set to Available.  */
-              FD_SET (wait_proc->infd, &Available);
-          }
+          if (nfds == 0)
+	    {
+	      if (! wait_proc)
+		{
+		  /* We're not waiting on a specific process, so loop
+		     through all the channels and check for data.
+		     This is a workaround needed for some versions of
+		     the gnutls library -- 2.12.14 has been confirmed
+		     to need it.  See
+		     http://comments.gmane.org/gmane.emacs.devel/145074 */
+		  for (channel = 0; channel < MAXDESC; ++channel)
+		    if (! NILP (chan_process[channel]))
+		      {
+			struct Lisp_Process *p =
+			  XPROCESS (chan_process[channel]);
+			if (p && p->gnutls_p && p->infd
+			    && ((emacs_gnutls_record_check_pending
+				 (p->gnutls_state))
+				> 0))
+			  {
+			    nfds++;
+			    FD_SET (p->infd, &Available);
+			  }
+		      }
+		}
+	      else
+		{
+		  /* Check this specific channel. */
+		  if (wait_proc->gnutls_p /* Check for valid process.  */
+		      /* Do we have pending data?  */
+		      && ((emacs_gnutls_record_check_pending
+			   (wait_proc->gnutls_state))
+			  > 0))
+		    {
+		      nfds = 1;
+		      /* Set to Available.  */
+		      FD_SET (wait_proc->infd, &Available);
+		    }
+		}
+	    }
 #endif
 	}
 
@@ -4848,16 +4888,11 @@ wait_reading_process_output (int time_limit, int microsecs, int read_kbd,
 		 It can't hurt.  */
 	      else if (nread == -1 && errno == EIO)
 		{
-		  /* Clear the descriptor now, so we only raise the
-		     signal once.  Don't do this if `process' is only
-		     a pty.  */
-		  if (XPROCESS (proc)->pid != -2)
-		    {
-		      FD_CLR (channel, &input_wait_mask);
-		      FD_CLR (channel, &non_keyboard_wait_mask);
+		  /* Clear the descriptor now, so we only raise the signal once.  */
+		  FD_CLR (channel, &input_wait_mask);
+		  FD_CLR (channel, &non_keyboard_wait_mask);
 
-		      kill (getpid (), SIGCHLD);
-		    }
+		  kill (getpid (), SIGCHLD);
 		}
 #endif /* HAVE_PTYS */
 	      /* If we can detect process termination, don't consider the process
@@ -5374,8 +5409,8 @@ send_process (volatile Lisp_Object proc, const char *volatile buf,
 	     sending a multibyte text, thus we must encode it by the
 	     original coding system specified for the current process.
 
-	     Another reason we comming here is that the coding system
-	     was just complemented and new one was returned by
+	     Another reason we come here is that the coding system
+	     was just complemented and a new one was returned by
 	     complement_process_encoding_system.  */
 	  setup_coding_system (p->encode_coding_system, coding);
 	  Vlast_coding_system_used = p->encode_coding_system;
@@ -5384,6 +5419,7 @@ send_process (volatile Lisp_Object proc, const char *volatile buf,
     }
   else
     {
+      coding->src_multibyte = 0;
       /* For sending a unibyte text, character code conversion should
 	 not take place but EOL conversion should.  So, setup raw-text
 	 or one of the subsidiary if we have not yet done it.  */

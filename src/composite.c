@@ -1,5 +1,5 @@
 /* Composite sequence support.
-   Copyright (C) 2001-2011 Free Software Foundation, Inc.
+   Copyright (C) 2001-2012 Free Software Foundation, Inc.
    Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011
      National Institute of Advanced Industrial Science and Technology (AIST)
      Registration Number H14PRO021
@@ -1307,7 +1307,7 @@ composition_reseat_it (struct composition_it *cmp_it, EMACS_INT charpos, EMACS_I
 	      if (cmp_it->lookback == 0)
 		goto no_composition;
 	      lgstring = Qnil;
-	      /* Try to find a shorter compostion that starts after CPOS.  */
+	      /* Try to find a shorter composition that starts after CPOS.  */
 	      composition_compute_stop_pos (cmp_it, charpos, bytepos, cpos,
 					    string);
 	      if (cmp_it->ch == -2 || cmp_it->stop_pos < charpos)

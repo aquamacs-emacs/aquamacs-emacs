@@ -1,6 +1,6 @@
 ;;; nnmairix.el --- Mairix back end for Gnus, the Emacs newsreader
 
-;; Copyright (C) 2007-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2007-2012  Free Software Foundation, Inc.
 
 ;; Author: David Engster <dengste@eml.cc>
 ;; Keywords: mail searching
@@ -204,7 +204,7 @@
 (add-hook 'gnus-summary-mode-hook 'nnmairix-summary-mode-hook)
 
 ;; ;;;###autoload
-;; (defun nnmairix-initalize (&optional force)
+;; (defun nnmairix-initialize (&optional force)
 ;;   (interactive "P")
 ;;   (if (not (or (file-readable-p "~/.mairixrc")
 ;; 	       force))
@@ -333,7 +333,7 @@ can happen are wrong marks in nnmairix groups."
   "Use only the registry for determining original group(s).
 If set to t, nnmairix will only use the registry for determining
 the original group(s) of an article (which is also necessary for
-propapagting marks).  If set to nil, it will also try to determine
+propagating marks).  If set to nil, it will also try to determine
 the group from an additional mairix search which might be slow
 when propagating lots of marks."
   :version "23.1"
@@ -483,7 +483,7 @@ Other back ends might or might not work.")
 	       mfolder query threads)))
       ;; Check return value
       (cond
-       ((zerop rval)			; call was succesful
+       ((zerop rval)			; call was successful
 	(nnmairix-call-backend
 	 "open-server" nnmairix-backend-server)
 	;; If we're dealing with nnml, rename files
@@ -512,7 +512,7 @@ Other back ends might or might not work.")
        ;; Everything else is an error
        (t
 	(nnheader-report
-	 'nnmairix "Error running marix. See buffer %s for details"
+	 'nnmairix "Error running mairix. See buffer %s for details"
 	 nnmairix-mairix-output-buffer)
 	nil))))))
 
@@ -603,7 +603,6 @@ Other back ends might or might not work.")
     nil))
 
 ;; Silence byte-compiler.
-(defvar gnus-registry-install)
 (autoload 'gnus-registry-get-id-key "gnus-registry")
 
 (deffoo nnmairix-request-set-mark (group actions &optional server)
@@ -1635,9 +1634,8 @@ search in raw mode."
       (nnheader-message 3 "Couldn't find original article"))))
 
 (defun nnmairix-determine-original-group-from-registry (mid)
-  "Try to determinale original group for message-id MID from the registry."
-  (when (and (boundp 'gnus-registry-install)
-	     gnus-registry-install)
+  "Try to determine original group for message-id MID from the registry."
+  (when (gnus-bound-and-true-p 'gnus-registry-enabled)
     (unless (string-match "^<" mid)
       (set mid (concat "<" mid)))
     (unless (string-match ">$" mid)

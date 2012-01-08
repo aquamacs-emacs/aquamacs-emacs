@@ -1,6 +1,6 @@
 ;;; browse-url.el --- pass a URL to a WWW browser
 
-;; Copyright (C) 1995-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1995-2012  Free Software Foundation, Inc.
 
 ;; Author: Denis Howe <dbh@doc.ic.ac.uk>
 ;; Maintainer: FSF
@@ -36,6 +36,7 @@
 ;; Function                           Browser     Earliest version
 ;; browse-url-mozilla                 Mozilla     Don't know
 ;; browse-url-firefox                 Firefox     Don't know (tried with 1.0.1)
+;; browse-url-chromium                Chromium    3.0
 ;; browse-url-galeon                  Galeon      Don't know
 ;; browse-url-epiphany                Epiphany    Don't know
 ;; browse-url-netscape                Netscape    1.1b1
@@ -47,6 +48,7 @@
 ;; browse-url-generic                 arbitrary
 ;; browse-url-default-windows-browser MS-Windows browser
 ;; browse-url-default-macosx-browser  Mac OS X browser
+;; browse-url-xdg-open                Free Desktop xdg-open on Gnome, KDE, Xfce4, LXDE
 ;; browse-url-gnome-moz               GNOME interface to Mozilla
 ;; browse-url-kde                     KDE konqueror (kfm)
 ;; browse-url-elinks                  Elinks      Don't know (tried with 0.12.GIT)
@@ -98,7 +100,7 @@
 ;; <URL:ftp://ftp.lysator.liu.se/pub/sgml>; hm--html-menus can be used
 ;; with this.
 
-;; This package generalises function html-previewer-process in Marc
+;; This package generalizes function html-previewer-process in Marc
 ;; Andreessen's html-mode (LCD modes/html-mode.el.Z).  See also the
 ;; ffap.el package.  The huge hyperbole package also contains similar
 ;; functions.
@@ -136,7 +138,7 @@
 ;; M-x browse-url-of-dired-file RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Customisation (~/.emacs)
+;; Customization (~/.emacs)
 
 ;; To see what variables are available for customization, type
 ;; `M-x set-variable browse-url TAB'.  Better, use
@@ -188,7 +190,7 @@
 ;;
 ;;	(add-hook 'browse-url-of-file-hook 'browse-url-netscape-reload)
 
-;; You may also want to customise browse-url-netscape-arguments, e.g.
+;; You may also want to customize browse-url-netscape-arguments, e.g.
 ;;	(setq browse-url-netscape-arguments '("-install"))
 ;;
 ;; or similarly for the other browsers.
@@ -230,6 +232,7 @@ regexp should probably be \".\" to specify a default browser."
 			 :value  browse-url-w3-gnudoit)
 	  (function-item :tag "Mozilla" :value  browse-url-mozilla)
 	  (function-item :tag "Firefox" :value browse-url-firefox)
+	  (function-item :tag "Chromium" :value browse-url-chromium)
 	  (function-item :tag "Galeon" :value  browse-url-galeon)
 	  (function-item :tag "Epiphany" :value  browse-url-epiphany)
 	  (function-item :tag "Netscape" :value  browse-url-netscape)
@@ -336,6 +339,22 @@ Defaults to the value of `browse-url-firefox-arguments' at the time
   :type '(repeat (string :tag "Argument"))
   :group 'browse-url)
 
+(defcustom browse-url-chromium-program
+  (let ((candidates '("chromium" "chromium-browser")))
+    (while (and candidates (not (executable-find (car candidates))))
+      (setq candidates (cdr candidates)))
+    (or (car candidates) "chromium"))
+  "The name by which to invoke Chromium."
+  :type 'string
+  :version "24.1"
+  :group 'browse-url)
+
+(defcustom browse-url-chromium-arguments nil
+  "A list of strings to pass to Chromium as arguments."
+  :type '(repeat (string :tag "Argument"))
+  :version "24.1"
+  :group 'browse-url)
+
 (defcustom browse-url-galeon-program "galeon"
   "The name by which to invoke Galeon."
   :type 'string
@@ -370,7 +389,7 @@ Defaults to the value of `browse-url-epiphany-arguments' at the time
   :type '(repeat (string :tag "Argument"))
   :group 'browse-url)
 
-;; GNOME means of invoking either Mozilla or Netrape.
+;; GNOME means of invoking either Mozilla or Netscape.
 (defvar browse-url-gnome-moz-program "gnome-moz-remote")
 
 (defcustom browse-url-gnome-moz-arguments '()
@@ -920,6 +939,7 @@ used instead of `browse-url-new-window-flag'."
     ((executable-find browse-url-gnome-moz-program) 'browse-url-gnome-moz)
     ((executable-find browse-url-mozilla-program) 'browse-url-mozilla)
     ((executable-find browse-url-firefox-program) 'browse-url-firefox)
+    ((executable-find browse-url-chromium-program) 'browse-url-chromium)
     ((executable-find browse-url-galeon-program) 'browse-url-galeon)
     ((executable-find browse-url-kde-program) 'browse-url-kde)
     ((executable-find browse-url-netscape-program) 'browse-url-netscape)
@@ -931,12 +951,13 @@ used instead of `browse-url-new-window-flag'."
    url args))
 
 (defun browse-url-can-use-xdg-open ()
-  "Check if xdg-open can be used, i.e. we are on Gnome, KDE or xfce4."
+  "Check if xdg-open can be used, i.e. we are on Gnome, KDE, Xfce4 or LXDE."
   (and (getenv "DISPLAY")
        (executable-find "xdg-open")
        ;; xdg-open may call gnome-open and that does not wait for its child
        ;; to finish.  This child may then be killed when the parent dies.
-       ;; Use nohup to work around.
+       ;; Use nohup to work around.  See bug#7166, bug#8917, bug#9779 and
+       ;; http://lists.gnu.org/archive/html/emacs-devel/2009-07/msg00279.html
        (executable-find "nohup")
        (or (getenv "GNOME_DESKTOP_SESSION_ID")
 	   ;; GNOME_DESKTOP_SESSION_ID is deprecated, check on Dbus also.
@@ -954,7 +975,9 @@ used instead of `browse-url-new-window-flag'."
 		      "/bin/sh" nil nil nil
 		      "-c"
 		      "xprop -root _DT_SAVE_MODE|grep xfce4"))
-	     (error nil)))))
+	     (error nil))
+	   (member (getenv "DESKTOP_SESSION") '("LXDE" "Lubuntu"))
+	   (equal (getenv "XDG_CURRENT_DESKTOP") "LXDE"))))
 
 
 ;;;###autoload
@@ -1146,6 +1169,22 @@ URL in a new window."
 	(apply 'start-process (concat "firefox " url) nil
 	       browse-url-firefox-program
 	       (append browse-url-firefox-startup-arguments (list url))))))
+
+;;;###autoload
+(defun browse-url-chromium (url &optional new-window)
+  "Ask the Chromium WWW browser to load URL.
+Default to the URL around or before point.  The strings in
+variable `browse-url-chromium-arguments' are also passed to
+Chromium."
+  (interactive (browse-url-interactive-arg "URL: "))
+  (setq url (browse-url-encode-url url))
+  (let* ((process-environment (browse-url-process-environment)))
+    (apply 'start-process
+	   (concat "chromium " url) nil
+	   browse-url-chromium-program
+	   (append
+	    browse-url-chromium-arguments
+	    (list url)))))
 
 ;;;###autoload
 (defun browse-url-galeon (url &optional new-window)

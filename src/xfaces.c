@@ -1,6 +1,6 @@
 /* xfaces.c -- "Face" primitives.
 
-Copyright (C) 1993-1994, 1998-2011  Free Software Foundation, Inc.
+Copyright (C) 1993-1994, 1998-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -27,7 +27,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
    1. Font family name.
 
-   2. Font foundary name.
+   2. Font foundry name.
 
    3. Relative proportionate width, aka character set width or set
    width (swidth), e.g. `semi-compressed'.
@@ -66,7 +66,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    attributes (1st thru 5th) are updated from the spec.
 
    On the other hand, if one of the other font-related attributes are
-   specified, the correspoinding specs in this attribute is set to nil.
+   specified, the corresponding specs in this attribute is set to nil.
 
    15. A face name or list of face names from which to inherit attributes.
 
@@ -1223,7 +1223,7 @@ face_color_gray_p (struct frame *f, const char *color_name)
   int gray_p;
 
   if (defined_color (f, color_name, &color, 0))
-    gray_p = (/* Any color sufficiently close to black counts as grey.  */
+    gray_p = (/* Any color sufficiently close to black counts as gray.  */
 	      (color.red < 5000 && color.green < 5000 && color.blue < 5000)
 	      ||
 	      ((eabs (color.red - color.green)
@@ -4190,12 +4190,12 @@ prepare_face_for_display (struct frame *f, struct face *face)
 static int
 color_distance (XColor *x, XColor *y)
 {
-  /* This formula is from a paper title `Colour metric' by Thiadmer Riemersma.
+  /* This formula is from a paper titled `Colour metric' by Thiadmer Riemersma.
      Quoting from that paper:
 
 	 This formula has results that are very close to L*u*v* (with the
 	 modified lightness curve) and, more importantly, it is a more even
-	 algorithm: it does not have a range of colours where it suddenly
+	 algorithm: it does not have a range of colors where it suddenly
 	 gives far from optimal results.
 
      See <http://www.compuphase.com/cmetric.htm> for more info.  */

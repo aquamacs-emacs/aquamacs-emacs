@@ -1,6 +1,6 @@
 ;;; package.el --- Simple package system for Emacs
 
-;; Copyright (C) 2007-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2012 Free Software Foundation, Inc.
 
 ;; Author: Tom Tromey <tromey@redhat.com>
 ;; Created: 10 Mar 2007
@@ -113,6 +113,8 @@
 
 ;;; ToDo:
 
+;; - a trust mechanism, since compiling a package can run arbitrary code.
+;;   For example, download package signatures and check that they match.
 ;; - putting info dirs at the start of the info path means
 ;;   users see a weird ordering of categories.  OTOH we want to
 ;;   override later entries.  maybe emacs needs to enforce
@@ -224,7 +226,10 @@ Each element has the form (ID . LOCATION).
  LOCATION specifies the base location for the archive.
   If it starts with \"http:\", it is treated as a HTTP URL;
   otherwise it should be an absolute directory name.
-  (Other types of URL are currently not supported.)"
+  (Other types of URL are currently not supported.)
+
+Only add locations that you trust, since fetching and installing
+a package can run arbitrary code."
   :type '(alist :key-type (string :tag "Archive name")
                 :value-type (string :tag "URL or directory name"))
   :risky t
@@ -277,7 +282,7 @@ contrast, `package-user-dir' contains packages for personal use."
   :version "24.1")
 
 ;; The value is precomputed in finder-inf.el, but don't load that
-;; until it's needed (i.e. when `package-intialize' is called).
+;; until it's needed (i.e. when `package-initialize' is called).
 (defvar package--builtins nil
   "Alist of built-in packages.
 The actual value is initialized by loading the library
@@ -1076,6 +1081,7 @@ similar to an entry in `package-alist'.  Save the cached copy to
 	(let ((version-control 'never))
 	  (save-buffer))))))
 
+;;;###autoload
 (defun package-refresh-contents ()
   "Download the ELPA archive description if needed.
 This informs Emacs about the latest versions of all packages, and

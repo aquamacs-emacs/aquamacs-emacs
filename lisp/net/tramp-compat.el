@@ -1,6 +1,6 @@
 ;;; tramp-compat.el --- Tramp compatibility functions
 
-;; Copyright (C) 2007-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2012 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, processes
@@ -412,7 +412,7 @@ element is not omitted."
   (program &optional infile destination display &rest args)
   "Calls `call-process' on the local host.
 This is needed because for some Emacs flavors Tramp has
-defadviced `call-process' to behave like `process-file'.  The
+defadvised `call-process' to behave like `process-file'.  The
 Lisp error raised when PROGRAM is nil is trapped also, returning 1."
   (let ((default-directory
 	  (if (file-remote-p default-directory)

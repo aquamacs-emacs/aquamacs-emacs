@@ -1,5 +1,5 @@
 /* Fundamental definitions for GNU Emacs Lisp interpreter.
-   Copyright (C) 1985-1987, 1993-1995, 1997-2011
+   Copyright (C) 1985-1987, 1993-1995, 1997-2012
                  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -162,12 +162,24 @@ extern int suppress_checking EXTERNALLY_VISIBLE;
 
 /* First, try and define DECL_ALIGN(type,var) which declares a static
    variable VAR of type TYPE with the added requirement that it be
-   TYPEBITS-aligned. */
+   TYPEBITS-aligned.  */
+
+#ifndef GCTYPEBITS
+#define GCTYPEBITS 3
+#endif
+
 #ifndef NO_DECL_ALIGN
 # ifndef DECL_ALIGN
 #  if HAVE_ATTRIBUTE_ALIGNED
 #   define DECL_ALIGN(type, var) \
      type __attribute__ ((__aligned__ (1 << GCTYPEBITS))) var
+#  elif defined(_MSC_VER)
+#   define ALIGN_GCTYPEBITS 8
+#   if (1 << GCTYPEBITS) != ALIGN_GCTYPEBITS
+#    error ALIGN_GCTYPEBITS is wrong!
+#   endif
+#   define DECL_ALIGN(type, var) \
+     type __declspec(align(ALIGN_GCTYPEBITS)) var
 #  else
      /* What directives do other compilers use?  */
 #  endif
@@ -224,6 +236,15 @@ extern int suppress_checking EXTERNALLY_VISIBLE;
 #  define LISP_INT_TAG_P(x) (((x) & 6) == 0)
 # endif
 #endif
+
+/* Stolen from GDB.  The only known compiler that doesn't support
+   enums in bitfields is MSVC.  */
+#ifdef _MSC_VER
+#define ENUM_BF(TYPE) unsigned int
+#else
+#define ENUM_BF(TYPE) enum TYPE
+#endif
+
 
 enum Lisp_Type
   {
@@ -288,10 +309,6 @@ enum Lisp_Fwd_Type
     Lisp_Fwd_Kboard_Obj,	/* Fwd to a Lisp_Object field of kboards.  */
   };
 
-#ifndef GCTYPEBITS
-#define GCTYPEBITS 3
-#endif
-
 /* These values are overridden by the m- file on some machines.  */
 #ifndef VALBITS
 #define VALBITS (BITS_PER_EMACS_INT - GCTYPEBITS)
@@ -312,15 +329,15 @@ union Lisp_Object
 
     struct
       {
-	/* Use explict signed, the signedness of a bit-field of type
+	/* Use explicit signed, the signedness of a bit-field of type
 	   int is implementation defined.  */
 	signed EMACS_INT val  : VALBITS;
-	enum Lisp_Type type : GCTYPEBITS;
+	ENUM_BF (Lisp_Type) type : GCTYPEBITS;
       } s;
     struct
       {
 	EMACS_UINT val : VALBITS;
-	enum Lisp_Type type : GCTYPEBITS;
+	ENUM_BF (Lisp_Type) type : GCTYPEBITS;
       } u;
   }
 Lisp_Object;
@@ -336,14 +353,14 @@ union Lisp_Object
 
     struct
       {
-	enum Lisp_Type type : GCTYPEBITS;
-	/* Use explict signed, the signedness of a bit-field of type
+	ENUM_BF (Lisp_Type) type : GCTYPEBITS;
+	/* Use explicit signed, the signedness of a bit-field of type
 	   int is implementation defined.  */
 	signed EMACS_INT val  : VALBITS;
       } s;
     struct
       {
-	enum Lisp_Type type : GCTYPEBITS;
+	ENUM_BF (Lisp_Type) type : GCTYPEBITS;
 	EMACS_UINT val : VALBITS;
       } u;
   }
@@ -931,7 +948,7 @@ struct Lisp_Vector
 
 /* Compute A OP B, using the unsigned comparison operator OP.  A and B
    should be integer expressions.  This is not the same as
-   mathemeatical comparison; for example, UNSIGNED_CMP (0, <, -1)
+   mathematical comparison; for example, UNSIGNED_CMP (0, <, -1)
    returns 1.  For efficiency, prefer plain unsigned comparison if A
    and B's sizes both fit (after integer promotion).  */
 #define UNSIGNED_CMP(a, op, b)						\
@@ -1084,10 +1101,8 @@ enum symbol_redirect
   SYMBOL_PLAINVAL  = 4,
   SYMBOL_VARALIAS  = 1,
   SYMBOL_LOCALIZED = 2,
-  SYMBOL_FORWARDED   = 3
+  SYMBOL_FORWARDED = 3
 };
-
-/* In a symbol, the markbit of the plist is used as the gc mark bit */
 
 struct Lisp_Symbol
 {
@@ -1097,9 +1112,8 @@ struct Lisp_Symbol
      0 : it's a plain var, the value is in the `value' field.
      1 : it's a varalias, the value is really in the `alias' symbol.
      2 : it's a localized var, the value is in the `blv' object.
-     3 : it's a forwarding variable, the value is in `forward'.
-   */
-  enum symbol_redirect redirect : 3;
+     3 : it's a forwarding variable, the value is in `forward'.  */
+  ENUM_BF (symbol_redirect) redirect : 3;
 
   /* Non-zero means symbol is constant, i.e. changing its value
      should signal an error.  If the value is 3, then the var
@@ -1115,15 +1129,12 @@ struct Lisp_Symbol
   unsigned declared_special : 1;
 
   /* The symbol's name, as a Lisp string.
-
      The name "xname" is used to intentionally break code referring to
      the old field "name" of type pointer to struct Lisp_String.  */
   Lisp_Object xname;
 
-  /* Value of the symbol or Qunbound if unbound.  If this symbol is a
-     defvaralias, `alias' contains the symbol for which it is an
-     alias.  Use the SYMBOL_VALUE and SET_SYMBOL_VALUE macros to get
-     and set a symbol's value, to take defvaralias into account.  */
+  /* Value of the symbol or Qunbound if unbound.  Which alternative of the
+     union is used depends on the `redirect' field above.  */
   union {
     Lisp_Object value;
     struct Lisp_Symbol *alias;
@@ -1315,16 +1326,16 @@ struct Lisp_Hash_Table
 
 struct Lisp_Misc_Any		/* Supertype of all Misc types.  */
 {
-  enum Lisp_Misc_Type type : 16;		/* = Lisp_Misc_??? */
+  ENUM_BF (Lisp_Misc_Type) type : 16;		/* = Lisp_Misc_??? */
   unsigned gcmarkbit : 1;
   int spacer : 15;
-  /* Make it as long as "Lisp_Free without padding". */
+  /* Make it as long as "Lisp_Free without padding".  */
   void *fill;
 };
 
 struct Lisp_Marker
 {
-  enum Lisp_Misc_Type type : 16;		/* = Lisp_Misc_Marker */
+  ENUM_BF (Lisp_Misc_Type) type : 16;		/* = Lisp_Misc_Marker */
   unsigned gcmarkbit : 1;
   int spacer : 13;
   /* This flag is temporarily used in the functions
@@ -1474,7 +1485,7 @@ struct Lisp_Overlay
    I.e. 9words plus 2 bits, 3words of which are for external linked lists.
 */
   {
-    enum Lisp_Misc_Type type : 16;	/* = Lisp_Misc_Overlay */
+    ENUM_BF (Lisp_Misc_Type) type : 16;	/* = Lisp_Misc_Overlay */
     unsigned gcmarkbit : 1;
     int spacer : 15;
     struct Lisp_Overlay *next;
@@ -1493,7 +1504,7 @@ struct Lisp_Kboard_Objfwd
    This type of object is used in the arg to record_unwind_protect.  */
 struct Lisp_Save_Value
   {
-    enum Lisp_Misc_Type type : 16;	/* = Lisp_Misc_Save_Value */
+    ENUM_BF (Lisp_Misc_Type) type : 16;	/* = Lisp_Misc_Save_Value */
     unsigned gcmarkbit : 1;
     int spacer : 14;
     /* If DOGC is set, POINTER is the address of a memory
@@ -1507,7 +1518,7 @@ struct Lisp_Save_Value
 /* A miscellaneous object, when it's on the free list.  */
 struct Lisp_Free
   {
-    enum Lisp_Misc_Type type : 16;	/* = Lisp_Misc_Free */
+    ENUM_BF (Lisp_Misc_Type) type : 16;	/* = Lisp_Misc_Free */
     unsigned gcmarkbit : 1;
     int spacer : 15;
     union Lisp_Misc *chain;
@@ -1871,9 +1882,6 @@ typedef struct {
     CHECK_NATNUM (tmp);			\
     XSETCDR ((x), tmp);			\
   } while (0)
-
-/* Cast pointers to this type to compare them.  */
-#define PNTR_COMPARISON_TYPE uintptr_t
 
 /* Define a built-in function for calling from Lisp.
  `lname' should be the name to give the function in Lisp,
@@ -1902,13 +1910,23 @@ typedef struct {
 
 /* This version of DEFUN declares a function prototype with the right
    arguments, so we can catch errors with maxargs at compile-time.  */
-#define DEFUN(lname, fnname, sname, minargs, maxargs, intspec, doc) \
-  Lisp_Object fnname DEFUN_ARGS_ ## maxargs ;				\
-  static DECL_ALIGN (struct Lisp_Subr, sname) =				\
-    { PVEC_SUBR,							\
-      { .a ## maxargs = fnname },				\
-      minargs, maxargs, lname, intspec, 0};				\
-  Lisp_Object fnname
+#ifdef _MSC_VER
+#define DEFUN(lname, fnname, sname, minargs, maxargs, intspec, doc)	\
+   Lisp_Object fnname DEFUN_ARGS_ ## maxargs ;				\
+   static DECL_ALIGN (struct Lisp_Subr, sname) =			\
+     { PVEC_SUBR | (sizeof (struct Lisp_Subr) / sizeof (EMACS_INT)),	\
+      { (Lisp_Object (__cdecl *)(void))fnname },                        \
+       minargs, maxargs, lname, intspec, 0};				\
+   Lisp_Object fnname
+#else  /* not _MSC_VER */
+#define DEFUN(lname, fnname, sname, minargs, maxargs, intspec, doc)	\
+   Lisp_Object fnname DEFUN_ARGS_ ## maxargs ;				\
+   static DECL_ALIGN (struct Lisp_Subr, sname) =			\
+     { PVEC_SUBR,							\
+      { .a ## maxargs = fnname },					\
+       minargs, maxargs, lname, intspec, 0};				\
+   Lisp_Object fnname
+#endif
 
 /* Note that the weird token-substitution semantics of ANSI C makes
    this work for MANY and UNEVALLED.  */
@@ -2110,7 +2128,10 @@ extern char *stack_bottom;
    Exception: if you set immediate_quit to nonzero,
    then the handler that responds to the C-g does the quit itself.
    This is a good thing to do around a loop that has no side effects
-   and (in particular) cannot call arbitrary Lisp code.  */
+   and (in particular) cannot call arbitrary Lisp code.
+
+   If quit-flag is set to `kill-emacs' the SIGINT handler has received
+   a request to exit Emacs when it is safe to do.  */
 
 #ifdef SYNC_INPUT
 extern void process_pending_signals (void);
@@ -2122,16 +2143,11 @@ extern int pending_signals;
 #define ELSE_PENDING_SIGNALS
 #endif	/* not SYNC_INPUT */
 
+extern void process_quit_flag (void);
 #define QUIT						\
   do {							\
     if (!NILP (Vquit_flag) && NILP (Vinhibit_quit))	\
-      {							\
-        Lisp_Object flag = Vquit_flag;			\
-	Vquit_flag = Qnil;				\
-	if (EQ (Vthrow_on_input, flag))			\
-	  Fthrow (Vthrow_on_input, Qt);			\
-	Fsignal (Qquit, Qnil);				\
-      }							\
+      process_quit_flag ();				\
     ELSE_PENDING_SIGNALS				\
   } while (0)
 
@@ -2205,143 +2221,127 @@ struct gcpro
 			  || GC_MARK_STACK == GC_MARK_STACK_CHECK_GCPROS)
 
 
-#define GCPRO1(var) \
-  GCPRO1_VAR (var, gcpro)
-#define GCPRO2(var1, var2) \
-  GCPRO2_VAR (var1, var2, gcpro)
-#define GCPRO3(var1, var2, var3) \
-  GCPRO3_VAR (var1, var2, var3, gcpro)
-#define GCPRO4(var1, var2, var3, var4) \
-  GCPRO4_VAR (var1, var2, var3, var4, gcpro)
-#define GCPRO5(var1, var2, var3, var4, var5) \
-  GCPRO5_VAR (var1, var2, var3, var4, var5, gcpro)
-#define GCPRO6(var1, var2, var3, var4, var5, var6) \
-  GCPRO6_VAR (var1, var2, var3, var4, var5, var6, gcpro)
-#define UNGCPRO UNGCPRO_VAR (gcpro)
-
 #if GC_MARK_STACK == GC_MAKE_GCPROS_NOOPS
 
 /* Do something silly with gcproN vars just so gcc shuts up.  */
 /* You get warnings from MIPSPro...  */
 
-#define GCPRO1_VAR(var, gcpro) ((void) gcpro##1)
-#define GCPRO2_VAR(var1, var2, gcpro) \
-  ((void) gcpro##2, (void) gcpro##1)
-#define GCPRO3_VAR(var1, var2, var3, gcpro) \
-  ((void) gcpro##3, (void) gcpro##2, (void) gcpro##1)
-#define GCPRO4_VAR(var1, var2, var3, var4, gcpro) \
-  ((void) gcpro##4, (void) gcpro##3, (void) gcpro##2, (void) gcpro##1)
-#define GCPRO5_VAR(var1, var2, var3, var4, var5, gcpro) \
-  ((void) gcpro##5, (void) gcpro##4, (void) gcpro##3, (void) gcpro##2, \
-   (void) gcpro##1)
-#define GCPRO6_VAR(var1, var2, var3, var4, var5, var6, gcpro) \
-  ((void) gcpro##6, (void) gcpro##5, (void) gcpro##4, (void) gcpro##3, \
-   (void) gcpro##2, (void) gcpro##1)
-#define UNGCPRO_VAR(gcpro) ((void) 0)
+#define GCPRO1(varname) ((void) gcpro1)
+#define GCPRO2(varname1, varname2) ((void) gcpro2, (void) gcpro1)
+#define GCPRO3(varname1, varname2, varname3) \
+  ((void) gcpro3, (void) gcpro2, (void) gcpro1)
+#define GCPRO4(varname1, varname2, varname3, varname4) \
+  ((void) gcpro4, (void) gcpro3, (void) gcpro2, (void) gcpro1)
+#define GCPRO5(varname1, varname2, varname3, varname4, varname5) \
+  ((void) gcpro5, (void) gcpro4, (void) gcpro3, (void) gcpro2, (void) gcpro1)
+#define GCPRO6(varname1, varname2, varname3, varname4, varname5, varname6) \
+  ((void) gcpro6, (void) gcpro5, (void) gcpro4, (void) gcpro3, (void) gcpro2, \
+   (void) gcpro1)
+#define UNGCPRO ((void) 0)
 
 #else /* GC_MARK_STACK != GC_MAKE_GCPROS_NOOPS */
 
 #ifndef DEBUG_GCPRO
 
-#define GCPRO1_VAR(var, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var; gcpro##1.nvars = 1; \
-  gcprolist = &gcpro##1; }
+#define GCPRO1(varname) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname; gcpro1.nvars = 1; \
+  gcprolist = &gcpro1; }
 
-#define GCPRO2_VAR(var1, var2, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcprolist = &gcpro##2; }
+#define GCPRO2(varname1, varname2) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcprolist = &gcpro2; }
 
-#define GCPRO3_VAR(var1, var2, var3, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##3.next = &gcpro##2; gcpro##3.var = &var3; gcpro##3.nvars = 1; \
-  gcprolist = &gcpro##3; }
+#define GCPRO3(varname1, varname2, varname3) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro3.next = &gcpro2; gcpro3.var = &varname3; gcpro3.nvars = 1; \
+  gcprolist = &gcpro3; }
 
-#define GCPRO4_VAR(var1, var2, var3, var4, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##3.next = &gcpro##2; gcpro##3.var = &var3; gcpro##3.nvars = 1; \
-  gcpro##4.next = &gcpro##3; gcpro##4.var = &var4; gcpro##4.nvars = 1; \
-  gcprolist = &gcpro##4; }
+#define GCPRO4(varname1, varname2, varname3, varname4) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro3.next = &gcpro2; gcpro3.var = &varname3; gcpro3.nvars = 1; \
+  gcpro4.next = &gcpro3; gcpro4.var = &varname4; gcpro4.nvars = 1; \
+  gcprolist = &gcpro4; }
 
-#define GCPRO5_VAR(var1, var2, var3, var4, var5, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##3.next = &gcpro##2; gcpro##3.var = &var3; gcpro##3.nvars = 1; \
-  gcpro##4.next = &gcpro##3; gcpro##4.var = &var4; gcpro##4.nvars = 1; \
-  gcpro##5.next = &gcpro##4; gcpro##5.var = &var5; gcpro##5.nvars = 1; \
-  gcprolist = &gcpro##5; }
+#define GCPRO5(varname1, varname2, varname3, varname4, varname5) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro3.next = &gcpro2; gcpro3.var = &varname3; gcpro3.nvars = 1; \
+  gcpro4.next = &gcpro3; gcpro4.var = &varname4; gcpro4.nvars = 1; \
+  gcpro5.next = &gcpro4; gcpro5.var = &varname5; gcpro5.nvars = 1; \
+  gcprolist = &gcpro5; }
 
-#define GCPRO6_VAR(var1, var2, var3, var4, var5, var6, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##3.next = &gcpro##2; gcpro##3.var = &var3; gcpro##3.nvars = 1; \
-  gcpro##4.next = &gcpro##3; gcpro##4.var = &var4; gcpro##4.nvars = 1; \
-  gcpro##5.next = &gcpro##4; gcpro##5.var = &var5; gcpro##5.nvars = 1; \
-  gcpro##6.next = &gcpro##5; gcpro##6.var = &var6; gcpro##6.nvars = 1; \
-  gcprolist = &gcpro##6; }
+#define GCPRO6(varname1, varname2, varname3, varname4, varname5, varname6) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro3.next = &gcpro2; gcpro3.var = &varname3; gcpro3.nvars = 1; \
+  gcpro4.next = &gcpro3; gcpro4.var = &varname4; gcpro4.nvars = 1; \
+  gcpro5.next = &gcpro4; gcpro5.var = &varname5; gcpro5.nvars = 1; \
+  gcpro6.next = &gcpro5; gcpro6.var = &varname6; gcpro6.nvars = 1; \
+  gcprolist = &gcpro6; }
 
-#define UNGCPRO_VAR(gcpro) (gcprolist = gcpro##1.next)
+#define UNGCPRO (gcprolist = gcpro1.next)
 
 #else
 
 extern int gcpro_level;
 
-#define GCPRO1_VAR(var, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var; gcpro##1.nvars = 1; \
-  gcpro##1.level = gcpro_level++; \
-  gcprolist = &gcpro##1; }
+#define GCPRO1(varname) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname; gcpro1.nvars = 1; \
+  gcpro1.level = gcpro_level++; \
+  gcprolist = &gcpro1; }
 
-#define GCPRO2_VAR(var1, var2, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##1.level = gcpro_level; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##2.level = gcpro_level++; \
-  gcprolist = &gcpro##2; }
+#define GCPRO2(varname1, varname2) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro1.level = gcpro_level; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro2.level = gcpro_level++; \
+  gcprolist = &gcpro2; }
 
-#define GCPRO3_VAR(var1, var2, var3, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##1.level = gcpro_level; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##3.next = &gcpro##2; gcpro##3.var = &var3; gcpro##3.nvars = 1; \
-  gcpro##3.level = gcpro_level++; \
-  gcprolist = &gcpro##3; }
+#define GCPRO3(varname1, varname2, varname3) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro1.level = gcpro_level; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro3.next = &gcpro2; gcpro3.var = &varname3; gcpro3.nvars = 1; \
+  gcpro3.level = gcpro_level++; \
+  gcprolist = &gcpro3; }
 
-#define GCPRO4_VAR(var1, var2, var3, var4, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##1.level = gcpro_level; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##3.next = &gcpro##2; gcpro##3.var = &var3; gcpro##3.nvars = 1; \
-  gcpro##4.next = &gcpro##3; gcpro##4.var = &var4; gcpro##4.nvars = 1; \
-  gcpro##4.level = gcpro_level++; \
-  gcprolist = &gcpro##4; }
+#define GCPRO4(varname1, varname2, varname3, varname4) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro1.level = gcpro_level; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro3.next = &gcpro2; gcpro3.var = &varname3; gcpro3.nvars = 1; \
+  gcpro4.next = &gcpro3; gcpro4.var = &varname4; gcpro4.nvars = 1; \
+  gcpro4.level = gcpro_level++; \
+  gcprolist = &gcpro4; }
 
-#define GCPRO5_VAR(var1, var2, var3, var4, var5, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##1.level = gcpro_level; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##3.next = &gcpro##2; gcpro##3.var = &var3; gcpro##3.nvars = 1; \
-  gcpro##4.next = &gcpro##3; gcpro##4.var = &var4; gcpro##4.nvars = 1; \
-  gcpro##5.next = &gcpro##4; gcpro##5.var = &var5; gcpro##5.nvars = 1; \
-  gcpro##5.level = gcpro_level++; \
-  gcprolist = &gcpro##5; }
+#define GCPRO5(varname1, varname2, varname3, varname4, varname5) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro1.level = gcpro_level; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro3.next = &gcpro2; gcpro3.var = &varname3; gcpro3.nvars = 1; \
+  gcpro4.next = &gcpro3; gcpro4.var = &varname4; gcpro4.nvars = 1; \
+  gcpro5.next = &gcpro4; gcpro5.var = &varname5; gcpro5.nvars = 1; \
+  gcpro5.level = gcpro_level++; \
+  gcprolist = &gcpro5; }
 
-#define GCPRO6_VAR(var1, var2, var3, var4, var5, var6, gcpro) \
- {gcpro##1.next = gcprolist; gcpro##1.var = &var1; gcpro##1.nvars = 1; \
-  gcpro##1.level = gcpro_level; \
-  gcpro##2.next = &gcpro##1; gcpro##2.var = &var2; gcpro##2.nvars = 1; \
-  gcpro##3.next = &gcpro##2; gcpro##3.var = &var3; gcpro##3.nvars = 1; \
-  gcpro##4.next = &gcpro##3; gcpro##4.var = &var4; gcpro##4.nvars = 1; \
-  gcpro##5.next = &gcpro##4; gcpro##5.var = &var5; gcpro##5.nvars = 1; \
-  gcpro##6.next = &gcpro##5; gcpro##6.var = &var6; gcpro##6.nvars = 1; \
-  gcpro##6.level = gcpro_level++; \
-  gcprolist = &gcpro##6; }
+#define GCPRO6(varname1, varname2, varname3, varname4, varname5, varname6) \
+ {gcpro1.next = gcprolist; gcpro1.var = &varname1; gcpro1.nvars = 1; \
+  gcpro1.level = gcpro_level; \
+  gcpro2.next = &gcpro1; gcpro2.var = &varname2; gcpro2.nvars = 1; \
+  gcpro3.next = &gcpro2; gcpro3.var = &varname3; gcpro3.nvars = 1; \
+  gcpro4.next = &gcpro3; gcpro4.var = &varname4; gcpro4.nvars = 1; \
+  gcpro5.next = &gcpro4; gcpro5.var = &varname5; gcpro5.nvars = 1; \
+  gcpro6.next = &gcpro5; gcpro6.var = &varname6; gcpro6.nvars = 1; \
+  gcpro6.level = gcpro_level++; \
+  gcprolist = &gcpro6; }
 
-#define UNGCPRO_VAR(gcpro) \
- ((--gcpro_level != gcpro##1.level) \
-  ? (abort (), 0) \
-  : ((gcprolist = gcpro##1.next), 0))
+#define UNGCPRO					\
+ ((--gcpro_level != gcpro1.level)		\
+  ? (abort (), 0)				\
+  : ((gcprolist = gcpro1.next), 0))
 
 #endif /* DEBUG_GCPRO */
 #endif /* GC_MARK_STACK != GC_MAKE_GCPROS_NOOPS */
@@ -3139,10 +3139,6 @@ extern void syms_of_fileio (void);
 extern Lisp_Object make_temp_name (Lisp_Object, int);
 extern Lisp_Object Qdelete_file;
 
-/* Defined in abbrev.c */
-
-extern void syms_of_abbrev (void);
-
 /* Defined in search.c */
 extern void shrink_regexp_cache (void);
 EXFUN (Fstring_match, 3);
@@ -3293,6 +3289,7 @@ extern Lisp_Object Qfile_name_handler_alist;
 #ifdef FLOAT_CATCH_SIGILL
 extern void fatal_error_signal (int);
 #endif
+extern Lisp_Object Qkill_emacs;
 EXFUN (Fkill_emacs, 1) NO_RETURN;
 #if HAVE_SETLOCALE
 void fixup_locale (void);
@@ -3603,7 +3600,7 @@ extern void init_system_name (void);
 
 #define SWITCH_ENUM_CAST(x) (x)
 
-/* Use this to suppress gcc's warnings. */
+/* Use this to suppress gcc's warnings.  */
 #ifdef lint
 
 /* Use CODE only if lint checking is in effect.  */

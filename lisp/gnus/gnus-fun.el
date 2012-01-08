@@ -1,6 +1,6 @@
 ;;; gnus-fun.el --- various frivolous extension functions to Gnus
 
-;; Copyright (C) 2002-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -274,10 +274,10 @@ colors of the displayed X-Faces."
     result))
 
 (defun gnus-fun-ppm-change-string ()
-  (let* ((possibilites '("%02x0000" "00%02x00" "0000%02x"
-			"%02x%02x00" "00%02x%02x" "%02x00%02x"))
+  (let* ((possibilities '("%02x0000" "00%02x00" "0000%02x"
+			  "%02x%02x00" "00%02x%02x" "%02x00%02x"))
 	 (format (concat "'#%02x%02x%02x' '#"
-			 (nth (random 6) possibilites)
+			 (nth (random 6) possibilities)
 			 "'"))
 	 (values nil))
   (dotimes (i 255)

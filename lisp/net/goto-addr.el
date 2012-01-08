@@ -1,6 +1,6 @@
 ;;; goto-addr.el --- click to browse URL or to send to e-mail address
 
-;; Copyright (C) 1995, 2000-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1995, 2000-2012 Free Software Foundation, Inc.
 
 ;; Author: Eric Ding <ericding@alum.mit.edu>
 ;; Maintainer: FSF
@@ -288,7 +288,7 @@ Also fontifies the buffer appropriately (see `goto-address-fontify-p' and
 
 ;;;###autoload
 (define-minor-mode goto-address-prog-mode
-  "Turn on `goto-address-mode', but only in comments and strings."
+  "Like `goto-address-mode', but only for comments and strings."
   nil
   ""
   nil

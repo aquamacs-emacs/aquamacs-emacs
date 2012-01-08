@@ -1,6 +1,6 @@
 /* System description file for Windows NT.
 
-Copyright (C) 1993-1995, 2001-2011  Free Software Foundation, Inc.
+Copyright (C) 1993-1995, 2001-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -86,6 +86,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define IS_ANY_SEP(_c_) (IS_DIRECTORY_SEP (_c_) || IS_DEVICE_SEP (_c_))
 
 #include <sys/types.h>
+
+#ifdef _MSC_VER
+typedef unsigned long sigset_t;
+typedef int ssize_t;
+#endif
+
 struct sigaction {
   int sa_flags;
   void (*sa_handler)(int);
@@ -181,6 +187,17 @@ struct sigaction {
 
 #ifdef emacs
 
+#ifdef _MSC_VER
+#include <sys/timeb.h>
+#include <sys/stat.h>
+#include <signal.h>
+
+/* MSVC gets link-time errors without these redirections.  */
+#define fstat(a, b) sys_fstat(a, b)
+#define stat(a, b)  sys_stat(a, b)
+#define utime       sys_utime
+#endif
+
 /* Calls that are emulated or shadowed.  */
 #undef access
 #define access  sys_access
@@ -250,6 +267,8 @@ struct sigaction {
 #define getpid    _getpid
 #ifdef _MSC_VER
 typedef int pid_t;
+#define snprintf  _snprintf
+#define strtoll   _strtoi64
 #endif
 #define isatty    _isatty
 #define logb      _logb
@@ -258,15 +277,18 @@ typedef int pid_t;
 #define popen     _popen
 #define pclose    _pclose
 #define umask	  _umask
+#ifndef _MSC_VER
 #define utimbuf	  _utimbuf
+#endif
 #define strdup    _strdup
 #define strupr    _strupr
 #define strnicmp  _strnicmp
 #define stricmp   _stricmp
 #define tzset     _tzset
 
-#if !defined (_MSC_VER) || (_MSC_VER < 1400)
 #define tzname    _tzname
+#if !defined (_MSC_VER) || (_MSC_VER < 1400)
+#undef  utime
 #define utime	  _utime
 #endif
 
@@ -317,13 +339,17 @@ extern char *get_emacs_configuration_options (void);
 #define _WINSOCK_H
 
 /* Defines size_t and alloca ().  */
-#ifdef USE_CRT_DLL
+#ifdef emacs
 #define malloc e_malloc
 #define free   e_free
 #define realloc e_realloc
 #define calloc e_calloc
 #endif
+#ifdef _MSC_VER
+#define alloca _alloca
+#else
 #include <malloc.h>
+#endif
 
 #include <sys/stat.h>
 

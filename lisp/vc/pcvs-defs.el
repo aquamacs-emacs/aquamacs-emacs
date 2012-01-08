@@ -1,6 +1,6 @@
 ;;; pcvs-defs.el --- variable definitions for PCL-CVS
 
-;; Copyright (C) 1991-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1991-2012  Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Keywords: pcl-cvs
@@ -493,7 +493,8 @@ It is expected to call the function.")
     (define-key m [examine]
       `(menu-item ,(purecopy "Examine Directory") cvs-examine
 		  :help ,(purecopy "Examine the current state of a workarea")))
-    (fset 'cvs-global-menu m)))
+    (fset 'cvs-global-menu m))
+  "Global menu used by PCL-CVS.")
 
 
 ;; cvs-1.10 and above can take file arguments in other directories
@@ -502,7 +503,7 @@ It is expected to call the function.")
   (if (or (null cvs-version)
           (or (>= (cdr cvs-version) 10) (> (car cvs-version) 1)))
       ;; Supposedly some recent versions of CVS output some directory info
-      ;; as they recurse downthe tree, but it's not good enough in the case
+      ;; as they recurse down the tree, but it's not good enough in the case
       ;; where we run "cvs status foo bar/foo".
       '("status")
     t)

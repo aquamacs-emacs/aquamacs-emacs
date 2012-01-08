@@ -1,6 +1,6 @@
 ;;; files.el --- file input and output commands for Emacs
 
-;; Copyright (C) 1985-1987, 1992-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1987, 1992-2012 Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Package: emacs
@@ -917,24 +917,41 @@ See `load-file' for a different interface to `load'."
 
 (defun file-remote-p (file &optional identification connected)
   "Test whether FILE specifies a location on a remote system.
-Returns nil or a string identifying the remote connection (ideally
-a prefix of FILE).  For example, the remote identification for filename
-\"/user@host:/foo\" could be \"/user@host:\".
-A file is considered \"remote\" if accessing it is likely to be slower or
-less reliable than accessing local files.
-Furthermore, relative file names do not work across remote connections.
+A file is considered remote if accessing it is likely to
+be slower or less reliable than accessing local files.
 
-IDENTIFICATION specifies which part of the identification shall
-be returned as string.  IDENTIFICATION can be the symbol
-`method', `user', `host' or `localname'; any other value is
-handled like nil and means to return the complete identification
-string.
+`file-remote-p' never opens a new remote connection.  It can
+only reuse a connection that is already open.
 
-If CONNECTED is non-nil, the function returns an identification only
-if FILE is located on a remote system, and a connection is established
-to that remote system.
+Return nil or a string identifying the remote connection
+\(ideally a prefix of FILE).  Return nil if FILE is a relative
+file name.
 
-`file-remote-p' will never open a connection on its own."
+When IDENTIFICATION is nil, the returned string is a complete
+remote identifier: with components method, user, and host.  The
+components are those present in FILE, with defaults filled in for
+any that are missing.
+
+IDENTIFICATION can specify which part of the identification to
+return.  IDENTIFICATION can be the symbol `method', `user',
+`host', or `localname'.  Any other value is handled like nil and
+means to return the complete identification.  The string returned
+for IDENTIFICATION `localname' can differ depending on whether
+there is an existing connection.
+
+If CONNECTED is non-nil, return an identification only if FILE is
+located on a remote system and a connection is established to
+that remote system.
+
+Tip: You can use this expansion of remote identifier components
+     to derive a new remote file name from an existing one.  For
+     example, if FILE is \"/sudo::/path/to/file\" then
+
+       \(concat \(file-remote-p FILE) \"/bin/sh\")
+
+     returns a remote file name for file \"/bin/sh\" that has the
+     same remote identifier as FILE but expanded; a name such as
+     \"/sudo:root@myhost:/bin/sh\"."
   (let ((handler (find-file-name-handler file 'file-remote-p)))
     (if handler
 	(funcall handler 'file-remote-p file identification connected)
@@ -2632,7 +2649,7 @@ we don't actually set it to the same mode the buffer already has."
 		   (if (looking-at auto-mode-interpreter-regexp)
 		       (match-string 2)
 		     ""))
-	    ;; Map interpreter name to a mode, signalling we're done at the
+	    ;; Map interpreter name to a mode, signaling we're done at the
 	    ;; same time.
 	    done (assoc (file-name-nondirectory mode)
 			interpreter-mode-alist))
@@ -2658,12 +2675,12 @@ we don't actually set it to the same mode the buffer already has."
       (if buffer-file-name
 	  (let ((name buffer-file-name)
 		(remote-id (file-remote-p buffer-file-name)))
+	    ;; Remove backup-suffixes from file name.
+	    (setq name (file-name-sans-versions name))
 	    ;; Remove remote file name identification.
 	    (when (and (stringp remote-id)
 		       (string-match (regexp-quote remote-id) name))
 	      (setq name (substring name (match-end 0))))
-	    ;; Remove backup-suffixes from file name.
-	    (setq name (file-name-sans-versions name))
 	    (while name
 	      ;; Find first matching alist entry.
 	      (setq mode
@@ -3711,7 +3728,11 @@ the old visited file has been renamed to the new name FILENAME."
 	  (get major-mode 'mode-class)
 	  ;; Don't change the mode if the local variable list specifies it.
 	  (hack-local-variables t)
-	  (set-auto-mode t))
+	  ;; TODO consider making normal-mode handle this case.
+	  (let ((old major-mode))
+	    (set-auto-mode t)
+	    (or (eq old major-mode)
+		(hack-local-variables))))
     (error nil)))
 
 (defun write-file (filename &optional confirm)
@@ -4722,7 +4743,15 @@ prints a message in the minibuffer.  Instead, use `set-buffer-modified-p'."
   "Change whether this buffer is read-only.
 With prefix argument ARG, make the buffer read-only if ARG is
 positive, otherwise make it writable.  If buffer is read-only
-and `view-read-only' is non-nil, enter view mode."
+and `view-read-only' is non-nil, enter view mode.
+
+This function is usually the wrong thing to use in a Lisp program.
+It can have side-effects beyond changing the read-only status of a buffer
+\(e.g., enabling view mode), and does not affect read-only regions that
+are caused by text properties.  To make a buffer read-only in Lisp code,
+set `buffer-read-only'.  To ignore read-only status (whether due to text
+properties or buffer state) and make changes, temporarily bind
+`inhibit-read-only'."
   (interactive "P")
   (if (and arg
            (if (> (prefix-numeric-value arg) 0) buffer-read-only
@@ -4740,11 +4769,7 @@ and `view-read-only' is non-nil, enter view mode."
            (not (eq (get major-mode 'mode-class) 'special)))
       (view-mode-enter))
      (t (setq buffer-read-only (not buffer-read-only))
-        (force-mode-line-update)))
-    (if (memq (vc-backend buffer-file-name) '(RCS SCCS))
-        (message "%s" (substitute-command-keys
-                  (concat "File is under version-control; "
-                          "use \\[vc-next-action] to check in/out"))))))
+        (force-mode-line-update)))))
 
 (defun insert-file (filename)
   "Insert contents of file FILENAME into buffer after point.
@@ -4898,7 +4923,7 @@ given.  With a prefix argument, TRASH is nil."
 		directory 'full directory-files-no-dot-files-regexp))
 	  (error "Directory is not empty, not moving to trash")
 	(move-file-to-trash directory)))
-     ;; Otherwise, call outselves recursively if needed.
+     ;; Otherwise, call ourselves recursively if needed.
      (t
       (if (and recursive (not (file-symlink-p directory)))
 	  (mapc (lambda (file)
@@ -5839,7 +5864,7 @@ returns nil."
 
          ;; vc dired listings provide the state or blanks between file
          ;; permissions and date.  The state is always surrounded by
-         ;; parantheses:
+         ;; parentheses:
          ;; -rw-r--r-- (modified) 2005-10-22 21:25 files.el
          ;; This is not supported yet.
     (purecopy (concat "\\([0-9][BkKMGTPEZY]? " iso
@@ -6159,7 +6184,7 @@ message to that effect instead of signaling an error."
 
 (defvar kill-emacs-query-functions nil
   "Functions to call with no arguments to query about killing Emacs.
-If any of these functions returns nil, killing Emacs is cancelled.
+If any of these functions returns nil, killing Emacs is canceled.
 `save-buffers-kill-emacs' calls these functions, but `kill-emacs',
 the low level primitive, does not.  See also `kill-emacs-hook'.")
 
@@ -6549,7 +6574,7 @@ Otherwise, trash FILENAME using the freedesktop.org conventions,
 				 (setq tries 0 success t))
 			     (file-already-exists nil))
 		     (setq tries (1- tries))
-		     ;; Uniqify new-fn.  (Some file managers do not
+		     ;; Uniquify new-fn.  (Some file managers do not
 		     ;; like Emacs-style backup file names---e.g. bug
 		     ;; 170956 in Konqueror bug tracker.)
 		     (setq new-fn (make-temp-name (concat base-fn "_")))))

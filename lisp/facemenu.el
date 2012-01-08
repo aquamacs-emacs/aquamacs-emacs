@@ -1,6 +1,6 @@
 ;;; facemenu.el --- create a face menu for interactively adding fonts to text
 
-;; Copyright (C) 1994-1996, 2001-2011 Free Software Foundation, Inc.
+;; Copyright (C) 1994-1996, 2001-2012 Free Software Foundation, Inc.
 
 ;; Author: Boris Goldowsky <boris@gnu.org>
 ;; Keywords: faces
@@ -639,8 +639,17 @@ a list of colors that the current display can handle."
 	 (l list))
     (while (cdr l)
       (if (and (facemenu-color-equal (car (car l)) (car (car (cdr l))))
-	       (not (if (fboundp 'w32-default-color-map)
-			(not (assoc (car (car l)) (w32-default-color-map))))))
+               ;; On MS-Windows, there are logical colors that might have
+               ;; the same value but different names and meanings.  For
+               ;; example, `SystemMenuText' (the color w32 uses for the
+               ;; text in menu entries) and `SystemWindowText' (the default
+               ;; color w32 uses for the text in windows and dialogs) may
+               ;; be the same display color and be adjacent in the list.
+               ;; These system colors all have names prefixed with "System",
+               ;; which is hardcoded in w32fns.c (SYSTEM_COLOR_PREFIX).
+               ;; This makes them different to any other color.  Bug#9722
+	       (not (and (eq system-type 'windows-nt)
+			 (string-match-p "^System" (car (car l))))))
 	  (progn
 	    (setcdr (car l) (cons (car (car (cdr l))) (cdr (car l))))
 	    (setcdr l (cdr (cdr l))))

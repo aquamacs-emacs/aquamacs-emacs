@@ -1,5 +1,5 @@
 /* Updating of data structures for redisplay.
-   Copyright (C) 1985-1988, 1993-1995, 1997-2011 Free Software Foundation, Inc.
+   Copyright (C) 1985-1988, 1993-1995, 1997-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -429,6 +429,14 @@ margin_glyphs_to_reserve (struct window *w, int total_glyphs, Lisp_Object margin
   return n;
 }
 
+#if XASSERTS
+/* Return non-zero if ROW's hash value is correct, zero if not.  */
+int
+verify_row_hash (struct glyph_row *row)
+{
+  return row->hash == row_hash (row);
+}
+#endif
 
 /* Adjust glyph matrix MATRIX on window W or on a frame to changed
    window sizes.
@@ -1063,37 +1071,55 @@ swap_glyphs_in_rows (struct glyph_row *a, struct glyph_row *b)
 
 #endif /* 0 */
 
-/* Exchange pointers to glyph memory between glyph rows A and B.  */
+/* Exchange pointers to glyph memory between glyph rows A and B.  Also
+   exchange the used[] array and the hash values of the rows, because
+   these should all go together for the row's hash value to be
+   correct.  */
 
 static inline void
 swap_glyph_pointers (struct glyph_row *a, struct glyph_row *b)
 {
   int i;
+  unsigned hash_tem = a->hash;
+
   for (i = 0; i < LAST_AREA + 1; ++i)
     {
       struct glyph *temp = a->glyphs[i];
+      short used_tem = a->used[i];
+
       a->glyphs[i] = b->glyphs[i];
       b->glyphs[i] = temp;
+      a->used[i] = b->used[i];
+      b->used[i] = used_tem;
     }
+  a->hash = b->hash;
+  b->hash = hash_tem;
 }
 
 
 /* Copy glyph row structure FROM to glyph row structure TO, except
-   that glyph pointers in the structures are left unchanged.  */
+   that glyph pointers, the `used' counts, and the hash values in the
+   structures are left unchanged.  */
 
 static inline void
 copy_row_except_pointers (struct glyph_row *to, struct glyph_row *from)
 {
   struct glyph *pointers[1 + LAST_AREA];
+  short used[1 + LAST_AREA];
+  unsigned hashval;
 
   /* Save glyph pointers of TO.  */
   memcpy (pointers, to->glyphs, sizeof to->glyphs);
+  memcpy (used, to->used, sizeof to->used);
+  hashval = to->hash;
 
   /* Do a structure assignment.  */
   *to = *from;
 
   /* Restore original pointers of TO.  */
   memcpy (to->glyphs, pointers, sizeof to->glyphs);
+  memcpy (to->used, used, sizeof to->used);
+  to->hash = hashval;
 }
 
 
@@ -1271,6 +1297,9 @@ line_draw_cost (struct glyph_matrix *matrix, int vpos)
 static inline int
 row_equal_p (struct glyph_row *a, struct glyph_row *b, int mouse_face_p)
 {
+  xassert (verify_row_hash (a));
+  xassert (verify_row_hash (b));
+
   if (a == b)
     return 1;
   else if (a->hash != b->hash)
@@ -3468,7 +3497,7 @@ redraw_overlapping_rows (struct window *w, int yb)
 	      if (row->used[RIGHT_MARGIN_AREA])
 		rif->fix_overlapping_area (w, row, RIGHT_MARGIN_AREA, overlaps);
 
-	      /* Record in neighbour rows that ROW overwrites part of
+	      /* Record in neighbor rows that ROW overwrites part of
 		 their display.  */
 	      if (overlaps & OVERLAPS_PRED)
 		MATRIX_ROW (w->current_matrix, i - 1)->overlapped_p = 1;
@@ -3546,12 +3575,11 @@ update_window (struct window *w, int force_p)
 
       rif->update_window_begin_hook (w);
       yb = window_text_bottom_y (w);
-
-      /* If window has a header line, update it before everything else.
-	 Adjust y-positions of other rows by the header line height.  */
       row = desired_matrix->rows;
       end = row + desired_matrix->nrows - 1;
 
+      /* Take note of the header line, if there is one.  We will
+	 update it below, after updating all of the window's lines.  */
       if (row->mode_line_p)
 	{
 	  header_line_row = row;
@@ -3596,6 +3624,8 @@ update_window (struct window *w, int force_p)
 
       /* Update the rest of the lines.  */
       for (; row < end && (force_p || !input_pending); ++row)
+	/* scrolling_window resets the enabled_p flag of the rows it
+	   reuses from current_matrix.  */
 	if (row->enabled_p)
 	  {
 	    int vpos = MATRIX_ROW_VPOS (row, desired_matrix);
@@ -4212,6 +4242,7 @@ add_row_entry (struct glyph_row *row)
   ptrdiff_t i = row->hash % row_table_size;
 
   entry = row_table[i];
+  xassert (entry || verify_row_hash (row));
   while (entry && !row_equal_p (entry->row, row, 1))
     entry = entry->next;
 
@@ -4336,10 +4367,10 @@ scrolling_window (struct window *w, int header_line_p)
   j = last_old;
   while (i - 1 > first_new
          && j - 1 > first_old
-         && MATRIX_ROW (current_matrix, i - 1)->enabled_p
-	 && (MATRIX_ROW (current_matrix, i - 1)->y
-	     == MATRIX_ROW (desired_matrix, j - 1)->y)
-	 && !MATRIX_ROW (desired_matrix, j - 1)->redraw_fringe_bitmaps_p
+         && MATRIX_ROW (current_matrix, j - 1)->enabled_p
+	 && (MATRIX_ROW (current_matrix, j - 1)->y
+	     == MATRIX_ROW (desired_matrix, i - 1)->y)
+	 && !MATRIX_ROW (desired_matrix, i - 1)->redraw_fringe_bitmaps_p
          && row_equal_p (MATRIX_ROW (desired_matrix, i - 1),
                          MATRIX_ROW (current_matrix, j - 1), 1))
     --i, --j;
@@ -4522,18 +4553,69 @@ scrolling_window (struct window *w, int header_line_p)
 	  {
 	    rif->clear_window_mouse_face (w);
 	    rif->scroll_run_hook (w, r);
+	  }
 
-	    /* Invalidate runs that copy from where we copied to.  */
-	    for (j = i + 1; j < nruns; ++j)
+	/* Truncate runs that copy to where we copied to, and
+	   invalidate runs that copy from where we copied to.  */
+	for (j = nruns - 1; j > i; --j)
+	  {
+	    struct run *p = runs[j];
+	    int truncated_p = 0;
+
+	    if (p->nrows > 0
+		&& p->desired_y < r->desired_y + r->height
+		&& p->desired_y + p->height > r->desired_y)
 	      {
-		struct run *p = runs[j];
+		if (p->desired_y < r->desired_y)
+		  {
+		    p->nrows = r->desired_vpos - p->desired_vpos;
+		    p->height = r->desired_y - p->desired_y;
+		    truncated_p = 1;
+		  }
+		else
+		  {
+		    int nrows_copied = (r->desired_vpos + r->nrows
+					- p->desired_vpos);
 
-		if ((p->current_y >= r->desired_y
+		    if (p->nrows <= nrows_copied)
+		      p->nrows = 0;
+		    else
+		      {
+			int height_copied = (r->desired_y + r->height
+					     - p->desired_y);
+
+			p->current_vpos += nrows_copied;
+			p->desired_vpos += nrows_copied;
+			p->nrows -= nrows_copied;
+			p->current_y += height_copied;
+			p->desired_y += height_copied;
+			p->height -= height_copied;
+			truncated_p = 1;
+		      }
+		  }
+	      }
+
+	    if (r->current_y != r->desired_y
+		/* The condition below is equivalent to
+		   ((p->current_y >= r->desired_y
 		     && p->current_y < r->desired_y + r->height)
-		    || (p->current_y + p->height >= r->desired_y
+		    || (p->current_y + p->height > r->desired_y
 			&& (p->current_y + p->height
-			    < r->desired_y + r->height)))
-		  p->nrows = 0;
+			    <= r->desired_y + r->height)))
+		   because we have 0 < p->height <= r->height.  */
+		&& p->current_y < r->desired_y + r->height
+		&& p->current_y + p->height > r->desired_y)
+	      p->nrows = 0;
+
+	    /* Reorder runs by copied pixel lines if truncated.  */
+	    if (truncated_p && p->nrows > 0)
+	      {
+		int k = nruns - 1;
+
+		while (runs[k]->nrows == 0 || runs[k]->height < p->height)
+		  k--;
+		memmove (runs + j, runs + j + 1, (k - j) * sizeof (*runs));
+		runs[k] = p;
 	      }
 	  }
 
@@ -4548,7 +4630,14 @@ scrolling_window (struct window *w, int header_line_p)
 	    to_overlapped_p = to->overlapped_p;
 	    from->redraw_fringe_bitmaps_p = from->fringe_bitmap_periodic_p;
 	    assign_row (to, from);
-	    to->enabled_p = 1, from->enabled_p = 0;
+	    /* The above `assign_row' actually does swap, so if we had
+	       an overlap in the copy destination of two runs, then
+	       the second run would assign a previously disabled bogus
+	       row.  But thanks to the truncation code in the
+	       preceding for-loop, we no longer have such an overlap,
+	       and thus the assigned row should always be enabled.  */
+	    xassert (to->enabled_p);
+	    from->enabled_p = 0;
 	    to->overlapped_p = to_overlapped_p;
 	  }
       }

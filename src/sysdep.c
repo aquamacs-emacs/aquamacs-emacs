@@ -1,5 +1,5 @@
 /* Interfaces to system-dependent kernel and library entries.
-   Copyright (C) 1985-1988, 1993-1995, 1999-2011
+   Copyright (C) 1985-1988, 1993-1995, 1999-2012
                  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -433,7 +433,7 @@ child_setup_tty (int out)
 #endif /* AIX */
 
   /* We originally enabled ICANON (and set VEOF to 04), and then had
-     proces.c send additional EOF chars to flush the output when faced
+     process.c send additional EOF chars to flush the output when faced
      with long lines, but this leads to weird effects when the
      subprocess has disabled ICANON and ends up seeing those spurious
      extra EOFs.  So we don't send EOFs any more in
@@ -854,6 +854,7 @@ void
 init_sys_modes (struct tty_display_info *tty_out)
 {
   struct emacs_tty tty;
+  Lisp_Object terminal;
 
   Vtty_erase_char = Qnil;
 
@@ -907,7 +908,9 @@ init_sys_modes (struct tty_display_info *tty_out)
       tty.main.c_cflag &= ~PARENB;/* Don't check parity */
     }
 #endif
-  if (tty_out->input == stdin)
+
+  XSETTERMINAL(terminal, tty_out->terminal);
+  if (!NILP (Fcontrolling_tty_p (terminal)))
     {
       tty.main.c_cc[VINTR] = quit_char;	/* C-g (usually) gives SIGINT */
       /* Set up C-g for both SIGQUIT and SIGINT.
@@ -1660,7 +1663,7 @@ init_signals (void)
       sys_siglist[SIGQUIT] = "Quit";
 # endif
 # ifdef SIGRETRACT
-      sys_siglist[SIGRETRACT] = "Need to relinguish monitor mode";
+      sys_siglist[SIGRETRACT] = "Need to relinquish monitor mode";
 # endif
 # ifdef SIGSAK
       sys_siglist[SIGSAK] = "Secure attention";

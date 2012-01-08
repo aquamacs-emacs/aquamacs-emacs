@@ -1,6 +1,6 @@
 ;;; cc-fonts.el --- font lock support for CC Mode
 
-;; Copyright (C) 2002-2011 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2012 Free Software Foundation, Inc.
 
 ;; Authors:    2003- Alan Mackenzie
 ;;             2002- Martin Stjernholm
@@ -194,9 +194,13 @@
 	 (unless (face-property-instance oldface 'reverse)
 	   (invert-face newface)))))
 
-(defvar c-annotation-face (make-face 'c-annotation-face)
-  "Face used to highlight annotations in java-mode and other modes that may wish to use it.")
-(set-face-foreground 'c-annotation-face "blue")
+(defvar c-annotation-face 'c-annotation-face)
+
+(defface c-annotation-face
+  '((default :inherit font-lock-constant-face))
+  "Face for highlighting annotations in Java mode and similar modes."
+  :version "24.1"
+  :group 'c)
 
 (eval-and-compile
   ;; We need the following definitions during compilation since they're
@@ -317,7 +321,7 @@
 			(match-beginning ,(car highlight))
 			(match-end ,(car highlight))
 			,(elt highlight 1))))
-		;; highlight is an "ANCHORED HIGHLIGHER" of the form
+		;; highlight is an "ANCHORED HIGHLIGHTER" of the form
 		;; (ANCHORED-MATCHER PRE-FORM POST-FORM SUBEXP-HIGHLIGHTERS...)
 		(when (nth 3 highlight)
 		  (error "Match highlights currently not supported in %s"
@@ -1040,7 +1044,7 @@ casts and declarations are fontified.  Used on level 2 and higher."
 	;; Inside the following "condition form", we move forward over the
 	;; declarator's identifier up as far as any opening bracket (for array
 	;; size) or paren (for parameters of function-type) or brace (for
-	;; array/struct initialisation) or "=" or terminating delimiter
+	;; array/struct initialization) or "=" or terminating delimiter
 	;; (e.g. "," or ";" or "}").
 	(and
 	    pos
@@ -1103,7 +1107,7 @@ casts and declarations are fontified.  Used on level 2 and higher."
 	      (<= (point) limit))
 
 	    ;; Search syntactically to the end of the declarator (";",
-	    ;; ",", a closen paren, eob etc) or to the beginning of an
+	    ;; ",", a closing paren, eob etc) or to the beginning of an
 	    ;; initializer or function prototype ("=" or "\\s\(").
 	    ;; Note that the open paren will match array specs in
 	    ;; square brackets, and we treat them as initializers too.
@@ -1122,7 +1126,7 @@ casts and declarations are fontified.  Used on level 2 and higher."
 			  (char-after (match-beginning 1))))
 
       (if types
-	  ;; Register and fontify the identifer as a type.
+	  ;; Register and fontify the identifier as a type.
 	  (let ((c-promote-possible-types t))
 	    (goto-char id-start)
 	    (c-forward-type))
@@ -1207,7 +1211,7 @@ casts and declarations are fontified.  Used on level 2 and higher."
 	  ;; o - '<> if the arglist is of angle bracket type;
 	  ;; o - 'arglist if it's some other arglist;
 	  ;; o - nil, if not in an arglist at all.  This includes the
-	  ;;   parenthesised condition which follows "if", "while", etc.
+	  ;;   parenthesized condition which follows "if", "while", etc.
 	  context
 	  ;; The position of the next token after the closing paren of
 	  ;; the last detected cast.
@@ -1277,9 +1281,11 @@ casts and declarations are fontified.  Used on level 2 and higher."
 	 (when
 	  ;; The result of the form below is true when we don't recognize a
 	  ;; declaration or cast.
-	  (if (and (eq (get-text-property (point) 'face)
-		       'font-lock-keyword-face)
-		   (looking-at c-not-decl-init-keywords))
+	  (if (or (and (eq (get-text-property (point) 'face)
+			   'font-lock-keyword-face)
+		       (looking-at c-not-decl-init-keywords))
+		  (and c-macro-with-semi-re
+		       (looking-at c-macro-with-semi-re))) ; 2008-11-04
 	      ;; Don't do anything more if we're looking at a keyword that
 	      ;; can't start a declaration.
 	      t
@@ -1532,24 +1538,8 @@ casts and declarations are fontified.  Used on level 2 and higher."
   ;; prevent a repeat invocation.  See elisp/lispref page "Search-based
   ;; Fontification".
   (let* ((paren-state (c-parse-state))
-	 (start (point))
-	 decl-context bo-decl in-typedef type-type ps-elt)
-
-    ;; First, are we actually in a "local" declaration?
-    (setq decl-context (c-beginning-of-decl-1)
-	  bo-decl (point)
-	  in-typedef (looking-at c-typedef-key))
-    (if in-typedef (c-forward-token-2))
-    (when (and (eq (car decl-context) 'same)
-	       (< bo-decl start))
-      ;; Are we genuinely at a type?
-      (setq type-type (c-forward-type t))
-      (if (and type-type
-	       (or (not (eq type-type 'maybe))
-		   (looking-at c-symbol-key)))
-	  (c-font-lock-declarators limit t in-typedef)))
-
-    ;; Secondly, are we in any nested struct/union/class/etc. braces?
+	 decl-context in-typedef ps-elt)
+    ;; Are we in any nested struct/union/class/etc. braces?
     (while paren-state
       (setq ps-elt (car paren-state)
 	    paren-state (cdr paren-state))

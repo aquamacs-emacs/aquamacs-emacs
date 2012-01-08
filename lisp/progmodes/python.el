@@ -1,6 +1,6 @@
 ;;; python.el --- silly walks for Python  -*- coding: iso-8859-1 -*-
 
-;; Copyright (C) 2003-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2003-2012  Free Software Foundation, Inc.
 
 ;; Author: Dave Love <fx@gnu.org>
 ;; Maintainer: FSF
@@ -119,7 +119,7 @@
      (1 font-lock-type-face))
     ;; Built-ins.  (The next three blocks are from
     ;; `__builtin__.__dict__.keys()' in Python 2.7)  These patterns
-    ;; are debateable, but they at least help to spot possible
+    ;; are debatable, but they at least help to spot possible
     ;; shadowing of builtins.
     (,(rx symbol-start (or
 	  ;; exceptions
@@ -550,7 +550,7 @@ element matches `python-python-command'."
   "^> \\(.*\\)(\\([0-9]+\\))\\([?a-zA-Z0-9_<>]+\\)()"
   "Regular expression pdbtrack uses to find a stack trace entry.")
 
-(defconst python-pdbtrack-input-prompt "\n[(<]*[Pp]db[>)]+ "
+(defconst python-pdbtrack-input-prompt "\n[(<]*[Ii]?[Pp]db[>)]+ "
   "Regular expression pdbtrack uses to recognize a pdb prompt.")
 
 (defconst python-pdbtrack-track-range 10000
@@ -948,22 +948,12 @@ Finds end of innermost nested class or method definition."
   "Go to start of current statement.
 Accounts for continuation lines, multi-line strings, and
 multi-line bracketed expressions."
-  (beginning-of-line)
-  (python-beginning-of-string)
-  (let (point)
-    (while (and (python-continuation-line-p)
-		(if point
-		    (< (point) point)
-		  t))
-      (beginning-of-line)
+  (while
       (if (python-backslash-continuation-line-p)
-	  (progn
-	    (forward-line -1)
-	    (while (python-backslash-continuation-line-p)
-	      (forward-line -1)))
-	(python-beginning-of-string)
-	(python-skip-out))
-      (setq point (point))))
+          (progn (forward-line -1) t)
+        (beginning-of-line)
+        (or (python-beginning-of-string)
+            (python-skip-out))))
   (back-to-indentation))
 
 (defun python-skip-out (&optional forward syntax)
@@ -971,6 +961,7 @@ multi-line bracketed expressions."
 Skip forward if FORWARD is non-nil, else backward.
 If SYNTAX is non-nil it is the state returned by `syntax-ppss' at point.
 Return non-nil if and only if skipping was done."
+  ;; FIXME: Use syntax-ppss-toplevel-pos.
   (let ((depth (syntax-ppss-depth (or syntax (syntax-ppss))))
 	(forward (if forward -1 1)))
     (unless (zerop depth)
@@ -1131,7 +1122,7 @@ don't move and return nil.  Otherwise return t."
 
 ;;;; Imenu.
 
-;; For possibily speeding this up, here's the top of the ELP profile
+;; For possibly speeding this up, here's the top of the ELP profile
 ;; for rescanning pydoc.py (2.2k lines, 90kb):
 ;; Function Name                         Call Count  Elapsed Time  Average Time
 ;; ====================================  ==========  =============  ============
@@ -1558,7 +1549,7 @@ behavior, change `python-remove-cwd-from-path' to nil."
 			      (if path (concat path path-separator))
 			      data-directory)
 		      process-environment))
-               ;; If we use a pipe, unicode characters are not printed
+               ;; If we use a pipe, Unicode characters are not printed
                ;; correctly (Bug#5794) and IPython does not work at
                ;; all (Bug#5390).
 	       (process-connection-type t))
@@ -2354,7 +2345,7 @@ Interactively, prompt for the name with completion."
 ;;;; Bicycle Repair Man support
 
 (autoload 'pymacs-load "pymacs" nil t)
-(autoload 'brm-init "bikemacs")
+(autoload 'brm-init "bikeemacs")
 (defvar brm-menu)
 
 ;; I'm not sure how useful BRM really is, and it's certainly dangerous
@@ -2564,7 +2555,7 @@ If the traceback target file path is invalid, we look for the
 most recently visited python-mode buffer which either has the
 name of the current function or class, or which defines the
 function or class.  This is to provide for scripts not in the
-local filesytem (e.g., Zope's 'Script \(Python)', but it's not
+local file system (e.g., Zope's 'Script \(Python)', but it's not
 Zope specific).  If you put a copy of the script in a buffer
 named for the script and activate python-mode, then pdbtrack will
 find it."
@@ -2594,6 +2585,7 @@ find it."
         (if (not (string-match (concat python-pdbtrack-input-prompt "$") block))
             (python-pdbtrack-overlay-arrow nil)
 
+          (setq block (ansi-color-filter-apply block))
           (setq target (python-pdbtrack-get-source-buffer block))
 
           (if (stringp target)

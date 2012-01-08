@@ -1,6 +1,6 @@
 /* update-game-score.c --- Update a score file
 
-Copyright (C) 2002-2011  Free Software Foundation, Inc.
+Copyright (C) 2002-2012  Free Software Foundation, Inc.
 
 Author: Colin Walters <walters@debian.org>
 
@@ -346,7 +346,7 @@ read_scores (const char *filename, struct score_entry **scores, int *count)
     return -1;
   while ((readval = read_score (f, &ret[scorecount])) == 0)
     {
-      /* We encoutered an error */
+      /* We encountered an error.  */
       if (readval < 0)
 	return -1;
       scorecount++;

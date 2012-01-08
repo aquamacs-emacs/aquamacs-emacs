@@ -1,6 +1,6 @@
 ;;; menu-bar.el --- define a default menu bar
 
-;; Copyright (C) 1993-1995, 2000-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1993-1995, 2000-2012  Free Software Foundation, Inc.
 
 ;; Author: RMS
 ;; Maintainer: FSF
@@ -70,22 +70,6 @@
 ;; Only declared obsolete (and only made a proper alias) in 23.3.
 (define-obsolete-variable-alias
   'menu-bar-files-menu 'menu-bar-file-menu "22.1")
-(defun menu-bar-menu-frame-live-and-visible-p ()
-  "Return non-nil if the menu frame is alive and visible.
-The menu frame is the frame for which we are updating the menu."
-  (let ((menu-frame (or menu-updating-frame (selected-frame))))
-    (and (frame-live-p menu-frame)
-	 ;; not icon
-	 (eq (frame-visible-p menu-frame) t))))
-
-(defun menu-bar-non-minibuffer-window-p ()
-  "Return non-nil if selected window of the menu frame is not a minibuf window.
-
-See the documentation of `menu-bar-menu-frame-live-and-visible-p'
-for the definition of the menu frame."
-  (let ((menu-frame (or menu-updating-frame (selected-frame))))
-    (not (window-minibuffer-p (frame-selected-window menu-frame)))))
-
 
 (defvar menu-bar-file-menu
   (let ((menu (make-sparse-keymap "File")))
@@ -422,6 +406,30 @@ for the definition of the menu frame."
                   :help ,(purecopy "Read a line number and go to that line")))
     menu))
 
+
+(defvar yank-menu (cons (purecopy "Select Yank") nil))
+(fset 'yank-menu (cons 'keymap yank-menu))
+
+    (define-key menu [props]
+      `(menu-item ,(purecopy "Text Properties") facemenu-menu))
+
+    ;; ns-win.el said: Add spell for platform consistency.
+    (if (featurep 'ns)
+        (define-key menu [spell]
+          `(menu-item ,(purecopy "Spell") ispell-menu-map)))
+
+    (define-key menu [fill]
+      `(menu-item ,(purecopy "Fill") fill-region
+                  :enable (and mark-active (not buffer-read-only))
+                  :help
+                  ,(purecopy "Fill text in region to fit between left and right margin")))
+
+    (define-key menu [separator-bookmark]
+      menu-bar-separator)
+
+    (define-key menu [bookmark]
+      `(menu-item ,(purecopy "Bookmarks") menu-bar-bookmark-map))
+
     (define-key menu [goto]
       `(menu-item ,(purecopy "Go To") ,menu-bar-goto-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
@@ -501,6 +509,7 @@ for the definition of the menu frame."
                                  (consp buffer-undo-list)))
                   :help ,(purecopy "Undo last operation")))
     menu))
+
 
 (defun menu-bar-next-tag-other-window ()
   "Find the next definition of the tag already specified."
@@ -1741,7 +1750,7 @@ key, a click, or a menu-item")))
 
 (defvar menu-bar-search-documentation-menu
   (let ((menu (make-sparse-keymap "Search Documentation")))
-    
+
     (define-key menu [search-documentation-strings]
       `(menu-item ,(purecopy "Search Documentation Strings...") apropos-documentation
                   :help
@@ -2268,11 +2277,13 @@ It must accept a buffer as its only required argument.")
 		:help ,(purecopy "Put previous minibuffer history element in the minibuffer"))))
 
 (define-minor-mode menu-bar-mode
-  "Toggle display of a menu bar on each frame.
+  "Toggle display of a menu bar on each frame (Menu Bar mode).
+With a prefix argument ARG, enable Menu Bar mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+Menu Bar mode if ARG is omitted or nil.
+
 This command applies to all frames that exist and frames to be
-created in the future.
-With a numeric argument, if the argument is positive,
-turn on menu bars; otherwise, turn off menu bars."
+created in the future."
   :init-value t
   :global t
   ;; It's defined in C/cus-start, this stops the d-m-m macro defining it again.

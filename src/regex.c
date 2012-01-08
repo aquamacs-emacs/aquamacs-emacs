@@ -2,7 +2,7 @@
    0.12.  (Implements POSIX draft P1003.2/D11.2, except for some of the
    internationalization features.)
 
-   Copyright (C) 1993-2011  Free Software Foundation, Inc.
+   Copyright (C) 1993-2012  Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@
 	(HAVE_WCTYPE_H && HAVE_WCHAR_H && HAVE_BTOWC && !emacs)
 #endif
 
-/* For platform which support the ISO C amendement 1 functionality we
+/* For platform which support the ISO C amendment 1 functionality we
    support user defined character classes.  */
 #if WIDE_CHAR_SUPPORT
 /* Solaris 2.5 has a bug: <wchar.h> must be included before <wctype.h>.  */
@@ -530,7 +530,11 @@ init_syntax_once (void)
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 /* Type of source-pattern and string chars.  */
+#ifdef _MSC_VER
+typedef unsigned char re_char;
+#else
 typedef const unsigned char re_char;
+#endif
 
 typedef char boolean;
 #define false 0
@@ -633,7 +637,7 @@ typedef enum
   on_failure_jump_nastyloop,
 
 	/* A smart `on_failure_jump' used for greedy * and + operators.
-	   It analyses the loop before which it is put and if the
+	   It analyzes the loop before which it is put and if the
 	   loop does not require backtracking, it changes itself to
 	   `on_failure_keep_string_jump' and short-circuits the loop,
 	   else it just defaults to changing itself into `on_failure_jump'.

@@ -1,6 +1,6 @@
 ;;; dichromacy-theme.el --- color theme suitable for color-blind users
 
-;; Copyright (C) 2011 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2012 Free Software Foundation, Inc.
 
 ;; Author: Chong Yidong <cyd@stupidchicken>
 
@@ -42,7 +42,7 @@ Ansi-Color faces are included.")
   (custom-theme-set-faces
    'dichromacy
    `(default ((,class (:foreground "black" :background "white"))))
-   `(cursor ((,class (:foreground "white" :background "black"))))
+   `(cursor ((,class (:background "black"))))
    ;; Highlighting faces
    `(fringe ((,class (:background "#f7f7f7"))))
    `(highlight ((,class (:foreground ,blue :background "#e5e5e5"))))

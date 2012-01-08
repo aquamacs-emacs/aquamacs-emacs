@@ -1,5 +1,5 @@
 /* sound.c -- sound support.
-   Copyright (C) 1998-1999, 2001-2011 Free Software Foundation, Inc.
+   Copyright (C) 1998-1999, 2001-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -226,7 +226,7 @@ struct sound_device
   /* Close device SD.  */
   void (* close) (struct sound_device *sd);
 
-  /* Configure SD accoring to device-dependent parameters.  */
+  /* Configure SD according to device-dependent parameters.  */
   void (* configure) (struct sound_device *device);
 
   /* Choose a device-dependent format for outputting sound S.  */
@@ -267,7 +267,7 @@ struct sound
      read from the start of a sound file.  */
   char *header;
 
-  /* Number of bytes raed from sound file.  This is always <=
+  /* Number of bytes read from sound file.  This is always <=
      MAX_SOUND_HEADER_BYTES.  */
   int header_size;
 

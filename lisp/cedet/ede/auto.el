@@ -1,6 +1,6 @@
 ;;; ede/auto.el --- Autoload features for EDE
 
-;; Copyright (C) 2010-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2010-2012  Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -49,7 +49,7 @@ routine instead.")
 		 :documentation
 		 "Initializers passed to the project object.
 These are used so there can be multiple types of projects
-associated with a single object class, based on the initilizeres used.")
+associated with a single object class, based on the initializers used.")
    (load-type :initarg :load-type
 	      :documentation "Fn symbol used to load this project file.")
    (class-sym :initarg :class-sym

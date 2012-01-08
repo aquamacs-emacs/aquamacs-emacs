@@ -1,6 +1,6 @@
 ;;; x-dnd.el --- drag and drop support for X  -*- coding: utf-8 -*-
 
-;; Copyright (C) 2004-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2004-2012  Free Software Foundation, Inc.
 
 ;; Author: Jan Djärv <jan.h.d@swipnet.se>
 ;; Maintainer: FSF
@@ -410,7 +410,7 @@ otherwise return the frame width/height."
   "Return the x/y coordinates to be sent in a XDndStatus message.
 Coordinates are required to be absolute.
 FRAME is the frame and W is the window where the drop happened.
-If W is a window, return its absolute corrdinates,
+If W is a window, return its absolute coordinates,
 otherwise return the frame coordinates."
   (let* ((frame-left (frame-parameter frame 'left))
 	 ;; If the frame is outside the display, frame-left looks like
@@ -444,7 +444,7 @@ otherwise return the frame coordinates."
   (if (consp flags)
       (logand (cdr flags) 1)
     (logand flags 1)))
-      
+
 (defun x-dnd-handle-xdnd (event frame window message _format data)
   "Receive one XDND event (client message) and send the appropriate reply.
 EVENT is the client message.  FRAME is where the mouse is now.

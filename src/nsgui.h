@@ -1,5 +1,5 @@
 /* Definitions and headers for communication on the NeXT/Open/GNUstep API.
-   Copyright (C) 1995, 2005, 2008-2011 Free Software Foundation, Inc.
+   Copyright (C) 1995, 2005, 2008-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -72,7 +72,7 @@ typedef struct _XCharStruct
   int descent;
 } XCharStruct;
 
-/* Fake tructure from Xlib.h to represent two-byte characters.  */
+/* Fake structure from Xlib.h to represent two-byte characters.  */
 #ifndef __OBJC__
 typedef unsigned short unichar;
 #endif
@@ -209,4 +209,3 @@ typedef struct _NSRect  { NSPoint origin; NSSize size; } NSRect;
 #define PWinGravity	(1L << 9) /* program specified window gravity */
 
 #endif  /* __NSGUI_H__ */
-

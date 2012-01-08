@@ -1,6 +1,6 @@
 ;;; faces.el --- Lisp faces
 
-;; Copyright (C) 1992-1996, 1998-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1992-1996, 1998-2012  Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: internal
@@ -1706,13 +1706,14 @@ If omitted or nil, that stands for the selected frame's display."
       (> (tty-color-gray-shades display) 2)))))
 
 (defun read-color (&optional prompt convert-to-RGB allow-empty-name msg)
-  "Read a color name or RGB triplet of the form \"#RRRRGGGGBBBB\".
+  "Read a color name or RGB triplet.
 Completion is available for color names, but not for RGB triplets.
 
-RGB triplets have the form #XXXXXXXXXXXX, where each X is a hex
-digit.  The number of Xs must be a multiple of 3, with the same
-number of Xs for each of red, green, and blue.  The order is red,
-green, blue.
+RGB triplets have the form \"#RRGGBB\".  Each of the R, G, and B
+components can have one to four digits, but all three components
+must have the same number of digits.  Each digit is a hex value
+between 0 and F; either upper case or lower case for A through F
+are acceptable.
 
 In addition to standard color names and RGB hex values, the
 following are available as color candidates.  In each case, the
@@ -1927,7 +1928,7 @@ frame parameters in PARAMETERS."
 	  (progn
 	    ;; Initialize faces from face spec and custom theme.
 	    (face-spec-recalc face frame)
-	    ;; X resouces for the default face are applied during
+	    ;; X resources for the default face are applied during
 	    ;; `x-create-frame'.
 	    (and (not (eq face 'default)) window-system-p
 		 (make-face-x-resource-internal face frame))
@@ -2385,6 +2386,10 @@ used to display the prompt text."
   '((((background light)) :background "black")
     (((background dark))  :background "white"))
   "Basic face for the cursor color under X.
+Currently, only the `:background' attribute is meaningful; all
+other attributes are ignored.  The cursor foreground color is
+taken from the background color of the underlying text.
+
 Note: Other faces cannot inherit from the cursor face."
   :version "21.1"
   :group 'cursor
@@ -2472,7 +2477,7 @@ It is used for characters of no fonts too."
 ;;; Manipulating font names.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; This is here for compatibilty with Emacs 20.2.  For example,
+;; This is here for compatibility with Emacs 20.2.  For example,
 ;; international/fontset.el uses x-resolve-font-name.  The following
 ;; functions are not used in the face implementation itself.
 

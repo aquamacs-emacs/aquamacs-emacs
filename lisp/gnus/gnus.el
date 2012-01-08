@@ -1,6 +1,6 @@
 ;;; gnus.el --- a newsreader for GNU Emacs
 
-;; Copyright (C) 1987-1990, 1993-1998, 2000-2011
+;; Copyright (C) 1987-1990, 1993-1998, 2000-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Masanobu UMEDA <umerin@flab.flab.fujitsu.junet>
@@ -700,7 +700,7 @@ be set in `.emacs' instead."
 (defface gnus-summary-cancelled
   '((((class color))
      (:foreground "yellow" :background "black")))
-  "Face used for cancelled articles."
+  "Face used for canceled articles."
   :group 'gnus-summary)
 ;; backward-compatibility alias
 (put 'gnus-summary-cancelled-face 'face-alias 'gnus-summary-cancelled)
@@ -1146,7 +1146,9 @@ For example:
 		  (display . all))
      (\"mail\\\\.me\" (gnus-use-scoring  t))
      (\"list\\\\..*\" (total-expire . t)
-		  (broken-reply-to . t)))"
+		  (broken-reply-to . t)))
+
+The first clause that matches the group name will be used."
   :version "22.1"
   :group 'gnus-group-various
   :type '(repeat (cons regexp
@@ -3582,7 +3584,7 @@ that that variable is buffer-local to the summary buffers."
 		 (equal (nth 1 m1) (nth 1 m2)))))))
 
 (defsubst gnus-sloppily-equal-method-parameters (m1 m2)
-  ;; Check parameters for sloppy equalness.
+  ;; Check parameters for sloppy equality.
   (let ((p1 (copy-sequence (cddr m1)))
 	(p2 (copy-sequence (cddr m2)))
 	e1 e2)

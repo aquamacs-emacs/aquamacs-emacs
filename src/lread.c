@@ -1,6 +1,6 @@
 /* Lisp parsing and input streams.
 
-Copyright (C) 1985-1989, 1993-1995, 1997-2011  Free Software Foundation, Inc.
+Copyright (C) 1985-1989, 1993-1995, 1997-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -1917,7 +1917,7 @@ which is the input stream for reading characters.
 This function does not move point.  */)
   (Lisp_Object start, Lisp_Object end, Lisp_Object printflag, Lisp_Object read_function)
 {
-  /* FIXME: Do the eval-sexp-add-defvars danse!  */
+  /* FIXME: Do the eval-sexp-add-defvars dance!  */
   int count = SPECPDL_INDEX ();
   Lisp_Object tem, cbuf;
 
@@ -2210,7 +2210,7 @@ read_escape (Lisp_Object readcharfun, int stringp)
     case 'x':
       /* A hex escape, as in ANSI C.  */
       {
-	int i = 0;
+	unsigned int i = 0;
 	int count = 0;
 	while (1)
 	  {
@@ -2234,7 +2234,9 @@ read_escape (Lisp_Object readcharfun, int stringp)
 		UNREAD (c);
 		break;
 	      }
-	    if (MAX_CHAR < i)
+	    /* Allow hex escapes as large as ?\xfffffff, because some
+	       packages use them to denote characters with modifiers.  */
+	    if ((CHAR_META | (CHAR_META - 1)) < i)
 	      error ("Hex character out of range: \\x%x...", i);
 	    count += count < 3;
 	  }
@@ -2820,7 +2822,7 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 	   So we now use the same heuristic as for backquote: old-style
 	   unquotes are only recognized when first on a list, and when
 	   followed by a space.
-	   Because it's more difficult to peak 2 chars ahead, a new-style
+	   Because it's more difficult to peek 2 chars ahead, a new-style
 	   ,@ can still not be used outside of a `, unless it's in the middle
 	   of a list.  */
 	if (new_backquote_flag
@@ -3111,7 +3113,7 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 	  if (uninterned_symbol && ! NILP (Vpurify_flag))
 	    name = make_pure_string (read_buffer, nchars, nbytes, multibyte);
 	  else
-	    name = make_specified_string (read_buffer, nchars, nbytes,multibyte);
+	    name = make_specified_string (read_buffer, nchars, nbytes, multibyte);
 	  result = (uninterned_symbol ? Fmake_symbol (name)
 		    : Fintern (name, Qnil));
 
@@ -3982,7 +3984,7 @@ init_obarray (void)
   Qnil = intern_c_string ("nil");
 
   /* Fmake_symbol inits fields of new symbols with Qunbound and Qnil,
-     so those two need to be fixed manally.  */
+     so those two need to be fixed manually.  */
   SET_SYMBOL_VAL (XSYMBOL (Qunbound), Qunbound);
   XSYMBOL (Qunbound)->function = Qunbound;
   XSYMBOL (Qunbound)->plist = Qnil;
@@ -4178,13 +4180,16 @@ init_lread (void)
 		}
 
 	      /* Add site-lisp under the installation dir, if it exists.  */
-	      tem = Fexpand_file_name (build_string ("site-lisp"),
-				       Vinstallation_directory);
-	      tem1 = Ffile_exists_p (tem);
-	      if (!NILP (tem1))
+	      if (!no_site_lisp)
 		{
-		  if (NILP (Fmember (tem, Vload_path)))
-		    Vload_path = Fcons (tem, Vload_path);
+		  tem = Fexpand_file_name (build_string ("site-lisp"),
+					   Vinstallation_directory);
+		  tem1 = Ffile_exists_p (tem);
+		  if (!NILP (tem1))
+		    {
+		      if (NILP (Fmember (tem, Vload_path)))
+			Vload_path = Fcons (tem, Vload_path);
+		    }
 		}
 
 	      /* If Emacs was not built in the source directory,
@@ -4220,11 +4225,14 @@ init_lread (void)
 		      if (NILP (Fmember (tem, Vload_path)))
 			Vload_path = Fcons (tem, Vload_path);
 
-		      tem = Fexpand_file_name (build_string ("site-lisp"),
-					       Vsource_directory);
+		      if (!no_site_lisp)
+			{
+			  tem = Fexpand_file_name (build_string ("site-lisp"),
+						   Vsource_directory);
 
-		      if (NILP (Fmember (tem, Vload_path)))
-			Vload_path = Fcons (tem, Vload_path);
+			  if (NILP (Fmember (tem, Vload_path)))
+			    Vload_path = Fcons (tem, Vload_path);
+			}
 		    }
 		}
 	      if (!NILP (sitelisp) && !no_site_lisp)

@@ -1,6 +1,6 @@
 ;;; minibuffer.el --- Minibuffer completion functions -*- lexical-binding: t -*-
 
-;; Copyright (C) 2008-2011  Free Software Foundation, Inc.
+;; Copyright (C) 2008-2012  Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Package: emacs
@@ -51,7 +51,7 @@
 ;; - choose-completion doesn't know how to quote the text it inserts.
 ;;   E.g. it fails to double the dollars in file-name completion, or
 ;;   to backslash-escape spaces and other chars in comint completion.
-;;   - when completing ~/tmp/fo$$o, the highligting in *Completions*
+;;   - when completing ~/tmp/fo$$o, the highlighting in *Completions*
 ;;     is off by one position.
 ;;   - all code like PCM which relies on all-completions to match
 ;;     its argument gets confused because all-completions returns unquoted
@@ -596,7 +596,7 @@ Moves point to the end of the new text."
       (setq end (- end suffix-len))
       (setq newtext (substring newtext 0 (- suffix-len))))
     (goto-char beg)
-    (insert newtext)
+    (insert-and-inherit newtext)
     (delete-region (point) (+ (point) (- end beg)))
     (forward-char suffix-len)))
 
@@ -927,9 +927,7 @@ If `minibuffer-completion-confirm' is `confirm-after-completion',
                      ;; file, so `try-completion' actually completes to
                      ;; that file.
                      (= (length string) (length compl)))
-            (goto-char end)
-            (insert compl)
-            (delete-region beg end))))
+            (completion--replace beg end compl))))
       (exit-minibuffer))
 
      ((memq minibuffer-completion-confirm '(confirm confirm-after-completion))
@@ -1795,59 +1793,60 @@ same as `substitute-in-file-name'."
 
 (defun completion-file-name-table (string pred action)
   "Completion table for file names."
-  (with-demoted-errors
-    (cond
-     ((eq action 'metadata) '(metadata (category . file)))
-     ((eq (car-safe action) 'boundaries)
-      (let ((start (length (file-name-directory string)))
-            (end (string-match-p "/" (cdr action))))
-        (list* 'boundaries
-               ;; if `string' is "C:" in w32, (file-name-directory string)
-               ;; returns "C:/", so `start' is 3 rather than 2.
-               ;; Not quite sure what is The Right Fix, but clipping it
-               ;; back to 2 will work for this particular case.  We'll
-               ;; see if we can come up with a better fix when we bump
-               ;; into more such problematic cases.
-               (min start (length string)) end)))
+  (condition-case nil
+      (cond
+       ((eq action 'metadata) '(metadata (category . file)))
+       ((eq (car-safe action) 'boundaries)
+        (let ((start (length (file-name-directory string)))
+              (end (string-match-p "/" (cdr action))))
+          (list* 'boundaries
+                 ;; if `string' is "C:" in w32, (file-name-directory string)
+                 ;; returns "C:/", so `start' is 3 rather than 2.
+                 ;; Not quite sure what is The Right Fix, but clipping it
+                 ;; back to 2 will work for this particular case.  We'll
+                 ;; see if we can come up with a better fix when we bump
+                 ;; into more such problematic cases.
+                 (min start (length string)) end)))
 
-     ((eq action 'lambda)
-      (if (zerop (length string))
-          nil    ;Not sure why it's here, but it probably doesn't harm.
-        (funcall (or pred 'file-exists-p) string)))
+       ((eq action 'lambda)
+        (if (zerop (length string))
+            nil          ;Not sure why it's here, but it probably doesn't harm.
+          (funcall (or pred 'file-exists-p) string)))
 
-     (t
-      (let* ((name (file-name-nondirectory string))
-             (specdir (file-name-directory string))
-             (realdir (or specdir default-directory)))
+       (t
+        (let* ((name (file-name-nondirectory string))
+               (specdir (file-name-directory string))
+               (realdir (or specdir default-directory)))
 
-        (cond
-         ((null action)
-          (let ((comp (file-name-completion name realdir pred)))
-            (if (stringp comp)
-                (concat specdir comp)
-              comp)))
+          (cond
+           ((null action)
+            (let ((comp (file-name-completion name realdir pred)))
+              (if (stringp comp)
+                  (concat specdir comp)
+                comp)))
 
-         ((eq action t)
-          (let ((all (file-name-all-completions name realdir)))
+           ((eq action t)
+            (let ((all (file-name-all-completions name realdir)))
 
-            ;; Check the predicate, if necessary.
-            (unless (memq pred '(nil file-exists-p))
-              (let ((comp ())
-                    (pred
-                     (if (eq pred 'file-directory-p)
-                         ;; Brute-force speed up for directory checking:
-                         ;; Discard strings which don't end in a slash.
-                         (lambda (s)
-                           (let ((len (length s)))
-                             (and (> len 0) (eq (aref s (1- len)) ?/))))
-                       ;; Must do it the hard (and slow) way.
-                       pred)))
-                (let ((default-directory (expand-file-name realdir)))
-                  (dolist (tem all)
-                    (if (funcall pred tem) (push tem comp))))
-                (setq all (nreverse comp))))
+              ;; Check the predicate, if necessary.
+              (unless (memq pred '(nil file-exists-p))
+                (let ((comp ())
+                      (pred
+                       (if (eq pred 'file-directory-p)
+                           ;; Brute-force speed up for directory checking:
+                           ;; Discard strings which don't end in a slash.
+                           (lambda (s)
+                             (let ((len (length s)))
+                               (and (> len 0) (eq (aref s (1- len)) ?/))))
+                         ;; Must do it the hard (and slow) way.
+                         pred)))
+                  (let ((default-directory (expand-file-name realdir)))
+                    (dolist (tem all)
+                      (if (funcall pred tem) (push tem comp))))
+                  (setq all (nreverse comp))))
 
-            all))))))))
+              all))))))
+    (file-error nil)))               ;PCM often calls with invalid directories.
 
 (defvar read-file-name-predicate nil
   "Current predicate used by `read-file-name-internal'.")
@@ -2434,7 +2433,7 @@ PATTERN is as returned by `completion-pcm--string->pattern'."
   "Find all completions for STRING at POINT in TABLE, satisfying PRED.
 POINT is a position inside STRING.
 FILTER is a function applied to the return value, that can be used, e.g. to
-filter out additional entries (because TABLE migth not obey PRED)."
+filter out additional entries (because TABLE might not obey PRED)."
   (unless filter (setq filter 'identity))
   (let* ((beforepoint (substring string 0 point))
          (afterpoint (substring string point))
@@ -2679,7 +2678,7 @@ the same set of elements."
                          mergedpat))
            ;; New pos from the start.
            (newpos (length (completion-pcm--pattern->string pointpat)))
-           ;; Do it afterwards because it changes `pointpat' by sideeffect.
+           ;; Do it afterwards because it changes `pointpat' by side effect.
            (merged (completion-pcm--pattern->string (nreverse mergedpat))))
 
       (setq suffix (completion--merge-suffix merged newpos suffix))

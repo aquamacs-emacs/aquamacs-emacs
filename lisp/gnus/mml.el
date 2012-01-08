@@ -1,6 +1,6 @@
 ;;; mml.el --- A package for parsing and validating MML documents
 
-;; Copyright (C) 1998-2011  Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012  Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; This file is part of GNU Emacs.
@@ -466,16 +466,21 @@ If MML is non-nil, return the buffer up till the correspondent mml tag."
 (defun mml-generate-mime ()
   "Generate a MIME message based on the current MML document."
   (let ((cont (mml-parse))
-	(mml-multipart-number mml-multipart-number))
+	(mml-multipart-number mml-multipart-number)
+	(options message-options))
     (if (not cont)
 	nil
-      (mm-with-multibyte-buffer
-	(if (and (consp (car cont))
-		 (= (length cont) 1))
-	    (mml-generate-mime-1 (car cont))
-	  (mml-generate-mime-1 (nconc (list 'multipart '(type . "mixed"))
-				      cont)))
-	(buffer-string)))))
+      (prog1
+	  (mm-with-multibyte-buffer
+	    (setq message-options options)
+	    (if (and (consp (car cont))
+		     (= (length cont) 1))
+		(mml-generate-mime-1 (car cont))
+	      (mml-generate-mime-1 (nconc (list 'multipart '(type . "mixed"))
+					  cont)))
+	    (setq options message-options)
+	    (buffer-string))
+	(setq message-options options)))))
 
 (defun mml-generate-mime-1 (cont)
   (let ((mm-use-ultra-safe-encoding
@@ -525,7 +530,7 @@ If MML is non-nil, return the buffer up till the correspondent mml tag."
 		      ;; Remove quotes from quoted tags.
 		      (goto-char (point-min))
 		      (while (re-search-forward
-			      "<#!+/?\\(part\\|multipart\\|external\\|mml\\)"
+			      "<#!+/?\\(part\\|multipart\\|external\\|mml\\|secure\\)"
 			      nil t)
 			(delete-region (+ (match-beginning 0) 2)
 				       (+ (match-beginning 0) 3))))))
@@ -1232,7 +1237,7 @@ If not set, `default-directory' will be used."
       (goto-char (point-min))
       ;; Quote parts.
       (while (re-search-forward
-	      "<#!*/?\\(multipart\\|part\\|external\\|mml\\)" nil t)
+	      "<#!*/?\\(multipart\\|part\\|external\\|mml\\|secure\\)" nil t)
 	;; Insert ! after the #.
 	(goto-char (+ (match-beginning 0) 2))
 	(insert "!")))))
@@ -1454,7 +1459,7 @@ Should be adopted if code in `message-send-mail' is changed."
   "Display current buffer with Gnus, in a new buffer.
 If RAW, display a raw encoded MIME message.
 
-The window layout for the preview buffer is controled by the variables
+The window layout for the preview buffer is controlled by the variables
 `special-display-buffer-names', `special-display-regexps', or
 `gnus-buffer-configuration' (the first match made will be used),
 or the `pop-to-buffer' function."
