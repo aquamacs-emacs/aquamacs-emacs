@@ -1977,6 +1977,7 @@ when `ns-popup-save-panel' was called.
     dirS = [dirS stringByExpandingTildeInPath];
 
   panel = [EmacsSavePanel savePanel];
+  [panel retain];
 
   [panel setTitle: promptS];
 
@@ -1990,12 +1991,15 @@ when `ns-popup-save-panel' was called.
 		    contextInfo:current_buffer];
   
   ns_update_menubar (SELECTED_FRAME (), 0, nil);
+
+  [panel release];
  
   /* make stick */
   // [NSApp setMainMenu: panelMenu];
 
   // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
   UNBLOCK_INPUT;
+
   return Qnil;
 }
 
@@ -2025,7 +2029,7 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
   check_ns ();
 
   if (fileDelegate == nil)
-    fileDelegate = [EmacsFileDelegate new];
+    fileDelegate = [[EmacsFileDelegate new] retain];
 
   [NSCursor setHiddenUntilMouseMoves: NO];
 
@@ -2035,6 +2039,7 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
   panel = NILP (mustmatch) ?
     (id)[EmacsSavePanel savePanel] : (id)[EmacsOpenPanel openPanel];
 
+  [panel retain];
   [panel setTitle: promptS];
 
   /* Puma (10.1) does not have */
@@ -2066,6 +2071,8 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
 
   [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
   UNBLOCK_INPUT;
+
+  [panel release];
 
   return ret ? fname : Qnil;
 }
