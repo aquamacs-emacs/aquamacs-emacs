@@ -5453,8 +5453,10 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   static BOOL firstTime = YES;
 #endif
   int left_is_none;
+  int specKey = 0;
 
   NSTRACE (keyDown);
+
   /* Rhapsody and OS X give up and down events for the arrow keys */
   if (ns_fake_keydown == YES)
     ns_fake_keydown = NO;
@@ -5508,6 +5510,20 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
             code = fnKeysym;
         }
 
+      /* arrow keys and the like */
+      if (! NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
+	{
+	  /* The better way to do this would be to add Meta to every key for 
+	     which the Option modifier doesn't change the character code.
+	     However, we can't find out about this in pure Cocoa
+	     (UCKeyTranslate seems to be needed).
+	     Thus, we have to use the manual route via 
+	     ns_alternate_meta_special_codes. */
+	  specKey = 1;  /* treat as if it was a key sym - always see Option key if pressed*/
+	}
+
+#define SPECCHECK(mod, def) ((specKey && ((NILP (mod) || (mod) == Qnone))) ? (def) : parse_solitary_modifier (mod))
+
       /* are there modifiers? */
       emacs_event->modifiers = 0;
       flags = [theEvent modifierFlags];
@@ -5518,24 +5534,23 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
       if (flags & NSShiftKeyMask)
         emacs_event->modifiers |= shift_modifier;
 
-      if (flags & NSCommandKeyMask)
-        {
-	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
-	  if ((flags & NSLeftCommandKeyMask) == NSLeftCommandKeyMask ||
-	      ! ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask))
-	    {
-          emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
-	    }
       if ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)
-	    {
-	      emacs_event->modifiers |= 
-		parse_solitary_modifier ((EQ (ns_right_command_modifier, Qleft) ? 
-					  ns_command_modifier : ns_right_command_modifier));
-	    }
+        emacs_event->modifiers |= parse_solitary_modifier
+          (EQ (ns_right_command_modifier, Qleft)
+           ? ns_command_modifier
+           : ns_right_command_modifier);
+
+      if ((flags & NSLeftCommandKeyMask) == NSLeftCommandKeyMask ||
+	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
+	  ((flags & NSCommandKeyMask)
+	   && ! ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)))
+        {
+          emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 
           /* if super, take input manager's word so things like
              dvorak / qwerty layout work */
-          if (EQ (ns_command_modifier, Qsuper)  /* non-default, so users can set it as workaround. */
+	  /* non-default, so users can set it as workaround. */
+          if (EQ (ns_command_modifier, Qsuper)
               && !fnKeysym
               && [[theEvent characters] length] != 0)
             {
@@ -5565,19 +5580,18 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
             }
         }
 
-      if (flags & NSControlKeyMask)
-	{
-	  if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask || 
-	      ! ((flags & NSRightControlKeyMask) == NSRightControlKeyMask))
-          emacs_event->modifiers |=
-            parse_solitary_modifier (ns_control_modifier);
       if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
-	    emacs_event->modifiers |=
-	      parse_solitary_modifier ((EQ (ns_right_control_modifier, Qleft) ? 
-					  ns_control_modifier : ns_right_control_modifier));
-	}
+          emacs_event->modifiers |=
+	    SPECCHECK ((EQ (ns_right_control_modifier, Qleft)
+			? ns_control_modifier
+			: ns_right_control_modifier), ctrl_modifier);
 
-      if ((flags & NS_FUNCTION_KEY_MASK) == NS_FUNCTION_KEY_MASK && !fnKeysym)
+      if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask ||
+	  ((flags & NSControlKeyMask) &&
+	   ! ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)))
+        emacs_event->modifiers |= SPECCHECK (ns_control_modifier, ctrl_modifier);
+
+      if (flags & NS_FUNCTION_KEY_MASK && !fnKeysym)
           emacs_event->modifiers |=
             parse_solitary_modifier (ns_function_modifier);
 
@@ -5585,42 +5599,11 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
         || EQ (ns_alternate_modifier, Qnone);
 
       if ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)
-	{
-	  if ((NILP (ns_right_alternate_modifier)
-	       || (EQ (ns_right_alternate_modifier, Qnone)
-		   && (NILP (ns_alternate_modifier) 
-		       || EQ (ns_alternate_modifier, Qnone)))))
-	    {
-
-	      if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
         {
-		   if (!fnKeysym)
-		    {
-		  /* accept pre-interp alt comb */
-              if ([[theEvent characters] length] > 0)
-                code = [[theEvent characters] characterAtIndex: 0];
-              /*HACK: clear lone shift modifier to stop next if from firing */
-              if (emacs_event->modifiers == shift_modifier)
-                emacs_event->modifiers = 0;
-            }
-		} 
-          else
-		emacs_event->modifiers |= meta_modifier;
-	    }
-	  else
-            emacs_event->modifiers |= parse_solitary_modifier
-              (EQ (ns_right_alternate_modifier, Qleft)
-               ? ns_alternate_modifier
-               : ns_right_alternate_modifier);
-        }
-
-      if ((flags & NSLeftAlternateKeyMask) == NSLeftAlternateKeyMask) /* default = meta */
-        {
-          if ((NILP (ns_alternate_modifier)
-               || EQ (ns_alternate_modifier, Qnone)))
-            {if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
-		{
-		   if (!fnKeysym)
+          if ((NILP (ns_right_alternate_modifier)
+               || EQ (ns_right_alternate_modifier, Qnone)
+               || (EQ (ns_right_alternate_modifier, Qleft) && left_is_none))
+              && !fnKeysym)
             {   /* accept pre-interp alt comb */
               if ([[theEvent characters] length] > 0)
                 code = [[theEvent characters] characterAtIndex: 0];
@@ -5628,46 +5611,27 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
               if (emacs_event->modifiers == shift_modifier)
                 emacs_event->modifiers = 0;
             }
-		}
           else
-		emacs_event->modifiers |= meta_modifier; 
-            }
-          else
-	    emacs_event->modifiers |=
-	      parse_solitary_modifier (EQ (ns_right_alternate_modifier, Qnone) ?
-				       ns_alternate_modifier
-               : ns_right_alternate_modifier);
+            emacs_event->modifiers |=
+	      SPECCHECK ((EQ (ns_right_alternate_modifier, Qleft)
+			  ? ns_alternate_modifier
+			  : ns_right_alternate_modifier), meta_modifier);
         }
-      if (flags & NSLeftAlternateKeyMask || (flags & NSAlternateKeyMask && 
-					     ! ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask))) /* default = meta */
-        {
-	  /* The better way to do this would be to add Meta to every key for 
-	     which the Option modifier doesn't change the character code.
-	     However, we can't find out about this in pure Cocoa
-	     (UCKeyTranslate seems to be needed).
-	     Thus, we have to use the manual route via 
-	     ns_alternate_meta_special_codes. */
 
-	  if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone)))
+      if ((flags & NSLeftAlternateKeyMask) == NSLeftAlternateKeyMask ||
+	  ((flags & NSAlternateKeyMask) &&
+	   ! ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)))
         {
-	      if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
-		{
-		  if (!fnKeysym)
-		    {
-		  /* accept pre-interp alt comb */
+          if (left_is_none && !fnKeysym)
+            {   /* accept pre-interp alt comb */
               if ([[theEvent characters] length] > 0)
                 code = [[theEvent characters] characterAtIndex: 0];
               /*HACK: clear lone shift modifier to stop next if from firing */
               if (emacs_event->modifiers == shift_modifier)
                 emacs_event->modifiers = 0;
             }
-		}
           else
-		emacs_event->modifiers |= meta_modifier;
-	    }
-	  else
-              emacs_event->modifiers |=
-                parse_solitary_modifier (ns_alternate_modifier);
+              emacs_event->modifiers |= SPECCHECK (ns_alternate_modifier, meta_modifier);
         }
 
   if (NS_KEYLOG)
@@ -5689,8 +5653,6 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
             emacs_event->kind = code > 0xFF
               ? MULTIBYTE_CHAR_KEYSTROKE_EVENT : ASCII_KEYSTROKE_EVENT;
 
-	  if (NS_KEYLOG)
-	    fprintf (stderr, "creating Emacs event.\n");
           emacs_event->code = code;
           EV_TRAILER (theEvent);
           return;
@@ -7798,7 +7760,8 @@ to be used at a lower level for accented character entry.");
 For these special keys, the Option modifier will be interpreted as \n\
 Meta if `ns_alternate_modifier' and `ns_right_alternate_modifier' are\n\
 configured such that the other keys with the Option modifier would\n\
-be interpreted by the system (`none' or nil).\n\
+be interpreted by the system (`none' or nil), and similiarly for the\n\
+control modifier.\n\
 \n\
 If `ns_alternate_modifier' and `ns_right_alternate_modifier' are\n\
 set to a specific Emacs modifier, this will be respected.");
