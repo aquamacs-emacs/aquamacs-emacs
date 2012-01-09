@@ -1,3 +1,33 @@
+2012-01-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	emacs: fix an auto-save permissions race condition (Bug#10400)
+	* fileio.c (auto_saving_dir_umask): New static var.
+	(Fmake_directory_internal): Use it.
+	(do_auto_save_make_dir): Set it, instead of invoking chmod after
+	creating the directory.  The old code temporarily assigns
+	too-generous permissions to the directory.
+	(do_auto_save_eh): Clear it.
+	(Fdo_auto_save): Catch all errors, not just file errors, so
+	that the var is always cleared.
+
+2012-01-07  Eli Zaretskii  <eliz@gnu.org>
+
+	* search.c (scan_buffer): Pass character positions to
+	know_region_cache, not byte positions.  (Bug#6540)
+
+2012-01-07  LynX  <_LynX@bk.ru>  (tiny change)
+
+	* w32.c (sys_rename): Report EXDEV when rename of a directory
+	fails because the target is on another logical disk.  (Bug#10284)
+
+2012-01-07  David Benjamin  <davidben@mit.edu>  (tiny change)
+
+	* xterm.c (x_embed_request_focus): New function.
+
+	* xterm.h: Add prototype.
+
+	* xfns.c (Fx_focus_frame): Use it for embedded frames (Bug#9977).
+
 2012-01-05  Glenn Morris  <rgm@gnu.org>
 
 	* emacs.c (emacs_copyright): Update short copyright year to 2012.

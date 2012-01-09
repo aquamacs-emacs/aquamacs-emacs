@@ -3323,7 +3323,7 @@ It is dangerous if either of these conditions are met:
       (and (symbolp (car exp))
 	   ;; Allow (minor)-modes calls with no arguments.
 	   ;; This obsoletes the use of "mode:" for such things.  (Bug#8613)
-	   (or (and (member (cdr exp) '(nil (1) (-1)))
+	   (or (and (member (cdr exp) '(nil (1) (0) (-1)))
 		    (string-match "-mode\\'" (symbol-name (car exp))))
 	       (let ((prop (get (car exp) 'safe-local-eval-function)))
 		 (cond ((eq prop t)
@@ -3606,6 +3606,10 @@ and `file-local-variables-alist', without applying them."
 	    (hack-local-variables-filter variables dir-name)))))))
 
 (defun hack-dir-local-variables-non-file-buffer ()
+  "Apply directory-local variables to a non-file buffer.
+For non-file buffers, such as Dired buffers, directory-local
+variables are looked for in `default-directory' and its parent
+directories."
   (hack-dir-local-variables)
   (hack-local-variables-apply))
 
@@ -6514,12 +6518,14 @@ Otherwise, trash FILENAME using the freedesktop.org conventions,
 
 	   ;; Ensure that the trash directory exists; otherwise, create it.
 	   (let ((saved-default-file-modes (default-file-modes)))
-	     (set-default-file-modes ?\700)
-	     (unless (file-exists-p trash-files-dir)
-	       (make-directory trash-files-dir t))
-	     (unless (file-exists-p trash-info-dir)
-	       (make-directory trash-info-dir t))
-	     (set-default-file-modes saved-default-file-modes))
+	     (unwind-protect
+		 (progn
+		   (set-default-file-modes #o700)
+		   (unless (file-exists-p trash-files-dir)
+		     (make-directory trash-files-dir t))
+		   (unless (file-exists-p trash-info-dir)
+		     (make-directory trash-info-dir t)))
+	       (set-default-file-modes saved-default-file-modes)))
 
 	   ;; Try to move to trash with .trashinfo undo information
 	   (save-excursion
