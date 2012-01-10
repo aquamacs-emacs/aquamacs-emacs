@@ -1,3 +1,29 @@
+2011-11-11  Johan Bockgård  <bojohan@gnu.org>
+
+	* xdisp.c (fill_composite_glyph_string): Always set s->face, to
+	avoid a crash (bug#9496).
+
+2012-01-09  Chong Yidong  <cyd@gnu.org>
+
+	* xdisp.c (note_mouse_highlight): Fix use of uninitialized var.
+
+2012-01-09  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (note_mouse_highlight): Initialize `area'.  (Bug#9947)
+	Initialize `part', to avoid a possible random value that matches
+	one of those tested as condition to clear the mouse face.
+
+2012-01-09  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* dispnew.c (scrolling_window): Truncate overlaps in copy
+	destination of scroll runs so as to avoid assigning disabled bogus
+	rows and unnecessary graphics copy operations.
+
+2012-01-09  Eli Zaretskii  <eliz@gnu.org>
+
+	* dispnew.c (scrolling_window): Fix incorrect indices in accessing
+	current_matrix and desired_matrix.  (Bug#9990)
+
 2011-10-31  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
 
 	* xmenu.c (cleanup_widget_value_tree): New function.
