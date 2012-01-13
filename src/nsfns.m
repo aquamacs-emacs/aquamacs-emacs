@@ -2673,6 +2673,8 @@ In case the execution fails, an error is signaled. */)
     (script)
     Lisp_Object script;
 {
+  struct gcpro gcpro1;
+
   Lisp_Object result;
   long status;
   NSEvent *nxev;
@@ -2681,6 +2683,7 @@ In case the execution fails, an error is signaled. */)
   check_ns ();
 
   BLOCK_INPUT;
+  GCPRO1 (script);
 
   as_script = script;
   as_result = &result;
@@ -2706,7 +2709,10 @@ In case the execution fails, an error is signaled. */)
   as_status = 0;
   as_script = Qnil;
   as_result = 0;
+
+  UNGCPRO;
   UNBLOCK_INPUT;
+
   if (status == 0)
     return result;
   else if (!STRINGP (result))
