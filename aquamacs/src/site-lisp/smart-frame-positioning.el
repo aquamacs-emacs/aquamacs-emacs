@@ -722,7 +722,7 @@ Returns nil of parms is nil."
 ; (setq frame (selected-frame))
 ; (smart-move-minibuffer-inside-screen)
 (defun smart-move-minibuffer-inside-screen (&optional frame)
-  (when (and (frame-parameter (or frame (selected-frame)) 'window-system)
+  (when (and (display-graphic-p frame)
 	     (not (frame-parameter frame 'fullscreen)))
     (unless
 	(smart-minibuffer-inside-screen-p frame)
@@ -740,7 +740,7 @@ boundaries.
 The function will fail to do its job when the Dock is not displayed
 on the main screen, i.e. where the menu is."
   (interactive)
-  (when (frame-parameter (or frame (selected-frame)) 'window-system)
+  (when (display-graphic-p frame)
     (let* ((frame (or frame (selected-frame)))
 	   ;; on some systems, we can retrieve the available pixel width with
 	   ;; non-standard methods.
