@@ -3,12 +3,16 @@
 
 \item Full-screen now supports the standard Mac OS X 10.7 ``Lion'' full-screen mode:  The frame takes up the full (main) display and uses its own screen.  Users may switch between screens as usual (mouse swipe or C-left/right, for instance).  The old-style fullscreen mode is still available, however.  To maximize a frame on the current space, allowing other frames on this space, type C-u A-S-Return, or prepend any of the commands that enter fullscreen mode with C-u.
 Thanks for research: Sandy Patterson and Daisuke Murase.
-\item Aquamacs now provides session persistency:  you can load and save sessions, and under Mac OS X 10.7 or later, sessions are reguarily saved and restored in case of unexpected program termination or reboot.  Use the new {\em Load Session, Save Session As} menu entries in the {\em File} menu to use these new functions, and the new customization variable `revive-desktop-after-launching' to turn the behavior off, or enable automatic session persistency even on pre-Lion operating systems.  Note: Unlike the formerly available functions from the `desktop' package, all frames, windows, tabs, buffers and some customizations are saved.  Buffers not linked to a file, such as those showing processes, will not be restored, and frames may not end up on the same space at this time.  Aquamacs now includes an adapted version of the {\tt revive.el} package by Hirose Yuuji.  We recommend that you do not load a different version of this package yourself.
+\item Aquamacs now provides experimental session persistency:  you can load and save sessions.  Use the new {\em Load Session, Save Session As} menu entries in the {\em File} menu to use these new functions.  Note: Unlike the formerly available functions from the `desktop' package, all frames, windows, tabs, buffers and some customizations are saved.  Buffers not linked to a file, such as those showing processes, will not be restored, and frames may not end up on the same space at this time.  Aquamacs now includes an adapted version of the {\tt revive.el} package by Hirose Yuuji.  We recommend that you do not load a different version of this package yourself.
+% , and under Mac OS X 10.7 or later, sessions are reguarily saved and restored in case of unexpected program termination or reboot
+% and the new customization variable `revive-desktop-after-launching' to turn the behavior off, or enable automatic session persistency even on pre-Lion operating systems
 \item Colors are now displayed in the ``color space'' that is set by the user for the specific display.  A slight change in color shades may be noticed.
 Suggested by Juan Jose Garcia Ripoll.
 \item Text search (isearch) now works better when using one of the Emulate-Mac-Keyboard-Modes.
 Reported by Thomas Strathmann.
 \item Frames are now reliably moved inside the current display again when entering the minibuffer (and at other times).
+\item Switching applications while Aquamacs is in full-screen mode no longer creates unwanted empty frames.
+Reported by Christian H\"o{}ltje, Rory Kirchner and Milan Mitrovi\'c{}.
 \end{itemize}
 
 \subsection{Changes--- 2.4}
@@ -26,7 +30,7 @@ Reported by James Thurgood and Robert Morelli.
 \item When deleting several words in a row (killing them to append them to the kill ring), they are no longer added as run-in words in smart spacing mode.  Spaces are addes where appropriate.
 \item Drag\&drop into windows showing eshell, shell and other comint-based buffers now inserts the full file name.
 Suggested by Jan Marius Hofert.
-\item When expanding the load path (e.g., for library files) in directories such as Library/Application~Support/Aquamacs~Emacs, a file called {.nosearch} now prevents Aquamacs from adding the present and subordinate directories.  (The previous {\tt .ignore} file only worked at the topmost level.}
+\item When expanding the load path (e.g., for library files) in directories such as Library/Application~Support/Aquamacs~Emacs, a file called {.nosearch} now prevents Aquamacs from adding the present and subordinate directories.  (The previous {\tt .ignore} file only worked at the topmost level.)
 Reported by Nathaniel Cunningham.
 \item Fixed issue that could lead to a crash when using Aquamacs as an editor (ODB standard) from certain other applications.
 Reported by Kevin Kirkup.

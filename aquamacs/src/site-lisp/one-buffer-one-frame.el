@@ -658,13 +658,14 @@ even if it's the only visible frame."
 	     (setq aquamacs-last-frame-empty-frame nil)))))
   (let ((all-parms
 	 (append
-	  '((visibility . nil))
+	  '((fullscreen . nil) (visibility . nil))
 	  parms)))
+    (print parms)
     (if (and aquamacs-last-frame-empty-frame
 	     (frame-live-p aquamacs-last-frame-empty-frame)
 	     (not (frame-iconified-p aquamacs-last-frame-empty-frame)))
 	(modify-frame-parameters aquamacs-last-frame-empty-frame
-				 parms)
+				 (cons '(fullscreen . nil) parms))
       (setq aquamacs-last-frame-empty-frame (make-frame all-parms))))
   (select-frame aquamacs-last-frame-empty-frame)
   (raise-frame aquamacs-last-frame-empty-frame)
@@ -1001,10 +1002,15 @@ Ensure that there is a (hidden) frame in the current space."
   (run-with-idle-timer 0.5 nil 'aquamacs-handle-app-activated2))
 
 (defun aquamacs-handle-app-activated2 ()
-  (unless (ns-frame-is-on-active-space-p (selected-frame))
+  (unless (or (ns-frame-is-on-active-space-p (selected-frame))
+	      ;; we're assuming that the selected frame, if full-frame,
+	      ;; will be on the active space.  we're probably switching
+	      ;; to a space with a visible frame anyway, in this case.
+	      ;; https://github.com/davidswelt/aquamacs-emacs/issues/60
+	      (eq (frame-parameter nil 'fullscreen) 'fullboth))
     ;; find a frame on active space
     ;; (unless (ns-visible-frame-list)
-      (let* ((display-buffer-reuse-frames 'select)
+    (let* ((display-buffer-reuse-frames 'select)
 	   (one-buffer-one-frame nil)
 	   (hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
       (select-window (frame-first-window hf))
