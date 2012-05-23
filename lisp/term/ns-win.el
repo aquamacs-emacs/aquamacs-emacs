@@ -241,7 +241,6 @@ The properties returned may include `top', `left', `height', and `width'."
   (let ((map (make-sparse-keymap)))
     ;; Map certain keypad keys into ASCII characters
     ;; that people usually expect.
-    (define-key map [S-tab] [25])
     (define-key map [M-backspace] [?\M-\d])
     (define-key map [M-delete] [?\M-\d])
     (define-key map [M-tab] [?\M-\t])
