@@ -34,6 +34,8 @@ See pycomplete.el for the Emacs Lisp side of things.
 
 # Along with pycomplete.el this file allows programmers to complete Python
 # symbols within the current buffer.
+# import pdb
+# pdb.set_trace()
 
 import sys
 import os.path
@@ -88,8 +90,17 @@ def get_all_completions(s, imports=None):
 
 def pycomplete(s, imports=None):
     completions = get_all_completions(s, imports)
-    dots = s.split(".")
-    return os.path.commonprefix([k[len(dots[-1]):] for k in completions])
+    if len(completions) == 0:
+        return None
+    else:
+        dots = s.split(".")
+        prefix = os.path.commonprefix([k for k in completions])
+        if len(completions)==1 or len(prefix)>len(dots[-1]):
+            return [prefix[len(dots[-1]):]]
+        
+        return completions
+
+        # return os.path.commonprefix([k[len(dots[-1]):] for k in completions])
 
 if __name__ == "__main__":
     print "<empty> ->", pycomplete("")
