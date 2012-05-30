@@ -1117,12 +1117,12 @@ binding is altered.  If there is no binding for KEY, the new pair
 binding KEY to DEF is added at the front of KEYMAP.  */)
   (Lisp_Object keymap, Lisp_Object key, Lisp_Object def)
 {
-  register int idx;
+  register ptrdiff_t idx;
   register Lisp_Object c;
   register Lisp_Object cmd;
   int metized = 0;
   int meta_bit;
-  int length;
+  ptrdiff_t length;
   struct gcpro gcpro1, gcpro2, gcpro3;
 
   GCPRO3 (keymap, key, def);
@@ -1143,7 +1143,7 @@ binding KEY to DEF is added at the front of KEYMAP.  */)
   if (VECTORP (def) && ASIZE (def) > 0 && CONSP (AREF (def, 0)))
     { /* DEF is apparently an XEmacs-style keyboard macro.  */
       Lisp_Object tmp = Fmake_vector (make_number (ASIZE (def)), Qnil);
-      int i = ASIZE (def);
+      ptrdiff_t i = ASIZE (def);
       while (--i >= 0)
 	{
 	  Lisp_Object defi = AREF (def, i);
@@ -1274,10 +1274,10 @@ third optional argument ACCEPT-DEFAULT is non-nil, `lookup-key' will
 recognize the default bindings, just as `read-key-sequence' does.  */)
   (Lisp_Object keymap, Lisp_Object key, Lisp_Object accept_default)
 {
-  register int idx;
+  register ptrdiff_t idx;
   register Lisp_Object cmd;
   register Lisp_Object c;
-  int length;
+  ptrdiff_t length;
   int t_ok = !NILP (accept_default);
   struct gcpro gcpro1, gcpro2;
 
@@ -1527,6 +1527,19 @@ current_minor_maps (Lisp_Object **modeptr, Lisp_Object **mapptr)
   return i;
 }
 
+/* Return the offset of POSITION, a click position, in the style of
+   the respective argument of Fkey_binding.  */
+static ptrdiff_t
+click_position (Lisp_Object position)
+{
+  EMACS_INT pos = (INTEGERP (position) ? XINT (position)
+		   : MARKERP (position) ? marker_position (position)
+		   : PT);
+  if (! (BEGV <= pos && pos <= ZV))
+    args_out_of_range (Fcurrent_buffer (), position);
+  return pos;
+}
+
 DEFUN ("current-active-maps", Fcurrent_active_maps, Scurrent_active_maps,
        0, 2, 0,
        doc: /* Return a list of the currently active keymaps.
@@ -1535,7 +1548,7 @@ OLP if non-nil indicates that we should obey `overriding-local-map' and
 like in the respective argument of `key-binding'. */)
   (Lisp_Object olp, Lisp_Object position)
 {
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
 
   Lisp_Object keymaps = Fcons (current_global_map, Qnil);
 
@@ -1582,10 +1595,7 @@ like in the respective argument of `key-binding'. */)
     {
       Lisp_Object *maps;
       int nmaps, i;
-      EMACS_INT pt
-	= INTEGERP (position) ? XINT (position)
-	: MARKERP (position) ? marker_position (position)
-	: PT;
+      ptrdiff_t pt = click_position (position);
       /* This usually returns the buffer's local map,
 	 but that can be overridden by a `local-map' property.  */
       Lisp_Object local_map = get_local_map (pt, current_buffer, Qlocal_map);
@@ -1904,10 +1914,10 @@ accessible_keymaps_1 (Lisp_Object key, Lisp_Object cmd, Lisp_Object args, void *
   while (!NILP (tem = Frassq (cmd, maps)))
     {
       Lisp_Object prefix = XCAR (tem);
-      int lim = XINT (Flength (XCAR (tem)));
+      ptrdiff_t lim = XINT (Flength (XCAR (tem)));
       if (lim <= XINT (Flength (thisseq)))
 	{ /* This keymap was already seen with a smaller prefix.  */
-	  int i = 0;
+	  ptrdiff_t i = 0;
 	  while (i < lim && EQ (Faref (prefix, make_number (i)),
 				Faref (thisseq, make_number (i))))
 	    i++;
@@ -1960,7 +1970,7 @@ then the value includes only maps for prefixes that start with PREFIX.  */)
   (Lisp_Object keymap, Lisp_Object prefix)
 {
   Lisp_Object maps, tail;
-  int prefixlen = XINT (Flength (prefix));
+  EMACS_INT prefixlen = XFASTINT (Flength (prefix));
 
   /* no need for gcpro because we don't autoload any keymaps.  */
 
@@ -2043,24 +2053,30 @@ static Lisp_Object Qsingle_key_description, Qkey_description;
 DEFUN ("key-description", Fkey_description, Skey_description, 1, 2, 0,
        doc: /* Return a pretty description of key-sequence KEYS.
 Optional arg PREFIX is the sequence of keys leading up to KEYS.
-Control characters turn into "C-foo" sequences, meta into "M-foo",
-spaces are put between sequence elements, etc.  */)
+For example, [?\C-x ?l] is converted into the string \"C-x l\".
+
+The `kbd' macro is an approximate inverse of this.  */)
   (Lisp_Object keys, Lisp_Object prefix)
 {
-  int len = 0;
-  int i, i_byte;
+  ptrdiff_t len = 0;
+  EMACS_INT i;
+  ptrdiff_t i_byte;
   Lisp_Object *args;
-  int size = XINT (Flength (keys));
+  EMACS_INT size = XINT (Flength (keys));
   Lisp_Object list;
   Lisp_Object sep = build_string (" ");
   Lisp_Object key;
+  Lisp_Object result;
   int add_meta = 0;
+  USE_SAFE_ALLOCA;
 
   if (!NILP (prefix))
     size += XINT (Flength (prefix));
 
   /* This has one extra element at the end that we don't pass to Fconcat.  */
-  args = (Lisp_Object *) alloca (size * 4 * sizeof (Lisp_Object));
+  if (min (PTRDIFF_MAX, SIZE_MAX) / sizeof (Lisp_Object) / 4 < size)
+    memory_full (SIZE_MAX);
+  SAFE_ALLOCA_LISP (args, size * 4);
 
   /* In effect, this computes
      (mapconcat 'single-key-description keys " ")
@@ -2076,11 +2092,14 @@ spaces are put between sequence elements, etc.  */)
       if (add_meta)
 	{
 	  args[len] = Fsingle_key_description (meta_prefix_char, Qnil);
-	  len += 2;
+	  result = Fconcat (len + 1, args);
 	}
       else if (len == 0)
-	return empty_unibyte_string;
-      return Fconcat (len - 1, args);
+	result = empty_unibyte_string;
+      else
+	result = Fconcat (len - 1, args);
+      SAFE_FREE ();
+      return result;
     }
 
   if (STRINGP (list))
@@ -2375,9 +2394,15 @@ around function keys and event symbols.  */)
   if (CONSP (key) && lucid_event_type_list_p (key))
     key = Fevent_convert_list (key);
 
+  if (CONSP (key) && INTEGERP (XCAR (key)) && INTEGERP (XCDR (key)))
+    /* An interval from a map-char-table.  */
+    return concat3 (Fsingle_key_description (XCAR (key), no_angles),
+		    build_string (".."),
+		    Fsingle_key_description (XCDR (key), no_angles));
+
   key = EVENT_HEAD (key);
 
-  if (INTEGERP (key))		/* Normal character */
+  if (INTEGERP (key))		/* Normal character.  */
     {
       char tem[KEY_DESCRIPTION_SIZE], *p;
 
@@ -2385,7 +2410,7 @@ around function keys and event symbols.  */)
       *p = 0;
       return make_specified_string (tem, -1, p - tem, 1);
     }
-  else if (SYMBOLP (key))	/* Function key or event-symbol */
+  else if (SYMBOLP (key))	/* Function key or event-symbol.  */
     {
 
       /* To Do:
@@ -2454,7 +2479,7 @@ See Info node `(elisp)Describing Characters' for examples.  */)
   char str[6];
   int c;
 
-  CHECK_NUMBER (character);
+  CHECK_CHARACTER (character);
 
   c = XINT (character);
   if (!ASCII_CHAR_P (c))
@@ -2477,8 +2502,8 @@ static int where_is_preferred_modifier;
 static int
 preferred_sequence_p (Lisp_Object seq)
 {
-  int i;
-  int len = XINT (Flength (seq));
+  EMACS_INT i;
+  EMACS_INT len = XFASTINT (Flength (seq));
   int result = 1;
 
   for (i = 0; i < len; i++)
@@ -2657,7 +2682,8 @@ where_is_internal (Lisp_Object definition, Lisp_Object keymaps,
 DEFUN ("where-is-internal", Fwhere_is_internal, Swhere_is_internal, 1, 5, 0,
        doc: /* Return list of keys that invoke DEFINITION.
 If KEYMAP is a keymap, search only KEYMAP and the global keymap.
-If KEYMAP is nil, search all the currently active keymaps.
+If KEYMAP is nil, search all the currently active keymaps, except
+ for `overriding-local-map' (which is ignored).
 If KEYMAP is a list of keymaps, search only those keymaps.
 
 If optional 3rd arg FIRSTONLY is non-nil, return the first key sequence found,
@@ -2672,9 +2698,17 @@ If optional 4th arg NOINDIRECT is non-nil, don't follow indirections
 to other keymaps or slots.  This makes it possible to search for an
 indirect definition itself.
 
-If optional 5th arg NO-REMAP is non-nil, don't search for key sequences
-that invoke a command which is remapped to DEFINITION, but include the
-remapped command in the returned list.  */)
+The optional 5th arg NO-REMAP alters how command remapping is handled:
+
+- If another command OTHER-COMMAND is remapped to DEFINITION, normally
+  search for the bindings of OTHER-COMMAND and include them in the
+  returned list.  But if NO-REMAP is non-nil, include the vector
+  [remap OTHER-COMMAND] in the returned list instead, without
+  searching for those other bindings.
+
+- If DEFINITION is remapped to OTHER-COMMAND, normally return the
+  bindings for OTHER-COMMAND.  But if NO-REMAP is non-nil, return the
+  bindings for DEFINITION instead, ignoring its remapping.  */)
   (Lisp_Object definition, Lisp_Object keymap, Lisp_Object firstonly, Lisp_Object noindirect, Lisp_Object no_remap)
 {
   /* The keymaps in which to search.  */
@@ -3195,7 +3229,7 @@ static void
 describe_command (Lisp_Object definition, Lisp_Object args)
 {
   register Lisp_Object tem1;
-  EMACS_INT column = current_column ();
+  ptrdiff_t column = current_column ();
   int description_column;
 
   /* If column 16 is no good, go to col 32;
@@ -3478,7 +3512,7 @@ This is text showing the elements of vector matched against indices.
 DESCRIBER is the output function used; nil means use `princ'.  */)
   (Lisp_Object vector, Lisp_Object describer)
 {
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   if (NILP (describer))
     describer = intern ("princ");
   specbind (Qstandard_output, Fcurrent_buffer ());

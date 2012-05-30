@@ -1,6 +1,6 @@
 ;;; flymake.el -- a universal on-the-fly syntax checker
 
-;; Copyright (C) 2003-2012  Free Software Foundation, Inc.
+;; Copyright (C) 2003-2012 Free Software Foundation, Inc.
 
 ;; Author:  Pavel Kobyakov <pk_at_work@yahoo.com>
 ;; Maintainer: Pavel Kobyakov <pk_at_work@yahoo.com>
@@ -253,7 +253,7 @@ are the string substitutions (see `format')."
 (make-variable-buffer-local 'flymake-output-residual)
 
 (defgroup flymake nil
-  "A universal on-the-fly syntax checker."
+  "Universal on-the-fly syntax checker."
   :version "23.1"
   :group 'tools)
 
@@ -1331,9 +1331,10 @@ For the format of LINE-ERR-INFO, see `flymake-ler-make-ler'."
 
 ;;;###autoload
 (define-minor-mode flymake-mode
-  "Minor mode to do on-the-fly syntax checking.
-When called interactively, toggles the minor mode.
-With arg, turn Flymake mode on if and only if arg is positive."
+  "Toggle on-the-fly syntax checking.
+With a prefix argument ARG, enable the mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode
+if ARG is omitted or nil."
   :group 'flymake :lighter flymake-mode-line
   (cond
 
@@ -1355,8 +1356,12 @@ With arg, turn Flymake mode on if and only if arg is positive."
       (setq flymake-timer
             (run-at-time nil 1 'flymake-on-timer-event (current-buffer)))
 
-      (when flymake-start-syntax-check-on-find-file
-        (flymake-start-syntax-check)))))
+      (when (and flymake-start-syntax-check-on-find-file
+                 ;; Since we write temp files in current dir, there's no point
+                 ;; trying if the directory is read-only (bug#8954).
+                 (file-writable-p (file-name-directory buffer-file-name)))
+        (with-demoted-errors
+          (flymake-start-syntax-check))))))
 
    ;; Turning the mode OFF.
    (t

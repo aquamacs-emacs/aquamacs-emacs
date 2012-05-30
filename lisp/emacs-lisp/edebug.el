@@ -1,6 +1,6 @@
 ;;; edebug.el --- a source-level debugger for Emacs Lisp
 
-;; Copyright (C) 1988-1995, 1997, 1999-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1988-1995, 1997, 1999-2012 Free Software Foundation, Inc.
 
 ;; Author: Daniel LaLiberte <liberte@holonexus.org>
 ;; Maintainer: FSF
@@ -191,6 +191,7 @@ Use this with caution since it is not debugged."
 
 (defcustom edebug-unwrap-results nil
   "Non-nil if Edebug should unwrap results of expressions.
+That is, Edebug will try to remove its own instrumentation from the result.
 This is useful when debugging macros where the results of expressions
 are instrumented expressions.  But don't do this when results might be
 circular or an infinite loop will result."
@@ -526,6 +527,7 @@ the minibuffer."
            (setq face-new-frame-defaults
                  (assq-delete-all (nth 1 form) face-new-frame-defaults))
            (put (nth 1 form) 'face-defface-spec nil)
+           (put (nth 1 form) 'face-documentation (nth 3 form))
 	   ;; See comments in `eval-defun-1' for purpose of code below
 	   (setq form (prog1 `(prog1 ,form
 				(put ',(nth 1 form) 'saved-face
@@ -1937,7 +1939,6 @@ expressions; a `progn' form will be returned enclosing these forms."
 
 ;;;; Edebug Form Specs
 ;;; ==========================================================
-;;; See cl-specs.el for common lisp specs.
 
 ;;;;* Spec for def-edebug-spec
 ;;; Out of date.
@@ -2010,12 +2011,6 @@ expressions; a `progn' form will be returned enclosing these forms."
 ;; A macro is allowed by Emacs.
 (def-edebug-spec function (&or symbolp lambda-expr))
 
-;; lambda is a macro in emacs 19.
-(def-edebug-spec lambda (&define lambda-list
-				 [&optional stringp]
-				 [&optional ("interactive" interactive)]
-				 def-body))
-
 ;; A macro expression is a lambda expression with "macro" prepended.
 (def-edebug-spec macro (&define "lambda" lambda-list def-body))
 
@@ -2028,7 +2023,10 @@ expressions; a `progn' form will be returned enclosing these forms."
 (def-edebug-spec apply (function-form &rest form))
 (def-edebug-spec funcall (function-form &rest form))
 
-;; FIXME? The manual has a gate here.
+;; FIXME?  The manual uses this form (maybe that's just for illustration?):
+;; (def-edebug-spec let
+;;   ((&rest &or symbolp (gate symbolp &optional form))
+;;    body))
 (def-edebug-spec let
   ((&rest &or (symbolp &optional form) symbolp)
    body))
@@ -3740,7 +3738,7 @@ This prints the value into current buffer."
 
 ;; FIXME eh?
 (defvar gud-inhibit-global-bindings
-  "*Non-nil means don't do global rebindings of C-x C-a subcommands.")
+  "Non-nil means don't do global rebindings of C-x C-a subcommands.")
 
 ;; Global GUD bindings for all emacs-lisp-mode buffers.
 (unless gud-inhibit-global-bindings
@@ -4157,6 +4155,8 @@ You must include newlines in FMT to break lines, but one newline is appended."
 ;;; Frequency count and coverage
 
 ;; FIXME should this use overlays instead?
+;; Definitely, IMO.  The current business with undo in
+;; edebug-temp-display-freq-count is horrid.
 (defun edebug-display-freq-count ()
   "Display the frequency count data for each line of the current definition.
 The frequency counts are inserted as comment lines after each line,
@@ -4226,6 +4226,8 @@ reinstrument it."
 	(insert "\n")
 	(setq i first-index)))))
 
+;; FIXME this does not work very well.  Eg if you press an arrow key,
+;; or make a mouse-click, it fails with "Non-character input-event".
 (defun edebug-temp-display-freq-count ()
   "Temporarily display the frequency count data for the current definition.
 It is removed when you hit any char."
@@ -4235,6 +4237,7 @@ It is removed when you hit any char."
     (undo-boundary)
     (edebug-display-freq-count)
     (setq unread-command-char (read-char))
+    ;; Yuck!  This doesn't seem to work at all for me.
     (undo)))
 
 
@@ -4427,13 +4430,6 @@ With prefix argument, make it a temporary breakpoint."
 
 
 ;;; Autoloading of Edebug accessories
-
-(if (featurep 'cl)
-    (add-hook 'edebug-setup-hook
-	      (function (lambda () (require 'cl-specs))))
-  ;; The following causes cl-specs to be loaded if you load cl.el.
-  (add-hook 'cl-load-hook
-	    (function (lambda () (require 'cl-specs)))))
 
 ;; edebug-cl-read and cl-read are available from liberte@cs.uiuc.edu
 (if (featurep 'cl-read)

@@ -74,11 +74,14 @@ If Emacs lacks asynchronous process support, this hook is run
 after `call-process' inserts the grep output into the buffer.")
 
 (defvar compilation-filter-start nil
-  "Start of the text inserted by `compilation-filter'.
-This is bound to a buffer position before running `compilation-filter-hook'.")
+  "Position of the start of the text inserted by `compilation-filter'.
+This is bound before running `compilation-filter-hook'.")
 
 (defvar compilation-first-column 1
-  "*This is how compilers number the first column, usually 1 or 0.")
+  "This is how compilers number the first column, usually 1 or 0.
+If this is buffer-local in the destination buffer, Emacs obeys
+that value, otherwise it uses the value in the *compilation*
+buffer.  This enables a major-mode to specify its own value.")
 
 (defvar compilation-parse-errors-filename-function nil
   "Function to call to post-process filenames while parsing error messages.
@@ -87,7 +90,7 @@ in the compilation output, and should return a transformed file name.")
 
 ;;;###autoload
 (defvar compilation-process-setup-function nil
-  "*Function to call to customize the compilation process.
+  "Function to call to customize the compilation process.
 This function is called immediately before the compilation process is
 started.  It can be used to set any variables or functions that are used
 while processing the output of the compilation process.")
@@ -206,7 +209,7 @@ of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
     ;; due to matching filenames via \\(.*?\\).  This might be faster.
     (maven
      ;; Maven is a popular free software build tool for Java.
-     "\\([0-9]*[^0-9\n]\\(?:[^\n :]\\| [^-/\n]\\|:[^ \n]\\)*?\\):\\[\\([0-9]+\\),\\([0-9]+\\)\\] " 1 2 3)
+     "\\([^ \n]\\(?:[^\n :]\\| [^-/\n]\\|:[^ \n]\\)*?\\):\\[\\([0-9]+\\),\\([0-9]+\\)\\] " 1 2 3)
 
     (jikes-line
      "^ *\\([0-9]+\\)\\.[ \t]+.*\n +\\(<-*>\n\\*\\*\\* \\(?:Error\\|Warnin\\(g\\)\\)\\)"
@@ -547,7 +550,10 @@ Otherwise they are interpreted as character positions, with
 each character occupying one column.
 The default is to use screen columns, which requires that the compilation
 program and Emacs agree about the display width of the characters,
-especially the TAB character."
+especially the TAB character.
+If this is buffer-local in the destination buffer, Emacs obeys
+that value, otherwise it uses the value in the *compilation*
+buffer.  This enables a major-mode to specify its own value."
   :type 'boolean
   :group 'compilation
   :version "20.4")
@@ -627,7 +633,7 @@ This only affects platforms that support asynchronous processes (see
 (defvar compilation-locs ())
 
 (defvar compilation-debug nil
-  "*Set this to t before creating a *compilation* buffer.
+  "Set this to t before creating a *compilation* buffer.
 Then every error line will have a debug text property with the matcher that
 fit this line and the match data.  Use `describe-text-properties'.")
 
@@ -733,7 +739,7 @@ Faces `compilation-error-face', `compilation-warning-face',
 ;; (make-variable-buffer-local 'compilation-buffer-modtime)
 
 (defvar compilation-skip-to-next-location t
-  "*If non-nil, skip multiple error messages for the same source location.")
+  "If non-nil, skip multiple error messages for the same source location.")
 
 (defcustom compilation-skip-threshold 1
   "Compilation motion commands skip less important messages.
@@ -1058,17 +1064,18 @@ FMTS is a list of format specs for transforming the file name.
 	 (marker
           (if marker-line (compilation--loc->marker (cadr marker-line))))
 	 (screen-columns compilation-error-screen-columns)
+	 (first-column compilation-first-column)
 	 end-marker loc end-loc)
     (if (not (and marker (marker-buffer marker)))
 	(setq marker nil)		; no valid marker for this file
-      (setq loc (or line 1))		; normalize no linenumber to line 1
+      (unless line (setq line 1))       ; normalize no linenumber to line 1
       (catch 'marker			; find nearest loc, at least one exists
 	(dolist (x (cddr (compilation--file-struct->loc-tree
                           file-struct)))	; Loop over remaining lines.
-	  (if (> (car x) loc)		; Still bigger.
+	  (if (> (car x) line)		; Still bigger.
 	      (setq marker-line x)
-	    (if (> (- (or (car marker-line) 1) loc)
-		   (- loc (car x)))	; Current line is nearer.
+	    (if (> (- (or (car marker-line) 1) line)
+		   (- line (car x)))	; Current line is nearer.
 		(setq marker-line x))
 	    (throw 'marker t))))
       (setq marker (compilation--loc->marker (cadr marker-line))
@@ -1078,20 +1085,23 @@ FMTS is a list of format specs for transforming the file name.
                ;; Obey the compilation-error-screen-columns of the target
                ;; buffer if its major mode set it buffer-locally.
                (if (local-variable-p 'compilation-error-screen-columns)
-                   compilation-error-screen-columns screen-columns)))
+                   compilation-error-screen-columns screen-columns))
+	      (compilation-first-column
+               (if (local-variable-p 'compilation-first-column)
+                   compilation-first-column first-column)))
           (save-excursion
 	  (save-restriction
 	    (widen)
 	    (goto-char (marker-position marker))
-	    (when (or end-col end-line)
+	    ;; Set end-marker if appropriate and go to line.
+	    (if (not (or end-col end-line))
+		(beginning-of-line (- line marker-line -1))
 	      (beginning-of-line (- (or end-line line) marker-line -1))
 	      (if (or (null end-col) (< end-col 0))
 		  (end-of-line)
 		(compilation-move-to-column end-col screen-columns))
-	      (setq end-marker (point-marker)))
-	    (beginning-of-line (if end-line
-				   (- line end-line -1)
-				 (- loc marker-line -1)))
+	      (setq end-marker (point-marker))
+	      (when end-line (beginning-of-line (- line end-line -1))))
 	    (if col
 		(compilation-move-to-column col screen-columns)
 	      (forward-to-indentation 0))
@@ -1874,6 +1884,9 @@ Runs `compilation-mode-hook' with `run-mode-hooks' (which see).
   (setq buffer-read-only t)
   (run-mode-hooks 'compilation-mode-hook))
 
+;;;###autoload
+(put 'define-compilation-mode 'doc-string-elt 3)
+
 (defmacro define-compilation-mode (mode name doc &rest body)
   "This is like `define-derived-mode' without the PARENT argument.
 The parent is always `compilation-mode' and the customizable `compilation-...'
@@ -2122,14 +2135,14 @@ and runs `compilation-filter-hook'."
 	   (if (or (eq (get-text-property ,limit 'compilation-message)
 		       (get-text-property opt 'compilation-message))
 		   (eq pt opt))
-	       (error ,error compilation-error)
+	       (user-error ,error compilation-error)
 	     (setq pt ,limit)))
        ;; prop 'compilation-message usually has 2 changes, on and off, so
        ;; re-search if off
        (or (setq msg (get-text-property pt 'compilation-message))
 	   (if (setq pt (,property-change pt 'compilation-message nil ,limit))
 	       (setq msg (get-text-property pt 'compilation-message)))
-	   (error ,error compilation-error))
+	   (user-error ,error compilation-error))
        (or (< (compilation--message->type msg) compilation-skip-threshold)
 	   (if different-file
 	       (eq (prog1 last
@@ -2271,6 +2284,7 @@ This is the value of `next-error-function' in Compilation buffers."
   (when reset
     (setq compilation-current-error nil))
   (let* ((screen-columns compilation-error-screen-columns)
+	 (first-column compilation-first-column)
 	 (last 1)
 	 (msg (compilation-next-error (or n 1) nil
 				      (or compilation-current-error
@@ -2309,7 +2323,10 @@ This is the value of `next-error-function' in Compilation buffers."
                ;; Obey the compilation-error-screen-columns of the target
                ;; buffer if its major mode set it buffer-locally.
                (if (local-variable-p 'compilation-error-screen-columns)
-                   compilation-error-screen-columns screen-columns)))
+                   compilation-error-screen-columns screen-columns))
+              (compilation-first-column
+               (if (local-variable-p 'compilation-first-column)
+                   compilation-first-column first-column)))
           (save-restriction
             (widen)
             (goto-char (point-min))
@@ -2645,9 +2662,6 @@ The file-structure looks like this:
     (maphash (lambda (k v)
                (if (eq v fs) (remhash k compilation-locs)))
              compilation-locs)))
-
-(add-to-list 'debug-ignored-errors "\\`No more [-a-z ]+s yet\\'")
-(add-to-list 'debug-ignored-errors "\\`Moved past last .*")
 
 ;;; Compatibility with the old compile.el.
 

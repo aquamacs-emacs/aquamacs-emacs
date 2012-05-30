@@ -245,7 +245,11 @@ List has a form of (file-name full-file-name (attribute-list))."
 			     " (default now): "
 			   ": ")))
 	 (new-attribute (dired-mark-read-string prompt nil op-symbol
-						arg files default))
+						arg files default
+						(cond ((eq op-symbol 'chown)
+						       (system-users))
+						      ((eq op-symbol 'chgrp)
+						       (system-groups)))))
 	 (operation (concat program " " new-attribute))
 	 failures)
     (setq failures
@@ -385,7 +389,7 @@ Uses the shell command coming from variables `lpr-command' and
     (dired-run-shell-command (dired-shell-stuff-it command file-list nil))))
 
 (defun dired-mark-read-string (prompt initial op-symbol arg files
-			       &optional default-value)
+			       &optional default-value collection)
   "Read args for a Dired marked-files command, prompting with PROMPT.
 Return the user input (a string).
 
@@ -397,11 +401,14 @@ FILES should be a list of file names.
 DEFAULT-VALUE, if non-nil, should be a \"standard\" value or list
 of such values, available via history commands.  Note that if the
 user enters empty input, this function returns the empty string,
-not DEFAULT-VALUE."
+not DEFAULT-VALUE.
+
+Optional argument COLLECTION is a collection of possible completions,
+suitable for use by `completing-read'."
   (dired-mark-pop-up nil op-symbol files
-		     'read-from-minibuffer
+		     'completing-read
 		     (format prompt (dired-mark-prompt arg files))
-		     initial nil nil nil default-value))
+		     collection nil nil initial nil default-value nil))
 
 ;;; Cleaning a directory: flagging some backups for deletion.
 
@@ -576,8 +583,11 @@ file name added at the end of COMMAND (separated by a space).
 
 `*' and `?' when not surrounded by whitespace have no special
 significance for `dired-do-shell-command', and are passed through
-normally to the shell, but you must confirm first.  To pass `*' by
-itself to the shell as a wildcard, type `*\"\"'.
+normally to the shell, but you must confirm first.
+
+If you want to use `*' as a shell wildcard with whitespace around
+it, write `*\"\"' in place of just `*'.  This is equivalent to just
+`*' in the shell, but avoids Dired's special handling.
 
 If COMMAND produces output, it goes to a separate buffer.
 
@@ -605,16 +615,16 @@ can be produced by `dired-get-marked-files', for example."
       current-prefix-arg
       files)))
   (let* ((on-each (not (string-match dired-star-subst-regexp command)))
-	 (subst (not (string-match dired-quark-subst-regexp command)))
-	 (star (not (string-match "\\*" command)))
-	 (qmark (not (string-match "\\?" command))))
+	 (no-subst (not (string-match dired-quark-subst-regexp command)))
+	 (star (string-match "\\*" command))
+	 (qmark (string-match "\\?" command)))
     ;; Get confirmation for wildcards that may have been meant
     ;; to control substitution of a file name or the file name list.
-    (if (cond ((not (or on-each subst))
+    (if (cond ((not (or on-each no-subst))
 	       (error "You can not combine `*' and `?' substitution marks"))
-	      ((and star (not on-each))
+	      ((and star on-each)
 	       (y-or-n-p "Confirm--do you mean to use `*' as a wildcard? "))
-	      ((and qmark (not subst))
+	      ((and qmark no-subst)
 	       (y-or-n-p "Confirm--do you mean to use `?' as a wildcard? "))
 	      (t))
 	(if on-each
@@ -1261,6 +1271,9 @@ Special value `always' suppresses confirmation."
 
 (defun dired-copy-file-recursive (from to ok-flag &optional
 				       preserve-time top recursive)
+  (when (and (eq t (car (file-attributes from)))
+	     (file-in-directory-p to from))
+    (error "Cannot copy `%s' into its subdirectory `%s'" from to))
   (let ((attrs (file-attributes from)))
     (if (and recursive
 	     (eq t (car attrs))
@@ -1427,10 +1440,32 @@ ESC or `q' to not overwrite any of the remaining files,
                   (cond  ((integerp marker-char) marker-char)
                          (marker-char (dired-file-marker from)) ; slow
                          (t nil))))
-	    (when (and (file-directory-p from)
-		       (file-directory-p to)
-		       (eq file-creator 'dired-copy-file))
-	      (setq to (file-name-directory to)))
+            ;; Handle the `dired-copy-file' file-creator specially
+            ;; When copying a directory to another directory or
+            ;; possibly to itself or one of its subdirectories.
+            ;; e.g "~/foo/" => "~/test/"
+            ;; or "~/foo/" =>"~/foo/"
+            ;; or "~/foo/ => ~/foo/bar/")
+            ;; In this case the 'name-constructor' have set the destination
+            ;; TO to "~/test/foo" because the old emacs23 behavior
+            ;; of `copy-directory' was to not create the subdirectory
+            ;; and instead copy the contents.
+            ;; With the new behavior of `copy-directory'
+            ;; (similar to the `cp' shell command) we don't
+            ;; need such a construction of the target directory,
+            ;; so modify the destination TO to "~/test/" instead of "~/test/foo/".
+            (let ((destname (file-name-directory to)))
+              (when (and (file-directory-p from)
+                         (file-directory-p to)
+                         (eq file-creator 'dired-copy-file))
+                (setq to destname))
+	      ;; If DESTNAME is a subdirectory of FROM, not a symlink,
+	      ;; and the method in use is copying, signal an error.
+	      (and (eq t (car (file-attributes destname)))
+		   (eq file-creator 'dired-copy-file)
+		   (file-in-directory-p destname from)
+		   (error "Cannot copy `%s' into its subdirectory `%s'"
+			  from to)))
             (condition-case err
                 (progn
                   (funcall file-creator from to dired-overwrite-confirmed)

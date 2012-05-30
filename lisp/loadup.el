@@ -83,18 +83,17 @@
 ;; implemented in subr.el.
 (add-hook 'after-load-functions (lambda (f) (garbage-collect)))
 
-;; We specify .el in case someone compiled version.el by mistake.
-(load "version.el")
+(load "version")
 
 (load "widget")
 (load "custom")
 (load "emacs-lisp/map-ynp")
-(load "cus-start")
 (load "international/mule")
 (load "international/mule-conf")
 (load "env")
 (load "format")
 (load "bindings")
+(load "cus-start")
 (load "window")  ; Needed here for `replace-buffer-in-windows'.
 (setq load-source-file-function 'load-with-code-conversion)
 (load "files")
@@ -179,7 +178,7 @@
 (load "rfn-eshadow")
 
 (load "menu-bar")
-(load "paths.el")  ;Don't get confused if someone compiled paths by mistake.
+(load "paths")
 (load "emacs-lisp/lisp")
 (load "textmodes/page")
 (load "register")
@@ -187,13 +186,17 @@
 (load "emacs-lisp/lisp-mode")
 (load "textmodes/text-mode")
 (load "textmodes/fill")
+(load "newcomment")
 
 (load "replace")
+(load "emacs-lisp/tabulated-list")
 (load "buff-menu")
 
 (if (fboundp 'x-create-frame)
     (progn
       (load "fringe")
+      ;; Needed by `imagemagick-register-types'
+      (load "emacs-lisp/regexp-opt")
       (load "image")
       (load "international/fontset")
       (load "dnd")
@@ -260,6 +263,8 @@
 	   (versions (mapcar (function (lambda (name)
 					 (string-to-number (substring name (length base)))))
 			     files)))
+      (setq emacs-bzr-version (condition-case nil (emacs-bzr-get-version)
+                              (error nil)))
       ;; `emacs-version' is a constant, so we shouldn't change it with `setq'.
       (defconst emacs-version
 	(format "%s.%d"

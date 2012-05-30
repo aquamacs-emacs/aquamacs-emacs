@@ -1141,12 +1141,6 @@ the field."
 	(kill-region (point) end)
       (call-interactively 'kill-line))))
 
-(defcustom widget-complete-field (lookup-key global-map "\M-\t")
-  "Default function to call for completion inside fields."
-  :options '(ispell-complete-word complete-tag lisp-complete-symbol)
-  :type 'function
-  :group 'widgets)
-
 (defun widget-narrow-to-field ()
   "Narrow to field."
   (interactive)
@@ -1169,10 +1163,6 @@ When not inside a field, signal an error."
         (completion-in-region (nth 0 data) (nth 1 data) (nth 2 data)
                               (plist-get completion-extra-properties
                                          :predicate))))
-     ((widget-field-find (point))
-      ;; This defaulting used to be performed in widget-default-complete, but
-      ;; it seems more appropriate here than in widget-default-completions.
-      (call-interactively 'widget-complete-field))
      (t
       (error "Not in an editable field")))))
 ;; We may want to use widget completion in buffers where the major mode
@@ -1987,10 +1977,14 @@ the earlier input."
     (when (overlayp overlay)
       (delete-overlay overlay))))
 
-(defun widget-field-value-get (widget)
-  "Return current text in editing field."
+(defun widget-field-value-get (widget &optional no-truncate)
+  "Return current text in editing field.
+Normally, trailing spaces within the editing field are truncated.
+But if NO-TRUNCATE is non-nil, include them."
   (let ((from (widget-field-start widget))
-	(to (widget-field-text-end widget))
+	(to   (if no-truncate
+		  (widget-field-end widget)
+		(widget-field-text-end widget)))
 	(buffer (widget-field-buffer widget))
 	(secret (widget-get widget :secret))
 	(old (current-buffer)))
@@ -2913,15 +2907,7 @@ link for that string."
 	      (push (widget-convert-button widget-documentation-link-type
 					   begin end :value name)
 		    buttons)))))
-      (widget-put widget :buttons buttons)))
-  (let ((indent (widget-get widget :indent)))
-    (when (and indent (not (zerop indent)))
-      (save-excursion
-	(save-restriction
-	  (narrow-to-region from to)
-	  (goto-char (point-min))
-	  (while (search-forward "\n" nil t)
-	    (insert-char ?\s indent)))))))
+      (widget-put widget :buttons buttons))))
 
 ;;; The `documentation-string' Widget.
 
@@ -2940,10 +2926,9 @@ link for that string."
 	(start (point)))
     (if (string-match "\n" doc)
 	(let ((before (substring doc 0 (match-beginning 0)))
-	      (after (substring doc (match-beginning 0)))
-	      button)
-	  (when (and indent (not (zerop indent)))
-	    (insert-char ?\s indent))
+	      (after (substring doc (match-end 0)))
+	      button end)
+	  (widget-documentation-string-indent-to indent)
 	  (insert before ?\s)
 	  (widget-documentation-link-add widget start (point))
 	  (setq button
@@ -2956,17 +2941,34 @@ link for that string."
 		 :action 'widget-parent-action
 		 shown))
 	  (when shown
+	    (insert ?\n)
 	    (setq start (point))
 	    (when (and indent (not (zerop indent)))
 	      (insert-char ?\s indent))
 	    (insert after)
-	    (widget-documentation-link-add widget start (point)))
+	    (setq end (point))
+	    (widget-documentation-link-add widget start end)
+	    ;; Indent the subsequent lines.
+	    (when (and indent (> indent 0))
+	      (save-excursion
+		(save-restriction
+		  (narrow-to-region start end)
+		  (goto-char (point-min))
+		  (while (search-forward "\n" nil t)
+		    (widget-documentation-string-indent-to indent))))))
 	  (widget-put widget :buttons (list button)))
-      (when (and indent (not (zerop indent)))
-	(insert-char ?\s indent))
+      (widget-documentation-string-indent-to indent)
       (insert doc)
       (widget-documentation-link-add widget start (point))))
   (insert ?\n))
+
+(defun widget-documentation-string-indent-to (col)
+  (when (and (numberp col)
+	     (> col 0))
+    (let ((opoint (point)))
+      (indent-to col)
+      (put-text-property opoint (point)
+      			 'display `(space :align-to ,col)))))
 
 (defun widget-documentation-string-action (widget &rest _ignore)
   ;; Toggle documentation.
@@ -3407,6 +3409,7 @@ To use this type, you must define :match or :match-alternatives."
   :format "%{%t%}: %v\n"
   :valid-regexp "\\`.\\'"
   :error "This field should contain a single character"
+  :value-get (lambda (w) (widget-field-value-get w t))
   :value-to-internal (lambda (_widget value)
 		       (if (stringp value)
 			   value

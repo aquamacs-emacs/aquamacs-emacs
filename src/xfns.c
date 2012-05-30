@@ -136,7 +136,7 @@ char *gray_bitmap_bits = gray_bits;
 
 /* Nonzero if using X.  */
 
-static int x_in_use;
+int x_in_use;
 
 static Lisp_Object Qnone;
 static Lisp_Object Qsuppress_icon;
@@ -1200,7 +1200,7 @@ x_set_menu_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
 
-  if (INTEGERP (value))
+  if (TYPE_RANGED_INTEGERP (int, value))
     nlines = XINT (value);
   else
     nlines = 0;
@@ -1286,8 +1286,8 @@ x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
 
-  /* Use VALUE only if an integer >= 0.  */
-  if (INTEGERP (value) && XINT (value) >= 0)
+  /* Use VALUE only if an int >= 0.  */
+  if (RANGED_INTEGERP (0, value, INT_MAX))
     nlines = XFASTINT (value);
   else
     nlines = 0;
@@ -2439,7 +2439,6 @@ x_window (struct frame *f, long window_prompting, int minibuffer_only)
 
   /* Do some needed geometry management.  */
   {
-    ptrdiff_t len;
     char *tem, shell_position[sizeof "=x++" + 4 * INT_STRLEN_BOUND (int)];
     Arg gal[10];
     int gac = 0;
@@ -2508,13 +2507,11 @@ x_window (struct frame *f, long window_prompting, int minibuffer_only)
         }
     }
 
-    len = strlen (shell_position) + 1;
     /* We don't free this because we don't know whether
        it is safe to free it while the frame exists.
        It isn't worth the trouble of arranging to free it
        when the frame is deleted.  */
-    tem = (char *) xmalloc (len);
-    strncpy (tem, shell_position, len);
+    tem = (char *) xstrdup (shell_position);
     XtSetArg (gal[gac], XtNgeometry, tem); gac++;
     XtSetValues (shell_widget, gal, gac);
   }
@@ -2787,8 +2784,8 @@ x_icon (struct frame *f, Lisp_Object parms)
   icon_y = x_frame_get_and_record_arg (f, parms, Qicon_top, 0, 0, RES_TYPE_NUMBER);
   if (!EQ (icon_x, Qunbound) && !EQ (icon_y, Qunbound))
     {
-      CHECK_NUMBER (icon_x);
-      CHECK_NUMBER (icon_y);
+      CHECK_TYPE_RANGED_INTEGER (int, icon_x);
+      CHECK_TYPE_RANGED_INTEGER (int, icon_y);
     }
   else if (!EQ (icon_x, Qunbound) || !EQ (icon_y, Qunbound))
     error ("Both left and top icon corners of icon must be specified");
@@ -2949,6 +2946,12 @@ unwind_create_frame (Lisp_Object frame)
   return Qnil;
 }
 
+static Lisp_Object
+unwind_create_frame_1 (Lisp_Object val)
+{
+  inhibit_lisp_code = val;
+  return Qnil;
+}
 
 static void
 x_default_font_parameter (struct frame *f, Lisp_Object parms)
@@ -3073,7 +3076,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   int minibuffer_only = 0;
   long window_prompting = 0;
   int width, height;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
   Lisp_Object display;
   struct x_display_info *dpyinfo = NULL;
@@ -3321,17 +3324,30 @@ This function is an internal primitive--use `make-frame' instead.  */)
      happen.  */
   init_frame_faces (f);
 
-  /* The X resources controlling the menu-bar and tool-bar are
-     processed specially at startup, and reflected in the mode
-     variables; ignore them here.  */
-  x_default_parameter (f, parms, Qmenu_bar_lines,
-		       NILP (Vmenu_bar_mode)
-		       ? make_number (0) : make_number (1),
-		       NULL, NULL, RES_TYPE_NUMBER);
-  x_default_parameter (f, parms, Qtool_bar_lines,
-		       NILP (Vtool_bar_mode)
-		       ? make_number (0) : make_number (1),
-		       NULL, NULL, RES_TYPE_NUMBER);
+  /* Set the menu-bar-lines and tool-bar-lines parameters.  We don't
+     look up the X resources controlling the menu-bar and tool-bar
+     here; they are processed specially at startup, and reflected in
+     the values of the mode variables.
+
+     Avoid calling window-configuration-change-hook; otherwise we
+     could get an infloop in next_frame since the frame is not yet in
+     Vframe_list.  */
+  {
+    ptrdiff_t count2 = SPECPDL_INDEX ();
+    record_unwind_protect (unwind_create_frame_1, inhibit_lisp_code);
+    inhibit_lisp_code = Qt;
+
+    x_default_parameter (f, parms, Qmenu_bar_lines,
+			 NILP (Vmenu_bar_mode)
+			 ? make_number (0) : make_number (1),
+			 NULL, NULL, RES_TYPE_NUMBER);
+    x_default_parameter (f, parms, Qtool_bar_lines,
+			 NILP (Vtool_bar_mode)
+			 ? make_number (0) : make_number (1),
+			 NULL, NULL, RES_TYPE_NUMBER);
+
+    unbind_to (count2, Qnil);
+  }
 
   x_default_parameter (f, parms, Qbuffer_predicate, Qnil,
 		       "bufferPredicate", "BufferPredicate",
@@ -4205,11 +4221,11 @@ FRAME.  Default is to change on the edit X window.  */)
   if (! NILP (format))
     {
       CHECK_NUMBER (format);
-      element_format = XFASTINT (format);
 
-      if (element_format != 8 && element_format != 16
-          && element_format != 32)
+      if (XINT (format) != 8 && XINT (format) != 16
+          && XINT (format) != 32)
         error ("FORMAT must be one of 8, 16 or 32");
+      element_format = XINT (format);
     }
 
   if (CONSP (value))
@@ -4567,7 +4583,7 @@ x_create_tip_frame (struct x_display_info *dpyinfo,
   Lisp_Object frame;
   Lisp_Object name;
   int width, height;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3;
   int face_change_count_before = face_change_count;
   Lisp_Object buffer;
@@ -4964,7 +4980,7 @@ Text larger than the specified size is clipped.  */)
   int i, width, height, seen_reversed_p;
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
   int old_windows_or_buffers_changed = windows_or_buffers_changed;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
 
   specbind (Qinhibit_redisplay, Qt);
 
@@ -5074,10 +5090,8 @@ Text larger than the specified size is clipped.  */)
   w->left_col = w->top_line = make_number (0);
 
   if (CONSP (Vx_max_tooltip_size)
-      && INTEGERP (XCAR (Vx_max_tooltip_size))
-      && XINT (XCAR (Vx_max_tooltip_size)) > 0
-      && INTEGERP (XCDR (Vx_max_tooltip_size))
-      && XINT (XCDR (Vx_max_tooltip_size)) > 0)
+      && RANGED_INTEGERP (1, XCAR (Vx_max_tooltip_size), INT_MAX)
+      && RANGED_INTEGERP (1, XCDR (Vx_max_tooltip_size), INT_MAX))
     {
       w->total_cols = XCAR (Vx_max_tooltip_size);
       w->total_lines = XCDR (Vx_max_tooltip_size);
@@ -5223,7 +5237,7 @@ DEFUN ("x-hide-tip", Fx_hide_tip, Sx_hide_tip, 0, 0, 0,
 Value is t if tooltip was open, nil otherwise.  */)
   (void)
 {
-  int count;
+  ptrdiff_t count;
   Lisp_Object deleted, frame, timer;
   struct gcpro gcpro1, gcpro2;
 
@@ -5365,7 +5379,7 @@ Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
   Arg al[10];
   int ac = 0;
   XmString dir_xmstring, pattern_xmstring;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4, gcpro5, gcpro6;
 
   check_x ();
@@ -5534,7 +5548,7 @@ Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
   char *fn;
   Lisp_Object file = Qnil;
   Lisp_Object decoded_file;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4, gcpro5, gcpro6;
   char *cdef_file;
 
@@ -5597,7 +5611,7 @@ If FRAME is omitted or nil, it defaults to the selected frame. */)
   Lisp_Object font_param;
   char *default_name = NULL;
   struct gcpro gcpro1, gcpro2;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
 
   check_x ();
 
@@ -5901,32 +5915,32 @@ Chinese, Japanese, and Korean.  */);
 
 /* This is not ifdef:ed, so other builds than GTK can customize it.  */
   DEFVAR_BOOL ("x-gtk-use-old-file-dialog", x_gtk_use_old_file_dialog,
-    doc: /* *Non-nil means prompt with the old GTK file selection dialog.
+    doc: /* Non-nil means prompt with the old GTK file selection dialog.
 If nil or if the file selection dialog is not available, the new GTK file
 chooser is used instead.  To turn off all file dialogs set the
 variable `use-file-dialog'.  */);
   x_gtk_use_old_file_dialog = 0;
 
   DEFVAR_BOOL ("x-gtk-show-hidden-files", x_gtk_show_hidden_files,
-    doc: /* *If non-nil, the GTK file chooser will by default show hidden files.
+    doc: /* If non-nil, the GTK file chooser will by default show hidden files.
 Note that this is just the default, there is a toggle button on the file
 chooser to show or not show hidden files on a case by case basis.  */);
   x_gtk_show_hidden_files = 0;
 
   DEFVAR_BOOL ("x-gtk-file-dialog-help-text", x_gtk_file_dialog_help_text,
-    doc: /* *If non-nil, the GTK file chooser will show additional help text.
+    doc: /* If non-nil, the GTK file chooser will show additional help text.
 If more space for files in the file chooser dialog is wanted, set this to nil
 to turn the additional text off.  */);
   x_gtk_file_dialog_help_text = 1;
 
   DEFVAR_BOOL ("x-gtk-whole-detached-tool-bar", x_gtk_whole_detached_tool_bar,
-    doc: /* *If non-nil, a detached tool bar is shown in full.
+    doc: /* If non-nil, a detached tool bar is shown in full.
 The default is to just show an arrow and pressing on that arrow shows
 the tool bar buttons.  */);
   x_gtk_whole_detached_tool_bar = 0;
 
   DEFVAR_BOOL ("x-gtk-use-system-tooltips", x_gtk_use_system_tooltips,
-    doc: /* *If non-nil with a Gtk+ built Emacs, the Gtk+ tooltip is used.
+    doc: /* If non-nil with a Gtk+ built Emacs, the Gtk+ tooltip is used.
 Otherwise use Emacs own tooltip implementation.
 When using Gtk+ tooltips, the tooltip face is not used.  */);
   x_gtk_use_system_tooltips = 1;

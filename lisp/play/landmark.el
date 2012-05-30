@@ -1,6 +1,6 @@
 ;;; landmark.el --- neural-network robot that learns landmarks
 
-;; Copyright (C) 1996-1997, 2000-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1996-1997, 2000-2012 Free Software Foundation, Inc.
 
 ;; Author: Terrence Brannon (was: <brannon@rana.usc.edu>)
 ;; Created: December 16, 1996 - first release to usenet
@@ -139,16 +139,16 @@
 ;; look rectangular, but spacings SHOULD be at least 2 (MUST BE at least 1).
 
 (defconst landmark-square-width 2
-  "*Horizontal spacing between squares on the Landmark board.")
+  "Horizontal spacing between squares on the Landmark board.")
 
 (defconst landmark-square-height 1
-  "*Vertical spacing between squares on the Landmark board.")
+  "Vertical spacing between squares on the Landmark board.")
 
 (defconst landmark-x-offset 3
-  "*Number of columns between the Landmark board and the side of the window.")
+  "Number of columns between the Landmark board and the side of the window.")
 
 (defconst landmark-y-offset 1
-  "*Number of lines between the Landmark board and the top of the window.")
+  "Number of lines between the Landmark board and the top of the window.")
 
 
 ;;;_ +  LANDMARK MODE AND KEYMAP.
@@ -206,11 +206,11 @@
 
 
 (defvar landmark-emacs-won ()
-  "*For making font-lock use the winner's face for the line.")
+  "For making font-lock use the winner's face for the line.")
 
 (defface landmark-font-lock-face-O '((((class color)) :foreground "red")
 			       (t :weight bold))
-  "Face to use for Emacs' O."
+  "Face to use for Emacs's O."
   :version "22.1"
   :group 'landmark)
 
@@ -226,7 +226,7 @@
     ("[-|/\\]" 0 (if landmark-emacs-won
 		     'landmark-font-lock-face-O
 		   'landmark-font-lock-face-X)))
-  "*Font lock rules for Landmark.")
+  "Font lock rules for Landmark.")
 
 (put 'landmark-mode 'front-sticky
      (put 'landmark-mode 'rear-nonsticky '(intangible)))

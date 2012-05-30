@@ -172,6 +172,7 @@ Higher values result in larger images."
 (defcustom doc-view-image-width 850
   "Default image width.
 Has only an effect if imagemagick support is compiled into emacs."
+  :version "24.1"
   :type 'number
   :group 'doc-view)
 
@@ -201,6 +202,7 @@ If this and `doc-view-dvipdfm-program' are set,
   "Program to convert any file type readable by OpenOffice.org to PDF.
 
 Needed for viewing OpenOffice.org (and MS Office) files."
+  :version "24.1"
   :type 'file
   :group 'doc-view)
 
@@ -958,13 +960,12 @@ Those files are saved in the directory given by the function
       (odf
        ;; ODF files have to be converted to PDF before Ghostscript can
        ;; process it.
-       (lexical-let
-           ((pdf (expand-file-name "doc.pdf" doc-view-current-cache-dir))
-	    (opdf (expand-file-name (concat (file-name-sans-extension
-					     (file-name-nondirectory doc-view-buffer-file-name))
-					    ".pdf")
-				    doc-view-current-cache-dir))
-            (png-file png-file))
+       (let ((pdf (expand-file-name "doc.pdf" doc-view-current-cache-dir))
+             (opdf (expand-file-name (concat (file-name-sans-extension
+                                              (file-name-nondirectory doc-view-buffer-file-name))
+                                             ".pdf")
+                                     doc-view-current-cache-dir))
+             (png-file png-file))
 	 ;; The unoconv tool only supports a output directory, but no
 	 ;; file name.  It's named like the input file with the
 	 ;; extension replaced by pdf.

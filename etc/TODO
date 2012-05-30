@@ -1,6 +1,6 @@
 Emacs TODO List                                                   -*-outline-*-
 
-Copyright (C) 2001-2012  Free Software Foundation, Inc.
+Copyright (C) 2001-2012 Free Software Foundation, Inc.
 See the end of the file for license conditions.
 
 
@@ -24,7 +24,6 @@ to the FSF.
 ** Improve the "code snippets" support: consolidate skeleton.el, tempo.el,
   and expand.el (any other?) and then advertise/use/improve it.
 ** Improve VC: yes, there's a lot of work to be done there :-(
-  And most of it could/should make it into Emacs-23.3.
 
 ** Random things that cross my mind right now that I'd like to see (some of
 them from my local hacks), but it's not obvious at all whether they'll
@@ -70,6 +69,12 @@ expecting such variables to always be defined, eg when they modify
 things in their .emacs.
 
 ** See if other files can use generated-autoload-file (see eg ps-print).
+
+** Write more tests.  Pick a fixed bug from the database, write a test
+case to make sure it stays fixed.  Or pick your favorite programming
+major-mode, and write a test for its indentation.  Or a version
+control backend, and write a test for its status parser.  Etc.
+See test/automated for examples.
 
 * Small but important fixes needed in existing features:
 
@@ -427,18 +432,13 @@ http://lists.gnu.org/archive/html/emacs-devel/2008-02/msg02234.html
 ** Highlight rectangles (`mouse-track-rectangle-p' in XEmacs).  Already in CUA,
   but it's a valuable feature worth making more general.
 
-** Provide MIME support for Rmail using the Gnus MIME library.  [Maybe
-  not now feasible, given Gnus maintenance decisions.  fx looked at
-  this and can say where some of the problems are.]
-
 ** Eliminate the storm of warnings concerning char/unsigned char
   mismatches that we get with GCC 4.x and proprietary compilers on
   various systems.  They make it difficult to spot the important warnings.
 
 ** Fix anything necessary to use `long long' EMACS_INTs with GCC.
 
-** Split out parts of lisp.h [and generate Makefile dependencies automatically.]
-[the last bit is done, see DEPFLAGS etc in src/Makefile.in ]
+** Split out parts of lisp.h.
 
 ** Update the FAQ.
 
@@ -641,17 +641,29 @@ up on top of all others
 
 ** Bidirectional editing
 
+*** Support reordering structured text
+Two important use cases: (1) comments and strings in program sources,
+and (2) text with markup, like HTML or XML.
+
+One idea is to invent a special text property that would instruct the
+display engine to reorder only the parts of buffer text covered by
+that property.  The display engine will then push its state onto the
+iterator stack, restrict the bidi iterator to accessing only the
+portion of buffer text covered by the property, reorder the text, then
+pop its state from stack and continue as usual.  This will require
+minor changes in the bidi_it structure.
+
+This design requires Lisp-level code to put the text properties on the
+relevant parts of the buffer text.  That could be done using JIT
+fontifications, or as a preliminary processing when the file is
+visited.  With HTML/XML, the code that puts text properties needs to
+pay attention to the bidi directives embedded in the HTML/XML stream.
+
 *** Allow the user to control the direction of the UI
 
 **** Introduce user option to control direction of mode line.
-This requires to figure out what to do with unibyte strings that are
-used in constructing the mode line.  Currently, unibyte strings are
-not reordered by bidi.c, without which R2L mode line will not display
-correctly.  One possibility would be to STRING_SET_MULTIBYTE all Lisp
-strings involved in the mode line, and then pass them through bidi.c.
-
-Another problem is the header line, which is produced by the same
-routines as the mode line.  While it makes sense to have the mode-line
+One problem is the header line, which is produced by the same routines
+as the mode line.  While it makes sense to have the mode-line
 direction controlled by a single global variable, header lines are
 buffer-specific, so they need a separate treatment in this regard.
 

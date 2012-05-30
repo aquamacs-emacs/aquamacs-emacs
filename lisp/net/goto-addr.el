@@ -80,18 +80,18 @@
 
 ;; I don't expect users to want fontify'ing without highlighting.
 (defcustom goto-address-fontify-p t
-  "*Non-nil means URLs and e-mail addresses in buffer are fontified.
+  "Non-nil means URLs and e-mail addresses in buffer are fontified.
 But only if `goto-address-highlight-p' is also non-nil."
   :type 'boolean
   :group 'goto-address)
 
 (defcustom goto-address-highlight-p t
-  "*Non-nil means URLs and e-mail addresses in buffer are highlighted."
+  "Non-nil means URLs and e-mail addresses in buffer are highlighted."
   :type 'boolean
   :group 'goto-address)
 
 (defcustom goto-address-fontify-maximum-size 30000
-  "*Maximum size of file in which to fontify and/or highlight URLs.
+  "Maximum size of file in which to fontify and/or highlight URLs.
 A value of t means there is no limit--fontify regardless of the size."
   :type '(choice (integer :tag "Maximum size") (const :tag "No limit" t))
   :group 'goto-address)
@@ -275,7 +275,10 @@ Also fontifies the buffer appropriately (see `goto-address-fontify-p' and
 
 ;;;###autoload
 (define-minor-mode goto-address-mode
-  "Minor mode to buttonize URLs and e-mail addresses in the current buffer."
+  "Minor mode to buttonize URLs and e-mail addresses in the current buffer.
+With a prefix argument ARG, enable the mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode
+if ARG is omitted or nil."
   nil
   ""
   nil

@@ -1,3 +1,384 @@
+2012-05-29  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* Makefile.in (echo-info): Don't try to install info files named
+	just ".info".
+
+2012-05-28  Glenn Morris  <rgm@gnu.org>
+
+	* calc.texi, dired-x.texi: Use @LaTeX rather than La@TeX.  (Bug#10910)
+
+	* sc.texi: Nuke hand-written node pointers.
+	Fix top-level menu to match actual node order.
+
+2012-05-27  Glenn Morris  <rgm@gnu.org>
+
+	* cl.texi, dired-x.texi: Nuke hand-written node pointers.
+	Some associated fixes, including not messing with chapno in cl.texi.
+
+2012-05-27  Bastien Guerry  <bzg@gnu.org>
+
+	* org.texi (Durations and time values): Fix typo.
+
+2012-05-19  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* doc/misc/calc.texi (Basic Operations on Units, Customizing Calc):
+	Mention `calc-ensure-consistent-units'.
+
+2012-05-14  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* cc-mode.texi: Avoid space before macro in 4th argument of cross
+	reference commands.  (Bug#11461)
+
+	* Makefile.in (gnus.dvi): Use $@ instead of $*.dvi.
+
+2012-05-12  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (mostlyclean): Add more TeX intermediates.
+
+	* Makefile.in: Make it look more like the other doc Makefiles.
+	Use explicit $srcdir in all dependencies.
+	Remove cd $srcdir from rules.
+	(VPATH): Remove.
+	(infodir): Set to an absolute path.
+	(INFO_TARGETS): Use short names.
+	(mkinfodir): infodir is now absolute.
+	(echo-info, maintainer-clean): Update for new format of INFO_TARGETS.
+
+	* Makefile.in (info.info): Rename from info, to avoid duplication.
+	(.SUFFIXES): Disable implicit rules.
+
+	* Makefile.in (MKDIR_P): New, set by configure.
+	(mkinfodir): Use $MKDIR_P.
+
+2012-05-07  Glenn Morris  <rgm@gnu.org>
+
+	* forms.texi (Long Example): Update for changed location of files.
+
+2012-05-04  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (INFO_EXT, INFO_OPTS): New, set by configure.
+	(INFO_TARGETS): Use $INFO_EXT.
+	Make all rules generating info files use $INFO_EXT, $INFO_OPT, and -o.
+	* makefile.w32-in (INFO_EXT, INFO_OPTS): New.
+	(INFO_TARGETS): Use $INFO_EXT.
+	Make all rules generating info files use $INFO_EXT, $INFO_OPT, and -o.
+
+2012-05-02  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (echo-info): New phony target, used by top-level.
+
+	* viper.texi: Make direntry shorter (also it is no longer "newest").
+
+	* emacs-gnutls.texi, ert.texi, org.texi:
+	Fix dircategory, direntry to match info/dir.
+
+	* faq.texi: Convert @inforefs to @xrefs.
+	Fix some malformed cross-references.
+	(File-name conventions): Shorten section name to avoid overfull line.
+	(How to add fonts): Use smallexample to avoid overfull lines.
+
+2012-05-01  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* auth.texi (Help for users): Update for .gpg file being second.
+
+2012-04-27  Ippei Furuhashi  <top.tuna+orgmode@gmail.com>  (tiny change)
+
+	* org.texi (Agenda commands): Fix two typos: give corresponding
+	function names, according to `org-agenda-view-mode-dispatch'.
+
+2012-04-27  Glenn Morris  <rgm@gnu.org>
+
+	* faq.texi (Major packages and programs): Remove section.
+	There is no point listing 6 packages (cf etc/MORE.STUFF).
+	(Finding Emacs and related packages): Move "Spell-checkers" here.
+
+2012-04-22  Michael Albinus  <michael.albinus@gmx.de>
+
+	* dbus.texi (Version): New node.
+	(Properties and Annotations): Mention the object manager
+	interface.  Describe dbus-get-all-managed-objects.
+	(Type Conversion): Floating point numbers are allowed, if an
+	anteger does not fit Emacs's integer range.
+	(Synchronous Methods): Remove obsolete dbus-call-method-non-blocking.
+	(Asynchronous Methods): Fix description of
+	dbus-call-method-asynchronously.
+	(Receiving Method Calls): Fix some minor errors.  Add
+	dbus-interface-emacs.
+	(Signals): Describe unicast signals and the new match rules.
+	(Alternative Buses): Add the PRIVATE optional argument to
+	dbus-init-bus.  Describe its new return value.  Add dbus-setenv.
+
+2012-04-20  Glenn Morris  <rgm@gnu.org>
+
+	* faq.texi (New in Emacs 24): New section.
+	(Packages that do not come with Emacs): Mention M-x list-packages.
+
+2012-04-14  Alan Mackenzie  <acm@muc.de>
+
+	* cc-mode.texi (c-offsets-alist): Correct a typo.
+
+2012-04-14  Jérémie Courrèges-Anglas  <jca@wxcvbn.org>  (tiny change)
+
+	* org.texi (Deadlines and scheduling): Fix the example: the
+	DEADLINE item should come right after the headline.  We enforce
+	this convention, so it is a bug not to illustrate it correctly in
+	the manual.
+
+2012-04-14  Ippei FURUHASHI  <top.tuna+orgmode@gmail.com>  (tiny change)
+
+	* org.texi (Agenda commands): Fix documentation bug by swapping
+	the equivalent keybindings to `org-agenda-next-line' with the ones
+	to `org-agenda-previous-line'.
+
+2012-04-14  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in: Replace non-portable use of $< in ordinary rules.
+
+2012-04-09  Eli Zaretskii  <eliz@gnu.org>
+
+	* makefile.w32-in (INFO_TARGETS, DVI_TARGETS, clean): Add
+	emacs-gnutls.
+	($(infodir)/emacs-gnutls, emacs-gnutls.dvi): New targets.
+
+2012-04-09  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* Makefile.in: Add emacs-gnutls.texi to build.
+
+	* emacs-gnutls.texi: Add documentation for the GnuTLS integration.
+
+2012-04-05  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* auth.texi (Secret Service API): Edit further and give examples.
+	(Secret Service API): Adjust @samp to @code for collection names.
+
+2012-04-04  Glenn Morris  <rgm@gnu.org>
+
+	* auth.texi (Secret Service API): Copyedits.
+	(Help for developers): Fill in some missing function doc-strings.
+	(Help for users, Help for developers)
+	(GnuPG and EasyPG Assistant Configuration): Markup fixes.
+
+2012-04-04  Michael Albinus  <michael.albinus@gmx.de>
+
+	* auth.texi (Secret Service API): Add the missing text.
+
+2012-04-04  Chong Yidong  <cyd@gnu.org>
+
+	* message.texi (Using PGP/MIME): Note that epg is now the default.
+
+	* gnus.texi: Reduce references to obsolete pgg library.
+	(Security): Note that epg is now the default.
+
+	* gnus-faq.texi (FAQ 8-2): Mention EasyPG.
+
+	* nxml-mode.texi (Completion): C-RET is no longer bound to
+	nxml-complete.
+
+2012-04-01  Jambunathan K  <kjambunathan@gmail.com>
+
+	* org.texi (Customizing tables in ODT export): Correct few errors.
+
+2012-04-01  Jambunathan K  <kjambunathan@gmail.com>
+
+	* org.texi (Links in ODT export): Update.
+	(Labels and captions in ODT export): New node.
+
+2012-04-01  Jambunathan K  <kjambunathan@gmail.com>
+
+	* org.texi (Literal examples in ODT export): htmlfontify.el in
+	Emacs-24.1 now supports fontification.  So ODT source blocks will
+	be fontified by default.
+
+2012-04-01  Julian Gehring  <julian.gehring@googlemail.com>  (tiny change)
+
+	* org.texi (Refiling notes): Remove duplicated keybinding.
+
+2012-04-01  Eric Schulte  <eric.schulte@gmx.com>
+
+	* org.texi (noweb): Documentation of this new option to the :noweb
+	header argument.
+
+2012-04-01  Suvayu Ali  <fatkasuvayu+linux@gmail.com>
+
+	* org.texi (Header and sectioning): Add example demonstrating how
+	to use "LaTeX_CLASS_OPTIONS".
+
+2012-04-01  Eric Schulte  <eric.schulte@gmx.com>
+
+	* org.texi (Noweb reference syntax): Describe the ability to
+	execute noweb references in the manual.
+
+2012-04-01  Eric Schulte  <eric.schulte@gmx.com>
+
+	* org.texi (cache): Improve cache documentation when session
+	evaluation is used.
+
+2012-04-01  Nicolas Goaziou  <n.goaziou@gmail.com>
+
+	* org.texi (Plain lists): Document removal.
+
+2012-04-01  Michael Brand  <michael.ch.brand@gmail.com>
+
+	* org.texi: Decapitalize file name in references to Calc manual.
+
+2012-04-01  Nicolas Goaziou  <n.goaziou@gmail.com>
+
+	* org.texi (Plain lists): Document removal.
+
+2012-04-01  Jambunathan K  <kjambunathan@gmail.com>
+
+	* org.texi (Top, OpenDocument Text export)
+	(ODT export commands, Extending ODT export)
+	(Images in ODT export, Tables in ODT export)
+	(Configuring a document converter): Add or Update.
+
+2012-04-01  Carsten Dominik  <carsten.dominik@gmail.com>
+
+	* org.texi (MobileOrg): Change the wording to reflect that the
+	Android Version is no longer just the little brother of the iOS
+	version.
+
+2012-04-01  Eric Schulte  <eric.schulte@gmx.com>
+
+	* org.texi (Key bindings and useful functions): Updated babel key
+	binding documentation in manual.
+
+2012-04-01  Eric Schulte  <eric.schulte@gmx.com>
+
+	* org.texi (noweb): Document new noweb header value.
+
+2012-04-01  Eric Schulte  <eric.schulte@gmx.com>
+
+	* org.texi (noweb-sep): Document new header argument.
+
+2012-04-01  Eric Schulte  <eric.schulte@gmx.com>
+
+	* org.texi (noweb-ref): Documentation of this new custom variable.
+
+2012-04-01  Eric Schulte  <eric.schulte@gmx.com>
+
+	* org.texi (wrap): Update the new :wrap documentation to match the
+	current implementation.
+
+2012-04-01  Thomas Dye  <dk@poto.myhome.westell.com>
+
+	* org.texi: Added documentation for :wrap.
+
+2012-04-01  Thomas Dye  <dk@poto.myhome.westell.com>
+
+	* org.texi: #+RESULTS now user-configurable.
+
+2012-04-01  Thomas Dye  <dk@poto.myhome.westell.com>
+
+	* org.texi: Documented :noweb no-export.
+
+2012-04-01  Thomas Dye  <dk@poto.local>
+
+	* org.texi: Edit :noweb no header argument for correctness.
+
+2012-04-01  Bastien Guerry  <bzg@altern.org>
+
+	* org.texi (Customization): Update the approximate number of Org
+	variables.
+
+2012-04-01  Thomas Dye  <dk@poto.local>
+
+	* org.texi: The :results wrap produces a drawer instead of a
+	begin_results block.
+
+2012-03-22  Peder O. Klingenberg  <peder@klingenberg.no>  (tiny change)
+
+	* gnus.texi (Archived Messages): Update `gnus-message-archive-group' to
+	reflect the new default.
+
+2012-03-10  Eli Zaretskii  <eliz@gnu.org>
+
+	* info.texi (Expert Info): Move the index entry for "Texinfo" from
+	"Getting Started" to this node.  (Bug#10450)
+
+2012-03-10  Chong Yidong  <cyd@gnu.org>
+
+	* flymake.texi (Example -- Configuring a tool called via make):
+	Mention the Automake COMPILE variable (Bug#8715).
+
+	* info.texi (Getting Started): Add an index entry (Bug#10450).
+
+2012-03-02  Michael Albinus  <michael.albinus@gmx.de>
+
+	* dbus.texi (Signals): Known names will be mapped onto unique
+	names, when registering for signals.
+
+2012-02-29  Glenn Morris  <rgm@gnu.org>
+
+	* url.texi: Fix quote usage in body text.
+
+	* sem-user.texi, url.texi, woman.texi: Use "" quotes in menus.
+
+	* cl.texi: Use @code{} in menus when appropriate.
+
+2012-02-28  Glenn Morris  <rgm@gnu.org>
+
+	* calc.texi, cc-mode.texi, cl.texi, ebrowse.texi, ediff.texi:
+	* eshell.texi, gnus-faq.texi, gnus-news.texi, gnus.texi:
+	* idlwave.texi, info.texi, newsticker.texi, nxml-mode.texi:
+	* org.texi, sc.texi, vip.texi, viper.texi:
+	Standardize possessive apostrophe usage.
+
+2012-02-26  Chong Yidong  <cyd@gnu.org>
+
+	* ediff.texi (Quick Help Commands): Add a couple of index entries
+	(Bug#10834).
+
+2012-02-17  Glenn Morris  <rgm@gnu.org>
+
+	* gnus.texi (Posting Styles):
+	* remember.texi (Org): Fix cross-refs to other manuals.
+
+2012-02-15  Glenn Morris  <rgm@gnu.org>
+
+	* smtpmail.texi (Emacs Speaks SMTP): General update for 24.1.
+	(Encryption): New chapter, split out from previous.
+
+2012-02-13  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus.texi (Customizing the IMAP Connection): Mention
+	nnimap-record-commands.
+
+2012-02-10  Glenn Morris  <rgm@gnu.org>
+
+	* url.texi (Retrieving URLs): Update url-retrieve arguments.
+	Mention url-queue-retrieve.
+
+2012-02-09  Glenn Morris  <rgm@gnu.org>
+
+	* sem-user.texi (Semantic mode user commands): Typo fix.
+
+	* info.texi (Create Info buffer): Mention info-display-manual.
+
+2012-02-07  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus.texi (Mail Source Specifiers): Add a pop3 via an SSH tunnel
+	example (modified from an example by Michael Albinus).
+
+2012-01-30  Philipp Haselwarter  <philipp.haselwarter@gmx.de>  (tiny change)
+
+	* gnus.texi (Agent Basics): Fix outdated description of
+	`gnus-agent-auto-agentize-methods'.
+
+2012-01-28  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* cc-mode.texi: Always @defindex ss.
+	(Config Basics): Fix argument of @itemize.
+	(Macro Backslashes): Add @code around index entry.
+
+2012-01-23  Glenn Morris  <rgm@gnu.org>
+
+	* pcl-cvs.texi (About PCL-CVS): Refer to vc-dir rather than vc-dired.
+
+2012-01-19  Eric Hanchrow  <eric.hanchrow@gmail.com>
+
+	* tramp.texi (File): Tweak wording for the `scpc' option.
+
 2012-01-06  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus.texi (Group Parameters): Really note precedence.
@@ -281,7 +662,7 @@
 	* mh-e.texi (VERSION, EDITION, UPDATED, UPDATE-MONTH): Update for
 	release 8.3.
 	(Preface): Updated support information.
-	(From Bill Wohler): Reset text to original version. As a
+	(From Bill Wohler): Reset text to original version.  As a
 	historical quote, the tense should be correct in the time that it
 	was written.
 
@@ -298,11 +679,11 @@
 
 2011-08-15  Suvayu Ali  <fatkasuvayu+linux@gmail.com>  (tiny change)
 
-	* org.texi (Images in LaTeX export): rewrite.
+	* org.texi (Images in LaTeX export): Rewrite.
 
 2011-08-15  Bastien Guerry  <bzg@gnu.org>
 
-	* org.texi (Using the mapping API): mention 'region as a possible
+	* org.texi (Using the mapping API): Mention 'region as a possible
 	scope for `org-map-entries'.
 
 2011-08-15  Carsten Dominik  <carsten.dominik@gmail.com>
@@ -311,7 +692,7 @@
 
 2011-08-15  Bastien Guerry  <bzg@gnu.org>
 
-	* org.texi (Template expansion): order template sequences in the
+	* org.texi (Template expansion): Order template sequences in the
 	proper order.
 
 2011-08-15  Eric Schulte  <schulte.eric@gmail.com>
@@ -325,11 +706,11 @@
 
 2011-08-15  Achim Gratz  <stromeko@nexgo.de>
 
-	* org.texi: document that both CLOCK_INTO_DRAWER and
+	* org.texi: Document that both CLOCK_INTO_DRAWER and
 	LOG_INTO_DRAWER can be used to override the contents of variable
 	org-clock-into-drawer (or if unset, org-log-into-drawer).
 
-	* org.texi: replace @xref->@pxref.
+	* org.texi: Replace @xref->@pxref.
 
 2011-08-15  Eric Schulte  <schulte.eric@gmail.com>
 
@@ -353,7 +734,7 @@
 
 2011-08-15  Eric Schulte  <schulte.eric@gmail.com>
 
-	* org.texi (Structure of code blocks): explicitly state that the
+	* org.texi (Structure of code blocks): Explicitly state that the
 	behavior of multiple blocks of the same name is undefined
 
 2011-08-15  Christian Egli  <christian.egli@sbszh.ch>
@@ -477,7 +858,7 @@
 
 2011-08-15  Bastien Guerry  <bzg@gnu.org>
 
-	* org.texi (LaTeX and PDF export): add a note about a limitation
+	* org.texi (LaTeX and PDF export): Add a note about a limitation
 	of the LaTeX export: the org file has to be properly structured.
 
 2011-08-15  Bastien Guerry  <bzg@gnu.org>
@@ -1287,7 +1668,7 @@
 
 2010-11-11  Eric Schulte  <schulte.eric@gmail.com>
 
-	* org.texi: multi-line header arguments :PROPERTIES: :ID:
+	* org.texi: Multi-line header arguments :PROPERTIES: :ID:
 	b77c8857-6c76-4ea9-8a61-ddc2648d96c4 :END:.
 
 2010-11-11  Carsten Dominik  <carsten.dominik@gmail.com>
@@ -8666,7 +9047,7 @@
 ;; coding: utf-8
 ;; End:
 
-  Copyright (C) 1993-1999, 2001-2012  Free Software Foundation, Inc.
+  Copyright (C) 1993-1999, 2001-2012 Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

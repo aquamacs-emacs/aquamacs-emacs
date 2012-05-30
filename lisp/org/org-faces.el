@@ -285,6 +285,16 @@ column view defines special faces for each outline level.  See the file
   "Face for date/time stamps."
   :group 'org-faces)
 
+(defface org-date-selected
+  (org-compatible-face nil
+    '((((class color) (min-colors 16) (background light)) (:foreground "Red1" :bold nil))
+      (((class color) (min-colors 16) (background dark))  (:foreground "Pink" :bold nil))
+      (((class color) (min-colors 8)  (background light)) (:foreground "red"  :bold nil))
+      (((class color) (min-colors 8)  (background dark))  (:foreground "red"  :bold nil))
+      (t (:inverse-video t))))
+  "Face for highlighting the calendar day when using `org-read-date'."
+  :group 'org-faces)
+
 (defface org-sexp-date
   '((((class color) (background light)) (:foreground "Purple"))
     (((class color) (background dark)) (:foreground "Cyan"))
@@ -351,6 +361,7 @@ keywords will then be interpreted as either foreground or background
 color."
   :group 'org-faces
   :group 'org-todo
+  :version "24.1"
   :type '(repeat
 	  (cons (choice (const todo) (const tag) (const priority))
 		(choice (const :foreground) (const :background)))))
@@ -547,6 +558,7 @@ follows a #+DATE:, #+AUTHOR: or #+EMAIL: keyword."
 When nil, format these as normal Org.  This is the default, because the
 content of these blocks will still be treated as Org syntax."
   :group 'org-faces
+  :version "24.1"
   :type 'boolean)
 
 (defface org-clock-overlay ;; copied from secondary-selection
@@ -732,6 +744,7 @@ If nil, then all levels >=org-n-level-faces are styled like
 level org-n-level-faces"
  :group 'org-appearance
  :group 'org-faces
+ :version "24.1"
  :type 'boolean)
 
 (defface org-latex-and-export-specials

@@ -1237,7 +1237,7 @@
 	 string-to-multibyte
 	 tan truncate
 	 unibyte-char-to-multibyte upcase user-full-name
-	 user-login-name user-original-login-name user-variable-p
+	 user-login-name user-original-login-name custom-variable-p
 	 vconcat
 	 window-buffer window-dedicated-p window-edges window-height
 	 window-hscroll window-minibuffer-p window-width
@@ -1574,7 +1574,7 @@ If FOR-EFFECT is non-nil, the return value is assumed to be of no importance."
               ;;   stack-set-X+1 stack-ref-X  -->  dup stack-set-X+2
               ;; but this is a very minor gain, since dup is stack-ref-0,
               ;; i.e. it's only better if X>5, and even then it comes
-              ;; at the cost cost of an extra stack slot.  Let's not bother.
+              ;; at the cost of an extra stack slot.  Let's not bother.
 	      ((and (eq 'byte-varref (car lap2))
                     (eq (cdr lap1) (cdr lap2))
                     (memq (car lap1) '(byte-varset byte-varbind)))

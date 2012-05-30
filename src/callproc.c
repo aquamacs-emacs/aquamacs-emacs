@@ -102,8 +102,12 @@ static Lisp_Object Fgetenv_internal (Lisp_Object, Lisp_Object);
 static Lisp_Object
 call_process_kill (Lisp_Object fdpid)
 {
-  emacs_close (XFASTINT (Fcar (fdpid)));
-  EMACS_KILLPG (XFASTINT (Fcdr (fdpid)), SIGKILL);
+  int fd;
+  pid_t pid;
+  CONS_TO_INTEGER (Fcar (fdpid), int, fd);
+  CONS_TO_INTEGER (Fcdr (fdpid), pid_t, pid);
+  emacs_close (fd);
+  EMACS_KILLPG (pid, SIGKILL);
   synch_process_alive = 0;
   return Qnil;
 }
@@ -112,18 +116,18 @@ static Lisp_Object
 call_process_cleanup (Lisp_Object arg)
 {
   Lisp_Object fdpid = Fcdr (arg);
+  int fd;
 #if defined (MSDOS)
   Lisp_Object file;
-  int fd;
 #else
-  int pid;
+  pid_t pid;
 #endif
 
   Fset_buffer (Fcar (arg));
+  CONS_TO_INTEGER (Fcar (fdpid), int, fd);
 
 #if defined (MSDOS)
   /* for MSDOS fdpid is really (fd . tempfile)  */
-  fd = XFASTINT (Fcar (fdpid));
   file = Fcdr (fdpid);
   /* FD is -1 and FILE is "" when we didn't actually create a
      temporary file in call-process.  */
@@ -132,17 +136,17 @@ call_process_cleanup (Lisp_Object arg)
   if (!(strcmp (SDATA (file), NULL_DEVICE) == 0 || SREF (file, 0) == '\0'))
     unlink (SDATA (file));
 #else /* not MSDOS */
-  pid = XFASTINT (Fcdr (fdpid));
+  CONS_TO_INTEGER (Fcdr (fdpid), pid_t, pid);
 
   if (call_process_exited)
     {
-      emacs_close (XFASTINT (Fcar (fdpid)));
+      emacs_close (fd);
       return Qnil;
     }
 
   if (EMACS_KILLPG (pid, SIGINT) == 0)
     {
-      int count = SPECPDL_INDEX ();
+      ptrdiff_t count = SPECPDL_INDEX ();
       record_unwind_protect (call_process_kill, fdpid);
       message1 ("Waiting for process to die...(type C-g again to kill it instantly)");
       immediate_quit = 1;
@@ -153,7 +157,7 @@ call_process_cleanup (Lisp_Object arg)
       message1 ("Waiting for process to die...done");
     }
   synch_process_alive = 0;
-  emacs_close (XFASTINT (Fcar (fdpid)));
+  emacs_close (fd);
 #endif /* not MSDOS */
   return Qnil;
 }
@@ -164,7 +168,8 @@ The remaining arguments are optional.
 The program's input comes from file INFILE (nil means `/dev/null').
 Insert output in BUFFER before point; t means current buffer; nil for BUFFER
  means discard it; 0 means discard and don't wait; and `(:file FILE)', where
- FILE is a file name string, means that it should be written to that file.
+ FILE is a file name string, means that it should be written to that file
+ \(if the file already exists it is overwritten).
 BUFFER can also have the form (REAL-BUFFER STDERR-FILE); in that case,
 REAL-BUFFER says what to do with standard output, as above,
 while STDERR-FILE says what to do with standard error in the child.
@@ -186,17 +191,16 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.
 usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
-  Lisp_Object infile, buffer, current_dir, path;
-  volatile int display_p_volatile;
+  Lisp_Object infile, buffer, current_dir, path, cleanup_info_tail;
+  int display_p;
   int fd[2];
   int filefd;
-  register int pid;
 #define CALLPROC_BUFFER_SIZE_MIN (16 * 1024)
 #define CALLPROC_BUFFER_SIZE_MAX (4 * CALLPROC_BUFFER_SIZE_MIN)
   char buf[CALLPROC_BUFFER_SIZE_MAX];
   int bufsize = CALLPROC_BUFFER_SIZE_MIN;
-  int count = SPECPDL_INDEX ();
-  volatile USE_SAFE_ALLOCA;
+  ptrdiff_t count = SPECPDL_INDEX ();
+  USE_SAFE_ALLOCA;
 
   register const unsigned char **new_argv;
   /* File to use for stderr in the child.
@@ -206,6 +210,9 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 #ifdef MSDOS	/* Demacs 1.1.1 91/10/16 HIRANO Satoshi */
   char *outf, *tempfile = NULL;
   int outfilefd;
+  int pid;
+#else
+  pid_t pid;
 #endif
   int fd_output = -1;
   struct coding_system process_coding; /* coding-system of process output */
@@ -370,7 +377,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
     UNGCPRO;
   }
 
-  display_p_volatile = INTERACTIVE && nargs >= 4 && !NILP (args[3]);
+  display_p = INTERACTIVE && nargs >= 4 && !NILP (args[3]);
 
   filefd = emacs_open (SSDATA (infile), O_RDONLY, 0);
   if (filefd < 0)
@@ -606,10 +613,13 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
       Lisp_Object volatile buffer_volatile = buffer;
       Lisp_Object volatile coding_systems_volatile = coding_systems;
       Lisp_Object volatile current_dir_volatile = current_dir;
+      int volatile display_p_volatile = display_p;
       int volatile fd1_volatile = fd1;
       int volatile fd_error_volatile = fd_error;
       int volatile fd_output_volatile = fd_output;
       int volatile output_to_buffer_volatile = output_to_buffer;
+      int volatile sa_must_free_volatile = sa_must_free;
+      ptrdiff_t volatile sa_count_volatile = sa_count;
       unsigned char const **volatile new_argv_volatile = new_argv;
 
       pid = vfork ();
@@ -617,10 +627,13 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
       buffer = buffer_volatile;
       coding_systems = coding_systems_volatile;
       current_dir = current_dir_volatile;
+      display_p = display_p_volatile;
       fd1 = fd1_volatile;
       fd_error = fd_error_volatile;
       fd_output = fd_output_volatile;
       output_to_buffer = output_to_buffer_volatile;
+      sa_must_free = sa_must_free_volatile;
+      sa_count = sa_count_volatile;
       new_argv = new_argv_volatile;
     }
 
@@ -639,7 +652,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 
 	/* GConf causes us to ignore SIGPIPE, make sure it is restored
 	   in the child.  */
-	//signal (SIGPIPE, SIG_DFL);
+	signal (SIGPIPE, SIG_DFL);
 #ifdef HAVE_WORKING_VFORK
 	pthread_sigmask (SIG_SETMASK, &procmask, 0);
 #endif
@@ -693,16 +706,14 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 
 #if defined (MSDOS)
   /* MSDOS needs different cleanup information.  */
-  record_unwind_protect (call_process_cleanup,
-			 Fcons (Fcurrent_buffer (),
-				Fcons (make_number (fd[0]),
-				       build_string (tempfile ? tempfile : ""))));
+  cleanup_info_tail = build_string (tempfile ? tempfile : "");
 #else
+  cleanup_info_tail = INTEGER_TO_CONS (pid);
+#endif /* not MSDOS */
   record_unwind_protect (call_process_cleanup,
 			 Fcons (Fcurrent_buffer (),
-				Fcons (make_number (fd[0]), make_number (pid))));
-#endif /* not MSDOS */
-
+				Fcons (INTEGER_TO_CONS (fd[0]),
+				       cleanup_info_tail)));
 
   if (BUFFERP (buffer))
     Fset_buffer (buffer);
@@ -758,11 +769,10 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 
   if (output_to_buffer)
     {
-      register EMACS_INT nread;
+      register int nread;
       int first = 1;
       EMACS_INT total_read = 0;
       int carryover = 0;
-      int display_p = display_p_volatile;
       int display_on_the_fly = display_p;
       struct coding_system saved_coding;
 
@@ -805,7 +815,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 	      else
 		{			/* We have to decode the input.  */
 		  Lisp_Object curbuf;
-		  int count1 = SPECPDL_INDEX ();
+		  ptrdiff_t count1 = SPECPDL_INDEX ();
 
 		  XSETBUFFER (curbuf, current_buffer);
 		  /* We cannot allow after-change-functions be run
@@ -924,7 +934,7 @@ static Lisp_Object
 delete_temp_file (Lisp_Object name)
 {
   /* Suppress jka-compr handling, etc.  */
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   specbind (intern ("file-name-handler-alist"), Qnil);
   internal_delete_file (name);
   unbind_to (count, Qnil);
@@ -940,7 +950,7 @@ Delete the text if fourth arg DELETE is non-nil.
 Insert output in BUFFER before point; t means current buffer; nil for
  BUFFER means discard it; 0 means discard and don't wait; and `(:file
  FILE)', where FILE is a file name string, means that it should be
- written to that file.
+ written to that file (if the file already exists it is overwritten).
 BUFFER can also have the form (REAL-BUFFER STDERR-FILE); in that case,
 REAL-BUFFER says what to do with standard output, as above,
 while STDERR-FILE says what to do with standard error in the child.
@@ -961,7 +971,7 @@ usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &r
   struct gcpro gcpro1;
   Lisp_Object filename_string;
   register Lisp_Object start, end;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   /* Qt denotes we have not yet called Ffind_operation_coding_system.  */
   Lisp_Object coding_systems;
   Lisp_Object val, *args2;
@@ -1038,7 +1048,7 @@ usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &r
   val = complement_process_encoding_system (val);
 
   {
-    int count1 = SPECPDL_INDEX ();
+    ptrdiff_t count1 = SPECPDL_INDEX ();
 
     specbind (intern ("coding-system-for-write"), val);
     /* POSIX lets mk[s]temp use "."; don't invoke jka-compr if we
@@ -1138,7 +1148,7 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
   HANDLE handles[3];
 #endif /* WINDOWSNT */
 
-  int pid = getpid ();
+  pid_t pid = getpid ();
 
   /* Close Emacs's descriptors that this process should not have.  */
   close_process_descs ();
@@ -1636,16 +1646,16 @@ syms_of_callproc (void)
   staticpro (&Vtemp_file_name_pattern);
 
   DEFVAR_LISP ("shell-file-name", Vshell_file_name,
-	       doc: /* *File name to load inferior shells from.
+	       doc: /* File name to load inferior shells from.
 Initialized from the SHELL environment variable, or to a system-dependent
 default if SHELL is not set.  */);
 
   DEFVAR_LISP ("exec-path", Vexec_path,
-	       doc: /* *List of directories to search programs to run in subprocesses.
+	       doc: /* List of directories to search programs to run in subprocesses.
 Each element is a string (directory name) or nil (try default directory).  */);
 
   DEFVAR_LISP ("exec-suffixes", Vexec_suffixes,
-	       doc: /* *List of suffixes to try to find executable file names.
+	       doc: /* List of suffixes to try to find executable file names.
 Each element is a string.  */);
   Vexec_suffixes = Qnil;
 

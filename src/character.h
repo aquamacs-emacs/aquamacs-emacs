@@ -292,7 +292,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
   } while (0)
 
 /* Return the character code of character whose multibyte form is at
-   P.  */
+   P.  Note that this macro unifies CJK characters whose codepoints
+   are in the Private Use Areas (PUAs), so it might return a different
+   codepoint from the one actually stored at P.  */
 
 #define STRING_CHAR(p)						\
   (!((p)[0] & 0x80)						\
@@ -309,7 +311,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 /* Like STRING_CHAR, but set ACTUAL_LEN to the length of multibyte
-   form.  */
+   form.
+
+   Note: This macro returns the actual length of the character's
+   multibyte sequence as it is stored in a buffer or string.  The
+   character it returns might have a different codepoint that has a
+   different multibyte sequence of a different length, due to possible
+   unification of CJK characters inside string_char.  Therefore do NOT
+   assume that the length returned by this macro is identical to the
+   length of the multibyte sequence of the character it returns.  */
 
 #define STRING_CHAR_AND_LENGTH(p, actual_len)			\
   (!((p)[0] & 0x80)						\
@@ -424,7 +434,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 	  unsigned char *chp = BYTE_POS_ADDR (BYTEIDX);		\
 	  int chlen;						\
 								\
-	  OUTPUT= STRING_CHAR_AND_LENGTH (chp, chlen);		\
+	  OUTPUT = STRING_CHAR_AND_LENGTH (chp, chlen);		\
 	  BYTEIDX += chlen;					\
 	}							\
       else							\
@@ -655,7 +665,7 @@ typedef enum {
   UNICODE_CATEGORY_Cn
 } unicode_category_t;
 
-extern int char_resolve_modifier_mask (int);
+extern EMACS_INT char_resolve_modifier_mask (EMACS_INT);
 extern int char_string (unsigned, unsigned char *);
 extern int string_char (const unsigned char *,
                         const unsigned char **, int *);
@@ -663,19 +673,19 @@ extern int string_char (const unsigned char *,
 extern int translate_char (Lisp_Object, int c);
 extern int char_printable_p (int c);
 extern void parse_str_as_multibyte (const unsigned char *,
-				    EMACS_INT, EMACS_INT *, EMACS_INT *);
-extern EMACS_INT count_size_as_multibyte (const unsigned char *, EMACS_INT);
-extern EMACS_INT str_as_multibyte (unsigned char *, EMACS_INT, EMACS_INT,
-			     EMACS_INT *);
-extern EMACS_INT str_to_multibyte (unsigned char *, EMACS_INT, EMACS_INT);
-extern EMACS_INT str_as_unibyte (unsigned char *, EMACS_INT);
-extern EMACS_INT str_to_unibyte (const unsigned char *, unsigned char *,
-                                 EMACS_INT, int);
-extern EMACS_INT strwidth (const char *, EMACS_INT);
-extern EMACS_INT c_string_width (const unsigned char *, EMACS_INT, int,
-				 EMACS_INT *, EMACS_INT *);
-extern EMACS_INT lisp_string_width (Lisp_Object, EMACS_INT,
-				    EMACS_INT *, EMACS_INT *);
+				    ptrdiff_t, ptrdiff_t *, ptrdiff_t *);
+extern ptrdiff_t count_size_as_multibyte (const unsigned char *, ptrdiff_t);
+extern ptrdiff_t str_as_multibyte (unsigned char *, ptrdiff_t, ptrdiff_t,
+				   ptrdiff_t *);
+extern ptrdiff_t str_to_multibyte (unsigned char *, ptrdiff_t, ptrdiff_t);
+extern ptrdiff_t str_as_unibyte (unsigned char *, ptrdiff_t);
+extern ptrdiff_t str_to_unibyte (const unsigned char *, unsigned char *,
+                                 ptrdiff_t, int);
+extern ptrdiff_t strwidth (const char *, ptrdiff_t);
+extern ptrdiff_t c_string_width (const unsigned char *, ptrdiff_t, int,
+				 ptrdiff_t *, ptrdiff_t *);
+extern ptrdiff_t lisp_string_width (Lisp_Object, ptrdiff_t,
+				    ptrdiff_t *, ptrdiff_t *);
 
 extern Lisp_Object Qcharacterp;
 extern Lisp_Object Vchar_unify_table;

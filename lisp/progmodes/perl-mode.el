@@ -1,6 +1,6 @@
 ;;; perl-mode.el --- Perl code editing commands for GNU Emacs
 
-;; Copyright (C) 1990, 1994, 2001-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1990, 1994, 2001-2012 Free Software Foundation, Inc.
 
 ;; Author: William F. Mann
 ;; Maintainer: FSF
@@ -132,11 +132,6 @@
     (define-key map "\t" 'perl-indent-command)
     map)
   "Keymap used in Perl mode.")
-
-(autoload 'c-macro-expand "cmacexp"
-  "Display the result of expanding all C macros occurring in the region.
-The expansion is entirely correct because it uses the C preprocessor."
-  t)
 
 (defvar perl-mode-syntax-table
   (let ((st (make-syntax-table (standard-syntax-table))))
@@ -378,7 +373,7 @@ The expansion is entirely correct because it uses the C preprocessor."
 		    ;; we are: we have to go back to the beginning of this
 		    ;; "string" and count from there.
 		    (condition-case nil
-                        (progn
+			(progn
 			  ;; Start after the first char since it doesn't have
 			  ;; paren-syntax (an alternative would be to let-bind
 			  ;; parse-sexp-lookup-properties).
@@ -388,7 +383,11 @@ The expansion is entirely correct because it uses the C preprocessor."
                       ;; In case of error, make sure we don't move backward.
 		      (scan-error (goto-char startpos) nil))
 		  (not (or (nth 8 (parse-partial-sexp
-				   (point) limit nil nil state 'syntax-table))
+				   ;; Since we don't know if point is within
+				   ;; the first or the scond arg, we have to
+				   ;; start from the beginning.
+				   (if twoargs (1+ (nth 8 state)) (point))
+				   limit nil nil state 'syntax-table))
 			   ;; If we have a self-paired opener and a twoargs
 			   ;; command, the form is s/../../ so we have to skip
 			   ;; a second time.
@@ -411,17 +410,17 @@ The expansion is entirely correct because it uses the C preprocessor."
 	  ;; s{...}{...}) we're right after the first arg, so we still have to
 	  ;; handle the second part.
 	  (when (and twoargs close)
-            ;; Skip whitespace and make sure that font-lock will
-            ;; refontify the second part in the proper context.
-            (put-text-property
-             (point) (progn (forward-comment (point-max)) (point))
+	    ;; Skip whitespace and make sure that font-lock will
+	    ;; refontify the second part in the proper context.
+	    (put-text-property
+	     (point) (progn (forward-comment (point-max)) (point))
 	     'syntax-multiline t)
-            ;;
+	    ;;
 	    (when (< (point) limit)
-              (put-text-property (point) (1+ (point))
-                                 'syntax-table
-                                 (if (assoc (char-after)
-                                            perl-quote-like-pairs)
+	      (put-text-property (point) (1+ (point))
+				 'syntax-table
+				 (if (assoc (char-after)
+					    perl-quote-like-pairs)
                                      ;; Put an `e' in the cdr to mark this
                                      ;; char as "second arg starter".
 				     (string-to-syntax "|e")
@@ -464,7 +463,7 @@ The expansion is entirely correct because it uses the C preprocessor."
    (t (funcall (default-value 'font-lock-syntactic-face-function) state))))
 
 (defcustom perl-indent-level 4
-  "*Indentation of Perl statements with respect to containing block."
+  "Indentation of Perl statements with respect to containing block."
   :type 'integer
   :group 'perl)
 
@@ -481,30 +480,38 @@ The expansion is entirely correct because it uses the C preprocessor."
 ;;;###autoload(put 'perl-label-offset 'safe-local-variable 'integerp)
 
 (defcustom perl-continued-statement-offset 4
-  "*Extra indent for lines not starting new statements."
+  "Extra indent for lines not starting new statements."
   :type 'integer
   :group 'perl)
 (defcustom perl-continued-brace-offset -4
-  "*Extra indent for substatements that start with open-braces.
+  "Extra indent for substatements that start with open-braces.
 This is in addition to `perl-continued-statement-offset'."
   :type 'integer
   :group 'perl)
 (defcustom perl-brace-offset 0
-  "*Extra indentation for braces, compared with other text in same context."
+  "Extra indentation for braces, compared with other text in same context."
   :type 'integer
   :group 'perl)
 (defcustom perl-brace-imaginary-offset 0
-  "*Imagined indentation of an open brace that actually follows a statement."
+  "Imagined indentation of an open brace that actually follows a statement."
   :type 'integer
   :group 'perl)
 (defcustom perl-label-offset -2
-  "*Offset of Perl label lines relative to usual indentation."
+  "Offset of Perl label lines relative to usual indentation."
   :type 'integer
   :group 'perl)
 (defcustom perl-indent-continued-arguments nil
-  "*If non-nil offset of argument lines relative to usual indentation.
+  "If non-nil offset of argument lines relative to usual indentation.
 If nil, continued arguments are aligned with the first argument."
   :type '(choice integer (const nil))
+  :group 'perl)
+
+(defcustom perl-indent-parens-as-block nil
+  "Non-nil means that non-block ()-, {}- and []-groups are indented as blocks.
+The closing bracket is aligned with the line of the opening bracket,
+not the contents of the brackets."
+  :version "24.2"
+  :type 'boolean
   :group 'perl)
 
 (defcustom perl-tab-always-indent tab-always-indent
@@ -517,7 +524,7 @@ nonwhite character on the line."
 ;; I changed the default to nil for consistency with general Emacs
 ;; conventions -- rms.
 (defcustom perl-tab-to-comment nil
-  "*Non-nil means TAB moves to eol or makes a comment in some cases.
+  "Non-nil means TAB moves to eol or makes a comment in some cases.
 For lines which don't need indenting, TAB either indents an
 existing comment, moves to end-of-line, or if at end-of-line already,
 create a new comment."
@@ -525,7 +532,7 @@ create a new comment."
   :group 'perl)
 
 (defcustom perl-nochange ";?#\\|\f\\|\\s(\\|\\(\\w\\|\\s_\\)+:[^:]"
-  "*Lines starting with this regular expression are not auto-indented."
+  "Lines starting with this regular expression are not auto-indented."
   :type 'regexp
   :group 'perl)
 
@@ -752,6 +759,7 @@ changed by, or (parse-state) if line starts in a quoted string."
     (setq shift-amt
 	  (cond ((eq (char-after bof) ?=) 0)
 		((listp (setq indent (perl-calculate-indent bof))) indent)
+                ((eq 'noindent indent) indent)
 		((looking-at (or nochange perl-nochange)) 0)
 		(t
 		 (skip-chars-forward " \t\f")
@@ -845,10 +853,11 @@ Optional argument PARSE-START should be the position of `beginning-of-defun'."
 	;;          following_quotep minimum_paren-depth_this_scan)
 	;; Parsing stops if depth in parentheses becomes equal to third arg.
 	(setq containing-sexp (nth 1 state)))
-      (cond ((nth 3 state) state)	; In a quoted string?
+      (cond ((nth 3 state) 'noindent)	; In a quoted string?
 	    ((null containing-sexp)	; Line is at top level.
 	     (skip-chars-forward " \t\f")
-	     (if (= (following-char) ?{)
+	     (if (memq (following-char)
+		       (if perl-indent-parens-as-block '(?\{ ?\( ?\[) '(?\{)))
 		 0  ; move to beginning of line if it starts a function body
 	       ;; indent a little if this is a continuation line
 	       (perl-backward-to-noncomment)
@@ -892,7 +901,9 @@ Optional argument PARSE-START should be the position of `beginning-of-defun'."
 			  0 perl-continued-statement-offset)
 		      (current-column)
 		      (if (save-excursion (goto-char indent-point)
-					  (looking-at "[ \t]*{"))
+					  (looking-at
+					   (if perl-indent-parens-as-block
+					       "[ \t]*[{(\[]" "[ \t]*{")))
 			  perl-continued-brace-offset 0)))
 	       ;; This line starts a new statement.
 	       ;; Position at last unclosed open.

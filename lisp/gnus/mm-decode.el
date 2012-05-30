@@ -1,6 +1,6 @@
 ;;; mm-decode.el --- Functions for decoding MIME things
 
-;; Copyright (C) 1998-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;;	MORIOKA Tomohiko <morioka@jaist.ac.jp>
@@ -1353,7 +1353,7 @@ Use CMD as the process."
 		  (mailcap-mime-info type 'all)))
 	 (method (let ((minibuffer-local-completion-map
 			mm-viewer-completion-map))
-		   (completing-read "Viewer" methods))))
+		   (completing-read "Viewer: " methods))))
     (when (string= method "")
       (error "No method given"))
     (if (string-match "^[^% \t]+$" method)
@@ -1493,7 +1493,7 @@ be determined."
   (let ((image (mm-get-image handle)))
     (or (not image)
 	(if (featurep 'xemacs)
-	    ;; XEmacs' glyphs can actually tell us about their width, so
+	    ;; XEmacs's glyphs can actually tell us about their width, so
 	    ;; let's be nice and smart about them.
 	    (or mm-inline-large-images
 		(and (<= (glyph-width image) (window-pixel-width))
@@ -1757,6 +1757,10 @@ If RECURSIVE, search recursively."
 				    (string-to-number (match-string 2)))
 				  mm-extra-numeric-entities)))
 	     (replace-match (char-to-string char))))
+	 ;; Remove "soft hyphens".
+	 (goto-char (point-min))
+	 (while (search-forward "­" nil t)
+	   (replace-match "" t t))
 	 (libxml-parse-html-region (point-min) (point-max))))
       (mm-handle-set-undisplayer
        handle

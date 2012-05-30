@@ -1,6 +1,6 @@
 ;;; font-lock.el --- Electric font lock mode
 
-;; Copyright (C) 1992-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1992-2012 Free Software Foundation, Inc.
 
 ;; Author: Jamie Zawinski
 ;;	Richard Stallman
@@ -67,7 +67,7 @@
 ;;
 ;; The syntactic keyword pass places `syntax-table' text properties in the
 ;; buffer according to the variable `font-lock-syntactic-keywords'.  It is
-;; necessary because Emacs' syntax table is not powerful enough to describe all
+;; necessary because Emacs's syntax table is not powerful enough to describe all
 ;; the different syntactic constructs required by the sort of people who decide
 ;; that a single quote can be syntactic or not depending on the time of day.
 ;; (What sort of person could decide to overload the meaning of a quote?)
@@ -492,11 +492,11 @@ This is normally set via `font-lock-add-keywords' and
 `font-lock-remove-keywords'.")
 
 (defvar font-lock-keywords-only nil
-  "*Non-nil means Font Lock should not fontify comments or strings.
+  "Non-nil means Font Lock should not fontify comments or strings.
 This is normally set via `font-lock-defaults'.")
 
 (defvar font-lock-keywords-case-fold-search nil
-  "*Non-nil means the patterns in `font-lock-keywords' are case-insensitive.
+  "Non-nil means the patterns in `font-lock-keywords' are case-insensitive.
 This is set via the function `font-lock-set-defaults', based on
 the CASE-FOLD argument of `font-lock-defaults'.")
 (make-variable-buffer-local 'font-lock-keywords-case-fold-search)
@@ -556,7 +556,7 @@ If this is nil, the major mode's syntax table is used.
 This is normally set via `font-lock-defaults'.")
 
 (defvar font-lock-beginning-of-syntax-function nil
-  "*Non-nil means use this function to move back outside all constructs.
+  "Non-nil means use this function to move back outside all constructs.
 When called with no args it should move point backward to a place which
 is not in a string or comment and not within any bracket-pairs (or else,
 a place such that any bracket-pairs outside it can be ignored for Emacs
@@ -571,7 +571,7 @@ This is normally set via `font-lock-defaults'.")
                         'syntax-begin-function "23.3" 'set)
 
 (defvar font-lock-mark-block-function nil
-  "*Non-nil means use this function to mark a block of text.
+  "Non-nil means use this function to mark a block of text.
 When called with no args it should leave point at the beginning of any
 enclosing textual block and mark at the end.
 This is normally set via `font-lock-defaults'.")
@@ -629,13 +629,24 @@ Major/minor modes can set this variable if they know which option applies.")
   ;; Shut up the byte compiler.
   (defvar font-lock-face-attributes))	; Obsolete but respected if set.
 
-(defun font-lock-mode-internal (arg)
-  ;; Turn on Font Lock mode.
-  (when arg
-    (add-hook 'after-change-functions 'font-lock-after-change-function t t)
-    (font-lock-set-defaults)
-    (font-lock-turn-on-thing-lock)
-    ;; Fontify the buffer if we have to.
+(defun font-lock-specified-p (mode)
+  "Return non-nil if the current buffer is ready for fontification.
+The MODE argument, if non-nil, means Font Lock mode is about to
+be enabled."
+  (or font-lock-defaults
+      (and (boundp 'font-lock-keywords)
+	   font-lock-keywords)
+      (and mode
+	   (boundp 'font-lock-set-defaults)
+	   font-lock-set-defaults
+	   font-lock-major-mode
+	   (not (eq font-lock-major-mode major-mode)))))
+
+(defun font-lock-initial-fontify ()
+  ;; The first fontification after turning the mode on.  This must
+  ;;  only be called after the mode hooks have been run.
+  (when (and font-lock-mode
+	     (font-lock-specified-p t))
     (let ((max-size (font-lock-value-in-major-mode font-lock-maximum-size)))
       (cond (font-lock-fontified
 	     nil)
@@ -643,7 +654,14 @@ Major/minor modes can set this variable if they know which option applies.")
 	     (font-lock-fontify-buffer))
 	    (font-lock-verbose
 	     (message "Fontifying %s...buffer size greater than font-lock-maximum-size"
-		      (buffer-name))))))
+		      (buffer-name)))))))
+
+(defun font-lock-mode-internal (arg)
+  ;; Turn on Font Lock mode.
+  (when arg
+    (add-hook 'after-change-functions 'font-lock-after-change-function t t)
+    (font-lock-set-defaults)
+    (font-lock-turn-on-thing-lock))
   ;; Turn off Font Lock mode.
   (unless font-lock-mode
     (remove-hook 'after-change-functions 'font-lock-after-change-function t)
@@ -2266,13 +2284,13 @@ in which C preprocessor directives are used. e.g. `asm-mode' and
      `(;; Control structures.  Emacs Lisp forms.
        (,(concat
 	  "(" (regexp-opt
-	       '("cond" "if" "while" "while-no-input" "let" "let*"
-		 "prog" "progn" "progv" "prog1" "prog2" "prog*"
-		 "inline" "lambda" "save-restriction" "save-excursion"
-		 "save-selected-window" "save-window-excursion"
-		 "save-match-data" "save-current-buffer"
+	       '("cond" "if" "while" "while-no-input" "let" "let*" "letrec"
+		 "pcase" "pcase-let" "pcase-let*" "prog" "progn" "progv"
+                 "prog1" "prog2" "prog*" "inline" "lambda"
+                 "save-restriction" "save-excursion" "save-selected-window"
+                 "save-window-excursion" "save-match-data" "save-current-buffer"
 		 "combine-after-change-calls" "unwind-protect"
-		 "condition-case" "condition-case-no-debug"
+		 "condition-case" "condition-case-unless-debug"
 		 "track-mouse" "eval-after-load" "eval-and-compile"
 		 "eval-when-compile" "eval-when" "eval-next-after-load"
 		 "with-case-table" "with-category-table"
@@ -2283,7 +2301,7 @@ in which C preprocessor directives are used. e.g. `asm-mode' and
 		 "with-selected-window" "with-selected-frame"
 		 "with-silent-modifications" "with-syntax-table"
 		 "with-temp-buffer" "with-temp-file" "with-temp-message"
-		 "with-timeout" "with-timeout-handler") t)
+		 "with-timeout" "with-timeout-handler" "with-wrapper-hook") t)
 	  "\\>")
 	  .  1)
        ;; Control structures.  Common Lisp forms.

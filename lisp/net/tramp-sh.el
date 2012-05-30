@@ -43,7 +43,7 @@
 ;; `dired-insert-set-properties'.
 
 (defcustom tramp-inline-compress-start-size 4096
-  "*The minimum size of compressing where inline transfer.
+  "The minimum size of compressing where inline transfer.
 When inline transfer, compress transferred data of file
 whose size is this value or above (up to `tramp-copy-size-limit').
 If it is nil, no compression at all will be applied."
@@ -51,14 +51,14 @@ If it is nil, no compression at all will be applied."
   :type '(choice (const nil) integer))
 
 (defcustom tramp-copy-size-limit 10240
-  "*The maximum file size where inline copying is preferred over an out-of-the-band copy.
+  "The maximum file size where inline copying is preferred over an out-of-the-band copy.
 If it is nil, inline out-of-the-band copy will be used without a check."
   :group 'tramp
   :type '(choice (const nil) integer))
 
 ;;;###tramp-autoload
 (defcustom tramp-terminal-type "dumb"
-  "*Value of TERM environment variable for logging in to remote host.
+  "Value of TERM environment variable for logging in to remote host.
 Because Tramp wants to parse the output of the remote shell, it is easily
 confused by ANSI color escape sequences and suchlike.  Often, shell init
 files conditionalize this setup based on the TERM environment variable."
@@ -380,7 +380,7 @@ detected as prompt when being sent on echoing hosts, therefore.")
     (tramp-remote-shell         "/bin/sh")
     (tramp-remote-shell-args    ("-c"))
     (tramp-copy-program         "pscp")
-    (tramp-copy-args            (("-P" "%p") ("-scp") ("-p" "%k")
+    (tramp-copy-args            (("-l" "%u") ("-P" "%p") ("-scp") ("-p" "%k")
 				 ("-q") ("-r")))
     (tramp-copy-keep-date       t)
     (tramp-copy-recursive       t)
@@ -394,7 +394,7 @@ detected as prompt when being sent on echoing hosts, therefore.")
     (tramp-remote-shell         "/bin/sh")
     (tramp-remote-shell-args    ("-c"))
     (tramp-copy-program         "pscp")
-    (tramp-copy-args            (("-P" "%p") ("-sftp") ("-p" "%k")
+    (tramp-copy-args            (("-l" "%u") ("-P" "%p") ("-sftp") ("-p" "%k")
 				 ("-q") ("-r")))
     (tramp-copy-keep-date       t)
     (tramp-copy-recursive       t)
@@ -419,13 +419,12 @@ detected as prompt when being sent on echoing hosts, therefore.")
 	     `(,(concat "\\`" (regexp-opt '("su" "sudo" "ksu")) "\\'")
 	       nil "root"))
 ;; Do not add "ssh" based methods, otherwise ~/.ssh/config would be ignored.
+;; Do not add "plink" based methods, they ask interactively for the user.
 ;;;###tramp-autoload
 (add-to-list 'tramp-default-user-alist
 	     `(,(concat
 		 "\\`"
-		 (regexp-opt
-		  '("rcp" "remcp" "rsh" "telnet" "krlogin"
-		    "plink" "plink1" "pscp" "psftp" "fcp"))
+		 (regexp-opt '("rcp" "remcp" "rsh" "telnet" "krlogin" "fcp"))
 		 "\\'")
 	       nil ,(user-login-name)))
 
@@ -512,11 +511,12 @@ detected as prompt when being sent on echoing hosts, therefore.")
 ;; GNU/Linux (Debian, Suse): /bin:/usr/bin
 ;; FreeBSD: /usr/bin:/bin:/usr/sbin:/sbin: - beware trailing ":"!
 ;; IRIX64: /usr/bin
+;;;###tramp-autoload
 (defcustom tramp-remote-path
   '(tramp-default-remote-path "/bin" "/usr/bin" "/usr/sbin" "/usr/local/bin"
     "/local/bin" "/local/freeware/bin" "/local/gnu/bin"
     "/usr/freeware/bin" "/usr/pkg/bin" "/usr/contrib/bin")
-  "*List of directories to search for executables on remote host.
+  "List of directories to search for executables on remote host.
 For every remote host, this variable will be set buffer local,
 keeping the list of existing directories on that host.
 
@@ -543,10 +543,10 @@ as given in your `~/.profile'."
     ,(format "TERM=%s" tramp-terminal-type)
     "EMACS=t" ;; Deprecated.
     ,(format "INSIDE_EMACS='%s,tramp:%s'" emacs-version tramp-version)
-    "CDPATH=" "HISTORY=" "MAIL=" "MAILCHECK=" "MAILPATH="
+    "CDPATH=" "HISTORY=" "MAIL=" "MAILCHECK=" "MAILPATH=" "PAGER=\"\""
     "autocorrect=" "correct=")
 
-  "*List of environment variables to be set on the remote host.
+  "List of environment variables to be set on the remote host.
 
 Each element should be a string of the form ENVVARNAME=VALUE.  An
 entry ENVVARNAME= disables the corresponding environment variable,
@@ -558,7 +558,7 @@ not be set here. Instead, it should be set via `tramp-remote-path'."
   :type '(repeat string))
 
 (defcustom tramp-sh-extra-args '(("/bash\\'" . "-norc -noprofile"))
-  "*Alist specifying extra arguments to pass to the remote shell.
+  "Alist specifying extra arguments to pass to the remote shell.
 Entries are (REGEXP . ARGS) where REGEXP is a regular expression
 matching the shell file name and ARGS is a string specifying the
 arguments.
@@ -1909,7 +1909,7 @@ tramp-sh-handle-file-name-all-completions: internal error accessing `%s': `%s'"
      'copy-file (list filename newname ok-if-already-exists keep-date)))))
 
 (defun tramp-sh-handle-copy-directory
-  (dirname newname &optional keep-date parents)
+  (dirname newname &optional keep-date parents copy-contents)
   "Like `copy-directory' for Tramp files."
   (let ((t1 (tramp-tramp-file-p dirname))
 	(t2 (tramp-tramp-file-p newname)))
@@ -2280,8 +2280,10 @@ The method used must be an out-of-band method."
 	;; Set variables for computing the prompt for reading
 	;; password.
 	(setq tramp-current-method (tramp-file-name-method v)
-	      tramp-current-user   (tramp-file-name-user v)
-	      tramp-current-host   (tramp-file-name-real-host v))
+	      tramp-current-user (or (tramp-file-name-user v)
+				     (tramp-get-connection-property
+				      v "login-as" nil))
+	      tramp-current-host (tramp-file-name-real-host v))
 
 	;; Expand hops.  Might be necessary for gateway methods.
 	(setq v (car (tramp-compute-multi-hops v)))
@@ -2308,8 +2310,15 @@ The method used must be an out-of-band method."
 	  (setq port (string-to-number (match-string 2 host))
 		host (string-to-number (match-string 1 host))))
 
+	;; Check for user.  There might be an interactive setting.
+	(setq user (or (tramp-file-name-user v)
+		       (tramp-get-connection-property v "login-as" nil)))
+
 	;; Compose copy command.
-	(setq spec (format-spec-make
+	(setq host (or host "")
+	      user (or user "")
+	      port (or port "")
+	      spec (format-spec-make
 		    ?h host ?u user ?p port
 		    ?t (tramp-get-connection-property
 			(tramp-get-connection-process v) "temp-file" "")

@@ -39,13 +39,13 @@
 (defmacro emerge-defvar-local (var value doc)
   "Defines SYMBOL as an advertised variable.
 Performs a defvar, then executes `make-variable-buffer-local' on
-the variable.  Also sets the `preserved' property, so that
+the variable.  Also sets the `permanent-local' property, so that
 `kill-all-local-variables' (called by major-mode setting commands)
 won't destroy Emerge control variables."
   `(progn
     (defvar ,var ,value ,doc)
     (make-variable-buffer-local ',var)
-    (put ',var 'preserved t)))
+    (put ',var 'permanent-local t)))
 
 ;; Add entries to minor-mode-alist so that emerge modes show correctly
 (defvar emerge-minor-modes-list
@@ -524,10 +524,10 @@ replaced by emerge-fast-keymap.")
 (emerge-defvar-local emerge-old-keymap nil
   "The original local keymap for the merge buffer.")
 (emerge-defvar-local emerge-auto-advance nil
-  "*If non-nil, emerge-select-A and emerge-select-B automatically advance to
+		     "If non-nil, emerge-select-A and emerge-select-B automatically advance to
 the next difference.")
 (emerge-defvar-local emerge-skip-prefers nil
-  "*If non-nil, differences for which there is a preference are automatically
+		     "If non-nil, differences for which there is a preference are automatically
 skipped.")
 (emerge-defvar-local emerge-quit-hook nil
   "Hooks to run in the merge buffer after the merge has been finished.

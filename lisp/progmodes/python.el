@@ -67,12 +67,9 @@
 ;;; Code:
 
 (require 'comint)
+(require 'ansi-color)
 
-(eval-when-compile
-  (require 'compile)
-  (require 'hippie-exp))
-
-(autoload 'comint-mode "comint")
+(eval-when-compile (require 'compile))
 
 (defgroup python nil
   "Silly walks in the Python language."
@@ -493,7 +490,7 @@ statement."
 
 
 (defcustom python-pdbtrack-do-tracking-p t
-  "*Controls whether the pdbtrack feature is enabled or not.
+  "Controls whether the pdbtrack feature is enabled or not.
 
 When non-nil, pdbtrack is enabled in all comint-based buffers,
 e.g. shell interaction buffers and the *Python* buffer.
@@ -508,7 +505,7 @@ having to restart the program."
 (make-variable-buffer-local 'python-pdbtrack-do-tracking-p)
 
 (defcustom python-pdbtrack-minor-mode-string " PDB"
-  "*Minor-mode sign to be displayed when pdbtrack is active."
+  "Minor-mode sign to be displayed when pdbtrack is active."
   :type 'string
   :group 'python)
 
@@ -1003,9 +1000,10 @@ On a comment line, go to end of line."
                                (error (goto-char pos) (end-of-line)))))
 			  ((python-skip-out t s))))
 	     (end-of-line))
-	   (unless comment
-	     (eq ?\\ (char-before))))	; Line continued?
-    (end-of-line 2))			; Try next line.
+	   (and (not comment)
+		(not (eobp))
+		(eq ?\\ (char-before)))) ; Line continued?
+    (end-of-line 2))                     ; Try next line.
   (point))
 
 (defun python-previous-statement (&optional count)
@@ -1286,7 +1284,7 @@ modified by the user.  Additional arguments are added when the command
 is used by `run-python' et al.")
 
 (defvar python-buffer nil
-  "*The current Python process buffer.
+  "The current Python process buffer.
 
 Commands that send text from source buffers to Python processes have
 to choose a process to send to.  This is determined by buffer-local
@@ -1386,7 +1384,6 @@ For running multiple processes in multiple buffers, see `run-python' and
 
 \\{inferior-python-mode-map}"
   :group 'python
-  (require 'ansi-color) ; for ipython
   (setq mode-line-process '(":%s"))
   (set (make-local-variable 'comint-input-filter) 'python-input-filter)
   (add-hook 'comint-preoutput-filter-functions #'python-preoutput-filter
@@ -1487,8 +1484,6 @@ Don't save anything for STR matching `inferior-python-filter-regexp'."
            res)
           (t (concat res s)))))
 
-(autoload 'comint-check-proc "comint")
-
 (defvar python-version-checked nil)
 (defun python-check-version (cmd)
   "Check that CMD runs a suitable version of Python."
@@ -1530,7 +1525,6 @@ behavior, change `python-remove-cwd-from-path' to nil."
   (interactive (if current-prefix-arg
 		   (list (read-string "Run Python: " python-command) nil t)
 		 (list python-command)))
-  (require 'ansi-color) ; for ipython
   (unless cmd (setq cmd python-command))
   (python-check-version cmd)
   (setq python-command cmd)
@@ -1607,7 +1601,7 @@ behavior, change `python-remove-cwd-from-path' to nil."
   ;; Fixme: Write a `coding' header to the temp file if the region is
   ;; non-ASCII.
   (interactive "r")
-  (let* ((f (make-temp-file "py"))
+  (let* ((f (make-temp-file "py" nil ".py"))
 	 (command
           ;; IPython puts the FakeModule module into __main__ so
           ;; emacs.eexecfile becomes useless.
@@ -1683,8 +1677,6 @@ value to determine defaults."
 (defvar python-prev-dir/file nil
   "Caches (directory . file) pair used in the last `python-load-file' command.
 Used for determining the default in the next one.")
-
-(autoload 'comint-get-source "comint")
 
 (defun python-load-file (file-name)
   "Load a Python file FILE-NAME into the inferior Python process.
@@ -1776,7 +1768,7 @@ will."
   ;; allow C-c C-f in help buffer.
   (let ((temp-buffer-show-hook		; avoid xref stuff
 	 (lambda ()
-	   (toggle-read-only 1)
+	   (setq buffer-read-only t)
 	   (setq view-return-to-alist
 		 (list (cons (selected-window) help-return-method))))))
     (with-output-to-temp-buffer (help-buffer)
@@ -1959,7 +1951,7 @@ the string's indentation."
 		;; paragraph in a multi-line string properly, so narrow
 		;; to the string and then fill around (the end of) the
 		;; current line.
-		((eq t (nth 3 syntax))	; in fenced string
+		((nth 3 syntax)	; in fenced string
 		 (goto-char (nth 8 syntax)) ; string start
 		 (setq start (line-beginning-position))
 		 (setq end (condition-case () ; for unbalanced quotes
@@ -2478,15 +2470,6 @@ with skeleton expansions for compound statement templates.
 	    nil t)
   (add-hook 'completion-at-point-functions
             'python-completion-at-point nil 'local)
-  ;; Fixme: should be in hideshow.  This seems to be of limited use
-  ;; since it isn't (can't be) indentation-based.  Also hide-level
-  ;; doesn't seem to work properly.
-  (add-to-list 'hs-special-modes-alist
-	       `(python-mode "^\\s-*\\(?:def\\|class\\)\\>" nil "#"
-		 ,(lambda (_arg)
-		    (python-end-of-defun)
-		    (skip-chars-backward " \t\n"))
-		 nil))
   (set (make-local-variable 'skeleton-further-elements)
        '((< '(backward-delete-char-untabify (min python-indent
 						 (current-column))))
@@ -2625,9 +2608,17 @@ problem."
     (let* ((filename (match-string 1 block))
            (lineno (string-to-number (match-string 2 block)))
            (funcname (match-string 3 block))
+           (msg (get-text-property 0 'compilation-message filename))
+           (loc (and msg (compilation--message->loc msg)))
            funcbuffer)
 
-      (cond ((file-exists-p filename)
+      (cond ((and loc (markerp (compilation--loc->marker loc)))
+             (setq funcbuffer (marker-buffer (compilation--loc->marker loc)))
+             (list (with-current-buffer funcbuffer
+                     (line-number-at-pos (compilation--loc->marker loc)))
+                   funcbuffer))
+
+            ((file-exists-p filename)
              (list lineno (find-file-noselect filename)))
 
             ((setq funcbuffer (python-pdbtrack-grub-for-buffer funcname lineno))
@@ -2645,15 +2636,12 @@ problem."
                                                   (buffer-substring
                                                    (point-min) (point-max)))
                                     )))))))
-               (list lineno funcbuffer))
+             (list lineno funcbuffer))
 
             ((= (elt filename 0) ?\<)
              (format "(Non-file source: '%s')" filename))
 
-            (t (format "Not found: %s(), %s" funcname filename)))
-      )
-    )
-  )
+            (t (format "Not found: %s(), %s" funcname filename))))))
 
 (defun python-pdbtrack-grub-for-buffer (funcname _lineno)
   "Find recent Python mode buffer named, or having function named FUNCNAME."
@@ -2726,6 +2714,17 @@ comint believe the user typed this string so that
     (setq debug-ignored-errors (delete error debug-ignored-errors)))
   ;; continue standard unloading
   nil)
+
+;;;; Finish up
+;; Fixme: should be in hideshow.  This seems to be of limited use
+;; since it isn't (can't be) indentation-based.  Also hide-level
+;; doesn't seem to work properly.
+(add-to-list 'hs-special-modes-alist
+             `(python-mode "^\\s-*\\(?:def\\|class\\)\\>" nil "#"
+                           ,(lambda (_arg)
+                              (python-end-of-defun)
+                              (skip-chars-backward " \t\n"))
+                           nil))
 
 (provide 'python)
 (provide 'python-21)

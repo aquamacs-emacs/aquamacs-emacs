@@ -1,6 +1,6 @@
 /* Implementation of GUI terminal on the Microsoft W32 API.
 
-Copyright (C) 1989, 1993-2012  Free Software Foundation, Inc.
+Copyright (C) 1989, 1993-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -230,6 +230,10 @@ static void my_set_focus (struct frame *, HWND);
 #endif
 static void my_set_foreground_window (HWND);
 static void my_destroy_window (struct frame *, HWND);
+
+#if GLYPH_DEBUG
+static void x_check_font (struct frame *, struct font *);
+#endif
 
 static Lisp_Object Qvendor_specific_keysyms;
 
@@ -3488,6 +3492,12 @@ my_destroy_window (struct frame * f, HWND hwnd)
 	       (WPARAM) hwnd, 0);
 }
 
+static void
+my_bring_window_to_top (HWND hwnd)
+{
+  SendMessage (hwnd, WM_EMACS_BRINGTOTOP, (WPARAM) hwnd, 0);
+}
+
 /* Create a scroll bar and return the scroll bar vector for it.  W is
    the Emacs window on which to create the scroll bar. TOP, LEFT,
    WIDTH and HEIGHT are the pixel coordinates and dimensions of the
@@ -5596,24 +5606,27 @@ x_raise_frame (struct frame *f)
       HDWP handle = BeginDeferWindowPos (2);
       if (handle)
 	{
-	  DeferWindowPos (handle,
-			  FRAME_W32_WINDOW (f),
-  			  HWND_TOP,
-  			  0, 0, 0, 0,
-  			  SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-
-	  DeferWindowPos (handle,
-			  GetForegroundWindow (),
-			  FRAME_W32_WINDOW (f),
-			  0, 0, 0, 0,
-			  SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-
-	  EndDeferWindowPos (handle);
+	  handle = DeferWindowPos (handle,
+				   FRAME_W32_WINDOW (f),
+				   HWND_TOP,
+				   0, 0, 0, 0,
+				   SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+	  if (handle)
+	    {
+	      handle = DeferWindowPos (handle,
+				       GetForegroundWindow (),
+				       FRAME_W32_WINDOW (f),
+				       0, 0, 0, 0,
+				       SWP_NOSIZE | SWP_NOMOVE |
+				       SWP_NOACTIVATE);
+	      if (handle)
+		EndDeferWindowPos (handle);
+	    }
 	}
     }
   else
     {
-      my_set_foreground_window (FRAME_W32_WINDOW (f));
+      my_bring_window_to_top (FRAME_W32_WINDOW (f));
     }
 
   UNBLOCK_INPUT;
@@ -5903,6 +5916,27 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
   XSetWMHints (FRAME_X_DISPLAY (f), window, &f->display.x->wm_hints);
 #endif
 }
+
+
+/***********************************************************************
+				Fonts
+ ***********************************************************************/
+
+#if GLYPH_DEBUG
+
+/* Check that FONT is valid on frame F.  It is if it can be found in F's
+   font table.  */
+
+static void
+x_check_font (struct frame *f, struct font *font)
+{
+  xassert (font != NULL && ! NILP (font->props[FONT_TYPE_INDEX]));
+  if (font->driver->check)
+    xassert (font->driver->check (f, font) == 0);
+}
+
+#endif /* GLYPH_DEBUG != 0 */
+
 
 
 /***********************************************************************
@@ -6411,7 +6445,7 @@ the cursor have no effect.  */);
      from cus-start.el and other places, like "M-x set-variable".  */
   DEFVAR_BOOL ("x-use-underline-position-properties",
 	       x_use_underline_position_properties,
-     doc: /* *Non-nil means make use of UNDERLINE_POSITION font properties.
+     doc: /* Non-nil means make use of UNDERLINE_POSITION font properties.
 A value of nil means ignore them.  If you encounter fonts with bogus
 UNDERLINE_POSITION font properties, for example 7x13 on XFree prior
 to 4.1, set this to nil.  You can also use `underline-minimum-offset'
@@ -6421,7 +6455,7 @@ sizes.  */);
 
   DEFVAR_BOOL ("x-underline-at-descent-line",
 	       x_underline_at_descent_line,
-     doc: /* *Non-nil means to draw the underline at the same place as the descent line.
+     doc: /* Non-nil means to draw the underline at the same place as the descent line.
 A value of nil means to draw the underline according to the value of the
 variable `x-use-underline-position-properties', which is usually at the
 baseline level.  The default value is nil.  */);
@@ -6432,7 +6466,7 @@ baseline level.  The default value is nil.  */);
 A value of nil means Emacs doesn't use toolkit scroll bars.
 With the X Window system, the value is a symbol describing the
 X toolkit.  Possible values are: gtk, motif, xaw, or xaw3d.
-With MS Windows, the value is t.  */);
+With MS Windows or Nextstep, the value is t.  */);
   Vx_toolkit_scroll_bars = Qt;
 
   staticpro (&last_mouse_motion_frame);

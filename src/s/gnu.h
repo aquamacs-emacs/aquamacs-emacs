@@ -24,8 +24,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #undef SYSTEM_TYPE
 #define SYSTEM_TYPE "gnu"
 
-#undef NLIST_STRUCT
-
 #define SIGNALS_VIA_CHARACTERS
 
 /* libc defines data_start.  */
@@ -44,5 +42,4 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif /* !_IO_STDIO_H */
 #endif /* emacs */
 
-/* Use the GC_MAKE_GCPROS_NOOPS (see lisp.h) method for marking the stack.  */
-#define GC_MARK_STACK 	GC_MAKE_GCPROS_NOOPS
+#define POSIX_SIGNALS 1

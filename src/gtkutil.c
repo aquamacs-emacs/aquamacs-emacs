@@ -1090,7 +1090,9 @@ xg_create_frame_widgets (FRAME_PTR f)
   GtkWidget *wtop;
   GtkWidget *wvbox, *whbox;
   GtkWidget *wfixed;
+#ifndef HAVE_GTK3
   GtkRcStyle *style;
+#endif
   char *title = 0;
 
   BLOCK_INPUT;
@@ -1304,10 +1306,13 @@ x_wm_set_size_hint (FRAME_PTR f, long int flags, int user_position)
 
   hint_flags |= GDK_HINT_BASE_SIZE;
   base_width = FRAME_TEXT_COLS_TO_PIXEL_WIDTH (f, 0) + FRAME_TOOLBAR_WIDTH (f);
-  base_height = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, 0)
+  /* Use one row here so base_height does not become zero.
+     Gtk+ and/or Unity on Ubuntu 12.04 can't handle it.  */
+  base_height = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, 1)
     + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f);
 
   check_frame_size (f, &min_rows, &min_cols);
+  if (min_rows > 0) --min_rows; /* We used one row in base_height = ... 1); */
 
   size_hints.base_width = base_width;
   size_hints.base_height = base_height;
@@ -1629,7 +1634,7 @@ xg_maybe_add_timer (gpointer data)
 static int
 xg_dialog_run (FRAME_PTR f, GtkWidget *w)
 {
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   struct xg_dialog_data dd;
 
   xg_set_screen (w, f);
@@ -1741,8 +1746,9 @@ xg_toggle_notify_cb (GObject *gobject, GParamSpec *arg1, gpointer user_data)
    PROMPT is a prompt to show to the user.  May not be NULL.
    DEFAULT_FILENAME is a default selection to be displayed.  May be NULL.
    If MUSTMATCH_P is non-zero, the returned file name must be an existing
-   file.  *FUNC is set to a function that can be used to retrieve the
-   selected file name from the returned widget.
+   file.  (Actually, this only has cosmetic effects, the user can
+   still enter a non-existing file.)  *FUNC is set to a function that
+   can be used to retrieve the selected file name from the returned widget.
 
    Returns the created widget.  */
 
@@ -4283,7 +4289,6 @@ xg_make_tool_item (FRAME_PTR f,
          rather than the GtkButton specific signals "enter" and
          "leave", so we can have only one callback.  The event
          will tell us what kind of event it is.  */
-      /* The EMACS_INT cast avoids a warning. */
       g_signal_connect (G_OBJECT (weventbox),
                         "enter-notify-event",
                         G_CALLBACK (xg_tool_bar_help_callback),
@@ -4409,20 +4414,17 @@ update_frame_tool_bar (FRAME_PTR f)
 
   BLOCK_INPUT;
 
-  if (INTEGERP (Vtool_bar_button_margin)
-      && XINT (Vtool_bar_button_margin) > 0)
+  if (RANGED_INTEGERP (1, Vtool_bar_button_margin, INT_MAX))
     {
       hmargin = XFASTINT (Vtool_bar_button_margin);
       vmargin = XFASTINT (Vtool_bar_button_margin);
     }
   else if (CONSP (Vtool_bar_button_margin))
     {
-      if (INTEGERP (XCAR (Vtool_bar_button_margin))
-          && XINT (XCAR (Vtool_bar_button_margin)) > 0)
+      if (RANGED_INTEGERP (1, XCAR (Vtool_bar_button_margin), INT_MAX))
         hmargin = XFASTINT (XCAR (Vtool_bar_button_margin));
 
-      if (INTEGERP (XCDR (Vtool_bar_button_margin))
-          && XINT (XCDR (Vtool_bar_button_margin)) > 0)
+      if (RANGED_INTEGERP (1, XCDR (Vtool_bar_button_margin), INT_MAX))
         vmargin = XFASTINT (XCDR (Vtool_bar_button_margin));
     }
 

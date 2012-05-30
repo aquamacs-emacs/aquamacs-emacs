@@ -1,6 +1,6 @@
 ;;; browse-url.el --- pass a URL to a WWW browser
 
-;; Copyright (C) 1995-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1995-2012 Free Software Foundation, Inc.
 
 ;; Author: Denis Howe <dbh@doc.ic.ac.uk>
 ;; Maintainer: FSF
@@ -297,7 +297,7 @@ Defaults to the value of `browse-url-netscape-arguments' at the time
   :group 'browse-url)
 
 (defcustom browse-url-browser-display nil
-  "The X display for running the browser, if not same as Emacs'."
+  "The X display for running the browser, if not same as Emacs's."
   :type '(choice string (const :tag "Default" nil))
   :group 'browse-url)
 
@@ -467,7 +467,7 @@ commands reverses the effect of this variable.  Requires Netscape version
     ;; it in anonymous cases.  If it's not anonymous the next regexp
     ;; applies.
     ("^/\\([^:@]+@\\)?\\([^:]+\\):/*" . "ftp://\\1\\2/")
-    ,@(if (memq system-type '(windows-nt ms-dos cygwin))
+    ,@(if (memq system-type '(windows-nt ms-dos))
           '(("^\\([a-zA-Z]:\\)[\\/]" . "file:///\\1/")
             ("^[\\/][\\/]+" . "file://")))
     ("^/+" . "file:///"))
@@ -642,7 +642,7 @@ CHARS is a regexp-like character alternative (e.g., \"[)$]\")."
 	(s 0))
     (while (setq s (string-match chars encoded-text s))
       (setq encoded-text
-	    (replace-match (format "%%%x"
+	    (replace-match (format "%%%X"
 				   (string-to-char (match-string 0 encoded-text)))
 			   t t encoded-text)
 	    s (1+ s)))
@@ -655,7 +655,7 @@ regarding its parameter treatment."
   ;; FIXME: Is there an actual example of a web browser getting
   ;; confused?  (This used to encode commas, but at least Firefox
   ;; handles commas correctly and doesn't accept encoded commas.)
-  (browse-url-url-encode-chars url "[)$]"))
+  (browse-url-url-encode-chars url "[\")$] "))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; URL input
@@ -724,12 +724,6 @@ interactively.  Turn the filename into a URL with function
 (defun browse-url-file-url (file)
   "Return the URL corresponding to FILE.
 Use variable `browse-url-filename-alist' to map filenames to URLs."
-  ;; De-munge Cygwin filenames before passing them to Windows browser.
-  (if (eq system-type 'cygwin)
-      (let ((winfile (with-output-to-string
-		       (call-process "cygpath" nil standard-output
-				     nil "-m" file))))
-	(setq file (substring winfile 0 -1))))
   (let ((coding (and (default-value 'enable-multibyte-characters)
 		     (or file-name-coding-system
 			 default-file-name-coding-system))))
@@ -951,7 +945,9 @@ used instead of `browse-url-new-window-flag'."
    url args))
 
 (defun browse-url-can-use-xdg-open ()
-  "Check if xdg-open can be used, i.e. we are on Gnome, KDE, Xfce4 or LXDE."
+  "Return non-nil if the \"xdg-open\" program can be used.
+xdg-open is a desktop utility that calls your preferred web browser.
+This requires you to be running either Gnome, KDE, Xfce4 or LXDE."
   (and (getenv "DISPLAY")
        (executable-find "xdg-open")
        ;; xdg-open may call gnome-open and that does not wait for its child
@@ -974,6 +970,7 @@ used instead of `browse-url-new-window-flag'."
 	       (eq 0 (call-process
 		      "/bin/sh" nil nil nil
 		      "-c"
+		      ;; FIXME use string-match rather than grep.
 		      "xprop -root _DT_SAVE_MODE|grep xfce4"))
 	     (error nil))
 	   (member (getenv "DESKTOP_SESSION") '("LXDE" "Lubuntu"))
@@ -981,7 +978,10 @@ used instead of `browse-url-new-window-flag'."
 
 
 ;;;###autoload
-(defun browse-url-xdg-open (url &optional new-window)
+(defun browse-url-xdg-open (url &optional ignored)
+  "Pass the specified URL to the \"xdg-open\" command.
+xdg-open is a desktop utility that calls your preferred web browser.
+The optional argument IGNORED is not used."
   (interactive (browse-url-interactive-arg "URL: "))
   (call-process "xdg-open" nil 0 nil url))
 

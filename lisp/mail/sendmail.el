@@ -1,4 +1,4 @@
-;;; sendmail.el --- mail sending commands for Emacs.  -*- byte-compile-dynamic: t -*-
+;;; sendmail.el --- mail sending commands for Emacs
 
 ;; Copyright (C) 1985-1986, 1992-1996, 1998, 2000-2012
 ;;   Free Software Foundation, Inc.
@@ -304,7 +304,7 @@ The default value matches citations like `foo-bar>' plus whitespace."
     (define-key map "\C-c\C-w" 'mail-signature)
     (define-key map "\C-c\C-c" 'mail-send-and-exit)
     (define-key map "\C-c\C-s" 'mail-send)
-    (define-key map "\C-c\C-i" 'mail-attach-file)
+    (define-key map "\C-c\C-i" 'mail-insert-file)
     ;; FIXME add this? "b" = bury buffer.  It's in the menu-bar.
 ;;;    (define-key map "\C-c\C-b" 'mail-dont-send)
 
@@ -513,48 +513,51 @@ This also saves the value of `send-mail-function' via Customize."
   ;; a second time, probably because someone's using an old value
   ;; of send-mail-function.
   (when (eq send-mail-function 'sendmail-query-once)
-    (let* ((options `(("mail client" . mailclient-send-it)
-                      ,@(when (and sendmail-program
-                                   (executable-find sendmail-program))
-                          '(("transport" . sendmail-send-it)))
-                      ("smtp" . smtpmail-send-it)))
-           (choice
-            ;; Query the user.
-            (with-temp-buffer
-              (rename-buffer "*Emacs Mail Setup Help*" t)
-              (insert "\
+    (sendmail-query-user-about-smtp))
+  (funcall send-mail-function))
+
+(defun sendmail-query-user-about-smtp ()
+  (let* ((options `(("mail client" . mailclient-send-it)
+		    ,@(when (and sendmail-program
+				 (executable-find sendmail-program))
+			'(("transport" . sendmail-send-it)))
+		    ("smtp" . smtpmail-send-it)))
+	 (choice
+	  ;; Query the user.
+	  (with-temp-buffer
+	    (rename-buffer "*Emacs Mail Setup Help*" t)
+	    (insert "\
  Emacs is about to send an email message, but it has not been
  configured for sending email.  To tell Emacs how to send email:
 
  - Type `"
-		      (propertize "mail client" 'face 'bold)
-		      "' to start your default email client and
+		    (propertize "mail client" 'face 'bold)
+		    "' to start your default email client and
    pass it the message text.\n\n")
-	      (and sendmail-program
-		   (executable-find sendmail-program)
-		   (insert "\
+	    (and sendmail-program
+		 (executable-find sendmail-program)
+		 (insert "\
  - Type `"
-			   (propertize "transport" 'face 'bold)
-			   "' to invoke the system's mail transport agent
+			 (propertize "transport" 'face 'bold)
+			 "' to invoke the system's mail transport agent
    (the `"
-			   sendmail-program
-			   "' program).\n\n"))
-	      (insert "\
+			 sendmail-program
+			 "' program).\n\n"))
+	    (insert "\
  - Type `"
-		      (propertize "smtp" 'face 'bold)
-		      "' to send mail directly to an \"outgoing mail\" server.
+		    (propertize "smtp" 'face 'bold)
+		    "' to send mail directly to an \"outgoing mail\" server.
    (Emacs may prompt you for SMTP settings).
 
  Emacs will record your selection and will use it thereafter.
  To change it later, customize the option `send-mail-function'.\n")
-              (goto-char (point-min))
-              (display-buffer (current-buffer))
-              (let ((completion-ignore-case t))
-                (completing-read "Send mail via: "
-                                 options nil 'require-match)))))
-      (customize-save-variable 'send-mail-function
-                               (cdr (assoc-string choice options t)))))
-  (funcall send-mail-function))
+	    (goto-char (point-min))
+	    (display-buffer (current-buffer))
+	    (let ((completion-ignore-case t))
+	      (completing-read "Send mail via: "
+			       options nil 'require-match)))))
+    (customize-save-variable 'send-mail-function
+			     (cdr (assoc-string choice options t)))))
 
 (defun sendmail-sync-aliases ()
   (when mail-personal-alias-file
@@ -730,6 +733,7 @@ Turning on Mail mode runs the normal hooks `text-mode-hook' and
       (set (make-local-variable 'comment-start-skip)
 	   (concat "^" (regexp-quote mail-yank-prefix) "[ \t]*")))
   (make-local-variable 'adaptive-fill-regexp)
+  ;; Also update the paragraph-separate entry if you change this.
   (setq adaptive-fill-regexp
 	(concat "[ \t]*[-[:alnum:]]+>+[ \t]*\\|"
 		adaptive-fill-regexp))
@@ -743,11 +747,14 @@ Turning on Mail mode runs the normal hooks `text-mode-hook' and
   ;; lines that delimit forwarded messages.
   ;; Lines containing just >= 3 dashes, perhaps after whitespace,
   ;; are also sometimes used and should be separators.
-  (setq paragraph-separate (concat (regexp-quote mail-header-separator)
-				"$\\|\t*\\([-|#;>* ]\\|(?[0-9]+[.)]\\)+$"
-				"\\|[ \t]*[[:alnum:]]*>+[ \t]*$\\|[ \t]*$\\|"
-				"--\\( \\|-+\\)$\\|"
-				page-delimiter)))
+  (setq paragraph-separate
+	(concat (regexp-quote mail-header-separator)
+		;; This is based on adaptive-fill-regexp (presumably
+		;; the idea is to allow navigation etc of cited paragraphs).
+		"$\\|\t*[-–!|#%;>*·•‣⁃◦ ]+$"
+		"\\|[ \t]*[-[:alnum:]]*>+[ \t]*$\\|[ \t]*$\\|"
+		"--\\( \\|-+\\)$\\|"
+		page-delimiter)))
 
 
 (defun mail-header-end ()
@@ -849,15 +856,17 @@ Prefix arg means don't delete this window."
 (defun mail-bury (&optional arg)
   "Bury this mail buffer."
   (let ((newbuf (other-buffer (current-buffer)))
-	(return-action mail-return-action)
-	some-rmail)
+	(return-action mail-return-action))
     (bury-buffer (current-buffer))
     ;; If there is an Rmail buffer, return to it nicely
     ;; even if this message was not started by an Rmail command.
     (unless return-action
       (dolist (buffer (buffer-list))
-	(if (eq (buffer-local-value 'major-mode buffer) 'rmail-mode)
-	    (setq return-action `(rmail-mail-return ,newbuf)))))
+	(if (and (eq (buffer-local-value 'major-mode buffer) 'rmail-mode)
+		 (null return-action)
+		 ;; Don't match message-viewer buffer.
+		 (not (string-match "\\` " (buffer-name buffer))))
+	    (setq return-action `(rmail-mail-return ,buffer)))))
     (if (and (null arg) return-action)
 	(apply (car return-action) (cdr return-action))
       (switch-to-buffer newbuf))))
@@ -983,7 +992,7 @@ This function uses `mail-envelope-from'."
 
 ;;;###autoload
 (defvar sendmail-coding-system nil
-  "*Coding system for encoding the outgoing mail.
+  "Coding system for encoding the outgoing mail.
 This has higher priority than the default `buffer-file-coding-system'
 and `default-sendmail-coding-system',
 but lower priority than the local value of `buffer-file-coding-system'.
@@ -1079,6 +1088,9 @@ Return non-nil if and only if some part of the header is encoded."
 		(cons selected mm-coding-system-priorities)
 	      mm-coding-system-priorities))
 	   (tick (buffer-chars-modified-tick))
+	   ;; Many mailers, including Gnus, passes a message of which
+	   ;; the header is already encoded, so this is necessary to
+	   ;; prevent it from being encoded again.
 	   (rfc2047-encode-encoded-words nil))
       (rfc2047-encode-message-header)
       (= tick (buffer-chars-modified-tick)))))
@@ -1667,7 +1679,8 @@ Just \\[universal-argument] as argument means don't indent, insert no prefix,
 and don't delete any header fields."
   (interactive "P")
   (and (consp mail-reply-action)
-       (eq (car mail-reply-action) 'insert-buffer)
+       (memq (car mail-reply-action)
+	     '(rmail-yank-current-message insert-buffer))
        (with-current-buffer (nth 1 mail-reply-action)
 	 (or (mark t)
 	     (error "No mark set: %S" (current-buffer))))
@@ -1986,5 +1999,10 @@ you can move to one of them and type C-c C-c to recover that one."
 ;; Do not add anything but external entries on this page.
 
 (provide 'sendmail)
+
+;; Local Variables:
+;; byte-compile-dynamic: t
+;; coding: utf-8
+;; End:
 
 ;;; sendmail.el ends here

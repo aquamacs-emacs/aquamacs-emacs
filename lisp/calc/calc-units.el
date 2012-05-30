@@ -302,7 +302,7 @@
 
 
 (defvar math-additional-units nil
-  "*Additional units table for user-defined units.
+  "Additional units table for user-defined units.
 Must be formatted like `math-standard-units'.
 If you change this, be sure to set `math-units-table' to nil to ensure
 that the combined units table will be rebuilt.")
@@ -356,6 +356,8 @@ Entries are (SYMBOL EXPR DOC-STRING TEMP-TYPE BASE-UNITS).")
 				  (math-to-standard-units (calc-top-n 1)
 							  nil))))))
 
+(defvar calc-ensure-consistent-units)
+
 (defun calc-quick-units ()
   (interactive)
   (calc-slow-wrapper
@@ -370,8 +372,11 @@ Entries are (SYMBOL EXPR DOC-STRING TEMP-TYPE BASE-UNITS).")
      (unless (< pos (length units))
        (error "Unit number %d not defined" pos))
      (if (math-units-in-expr-p expr nil)
-	 (calc-enter-result 1 (format "cun%d" num)
-			    (math-convert-units expr (nth pos units)))
+         (progn
+           (if calc-ensure-consistent-units
+               (math-check-unit-consistency expr (nth pos units)))
+           (calc-enter-result 1 (format "cun%d" num)
+                              (math-convert-units expr (nth pos units))))
        (calc-enter-result 1 (format "*un%d" num)
 			  (math-simplify-units
 			   (math-mul expr (nth pos units))))))))
@@ -415,18 +420,19 @@ If EXPR is nil, return nil."
 
 (defun math-put-default-units (expr)
   "Put the units in EXPR in the default units table."
-  (let* ((units (math-get-units expr))
-         (standard-units (math-get-standard-units expr))
+  (let ((units (math-get-units expr)))
+    (unless (eq units 1)
+      (let* ((standard-units (math-get-standard-units expr))
          (default-units (gethash
                          standard-units
                          math-default-units-table)))
-    (cond
-     ((not default-units)
-      (puthash standard-units (list units) math-default-units-table))
-     ((not (equal units (car default-units)))
-      (puthash standard-units
-               (list units (car default-units))
-               math-default-units-table)))))
+        (cond
+         ((not default-units)
+          (puthash standard-units (list units) math-default-units-table))
+         ((not (equal units (car default-units)))
+          (puthash standard-units
+                   (list units (car default-units))
+                   math-default-units-table)))))))
 
 
 (defun calc-convert-units (&optional old-units new-units)
@@ -476,6 +482,8 @@ If EXPR is nil, return nil."
      (setq units (math-read-expr new-units))
      (when (eq (car-safe units) 'error)
        (error "Bad format in units expression: %s" (nth 2 units)))
+     (if calc-ensure-consistent-units
+         (math-check-unit-consistency expr units))
      (math-put-default-units units)
      (let ((unew (math-units-in-expr-p units t))
 	   (std (and (eq (car-safe units) 'var)
@@ -559,7 +567,7 @@ If EXPR is nil, return nil."
 (defun calc-extract-units ()
   (interactive)
   (calc-slow-wrapper
-   (calc-enter-result 1 "rmun" (math-simplify-units
+   (calc-enter-result 1 "exun" (math-simplify-units
 				(math-extract-units (calc-top-n 1))))))
 
 ;; The variables calc-num-units and calc-den-units are local to
@@ -912,6 +920,20 @@ If EXPR is nil, return nil."
 	     'wrong
 	   (math-single-units-in-expr-p (nth 1 expr))))
 	(t 'wrong)))
+
+(defun math-consistent-units-p (expr newunits)
+  "Non-nil if EXPR and NEWUNITS have consistent units."
+  (or
+   (and (eq (car-safe newunits) 'var)
+        (assq (nth 1 newunits) math-standard-units-systems))
+   (math-numberp (math-get-units (list '/ expr newunits)))))
+
+(defun math-check-unit-consistency (expr units)
+  "Give an error if EXPR and UNITS do not have consistent units."
+  (unless  (math-consistent-units-p expr units)
+    (error "New units (%s) are inconsistent with current units (%s)"
+           (math-format-value units)
+           (math-format-value (math-get-units expr)))))
 
 (defun math-check-unit-name (v)
   (and (eq (car-safe v) 'var)

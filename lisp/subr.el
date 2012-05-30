@@ -112,9 +112,28 @@ It may also be omitted.
 BODY should be a list of Lisp expressions.
 
 \(fn ARGS [DOCSTRING] [INTERACTIVE] BODY)"
+  (declare (doc-string 2) (indent defun)
+           (debug (&define lambda-list
+                           [&optional stringp]
+                           [&optional ("interactive" interactive)]
+                           def-body)))
   ;; Note that this definition should not use backquotes; subr.el should not
   ;; depend on backquote.el.
   (list 'function (cons 'lambda cdr)))
+
+(defmacro setq-local (var val)
+  "Set variable VAR to value VAL in current buffer."
+  ;; Can't use backquote here, it's too early in the bootstrap.
+  (list 'set (list 'make-local-variable (list 'quote var)) val))
+
+(defmacro defvar-local (var val &optional docstring)
+  "Define VAR as a buffer-local variable with default value VAL.
+Like `defvar' but additionally marks the variable as being automatically
+buffer-local wherever it is set."
+  (declare (debug defvar) (doc-string 3))
+  ;; Can't use backquote here, it's too early in the bootstrap.
+  (list 'progn (list 'defvar var val docstring)
+        (list 'make-variable-buffer-local (list 'quote var))))
 
 (defun apply-partially (fun &rest args)
   "Return a function that is a partial application of FUN to ARGS.
@@ -273,6 +292,17 @@ for the sake of consistency."
   (while t
     (signal 'error (list (apply 'format args)))))
 (set-advertised-calling-convention 'error '(string &rest args) "23.1")
+
+(defun user-error (format &rest args)
+  "Signal a pilot error, making error message by passing all args to `format'.
+In Emacs, the convention is that error messages start with a capital
+letter but *do not* end with a period.  Please follow this convention
+for the sake of consistency.
+This is just like `error' except that `user-error's are expected to be the
+result of an incorrect manipulation on the part of the user, rather than the
+result of an actual problem."
+  (while t
+    (signal 'user-error (list (apply #'format format args)))))
 
 ;; We put this here instead of in frame.el so that it's defined even on
 ;; systems where frame.el isn't loaded.
@@ -495,11 +525,8 @@ side-effects, and the argument LIST is not modified."
 
 ;;;; Keymap support.
 
-(defmacro kbd (keys)
-  "Convert KEYS to the internal Emacs key representation.
-KEYS should be a string constant in the format used for
-saving keyboard macros (see `edmacro-mode')."
-  (read-kbd-macro keys))
+(defalias 'kbd 'read-kbd-macro)
+(put 'kbd 'pure t)
 
 (defun undefined ()
   "Beep to tell the user this binding is undefined."
@@ -678,7 +705,6 @@ Subkeymaps may be modified but are not canonicalized."
     ;; Process the bindings starting from the end.
     (dolist (binding (prog1 bindings (setq bindings ())))
       (let* ((key (car binding))
-             (item (cdr binding))
              (oldbind (assq key bindings)))
         (push (if (not oldbind)
                   ;; The normal case: no duplicate bindings.
@@ -893,6 +919,7 @@ The normal global definition of the character C-x indirects to this keymap.")
 (defsubst eventp (obj)
   "True if the argument is an event object."
   (or (and (integerp obj)
+           ;; FIXME: Why bother?
 	   ;; Filter out integers too large to be events.
 	   ;; M is the biggest modifier.
 	   (zerop (logand obj (lognot (1- (lsh ?\M-\^@ 1)))))
@@ -1149,6 +1176,7 @@ be a list of the form returned by `event-start' and `event-end'."
 (define-obsolete-function-alias 'string-to-int 'string-to-number "22.1")
 
 (make-obsolete 'forward-point "use (+ (point) N) instead." "23.1")
+(make-obsolete 'buffer-has-markers-at nil "24.2")
 
 (defun insert-string (&rest args)
   "Mocklisp-compatibility insert function.
@@ -1395,16 +1423,19 @@ around the preceding ones, like a set of nested `around' advices.
 Each hook function should accept an argument list consisting of a
 function FUN, followed by the additional arguments in ARGS.
 
-The FUN passed to the first hook function in HOOK performs BODY,
-if it is called with arguments ARGS.  The FUN passed to each
-successive hook function is defined based on the preceding hook
-functions; if called with arguments ARGS, it does what the
-`with-wrapper-hook' call would do if the preceding hook functions
-were the only ones present in HOOK.
+The first hook function in HOOK is passed a FUN that, if it is called
+with arguments ARGS, performs BODY (i.e., the default operation).
+The FUN passed to each successive hook function is defined based
+on the preceding hook functions; if called with arguments ARGS,
+it does what the `with-wrapper-hook' call would do if the
+preceding hook functions were the only ones present in HOOK.
 
-In the function definition of each hook function, FUN can be
-called any number of times (including not calling it at all).
-That function definition is then used to construct the FUN passed
+Each hook function may call its FUN argument as many times as it wishes,
+including never.  In that case, such a hook function acts to replace
+the default definition altogether, and any preceding hook functions.
+Of course, a subsequent hook function may do the same thing.
+
+Each hook function definition is used to construct the FUN passed
 to the next hook function, if any.  The last (or \"outermost\")
 FUN is then called once."
   (declare (indent 2) (debug (form sexp body)))
@@ -1561,10 +1592,12 @@ if it is empty or a duplicate."
 
 (defun run-mode-hooks (&rest hooks)
   "Run mode hooks `delayed-mode-hooks' and HOOKS, or delay HOOKS.
-Execution is delayed if the variable `delay-mode-hooks' is non-nil.
-Otherwise, runs the mode hooks and then `after-change-major-mode-hook'.
-Major mode functions should use this instead of `run-hooks' when running their
-FOO-mode-hook."
+If the variable `delay-mode-hooks' is non-nil, does not run any hooks,
+just adds the HOOKS to the list `delayed-mode-hooks'.
+Otherwise, runs hooks in the sequence: `change-major-mode-after-body-hook',
+`delayed-mode-hooks' (in reverse order), HOOKS, and finally
+`after-change-major-mode-hook'.  Major mode functions should use
+this instead of `run-hooks' when running their FOO-mode-hook."
   (if delay-mode-hooks
       ;; Delaying case.
       (dolist (hook hooks)
@@ -1802,6 +1835,8 @@ this name matching.
 
 Alternatively, FILE can be a feature (i.e. a symbol), in which case FORM
 is evaluated at the end of any file that `provide's this feature.
+If the feature is provided when evaluating code not associated with a
+file, FORM is evaluated immediately after the provide statement.
 
 Usually FILE is just a library name like \"font-lock\" or a feature name
 like 'font-lock.
@@ -1831,14 +1866,16 @@ This function makes or adds to an entry on `after-load-alist'."
 	;; make sure that `form' is really run "after-load" in case the provide
 	;; call happens early.
 	(setq form
-	      `(when load-file-name
-		 (let ((fun (make-symbol "eval-after-load-helper")))
-		   (fset fun `(lambda (file)
-				(if (not (equal file ',load-file-name))
-				    nil
-				  (remove-hook 'after-load-functions ',fun)
-				  ,',form)))
-		   (add-hook 'after-load-functions fun)))))
+	      `(if load-file-name
+		   (let ((fun (make-symbol "eval-after-load-helper")))
+		     (fset fun `(lambda (file)
+				  (if (not (equal file ',load-file-name))
+				      nil
+				    (remove-hook 'after-load-functions ',fun)
+				    ,',form)))
+		     (add-hook 'after-load-functions fun))
+		 ;; Not being provided from a file, run form right now.
+		 ,form)))
       ;; Add FORM to the element unless it's already there.
       (unless (member form (cdr elt))
 	(nconc elt (purecopy (list form)))))))
@@ -1879,15 +1916,36 @@ FILE should be the name of a library, with no directory name."
 
 (defun display-delayed-warnings ()
   "Display delayed warnings from `delayed-warnings-list'.
-This is the default value of `delayed-warnings-hook'."
+Used from `delayed-warnings-hook' (which see)."
   (dolist (warning (nreverse delayed-warnings-list))
     (apply 'display-warning warning))
   (setq delayed-warnings-list nil))
 
-(defvar delayed-warnings-hook '(display-delayed-warnings)
-  "Normal hook run to process delayed warnings.
-Functions in this hook should access the `delayed-warnings-list'
-variable (which see) and remove from it the warnings they process.")
+(defun collapse-delayed-warnings ()
+  "Remove duplicates from `delayed-warnings-list'.
+Collapse identical adjacent warnings into one (plus count).
+Used from `delayed-warnings-hook' (which see)."
+  (let ((count 1)
+        collapsed warning)
+    (while delayed-warnings-list
+      (setq warning (pop delayed-warnings-list))
+      (if (equal warning (car delayed-warnings-list))
+          (setq count (1+ count))
+        (when (> count 1)
+          (setcdr warning (cons (format "%s [%d times]" (cadr warning) count)
+                                (cddr warning)))
+          (setq count 1))
+        (push warning collapsed)))
+    (setq delayed-warnings-list (nreverse collapsed))))
+
+;; At present this is only used for Emacs internals.
+;; Ref http://lists.gnu.org/archive/html/emacs-devel/2012-02/msg00085.html
+(defvar delayed-warnings-hook '(collapse-delayed-warnings
+                                display-delayed-warnings)
+  "Normal hook run to process and display delayed warnings.
+By default, this hook contains functions to consolidate the
+warnings listed in `delayed-warnings-list', display them, and set
+`delayed-warnings-list' back to nil.")
 
 
 ;;;; Process stuff.
@@ -1960,7 +2018,7 @@ It can be retrieved with `(process-get PROCESS PROPNAME)'."
 ;;;; Input and display facilities.
 
 (defvar read-quoted-char-radix 8
-  "*Radix for \\[quoted-insert] and other uses of `read-quoted-char'.
+  "Radix for \\[quoted-insert] and other uses of `read-quoted-char'.
 Legitimate radix values are 8, 10 and 16.")
 
 (custom-declare-variable-early
@@ -1981,6 +2039,10 @@ obey the input decoding and translations usually done by `read-key-sequence'.
 So escape sequences and keyboard encoding are taken into account.
 When there's an ambiguity because the key looks like the prefix of
 some sort of escape sequence, the ambiguity is resolved via `read-key-delay'."
+  ;; This overriding-terminal-local-map binding also happens to
+  ;; disable quail's input methods, so although read-key-sequence
+  ;; always inherits the input method, in practice read-key does not
+  ;; inherit the input method (at least not if it's based on quail).
   (let ((overriding-terminal-local-map read-key-empty-map)
 	(overriding-local-map nil)
         (echo-keystrokes 0)
@@ -2012,7 +2074,10 @@ some sort of escape sequence, the ambiguity is resolved via `read-key-delay'."
            (let ((map (make-sparse-keymap)))
              ;; Don't hide the menu-bar and tool-bar entries.
              (define-key map [menu-bar] (lookup-key global-map [menu-bar]))
-             (define-key map [tool-bar] (lookup-key global-map [tool-bar]))
+             (define-key map [tool-bar]
+	       ;; This hack avoids evaluating the :filter (Bug#9922).
+	       (or (cdr (assq 'tool-bar global-map))
+		   (lookup-key global-map [tool-bar])))
              map))
 	  (aref	(catch 'read-key (read-key-sequence-vector prompt nil t)) 0))
       (cancel-timer timer)
@@ -2085,77 +2150,52 @@ Optional DEFAULT is a default password to use instead of empty input.
 
 This function echoes `.' for each character that the user types.
 
-The user ends with RET, LFD, or ESC.  DEL or C-h rubs out.
-C-y yanks the current kill.  C-u kills line.
-C-g quits; if `inhibit-quit' was non-nil around this function,
-then it returns nil if the user types C-g, but `quit-flag' remains set.
-
 Once the caller uses the password, it can erase the password
 by doing (clear-string STRING)."
-  (with-local-quit
-    (if confirm
-	(let (success)
-	  (while (not success)
-	    (let ((first (read-passwd prompt nil default))
-		  (second (read-passwd "Confirm password: " nil default)))
-	      (if (equal first second)
-		  (progn
-		    (and (arrayp second) (clear-string second))
-		    (setq success first))
-		(and (arrayp first) (clear-string first))
-		(and (arrayp second) (clear-string second))
-		(message "Password not repeated accurately; please start over")
-		(sit-for 1))))
-	  success)
-      (let ((pass nil)
-	    ;; Copy it so that add-text-properties won't modify
-	    ;; the object that was passed in by the caller.
-	    (prompt (copy-sequence prompt))
-	    (c 0)
-	    (echo-keystrokes 0)
-	    (cursor-in-echo-area t)
-	    (message-log-max nil)
-	    (stop-keys (list 'return ?\r ?\n ?\e))
-	    (rubout-keys (list 'backspace ?\b ?\177)))
-	(add-text-properties 0 (length prompt)
-			     minibuffer-prompt-properties prompt)
-	(while (progn (message "%s%s"
-			       prompt
-			       (make-string (length pass) ?.))
-		      (setq c (read-key))
-		      (not (memq c stop-keys)))
-	  (clear-this-command-keys)
-	  (cond ((memq c rubout-keys) ; rubout
-		 (when (> (length pass) 0)
-		   (let ((new-pass (substring pass 0 -1)))
-		     (and (arrayp pass) (clear-string pass))
-		     (setq pass new-pass))))
-                ((eq c ?\C-g) (keyboard-quit))
-		((not (numberp c)))
-		((= c ?\C-u) ; kill line
-		 (and (arrayp pass) (clear-string pass))
-		 (setq pass ""))
-		((= c ?\C-y) ; yank
-		 (let* ((str (condition-case nil
-				 (current-kill 0)
-			       (error nil)))
-			new-pass)
-		   (when str
-		     (setq new-pass
-			   (concat pass
-				   (substring-no-properties str)))
-		     (and (arrayp pass) (clear-string pass))
-		     (setq c ?\0)
-		     (setq pass new-pass))))
-		((characterp c) ; insert char
-		 (let* ((new-char (char-to-string c))
-			(new-pass (concat pass new-char)))
-		   (and (arrayp pass) (clear-string pass))
-		   (clear-string new-char)
-		   (setq c ?\0)
-		   (setq pass new-pass)))))
-	(message nil)
-	(or pass default "")))))
+  (if confirm
+      (let (success)
+        (while (not success)
+          (let ((first (read-passwd prompt nil default))
+                (second (read-passwd "Confirm password: " nil default)))
+            (if (equal first second)
+                (progn
+                  (and (arrayp second) (clear-string second))
+                  (setq success first))
+              (and (arrayp first) (clear-string first))
+              (and (arrayp second) (clear-string second))
+              (message "Password not repeated accurately; please start over")
+              (sit-for 1))))
+        success)
+    (let ((hide-chars-fun
+           (lambda (beg end _len)
+             (clear-this-command-keys)
+             (setq beg (min end (max (minibuffer-prompt-end)
+                                     beg)))
+             (dotimes (i (- end beg))
+               (put-text-property (+ i beg) (+ 1 i beg)
+                                  'display (string ?.)))))
+          minibuf)
+      (minibuffer-with-setup-hook
+          (lambda ()
+            (setq minibuf (current-buffer))
+            ;; Turn off electricity.
+            (set (make-local-variable 'post-self-insert-hook) nil)
+            (add-hook 'after-change-functions hide-chars-fun nil 'local))
+        (unwind-protect
+            (read-string prompt nil
+                         (let ((sym (make-symbol "forget-history")))
+                           (set sym nil)
+                           sym)
+                         default)
+          (when (buffer-live-p minibuf)
+            (with-current-buffer minibuf
+              ;; Not sure why but it seems that there might be cases where the
+              ;; minibuffer is not always properly reset later on, so undo
+              ;; whatever we've done here (bug#11392).
+              (remove-hook 'after-change-functions hide-chars-fun 'local)
+              (kill-local-variable 'post-self-insert-hook)
+              ;; And of course, don't keep the sensitive data around.
+              (erase-buffer))))))))
 
 ;; This should be used by `call-interactively' for `n' specs.
 (defun read-number (prompt &optional default)
@@ -2328,6 +2368,8 @@ is nil and `use-dialog-box' is non-nil."
         (discard-input))))
     (let ((ret (eq answer 'act)))
       (unless noninteractive
+        ;; FIXME this prints one too many spaces, since prompt
+        ;; already ends in a space.  Eg "... (y or n)  y".
         (message "%s %s" prompt (if ret "y" "n")))
       ret)))
 
@@ -2410,7 +2452,7 @@ to `accept-change-group' or `cancel-change-group'."
 This finishes the change group by accepting its changes as final."
   (dolist (elt handle)
     (with-current-buffer (car elt)
-      (if (eq elt t)
+      (if (eq (cdr elt) t)
 	  (setq buffer-undo-list t)))))
 
 (defun cancel-change-group (handle)
@@ -2984,21 +3026,26 @@ potentially make a different buffer current.  It does not alter
 the buffer list ordering."
   (declare (indent 1) (debug t))
   ;; Most of this code is a copy of save-selected-window.
-  `(let ((save-selected-window-window (selected-window))
-	 ;; It is necessary to save all of these, because calling
-	 ;; select-window changes frame-selected-window for whatever
-	 ;; frame that window is in.
-	 (save-selected-window-alist
-	  (mapcar (lambda (frame) (list frame (frame-selected-window frame)))
-		  (frame-list))))
+  `(let* ((save-selected-window-destination ,window)
+          (save-selected-window-window (selected-window))
+          ;; Selecting a window on another frame changes not only the
+          ;; selected-window but also the frame-selected-window of the
+          ;; destination frame.  So we need to save&restore it.
+          (save-selected-window-other-frame
+           (unless (eq (selected-frame)
+                       (window-frame save-selected-window-destination))
+             (frame-selected-window
+              (window-frame save-selected-window-destination)))))
      (save-current-buffer
        (unwind-protect
-	   (progn (select-window ,window 'norecord)
+           (progn (select-window save-selected-window-destination 'norecord)
 		  ,@body)
-	 (dolist (elt save-selected-window-alist)
-	   (and (frame-live-p (car elt))
-		(window-live-p (cadr elt))
-		(set-frame-selected-window (car elt) (cadr elt) 'norecord)))
+         ;; First reset frame-selected-window.
+         (if (window-live-p save-selected-window-other-frame)
+             ;; We don't use set-frame-selected-window because it does not
+             ;; pass the `norecord' argument to Fselect_window.
+             (select-window save-selected-window-other-frame 'norecord))
+         ;; Then reset the actual selected-window.
 	 (when (window-live-p save-selected-window-window)
 	   (select-window save-selected-window-window 'norecord))))))
 
@@ -3023,13 +3070,12 @@ the buffer list."
 	   (set-buffer ,old-buffer))))))
 
 (defmacro save-window-excursion (&rest body)
-  "Execute BODY, preserving window sizes and contents.
-Return the value of the last form in BODY.
-Restore which buffer appears in which window, where display starts,
-and the value of point and mark for each window.
-Also restore the choice of selected window.
-Also restore which buffer is current.
-Does not restore the value of point in current buffer.
+  "Execute BODY, then restore previous window configuration.
+This macro saves the window configuration on the selected frame,
+executes BODY, then calls `set-window-configuration' to restore
+the saved window configuration.  The return value is the last
+form in BODY.  The window configuration is also restored if BODY
+exits nonlocally.
 
 BEWARE: Most uses of this macro introduce bugs.
 E.g. it should not be used to try and prevent some code from opening
@@ -3216,7 +3262,7 @@ If BODY finishes, `while-no-input' returns whatever value BODY produced."
 	   (or (input-pending-p)
 	       (progn ,@body)))))))
 
-(defmacro condition-case-no-debug (var bodyform &rest handlers)
+(defmacro condition-case-unless-debug (var bodyform &rest handlers)
   "Like `condition-case' except that it does not catch anything when debugging.
 More specifically if `debug-on-error' is set, then it does not catch any signal."
   (declare (debug condition-case) (indent 2))
@@ -3228,6 +3274,9 @@ More specifically if `debug-on-error' is set, then it does not catch any signal.
              (funcall ,bodysym)
            ,@handlers)))))
 
+(define-obsolete-function-alias 'condition-case-no-debug
+  'condition-case-unless-debug "24.1")
+
 (defmacro with-demoted-errors (&rest body)
   "Run BODY and demote any errors to simple messages.
 If `debug-on-error' is non-nil, run BODY without catching its errors.
@@ -3235,7 +3284,7 @@ This is to be used around code which is not expected to signal an error
 but which should be robust in the unexpected case that an error is signaled."
   (declare (debug t) (indent 0))
   (let ((err (make-symbol "err")))
-    `(condition-case-no-debug ,err
+    `(condition-case-unless-debug ,err
          (progn ,@body)
        (error (message "Error: %S" ,err) nil))))
 
@@ -3547,8 +3596,7 @@ of STRING.
 To replace only the first match (if any), make REGEXP match up to \\'
 and replace a sub-expression, e.g.
   (replace-regexp-in-string \"\\\\(foo\\\\).*\\\\'\" \"bar\" \" foo foo\" nil nil 1)
-    => \" bar foo\"
-"
+    => \" bar foo\""
 
   ;; To avoid excessive consing from multiple matches in long strings,
   ;; don't just call `replace-match' continually.  Walk down the
@@ -3805,6 +3853,29 @@ The properties used on SYMBOL are `composefunc', `sendfunc',
   (put symbol 'abortfunc (or abortfunc 'kill-buffer))
   (put symbol 'hookvar (or hookvar 'mail-send-hook)))
 
+(defun set-temporary-overlay-map (map &optional keep-pred)
+  (let* ((clearfunsym (make-symbol "clear-temporary-overlay-map"))
+         (overlaysym (make-symbol "t"))
+         (alist (list (cons overlaysym map)))
+         (clearfun
+          ;; FIXME: Use lexical-binding.
+          `(lambda ()
+             (unless ,(cond ((null keep-pred) nil)
+                            ((eq t keep-pred)
+                             `(eq this-command
+                                  (lookup-key ',map
+                                              (this-command-keys-vector))))
+                            (t `(funcall ',keep-pred)))
+               (remove-hook 'pre-command-hook ',clearfunsym)
+               (setq emulation-mode-map-alists
+                     (delq ',alist emulation-mode-map-alists))))))
+    (set overlaysym overlaysym)
+    (fset clearfunsym clearfun)
+    (add-hook 'pre-command-hook clearfunsym)
+    ;; FIXME: That's the keymaps with highest precedence, except for
+    ;; the `keymap' text-property ;-(
+    (push alist emulation-mode-map-alists)))
+
 ;;;; Progress reporters.
 
 ;; Progress reporter has the following structure:

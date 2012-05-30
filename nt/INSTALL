@@ -68,13 +68,19 @@
      With GNU Make, you can use the -j command-line option to have
      Make execute several commands at once, like this:
 
+       gmake -j 2
+
+     (With versions of GNU Make before 3.82, you need also set the
+     XMFLAGS variable, like this:
+
        gmake -j 2 XMFLAGS="-j 2"
 
-     The XMFLAGS variable overrides the default behavior of GNU Make
-     on Windows, whereby recursive Make invocations reset the maximum
-     number of simultaneous commands to 1.  The above command allows
-     up to 4 simultaneous commands at once in the top-level Make, and
-     up to 3 in each one of the recursive Make's.
+     The XMFLAGS variable overrides the default behavior of version
+     3.82 and older of GNU Make on Windows, whereby recursive Make
+     invocations reset the maximum number of simultaneous commands to
+     1.  The above command allows up to 4 simultaneous commands at
+     once in the top-level Make, and up to 3 in each one of the
+     recursive Make's.)
 
   4. Generate the Info manuals (only if you are building out of Bazaar,
      and if you have makeinfo.exe installed):
@@ -359,7 +365,41 @@
   session.
 
   You can get pre-built binaries (including any required DLL and the
-  gnutls.h file) and an installer at http://josefsson.org/gnutls4win/.
+  header files) at http://sourceforge.net/projects/ezwinports/files/.
+
+* Optional libxml2 support
+
+  If configure.bat finds the libxml/HTMLparser.h file in the include path,
+  Emacs is built with libxml2 support by default; to avoid that you can
+  pass the argument --without-libxml2.
+
+  In order to support libxml2 at runtime, a libxml2-enabled Emacs must
+  be able to find the relevant DLLs during startup; failure to do so
+  is not an error, but libxml2 features won't be available to the
+  running session.
+
+  One place where you can get pre-built Windows binaries of libxml2
+  (including any required DLL and the header files) is here:
+
+     http://sourceforge.net/projects/ezwinports/files/
+
+  To compile Emacs with libxml2 from that site, you will need to pass
+  the "--cflags -I/path/to/include/libxml2" option to configure.bat,
+  because libxml2 header files are installed in the include/libxml2
+  subdirectory of the directory where you unzip the binary
+  distribution.  Other binary distributions might use other
+  directories, although include/libxml2 is the canonical place where
+  libxml2 headers are installed on Posix platforms.
+
+  You will also need to install the libiconv "development" tarball,
+  because the libiconv headers need to be available to the compiler
+  when you compile with libxml2 support.  A MinGW port of libiconv can
+  be found on the MinGW site:
+
+   http://sourceforge.net/projects/mingw/files/MinGW/Base/libiconv/
+
+  You need the libiconv-X.Y.Z-N-mingw32-dev.tar.lzma tarball from that
+  site.
 
 * Experimental SVG support
 
@@ -395,6 +435,17 @@
   text, they seem to be a problem in the Windows port of Pango, or
   maybe a problem with the way Cairo or librsvg is using it that
   doesn't show up on other platforms.
+
+* Optional extra runtime checks
+
+  The configure.bat option --enable-checking builds Emacs with some
+  optional extra runtime checks and assertions enabled.  This may be
+  useful for debugging.
+
+* Optional extra libraries
+
+  You can pass --lib LIBNAME option to configure.bat to cause Emacs to
+  link with the specified library.  You can use this option more than once.
 
 * Building
 

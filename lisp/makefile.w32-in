@@ -1,5 +1,5 @@
 # -*- Makefile -*- for GNU Emacs on the Microsoft W32 API.
-# Copyright (C) 2000-2012  Free Software Foundation, Inc.
+# Copyright (C) 2000-2012 Free Software Foundation, Inc.
 
 # This file is part of GNU Emacs.
 
@@ -243,9 +243,9 @@ update-subdirs-CMD: doit
 	echo ;; End:>> $(lisp)/subdirs.el
 
 update-subdirs-SH: doit
-	$(srcdir)/update-subdirs $(lisp); \
+	$(srcdir)/build-aux/update-subdirs $(lisp); \
 	for file in $(WINS_SUBDIR); do \
-	   $(srcdir)/update-subdirs $$file; \
+	   $(srcdir)/build-aux/update-subdirs $$file; \
 	done;
 
 updates: update-subdirs autoloads mh-autoloads finder-data custom-deps
@@ -510,9 +510,9 @@ bootstrap: update-subdirs autoloads mh-autoloads compile finder-data custom-deps
 #
 install:
 		- mkdir "$(INSTALL_DIR)/lisp"
-		- $(DEL) ../same-dir.tst
-		- $(DEL) "$(INSTALL_DIR)/same-dir.tst"
-		echo SameDirTest > "$(INSTALL_DIR)/same-dir.tst"
+		- $(DEL) ../$(DIRNAME)_same-dir.tst
+		- $(DEL) "$(INSTALL_DIR)/$(DIRNAME)_same-dir.tst"
+		echo SameDirTest > "$(INSTALL_DIR)/$(DIRNAME)_same-dir.tst"
 #ifdef COPY_LISP_SOURCE
 		$(IFNOTSAMEDIR) $(MAKE) $(MFLAGS) install-lisp-$(SHELLTYPE) $(ENDIF)
 #else
@@ -528,8 +528,8 @@ install:
 #		$(IFNOTSAMEDIR) $(CP) international/latin-*.el "$(INSTALL_DIR)/lisp/international" $(ENDIF)
 #		$(IFNOTSAMEDIR) $(CP) international/mule-conf.el "$(INSTALL_DIR)/lisp/international" $(ENDIF)
 #endif
-		- $(DEL) ../same-dir.tst
-		- $(DEL) "$(INSTALL_DIR)/same-dir.tst"
+		- $(DEL) ../$(DIRNAME)_same-dir.tst
+		- $(DEL) "$(INSTALL_DIR)/$(DIRNAME)_same-dir.tst"
 
 # Need to copy *.el files first, to avoid "source file is newer" annoyance
 # since cp does not preserve time stamps

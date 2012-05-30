@@ -1,6 +1,6 @@
 ;;; tar-mode.el --- simple editing of tar files from GNU Emacs
 
-;; Copyright (C) 1990-1991, 1993-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1990-1991, 1993-2012 Free Software Foundation, Inc.
 
 ;; Author: Jamie Zawinski <jwz@lucid.com>
 ;; Maintainer: FSF
@@ -396,7 +396,7 @@ write-date, checksum, link-type, and link-name."
 
 (defun tar-clip-time-string (time)
   (let ((str (current-time-string time)))
-    (concat " " (substring str 4 16) (substring str 19 24))))
+    (concat " " (substring str 4 16) (format-time-string " %Y" time))))
 
 (defun tar-grind-file-mode (mode)
   "Construct a `-rw--r--r--' string indicating MODE.
@@ -549,6 +549,7 @@ MODE should be an integer which is a file mode value."
     (define-key map "R" 'tar-rename-entry)
     (define-key map "u" 'tar-unflag)
     (define-key map "v" 'tar-view)
+    (define-key map "w" 'woman-tar-extract-file)
     (define-key map "x" 'tar-expunge)
     (define-key map "\177" 'tar-unflag-backwards)
     (define-key map "E" 'tar-extract-other-window)
@@ -566,6 +567,8 @@ MODE should be an integer which is a file mode value."
     (define-key map [menu-bar immediate]
       (cons "Immediate" (make-sparse-keymap "Immediate")))
 
+    (define-key map [menu-bar immediate woman]
+      '("Read Man Page (WoMan)" . woman-tar-extract-file))
     (define-key map [menu-bar immediate view]
       '("View This File" . tar-view))
     (define-key map [menu-bar immediate display]
@@ -634,6 +637,9 @@ inside of a tar archive without extracting it and re-archiving it.
 
 See also: variables `tar-update-datestamp' and `tar-anal-blocksize'.
 \\{tar-mode-map}"
+  (and buffer-file-name
+       (file-writable-p buffer-file-name)
+       (setq buffer-read-only nil))    ; undo what `special-mode' did
   (make-local-variable 'tar-parse-info)
   (set (make-local-variable 'require-final-newline) nil) ; binary data, dude...
   (set (make-local-variable 'local-enable-local-variables) nil)
@@ -674,12 +680,17 @@ See also: variables `tar-update-datestamp' and `tar-anal-blocksize'.
      (fundamental-mode)
      (signal (car err) (cdr err)))))
 
+(autoload 'woman-tar-extract-file "woman"
+  "In tar mode, run the WoMan man-page browser on this file." t)
 
 (define-minor-mode tar-subfile-mode
   "Minor mode for editing an element of a tar-file.
-This mode arranges for \"saving\" this buffer to write the data
-into the tar-file buffer that it came from.  The changes will actually
-appear on disk when you save the tar-file's buffer."
+With a prefix argument ARG, enable the mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode
+if ARG is omitted or nil.  This mode arranges for \"saving\" this
+buffer to write the data into the tar-file buffer that it came
+from.  The changes will actually appear on disk when you save the
+tar-file's buffer."
   ;; Don't do this, because it is redundant and wastes mode line space.
   ;; :lighter " TarFile"
   nil nil nil

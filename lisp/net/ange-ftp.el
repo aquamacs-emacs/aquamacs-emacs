@@ -671,8 +671,7 @@
 ;;;; ------------------------------------------------------------
 
 (defgroup ange-ftp nil
-  "Accessing remote files and directories using FTP
-   made as simple and transparent as possible."
+  "Accessing remote files and directories using FTP."
   :group 'files
   :group 'comm
   :prefix "ange-ftp-")
@@ -697,11 +696,11 @@ parenthesized expressions in REGEXP for the components (in that order)."
 
 (defvar ange-ftp-multi-msgs
   "^150-\\|^220-\\|^230-\\|^226\\|^25.-\\|^221-\\|^200-\\|^331-\\|^4[25]1-\\|^530-"
-  "*Regular expression matching the start of a multiline FTP reply.")
+  "Regular expression matching the start of a multiline FTP reply.")
 
 (defvar ange-ftp-good-msgs
   "^220 \\|^230 \\|^226 \\|^25. \\|^221 \\|^200 \\|^[Hh]ash mark"
-  "*Regular expression matching FTP \"success\" messages.")
+  "Regular expression matching FTP \"success\" messages.")
 
 ;; CMS and the odd VMS machine say 200 Port rather than 200 PORT.
 ;; Also CMS machines use a multiline 550- reply to say that you
@@ -908,7 +907,7 @@ matches the login banner."
   (if (eq system-type 'hpux)
       "stty -onlcr -echo\n"
     "stty -echo nl\n")
-  "*Set up terminal after logging in to the gateway machine.
+  "Set up terminal after logging in to the gateway machine.
 This command should stop the terminal from echoing each command, and
 arrange to strip out trailing ^M characters.")
 
@@ -1389,6 +1388,9 @@ only return the directory part of FILE."
 		(normal-mode t)
 		(run-hooks 'find-file-hook)
 		(setq buffer-file-name nil)
+		(goto-char (point-min))
+		(while (search-forward-regexp "^[ \t]*#.*$" nil t)
+		  (replace-match ""))
 		(goto-char (point-min))
 		(skip-chars-forward " \t\r\n")
 		(while (not (eobp))
@@ -2095,7 +2097,7 @@ suffix of the form #PORT to specify a non-default port."
 ;; ange@hplb.hpl.hp.com says this should not be changed.
 (defvar ange-ftp-hash-mark-msgs
   "[hH]ash mark [^0-9]*\\([0-9]+\\)"
-  "*Regexp matching the FTP client's output upon doing a HASH command.")
+  "Regexp matching the FTP client's output upon doing a HASH command.")
 
 (defun ange-ftp-guess-hash-mark-size (proc)
   (if ange-ftp-send-hash
@@ -3098,7 +3100,8 @@ logged in as user USER and cd'd to directory DIR."
             (if (not (eq system-type 'windows-nt))
                 (setq name (ange-ftp-real-expand-file-name name))
               ;; Windows UNC default dirs do not make sense for ftp.
-              (setq name (if (string-match "\\`//" default-directory)
+              (setq name (if (and default-directory
+				  (string-match "\\`//" default-directory))
                              (ange-ftp-real-expand-file-name name "c:/")
                            (ange-ftp-real-expand-file-name name)))
               ;; Strip off possible drive specifier.
@@ -6075,7 +6078,7 @@ Other orders of $ and _ seem to all work just fine.")
 
 (defcustom ange-ftp-bs2000-additional-pubsets
   nil
-  "*List of additional pubsets available to all users."
+  "List of additional pubsets available to all users."
   :group 'ange-ftp
   :type '(repeat string))
 

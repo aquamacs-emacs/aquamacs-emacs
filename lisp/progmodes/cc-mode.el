@@ -1,6 +1,6 @@
 ;;; cc-mode.el --- major mode for editing C and similar languages
 
-;; Copyright (C) 1985, 1987, 1992-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1987, 1992-2012 Free Software Foundation, Inc.
 
 ;; Authors:    2003- Alan Mackenzie
 ;;             1998- Martin Stjernholm
@@ -490,6 +490,7 @@ that requires a literal mode spec at compile time."
   (make-local-variable 'paragraph-ignore-fill-prefix)
   (make-local-variable 'adaptive-fill-mode)
   (make-local-variable 'adaptive-fill-regexp)
+  (make-local-variable 'fill-paragraph-handle-comment)
 
   ;; now set their values
   (set (make-local-variable 'parse-sexp-ignore-comments) t)
@@ -499,6 +500,9 @@ that requires a literal mode spec at compile time."
   (set (make-local-variable 'comment-multi-line) t)
   (set (make-local-variable 'comment-line-break-function)
        'c-indent-new-comment-line)
+
+  ;; For the benefit of adaptive file, which otherwise mis-fills.
+  (setq fill-paragraph-handle-comment nil)
 
   ;; Install `c-fill-paragraph' on `fill-paragraph-function' so that a
   ;; direct call to `fill-paragraph' behaves better.  This still
@@ -921,8 +925,8 @@ Note that the style variables are always made local to the buffer."
     ;; inside a string, comment, or macro.
     (setq new-bounds (c-extend-font-lock-region-for-macros
 		      c-new-BEG c-new-END old-len))
-    (setq c-new-BEG (car new-bounds)
-	  c-new-END (cdr new-bounds))
+    (setq c-new-BEG (max (car new-bounds) (c-determine-limit 500 begg))
+	  c-new-END (min (cdr new-bounds) (c-determine-+ve-limit 500 endd)))
     ;; Clear all old relevant properties.
     (c-clear-char-property-with-value c-new-BEG c-new-END 'syntax-table '(1))
     (c-clear-char-property-with-value c-new-BEG c-new-END 'category 'c-cpp-delimiter)
@@ -1110,7 +1114,7 @@ Note that the style variables are always made local to the buffer."
     (goto-char (c-point 'bol new-pos))
     (when lit-limits			; Comment or string.
       (goto-char (car lit-limits)))
-    (setq bod-lim (max (- (point) 500) (point-min)))
+    (setq bod-lim (c-determine-limit 500))
 
     (while
 	;; Go to a less nested declaration each time round this loop.
@@ -1128,11 +1132,12 @@ Note that the style variables are always made local to the buffer."
 	 ;; Try and go out a level to search again.
 	 (progn
 	   (c-backward-syntactic-ws bod-lim)
-	   (or (memq (char-before) '(?\( ?\[))
-	       (and (eq (char-before) ?\<)
-		    (eq (c-get-char-property
-			 (1- (point)) 'syntax-table)
-			c-<-as-paren-syntax))))
+	   (and (> (point) bod-lim)
+		(or (memq (char-before) '(?\( ?\[))
+		    (and (eq (char-before) ?\<)
+			 (eq (c-get-char-property
+			      (1- (point)) 'syntax-table)
+			     c-<-as-paren-syntax)))))
 	 (not (bobp)))
       (backward-char))
     new-pos))				; back over (, [, <.
@@ -1165,10 +1170,10 @@ Note that the style variables are always made local to the buffer."
   ;;
   ;;
   ;;     void myfunc(T* p) {}
-  ;;
+  ;; 
   ;; Type a space in the first blank line, and the fontification of the next
   ;; line was fouled up by context fontification.
-  (let ((new-beg beg) (new-end end) new-region)
+  (let ((new-beg beg) (new-end end) new-region case-fold-search)
     (if c-in-after-change-fontification
 	(setq c-in-after-change-fontification nil)
       (save-restriction
@@ -1579,7 +1584,7 @@ Key bindings:
 (easy-menu-define c-pike-menu pike-mode-map "Pike Mode Commands"
 		  (cons "Pike" (c-lang-const c-mode-menu pike)))
 
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.\\(u?lpc\\|pike\\|pmod\\(.in\\)?\\)\\'" . pike-mode))
+;;;###autoload (add-to-list 'auto-mode-alist '("\\.\\(u?lpc\\|pike\\|pmod\\(\\.in\\)?\\)\\'" . pike-mode))
 ;;;###autoload (add-to-list 'interpreter-mode-alist '("pike" . pike-mode))
 
 ;;;###autoload

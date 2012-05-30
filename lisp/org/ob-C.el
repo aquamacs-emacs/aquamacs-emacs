@@ -88,7 +88,9 @@ or `org-babel-execute:C++'."
 			(cond
 			 ((equal org-babel-c-variant 'c) ".c")
 			 ((equal org-babel-c-variant 'cpp) ".cpp"))))
-         (tmp-bin-file (org-babel-temp-file "C-bin-"))
+         (tmp-bin-file (org-babel-temp-file
+			"C-bin-"
+			(if (equal system-type 'windows-nt) ".exe" "")))
          (cmdline (cdr (assoc :cmdline params)))
          (flags (cdr (assoc :flags params)))
          (full-body (org-babel-C-expand body params))
@@ -150,7 +152,7 @@ it's header arguments."
   "Wrap body in a \"main\" function call if none exists."
   (if (string-match "^[ \t]*[intvod]+[ \t\n\r]*main[ \t]*(.*)" body)
       body
-    (format "int main() {\n%s\n}\n" body)))
+    (format "int main() {\n%s\nreturn(0);\n}\n" body)))
 
 (defun org-babel-prep-session:C (session params)
   "This function does nothing as C is a compiled language with no

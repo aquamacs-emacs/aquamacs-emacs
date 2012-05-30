@@ -763,8 +763,8 @@ prompt the user for the name of an NNTP server to use."
     ;; Add "native" to gnus-predefined-server-alist just to have a
     ;; name for the native select method.
     (when gnus-select-method
-      (push (cons "native" gnus-select-method)
-	    gnus-predefined-server-alist))
+      (add-to-list 'gnus-predefined-server-alist
+		   (cons "native" gnus-select-method)))
 
     (if gnus-agent
 	(gnus-agentize))
@@ -1714,6 +1714,21 @@ backend check whether the group actually exists."
 	  (with-current-buffer nntp-server-buffer
 	    (gnus-read-active-file-1 method nil)))))
 
+    ;; Clear out all the early methods.
+    (dolist (elem type-cache)
+      (destructuring-bind (method method-type infos dummy) elem
+	(when (and method
+		   infos
+		   (gnus-check-backend-function
+		    'retrieve-group-data-early (car method))
+		   (not (gnus-method-denied-p method)))
+	  (when (ignore-errors (gnus-get-function method 'open-server))
+	    (unless (gnus-server-opened method)
+	      (gnus-open-server method))
+	    (when (gnus-server-opened method)
+	      ;; Just mark this server as "cleared".
+	      (gnus-retrieve-group-data-early method nil))))))
+
     ;; Start early async retrieval of data.
     (let ((done-methods nil)
 	  sanity-spec)
@@ -2427,7 +2442,9 @@ If FORCE is non-nil, the .newsrc file is read."
 	(when gnus-newsrc-assoc
 	  (setq gnus-newsrc-alist gnus-newsrc-assoc))))
     (dolist (elem gnus-newsrc-alist)
-      (setcar elem (mm-string-as-unibyte (car elem))))
+      ;; Protect against broken .newsrc.el files.
+      (when (car elem)
+	(setcar elem (mm-string-as-unibyte (car elem)))))
     (gnus-make-hashtable-from-newsrc-alist)
     (when (file-newer-than-file-p file ding-file)
       ;; Old format quick file

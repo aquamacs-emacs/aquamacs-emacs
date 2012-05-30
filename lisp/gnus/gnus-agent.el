@@ -1,6 +1,6 @@
 ;;; gnus-agent.el --- unplugged support for Gnus
 
-;; Copyright (C) 1997-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1997-2012 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; This file is part of GNU Emacs.
@@ -186,7 +186,7 @@ When found, offer to remove them."
 (defcustom gnus-agent-auto-agentize-methods nil
   "Initially, all servers from these methods are agentized.
 The user may remove or add servers using the Server buffer.
-See Info node `(gnus)Server Buffer'."
+See Info nodes `(gnus)Server Buffer', `(gnus)Agent Variables'."
   :version "22.1"
   :type '(repeat symbol)
   :group 'gnus-agent)
@@ -602,7 +602,7 @@ manipulated as follows:
 		  (make-mode-line-mouse-map mouse-button mouse-func)
 		  'mouse-face
 		  (if (and (featurep 'xemacs)
-			   ;; XEmacs' `facep' only checks for a face
+			   ;; XEmacs's `facep' only checks for a face
 			   ;; object, not for a face name, so it's useless
 			   ;; to check with `facep'.
 			   (find-face 'modeline))
@@ -3618,7 +3618,7 @@ articles in every agentized group? "))
                                 (setq r d
                                       d (directory-file-name d)))
                               ;; if ANY ancestor was NOT in keep hash and
-                              ;; it's already in to-remove, add it to
+                              ;; it's not already in to-remove, add it to
                               ;; to-remove.
                               (if (and r
                                        (not (member r to-remove)))

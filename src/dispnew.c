@@ -1,5 +1,6 @@
 /* Updating of data structures for redisplay.
-   Copyright (C) 1985-1988, 1993-1995, 1997-2012 Free Software Foundation, Inc.
+
+Copyright (C) 1985-1988, 1993-1995, 1997-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -62,7 +63,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <errno.h>
 
 /* Get number of chars of output now in the buffer of a stdio stream.
-   This ought to be built in in stdio, but it isn't.  Some s- files
+   This ought to be built in stdio, but it isn't.  Some s- files
    override this because their stdio internals differ.  */
 
 #ifdef __GNU_LIBRARY__
@@ -87,7 +88,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 #endif /* not __GNU_LIBRARY__ */
 
-#if defined (HAVE_TERM_H) && defined (GNU_LINUX) && defined (HAVE_LIBNCURSES)
+#if defined (HAVE_TERM_H) && defined (GNU_LINUX)
 #include <term.h>		/* for tgetent */
 #endif
 
@@ -108,7 +109,7 @@ static int required_matrix_height (struct window *);
 static int required_matrix_width (struct window *);
 static void adjust_frame_glyphs (struct frame *);
 static void change_frame_size_1 (struct frame *, int, int, int, int, int);
-static void increment_row_positions (struct glyph_row *, EMACS_INT, EMACS_INT);
+static void increment_row_positions (struct glyph_row *, ptrdiff_t, ptrdiff_t);
 static void fill_up_frame_row_with_spaces (struct glyph_row *, int);
 static void build_frame_matrix_from_window_tree (struct glyph_matrix *,
                                                  struct window *);
@@ -758,7 +759,7 @@ rotate_matrix (struct glyph_matrix *matrix, int first, int last, int by)
 
 void
 increment_matrix_positions (struct glyph_matrix *matrix, int start, int end,
-			    EMACS_INT delta, EMACS_INT delta_bytes)
+			    ptrdiff_t delta, ptrdiff_t delta_bytes)
 {
   /* Check that START and END are reasonable values.  */
   xassert (start >= 0 && start <= matrix->nrows);
@@ -1000,7 +1001,7 @@ blank_row (struct window *w, struct glyph_row *row, int y)
 
 static void
 increment_row_positions (struct glyph_row *row,
-			 EMACS_INT delta, EMACS_INT delta_bytes)
+			 ptrdiff_t delta, ptrdiff_t delta_bytes)
 {
   int area, i;
 
@@ -1085,12 +1086,16 @@ swap_glyph_pointers (struct glyph_row *a, struct glyph_row *b)
   for (i = 0; i < LAST_AREA + 1; ++i)
     {
       struct glyph *temp = a->glyphs[i];
-      short used_tem = a->used[i];
 
       a->glyphs[i] = b->glyphs[i];
       b->glyphs[i] = temp;
-      a->used[i] = b->used[i];
-      b->used[i] = used_tem;
+      if (i < LAST_AREA)
+	{
+	  short used_tem = a->used[i];
+
+	  a->used[i] = b->used[i];
+	  b->used[i] = used_tem;
+	}
     }
   a->hash = b->hash;
   b->hash = hash_tem;
@@ -1105,7 +1110,7 @@ static inline void
 copy_row_except_pointers (struct glyph_row *to, struct glyph_row *from)
 {
   struct glyph *pointers[1 + LAST_AREA];
-  short used[1 + LAST_AREA];
+  short used[LAST_AREA];
   unsigned hashval;
 
   /* Save glyph pointers of TO.  */
@@ -2542,8 +2547,7 @@ build_frame_matrix_from_leaf_window (struct glyph_matrix *frame_matrix, struct w
 
 	  SET_GLYPH_FROM_CHAR (right_border_glyph, '|');
 	  if (dp
-	      && (gc = DISP_BORDER_GLYPH (dp), GLYPH_CODE_P (gc))
-	      && GLYPH_CODE_CHAR_VALID_P (gc))
+	      && (gc = DISP_BORDER_GLYPH (dp), GLYPH_CODE_P (gc)))
 	    {
 	      SET_GLYPH_FROM_GLYPH_CODE (right_border_glyph, gc);
 	      spec_glyph_lookup_face (w, &right_border_glyph);
@@ -5476,7 +5480,7 @@ buffer_posn_from_coords (struct window *w, int *x, int *y, struct display_pos *p
 
 Lisp_Object
 mode_line_string (struct window *w, enum window_part part,
-		  int *x, int *y, EMACS_INT *charpos, Lisp_Object *object,
+		  int *x, int *y, ptrdiff_t *charpos, Lisp_Object *object,
 		  int *dx, int *dy, int *width, int *height)
 {
   struct glyph_row *row;
@@ -5545,7 +5549,7 @@ mode_line_string (struct window *w, enum window_part part,
 
 Lisp_Object
 marginal_area_string (struct window *w, enum window_part part,
-		      int *x, int *y, EMACS_INT *charpos, Lisp_Object *object,
+		      int *x, int *y, ptrdiff_t *charpos, Lisp_Object *object,
 		      int *dx, int *dy, int *width, int *height)
 {
   struct glyph_row *row = w->current_matrix->rows;
@@ -5742,7 +5746,7 @@ static void
 change_frame_size_1 (register struct frame *f, int newheight, int newwidth, int pretend, int delay, int safe)
 {
   int new_frame_total_cols;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
 
   /* If we can't deal with the change now, queue it for later.  */
   if (delay || (redisplaying_p && !safe))
@@ -5763,19 +5767,22 @@ change_frame_size_1 (register struct frame *f, int newheight, int newwidth, int 
   if (newwidth == 0)
     newwidth  = FRAME_COLS  (f);
 
-  /* Compute width of windows in F.
-     This is the width of the frame without vertical scroll bars.  */
-  new_frame_total_cols = FRAME_TOTAL_COLS_ARG (f, newwidth);
-
+  /* Compute width of windows in F.  */
   /* Round up to the smallest acceptable size.  */
   check_frame_size (f, &newheight, &newwidth);
 
+  /* This is the width of the frame with vertical scroll bars and fringe
+     columns.  Do this after rounding - see discussion of bug#9723.  */
+  new_frame_total_cols = FRAME_TOTAL_COLS_ARG (f, newwidth);
+
   /* If we're not changing the frame size, quit now.  */
-  /* Frame width may be unchanged but the text portion may change, for example,
-     fullscreen and remove/add scroll bar.  */
+  /* Frame width may be unchanged but the text portion may change, for
+     example, fullscreen and remove/add scroll bar.  */
   if (newheight == FRAME_LINES (f)
-      && newwidth == FRAME_COLS  (f) // text portion unchanged
-      && new_frame_total_cols == FRAME_TOTAL_COLS (f)) // frame width unchanged
+      /* Text portion unchanged?  */
+      && newwidth == FRAME_COLS  (f)
+      /* Frame width unchanged?  */
+      && new_frame_total_cols == FRAME_TOTAL_COLS (f))
     return;
 
   BLOCK_INPUT;
@@ -5960,6 +5967,38 @@ bitch_at_user (void)
 			  Sleeping, Waiting
  ***********************************************************************/
 
+/* Convert a positive value DURATION to a seconds count *PSEC plus a
+   microseconds count *PUSEC, rounding up.  On overflow return the
+   maximal value.  */
+void
+duration_to_sec_usec (double duration, int *psec, int *pusec)
+{
+  int MILLION = 1000000;
+  int sec = INT_MAX, usec = MILLION - 1;
+
+  if (duration < INT_MAX + 1.0)
+    {
+      int s = duration;
+      double usdouble = (duration - s) * MILLION;
+      int usfloor = usdouble;
+      int usceil = usfloor + (usfloor < usdouble);
+
+      if (usceil < MILLION)
+	{
+	  sec = s;
+	  usec = usceil;
+	}
+      else if (sec < INT_MAX)
+	{
+	  sec = s + 1;
+	  usec = 0;
+	}
+    }
+
+  *psec = sec;
+  *pusec = usec;
+}
+
 DEFUN ("sleep-for", Fsleep_for, Ssleep_for, 1, 2, 0,
        doc: /* Pause, without updating display, for SECONDS seconds.
 SECONDS may be a floating-point value, meaning that you can wait for a
@@ -5970,38 +6009,23 @@ Emacs was built without floating point support.
   (Lisp_Object seconds, Lisp_Object milliseconds)
 {
   int sec, usec;
+  double duration = extract_float (seconds);
 
-  if (NILP (milliseconds))
-    XSETINT (milliseconds, 0);
-  else
-    CHECK_NUMBER (milliseconds);
-  usec = XINT (milliseconds) * 1000;
+  if (!NILP (milliseconds))
+    {
+      CHECK_NUMBER (milliseconds);
+      duration += XINT (milliseconds) / 1000.0;
+    }
 
-  {
-    double duration = extract_float (seconds);
-    sec = (int) duration;
-    usec += (duration - sec) * 1000000;
-  }
+  if (! (0 < duration))
+    return Qnil;
+
+  duration_to_sec_usec (duration, &sec, &usec);
 
 #ifndef EMACS_HAS_USECS
   if (sec == 0 && usec != 0)
     error ("Millisecond `sleep-for' not supported on %s", SYSTEM_TYPE);
 #endif
-
-  /* Assure that 0 <= usec < 1000000.  */
-  if (usec < 0)
-    {
-      /* We can't rely on the rounding being correct if usec is negative.  */
-      if (-1000000 < usec)
-	sec--, usec += 1000000;
-      else
-	sec -= -usec / 1000000, usec = 1000000 - (-usec % 1000000);
-    }
-  else
-    sec += usec / 1000000, usec %= 1000000;
-
-  if (sec < 0 || (sec == 0 && usec == 0))
-    return Qnil;
 
   wait_reading_process_output (sec, usec, 0, 0, Qnil, NULL, 0);
 
@@ -6033,27 +6057,20 @@ sit_for (Lisp_Object timeout, int reading, int do_display)
   if (do_display >= 2)
     redisplay_preserve_echo_area (2);
 
-  if (INTEGERP (timeout))
-    {
-      sec = XINT (timeout);
-      usec = 0;
-    }
-  else if (FLOATP (timeout))
-    {
-      double seconds = XFLOAT_DATA (timeout);
-      sec = (int) seconds;
-      usec = (int) ((seconds - sec) * 1000000);
-    }
-  else if (EQ (timeout, Qt))
+  if (EQ (timeout, Qt))
     {
       sec = 0;
       usec = 0;
     }
   else
-    wrong_type_argument (Qnumberp, timeout);
+    {
+      double duration = extract_float (timeout);
 
-  if (sec == 0 && usec == 0 && !EQ (timeout, Qt))
-    return Qt;
+      if (! (0 < duration))
+	return Qt;
+
+      duration_to_sec_usec (duration, &sec, &usec);
+    }
 
 #ifdef SIGIO
   gobble_input (0);
@@ -6067,13 +6084,17 @@ sit_for (Lisp_Object timeout, int reading, int do_display)
 
 
 DEFUN ("redisplay", Fredisplay, Sredisplay, 0, 1, 0,
-       doc: /* Perform redisplay if no input is available.
-If optional arg FORCE is non-nil or `redisplay-dont-pause' is non-nil,
-perform a full redisplay even if input is available.
-Return t if redisplay was performed, nil otherwise.  */)
+       doc: /* Perform redisplay.
+Optional arg FORCE, if non-nil, prevents redisplay from being
+preempted by arriving input, even if `redisplay-dont-pause' is nil.
+If `redisplay-dont-pause' is non-nil (the default), redisplay is never
+preempted by arriving input, so FORCE does nothing.
+
+Return t if redisplay was performed, nil if redisplay was preempted
+immediately by pending input.  */)
   (Lisp_Object force)
 {
-  int count;
+  ptrdiff_t count;
 
   swallow_events (1);
   if ((detect_input_pending_run_timers (1)
@@ -6119,7 +6140,7 @@ pass nil for VARIABLE.  */)
 {
   Lisp_Object state, tail, frame, buf;
   Lisp_Object *vecp, *end;
-  int n;
+  ptrdiff_t n;
 
   if (! NILP (variable))
     {
@@ -6294,7 +6315,7 @@ init_display (void)
 #ifdef HAVE_X11
       Vwindow_system_version = make_number (11);
 #endif
-#if defined (GNU_LINUX) && defined (HAVE_LIBNCURSES)
+#ifdef GNU_LINUX
       /* In some versions of ncurses,
 	 tputs crashes if we have not called tgetent.
 	 So call tgetent.  */
@@ -6520,21 +6541,21 @@ syms_of_display (void)
   DEFSYM (Qredisplay_dont_pause, "redisplay-dont-pause");
 
   DEFVAR_INT ("baud-rate", baud_rate,
-	      doc: /* *The output baud rate of the terminal.
+	      doc: /* The output baud rate of the terminal.
 On most systems, changing this value will affect the amount of padding
 and the other strategic decisions made during redisplay.  */);
 
   DEFVAR_BOOL ("inverse-video", inverse_video,
-	       doc: /* *Non-nil means invert the entire frame display.
+	       doc: /* Non-nil means invert the entire frame display.
 This means everything is in inverse video which otherwise would not be.  */);
 
   DEFVAR_BOOL ("visible-bell", visible_bell,
-	       doc: /* *Non-nil means try to flash the frame to represent a bell.
+	       doc: /* Non-nil means try to flash the frame to represent a bell.
 
 See also `ring-bell-function'.  */);
 
   DEFVAR_BOOL ("no-redraw-on-reenter", no_redraw_on_reenter,
-	       doc: /* *Non-nil means no need to redraw entire frame after suspending.
+	       doc: /* Non-nil means no need to redraw entire frame after suspending.
 A non-nil value is useful if the terminal can automatically preserve
 Emacs's frame display when you reenter Emacs.
 It is up to you to set this variable if your terminal can do that.  */);
@@ -6589,14 +6610,15 @@ See `buffer-display-table' for more information.  */);
   Vstandard_display_table = Qnil;
 
   DEFVAR_BOOL ("redisplay-dont-pause", redisplay_dont_pause,
-	       doc: /* *Non-nil means display update isn't paused when input is detected.  */);
+	       doc: /* Non-nil means display update isn't paused when input is detected.  */);
   redisplay_dont_pause = 1;
 
 #if PERIODIC_PREEMPTION_CHECKING
   DEFVAR_LISP ("redisplay-preemption-period", Vredisplay_preemption_period,
-	       doc: /* *The period in seconds between checking for input during redisplay.
-If input is detected, redisplay is pre-empted, and the input is processed.
-If nil, never pre-empt redisplay.  */);
+	       doc: /* Period in seconds between checking for input during redisplay.
+This has an effect only if `redisplay-dont-pause' is nil; in that
+case, arriving input preempts redisplay until the input is processed.
+If the value is nil, redisplay is never preempted.  */);
   Vredisplay_preemption_period = make_float (0.10);
 #endif
 

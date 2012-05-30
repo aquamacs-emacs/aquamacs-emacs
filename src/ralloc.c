@@ -31,9 +31,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <unistd.h>
 
-typedef POINTER_TYPE *POINTER;
-typedef size_t SIZE;
-
 #ifdef DOUG_LEA_MALLOC
 #define M_TOP_PAD           -2
 extern int mallopt (int, int);
@@ -47,9 +44,6 @@ extern size_t __malloc_extra_blocks;
 
 #include <stddef.h>
 
-typedef size_t SIZE;
-typedef void *POINTER;
-
 #include <unistd.h>
 #include <malloc.h>
 
@@ -58,6 +52,8 @@ typedef void *POINTER;
 
 #include "getpagesize.h"
 
+typedef size_t SIZE;
+typedef void *POINTER;
 #define NIL ((POINTER) 0)
 
 /* A flag to indicate whether we have initialized ralloc yet.  For
@@ -95,10 +91,8 @@ static int extra_bytes;
 /* Macros for rounding.  Note that rounding to any value is possible
    by changing the definition of PAGE.  */
 #define PAGE (getpagesize ())
-#define ALIGNED(addr) (((unsigned long int) (addr) & (page_size - 1)) == 0)
 #define ROUNDUP(size) (((unsigned long int) (size) + page_size - 1) \
 		       & ~(page_size - 1))
-#define ROUND_TO_PAGE(addr) (addr & (~(page_size - 1)))
 
 #define MEM_ALIGN sizeof (double)
 #define MEM_ROUNDUP(addr) (((unsigned long int)(addr) + MEM_ALIGN - 1) \
@@ -151,7 +145,6 @@ typedef struct heap
 } *heap_ptr;
 
 #define NIL_HEAP ((heap_ptr) 0)
-#define HEAP_PTR_SIZE (sizeof (struct heap))
 
 /* This is the first heap object.
    If we need additional heap objects, each one resides at the beginning of
@@ -365,15 +358,6 @@ relinquish (void)
 	    abort ();
 	}
     }
-}
-
-/* Return the total size in use by relocating allocator,
-   above where malloc gets space.  */
-
-long
-r_alloc_size_in_use (void)
-{
-  return (char *) break_value - (char *) virtual_break_value;
 }
 
 /* The meat - allocating, freeing, and relocating blocs.  */
@@ -636,7 +620,8 @@ resize_bloc (bloc_ptr bloc, SIZE size)
             }
 	  else
 	    {
-	      memmove (b->new_data, b->data, b->size);
+	      if (b->new_data != b->data)
+		memmove (b->new_data, b->data, b->size);
 	      *b->variable = b->data = b->new_data;
             }
 	}
@@ -647,7 +632,8 @@ resize_bloc (bloc_ptr bloc, SIZE size)
 	}
       else
 	{
-	  memmove (bloc->new_data, bloc->data, old_size);
+	  if (bloc->new_data != bloc->data)
+	    memmove (bloc->new_data, bloc->data, old_size);
 	  memset ((char *) bloc->new_data + old_size, 0, size - old_size);
 	  *bloc->variable = bloc->data = bloc->new_data;
 	}
@@ -663,7 +649,8 @@ resize_bloc (bloc_ptr bloc, SIZE size)
             }
 	  else
 	    {
-	      memmove (b->new_data, b->data, b->size);
+	      if (b->new_data != b->data)
+		memmove (b->new_data, b->data, b->size);
 	      *b->variable = b->data = b->new_data;
 	    }
 	}
@@ -745,7 +732,7 @@ free_bloc (bloc_ptr bloc)
    __morecore hook values - in particular, __default_morecore in the
    GNU malloc package.  */
 
-POINTER
+static POINTER
 r_alloc_sbrk (long int size)
 {
   register bloc_ptr b;
@@ -816,7 +803,8 @@ r_alloc_sbrk (long int size)
 	     header.  */
 	  for (b = last_bloc; b != NIL_BLOC; b = b->prev)
 	    {
-	      memmove (b->new_data, b->data, b->size);
+	      if (b->new_data != b->data)
+		memmove (b->new_data, b->data, b->size);
 	      *b->variable = b->data = b->new_data;
 	    }
 
@@ -862,7 +850,8 @@ r_alloc_sbrk (long int size)
 
 	  for (b = first_bloc; b != NIL_BLOC; b = b->next)
 	    {
-	      memmove (b->new_data, b->data, b->size);
+	      if (b->new_data != b->data)
+		memmove (b->new_data, b->data, b->size);
 	      *b->variable = b->data = b->new_data;
 	    }
 	}
@@ -1009,52 +998,6 @@ r_re_alloc (POINTER *ptr, SIZE size)
   return *ptr;
 }
 
-/* Disable relocations, after making room for at least SIZE bytes
-   of non-relocatable heap if possible.  The relocatable blocs are
-   guaranteed to hold still until thawed, even if this means that
-   malloc must return a null pointer.  */
-
-void
-r_alloc_freeze (long int size)
-{
-  if (! r_alloc_initialized)
-    r_alloc_init ();
-
-  /* If already frozen, we can't make any more room, so don't try.  */
-  if (r_alloc_freeze_level > 0)
-    size = 0;
-  /* If we can't get the amount requested, half is better than nothing.  */
-  while (size > 0 && r_alloc_sbrk (size) == 0)
-    size /= 2;
-  ++r_alloc_freeze_level;
-  if (size > 0)
-    r_alloc_sbrk (-size);
-}
-
-void
-r_alloc_thaw (void)
-{
-
-  if (! r_alloc_initialized)
-    r_alloc_init ();
-
-  if (--r_alloc_freeze_level < 0)
-    abort ();
-
-  /* This frees all unused blocs.  It is not too inefficient, as the resize
-     and memcpy is done only once.  Afterwards, all unreferenced blocs are
-     already shrunk to zero size.  */
-  if (!r_alloc_freeze_level)
-    {
-      bloc_ptr *b = &first_bloc;
-      while (*b)
-	if (!(*b)->variable)
-	  free_bloc (*b);
-	else
-	  b = &(*b)->next;
-    }
-}
-
 
 #if defined (emacs) && defined (DOUG_LEA_MALLOC)
 
@@ -1194,6 +1137,12 @@ r_alloc_reset_variable (POINTER *old, POINTER *new)
 
   /* Update variable to point to the new location.  */
   bloc->variable = new;
+}
+
+void
+r_alloc_inhibit_buffer_relocation (int inhibit)
+{
+  use_relocatable_buffers = !inhibit;
 }
 
 

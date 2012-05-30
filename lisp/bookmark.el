@@ -1,6 +1,6 @@
 ;;; bookmark.el --- set bookmarks, maybe annotate them, jump to them later
 
-;; Copyright (C) 1993-1997, 2001-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1993-1997, 2001-2012 Free Software Foundation, Inc.
 
 ;; Author: Karl Fogel <kfogel@red-bean.com>
 ;; Maintainer: Karl Fogel <kfogel@red-bean.com>
@@ -65,7 +65,7 @@
 --> t means save bookmarks when Emacs is killed.
 --> Otherwise, it should be a number that is the frequency with which
     the bookmark list is saved (i.e.: the number of times which
-    Emacs' bookmark list may be modified before it is automatically
+    Emacs's bookmark list may be modified before it is automatically
     saved.).  If it is a number, Emacs will also automatically save
     bookmarks when it is killed.
 
@@ -828,11 +828,11 @@ annotations."
 	  "#  Date:    " (current-time-string) "\n"))
 
 
+(define-obsolete-variable-alias 'bookmark-read-annotation-text-func
+  'bookmark-edit-annotation-text-func "23.1")
 (defvar bookmark-edit-annotation-text-func 'bookmark-default-annotation-text
   "Function to return default text to use for a bookmark annotation.
 It takes one argument, the name of the bookmark, as a string.")
-(define-obsolete-variable-alias 'bookmark-read-annotation-text-func
-  'bookmark-edit-annotation-text-func "23.1")
 
 (defvar bookmark-edit-annotation-mode-map
   (let ((map (make-sparse-keymap)))
@@ -2164,10 +2164,10 @@ strings returned are not."
   "Hook run at the end of loading library `bookmark.el'.")
 
 ;; Exit Hook, called from kill-emacs-hook
+(define-obsolete-variable-alias 'bookmark-exit-hooks
+  'bookmark-exit-hook "22.1")
 (defvar bookmark-exit-hook nil
   "Hook run when Emacs exits.")
-
-(define-obsolete-variable-alias 'bookmark-exit-hooks 'bookmark-exit-hook "22.1")
 
 (defun bookmark-exit-hook-internal ()
   "Save bookmark state, if necessary, at Emacs exit time.

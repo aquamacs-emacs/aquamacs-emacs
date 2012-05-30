@@ -1813,7 +1813,7 @@ internal_terminal_init (void)
 	}
 
       Vinitial_window_system = Qpc;
-      Vwindow_system_version = make_number (23); /* RE Emacs version */
+      Vwindow_system_version = make_number (24); /* RE Emacs version */
       tty->terminal->type = output_msdos_raw;
 
       /* If Emacs was dumped on DOS/V machine, forget the stale VRAM
@@ -4270,7 +4270,7 @@ syms_of_msdos (void)
   DEFSYM (Qreverse, "reverse");
 
   DEFVAR_LISP ("dos-unsupported-char-glyph", Vdos_unsupported_char_glyph,
-	       doc: /* *Glyph to display instead of chars not supported by current codepage.
+	       doc: /* Glyph to display instead of chars not supported by current codepage.
 This variable is used only by MS-DOS terminals.  */);
   Vdos_unsupported_char_glyph = make_number ('\177');
 

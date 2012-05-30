@@ -34,8 +34,14 @@
 (defvar font-lock-string-face)
 
 (defvar lisp-mode-abbrev-table nil)
+(define-abbrev-table 'lisp-mode-abbrev-table ()
+  "Abbrev table for Lisp mode.")
 
-(define-abbrev-table 'lisp-mode-abbrev-table ())
+(defvar emacs-lisp-mode-abbrev-table nil)
+(define-abbrev-table 'emacs-lisp-mode-abbrev-table ()
+  "Abbrev table for Emacs Lisp mode.
+It has `lisp-mode-abbrev-table' as its parent."
+  :parents (list lisp-mode-abbrev-table))
 
 (defvar emacs-lisp-mode-syntax-table
   (let ((table (make-syntax-table))
@@ -130,34 +136,13 @@
 ;; This was originally in autoload.el and is still used there.
 (put 'autoload 'doc-string-elt 3)
 (put 'defun    'doc-string-elt 3)
-(put 'defun*    'doc-string-elt 3)
 (put 'defmethod 'doc-string-elt 3)
 (put 'defvar   'doc-string-elt 3)
-(put 'defcustom 'doc-string-elt 3)
-(put 'deftheme 'doc-string-elt 2)
-(put 'deftype 'doc-string-elt 3)
 (put 'defconst 'doc-string-elt 3)
 (put 'defmacro 'doc-string-elt 3)
-(put 'defmacro* 'doc-string-elt 3)
-(put 'defsubst 'doc-string-elt 3)
-(put 'defstruct 'doc-string-elt 2)
-(put 'define-skeleton 'doc-string-elt 2)
-(put 'define-derived-mode 'doc-string-elt 4)
-(put 'define-compilation-mode 'doc-string-elt 3)
-(put 'easy-mmode-define-minor-mode 'doc-string-elt 2)
-(put 'define-minor-mode 'doc-string-elt 2)
-(put 'easy-mmode-define-global-mode 'doc-string-elt 2)
-(put 'define-global-minor-mode 'doc-string-elt 2)
-(put 'define-globalized-minor-mode 'doc-string-elt 2)
-(put 'define-generic-mode 'doc-string-elt 7)
-(put 'define-ibuffer-filter 'doc-string-elt 2)
-(put 'define-ibuffer-op 'doc-string-elt 3)
-(put 'define-ibuffer-sorter 'doc-string-elt 2)
-(put 'lambda 'doc-string-elt 2)
 (put 'defalias 'doc-string-elt 3)
 (put 'defvaralias 'doc-string-elt 3)
 (put 'define-category 'doc-string-elt 2)
-(put 'define-overloadable-function 'doc-string-elt 3)
 
 (defvar lisp-doc-string-elt-property 'doc-string-elt
   "The symbol property that holds the docstring position info.")
@@ -206,7 +191,6 @@ score-mode.el.  KEYWORDS-CASE-INSENSITIVE non-nil means that for
 font-lock keywords will not be case sensitive."
   (when lisp-syntax
     (set-syntax-table lisp-mode-syntax-table))
-  (setq local-abbrev-table lisp-mode-abbrev-table)
   (make-local-variable 'paragraph-ignore-fill-prefix)
   (setq paragraph-ignore-fill-prefix t)
   (make-local-variable 'fill-paragraph-function)
@@ -540,7 +524,8 @@ Semicolons start comments.
 
 \\{lisp-interaction-mode-map}
 Entry to this mode calls the value of `lisp-interaction-mode-hook'
-if that value is non-nil.")
+if that value is non-nil."
+  :abbrev-table nil)
 
 (defun eval-print-last-sexp ()
   "Evaluate sexp before point; print value into current buffer.
@@ -844,10 +829,10 @@ Return the result of evaluation."
 	   (end-of-defun)
 	   (beginning-of-defun)
 	   (setq beg (point))
-	   (setq form (eval-sexp-add-defvars (read (current-buffer))))
+	   (setq form (read (current-buffer)))
 	   (setq end (point)))
 	 ;; Alter the form if necessary.
-	 (setq form (eval-defun-1 (macroexpand form)))
+	 (setq form (eval-sexp-add-defvars (eval-defun-1 (macroexpand form))))
 	 (list beg end standard-output
 	       `(lambda (ignore)
 		 ;; Skipping to the end of the specified region
@@ -1227,7 +1212,6 @@ Lisp function does not specify a special indentation."
 ;; like defun if the first form is placed on the next line, otherwise
 ;; it is indented like any other form (i.e. forms line up under first).
 
-(put 'lambda 'lisp-indent-function 'defun)
 (put 'autoload 'lisp-indent-function 'defun)
 (put 'progn 'lisp-indent-function 0)
 (put 'prog1 'lisp-indent-function 1)

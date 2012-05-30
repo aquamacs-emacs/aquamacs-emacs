@@ -656,12 +656,13 @@ another window.  With LEAVE-W, use the current `vcursor-window'."
       (or window-system
 	  (display-color-p)
 	  (overlay-put vcursor-overlay 'before-string vcursor-string))
-      (overlay-put vcursor-overlay 'face 'vcursor))
+      (overlay-put vcursor-overlay 'face 'vcursor)
+      ;; 200 is purely an arbitrary "high" number.  See bug#9663.
+      (overlay-put vcursor-overlay 'priority 200))
     (or leave-w (vcursor-find-window nil t))
     ;; vcursor-window now contains the right buffer
     (or (pos-visible-in-window-p pt vcursor-window)
-	(set-window-point vcursor-window pt)))
-  )
+	(set-window-point vcursor-window pt))))
 
 (defun vcursor-insert (text)
   "Insert TEXT, respecting `vcursor-interpret-input'."
@@ -813,6 +814,8 @@ out how much to copy."
 
 (define-minor-mode vcursor-use-vcursor-map
   "Toggle the state of the vcursor key map.
+With a prefix argument ARG, enable it if ARG is positive, and disable
+it otherwise.  If called from Lisp, enable it if ARG is omitted or nil.
 When on, the keys defined in it are mapped directly on top of the main
 keymap, allowing you to move the vcursor with ordinary motion keys.
 An indication \"!VC\" appears in the mode list.  The effect is

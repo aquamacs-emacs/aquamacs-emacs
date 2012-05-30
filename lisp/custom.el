@@ -198,13 +198,21 @@ set to nil, as the value is no longer rogue."
   (run-hooks 'custom-define-hook)
   symbol)
 
-(defmacro defcustom (symbol value doc &rest args)
-  "Declare SYMBOL as a customizable variable that defaults to VALUE.
+(defmacro defcustom (symbol standard doc &rest args)
+  "Declare SYMBOL as a customizable variable.
+SYMBOL is the variable name; it should not be quoted.
+STANDARD is an expression specifying the variable's standard
+value.  It should not be quoted.  It is evaluated once by
+`defcustom', and the value is assigned to SYMBOL if the variable
+is unbound.  The expression itself is also stored, so that
+Customize can re-evaluate it later to get the standard value.
 DOC is the variable documentation.
 
-Neither SYMBOL nor VALUE need to be quoted.
-If SYMBOL is not already bound, initialize it to VALUE.
-The remaining arguments should have the form
+This macro uses `defvar' as a subroutine, which also marks the
+variable as \"special\", so that it is always dynamically bound
+even when `lexical-binding' is t.
+
+The remaining arguments to `defcustom' should have the form
 
    [KEYWORD VALUE]...
 
@@ -229,8 +237,12 @@ The following keywords are meaningful:
 	VALUE should be a feature symbol.  If you save a value
 	for this option, then when your `.emacs' file loads the value,
 	it does (require VALUE) first.
+:set-after VARIABLES
+	Specifies that SYMBOL should be set after the list of variables
+        VARIABLES when both have been customized.
 :risky	Set SYMBOL's `risky-local-variable' property to VALUE.
 :safe	Set SYMBOL's `safe-local-variable' property to VALUE.
+        See Info node `(elisp) File Local Variables'.
 
 The following common keywords are also meaningful.
 
@@ -299,9 +311,6 @@ The following common keywords are also meaningful.
         Load file FILE (a string) before displaying this customization
         item.  Loading is done with `load', and only if the file is
         not already loaded.
-:set-after VARIABLES
-	Specifies that SYMBOL should be set after the list of variables
-        VARIABLES when both have been customized.
 
 If SYMBOL has a local binding, then this form affects the local
 binding.  This is normally not what you want.  Thus, if you need
@@ -319,14 +328,15 @@ for more information."
   `(custom-declare-variable
     ',symbol
     ,(if lexical-binding    ;FIXME: This is not reliable, but is all we have.
-         ;; The `default' arg should be an expression that evaluates to
-         ;; the value to use.  The use of `eval' for it is spread over
-         ;; many different places and hence difficult to eliminate, yet
-         ;; we want to make sure that the `value' expression is checked by the
-         ;; byte-compiler, and that lexical-binding is obeyed, so quote the
-         ;; expression with `lambda' rather than with `quote'.
-         `(list (lambda () ,value))
-       `',value)
+         ;; The STANDARD arg should be an expression that evaluates to
+         ;; the standard value.  The use of `eval' for it is spread
+         ;; over many different places and hence difficult to
+         ;; eliminate, yet we want to make sure that the `standard'
+         ;; expression is checked by the byte-compiler, and that
+         ;; lexical-binding is obeyed, so quote the expression with
+         ;; `lambda' rather than with `quote'.
+         ``(funcall #',(lambda () ,standard))
+       `',standard)
     ,doc
     ,@args))
 
@@ -589,13 +599,17 @@ If NOSET is non-nil, don't bother autoloading LOAD when setting the variable."
   (put symbol 'custom-autoload (if noset 'noset t))
   (custom-add-load symbol load))
 
-;; This test is also in the C code of `user-variable-p'.
 (defun custom-variable-p (variable)
-  "Return non-nil if VARIABLE is a custom variable.
-This recursively follows aliases."
-  (setq variable (indirect-variable variable))
-  (or (get variable 'standard-value)
-      (get variable 'custom-autoload)))
+  "Return non-nil if VARIABLE is a customizable variable.
+A customizable variable is either (i) a variable whose property
+list contains a non-nil `standard-value' or `custom-autoload'
+property, or (ii) an alias for another customizable variable."
+  (when (symbolp variable)
+    (setq variable (indirect-variable variable))
+    (or (get variable 'standard-value)
+	(get variable 'custom-autoload))))
+
+(define-obsolete-function-alias 'user-variable-p 'custom-variable-p "24.2")
 
 (defun custom-note-var-changed (variable)
   "Inform Custom that VARIABLE has been set (changed).
@@ -922,16 +936,21 @@ Each of the arguments in ARGS should be a list of this form:
 
   (SYMBOL EXP [NOW [REQUEST [COMMENT]]])
 
-This stores EXP (without evaluating it) as the saved value for SYMBOL.
-If NOW is present and non-nil, then also evaluate EXP and set
-the default value for the SYMBOL to the value of EXP.
+SYMBOL is the variable name, and EXP is an expression which
+evaluates to the customized value.  EXP will also be stored,
+without evaluating it, in SYMBOL's `saved-value' property, so
+that it can be restored via the Customize interface.  It is also
+added to the alist in SYMBOL's `theme-value' property \(by
+calling `custom-push-theme').
 
-REQUEST is a list of features we must require in order to
-handle SYMBOL properly.
-COMMENT is a comment string about SYMBOL.
+NOW, if present and non-nil, means to install the variable's
+value directly now, even if its `defcustom' declaration has not
+been executed.  This is for internal use only.
 
-EXP itself is saved unevaluated as SYMBOL property `saved-value' and
-in SYMBOL's list property `theme-value' \(using `custom-push-theme')."
+REQUEST is a list of features to `require' (which are loaded
+prior to evaluating EXP).
+
+COMMENT is a comment string about SYMBOL."
   (custom-check-theme theme)
 
   ;; Process all the needed autoloads before anything else, so that the
@@ -1029,6 +1048,7 @@ The optional argument DOC is a doc string describing the theme.
 
 Any theme `foo' should be defined in a file called `foo-theme.el';
 see `custom-make-theme-feature' for more information."
+  (declare (doc-string 2))
   (let ((feature (custom-make-theme-feature theme)))
     ;; It is better not to use backquote in this file,
     ;; because that makes a bootstrapping problem
@@ -1126,12 +1146,14 @@ This variable cannot be set in a Custom theme."
 The theme file is named THEME-theme.el, in one of the directories
 specified by `custom-theme-load-path'.
 
-If optional arg NO-CONFIRM is non-nil, and THEME is not
-considered safe according to `custom-safe-themes', prompt the
-user for confirmation.
+If the theme is not considered safe by `custom-safe-themes',
+prompt the user for confirmation before loading it.  But if
+optional arg NO-CONFIRM is non-nil, load the theme without
+prompting.
 
-Normally, this function also enables THEME; if optional arg
-NO-ENABLE is non-nil, load the theme but don't enable it.
+Normally, this function also enables THEME.  If optional arg
+NO-ENABLE is non-nil, load the theme but don't enable it, unless
+the theme was already enabled.
 
 This function is normally called through Customize when setting
 `custom-enabled-themes'.  If used directly in your init file, it
@@ -1147,6 +1169,10 @@ Return t if THEME was successfully loaded, nil otherwise."
     nil nil))
   (unless (custom-theme-name-valid-p theme)
     (error "Invalid theme name `%s'" theme))
+  ;; If THEME is already enabled, re-enable it after loading, even if
+  ;; NO-ENABLE is t.
+  (if no-enable
+      (setq no-enable (not (custom-theme-enabled-p theme))))
   ;; If reloading, clear out the old theme settings.
   (when (custom-theme-p theme)
     (disable-theme theme)

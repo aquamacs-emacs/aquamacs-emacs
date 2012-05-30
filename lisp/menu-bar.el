@@ -1,6 +1,6 @@
 ;;; menu-bar.el --- define a default menu bar
 
-;; Copyright (C) 1993-1995, 2000-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1993-1995, 2000-2012 Free Software Foundation, Inc.
 
 ;; Author: RMS
 ;; Maintainer: FSF
@@ -666,29 +666,10 @@ by \"Save Options\" in Custom buffers.")
 (defun menu-set-font ()
   "Interactively select a font and make it the default."
   (interactive)
-  (let ((font (if (fboundp 'x-select-font)
-  		  (x-select-font)
-  		(mouse-select-font)))
-	spec)
-    (when font
-      ;; Be careful here: when set-face-attribute is called for the
-      ;; :font attribute, Emacs tries to guess the best matching font
-      ;; by examining the other face attributes (Bug#2476).
-      (set-face-attribute 'default (selected-frame)
-			  :width 'normal
-			  :weight 'normal
-			  :slant 'normal
-			  :font font)
-      (let ((font-object (face-attribute 'default :font)))
-	(dolist (f (frame-list))
-	  (and (not (eq f (selected-frame)))
-	       (display-graphic-p f)
-	       (set-face-attribute 'default f :font font-object)))
-	(set-face-attribute 'default t :font font-object))
-      (setq spec (list (list t (face-attr-construct 'default))))
-      (put 'default 'customized-face spec)
-      (custom-push-theme 'theme-face 'default 'user 'set spec)
-      (put 'default 'face-modified nil))))
+  (set-frame-font (if (fboundp 'x-select-font)
+		      (x-select-font)
+		    (mouse-select-font))
+		  nil t))
 
 (defun menu-bar-options-save ()
   "Save current values of Options menu items using Custom."

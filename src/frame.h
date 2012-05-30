@@ -322,7 +322,7 @@ struct frame
     struct x_output *x;         /* xterm.h */
     struct w32_output *w32;     /* w32term.h */
     struct ns_output *ns;       /* nsterm.h */
-    EMACS_INT nothing;
+    intptr_t nothing;
   }
   output_data;
 
@@ -501,7 +501,8 @@ struct frame
 
 typedef struct frame *FRAME_PTR;
 
-#define XFRAME(p) (eassert (FRAMEP(p)),(struct frame *) XPNTR (p))
+#define XFRAME(p) \
+  (eassert (FRAMEP (p)), (struct frame *) XUNTAG (p, Lisp_Vectorlike))
 #define XSETFRAME(a, b) (XSETPSEUDOVECTOR (a, b, PVEC_FRAME))
 
 /* Given a window, return its frame as a Lisp_Object.  */

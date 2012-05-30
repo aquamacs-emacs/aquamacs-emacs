@@ -1,6 +1,7 @@
 /* NeXT/Open/GNUstep / MacOSX communication module.
-   Copyright (C) 1989, 1993-1994, 2005-2006, 2008-2012
-     Free Software Foundation, Inc.
+
+Copyright (C) 1989, 1993-1994, 2005-2006, 2008-2012
+  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -70,6 +71,7 @@ int term_trace_num = 0;
 #define NSTRACE(x)
 #endif
 
+extern NSString *NSMenuDidBeginTrackingNotification;
 
 /* ==========================================================================
 
@@ -345,11 +347,18 @@ ns_init_paths (void)
 /*NSLog (@"loadPath: '%@'\n", resourcePaths); */
     }
 
+  /* Normally, Emacs does not add its own bin/ directory to the PATH.
+     However, a self-contained NS build has a different layout, with
+     bin/ and libexec/ subdirectories in the directory that contains
+     Emacs.app itself.
+     We put libexec first, because init_callproc_1 uses the first
+     element to initialize exec-directory.  An alternative would be
+     for init_callproc to check for invocation-directory/libexec.  */
   if (!getenv ("EMACSPATH"))
     {
       NSArray *paths = [binDir stringsByAppendingPaths:
-                                  [NSArray arrayWithObjects: @"bin",
-                                                             @"lib-exec", nil]];
+                                  [NSArray arrayWithObjects: @"libexec",
+                                                             @"bin", nil]];
       NSEnumerator *pathEnum = [paths objectEnumerator];
       resourcePaths = @"";
       while (resourcePath = [pathEnum nextObject])
@@ -378,16 +387,6 @@ ns_init_paths (void)
           if (!getenv ("EMACSDOC"))
             setenv ("EMACSDOC", [resourcePath UTF8String], 1);
         }
-    }
-
-  if (!getenv ("INFOPATH"))
-    {
-      resourcePath = [resourceDir stringByAppendingPathComponent: @"info"];
-      if ([fileManager fileExistsAtPath: resourcePath isDirectory: &isDir])
-        if (isDir)
-          setenv ("INFOPATH", [[resourcePath stringByAppendingString: @":"]
-                                             UTF8String], 1);
-      /* Note, extra colon needed to cause merge w/later user additions. */
     }
 }
 
@@ -7071,11 +7070,15 @@ enum {
    restrict the height to just one monitor.  So we override this.  */
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
-  /* When making the frame visible for the first time, we want to
-     constrain.  Other times not.  */
+  /* When making the frame visible for the first time or if there is just
+     one screen, we want to constrain.  Other times not.  */
+  NSUInteger nr_screens = [[NSScreen screens] count];
   struct frame *f = ((EmacsView *)[self delegate])->emacsframe;
   NSTRACE (constrainFrameRect);
 
+  if (nr_screens == 1)
+    return [super constrainFrameRect:frameRect toScreen:screen];
+  
   if (f->output_data.ns->dont_constrain
       || ns_menu_bar_should_be_hidden ())
     return frameRect;
@@ -7849,12 +7852,12 @@ Only works on OSX 10.6 or later.  */);
 
   /* TODO: move to common code */
   DEFVAR_LISP ("x-toolkit-scroll-bars", Vx_toolkit_scroll_bars,
-	       doc: /* If not nil, Emacs uses toolkit scroll bars.  */);
-#ifdef USE_TOOLKIT_SCROLL_BARS
+	       doc: /* Which toolkit scroll bars Emacs uses, if any.
+A value of nil means Emacs doesn't use toolkit scroll bars.
+With the X Window system, the value is a symbol describing the
+X toolkit.  Possible values are: gtk, motif, xaw, or xaw3d.
+With MS Windows or Nextstep, the value is t.  */);
   Vx_toolkit_scroll_bars = Qt;
-#else
-  Vx_toolkit_scroll_bars = Qnil;
-#endif
 
   DEFVAR_BOOL ("x-use-underline-position-properties",
 	       x_use_underline_position_properties,

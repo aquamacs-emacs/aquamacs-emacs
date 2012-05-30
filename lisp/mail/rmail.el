@@ -40,6 +40,9 @@
 (require 'mail-utils)
 (require 'rfc2047)
 
+(declare-function compilation--message->loc "compile" (cl-x) t)
+(declare-function epa--find-coding-system-for-mime-charset "epa" (mime-charset))
+
 (defconst rmail-attribute-header "X-RMAIL-ATTRIBUTES"
   "The header that stores the Rmail attribute data.")
 
@@ -97,8 +100,6 @@ its character representation and its display representation.")
   "The current header display style choice, one of
 'normal (selected headers) or 'full (all headers).")
 
-;; rmail-spool-directory and rmail-file-name are defined in paths.el.
-
 (defgroup rmail nil
   "Mail reader for Emacs."
   :group 'mail)
@@ -139,6 +140,40 @@ its character representation and its display representation.")
   "Rmail editing."
   :prefix "rmail-edit-"
   :group 'rmail)
+
+;;;###autoload
+(defcustom rmail-file-name (purecopy "~/RMAIL")
+  "Name of user's primary mail file."
+  :type 'string
+  :group 'rmail
+  :version "21.1")
+
+;;;###autoload
+(put 'rmail-spool-directory 'standard-value
+     '((cond ((file-exists-p "/var/mail") "/var/mail/")
+	     ((file-exists-p "/var/spool/mail") "/var/spool/mail/")
+	     ((memq system-type '(hpux usg-unix-v irix)) "/usr/mail/")
+	     (t "/usr/spool/mail/"))))
+
+;;;###autoload
+(defcustom rmail-spool-directory
+  (purecopy
+  (cond ((file-exists-p "/var/mail")
+	 ;; SVR4 and recent BSD are said to use this.
+	 ;; Rather than trying to know precisely which systems use it,
+	 ;; let's assume this dir is never used for anything else.
+	 "/var/mail/")
+	;; Many GNU/Linux systems use this name.
+	((file-exists-p "/var/spool/mail") "/var/spool/mail/")
+	((memq system-type '(hpux usg-unix-v irix)) "/usr/mail/")
+	(t "/usr/spool/mail/")))
+  "Name of directory used by system mailer for delivering new mail.
+Its name should end with a slash."
+  :initialize 'custom-initialize-delay
+  :type 'directory
+  :group 'rmail)
+
+;;;###autoload(custom-initialize-delay 'rmail-spool-directory nil)
 
 (defcustom rmail-movemail-program nil
   "If non-nil, the file name of the `movemail' program."
@@ -285,8 +320,10 @@ Setting this variable has an effect only before reading a mail."
   :version "21.1")
 
 ;;;###autoload
-(defvaralias 'rmail-dont-reply-to-names 'mail-dont-reply-to-names)
+(define-obsolete-variable-alias 'rmail-dont-reply-to-names
+  'mail-dont-reply-to-names "24.1")
 
+;; Prior to 24.1, this used to contain "\\`info-".
 ;;;###autoload
 (defvar rmail-default-dont-reply-to-names nil
   "Regexp specifying part of the default value of `mail-dont-reply-to-names'.
@@ -707,19 +744,6 @@ to an appropriate value, and optionally also set
 `rmail-search-mime-header-function',
 `rmail-insert-mime-forwarded-message-function', and
 `rmail-insert-mime-resent-message-function'.")
-
-;; FIXME this is unused since 23.1.
-(defvar rmail-decode-mime-charset t
-  "*Non-nil means a message is decoded by MIME's charset specification.
-If this variable is nil, or the message has not MIME specification,
-the message is decoded as normal way.
-
-If the variable `rmail-enable-mime' is non-nil, this variable is
-ignored, and all the decoding work is done by a feature specified by
-the variable `rmail-mime-feature'.")
-
-(make-obsolete-variable 'rmail-decode-mime-charset
-			"it does nothing." "23.1")
 
 (defvar rmail-mime-charset-pattern
   (concat "^content-type:[ \t]*text/plain;"
@@ -1361,8 +1385,7 @@ sets the current buffer's `buffer-file-coding-system' to that of
 (defun rmail-buffers-swapped-p ()
   "Return non-nil if the message collection is in `rmail-view-buffer'."
   ;; This is analogous to tar-data-swapped-p in tar-mode.el.
-  (and (buffer-live-p rmail-view-buffer)
-       rmail-buffer-swapped))
+  rmail-buffer-swapped)
 
 (defun rmail-change-major-mode-hook ()
   ;; Bring the actual Rmail messages back into the main buffer.
@@ -1404,7 +1427,8 @@ If so restore the actual mbox message collection."
 	(kill-buffer rmail-view-buffer))))
 
 (defun rmail-view-buffer-kill-buffer-hook ()
-  (error "Can't kill message view buffer by itself"))
+  (error "Can't kill Rmail view buffer `%s' by itself"
+	 (buffer-name (current-buffer))))
 
 ;; Set up the permanent locals associated with an Rmail file.
 (defun rmail-perm-variables ()
@@ -3558,6 +3582,25 @@ does not pop any summary buffer."
 
 ;;;; *** Rmail Mailing Commands ***
 
+(defun rmail-yank-current-message (buffer)
+  "Yank into the current buffer the current message of Rmail buffer BUFFER.
+If BUFFER is swapped with its message viewer buffer, yank out of BUFFER.
+If BUFFER is not swapped, yank out of its message viewer buffer."
+  (with-current-buffer buffer
+    (unless (rmail-buffers-swapped-p)
+      (setq buffer rmail-view-buffer)))
+  (insert-buffer buffer)
+  ;; If they yank the text of BUFFER, the encoding of BUFFER is a
+  ;; better default for the reply message than the default value of
+  ;; buffer-file-coding-system.
+  (and (coding-system-equal (default-value 'buffer-file-coding-system)
+			    buffer-file-coding-system)
+       (setq buffer-file-coding-system
+	     (coding-system-change-text-conversion
+	      buffer-file-coding-system (coding-system-base
+					 (with-current-buffer buffer
+					   buffer-file-coding-system))))))
+
 (defun rmail-start-mail (&optional noerase to subject in-reply-to cc
 				   replybuffer sendactions same-window
 				   other-headers)
@@ -3569,7 +3612,8 @@ does not pop any summary buffer."
     (if replybuffer
 	;; The function used here must behave like insert-buffer wrt
 	;; point and mark (see doc of sc-cite-original).
-	(setq yank-action (list 'insert-buffer replybuffer)))
+	(setq yank-action
+	      `(rmail-yank-current-message ,replybuffer)))
     (push (cons "cc" cc) other-headers)
     (push (cons "in-reply-to" in-reply-to) other-headers)
     (setq other-headers
@@ -3584,15 +3628,18 @@ does not pop any summary buffer."
     (if (stringp subject) (setq subject (rfc2047-decode-string subject)))
     (prog1
 	(compose-mail to subject other-headers noerase
-		      switch-function yank-action sendactions)
+		      switch-function yank-action sendactions
+		      (if replybuffer `(rmail-mail-return ,replybuffer)))
       (if (eq switch-function 'switch-to-buffer-other-frame)
 	  ;; This is not a standard frame parameter; nothing except
 	  ;; sendmail.el looks at it.
-	    (modify-frame-parameters (selected-frame)
+	  (modify-frame-parameters (selected-frame)
 				   '((mail-dedicated-frame . t)))))))
 
 (defun rmail-mail-return (&optional newbuf)
-  "NEWBUF is a buffer to switch to."
+  "Try to return to Rmail from the mail window.
+If optional argument NEWBUF is specified, it is the Rmail buffer
+to switch to."
   (cond
    ;; If there is only one visible frame with no special handling,
    ;; consider deleting the mail window to return to Rmail.
@@ -3602,23 +3649,30 @@ does not pop any summary buffer."
 		 (cdr (assq 'mail-dedicated-frame
 			    (frame-parameters))))))
     (let (rmail-flag summary-buffer)
-      (and (not (one-window-p))
-	   (with-current-buffer
-	       (window-buffer (next-window (selected-window) 'not))
-	     (setq rmail-flag (eq major-mode 'rmail-mode))
-	     (setq summary-buffer
-		   (and (boundp 'mail-bury-selects-summary)
-			mail-bury-selects-summary
-			(boundp 'rmail-summary-buffer)
-			rmail-summary-buffer
-			(buffer-name rmail-summary-buffer)
-			(not (get-buffer-window rmail-summary-buffer))
-			rmail-summary-buffer))))
-      (if rmail-flag
-	  ;; If the Rmail buffer has a summary, show that.
-	  (if summary-buffer (switch-to-buffer summary-buffer)
-	    (delete-window))
-	(switch-to-buffer newbuf))))
+      (unless (one-window-p)
+	(with-current-buffer
+	    (window-buffer (next-window (selected-window) 'not))
+	  (setq rmail-flag (eq major-mode 'rmail-mode))
+	  (setq summary-buffer
+		(and (boundp 'mail-bury-selects-summary)
+		     mail-bury-selects-summary
+		     (boundp 'rmail-summary-buffer)
+		     rmail-summary-buffer
+		     (buffer-name rmail-summary-buffer)
+		     (not (get-buffer-window rmail-summary-buffer))
+		     rmail-summary-buffer))))
+      (cond ((null rmail-flag)
+	     ;; If the Rmail buffer is not in the next window, switch
+	     ;; directly to the Rmail buffer specified by NEWBUF.
+	     (if (buffer-live-p newbuf)
+		 (switch-to-buffer newbuf)))
+	    ;; If the Rmail buffer is in the next window, switch to
+	    ;; the summary buffer if `mail-bury-selects-summary' is
+	    ;; non-nil.  Otherwise just delete this window.
+	    (summary-buffer
+	     (switch-to-buffer summary-buffer))
+	    (t
+	     (delete-window)))))
    ;; If the frame was probably made for this buffer, the user
    ;; probably wants to delete it now.
    ((display-multi-frame-p)
@@ -3632,7 +3686,7 @@ does not pop any summary buffer."
 While composing the message, use \\[mail-yank-original] to yank the
 original message into it."
   (interactive)
-  (rmail-start-mail nil nil nil nil nil rmail-view-buffer))
+  (rmail-start-mail nil nil nil nil nil rmail-buffer))
 
 ;; FIXME should complain if there is nothing to continue.
 (defun rmail-continue ()
@@ -3719,9 +3773,7 @@ use \\[mail-yank-original] to yank the original message into it."
 			(mail-strip-quoted-names
 			 (if (null cc) to (concat to ", " cc))))))
 	 (if (string= cc-list "") nil cc-list)))
-     (if (rmail-buffers-swapped-p)
-	 rmail-buffer
-       rmail-view-buffer)
+     rmail-buffer
      (list (list 'rmail-mark-message
 		 rmail-buffer
 		 (with-current-buffer rmail-buffer
@@ -3823,7 +3875,7 @@ see the documentation of `rmail-resend'."
 			   (or (mail-fetch-field "Subject") "")
 			   "]")))
       (if (rmail-start-mail
-	   nil nil subject nil nil nil
+	   nil nil subject nil nil rmail-buffer
 	   (list (list 'rmail-mark-message
 		       forward-buffer
 		       (with-current-buffer rmail-buffer
@@ -4198,10 +4250,13 @@ This has an effect only if a summary buffer exists."
 ;;; Speedbar support for RMAIL files.
 (eval-when-compile (require 'speedbar))
 
-(defvar rmail-speedbar-match-folder-regexp "^[A-Z0-9]+\\(\\.[A-Z0-9]+\\)?$"
-  "*This regex is used to match folder names to be displayed in speedbar.
-Enabling this will permit speedbar to display your folders for easy
-browsing, and moving of messages.")
+(defcustom rmail-speedbar-match-folder-regexp "^[A-Z0-9]+\\(\\.[A-Z0-9]+\\)?$"
+  "Regexp matching Rmail folder names to be displayed in Speedbar.
+Enabling this permits Speedbar to display your folders for easy
+browsing, and moving of messages."
+  :type 'regexp
+  :group 'rmail
+  :group 'speedbar)
 
 (defvar rmail-speedbar-last-user nil
   "The last user to be displayed in the speedbar.")
@@ -4353,6 +4408,9 @@ encoded string (and the same mask) will decode the string."
      (setq i (1+ i)))
    (concat string-vector)))
 
+;; Should this have a key-binding, or be in a menu?
+;; There doesn't really seem to be an appropriate menu.
+;; Eg the edit command is not in a menu either.
 (defun rmail-epa-decrypt ()
   "Decrypt OpenPGP armors in current message."
   (interactive)
@@ -4457,7 +4515,11 @@ encoded string (and the same mask) will decode the string."
 
 ;; Used in `write-region-annotate-functions' to write rmail files.
 (defun rmail-write-region-annotate (start end)
-  (when (and (null start) (rmail-buffers-swapped-p))
+  (when (and (null start) rmail-buffer-swapped)
+    (unless (buffer-live-p rmail-view-buffer)
+      (error "Buffer `%s' with real text of `%s' has disappeared"
+	     (buffer-name rmail-view-buffer)
+	     (buffer-name (current-buffer))))
     (setq rmail-message-encoding buffer-file-coding-system)
     (set-buffer rmail-view-buffer)
     (widen)
@@ -4535,7 +4597,7 @@ With prefix argument N moves forward N messages with these labels.
 
 ;;;***
 
-;;;### (autoloads (rmail-mime) "rmailmm" "rmailmm.el" "be7f4b94a269f840b8707defd515c4f9")
+;;;### (autoloads (rmail-mime) "rmailmm" "rmailmm.el" "cd7656f82944d0b92b0d093a5f3a4c36")
 ;;; Generated autoloads from rmailmm.el
 
 (autoload 'rmail-mime "rmailmm" "\
@@ -4685,7 +4747,7 @@ SENDERS is a string of regexps separated by commas.
 ;;;***
 
 ;;;### (autoloads (unforward-rmail-message undigestify-rmail-message)
-;;;;;;  "undigest" "undigest.el" "1be42b2d20b13004f0ad1b504630ed00")
+;;;;;;  "undigest" "undigest.el" "9f270a2571bbbbfabc27498a8d4089c7")
 ;;; Generated autoloads from undigest.el
 
 (autoload 'undigestify-rmail-message "undigest" "\
@@ -4696,8 +4758,9 @@ Leaves original message, deleted, before the undigestified messages.
 
 (autoload 'unforward-rmail-message "undigest" "\
 Extract a forwarded message from the containing message.
-This puts the forwarded message into a separate rmail message
-following the containing message.
+This puts the forwarded message into a separate rmail message following
+the containing message.  This command is only useful when messages are
+forwarded with `rmail-enable-mime-composing' set to nil.
 
 \(fn)" t nil)
 

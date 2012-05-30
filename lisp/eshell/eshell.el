@@ -140,12 +140,12 @@
 ;;   paragraph wasn't discovered until two months after I wrote the
 ;;   text; it was not intentional).
 ;;
-;; @ Emacs' register and bookmarking facilities can be used for
+;; @ Emacs's register and bookmarking facilities can be used for
 ;;   remembering where you've been, and what you've seen -- to varying
 ;;   levels of persistence.  They could perhaps even be tied to
 ;;   specific "moments" during eshell execution, which would include
 ;;   the environment at that time, as well as other variables.
-;;   Although this would require functionality orthogonal to Emacs'
+;;   Although this would require functionality orthogonal to Emacs's
 ;;   own bookmarking facilities, the interface used could be made to
 ;;   operate very similarly.
 ;;
@@ -228,11 +228,10 @@
 (require 'esh-mode)
 
 (defgroup eshell nil
-  "A command shell implemented entirely in Emacs Lisp.
+  "Command shell implemented entirely in Emacs Lisp.
 It invokes no external processes beyond those requested by the
 user, and is intended to be a functional replacement for command
 shells such as bash, zsh, rc, 4dos."
-  :tag "The Emacs shell"
   :link '(info-link "(eshell)Top")
   :version "21.1"
   :group 'applications)

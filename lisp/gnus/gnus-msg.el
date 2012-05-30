@@ -478,22 +478,29 @@ Thank you for your help in stamping out bugs.
 
 ;;;###autoload
 (defun gnus-msg-mail (&optional to subject other-headers continue
-		      switch-action yank-action send-actions return-action)
+				switch-action yank-action send-actions
+				return-action)
   "Start editing a mail message to be sent.
 Like `message-mail', but with Gnus paraphernalia, particularly the
-Gcc: header for archiving purposes."
+Gcc: header for archiving purposes.
+If Gnus isn't running, a plain `message-mail' setup is used
+instead."
   (interactive)
-  (let ((buf (current-buffer))
-	mail-buf)
-    (gnus-setup-message 'message
+  (if (not (gnus-alive-p))
       (message-mail to subject other-headers continue
-		    nil yank-action send-actions return-action))
-    (when switch-action
-      (setq mail-buf (current-buffer))
-      (switch-to-buffer buf)
-      (apply switch-action mail-buf nil)))
-  ;; COMPOSEFUNC should return t if succeed.  Undocumented ???
-  t)
+                    nil yank-action send-actions return-action)
+    (let ((buf (current-buffer))
+	  (gnus-newsgroup-name (or gnus-newsgroup-name ""))
+	  mail-buf)
+      (gnus-setup-message 'message
+	(message-mail to subject other-headers continue
+		      nil yank-action send-actions return-action))
+      (when switch-action
+	(setq mail-buf (current-buffer))
+	(switch-to-buffer buf)
+	(apply switch-action mail-buf nil))
+      ;; COMPOSEFUNC should return t if succeed.  Undocumented ???
+      t)))
 
 ;;;###autoload
 (defun gnus-button-mailto (address)
@@ -636,7 +643,7 @@ a news."
 	     (if (= 1 (prefix-numeric-value arg))
 		 (gnus-group-completing-read "Newsgroup" nil
 					     (gnus-read-active-file-p))
-	       (gnus-group-group-name))
+	       (or (gnus-group-group-name) ""))
 	   ""))
 	;; make sure last viewed article doesn't affect posting styles:
 	(gnus-article-copy))
@@ -1230,7 +1237,7 @@ For the \"inline\" alternatives, also see the variable
   (interactive "P")
   (if (cdr (gnus-summary-work-articles nil))
       ;; Process marks are given.
-      (gnus-uu-digest-mail-forward arg post)
+      (gnus-uu-digest-mail-forward nil post)
     ;; No process marks.
     (let ((message-forward-as-mime message-forward-as-mime)
 	  (message-forward-show-mml message-forward-show-mml))
@@ -1447,7 +1454,6 @@ If YANK is non-nil, include the original article."
     (error "Gnus has been shut down"))
   (gnus-setup-message (if (message-mail-user-agent) 'message 'bug)
     (unless (message-mail-user-agent)
-      (delete-other-windows)
       (when gnus-bug-create-help-buffer
 	(switch-to-buffer "*Gnus Help Bug*")
 	(erase-buffer)
@@ -1659,17 +1665,19 @@ this is a reply."
 	   ((functionp var)
 	    ;; A function.
 	    (funcall var group))
-	   (t
+	   (group
 	    ;; An alist of regexps/functions/forms.
 	    (while (and var
 			(not
 			 (setq result
 			       (cond
-				((stringp (caar var))
+				((and group
+				      (stringp (caar var)))
 				 ;; Regexp.
 				 (when (string-match (caar var) group)
 				   (cdar var)))
-				((functionp (car var))
+				((and group
+				      (functionp (car var)))
 				 ;; Function.
 				 (funcall (car var) group))
 				(t

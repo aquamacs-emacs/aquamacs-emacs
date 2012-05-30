@@ -1,6 +1,6 @@
 /* X Communication module for terminals which understand the X protocol.
 
-Copyright (C) 1989, 1993-2012  Free Software Foundation, Inc.
+Copyright (C) 1989, 1993-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -256,11 +256,7 @@ static Time last_user_time;
 /* Incremented by XTread_socket whenever it really tries to read
    events.  */
 
-#ifdef __STDC__
 static int volatile input_signal_count;
-#else
-static int input_signal_count;
-#endif
 
 /* Used locally within XTread_socket.  */
 
@@ -2292,7 +2288,8 @@ x_draw_image_foreground (struct glyph_string *s)
 static void
 x_draw_image_relief (struct glyph_string *s)
 {
-  int x0, y0, x1, y1, thick, raised_p, extra;
+  int x0, y0, x1, y1, thick, raised_p;
+  int extra_x, extra_y;
   XRectangle r;
   int x = s->x;
   int y = s->ybase - image_ascent (s->img, s->face, &s->slice);
@@ -2323,13 +2320,24 @@ x_draw_image_relief (struct glyph_string *s)
       raised_p = s->img->relief > 0;
     }
 
-  extra = s->face->id == TOOL_BAR_FACE_ID
-    ? XINT (Vtool_bar_button_margin) : 0;
+  extra_x = extra_y = 0;
+  if (s->face->id == TOOL_BAR_FACE_ID)
+    {
+      if (CONSP (Vtool_bar_button_margin)
+	  && INTEGERP (XCAR (Vtool_bar_button_margin))
+	  && INTEGERP (XCDR (Vtool_bar_button_margin)))
+	{
+	  extra_x = XINT (XCAR (Vtool_bar_button_margin));
+	  extra_y = XINT (XCDR (Vtool_bar_button_margin));
+	}
+      else if (INTEGERP (Vtool_bar_button_margin))
+	extra_x = extra_y = XINT (Vtool_bar_button_margin);
+    }
 
-  x0 = x - thick - extra;
-  y0 = y - thick - extra;
-  x1 = x + s->slice.width + thick - 1 + extra;
-  y1 = y + s->slice.height + thick - 1 + extra;
+  x0 = x - thick - extra_x;
+  y0 = y - thick - extra_y;
+  x1 = x + s->slice.width + thick - 1 + extra_x;
+  y1 = y + s->slice.height + thick - 1 + extra_y;
 
   x_setup_relief_colors (s);
   get_glyph_string_clip_rect (s, &r);
@@ -3688,24 +3696,23 @@ x_find_modifier_meanings (struct x_display_info *dpyinfo)
 /* Convert between the modifier bits X uses and the modifier bits
    Emacs uses.  */
 
-EMACS_INT
+int
 x_x_to_emacs_modifiers (struct x_display_info *dpyinfo, int state)
 {
-  EMACS_INT mod_meta = meta_modifier;
-  EMACS_INT mod_alt  = alt_modifier;
-  EMACS_INT mod_hyper = hyper_modifier;
-  EMACS_INT mod_super = super_modifier;
+  int mod_meta = meta_modifier;
+  int mod_alt  = alt_modifier;
+  int mod_hyper = hyper_modifier;
+  int mod_super = super_modifier;
   Lisp_Object tem;
 
   tem = Fget (Vx_alt_keysym, Qmodifier_value);
-  if (INTEGERP (tem)) mod_alt = XINT (tem);
+  if (INTEGERP (tem)) mod_alt = XINT (tem) & INT_MAX;
   tem = Fget (Vx_meta_keysym, Qmodifier_value);
-  if (INTEGERP (tem)) mod_meta = XINT (tem);
+  if (INTEGERP (tem)) mod_meta = XINT (tem) & INT_MAX;
   tem = Fget (Vx_hyper_keysym, Qmodifier_value);
-  if (INTEGERP (tem)) mod_hyper = XINT (tem);
+  if (INTEGERP (tem)) mod_hyper = XINT (tem) & INT_MAX;
   tem = Fget (Vx_super_keysym, Qmodifier_value);
-  if (INTEGERP (tem)) mod_super = XINT (tem);
-
+  if (INTEGERP (tem)) mod_super = XINT (tem) & INT_MAX;
 
   return (  ((state & (ShiftMask | dpyinfo->shift_lock_mask)) ? shift_modifier : 0)
             | ((state & ControlMask)			? ctrl_modifier	: 0)
@@ -3718,10 +3725,10 @@ x_x_to_emacs_modifiers (struct x_display_info *dpyinfo, int state)
 static int
 x_emacs_to_x_modifiers (struct x_display_info *dpyinfo, EMACS_INT state)
 {
-  int mod_meta = meta_modifier;
-  int mod_alt  = alt_modifier;
-  int mod_hyper = hyper_modifier;
-  int mod_super = super_modifier;
+  EMACS_INT mod_meta = meta_modifier;
+  EMACS_INT mod_alt  = alt_modifier;
+  EMACS_INT mod_hyper = hyper_modifier;
+  EMACS_INT mod_super = super_modifier;
 
   Lisp_Object tem;
 
@@ -6480,9 +6487,10 @@ handle_one_xevent (struct x_display_info *dpyinfo, XEvent *eventptr,
 
 	  /* Now non-ASCII.  */
 	  if (HASH_TABLE_P (Vx_keysym_table)
-	      && (NATNUMP (c = Fgethash (make_number (keysym),
- 					 Vx_keysym_table,
- 					 Qnil))))
+	      && (c = Fgethash (make_number (keysym),
+				Vx_keysym_table,
+				Qnil),
+		  NATNUMP (c)))
  	    {
  	      inev.ie.kind = (SINGLE_BYTE_CHAR_P (XFASTINT (c))
                               ? ASCII_KEYSTROKE_EVENT
@@ -7087,7 +7095,8 @@ x_dispatch_event (XEvent *event, Display *display)
 
 
 /* Read events coming from the X server.
-   This routine is called by the SIGIO handler.
+   This routine is called by the SIGIO handler only if SYNC_INPUT is
+   not defined.
    We return as soon as there are no more events to be read.
 
    We return the number of characters stored into the buffer,
@@ -7121,7 +7130,9 @@ XTread_socket (struct terminal *terminal, int expected, struct input_event *hold
   /* So people can tell when we have read the available input.  */
   input_signal_count++;
 
+#ifndef SYNC_INPUT
   ++handling_signal;
+#endif
 
   /* For debugging, this gives a way to fake an I/O error.  */
   if (terminal->display_info.x == XTread_socket_fake_io_error)
@@ -7211,7 +7222,9 @@ XTread_socket (struct terminal *terminal, int expected, struct input_event *hold
       pending_autoraise_frame = 0;
     }
 
+#ifndef SYNC_INPUT
   --handling_signal;
+#endif
   UNBLOCK_INPUT;
 
   return count;
@@ -7755,7 +7768,7 @@ x_connection_closed (Display *dpy, const char *error_message)
 {
   struct x_display_info *dpyinfo = x_display_info_for_display (dpy);
   Lisp_Object frame, tail;
-  int idx = SPECPDL_INDEX ();
+  ptrdiff_t idx = SPECPDL_INDEX ();
 
   error_msg = (char *) alloca (strlen (error_message) + 1);
   strcpy (error_msg, error_message);
@@ -10129,7 +10142,7 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
 
   /* Set the name of the terminal. */
   terminal->name = (char *) xmalloc (SBYTES (display_name) + 1);
-  strncpy (terminal->name, SSDATA (display_name), SBYTES (display_name));
+  memcpy (terminal->name, SSDATA (display_name), SBYTES (display_name));
   terminal->name[SBYTES (display_name)] = 0;
 
 #if 0
@@ -10813,7 +10826,7 @@ syms_of_xterm (void)
 
   DEFVAR_BOOL ("x-use-underline-position-properties",
 	       x_use_underline_position_properties,
-     doc: /* *Non-nil means make use of UNDERLINE_POSITION font properties.
+     doc: /* Non-nil means make use of UNDERLINE_POSITION font properties.
 A value of nil means ignore them.  If you encounter fonts with bogus
 UNDERLINE_POSITION font properties, for example 7x13 on XFree prior
 to 4.1, set this to nil.  You can also use `underline-minimum-offset'
@@ -10823,7 +10836,7 @@ sizes.  */);
 
   DEFVAR_BOOL ("x-underline-at-descent-line",
 	       x_underline_at_descent_line,
-     doc: /* *Non-nil means to draw the underline at the same place as the descent line.
+     doc: /* Non-nil means to draw the underline at the same place as the descent line.
 A value of nil means to draw the underline according to the value of the
 variable `x-use-underline-position-properties', which is usually at the
 baseline level.  The default value is nil.  */);
@@ -10844,7 +10857,7 @@ selected window or cursor position is preserved.  */);
 A value of nil means Emacs doesn't use toolkit scroll bars.
 With the X Window system, the value is a symbol describing the
 X toolkit.  Possible values are: gtk, motif, xaw, or xaw3d.
-With MS Windows, the value is t.  */);
+With MS Windows or Nextstep, the value is t.  */);
 #ifdef USE_TOOLKIT_SCROLL_BARS
 #ifdef USE_MOTIF
   Vx_toolkit_scroll_bars = intern_c_string ("motif");

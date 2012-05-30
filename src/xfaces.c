@@ -922,7 +922,7 @@ the pixmap.  Bits are stored row by row, each row occupies
   else if (CONSP (object))
     {
       /* Otherwise OBJECT must be (WIDTH HEIGHT DATA), WIDTH and
-	 HEIGHT must be integers > 0, and DATA must be string large
+	 HEIGHT must be ints > 0, and DATA must be string large
 	 enough to hold a bitmap of the specified size.  */
       Lisp_Object width, height, data;
 
@@ -942,11 +942,11 @@ the pixmap.  Bits are stored row by row, each row occupies
 	}
 
       if (STRINGP (data)
-	  && INTEGERP (width) && 0 < XINT (width)
-	  && INTEGERP (height) && 0 < XINT (height))
+	  && RANGED_INTEGERP (1, width, INT_MAX)
+	  && RANGED_INTEGERP (1, height, INT_MAX))
 	{
-	  EMACS_INT bytes_per_row = ((XINT (width) + BITS_PER_CHAR - 1)
-				     / BITS_PER_CHAR);
+	  int bytes_per_row = ((XINT (width) + BITS_PER_CHAR - 1)
+			       / BITS_PER_CHAR);
 	  if (XINT (height) <= SBYTES (data) / bytes_per_row)
 	    pixmap_p = 1;
 	}
@@ -1604,7 +1604,9 @@ compare_fonts_by_sort_order (const void *v1, const void *v2)
       else
 	{
 	  if (INTEGERP (val1))
-	    result = INTEGERP (val2) ? XINT (val1) - XINT (val2) : -1;
+	    result = (INTEGERP (val2) && XINT (val1) >= XINT (val2)
+		      ? XINT (val1) > XINT (val2)
+		      : -1);
 	  else
 	    result = INTEGERP (val2) ? 1 : 0;
 	}
@@ -1633,8 +1635,10 @@ the face font sort order.  */)
   (Lisp_Object family, Lisp_Object frame)
 {
   Lisp_Object font_spec, list, *drivers, vec;
-  int i, nfonts, ndrivers;
+  ptrdiff_t i, nfonts;
+  EMACS_INT ndrivers;
   Lisp_Object result;
+  USE_SAFE_ALLOCA;
 
   if (NILP (frame))
     frame = selected_frame;
@@ -1670,7 +1674,7 @@ the face font sort order.  */)
   font_props_for_sorting[i++] = FONT_REGISTRY_INDEX;
 
   ndrivers = XINT (Flength (list));
-  drivers  = alloca (sizeof (Lisp_Object) * ndrivers);
+  SAFE_ALLOCA_LISP (drivers, ndrivers);
   for (i = 0; i < ndrivers; i++, list = XCDR (list))
     drivers[i] = XCAR (list);
   vec = Fvconcat (ndrivers, drivers);
@@ -1702,6 +1706,7 @@ the face font sort order.  */)
       result = Fcons (v, result);
     }
 
+  SAFE_FREE ();
   return result;
 }
 
@@ -2263,7 +2268,7 @@ merge_face_heights (Lisp_Object from, Lisp_Object to, Lisp_Object invalid)
     {
       if (INTEGERP (to))
 	/* relative X absolute => absolute */
-	result = make_number ((EMACS_INT)(XFLOAT_DATA (from) * XINT (to)));
+	result = make_number (XFLOAT_DATA (from) * XINT (to));
       else if (FLOATP (to))
 	/* relative X relative => relative */
 	result = make_float (XFLOAT_DATA (from) * XFLOAT_DATA (to));
@@ -2683,8 +2688,7 @@ Value is a vector of face attributes.  */)
 	 property `face' of the Lisp face name.  */
       if (next_lface_id == lface_id_to_name_size)
 	lface_id_to_name =
-	  xpalloc (lface_id_to_name, &lface_id_to_name_size, 1,
-		   min (INT_MAX, MOST_POSITIVE_FIXNUM),
+	  xpalloc (lface_id_to_name, &lface_id_to_name_size, 1, MAX_FACE_ID,
 		   sizeof *lface_id_to_name);
 
       lface_id_to_name[next_lface_id] = face;
@@ -3361,7 +3365,7 @@ update_face_from_frame_parameter (struct frame *f, Lisp_Object param,
 
       /* Changing the background color might change the background
 	 mode, so that we have to load new defface specs.
-	 Call frame-update-face-colors to do that.  */
+	 Call frame-set-background-mode to do that.  */
       XSETFRAME (frame, f);
       call1 (Qframe_set_background_mode, frame);
 
@@ -5334,7 +5338,7 @@ static int
 realize_basic_faces (struct frame *f)
 {
   int success_p = 0;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
 
   /* Block input here so that we won't be surprised by an X expose
      event, for instance, without having the faces set up.  */
@@ -6017,9 +6021,9 @@ compute_char_face (struct frame *f, int ch, Lisp_Object prop)
    The face returned is suitable for displaying ASCII characters.  */
 
 int
-face_at_buffer_position (struct window *w, EMACS_INT pos,
-			 EMACS_INT region_beg, EMACS_INT region_end,
-			 EMACS_INT *endptr, EMACS_INT limit,
+face_at_buffer_position (struct window *w, ptrdiff_t pos,
+			 ptrdiff_t region_beg, ptrdiff_t region_end,
+			 ptrdiff_t *endptr, ptrdiff_t limit,
 			 int mouse, int base_face_id)
 {
   struct frame *f = XFRAME (w->frame);
@@ -6028,7 +6032,7 @@ face_at_buffer_position (struct window *w, EMACS_INT pos,
   ptrdiff_t i, noverlays;
   Lisp_Object *overlay_vec;
   Lisp_Object frame;
-  EMACS_INT endpos;
+  ptrdiff_t endpos;
   Lisp_Object propname = mouse ? Qmouse_face : Qface;
   Lisp_Object limit1, end;
   struct face *default_face;
@@ -6054,7 +6058,7 @@ face_at_buffer_position (struct window *w, EMACS_INT pos,
 
   /* Look at properties from overlays.  */
   {
-    EMACS_INT next_overlay;
+    ptrdiff_t next_overlay;
 
     GET_OVERLAYS_AT (pos, overlay_vec, noverlays, &next_overlay, 0);
     if (next_overlay < endpos)
@@ -6129,9 +6133,9 @@ face_at_buffer_position (struct window *w, EMACS_INT pos,
    simply disregards the `face' properties of all overlays.  */
 
 int
-face_for_overlay_string (struct window *w, EMACS_INT pos,
-			 EMACS_INT region_beg, EMACS_INT region_end,
-			 EMACS_INT *endptr, EMACS_INT limit,
+face_for_overlay_string (struct window *w, ptrdiff_t pos,
+			 ptrdiff_t region_beg, ptrdiff_t region_end,
+			 ptrdiff_t *endptr, ptrdiff_t limit,
 			 int mouse, Lisp_Object overlay)
 {
   struct frame *f = XFRAME (w->frame);
@@ -6218,9 +6222,9 @@ face_for_overlay_string (struct window *w, EMACS_INT pos,
 
 int
 face_at_string_position (struct window *w, Lisp_Object string,
-			 EMACS_INT pos, EMACS_INT bufpos,
-			 EMACS_INT region_beg, EMACS_INT region_end,
-			 EMACS_INT *endptr, enum face_id base_face_id,
+			 ptrdiff_t pos, ptrdiff_t bufpos,
+			 ptrdiff_t region_beg, ptrdiff_t region_end,
+			 ptrdiff_t *endptr, enum face_id base_face_id,
 			 int mouse_p)
 {
   Lisp_Object prop, position, end, limit;
@@ -6303,7 +6307,7 @@ face_at_string_position (struct window *w, Lisp_Object string,
 */
 
 int
-merge_faces (struct frame *f, Lisp_Object face_name, EMACS_INT face_id,
+merge_faces (struct frame *f, Lisp_Object face_name, int face_id,
 	     int base_face_id)
 {
   Lisp_Object attrs[LFACE_VECTOR_SIZE];
@@ -6615,7 +6619,7 @@ syms_of_xfaces (void)
 #endif
 
   DEFVAR_LISP ("font-list-limit", Vfont_list_limit,
-	       doc: /* *Limit for font matching.
+	       doc: /* Limit for font matching.
 If an integer > 0, font matching functions won't load more than
 that number of fonts when searching for a matching font.  */);
   Vfont_list_limit = make_number (DEFAULT_FONT_LIST_LIMIT);
@@ -6625,7 +6629,7 @@ that number of fonts when searching for a matching font.  */);
   Vface_new_frame_defaults = Qnil;
 
   DEFVAR_LISP ("face-default-stipple", Vface_default_stipple,
-    doc: /* *Default stipple pattern used on monochrome displays.
+    doc: /* Default stipple pattern used on monochrome displays.
 This stipple pattern is used on monochrome displays
 instead of shades of gray for a face background color.
 See `set-face-stipple' for possible values for this variable.  */);
@@ -6656,20 +6660,22 @@ ignore.  */);
 	       doc: /* Alist of face remappings.
 Each element is of the form:
 
-   (FACE REPLACEMENT...),
+   (FACE . REPLACEMENT),
 
-which causes display of the face FACE to use REPLACEMENT... instead.
-REPLACEMENT... is interpreted the same way as the value of a `face'
-text property: it may be (1) A face name, (2) A list of face names,
-(3) A property-list of face attribute/value pairs, or (4) A list of
-face names or lists containing face attribute/value pairs.
+which causes display of the face FACE to use REPLACEMENT instead.
+REPLACEMENT is a face specification, i.e. one of the following:
 
-Multiple entries in REPLACEMENT... are merged together to form the final
-result, with faces or attributes earlier in the list taking precedence
-over those that are later.
+  (1) a face name
+  (2) a property list of attribute/value pairs, or
+  (3) a list in which each element has the form of (1) or (2).
 
-Face-name remapping cycles are suppressed; recursive references use the
-underlying face instead of the remapped face.  So a remapping of the form:
+List values for REPLACEMENT are merged to form the final face
+specification, with earlier entries taking precedence, in the same as
+as in the `face' text property.
+
+Face-name remapping cycles are suppressed; recursive references use
+the underlying face instead of the remapped face.  So a remapping of
+the form:
 
    (FACE EXTRA-FACE... FACE)
 
@@ -6677,13 +6683,13 @@ or:
 
    (FACE (FACE-ATTR VAL ...) FACE)
 
-will cause EXTRA-FACE... or (FACE-ATTR VAL ...) to be _merged_ with the
-existing definition of FACE.  Note that for the default face, this isn't
-necessary, as every face inherits from the default face.
+causes EXTRA-FACE... or (FACE-ATTR VAL ...) to be _merged_ with the
+existing definition of FACE.  Note that this isn't necessary for the
+default face, since every face inherits from the default face.
 
-Making this variable buffer-local is a good way to allow buffer-specific
-face definitions.  For instance, the mode my-mode could define a face
-`my-mode-default', and then in the mode setup function, do:
+If this variable is made buffer-local, the face remapping takes effect
+only in that buffer.  For instance, the mode my-mode could define a
+face `my-mode-default', and then in the mode setup function, do:
 
    (set (make-local-variable 'face-remapping-alist)
 	'((default my-mode-default)))).

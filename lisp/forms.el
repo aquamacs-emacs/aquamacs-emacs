@@ -21,7 +21,7 @@
 
 ;;; Commentary:
 
-;; Visit a file using a form.  See forms-d2.el for examples.
+;; Visit a file using a form.  See etc/forms for examples.
 ;;
 ;; === Naming conventions
 ;;
@@ -581,7 +581,7 @@ Commands:                        Equivalent keys in read-only mode:
 	    (error (concat "Forms control file error: "
 			   "`forms-modified-record-filter' is not a function")))
 
-	;; The filters acces the contents of the forms using `forms-fields'.
+	;; The filters access the contents of the forms using `forms-fields'.
 	(make-local-variable 'forms-fields)
 
 	;; Dynamic text support.
@@ -2030,8 +2030,10 @@ Usage: (setq forms-number-of-fields
 
 ;;; Debugging
 
-(defvar forms--debug nil
-  "*Enables forms-mode debugging if not nil.")
+(defcustom forms--debug nil
+  "If non-nil, enable Forms mode debugging."
+  :type 'boolean
+  :group 'forms)
 
 (defun forms--debug (&rest args)
   "Internal debugging routine."

@@ -2,7 +2,7 @@
 @c Copyright (C) 1985-1987, 1993-1995, 1997, 2000-2012
 @c   Free Software Foundation, Inc.
 @c See file emacs.texi for copying conditions.
-@node Search, Fixit, Display, Top
+@node Search
 @chapter Searching and Replacement
 @cindex searching
 @cindex finding strings within text
@@ -146,7 +146,7 @@ you don't like this feature, you can disable it by setting
   After exiting a search, you can search for the same string again by
 typing just @kbd{C-s C-s}.  The first @kbd{C-s} is the key that
 invokes incremental search, and the second @kbd{C-s} means ``search
-again.''  Similarly, @kbd{C-r C-r} searches backward for the last
+again''.  Similarly, @kbd{C-r C-r} searches backward for the last
 search string.  In determining the last search string, it doesn't
 matter whether the string was searched for with @kbd{C-s} or
 @kbd{C-r}.
@@ -456,7 +456,7 @@ apply to the lazy highlight, which always matches whole words.
 @cindex search for a regular expression
 
   A @dfn{regular expression} (or @dfn{regexp} for short) is a pattern
-that denotes a class of alternative strings to match.  GNU Emacs
+that denotes a class of alternative strings to match.  Emacs
 provides both incremental and nonincremental ways to search for a
 match for a regexp.  The syntax of regular expressions is explained in
 the next section.
@@ -552,7 +552,7 @@ therefore @samp{f} is a regular expression that matches the string
 @samp{ff}.)  Likewise, @samp{o} is a regular expression that matches
 only @samp{o}.  (When case distinctions are being ignored, these regexps
 also match @samp{F} and @samp{O}, but we consider this a generalization
-of ``the same string,'' rather than an exception.)
+of ``the same string'', rather than an exception.)
 
   Any two regular expressions @var{a} and @var{b} can be concatenated.
 The result is a regular expression which matches a string if @var{a}
@@ -801,7 +801,7 @@ After the end of a @samp{\( @dots{} \)} construct, the matcher remembers
 the beginning and end of the text matched by that construct.  Then,
 later on in the regular expression, you can use @samp{\} followed by the
 digit @var{d} to mean ``match the same text matched the @var{d}th time
-by the @samp{\( @dots{} \)} construct.''
+by the @samp{\( @dots{} \)} construct''.
 
 The strings matching the first nine @samp{\( @dots{} \)} constructs
 appearing in a regular expression are assigned numbers 1 through 9 in
@@ -981,7 +981,7 @@ command @code{expand-region-abbrevs} (@pxref{Expanding Abbrevs}).
 * Query Replace::           How to use querying.
 @end menu
 
-@node Unconditional Replace, Regexp Replace, Replace, Replace
+@node Unconditional Replace
 @subsection Unconditional Replacement
 @findex replace-string
 
@@ -1011,7 +1011,7 @@ surrounded by word boundaries.
   @xref{Replacement and Case}, for details about case-sensitivity in
 replace commands.
 
-@node Regexp Replace, Replacement and Case, Unconditional Replace, Replace
+@node Regexp Replace
 @subsection Regexp Replacement
 @findex replace-regexp
 
@@ -1030,7 +1030,7 @@ it can refer to all or part of what is matched by the @var{regexp}.
 @samp{\&} in @var{newstring} stands for the entire match being
 replaced.  @samp{\@var{d}} in @var{newstring}, where @var{d} is a
 digit, stands for whatever matched the @var{d}th parenthesized
-grouping in @var{regexp}.  (This is called a ``back reference.'')
+grouping in @var{regexp}.  (This is called a ``back reference''.)
 @samp{\#} refers to the count of replacements already made in this
 command, as a decimal number.  In the first replacement, @samp{\#}
 stands for @samp{0}; in the second, for @samp{1}; and so on.  For
@@ -1098,7 +1098,7 @@ M-x replace-regexp @key{RET} ^.\@{0,72\@}$ @key{RET}
 \,(format "%-72sABC%05d" \& \#) @key{RET}
 @end example
 
-@node Replacement and Case, Query Replace, Regexp Replace, Replace
+@node Replacement and Case
 @subsection Replace Commands and Case
 
   If the first argument of a replace command is all lower case, the
@@ -1130,7 +1130,7 @@ exactly as given, with no case conversion.  Likewise, if either
 @code{case-replace} or @code{case-fold-search} is set to @code{nil},
 replacement is done without case conversion.
 
-@node Query Replace,, Replacement and Case, Replace
+@node Query Replace
 @subsection Query Replace
 @cindex query replace
 
@@ -1308,7 +1308,7 @@ displayed before and after each matching line.
 @kindex RET @r{(Occur mode)}
 @kindex o @r{(Occur mode)}
 @kindex C-o @r{(Occur mode)}
-In the @samp{*Occur*} buffer, you can click on each entry, or move
+In the @file{*Occur*} buffer, you can click on each entry, or move
 point there and type @key{RET}, to visit the corresponding position in
 the buffer that was searched.  @kbd{o} and @kbd{C-o} display the match
 in another window; @kbd{C-o} does not select it.  Alternatively, you
@@ -1317,7 +1317,7 @@ occurrences one by one (@pxref{Compilation Mode}).
 
 @cindex Occur Edit mode
 @cindex mode, Occur Edit
-Typing @kbd{e} in the @samp{*Occur*} buffer switches to Occur Edit
+Typing @kbd{e} in the @file{*Occur*} buffer switches to Occur Edit
 mode, in which edits made to the entries are also applied to the text
 in the originating buffer.  Type @kbd{C-c C-c} to return to Occur
 mode.

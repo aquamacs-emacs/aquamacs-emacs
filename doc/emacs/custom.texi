@@ -79,7 +79,7 @@ top-level @code{Emacs} group.  It looks like this, in part:
 
 @c we want the buffer example to all be on one page, but unfortunately
 @c that's quite a bit of text, so force all space to the bottom.
-@page
+@c @page
 @smallexample
 @group
 To apply changes, use the Save or Set buttons.
@@ -141,7 +141,7 @@ previous button or editable field.
   From the top-level customization buffer created by @kbd{M-x
 customize}, you can follow the links to the subgroups of the
 @samp{Emacs} customization group.  These subgroups may contain
-settings for you to customize; they may also contain futher subgroups,
+settings for you to customize; they may also contain further subgroups,
 dealing with yet more specialized subsystems of Emacs.  As you
 navigate the hierarchy of customization groups, you should find some
 settings that you want to customize.
@@ -332,7 +332,7 @@ customization.  Use the @samp{Add Comment} item from the
 
 @smallexample
  [Set for Current Session] [Save for Future Sessions]
- [Undo Edits] [Reset to Saved] [Erase Customization]   [Finish]
+ [Undo Edits] [Reset to Saved] [Erase Customization]   [Exit]
 @end smallexample
 
 @noindent
@@ -351,7 +351,7 @@ C-s} (@code{Custom-save}) is like using the @samp{[Save for Future
 Sessions]} button.
 
 @vindex custom-buffer-done-kill
-  The @samp{[Finish]} button switches out of the customization buffer,
+  The @samp{[Exit]} button switches out of the customization buffer,
 and buries the buffer at the bottom of the buffer list.  To make it
 kill the customization buffer instead, change the variable
 @code{custom-buffer-done-kill} to @code{t}.
@@ -561,13 +561,13 @@ format of a theme file and how to make one.
 @vindex custom-theme-directory
 @cindex color scheme
   Type @kbd{M-x customize-themes} to switch to a buffer named
-@samp{*Custom Themes*}, which lists the Custom themes that Emacs knows
+@file{*Custom Themes*}, which lists the Custom themes that Emacs knows
 about.  By default, Emacs looks for theme files in two locations: the
 directory specified by the variable @code{custom-theme-directory}
 (which defaults to @file{~/.emacs.d/}), and a directory named
 @file{etc/themes} in your Emacs installation (see the variable
 @code{data-directory}).  The latter contains several Custom themes
-which are distributed with Emacs, which customize Emacs' faces to fit
+which are distributed with Emacs, which customize Emacs's faces to fit
 various color schemes.  (Note, however, that Custom themes need not be
 restricted to this purpose; they can be used to customize variables
 too).
@@ -580,11 +580,11 @@ add the directory name to the list variable
 @code{custom-theme-directory} has the special meaning of the value of
 the variable @code{custom-theme-directory}, while @code{t} stands for
 the built-in theme directory @file{etc/themes}.  The themes listed in
-the @samp{*Custom Themes*} buffer are those found in the directories
+the @file{*Custom Themes*} buffer are those found in the directories
 specified by @code{custom-theme-load-path}.
 
 @kindex C-x C-s @r{(Custom Themes buffer)}
-  In the @samp{*Custom Themes*} buffer, you can activate the checkbox
+  In the @file{*Custom Themes*} buffer, you can activate the checkbox
 next to a Custom theme to enable or disable the theme for the current
 Emacs session.  When a Custom theme is enabled, all of its settings
 (variables and faces) take effect in the Emacs session.  To apply the
@@ -608,7 +608,7 @@ always considered safe.
   Setting or saving Custom themes actually works by customizing the
 variable @code{custom-enabled-themes}.  The value of this variable is
 a list of Custom theme names (as Lisp symbols, e.g.@: @code{tango}).
-Instead of using the @samp{*Custom Themes*} buffer to set
+Instead of using the @file{*Custom Themes*} buffer to set
 @code{custom-enabled-themes}, you can customize the variable using the
 usual customization interface, e.g.@: with @kbd{M-x customize-option}.
 Note that Custom themes are not allowed to set
@@ -628,15 +628,15 @@ theme, its @samp{State} display shows @samp{THEMED} instead of
 @findex disable-theme
   You can enable a specific Custom theme in the current Emacs session
 by typing @kbd{M-x load-theme}.  This prompts for a theme name, loads
-the theme from the theme file, and enables the theme.  If a theme file
+the theme from the theme file, and enables it.  If a theme file
 has been loaded before, you can enable the theme without loading its
 file by typing @kbd{M-x enable-theme}.  To disable a Custom theme,
 type @kbd{M-x disable-theme}.
 
 @findex describe-theme
   To see a description of a Custom theme, type @kbd{?} on its line in
-the @samp{*Custom Themes*} buffer; or type @kbd{M-x describe-theme}
-anywhere in Emacs and enter the theme name in the minibuffer.
+the @file{*Custom Themes*} buffer; or type @kbd{M-x describe-theme}
+anywhere in Emacs and enter the theme name.
 
 @node Creating Custom Themes
 @subsection Creating Custom Themes
@@ -645,12 +645,12 @@ anywhere in Emacs and enter the theme name in the minibuffer.
 @findex customize-create-theme
   You can define a Custom theme using an interface similar to the
 customization buffer, by typing @kbd{M-x customize-create-theme}.
-This switches to a buffer named @samp{*Custom Theme*}.  It also offers
+This switches to a buffer named @file{*Custom Theme*}.  It also offers
 to insert some common Emacs faces into the theme (a convenience, since
 Custom themes are often used to customize faces).  If you answer no,
 the theme will initially contain no settings.
 
-  Near the top of the @samp{*Custom Theme*} buffer are editable fields
+  Near the top of the @file{*Custom Theme*} buffer are editable fields
 where you can enter the theme's name and description.  The name can be
 anything except @samp{user}.  The description is the one that will be
 shown when you invoke @kbd{M-x describe-theme} for the theme.  Its
@@ -673,7 +673,7 @@ theme, uncheck the checkbox next to its name.
 @file{@var{name}-theme.el} where @var{name} is the theme name, in the
 directory named by @code{custom-theme-directory}.
 
-  From the @samp{*Custom Theme*} buffer, you can view and edit an
+  From the @file{*Custom Theme*} buffer, you can view and edit an
 existing Custom theme by activating the @samp{[Visit Theme]} button
 and specifying the theme name.  You can also add the settings of
 another theme into the buffer, using the @samp{[Merge Theme]} button.
@@ -683,10 +683,9 @@ the @samp{[Merge Theme]} button and specifying the special theme named
 
   A theme file is simply an Emacs Lisp source file, and loading the
 Custom theme works by loading the Lisp file.  Therefore, you can edit
-a theme file directly instead of using the @samp{*Custom Theme*}
-buffer.
-@c Add link to the relevant Emacs Lisp Reference manual node, once
-@c that is written.
+a theme file directly instead of using the @file{*Custom Theme*}
+buffer.  @xref{Custom Themes,,, elisp, The Emacs Lisp Reference
+Manual}, for details.
 
 @node Variables
 @section Variables
@@ -763,7 +762,7 @@ C-h v fill-column @key{RET}
 @noindent
 displays something like this:
 
-@smallexample
+@example
 fill-column is a variable defined in `C source code'.
 fill-column's value is 70
 Local in buffer custom.texi; global value is 70
@@ -778,7 +777,7 @@ Documentation:
 Interactively, you can set the buffer local value using C-x f.
 
 You can customize this variable.
-@end smallexample
+@end example
 
 @noindent
 The line that says ``You can customize the variable'' indicates that
@@ -809,7 +808,7 @@ can set any variable with a Lisp expression like this:
 @noindent
 To execute such an expression, type @kbd{M-:} (@code{eval-expression})
 and enter the expression in the minibuffer (@pxref{Lisp Eval}).
-Alternatively, go to the @samp{*scratch*} buffer, type in the
+Alternatively, go to the @file{*scratch*} buffer, type in the
 expression, and then type @kbd{C-j} (@pxref{Lisp Interaction}).
 
   Setting variables, like all means of customizing Emacs except where
@@ -867,7 +866,7 @@ other modes based on Text mode:
 @noindent
 This works by calling @code{auto-fill-mode}, which enables the minor
 mode when no argument is supplied (@pxref{Minor Modes}).  Next,
-suppose you don't want Auto Fill mode turned on in La@TeX{} mode,
+suppose you don't want Auto Fill mode turned on in @LaTeX{} mode,
 which is one of the modes based on Text mode.  You can do this with
 the following additional line:
 
@@ -879,7 +878,7 @@ the following additional line:
 Here we have used the special macro @code{lambda} to construct an
 anonymous function (@pxref{Lambda Expressions,,, elisp, The Emacs Lisp
 Reference Manual}), which calls @code{auto-fill-mode} with an argument
-of @code{-1} to disable the minor mode.  Because La@TeX{} mode runs
+of @code{-1} to disable the minor mode.  Because @LaTeX{} mode runs
 @code{latex-mode-hook} after running @code{text-mode-hook}, the result
 leaves Auto Fill mode disabled.
 
@@ -1055,8 +1054,8 @@ pair with a colon and semicolon.  The special variable/value pair
 @findex add-file-local-variable-prop-line
 @findex delete-file-local-variable-prop-line
 @findex copy-dir-locals-to-file-locals-prop-line
-  Instead of adding variable/value pairs by hand, you can use the
-command @kbd{M-x add-file-local-variable-prop-line}.  This prompts for
+  You can use the command @kbd{M-x add-file-local-variable-prop-line}
+instead of adding entries by hand.  It prompts for
 a variable and value, and adds them to the first line in the
 appropriate way.  @kbd{M-x delete-file-local-variable-prop-line}
 prompts for a variable, and deletes its entry from the line.  @kbd{M-x
@@ -1163,8 +1162,8 @@ returned by that expression is ignored).
 conversion of this file.  @xref{Coding Systems}.
 
 @item
-@code{unibyte} says to visit the file in a unibyte buffer, if the
-value is @code{t}.  @xref{Enabling Multibyte}.
+@code{unibyte} says to load or compile a file of Emacs Lisp in unibyte
+mode, if the value is @code{t}.  @xref{Disabling Multibyte}.
 @end itemize
 
 @noindent
@@ -1523,7 +1522,7 @@ circumstances.
 @vindex minibuffer-local-completion-map
 @vindex minibuffer-local-must-match-map
 @vindex minibuffer-local-filename-completion-map
-@vindex minibuffer-local-must-match-filename-map
+@vindex minibuffer-local-filename-must-match-map
   The minibuffer has its own set of local keymaps; they contain various
 completion and exit commands.
 
@@ -1540,7 +1539,7 @@ just like @key{RET}.
 for cautious completion.
 @item
 @code{minibuffer-local-filename-completion-map} and
-@code{minibuffer-local-must-match-filename-map} are like the two
+@code{minibuffer-local-filename-must-match-map} are like the two
 previous ones, but they are specifically for file name completion.
 They do not bind @key{SPC}.
 @end itemize
@@ -1923,7 +1922,7 @@ single click definition has run when the first click was received.
   This constrains what you can do with double clicks, but user interface
 designers say that this constraint ought to be followed in any case.  A
 double click should do something similar to the single click, only
-``more so.''  The command for the double-click event should perform the
+``more so''.  The command for the double-click event should perform the
 extra work for the double click.
 
   If a double-click event has no binding, it changes to the
@@ -1971,7 +1970,7 @@ or @samp{triple-}, which always precede @samp{drag-} or @samp{down-}.
   A frame includes areas that don't show text from the buffer, such as
 the mode line and the scroll bar.  You can tell whether a mouse button
 comes from a special area of the screen by means of dummy ``prefix
-keys.''  For example, if you click the mouse in the mode line, you get
+keys''.  For example, if you click the mouse in the mode line, you get
 the prefix key @code{mode-line} before the ordinary mouse-button symbol.
 Thus, here is how to define the command for clicking the first button in
 a mode line to run @code{scroll-up-command}:

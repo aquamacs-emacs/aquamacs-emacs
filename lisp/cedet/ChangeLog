@@ -1,3 +1,48 @@
+2012-03-12  David Engster  <deng@randomsample.de>
+
+	* semantic/db-find.el
+	(semanticdb-find-translate-path-brutish-default): If we don't yet
+	have a proper table for PATH, use `semanticdb-current-database'
+	instead (bug #10343).
+
+2012-03-11  David Engster  <deng@randomsample.de>
+
+	* semantic/wisent/javascript.el (js-mode): Define `js-mode' as
+	child-mode of `javascript-mode' (bug #8445).
+
+2012-02-28  Glenn Morris  <rgm@gnu.org>
+
+	* semantic/db.el (semanticdb-search-results-table):
+	Doc fix (standardize possessive apostrophe usage).
+
+2012-02-09  Juanma Barranquero  <lekktu@gmail.com>
+
+	* ede/auto.el (ede-directory-safe-p, ede-add-project-to-global-list):
+	Add declarations.
+
+2012-01-29  David Engster  <deng@randomsample.de>
+
+	Fix require error when using srecode-insert (Bug#9967).
+	* srecode/insert.el: Require srecode/filters.
+	* srecode/filters.el: Drop two requires.
+
+2012-01-09  Eric Ludlam  <zappo@gnu.org>
+
+	* ede.el (ede-project-directories): New option.
+	(ede-directory-safe-p): Check it.
+	(ede-initialize-state-current-buffer, ede, ede-new)
+	(ede-check-project-directory, ede-rescan-toplevel)
+	(ede-load-project-file, ede-parent-project, ede-current-project):
+	(ede-target-parent): Avoid loading in a project unless it is safe,
+	since it may involve malicious code.  This security flaw was
+	pointed out by Hiroshi Oota.
+
+	* ede/auto.el (ede-project-autoload): Add safe-p slot.
+	(ede-project-class-files): Projects using Project.ede are unsafe.
+	(ede-auto-load-project): New method.
+
+	* ede/simple.el (ede-project-class-files): Mark as unsafe.
+
 2011-12-19  Sam Steingold  <sds@gnu.org>
 
 	* semantic/edit.el (semantic-edits-incremental-parser): Add the
@@ -123,8 +168,8 @@
 
 2011-07-30  Chong Yidong  <cyd@stupidchicken.com>
 
-	* semantic/grammar.el (semantic-grammar-insert-defanalyzers): Fix
-	require.
+	* semantic/grammar.el (semantic-grammar-insert-defanalyzers):
+	Fix require.
 
 2011-07-04  Darren Hoo  <darren.hoo@gmail.com>  (tiny change)
 

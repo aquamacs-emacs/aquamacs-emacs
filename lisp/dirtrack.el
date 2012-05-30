@@ -179,6 +179,8 @@ and ends with a forward slash."
     dir))
 
 
+(define-obsolete-function-alias 'dirtrack-toggle 'dirtrack-mode "23.1")
+(define-obsolete-variable-alias 'dirtrackp 'dirtrack-mode "23.1")
 ;;;###autoload
 (define-minor-mode dirtrack-mode
   "Toggle directory tracking in shell buffers (Dirtrack mode).
@@ -198,20 +200,18 @@ directory."
       (add-hook 'comint-preoutput-filter-functions 'dirtrack nil t)
     (remove-hook 'comint-preoutput-filter-functions 'dirtrack t)))
 
-(define-obsolete-function-alias 'dirtrack-toggle 'dirtrack-mode "23.1")
-(define-obsolete-variable-alias 'dirtrackp 'dirtrack-mode "23.1")
-
-
-(define-minor-mode dirtrack-debug-mode
-  "Toggle Dirtrack debugging."
-  nil nil nil
-  (if dirtrack-debug-mode
-      (display-buffer (get-buffer-create dirtrack-debug-buffer))))
 
 (define-obsolete-function-alias 'dirtrack-debug-toggle 'dirtrack-debug-mode
   "23.1")
 (define-obsolete-variable-alias 'dirtrack-debug 'dirtrack-debug-mode "23.1")
-
+(define-minor-mode dirtrack-debug-mode
+  "Toggle Dirtrack debugging.
+With a prefix argument ARG, enable Dirtrack debugging if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil."
+  nil nil nil
+  (if dirtrack-debug-mode
+      (display-buffer (get-buffer-create dirtrack-debug-buffer))))
 
 (defun dirtrack-debug-message (msg1 msg2)
   "Insert strings at the end of `dirtrack-debug-buffer'."

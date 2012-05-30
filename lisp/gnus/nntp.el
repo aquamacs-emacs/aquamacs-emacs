@@ -772,7 +772,11 @@ command whose response triggered the error."
   "Retrieve group info on INFOS."
   (nntp-with-open-group nil server
     (let ((buffer (nntp-find-connection-buffer nntp-server-buffer)))
+      (unless infos
+	(with-current-buffer buffer
+	  (setq nntp-retrieval-in-progress nil)))
       (when (and buffer
+		 infos
 		 (with-current-buffer buffer
 		   (not nntp-retrieval-in-progress)))
 	;; The first time this is run, this variable is `try'.  So we
@@ -1248,10 +1252,11 @@ If SEND-IF-FORCE, only send authinfo to the server if the
   (let* ((list (netrc-parse nntp-authinfo-file))
 	 (alist (netrc-machine list nntp-address "nntp"))
          (auth-info
-          (nth 0 (auth-source-search :max 1
-                                     ;; TODO: allow the virtual server name too
-                                     :host nntp-address
-                                     :port '("119" "nntp"))))
+          (nth 0 (auth-source-search
+		  :max 1
+		  :host (list nntp-address (nnoo-current-server 'nntp))
+		  :port `("119" "nntp" ,(format "%s" nntp-port-number)
+			  "563" "nntps" "snews"))))
          (auth-user (plist-get auth-info :user))
          (auth-force (plist-get auth-info :force))
          (auth-passwd (plist-get auth-info :secret))
@@ -1381,6 +1386,10 @@ password contained in '~/.nntp-authinfo'."
       (nnheader-cancel-timer timer))
     (when (and process
 	       (not (memq (process-status process) '(open run))))
+      (with-current-buffer pbuffer
+	(goto-char (point-min))
+	(nnheader-report 'nntp "Error when connecting: %s"
+			 (buffer-substring (point) (line-end-position))))
       (setq process nil))
     (unless process
       (nntp-kill-buffer pbuffer))

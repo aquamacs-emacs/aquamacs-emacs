@@ -1002,12 +1002,14 @@ Each function's symbol gets added to `byte-compile-noruntime-functions'."
 
 (defvar byte-compile-last-warned-form nil)
 (defvar byte-compile-last-logged-file nil)
+(defvar byte-compile-root-dir nil
+  "Directory relative to which file names in error messages are written.")
 
 ;; This is used as warning-prefix for the compiler.
 ;; It is always called with the warnings buffer current.
 (defun byte-compile-warning-prefix (level entry)
   (let* ((inhibit-read-only t)
-	 (dir default-directory)
+	 (dir (or byte-compile-root-dir default-directory))
 	 (file (cond ((stringp byte-compile-current-file)
 		      (format "%s:" (file-relative-name
                                      byte-compile-current-file dir)))
@@ -2237,22 +2239,21 @@ list that represents a doc string reference.
 (put 'defvar   'byte-hunk-handler 'byte-compile-file-form-defvar)
 (put 'defconst 'byte-hunk-handler 'byte-compile-file-form-defvar)
 (defun byte-compile-file-form-defvar (form)
-  (if (null (nth 3 form))
-      ;; Since there is no doc string, we can compile this as a normal form,
-      ;; and not do a file-boundary.
-      (byte-compile-keep-pending form)
-    (when (and (symbolp (nth 1 form))
-               (not (string-match "[-*/:$]" (symbol-name (nth 1 form))))
-               (byte-compile-warning-enabled-p 'lexical))
-      (byte-compile-warn "global/dynamic var `%s' lacks a prefix"
-                         (nth 1 form)))
-    (push (nth 1 form) byte-compile-bound-variables)
-    (if (eq (car form) 'defconst)
-	(push (nth 1 form) byte-compile-const-variables))
+  (when (and (symbolp (nth 1 form))
+             (not (string-match "[-*/:$]" (symbol-name (nth 1 form))))
+             (byte-compile-warning-enabled-p 'lexical))
+    (byte-compile-warn "global/dynamic var `%s' lacks a prefix"
+                       (nth 1 form)))
+  (push (nth 1 form) byte-compile-bound-variables)
+  (if (eq (car form) 'defconst)
+      (push (nth 1 form) byte-compile-const-variables))
+  (if (and (null (cddr form))		;No `value' provided.
+           (eq (car form) 'defvar))     ;Just a declaration.
+      nil
     (cond ((consp (nth 2 form))
-	   (setq form (copy-sequence form))
-	   (setcar (cdr (cdr form))
-		   (byte-compile-top-level (nth 2 form) nil 'file))))
+           (setq form (copy-sequence form))
+           (setcar (cdr (cdr form))
+                   (byte-compile-top-level (nth 2 form) nil 'file))))
     form))
 
 (put 'define-abbrev-table 'byte-hunk-handler
@@ -2268,19 +2269,7 @@ list that represents a doc string reference.
   (when (byte-compile-warning-enabled-p 'callargs)
     (byte-compile-nogroup-warn form))
   (push (nth 1 (nth 1 form)) byte-compile-bound-variables)
-  ;; Don't compile the expression because it may be displayed to the user.
-  ;; (when (eq (car-safe (nth 2 form)) 'quote)
-  ;;   ;; (nth 2 form) is meant to evaluate to an expression, so if we have the
-  ;;   ;; final value already, we can byte-compile it.
-  ;;   (setcar (cdr (nth 2 form))
-  ;;           (byte-compile-top-level (cadr (nth 2 form)) nil 'file)))
-  (let ((tail (nthcdr 4 form)))
-    (while tail
-      (unless (keywordp (car tail))      ;No point optimizing keywords.
-        ;; Compile the keyword arguments.
-        (setcar tail (byte-compile-top-level (car tail) nil 'file)))
-      (setq tail (cdr tail))))
-  form)
+  (byte-compile-keep-pending form))
 
 (put 'require 'byte-hunk-handler 'byte-compile-file-form-require)
 (defun byte-compile-file-form-require (form)
@@ -2695,7 +2684,8 @@ If FORM is a lambda or a macro, byte-compile it as a function."
 	 (limits '(5			; Use the 1-byte varref codes,
 		   63  ; 1-constlim	;  1-byte byte-constant codes,
 		   255			;  2-byte varref codes,
-		   65535))		;  3-byte codes for the rest.
+		   65535		;  3-byte codes for the rest.
+                   65535))              ;  twice since we step when we swap.
 	 limit)
     (while (or rest other)
       (setq limit (car limits))
@@ -2709,8 +2699,8 @@ If FORM is a lambda or a macro, byte-compile it as a function."
 	  (setcdr (car rest) (setq i (1+ i)))
 	  (setq ret (cons (car rest) ret))))
 	(setq rest (cdr rest)))
-      (setq limits (cdr limits)
-	    rest (prog1 other
+      (setq limits (cdr limits)         ;Step
+	    rest (prog1 other           ;&Swap.
 		   (setq other rest))))
     (apply 'vector (nreverse (mapcar 'car ret)))))
 
@@ -4124,8 +4114,10 @@ binding slots have been popped."
     (push (nth 1 (nth 1 form)) byte-compile-global-not-obsolete-vars))
   (byte-compile-normal-call form))
 
+(defconst byte-compile-tmp-var (make-symbol "def-tmp-var"))
+
 (defun byte-compile-defvar (form)
-  ;; This is not used for file-level defvar/consts with doc strings.
+  ;; This is not used for file-level defvar/consts.
   (when (and (symbolp (nth 1 form))
              (not (string-match "[-*/:$]" (symbol-name (nth 1 form))))
              (byte-compile-warning-enabled-p 'lexical))
@@ -4148,32 +4140,21 @@ binding slots have been popped."
     (push var byte-compile-bound-variables)
     (if (eq fun 'defconst)
 	(push var byte-compile-const-variables))
-    (byte-compile-body-do-effect
-     (list
-      ;; Put the defined variable in this library's load-history entry
-      ;; just as a real defvar would, but only in top-level forms.
-      (when (and (cddr form) (null byte-compile-current-form))
-	`(setq current-load-list (cons ',var current-load-list)))
-      (when (> (length form) 3)
-	(when (and string (not (stringp string)))
-	    (byte-compile-warn "third arg to `%s %s' is not a string: %s"
-			       fun var string))
-	`(put ',var 'variable-documentation ,string))
-      (if (cddr form)		; `value' provided
-	  (let ((byte-compile-not-obsolete-vars (list var)))
-	    (if (eq fun 'defconst)
-		;; `defconst' sets `var' unconditionally.
-		(let ((tmp (make-symbol "defconst-tmp-var")))
-                  ;; Quote with `quote' to prevent byte-compiling the body,
-                  ;; which would lead to an inf-loop.
-		  `(funcall '(lambda (,tmp) (defconst ,var ,tmp))
-			    ,value))
-	      ;; `defvar' sets `var' only when unbound.
-	      `(if (not (default-boundp ',var)) (setq-default ,var ,value))))
-	(when (eq fun 'defconst)
-	  ;; This will signal an appropriate error at runtime.
-	  `(eval ',form)))
-      `',var))))
+    (when (and string (not (stringp string)))
+      (byte-compile-warn "third arg to `%s %s' is not a string: %s"
+                         fun var string))
+    (byte-compile-form-do-effect
+     (if (cddr form)  ; `value' provided
+         ;; Quote with `quote' to prevent byte-compiling the body,
+         ;; which would lead to an inf-loop.
+         `(funcall '(lambda (,byte-compile-tmp-var)
+                      (,fun ,var ,byte-compile-tmp-var ,@(nthcdr 3 form)))
+                   ,value)
+        (if (eq fun 'defconst)
+            ;; This will signal an appropriate error at runtime.
+            `(eval ',form)
+          ;; A simple (defvar foo) just returns foo.
+          `',var)))))
 
 (defun byte-compile-autoload (form)
   (byte-compile-set-symbol-position 'autoload)
@@ -4536,29 +4517,30 @@ already up-to-date."
     (kill-emacs (if error 1 0))))
 
 (defun batch-byte-compile-file (file)
-  (if debug-on-error
-      (byte-compile-file file)
-    (condition-case err
-	(byte-compile-file file)
-      (file-error
-       (message (if (cdr err)
-		    ">>Error occurred processing %s: %s (%s)"
-		  ">>Error occurred processing %s: %s")
-		file
-		(get (car err) 'error-message)
-		(prin1-to-string (cdr err)))
-       (let ((destfile (byte-compile-dest-file file)))
-	 (if (file-exists-p destfile)
-	     (delete-file destfile)))
-       nil)
-      (error
-       (message (if (cdr err)
-		    ">>Error occurred processing %s: %s (%s)"
-		  ">>Error occurred processing %s: %s")
-		file
-		(get (car err) 'error-message)
-		(prin1-to-string (cdr err)))
-       nil))))
+  (let ((byte-compile-root-dir (or byte-compile-root-dir default-directory)))
+    (if debug-on-error
+        (byte-compile-file file)
+      (condition-case err
+          (byte-compile-file file)
+        (file-error
+         (message (if (cdr err)
+                      ">>Error occurred processing %s: %s (%s)"
+                    ">>Error occurred processing %s: %s")
+                  file
+                  (get (car err) 'error-message)
+                  (prin1-to-string (cdr err)))
+         (let ((destfile (byte-compile-dest-file file)))
+           (if (file-exists-p destfile)
+               (delete-file destfile)))
+         nil)
+        (error
+         (message (if (cdr err)
+                      ">>Error occurred processing %s: %s (%s)"
+                    ">>Error occurred processing %s: %s")
+                  file
+                  (get (car err) 'error-message)
+                  (prin1-to-string (cdr err)))
+         nil)))))
 
 (defun byte-compile-refresh-preloaded ()
   "Reload any Lisp file that was changed since Emacs was dumped.

@@ -23,6 +23,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
 
+/* This limits the attempts to handshake per process (connection).  */
+#define GNUTLS_EMACS_HANDSHAKES_LIMIT 100
+
 typedef enum
 {
   /* Initialization stages.  */
@@ -53,10 +56,12 @@ typedef enum
 
 #define GNUTLS_LOG2(level, max, string, extra) do { if (level <= max) { gnutls_log_function2 (level, "(Emacs) " string, extra); } } while (0)
 
-extern EMACS_INT
-emacs_gnutls_write (struct Lisp_Process *proc, const char *buf, EMACS_INT nbyte);
-extern EMACS_INT
-emacs_gnutls_read (struct Lisp_Process *proc, char *buf, EMACS_INT nbyte);
+#define GNUTLS_LOG2i(level, max, string, extra) do { if (level <= max) { gnutls_log_function2i (level, "(Emacs) " string, extra); } } while (0)
+
+extern ptrdiff_t
+emacs_gnutls_write (struct Lisp_Process *proc, const char *buf, ptrdiff_t nbyte);
+extern ptrdiff_t
+emacs_gnutls_read (struct Lisp_Process *proc, char *buf, ptrdiff_t nbyte);
 
 extern int emacs_gnutls_record_check_pending (gnutls_session_t state);
 extern void emacs_gnutls_transport_set_errno (gnutls_session_t state, int err);

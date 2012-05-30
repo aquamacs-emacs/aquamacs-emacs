@@ -469,11 +469,12 @@ struct font_bitmap
   } while (0)
 
 #define XFONT_SPEC(p)	\
-  (eassert (FONT_SPEC_P(p)), (struct font_spec *) XPNTR (p))
+  (eassert (FONT_SPEC_P (p)), (struct font_spec *) XUNTAG (p, Lisp_Vectorlike))
 #define XFONT_ENTITY(p)	\
-  (eassert (FONT_ENTITY_P(p)), (struct font_entity *) XPNTR (p))
+  (eassert (FONT_ENTITY_P (p)), \
+   (struct font_entity *) XUNTAG (p, Lisp_Vectorlike))
 #define XFONT_OBJECT(p)	\
-  (eassert (FONT_OBJECT_P(p)), (struct font *) XPNTR (p))
+  (eassert (FONT_OBJECT_P (p)), (struct font *) XUNTAG (p, Lisp_Vectorlike))
 #define XSETFONT(a, b) (XSETPSEUDOVECTOR (a, b, PVEC_FONT))
 
 /* Number of pt per inch (from the TeXbook).  */
@@ -793,7 +794,7 @@ extern int font_unparse_fcname (Lisp_Object font, int pixel_size,
 extern void register_font_driver (struct font_driver *driver, FRAME_PTR f);
 extern void free_font_driver_list (FRAME_PTR f);
 extern Lisp_Object font_update_drivers (FRAME_PTR f, Lisp_Object list);
-extern Lisp_Object font_range (EMACS_INT, EMACS_INT *,
+extern Lisp_Object font_range (ptrdiff_t, ptrdiff_t *,
 			       struct window *, struct face *,
 			       Lisp_Object);
 extern void font_fill_lglyph_metrics (Lisp_Object, Lisp_Object);

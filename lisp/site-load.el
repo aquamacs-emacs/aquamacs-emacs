@@ -44,7 +44,7 @@
 (load "disp-table")
 (load "tool-bar")  ;; taken out while we're working on it!
 (load "tooltip")
-(load "image") ;; path issue should be alright now
+(load "image") ;; path issue should be OK now
 (load "image-file")
 (load "button")
 ; (load "view")  ; can't do it in Emacs 24

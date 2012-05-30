@@ -35,7 +35,7 @@
 ;; links to these 'tagged' destinations, allowing seamless navigation between
 ;; multiple org-mode files. Topics can be created in any org mode file and
 ;; will always be found by plain links from other files. Other file types
-;; recognised by ctags (source code files, latex files, etc) will also be
+;; recognized by ctags (source code files, latex files, etc) will also be
 ;; available as destinations for plain links, and similarly, org-mode links
 ;; will be available as tags from source files. Finally, the function
 ;; `org-ctags-find-tag-interactive' lets you choose any known tag, using
@@ -162,6 +162,7 @@ See the ctags documentation for more information.")
     (t "ctags-exuberant"))
   "Full path to the ctags executable file."
   :group 'org-ctags
+  :version "24.1"
   :type 'file)
 
 (defcustom org-ctags-open-link-functions
@@ -170,6 +171,7 @@ See the ctags documentation for more information.")
     org-ctags-ask-append-topic)
   "List of functions to be prepended to ORG-OPEN-LINK-FUNCTIONS when ORG-CTAGS is active."
   :group 'org-ctags
+  :version "24.1"
   :type 'hook
   :options '(org-ctags-find-tag
              org-ctags-ask-rebuild-tags-file-then-find-tag

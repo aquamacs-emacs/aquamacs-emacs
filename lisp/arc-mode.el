@@ -322,6 +322,7 @@ Archive and member name will be added."
   "Program and its options to run in order to extract a 7z file member.
 Extraction should happen to standard output.  Archive and member name will
 be added."
+  :version "24.1"
   :type '(list (string :tag "Program")
 	       (repeat :tag "Options"
 		       :inline t
@@ -332,6 +333,7 @@ be added."
   '("7z" "d")
   "Program and its options to run in order to delete 7z file members.
 Archive and member names will be added."
+  :version "24.1"
   :type '(list (string :tag "Program")
 	       (repeat :tag "Options"
 		       :inline t
@@ -343,6 +345,7 @@ Archive and member names will be added."
   "Program and its options to run in order to update a 7z file member.
 Options should ensure that specified directory will be put into the 7z
 file.  Archive and member name will be added."
+  :version "24.1"
   :type '(list (string :tag "Program")
 	       (repeat :tag "Options"
 		       :inline t
@@ -619,11 +622,12 @@ the mode is invalid.  If ERROR is nil then nil will be returned."
 
 (defun archive-unixdate (low high)
   "Stringify Unix (LOW HIGH) date."
-  (let ((str (current-time-string (cons high low))))
+  (let* ((time (cons high low))
+	 (str (current-time-string time)))
     (format "%s-%s-%s"
 	    (substring str 8 10)
 	    (substring str 4 7)
-	    (substring str 20 24))))
+	    (format-time-string "%Y" time))))
 
 (defun archive-unixtime (low high)
   "Stringify Unix (LOW HIGH) time."

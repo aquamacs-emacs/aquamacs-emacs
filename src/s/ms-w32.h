@@ -122,7 +122,6 @@ struct sigaction {
 
 #define HAVE_GETTIMEOFDAY 1
 #define HAVE_GETHOSTNAME 1
-#undef  HAVE_GETDOMAINNAME
 #define HAVE_DUP2 1
 #define HAVE_RENAME 1
 #define HAVE_CLOSEDIR 1
@@ -147,7 +146,6 @@ struct sigaction {
 #define HAVE_FMOD 1
 #undef  HAVE_RINT
 #undef  HAVE_CBRT
-#define HAVE_FTIME 1
 #undef  HAVE_RES_INIT /* For -lresolv on Suns.  */
 #undef  HAVE_SETSID
 #undef  HAVE_FPATHCONF
@@ -159,6 +157,9 @@ struct sigaction {
 #undef  HAVE_UTIMES
 #undef  HAVE_SETRLIMIT
 #undef  HAVE_SETPGID
+/* If you think about defining HAVE_GETCWD, don't: the alternative
+   getwd is redefined on w32.c, and does not really return the current
+   directory, to get the desired results elsewhere in Emacs */
 #undef  HAVE_GETCWD
 #define HAVE_SHUTDOWN 1
 
@@ -286,6 +287,12 @@ typedef int pid_t;
 #define stricmp   _stricmp
 #define tzset     _tzset
 
+/* Include time.h before redirecting tzname, since MSVC's time.h
+   defines _tzname to call a function, but also declares tzname a
+   2-element array.  Having the redirection before including the
+   header thus has the effect of declaring a function that returns an
+   array, and triggers an error message.  */
+#include <time.h>
 #define tzname    _tzname
 #if !defined (_MSC_VER) || (_MSC_VER < 1400)
 #undef  utime
@@ -373,6 +380,8 @@ extern int getloadavg (double *, int);
 
 /* We need a little extra space, see ../../lisp/loadup.el.  */
 #define SYSTEM_PURESIZE_EXTRA 50000
+
+#define DATA_START 	get_data_start ()
 
 /* For unexec to work on Alpha systems, we need to put Emacs'
    initialized data into a separate section from the CRT initialized

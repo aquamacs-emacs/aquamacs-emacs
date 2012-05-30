@@ -95,9 +95,9 @@ struct Lisp_Process
     /* Descriptor by which we write to this process */
     int outfd;
     /* Event-count of last event in which this process changed status.  */
-    int tick;
+    EMACS_INT tick;
     /* Event-count of last such event reported.  */
-    int update_tick;
+    EMACS_INT update_tick;
     /* Size of carryover in decoding.  */
     int decoding_carryover;
     /* Hysteresis to try to read process output in larger blocks.
@@ -134,6 +134,7 @@ struct Lisp_Process
     gnutls_certificate_client_credentials gnutls_x509_cred;
     gnutls_anon_client_credentials_t gnutls_anon_cred;
     int gnutls_log_level;
+    int gnutls_handshakes_tried;
     int gnutls_p;
 #endif
 };

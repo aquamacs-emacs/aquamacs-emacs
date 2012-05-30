@@ -210,7 +210,8 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
        '(gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
        '(glib "libglib-2.0-0.dll")
        '(gobject "libgobject-2.0-0.dll")
-       '(gnutls "libgnutls-28.dll" "libgnutls-26.dll")))
+       '(gnutls "libgnutls-28.dll" "libgnutls-26.dll")
+       '(libxml2 "libxml2-2.dll" "libxml2.dll")))
 
 ;;; multi-tty support
 (defvar w32-initialized nil
@@ -308,6 +309,7 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
   ;; Set to a system sound if you want a fancy bell.
   (set-message-beep 'ok)
+  (x-apply-session-resources)
   (setq w32-initialized t))
 
 (add-to-list 'handle-args-function-alist '(w32 . x-handle-args))

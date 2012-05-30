@@ -2479,6 +2479,10 @@ signal_user_input (void)
   if (!NILP (Vthrow_on_input))
     {
       Vquit_flag = Vthrow_on_input;
+      /* Doing a QUIT from this thread is a bad idea, since this
+	 unwinds the stack of the Lisp thread, and the Windows runtime
+	 rightfully barfs.  Disabled.  */
+#if 0
       /* If we're inside a function that wants immediate quits,
 	 do it now.  */
       if (immediate_quit && NILP (Vinhibit_quit))
@@ -2486,6 +2490,7 @@ signal_user_input (void)
 	  immediate_quit = 0;
 	  QUIT;
 	}
+#endif
     }
 }
 
@@ -3658,6 +3663,7 @@ w32_wnd_proc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_EMACS_SHOWWINDOW:
       return ShowWindow ((HWND) wParam, (WPARAM) lParam);
 
+    case WM_EMACS_BRINGTOTOP:
     case WM_EMACS_SETFOREGROUND:
       {
         HWND foreground_window;
@@ -3675,6 +3681,8 @@ w32_wnd_proc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
           foreground_thread = 0;
 
         retval = SetForegroundWindow ((HWND) wParam);
+        if (msg == WM_EMACS_BRINGTOTOP)
+          retval = BringWindowToTop ((HWND) wParam);
 
         /* Detach from the previous foreground thread.  */
         if (foreground_thread)
@@ -3998,7 +4006,7 @@ unwind_create_frame (Lisp_Object frame)
 #if GLYPH_DEBUG
       /* Check that reference counts are indeed correct.  */
       xassert (dpyinfo->reference_count == dpyinfo_refcount);
-      xassert (dpyinfo->image_cache->refcount == image_cache_refcount);
+      xassert (dpyinfo->terminal->image_cache->refcount == image_cache_refcount);
 #endif
       return Qt;
     }
@@ -4065,7 +4073,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   int minibuffer_only = 0;
   long window_prompting = 0;
   int width, height;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
   Lisp_Object display;
   struct w32_display_info *dpyinfo = NULL;
@@ -5011,16 +5019,6 @@ no value of TYPE (always string in the MS Windows case).  */)
    cursor.  Duplicated from xdisp.c, but cannot use the version there
    due to lack of atimers on w32.  */
 #define DEFAULT_HOURGLASS_DELAY 1
-/* Return non-zero if hourglass timer has been started or hourglass is
-   shown.  */
-/* PENDING: if W32 can use atimers (atimer.[hc]) then the common impl in
-   	    xdisp.c could be used. */
-
-int
-hourglass_started (void)
-{
-  return hourglass_shown_p || hourglass_timer;
-}
 
 /* Cancel a currently active hourglass timer, and start a new one.  */
 
@@ -5178,7 +5176,7 @@ x_create_tip_frame (struct w32_display_info *dpyinfo,
   Lisp_Object name;
   long window_prompting = 0;
   int width, height;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3;
   struct kboard *kb;
   int face_change_count_before = face_change_count;
@@ -5241,7 +5239,7 @@ x_create_tip_frame (struct w32_display_info *dpyinfo,
 
 #if GLYPH_DEBUG
   image_cache_refcount =
-    FRAME_IMAGE_CACHE ? FRAME_IMAGE_CACHE (f)->refcount : 0;
+    FRAME_IMAGE_CACHE (f) ? FRAME_IMAGE_CACHE (f)->refcount : 0;
   dpyinfo_refcount = dpyinfo->reference_count;
 #endif /* GLYPH_DEBUG */
   FRAME_KBOARD (f) = kb;
@@ -5527,7 +5525,7 @@ Text larger than the specified size is clipped.  */)
   int i, width, height, seen_reversed_p;
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
   int old_windows_or_buffers_changed = windows_or_buffers_changed;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
 
   specbind (Qinhibit_redisplay, Qt);
 
@@ -5806,7 +5804,7 @@ DEFUN ("x-hide-tip", Fx_hide_tip, Sx_hide_tip, 0, 0, 0,
 Value is t if tooltip was open, nil otherwise.  */)
   (void)
 {
-  int count;
+  ptrdiff_t count;
   Lisp_Object deleted, frame, timer;
   struct gcpro gcpro1, gcpro2;
 
@@ -5928,7 +5926,7 @@ Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
 {
   struct frame *f = SELECTED_FRAME ();
   Lisp_Object file = Qnil;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4, gcpro5, gcpro6;
   char filename[MAX_PATH + 1];
   char init_dir[MAX_PATH + 1];

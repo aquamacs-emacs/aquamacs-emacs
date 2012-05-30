@@ -3,30 +3,28 @@
 ;; Copyright (C) 2011-2012  Free Software Foundation, Inc.
 
 ;; Authors: Sergey Litvinov
-;;	    Eric Schulte
+;;       Eric Schulte
 ;; Keywords: literate programming, reproducible research, fortran
 ;; Homepage: http://orgmode.org
-;; Version: 7.8.02
 
-;; This file is part of GNU Emacs.
-
-;; GNU Emacs is free software: you can redistribute it and/or modify
+;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
-
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-
+;;
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
 ;; Org-Babel support for evaluating fortran code.
-;; Based on ob-C.el by Eric Schulte.
 
 ;;; Code:
 (require 'ob)
@@ -110,7 +108,7 @@ it's header arguments."
   "Wrap body in a \"program ... end program\" block if none exists."
   (if (string-match "^[ \t]*program[ \t]*.*" (capitalize body))
        (let ((vars (mapcar #'cdr (org-babel-get-header params :var))))
-	 (if vars (error "cannot use :vars if 'program' statment is present"))
+	 (if vars (error "cannot use :vars if 'program' statement is present"))
 	 body)
     (format "program main\n%s\nend program main\n" body)))
 
@@ -127,7 +125,7 @@ support for sessions"
 ;; helper functions
 
 (defun org-babel-fortran-var-to-fortran (pair)
-  "fortranonvert an elisp val into a string of fortran code specifying a var
+  "Convert an elisp val into a string of fortran code specifying a var
 of the same value."
   ;; TODO list support
   (let ((var (car pair))

@@ -133,7 +133,7 @@ a command, but you can think of it as canceling a command that already
 finished executing.  @xref{Undo}, for more information about the undo
 facility.
 
-@node Lossage, Bugs, Quitting, Top
+@node Lossage
 @section Dealing with Emacs Trouble
 
   This section describes how to recognize and deal with situations in
@@ -172,20 +172,19 @@ used to delete forwards.  If this key deletes backward in Emacs, that
 too suggests Emacs got the wrong information---but in the opposite
 sense.
 
-  On a text-only terminal, if you find that @key{Backspace} prompts
-for a Help command, like @kbd{Control-h}, instead of deleting a
-character, it means that key is actually sending the @key{BS}
-character.  Emacs ought to be treating @key{BS} as @key{DEL}, but it
-isn't.
+  On a text terminal, if you find that @key{Backspace} prompts for a
+Help command, like @kbd{Control-h}, instead of deleting a character,
+it means that key is actually sending the @key{BS} character.  Emacs
+ought to be treating @key{BS} as @key{DEL}, but it isn't.
 
 @findex normal-erase-is-backspace-mode
   In all of those cases, the immediate remedy is the same: use the
 command @kbd{M-x normal-erase-is-backspace-mode}.  This toggles
 between the two modes that Emacs supports for handling @key{DEL}, so
 if Emacs starts in the wrong mode, this should switch to the right
-mode.  On a text-only terminal, if you want to ask for help when
-@key{BS} is treated as @key{DEL}, use @key{F1}; @kbd{C-?} may also
-work, if it sends character code 127.
+mode.  On a text terminal, if you want to ask for help when @key{BS}
+is treated as @key{DEL}, use @key{F1}; @kbd{C-?} may also work, if it
+sends character code 127.
 
   To fix the problem in every Emacs session, put one of the following
 lines into your initialization file (@pxref{Init File}).  For the
@@ -327,8 +326,8 @@ not make a backup of its old contents.
 @node Emergency Escape
 @subsection Emergency Escape
 
-  On text-only terminals, the @dfn{emergency escape} feature suspends
-Emacs immediately if you type @kbd{C-g} a second time before Emacs can
+  On text terminals, the @dfn{emergency escape} feature suspends Emacs
+immediately if you type @kbd{C-g} a second time before Emacs can
 actually respond to the first one by quitting.  This is so you can
 always get out of GNU Emacs no matter how badly it might be hung.
 When things are working properly, Emacs recognizes and handles the
@@ -374,7 +373,7 @@ program.
 emergency escape---but there are cases where it won't work, when
 system call hangs or when Emacs is stuck in a tight loop in C code.
 
-@node Bugs, Contributing, Lossage, Top
+@node Bugs
 @section Reporting Bugs
 
 @cindex bugs
@@ -535,16 +534,16 @@ large, and Emacs displays @samp{I feel pretty today}.  The bug report
 would need to provide all that information.  You should not assume
 that the problem is due to the size of the file and say, ``I visited a
 large file, and Emacs displayed @samp{I feel pretty today}.''  This is
-what we mean by ``guessing explanations.''  The problem might be due
+what we mean by ``guessing explanations''.  The problem might be due
 to the fact that there is a @samp{z} in the file name.  If this is so,
 then when we got your report, we would try out the problem with some
-``large file,'' probably with no @samp{z} in its name, and not see any
+``large file'', probably with no @samp{z} in its name, and not see any
 problem.  There is no way we could guess that we should try visiting a
 file with a @samp{z} in its name.
 
   You should not even say ``visit a file'' instead of @kbd{C-x C-f}.
 Similarly, rather than saying ``if I have three characters on the
-line,'' say ``after I type @kbd{@key{RET} A B C @key{RET} C-p},'' if
+line'', say ``after I type @kbd{@key{RET} A B C @key{RET} C-p}'', if
 that is the way you entered the text.
 
   If possible, try quickly to reproduce the bug by invoking Emacs with
@@ -592,9 +591,10 @@ When you have finished writing your report, type @kbd{C-c C-c} and it
 will be sent to the Emacs maintainers at @email{bug-gnu-emacs@@gnu.org}.
 (If you want to suggest an improvement or new feature, use the same
 address.)  If you cannot send mail from inside Emacs, you can copy the
-text of your report to your normal mail client and send it to that
-address.  Or you can simply send an email to that address describing
-the problem.
+text of your report to your normal mail client (if your system
+supports it, you can type @kbd{C-c m} to have Emacs do this for you)
+and send it to that address.  Or you can simply send an email to that
+address describing the problem.
 
 Your report will be sent to the @samp{bug-gnu-emacs} mailing list, and
 stored in the GNU Bug Tracker at @url{http://debbugs.gnu.org}.  Please
@@ -634,7 +634,7 @@ Emacs, so you will have to report the bug somewhere else.
 The type of machine you are using, and the operating system name and
 version number (again, automatically included by @kbd{M-x
 report-emacs-bug}).  @kbd{M-x emacs-version @key{RET}} provides this
-information too.  Copy its output from the @samp{*Messages*} buffer,
+information too.  Copy its output from the @file{*Messages*} buffer,
 so that you get it all and get it accurately.
 
 @item
@@ -697,7 +697,7 @@ The way to collect the terminal output is to execute the Lisp expression
 @end example
 
 @noindent
-using @kbd{M-:} or from the @samp{*scratch*} buffer just after
+using @kbd{M-:} or from the @file{*scratch*} buffer just after
 starting Emacs.  From then on, Emacs copies all terminal output to the
 specified termscript file as well, until the Emacs process is killed.
 If the problem happens when Emacs starts up, put this expression into
@@ -723,14 +723,14 @@ Alternatively, use the @command{locale} command, if your system has it,
 to display your locale settings.
 
 You can use the @kbd{M-!} command to execute these commands from
-Emacs, and then copy the output from the @samp{*Messages*} buffer into
+Emacs, and then copy the output from the @file{*Messages*} buffer into
 the bug report.  Alternatively, @kbd{M-x getenv @key{RET} LC_ALL
 @key{RET}} will display the value of @code{LC_ALL} in the echo area, and
-you can copy its output from the @samp{*Messages*} buffer.
+you can copy its output from the @file{*Messages*} buffer.
 
 @item
 A description of what behavior you observe that you believe is
-incorrect.  For example, ``The Emacs process gets a fatal signal,'' or,
+incorrect.  For example, ``The Emacs process gets a fatal signal'', or,
 ``The resulting text is as follows, which I think is wrong.''
 
 Of course, if the bug is that Emacs gets a fatal signal, then one can't
@@ -759,7 +759,7 @@ important to report the precise text of the error message, and a
 backtrace showing how the Lisp program in Emacs arrived at the error.
 
 To get the error message text accurately, copy it from the
-@samp{*Messages*} buffer into the bug report.  Copy all of it, not just
+@file{*Messages*} buffer into the bug report.  Copy all of it, not just
 part.
 
 @findex toggle-debug-on-error
@@ -782,6 +782,12 @@ operation, typing @kbd{C-g} with the variable @code{debug-on-quit}
 non-@code{nil} will start the Lisp debugger and show a backtrace.
 This backtrace is useful for debugging such long loops, so if you can
 produce it, copy it into the bug report.
+
+@vindex debug-on-event
+If you cannot get Emacs to respond to @kbd{C-g} (e.g., because
+@code{inhibit-quit} is set), then you can try sending the signal
+specified by @code{debug-on-event} (default SIGUSR2) from outside
+Emacs to cause it to enter the debugger.
 
 @item
 Check whether any programs you have loaded into the Lisp world,
@@ -865,7 +871,7 @@ More detailed advice and other useful techniques for debugging Emacs
 are available in the file @file{etc/DEBUG} in the Emacs distribution.
 That file also includes instructions for investigating problems
 whereby Emacs stops responding (many people assume that Emacs is
-``hung,'' whereas in fact it might be in an infinite loop).
+``hung'', whereas in fact it might be in an infinite loop).
 
 To find the file @file{etc/DEBUG} in your Emacs installation, use the
 directory name stored in the variable @code{data-directory}.
@@ -1057,7 +1063,7 @@ Please help us keep up with the workload by designing the patch in a
 form that is clearly safe to install.
 @end itemize
 
-@node Contributing, Service, Bugs, Top
+@node Contributing
 @section Contributing to Emacs Development
 @cindex contributing to Emacs
 
@@ -1082,7 +1088,7 @@ See the Emacs project page
 For more information on how to contribute, see the @file{etc/CONTRIBUTE}
 file in the Emacs distribution.
 
-@node Service, Copying, Contributing, Top
+@node Service
 @section How To Get Help with GNU Emacs
 
 If you need help installing, using or changing GNU Emacs, there are two

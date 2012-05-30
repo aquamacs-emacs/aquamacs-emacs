@@ -1,6 +1,6 @@
 ;;; abbrev.el --- abbrev mode commands for Emacs -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1987, 1992, 2001-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1985-1987, 1992, 2001-2012 Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: abbrev convenience
@@ -81,7 +81,8 @@ be replaced by its expansion."
     (clear-abbrev-table (symbol-value tablesym))))
 
 (defun copy-abbrev-table (table)
-  "Make a new abbrev-table with the same abbrevs as TABLE."
+  "Make a new abbrev-table with the same abbrevs as TABLE.
+Does not copy property lists."
   (let ((new-table (make-abbrev-table)))
     (mapatoms
      (lambda (symbol)
@@ -133,10 +134,13 @@ Otherwise display all abbrevs."
 		(push table empty-tables)
 	      (insert-abbrev-table-description table t)))
 	  (dolist (table (nreverse empty-tables))
-	    (insert-abbrev-table-description table t))))
+	    (insert-abbrev-table-description table t)))
+        ;; Note: `list-abbrevs' can display only local abbrevs, in
+        ;; which case editing could lose abbrevs of other tables. Thus
+        ;; enter `edit-abbrevs-mode' only if LOCAL is nil.
+        (edit-abbrevs-mode))
       (goto-char (point-min))
       (set-buffer-modified-p nil)
-      (edit-abbrevs-mode)
       (current-buffer))))
 
 (defun edit-abbrevs-mode ()
@@ -151,7 +155,8 @@ Otherwise display all abbrevs."
 
 (defun edit-abbrevs ()
   "Alter abbrev definitions by editing a list of them.
-Selects a buffer containing a list of abbrev definitions.
+Selects a buffer containing a list of abbrev definitions with
+point located in the abbrev table of current buffer.
 You can edit them and type \\<edit-abbrevs-map>\\[edit-abbrevs-redefine] to redefine abbrevs
 according to your editing.
 Buffer contains a header line for each abbrev table,
@@ -162,7 +167,12 @@ where NAME and EXPANSION are strings with quotes,
 USECOUNT is an integer, and HOOK is any valid function
 or may be omitted (it is usually omitted)."
   (interactive)
-  (switch-to-buffer (prepare-abbrev-list-buffer)))
+  (let ((table-name (abbrev-table-name local-abbrev-table)))
+    (switch-to-buffer (prepare-abbrev-list-buffer))
+    (when (and table-name
+               (search-forward
+                (concat "(" (symbol-name table-name) ")\n\n") nil t))
+      (goto-char (match-end 0)))))
 
 (defun edit-abbrevs-redefine ()
   "Redefine abbrevs according to current buffer contents."
@@ -191,7 +201,8 @@ the ones defined from the buffer now."
 		      (not (eolp)))
 	  (setq name (read buf) count (read buf))
 	  (if (equal count '(sys))
-	      (setq sys t count (read buf)))
+	      (setq sys t count (read buf))
+	    (setq sys nil))
 	  (setq exp (read buf))
 	  (skip-chars-backward " \t\n\f")
 	  (setq hook (if (not (eolp)) (read buf)))
@@ -446,6 +457,7 @@ PROPS is a list of properties."
     table))
 
 (defun abbrev-table-p (object)
+  "Return non-nil if OBJECT is an abbrev table."
   (and (vectorp object)
        (numberp (abbrev-table-get object :abbrev-table-modiff))))
 
@@ -471,7 +483,8 @@ for any particular abbrev defined in both.")
 (defvar abbrev-minor-mode-table-alist nil
   "Alist of abbrev tables to use for minor modes.
 Each element looks like (VARIABLE . ABBREV-TABLE);
-ABBREV-TABLE is active whenever VARIABLE's value is non-nil.")
+ABBREV-TABLE is active whenever VARIABLE's value is non-nil.
+ABBREV-TABLE can also be a list of abbrev tables.")
 
 (defvar fundamental-mode-abbrev-table
   (let ((table (make-abbrev-table)))
@@ -546,6 +559,12 @@ it is called after EXPANSION is inserted.
 If EXPANSION is not a string (and not nil), the abbrev is a
  special one, which does not expand in the usual way but only
  runs HOOK.
+
+If HOOK is a non-nil symbol with a non-nil `no-self-insert' property,
+it can control whether the character that triggered abbrev expansion
+is inserted.  If such a HOOK returns non-nil, the character is not
+inserted.  If such a HOOK returns nil, then so does `abbrev-insert'
+\(and `expand-abbrev'), as if no abbrev expansion had taken place.
 
 PROPS is a property list.  The following properties are special:
 - `:count': the value for the abbrev's usage-count, which is incremented each
@@ -745,7 +764,9 @@ If non-nil, NAME is the name by which this abbrev was found.
 If non-nil, WORDSTART is the place where to insert the abbrev.
 If WORDEND is non-nil, the abbrev replaces the previous text between
 WORDSTART and WORDEND.
-Return ABBREV if the expansion should be considered as having taken place."
+Return ABBREV if the expansion should be considered as having taken place.
+The return value can be influenced by a `no-self-insert' property;
+see `define-abbrev' for details."
   (unless name (setq name (symbol-name abbrev)))
   (unless wordstart (setq wordstart (point)))
   (unless wordend (setq wordend wordstart))
@@ -810,7 +831,8 @@ the abbrev symbol if expansion took place.")
 (defun expand-abbrev ()
   "Expand the abbrev before point, if there is an abbrev there.
 Effective when explicitly called even when `abbrev-mode' is nil.
-Returns the abbrev symbol, if expansion took place."
+Returns the abbrev symbol, if expansion took place.  (The actual
+return value is that of `abbrev-insert'.)"
   (interactive)
   (run-hooks 'pre-abbrev-expand-hook)
   (with-wrapper-hook abbrev-expand-functions ()
@@ -933,9 +955,11 @@ Properties with special meaning:
   abbreviations.
 - `:case-fixed' non-nil means that abbreviations are looked up without
   case-folding, and the expansion is not capitalized/upcased.
-- `:regexp' describes the form of abbrevs.  It defaults to \\=\\<\\(\\w+\\)\\W* which
-  means that an abbrev can only be a single word.  The submatch 1 is treated
-  as the potential name of an abbrev.
+- `:regexp' is a regular expression that specifies how to extract the
+  name of the abbrev before point.  The submatch 1 is treated
+  as the potential name of an abbrev.  If :regexp is nil, the default
+  behavior uses `backward-word' and `forward-word' to extract the name
+  of the abbrev, which can therefore only be a single word.
 - `:enable-function' can be set to a function of no argument which returns
   non-nil if and only if the abbrevs in this table should be used for this
   instance of `expand-abbrev'."

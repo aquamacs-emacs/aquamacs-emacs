@@ -62,7 +62,7 @@
 ;;; User Customizable Internal Variables:
 
 (defgroup tramp nil
-  "Edit remote files with a combination of rsh and rcp or similar programs."
+  "Edit remote files with a combination of ssh, scp, etc."
   :group 'files
   :group 'comm
   :version "22.1")
@@ -70,13 +70,13 @@
 ;; Maybe we need once a real Tramp mode, with key bindings etc.
 ;;;###autoload
 (defcustom tramp-mode t
-  "*Whether Tramp is enabled.
+  "Whether Tramp is enabled.
 If it is set to nil, all remote file names are used literally."
   :group 'tramp
   :type 'boolean)
 
 (defcustom tramp-verbose 3
-  "*Verbosity level for Tramp messages.
+  "Verbosity level for Tramp messages.
 Any level x includes messages for all levels 1 .. x-1.  The levels are
 
  0  silent (no tramp messages at all)
@@ -137,7 +137,7 @@ policy for local files."
       :group 'tramp)))
 
 (defcustom tramp-auto-save-directory nil
-  "*Put auto-save files in this directory, if set.
+  "Put auto-save files in this directory, if set.
 The idea is to use a local directory so that auto-saving is faster."
   :group 'tramp
   :type '(choice (const nil) string))
@@ -146,7 +146,7 @@ The idea is to use a local directory so that auto-saving is faster."
   (if (memq system-type '(windows-nt))
       (getenv "COMSPEC")
     "/bin/sh")
-  "*Use this program for encoding and decoding commands on the local host.
+  "Use this program for encoding and decoding commands on the local host.
 This shell is used to execute the encoding and decoding command on the
 local host, so if you want to use `~' in those commands, you should
 choose a shell here which groks tilde expansion.  `/bin/sh' normally
@@ -172,21 +172,22 @@ use for the remote host."
   (if (string-match "cmd\\.exe" tramp-encoding-shell)
       "/c"
     "-c")
-  "*Use this switch together with `tramp-encoding-shell' for local commands.
+  "Use this switch together with `tramp-encoding-shell' for local commands.
 See the variable `tramp-encoding-shell' for more information."
   :group 'tramp
   :type 'string)
 
 (defcustom tramp-encoding-command-interactive
   (unless (string-match "cmd\\.exe" tramp-encoding-shell) "-i")
-  "*Use this switch together with `tramp-encoding-shell' for interactive shells.
+  "Use this switch together with `tramp-encoding-shell' for interactive shells.
 See the variable `tramp-encoding-shell' for more information."
+  :version "24.1"
   :group 'tramp
   :type '(choice (const nil) string))
 
 ;;;###tramp-autoload
 (defvar tramp-methods nil
-  "*Alist of methods for remote files.
+  "Alist of methods for remote files.
 This is a list of entries of the form (NAME PARAM1 PARAM2 ...).
 Each NAME stands for a remote access method.  Each PARAM is a
 pair of the form (KEY VALUE).  The following KEYs are defined:
@@ -333,7 +334,7 @@ shouldn't return t when it isn't."
      (t "ssh")))
    ;; Fallback.
    (t "ftp"))
-  "*Default method to use for transferring files.
+  "Default method to use for transferring files.
 See `tramp-methods' for possibilities.
 Also see `tramp-default-method-alist'."
   :group 'tramp
@@ -341,7 +342,7 @@ Also see `tramp-default-method-alist'."
 
 ;;;###tramp-autoload
 (defcustom tramp-default-method-alist nil
-  "*Default method to use for specific host/user pairs.
+  "Default method to use for specific host/user pairs.
 This is an alist of items (HOST USER METHOD).  The first matching item
 specifies the method to use for a file name which does not specify a
 method.  HOST and USER are regular expressions or nil, which is
@@ -358,7 +359,7 @@ See `tramp-methods' for a list of possibilities for METHOD."
 		       (choice :tag "Method name" string (const nil)))))
 
 (defcustom tramp-default-user nil
-  "*Default user to use for transferring files.
+  "Default user to use for transferring files.
 It is nil by default; otherwise settings in configuration files like
 \"~/.ssh/config\" would be overwritten.  Also see `tramp-default-user-alist'.
 
@@ -368,7 +369,7 @@ This variable is regarded as obsolete, and will be removed soon."
 
 ;;;###tramp-autoload
 (defcustom tramp-default-user-alist nil
-  "*Default user to use for specific method/host pairs.
+  "Default user to use for specific method/host pairs.
 This is an alist of items (METHOD HOST USER).  The first matching item
 specifies the user to use for a file name which does not specify a
 user.  METHOD and USER are regular expressions or nil, which is
@@ -383,13 +384,13 @@ empty string for the method name."
 		       (choice :tag "    User name" string (const nil)))))
 
 (defcustom tramp-default-host (system-name)
-  "*Default host to use for transferring files.
+  "Default host to use for transferring files.
 Useful for su and sudo methods mostly."
   :group 'tramp
   :type 'string)
 
 (defcustom tramp-default-proxies-alist nil
-  "*Route to be followed for specific host/user pairs.
+  "Route to be followed for specific host/user pairs.
 This is an alist of items (HOST USER PROXY).  The first matching
 item specifies the proxy to be passed for a file name located on
 a remote target matching USER@HOST.  HOST and USER are regular
@@ -414,10 +415,10 @@ interpreted as a regular expression which always matches."
    (regexp-opt
     (list "localhost" "localhost6" (system-name) "127\.0\.0\.1" "::1") t)
    "\\'")
-  "*Host names which are regarded as local host.")
+  "Host names which are regarded as local host.")
 
 (defvar tramp-completion-function-alist nil
-  "*Alist of methods for remote files.
+  "Alist of methods for remote files.
 This is a list of entries of the form \(NAME PAIR1 PAIR2 ...\).
 Each NAME stands for a remote access method.  Each PAIR is of the form
 \(FUNCTION FILE\).  FUNCTION is responsible to extract user names and host
@@ -460,8 +461,15 @@ usually suffice.")
   "Regexp which matches `tramp-echo-mark' as it gets echoed by
 the remote shell.")
 
+(defcustom tramp-local-end-of-line
+  (if (memq system-type '(windows-nt)) "\r\n" "\n")
+  "String used for end of line in local processes."
+  :version "24.1"
+  :group 'tramp
+  :type 'string)
+
 (defcustom tramp-rsh-end-of-line "\n"
-  "*String used for end of line in rsh connections.
+  "String used for end of line in rsh connections.
 I don't think this ever needs to be changed, so please tell me about it
 if you need to change this.
 Also see the method parameter `tramp-password-end-of-line' and the normal
@@ -471,7 +479,7 @@ variable `tramp-default-password-end-of-line'."
 
 (defcustom tramp-default-password-end-of-line
   tramp-rsh-end-of-line
-  "*String used for end of line after sending a password.
+  "String used for end of line after sending a password.
 This variable provides the default value for the method parameter
 `tramp-password-end-of-line', see `tramp-methods' for more details.
 
@@ -486,7 +494,7 @@ The default value is to use the same value as `tramp-rsh-end-of-line'."
 
 (defcustom tramp-login-prompt-regexp
   ".*ogin\\( .*\\)?: *"
-  "*Regexp matching login-like prompts.
+  "Regexp matching login-like prompts.
 The regexp should match at end of buffer.
 
 Sometimes the prompt is reported to look like \"login as:\"."
@@ -515,7 +523,7 @@ This regexp must match both `tramp-initial-end-of-output' and
 
 (defcustom tramp-password-prompt-regexp
   "^.*\\([pP]assword\\|[pP]assphrase\\).*:\^@? *"
-  "*Regexp matching password-like prompts.
+  "Regexp matching password-like prompts.
 The regexp should match at end of buffer.
 
 The `sudo' program appears to insert a `^@' character into the prompt."
@@ -541,7 +549,7 @@ The `sudo' program appears to insert a `^@' character into the prompt."
 	  ;; Here comes a list of regexes, separated by \\|
 	  "Received signal [0-9]+"
 	  "\\).*")
-  "*Regexp matching a `login failed' message.
+  "Regexp matching a `login failed' message.
 The regexp should match at end of buffer."
   :group 'tramp
   :type 'regexp)
@@ -612,7 +620,7 @@ The answer will be provided by `tramp-action-process-alive',
   :type 'regexp)
 
 (defconst tramp-temp-name-prefix "tramp."
-  "*Prefix to use for temporary files.
+  "Prefix to use for temporary files.
 If this is a relative file name (such as \"tramp.\"), it is considered
 relative to the directory name returned by the function
 `tramp-compat-temporary-file-directory' (which see).  It may also be an
@@ -662,76 +670,76 @@ It can have the following values:
 	((equal tramp-syntax 'sep) "/[")
 	((equal tramp-syntax 'url) "/")
 	(t (error "Wrong `tramp-syntax' defined")))
-  "*String matching the very beginning of Tramp file names.
+  "String matching the very beginning of Tramp file names.
 Used in `tramp-make-tramp-file-name'.")
 
 (defconst tramp-prefix-regexp
   (concat "^" (regexp-quote tramp-prefix-format))
-  "*Regexp matching the very beginning of Tramp file names.
+  "Regexp matching the very beginning of Tramp file names.
 Should always start with \"^\". Derived from `tramp-prefix-format'.")
 
 (defconst tramp-method-regexp
   "[a-zA-Z_0-9-]+"
-  "*Regexp matching methods identifiers.")
+  "Regexp matching methods identifiers.")
 
 (defconst tramp-postfix-method-format
   (cond ((equal tramp-syntax 'ftp) ":")
 	((equal tramp-syntax 'sep) "/")
 	((equal tramp-syntax 'url) "://")
 	(t (error "Wrong `tramp-syntax' defined")))
-  "*String matching delimiter between method and user or host names.
+  "String matching delimiter between method and user or host names.
 Used in `tramp-make-tramp-file-name'.")
 
 (defconst tramp-postfix-method-regexp
   (regexp-quote tramp-postfix-method-format)
-  "*Regexp matching delimiter between method and user or host names.
+  "Regexp matching delimiter between method and user or host names.
 Derived from `tramp-postfix-method-format'.")
 
 (defconst tramp-user-regexp "[^:/ \t]+"
-  "*Regexp matching user names.")
+  "Regexp matching user names.")
 
 ;;;###tramp-autoload
 (defconst tramp-prefix-domain-format "%"
-  "*String matching delimiter between user and domain names.")
+  "String matching delimiter between user and domain names.")
 
 ;;;###tramp-autoload
 (defconst tramp-prefix-domain-regexp
   (regexp-quote tramp-prefix-domain-format)
-  "*Regexp matching delimiter between user and domain names.
+  "Regexp matching delimiter between user and domain names.
 Derived from `tramp-prefix-domain-format'.")
 
 (defconst tramp-domain-regexp "[-a-zA-Z0-9_.]+"
-  "*Regexp matching domain names.")
+  "Regexp matching domain names.")
 
 (defconst tramp-user-with-domain-regexp
   (concat "\\(" tramp-user-regexp "\\)"
 	        tramp-prefix-domain-regexp
 	  "\\(" tramp-domain-regexp "\\)")
-  "*Regexp matching user names with domain names.")
+  "Regexp matching user names with domain names.")
 
 (defconst tramp-postfix-user-format "@"
-  "*String matching delimiter between user and host names.
+  "String matching delimiter between user and host names.
 Used in `tramp-make-tramp-file-name'.")
 
 (defconst tramp-postfix-user-regexp
   (regexp-quote tramp-postfix-user-format)
-  "*Regexp matching delimiter between user and host names.
+  "Regexp matching delimiter between user and host names.
 Derived from `tramp-postfix-user-format'.")
 
 (defconst tramp-host-regexp "[a-zA-Z0-9_.-]+"
-  "*Regexp matching host names.")
+  "Regexp matching host names.")
 
 (defconst tramp-prefix-ipv6-format
   (cond ((equal tramp-syntax 'ftp) "[")
 	((equal tramp-syntax 'sep) "")
 	((equal tramp-syntax 'url) "[")
 	(t (error "Wrong `tramp-syntax' defined")))
-  "*String matching left hand side of IPv6 addresses.
+  "String matching left hand side of IPv6 addresses.
 Used in `tramp-make-tramp-file-name'.")
 
 (defconst tramp-prefix-ipv6-regexp
   (regexp-quote tramp-prefix-ipv6-format)
-  "*Regexp matching left hand side of IPv6 addresses.
+  "Regexp matching left hand side of IPv6 addresses.
 Derived from `tramp-prefix-ipv6-format'.")
 
 ;; The following regexp is a bit sloppy.  But it shall serve our
@@ -739,19 +747,19 @@ Derived from `tramp-prefix-ipv6-format'.")
 ;; "::ffff:192.168.0.1".
 (defconst tramp-ipv6-regexp
   "\\(?:\\(?:[a-zA-Z0-9]+\\)?:\\)+[a-zA-Z0-9.]+"
-  "*Regexp matching IPv6 addresses.")
+  "Regexp matching IPv6 addresses.")
 
 (defconst tramp-postfix-ipv6-format
   (cond ((equal tramp-syntax 'ftp) "]")
 	((equal tramp-syntax 'sep) "")
 	((equal tramp-syntax 'url) "]")
 	(t (error "Wrong `tramp-syntax' defined")))
-  "*String matching right hand side of IPv6 addresses.
+  "String matching right hand side of IPv6 addresses.
 Used in `tramp-make-tramp-file-name'.")
 
 (defconst tramp-postfix-ipv6-regexp
   (regexp-quote tramp-postfix-ipv6-format)
-  "*Regexp matching right hand side of IPv6 addresses.
+  "Regexp matching right hand side of IPv6 addresses.
 Derived from `tramp-postfix-ipv6-format'.")
 
 (defconst tramp-prefix-port-format
@@ -759,37 +767,37 @@ Derived from `tramp-postfix-ipv6-format'.")
 	((equal tramp-syntax 'sep) "#")
 	((equal tramp-syntax 'url) ":")
 	(t (error "Wrong `tramp-syntax' defined")))
-  "*String matching delimiter between host names and port numbers.")
+  "String matching delimiter between host names and port numbers.")
 
 (defconst tramp-prefix-port-regexp
   (regexp-quote tramp-prefix-port-format)
-  "*Regexp matching delimiter between host names and port numbers.
+  "Regexp matching delimiter between host names and port numbers.
 Derived from `tramp-prefix-port-format'.")
 
 (defconst tramp-port-regexp "[0-9]+"
-  "*Regexp matching port numbers.")
+  "Regexp matching port numbers.")
 
 (defconst tramp-host-with-port-regexp
   (concat "\\(" tramp-host-regexp "\\)"
 	        tramp-prefix-port-regexp
 	  "\\(" tramp-port-regexp "\\)")
-  "*Regexp matching host names with port numbers.")
+  "Regexp matching host names with port numbers.")
 
 (defconst tramp-postfix-host-format
   (cond ((equal tramp-syntax 'ftp) ":")
 	((equal tramp-syntax 'sep) "]")
 	((equal tramp-syntax 'url) "")
 	(t (error "Wrong `tramp-syntax' defined")))
-  "*String matching delimiter between host names and localnames.
+  "String matching delimiter between host names and localnames.
 Used in `tramp-make-tramp-file-name'.")
 
 (defconst tramp-postfix-host-regexp
   (regexp-quote tramp-postfix-host-format)
-  "*Regexp matching delimiter between host names and localnames.
+  "Regexp matching delimiter between host names and localnames.
 Derived from `tramp-postfix-host-format'.")
 
 (defconst tramp-localname-regexp ".*$"
-  "*Regexp matching localnames.")
+  "Regexp matching localnames.")
 
 ;;; File name format:
 
@@ -808,7 +816,7 @@ Derived from `tramp-postfix-host-format'.")
     "\\(" tramp-localname-regexp "\\)")
    2 4 5 8)
 
-  "*List of five elements (REGEXP METHOD USER HOST FILE), detailing \
+  "List of five elements (REGEXP METHOD USER HOST FILE), detailing \
 the Tramp file name structure.
 
 The first element REGEXP is a regular expression matching a Tramp file
@@ -852,7 +860,7 @@ See `tramp-file-name-structure' for more explanations.")
 	((equal tramp-syntax 'sep) tramp-file-name-regexp-separate)
 	((equal tramp-syntax 'url) tramp-file-name-regexp-url)
 	(t (error "Wrong `tramp-syntax' defined")))
-  "*Regular expression matching file names handled by Tramp.
+  "Regular expression matching file names handled by Tramp.
 This regexp should match Tramp file names but no other file names.
 When tramp.el is loaded, this regular expression is prepended to
 `file-name-handler-alist', and that is searched sequentially.  Thus,
@@ -896,7 +904,7 @@ See `tramp-file-name-structure' for more explanations.")
 	((equal tramp-syntax 'sep) tramp-completion-file-name-regexp-separate)
 	((equal tramp-syntax 'url) tramp-completion-file-name-regexp-url)
 	(t (error "Wrong `tramp-syntax' defined")))
-  "*Regular expression matching file names handled by Tramp completion.
+  "Regular expression matching file names handled by Tramp completion.
 This regexp should match partial Tramp file names only.
 
 Please note that the entry in `file-name-handler-alist' is made when
@@ -918,7 +926,7 @@ Also see `tramp-file-name-structure'.")
 ;; Parentheses in docstring starting at beginning of line are escaped.
 ;; Fontification is messed up when
 ;; `open-paren-in-column-0-is-defun-start' set to t.
-  "*If non-nil, chunksize for sending input to local process.
+  "If non-nil, chunksize for sending input to local process.
 It is necessary only on systems which have a buggy `process-send-string'
 implementation.  The necessity, whether this variable must be set, can be
 checked via the following code:
@@ -1642,7 +1650,7 @@ been set up by `rfn-eshadow-setup-minibuffer'."
 ;; applied might be not so efficient (Ange-FTP uses hashes). But
 ;; performance isn't the major issue given that file transfer will
 ;; take time.
-(defvar tramp-inodes nil
+(defvar tramp-inodes 0
   "Keeps virtual inodes numbers.")
 
 ;; Devices must distinguish physical file systems.  The device numbers
@@ -1650,7 +1658,7 @@ been set up by `rfn-eshadow-setup-minibuffer'."
 ;; So we use virtual device numbers, generated by Tramp.  Both Ange-FTP and
 ;; EFS use device number "-1".  In order to be different, we use device number
 ;; (-1 . x), whereby "x" is unique for a given (method user host).
-(defvar tramp-devices nil
+(defvar tramp-devices 0
   "Keeps virtual device numbers.")
 
 (defun tramp-default-file-modes (filename)
@@ -1801,6 +1809,8 @@ ARGS are the arguments OPERATION has been called with."
 		  'file-newer-than-file-p 'make-symbolic-link 'rename-file
 		  ;; Emacs 23+ only.
 		  'copy-directory
+		  ;; Emacs 24+ only.
+		  'file-equal-p 'file-in-directory-p
 		  ;; XEmacs only.
 		  'dired-make-relative-symlink
 		  'vm-imap-move-mail 'vm-pop-move-mail 'vm-spool-move-mail))
@@ -1902,7 +1912,7 @@ Falls back to normal file name handler if no Tramp file name handler exists."
 		  ;; operations shall return at least a default value
 		  ;; in order to give the user a chance to correct the
 		  ;; file name in the minibuffer.
-		  ;; We cannot use 'debug as error handler.  In order
+		  ;; We cannot use `debug' as error handler.  In order
 		  ;; to get a full backtrace, one could apply
 		  ;;   (setq debug-on-error t debug-on-signal t)
 		  (error
@@ -3109,23 +3119,26 @@ beginning of local filename are not substituted."
 (defun tramp-action-login (proc vec)
   "Send the login name."
   (when (not (stringp tramp-current-user))
-    (save-window-excursion
-      (let ((enable-recursive-minibuffers t))
-	(pop-to-buffer (tramp-get-connection-buffer vec))
-	(setq tramp-current-user (read-string (match-string 0))))))
-  (tramp-message vec 3 "Sending login name `%s'" tramp-current-user)
+    (setq tramp-current-user
+	  (with-connection-property vec "login-as"
+	    (save-window-excursion
+	      (let ((enable-recursive-minibuffers t))
+		(pop-to-buffer (tramp-get-connection-buffer vec))
+		(read-string (match-string 0)))))))
   (with-current-buffer (tramp-get-connection-buffer vec)
     (tramp-message vec 6 "\n%s" (buffer-string)))
-  (tramp-send-string vec tramp-current-user))
+  (tramp-message vec 3 "Sending login name `%s'" tramp-current-user)
+  (tramp-send-string vec (concat tramp-current-user tramp-local-end-of-line)))
 
 (defun tramp-action-password (proc vec)
   "Query the user for a password."
   (with-current-buffer (process-buffer proc)
-    (tramp-check-for-regexp proc tramp-password-prompt-regexp)
-    (tramp-message vec 3 "Sending %s" (match-string 1))
-    (tramp-enter-password proc)
-    ;; Hide password prompt.
-    (narrow-to-region (point-max) (point-max))))
+    (let ((enable-recursive-minibuffers t))
+      (tramp-check-for-regexp proc tramp-password-prompt-regexp)
+      (tramp-message vec 3 "Sending %s" (match-string 1))
+      (tramp-enter-password proc)
+      ;; Hide password prompt.
+      (narrow-to-region (point-max) (point-max)))))
 
 (defun tramp-action-succeed (proc vec)
   "Signal success in finding shell prompt."
@@ -3148,7 +3161,7 @@ See also `tramp-action-yn'."
 	(throw 'tramp-action 'permission-denied))
       (with-current-buffer (tramp-get-connection-buffer vec)
 	(tramp-message vec 6 "\n%s" (buffer-string)))
-      (tramp-send-string vec "yes"))))
+      (tramp-send-string vec (concat "yes" tramp-local-end-of-line)))))
 
 (defun tramp-action-yn (proc vec)
   "Ask the user for confirmation using `y-or-n-p'.
@@ -3162,7 +3175,7 @@ See also `tramp-action-yesno'."
 	(throw 'tramp-action 'permission-denied))
       (with-current-buffer (tramp-get-connection-buffer vec)
 	(tramp-message vec 6 "\n%s" (buffer-string)))
-      (tramp-send-string vec "y"))))
+      (tramp-send-string vec (concat "y" tramp-local-end-of-line)))))
 
 (defun tramp-action-terminal (proc vec)
   "Tell the remote host which terminal type to use.
@@ -3170,7 +3183,7 @@ The terminal type can be configured with `tramp-terminal-type'."
   (tramp-message vec 5 "Setting `%s' as terminal type." tramp-terminal-type)
   (with-current-buffer (tramp-get-connection-buffer vec)
     (tramp-message vec 6 "\n%s" (buffer-string)))
-  (tramp-send-string vec tramp-terminal-type))
+  (tramp-send-string vec (concat tramp-terminal-type tramp-local-end-of-line)))
 
 (defun tramp-action-process-alive (proc vec)
   "Check, whether a process has finished."
@@ -3400,28 +3413,14 @@ the remote host use line-endings as defined in the variable
 (defun tramp-get-inode (vec)
   "Returns the virtual inode number.
 If it doesn't exist, generate a new one."
-  (let ((string (tramp-make-tramp-file-name
-		 (tramp-file-name-method vec)
-		 (tramp-file-name-user vec)
-		 (tramp-file-name-host vec)
-		 "")))
-    (unless (assoc string tramp-inodes)
-      (add-to-list 'tramp-inodes
-		   (list string (length tramp-inodes))))
-    (nth 1 (assoc string tramp-inodes))))
+  (with-file-property vec (tramp-file-name-localname vec) "inode"
+    (setq tramp-inodes (1+ tramp-inodes))))
 
 (defun tramp-get-device (vec)
   "Returns the virtual device number.
 If it doesn't exist, generate a new one."
-  (let ((string (tramp-make-tramp-file-name
-		 (tramp-file-name-method vec)
-		 (tramp-file-name-user vec)
-		 (tramp-file-name-host vec)
-		 "")))
-    (unless (assoc string tramp-devices)
-      (add-to-list 'tramp-devices
-		   (list string (length tramp-devices))))
-    (cons -1 (nth 1 (assoc string tramp-devices)))))
+  (with-connection-property (tramp-get-connection-process vec) "device"
+    (cons -1 (setq tramp-devices (1+ tramp-devices)))))
 
 (defun tramp-equal-remote (file1 file2)
   "Check, whether the remote parts of FILE1 and FILE2 are identical.

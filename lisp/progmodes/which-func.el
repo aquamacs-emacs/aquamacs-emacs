@@ -1,6 +1,6 @@
 ;;; which-func.el --- print current function in mode line
 
-;; Copyright (C) 1994, 1997-1998, 2001-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1994, 1997-1998, 2001-2012 Free Software Foundation, Inc.
 
 ;; Author:   Alex Rezinsky <alexr@msil.sps.mot.com>
 ;;           (doesn't seem to be responsive any more)
@@ -68,18 +68,19 @@
   "String to display in the mode line when current function is unknown.")
 
 (defgroup which-func nil
-  "Mode to display the current function name in the modeline."
+  "Display the current function name in the modeline."
   :group 'tools
   :version "20.3")
 
-(defcustom which-func-modes
-  '(emacs-lisp-mode c-mode c++-mode perl-mode cperl-mode python-mode
-		    makefile-mode sh-mode fortran-mode f90-mode ada-mode
-		    diff-mode)
+(defcustom which-func-modes t
+  ;; '(emacs-lisp-mode c-mode c++-mode objc-mode perl-mode cperl-mode python-mode
+  ;;       	    makefile-mode sh-mode fortran-mode f90-mode ada-mode
+  ;;       	    diff-mode)
   "List of major modes for which Which Function mode should be used.
 For other modes it is disabled.  If this is equal to t,
 then Which Function mode is enabled in any major mode that supports it."
   :group 'which-func
+  :version "24.2"                       ; explicit list -> t
   :type '(choice (const :tag "All modes" t)
 		 (repeat (symbol :tag "Major mode"))))
 
@@ -178,7 +179,9 @@ and you want to simplify them for the mode line
 (defvar which-func-table (make-hash-table :test 'eq :weakness 'key))
 
 (defconst which-func-current
-  '(:eval (gethash (selected-window) which-func-table which-func-unknown)))
+  '(:eval (replace-regexp-in-string
+	   "%" "%%"
+	   (gethash (selected-window) which-func-table which-func-unknown))))
 ;;;###autoload (put 'which-func-current 'risky-local-variable t)
 
 (defvar which-func-mode nil
@@ -206,7 +209,8 @@ It creates the Imenu index for the buffer, if necessary."
 	  (setq imenu--index-alist
 		(save-excursion (funcall imenu-create-index-function))))
     (error
-     (unless (equal err '(error "This buffer cannot use `imenu-default-create-index-function'"))
+     (unless (equal err
+                    '(user-error "This buffer cannot use `imenu-default-create-index-function'"))
        (message "which-func-ff-hook error: %S" err))
      (setq which-func-mode nil))))
 

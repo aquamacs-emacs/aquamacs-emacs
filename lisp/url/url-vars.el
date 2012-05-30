@@ -21,8 +21,6 @@
 
 ;;; Code:
 
-(require 'mm-util)
-
 (defconst url-version "Emacs"
   "Version number of URL package.")
 
@@ -212,7 +210,7 @@ Should be an assoc list of headers/contents.")
 
 ;; FIXME!!  (RFC 2616 gives examples like `compress, gzip'.)
 (defvar url-mime-encoding-string nil
-  "*String to send in the Accept-encoding: field in HTTP requests.")
+  "String to send in the Accept-encoding: field in HTTP requests.")
 
 ;; Perhaps the first few should actually be given decreasing `q's and
 ;; the list should be trimmed significantly.
@@ -221,6 +219,7 @@ Should be an assoc list of headers/contents.")
 (defun url-mime-charset-string ()
   "Generate a list of preferred MIME charsets for HTTP requests.
 Generated according to current coding system priorities."
+  (require 'mm-util)
   (if (fboundp 'sort-coding-systems)
       (let ((ordered (sort-coding-systems
 		      (let (accum)
@@ -233,7 +232,7 @@ Generated according to current coding system priorities."
 		";q=0.5"))))
 
 (defvar url-mime-charset-string nil
-  "*String to send in the Accept-charset: field in HTTP requests.
+  "String to send in the Accept-charset: field in HTTP requests.
 The MIME charset corresponding to the most preferred coding system is
 given priority 1 and the rest are given priority 0.5.")
 
@@ -304,8 +303,12 @@ undefined."
   :type '(choice (const :tag "None" :value nil) string)
   :group 'url)
 
+;; From RFC3986: Scheme names consist of a sequence of characters
+;; beginning with a letter and followed by any combination of letters,
+;; digits, plus ("+"), period ("."), or hyphen ("-").
+
 (defvar url-nonrelative-link
-  "\\`\\([-a-zA-Z0-9+.]+:\\)"
+  "\\`\\([a-zA-Z][-a-zA-Z0-9+.]*:\\)"
   "A regular expression that will match an absolute URL.")
 
 (defcustom url-max-redirections 30
@@ -364,7 +367,7 @@ Currently supported methods:
 
 (defvar url-parse-syntax-table
   (copy-syntax-table emacs-lisp-mode-syntax-table)
-  "*A syntax table for parsing URLs.")
+  "A syntax table for parsing URLs.")
 
 (modify-syntax-entry ?' "\"" url-parse-syntax-table)
 (modify-syntax-entry ?` "\"" url-parse-syntax-table)
@@ -373,7 +376,7 @@ Currently supported methods:
 (modify-syntax-entry ?/ " " url-parse-syntax-table)
 
 (defvar url-load-hook nil
-  "*Hooks to be run after initializing the URL library.")
+  "Hooks to be run after initializing the URL library.")
 
 ;;; Make OS/2 happy - yeeks
 ;; (defvar	tcp-binary-process-input-services nil

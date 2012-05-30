@@ -1,6 +1,6 @@
 ;;; rcirc.el --- default, simple IRC client.
 
-;; Copyright (C) 2005-2012  Free Software Foundation, Inc.
+;; Copyright (C) 2005-2012 Free Software Foundation, Inc.
 
 ;; Author: Ryan Yeske <rcyeske@gmail.com>
 ;; Maintainers: Ryan Yeske <rcyeske@gmail.com>,
@@ -139,12 +139,12 @@ for connections using SSL/TLS."
   :group 'rcirc)
 
 (defcustom rcirc-fill-flag t
-  "*Non-nil means line-wrap messages printed in channel buffers."
+  "Non-nil means line-wrap messages printed in channel buffers."
   :type 'boolean
   :group 'rcirc)
 
 (defcustom rcirc-fill-column nil
-  "*Column beyond which automatic line-wrapping should happen.
+  "Column beyond which automatic line-wrapping should happen.
 If nil, use value of `fill-column'.  If 'frame-width, use the
 maximum frame width."
   :type '(choice (const :tag "Value of `fill-column'")
@@ -153,7 +153,7 @@ maximum frame width."
   :group 'rcirc)
 
 (defcustom rcirc-fill-prefix nil
-  "*Text to insert before filled lines.
+  "Text to insert before filled lines.
 If nil, calculate the prefix dynamically to line up text
 underneath each nick."
   :type '(choice (const :tag "Dynamic" nil)
@@ -174,23 +174,23 @@ Use the command `rcirc-omit-mode' to change this variable.")
 (make-variable-buffer-local 'rcirc-omit-mode)
 
 (defcustom rcirc-time-format "%H:%M "
-  "*Describes how timestamps are printed.
+  "Describes how timestamps are printed.
 Used as the first arg to `format-time-string'."
   :type 'string
   :group 'rcirc)
 
 (defcustom rcirc-input-ring-size 1024
-  "*Size of input history ring."
+  "Size of input history ring."
   :type 'integer
   :group 'rcirc)
 
 (defcustom rcirc-read-only-flag t
-  "*Non-nil means make text in IRC buffers read-only."
+  "Non-nil means make text in IRC buffers read-only."
   :type 'boolean
   :group 'rcirc)
 
 (defcustom rcirc-buffer-maximum-lines nil
-  "*The maximum size in lines for rcirc buffers.
+  "The maximum size in lines for rcirc buffers.
 Channel buffers are truncated from the top to be no greater than this
 number.  If zero or nil, no truncating is done."
   :type '(choice (const :tag "No truncation" nil)
@@ -198,7 +198,7 @@ number.  If zero or nil, no truncating is done."
   :group 'rcirc)
 
 (defcustom rcirc-scroll-show-maximum-output t
-  "*If non-nil, scroll buffer to keep the point at the bottom of
+  "If non-nil, scroll buffer to keep the point at the bottom of
 the window."
   :type 'boolean
   :group 'rcirc)
@@ -244,13 +244,13 @@ Examples:
   :group 'rcirc)
 
 (defcustom rcirc-auto-authenticate-flag t
-  "*Non-nil means automatically send authentication string to server.
+  "Non-nil means automatically send authentication string to server.
 See also `rcirc-authinfo'."
   :type 'boolean
   :group 'rcirc)
 
 (defcustom rcirc-authenticate-before-join t
-  "*Non-nil means authenticate to services before joining channels.
+  "Non-nil means authenticate to services before joining channels.
 Currently only works with NickServ on some networks."
   :version "24.1"
   :type 'boolean
@@ -359,6 +359,14 @@ of a line.  The string is passed as the first argument to
 `format' with the nickname as the second argument."
   :version "24.1"
   :type 'string
+  :group 'rcirc)
+
+(defcustom rcirc-kill-channel-buffers nil
+  "When non-nil, kill channel buffers when the server buffer is killed.
+Only the channel buffers associated with the server in question
+will be killed."
+  :version "24.2"
+  :type 'boolean
   :group 'rcirc)
 
 (defvar rcirc-nick nil)
@@ -471,7 +479,8 @@ If ARG is non-nil, instead prompt for connection parameters."
 			     rcirc-default-full-name))
 	      (channels (plist-get (cdr c) :channels))
               (password (plist-get (cdr c) :password))
-              (encryption (plist-get (cdr c) :encryption)))
+              (encryption (plist-get (cdr c) :encryption))
+              contact)
 	  (when server
 	    (let (connected)
 	      (dolist (p (rcirc-process-list))
@@ -483,10 +492,11 @@ If ARG is non-nil, instead prompt for connection parameters."
 				     full-name channels password encryption)
 		    (quit (message "Quit connecting to %s" server)))
 		(with-current-buffer (process-buffer connected)
-		  (setq connected-servers
-			(cons (process-contact (get-buffer-process
-						(current-buffer)) :host)
-			      connected-servers))))))))
+                  (setq contact (process-contact
+                                 (get-buffer-process (current-buffer)) :host))
+                  (setq connected-servers
+                        (cons (if (stringp contact) contact server)
+                              connected-servers))))))))
       (when connected-servers
 	(message "Already connected to %s"
 		 (if (cdr connected-servers)
@@ -1088,12 +1098,20 @@ Logfiles are kept in `rcirc-log-directory'."
   :group 'rcirc)
 
 (defun rcirc-kill-buffer-hook ()
-  "Part the channel when killing an rcirc buffer."
+  "Part the channel when killing an rcirc buffer.
+
+If `rcirc-kill-channel-buffers' is non-nil and the killed buffer
+is a server buffer, kills all of the channel buffers associated
+with it."
   (when (eq major-mode 'rcirc-mode)
     (when (and rcirc-log-flag
                rcirc-log-directory)
       (rcirc-log-write))
-    (rcirc-clean-up-buffer "Killed buffer")))
+    (rcirc-clean-up-buffer "Killed buffer")
+    (when (and rcirc-buffer-alist ;; it's a server buffer
+               rcirc-kill-channel-buffers)
+      (dolist (channel rcirc-buffer-alist)
+	(kill-buffer (cdr channel))))))
 
 (defun rcirc-change-major-mode-hook ()
   "Part the channel when changing the major-mode."
@@ -1261,7 +1279,10 @@ Create the buffer if it doesn't exist."
   "Keymap for multiline mode in rcirc.")
 
 (define-minor-mode rcirc-multiline-minor-mode
-  "Minor mode for editing multiple lines in rcirc."
+  "Minor mode for editing multiple lines in rcirc.
+With a prefix argument ARG, enable the mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode
+if ARG is omitted or nil."
   :init-value nil
   :lighter " rcirc-mline"
   :keymap rcirc-multiline-minor-mode-map
@@ -1779,7 +1800,10 @@ This function does not alter the INPUT string."
 
 ;;;###autoload
 (define-minor-mode rcirc-track-minor-mode
-  "Global minor mode for tracking activity in rcirc buffers."
+  "Global minor mode for tracking activity in rcirc buffers.
+With a prefix argument ARG, enable the mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode
+if ARG is omitted or nil."
   :init-value nil
   :lighter ""
   :keymap rcirc-track-minor-mode-map
@@ -2378,6 +2402,7 @@ keywords when no KEYWORD is given."
     (delete-region (match-beginning 1) (match-end 1))
     (goto-char (match-beginning 1)))
   ;; remove the ^O characters now
+  (goto-char (point-min))
   (while (re-search-forward "\C-o+" nil t)
     (delete-region (match-beginning 0) (match-end 0))))
 

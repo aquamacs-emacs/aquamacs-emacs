@@ -61,16 +61,15 @@ For example, invoke `emacs -batch -f batch-unrmail RMAIL'."
 	(error "This file is not in Babyl format"))
 
     ;; Decode the file contents just as Rmail did.
-    (let ((modifiedp (buffer-modified-p))
-	  (coding-system rmail-file-coding-system)
+    (let ((coding-system rmail-file-coding-system)
 	  from to)
       (goto-char (point-min))
       (search-forward "\n\^_" nil t)	; Skip BABYL header.
-      (if (= (setq from (point)) (point-max))
-	  (error "The input file contains no messages"))
+      (setq from (point))
       (goto-char (point-max))
       (search-backward "\n\^_" from 'mv)
-      (setq to (point))
+      (if (= from (setq to (point)))
+	  (error "The input file contains no messages"))
       (unless (and coding-system
 		   (coding-system-p coding-system))
 	(setq coding-system

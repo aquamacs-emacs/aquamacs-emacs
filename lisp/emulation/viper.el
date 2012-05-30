@@ -87,7 +87,7 @@
 ;;    facility in the original Vi.
 ;;    First, one can execute any Emacs command while defining a
 ;;    macro, not just the Vi commands.  Second, macros are defined in a
-;;    WYSYWYG mode, using an interface to Emacs' WYSIWYG style of defining
+;;    WYSYWYG mode, using an interface to Emacs's WYSIWYG style of defining
 ;;    macros.  Third, in Viper, one can define macros that are specific to
 ;;    a given buffer, a given major mode, or macros defined for all buffers.
 ;;    The same macro name can have several different definitions:
@@ -435,7 +435,7 @@ widget."
     view-mode
     vm-mode
     vm-summary-mode)
-  "*A list of major modes that should come up in Emacs state.
+  "A list of major modes that should come up in Emacs state.
 Normally, Viper would bring buffers up in Emacs state, unless the corresponding
 major mode has been placed on `viper-vi-state-mode-list' or
 `viper-insert-state-mode-list'.  So, don't place a new mode on this list,
@@ -451,7 +451,7 @@ unless it is coming up in a wrong Viper state."
     erc-mode
     eshell-mode
     shell-mode)
-  "*A list of major modes that should come up in Vi Insert state."
+  "A list of major modes that should come up in Vi Insert state."
   :type '(repeat symbol)
   :group 'viper-misc)
 
@@ -561,7 +561,7 @@ and improving upon much of it.
       use Emacs productively, you are advised to reach user level 3 or higher.
 
       At user level 2 or higher, ^X and ^C have Emacs, not Vi, bindings;
-      ^Z toggles Vi/Emacs states; ^G is Emacs' keyboard-quit (like ^C in Vi).
+      ^Z toggles Vi/Emacs states; ^G is Emacs's keyboard-quit (like ^C in Vi).
 
    2. Vi exit functions (e.g., :wq, ZZ) work on INDIVIDUAL files -- they
       do not cause Emacs to quit, except at user level 1 (for a novice).

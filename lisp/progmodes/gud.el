@@ -58,18 +58,19 @@
 ;; GUD commands must be visible in C buffers visited by GUD
 
 (defgroup gud nil
-  "Grand Unified Debugger mode for gdb and other debuggers under Emacs.
-Supported debuggers include gdb, sdb, dbx, xdb, perldb, pdb (Python) and jdb."
+  "The \"Grand Unified Debugger\" interface.
+Supported debuggers include gdb, sdb, dbx, xdb, perldb,
+pdb (Python), and jdb."
   :group 'processes
   :group 'tools)
 
 
 (defcustom gud-key-prefix "\C-x\C-a"
   "Prefix of all GUD commands valid in C buffers."
-  :type 'string
+  :type 'key-sequence
   :group 'gud)
 
-(global-set-key (concat gud-key-prefix "\C-l") 'gud-refresh)
+(global-set-key (vconcat gud-key-prefix "\C-l") 'gud-refresh)
 (define-key ctl-x-map " " 'gud-break)	;; backward compatibility hack
 
 (defvar gud-marker-filter nil)
@@ -749,7 +750,7 @@ directory and source-file directory for your debugger."
 	   "Evaluate C dereferenced pointer expression at point.")
 
   ;; For debugging Emacs only.
-  (gud-def gud-pv "pv1 %e"      "\C-v" "Print the value of the lisp variable.")
+  (gud-def gud-pv "pv %e"      "\C-v" "Print the value of the lisp variable.")
 
   (gud-def gud-until  "until %l" "\C-u" "Continue to current line.")
   (gud-def gud-run    "run"	 nil    "Run the program.")
@@ -1046,7 +1047,7 @@ and source-file directory for your debugger."
 (defvar gud-dbx-history nil)
 
 (defcustom gud-dbx-directories nil
-  "*A list of directories that dbx should search for source code.
+  "A list of directories that dbx should search for source code.
 If nil, only source files in the program directory
 will be known to dbx.
 
@@ -1358,7 +1359,7 @@ and source-file directory for your debugger."
 (defvar gud-xdb-history nil)
 
 (defcustom gud-xdb-directories nil
-  "*A list of directories that xdb should search for source code.
+  "A list of directories that xdb should search for source code.
 If nil, only source files in the program directory
 will be known to xdb.
 
@@ -1646,8 +1647,8 @@ and source-file directory for your debugger."
   (gud-common-init command-line nil 'gud-pdb-marker-filter)
   (set (make-local-variable 'gud-minor-mode) 'pdb)
 
-  (gud-def gud-break  "break %f:%l"  "\C-b" "Set breakpoint at current line.")
-  (gud-def gud-remove "clear %f:%l"  "\C-d" "Remove breakpoint at current line")
+  (gud-def gud-break  "break %d%f:%l"  "\C-b" "Set breakpoint at current line.")
+  (gud-def gud-remove "clear %d%f:%l"  "\C-d" "Remove breakpoint at current line")
   (gud-def gud-step   "step"         "\C-s" "Step one source line with display.")
   (gud-def gud-next   "next"         "\C-n" "Step one line (skip functions).")
   (gud-def gud-cont   "continue"     "\C-r" "Continue with display.")
@@ -1811,7 +1812,7 @@ source file information.")
 
 ;; List of Java source file directories.
 (defvar gud-jdb-directories (list ".")
-  "*A list of directories that gud jdb should search for source code.
+  "A list of directories that gud jdb should search for source code.
 The file names should be absolute, or relative to the current
 directory.
 

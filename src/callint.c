@@ -97,7 +97,7 @@ r -- Region: point and mark as 2 numeric args, smallest first.  Does no I/O.
 s -- Any string.  Does not inherit the current input method.
 S -- Any symbol.
 U -- Mouse up event discarded by a previous k or K argument.
-v -- Variable name: symbol that is user-variable-p.
+v -- Variable name: symbol that is `custom-variable-p'.
 x -- Lisp expression read but not evaluated.
 X -- Lisp expression read and evaluated.
 z -- Coding system.
@@ -257,11 +257,11 @@ invoke it.  If KEYS is omitted or nil, the return value of
   Lisp_Object teml;
   Lisp_Object up_event;
   Lisp_Object enable;
-  int speccount = SPECPDL_INDEX ();
+  ptrdiff_t speccount = SPECPDL_INDEX ();
 
   /* The index of the next element of this_command_keys to examine for
      the 'e' interactive code.  */
-  int next_event;
+  ptrdiff_t next_event;
 
   Lisp_Object prefix_arg;
   char *string;
@@ -276,7 +276,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
   int foo;
   int arg_from_tty = 0;
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4, gcpro5;
-  int key_count;
+  ptrdiff_t key_count;
   int record_then_fail = 0;
 
   Lisp_Object save_this_command, save_last_command;
@@ -577,7 +577,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
 
 	case 'k':		/* Key sequence. */
 	  {
-	    int speccount1 = SPECPDL_INDEX ();
+	    ptrdiff_t speccount1 = SPECPDL_INDEX ();
 	    specbind (Qcursor_in_echo_area, Qt);
 	    /* Prompt in `minibuffer-prompt' face.  */
 	    Fput_text_property (make_number (0),
@@ -609,7 +609,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
 
 	case 'K':		/* Key sequence to be defined. */
 	  {
-	    int speccount1 = SPECPDL_INDEX ();
+	    ptrdiff_t speccount1 = SPECPDL_INDEX ();
 	    specbind (Qcursor_in_echo_area, Qt);
 	    /* Prompt in `minibuffer-prompt' face.  */
 	    Fput_text_property (make_number (0),
@@ -748,7 +748,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
 	  break;
 
 	case 'v':		/* Variable name: symbol that is
-				   user-variable-p. */
+				   custom-variable-p. */
 	  args[i] = Fread_variable (callint_message, Qnil);
 	  visargs[i] = last_minibuf_string;
 	  break;
@@ -945,7 +945,7 @@ may be set by the debugger as a reminder for itself.  */);
   Vcommand_debug_status = Qnil;
 
   DEFVAR_LISP ("mark-even-if-inactive", Vmark_even_if_inactive,
-	       doc: /* *Non-nil means you can use the mark even when inactive.
+	       doc: /* Non-nil means you can use the mark even when inactive.
 This option makes a difference in Transient Mark mode.
 When the option is non-nil, deactivation of the mark
 turns off region highlighting, but commands that use the mark

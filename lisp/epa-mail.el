@@ -47,7 +47,10 @@
 
 ;;;###autoload
 (define-minor-mode epa-mail-mode
-  "A minor-mode for composing encrypted/clearsigned mails."
+  "A minor-mode for composing encrypted/clearsigned mails.
+With a prefix argument ARG, enable the mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode
+if ARG is omitted or nil."
   nil " epa-mail" epa-mail-mode-map)
 
 (defun epa-mail--find-usable-key (keys usage)
@@ -189,7 +192,9 @@ If no one is selected, symmetric encryption will be performed.  "
 	     (if sign
 		 (epa-select-keys context
 				  "Select keys for signing.  "))))))
-  (epa-encrypt-region start end recipients sign signers))
+  ;; Don't let some read-only text stop us from encrypting.
+  (let ((inhibit-read-only t))
+    (epa-encrypt-region start end recipients sign signers)))
 
 ;;;###autoload
 (defun epa-mail-import-keys ()
@@ -202,7 +207,10 @@ Don't use this command in Lisp programs!"
 
 ;;;###autoload
 (define-minor-mode epa-global-mail-mode
-  "Minor mode to hook EasyPG into Mail mode."
+  "Minor mode to hook EasyPG into Mail mode.
+With a prefix argument ARG, enable the mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode
+if ARG is omitted or nil."
   :global t :init-value nil :group 'epa-mail :version "23.1"
   (remove-hook 'mail-mode-hook 'epa-mail-mode)
   (if epa-global-mail-mode

@@ -1,6 +1,6 @@
 ;;; semantic.el --- Semantic buffer evaluator.
 
-;; Copyright (C) 1999-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1999-2012 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax tools
@@ -550,14 +550,14 @@ is requested."
   )
 
 (defvar semantic-working-type 'percent
-  "*The type of working message to use when parsing.
+  "The type of working message to use when parsing.
 'percent means we are doing a linear parse through the buffer.
 'dynamic means we are reparsing specific tags.")
 (semantic-varalias-obsolete 'semantic-bovination-working-type
 			    'semantic-working-type "23.2")
 
 (defvar semantic-minimum-working-buffer-size (* 1024 5)
-  "*The minimum size of a buffer before working messages are displayed.
+  "The minimum size of a buffer before working messages are displayed.
 Buffers smaller than this will parse silently.
 Buffers larger than this will display the working progress bar.")
 
@@ -623,7 +623,7 @@ was marked unparseable, then do nothing, and return the cache."
 
 ;;;; Parse the whole system.
      ((semantic-parse-tree-needs-rebuild-p)
-      ;; Use Emacs' built-in progress-reporter
+      ;; Use Emacs's built-in progress-reporter
       (let ((semantic--progress-reporter
 	     (and (>= (point-max) semantic-minimum-working-buffer-size)
 		  (eq semantic-working-type 'percent)
@@ -762,7 +762,7 @@ This function returns semantic tags without overlays."
       ;; Designated to ignore.
       (setq stream (car nontermsym))
       (if stream
-	  ;; Use Emacs' built-in progress reporter:
+	  ;; Use Emacs's built-in progress reporter:
 	  (and (boundp 'semantic--progress-reporter)
 	       semantic--progress-reporter
 	       (eq semantic-working-type 'percent)

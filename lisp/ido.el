@@ -872,7 +872,7 @@ The following variables are available, but should not be changed:
   :group 'ido)
 
 (defvar ido-rewrite-file-prompt-rules nil
-  "*Alist of rewriting rules for directory names in ido prompts.
+  "Alist of rewriting rules for directory names in ido prompts.
 A list of elements of the form (FROM . TO) or (FROM . FUNC), each
 meaning to rewrite the directory name if matched by FROM by either
 substituting the matched string by TO or calling the function FUNC
@@ -893,9 +893,14 @@ Otherwise, only the current list of matches is shown."
   :type 'boolean
   :group 'ido)
 
-(defvar ido-all-frames 'visible
-  "*Argument to pass to `walk-windows' when finding visible files.
-See documentation of `walk-windows' for useful values.")
+(defcustom ido-all-frames 'visible
+  "Argument to pass to `walk-windows' when Ido is finding buffers.
+See documentation of `walk-windows' for useful values."
+  :type '(choice (const :tag "Selected frame only" nil)
+		 (const :tag "All existing frames" t)
+		 (const :tag "All visible frames" visible)
+		 (const :tag "All frames on this terminal" 0))
+  :group 'ido)
 
 (defcustom ido-minibuffer-setup-hook nil
   "Ido-specific customization of minibuffer setup.
@@ -1722,8 +1727,9 @@ This function also adds a hook to the minibuffer."
     (unless (and ido-enable-tramp-completion
 		 (string-match "\\`/[^/]*@\\'" dir))
       (setq dir (ido-final-slash dir t))))
-  (if (get-buffer ido-completion-buffer)
-      (kill-buffer ido-completion-buffer))
+  (and ido-completion-buffer
+       (get-buffer ido-completion-buffer)
+       (kill-buffer ido-completion-buffer))
   (cond
    ((equal dir ido-current-directory)
     nil)
@@ -1736,8 +1742,9 @@ This function also adds a hook to the minibuffer."
    (t
     (ido-trace "cd" dir)
     (setq ido-current-directory dir)
-    (if (get-buffer ido-completion-buffer)
-	(kill-buffer ido-completion-buffer))
+    (and ido-completion-buffer
+	 (get-buffer ido-completion-buffer)
+	 (kill-buffer ido-completion-buffer))
     (setq ido-directory-nonreadable (ido-nonreadable-directory-p dir))
     (setq ido-directory-too-big (and (not ido-directory-nonreadable)
 				     (ido-directory-too-big-p dir)))
@@ -1982,8 +1989,9 @@ If INITIAL is non-nil, it specifies the initial input string."
 					(setq ido-text-init nil))
 				      ido-completion-map nil hist))))
       (ido-trace "read-from-minibuffer" ido-final-text)
-      (if (get-buffer ido-completion-buffer)
-	  (kill-buffer ido-completion-buffer))
+      (and ido-completion-buffer
+	   (get-buffer ido-completion-buffer)
+	   (kill-buffer ido-completion-buffer))
 
       (ido-trace "\n_EXIT_" ido-exit)
 
@@ -3266,7 +3274,7 @@ for first matching file."
     (while filenames
       (setq filename (car filenames)
 	    filenames (cdr filenames))
-      (if (and (string-match "^/" filename)
+      (if (and (file-name-absolute-p filename)
 	       (file-exists-p filename))
 	  (setq d (file-name-directory filename)
 		f (file-name-nondirectory filename)
@@ -3837,8 +3845,9 @@ This is to make them appear as if they were \"virtual buffers\"."
 (defun ido-choose-completion-string (choice &rest ignored)
   (when (ido-active)
     ;; Insert the completion into the buffer where completion was requested.
-    (if (get-buffer ido-completion-buffer)
-	(kill-buffer ido-completion-buffer))
+    (and ido-completion-buffer
+	 (get-buffer ido-completion-buffer)
+	 (kill-buffer ido-completion-buffer))
     (cond
      ((ido-active t) ;; ido-use-merged-list
       (setq ido-current-directory ""
@@ -3857,7 +3866,8 @@ This is to make them appear as if they were \"virtual buffers\"."
   "Show possible completions in a *File Completions* buffer."
   (interactive)
   (setq ido-rescan nil)
-  (let ((temp-buf (get-buffer ido-completion-buffer))
+  (let ((temp-buf (and ido-completion-buffer
+		       (get-buffer ido-completion-buffer)))
 	display-it full-list)
     (if (and (eq last-command this-command) temp-buf)
 	;; scroll buffer
@@ -3876,7 +3886,7 @@ This is to make them appear as if they were \"virtual buffers\"."
 	    (scroll-other-window))
 	  (set-buffer buf))
       (setq display-it t))
-    (if display-it
+    (if (and ido-completion-buffer display-it)
 	(with-output-to-temp-buffer ido-completion-buffer
 	  (let ((completion-list (sort
 				  (cond
@@ -4148,7 +4158,6 @@ in a separate window.
 \\[ido-toggle-regexp] Toggle regexp searching.
 \\[ido-toggle-prefix] Toggle between substring and prefix matching.
 \\[ido-toggle-case] Toggle case-sensitive searching of file names.
-\\[ido-toggle-vc] Toggle version control for this file.
 \\[ido-toggle-literal] Toggle literal reading of this file.
 \\[ido-completion-help] Show list of matching files in separate window.
 \\[ido-toggle-ignore] Toggle ignoring files listed in `ido-ignore-files'."

@@ -1,6 +1,6 @@
 ;;; shell.el --- specialized comint.el for running the shell -*- lexical-binding: t -*-
 
-;; Copyright (C) 1988, 1993-1997, 2000-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1988, 1993-1997, 2000-2012 Free Software Foundation, Inc.
 
 ;; Author: Olin Shivers <shivers@cs.cmu.edu>
 ;;	Simon Marshall <simon@gnu.org>
@@ -153,13 +153,14 @@ This is a fine thing to set in your `.emacs' file."
   :type '(repeat (string :tag "Suffix"))
   :group 'shell)
 
-(defcustom shell-delimiter-argument-list nil ; '(?\| ?& ?< ?> ?\( ?\) ?\;)
+(defcustom shell-delimiter-argument-list '(?\| ?& ?< ?> ?\( ?\) ?\;)
   "List of characters to recognize as separate arguments.
 This variable is used to initialize `comint-delimiter-argument-list' in the
 shell buffer.  The value may depend on the operating system or shell."
   :type '(choice (const nil)
 		 (repeat :tag "List of characters" character))
-  :version "24.1"			; changed to nil (bug#8027)
+  ;; Reverted.
+;;  :version "24.1"			; changed to nil (bug#8027)
   :group 'shell)
 
 (defvar shell-file-name-chars
@@ -371,8 +372,57 @@ Thus, this does not include the shell's current directory.")
 
 ;;; Basic Procedures
 
-(defun shell-parse-pcomplete-arguments ()
+(defun shell--unquote&requote-argument (qstr &optional upos)
+  (unless upos (setq upos 0))
+  (let* ((qpos 0)
+         (dquotes nil)
+         (ustrs '())
+         (re (concat
+              "[\"']"
+              "\\|\\$\\(?:\\([[:alpha:]][[:alnum:]]*\\)"
+              "\\|{\\(?1:[^{}]+\\)}\\)"
+              (when (memq system-type '(ms-dos windows-nt))
+                "\\|%\\(?1:[^\\\\/]*\\)%")
+              (when comint-file-name-quote-list
+                "\\|\\\\\\(.\\)")))
+         (qupos nil)
+         (push (lambda (str end)
+                 (push str ustrs)
+                 (setq upos (- upos (length str)))
+                 (unless (or qupos (> upos 0))
+                   (setq qupos (if (< end 0) (- end) (+ upos end))))))
+         match)
+    (while (setq match (string-match re qstr qpos))
+      (funcall push (substring qstr qpos match) match)
+      (cond
+       ((match-beginning 2) (funcall push (match-string 2 qstr) (match-end 0)))
+       ((match-beginning 1) (funcall push (getenv (match-string 1 qstr))
+                                     (- (match-end 0))))
+       ((eq (aref qstr match) ?\") (setq dquotes (not dquotes)))
+       ((eq (aref qstr match) ?\')
+        (cond
+         (dquotes (funcall push "'" (match-end 0)))
+         ((< match (1+ (length qstr)))
+          (let ((end (string-match "'" qstr (1+ match))))
+            (funcall push (substring qstr (1+ match) end)
+                     (or end (length qstr)))))
+         (t nil)))
+       (t (error "Unexpected case in shell--unquote&requote-argument!")))
+      (setq qpos (match-end 0)))
+    (funcall push (substring qstr qpos) (length qstr))
+    (list (mapconcat #'identity (nreverse ustrs) "")
+          qupos #'comint-quote-filename)))
+
+(defun shell--unquote-argument (str)
+  (car (shell--unquote&requote-argument str)))
+(defun shell--requote-argument (upos qstr)
+  ;; See `completion-table-with-quoting'.
+  (let ((res (shell--unquote&requote-argument qstr upos)))
+    (cons (nth 1 res) (nth 2 res))))
+
+(defun shell--parse-pcomplete-arguments ()
   "Parse whitespace separated arguments in the current region."
+  ;; FIXME: share code with shell--unquote&requote-argument.
   (let ((begin (save-excursion (shell-backward-command 1) (point)))
 	(end (point))
 	begins args)
@@ -392,12 +442,16 @@ Thus, this does not include the shell's current directory.")
             (goto-char (match-end 0))
             (cond
              ((match-beginning 3)       ;Backslash escape.
-              (push (if (= (match-beginning 3) (match-end 3))
-                        "\\" (match-string 3))
+              (push (cond
+                     ((null comint-file-name-quote-list)
+                      (goto-char (match-beginning 3)) "\\")
+                     ((= (match-beginning 3) (match-end 3)) "\\")
+                     (t (match-string 3)))
                     arg))
              ((match-beginning 2)       ;Double quote.
-              (push (replace-regexp-in-string
-                     "\\\\\\(.\\)" "\\1" (match-string 2))
+              (push (if (null comint-file-name-quote-list) (match-string 2)
+                      (replace-regexp-in-string
+                       "\\\\\\(.\\)" "\\1" (match-string 2)))
                     arg))
              ((match-beginning 1)       ;Single quote.
               (push (match-string 1) arg))
@@ -425,10 +479,10 @@ Shell buffers.  It implements `shell-completion-execonly' for
        shell-file-name-quote-list)
   (set (make-local-variable 'comint-dynamic-complete-functions)
        shell-dynamic-complete-functions)
+  (setq-local comint-unquote-function #'shell--unquote-argument)
+  (setq-local comint-requote-function #'shell--requote-argument)
   (set (make-local-variable 'pcomplete-parse-arguments-function)
-       #'shell-parse-pcomplete-arguments)
-  (set (make-local-variable 'pcomplete-arg-quote-list)
-       (append "\\ \t\n\r\"'`$|&;(){}[]<>#" nil))
+       #'shell--parse-pcomplete-arguments)
   (set (make-local-variable 'pcomplete-termination-string)
        (cond ((not comint-completion-addsuffix) "")
              ((stringp comint-completion-addsuffix)
@@ -470,7 +524,7 @@ to continue it.
 keep this buffer's default directory the same as the shell's working directory.
 While directory tracking is enabled, the shell's working directory is displayed
 by \\[list-buffers] or \\[mouse-buffer-menu] in the `File' field.
-\\[dirs] queries the shell and resyncs Emacs' idea of what the current
+\\[dirs] queries the shell and resyncs Emacs's idea of what the current
     directory stack is.
 \\[shell-dirtrack-mode] turns directory tracking on and off.
 \(The `dirtrack' package provides an alternative implementation of this
@@ -509,6 +563,16 @@ buffer."
   (set (make-local-variable 'shell-dirstack) nil)
   (set (make-local-variable 'shell-last-dir) nil)
   (shell-dirtrack-mode 1)
+
+  ;; By default, ansi-color applies faces using overlays.  This is
+  ;; very inefficient in Shell buffers (e.g. Bug#10835).  We use a
+  ;; custom `ansi-color-apply-face-function' to convert color escape
+  ;; sequences into `font-lock-face' properties.
+  (set (make-local-variable 'ansi-color-apply-face-function)
+       (lambda (beg end face)
+	 (when face
+	   (put-text-property beg end 'font-lock-face face))))
+
   ;; This is not really correct, since the shell buffer does not really
   ;; edit this directory.  But it is useful in the buffer list and menus.
   (setq list-buffers-directory (expand-file-name default-directory))
@@ -624,7 +688,6 @@ Otherwise, one argument `-i' is passed to the shell.
 		      (read-directory-name
 		       "Default directory: " default-directory default-directory
 		       t nil))))))))
-  (require 'ansi-color)
   (setq buffer (if (or buffer (not (derived-mode-p 'shell-mode))
                        (comint-check-proc (current-buffer)))
                    (get-buffer-create (or buffer "*shell*"))

@@ -1,6 +1,6 @@
 ;;; mule.el --- basic commands for multilingual environment
 
-;; Copyright (C) 1997-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1997-2012 Free Software Foundation, Inc.
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
 ;;   2005, 2006, 2007, 2008, 2009, 2010, 2011
 ;;   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -30,6 +30,7 @@
 
 ;;; Code:
 
+;; FIXME?  Are these still relevant?  Nothing uses them AFAICS.
 (defconst mule-version "6.0 (HANACHIRUSATO)" "\
 Version number and name of this version of MULE (multilingual environment).")
 
@@ -165,7 +166,7 @@ compatibility.
 
 VALUE must be a nonnegative integer that can be used as an invalid
 code point of the charset.  If the minimum code is 0 and the maximum
-code is greater than Emacs' maximum integer value, `:invalid-code'
+code is greater than Emacs's maximum integer value, `:invalid-code'
 should not be omitted.
 
 `:code-offset'
@@ -1668,6 +1669,7 @@ in-place."
 
 ;;; FILE I/O
 
+;; TODO many elements of this list are also in inhibit-local-variables-regexps.
 (defcustom auto-coding-alist
   ;; .exe and .EXE are added to support archive-mode looking at DOS
   ;; self-extracting exe archives.
@@ -1677,7 +1679,7 @@ arc\\|zip\\|lzh\\|lha\\|zoo\\|[jew]ar\\|xpi\\|rar\\|7z\\|\
 ARC\\|ZIP\\|LZH\\|LHA\\|ZOO\\|[JEW]AR\\|XPI\\|RAR\\|7Z\\)\\'"
      . no-conversion-multibyte)
     ("\\.\\(exe\\|EXE\\)\\'" . no-conversion)
-    ("\\.\\(sx[dmicw]\\|odt\\|tar\\|tgz\\)\\'" . no-conversion)
+    ("\\.\\(sx[dmicw]\\|odt\\|tar\\|t[bg]z\\)\\'" . no-conversion)
     ("\\.\\(gz\\|Z\\|bz\\|bz2\\|xz\\|gpg\\)\\'" . no-conversion)
     ("\\.\\(jpe?g\\|png\\|gif\\|tiff?\\|p[bpgn]m\\)\\'" . no-conversion)
     ("\\.pdf\\'" . no-conversion)
@@ -1753,8 +1755,9 @@ functions, so they won't be called at all."
   :type '(repeat function))
 
 (defvar set-auto-coding-for-load nil
-  "Non-nil means look for `load-coding' property instead of `coding'.
-This is used for loading and byte-compiling Emacs Lisp files.")
+  "Non-nil means respect a \"unibyte: t\" entry in file local variables.
+Emacs binds this variable to t when loading or byte-compiling Emacs Lisp
+files.")
 
 (defun auto-coding-alist-lookup (filename)
   "Return the coding system specified by `auto-coding-alist' for FILENAME."
@@ -1833,6 +1836,8 @@ If nothing is specified, the return value is nil."
 		       (re-search-forward
 			"\\(.*;\\)?[ \t]*unibyte:[ \t]*\\([^ ;]+\\)"
 			head-end t))
+              (display-warning 'mule "`unibyte: t' is obsolete; \
+use \"coding: 'raw-text\" instead." :warning)
 	      (setq coding-system 'raw-text))
 	    (when (and (not coding-system)
 		       (re-search-forward
@@ -1885,6 +1890,8 @@ If nothing is specified, the return value is nil."
 		(goto-char pos)
 		(when (and set-auto-coding-for-load
 			   (re-search-forward re-unibyte tail-end t))
+                  (display-warning 'mule "`unibyte: t' is obsolete; \
+use \"coding: 'raw-text\" instead." :warning)
 		  (setq coding-system 'raw-text))
 		(when (and (not coding-system)
 			   (re-search-forward re-coding tail-end t))

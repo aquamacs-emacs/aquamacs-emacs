@@ -1,3 +1,128 @@
+2012-05-26  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (INSTALL_DATA): Remove; unused.
+
+2012-05-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Remove src/m/*.
+	* makefile.w32-in: Remove dependencies on
+	$(EMACS_ROOT)/src/m/intel386.h.
+
+2012-05-22  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (install): Remove unneeded chmods.
+
+2012-05-21  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Assume C89 or later.
+	* etags.c (static, const): Remove macros.
+	(PTR): Remove; all uses replaced with void *.  Omit needless casts.
+
+2012-05-21  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (insrcdir, $(DESTDIR)${archlibdir}):
+	Scrap superfluous subshells.
+
+2012-05-18  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (install): Ensure $bindir exists.
+
+2012-05-17  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (ns_appbindir): New, set by configure.
+
+2012-05-12  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (MKDIR_P): New, set by configure.
+	($(DESTDIR)${archlibdir}): Use $MKDIR_P.
+
+2012-05-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	etags: pacify gcc -Wstack-protector on Ubuntu 12.04 x86
+	* etags.c: Include <stdarg.h>.
+	(error): Declare as printf-style, as that's what it really is.
+	All uses changed.
+	(add_regex): Use single char rather than array-of-one char.
+
+2012-05-05  Jim Meyering  <meyering@redhat.com>
+
+	* lib-src/pop.c (pop_stat, pop_list, pop_multi_first, pop_last):
+	NUL-terminate the error buffer (Bug#11372).
+
+2012-05-02  Juanma Barranquero  <lekktu@gmail.com>
+
+	* emacsclient.c (min): Undef before redefining it.
+
+2012-05-02  Jim Meyering  <jim@meyering.net>
+
+	* emacsclient.c (send_to_emacs): Avoid invalid strcpy upon partial
+	send (Bug#11374).
+
+2012-04-29  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* make-docfile.c (scan_lisp_file) [DEBUG]: Also skip if and
+	byte-code forms.  (Bug#11380)
+
+2012-04-20  Chong Yidong  <cyd@gnu.org>
+
+	* emacsclient.c (decode_options): Move -t -n corner case handling
+	into server.el (Bug#11102).
+	(main): Send -tty to Emacs under more circumstances (Bug#8314).
+
+2012-04-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	configure: new option --enable-gcc-warnings (Bug#11207)
+	* Makefile.in (C_WARNINGS_SWITCH): Remove.
+	(WARN_CFLAGS, WERROR_CFLAGS): New macros.
+	(BASE_CFLAGS): Use new macros rather than old.
+
+2012-04-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Assume less-ancient POSIX support.
+	* update-game-score.c: Include <getopt.h> rather than rolling our
+	own decls for optarg, optind, opterr.  See
+	<http://lists.gnu.org/archive/html/emacs-devel/2011-12/msg00720.html>.
+
+2012-04-14  Juanma Barranquero  <lekktu@gmail.com>
+
+	* emacsclient.c (decode_options) [WINDOWSNT]:
+	Call ttyname instead of passing its address (typo in revno:106608).
+
+2012-04-07  Eli Zaretskii  <eliz@gnu.org>
+
+	* makefile.w32-in (obj): Add xml.o.
+
+2012-04-07  Eli Zaretskii  <eliz@gnu.org>
+
+	* makefile.w32-in (ALL): Now the list of executables, not of phony
+	targets.
+	(.PHONY): Only make-docfile is its prerequisite now.
+	(make-docfile): Don't depend on stamp_BLD.  Add a comment about
+	the need in this target.
+	(ctags, etags, ebrowse, hexl, movemail, emacsclient)
+	(test-distrib): Phony targets removed.
+	($(BLD)/test-distrib.exe): Run test-distrib as part of the recipe.
+	(all): Don't depend on stamp_BLD.
+	(ALL): Include $(BLD)/test-distrib.exe.
+
+2012-03-11  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* emacsclient.c (main): Handle -print-nonl command.
+
+	* emacsclient.c (main): Handle multiple messages in a single
+	datagram.
+
+	* emacsclient.c (socket_name): Add const.
+	(get_server_config): Add parameter config_file, use it instead of
+	global server_file.
+	(set_tcp_socket): Add parameter local_server_file, pass it down to
+	get_server_config.
+	(set_local_socket): Add parameter local_socket_name, use it
+	instead of global socket_name.
+	(set_socket): Adjust calls to set_local_socket and set_tcp_socket.
+	Don't clobber global server_file or socket_name.
+	(main): No longer reset server_file or socket_name.
+
 2012-01-05  Glenn Morris  <rgm@gnu.org>
 
 	* ebrowse.c (version) <emacs_copyright>:
@@ -27,7 +152,7 @@
 	* makefile.w32-in (LOCAL_FLAGS): Add $(EMACS_EXTRA_C_FLAGS).
 
 	* emacsclient.c (main) <environ>: Remove declaration, already
-	pulled in by unistd.h on Posix hosts and stdlib.h on MS-Windows.
+	pulled in by unistd.h on POSIX hosts and stdlib.h on MS-Windows.
 
 2011-11-24  Glenn Morris  <rgm@gnu.org>
 
@@ -6611,7 +6736,7 @@
 
 1993-08-25  Paul Eggert  (eggert@twinsun.com)
 
-	* rcs2log: Change /{/ to /\{/ for Posix ERE compatibility;
+	* rcs2log: Change /{/ to /\{/ for POSIX ERE compatibility;
 	otherwise, HP awk complains.
 
 	* vcdiff: Append /usr/ccs/bin and /usr/sccs to PATH, since these
@@ -6958,7 +7083,7 @@
 
 	* rcs2log: mawk, SunOS 4.1.3 nawk, and Ultrix/MKS nawk all barf on
 	/[/]/, so change it to /[\/]/.  This should work on all
-	Posix-compliant awks.  It's slightly wrong with traditional awk,
+	POSIX-compliant awks.  It's slightly wrong with traditional awk,
 	since it matches \ too, but that's a minor problem compared to awk
 	syntax errors.
 

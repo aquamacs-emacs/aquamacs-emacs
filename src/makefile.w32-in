@@ -128,6 +128,7 @@ OBJ2 =  $(BLD)/sysdep.$(O)		\
 	$(BLD)/image.$(O)		\
 	$(BLD)/terminal.$(O)            \
 	$(BLD)/menu.$(O)		\
+	$(BLD)/xml.$(O)			\
 	$(BLD)/w32term.$(O)		\
 	$(BLD)/w32xfns.$(O)		\
 	$(BLD)/w32fns.$(O)		\
@@ -225,7 +226,7 @@ GLOBAL_SOURCES =   dosfns.c msdos.c \
 	process.c callproc.c unexw32.c \
 	region-cache.c sound.c atimer.c \
 	doprnt.c intervals.c textprop.c composite.c \
-	gnutls.c
+	gnutls.c xml.c
 SOME_MACHINE_OBJECTS = dosfns.o msdos.o \
 	xterm.o xfns.o xmenu.o xselect.o xrdb.o xsmfns.o dbusbind.o
 obj = $(GLOBAL_SOURCES:.c=.o)
@@ -342,7 +343,7 @@ cleanall:	clean
 ##
 ## This works only with GNU Make.
 
-TAGS: $(OBJ0) $(OBJ1) $(OBJ2) $(CURDIR)/m/intel386.h $(CURDIR)/s/ms-w32.h
+TAGS: $(OBJ0) $(OBJ1) $(OBJ2) $(CURDIR)/s/ms-w32.h
 	$(MAKE) $(MFLAGS) TAGS-$(MAKETYPE)
 
 TAGS-LISP: $(OBJ0) $(OBJ1) $(OBJ2)
@@ -356,7 +357,7 @@ TAGS-gmake:
 	  $(OBJ1_c)
 	../lib-src/$(BLD)/etags.exe -a --regex=@../nt/emacs-src.tags \
 	  $(OBJ2_c) \
-	  $(CURDIR)/*.h $(CURDIR)/m/intel386.h $(CURDIR)/s/ms-w32.h
+	  $(CURDIR)/*.h $(CURDIR)/s/ms-w32.h
 
 TAGS-nmake:
 	echo This target is not supported with NMake
@@ -406,7 +407,6 @@ CODING_H       = $(SRC)/coding.h \
 MS_W32_H       = $(SRC)/s/ms-w32.h \
 		 $(NT_INC)/sys/stat.h
 CONFIG_H       = $(SRC)/config.h \
-		 $(SRC)/m/intel386.h \
 		 $(MS_W32_H)
 DIR_H          = $(NT_INC)/sys/dir.h \
 		 $(SRC)/ndir.h
@@ -929,7 +929,7 @@ $(BLD)/fringe.$(O) : \
 
 $(BLD)/gmalloc.$(O) : \
 	$(SRC)/gmalloc.c \
-	$(SRC)/getpagesize.h \
+	$(NT_INC)/stdint.h \
 	$(NT_INC)/unistd.h \
 	$(CONFIG_H)
 
@@ -939,6 +939,13 @@ $(BLD)/gnutls.$(O) : \
 	$(CONFIG_H) \
 	$(LISP_H) \
 	$(PROCESS_H)
+
+$(BLD)/xml.$(O) : \
+	$(SRC)/xml.c \
+	$(SRC)/buffer.h \
+	$(SRC)/w32.h \
+	$(CONFIG_H) \
+	$(LISP_H)
 
 $(BLD)/image.$(O) : \
 	$(SRC)/image.c \
@@ -1142,6 +1149,7 @@ $(BLD)/w32heap.$(O) : \
 
 $(BLD)/w32inevt.$(O) : \
 	$(SRC)/w32inevt.c \
+	$(SRC)/termchar.h \
 	$(SRC)/w32heap.h \
 	$(BLOCKINPUT_H) \
 	$(CONFIG_H) \
@@ -1150,7 +1158,8 @@ $(BLD)/w32inevt.$(O) : \
 	$(KEYBOARD_H) \
 	$(LISP_H) \
 	$(TERMHOOKS_H) \
-	$(W32TERM_H)
+	$(W32TERM_H) \
+	$(WINDOW_H)
 
 $(BLD)/w32proc.$(O) : \
 	$(SRC)/w32proc.c \
@@ -1180,7 +1189,8 @@ $(BLD)/w32console.$(O) : \
 	$(DISPEXTERN_H) \
 	$(FRAME_H) \
 	$(LISP_H) \
-	$(TERMHOOKS_H)
+	$(TERMHOOKS_H) \
+	$(WINDOW_H)
 
 $(BLD)/print.$(O) : \
 	$(SRC)/print.c \
@@ -1506,6 +1516,7 @@ $(BLD)/w32menu.$(O) : \
 	$(SRC)/w32menu.c \
 	$(SRC)/buffer.h \
 	$(SRC)/keymap.h \
+	$(SRC)/w32heap.h \
 	$(BLOCKINPUT_H) \
 	$(CHARSET_H) \
 	$(CODING_H) \

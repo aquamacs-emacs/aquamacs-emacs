@@ -399,7 +399,7 @@ This manual corresponds to Gnus v5.13
 @item Message manual: Composing messages
 @item Emacs-MIME:     Composing messages; @acronym{MIME}-specific parts.
 @item Sieve:          Managing Sieve scripts in Emacs.
-@item PGG:            @acronym{PGP/MIME} with Gnus.
+@item EasyPG:         @acronym{PGP/MIME} with Gnus.
 @item SASL:           @acronym{SASL} authentication in Emacs.
 @end itemize
 
@@ -426,7 +426,7 @@ Other related manuals
 * Message:(message).         Composing messages.
 * Emacs-MIME:(emacs-mime).   Composing messages; @acronym{MIME}-specific parts.
 * Sieve:(sieve).             Managing Sieve scripts in Emacs.
-* PGG:(pgg).                 @acronym{PGP/MIME} with Gnus.
+* EasyPG:(epa).              @acronym{PGP/MIME} with Gnus.
 * SASL:(sasl).               @acronym{SASL} authentication in Emacs.
 
 @detailmenu
@@ -12526,8 +12526,8 @@ mode buffers.
 Gnus provides a few different methods for storing the mail and news you
 send.  The default method is to use the @dfn{archive virtual server} to
 store the messages.  If you want to disable this completely, the
-@code{gnus-message-archive-group} variable should be @code{nil}, which
-is the default.
+@code{gnus-message-archive-group} variable should be @code{nil}.  The
+default is "sent.%Y-%m", which gives you one archive group per month.
 
 For archiving interesting messages in a group you read, see the
 @kbd{B c} (@code{gnus-summary-copy-article}) command (@pxref{Mail
@@ -12763,8 +12763,8 @@ from date id references chars lines xref extra.
 In the case of a string value, if the @code{match} is a regular
 expression, a @samp{gnus-match-substitute-replacement} is proceed on
 the value to replace the positional parameters @samp{\@var{n}} by the
-corresponding parenthetical matches (see @xref{Replacing the Text that
-Matched, , Text Replacement, elisp, The Emacs Lisp Reference Manual}.)
+corresponding parenthetical matches (see @xref{Replacing Match,,
+Replacing the Text that Matched, elisp, The Emacs Lisp Reference Manual}.)
 
 @vindex message-reply-headers
 
@@ -14227,14 +14227,19 @@ if the server supports UID EXPUNGE, but it's not done by default on
 servers that doesn't support that command.
 
 @item nnimap-streaming
-Virtually all @code{IMAP} server support fast streaming of data.  If
-you have problems connecting to the server, try setting this to @code{nil}.
+Virtually all @acronym{IMAP} server support fast streaming of data.
+If you have problems connecting to the server, try setting this to
+@code{nil}.
 
 @item nnimap-fetch-partial-articles
 If non-@code{nil}, fetch partial articles from the server.  If set to
 a string, then it's interpreted as a regexp, and parts that have
 matching types will be fetched.  For instance, @samp{"text/"} will
 fetch all textual parts, while leaving the rest on the server.
+
+@item nnimap-record-commands
+If non-@code{nil}, record all @acronym{IMAP} commands in the
+@samp{"*imap log*"} buffer.
 
 @end table
 
@@ -14750,6 +14755,18 @@ corresponding keywords.
 @item :prescript
 A script to be run before fetching the mail.  The syntax is the same as
 the @code{:program} keyword.  This can also be a function to be run.
+
+One popular way to use this is to set up an SSH tunnel to access the
+@acronym{POP} server.  Here's an example:
+
+@lisp
+(pop :server "127.0.0.1"
+     :port 1234
+     :user "foo"
+     :password "secret"
+     :prescript
+     "nohup ssh -f -L 1234:pop.server:110 remote.host sleep 3600 &")
+@end lisp
 
 @item :postscript
 A script to be run after fetching the mail.  The syntax is the same as
@@ -16679,7 +16696,7 @@ was used for mail landing on the system, but Babyl had its own internal
 format to which mail was converted, primarily involving creating a
 spool-file-like entity with a scheme for inserting Babyl-specific
 headers and status bits above the top of each message in the file.
-Rmail was Emacs' first mail reader, it was written by Richard Stallman,
+Rmail was Emacs's first mail reader, it was written by Richard Stallman,
 and Stallman came out of that TOPS/Babyl environment, so he wrote Rmail
 to understand the mail files folks already had in existence.  Gnus (and
 VM, for that matter) continue to support this format because it's
@@ -18236,8 +18253,7 @@ Agent.  Go to the server buffer (@kbd{^} in the group buffer) and press
 @kbd{J a} on the server (or servers) that you wish to have covered by the
 Agent (@pxref{Server Agent Commands}), or @kbd{J r} on automatically
 added servers you do not wish to have covered by the Agent.  By default,
-all @code{nntp} and @code{nnimap} servers in @code{gnus-select-method} and
-@code{gnus-secondary-select-methods} are agentized.
+no servers are agentized.
 
 @item
 Decide on download policy.  It's fairly simple once you decide whether
@@ -19263,7 +19279,7 @@ to agentize remote back ends.  The auto-agentizing has the same effect
 as running @kbd{J a} on the servers (@pxref{Server Agent Commands}).
 If the file exist, you must manage the servers manually by adding or
 removing them, this variable is only applicable the first time you
-start Gnus.  The default is @samp{(nntp nnimap)}.
+start Gnus.  The default is @samp{nil}.
 
 @end table
 
@@ -21024,7 +21040,7 @@ and `gnus-score-decay-scale'."
                            (* (abs score)
                               gnus-score-decay-scale)))))))
     (if (and (featurep 'xemacs)
-             ;; XEmacs' floor can handle only the floating point
+             ;; XEmacs's floor can handle only the floating point
              ;; number below the half of the maximum integer.
              (> (abs n) (lsh -1 -2)))
         (string-to-number
@@ -22130,8 +22146,8 @@ to you, using @kbd{G b u} and updating the group will usually fix this.
 @include emacs-mime.texi
 @chapter Sieve
 @include sieve.texi
-@chapter PGG
-@include pgg.texi
+@chapter EasyPG
+@include epa.texi
 @chapter SASL
 @include sasl.texi
 @end iflatex

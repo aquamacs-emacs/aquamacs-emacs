@@ -10,7 +10,7 @@
 
 ;;; Commentary:
 
-;; A replacement for parts of Emacs' sendmail.el (specifically,
+;; A replacement for parts of sendmail.el (specifically,
 ;; it's what handles your outgoing mail after you hit C-c C-c in mail
 ;; mode).  See below for a list of additional features, including the
 ;; ability to queue messages for later sending.  This replaces
@@ -428,6 +428,7 @@ any other non-nil value, take the action in both cases.  Even if
 you're not confirming the sending of immediate or queued messages,
 it can still be interesting to see a lot about them as they are
 shuttled robotically onward."
+  :version "24.1"
   :group 'feedmail-misc
   :type 'boolean
   )
@@ -1339,7 +1340,7 @@ Example 'defadvice' for mail-send:
 
 
 (defvar feedmail-queue-runner-is-active nil
-  "*Non-nil means we're inside the logic of the queue-running loop.
+  "Non-nil means we're inside the logic of the queue-running loop.
 That is, iterating over all messages in the queue to send them.  In
 that case, the value is the name of the queued message file currently
 being processed.  This can be used for differentiating customized code
@@ -1365,17 +1366,19 @@ call to `feedmail-run-the-queue'."
   (feedmail-say-debug ">in-> feedmail-mail-send-hook-splitter %s" feedmail-queue-runner-is-active)
   (if feedmail-queue-runner-is-active
       (run-hooks 'feedmail-mail-send-hook-queued)
-    (run-hooks 'feedmail-mail-send-hook))
-  )
+    (run-hooks 'feedmail-mail-send-hook)))
 
+(defcustom feedmail-mail-send-hook nil
+  "Hook run by `feedmail-mail-send-hook-splitter' for immediate mail.
+See documentation of `feedmail-mail-send-hook-splitter' for details."
+  :type 'hook
+  :group 'feedmail)
 
-(defvar feedmail-mail-send-hook nil
-  "*See documentation for `feedmail-mail-send-hook-splitter'.")
-
-
-(defvar feedmail-mail-send-hook-queued nil
-  "*See documentation for `feedmail-mail-send-hook-splitter'.")
-
+(defcustom feedmail-mail-send-hook-queued nil
+  "Hook run by `feedmail-mail-send-hook-splitter' for queued mail.
+See documentation of `feedmail-mail-send-hook-splitter' for details."
+  :type 'hook
+  :group 'feedmail)
 
 (defun feedmail-confirm-addresses-hook-example ()
   "An example of a `feedmail-last-chance-hook'.
@@ -1386,9 +1389,7 @@ It shows the simple addresses and gets a confirmation.  Use as:
     (erase-buffer)
     (insert (mapconcat 'identity feedmail-address-list " "))
     (if (not (y-or-n-p "How do you like them apples? "))
-	(error "FQM: Sending...gave up in last chance hook")
-      )))
-
+	(error "FQM: Sending...gave up in last chance hook"))))
 
 (defcustom feedmail-last-chance-hook nil
   "User's last opportunity to modify the message on its way out.
@@ -1513,7 +1514,7 @@ function, for example, to archive all of your sent messages someplace
 
 
 (defvar feedmail-is-a-resend nil
-  "*Non-nil means the message is a Resend (in the RFC-822 sense).
+  "Non-nil means the message is a Resend (in the RFC-822 sense).
 This affects the composition of certain headers.  feedmail sets this
 variable as soon as it starts prepping the message text buffer, so any
 user-supplied functions can rely on it.  Users shouldn't set or change this
@@ -1585,7 +1586,7 @@ messages to make sure it works as expected."
 
 
 ;; feedmail-buffer-to-binmail, feedmail-buffer-to-sendmail, and
-;; feedmail-buffer-to-smptmail are the only things provided for values
+;; feedmail-buffer-to-smtpmail are the only things provided for values
 ;; for the variable feedmail-buffer-eating-function.  It's pretty easy
 ;; to write your own, though.
 (defun feedmail-buffer-to-binmail (prepped errors-to addr-listoid)
@@ -2026,12 +2027,6 @@ backup file names and the like)."
 	      (if (looking-at ".*\r\n.*\r\n")
 		  (while (search-forward "\r\n" nil t)
 		    (replace-match "\n" nil t)))
-;;		   ;; work around text-vs-binary weirdness
-;;		   ;; if we don't find the normal M-H-S, try reading the file a different way
-;; 		   (if (not (feedmail-find-eoh t))
-;;			   (let ((file-name-buffer-file-type-alist nil) (default-buffer-file-type nil))
-;;				 (erase-buffer)
-;;				 (insert-file-contents maybe-file)))
 	      (funcall feedmail-queue-runner-mode-setter arg)
 	      (condition-case signal-stuff ; don't give up the loop if user skips some
 		  (let ((feedmail-enable-queue nil)

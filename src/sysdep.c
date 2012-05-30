@@ -37,13 +37,21 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "sysselect.h"
 #include "blockinput.h"
 
+#ifdef __FreeBSD__
+#include <sys/sysctl.h>
+#include <sys/user.h>
+#include <sys/resource.h> */
+#include <math.h>
+#endif
+
+#ifdef DARWIN_OS
+#include <sys/sysctl.h>
+#endif
+
 #ifdef WINDOWSNT
 #define read sys_read
 #define write sys_write
 #include <windows.h>
-#ifndef NULL
-#define NULL 0
-#endif
 #endif /* not WINDOWSNT */
 
 #include <sys/types.h>
@@ -296,7 +304,7 @@ int wait_debugging EXTERNALLY_VISIBLE;
 #ifndef MSDOS
 
 static void
-wait_for_termination_1 (int pid, int interruptible)
+wait_for_termination_1 (pid_t pid, int interruptible)
 {
   while (1)
     {
@@ -344,14 +352,14 @@ wait_for_termination_1 (int pid, int interruptible)
    make sure it will get eliminated (not remain forever as a zombie) */
 
 void
-wait_for_termination (int pid)
+wait_for_termination (pid_t pid)
 {
   wait_for_termination_1 (pid, 0);
 }
 
 /* Like the above, but allow keyboard interruption. */
 void
-interruptible_wait_for_termination (int pid)
+interruptible_wait_for_termination (pid_t pid)
 {
   wait_for_termination_1 (pid, 1);
 }
@@ -1902,8 +1910,8 @@ emacs_close (int fd)
 /* Read from FILEDESC to a buffer BUF with size NBYTE, retrying if interrupted.
    Return the number of bytes read, which might be less than NBYTE.
    On error, set errno and return -1.  */
-EMACS_INT
-emacs_read (int fildes, char *buf, EMACS_INT nbyte)
+ptrdiff_t
+emacs_read (int fildes, char *buf, ptrdiff_t nbyte)
 {
   register ssize_t rtnval;
 
@@ -1919,11 +1927,11 @@ emacs_read (int fildes, char *buf, EMACS_INT nbyte)
 /* Write to FILEDES from a buffer BUF with size NBYTE, retrying if interrupted
    or if a partial write occurs.  Return the number of bytes written, setting
    errno if this is less than NBYTE.  */
-EMACS_INT
-emacs_write (int fildes, const char *buf, EMACS_INT nbyte)
+ptrdiff_t
+emacs_write (int fildes, const char *buf, ptrdiff_t nbyte)
 {
   ssize_t rtnval;
-  EMACS_INT bytes_written;
+  ptrdiff_t bytes_written;
 
   bytes_written = 0;
 
@@ -2158,7 +2166,8 @@ set_file_times (const char *filename, EMACS_TIME atime, EMACS_TIME mtime)
 int
 mkdir (char *dpath, int dmode)
 {
-  int cpid, status, fd;
+  pid_t cpid;
+  int status, fd;
   struct stat statbuf;
 
   if (stat (dpath, &statbuf) == 0)
@@ -2529,6 +2538,50 @@ list_system_processes (void)
   return proclist;
 }
 
+#elif defined BSD_SYSTEM
+
+Lisp_Object
+list_system_processes (void)
+{
+#ifdef DARWIN_OS
+  int mib[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL};
+#else
+  int mib[] = {CTL_KERN, KERN_PROC, KERN_PROC_PROC};
+#endif
+  size_t len;
+  struct kinfo_proc *procs;
+  size_t i;
+
+  struct gcpro gcpro1;
+  Lisp_Object proclist = Qnil;
+
+  if (sysctl (mib, 3, NULL, &len, NULL, 0) != 0)
+    return proclist;
+
+  procs = xmalloc (len);
+  if (sysctl (mib, 3, procs, &len, NULL, 0) != 0)
+    {
+      xfree (procs);
+      return proclist;
+    }
+
+  GCPRO1 (proclist);
+  len /= sizeof (struct kinfo_proc);
+  for (i = 0; i < len; i++)
+    {
+#ifdef DARWIN_OS
+      proclist = Fcons (make_fixnum_or_float (procs[i].kp_proc.p_pid), proclist);
+#else
+      proclist = Fcons (make_fixnum_or_float (procs[i].ki_pid), proclist);
+#endif
+    }
+  UNGCPRO;
+
+  xfree (procs);
+
+  return  proclist;
+}
+
 /* The WINDOWSNT implementation is in w32.c.
    The MSDOS implementation is in dosfns.c.  */
 #elif !defined (WINDOWSNT) && !defined (MSDOS)
@@ -2688,7 +2741,10 @@ system_process_attributes (Lisp_Object pid)
   char *cmdline = NULL;
   ptrdiff_t cmdsize = 0, cmdline_size;
   unsigned char c;
-  int proc_id, ppid, uid, gid, pgrp, sess, tty, tpgid, thcount;
+  printmax_t proc_id;
+  int ppid, pgrp, sess, tty, tpgid, thcount;
+  uid_t uid;
+  gid_t gid;
   unsigned long long u_time, s_time, cutime, cstime, start;
   long priority, niceness, rss;
   unsigned long minflt, majflt, cminflt, cmajflt, vsize;
@@ -2699,11 +2755,10 @@ system_process_attributes (Lisp_Object pid)
   Lisp_Object attrs = Qnil;
   Lisp_Object cmd_str, decoded_cmd, tem;
   struct gcpro gcpro1, gcpro2;
-  EMACS_INT uid_eint, gid_eint;
 
   CHECK_NUMBER_OR_FLOAT (pid);
-  proc_id = FLOATP (pid) ? XFLOAT_DATA (pid) : XINT (pid);
-  sprintf (procfn, "/proc/%u", proc_id);
+  CONS_TO_INTEGER (pid, pid_t, proc_id);
+  sprintf (procfn, "/proc/%"pMd, proc_id);
   if (stat (procfn, &st) < 0)
     return attrs;
 
@@ -2711,9 +2766,7 @@ system_process_attributes (Lisp_Object pid)
 
   /* euid egid */
   uid = st.st_uid;
-  /* Use of EMACS_INT stops GCC whining about limited range of data type.  */
-  uid_eint = uid;
-  attrs = Fcons (Fcons (Qeuid, make_fixnum_or_float (uid_eint)), attrs);
+  attrs = Fcons (Fcons (Qeuid, make_fixnum_or_float (uid)), attrs);
   BLOCK_INPUT;
   pw = getpwuid (uid);
   UNBLOCK_INPUT;
@@ -2721,8 +2774,7 @@ system_process_attributes (Lisp_Object pid)
     attrs = Fcons (Fcons (Quser, build_string (pw->pw_name)), attrs);
 
   gid = st.st_gid;
-  gid_eint = gid;
-  attrs = Fcons (Fcons (Qegid, make_fixnum_or_float (gid_eint)), attrs);
+  attrs = Fcons (Fcons (Qegid, make_fixnum_or_float (gid)), attrs);
   BLOCK_INPUT;
   gr = getgrgid (gid);
   UNBLOCK_INPUT;
@@ -2962,15 +3014,16 @@ system_process_attributes (Lisp_Object pid)
   struct psinfo pinfo;
   int fd;
   ssize_t nread;
-  int proc_id, uid, gid;
+  printmax_t proc_id;
+  uid_t uid;
+  gid_t gid;
   Lisp_Object attrs = Qnil;
   Lisp_Object decoded_cmd, tem;
   struct gcpro gcpro1, gcpro2;
-  EMACS_INT uid_eint, gid_eint;
 
   CHECK_NUMBER_OR_FLOAT (pid);
-  proc_id = FLOATP (pid) ? XFLOAT_DATA (pid) : XINT (pid);
-  sprintf (procfn, "/proc/%u", proc_id);
+  CONS_TO_INTEGER (pid, pid_t, proc_id);
+  sprintf (procfn, "/proc/%"pMd, proc_id);
   if (stat (procfn, &st) < 0)
     return attrs;
 
@@ -2978,9 +3031,7 @@ system_process_attributes (Lisp_Object pid)
 
   /* euid egid */
   uid = st.st_uid;
-  /* Use of EMACS_INT stops GCC whining about limited range of data type.  */
-  uid_eint = uid;
-  attrs = Fcons (Fcons (Qeuid, make_fixnum_or_float (uid_eint)), attrs);
+  attrs = Fcons (Fcons (Qeuid, make_fixnum_or_float (uid)), attrs);
   BLOCK_INPUT;
   pw = getpwuid (uid);
   UNBLOCK_INPUT;
@@ -2988,8 +3039,7 @@ system_process_attributes (Lisp_Object pid)
     attrs = Fcons (Fcons (Quser, build_string (pw->pw_name)), attrs);
 
   gid = st.st_gid;
-  gid_eint = gid;
-  attrs = Fcons (Fcons (Qegid, make_fixnum_or_float (gid_eint)), attrs);
+  attrs = Fcons (Fcons (Qegid, make_fixnum_or_float (gid)), attrs);
   BLOCK_INPUT;
   gr = getgrgid (gid);
   UNBLOCK_INPUT;
@@ -3074,6 +3124,179 @@ system_process_attributes (Lisp_Object pid)
 
   if (fd >= 0)
     emacs_close (fd);
+
+  UNGCPRO;
+  return attrs;
+}
+
+#elif defined __FreeBSD__
+
+Lisp_Object
+system_process_attributes (Lisp_Object pid)
+{
+  int proc_id;
+  int pagesize = getpagesize ();
+  int npages;
+  int fscale;
+  struct passwd *pw;
+  struct group  *gr;
+  char *ttyname;
+  size_t len;
+  char args[MAXPATHLEN];
+  EMACS_TIME t, now;
+
+  int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_PID};
+  struct kinfo_proc proc;
+  size_t proclen = sizeof proc;
+
+  struct gcpro gcpro1, gcpro2;
+  Lisp_Object attrs = Qnil;
+  Lisp_Object decoded_comm;
+
+  CHECK_NUMBER_OR_FLOAT (pid);
+  CONS_TO_INTEGER (pid, int, proc_id);
+  mib[3] = proc_id;
+
+  if (sysctl (mib, 4, &proc, &proclen, NULL, 0) != 0)
+    return attrs;
+
+  GCPRO2 (attrs, decoded_comm);
+
+  attrs = Fcons (Fcons (Qeuid, make_fixnum_or_float (proc.ki_uid)), attrs);
+
+  BLOCK_INPUT;
+  pw = getpwuid (proc.ki_uid);
+  UNBLOCK_INPUT;
+  if (pw)
+    attrs = Fcons (Fcons (Quser, build_string (pw->pw_name)), attrs);
+
+  attrs = Fcons (Fcons (Qegid, make_fixnum_or_float (proc.ki_svgid)), attrs);
+
+  BLOCK_INPUT;
+  gr = getgrgid (proc.ki_svgid);
+  UNBLOCK_INPUT;
+  if (gr)
+    attrs = Fcons (Fcons (Qgroup, build_string (gr->gr_name)), attrs);
+
+  decoded_comm = code_convert_string_norecord
+    (make_unibyte_string (proc.ki_comm, strlen (proc.ki_comm)),
+     Vlocale_coding_system, 0);
+
+  attrs = Fcons (Fcons (Qcomm, decoded_comm), attrs);
+  {
+    char state[2] = {'\0', '\0'};
+    switch (proc.ki_stat)
+      {
+      case SRUN:
+	state[0] = 'R';
+	break;
+
+      case SSLEEP:
+	state[0] = 'S';
+	break;
+
+      case SLOCK:
+	state[0] = 'D';
+	break;
+
+      case SZOMB:
+	state[0] = 'Z';
+	break;
+
+      case SSTOP:
+	state[0] = 'T';
+	break;
+      }
+    attrs = Fcons (Fcons (Qstate, build_string (state)), attrs);
+  }
+
+  attrs = Fcons (Fcons (Qppid, make_fixnum_or_float (proc.ki_ppid)), attrs);
+  attrs = Fcons (Fcons (Qpgrp, make_fixnum_or_float (proc.ki_pgid)), attrs);
+  attrs = Fcons (Fcons (Qsess, make_fixnum_or_float (proc.ki_sid)),  attrs);
+
+  BLOCK_INPUT;
+  ttyname = proc.ki_tdev == NODEV ? NULL : devname (proc.ki_tdev, S_IFCHR);
+  UNBLOCK_INPUT;
+  if (ttyname)
+    attrs = Fcons (Fcons (Qtty, build_string (ttyname)), attrs);
+
+  attrs = Fcons (Fcons (Qtpgid,   make_fixnum_or_float (proc.ki_tpgid)), attrs);
+  attrs = Fcons (Fcons (Qminflt,  make_fixnum_or_float (proc.ki_rusage.ru_minflt)), attrs);
+  attrs = Fcons (Fcons (Qmajflt,  make_fixnum_or_float (proc.ki_rusage.ru_majflt)), attrs);
+  attrs = Fcons (Fcons (Qcminflt, make_number (proc.ki_rusage_ch.ru_minflt)), attrs);
+  attrs = Fcons (Fcons (Qcmajflt, make_number (proc.ki_rusage_ch.ru_majflt)), attrs);
+
+#define TIMELIST(ts)					\
+  list3 (make_number (EMACS_SECS (ts) >> 16 & 0xffff),	\
+	 make_number (EMACS_SECS (ts) & 0xffff),	\
+	 make_number (EMACS_USECS (ts)))
+
+  attrs = Fcons (Fcons (Qutime, TIMELIST (proc.ki_rusage.ru_utime)), attrs);
+  attrs = Fcons (Fcons (Qstime, TIMELIST (proc.ki_rusage.ru_stime)), attrs);
+  EMACS_ADD_TIME (t, proc.ki_rusage.ru_utime, proc.ki_rusage.ru_stime);
+  attrs = Fcons (Fcons (Qtime,  TIMELIST (t)), attrs);
+
+  attrs = Fcons (Fcons (Qcutime, TIMELIST (proc.ki_rusage_ch.ru_utime)), attrs);
+  attrs = Fcons (Fcons (Qcstime, TIMELIST (proc.ki_rusage_ch.ru_utime)), attrs);
+  EMACS_ADD_TIME (t, proc.ki_rusage_ch.ru_utime, proc.ki_rusage_ch.ru_stime);
+  attrs = Fcons (Fcons (Qctime, TIMELIST (t)), attrs);
+
+  attrs = Fcons (Fcons (Qthcount, make_fixnum_or_float (proc.ki_numthreads)),
+		 attrs);
+  attrs = Fcons (Fcons (Qpri,   make_number (proc.ki_pri.pri_native)), attrs);
+  attrs = Fcons (Fcons (Qnice,  make_number (proc.ki_nice)), attrs);
+  attrs = Fcons (Fcons (Qstart, TIMELIST (proc.ki_start)), attrs);
+  attrs = Fcons (Fcons (Qvsize, make_number (proc.ki_size >> 10)), attrs);
+  attrs = Fcons (Fcons (Qrss,   make_number (proc.ki_rssize * pagesize >> 10)),
+		 attrs);
+
+  EMACS_GET_TIME (now);
+  EMACS_SUB_TIME (t, now, proc.ki_start);
+  attrs = Fcons (Fcons (Qetime, TIMELIST (t)), attrs);
+
+#undef TIMELIST
+
+  len = sizeof fscale;
+  if (sysctlbyname ("kern.fscale", &fscale, &len, NULL, 0) == 0)
+    {
+      double pcpu;
+      fixpt_t ccpu;
+      len = sizeof ccpu;
+      if (sysctlbyname ("kern.ccpu", &ccpu, &len, NULL, 0) == 0)
+      	{
+      	  pcpu = (100.0 * proc.ki_pctcpu / fscale
+		  / (1 - exp (proc.ki_swtime * log ((double) ccpu / fscale))));
+  	  attrs = Fcons (Fcons (Qpcpu, make_fixnum_or_float (pcpu)), attrs);
+      	}
+    }
+
+  len = sizeof npages;
+  if (sysctlbyname ("hw.availpages", &npages, &len, NULL, 0) == 0)
+    {
+      double pmem = (proc.ki_flag & P_INMEM
+		     ? 100.0 * proc.ki_rssize / npages
+		     : 0);
+      attrs = Fcons (Fcons (Qpmem, make_fixnum_or_float (pmem)), attrs);
+    }
+
+  mib[2] = KERN_PROC_ARGS;
+  len = MAXPATHLEN;
+  if (sysctl (mib, 4, args, &len, NULL, 0) == 0)
+    {
+      int i;
+      for (i = 0; i < len; i++)
+	{
+	  if (! args[i] && i < len - 1)
+	    args[i] = ' ';
+	}
+
+      decoded_comm =
+	(code_convert_string_norecord
+	 (make_unibyte_string (args, strlen (args)),
+	  Vlocale_coding_system, 0));
+
+      attrs = Fcons (Fcons (Qargs, decoded_comm), attrs);
+    }
 
   UNGCPRO;
   return attrs;

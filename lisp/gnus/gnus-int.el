@@ -43,11 +43,13 @@
 
 (defcustom gnus-after-set-mark-hook nil
   "Hook called just after marks are set in a group."
+  :version "24.1"
   :group 'gnus-start
   :type 'hook)
 
 (defcustom gnus-before-update-mark-hook nil
   "Hook called just before marks are updated in a group."
+  :version "24.1"
   :group 'gnus-start
   :type 'hook)
 
@@ -245,7 +247,7 @@ If it is down, start it up (again)."
   (eq (nth 1 (assoc method gnus-opened-servers))
       'denied))
 
-(defvar gnus-backend-trace t)
+(defvar gnus-backend-trace nil)
 
 (defun gnus-open-server (gnus-command-method)
   "Open a connection to GNUS-COMMAND-METHOD."

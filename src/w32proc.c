@@ -141,7 +141,25 @@ new_child (void)
       cp->char_consumed = CreateEvent (NULL, FALSE, FALSE, NULL);
       if (cp->char_consumed)
         {
-	  cp->thrd = CreateThread (NULL, 1024, reader_thread, cp, 0, &id);
+	  /* The 0x00010000 flag is STACK_SIZE_PARAM_IS_A_RESERVATION.
+	     It means that the 64K stack we are requesting in the 2nd
+	     argument is how much memory should be reserved for the
+	     stack.  If we don't use this flag, the memory requested
+	     by the 2nd argument is the amount actually _committed_,
+	     but Windows reserves 8MB of memory for each thread's
+	     stack.  (The 8MB figure comes from the -stack
+	     command-line argument we pass to the linker when building
+	     Emacs, but that's because we need a large stack for
+	     Emacs's main thread.)  Since we request 2GB of reserved
+	     memory at startup (see w32heap.c), which is close to the
+	     maximum memory available for a 32-bit process on Windows,
+	     the 8MB reservation for each thread causes failures in
+	     starting subprocesses, because we create a thread running
+	     reader_thread for each subprocess.  As 8MB of stack is
+	     way too much for reader_thread, forcing Windows to
+	     reserve less wins the day.  */
+	  cp->thrd = CreateThread (NULL, 64 * 1024, reader_thread, cp,
+				   0x00010000, &id);
 	  if (cp->thrd)
 	    return cp;
 	}
@@ -2067,8 +2085,8 @@ DEFUN ("w32-get-console-codepage", Fw32_get_console_codepage,
 
 DEFUN ("w32-set-console-codepage", Fw32_set_console_codepage,
        Sw32_set_console_codepage, 1, 1, 0,
-       doc: /* Make Windows codepage CP be the current codepage setting for Emacs.
-The codepage setting affects keyboard input and display in tty mode.
+       doc: /* Make Windows codepage CP be the codepage for Emacs tty keyboard input.
+This codepage setting affects keyboard input in tty mode.
 If successful, the new CP is returned, otherwise nil.  */)
   (Lisp_Object cp)
 {
@@ -2095,8 +2113,8 @@ DEFUN ("w32-get-console-output-codepage", Fw32_get_console_output_codepage,
 
 DEFUN ("w32-set-console-output-codepage", Fw32_set_console_output_codepage,
        Sw32_set_console_output_codepage, 1, 1, 0,
-       doc: /* Make Windows codepage CP be the current codepage setting for Emacs.
-The codepage setting affects keyboard input and display in tty mode.
+       doc: /* Make Windows codepage CP be the codepage for Emacs console output.
+This codepage setting affects display in tty mode.
 If successful, the new CP is returned, otherwise nil.  */)
   (Lisp_Object cp)
 {
@@ -2114,7 +2132,7 @@ If successful, the new CP is returned, otherwise nil.  */)
 
 DEFUN ("w32-get-codepage-charset", Fw32_get_codepage_charset,
        Sw32_get_codepage_charset, 1, 1, 0,
-       doc: /* Return charset of codepage CP.
+       doc: /* Return charset ID corresponding to codepage CP.
 Returns nil if the codepage is not valid.  */)
   (Lisp_Object cp)
 {

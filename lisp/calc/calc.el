@@ -222,7 +222,7 @@
 
 
 (defgroup calc nil
-  "GNU Calc."
+  "Advanced desk calculator and mathematical tool."
   :prefix "calc-"
   :tag    "Calc"
   :group  'applications)
@@ -418,6 +418,13 @@ in normal mode."
   :group 'calc
   :type 'boolean)
 
+(defcustom calc-ensure-consistent-units
+  nil
+  "If non-nil, make sure new units are consistent with current units
+when converting units."
+  :group 'calc
+  :type 'boolean)
+
 (defcustom calc-undo-length
   100
   "The number of undo steps that will be preserved when Calc is quit."
@@ -431,24 +438,28 @@ If `calc-show-selections' is non-nil, then selected sub-formulas are shown
 by displaying the rest of the formula in `calc-nonselected-face'.
 If `calc-show-selections' is nil, then selected sub-formulas are shown
 by displaying the sub-formula in `calc-selected-face'."
+  :version "24.1"
   :group 'calc
   :type 'boolean)
 
 (defcustom calc-lu-field-reference
   "20 uPa"
   "The default reference level for logarithmic units (field)."
+  :version "24.1"
   :group 'calc
   :type '(string))
 
 (defcustom calc-lu-power-reference
   "mW"
   "The default reference level for logarithmic units (power)."
+  :version "24.1"
   :group 'calc
   :type '(string))
 
 (defcustom calc-note-threshold "1"
   "The number of cents that a frequency should be near a note
 to be identified as that note."
+  :version "24.1"
   :type 'string
   :group 'calc)
 
@@ -813,7 +824,7 @@ If nil, selections displayed but ignored.")
 Used by `calc-user-invocation'.")
 
 (defcalcmodevar calc-show-banner t
-  "*If non-nil, show a friendly greeting above the stack.")
+  "If non-nil, show a friendly greeting above the stack.")
 
 (defconst calc-local-var-list '(calc-stack
 				calc-stack-top

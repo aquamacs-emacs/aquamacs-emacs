@@ -2,7 +2,7 @@
 @c Copyright (C) 1985-1987, 1993-1995, 1997, 1999-2012
 @c   Free Software Foundation, Inc.
 @c See file emacs.texi for copying conditions.
-@node Files, Buffers, Keyboard Macros, Top
+@node Files
 @chapter File Handling
 @cindex files
 
@@ -36,7 +36,7 @@ on file directories.
 * Misc File Ops::       Other things you can do on files.
 * Compressed Files::    Accessing compressed files.
 * File Archives::       Operating on tar, zip, jar etc. archive files.
-* Remote Files::        Accessing files on other sites.
+* Remote Files::        Accessing files on other machines.
 * Quoted File Names::   Quoting special characters in file names.
 * File Name Cache::     Completion against a list of files you often use.
 * File Conveniences::   Convenience Features for Finding Files.
@@ -97,7 +97,7 @@ minibuffer, with a directory omitted, specifies the file
 
   When typing a file name into the minibuffer, you can make use of a
 couple of shortcuts: a double slash is interpreted as ``ignore
-everything before the second slash in the pair,'' and @samp{~/} is
+everything before the second slash in the pair'', and @samp{~/} is
 interpreted as your home directory.  @xref{Minibuffer File}.
 
 @cindex environment variables in file names
@@ -288,7 +288,7 @@ see @ref{Drag and Drop}, and @ref{Misc Dired Features}.
 
   Each time you visit a file, Emacs automatically scans its contents
 to detect what character encoding and end-of-line convention it uses,
-and converts these to Emacs' internal encoding and end-of-line
+and converts these to Emacs's internal encoding and end-of-line
 convention within the buffer.  When you save the buffer, Emacs
 performs the inverse conversion, writing the file to disk with its
 original encoding and end-of-line convention.  @xref{Coding Systems}.
@@ -739,6 +739,11 @@ directory.)  Emacs removes the lock when you save the changes.  The
 idea is that the file is locked whenever an Emacs buffer visiting it
 has unsaved changes.
 
+@vindex create-lockfiles
+  You can prevent the creation of lock files by setting the variable
+@code{create-lockfiles} to @code{nil}.  @strong{Caution:} by
+doing so you will lose the benefits that this feature provides.
+
 @cindex collision
   If you begin to modify the buffer while the visited file is locked by
 someone else, this constitutes a @dfn{collision}.  When Emacs detects a
@@ -976,7 +981,7 @@ are not visiting files are auto-saved only if you request it explicitly;
 when they are auto-saved, the auto-save file name is made by appending
 @samp{#} to the front and rear of buffer name, then
 adding digits and letters at the end for uniqueness.  For
-example, the @samp{*mail*} buffer in which you compose messages to be
+example, the @file{*mail*} buffer in which you compose messages to be
 sent might be auto-saved in a file named @file{#*mail*#704juu}.  Auto-save file
 names are made this way unless you reprogram parts of Emacs to do
 something different (the functions @code{make-auto-save-file-name} and
@@ -1245,7 +1250,7 @@ for more information about using the Trash.
 @vindex diff-switches
   The command @kbd{M-x diff} prompts for two file names, using the
 minibuffer, and displays the differences between the two files in a
-buffer named @samp{*diff*}.  This works by running the @command{diff}
+buffer named @file{*diff*}.  This works by running the @command{diff}
 program, using options taken from the variable @code{diff-switches}.
 The value of @code{diff-switches} should be a string; the default is
 @code{"-c"} to specify a context diff.  @xref{Top,, Diff, diff,
@@ -1340,7 +1345,7 @@ correct the line numbers in the hunk headers, to ensure that the diff
 remains ``correct''.  To disable automatic line number correction,
 change the variable @code{diff-update-on-the-fly} to @code{nil}.
 
-  Diff mode treats each hunk as an ``error message,'' similar to
+  Diff mode treats each hunk as an ``error message'', similar to
 Compilation mode.  Thus, you can use commands such as @kbd{C-x '} to
 visit the corresponding source locations.  @xref{Compilation Mode}.
 
@@ -1853,7 +1858,7 @@ When typing a file name in the minibuffer, @kbd{C-@key{tab}}
 (@code{file-cache-minibuffer-complete}) completes it using the file
 name cache.  If you repeat @kbd{C-@key{tab}}, that cycles through the
 possible completions of what you had originally typed.  (However, note
-that the @kbd{C-@key{tab}} character cannot be typed on most text-only
+that the @kbd{C-@key{tab}} character cannot be typed on most text
 terminals.)
 
   The file name cache does not fill up automatically.  Instead, you
@@ -1871,10 +1876,9 @@ Add each file name in @var{directory} and all of its nested
 subdirectories to the file name cache, using @command{locate} to find
 them all.
 @item M-x file-cache-add-directory-list @key{RET} @var{variable} @key{RET}
-Add each file name in each directory listed in @var{variable}
-to the file name cache.  @var{variable} should be a Lisp variable
-such as @code{load-path} or @code{exec-path}, whose value is a list
-of directory names.
+Add each file name in each directory listed in @var{variable} to the
+file name cache.  @var{variable} should be a Lisp variable whose value
+is a list of directory names, like @code{load-path}.
 @item M-x file-cache-clear-cache @key{RET}
 Clear the cache; that is, remove all file names from it.
 @end table
@@ -1908,20 +1912,39 @@ point.  Partial Completion mode offers other features extending
 
 @findex image-mode
 @findex image-toggle-display
+@findex image-toggle-animation
 @cindex images, viewing
-  Visiting image files automatically selects Image mode.  This major
-mode allows you to toggle between displaying the file as an image in
-the Emacs buffer, and displaying its underlying text representation,
-using the command @kbd{C-c C-c} (@code{image-toggle-display}).  This
-works only when Emacs can display the specific image type.  If the
-displayed image is wider or taller than the frame, the usual point
-motion keys (@kbd{C-f}, @kbd{C-p}, and so forth) cause different parts
-of the image to be displayed.
+@cindex image animation
+@cindex animated images
+  Visiting image files automatically selects Image mode.  In this
+major mode, you can type @kbd{C-c C-c} (@code{image-toggle-display})
+to toggle between displaying the file as an image in the Emacs buffer,
+and displaying its underlying text (or raw byte) representation.
+Displaying the file as an image works only if Emacs is compiled with
+support for displaying such images.  If the displayed image is wider
+or taller than the frame, the usual point motion keys (@kbd{C-f},
+@kbd{C-p}, and so forth) cause different parts of the image to be
+displayed.  If the image can be animated, the command @kbd{RET}
+(@code{image-toggle-animation}) starts or stops the animation.
+Animation plays once, unless the option @code{image-animate-loop} is
+non-@code{nil}.  Currently, Emacs only supports animation in GIF
+files.
+
+@cindex ImageMagick support
+  If your Emacs was compiled with ImageMagick support, it is possible
+to view a much wider variety of image types in Image mode, by
+rendering the images via ImageMagick.  However, this feature is
+currently disabled by default.  To enable it, add the following line
+to your init file:
+
+@example
+(imagemagick-register-types)
+@end example
 
 @findex thumbs-mode
 @findex mode, thumbs
-  See also the Image-Dired package (@pxref{Image-Dired}) for viewing
-images as thumbnails.
+  The Image-Dired package can also be used to view images as
+thumbnails.  @xref{Image-Dired}.
 
 @node Filesets
 @section Filesets
@@ -1937,20 +1960,20 @@ adds a @samp{Filesets} menu to the menu bar.
 
 @findex filesets-add-buffer
 @findex filesets-remove-buffer
-  The simplest way to define a fileset is by adding files to it one
-at a time.  To add a file to fileset @var{name}, visit the file and
-type @kbd{M-x filesets-add-buffer @kbd{RET} @var{name} @kbd{RET}}.  If
+  The simplest way to define a fileset is by adding files to it one at
+a time.  To add a file to fileset @var{name}, visit the file and type
+@kbd{M-x filesets-add-buffer @kbd{RET} @var{name} @kbd{RET}}.  If
 there is no fileset @var{name}, this creates a new one, which
-initially creates only the current file.  The command @kbd{M-x
+initially contains only the current file.  The command @kbd{M-x
 filesets-remove-buffer} removes the current file from a fileset.
 
   You can also edit the list of filesets directly, with @kbd{M-x
 filesets-edit} (or by choosing @samp{Edit Filesets} from the
 @samp{Filesets} menu).  The editing is performed in a Customize buffer
-(@pxref{Easy Customization}).  Filesets need not be a simple list of
-files---you can also define filesets using regular expression matching
-file names.  Some examples of these more complicated filesets are
-shown in the Customize buffer.  Remember to select @samp{Save for
+(@pxref{Easy Customization}).  Normally, a fileset is a simple list of
+files, but you can also define a fileset as a regular expression
+matching file names.  Some examples of these more complicated filesets
+are shown in the Customize buffer.  Remember to select @samp{Save for
 future sessions} if you want to use the same filesets in future Emacs
 sessions.
 

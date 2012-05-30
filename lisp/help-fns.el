@@ -482,12 +482,14 @@ suitable file is found, return nil."
 		  (if (member (event-modifiers (aref key 0)) '(nil (shift)))
 		      (push key non-modified-keys)))
 		(when remapped
-		  (princ "It is remapped to `")
+		  (princ "Its keys are remapped to `")
 		  (princ (symbol-name remapped))
-		  (princ "'"))
+		  (princ "'.\n"))
 
 		(when keys
-		  (princ (if remapped ", which is bound to " "It is bound to "))
+		  (princ (if remapped
+			     "Without this remapping, it would be bound to "
+			   "It is bound to "))
 		  ;; If lots of ordinary text characters run this command,
 		  ;; don't mention them one by one.
 		  (if (< (length non-modified-keys) 10)
@@ -707,12 +709,19 @@ it is displayed along with the global value."
 	      (with-current-buffer standard-output
 		(setq val-start-pos (point))
 		(princ "value is ")
-		(let ((from (point)))
-		  (terpri)
-		  (pp val)
-		  (if (< (point) (+ 68 (line-beginning-position 0)))
-		      (delete-region from (1+ from))
-		    (delete-region (1- from) from))
+		(let ((from (point))
+		      (line-beg (line-beginning-position))
+		      ;;
+		      (print-rep
+		       (let ((print-quoted t))
+			 (prin1-to-string val))))
+		  (if (< (+ (length print-rep) (point) (- line-beg)) 68)
+		      (insert print-rep)
+		    (terpri)
+		    (pp val)
+		    (if (< (point) (+ 68 (line-beginning-position 0)))
+			(delete-region from (1+ from))
+		      (delete-region (1- from) from)))
 		  (let* ((sv (get variable 'standard-value))
 			 (origval (and (consp sv)
 				       (condition-case nil

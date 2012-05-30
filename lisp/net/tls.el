@@ -231,16 +231,11 @@ Fourth arg PORT is an integer specifying a port to connect to."
 		 ?h host
 		 ?p (if (integerp port)
 			(int-to-string port)
-		      port))))
-	      response)
+		      port)))))
 	  (message "Opening TLS connection with `%s'..." formatted-cmd)
 	  (setq process (start-process
 			 name buffer shell-file-name shell-command-switch
 			 formatted-cmd))
-	  (funcall (if (fboundp 'set-process-query-on-exit-flag)
-		       'set-process-query-on-exit-flag
-		     'process-kill-without-query)
-		   process nil)
 	  (while (and process
 		      (memq (process-status process) '(open run))
 		      (progn

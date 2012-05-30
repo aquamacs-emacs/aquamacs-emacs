@@ -54,7 +54,7 @@ end
 
 define xgetint
   set $bugfix = $arg0
-  set $int = gdb_use_union ? $bugfix.s.val : (gdb_use_lsb ? $bugfix : $bugfix << gdb_gctypebits) >> gdb_gctypebits
+  set $int = gdb_use_union ? $bugfix.s.val : (gdb_use_lsb ? $bugfix >> (gdb_gctypebits - 1) : $bugfix << gdb_gctypebits) >> gdb_gctypebits
 end
 
 define xgettype
@@ -67,10 +67,7 @@ end
 # from calling OutputDebugString, which causes GDB to display each
 # character twice (yuk!).
 define pr
-  set $output_debug = print_output_debug_flag
-  set print_output_debug_flag = 0
-  set debug_print ($)
-  set print_output_debug_flag = $output_debug
+  pp $
 end
 document pr
 Print the emacs s-expression which is $.
@@ -90,48 +87,17 @@ Print the argument as an emacs s-expression
 Works only when an inferior emacs is executing.
 end
 
-# Print out s-expressions from tool bar
-define pp1
-  set $tmp = $arg0
-  set $output_debug = print_output_debug_flag
-  set print_output_debug_flag = 0
-  set safe_debug_print ($tmp)
-  set print_output_debug_flag = $output_debug
-end
-document pp1
-Print the argument as an emacs s-expression.
-Works only when an inferior emacs is executing.
-For use on tool bar when debugging in Emacs
-where the variable name would not otherwise
-be recorded in the GUD buffer.
-end
-
 # Print value of lisp variable
 define pv
-  set $tmp = "$arg0"
-  set $output_debug = print_output_debug_flag
-  set print_output_debug_flag = 0
-  set safe_debug_print ( find_symbol_value (intern ($tmp)))
-  set print_output_debug_flag = $output_debug
-end
-document pv
-Print the value of the lisp variable given as argument.
-Works only when an inferior emacs is executing.
-end
-
-# Print value of lisp variable
-define pv1
   set $tmp = "$arg0"
   set $output_debug = print_output_debug_flag
   set print_output_debug_flag = 0
   set safe_debug_print (find_symbol_value (intern ($tmp)))
   set print_output_debug_flag = $output_debug
 end
-document pv1
+document pv
 Print the value of the lisp variable given as argument.
 Works only when an inferior emacs is executing.
-For use when debugging in Emacs where the variable
-name would not otherwise be recorded in the GUD buffer.
 end
 
 # Print out current buffer point and boundaries
@@ -288,8 +254,8 @@ define pitx
   while ($i < $it->sp && $i < 4)
     set $e = $it->stack[$i]
     printf "stack[%d]: ", $i
-    pitmethod $e->method
-    printf "[%d]", $e->position.charpos
+    pitmethod $e.method
+    printf "[%d]", $e.position.charpos
     printf "\n"
     set $i = $i + 1
   end
@@ -737,60 +703,6 @@ Print $ as a misc free-cell pointer.
 This command assumes that $ is an Emacs Lisp Misc value.
 end
 
-define xintfwd
-  xgetptr $
-  print (struct Lisp_Intfwd *) $ptr
-end
-document xintfwd
-Print $ as an integer forwarding pointer.
-This command assumes that $ is an Emacs Lisp Misc value.
-end
-
-define xboolfwd
-  xgetptr $
-  print (struct Lisp_Boolfwd *) $ptr
-end
-document xboolfwd
-Print $ as a boolean forwarding pointer.
-This command assumes that $ is an Emacs Lisp Misc value.
-end
-
-define xobjfwd
-  xgetptr $
-  print (struct Lisp_Objfwd *) $ptr
-end
-document xobjfwd
-Print $ as an object forwarding pointer.
-This command assumes that $ is an Emacs Lisp Misc value.
-end
-
-define xbufobjfwd
-  xgetptr $
-  print (struct Lisp_Buffer_Objfwd *) $ptr
-end
-document xbufobjfwd
-Print $ as a buffer-local object forwarding pointer.
-This command assumes that $ is an Emacs Lisp Misc value.
-end
-
-define xkbobjfwd
-  xgetptr $
-  print (struct Lisp_Kboard_Objfwd *) $ptr
-end
-document xkbobjfwd
-Print $ as a kboard-local object forwarding pointer.
-This command assumes that $ is an Emacs Lisp Misc value.
-end
-
-define xbuflocal
-  xgetptr $
-  print (struct Lisp_Buffer_Local_Value *) $ptr
-end
-document xbuflocal
-Print $ as a buffer-local-value pointer.
-This command assumes that $ is an Emacs Lisp Misc value.
-end
-
 define xsymbol
   set $sym = $
   xgetptr $sym
@@ -1037,8 +949,15 @@ end
 
 define xpr
   xtype
-  if $type == Lisp_Int
-    xint
+  if gdb_use_union
+    if $type == Lisp_Int
+      xint
+    end
+  end
+  if !gdb_use_union
+    if $type == Lisp_Int0 || $type == Lisp_Int1
+      xint
+    end
   end
   if $type == Lisp_Symbol
     xsymbol
@@ -1057,35 +976,11 @@ define xpr
     if $misc == Lisp_Misc_Free
       xmiscfree
     end
-    if $misc == Lisp_Misc_Boolfwd
-      xboolfwd
-    end
     if $misc == Lisp_Misc_Marker
       xmarker
     end
-    if $misc == Lisp_Misc_Intfwd
-      xintfwd
-    end
-    if $misc == Lisp_Misc_Boolfwd
-      xboolfwd
-    end
-    if $misc == Lisp_Misc_Objfwd
-      xobjfwd
-    end
-    if $misc == Lisp_Misc_Buffer_Objfwd
-      xbufobjfwd
-    end
-    if $misc == Lisp_Misc_Buffer_Local_Value
-      xbuflocal
-    end
-#    if $misc == Lisp_Misc_Some_Buffer_Local_Value
-#      xvalue
-#    end
     if $misc == Lisp_Misc_Overlay
       xoverlay
-    end
-    if $misc == Lisp_Misc_Kboard_Objfwd
-      xkbobjfwd
     end
 #    if $misc == Lisp_Misc_Save_Value
 #      xsavevalue
@@ -1293,7 +1188,9 @@ end
 
 define xreload
   set $tagmask = (((long)1 << gdb_gctypebits) - 1)
-  set $valmask = gdb_use_lsb ? ~($tagmask) : ((long)1 << gdb_valbits) - 1
+  # The consing_since_gc business widens the 1 to EMACS_INT,
+  # a symbol not directly visible to GDB.
+  set $valmask = gdb_use_lsb ? ~($tagmask) : ((consing_since_gc - consing_since_gc + 1) << gdb_valbits) - 1
 end
 document xreload
   When starting Emacs a second time in the same gdb session under

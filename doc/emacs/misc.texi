@@ -92,7 +92,7 @@ file named @file{.newsrc} in your home directory which lists your
 Usenet newsgroups and subscriptions (this file is not unique to Gnus;
 it is used by many other newsreader programs).  It then tries to
 contact the system's default news server, which is typically specified
-by the @samp{NNTPSERVER} environment variable.
+by the @env{NNTPSERVER} environment variable.
 
   If your system does not have a default news server, or if you wish
 to use Gnus for reading email, then before invoking @kbd{M-x gnus} you
@@ -465,6 +465,15 @@ then give commands interactively.  Full terminal emulation is
 available.
 @end table
 
+@vindex exec-path
+  Whenever you specify a relative file name for an executable program
+(either in the @var{cmd} argument to one of the above commands, or in
+other contexts), Emacs searches for the program in the directories
+specified by the variable @code{exec-path}.  The value of this
+variable must be a list of directory names; the default value is
+initialized from the environment variable @env{PATH} when Emacs is
+started (@pxref{General Variables}).
+
   @kbd{M-x eshell} invokes a shell implemented entirely in Emacs.  It
 is documented in its own manual.
 @ifnottex
@@ -498,7 +507,7 @@ minibuffer and executes it as a shell command, in a subshell made just
 for that command.  Standard input for the command comes from the null
 device.  If the shell command produces any output, the output appears
 either in the echo area (if it is short), or in an Emacs buffer named
-@samp{*Shell Command Output*}, displayed in another window (if the
+@file{*Shell Command Output*}, displayed in another window (if the
 output is long).
 
   For instance, one way to decompress a file named @file{foo.gz} is to
@@ -545,17 +554,14 @@ old region and replaces it with the output from the shell command.
 see what keys are in the buffer.  If the buffer contains a GnuPG key,
 type @kbd{C-x h M-| gpg @key{RET}} to feed the entire buffer contents
 to @command{gpg}.  This will output the list of keys to the
-@samp{*Shell Command Output*} buffer.
+@file{*Shell Command Output*} buffer.
 
 @vindex shell-file-name
   The above commands use the shell specified by the variable
 @code{shell-file-name}.  Its default value is determined by the
 @env{SHELL} environment variable when Emacs is started.  If the file
-name is relative, Emacs searches the directories in the list
-@code{exec-path}; this list is initialized based on the environment
-variable @env{PATH} when Emacs is started.  Your init file can
-override either or both of these default initializations (@pxref{Init
-File}).
+name is relative, Emacs searches the directories listed in
+@code{exec-path} (@pxref{Shell}).
 
   To specify a coding system for @kbd{M-!} or @kbd{M-|}, use the command
 @kbd{C-x @key{RET} c} immediately beforehand.  @xref{Communication Coding}.
@@ -571,7 +577,7 @@ inserted into a buffer of that name.
 
 @findex shell
   To run a subshell interactively, type @kbd{M-x shell}.  This creates
-(or reuses) a buffer named @samp{*shell*}, and runs a shell subprocess
+(or reuses) a buffer named @file{*shell*}, and runs a shell subprocess
 with input coming from and output going to that buffer.  That is to
 say, any terminal output from the subshell goes into the buffer,
 advancing point, and any terminal input for the subshell comes from
@@ -594,8 +600,8 @@ easier to distinguish input lines from the shell output.
   To make multiple subshells, invoke @kbd{M-x shell} with a prefix
 argument (e.g. @kbd{C-u M-x shell}).  Then the command will read a
 buffer name, and create (or reuse) a subshell in that buffer.  You can
-also rename the @samp{*shell*} buffer using @kbd{M-x rename-uniquely},
-then create a new @samp{*shell*} buffer using plain @kbd{M-x shell}.
+also rename the @file{*shell*} buffer using @kbd{M-x rename-uniquely},
+then create a new @file{*shell*} buffer using plain @kbd{M-x shell}.
 Subshells in different buffers run independently and in parallel.
 
 @vindex explicit-shell-file-name
@@ -1177,7 +1183,7 @@ underlying shell, of course.
 @findex term
 
   To run a subshell in a terminal emulator, use @kbd{M-x term}.  This
-creates (or reuses) a buffer named @samp{*terminal*}, and runs a
+creates (or reuses) a buffer named @file{*terminal*}, and runs a
 subshell with input coming from your keyboard, and output going to
 that buffer.
 
@@ -1185,7 +1191,7 @@ that buffer.
 line mode, Term basically acts like Shell mode (@pxref{Shell Mode}).
 
   In char mode, each character is sent directly to the subshell, as
-``terminal input.''  Any ``echoing'' of your input is the
+``terminal input''.  Any ``echoing'' of your input is the
 responsibility of the subshell.  The sole exception is the terminal
 escape character, which by default is @kbd{C-c} (@pxref{Term Mode}).
 Any ``terminal output'' from the subshell goes into the buffer,
@@ -1206,7 +1212,7 @@ serial port.  @xref{Serial Terminal}.
 
   The file name used to load the subshell is determined the same way
 as for Shell mode.  To make multiple terminal emulators, rename the
-buffer @samp{*terminal*} to something different using @kbd{M-x
+buffer @file{*terminal*} to something different using @kbd{M-x
 rename-uniquely}, just as with Shell mode.
 
   Unlike Shell mode, Term mode does not track the current directory by
@@ -1318,7 +1324,7 @@ bit, and 1 stopbit.
 with your device and will probably only see garbage output in the
 window.
 
-@node Emacs Server, Printing, Shell, Top
+@node Emacs Server
 @section Using Emacs as a Server
 @pindex emacsclient
 @cindex Emacs as a server
@@ -1399,7 +1405,7 @@ signaled.)  Currently, this feature is mainly useful for developers.
 the shell command @samp{emacsclient @var{file}}, where @var{file} is a
 file name.  This connects to an Emacs server, and tells that Emacs
 process to visit @var{file} in one of its existing frames---either a
-graphical frame, or one in a text-only terminal (@pxref{Frames}).  You
+graphical frame, or one in a text terminal (@pxref{Frames}).  You
 can then select that frame to begin editing.
 
   If there is no Emacs server, the @command{emacsclient} program halts
@@ -1409,12 +1415,12 @@ Server})---then Emacs opens a frame on the terminal in which you
 called @command{emacsclient}.
 
   You can also force @command{emacsclient} to open a new frame on a
-graphical display, or on a text-only terminal, using the @samp{-c} and
+graphical display, or on a text terminal, using the @samp{-c} and
 @samp{-t} options.  @xref{emacsclient Options}.
 
-  If you are running on a single text-only terminal, you can switch
-between @command{emacsclient}'s shell and the Emacs server using one
-of two methods: (i) run the Emacs server and @command{emacsclient} on
+  If you are running on a single text terminal, you can switch between
+@command{emacsclient}'s shell and the Emacs server using one of two
+methods: (i) run the Emacs server and @command{emacsclient} on
 different virtual terminals, and switch to the Emacs server's virtual
 terminal after calling @command{emacsclient}; or (ii) call
 @command{emacsclient} from within the Emacs server itself, using Shell
@@ -1496,14 +1502,24 @@ The environment variable @env{ALTERNATE_EDITOR} has the same effect as
 the @samp{-a} option.  If both are present, the latter takes
 precedence.
 
+@cindex client frame
 @item -c
-Create a new graphical frame, instead of using an existing Emacs
-frame.  Emacs can create a graphical frame even if it was started in a
-text-only terminal, provided it is able to connect to a graphical
-display.  If no graphical display is available, Emacs creates a new
-text-only terminal frame (@pxref{Frames}).  If you omit a filename
-argument while supplying the @samp{-c} option, the new frame displays
-the @samp{*scratch*} buffer (@pxref{Buffers}).
+Create a new graphical @dfn{client frame}, instead of using an
+existing Emacs frame.  If you omit a filename argument while supplying
+the @samp{-c} option, the new frame displays the @file{*scratch*}
+buffer (@pxref{Buffers}).  See below for the special behavior of
+@kbd{C-x C-c} in a client frame.
+
+If Emacs is unable to create a new graphical frame (e.g.@: if it is
+unable to connect to the X server), it tries to create a text terminal
+client frame, as though you had supplied the @samp{-t} option instead
+(see below).
+
+On MS-Windows, a single Emacs session cannot display frames on both
+graphical and text terminals, nor on multiple text terminals.  Thus,
+if the Emacs server is running on a text terminal, the @samp{-c}
+option, like the @samp{-t} option, creates a new frame in the server's
+current text terminal.  @xref{Windows Startup}.
 
 @item -F @var{alist}
 @itemx --frame-parameters=@var{alist}
@@ -1585,27 +1601,48 @@ server it finds.  (This option is not supported on MS-Windows.)
 @item -t
 @itemx --tty
 @itemx -nw
-Create a new Emacs frame on the current text-only terminal, instead of
-using an existing Emacs frame.  Emacs can open a text-only terminal
-even if it was started in another text-only terminal, or on a
-graphical display.  If you omit a filename argument while supplying
-this option, the new frame displays the @samp{*scratch*} buffer.
-@xref{Buffers}.
+Create a new client frame on the current text terminal, instead of
+using an existing Emacs frame.  This is similar to the @samp{-c}
+option, above, except that it creates a text terminal frame
+(@pxref{Non-Window Terminals}).  If you omit a filename argument while
+supplying this option, the new frame displays the @file{*scratch*}
+buffer (@pxref{Buffers}).  See below for the special behavior of
+@kbd{C-x C-c} in a client frame.
+
+On MS-Windows, a single Emacs session cannot display frames on both
+graphical and text terminals, nor on multiple text terminals.  Thus,
+if the Emacs server is using the graphical display, @samp{-t} behaves
+like @samp{-c} (see above); whereas if the Emacs server is running on
+a text terminal, it creates a new frame in its current text terminal.
+@xref{Windows Startup}.
 @end table
 
-  If you type @kbd{C-x C-c} (@code{save-buffers-kill-terminal}) in an
-Emacs frame created with @command{emacsclient}, via the @samp{-c} or
-@samp{-t} options, Emacs deletes the frame instead of killing the
-Emacs process itself.  On a text-only terminal frame created with the
-@samp{-t} option, this returns control to the terminal.  Emacs also
-marks all the server buffers for the client as finished, as though you
-had typed @kbd{C-x #} in all of them.
+  The new graphical or text terminal frames created by the @samp{-c}
+or @samp{-t} options are considered @dfn{client frames}.  Any new
+frame that you create from a client frame is also considered a client
+frame.  If you type @kbd{C-x C-c} (@code{save-buffers-kill-terminal})
+in a client frame, that command does not kill the Emacs session as it
+normally does (@pxref{Exiting}).  Instead, Emacs deletes the client
+frame; furthermore, if the client frame has an @command{emacsclient}
+waiting to regain control (i.e.@: if you did not supply the @samp{-n}
+option), Emacs deletes all other frames of the same client, and marks
+the client's server buffers as finished, as though you had typed
+@kbd{C-x #} in all of them.  If it so happens that there are no
+remaining frames after the client frame(s) are deleted, the Emacs
+session exits.
 
-  When Emacs is started as a daemon, all frames are considered client
-frames, so @kbd{C-x C-c} will never kill Emacs.  To kill the Emacs
-process, type @kbd{M-x kill-emacs}.
+  As an exception, when Emacs is started as a daemon, all frames are
+considered client frames, and @kbd{C-x C-c} never kills Emacs.  To
+kill a daemon session, type @kbd{M-x kill-emacs}.
 
-@node Printing, Sorting, Emacs Server, Top
+  Note that the @samp{-t} and @samp{-n} options are contradictory:
+@samp{-t} says to take control of the current text terminal to create
+a new client frame, while @samp{-n} says not to take control of the
+text terminal.  If you supply both options, Emacs visits the specified
+files(s) in an existing frame rather than a new client frame, negating
+the effect of @samp{-t}.
+
+@node Printing
 @section Printing Hard Copies
 @cindex hardcopy
 @cindex printing
@@ -1673,7 +1710,7 @@ printer program is not compatible with @command{lpr}).
 * Printing Package::     An optional advanced printing interface.
 @end menu
 
-@node PostScript, PostScript Variables,, Printing
+@node PostScript
 @subsection PostScript Hardcopy
 
   These commands convert buffer contents to PostScript,
@@ -1742,7 +1779,7 @@ rendition of the current buffer as a cursive handwritten document.  It
 can be customized in group @code{handwrite}.  This function only
 supports ISO 8859-1 characters.
 
-@node PostScript Variables, Printing Package, PostScript, Printing
+@node PostScript Variables
 @subsection Variables for PostScript Hardcopy
 
 @vindex ps-lpr-command
@@ -1837,7 +1874,7 @@ includes a single directory @file{/usr/local/share/emacs/fonts/bdf}.
   Many other customization variables for these commands are defined and
 described in the Lisp files @file{ps-print.el} and @file{ps-mule.el}.
 
-@node Printing Package,, PostScript Variables, Printing
+@node Printing Package
 @subsection Printing Package
 @cindex Printing package
 
@@ -1857,7 +1894,7 @@ init file (@pxref{Init File}), followed by @code{(pr-update-menus)}.
 This function replaces the usual printing commands in the menu bar
 with a @samp{Printing} submenu that contains various printing options.
 You can also type @kbd{M-x pr-interface RET}; this creates a
-@samp{*Printing Interface*} buffer, similar to a customization buffer,
+@file{*Printing Interface*} buffer, similar to a customization buffer,
 where you can set the printing options.  After selecting what and how
 to print, you start the print job using the @samp{Print} button (click
 @kbd{mouse-2} on it, or move point over it and type @kbd{RET}).  For
@@ -2039,10 +2076,10 @@ Insert a byte with a code typed in octal.
 Insert a byte with a code typed in hex.
 
 @item C-x [
-Move to the beginning of a 1k-byte ``page.''
+Move to the beginning of a 1k-byte ``page''.
 
 @item C-x ]
-Move to the end of a 1k-byte ``page.''
+Move to the end of a 1k-byte ``page''.
 
 @item M-g
 Move to an address specified in hex.
@@ -2061,7 +2098,7 @@ bytes, move by @code{short}s or @code{int}s, etc.; type @kbd{C-h a
 hexl-@key{RET}} for details.
 
 
-@node Saving Emacs Sessions, Recursive Edit, Editing Binary Files, Top
+@node Saving Emacs Sessions
 @section Saving Emacs Sessions
 @cindex saving sessions
 @cindex restore session
@@ -2112,7 +2149,7 @@ usually turned on.
 However, this may be slow if there are a lot of buffers in the
 desktop.  You can specify the maximum number of buffers to restore
 immediately with the variable @code{desktop-restore-eager}; the
-remaining buffers are restored ``lazily,'' when Emacs is idle.
+remaining buffers are restored ``lazily'', when Emacs is idle.
 
 @findex desktop-clear
 @vindex desktop-globals-to-clear
@@ -2127,7 +2164,7 @@ expression matching the names of buffers not to kill.
   If you want to save minibuffer history from one session to
 another, use the @code{savehist} library.
 
-@node Recursive Edit, Emulation, Saving Emacs Sessions, Top
+@node Recursive Edit
 @section Recursive Editing Levels
 @cindex recursive editing level
 @cindex editing level, recursive
@@ -2195,7 +2232,7 @@ new major mode which provides a command to switch back.  These
 approaches give you more flexibility to go back to unfinished tasks in
 the order you choose.
 
-@node Emulation, Hyperlinking, Recursive Edit, Top
+@node Emulation
 @section Emulation
 @cindex emulating other editors
 @cindex other editors
@@ -2287,7 +2324,7 @@ not use it.
 key bindings.
 @end table
 
-@node Hyperlinking, Amusements, Emulation, Top
+@node Hyperlinking
 @section Hyperlinking and Navigation Features
 
   The following subsections describe convenience features for handling
@@ -2438,14 +2475,14 @@ Display a menu of files and URLs mentioned in current buffer, then
 find the one you select (@code{ffap-menu}).
 @end table
 
-@node Amusements, Packages, Hyperlinking, Top
+@node Amusements
 @section Other Amusements
 @cindex boredom
 
 @findex animate-birthday-present
 @cindex animate
-  The @code{animate} package makes text dance.  For an example, try
-@kbd{M-x animate-birthday-present}.
+  The @code{animate} package makes text dance (e.g. try
+@kbd{M-x animate-birthday-present}).
 
 @findex blackbox
 @findex mpuz
@@ -2471,7 +2508,7 @@ encrypted in a simple monoalphabetic substitution cipher.
 @findex dissociated-press
   @kbd{M-x dissociated-press} scrambles the text in the current Emacs
 buffer, word by word or character by character, writing its output to
-a buffer named @samp{*Dissociation*}.  A positive argument tells it to
+a buffer named @file{*Dissociation*}.  A positive argument tells it to
 operate character by character, and specifies the number of overlap
 characters.  A negative argument tells it to operate word by word, and
 specifies the number of overlap words.  Dissociated Press produces

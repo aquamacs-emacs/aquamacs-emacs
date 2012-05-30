@@ -32,7 +32,7 @@
 
 (defcustom rmail-forward-separator-regex
   "^----.*\\([Ff]orwarded\\|[Oo]riginal\\).*[Mm]essage"
-  "*Regexp to match the string that introduces forwarded messages.
+  "Regexp to match the string that introduces forwarded messages.
 This is not a header, but a string contained in the body of the message.
 You may need to customize it for local needs."
   :type 'regexp
@@ -228,8 +228,9 @@ Leaves original message, deleted, before the undigestified messages."
 ;;;###autoload
 (defun unforward-rmail-message ()
   "Extract a forwarded message from the containing message.
-This puts the forwarded message into a separate rmail message
-following the containing message."
+This puts the forwarded message into a separate rmail message following
+the containing message.  This command is only useful when messages are
+forwarded with `rmail-enable-mime-composing' set to nil."
   (interactive)
   (set-buffer rmail-buffer)
   (let ((buff (current-buffer))

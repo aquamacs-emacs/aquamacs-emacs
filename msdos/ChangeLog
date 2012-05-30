@@ -1,3 +1,68 @@
+2012-05-27  Eli Zaretskii  <eliz@gnu.org>
+
+	* sedlibmk.inp (GNULIB_GL_UNISTD_H_GETOPT, GNULIB_POSIX_OPENPT)
+	(GNULIB_ISATTY, GNULIB_PTSNAME_R, GNULIB_RANDOM)
+	(GNULIB_SETHOSTNAME, HAVE_POSIX_OPENPT, HAVE_PTSNAME_R)
+	(HAVE_RANDOM, HAVE_SETHOSTNAME, NEXT_SYS_TYPES_H)
+	(NEXT_AS_FIRST_DIRECTIVE_SYS_TYPES_H, REPLACE_FTRUNCATE)
+	(REPLACE_ISATTY, REPLACE_PTSNAME_R, REPLACE_RANDOM_R)
+	(REPLACE_STRTOIMAX, STDALIGN_H, WINDOWS_64_BIT_OFF_T)
+	(WINDOWS_64_BIT_ST_SIZE, GL_GENERATE_STDALIGN_H_TRUE)
+	(GL_GENERATE_STDALIGN_H_FALSE): Edit as appropriate for DJGPP.
+	(cat FOO): Edit into "sed -e '' FOO >>".
+
+2012-05-25  Eli Zaretskii  <eliz@gnu.org>
+
+	* sed6.inp (INFO_EXT): Edit to .info.
+	(INFO_OPTS): Edit to --no-split.
+
+2012-05-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Remove src/m/*.
+	* mainmake.v2 (TAGS tags): Don't look at $(CURDIR)/src/m/intel386.h.
+
+2012-05-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* sed2v2.inp (HAVE_MBLEN): Remove.
+	* sed2x.inp (HAVE_XSETWMPROTOCOLS): Remove.
+
+2012-04-21  Eli Zaretskii  <eliz@gnu.org>
+
+	* sedleim.inp (RUN_EMACS): Replace BUILT_EMACS with EMACS.
+	Remove stale editing of "else make quail".
+	(.PHONY, compile-targets): Remove targets.
+	(compile-main): Edit into something that can be done without
+	requiring a Unixy shell.
+	(bootstrap-clean): Likewise: edit to not require $(setwins).
+
+	* sed1v2.inp: Edit "cd $(leimdir) && $(MAKE) ..." into the
+	equivalent "$(MAKE) $(MFLAGS) -C $(leimdir) ..." command.
+
+2012-04-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	configure: new option --enable-gcc-warnings (Bug#11207)
+	* sed1v2.inp, sed3v2.inp, sedlibmk.inp: GNULIB_WARN_CFLAGS,
+	WARN_CFLAGS, and WERROR_CFLAGS replace C_WARNINGS_SWITCH.
+
+2012-04-11  Glenn Morris  <rgm@gnu.org>
+
+	* sedlibmk.inp, sed1v2.inp: GNUSTEP_CFLAGS replaces C_SWITCH_X_SYSTEM.
+
+2012-04-07  Glenn Morris  <rgm@gnu.org>
+
+	* sed2v2.inp: Bump version to 24.1.50.
+
+2012-02-04  Eli Zaretskii  <eliz@gnu.org>
+
+	* sed3v2.inp (insrcdir): Use $(<F) rather than $<, as
+	command.com's "if not exist" doesn't grok forward slashes in file
+	names.
+
+2012-01-14  Eli Zaretskii  <eliz@gnu.org>
+
+	* sed4.inp (PATH_DUMPLOADSEARCH): Edit to "../lisp", for when the
+	default in src/epaths.in will change, maybe.
+
 2011-10-31  Eli Zaretskii  <eliz@gnu.org>
 
 	* sed3v2.inp (insrcdir): Comment out definition.
@@ -637,7 +702,7 @@
 	b-emacs.exe to 3072K.
 
 	* mainmake.v2 (emacs lispref lispintro): Chdir under doc/.
-	(emacs): Renamed from `man', to reflect changes in doc directory
+	(emacs): Rename from `man', to reflect changes in doc directory
 	structure.  All callers changed.
 	(clean mostlyclean distclean maintainer-clean extraclean): Chdir
 	into doc/ for manuals.  Add misc subdirectory.
@@ -1092,7 +1157,7 @@
 
 1996-08-04  Richard Stallman  <rms@psilocin.gnu.ai.mit.edu>
 
-	* is_exec.c: Renamed from is-exec.c.
+	* is_exec.c: Rename from is-exec.c.
 
 1996-07-27  Richard Stallman  <rms@psilocin.gnu.ai.mit.edu>
 
@@ -1127,7 +1192,7 @@
 
 	* mainmake.v2 (src): Create a file with sed commands instead of using
 	a long sed command line (some versions of Sed don't handle that).
-	(gdb): Merged back into src, undoing April 13 change.
+	(gdb): Merge back into src, undoing April 13 change.
 	(install): Do use if statements, but not a loop.
 
 1996-04-13  Richard Stallman  <rms@mole.gnu.ai.mit.edu>
@@ -1297,7 +1362,7 @@
 ;; coding: utf-8
 ;; End:
 
-  Copyright (C) 1994-1999, 2001-2012  Free Software Foundation, Inc.
+  Copyright (C) 1994-1999, 2001-2012 Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

@@ -1,6 +1,6 @@
 /* Record indices of function doc strings stored in a file.
-   Copyright (C) 1985-1986, 1993-1995, 1997-2012
-                 Free Software Foundation, Inc.
+
+Copyright (C) 1985-1986, 1993-1995, 1997-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -86,9 +86,11 @@ get_doc_string (Lisp_Object filepos, int unibyte, int definition)
   register int fd;
   register char *name;
   register char *p, *p1;
-  EMACS_INT minsize;
-  EMACS_INT offset, position;
+  ptrdiff_t minsize;
+  int offset;
+  EMACS_INT position;
   Lisp_Object file, tem;
+  USE_SAFE_ALLOCA;
 
   if (INTEGERP (filepos))
     {
@@ -124,7 +126,7 @@ get_doc_string (Lisp_Object filepos, int unibyte, int definition)
       /* sizeof ("../etc/") == 8 */
       if (minsize < 8)
 	minsize = 8;
-      name = (char *) alloca (minsize + SCHARS (file) + 8);
+      SAFE_ALLOCA (name, char *, minsize + SCHARS (file) + 8);
       strcpy (name, SSDATA (docdir));
       strcat (name, SSDATA (file));
     }
@@ -155,12 +157,15 @@ get_doc_string (Lisp_Object filepos, int unibyte, int definition)
   /* Make sure we read at least 1024 bytes before `position'
      so we can check the leading text for consistency.  */
   offset = min (position, max (1024, position % (8 * 1024)));
-  if (0 > lseek (fd, position - offset, 0))
+  if (TYPE_MAXIMUM (off_t) < position
+      || lseek (fd, position - offset, 0) < 0)
     {
       emacs_close (fd);
       error ("Position %"pI"d out of range in doc string file \"%s\"",
 	     position, name);
     }
+
+  SAFE_FREE ();
 
   /* Read the doc string into get_doc_string_buffer.
      P points beyond the data just read.  */
@@ -279,7 +284,7 @@ Invalid data in documentation file -- %c followed by code %03o",
   else
     {
       /* The data determines whether the string is multibyte.  */
-      EMACS_INT nchars =
+      ptrdiff_t nchars =
 	multibyte_chars_in_text (((unsigned char *) get_doc_string_buffer
 				  + offset),
 				 to - (get_doc_string_buffer + offset));
@@ -502,10 +507,11 @@ aren't strings.  */)
 /* Scanning the DOC files and placing docstring offsets into functions.  */
 
 static void
-store_function_docstring (Lisp_Object fun, EMACS_INT offset)
-/* Use EMACS_INT because we get offset from pointer subtraction.  */
+store_function_docstring (Lisp_Object obj, ptrdiff_t offset)
 {
-  fun = indirect_function (fun);
+  /* Don't use indirect_function here, or defaliases will apply their
+     docstrings to the base functions (Bug#2603).  */
+  Lisp_Object fun = SYMBOLP (obj) ? XSYMBOL (obj)->function : obj;
 
   /* The type determines where the docstring is stored.  */
 
@@ -558,7 +564,7 @@ the same file name is found in the `doc-directory'.  */)
 {
   int fd;
   char buf[1024 + 1];
-  register EMACS_INT filled;
+  register int filled;
   register EMACS_INT pos;
   register char *p;
   Lisp_Object sym;
@@ -593,7 +599,7 @@ the same file name is found in the `doc-directory'.  */)
 
     for (beg = buildobj; *beg; beg = end)
       {
-        EMACS_INT len;
+        ptrdiff_t len;
 
         while (*beg && isspace (*beg)) ++beg;
 
@@ -641,7 +647,7 @@ the same file name is found in the `doc-directory'.  */)
               if (end - p > 4 && end[-2] == '.'
                   && (end[-1] == 'o' || end[-1] == 'c'))
                 {
-                  EMACS_INT len = end - p - 2;
+                  ptrdiff_t len = end - p - 2;
                   char *fromfile = alloca (len + 1);
                   strncpy (fromfile, &p[2], len);
                   fromfile[len] = 0;
@@ -669,15 +675,18 @@ the same file name is found in the `doc-directory'.  */)
 		  /* Install file-position as variable-documentation property
 		     and make it negative for a user-variable
 		     (doc starts with a `*').  */
-		  Fput (sym, Qvariable_documentation,
-			make_number ((pos + end + 1 - buf)
-				     * (end[1] == '*' ? -1 : 1)));
+                  if (!NILP (Fboundp (sym)))
+                    Fput (sym, Qvariable_documentation,
+                          make_number ((pos + end + 1 - buf)
+                                       * (end[1] == '*' ? -1 : 1)));
 		}
 
 	      /* Attach a docstring to a function?  */
 	      else if (p[1] == 'F')
-		store_function_docstring (sym, pos + end + 1 - buf);
-
+                {
+                  if (!NILP (Ffboundp (sym)))
+                    store_function_docstring (sym, pos + end + 1 - buf);
+                }
 	      else if (p[1] == 'S')
 		; /* Just a source file name boundary marker.  Ignore it.  */
 

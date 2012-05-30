@@ -71,7 +71,7 @@
 ;; few thousand lines long).  Thus, code should follow the rule:
 ;; "collect once, use many".  As a corollary, it is usually a bad idea
 ;; to use directly an interactive function inside the code, as those,
-;; being independant entities, read the whole list structure another
+;; being independent entities, read the whole list structure another
 ;; time.
 
 ;;; Code:
@@ -207,7 +207,7 @@ Valid values are ?. and ?\).  To get both terminators, use t."
   :group 'org-plain-lists
   :type '(choice (const :tag "dot like in \"2.\"" ?.)
 		 (const :tag "paren like in \"2)\"" ?\))
-		 (const :tab "both" t)))
+		 (const :tag "both" t)))
 
 (defcustom org-alphabetical-lists nil
   "Non-nil means single character alphabetical bullets are allowed.
@@ -215,6 +215,7 @@ Both uppercase and lowercase are handled.  Lists with more than
 26 items will fallback to standard numbering.  Alphabetical
 counters like \"[@c]\" will be recognized."
   :group 'org-plain-lists
+  :version "24.1"
   :type 'boolean)
 
 (defcustom org-list-two-spaces-after-bullet-regexp nil
@@ -229,41 +230,11 @@ spaces instead of one after the bullet in each item of the list."
 	  (const :tag "never" nil)
 	  (regexp)))
 
-(defcustom org-list-ending-method 'both
-  "Determine where plain lists should end.
-Valid values are: `regexp', `indent' or `both'.
-
-When set to `regexp', Org will look into two variables,
-`org-empty-line-terminates-plain-lists' and the more general
-`org-list-end-regexp', to determine what will end lists.
-
-When set to `indent', a list will end whenever a line following
-an item, but not starting one, is less or equally indented than
-the first item of the list.
-
-When set to `both', each of the preceding methods is applied to
-determine lists endings.  This is the default method."
-  :group 'org-plain-lists
-  :type '(choice
-	  (const :tag "With a regexp defining ending" regexp)
-	  (const :tag "With indentation of regular (no bullet) text" indent)
-	  (const :tag "With both methods" both)))
-
 (defcustom org-empty-line-terminates-plain-lists nil
   "Non-nil means an empty line ends all plain list levels.
-This variable only makes sense if `org-list-ending-method' is set
-to `regexp' or `both'.  This is then equivalent to set
-`org-list-end-regexp' to \"^[ \\t]*$\"."
+Otherwise, two of them will be necessary."
   :group 'org-plain-lists
   :type 'boolean)
-
-(defcustom org-list-end-regexp "^[ \t]*\n[ \t]*\n"
-  "Regexp matching the end of all plain list levels.
-It must start with \"^\" and end with \"\\n\".  It defaults to 2
-blank lines. `org-empty-line-terminates-plain-lists' has
-precedence over it."
-  :group 'org-plain-lists
-  :type 'string)
 
 (defcustom org-list-automatic-rules '((bullet . t)
 				      (checkbox . t)
@@ -288,6 +259,7 @@ indent    when non-nil, indenting or outdenting list top-item
           outdenting a list whose bullet is * to column 0 will
           change that bullet to \"-\"."
    :group 'org-plain-lists
+   :version "24.1"
    :type '(alist :tag "Sets of rules"
 		 :key-type
 		 (choice
@@ -307,6 +279,7 @@ This affects the behavior of \\[org-move-item-up],
  \\[org-move-item-down], \\[org-next-item] and
  \\[org-previous-item]."
   :group 'org-plain-lists
+  :version "24.1"
   :type 'boolean)
 
 (defvar org-checkbox-statistics-hook nil
@@ -336,6 +309,7 @@ When the indentation would be larger than this, it will become
 By setting this to a small number, usually 1 or 2, one can more
 clearly distinguish sub-items in a list."
   :group 'org-plain-lists
+  :version "24.1"
   :type 'integer)
 
 (defcustom org-list-radio-list-templates
@@ -381,9 +355,8 @@ specifically, type `block' is determined by the variable
 
 ;;; Predicates and regexps
 
-(defconst org-list-end-re (if org-empty-line-terminates-plain-lists
-			      "^[ \t]*\n"
-			    org-list-end-regexp)
+(defconst org-list-end-re (if org-empty-line-terminates-plain-lists "^[ \t]*\n"
+			    "^[ \t]*\n[ \t]*\n")
   "Regex corresponding to the end of a list.
 It depends on `org-empty-line-terminates-plain-lists'.")
 
@@ -432,8 +405,7 @@ group 4: description tag")
   (not (org-in-block-p org-list-forbidden-blocks)))
 
 (defun org-in-item-p ()
-  "Return item beginning position when in a plain list, nil otherwise.
-This checks `org-list-ending-method'."
+  "Return item beginning position when in a plain list, nil otherwise."
   (save-excursion
     (beginning-of-line)
     (let* ((case-fold-search t)
@@ -460,8 +432,7 @@ This checks `org-list-ending-method'."
 	;; to compute its boundaries END-BOUNDS.  When point is
 	;; in-between, move cursor before regexp beginning.
 	(let ((hl 0) (i -1) end-bounds)
-	  (when (and (not (eq org-list-ending-method 'indent))
-		     (progn
+	  (when (and (progn
 		       (while (setq i (string-match
 				       "[\r\n]" org-list-end-re (1+ i)))
 			 (setq hl (1+ hl)))
@@ -470,23 +441,18 @@ This checks `org-list-ending-method'."
 		     (< (point) (cdr end-bounds)))
 	    (goto-char (car end-bounds))
 	    (forward-line -1)))
-	;; Look for an item, less indented that reference line if
-	;; `org-list-ending-method' isn't `regexp'.
+	;; Look for an item, less indented that reference line.
 	(catch 'exit
 	  (while t
 	    (let ((ind (org-get-indentation)))
 	      (cond
 	       ;; This is exactly what we want.
-	       ((and (looking-at item-re)
-		     (or (< ind ind-ref)
-			 (eq org-list-ending-method 'regexp)))
+	       ((and (looking-at item-re) (< ind ind-ref))
 		(throw 'exit (point)))
 	       ;; At upper bound of search or looking at the end of a
 	       ;; previous list: search is over.
 	       ((<= (point) lim-up) (throw 'exit nil))
-	       ((and (not (eq org-list-ending-method 'indent))
-		     (looking-at org-list-end-re))
-		(throw 'exit nil))
+	       ((looking-at org-list-end-re) (throw 'exit nil))
 	       ;; Skip blocks, drawers, inline-tasks, blank lines
 	       ((and (looking-at "^[ \t]*#\\+end_")
 		     (re-search-backward "^[ \t]*#\\+begin_" lim-up t)))
@@ -685,7 +651,7 @@ Assume point is at an item."
 	      (cond
 	       ((<= (point) lim-up)
 		;; At upward limit: if we ended at an item, store it,
-		;; else dimiss useless data recorded above BEG-CELL.
+		;; else dismiss useless data recorded above BEG-CELL.
 		;; Jump to part 2.
 		(throw 'exit
 		       (setq itm-lst
@@ -703,8 +669,7 @@ Assume point is at an item."
 		(forward-line -1))
 	       ;; Looking at a list ending regexp.  Dismiss useless
 	       ;; data recorded above BEG-CELL.  Jump to part 2.
-	       ((and (not (eq org-list-ending-method 'indent))
-		     (looking-at org-list-end-re))
+	       ((looking-at org-list-end-re)
 		(throw 'exit
 		       (setq itm-lst
 			     (memq (assq (car beg-cell) itm-lst) itm-lst))))
@@ -716,10 +681,7 @@ Assume point is at an item."
 	       ((looking-at item-re)
 		(push (funcall assoc-at-point ind) itm-lst)
 		(push (cons ind (point)) end-lst)
-		(when (or (and (eq org-list-ending-method 'regexp)
-			       (<= ind (cdr beg-cell)))
-			  (< ind text-min-ind))
-		  (setq beg-cell (cons (point) ind)))
+		(when (< ind text-min-ind) (setq beg-cell (cons (point) ind)))
 		(forward-line -1))
 	       ;; Skip blocks, drawers, inline tasks, blank lines.
 	       ((and (looking-at "^[ \t]*#\\+end_")
@@ -732,14 +694,13 @@ Assume point is at an item."
 		(forward-line -1))
 	       ((looking-at "^[ \t]*$")
 		(forward-line -1))
-	       ;; From there, point is not at an item.  Unless ending
-	       ;; method is `regexp', interpret line's indentation:
+	       ;; From there, point is not at an item. Interpret
+	       ;; line's indentation:
 	       ;; - text at column 0 is necessarily out of any list.
 	       ;;   Dismiss data recorded above BEG-CELL.  Jump to
 	       ;;   part 2.
 	       ;; - any other case may be an ending position for an
 	       ;;   hypothetical item above.  Store it and proceed.
-	       ((eq org-list-ending-method 'regexp) (forward-line -1))
 	       ((zerop ind)
 		(throw 'exit
 		       (setq itm-lst
@@ -753,15 +714,15 @@ Assume point is at an item."
       ;;    equally indented than BEG-CELL's cdr.  Also, store ending
       ;;    position of items in END-LST-2.
       (catch 'exit
-      	(while t
-      	  (let ((ind (+ (or (get-text-property (point) 'original-indentation) 0)
+	(while t
+	  (let ((ind (+ (or (get-text-property (point) 'original-indentation) 0)
 			(org-get-indentation))))
-      	    (cond
-      	     ((>= (point) lim-down)
+	    (cond
+	     ((>= (point) lim-down)
 	      ;; At downward limit: this is de facto the end of the
 	      ;; list.  Save point as an ending position, and jump to
 	      ;; part 3.
-      	      (throw 'exit
+	      (throw 'exit
 		     (push (cons 0 (funcall end-before-blank)) end-lst-2)))
 	     ;; At a verbatim block, move to its end.  Point is at bol
 	     ;; and 'org-example property is set by whole lines:
@@ -771,8 +732,7 @@ Assume point is at an item."
 	       (next-single-property-change (point) 'org-example nil lim-down)))
 	     ;; Looking at a list ending regexp.  Save point as an
 	     ;; ending position and jump to part 3.
-	     ((and (not (eq org-list-ending-method 'indent))
-		   (looking-at org-list-end-re))
+	     ((looking-at org-list-end-re)
 	      (throw 'exit (push (cons 0 (point)) end-lst-2)))
 	     ((looking-at item-re)
 	      ;; Point is at an item.  Add data to ITM-LST-2. It may
@@ -788,16 +748,14 @@ Assume point is at an item."
 	     ;; Ind is lesser or equal than BEG-CELL's.  The list is
 	     ;; over: store point as an ending position and jump to
 	     ;; part 3.
-	     ((and (not (eq org-list-ending-method 'regexp))
-		   (<= ind (cdr beg-cell)))
+	     ((<= ind (cdr beg-cell))
 	      (throw 'exit
 		     (push (cons 0 (funcall end-before-blank)) end-lst-2)))
 	     ;; Else, if ind is lesser or equal than previous item's,
 	     ;; this is an ending position: store it.  In any case,
 	     ;; skip block or drawer at point, and move to next line.
 	     (t
-	      (when (and (not (eq org-list-ending-method 'regexp))
-			 (<= ind (nth 1 (car itm-lst-2))))
+	      (when (<= ind (nth 1 (car itm-lst-2)))
 		(push (cons ind (point)) end-lst-2))
 	      (cond
 	       ((and (looking-at "^[ \t]*#\\+begin_")
@@ -1113,8 +1071,10 @@ It determines the number of whitespaces to append by looking at
 
 (defun org-list-swap-items (beg-A beg-B struct)
   "Swap item starting at BEG-A with item starting at BEG-B in STRUCT.
-Blank lines at the end of items are left in place.  Return the
-new structure after the changes.
+
+Blank lines at the end of items are left in place.  Item
+visibility is preserved.  Return the new structure after the
+changes.
 
 Assume BEG-A is lesser than BEG-B and that BEG-A and BEG-B belong
 to the same sub-list.
@@ -1131,7 +1091,17 @@ This function modifies STRUCT."
 	   (body-B (buffer-substring beg-B end-B-no-blank))
 	   (between-A-no-blank-and-B (buffer-substring end-A-no-blank beg-B))
 	   (sub-A (cons beg-A (org-list-get-subtree beg-A struct)))
-	   (sub-B (cons beg-B (org-list-get-subtree beg-B struct))))
+	   (sub-B (cons beg-B (org-list-get-subtree beg-B struct)))
+	   ;; Store overlays responsible for visibility status.  We
+	   ;; also need to store their boundaries as they will be
+	   ;; removed from buffer.
+	   (overlays (cons
+		      (mapcar (lambda (ov)
+				(list ov (overlay-start ov) (overlay-end ov)))
+			      (overlays-in beg-A end-A))
+		      (mapcar (lambda (ov)
+				(list ov (overlay-start ov) (overlay-end ov)))
+			      (overlays-in beg-B end-B)))))
       ;; 1. Move effectively items in buffer.
       (goto-char beg-A)
       (delete-region beg-A end-B-no-blank)
@@ -1164,7 +1134,22 @@ This function modifies STRUCT."
 		    (setcar e (+ pos (- size-B size-A)))
 		    (setcar (nthcdr 6 e) (+ end-e (- size-B size-A))))))))
 	    struct)
-      (sort struct (lambda (e1 e2) (< (car e1) (car e2)))))))
+      (setq struct (sort struct (lambda (e1 e2) (< (car e1) (car e2)))))
+      ;; Restore visibility status, by moving overlays to their new
+      ;; position.
+      (mapc (lambda (ov)
+	      (move-overlay
+	       (car ov)
+	       (+ (nth 1 ov) (- (+ beg-B (- size-B size-A)) beg-A))
+	       (+ (nth 2 ov) (- (+ beg-B (- size-B size-A)) beg-A))))
+	    (car overlays))
+      (mapc (lambda (ov)
+	      (move-overlay (car ov)
+			    (+ (nth 1 ov) (- beg-A beg-B))
+			    (+ (nth 2 ov) (- beg-A beg-B))))
+	    (cdr overlays))
+      ;; Return structure.
+      struct)))
 
 (defun org-list-separating-blank-lines-number (pos struct prevs)
   "Return number of blank lines that should separate items in list.
@@ -1192,9 +1177,7 @@ some heuristics to guess the result."
 				    (point))))))))
       (cond
        ;; Trivial cases where there should be none.
-       ((or (and (not (eq org-list-ending-method 'indent))
-		 org-empty-line-terminates-plain-lists)
-	    (not insert-blank-p)) 0)
+       ((or org-empty-line-terminates-plain-lists (not insert-blank-p)) 0)
        ;; When `org-blank-before-new-entry' says so, it is 1.
        ((eq insert-blank-p t) 1)
        ;; `plain-list-item' is 'auto.  Count blank lines separating
@@ -1384,8 +1367,8 @@ If DEST is a buffer position, the function will assume it points
 to another item in the same list as ITEM, and will move the
 latter just before the former.
 
-If DEST is `begin' \(respectively `end'\), ITEM will be moved at
-the beginning \(respectively end\) of the list it belongs to.
+If DEST is `begin' (respectively `end'), ITEM will be moved at
+the beginning (respectively end) of the list it belongs to.
 
 If DEST is a string like \"N\", where N is an integer, ITEM will
 be moved at the Nth position in the list.
@@ -1394,6 +1377,8 @@ If DEST is `kill', ITEM will be deleted and its body will be
 added to the kill-ring.
 
 If DEST is `delete', ITEM will be deleted.
+
+Visibility of item is preserved.
 
 This function returns, destructively, the new list structure."
   (let* ((prevs (org-list-prevs-alist struct))
@@ -1437,7 +1422,9 @@ This function returns, destructively, the new list structure."
 			     (org-list-get-last-item item struct prevs))
 			    (point-at-eol)))))
 		     (t dest)))
-	 (org-M-RET-may-split-line nil))
+	 (org-M-RET-may-split-line nil)
+	 ;; Store visibility.
+	 (visibility (overlays-in item item-end)))
     (cond
      ((eq dest 'delete) (org-list-delete-item item struct))
      ((eq dest 'kill)
@@ -1473,9 +1460,14 @@ This function returns, destructively, the new list structure."
 							 (+ end shift)))))))
 			       moved-items))
 		      (lambda (e1 e2) (< (car e1) (car e2))))))
-      ;; 2. Eventually delete extra copy of the item and clean marker.
-      (prog1
-	  (org-list-delete-item (marker-position item) struct)
+      ;; 2. Restore visibility.
+      (mapc (lambda (ov)
+	      (move-overlay ov
+			    (+ (overlay-start ov) (- (point) item))
+			    (+ (overlay-end ov) (- (point) item))))
+	    visibility)
+      ;; 3. Eventually delete extra copy of the item and clean marker.
+      (prog1 (org-list-delete-item (marker-position item) struct)
 	(move-marker item nil)))
      (t struct))))
 
@@ -1528,8 +1520,19 @@ bullets between START and END."
 	 (change-bullet-maybe
 	  (function
 	   (lambda (item)
-	     (let* ((bul (org-trim (org-list-get-bullet item struct)))
-		    (new-bul-p (cdr (assoc bul org-list-demote-modify-bullet))))
+	     (let ((new-bul-p
+		    (cdr (assoc
+			  ;; Normalize ordered bullets.
+			  (let ((bul (org-trim
+				      (org-list-get-bullet item struct))))
+			    (cond ((string-match "[A-Z]\\." bul) "A.")
+				  ((string-match "[A-Z])" bul) "A)")
+				  ((string-match "[a-z]\\." bul) "a.")
+				  ((string-match "[a-z])" bul) "a)")
+				  ((string-match "[0-9]\\." bul) "1.")
+				  ((string-match "[0-9])" bul) "1)")
+				  (t bul)))
+			  org-list-demote-modify-bullet))))
 	       (when new-bul-p (org-list-set-bullet item struct new-bul-p))))))
 	 (ind
 	  (lambda (cell)
@@ -2544,7 +2547,6 @@ STRUCT is the list structure.
 
 Return t if successful."
   (save-excursion
-    (beginning-of-line)
     (let* ((regionp (org-region-active-p))
 	   (rbeg (and regionp (region-beginning)))
 	   (rend (and regionp (region-end)))
@@ -2553,7 +2555,8 @@ Return t if successful."
 	   (prevs (org-list-prevs-alist struct))
 	   ;; Are we going to move the whole list?
 	   (specialp
-	    (and (= top (point))
+	    (and (not regionp)
+		 (= top (point-at-bol))
 		 (cdr (assq 'indent org-list-automatic-rules))
 		 (if no-subtree
 		     (error
@@ -2567,12 +2570,12 @@ Return t if successful."
 	    (progn
 	      (set-marker org-last-indent-begin-marker rbeg)
 	      (set-marker org-last-indent-end-marker rend))
-	  (set-marker org-last-indent-begin-marker (point))
+	  (set-marker org-last-indent-begin-marker (point-at-bol))
 	  (set-marker org-last-indent-end-marker
 		      (cond
 		       (specialp (org-list-get-bottom-point struct))
-		       (no-subtree (1+ (point)))
-		       (t (org-list-get-item-end (point) struct))))))
+		       (no-subtree (1+ (point-at-bol)))
+		       (t (org-list-get-item-end (point-at-bol) struct))))))
       (let* ((beg (marker-position org-last-indent-begin-marker))
 	     (end (marker-position org-last-indent-end-marker)))
 	(cond
@@ -2627,19 +2630,35 @@ Return t if successful."
   "Outdent a local list item, but not its children.
 If a region is active, all items inside will be moved."
   (interactive)
-  (if (org-at-item-p)
-      (let ((struct (org-list-struct)))
-	(org-list-indent-item-generic -1 t struct))
-    (error "Not at an item")))
+  (let ((regionp (org-region-active-p)))
+    (cond
+     ((or (org-at-item-p)
+	  (and regionp
+	       (save-excursion (goto-char (region-beginning))
+			       (org-at-item-p))))
+      (let ((struct (if (not regionp) (org-list-struct)
+		      (save-excursion (goto-char (region-beginning))
+				      (org-list-struct)))))
+	(org-list-indent-item-generic -1 t struct)))
+     (regionp (error "Region not starting at an item"))
+     (t (error "Not at an item")))))
 
 (defun org-indent-item ()
   "Indent a local list item, but not its children.
 If a region is active, all items inside will be moved."
   (interactive)
-  (if (org-at-item-p)
-      (let ((struct (org-list-struct)))
-	(org-list-indent-item-generic 1 t struct))
-    (error "Not at an item")))
+  (let ((regionp (org-region-active-p)))
+    (cond
+     ((or (org-at-item-p)
+	  (and regionp
+	       (save-excursion (goto-char (region-beginning))
+			       (org-at-item-p))))
+      (let ((struct (if (not regionp) (org-list-struct)
+		      (save-excursion (goto-char (region-beginning))
+				      (org-list-struct)))))
+	(org-list-indent-item-generic 1 t struct)))
+     (regionp (error "Region not starting at an item"))
+     (t (error "Not at an item")))))
 
 (defun org-outdent-item-tree ()
   "Outdent a local list item including its children.
@@ -2648,10 +2667,12 @@ If a region is active, all items inside will be moved."
   (let ((regionp (org-region-active-p)))
     (cond
      ((or (org-at-item-p)
-	  (and (org-region-active-p)
-	       (goto-char (region-beginning))
-	       (org-at-item-p)))
-      (let ((struct (org-list-struct)))
+	  (and regionp
+	       (save-excursion (goto-char (region-beginning))
+			       (org-at-item-p))))
+      (let ((struct (if (not regionp) (org-list-struct)
+		      (save-excursion (goto-char (region-beginning))
+				      (org-list-struct)))))
 	(org-list-indent-item-generic -1 nil struct)))
      (regionp (error "Region not starting at an item"))
      (t (error "Not at an item")))))
@@ -2663,10 +2684,12 @@ If a region is active, all items inside will be moved."
   (let ((regionp (org-region-active-p)))
     (cond
      ((or (org-at-item-p)
-	  (and (org-region-active-p)
-	       (goto-char (region-beginning))
-	       (org-at-item-p)))
-      (let ((struct (org-list-struct)))
+	  (and regionp
+	       (save-excursion (goto-char (region-beginning))
+			       (org-at-item-p))))
+      (let ((struct (if (not regionp) (org-list-struct)
+		      (save-excursion (goto-char (region-beginning))
+				      (org-list-struct)))))
 	(org-list-indent-item-generic 1 nil struct)))
      (regionp (error "Region not starting at an item"))
      (t (error "Not at an item")))))
@@ -2674,7 +2697,7 @@ If a region is active, all items inside will be moved."
 (defvar org-tab-ind-state)
 (defun org-cycle-item-indentation ()
   "Cycle levels of indentation of an empty item.
-The first run indents the item, if applicable.  Subsequents runs
+The first run indents the item, if applicable.  Subsequent runs
 outdent it at meaningful levels in the list.  When done, item is
 put back at its original position with its original bullet.
 
@@ -2929,9 +2952,7 @@ Point is left at list end."
     (goto-char top)
     (when delete
       (delete-region top bottom)
-      (when (and (not (eq org-list-ending-method 'indent))
-		 (not (looking-at "[ \t]*$"))
-		 (looking-at org-list-end-re))
+      (when (and (not (looking-at "[ \t]*$")) (looking-at org-list-end-re))
 	(replace-match "")))
     out))
 
@@ -3047,7 +3068,7 @@ Valid parameters PARAMS are:
 
 Alternatively, each parameter can also be a form returning
 a string.  These sexp can use keywords `counter' and `depth',
-reprensenting respectively counter associated to the current
+representing respectively counter associated to the current
 item, and depth of the current sub-list, starting at 0.
 Obviously, `counter' is only available for parameters applying to
 items."

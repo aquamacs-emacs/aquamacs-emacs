@@ -1,6 +1,6 @@
 ;;; image.el --- image API
 
-;; Copyright (C) 1998-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1998-2012 Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: multimedia
@@ -163,7 +163,7 @@ compatibility with versions of Emacs that lack the variable
                 dir (expand-file-name "../" dir))))
       (setq image-directory-load-path dir))
 
-    ;; If `image-directory-load-path' isn't Emacs' image directory,
+    ;; If `image-directory-load-path' isn't Emacs's image directory,
     ;; it's probably a user preference, so use it. Then use a
     ;; relative setting if possible; otherwise, use
     ;; `image-directory-load-path'.
@@ -194,7 +194,7 @@ compatibility with versions of Emacs that lack the variable
               ;; Set it to nil if image is not found.
               (cond ((file-exists-p (expand-file-name image d2ei)) d2ei)
                     ((file-exists-p (expand-file-name image d1ei)) d1ei)))))
-     ;; Use Emacs' image directory.
+     ;; Use Emacs's image directory.
      (image-directory-load-path
       (setq image-directory image-directory-load-path))
      (no-error
@@ -207,6 +207,8 @@ compatibility with versions of Emacs that lack the variable
            (delete image-directory (copy-sequence (or path load-path))))))
 
 
+;; Used to be in image-type-header-regexps, but now not used anywhere
+;; (since 2009-08-28).
 (defun image-jpeg-p (data)
   "Value is non-nil if DATA, a string, consists of JFIF image data.
 We accept the tag Exif because that is the same format."
@@ -280,7 +282,9 @@ be determined."
 		  types nil)
 	  (setq types (cdr types)))))
     (goto-char opoint)
-    type))
+    (and type
+	 (memq type image-types)
+	 type)))
 
 
 ;;;###autoload
@@ -328,6 +332,10 @@ Optional DATA-P non-nil means SOURCE is a string containing image data."
       (error "Invalid image type `%s'" type))
   type)
 
+
+(if (fboundp 'image-metadata)           ; eg not --without-x
+    (define-obsolete-function-alias 'image-extension-data
+      'image-metadata' "24.1"))
 
 (define-obsolete-variable-alias
     'image-library-alist
@@ -406,7 +414,8 @@ means display it in the right marginal area."
 	  (prop (if (null area) image (list (list 'margin area) image))))
       (put-text-property 0 (length string) 'display prop string)
       (overlay-put overlay 'put-image t)
-      (overlay-put overlay 'before-string string))))
+      (overlay-put overlay 'before-string string)
+      overlay)))
 
 
 ;;;###autoload
@@ -595,13 +604,15 @@ Example:
   "List of supported animated image types.")
 
 (defun image-animated-p (image)
-  "Return non-nil if image can be animated.
-Actually, the return value is a cons (NIMAGES . DELAY), where
-NIMAGES is the number of sub-images in the animated image and
-DELAY is the delay in second until the next sub-image shall be
-displayed."
+  "Return non-nil if IMAGE can be animated.
+To be capable of being animated, an image must be of a type
+listed in `image-animated-types', and contain more than one
+sub-image, with a specified animation delay.  The actual return
+value is a cons (NIMAGES . DELAY), where NIMAGES is the number
+of sub-images in the animated image and DELAY is the delay in
+seconds until the next sub-image should be displayed."
   (cond
-   ((eq (plist-get (cdr image) :type) 'gif)
+   ((memq (plist-get (cdr image) :type) image-animated-types)
     (let* ((metadata (image-metadata image))
 	   (images (plist-get metadata 'count))
 	   (delay (plist-get metadata 'delay)))
@@ -609,6 +620,7 @@ displayed."
 	(if (< delay 0) (setq delay 0.1))
 	(cons images delay))))))
 
+;; "Destructively"?
 (defun image-animate (image &optional index limit)
   "Start animating IMAGE.
 Animation occurs by destructively altering the IMAGE spec list.
@@ -639,16 +651,20 @@ number, play until that number of seconds has elapsed."
 	(setq timer nil)))
     timer))
 
+;; FIXME? The delay may not be the same for different sub-images,
+;; hence we need to call image-animated-p to return it.
+;; But it also returns count, so why do we bother passing that as an
+;; argument?
 (defun image-animate-timeout (image n count time-elapsed limit)
   "Display animation frame N of IMAGE.
 N=0 refers to the initial animation frame.
 COUNT is the total number of frames in the animation.
-DELAY is the time between animation frames, in seconds.
 TIME-ELAPSED is the total time that has elapsed since
 `image-animate-start' was called.
 LIMIT determines when to stop.  If t, loop forever.  If nil, stop
  after displaying the last animation frame.  Otherwise, stop
- after LIMIT seconds have elapsed."
+ after LIMIT seconds have elapsed.
+The minimum delay between successive frames is 0.01s."
   (plist-put (cdr image) :index n)
   (force-window-update)
   (setq n (1+ n))
@@ -671,38 +687,67 @@ LIMIT determines when to stop.  If t, loop forever.  If nil, stop
 		      image n count time-elapsed limit))))
 
 
-(defcustom imagemagick-types-inhibit
-  '(C HTML HTM TXT PDF)
-  "ImageMagick types that Emacs should not use ImageMagick to handle.
-This should be a list of symbols, each of which has the same
-names as one of the format tags used internally by ImageMagick;
-see `imagemagick-types'.  Entries in this list are excluded from
-being registered by `imagemagick-register-types'.
-
-If Emacs is compiled without ImageMagick, this variable has no effect."
-  :type '(choice (const :tag "Let ImageMagick handle all types it can" nil)
-		 (repeat symbol))
-  :version "24.1"
-  :group 'image)
+(defvar imagemagick--file-regexp nil
+  "File extension regexp for ImageMagick files, if any.
+This is the extension installed into `auto-mode-alist' and
+`image-type-file-name-regexps' by `imagemagick-register-types'.")
 
 ;;;###autoload
 (defun imagemagick-register-types ()
   "Register file types that can be handled by ImageMagick.
-This adds the file types returned by `imagemagick-types'
-\(excluding the ones in `imagemagick-types-inhibit') to
-`auto-mode-alist' and `image-type-file-name-regexps', so that
-Emacs visits them in Image mode.
+This function is called at startup, after loading the init file.
+It registers the ImageMagick types listed in `imagemagick-types',
+excluding those listed in `imagemagick-types-inhibit'.
+
+Registered image types are added to `auto-mode-alist', so that
+Emacs visits them in Image mode.  They are also added to
+`image-type-file-name-regexps', so that the `image-type' function
+recognizes these files as having image type `imagemagick'.
 
 If Emacs is compiled without ImageMagick support, do nothing."
   (when (fboundp 'imagemagick-types)
-    (let ((im-types '()))
-      (dolist (im-type (imagemagick-types))
-        (unless (memq im-type imagemagick-types-inhibit)
-          (push (downcase (symbol-name im-type)) im-types)))
-      (let ((extension (concat "\\." (regexp-opt im-types) "\\'")))
-        (push (cons extension 'image-mode) auto-mode-alist)
-        (push (cons extension 'imagemagick)
-              image-type-file-name-regexps)))))
+    (let ((re (if (eq imagemagick-types-inhibit t)
+		  ;; Use a bogus regexp to inhibit matches.
+		  "\\'a"
+		(let ((types))
+		  (dolist (type (imagemagick-types))
+		    (unless (memq type imagemagick-types-inhibit)
+		      (push (downcase (symbol-name type)) types)))
+		  (concat "\\." (regexp-opt types) "\\'"))))
+	  (ama-elt (car (member (cons imagemagick--file-regexp 'image-mode)
+				auto-mode-alist)))
+	  (itfnr-elt (car (member (cons imagemagick--file-regexp 'imagemagick)
+				  image-type-file-name-regexps))))
+      (if ama-elt
+	  (setcar ama-elt re)
+	(push (cons re 'image-mode) auto-mode-alist))
+      (if itfnr-elt
+	  (setcar itfnr-elt re)
+	(push (cons re 'imagemagick) image-type-file-name-regexps))
+      (setq imagemagick--file-regexp re))))
+
+(defcustom imagemagick-types-inhibit
+  '(C HTML HTM TXT PDF)
+  "List of ImageMagick types that should not be treated as images.
+This should be a list of symbols, each of which should be one of
+the ImageMagick types listed in `imagemagick-types'.  The listed
+image types are not registered by `imagemagick-register-types'.
+
+If the value is t, inhibit the use of ImageMagick for images.
+
+If you change this without using customize, you must call
+`imagemagick-register-types' afterwards.
+
+If Emacs is compiled without ImageMagick support, this variable
+has no effect."
+  :type '(choice (const :tag "Support all ImageMagick types" nil)
+		 (const :tag "Disable all ImageMagick types" t)
+		 (repeat symbol))
+  :set (lambda (symbol value)
+	 (set-default symbol value)
+	 (imagemagick-register-types))
+  :version "24.1"
+  :group 'image)
 
 (provide 'image)
 

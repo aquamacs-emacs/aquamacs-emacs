@@ -79,7 +79,7 @@
 ;;
 
 (defvar eieio-hook nil
-  "*This hook is executed, then cleared each time `defclass' is called.")
+  "This hook is executed, then cleared each time `defclass' is called.")
 
 (defvar eieio-error-unsupported-class-tags nil
   "Non-nil to throw an error if an encountered tag is unsupported.
@@ -87,7 +87,7 @@ This may prevent classes from CLOS applications from being used with EIEIO
 since EIEIO does not support all CLOS tags.")
 
 (defvar eieio-skip-typecheck nil
-  "*If non-nil, skip all slot typechecking.
+  "If non-nil, skip all slot typechecking.
 Set this to t permanently if a program is functioning well to get a
 small speed increase.  This variable is also used internally to handle
 default setting for optimization purposes.")
@@ -2044,7 +2044,7 @@ During executions, the list is first generated, then as each next method
 is called, the next method is popped off the stack.")
 
 (defvar eieio-pre-method-execution-hooks nil
-  "*Hooks run just before a method is executed.
+  "Hooks run just before a method is executed.
 The hook function must accept one argument, the list of forms
 about to be executed.")
 
@@ -3051,7 +3051,7 @@ Optional argument GROUP is the sub-group of slots to display.
 
 ;;;### (autoloads (eieio-help-mode-augmentation-maybee eieio-describe-generic
 ;;;;;;  eieio-describe-constructor eieio-describe-class eieio-browse)
-;;;;;;  "eieio-opt" "eieio-opt.el" "e2814881441ad23759409687502f0ee1")
+;;;;;;  "eieio-opt" "eieio-opt.el" "d808328f9c0156ecbd412d77ba8c569e")
 ;;; Generated autoloads from eieio-opt.el
 
 (autoload 'eieio-browse "eieio-opt" "\
@@ -3060,7 +3060,6 @@ If optional ROOT-CLASS, then start with that, otherwise start with
 variable `eieio-default-superclass'.
 
 \(fn &optional ROOT-CLASS)" t nil)
-
 (defalias 'describe-class 'eieio-describe-class)
 
 (autoload 'eieio-describe-class "eieio-opt" "\
@@ -3075,7 +3074,6 @@ Describe the constructor function FCN.
 Uses `eieio-describe-class' to describe the class being constructed.
 
 \(fn FCN)" t nil)
-
 (defalias 'describe-generic 'eieio-describe-generic)
 
 (autoload 'eieio-describe-generic "eieio-opt" "\

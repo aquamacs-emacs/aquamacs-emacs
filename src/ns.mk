@@ -1,6 +1,6 @@
 ### autodeps.mk --- src/Makefile fragment for GNU Emacs
 
-## Copyright (C) 2008-2012  Free Software Foundation, Inc.
+## Copyright (C) 2008-2012 Free Software Foundation, Inc.
 
 ## This file is part of GNU Emacs.
 
@@ -27,13 +27,13 @@
 
 ${ns_appdir}: ${ns_appsrc}
 	rm -fr ${ns_appdir}
-	mkdir -p ${ns_appdir}
+	${MKDIR_P} ${ns_appdir}
 	( cd ${ns_appsrc} ; tar cfh - . ) | ( cd ${ns_appdir} ; umask 022; tar xf - )
 
-${ns_appbindir}Aquamacs: emacs${EXEEXT}
-	mkdir -p ${ns_appbindir}
-	cp -f emacs${EXEEXT} ${ns_appbindir}Aquamacs
+${ns_appbindir}/Aquamacs: emacs${EXEEXT}
+	${MKDIR_P} ${ns_appbindir}
+	cp -f emacs${EXEEXT} ${ns_appbindir}/Aquamacs
 
-ns-app: ${ns_appdir} ${ns_appbindir}Aquamacs
+ns-app: ${ns_appdir} ${ns_appbindir}/Aquamacs
 
 ### ns.mk ends here

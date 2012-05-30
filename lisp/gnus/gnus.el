@@ -1271,15 +1271,18 @@ Set this variable in `.emacs' instead."
   :type '(choice (const :tag "current" nil)
 		 directory))
 
-;; Site dependent variables.  These variables should be defined in
-;; paths.el.
+;; Site dependent variables.
 
-(defvar gnus-default-nntp-server nil
-  "Specify a default NNTP server.
-This variable should be defined in paths.el, and should never be set
-by the user.
-If you want to change servers, you should use `gnus-select-method'.
-See the documentation to that variable.")
+;; Should this be obsolete?
+(defcustom gnus-default-nntp-server nil
+  "The hostname of the default NNTP server.
+The empty string, or nil, means to use the local host.
+You may wish to set this on a site-wide basis.
+
+If you want to change servers, you should use `gnus-select-method'."
+  :group 'gnus-server
+  :type '(choice (const :tag "local host" nil)
+                 (string :tag "host name")))
 
 (defcustom gnus-nntpserver-file "/etc/nntpserver"
   "A file with only the name of the nntp server in it."
@@ -1326,6 +1329,8 @@ If you use this variable, you must set `gnus-nntp-server' to nil.
 
 There is a lot more to know about select methods and virtual servers -
 see the manual for details."
+  ;; Emacs has set-after since 22.1.
+  ;set-after '(gnus-default-nntp-server)
   :group 'gnus-server
   :group 'gnus-start
   :initialize 'custom-initialize-default
@@ -1626,7 +1631,7 @@ slower."
     ("nnagent" post-mail)
     ("nnimap" post-mail address prompt-address physical-address respool
      server-marks)
-    ("nnmaildir" mail respool address)
+    ("nnmaildir" mail respool address server-marks)
     ("nnnil" none))
   "*An alist of valid select methods.
 The first element of each list lists should be a string with the name
@@ -3609,6 +3614,13 @@ that that variable is buffer-local to the summary buffers."
       ;; If p2 now is empty, they were equal.
       (null p2))))
 
+(defun gnus-method-ephemeral-p (method)
+  (let ((equal nil))
+    (dolist (ephemeral gnus-ephemeral-servers)
+      (when (gnus-sloppily-equal-method-parameters method ephemeral)
+	(setq equal t)))
+    equal))
+
 (defun gnus-methods-sloppily-equal (m1 m2)
   ;; Same method.
   (or
@@ -3877,7 +3889,7 @@ If SYMBOL, return the value of that symbol in the group parameters.
 
 If you call this function inside a loop, consider using the faster
 `gnus-group-fast-parameter' instead."
-  (with-current-buffer (if (buffer-live-p gnus-group-buffer)
+  (with-current-buffer (if (buffer-live-p (get-buffer gnus-group-buffer))
 			   gnus-group-buffer
 			 (current-buffer))
     (if symbol
@@ -4116,12 +4128,17 @@ parameters."
   (if (or (not (inline (gnus-similar-server-opened method)))
 	  (not (cddr method)))
       method
-    (setq method
-	  `(,(car method) ,(concat (cadr method) "+" group)
-	    (,(intern (format "%s-address" (car method))) ,(cadr method))
-	    ,@(cddr method)))
-    (push method gnus-extended-servers)
-    method))
+    (let ((address-slot
+	   (intern (format "%s-address" (car method)))))
+      (setq method
+	    (if (assq address-slot (cddr method))
+		`(,(car method) ,(concat (cadr method) "+" group)
+		  ,@(cddr method))
+	      `(,(car method) ,(concat (cadr method) "+" group)
+		(,address-slot ,(cadr method))
+		,@(cddr method))))
+      (push method gnus-extended-servers)
+      method)))
 
 (defun gnus-server-status (method)
   "Return the status of METHOD."
@@ -4385,7 +4402,9 @@ prompt the user for the name of an NNTP server to use."
     (gnus-1 arg dont-connect slave)
     (gnus-final-warning)))
 
-(autoload 'debbugs-gnu "debbugs-gnu")
+(eval-and-compile
+  (unless (fboundp 'debbugs-gnu)
+    (autoload 'debbugs-gnu "debbugs-gnu" "List all outstanding Emacs bugs." t)))
 (defun gnus-list-debbugs ()
   "List all open Gnus bug reports."
   (interactive)

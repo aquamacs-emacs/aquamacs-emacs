@@ -1,4 +1,4 @@
-;;; vc-git.el --- VC backend for the git version control system
+;;; vc-git.el --- VC backend for the git version control system -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2006-2012 Free Software Foundation, Inc.
 
@@ -109,6 +109,11 @@
   (require 'vc-dir)
   (require 'grep))
 
+(defgroup vc-git nil
+  "VC Git backend."
+  :version "24.1"
+  :group 'vc)
+
 (defcustom vc-git-diff-switches t
   "String or list of strings specifying switches for Git diff under VC.
 If nil, use the value of `vc-diff-switches'.  If t, use no switches."
@@ -117,13 +122,13 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
 		 (string :tag "Argument String")
 		 (repeat :tag "Argument List" :value ("") string))
   :version "23.1"
-  :group 'vc)
+  :group 'vc-git)
 
 (defcustom vc-git-program "git"
   "Name of the Git executable (excluding any arguments)."
   :version "24.1"
   :type 'string
-  :group 'vc)
+  :group 'vc-git)
 
 (defcustom vc-git-root-log-format
   '("%d%h..: %an %ad %s"
@@ -143,7 +148,7 @@ format string (which is passed to \"git log\" via the argument
 matching the resulting Git log output, and KEYWORDS is a list of
 `font-lock-keywords' for highlighting the Log View buffer."
   :type '(list string string (repeat sexp))
-  :group 'vc
+  :group 'vc-git
   :version "24.1")
 
 (defvar vc-git-commits-coding-system 'utf-8
@@ -155,7 +160,7 @@ matching the resulting Git log output, and KEYWORDS is a list of
 ;;; BACKEND PROPERTIES
 
 (defun vc-git-revision-granularity () 'repository)
-(defun vc-git-checkout-model (files) 'implicit)
+(defun vc-git-checkout-model (_files) 'implicit)
 
 ;;; STATE-QUERYING FUNCTIONS
 
@@ -212,15 +217,23 @@ matching the resulting Git log output, and KEYWORDS is a list of
   ;; operation.
   (if (not (vc-git-registered file))
       'unregistered
-    (vc-git--call nil "add" "--refresh" "--" (file-relative-name file))
     (let ((diff (vc-git--run-command-string
-                 file "diff-index" "-z" "HEAD" "--")))
-      (if (and diff (string-match ":[0-7]\\{6\\} [0-7]\\{6\\} [0-9a-f]\\{40\\} [0-9a-f]\\{40\\} \\([ADMUT]\\)\0[^\0]+\0"
-				  diff))
-	  (vc-git--state-code (match-string 1 diff))
+                 file "diff-index" "-p" "--raw" "-z" "HEAD" "--")))
+      (if (and diff
+	       (string-match ":[0-7]\\{6\\} [0-7]\\{6\\} [0-9a-f]\\{40\\} [0-9a-f]\\{40\\} \\([ADMUT]\\)\0[^\0]+\0\\(.*\n.\\)?"
+			     diff))
+          (let ((diff-letter (match-string 1 diff)))
+            (if (not (match-beginning 2))
+                ;; Empty diff: file contents is the same as the HEAD
+                ;; revision, but timestamps are different (eg, file
+                ;; was "touch"ed).  Update timestamp in index:
+                (prog1 'up-to-date
+                  (vc-git--call nil "add" "--refresh" "--"
+                                (file-relative-name file)))
+              (vc-git--state-code diff-letter)))
 	(if (vc-git--empty-db-p) 'added 'up-to-date)))))
 
-(defun vc-git-working-revision (file)
+(defun vc-git-working-revision (_file)
   "Git-specific version of `vc-working-revision'."
   (let* (process-file-side-effects
 	 (str (with-output-to-string
@@ -458,14 +471,14 @@ or an empty string if none."
   (vc-exec-after
    `(vc-git-after-dir-status-stage ',stage  ',files ',update-function)))
 
-(defun vc-git-dir-status (dir update-function)
+(defun vc-git-dir-status (_dir update-function)
   "Return a list of (FILE STATE EXTRA) entries for DIR."
   ;; Further things that would have to be fixed later:
   ;; - how to handle unregistered directories
   ;; - how to support vc-dir on a subdir of the project tree
   (vc-git-dir-status-goto-stage 'update-index nil update-function))
 
-(defun vc-git-dir-status-files (dir files default-state update-function)
+(defun vc-git-dir-status-files (_dir files _default-state update-function)
   "Return a list of (FILE STATE EXTRA) entries for FILES in DIR."
   (vc-git-dir-status-goto-stage 'update-index files update-function))
 
@@ -499,7 +512,7 @@ or an empty string if none."
 		  :help "Show the contents of the current stash"))
     map))
 
-(defun vc-git-dir-extra-headers (dir)
+(defun vc-git-dir-extra-headers (_dir)
   (let ((str (with-output-to-string
                (with-current-buffer standard-output
                  (vc-git--out-ok "symbolic-ref" "HEAD"))))
@@ -577,7 +590,7 @@ The car of the list is the current branch."
   "Create a new Git repository."
   (vc-git-command nil 0 nil "init"))
 
-(defun vc-git-register (files &optional rev comment)
+(defun vc-git-register (files &optional _rev _comment)
   "Register FILES into the git version-control system."
   (let (flist dlist)
     (dolist (crt files)
@@ -596,7 +609,7 @@ The car of the list is the current branch."
 
 (declare-function log-edit-extract-headers "log-edit" (headers string))
 
-(defun vc-git-checkin (files rev comment)
+(defun vc-git-checkin (files _rev comment)
   (let ((coding-system-for-write vc-git-commits-coding-system))
     (apply 'vc-git-command nil 0 files
 	   (nconc (list "commit" "-m")
@@ -622,7 +635,7 @@ The car of the list is the current branch."
      nil
      "cat-file" "blob" (concat (if rev rev "HEAD") ":" fullname))))
 
-(defun vc-git-checkout (file &optional editable rev)
+(defun vc-git-checkout (file &optional _editable rev)
   (vc-git-command nil 0 file "checkout" (or rev "HEAD")))
 
 (defun vc-git-revert (file &optional contents-done)
@@ -808,7 +821,7 @@ or BRANCH^ (where \"^\" can be repeated)."
 	   (append (vc-switches 'git 'diff)
 		   (list "-p" (or rev1 "HEAD") rev2 "--")))))
 
-(defun vc-git-revision-table (files)
+(defun vc-git-revision-table (_files)
   ;; What about `files'?!?  --Stef
   (let (process-file-side-effects
 	(table (list "HEAD")))
@@ -821,10 +834,8 @@ or BRANCH^ (where \"^\" can be repeated)."
     table))
 
 (defun vc-git-revision-completion-table (files)
-  (lexical-let ((files files)
-                table)
-    (setq table (lazy-completion-table
-                 table (lambda () (vc-git-revision-table files))))
+  (letrec ((table (lazy-completion-table
+                   table (lambda () (vc-git-revision-table files)))))
     table))
 
 (defun vc-git-annotate-command (file buf &optional rev)
@@ -863,7 +874,7 @@ or BRANCH^ (where \"^\" can be repeated)."
              (vc-git-command nil 0 nil "checkout" "-b" name)
            (vc-git-command nil 0 nil "tag" name)))))
 
-(defun vc-git-retrieve-tag (dir name update)
+(defun vc-git-retrieve-tag (dir name _update)
   (let ((default-directory dir))
     (vc-git-command nil 0 nil "checkout" name)
     ;; FIXME: update buffers if `update' is true
@@ -1103,8 +1114,11 @@ The difference to vc-do-command is that this function always invokes
 (defun vc-git--call (buffer command &rest args)
   ;; We don't need to care the arguments.  If there is a file name, it
   ;; is always a relative one.  This works also for remote
-  ;; directories.
-  (apply 'process-file vc-git-program nil buffer nil command args))
+  ;; directories.  We enable `inhibit-null-byte-detection', otherwise
+  ;; Tramp's eol conversion might be confused.
+  (let ((inhibit-null-byte-detection t)
+	(process-environment (cons "PAGER=" process-environment)))
+    (apply 'process-file vc-git-program nil buffer nil command args)))
 
 (defun vc-git--out-ok (command &rest args)
   (zerop (apply 'vc-git--call '(t nil) command args)))

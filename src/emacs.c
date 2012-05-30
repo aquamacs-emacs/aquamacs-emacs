@@ -82,10 +82,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/personality.h>
 #endif
 
-#ifdef HAVE_LIBXML2
-#include <libxml/parser.h>
-#endif
-
 #ifndef O_RDWR
 #define O_RDWR 2
 #endif
@@ -112,15 +108,15 @@ int gdb_use_union EXTERNALLY_VISIBLE  = 0;
 #else
 int gdb_use_union EXTERNALLY_VISIBLE = 1;
 #endif
-EMACS_INT gdb_valbits EXTERNALLY_VISIBLE = VALBITS;
-EMACS_INT gdb_gctypebits EXTERNALLY_VISIBLE = GCTYPEBITS;
+int gdb_valbits EXTERNALLY_VISIBLE = VALBITS;
+int gdb_gctypebits EXTERNALLY_VISIBLE = GCTYPEBITS;
 #if defined (DATA_SEG_BITS) && ! defined (USE_LSB_TAG)
-EMACS_INT gdb_data_seg_bits EXTERNALLY_VISIBLE = DATA_SEG_BITS;
+uintptr_t gdb_data_seg_bits EXTERNALLY_VISIBLE = DATA_SEG_BITS;
 #else
-EMACS_INT gdb_data_seg_bits EXTERNALLY_VISIBLE = 0;
+uintptr_t gdb_data_seg_bits EXTERNALLY_VISIBLE = 0;
 #endif
-EMACS_INT PVEC_FLAG EXTERNALLY_VISIBLE = PSEUDOVECTOR_FLAG;
-EMACS_INT gdb_array_mark_flag EXTERNALLY_VISIBLE = ARRAY_MARK_FLAG;
+ptrdiff_t PVEC_FLAG EXTERNALLY_VISIBLE = PSEUDOVECTOR_FLAG;
+ptrdiff_t gdb_array_mark_flag EXTERNALLY_VISIBLE = ARRAY_MARK_FLAG;
 /* GDB might say "No enum type named pvec_type" if we don't have at
    least one symbol with that type, and then xbacktrace could fail.  */
 enum pvec_type gdb_pvec_type EXTERNALLY_VISIBLE = PVEC_TYPE_MASK;
@@ -405,7 +401,7 @@ init_cmdargs (int argc, char **argv, int skip_args)
 {
   register int i;
   Lisp_Object name, dir, handler;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
   Lisp_Object raw_name;
 
   initial_argv = argv;
@@ -2031,10 +2027,15 @@ all of which are called before Emacs is actually killed.  */)
   if (STRINGP (Vauto_save_list_file_name))
     unlink (SSDATA (Vauto_save_list_file_name));
 
-  exit_code = EXIT_SUCCESS;
-  if (noninteractive && (fflush (stdout) || ferror (stdout)))
+  if (INTEGERP (arg))
+    exit_code = (XINT (arg) < 0
+		 ? XINT (arg) | INT_MIN
+		 : XINT (arg) & INT_MAX);
+  else if (noninteractive && (fflush (stdout) || ferror (stdout)))
     exit_code = EXIT_FAILURE;
-  exit (INTEGERP (arg) ? XINT (arg) : exit_code);
+  else
+    exit_code = EXIT_SUCCESS;
+  exit (exit_code);
 }
 
 
@@ -2124,7 +2125,7 @@ shut_down_emacs (int sig, int no_x, Lisp_Object stuff)
 #endif
 
 #ifdef HAVE_LIBXML2
-  xmlCleanupParser ();
+  xml_cleanup_parser ();
 #endif
 }
 
@@ -2144,7 +2145,7 @@ You must run Emacs in batch mode in order to dump it.  */)
 {
   Lisp_Object tem;
   Lisp_Object symbol;
-  int count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX ();
 
   check_pure_size ();
 
@@ -2480,9 +2481,11 @@ The value is nil if that directory's name is not known.  */);
 
   DEFVAR_LISP ("installation-directory", Vinstallation_directory,
 	       doc: /* A directory within which to look for the `lib-src' and `etc' directories.
-This is non-nil when we can't find those directories in their standard
-installed locations, but we can find them near where the Emacs executable
-was found.  */);
+In an installed Emacs, this is normally nil.  It is non-nil if
+both `lib-src' (on MS-DOS, `info') and `etc' directories are found
+within the variable `invocation-directory' or its parent.  For example,
+this is the case when running an uninstalled Emacs executable from its
+build directory.  */);
   Vinstallation_directory = Qnil;
 
   DEFVAR_LISP ("system-messages-locale", Vsystem_messages_locale,

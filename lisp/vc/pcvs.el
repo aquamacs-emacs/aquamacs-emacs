@@ -31,19 +31,19 @@
 
 ;;; Commentary:
 
-;; PCL-CVS is a front-end to the CVS version control system.  For people
-;; familiar with VC, it is somewhat like VC-dired: it presents the status of
-;; all the files in your working area and allows you to commit/update several
-;; of them at a time.  Compared to VC-dired, it is considerably better and
-;; faster (but only for CVS).
+;; PCL-CVS is a front-end to the CVS version control system.
+;; It presents the status of all the files in your working area and
+;; allows you to commit/update several of them at a time.
+;; Compare with the general Emacs utility vc-dir, which tries
+;; to be VCS-agnostic.  You may find PCL-CVS better/faster for CVS.
 
 ;; PCL-CVS was originally written by Per Cederqvist many years ago.  This
 ;; version derives from the XEmacs-21 version, itself based on the 2.0b2
 ;; version (last release from Per).  It is a thorough rework.
 
-;; Contrary to what you'd expect, PCL-CVS is not a replacement for VC but only
-;; for VC-dired.  As such, I've tried to make PCL-CVS and VC interoperate
-;; seamlessly (I also use VC).
+;; PCL-CVS is not a replacement for VC, but adds extra functionality.
+;; As such, I've tried to make PCL-CVS and VC interoperate seamlessly
+;; (I also use VC).
 
 ;; To use PCL-CVS just use `M-x cvs-examine RET <dir> RET'.
 ;; There is a TeXinfo manual, which can be helpful to get started.
@@ -432,8 +432,8 @@ If non-nil, NEW means to create a new buffer no matter what."
 			 (case cvs-reuse-cvs-buffer
 			   (always t)
 			   (subdir
-			    (or (cvs-string-prefix-p default-directory dir)
-				(cvs-string-prefix-p dir default-directory)))
+			    (or (string-prefix-p default-directory dir)
+				(string-prefix-p dir default-directory)))
 			   (samedir (string= default-directory dir)))
 			 (return buffer)))))
 	      ;; we really have to create a new buffer:
@@ -887,7 +887,7 @@ RM-MSGS if non-nil means remove messages."
 			(eq (cvs-fileinfo->type last-fi) 'DIRCHANGE)
 			(not (when first-dir (setq first-dir nil) t))
 			(or (eq rm-dirs 'all)
-			    (not (cvs-string-prefix-p
+			    (not (string-prefix-p
 				  (cvs-fileinfo->dir last-fi)
 				  (cvs-fileinfo->dir fi)))
 			    (and (eq type 'DIRCHANGE) (eq rm-dirs 'empty))
@@ -1839,7 +1839,7 @@ Signal an error if there is no backup file."
     (setq buffer-file-name (expand-file-name buffer-file-name))
     (let (ret)
       (dolist (fi (or fis (list (cvs-create-fileinfo 'DIRCHANGE "" "." ""))))
-	(when (cvs-string-prefix-p
+	(when (string-prefix-p
 	       (expand-file-name (cvs-fileinfo->full-name fi) dir)
 	       buffer-file-name)
 	  (setq ret t)))
@@ -2261,7 +2261,7 @@ With prefix argument, prompt for cvs flags."
 (defun cvs-dir-member-p (fileinfo dir)
   "Return true if FILEINFO represents a file in directory DIR."
   (and (not (eq (cvs-fileinfo->type fileinfo) 'DIRCHANGE))
-       (cvs-string-prefix-p dir (cvs-fileinfo->dir fileinfo))))
+       (string-prefix-p dir (cvs-fileinfo->dir fileinfo))))
 
 (defun cvs-execute-single-file (fi extractor program constant-args)
   "Internal function for `cvs-execute-single-file-list'."
@@ -2392,7 +2392,7 @@ The exact behavior is determined also by `cvs-dired-use-hook'."
 	  (set-buffer cvs-buf)
 	  ;; look for a corresponding pcl-cvs buffer
 	  (when (and (eq major-mode 'cvs-mode)
-		     (cvs-string-prefix-p default-directory dir))
+		     (string-prefix-p default-directory dir))
 	    (let ((subdir (substring dir (length default-directory))))
 	      (set-buffer buffer)
 	      (set (make-local-variable 'cvs-buffer) cvs-buf)
@@ -2423,7 +2423,7 @@ The exact behavior is determined also by `cvs-dired-use-hook'."
 	  (set-buffer cvs-buf)
 	  ;; look for a corresponding pcl-cvs buffer
 	  (when (and (eq major-mode 'cvs-mode)
-		     (cvs-string-prefix-p default-directory file))
+		     (string-prefix-p default-directory file))
 	    (let* ((file (substring file (length default-directory)))
 		   (fi (cvs-create-fileinfo
 			(if (string= "0" version)
