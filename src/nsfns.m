@@ -1,6 +1,6 @@
 /* Functions for the NeXT/Open/GNUstep and MacOSX window system.
-   Copyright (C) 1989, 1992, 1993, 1994, 2005, 2006, 2008, 2009, 2010, 2011
-  Free Software Foundation, Inc.
+   Copyright (C) 1989, 1992, 1993, 1994, 2005, 2006, 2008, 2009, 2010, 2011, 2012
+     Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -227,7 +227,7 @@ ns_get_screen (Lisp_Object screen)
   else
     {
       struct ns_display_info *dpyinfo = terminal->display_info.ns;
-      f = dpyinfo->x_focus_frame
+      f = dpyinfo->x_focus_frame 
         ? dpyinfo->x_focus_frame : dpyinfo->x_highlight_frame;
     }
 
@@ -502,7 +502,7 @@ ns_set_name_internal (FRAME_PTR f, Lisp_Object name)
   if (!STRINGP (f->icon_name))
     encoded_icon_name = encoded_name;
   else
-    encoded_icon_name = ENCODE_UTF_8 (f->icon_name);
+    encoded_icon_name = ENCODE_UTF_8 (f->icon_name);    
 
   str = [NSString stringWithUTF8String: SDATA (encoded_icon_name)];
 
@@ -656,7 +656,7 @@ ns_set_name_as_filename (struct frame *f)
 
   if (FRAME_ICONIFIED_P (f))
     [[view window] setMiniwindowTitle: str];
-  else
+  else 
     {
       NSString *fstr;
 
@@ -1007,7 +1007,7 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_fullscreen,  /* generic OK */
   x_set_font_backend, /* generic OK */
   x_set_alpha,
-  0, /* x_set_sticky */
+  0, /* x_set_sticky */  
 };
 
 
@@ -3283,9 +3283,9 @@ compute_tip_xy (f, parms, dx, dy, width, height, root_x, root_y)
   else
     pt.y = last_mouse_motion_position.y;
 
-      /* Convert to screen coordinates */
-      pt = [view convertPoint: pt toView: nil];
-      pt = [[view window] convertBaseToScreen: pt];
+  /* Convert to screen coordinates */
+  pt = [view convertPoint: pt toView: nil];
+  pt = [[view window] convertBaseToScreen: pt];
 
   vScreen = [[[view window] screen] visibleFrame];
 

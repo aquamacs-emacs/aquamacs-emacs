@@ -1,6 +1,6 @@
 ;;; indian.el --- Quail packages for inputting Indian
 
-;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012
 ;;   Free Software Foundation, Inc.
 
 ;; Author: KAWABATA, Taichi <kawabata@m17n.org>
@@ -269,7 +269,7 @@
 (if nil
     (quail-define-package "telugu-inscript" "Telugu" "TlgIS" t "Telugu keyboard Inscript"))
 (quail-define-inscript-package
- indian-dev-base-table inscript-dev-keytable
+ indian-tlg-base-table inscript-dev-keytable
  "telugu-inscript" "Telugu" "TlgIS"
  "Telugu keyboard Inscript.")
 
