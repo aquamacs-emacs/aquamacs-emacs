@@ -1193,7 +1193,7 @@ update_frame_tool_bar (FRAME_PTR f)
       else
 	keyText = "?";
 
-      if (strcmp("--", SDATA (label)) == 0)
+      if (STRINGP (label) && strcmp("--", SDATA (label)) == 0)
 	[toolbar addDisplayItemSpacerWithIdx: i key: keyText];
       else
 	{
@@ -1214,7 +1214,7 @@ update_frame_tool_bar (FRAME_PTR f)
       /* Ignore invalid image specifications.  */
       if (!valid_image_p (image))
         {
-          NSLog (@"Invalid image for toolbar item");
+          // NSLog (@"Invalid image for toolbar item");
           continue;
         }
 
@@ -1231,10 +1231,10 @@ update_frame_tool_bar (FRAME_PTR f)
       helpObj = TOOLPROP (TOOL_BAR_ITEM_HELP);
       if (NILP (helpObj))
         helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-      helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
+      helpText = STRINGP (helpObj) ? (char *)SDATA (helpObj) : "";
 
       captionObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-      captionText = NILP (captionObj) ? "" : (char *)SDATA (captionObj);
+      captionText = STRINGP (captionObj) ? (char *)SDATA (captionObj) : "";
 
       [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
 			       enabled: enabled_p  visible: visible_p
