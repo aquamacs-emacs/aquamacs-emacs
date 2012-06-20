@@ -1162,7 +1162,7 @@ when cocoAspell dictionaries are installed, but no Spelling prefpane.")
 		    (file-name-sans-extension
 		     (file-name-nondirectory dict-alias)))
 		  (file-expand-wildcards
-		   "/Library/Application Support/cocoAspell/aspell*-*-*/*.alias"))))
+		   "/Library/Application Support/cocoAspell/aspell*-*-*/*.multi"))))
   )
   ;; convert from names e.g. English (United States) to en_US
   ;; append stuff in brackets
@@ -1519,7 +1519,7 @@ of `ispell-dictionary-base-alist' elements."
 		       (file-expand-wildcards
 			(concat
 			 "/Library/Application Support/cocoAspell/aspell*-*-*/"
-			 dict-name ".alias")))))))
+			 dict-name ".multi")))))))
 	 (datafile0
 	  (if ispell-use-cocoaspell-internal (concat dict-dir "/" lang ".dat")))
 	 (datafile1
