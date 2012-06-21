@@ -364,10 +364,12 @@ Must be greater than 1."
   :group 'ispell)
 
 (defcustom ispell-program-name
-  (or (executable-find "aspell")
-      (executable-find "ispell")
-      (executable-find "hunspell")
-      "ispell")
+;; set NSSpellChecker as the default; no need to see if it's installed
+  "NSSpellChecker"
+  ;; (or (executable-find "aspell")
+  ;;     (executable-find "ispell")
+  ;;     (executable-find "hunspell")
+  ;;     "ispell")
   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
   :type 'string
   :group 'ispell)
@@ -1530,7 +1532,7 @@ of `ispell-dictionary-base-alist' elements."
 		  (and (string-match "^[[:alpha:]_]+" dict-name)
 		       (match-string 0 dict-name)) ".dat"))
 	 (data-file
-	  (if (file-readable-p datafile0)
+	  (if (and datafile0 (file-readable-p datafile0))
 	      datafile0
 	    (if (file-readable-p datafile1)
 		datafile1
