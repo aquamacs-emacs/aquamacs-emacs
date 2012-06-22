@@ -363,6 +363,7 @@ Must be greater than 1."
   :type 'integer
   :group 'ispell)
 
+;;;###autoload
 (defcustom ispell-program-name
 ;; set NSSpellChecker as the default; no need to see if it's installed
   "NSSpellChecker"
