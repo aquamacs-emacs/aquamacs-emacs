@@ -64,7 +64,10 @@ do
 
 #convert  "$P/$file" -resize x32 $file
 convert "$P/$file"  -resize x28 -matte -bordercolor none -border 2 $file
-
+convert "$P/$file"  -matte -bordercolor none -border 2 $BASE\@2x.png
+convert $file $BASE\@2x.png $BASE.tiff
+rm $file $BASE\@2x.png
+# tiffutil won't work due to a conflict between libjpeg and libJPEG
 
 #convert p2.png -resize x32  /Applications/Aquamacs\ Emacs.app/Contents/Resources/etc/images/print.png
 

@@ -95,7 +95,7 @@ ns_load_image (struct frame *f, struct image *img,
   else
     {
       NSData *data = [NSData dataWithBytes: SDATA (spec_data)
-                                    length: SBYTES (spec_data)];
+			    length: SBYTES (spec_data)];
       eImg = [[EmacsImage alloc] initWithData: data];
       [eImg setPixmapData];
     }

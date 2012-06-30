@@ -449,7 +449,7 @@ AQUAMACS_APPLE_VERSION=${AQUAMACS_MAIN_VERSION}.${HEADDATE}# string with integer
 
 install-aquamacs: mkdir 
 	if test "${ns_appdir}" != ""; then \
-	( cp $(AQUAMACS_DIR)/Icons/build/*.png $(ns_appresdir)/etc/images/ ; \
+	( cp $(AQUAMACS_DIR)/Icons/build/*.tiff $(AQUAMACS_DIR)/Icons/build/*.png $(ns_appresdir)/etc/images/ ; \
 	  cd $(ns_appresdir) ; \
 	  cp -r $(AQUAMACS_DIR)/src/commandline-tool/Aquamacs\ Command\ Line\ Tool.mpkg .; \
 	  cd - >/dev/null ; \
@@ -518,8 +518,8 @@ install-arch-indep: mkdir info install-etc
 	  [ -d $${dir} ] \
 	  && [ `(cd $${dir} && /bin/pwd)` != `(cd $${dest} && /bin/pwd)` ] \
 	  && (echo "Copying $${dir} to $${dest}..." ; \
-	      (cd $${dir}; tar -chf - . ) \
-		| (cd $${dest}; umask 022; \
+	  (cd $${dir}; tar -chf - . ) \
+	    | (cd $${dest}; umask 022; \
                    tar -xf - && cat > /dev/null) || exit 1; \
 	      find $${dest} -exec chown $${installuser} {} ';' ;\
 	      for subdir in `find $${dest} -type d ! -name RCS ! -name CVS -print` ; do \
@@ -527,17 +527,17 @@ install-arch-indep: mkdir info install-etc
 		rm -rf $${subdir}/RCS ; \
 		rm -rf $${subdir}/CVS ; \
 		rm -f  $${subdir}/.cvsignore ; \
-		rm -f  $${subdir}/.gitignore ; \
-		rm -f  $${subdir}/.arch-inventory ; \
-		rm -f  $${subdir}/.DS_Store ; \
-		rm -f  $${subdir}/\#* ; \
-		rm -f  $${subdir}/.\#* ; \
-		rm -f  $${subdir}/*~ ; \
-		rm -f  $${subdir}/*.orig ; \
+	    rm -f $${subdir}/.gitignore ; \
+	    rm -f $${subdir}/.arch-inventory ; \
+	    rm -f $${subdir}/.DS_Store ; \
+	    rm -f $${subdir}/\#* ; \
+	    rm -f $${subdir}/.\#* ; \
+	    rm -f $${subdir}/*~ ; \
+	    rm -f $${subdir}/*.orig ; \
 		[ "$${dir}" != "${srcdir}/etc" ] && \
 		 rm -f $${subdir}/[mM]akefile*.c $${subdir}/[mM]akefile*[.-]in \
 		   $${subdir}/[mM]akefile ; \
-		rm -f  $${subdir}/ChangeLog* ; \
+	    rm -f $${subdir}/ChangeLog* ; \
 		rm -f  $${subdir}/dired.todo ; \
 	      done) ; \
 	done
@@ -573,7 +573,7 @@ install-arch-indep: mkdir info install-etc
 	   (cd ./etc; tar -chf - $${docfile}) \
 	     |(cd $(DESTDIR)${docdir}; umask 022; tar -xf - && cat > /dev/null) || exit 1; \
 	   (cd $(DESTDIR)$(docdir); \
-	    $(set_installuser); \
+	   $(set_installuser); \
 	    chown $${installuser} DOC*; chmod a+r DOC*; \
 	    if test "`echo DOC-*`" != "DOC-*"; then rm -f DOC; fi); \
 	else true; fi
@@ -618,7 +618,7 @@ install-arch-indep: mkdir info install-etc
 	        ${INSTALL_DATA} $$f $(DESTDIR)${infodir}/$$f; \
 	        chmod a+r $(DESTDIR)${infodir}/$$f; \
 		test "$ff" != "dir" && test "${GZIP_PROG}" && \
-		   ${GZIP_PROG} -9n $(DESTDIR)${infodir}/$$f; \
+	        ${GZIP_PROG} -9n $(DESTDIR)${infodir}/$$f; \
 	      done; \
 	   done); \
 	else true; fi
@@ -628,8 +628,8 @@ install-arch-indep: mkdir info install-etc
 	then \
 	  for elt in $(INFO_FILES); do \
 	    test "$(MAKEINFO)" = "off" && ! test -e $$elt && continue; \
-	    (cd $${thisdir}; \
-	     ${INSTALL_INFO} --info-dir=$(DESTDIR)${infodir} $(DESTDIR)${infodir}/$$elt); \
+	     (cd $${thisdir}; \
+	      ${INSTALL_INFO} --info-dir=$(DESTDIR)${infodir} $(DESTDIR)${infodir}/$$elt); \
 	  done; \
 	else true; fi
 	-chmod -R a+r $(DESTDIR)${datadir}/emacs/${version} ${COPYDESTS}
@@ -851,7 +851,7 @@ dist:
 
 .PHONY: info dvi dist check html
 
-info-real: 
+info-real:
 	(cd doc/emacs; $(MAKE) $(MFLAGS) info)
 	(cd doc/misc; $(MAKE) $(MFLAGS) info)
 	(cd doc/lispref; $(MAKE) $(MFLAGS) info)

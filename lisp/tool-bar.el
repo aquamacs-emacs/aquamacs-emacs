@@ -93,6 +93,9 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
 			  nil
 			(list :type 'xpm :file
                               (concat "low-color/" icon ".xpm"))))
+	 (tiff-spec (if (image-type-available-p 'png)
+		       (list :type 'png :file (concat icon ".tiff") 
+			     :background "grey")))
 	 (png-spec (if (image-type-available-p 'png)
 		       (list :type 'png :file (concat icon ".png") 
 			     :background "grey")))
@@ -104,7 +107,7 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
 	 ;; 		  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
 	 ;; 		(list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
 	 (format-spec (if tool-bar-load-png-only
-			  (list png-spec)
+			  (list tiff-spec png-spec)
 			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)))
 	 (image (find-image format-spec))
 	 (image-sel (find-image

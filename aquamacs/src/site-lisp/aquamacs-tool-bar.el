@@ -116,7 +116,9 @@
 			:image (vector img img) ;; 1st: Emacs, 2nd: XEma
 			:help ""))))))
    (reverse (cdr keymap))) meaning))
- 
+
+(require 'image)
+
 ;; this to overwrite the tool-bar setup function
 ;  (aquamacs-tool-bar-setup)
 (defun aquamacs-tool-bar-setup ()
