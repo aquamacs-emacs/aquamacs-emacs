@@ -120,6 +120,8 @@
    (reverse (cdr keymap))) meaning))
 ;; (setq  aquamacs-default-toolbarx-meaning-alist (aquamacs-toolbar-x-create-meaning-list tool-bar-map))
 
+(require 'image)
+
 ;; this to overwrite the tool-bar setup function
 ;  (aquamacs-tool-bar-setup)
 (defun aquamacs-tool-bar-setup ()
