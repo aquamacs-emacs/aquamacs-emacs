@@ -805,11 +805,6 @@ set to `aquamacs-popup-context-menu' or nil"
     (define-key map `[(meta q)] 'fill-paragraph-or-region)
     (define-key map `[(meta shift q)] 'unfill-paragraph-or-region)
 
-    (define-key map '[(control meta left)] 'backward-sexp-nomark)
-    (define-key map '[(control meta right)] 'forward-sexp-nomark)
-    (define-key map '[(control shift meta left)] 'backward-sexp-mark)
-    (define-key map '[(control shift meta right)] 'forward-sexp-mark)
-
     (define-key map `[(,osxkeys-command-key delete)] 'kill-visual-line)
     (define-key map `[(,osxkeys-command-key kp-delete)] 'kill-visual-line)
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-visual-line)
