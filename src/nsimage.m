@@ -204,17 +204,30 @@ static EmacsImage *ImageList = nil;
   image = [[EmacsImage alloc] initByReferencingFile:
                      [NSString stringWithUTF8String: SDATA (found)]];
 
+  // image = [NSImage imageNamed: [NSString stringWithUTF8String: SDATA (found)]];
+
+
+#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+  imgRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+#else
   imgRep = [image bestRepresentationForDevice: nil];
+#endif
   if (imgRep == nil)
     {
       [image release];
       return nil;
     }
 
+  /* Do not ignore the DPI of the image - in case of multiple representations
+     (e.g., TIFFs with images for multiple resolutions), retain image size and
+     let NSImage choose the right representation. */
+
   /* The next two lines cause the DPI of the image to be ignored.
      This seems to be the behavior users expect. */
-  [image setScalesWhenResized: YES];
-  [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
+  // [image setScalesWhenResized: YES];
+  // [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
+  // this would retain the size:
+  // [image setSize: NSMakeSize([image size].width, [image size].height)];
 
   [image setName: [NSString stringWithUTF8String: SDATA (file)]];
   [image reference];

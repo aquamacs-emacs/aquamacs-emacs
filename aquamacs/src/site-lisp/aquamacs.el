@@ -1345,7 +1345,7 @@ to the selected frame."
   (require 'savehist) ;; because we configure and activate it
 
   (aquamacs-set-defaults
-   '((fancy-splash-image "aquamacs-splash-screen.jpg")
+   '((fancy-splash-image "aquamacs-logo.tiff")
      (fancy-splash-max-time 3000)))
     
   ;; while pc selection mode will be turned on, we don't
