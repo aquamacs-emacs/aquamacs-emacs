@@ -2248,8 +2248,14 @@ If omitted or nil, the selected frame's display is used.  */)
      (Lisp_Object display)
 {
   check_ns ();
-  return make_number ((int)
-                     ([ns_get_screen (display) frame].size.height/(92.0/25.4)));
+
+  NSScreen *screen = ns_get_screen (display);
+
+  CGDirectDisplayID displayID = (CGDirectDisplayID)[[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+  CGSize physicalSize = CGDisplayScreenSize(displayID);
+  
+  // height in mm
+  return make_number ((int) physicalSize.height);
 }
 
 
@@ -2261,8 +2267,14 @@ If omitted or nil, the selected frame's display is used.  */)
      (Lisp_Object display)
 {
   check_ns ();
-  return make_number ((int)
-                     ([ns_get_screen (display) frame].size.width/(92.0/25.4)));
+
+  NSScreen *screen = ns_get_screen (display);
+
+  CGDirectDisplayID displayID = (CGDirectDisplayID)[[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+  CGSize physicalSize = CGDisplayScreenSize(displayID);
+  
+  // width in mm
+  return make_number ((int) physicalSize.width);
 }
 
 
