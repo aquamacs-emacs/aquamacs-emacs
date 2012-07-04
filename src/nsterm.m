@@ -3707,7 +3707,21 @@ ns_initialize_display_info (struct ns_display_info *dpyinfo)
     NSScreen *screen = [NSScreen mainScreen];
     NSWindowDepth depth = [screen depth];
 
-    dpyinfo->resx = 72.27; /* used 75.0, but this makes pt == pixel, expected */
+
+#if 0
+    /* Use correct DPI for main screen*/
+    CGDirectDisplayID displayID = (CGDirectDisplayID)[[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+    CGSize physicalSize = CGDisplayScreenSize (displayID);
+    CGRect bounds = CGDisplayBounds (displayID);
+    float resx = bounds.size.width / physicalSize.width;
+    float resy = bounds.size.height / physicalSize.height;
+
+
+    dpyinfo->resx = resx * 25.4;
+    dpyinfo->resy = resy * 25.4;
+#endif
+
+    dpyinfo->resx = 72.27;  /* used to be 75.0, but this makes pt == pixel, expected */
     dpyinfo->resy = 72.27;
     dpyinfo->color_p = ![NSDeviceWhiteColorSpace isEqualToString:
                                                   NSColorSpaceFromDepth (depth)]
@@ -7567,6 +7581,14 @@ A value of nil means to draw the underline according to the value of the
 variable `x-use-underline-position-properties', which is usually at the
 baseline level.  The default value is nil.  */);
   x_underline_at_descent_line = 0;
+
+  DEFVAR_LISP ("ns-true-dpi-images-filename-string", Vns_true_dpi_images_filename_string,
+               doc: /* String to recognize images to be displayed in their true size.
+If set to a string, Emacs (NS only) will look for this string in the filename of
+each image to be loaded, and if the string is found, will scale the image so that
+it is sized correctly according to the image's resolution (DPI) and the main screen's
+resolution.  If set to `t`, all images to be loaded are scaled.*/);
+  Vns_true_dpi_images_filename_string = Qnil;
 
   /* Tell emacs about this window system. */
   Fprovide (intern ("ns"), Qnil);

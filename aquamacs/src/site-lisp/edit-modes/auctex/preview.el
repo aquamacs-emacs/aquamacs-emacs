@@ -1118,6 +1118,7 @@ RUN-BUFFER is the buffer of the TeX process,
 TEMPDIR is the correct copy of `TeX-active-tempdir',
 PS-FILE is a copy of `preview-ps-file', IMAGETYPE is the image type
 for the file extension."
+  (let ((ns-true-dpi-images-filename-string "pr"))
   (overlay-put ov 'filenames
 	       (unless (eq ps-file t)
 		 (list
@@ -1130,7 +1131,7 @@ for the file extension."
   (overlay-put ov 'preview-image
 	       (list (preview-icon-copy preview-nonready-icon)))
   (preview-add-urgentization #'preview-gs-urgentize ov run-buffer)
-  (list ov))
+  (list ov)))
 
 (defun preview-mouse-open-error (string)
   "Display STRING in a new view buffer on click."
@@ -1892,6 +1893,7 @@ is already selected and unnarrowed."
 (defun preview-dvipng-place-all ()
   "Place all images dvipng has created, if any.
 Deletes the dvi file when finished."
+  (let ((ns-true-dpi-images-filename-string "pr"))
   (let (filename queued oldfiles snippet)
     (dolist (ov (prog1 preview-gs-queue (setq preview-gs-queue nil)))
       (when (and (setq queued (overlay-get ov 'queued))
@@ -1939,7 +1941,7 @@ Deletes the dvi file when finished."
 	    (delete-file
 	     (with-current-buffer TeX-command-buffer
 	       (funcall (car gsfile) "dvi"))))
-	(file-error nil)))))
+	(file-error nil))))))
    
 (defun preview-active-string (ov)
   "Generate before-string for active image overlay OV."
@@ -1956,6 +1958,7 @@ and TEMPDIR as CDR.  TEMPDIR is a copy of `TeX-active-tempdir'
 with the directory name, the reference count and its top directory
 name elements.  If FILE is already in that form, the file name itself
 gets converted into a CONS-cell with a name and a reference count."
+  (print (format "make filename %s\n" file))
   (if (consp file)
       (progn
 	(if (consp (car file))
@@ -2975,6 +2978,7 @@ name(\\([^)]+\\))\\)\\|\
 				  snippet)) "Parser"))))))))
 	  (preview-call-hook 'close (car open-data) close-data))))))
 
+(defvar preview-resolution-factor 2.0 "")
 (defun preview-get-geometry ()
   "Transfer display geometry parameters from current display.
 Returns list of scale, resolution and colors.  Calculation
@@ -2982,10 +2986,12 @@ is done in current buffer."
   (condition-case err
       (let* ((geometry
 	      (list (preview-hook-enquiry preview-scale-function)
-		    (cons (/ (* 25.4 (display-pixel-width))
-			     (display-mm-width))
-			  (/ (* 25.4 (display-pixel-height))
-			     (display-mm-height)))
+		    (cons (* preview-resolution-factor 
+			     (/ (* 25.4 (display-pixel-width))
+				(display-mm-width)))
+			  (* preview-resolution-factor
+			     (/ (* 25.4 (display-pixel-height))
+				(display-mm-height))))
 		    (preview-get-colors)))
 	     (preview-min-spec
 	      (* (cdr (nth 1 geometry))

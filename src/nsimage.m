@@ -106,6 +106,7 @@ ns_load_image (struct frame *f, struct image *img,
       return 0;
     }
 
+  /* Pixels = Points in Emacs world... */
   size = [eImg size];
   img->width = size.width;
   img->height = size.height;
@@ -119,12 +120,34 @@ ns_load_image (struct frame *f, struct image *img,
 int
 ns_image_width (void *img)
 {
+  /*
+  NSImageRep *imgRep;
+
+  if ([(id)img respondsToSelector: @selector (bestRepresentationForRect:context:hints:)])
+    {
+      imgRep = [img bestRepresentationForRect: NSMakeRect(100,100,30,30)  context:nil hints: nil];
+
+      if (imgRep)
+	return [imgRep pixelsWide];
+    }
+  */
   return [(id)img size].width;
 }
 
 int
 ns_image_height (void *img)
 {
+  /*
+  NSImageRep *imgRep;
+
+  if ([(id)img respondsToSelector: @selector (bestRepresentationForRect:context:hints:)])
+    {
+      imgRep = [img bestRepresentationForRect: NSMakeRect(100,100,30,30)  context:nil hints: nil];
+
+      if (imgRep)
+	return [imgRep pixelsHigh];
+    }
+  */
   return [(id)img size].height;
 }
 
@@ -157,6 +180,10 @@ ns_set_alpha (void *img, int x, int y, unsigned char a)
 
    ========================================================================== */
 
+// extern Lisp_Object Vns_true_dpi_images_filename_string;
+/* defined in nsterm.m */
+
+
 @implementation EmacsImage
 
 static EmacsImage *ImageList = nil;
@@ -167,7 +194,6 @@ static EmacsImage *ImageList = nil;
   NSImageRep *imgRep;
   Lisp_Object found;
 
- 
   #if 1
   image =  ImageList;
   /* look for an existing image of the same name */
@@ -207,27 +233,63 @@ static EmacsImage *ImageList = nil;
   // image = [NSImage imageNamed: [NSString stringWithUTF8String: SDATA (found)]];
 
 
+#if 0
 #if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
   imgRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
 #else
   imgRep = [image bestRepresentationForDevice: nil];
 #endif
+#else
+
+  // we'll optimize for the main screen.
+  // needed to pick the right representation e.g., when HiDPI image is provided.
+  imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,30,30)  context:nil hints: nil];
+
+#endif
+
   if (imgRep == nil)
     {
       [image release];
       return nil;
     }
-
-  /* Do not ignore the DPI of the image - in case of multiple representations
-     (e.g., TIFFs with images for multiple resolutions), retain image size and
-     let NSImage choose the right representation. */
-
+  
+  // Respect DPI?
+  
   /* The next two lines cause the DPI of the image to be ignored.
      This seems to be the behavior users expect. */
-  // [image setScalesWhenResized: YES];
-  // [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
-  // this would retain the size:
-  // [image setSize: NSMakeSize([image size].width, [image size].height)];
+
+  if (EQ (Qt, Vns_true_dpi_images_filename_string) ||
+      (STRINGP (Vns_true_dpi_images_filename_string) &&
+       strstr (SDATA (file), SDATA (Vns_true_dpi_images_filename_string))))
+    {
+      // this would retain the size:
+      // [image setSize: NSMakeSize([image size].width, [image size].height)];
+
+      // points = pixels for this port
+      // so we need to scale the image.
+
+      // NS assumes 72dpi= 72/25.4 pix/mm
+      // So we adjust according to the CoreGraphics DPI information
+
+      // use userSpaceScaleFactor?
+
+      NSScreen *screen = [NSScreen mainScreen];
+      CGDirectDisplayID displayID = (CGDirectDisplayID)[[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+      CGSize physicalSize = CGDisplayScreenSize (displayID);
+      CGRect bounds = CGDisplayBounds (displayID);
+      float resx = bounds.size.width / physicalSize.width; // pixels per mm
+      float resy = bounds.size.height / physicalSize.height;
+
+
+      [image setScalesWhenResized: YES];
+      [image setSize: NSMakeSize([image size].width*resx / (72.0/25.4),  [image size].height*resy / (72.0/25.4))];
+
+    }
+  else
+    {
+      [image setScalesWhenResized: YES];
+      [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
+    }
 
   [image setName: [NSString stringWithUTF8String: SDATA (file)]];
   [image reference];
@@ -434,8 +496,8 @@ static EmacsImage *ImageList = nil;
 
           /* The next two lines cause the DPI of the image to be ignored.
              This seems to be the behavior users expect. */
-          [self setScalesWhenResized: YES];
-          [self setSize: NSMakeSize([bmRep pixelsWide], [bmRep pixelsHigh])];
+	  [self setScalesWhenResized: YES];
+	  [self setSize: NSMakeSize([bmRep pixelsWide], [bmRep pixelsHigh])];
 
           break;
         }
