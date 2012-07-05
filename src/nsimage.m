@@ -180,7 +180,7 @@ ns_set_alpha (void *img, int x, int y, unsigned char a)
 
    ========================================================================== */
 
-// extern Lisp_Object Vns_true_dpi_images_filename_string;
+extern Lisp_Object Vns_true_dpi_images_filename_string;
 /* defined in nsterm.m */
 
 
