@@ -7585,7 +7585,7 @@ variable `x-use-underline-position-properties', which is usually at the
 baseline level.  The default value is nil.  */);
   x_underline_at_descent_line = 0;
 
-  DEFVAR_LISP ("ns-true-dpi-images-filename-string", Vns_true_dpi_images_filename_string,
+  DEFVAR_LISP ("ns-true-dpi-images-filename-string", &Vns_true_dpi_images_filename_string,
                doc: /* String to recognize images to be displayed in their true size.
 If set to a string, Emacs (NS only) will look for this string in the filename of
 each image to be loaded, and if the string is found, will scale the image so that
