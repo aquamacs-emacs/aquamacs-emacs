@@ -197,6 +197,9 @@ Lisp_Object ns_emulate_three_button_mouse;
 /* Control via default 'GSFontAntiAlias' on OS X and GNUstep. */
 Lisp_Object ns_antialias_text;
 
+/* String to recognize images to be displayed in their true size */
+Lisp_Object Vns_true_dpi_images_filename_string;
+
 static Lisp_Object QUTF8_STRING;
 
 /* On OS X picks up the default NSGlobalDomain AppleAntiAliasingThreshold,
