@@ -243,8 +243,14 @@ static EmacsImage *ImageList = nil;
 
   // we'll optimize for the main screen.
   // needed to pick the right representation e.g., when HiDPI image is provided.
-  imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,30,30)  context:nil hints: nil];
-
+  if ([image respondsToSelector: @selector (bestRepresentationForRect:context:hints:)])
+    {
+      imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,30,30)  context:nil hints: nil];
+    }
+  else
+    {
+      imgRep = [image bestRepresentationForDevice: nil];
+    }
 #endif
 
   if (imgRep == nil)
