@@ -247,7 +247,8 @@ static EmacsImage *ImageList = nil;
   // needed to pick the right representation e.g., when HiDPI image is provided.
   if ([image respondsToSelector: @selector (bestRepresentationForRect:context:hints:)])
     {
-      imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,30,30)  context:nil hints: nil];
+      // Choose the smallest (full-resolution) image representation
+      imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,2,2)  context:nil hints: nil];
     }
   else
     {
