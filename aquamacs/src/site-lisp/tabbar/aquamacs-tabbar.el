@@ -469,27 +469,27 @@ or groups.  Call the function `tabbar-button-label' otherwise."
         (cons "[-]" tabbar-home-button-disabled-image)))
 
 (setq tabbar-scroll-left-button-enabled-image
-  '((:type png :file "left.png")))
+  '((:type tiff :file "left.tiff")))
 
 (setq tabbar-scroll-left-button-disabled-image
-  '((:type png :file "left_disabled.png")))
+  '((:type tiff :file "left_disabled.tiff")))
 
 (setq tabbar-scroll-left-button
   (cons (cons " <" tabbar-scroll-left-button-enabled-image)
         (cons " =" tabbar-scroll-left-button-disabled-image)))
 
 (setq tabbar-scroll-right-button-enabled-image
-  '((:type png :file "right.png")))
+  '((:type tiff :file "right.tiff")))
 
 (setq tabbar-scroll-right-button-disabled-image
-  '((:type png :file "right_disabled.png")))
+  '((:type tiff :file "right_disabled.tiff")))
 
 (setq tabbar-scroll-right-button
   (cons (cons " >" tabbar-scroll-right-button-enabled-image)
         (cons " =" tabbar-scroll-right-button-disabled-image)))
 
 (setq tabbar-close-tab-button
-      '((:type png :file "close-tab.png")))
+      '((:type tiff :file "close-tab.tiff")))
 
 ;; allow fast-clicking through lists of tabs
 (defsubst tabbar-click-p (event)
