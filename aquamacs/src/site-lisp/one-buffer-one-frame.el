@@ -659,7 +659,6 @@ even if it's the only visible frame."
 	 (append
 	  '((fullscreen . nil) (visibility . nil))
 	  parms)))
-    (print parms)
     (if (and aquamacs-last-frame-empty-frame
 	     (frame-live-p aquamacs-last-frame-empty-frame)
 	     (not (frame-iconified-p aquamacs-last-frame-empty-frame)))
