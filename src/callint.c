@@ -22,12 +22,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <setjmp.h>
 
 #include "lisp.h"
+#include "character.h"
 #include "buffer.h"
 #include "commands.h"
 #include "keyboard.h"
 #include "window.h"
 #include "keymap.h"
-#include "character.h"
 
 Lisp_Object Qminus, Qplus;
 Lisp_Object Qcall_interactively;
@@ -205,7 +205,7 @@ fix_command (Lisp_Object input, Lisp_Object values)
 	      if (CONSP (elt))
 		{
 		  Lisp_Object presflag, carelt;
-		  carelt = Fcar (elt);
+		  carelt = XCAR (elt);
 		  /* If it is (if X Y), look at Y.  */
 		  if (EQ (carelt, Qif)
 		      && EQ (Fnthcdr (make_number (3), elt), Qnil))
@@ -284,7 +284,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
 
   save_this_command = Vthis_command;
   save_this_original_command = Vthis_original_command;
-  save_real_this_command = real_this_command;
+  save_real_this_command = Vreal_this_command;
   save_last_command = KVAR (current_kboard, Vlast_command);
 
   if (NILP (keys))
@@ -295,7 +295,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
       key_count = ASIZE (keys);
     }
 
-  /* Save this now, since use of minibuffer will clobber it. */
+  /* Save this now, since use of minibuffer will clobber it.  */
   prefix_arg = Vcurrent_prefix_arg;
 
   if (SYMBOLP (function))
@@ -310,7 +310,8 @@ invoke it.  If KEYS is omitted or nil, the return value of
      The feature is not fully implemented.  */
   filter_specs = Qnil;
 
-  /* If k or K discard an up-event, save it here so it can be retrieved with U */
+  /* If k or K discard an up-event, save it here so it can be retrieved with
+     U.  */
   up_event = Qnil;
 
   /* Set SPECS to the interactive form, or barf if not interactive.  */
@@ -330,7 +331,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
     {
       /* Make a copy of string so that if a GC relocates specs,
 	 `string' will still be valid.  */
-      string = (char *) alloca (SBYTES (specs) + 1);
+      string = alloca (SBYTES (specs) + 1);
       memcpy (string, SSDATA (specs), SBYTES (specs) + 1);
     }
   else
@@ -370,14 +371,14 @@ invoke it.  If KEYS is omitted or nil, the return value of
 
       Vthis_command = save_this_command;
       Vthis_original_command = save_this_original_command;
-      real_this_command= save_real_this_command;
+      Vreal_this_command = save_real_this_command;
       KVAR (current_kboard, Vlast_command) = save_last_command;
 
       temporarily_switch_to_single_kboard (NULL);
       return unbind_to (speccount, apply1 (function, specs));
     }
 
-  /* Here if function specifies a string to control parsing the defaults */
+  /* Here if function specifies a string to control parsing the defaults.  */
 
   /* Set next_event to point to the first event with parameters.  */
   for (next_event = 0; next_event < key_count; next_event++)
@@ -468,9 +469,9 @@ invoke it.  If KEYS is omitted or nil, the return value of
       < nargs)
     memory_full (SIZE_MAX);
 
-  args = (Lisp_Object *) alloca (nargs * sizeof (Lisp_Object));
-  visargs = (Lisp_Object *) alloca (nargs * sizeof (Lisp_Object));
-  varies = (signed char *) alloca (nargs);
+  args = alloca (nargs * sizeof *args);
+  visargs = alloca (nargs * sizeof *visargs);
+  varies = alloca (nargs * sizeof *varies);
 
   for (i = 0; i < nargs; i++)
     {
@@ -841,7 +842,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
 
   Vthis_command = save_this_command;
   Vthis_original_command = save_this_original_command;
-  real_this_command= save_real_this_command;
+  Vreal_this_command = save_real_this_command;
   KVAR (current_kboard, Vlast_command) = save_last_command;
 
   {

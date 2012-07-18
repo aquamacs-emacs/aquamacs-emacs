@@ -30,7 +30,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 (require 'tool-bar)
 (require 'comint)
 
@@ -674,6 +674,34 @@ starting the compilation process."
   :group 'compilation
   :version "22.1")
 
+;; The next three faces must be able to stand out against the
+;; `mode-line' and `mode-line-inactive' faces.
+
+(defface compilation-mode-line-fail
+  '((default :inherit compilation-error)
+    (((class color) (min-colors 16)) (:foreground "Red1" :weight bold))
+    (((class color) (min-colors 8)) (:foreground "red"))
+    (t (:inverse-video t :weight bold)))
+  "Face for Compilation mode's \"error\" mode line indicator."
+  :group 'compilation
+  :version "24.2")
+
+(defface compilation-mode-line-run
+  '((t :inherit compilation-warning))
+  "Face for Compilation mode's \"running\" mode line indicator."
+  :group 'compilation
+  :version "24.2")
+
+(defface compilation-mode-line-exit
+  '((default :inherit compilation-info)
+    (((class color) (min-colors 16))
+     (:foreground "ForestGreen" :weight bold))
+    (((class color)) (:foreground "green" :weight bold))
+    (t (:weight bold)))
+  "Face for Compilation mode's \"exit\" mode line indicator."
+  :group 'compilation
+  :version "24.2")
+
 (defface compilation-line-number
   '((t :inherit font-lock-keyword-face))
   "Face for displaying line numbers in compiler messages."
@@ -763,7 +791,7 @@ info, are considered errors."
          3)))
   (setq compilation-skip-threshold level)
   (message "Skipping %s"
-           (case compilation-skip-threshold
+           (pcase compilation-skip-threshold
              (0 "Nothing")
              (1 "Info messages")
              (2 "Warnings and info"))))
@@ -798,7 +826,7 @@ from a different message."
 ;; modified using the same *compilation* buffer. this necessitates
 ;; re-parsing markers.
 
-;; (defstruct (compilation--loc
+;; (cl-defstruct (compilation--loc
 ;;             (:constructor nil)
 ;;             (:copier nil)
 ;;             (:constructor compilation--make-loc
@@ -847,7 +875,7 @@ from a different message."
 ;; These are the value of the `compilation-message' text-properties in the
 ;; compilation buffer.
 
-(defstruct (compilation--message
+(cl-defstruct (compilation--message
             (:constructor nil)
             (:copier nil)
             ;; (:type list)                ;Old representation.
@@ -1184,7 +1212,7 @@ FMTS is a list of format specs for transforming the file name.
   (goto-char end)
   (unless (bolp)
     ;; We generally don't like to parse partial lines.
-    (assert (eobp))
+    (cl-assert (eobp))
     (when (let ((proc (get-buffer-process (current-buffer))))
             (and proc (memq (process-status proc) '(run open))))
       (setq end (line-beginning-position))))
@@ -1626,7 +1654,7 @@ Returns the compilation buffer created."
 						       outbuf command))))
 	      ;; Make the buffer's mode line show process state.
 	      (setq mode-line-process
-		    (list (propertize ":%s" 'face 'compilation-warning)))
+		    '(:propertize ":%s" face compilation-mode-line-run))
 	      (set-process-sentinel proc 'compilation-sentinel)
 	      (unless (eq mode t)
 		;; Keep the comint filter, since it's needed for proper handling
@@ -1646,9 +1674,9 @@ Returns the compilation buffer created."
 		    (cons proc compilation-in-progress)))
 	  ;; No asynchronous processes available.
 	  (message "Executing `%s'..." command)
-	  ;; Fake modeline display as if `start-process' were run.
+	  ;; Fake mode line display as if `start-process' were run.
 	  (setq mode-line-process
-		(list (propertize ":run" 'face 'compilation-warning)))
+		'(:propertize ":run" face compilation-mode-line-run))
 	  (force-mode-line-update)
 	  (sit-for 0)			; Force redisplay
 	  (save-excursion
@@ -2046,9 +2074,10 @@ commands of Compilation major mode are available.  See
                                                        (car status)))))
 	    (message "%s" msg)
 	    (propertize out-string
-			'help-echo msg 'face (if (> exit-status 0)
-						 'compilation-error
-					       'compilation-info))))
+			'help-echo msg
+			'face (if (> exit-status 0)
+				  'compilation-mode-line-fail
+				'compilation-mode-line-exit))))
     ;; Force mode line redisplay soon.
     (force-mode-line-update)
     (if (and opoint (< opoint omax))
@@ -2386,7 +2415,7 @@ region and the first line of the next region."
     (push fs compilation-gcpro)
     (let ((loc (compilation-assq (or line 1) (cdr fs))))
       (setq loc (compilation-assq col loc))
-      (assert (null (cdr loc)))
+      (cl-assert (null (cdr loc)))
       (setcdr loc (compilation--make-cdrloc line fs marker))
       loc)))
 
@@ -2656,8 +2685,8 @@ The file-structure looks like this:
 (defun compilation--flush-file-structure (file)
   (or (consp file) (setq file (list file)))
   (let ((fs (compilation-get-file-structure file)))
-    (assert (eq fs (gethash file compilation-locs)))
-    (assert (eq fs (gethash (cons (caar fs) (cadr (car fs)))
+    (cl-assert (eq fs (gethash file compilation-locs)))
+    (cl-assert (eq fs (gethash (cons (caar fs) (cadr (car fs)))
                             compilation-locs)))
     (maphash (lambda (k v)
                (if (eq v fs) (remhash k compilation-locs)))

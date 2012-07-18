@@ -33,16 +33,17 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 #include <signal.h>
 #include <math.h>
 #include <setjmp.h>
+#include <c-strcase.h>
 
 #include "lisp.h"
 #include "blockinput.h"
 #include "nsterm.h"
 #include "window.h"
+#include "character.h"
 #include "buffer.h"
 #include "keyboard.h"
 #include "termhooks.h"
 #include "fontset.h"
-#include "character.h"
 #include "font.h"
 
 #if 0
@@ -101,7 +102,7 @@ extern BOOL ns_in_resize;
 static Lisp_Object as_script, *as_result;
 static int as_status;
 
-#if GLYPH_DEBUG
+#ifdef GLYPH_DEBUG
 static ptrdiff_t image_cache_refcount;
 #endif
 
@@ -470,11 +471,11 @@ x_set_icon_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   if ([[view window] miniwindowTitle] &&
       ([[[view window] miniwindowTitle]
              isEqualToString: [NSString stringWithUTF8String:
-                                           SDATA (arg)]]))
+                                           SSDATA (arg)]]))
     return;
 
   [[view window] setMiniwindowTitle:
-        [NSString stringWithUTF8String: SDATA (arg)]];
+        [NSString stringWithUTF8String: SSDATA (arg)]];
 }
 
 static void
@@ -489,7 +490,7 @@ ns_set_name_internal (FRAME_PTR f, Lisp_Object name)
   encoded_name = ENCODE_UTF_8 (name);
   UNGCPRO;
 
-  str = [NSString stringWithUTF8String: SDATA (encoded_name)];
+  str = [NSString stringWithUTF8String: SSDATA (encoded_name)];
 
   /* Don't change the name if it's already NAME.  */
   if (! [[[view window] title] isEqualToString: str])
@@ -500,7 +501,7 @@ ns_set_name_internal (FRAME_PTR f, Lisp_Object name)
   else
     encoded_icon_name = ENCODE_UTF_8 (f->icon_name);
 
-  str = [NSString stringWithUTF8String: SDATA (encoded_icon_name)];
+  str = [NSString stringWithUTF8String: SSDATA (encoded_icon_name)];
 
   if ([[view window] miniwindowTitle] &&
       ! [[[view window] miniwindowTitle] isEqualToString: str])
@@ -511,7 +512,6 @@ ns_set_name_internal (FRAME_PTR f, Lisp_Object name)
 static void
 ns_set_name (struct frame *f, Lisp_Object name, int explicit)
 {
-  NSView *view;
   NSTRACE (ns_set_name);
 
   if (ns_in_resize)
@@ -640,14 +640,14 @@ ns_set_name_as_filename (struct frame *f)
   title = FRAME_ICONIFIED_P (f) ? [[[view window] miniwindowTitle] UTF8String]
                                 : [[[view window] title] UTF8String];
 
-  if (title && (! strcmp (title, SDATA (encoded_name))))
+  if (title && (! strcmp (title, SSDATA (encoded_name))))
     {
       [pool release];
       UNBLOCK_INPUT;
       return;
     }
 
-  str = [NSString stringWithUTF8String: SDATA (encoded_name)];
+  str = [NSString stringWithUTF8String: SSDATA (encoded_name)];
   if (str == nil) str = @"Bad coding";
 
   if (FRAME_ICONIFIED_P (f))
@@ -662,7 +662,7 @@ ns_set_name_as_filename (struct frame *f)
           encoded_filename = ENCODE_UTF_8 (filename);
           UNGCPRO;
 
-          fstr = [NSString stringWithUTF8String: SDATA (encoded_filename)];
+          fstr = [NSString stringWithUTF8String: SSDATA (encoded_filename)];
           if (fstr == nil) fstr = @"";
 #ifdef NS_IMPL_COCOA
           /* work around a bug observed on 10.3 and later where
@@ -705,7 +705,6 @@ void
 x_set_menu_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
 {
   int nlines;
-  int olines = FRAME_MENU_BAR_LINES (f);
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
 
@@ -778,7 +777,7 @@ ns_implicitly_set_icon_type (struct frame *f)
   BLOCK_INPUT;
   pool = [[NSAutoreleasePool alloc] init];
   if (f->output_data.ns->miniimage
-      && [[NSString stringWithUTF8String: SDATA (f->name)]
+      && [[NSString stringWithUTF8String: SSDATA (f->name)]
                isEqualToString: [(NSImage *)f->output_data.ns->miniimage name]])
     {
       [pool release];
@@ -800,10 +799,10 @@ ns_implicitly_set_icon_type (struct frame *f)
     {
       elt = XCAR (chain);
       /* special case: 't' means go by file type */
-      if (SYMBOLP (elt) && EQ (elt, Qt) && SDATA (f->name)[0] == '/')
+      if (SYMBOLP (elt) && EQ (elt, Qt) && SSDATA (f->name)[0] == '/')
         {
           NSString *str
-	     = [NSString stringWithUTF8String: SDATA (f->name)];
+	     = [NSString stringWithUTF8String: SSDATA (f->name)];
           if ([[NSFileManager defaultManager] fileExistsAtPath: str])
             image = [[[NSWorkspace sharedWorkspace] iconForFile: str] retain];
         }
@@ -816,7 +815,7 @@ ns_implicitly_set_icon_type (struct frame *f)
           if (image == nil)
             image = [[NSImage imageNamed:
                                [NSString stringWithUTF8String:
-					    SDATA (XCDR (elt))]] retain];
+					    SSDATA (XCDR (elt))]] retain];
         }
     }
 
@@ -845,7 +844,7 @@ x_set_icon_type (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 
   if (!NILP (arg) && SYMBOLP (arg))
     {
-      arg =build_string (SDATA (SYMBOL_NAME (arg)));
+      arg =build_string (SSDATA (SYMBOL_NAME (arg)));
       store_frame_param (f, Qicon_type, arg);
     }
 
@@ -861,7 +860,7 @@ x_set_icon_type (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   image = [EmacsImage allocInitFromFile: arg];
   if (image == nil)
     image =[NSImage imageNamed: [NSString stringWithUTF8String:
-                                            SDATA (arg)]];
+                                            SSDATA (arg)]];
 
   if (image == nil)
     {
@@ -881,6 +880,40 @@ XParseGeometry (char *string, int *x, int *y,
 {
   message1 ("Warning: XParseGeometry not supported under NS.\n");
   return 0;
+}
+
+
+/* TODO: move to nsterm? */
+int
+ns_lisp_to_cursor_type (Lisp_Object arg)
+{
+  char *str;
+  if (XTYPE (arg) == Lisp_String)
+    str = SSDATA (arg);
+  else if (XTYPE (arg) == Lisp_Symbol)
+    str = SSDATA (SYMBOL_NAME (arg));
+  else return -1;
+  if (!strcmp (str, "box"))	return FILLED_BOX_CURSOR;
+  if (!strcmp (str, "hollow"))	return HOLLOW_BOX_CURSOR;
+  if (!strcmp (str, "hbar"))	return HBAR_CURSOR;
+  if (!strcmp (str, "bar"))	return BAR_CURSOR;
+  if (!strcmp (str, "no"))	return NO_CURSOR;
+  return -1;
+}
+
+
+Lisp_Object
+ns_cursor_type_to_lisp (int arg)
+{
+  switch (arg)
+    {
+    case FILLED_BOX_CURSOR: return Qbox;
+    case HOLLOW_BOX_CURSOR: return intern ("hollow");
+    case HBAR_CURSOR:	    return intern ("hbar");
+    case BAR_CURSOR:	    return intern ("bar");
+    case NO_CURSOR:
+    default:		    return intern ("no");
+    }
 }
 
 /* This is the same as the xfns.c definition.  */
@@ -1023,16 +1056,16 @@ unwind_create_frame (Lisp_Object frame)
   /* If frame is ``official'', nothing to do.  */
   if (NILP (Fmemq (frame, Vframe_list)))
     {
-#if GLYPH_DEBUG && XASSERTS
+#if defined GLYPH_DEBUG && defined ENABLE_CHECKING
       struct ns_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
 #endif
 
       x_free_frame_resources (f);
       free_glyphs (f);
 
-#if GLYPH_DEBUG
+#ifdef GLYPH_DEBUG
       /* Check that reference counts are indeed correct.  */
-      xassert (dpyinfo->terminal->image_cache->refcount == image_cache_refcount);
+      eassert (dpyinfo->terminal->image_cache->refcount == image_cache_refcount);
 #endif
       return Qt;
     }
@@ -1168,8 +1201,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   f->terminal = dpyinfo->terminal;
 
   f->output_method = output_ns;
-  f->output_data.ns = (struct ns_output *)xmalloc (sizeof *(f->output_data.ns));
-  memset (f->output_data.ns, 0, sizeof *(f->output_data.ns));
+  f->output_data.ns = xzalloc (sizeof *f->output_data.ns);
 
   FRAME_FONTSET (f) = -1;
 
@@ -1259,7 +1291,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   x_default_parameter (f, parms, Qright_fringe, Qnil,
 		       "rightFringe", "RightFringe", RES_TYPE_NUMBER);
 
-#if GLYPH_DEBUG
+#ifdef GLYPH_DEBUG
   image_cache_refcount =
     FRAME_IMAGE_CACHE (f) ? FRAME_IMAGE_CACHE (f)->refcount : 0;
 #endif
@@ -2064,12 +2096,12 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
   Lisp_Object fname;
 
   NSString *promptS = NILP (prompt) || !STRINGP (prompt) ? nil :
-    [NSString stringWithUTF8String: SDATA (prompt)];
+    [NSString stringWithUTF8String: SSDATA (prompt)];
   NSString *dirS = NILP (dir) || !STRINGP (dir) ?
-    [NSString stringWithUTF8String: SDATA (BVAR (current_buffer, directory))] :
-    [NSString stringWithUTF8String: SDATA (dir)];
+    [NSString stringWithUTF8String: SSDATA (BVAR (current_buffer, directory))] :
+    [NSString stringWithUTF8String: SSDATA (dir)];
   NSString *initS = NILP (init) || !STRINGP (init) ? nil :
-    [NSString stringWithUTF8String: SDATA (init)];
+    [NSString stringWithUTF8String: SSDATA (init)];
 
   check_ns ();
 
@@ -2138,9 +2170,9 @@ If OWNER is nil, Emacs is assumed.  */)
   if (NILP (owner))
     owner = build_string([ns_app_name UTF8String]);
   CHECK_STRING (name);
-/*fprintf (stderr, "ns-get-resource checking resource '%s'\n", SDATA (name)); */
+/*fprintf (stderr, "ns-get-resource checking resource '%s'\n", SSDATA (name)); */
 
-  value = ns_get_defaults_value (SDATA (name));
+  value = ns_get_defaults_value (SSDATA (name));
 
   if (value)
     return build_string (value);
@@ -2160,15 +2192,15 @@ If VALUE is nil, the default is removed.  */)
   if (NILP (value))
     {
       [[NSUserDefaults standardUserDefaults] removeObjectForKey:
-                         [NSString stringWithUTF8String: SDATA (name)]];
+                         [NSString stringWithUTF8String: SSDATA (name)]];
     }
   else
     {
       CHECK_STRING (value);
       [[NSUserDefaults standardUserDefaults] setObject:
-                [NSString stringWithUTF8String: SDATA (value)]
+                [NSString stringWithUTF8String: SSDATA (value)]
                                         forKey: [NSString stringWithUTF8String:
-                                                         SDATA (name)]];
+                                                         SSDATA (name)]];
     }
 
   return Qnil;
@@ -2376,10 +2408,10 @@ terminate Emacs if we can't open the connection.
     {
       if (!NILP (must_succeed))
         fatal ("OpenStep on %s not responding.\n",
-               SDATA (display));
+               SSDATA (display));
       else
         error ("OpenStep on %s not responding.\n",
-               SDATA (display));
+               SSDATA (display));
     }
 
   /* Register our external input/output types, used for determining
@@ -2478,14 +2510,14 @@ font descriptor.  If string contains `fontset' and not
 {
   char *nm;
   CHECK_STRING (name);
-  nm = SDATA (name);
+  nm = SSDATA (name);
 
   if (nm[0] != '-')
     return name;
   if (strstr (nm, "fontset") && !strstr (nm, "fontset-startup"))
     return name;
 
-  return build_string (ns_xlfd_to_fontname (SDATA (name)));
+  return build_string (ns_xlfd_to_fontname (SSDATA (name)));
 }
 
 
@@ -2508,14 +2540,14 @@ The optional argument FRAME is currently ignored.  */)
   BLOCK_INPUT;
 
   colorlists = [[NSColorList availableColorLists] objectEnumerator];
-  while (clist = [colorlists nextObject])
+  while ((clist = [colorlists nextObject]))
     {
       if ([[clist name] length] < 7 ||
           [[clist name] rangeOfString: @"PANTONE"].location == 0)
         {
           NSEnumerator *cnames = [[clist allKeys] reverseObjectEnumerator];
           NSString *cname;
-          while (cname = [cnames nextObject])
+          while ((cname = [cnames nextObject]))
             list = Fcons (build_string ([cname UTF8String]), list);
 /*           for (i = [[clist allKeys] count] - 1; i >= 0; i--)
                list = Fcons (build_string ([[[clist allKeys] objectAtIndex: i]
@@ -2595,12 +2627,11 @@ there was no result.  */)
   id pb;
   NSString *svcName;
   char *utfStr;
-  int len;
 
   CHECK_STRING (service);
   check_ns ();
 
-  utfStr = SDATA (service);
+  utfStr = SSDATA (service);
   svcName = [NSString stringWithUTF8String: utfStr];
 
   pb =[NSPasteboard pasteboardWithUniqueName];
@@ -2625,7 +2656,7 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
   NSString *utfStr;
 
   CHECK_STRING (str);
-  utfStr = [NSString stringWithUTF8String: SDATA (str)];
+  utfStr = [NSString stringWithUTF8String: SSDATA (str)];
   if (![utfStr respondsToSelector:
                  @selector (precomposedStringWithCanonicalMapping)])
     {
@@ -2654,7 +2685,7 @@ ns_do_applescript (Lisp_Object script, Lisp_Object *result)
 
   NSAppleScript* scriptObject =
     [[NSAppleScript alloc] initWithSource:
-			     [NSString stringWithUTF8String: SDATA (script)]];
+			     [NSString stringWithUTF8String: SSDATA (script)]];
 
   returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
   [scriptObject release];
@@ -2759,7 +2790,7 @@ In case the execution fails, an error is signaled. */)
   else if (!STRINGP (result))
     error ("AppleScript error %d", status);
   else
-    error ("%s", SDATA (result));
+    error ("%s", SSDATA (result));
 }
 #endif
 
@@ -3056,8 +3087,8 @@ x_get_string_resource (XrmDatabase rdb, char *name, char *class)
 
   res = ns_get_defaults_value (toCheck);
   return !res ? NULL :
-      (!strncasecmp (res, "YES", 3) ? "true" :
-          (!strncasecmp (res, "NO", 2) ? "false" : res));
+      (!c_strncasecmp (res, "YES", 3) ? "true" :
+          (!c_strncasecmp (res, "NO", 2) ? "false" : res));
 }
 
 
@@ -3232,7 +3263,6 @@ May return nil if a frame passed in DISPLAY is not on any available display.  */
      (display)
      Lisp_Object display;
 {
-  int top;
   NSScreen *screen;
   NSRect vScreen;
 
@@ -3390,7 +3420,7 @@ Text larger than the specified size is clipped.  */)
   GCPRO4 (string, parms, frame, timeout);
 
   CHECK_STRING (string);
-  str = SDATA (string);
+  str = SSDATA (string);
   f = check_x_frame (frame);
   if (NILP (timeout))
     timeout = make_number (5);
@@ -3525,8 +3555,6 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 void
 syms_of_nsfns (void)
 {
-  int i;
-
   Qfontsize = intern_c_string ("fontsize");
   staticpro (&Qfontsize);
 

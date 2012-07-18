@@ -310,7 +310,7 @@ left out.
 Turning on auto-newline automatically enables electric indentation.
 
 When the auto-newline feature is enabled (indicated by \"/la\" on the
-modeline after the mode name) newlines are automatically inserted
+mode line after the mode name) newlines are automatically inserted
 after special characters such as brace, comma, semi-colon, and colon."
   (interactive "P")
   (setq c-auto-newline
@@ -329,7 +329,7 @@ positive, turns it off when negative, and just toggles it when zero or
 left out.
 
 When the hungry-delete-key feature is enabled (indicated by \"/h\" on
-the modeline after the mode name) the delete key gobbles all preceding
+the mode line after the mode name) the delete key gobbles all preceding
 whitespace in one fell swoop."
   (interactive "P")
   (setq c-hungry-delete-key (c-calculate-state arg c-hungry-delete-key))
@@ -1825,6 +1825,15 @@ with a brace block."
 	    ;; DEFCHECKER(sysconf_arg,prefix=_SC,default=, ...) ==> sysconf_arg
 	    ;; DEFFLAGSET(syslog_opt_flags,LOG_PID ...) ==> syslog_opt_flags
 	    (match-string-no-properties 1))
+
+	   ;; Objective-C method starting with + or -.
+	   ((and (derived-mode-p 'objc-mode)
+		 (looking-at "[-+]\s*("))
+	    (when (c-syntactic-re-search-forward ")\s*" nil t)
+	      (c-forward-token-2)
+	      (setq name-end (point))
+	      (c-backward-token-2)
+	      (buffer-substring-no-properties (point) name-end)))
 
 	   (t
 	    ;; Normal function or initializer.

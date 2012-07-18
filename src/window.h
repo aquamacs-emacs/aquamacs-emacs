@@ -94,9 +94,6 @@ struct window
     /* The frame this window is on.  */
     Lisp_Object frame;
 
-    /* t if this window is a minibuffer window.  */
-    Lisp_Object mini_p;
-
     /* Following (to right or down) and preceding (to left or up) child
        at same level of tree.  */
     Lisp_Object next, prev;
@@ -144,41 +141,9 @@ struct window
        each one can have its own value of point.  */
     Lisp_Object pointm;
 
-    /* Non-nil means next redisplay must use the value of start
-       set up for it in advance.  Set by scrolling commands.  */
-    Lisp_Object force_start;
-    /* Non-nil means we have explicitly changed the value of start,
-       but that the next redisplay is not obliged to use the new value.
-       This is used in Fdelete_other_windows to force a call to
-       Vwindow_scroll_functions; also by Frecenter with argument.  */
-    Lisp_Object optional_new_start;
-
-    /* Number of columns display within the window is scrolled to the left.  */
-    Lisp_Object hscroll;
-    /* Minimum hscroll for automatic hscrolling.  This is the value
-       the user has set, by set-window-hscroll for example.  */
-    Lisp_Object min_hscroll;
-
-    /* Number saying how recently window was selected.  */
-    Lisp_Object use_time;
-
-    /* Unique number of window assigned when it was created.  */
-    Lisp_Object sequence_number;
-
     /* No permanent meaning; used by save-window-excursion's
        bookkeeping.  */
     Lisp_Object temslot;
-
-    /* text.modified of displayed buffer as of last time display
-       completed.  */
-    Lisp_Object last_modified;
-    /* BUF_OVERLAY_MODIFIED of displayed buffer as of last complete update.  */
-    Lisp_Object last_overlay_modified;
-    /* Value of point at that time.  */
-    Lisp_Object last_point;
-    /* Non-nil if the buffer was "modified" when the window
-       was last updated.  */
-    Lisp_Object last_had_star;
 
     /* This window's vertical scroll bar.  This field is only for use
        by the window-system-dependent code which implements the
@@ -194,9 +159,6 @@ struct window
     /* Width of left and right fringes.
        A value of nil or t means use frame values.  */
     Lisp_Object left_fringe_width, right_fringe_width;
-    /* Non-nil means fringes are drawn outside display margins;
-       othersize draw them between margin areas and text.  */
-    Lisp_Object fringes_outside_margins;
 
     /* Pixel width of scroll bars.
        A value of nil or t means use frame values.  */
@@ -205,11 +167,6 @@ struct window
     /* Type of vertical scroll bar.  A value of nil means
        no scroll bar.  A value of t means use frame value.  */
     Lisp_Object vertical_scroll_bar_type;
-
-    /* Frame coords of mark as of last time display completed */
-    /* May be nil if mark does not exist or was not on frame */
-    Lisp_Object last_mark_x;
-    Lisp_Object last_mark_y;
 
     /* Z - the buffer position of the last glyph in the current matrix
        of W.  Only valid if WINDOW_END_VALID is not nil.  */
@@ -223,18 +180,13 @@ struct window
        did not get onto the frame.  */
     Lisp_Object window_end_valid;
 
-    /* Non-nil means must regenerate mode line of this window */
-    Lisp_Object update_mode_line;
-
-    /* Non-nil means current value of `start'
-       was the beginning of a line when it was chosen.  */
-    Lisp_Object start_at_line_beg;
-
     /* Display-table to use for displaying chars in this window.
        Nil means use the buffer's own display-table.  */
     Lisp_Object display_table;
 
-    /* Non-nil means window is marked as dedicated.  */
+    /* Non-nil usually means window is marked as dedicated.
+       Note Lisp code may set this to something beyond Qnil
+       and Qt, so bitfield can't be used here.  */
     Lisp_Object dedicated;
 
     /* Line number and position of a line somewhere above the top of the
@@ -279,6 +231,31 @@ struct window
     struct glyph_matrix *current_matrix;
     struct glyph_matrix *desired_matrix;
 
+    /* Number saying how recently window was selected.  */
+    int use_time;
+
+    /* Unique number of window assigned when it was created.  */
+    int sequence_number;
+
+    /* Number of columns display within the window is scrolled to the left.  */
+    ptrdiff_t hscroll;
+
+    /* Minimum hscroll for automatic hscrolling.  This is the value
+       the user has set, by set-window-hscroll for example.  */
+    ptrdiff_t min_hscroll;
+
+    /* Displayed buffer's text modification events counter as of last time
+       display completed.  */
+    EMACS_INT last_modified;
+
+    /* Displayed buffer's overlays modification events counter as of last
+       complete update.  */
+    EMACS_INT last_overlay_modified;
+
+    /* Value of point at that time.  Since this is a position in a buffer,
+       it should be positive. */
+    ptrdiff_t last_point;
+
     /* Scaling factor for the glyph_matrix size calculation in this window.
        Used if window contains many small images or uses proportional fonts,
        as the normal  may yield a matrix which is too small.  */
@@ -301,6 +278,30 @@ struct window
 
     /* This is handy for undrawing the cursor.  */
     int phys_cursor_ascent, phys_cursor_height;
+
+    /* Non-zero if this window is a minibuffer window.  */
+    unsigned mini : 1;
+
+    /* Non-zero means must regenerate mode line of this window */
+    unsigned update_mode_line : 1;
+
+    /* Non-nil if the buffer was "modified" when the window
+       was last updated.  */
+    unsigned last_had_star : 1;
+
+    /* Non-zero means current value of `start'
+       was the beginning of a line when it was chosen.  */
+    unsigned start_at_line_beg : 1;
+
+    /* Non-zero means next redisplay must use the value of start
+       set up for it in advance.  Set by scrolling commands.  */
+    unsigned force_start : 1;
+
+    /* Non-zero means we have explicitly changed the value of start,
+       but that the next redisplay is not obliged to use the new value.
+       This is used in Fdelete_other_windows to force a call to
+       Vwindow_scroll_functions; also by Frecenter with argument.  */
+    unsigned optional_new_start : 1;
 
     /* Non-zero means the cursor is currently displayed.  This can be
        set to zero by functions overpainting the cursor image.  */
@@ -326,18 +327,22 @@ struct window
        accept that.  */
     unsigned frozen_window_start_p : 1;
 
+    /* Non-zero means fringes are drawn outside display margins.
+       Otherwise draw them between margin areas and text.  */
+    unsigned fringes_outside_margins : 1;
+
     /* Amount by which lines of this window are scrolled in
        y-direction (smooth scrolling).  */
     int vscroll;
 
-    /* Z_BYTE - the buffer position of the last glyph in the current matrix
-       of W.  Only valid if WINDOW_END_VALID is not nil.  */
-    int window_end_bytepos;
+    /* Z_BYTE - the buffer position of the last glyph in the current matrix of W.
+       Should be nonnegative, and only valid if window_end_valid is not nil.  */
+    ptrdiff_t window_end_bytepos;
 };
 
 /* 1 if W is a minibuffer window.  */
 
-#define MINI_WINDOW_P(W)	(!NILP ((W)->mini_p))
+#define MINI_WINDOW_P(W)	((W)->mini)
 
 /* General window layout:
 
@@ -608,7 +613,7 @@ struct window
 /* Are fringes outside display margins in window W.  */
 
 #define WINDOW_HAS_FRINGES_OUTSIDE_MARGINS(W)	\
-  (!NILP ((W)->fringes_outside_margins))
+  ((W)->fringes_outside_margins)
 
 /* Say whether scroll bars are currently enabled for window W,
    and which side they are on.  */
@@ -810,14 +815,9 @@ extern Lisp_Object Vmouse_window;
 
 extern Lisp_Object Vmouse_event;
 
-EXFUN (Fnext_window, 3);
-EXFUN (Fselect_window, 2);
-EXFUN (Fset_window_buffer, 3);
-EXFUN (Fset_window_point, 2);
 extern Lisp_Object make_window (void);
 extern Lisp_Object window_from_coordinates (struct frame *, int, int,
                                             enum window_part *, int);
-EXFUN (Fwindow_dedicated_p, 1);
 extern void resize_frame_windows (struct frame *, int, int);
 extern void delete_all_child_windows (Lisp_Object);
 extern void freeze_window_starts (struct frame *, int);
@@ -888,21 +888,10 @@ struct glyph *get_phys_cursor_glyph (struct window *w);
 extern Lisp_Object Qwindowp, Qwindow_live_p;
 extern Lisp_Object Vwindow_list;
 
-EXFUN (Fwindow_buffer, 1);
-EXFUN (Fget_buffer_window, 2);
-EXFUN (Fwindow_minibuffer_p, 1);
-EXFUN (Fselected_window, 0);
-EXFUN (Fframe_root_window, 1);
-EXFUN (Fframe_first_window, 1);
-EXFUN (Fset_frame_selected_window, 3);
-EXFUN (Fset_window_configuration, 1);
-EXFUN (Fcurrent_window_configuration, 1);
 extern int compare_window_configurations (Lisp_Object, Lisp_Object, int);
-EXFUN (Fpos_visible_in_window_p, 3);
 extern void mark_window_cursors_off (struct window *);
 extern int window_internal_height (struct window *);
 extern int window_body_cols (struct window *w);
-EXFUN (Frecenter, 1);
 extern void temp_output_buffer_show (Lisp_Object);
 extern void replace_buffer_in_windows (Lisp_Object);
 extern void replace_buffer_in_windows_safely (Lisp_Object);

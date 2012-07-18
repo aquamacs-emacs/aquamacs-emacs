@@ -28,9 +28,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <unistd.h>
 
 #include "lisp.h"
+#include "character.h"
 #include "buffer.h"
 #include "keyboard.h"
-#include "character.h"
 #include "keymap.h"
 #include "buildobj.h"
 
@@ -42,9 +42,6 @@ static char *get_doc_string_buffer;
 static ptrdiff_t get_doc_string_buffer_size;
 
 static unsigned char *read_bytecode_pointer;
-static Lisp_Object Fdocumentation_property (Lisp_Object, Lisp_Object,
-					    Lisp_Object);
-static Lisp_Object Fsnarf_documentation (Lisp_Object);
 
 /* readchar in lread.c calls back here to fetch the next byte.
    If UNREADFLAG is 1, we unread a byte.  */
@@ -384,7 +381,7 @@ string is passed through `substitute-command-keys'.  */)
     }
   else if (CONSP (fun))
     {
-      funcar = Fcar (fun);
+      funcar = XCAR (fun);
       if (!SYMBOLP (funcar))
 	xsignal1 (Qinvalid_function, fun);
       else if (EQ (funcar, Qkeymap))
@@ -580,14 +577,13 @@ the same file name is found in the `doc-directory'.  */)
       (0)
 #endif /* CANNOT_DUMP */
     {
-      name = (char *) alloca (SCHARS (filename) + 14);
+      name = alloca (SCHARS (filename) + 14);
       strcpy (name, "../etc/");
     }
   else
     {
       CHECK_STRING (Vdoc_directory);
-      name = (char *) alloca (SCHARS (filename)
-			  + SCHARS (Vdoc_directory) + 1);
+      name = alloca (SCHARS (filename) + SCHARS (Vdoc_directory) + 1);
       strcpy (name, SSDATA (Vdoc_directory));
     }
   strcat (name, SSDATA (filename)); 	/*** Add this line ***/
@@ -649,7 +645,7 @@ the same file name is found in the `doc-directory'.  */)
                 {
                   ptrdiff_t len = end - p - 2;
                   char *fromfile = alloca (len + 1);
-                  strncpy (fromfile, &p[2], len);
+                  memcpy (fromfile, &p[2], len);
                   fromfile[len] = 0;
                   if (fromfile[len-1] == 'c')
                     fromfile[len-1] = 'o';
@@ -705,18 +701,23 @@ the same file name is found in the `doc-directory'.  */)
 DEFUN ("substitute-command-keys", Fsubstitute_command_keys,
        Ssubstitute_command_keys, 1, 1, 0,
        doc: /* Substitute key descriptions for command names in STRING.
-Substrings of the form \\=\\[COMMAND] replaced by either: a keystroke
-sequence that will invoke COMMAND, or "M-x COMMAND" if COMMAND is not
-on any keys.
-Substrings of the form \\=\\{MAPVAR} are replaced by summaries
-\(made by `describe-bindings') of the value of MAPVAR, taken as a keymap.
-Substrings of the form \\=\\<MAPVAR> specify to use the value of MAPVAR
+Each substring of the form \\=\\[COMMAND] is replaced by either a
+keystroke sequence that invokes COMMAND, or "M-x COMMAND" if COMMAND
+is not on any keys.
+
+Each substring of the form \\=\\{MAPVAR} is replaced by a summary of
+the value of MAPVAR as a keymap.  This summary is similar to the one
+produced by `describe-bindings'.  The summary ends in two newlines
+\(used by the helper function `help-make-xrefs' to find the end of the
+summary).
+
+Each substring of the form \\=\\<MAPVAR> specifies the use of MAPVAR
 as the keymap for future \\=\\[COMMAND] substrings.
 \\=\\= quotes the following character and is discarded;
 thus, \\=\\=\\=\\= puts \\=\\= into the output, and \\=\\=\\=\\[ puts \\=\\[ into the output.
 
-Returns original STRING if no substitutions were made.  Otherwise,
-a new string, without any text properties, is returned.  */)
+Return the original STRING if no substitutions are made.
+Otherwise, return a new string, without any text properties.  */)
   (Lisp_Object string)
 {
   char *buf;
@@ -755,7 +756,7 @@ a new string, without any text properties, is returned.  */)
     keymap = Voverriding_local_map;
 
   bsize = SBYTES (string);
-  bufp = buf = (char *) xmalloc (bsize);
+  bufp = buf = xmalloc (bsize);
 
   strp = SDATA (string);
   while (strp < SDATA (string) + SBYTES (string))
@@ -826,7 +827,7 @@ a new string, without any text properties, is returned.  */)
 	      ptrdiff_t offset = bufp - buf;
 	      if (STRING_BYTES_BOUND - 4 < bsize)
 		string_overflow ();
-	      buf = (char *) xrealloc (buf, bsize += 4);
+	      buf = xrealloc (buf, bsize += 4);
 	      bufp = buf + offset;
 	      memcpy (bufp, "M-x ", 4);
 	      bufp += 4;
@@ -892,11 +893,11 @@ a new string, without any text properties, is returned.  */)
 	  if (NILP (tem))
 	    {
 	      name = Fsymbol_name (name);
-	      insert_string ("\nUses keymap \"");
+	      insert_string ("\nUses keymap `");
 	      insert_from_string (name, 0, 0,
 				  SCHARS (name),
 				  SBYTES (name), 1);
-	      insert_string ("\", which is not currently defined.\n");
+	      insert_string ("', which is not currently defined.\n");
 	      if (start[-1] == '<') keymap = Qnil;
 	    }
 	  else if (start[-1] == '<')
@@ -922,7 +923,7 @@ a new string, without any text properties, is returned.  */)
 	    ptrdiff_t offset = bufp - buf;
 	    if (STRING_BYTES_BOUND - length_byte < bsize)
 	      string_overflow ();
-	    buf = (char *) xrealloc (buf, bsize += length_byte);
+	    buf = xrealloc (buf, bsize += length_byte);
 	    bufp = buf + offset;
 	    memcpy (bufp, start, length_byte);
 	    bufp += length_byte;

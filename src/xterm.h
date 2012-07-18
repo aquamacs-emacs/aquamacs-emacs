@@ -736,9 +736,6 @@ enum
 /* This is the Colormap which frame F uses.  */
 #define FRAME_X_COLORMAP(f) FRAME_X_DISPLAY_INFO (f)->cmap
 
-/* This is the 'font_info *' which frame F has.  */
-#define FRAME_X_FONT_TABLE(f) (FRAME_X_DISPLAY_INFO (f)->font_table)
-
 /* The difference in pixels between the top left corner of the
    Emacs window (including possible window manager decorations)
    and FRAME_X_WINDOW (f).  */
@@ -937,10 +934,7 @@ void x_handle_property_notify (XPropertyEvent *);
 /* From xfns.c.  */
 
 struct frame *check_x_frame (Lisp_Object);
-EXFUN (Fx_display_grayscale_p, 1);
 extern void x_free_gcs (struct frame *);
-extern int gray_bitmap_width, gray_bitmap_height;
-extern char *gray_bitmap_bits;
 
 /* From xrdb.c.  */
 

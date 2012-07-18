@@ -54,7 +54,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'vc) (require 'cl))
+(eval-when-compile (require 'vc))
 
 ;;; Properties of the backend
 
@@ -385,15 +385,15 @@ CALLBACK expects (ENTRIES &optional MORE-TO-COME); see
   :group 'vc-arch)
 
 (defun vc-arch-mode-line-string (file)
-  "Return string for placement in modeline by `vc-mode-line' for FILE."
+  "Return a string for `vc-mode-line' to put in the mode line for FILE."
   (let ((rev (vc-working-revision file)))
     (dolist (rule vc-arch-mode-line-rewrite)
       (if (string-match (car rule) rev)
 	  (setq rev (replace-match (cdr rule) t nil rev))))
     (format "Arch%c%s"
-	    (case (vc-state file)
-	      ((up-to-date needs-update) ?-)
-	      (added ?@)
+	    (pcase (vc-state file)
+	      ((or `up-to-date `needs-update) ?-)
+	      (`added ?@)
 	      (t ?:))
 	    rev)))
 

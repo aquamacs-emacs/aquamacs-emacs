@@ -25,7 +25,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl) (require 'vc))
+(eval-when-compile (require 'vc))
 
 ;; Clear up the cache to force vc-call to check again and discover
 ;; new functions when we reload this file.
@@ -256,7 +256,7 @@ See also variable `vc-cvs-sticky-date-format-string'."
   (vc-file-getprop file 'vc-working-revision))
 
 (defun vc-cvs-mode-line-string (file)
-  "Return string for placement into the modeline for FILE.
+  "Return a string for `vc-mode-line' to put in the mode line for FILE.
 Compared to the default implementation, this function does two things:
 Handle the special case of a CVS file that is added but not yet
 committed and support display of sticky tags."
@@ -790,7 +790,7 @@ For an empty string, nil is returned (invalid CVS root)."
            ((= len 3)
             ;; :METHOD:PATH or :METHOD:USER@HOSTNAME/PATH
             (cons (cadr root-list)
-                  (vc-cvs-parse-uhp (caddr root-list))))
+                  (vc-cvs-parse-uhp (nth 2 root-list))))
            (t
             ;; :METHOD:[USER@]HOST:PATH
             (cdr root-list)))))

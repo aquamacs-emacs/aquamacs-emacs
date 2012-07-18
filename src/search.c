@@ -24,8 +24,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "lisp.h"
 #include "syntax.h"
 #include "category.h"
-#include "buffer.h"
 #include "character.h"
+#include "buffer.h"
 #include "charset.h"
 #include "region-cache.h"
 #include "commands.h"
@@ -101,9 +101,8 @@ static EMACS_INT boyer_moore (EMACS_INT, unsigned char *, ptrdiff_t,
 static EMACS_INT search_buffer (Lisp_Object, ptrdiff_t, ptrdiff_t,
                                 ptrdiff_t, ptrdiff_t, EMACS_INT, int,
                                 Lisp_Object, Lisp_Object, int);
-static void matcher_overflow (void) NO_RETURN;
 
-static void
+static _Noreturn void
 matcher_overflow (void)
 {
   error ("Stack overflow in regexp matcher");
@@ -176,8 +175,7 @@ shrink_regexp_cache (void)
   for (cp = searchbuf_head; cp != 0; cp = cp->next)
     {
       cp->buf.allocated = cp->buf.used;
-      cp->buf.buffer
-	= (unsigned char *) xrealloc (cp->buf.buffer, cp->buf.used);
+      cp->buf.buffer = xrealloc (cp->buf.buffer, cp->buf.used);
     }
 }
 
@@ -492,11 +490,11 @@ fast_string_match (Lisp_Object regexp, Lisp_Object string)
    We assume that STRING contains single-byte characters.  */
 
 ptrdiff_t
-fast_c_string_match_ignore_case (Lisp_Object regexp, const char *string)
+fast_c_string_match_ignore_case (Lisp_Object regexp,
+				 const char *string, ptrdiff_t len)
 {
   ptrdiff_t val;
   struct re_pattern_buffer *bufp;
-  size_t len = strlen (string);
 
   regexp = string_make_unibyte (regexp);
   re_match_object = Qt;
@@ -1160,24 +1158,12 @@ search_buffer (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
 	{
 	  ptrdiff_t val;
 
-#ifdef REL_ALLOC
-	  /* re_search_2 below is passed C pointers to buffer text.
-	     If some code called by it causes memory (re)allocation,
-	     buffer text could be relocated on platforms that use
-	     REL_ALLOC, which invalidates those C pointers.  So we
-	     inhibit relocation of buffer text for as long as
-	     re_search_2 runs.  */
-	  r_alloc_inhibit_buffer_relocation (1);
-#endif
 	  val = re_search_2 (bufp, (char *) p1, s1, (char *) p2, s2,
 			     pos_byte - BEGV_BYTE, lim_byte - pos_byte,
 			     (NILP (Vinhibit_changing_match_data)
 			      ? &search_regs : &search_regs_1),
 			     /* Don't allow match past current point */
 			     pos_byte - BEGV_BYTE);
-#ifdef REL_ALLOC
-	  r_alloc_inhibit_buffer_relocation (0);
-#endif
 	  if (val == -2)
 	    {
 	      matcher_overflow ();
@@ -1217,19 +1203,11 @@ search_buffer (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
 	{
 	  ptrdiff_t val;
 
-#ifdef REL_ALLOC
-	  /* See commentary above for the reasons for inhibiting
-	     buffer text relocation here.  */
-	  r_alloc_inhibit_buffer_relocation (1);
-#endif
 	  val = re_search_2 (bufp, (char *) p1, s1, (char *) p2, s2,
 			     pos_byte - BEGV_BYTE, lim_byte - pos_byte,
 			     (NILP (Vinhibit_changing_match_data)
 			      ? &search_regs : &search_regs_1),
 			     lim_byte - BEGV_BYTE);
-#ifdef REL_ALLOC
-	  r_alloc_inhibit_buffer_relocation (0);
-#endif
 	  if (val == -2)
 	    {
 	      matcher_overflow ();
@@ -1295,7 +1273,7 @@ search_buffer (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
 	  raw_pattern_size_byte
 	    = count_size_as_multibyte (SDATA (string),
 				       raw_pattern_size);
-	  raw_pattern = (unsigned char *) alloca (raw_pattern_size_byte + 1);
+	  raw_pattern = alloca (raw_pattern_size_byte + 1);
 	  copy_text (SDATA (string), raw_pattern,
 		     SCHARS (string), 0, 1);
 	}
@@ -1309,7 +1287,7 @@ search_buffer (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
 	     the chosen single-byte character set can possibly match.  */
 	  raw_pattern_size = SCHARS (string);
 	  raw_pattern_size_byte = SCHARS (string);
-	  raw_pattern = (unsigned char *) alloca (raw_pattern_size + 1);
+	  raw_pattern = alloca (raw_pattern_size + 1);
 	  copy_text (SDATA (string), raw_pattern,
 		     SBYTES (string), 1, 0);
 	}
@@ -1317,7 +1295,7 @@ search_buffer (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
       /* Copy and optionally translate the pattern.  */
       len = raw_pattern_size;
       len_byte = raw_pattern_size_byte;
-      patbuf = (unsigned char *) alloca (len * MAX_MULTIBYTE_LENGTH);
+      patbuf = alloca (len * MAX_MULTIBYTE_LENGTH);
       pat = patbuf;
       base_pat = raw_pattern;
       if (multibyte)
@@ -1472,7 +1450,7 @@ simple_search (EMACS_INT n, unsigned char *pat,
   int forward = n > 0;
   /* Number of buffer bytes matched.  Note that this may be different
      from len_byte in a multibyte buffer.  */
-  ptrdiff_t match_byte;
+  ptrdiff_t match_byte = PTRDIFF_MIN;
 
   if (lim > pos && multibyte)
     while (n > 0)
@@ -1643,6 +1621,7 @@ simple_search (EMACS_INT n, unsigned char *pat,
  stop:
   if (n == 0)
     {
+      eassert (match_byte != PTRDIFF_MIN);
       if (forward)
 	set_search_regs ((multibyte ? pos_byte : pos) - match_byte, match_byte);
       else
@@ -2084,8 +2063,8 @@ set_search_regs (ptrdiff_t beg_byte, ptrdiff_t nbytes)
      the match position.  */
   if (search_regs.num_regs == 0)
     {
-      search_regs.start = (regoff_t *) xmalloc (2 * sizeof (regoff_t));
-      search_regs.end = (regoff_t *) xmalloc (2 * sizeof (regoff_t));
+      search_regs.start = xmalloc (2 * sizeof (regoff_t));
+      search_regs.end = xmalloc (2 * sizeof (regoff_t));
       search_regs.num_regs = 2;
     }
 
@@ -2520,7 +2499,7 @@ since only regular expressions have distinguished subexpressions.  */)
       substed_alloc_size = ((STRING_BYTES_BOUND - 100) / 2 < length
 			    ? STRING_BYTES_BOUND
 			    : length * 2 + 100);
-      substed = (unsigned char *) xmalloc (substed_alloc_size);
+      substed = xmalloc (substed_alloc_size);
       substed_len = 0;
 
       /* Go thru NEWTEXT, producing the actual text to insert in
@@ -2761,8 +2740,7 @@ Return value is undefined if the last search failed.  */)
 
   prev = Qnil;
 
-  data = (Lisp_Object *) alloca ((2 * search_regs.num_regs + 1)
-				 * sizeof (Lisp_Object));
+  data = alloca ((2 * search_regs.num_regs + 1) * sizeof *data);
 
   len = 0;
   for (i = 0; i < search_regs.num_regs; i++)
@@ -3028,7 +3006,7 @@ DEFUN ("regexp-quote", Fregexp_quote, Sregexp_quote, 1, 1, 0,
 
   CHECK_STRING (string);
 
-  temp = (char *) alloca (SBYTES (string) * 2);
+  temp = alloca (SBYTES (string) * 2);
 
   /* Now copy the data into the new string, inserting escapes. */
 
@@ -3060,7 +3038,7 @@ syms_of_search (void)
   for (i = 0; i < REGEXP_CACHE_SIZE; ++i)
     {
       searchbufs[i].buf.allocated = 100;
-      searchbufs[i].buf.buffer = (unsigned char *) xmalloc (100);
+      searchbufs[i].buf.buffer = xmalloc (100);
       searchbufs[i].buf.fastmap = searchbufs[i].fastmap;
       searchbufs[i].regexp = Qnil;
       searchbufs[i].whitespace_regexp = Qnil;
@@ -3078,12 +3056,12 @@ syms_of_search (void)
   Fput (Qsearch_failed, Qerror_conditions,
 	pure_cons (Qsearch_failed, pure_cons (Qerror, Qnil)));
   Fput (Qsearch_failed, Qerror_message,
-	make_pure_c_string ("Search failed"));
+	build_pure_c_string ("Search failed"));
 
   Fput (Qinvalid_regexp, Qerror_conditions,
 	pure_cons (Qinvalid_regexp, pure_cons (Qerror, Qnil)));
   Fput (Qinvalid_regexp, Qerror_message,
-	make_pure_c_string ("Invalid regexp"));
+	build_pure_c_string ("Invalid regexp"));
 
   last_thing_searched = Qnil;
   staticpro (&last_thing_searched);

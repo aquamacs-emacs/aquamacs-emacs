@@ -45,8 +45,6 @@
     (error "%s: Loading ns-win.el but not compiled for GNUstep/MacOS"
            (invocation-name)))
 
-(eval-when-compile (require 'cl))
-
 ;; Documentation-purposes only: actually loaded in loadup.el.
 (require 'frame)
 (require 'mouse)
@@ -939,26 +937,39 @@ panel immediately after correcting a word in a buffer."
 ;;;; Color support.
 
 ;; Functions for color panel + drag
-(defun ns-face-at-pos (position)
-  (let* ((p (posn-point position))
-	 (area (posn-area position))
-	 (window (posn-window position)))
+(defun ns-face-at-pos (pos)
+  (let* ((frame (car pos))
+         (frame-pos (cons (cadr pos) (cddr pos)))
+         (window (window-at (car frame-pos) (cdr frame-pos) frame))
+         (window-pos (coordinates-in-window-p frame-pos window))
+         (buffer (window-buffer window))
+         (edges (window-edges window)))
     (cond
-     ((eq area 'mode-line)
-      (if (eq (frame-selected-window) window)
-	  'mode-line ; does not work yet - frame is always selected
-	  'mode-line-inactive))
-     ((eq area 'vertical-line)
+     ((not window-pos)
+      nil)
+     ((eq window-pos 'mode-line)
+      'mode-line)
+     ((eq window-pos 'vertical-line)
       'default)
-     ((and (not area) (eq p (window-point window)))
+     ((consp window-pos)
+      (with-current-buffer buffer
+        (let ((p (car (compute-motion (window-start window)
+                                      (cons (nth 0 edges) (nth 1 edges))
+                                      (window-end window)
+                                      frame-pos
+                                      (- (window-width window) 1)
+                                      nil
+                                      window))))
+          (cond
+           ((eq p (window-point window))
             'cursor)
-     ((and (not area) mark-active (< (region-beginning) p) (< p (region-end)))
+           ((and mark-active (< (region-beginning) p) (< p (region-end)))
             'region)
-     ((not area)
-      (let* ((faces (or (get-char-property p 'face window) 'default))
-	     (face (if (consp faces) (car faces) faces)))
-	(or (cdr-safe (assq face face-remapping-alist))
-	    face))))))
+           (t
+	    (let ((faces (get-char-property p 'face window)))
+	      (if (consp faces) (car faces) faces)))))))
+     (t
+      nil))))
 
 (defvar ns-input-color)			; nsterm.m
 

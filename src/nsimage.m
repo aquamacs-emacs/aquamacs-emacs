@@ -96,7 +96,7 @@ ns_load_image (struct frame *f, struct image *img,
     {
       NSData *data;
 
-      data = [NSData dataWithBytes: SDATA (spec_data)
+      data = [NSData dataWithBytes: SSDATA (spec_data)
 			    length: SBYTES (spec_data)];
       eImg = [[EmacsImage alloc] initWithData: data];
       [eImg setPixmapData];
@@ -200,10 +200,8 @@ static EmacsImage *ImageList = nil;
   image =  ImageList;
   /* look for an existing image of the same name */
   while (image != nil &&
-	 // not all images seem to have names.
-	 // The reason for this is unclear.
-	 ([image name] == nil ||
-	  [[image name] compare: [NSString stringWithUTF8String: SDATA (file)]]
+	 ([image name] == nil || 
+	  [[image name] compare: [NSString stringWithUTF8String: SSDATA (file)]]
 	  != NSOrderedSame))
     image = [image imageListNext];
   if (image != nil)
@@ -230,7 +228,7 @@ static EmacsImage *ImageList = nil;
     return nil;
 
   image = [[EmacsImage alloc] initByReferencingFile:
-                     [NSString stringWithUTF8String: SDATA (found)]];
+                     [NSString stringWithUTF8String: SSDATA (found)]];
 
   // image = [NSImage imageNamed: [NSString stringWithUTF8String: SDATA (found)]];
 
@@ -261,7 +259,7 @@ static EmacsImage *ImageList = nil;
       [image release];
       return nil;
     }
-  
+
   // Respect DPI?
   
   /* The next two lines cause the DPI of the image to be ignored.
@@ -290,17 +288,17 @@ static EmacsImage *ImageList = nil;
       float resy = bounds.size.height / physicalSize.height;
 
 
-      [image setScalesWhenResized: YES];
+  [image setScalesWhenResized: YES];
       [image setSize: NSMakeSize([image size].width*resx / (72.0/25.4),  [image size].height*resy / (72.0/25.4))];
 
     }
   else
     {
       [image setScalesWhenResized: YES];
-      [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
+  [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
     }
 
-  [image setName: [NSString stringWithUTF8String: SDATA (file)]];
+  [image setName: [NSString stringWithUTF8String: SSDATA (file)]];
   [image reference];
   ImageList = [image imageListSetNext: ImageList];
 
@@ -429,7 +427,6 @@ static EmacsImage *ImageList = nil;
 - setXBMColor: (NSColor *)color
 {
   NSSize s = [self size];
-  int len = (int) s.width * s.height;
   unsigned char *planes[5];
   CGFloat r, g, b, a;
   NSColor *rgbColor;
@@ -495,7 +492,7 @@ static EmacsImage *ImageList = nil;
   NSImageRep *rep;
 
   reps = [[self representations] objectEnumerator];
-  while (rep = (NSImageRep *) [reps nextObject])
+  while ((rep = (NSImageRep *) [reps nextObject]))
     {
       if ([rep respondsToSelector: @selector (getBitmapDataPlanes:)])
         {
@@ -507,8 +504,8 @@ static EmacsImage *ImageList = nil;
 
           /* The next two lines cause the DPI of the image to be ignored.
              This seems to be the behavior users expect. */
-	  [self setScalesWhenResized: YES];
-	  [self setSize: NSMakeSize([bmRep pixelsWide], [bmRep pixelsHigh])];
+          [self setScalesWhenResized: YES];
+          [self setSize: NSMakeSize([bmRep pixelsWide], [bmRep pixelsHigh])];
 
           break;
         }

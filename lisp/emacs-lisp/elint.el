@@ -357,6 +357,8 @@ Returns the forms."
     (set (make-local-variable 'elint-buffer-env)
 	 (elint-init-env elint-buffer-forms))
     (if elint-preloaded-env
+        ;; FIXME: This doesn't do anything!  Should we setq the result to
+        ;; elint-buffer-env?
 	(elint-env-add-env elint-preloaded-env elint-buffer-env))
     (set (make-local-variable 'elint-last-env-time) (buffer-modified-tick))
     elint-buffer-forms))
@@ -464,6 +466,9 @@ Return nil if there are no more forms, t otherwise."
 	(add-to-list 'elint-features name)
 	;; cl loads cl-macs in an opaque manner.
 	;; Since cl-macs requires cl, we can just process cl-macs.
+        ;; FIXME: AFAIK, `cl' now behaves properly and does not need any
+        ;; special treatment any more.  Can someone who understands this
+        ;; code confirm?  --Stef
 	(and (eq name 'cl) (not elint-doing-cl)
 	     ;; We need cl if elint-form is to be able to expand cl macros.
 	     (require 'cl)

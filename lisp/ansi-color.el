@@ -90,7 +90,7 @@ as a PDF file <URL:http://www.ecma.ch/ecma1/STAND/ECMA-048.HTM>."
   :group 'processes)
 
 (defcustom ansi-color-faces-vector
-  [default bold default italic underline bold bold-italic modeline]
+  [default bold default italic underline success warning error]
   "Faces used for SGR control sequences determining a face.
 This vector holds the faces used for SGR control sequence parameters 0
 to 7.
@@ -101,9 +101,9 @@ Parameter  Description        Face used by default
   2        faint              default
   3        italic             italic
   4        underlined         underline
-  5        slowly blinking    bold
-  6        rapidly blinking   bold-italic
-  7        negative image     modeline
+  5        slowly blinking    success
+  6        rapidly blinking   warning
+  7        negative image     error
 
 Note that the symbol `default' is special: It will not be combined
 with the current face.
@@ -358,11 +358,12 @@ it will override BEGIN, the start of the region.  Set
   "Translates SGR control sequences into overlays or extents.
 Delete all other control sequences without processing them.
 
-SGR control sequences are applied by setting foreground and
-background colors to the text between BEGIN and END using
-overlays.  The colors used are given in `ansi-color-faces-vector'
-and `ansi-color-names-vector'.  See `ansi-color-apply-sequence'
-for details.
+SGR control sequences are applied by calling the function
+specified by `ansi-color-apply-face-function'.  The default
+function sets foreground and background colors to the text
+between BEGIN and END, using overlays.  The colors used are given
+in `ansi-color-faces-vector' and `ansi-color-names-vector'.  See
+`ansi-color-apply-sequence' for details.
 
 Every call to this function will set and use the buffer-local variable
 `ansi-color-context-region' to save position and current face.  This
