@@ -1224,7 +1224,7 @@ to the selected frame."
   ;; ;; not needed
 
 
-  (require 'mouse-sel) ; provie functions - but don't turn on mouse-sel-mode
+  ;; (require 'mouse-sel) ; provie functions - but don't turn on mouse-sel-mode
  
   (aquamacs-set-defaults '((mouse-drag-copy-region t) ;; needed in Emacs 24
 			   (cua-use-hyper-key only) ;;this avoids shift-return
@@ -1303,7 +1303,8 @@ to the selected frame."
  
   (aquamacs-set-defaults '((x-select-enable-clipboard nil) 
 			   (cua-mode t)
-			   (mouse-sel-leave-point-near-mouse t)))
+			   ;; (mouse-sel-leave-point-near-mouse t)
+			   ))
 
   ;; mainly to ensure  that we overwrite a marked region
   ;; (transient-mark-mode nil)
