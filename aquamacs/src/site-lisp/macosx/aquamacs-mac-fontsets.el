@@ -30,12 +30,19 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2012 David Reitter
 
 
 (eval-when-compile (require 'aquamacs-macros))
 
 ;;; FONT DEFAULTS 
+
+;; This seems to be required in Emacs 24 now
+;; (set-fontset-font t 'symbol (font-spec :name "AppleSymbol"))
+;; (set-fontset-font t 'symbol '("Apple Symbol" . "iso10646-1"))
+
+;; Fix Euro symbol (needed in Emacs 24)
+(set-fontset-font t '(#x20AC . #x20AC) (font-spec :name "AppleSymbol"))
 
 ;; commented out, doesn't work 
 ;;(set-fontset-font
