@@ -41,8 +41,29 @@
 ;; (set-fontset-font t 'symbol (font-spec :name "AppleSymbol"))
 ;; (set-fontset-font t 'symbol '("Apple Symbol" . "iso10646-1"))
 
-;; Fix Euro symbol (needed in Emacs 24)
-(set-fontset-font t '(#x20AC . #x20AC) (font-spec :name "AppleSymbol"))
+;; AppleGothic does not have all characters...
+;; Euro symbol (needed in Emacs 24)  20AC
+;; RUPEE SIGN
+(set-fontset-font t '(#x20AB . #x20B6) (font-spec :name "AppleSymbol"))
+;; SINGLE LOW-9 QUOTATION MARK  and others
+(set-fontset-font t '(#x2017 . #x201A) (font-spec :name "AppleSymbol"))
+ 
+;; (set-fontset-font t '( #x2000 . #x21FF) (font-spec :name "AppleGothic"))
+;; (set-fontset-font t '( #x2000 . #x21FF) (font-spec :name "AppleSymbol"))
+
+;; ;; the following doesn't work - needs display
+;; (with-temp-buffer
+;;   ;; should choose default font
+;;   (loop for i from #x2000 to #x21FF do
+;; 	(insert i))
+;;   (beginning-of-buffer)
+;;   (loop for i from #x2000 to #x21FF do
+;; 	(print (internal-char-font (point)))
+;; 	(when (equal 0 (cdr-safe (internal-char-font (point))))
+;; 	  (print i)
+;; 	  (set-fontset-font t '(i . i) (font-spec :name "AppleSymbol")))
+;; 	(forward-char)))
+
 
 ;; commented out, doesn't work 
 ;;(set-fontset-font
