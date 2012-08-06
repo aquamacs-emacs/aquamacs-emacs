@@ -1944,8 +1944,8 @@ END marks boundaries for searching for quotation ends."
        (symbol-function 'font-latex-make-built-in-keywords))
   (dolist (elt font-latex-built-in-keyword-classes)
     (let ((name (nth 0 elt)))
-      (byte-compile (intern (concat "font-latex-" name)))
-      (byte-compile (intern (concat "font-latex-" name "-make"))))))
+      (byte-compile (intern (concat "font-latex-match-" name)))
+      (byte-compile (intern (concat "font-latex-match-" name "-make"))))))
 
 
 ;; Provide ourselves:
