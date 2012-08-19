@@ -1707,7 +1707,8 @@ splash screen in another window."
 
 (defun fancy-about-screen ()
   "Display fancy About screen."
-  (let ((frame (fancy-splash-frame)))
+  (let ((one-buffer-one-frame-mode nil)
+	(frame (fancy-splash-frame)))
     (save-selected-window
       (select-frame frame)
       (switch-to-buffer "*About Aquamacs Emacs*")
