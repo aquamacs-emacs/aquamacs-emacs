@@ -16,7 +16,8 @@ echo "user\tcalls\tvers\ttime\n" >stats.txt
 
 #perl -ne 'use Time::ParseDate; /^(.*)\t.*sess=(\-?[0-9]*)\&.*seq=([0-9]*)\&.*ver=([^\&\n]*)/ig; $ep = parsedate($1); print "$2\t$3\t$4\t$ep\n";' <version-queries.log >>stats.txt
  
-cat version-queries.a.log version-queries.log | ./calc-stats.perl
+ 
+cat ~/Stats/version-queries.a.log ~/Stats/version-queries.b.log version-queries.log | ./calc-stats.perl
 
 # stats can now be processed with R 
 
