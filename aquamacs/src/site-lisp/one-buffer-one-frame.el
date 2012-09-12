@@ -639,37 +639,46 @@ even if it's the only visible frame."
 
 (defvar aquamacs-last-frame-empty-buffer nil)
 (defun init-aquamacs-last-frame-empty-buffer ()
-  (unless (buffer-live-p aquamacs-last-frame-empty-buffer)
-    (setq aquamacs-last-frame-empty-buffer (generate-new-buffer " *empty*"))
-    (with-current-buffer aquamacs-last-frame-empty-buffer
-      (setq buffer-read-only t)
-      (setq header-line-format nil)))
-  aquamacs-last-frame-empty-buffer)
+  (when aquamacs-keep-running-via-empty-frame
+    (unless (buffer-live-p aquamacs-last-frame-empty-buffer)
+      (setq aquamacs-last-frame-empty-buffer (generate-new-buffer " *empty*"))
+      (with-current-buffer aquamacs-last-frame-empty-buffer
+	(setq buffer-read-only t)
+	(setq header-line-format nil)))
+    aquamacs-last-frame-empty-buffer))
+
+(defcustom aquamacs-keep-running-via-empty-frame t
+"Keep Aquamacs application running even when the last frame is closed.
+Aquamacs uses invisible, empty frames to keep the application running
+when the user closes the last empty frame.  This customization variable
+may be set to `nil' if such empty frames become visible inadvertently."
+:type 'boolean)
 
 (defvar aquamacs-last-frame-empty-frame nil)
 (defun aquamacs-make-empty-frame (parms)
-  (let ((frame-to-delete
-	 (when (and aquamacs-last-frame-empty-frame
-		    (frame-live-p aquamacs-last-frame-empty-frame)
-		    (not (ns-frame-is-on-active-space-p aquamacs-last-frame-empty-frame)))
-	   (prog1
-	       aquamacs-last-frame-empty-frame
-	     (setq aquamacs-last-frame-empty-frame nil)))))
-  (let ((all-parms
-	 (append
+  (when aquamacs-keep-running-via-empty-frame ;; return nil otherwise
+    (let ((frame-to-delete
+	   (when (and aquamacs-last-frame-empty-frame
+		      (frame-live-p aquamacs-last-frame-empty-frame)
+		      (not (ns-frame-is-on-active-space-p aquamacs-last-frame-empty-frame)))
+	     (prog1
+		 aquamacs-last-frame-empty-frame
+	       (setq aquamacs-last-frame-empty-frame nil)))))
+      (let ((all-parms
+	     (append
 	  '((fullscreen . nil) (visibility . nil))
 	  parms)))
-    (if (and aquamacs-last-frame-empty-frame
-	     (frame-live-p aquamacs-last-frame-empty-frame)
-	     (not (frame-iconified-p aquamacs-last-frame-empty-frame)))
-	(modify-frame-parameters aquamacs-last-frame-empty-frame
-				 (cons '(fullscreen . nil) parms))
-      (setq aquamacs-last-frame-empty-frame (make-frame all-parms))))
-  (select-frame aquamacs-last-frame-empty-frame)
-  (raise-frame aquamacs-last-frame-empty-frame)
-  (if frame-to-delete
-      (delete-frame frame-to-delete)))
-  aquamacs-last-frame-empty-frame)
+	(if (and aquamacs-last-frame-empty-frame
+		 (frame-live-p aquamacs-last-frame-empty-frame)
+		 (not (frame-iconified-p aquamacs-last-frame-empty-frame)))
+	    (modify-frame-parameters aquamacs-last-frame-empty-frame
+				     (cons '(fullscreen . nil) parms))
+	  (setq aquamacs-last-frame-empty-frame (make-frame all-parms))))
+      (select-frame aquamacs-last-frame-empty-frame)
+      (raise-frame aquamacs-last-frame-empty-frame)
+      (if frame-to-delete
+	  (delete-frame frame-to-delete)))
+    aquamacs-last-frame-empty-frame))
 
 (defvar aquamacs-deleted-frame-position nil)
 (defun aquamacs-delete-frame (&optional frame)
@@ -696,8 +705,8 @@ even if it's the only visible frame."
 	;; do not delete the last visible frame if there are others hidden:
 	;; doing so prevents Aquamacs from receiving keyboard input (NS problem?)
 	(progn 
-	  (if (equal (ns-visible-frame-list)
-		     (list (or frame (selected-frame))))
+	  (if (and aquamacs-keep-running-via-empty-frame (equal (ns-visible-frame-list)
+		     (list (or frame (selected-frame)))))
 	      (error) ;; create *empty* frame or hide current one
 	    (delete-frame (or frame (selected-frame))))
 	  (unless (visible-frame-list) ;; delete-frame may succeed if iconified frames are around
@@ -713,17 +722,20 @@ even if it's the only visible frame."
 	 (set-window-dedicated-p (selected-window) nil)
 	 ;; select read-only special buffer in case it gets any input
 	 (let ((hb (init-aquamacs-last-frame-empty-buffer)))
-
-	   (with-current-buffer hb
-	     ;; to do: we should re-use a hidden frame if it exists.
-	     (let ((hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
-	       (if (and (not (eq f hf)) (frame-live-p f))
-		   (delete-frame f t))
-	       (select-window (frame-first-window hf))
-	       (switch-to-buffer hb  'norecord)
-	       (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
-	       (make-frame-invisible hf t))))))))))
-
+	   (if (null hb)
+	       (delete-frame (or frame (selected-frame))) ;; actually delete frame or show error message
+	       ;; else, go via empty buffer
+	     (with-current-buffer hb
+	       ;; to do: we should re-use a hidden frame if it exists.
+	       (let ((hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
+		 (when hf
+		   (if (and (not (eq f hf)) (frame-live-p f))
+		       (delete-frame f t))
+		   (select-window (frame-first-window hf))
+		   (switch-to-buffer hb  'norecord)
+		   (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
+		 (make-frame-invisible hf t))))))))))))
+  
 (defun aquamacs-handle-frame-iconified (&optional frame)
   (interactive)
   (when (or (null (visible-frame-list))
@@ -733,13 +745,14 @@ even if it's the only visible frame."
 		      (mapcar (lambda (x) (cons x (frame-parameter frame x)))
 			      '(top left width height)) 
 		      )))
-      (let ((confirm-nonexistent-file-or-buffer)
-	    (one-buffer-one-frame nil)
-	    (pop-up-frames nil)
-	    (tabbar-mode nil))
-      (switch-to-buffer (init-aquamacs-last-frame-empty-buffer))
-      (make-frame-visible (selected-frame)) ; HACK: must do this first, presumably to convince NS to make it key.
-      (make-frame-invisible (selected-frame))))))
+      (when bub-frame
+	(let ((confirm-nonexistent-file-or-buffer)
+	      (one-buffer-one-frame nil)
+	      (pop-up-frames nil)
+	      (tabbar-mode nil))
+	  (switch-to-buffer (init-aquamacs-last-frame-empty-buffer))
+	  (make-frame-visible (selected-frame)) ; HACK: must do this first, presumably to convince NS to make it key.
+	  (make-frame-invisible (selected-frame)))))))
 
 ;; usually, iconify-frame is bound to 'ignore
 (define-key special-event-map [iconify-frame] 'aquamacs-handle-frame-iconified)
@@ -1011,10 +1024,11 @@ Ensure that there is a (hidden) frame in the current space."
     (let* ((display-buffer-reuse-frames 'select)
 	   (one-buffer-one-frame nil)
 	   (hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
-      (select-window (frame-first-window hf))
-      (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
-      ;; (switch-to-buffer (init-aquamacs-last-frame-empty-buffer) 'norecord)
-      (make-frame-invisible hf t))))
+      (when hf
+	(select-window (frame-first-window hf))
+	(make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
+	;; (switch-to-buffer (init-aquamacs-last-frame-empty-buffer) 'norecord)
+	(make-frame-invisible hf t)))))
 
 ;; FIXES IN VARIOUS PLACES
 
