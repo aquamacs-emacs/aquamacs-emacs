@@ -237,7 +237,22 @@ static EmacsImage *ImageList = nil;
 #if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
   imgRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
 #else
-  imgRep = [image bestRepresentationForDevice: nil];
+
+  // on 10.5:
+
+  // imgRep = [image bestRepresentationForDevice: nil];
+  imgRep = nil;
+
+  // choose smallest representation
+  NSInteger w = 999999;
+  for (NSImageRep * imageRep in [image representations]) {
+    if ([imageRep pixelsWide] < w) 
+      { w = [imageRep pixelsWide];
+	imgRep = imageRep;
+      }
+  }
+ 
+
 #endif
 #else
 
