@@ -52,7 +52,7 @@
 ;;
 ;; First make sure hideshow.el is in a directory in your `load-path'.
 ;; You can optionally byte-compile it using `M-x byte-compile-file'.
-;; Then, add the following to your ~/.emacs:
+;; Then, add the following to your init file:
 ;;
 ;; (load-library "hideshow")
 ;; (add-hook 'X-mode-hook               ; other modes similarly
@@ -408,6 +408,8 @@ element (using `match-beginning') before calling `hs-forward-sexp-func'.")
 
 (defvar hs-block-end-regexp nil
   "Regexp for end of block.")
+(make-variable-buffer-local 'hs-block-end-regexp)
+
 
 (defvar hs-forward-sexp-func 'forward-sexp
   "Function used to do a `forward-sexp'.

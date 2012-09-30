@@ -123,13 +123,13 @@ own!):
   no upper limit on its size.  The size will also be aligned to the
   right.
 
-Thus, if you wanted to use these two formats, add
+Thus, if you wanted to use these two formats, the appropriate
+value for this variable would be
 
- (setq ibuffer-formats '((mark \" \" name)
-		         (mark modified read-only
-			  (name 16 16 :left) (size 6 -1 :right))))
-
-to your ~/.emacs file.
+  '((mark \" \" name)
+    (mark modified read-only
+          (name 16 16 :left)
+          (size 6 -1 :right)))
 
 Using \\[ibuffer-switch-format], you can rotate the display between
 the specified formats in the list."
@@ -1279,11 +1279,11 @@ a new window in the current frame, splitting vertically."
 
 (define-ibuffer-op ibuffer-do-toggle-read-only (&optional arg)
   "Toggle read only status in marked buffers.
-With optional ARG, make read-only only if ARG is positive."
+With optional ARG, make read-only only if ARG is not negative."
   (:opstring "toggled read only status in"
    :interactive "P"
    :modifier-p t)
-  (toggle-read-only arg t))
+  (read-only-mode 'toggle))
 
 (define-ibuffer-op ibuffer-do-delete ()
   "Kill marked buffers as with `kill-this-buffer'."
@@ -2401,7 +2401,7 @@ Operations on marked buffers:
           buffer's file as an argument.
   '\\[ibuffer-do-eval]' - Evaluate a form in each of the marked buffers.  This
           is a very flexible command.  For example, if you want to make all
-          of the marked buffers read only, try using (toggle-read-only 1) as
+          of the marked buffers read only, try using (read-only-mode 1) as
           the input form.
   '\\[ibuffer-do-view-and-eval]' - As above, but view each buffer while the form
           is evaluated.
@@ -2641,7 +2641,7 @@ will be inserted before the group at point."
 ;;;;;;  ibuffer-backward-filter-group ibuffer-forward-filter-group
 ;;;;;;  ibuffer-toggle-filter-group ibuffer-mouse-toggle-filter-group
 ;;;;;;  ibuffer-interactive-filter-by-mode ibuffer-mouse-filter-by-mode
-;;;;;;  ibuffer-auto-mode) "ibuf-ext" "ibuf-ext.el" "c255d1ebe80ccabd8385f40bdd0b5451")
+;;;;;;  ibuffer-auto-mode) "ibuf-ext" "ibuf-ext.el" "f03bae226325c7320d41ddb78896665a")
 ;;; Generated autoloads from ibuf-ext.el
 
 (autoload 'ibuffer-auto-mode "ibuf-ext" "\

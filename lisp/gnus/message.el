@@ -1332,11 +1332,11 @@ If nil, you might be asked to input the charset."
   :type 'symbol)
 
 (defcustom message-dont-reply-to-names
-  (and (boundp 'rmail-dont-reply-to-names) rmail-dont-reply-to-names)
+  (and (boundp 'mail-dont-reply-to-names) mail-dont-reply-to-names)
   "*Addresses to prune when doing wide replies.
 This can be a regexp or a list of regexps.  Also, a value of nil means
 exclude your own user name only."
-  :version "21.1"
+  :version "24.3"
   :group 'message
   :link '(custom-manual "(message)Wide Reply")
   :type '(choice (const :tag "Yourself" nil)
@@ -1933,9 +1933,12 @@ You must have the \"hashcash\" binary installed, see `hashcash-path'."
 (autoload 'nndraft-request-associate-buffer "nndraft")
 (autoload 'nndraft-request-expire-articles "nndraft")
 (autoload 'nnvirtual-find-group-art "nnvirtual")
-(autoload 'rmail-dont-reply-to "mail-utils")
 (autoload 'rmail-msg-is-pruned "rmail")
 (autoload 'rmail-output "rmailout")
+
+;; Emacs < 24.1 do not have mail-dont-reply-to
+(unless (fboundp 'mail-dont-reply-to)
+  (defalias 'mail-dont-reply-to 'rmail-dont-reply-to))
 
 
 
@@ -2603,7 +2606,7 @@ Point is left at the beginning of the narrowed-to region."
   (interactive)
   (let ((start (point)))
     (message-skip-to-next-address)
-    (kill-region start (point))))
+    (kill-region start (if (bolp) (1- (point)) (point)))))
 
 
 (autoload 'Info-goto-node "info")
@@ -3157,8 +3160,12 @@ M-RET    `message-newline-and-reformat' (break the line and reformat)."
 
 (defun message-in-body-p ()
   "Return t if point is in the message body."
-  (let ((body (save-excursion (message-goto-body))))
-    (>= (point) body)))
+  (>= (point)
+      (save-excursion
+	(goto-char (point-min))
+	(or (search-forward (concat "\n" mail-header-separator "\n") nil t)
+	    (search-forward-regexp "[^:]+:\\([^\n]\\|\n[ \t]\\)+\n\n" nil t))
+	(point))))
 
 (defun message-goto-eoh ()
   "Move point to the end of the headers."
@@ -3289,11 +3296,33 @@ or in the synonym headers, defined by `message-header-synonyms'."
 (defun message-insert-newsgroups ()
   "Insert the Newsgroups header from the article being replied to."
   (interactive)
-  (when (and (message-position-on-field "Newsgroups")
-	     (mail-fetch-field "newsgroups")
-	     (not (string-match "\\` *\\'" (mail-fetch-field "newsgroups"))))
-    (insert ","))
-  (insert (or (message-fetch-reply-field "newsgroups") "")))
+  (let ((old-newsgroups (mail-fetch-field "newsgroups"))
+	(new-newsgroups (message-fetch-reply-field "newsgroups"))
+	(first t)
+	insert-newsgroups)
+    (message-position-on-field "Newsgroups")
+    (cond
+     ((not new-newsgroups)
+      (error "No Newsgroups to insert"))
+     ((not old-newsgroups)
+      (insert new-newsgroups))
+     (t
+      (setq new-newsgroups (split-string new-newsgroups "[, ]+")
+	    old-newsgroups (split-string old-newsgroups "[, ]+"))
+      (dolist (group new-newsgroups)
+	(unless (member group old-newsgroups)
+	  (push group insert-newsgroups)))
+      (if (null insert-newsgroups)
+	  (error "Newgroup%s already in the header"
+		 (if (> (length new-newsgroups) 1)
+		     "s" ""))
+	(when old-newsgroups
+	  (setq first nil))
+	(dolist (group insert-newsgroups)
+	  (unless first
+	    (insert ","))
+	  (setq first nil)
+	  (insert group)))))))
 
 
 
@@ -4010,28 +4039,6 @@ This function strips off the signature from the original message."
 	(insert header ": \n")
 	(forward-char -1)
 	nil))))
-
-(defun message-remove-signature ()
-  "Remove the signature from the text between point and mark.
-The text will also be indented the normal way."
-  (save-excursion
-    (let ((start (point))
-	  mark)
-      (if (not (re-search-forward message-signature-separator (mark t) t))
-	  ;; No signature here, so we just indent the cited text.
-	  (message-indent-citation)
-	;; Find the last non-empty line.
-	(forward-line -1)
-	(while (looking-at "[ \t]*$")
-	  (forward-line -1))
-	(forward-line 1)
-	(setq mark (set-marker (make-marker) (point)))
-	(goto-char start)
-	(message-indent-citation)
-	;; Enable undoing the deletion.
-	(undo-boundary)
-	(delete-region mark (mark t))
-	(set-marker mark nil)))))
 
 
 
@@ -4839,9 +4846,7 @@ Do not use this for anything important, it is cryptographically weak."
   (require 'sha1)
   (let (sha1-maximum-internal-length)
     (sha1 (concat (message-unique-id)
-		  (format "%x%x%x" (random)
-			  (progn (random t) (random))
-			  (random))
+		  (format "%x%x%x" (random) (random) (random))
 		  (prin1-to-string (recent-keys))
 		  (prin1-to-string (garbage-collect))))))
 
@@ -5544,7 +5549,6 @@ In posting styles use `(\"Expires\" (make-expires-date 30))'."
 ;; You might for example insert a "." somewhere (not next to another dot
 ;; or string boundary), or modify the "fsf" string.
 (defun message-unique-id ()
-  (random t)
   ;; Don't use microseconds from (current-time), they may be unsupported.
   ;; Instead we use this randomly inited counter.
   (setq message-unique-id-char
@@ -5804,12 +5808,6 @@ give as trustworthy answer as possible."
      (t
       (concat system-name
 	      ".i-did-not-set--mail-host-address--so-tickle-me")))))
-
-(defun message-make-host-name ()
-  "Return the name of the host."
-  (let ((fqdn (message-make-fqdn)))
-    (string-match "^[^.]+\\." fqdn)
-    (substring fqdn 0 (1- (match-end 0)))))
 
 (defun message-make-domain ()
   "Return the domain name."
@@ -6127,19 +6125,12 @@ Headers already prepared in the buffer are not modified."
     (while (and (not (= (point) end))
 		(or (not (eq char ?,))
 		    quoted))
-      (skip-chars-forward "^,\"" (point-max))
+      (skip-chars-forward "^,\"" end)
       (when (eq (setq char (following-char)) ?\")
 	(setq quoted (not quoted)))
       (unless (= (point) end)
 	(forward-char 1)))
     (skip-chars-forward " \t\n")))
-
-(defun message-fill-address (header value)
-  (insert (capitalize (symbol-name header))
-	  ": "
-	  (if (consp value) (car value) value)
-	  "\n")
-  (message-fill-field-address))
 
 (defun message-split-line ()
   "Split current line, moving portion beyond point vertically down.
@@ -6171,17 +6162,22 @@ If the current line has `message-yank-prefix', insert it on the new line."
       (point-max))))
 
 (defun message-fill-field-address ()
-  (while (not (eobp))
-    (message-skip-to-next-address)
-    (let (last)
-      (if (and (> (current-column) 78)
-	       last)
-	  (progn
-	    (save-excursion
-	      (goto-char last)
-	      (insert "\n\t"))
-	    (setq last (1+ (point))))
-	(setq last (1+ (point)))))))
+  (let (end last)
+    (while (not end)
+      (message-skip-to-next-address)
+      (cond ((bolp)
+	     (end-of-line 0)
+	     (setq end 1))
+	    ((eobp)
+	     (setq end 0)))
+      (when (and (> (current-column) 78)
+		 last)
+	(save-excursion
+	  (goto-char last)
+	  (delete-char (- (skip-chars-backward " \t")))
+	  (insert "\n\t")))
+      (setq last (point)))
+    (forward-line end)))
 
 (defun message-fill-field-general ()
   (let ((begin (point))
@@ -6802,9 +6798,9 @@ want to get rid of this query permanently.")))
       ;; Squeeze whitespace.
       (while (string-match "[ \t][ \t]+" recipients)
 	(setq recipients (replace-match " " t t recipients)))
-      ;; Remove addresses that match `rmail-dont-reply-to-names'.
-      (let ((rmail-dont-reply-to-names (message-dont-reply-to-names)))
-	(setq recipients (rmail-dont-reply-to recipients)))
+      ;; Remove addresses that match `mail-dont-reply-to-names'.
+      (let ((mail-dont-reply-to-names (message-dont-reply-to-names)))
+	(setq recipients (mail-dont-reply-to recipients)))
       ;; Perhaps "Mail-Copies-To: never" removed the only address?
       (if (string-equal recipients "")
 	  (setq recipients author))

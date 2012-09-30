@@ -45,16 +45,23 @@ The list returned is sorted by oldest-first."
     (erase-buffer)
     ;; We generally want to make sure we start with a clean tree, but we also
     ;; want to allow restarts (i.e. with some part of FROM already merged but
-    ;; not yet committed).
+    ;; not yet committed).  Unversioned (unknown) files in the tree
+    ;; are also ok.
     (call-process "bzr" nil t nil "status" "-v")
     (goto-char (point-min))
     (when (re-search-forward "^conflicts:\n" nil t)
       (error "You still have unresolved conflicts"))
-    (let ((merges ()))
+    (let ((merges ())
+          found)
       (if (not (re-search-forward "^pending merges:\n" nil t))
           (when (save-excursion
                   (goto-char (point-min))
-                  (re-search-forward "^[a-z ]*:\n" nil t))
+                  (while (and
+                          (re-search-forward "^\\([a-z ]*\\):\n" nil t)
+                          (not
+                           (setq found
+                                 (not (equal "unknown" (match-string 1)))))))
+                  found)
             (error "You still have uncommitted changes"))
         ;; This is really stupid, but it seems there's no easy way to figure
         ;; out which revisions have been merged already.  The only info I can
@@ -138,17 +145,17 @@ Type `y' to skip this revision,
 `N' to include it and go on to the next revision,
 `n' to not skip, but continue to search this log entry for skip regexps,
 `q' to quit merging."))
-                    (case (save-excursion
+                    (pcase (save-excursion
                             (read-char-choice
                              (format "%s: Skip (y/n/N/q/%s)? " str
                                      (key-description (vector help-char)))
                              '(?y ?n ?N ?q)))
-                      (?y (setq skip t))
-                      (?q (keyboard-quit))
+                      (`?y (setq skip t))
+                      (`?q (keyboard-quit))
                       ;; A single log entry can match skip-regexp multiple
                       ;; times.  If you are sure you don't want to skip it,
                       ;; you don't want to be asked multiple times.
-                      (?N (setq skip 'no))))))
+                      (`?N (setq skip 'no))))))
               (if (eq skip t)
                   (push revno skipped)
                 (push revno revnos)))))
@@ -160,7 +167,8 @@ Type `y' to skip this revision,
   (unless (file-exists-p file) (error "Bzrmerge-resolve: Can't find %s" file))
   (with-demoted-errors
     (let ((exists (find-buffer-visiting file)))
-      (with-current-buffer (let ((enable-local-variables :safe))
+      (with-current-buffer (let ((enable-local-variables :safe)
+                                 (enable-local-eval nil))
                              (find-file-noselect file))
         (if (buffer-modified-p)
             (error "Unsaved changes in %s" (current-buffer)))

@@ -30,9 +30,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
    interpretation of even the system includes. */
 #include <config.h>
 
-#include <signal.h>
 #include <math.h>
-#include <setjmp.h>
 #include <c-strcase.h>
 
 #include "lisp.h"
@@ -82,7 +80,6 @@ extern Lisp_Object Qface_set_after_frame_default;
 extern Lisp_Object Qunderline, Qundefined;
 extern Lisp_Object Qheight, Qminibuffer, Qname, Qonly, Qwidth;
 extern Lisp_Object Qunsplittable, Qmenu_bar_lines, Qbuffer_predicate, Qtitle;
-extern Lisp_Object Qnone;
 
 
 Lisp_Object Qbuffered;
@@ -448,7 +445,7 @@ x_set_icon_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   else if (!STRINGP (oldval) && EQ (oldval, Qnil) == EQ (arg, Qnil))
     return;
 
-  f->icon_name = arg;
+  fset_icon_name (f, arg);
 
   if (NILP (arg))
     {
@@ -540,7 +537,7 @@ ns_set_name (struct frame *f, Lisp_Object name, int explicit)
   if (! NILP (Fstring_equal (name, f->name)))
     return;
 
-  f->name = name;
+  fset_name (f, name);
 
   /* title overrides explicit name */
   if (! NILP (f->title))
@@ -591,7 +588,7 @@ x_set_title (struct frame *f, Lisp_Object name, Lisp_Object old_name)
 
   update_mode_lines = 1;
 
-  f->title = name;
+  fset_title (f, name);
 
   if (NILP (name))
     name = f->name;
@@ -618,7 +615,7 @@ ns_set_name_as_filename (struct frame *f)
   if (f->explicit_name || ! NILP (f->title) || ns_in_resize)
     return;
 
-  BLOCK_INPUT;
+  block_input ();
   pool = [[NSAutoreleasePool alloc] init];
   filename = BVAR (XBUFFER (buf), filename);
   name = BVAR (XBUFFER (buf), name);
@@ -643,7 +640,7 @@ ns_set_name_as_filename (struct frame *f)
   if (title && (! strcmp (title, SSDATA (encoded_name))))
     {
       [pool release];
-      UNBLOCK_INPUT;
+      unblock_input ();
       return;
     }
 
@@ -677,11 +674,11 @@ ns_set_name_as_filename (struct frame *f)
 
       [[view window] setRepresentedFilename: fstr];
       [[view window] setTitle: str];
-      f->name = name;
+      fset_name (f, name);
     }
 
   [pool release];
-  UNBLOCK_INPUT;
+  unblock_input ();
 }
 
 
@@ -692,11 +689,11 @@ ns_set_doc_edited (struct frame *f, Lisp_Object arg)
   NSAutoreleasePool *pool;
   if (!MINI_WINDOW_P (XWINDOW (f->selected_window)))
     {
-      BLOCK_INPUT;
+      block_input ();
       pool = [[NSAutoreleasePool alloc] init];
       [[view window] setDocumentEdited: !NILP (arg)];
       [pool release];
-      UNBLOCK_INPUT;
+      unblock_input ();
     }
 }
 
@@ -774,14 +771,14 @@ ns_implicitly_set_icon_type (struct frame *f)
 
   NSTRACE (ns_implicitly_set_icon_type);
 
-  BLOCK_INPUT;
+  block_input ();
   pool = [[NSAutoreleasePool alloc] init];
   if (f->output_data.ns->miniimage
       && [[NSString stringWithUTF8String: SSDATA (f->name)]
                isEqualToString: [(NSImage *)f->output_data.ns->miniimage name]])
     {
       [pool release];
-      UNBLOCK_INPUT;
+      unblock_input ();
       return;
     }
 
@@ -789,7 +786,7 @@ ns_implicitly_set_icon_type (struct frame *f)
   if (CONSP (tem) && ! NILP (XCDR (tem)))
     {
       [pool release];
-      UNBLOCK_INPUT;
+      unblock_input ();
       return;
     }
 
@@ -829,7 +826,7 @@ ns_implicitly_set_icon_type (struct frame *f)
   f->output_data.ns->miniimage = image;
   [view setMiniwindowImage: setMini];
   [pool release];
-  UNBLOCK_INPUT;
+  unblock_input ();
 }
 
 
@@ -870,16 +867,6 @@ x_set_icon_type (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 
   f->output_data.ns->miniimage = image;
   [view setMiniwindowImage: setMini];
-}
-
-
-/* Xism; we stub out (we do implement this in ns-win.el) */
-int
-XParseGeometry (char *string, int *x, int *y,
-                unsigned int *width, unsigned int *height)
-{
-  message1 ("Warning: XParseGeometry not supported under NS.\n");
-  return 0;
 }
 
 
@@ -1205,10 +1192,11 @@ This function is an internal primitive--use `make-frame' instead.  */)
 
   FRAME_FONTSET (f) = -1;
 
-  f->icon_name = x_get_arg (dpyinfo, parms, Qicon_name, "iconName", "Title",
-                            RES_TYPE_STRING);
+  fset_icon_name (f, x_get_arg (dpyinfo, parms, Qicon_name,
+				"iconName", "Title",
+				RES_TYPE_STRING));
   if (! STRINGP (f->icon_name))
-    f->icon_name = Qnil;
+    fset_icon_name (f, Qnil);
 
   FRAME_NS_DISPLAY_INFO (f) = dpyinfo;
 
@@ -1231,12 +1219,12 @@ This function is an internal primitive--use `make-frame' instead.  */)
      be set.  */
   if (EQ (name, Qunbound) || NILP (name) || ! STRINGP (name))
     {
-      f->name = build_string ([ns_app_name UTF8String]);
+      fset_name (f, build_string ([ns_app_name UTF8String]));
       f->explicit_name = 0;
     }
   else
     {
-      f->name = name;
+      fset_name (f, name);
       f->explicit_name = 1;
       specbind (Qx_resource_name, name);
     }
@@ -1244,7 +1232,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   f->resx = dpyinfo->resx;
   f->resy = dpyinfo->resy;
 
-  BLOCK_INPUT;
+  block_input ();
   register_font_driver (&nsfont_driver, f);
   x_default_parameter (f, parms, Qfont_backend, Qnil,
 			"fontBackend", "FontBackend", RES_TYPE_STRING);
@@ -1259,7 +1247,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
                                  build_string ([[font fontName] UTF8String]),
                                  "font", "Font", RES_TYPE_STRING);
   }
-  UNBLOCK_INPUT;
+  unblock_input ();
 
   x_default_parameter (f, parms, Qborder_width, make_number (0),
 		       "borderwidth", "BorderWidth", RES_TYPE_NUMBER);
@@ -1391,15 +1379,18 @@ This function is an internal primitive--use `make-frame' instead.  */)
   if (FRAME_HAS_MINIBUF_P (f)
       && (!FRAMEP (KVAR (kb, Vdefault_minibuffer_frame))
           || !FRAME_LIVE_P (XFRAME (KVAR (kb, Vdefault_minibuffer_frame)))))
-    KVAR (kb, Vdefault_minibuffer_frame) = frame;
+    kset_default_minibuffer_frame (kb, frame);
 
   /* All remaining specified parameters, which have not been "used"
      by x_get_arg and friends, now go in the misc. alist of the frame.  */
   for (tem = parms; CONSP (tem); tem = XCDR (tem))
     if (CONSP (XCAR (tem)) && !NILP (XCAR (XCAR (tem))))
-      f->param_alist = Fcons (XCAR (tem), f->param_alist);
+      fset_param_alist (f, Fcons (XCAR (tem), f->param_alist));
 
   UNGCPRO;
+
+  if (window_prompting & USPosition)
+    x_set_offset (f, f->left_pos, f->top_pos, 1);
 
   /* Make sure windows on this frame appear in calls to next-window
      and similar functions.  */
@@ -1420,10 +1411,10 @@ FRAME nil means use the selected frame.  */)
   if (dpyinfo->x_focus_frame != f)
     {
       EmacsView *view = FRAME_NS_VIEW (f);
-      BLOCK_INPUT;
+      block_input ();
       [NSApp activateIgnoringOtherApps: YES];
       [[view window] makeKeyAndOrderFront: view];
-      UNBLOCK_INPUT;
+      unblock_input ();
     }
 
   return Qnil;
@@ -2125,7 +2116,7 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
   [panel setExtensionHidden:NO];
 
   panelOK = 0;
-  BLOCK_INPUT;
+  block_input ();
   if (NILP (mustmatch))
     {
       ret = [panel runModalForDirectory: dirS file: initS];
@@ -2142,7 +2133,7 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
     fname = build_string ([[panel filename] UTF8String]);
 
   [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
-  UNBLOCK_INPUT;
+  unblock_input ();
 
   return ret ? fname : Qnil;
 }
@@ -2414,19 +2405,6 @@ terminate Emacs if we can't open the connection.
                SSDATA (display));
     }
 
-  /* Register our external input/output types, used for determining
-     applicable services and also drag/drop eligibility. */
-  ns_send_types = [[NSArray arrayWithObjects: NSStringPboardType, nil] retain];
-  ns_return_types = [[NSArray arrayWithObjects: NSStringPboardType, nil]
-                      retain];
-  ns_drag_types = [[NSArray arrayWithObjects:
-                            NSStringPboardType,
-                            NSTabularTextPboardType,
-                            NSFilenamesPboardType,
-                            NSURLPboardType,
-                            NSColorPboardType,
-                            NSFontPboardType, nil] retain];
-
   return Qnil;
 }
 
@@ -2537,7 +2515,7 @@ The optional argument FRAME is currently ignored.  */)
         error ("non-Nextstep frame used in `ns-list-colors'");
     }
 
-  BLOCK_INPUT;
+  block_input ();
 
   colorlists = [[NSColorList availableColorLists] objectEnumerator];
   while ((clist = [colorlists nextObject]))
@@ -2555,7 +2533,7 @@ The optional argument FRAME is currently ignored.  */)
         }
     }
 
-  UNBLOCK_INPUT;
+  unblock_input ();
 
   return list;
 }
@@ -2754,8 +2732,7 @@ In case the execution fails, an error is signaled. */)
   CHECK_STRING (script);
   check_ns ();
 
-  BLOCK_INPUT;
-  GCPRO1 (script);
+  block_input ();
 
   as_script = script;
   as_result = &result;
@@ -2781,10 +2758,7 @@ In case the execution fails, an error is signaled. */)
   as_status = 0;
   as_script = Qnil;
   as_result = 0;
-
-  UNGCPRO;
-  UNBLOCK_INPUT;
-
+  unblock_input ();
   if (status == 0)
     return result;
   else if (!STRINGP (result))
@@ -3437,14 +3411,10 @@ Text larger than the specified size is clipped.  */)
   else
     CHECK_NUMBER (dy);
 
-  if (strlen (str) > 0)
+ if (strlen (str) > 0)
     {
-  BLOCK_INPUT;
-      if (ns_tooltip)
-	Fx_hide_tip ();  /* closes and releases ns_tooltip */
-
-      /* must initialize every time in order to keep tooltip on
-	 the screen with key focus. */
+  block_input ();
+  if (ns_tooltip == nil)
     ns_tooltip = [[EmacsTooltip alloc] init];
   [ns_tooltip setText: str];
   size = [ns_tooltip frame].size;
@@ -3455,8 +3425,7 @@ Text larger than the specified size is clipped.  */)
 		  &root_x, &root_y);
 
   [ns_tooltip showAtX: root_x Y: root_y for: XINT (timeout)];
-
-  UNBLOCK_INPUT;
+  unblock_input ();
     }
   UNGCPRO;
   return unbind_to (count, Qnil);

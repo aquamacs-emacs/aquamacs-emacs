@@ -185,11 +185,10 @@ The return value is undefined.
                    ((and (featurep 'cl)
                          (memq (car x)  ;C.f. cl-do-proclaim.
                                '(special inline notinline optimize warn)))
-                    (if (null (stringp docstring))
-                        (push (list 'declare x) body)
-                      (setcdr body (cons (list 'declare x) (cdr body))))
+                    (push (list 'declare x)
+                          (if (stringp docstring) (cdr body) body))
                     nil)
-                   (t (message "Warning: Unknown defun property %S in %S"
+                   (t (message "Warning: Unknown defun property `%S' in %S"
                                (car x) name)))))
                    decls))
           (def (list 'defalias
@@ -254,7 +253,9 @@ convention was modified."
            advertised-signature-table))
 
 (defun make-obsolete (obsolete-name current-name &optional when)
-  "Make the byte-compiler warn that OBSOLETE-NAME is obsolete.
+  "Make the byte-compiler warn that function OBSOLETE-NAME is obsolete.
+OBSOLETE-NAME should be a function name or macro name (a symbol).
+
 The warning will say that CURRENT-NAME should be used instead.
 If CURRENT-NAME is a string, that is the `use instead' message
 \(it should end with a period, and not start with a capital).
@@ -313,7 +314,7 @@ This uses `defvaralias' and `make-obsolete-variable' (which see).
 See the Info node `(elisp)Variable Aliases' for more details.
 
 If CURRENT-NAME is a defcustom (more generally, any variable
-where OBSOLETE-NAME may be set, e.g. in a .emacs file, before the
+where OBSOLETE-NAME may be set, e.g. in an init file, before the
 alias is defined), then the define-obsolete-variable-alias
 statement should be evaluated before the defcustom, if user
 customizations are to be respected.  The simplest way to achieve
@@ -420,8 +421,8 @@ In interpreted code, this is entirely equivalent to `progn'."
 ;;   nil)
 
 (make-obsolete-variable 'macro-declaration-function
-                        'macro-declarations-alist "24.2")
+                        'macro-declarations-alist "24.3")
 (make-obsolete 'macro-declaration-function
-               'macro-declarations-alist "24.2")
+               'macro-declarations-alist "24.3")
 
 ;;; byte-run.el ends here

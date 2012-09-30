@@ -1,4 +1,4 @@
-/* Process support for GNU Emacs on the Microsoft W32 API.
+/* Process support for GNU Emacs on the Microsoft Windows API.
    Copyright (C) 1992, 1995, 1999-2012  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -28,7 +28,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <fcntl.h>
 #include <signal.h>
 #include <sys/file.h>
-#include <setjmp.h>
 
 /* must include CRT headers *before* config.h */
 #include <config.h>
@@ -87,20 +86,61 @@ typedef void (_CALLBACK_ *signal_handler) (int);
 /* Signal handlers...SIG_DFL == 0 so this is initialized correctly.  */
 static signal_handler sig_handlers[NSIG];
 
-/* Fake signal implementation to record the SIGCHLD handler.  */
+/* Improve on the CRT 'signal' implementation so that we could record
+   the SIGCHLD handler.  */
 signal_handler
 sys_signal (int sig, signal_handler handler)
 {
   signal_handler old;
 
-  if (sig != SIGCHLD)
+  /* SIGCHLD is needed for supporting subprocesses, see sys_kill
+     below.  All the others are the only ones supported by the MS
+     runtime.  */
+  if (!(sig == SIGCHLD || sig == SIGSEGV || sig == SIGILL
+	|| sig == SIGFPE || sig == SIGABRT || sig == SIGTERM))
     {
       errno = EINVAL;
       return SIG_ERR;
     }
   old = sig_handlers[sig];
-  sig_handlers[sig] = handler;
+  /* SIGABRT is treated specially because w32.c installs term_ntproc
+     as its handler, so we don't want to override that afterwards.
+     Aborting Emacs works specially anyway: either by calling
+     emacs_abort directly or through terminate_due_to_signal, which
+     calls emacs_abort through emacs_raise.  */
+  if (!(sig == SIGABRT && old == term_ntproc))
+    {
+      sig_handlers[sig] = handler;
+      if (sig != SIGCHLD)
+	signal (sig, handler);
+    }
   return old;
+}
+
+/* Emulate sigaction. */
+int
+sigaction (int sig, const struct sigaction *act, struct sigaction *oact)
+{
+  signal_handler old = SIG_DFL;
+  int retval = 0;
+
+  if (act)
+    old = sys_signal (sig, act->sa_handler);
+  else if (oact)
+    old = sig_handlers[sig];
+
+  if (old == SIG_ERR)
+    {
+      errno = EINVAL;
+      retval = -1;
+    }
+  if (oact)
+    {
+      oact->sa_handler = old;
+      oact->sa_flags = 0;
+      oact->sa_mask = empty_mask;
+    }
+  return retval;
 }
 
 /* Defined in <process.h> which conflicts with the local copy */
@@ -176,7 +216,7 @@ delete_child (child_process *cp)
   /* Should not be deleting a child that is still needed. */
   for (i = 0; i < MAXDESC; i++)
     if (fd_info[i].cp == cp)
-      abort ();
+      emacs_abort ();
 
   if (!CHILD_ACTIVE (cp))
     return;
@@ -316,7 +356,7 @@ create_child (char *exe, char *cmdline, char *env, int is_gui_app,
   DWORD flags;
   char dir[ MAXPATHLEN ];
 
-  if (cp == NULL) abort ();
+  if (cp == NULL) emacs_abort ();
 
   memset (&start, 0, sizeof (start));
   start.cb = sizeof (start);
@@ -405,7 +445,7 @@ register_child (int pid, int fd)
   if (fd_info[fd].cp != NULL)
     {
       DebPrint (("register_child: fd_info[%d] apparently in use!\n", fd));
-      abort ();
+      emacs_abort ();
     }
 
   fd_info[fd].cp = cp;
@@ -459,7 +499,7 @@ sys_wait (int *status)
       /* We want to wait for a specific child */
       wait_hnd[nh] = dead_child->procinfo.hProcess;
       cps[nh] = dead_child;
-      if (!wait_hnd[nh]) abort ();
+      if (!wait_hnd[nh]) emacs_abort ();
       nh++;
       active = 0;
       goto get_result;
@@ -507,7 +547,7 @@ sys_wait (int *status)
       active -= WAIT_ABANDONED_0;
     }
   else
-    abort ();
+    emacs_abort ();
 
 get_result:
   if (!GetExitCodeProcess (wait_hnd[active], &retval))
@@ -549,7 +589,7 @@ get_result:
 
       /* Report the status of the synchronous process.  */
       if (WIFEXITED (retval))
-	synch_process_retcode = WRETCODE (retval);
+	synch_process_retcode = WEXITSTATUS (retval);
       else if (WIFSIGNALED (retval))
 	{
 	  int code = WTERMSIG (retval);
@@ -799,7 +839,7 @@ sys_spawnve (int mode, char *cmdname, char **argv, char **envp)
   unixtodos_filename (cmdname);
   argv[0] = cmdname;
 
-  /* Determine whether program is a 16-bit DOS executable, or a w32
+  /* Determine whether program is a 16-bit DOS executable, or a 32-bit Windows
      executable that is implicitly linked to the Cygnus dll (implying it
      was compiled with the Cygnus GNU toolchain and hence relies on
      cygwin.dll to parse the command line - we use this to decide how to
@@ -1189,7 +1229,7 @@ sys_select (int nfds, SELECT_TYPE *rfds, SELECT_TYPE *wfds, SELECT_TYPE *efds,
 #endif
 		wait_hnd[nh] = cp->char_avail;
 		fdindex[nh] = i;
-		if (!wait_hnd[nh]) abort ();
+		if (!wait_hnd[nh]) emacs_abort ();
 		nh++;
 #ifdef FULL_DEBUG
 		DebPrint (("select waiting on child %d fd %d\n",
@@ -1276,7 +1316,7 @@ count_children:
       active -= WAIT_ABANDONED_0;
     }
   else
-    abort ();
+    emacs_abort ();
 
   /* Loop over all handles after active (now officially documented as
      being the first signaled handle in the array).  We do this to
@@ -1386,7 +1426,7 @@ find_child_console (HWND hwnd, LPARAM arg)
 
       GetClassName (hwnd, window_class, sizeof (window_class));
       if (strcmp (window_class,
-		  (os_subtype == OS_WIN95)
+		  (os_subtype == OS_9X)
 		  ? "tty"
 		  : "ConsoleWindowClass") == 0)
 	{
@@ -1398,6 +1438,7 @@ find_child_console (HWND hwnd, LPARAM arg)
   return TRUE;
 }
 
+/* Emulate 'kill', but only for other processes.  */
 int
 sys_kill (int pid, int sig)
 {
@@ -1416,6 +1457,11 @@ sys_kill (int pid, int sig)
   cp = find_child_pid (pid);
   if (cp == NULL)
     {
+      /* We were passed a PID of something other than our subprocess.
+	 If that is our own PID, we will send to ourself a message to
+	 close the selected frame, which does not necessarily
+	 terminates Emacs.  But then we are not supposed to call
+	 sys_kill with our own PID.  */
       proc_hand = OpenProcess (PROCESS_TERMINATE, 0, pid);
       if (proc_hand == NULL)
         {
@@ -1517,7 +1563,7 @@ sys_kill (int pid, int sig)
       if (NILP (Vw32_start_process_share_console) && cp && cp->hwnd)
 	{
 #if 1
-	  if (os_subtype == OS_WIN95)
+	  if (os_subtype == OS_9X)
 	    {
 /*
    Another possibility is to try terminating the VDM out-right by
@@ -1536,7 +1582,7 @@ sys_kill (int pid, int sig)
 
 */
 #if 0
-	      /* On Win95, posting WM_QUIT causes the 16-bit subsystem
+	      /* On Windows 95, posting WM_QUIT causes the 16-bit subsystem
 		 to hang when cmdproxy is used in conjunction with
 		 command.com for an interactive shell.  Posting
 		 WM_CLOSE pops up a dialog that, when Yes is selected,
@@ -1810,7 +1856,7 @@ If successful, the return value is t, otherwise nil.  */)
       CHECK_NUMBER (process);
 
       /* Allow pid to be an internally generated one, or one obtained
-	 externally.  This is necessary because real pids on Win95 are
+	 externally.  This is necessary because real pids on Windows 95 are
 	 negative.  */
 
       pid = XINT (process);

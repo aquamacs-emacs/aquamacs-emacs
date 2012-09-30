@@ -342,12 +342,12 @@ a tab, a carriage return (control-M), a newline, and `]+'."
 (defcustom Info-isearch-search t
   "If non-nil, isearch in Info searches through multiple nodes.
 Before leaving the initial Info node, where isearch was started,
-it fails once with the error message [initial node], and with
+it fails once with the error message [end of node], and with
 subsequent C-s/C-r continues through other nodes without failing
 with this error message in other nodes.  When isearch fails for
-the rest of the manual, it wraps around the whole manual and
-restarts the search from the top/final node depending on
-search direction.
+the rest of the manual, it displays the error message [end of manual],
+wraps around the whole manual and restarts the search from the top/final
+node depending on search direction.
 
 Setting this option to nil restores the default isearch behavior
 with wrapping around the current Info node."
@@ -416,6 +416,21 @@ If number, the point is moved to the corresponding line.")
 
 (defvar Info-standalone nil
   "Non-nil if Emacs was started solely as an Info browser.")
+
+(defvar Info-file-attributes nil
+  "Alist of file attributes of visited Info files.
+Each element is a list (FILE-NAME FILE-ATTRIBUTES...).")
+
+(defvar Info-toc-nodes nil
+  "Alist of cached parent-children node information in visited Info files.
+Each element is (FILE (NODE-NAME PARENT SECTION CHILDREN) ...)
+where PARENT is the parent node extracted from the Up pointer,
+SECTION is the section name in the Top node where this node is placed,
+CHILDREN is a list of child nodes extracted from the node menu.")
+
+(defvar Info-index-nodes nil
+  "Alist of cached index node names of visited Info files.
+Each element has the form (INFO-FILE INDEX-NODE-NAMES-LIST).")
 
 (defvar Info-virtual-files nil
   "List of definitions of virtual Info files.
@@ -609,7 +624,26 @@ Do the right thing if the file has been compressed or zipped."
 	    (apply 'call-process-region (point-min) (point-max)
 		   (car decoder) t t nil (cdr decoder))))
       (let ((inhibit-null-byte-detection t)) ; Index nodes include null bytes
-	(insert-file-contents fullname visit)))))
+	(insert-file-contents fullname visit)))
+
+    ;; Clear the caches of modified Info files.
+    (let* ((attribs-old (cdr (assoc fullname Info-file-attributes)))
+	   (modtime-old (and attribs-old (nth 5 attribs-old)))
+	   (attribs-new (and (stringp fullname) (file-attributes fullname)))
+	   (modtime-new (and attribs-new (nth 5 attribs-new))))
+      (when (and modtime-old modtime-new
+		 (> (float-time modtime-new) (float-time modtime-old)))
+	(setq Info-index-nodes (remove (assoc (or Info-current-file filename)
+					      Info-index-nodes)
+				       Info-index-nodes))
+	(setq Info-toc-nodes (remove (assoc (or Info-current-file filename)
+					    Info-toc-nodes)
+				     Info-toc-nodes)))
+      ;; Add new modtime to `Info-file-attributes'.
+      (setq Info-file-attributes
+	    (cons (cons fullname attribs-new)
+		  (remove (assoc fullname Info-file-attributes)
+			  Info-file-attributes))))))
 
 (defun Info-file-supports-index-cookies (&optional file)
   "Return non-nil value if FILE supports Info index cookies.
@@ -1848,9 +1882,7 @@ If DIRECTION is `backward', search in the reverse direction."
 	  (while (and (not give-up)
 		      (or (null found)
 			  (not (funcall isearch-filter-predicate beg-found found))))
-	    (let ((search-spaces-regexp
-		   (if (or (not isearch-mode) isearch-regexp)
-		       Info-search-whitespace-regexp)))
+	    (let ((search-spaces-regexp Info-search-whitespace-regexp))
 	      (if (if backward
 		      (re-search-backward regexp bound t)
 		    (re-search-forward regexp bound t))
@@ -1863,16 +1895,14 @@ If DIRECTION is `backward', search in the reverse direction."
 		 (not bound)
 		 (or give-up (and found (not (and (> found opoint-min)
 						  (< found opoint-max))))))
-	(signal 'search-failed (list regexp "initial node")))
+	(signal 'search-failed (list regexp "end of node")))
 
       ;; If no subfiles, give error now.
       (if give-up
 	  (if (null Info-current-subfile)
 	      (if isearch-mode
 		  (signal 'search-failed (list regexp "end of manual"))
-		(let ((search-spaces-regexp
-		       (if (or (not isearch-mode) isearch-regexp)
-			   Info-search-whitespace-regexp)))
+		(let ((search-spaces-regexp Info-search-whitespace-regexp))
 		  (if backward
 		      (re-search-backward regexp)
 		    (re-search-forward regexp))))
@@ -1930,9 +1960,7 @@ If DIRECTION is `backward', search in the reverse direction."
 		(while (and (not give-up)
 			    (or (null found)
 				(not (funcall isearch-filter-predicate beg-found found))))
-		  (let ((search-spaces-regexp
-			 (if (or (not isearch-mode) isearch-regexp)
-			     Info-search-whitespace-regexp)))
+		  (let ((search-spaces-regexp Info-search-whitespace-regexp))
 		    (if (if backward
 			    (re-search-backward regexp nil t)
 			  (re-search-forward regexp nil t))
@@ -2000,21 +2028,26 @@ If DIRECTION is `backward', search in the reverse direction."
 (defun Info-isearch-search ()
   (if Info-isearch-search
       (lambda (string &optional bound noerror count)
-	(Info-search
-	 (cond
-	  (isearch-word
-	   ;; Lax version of word search
-	   (let ((lax (not (or isearch-nonincremental
-			       (eq (length string)
-				   (length (isearch-string-state
-					    (car isearch-cmds))))))))
-	     (if (functionp isearch-word)
-		 (funcall isearch-word string lax)
-	       (word-search-regexp string lax))))
-	  (isearch-regexp string)
-	  (t (regexp-quote string)))
-	 bound noerror count
-	 (unless isearch-forward 'backward))
+	(let ((Info-search-whitespace-regexp
+	       (if (if isearch-regexp
+		       isearch-regexp-lax-whitespace
+		     isearch-lax-whitespace)
+		   search-whitespace-regexp)))
+	  (Info-search
+	   (cond
+	    (isearch-word
+	     ;; Lax version of word search
+	     (let ((lax (not (or isearch-nonincremental
+				 (eq (length string)
+				     (length (isearch--state-string
+					      (car isearch-cmds))))))))
+	       (if (functionp isearch-word)
+		   (funcall isearch-word string lax)
+		 (word-search-regexp string lax))))
+	    (isearch-regexp string)
+	    (t (regexp-quote string)))
+	   bound noerror count
+	   (unless isearch-forward 'backward)))
 	(point))
     (isearch-search-fun-default)))
 
@@ -2393,13 +2426,6 @@ Table of contents is created from the tree structure of menus."
           (setq subfiles (cdr subfiles))))
       (message "")
       (nreverse nodes))))
-
-(defvar Info-toc-nodes nil
-  "Alist of cached parent-children node information in visited Info files.
-Each element is (FILE (NODE-NAME PARENT SECTION CHILDREN) ...)
-where PARENT is the parent node extracted from the Up pointer,
-SECTION is the section name in the Top node where this node is placed,
-CHILDREN is a list of child nodes extracted from the node menu.")
 
 (defun Info-toc-nodes (filename)
   "Return a node list of Info FILENAME with parent-children information.
@@ -2854,7 +2880,7 @@ N is the digit argument used to invoke this command."
 		      (Info-extract-menu-node-name)))))
 
 (defmacro Info-no-error (&rest body)
-  (list 'condition-case nil (cons 'progn (append body '(t))) '(error nil)))
+  `(condition-case nil (progn ,@body t) (error nil)))
 
 (defun Info-next-preorder ()
   "Go to the next subnode or the next node, or go up a level."
@@ -3032,10 +3058,6 @@ See `Info-scroll-down'."
       (if (looking-at "^\\* ")
 	  (forward-char 2)))))
 
-(defvar Info-index-nodes nil
-  "Alist of cached index node names of visited Info files.
-Each element has the form (INFO-FILE INDEX-NODE-NAMES-LIST).")
-
 (defun Info-index-nodes (&optional file)
   "Return a list of names of all index nodes in Info FILE.
 If FILE is omitted, it defaults to the current Info file.
@@ -4134,8 +4156,6 @@ Advanced commands:
        'Info-isearch-push-state)
   (set (make-local-variable 'isearch-filter-predicate)
        'Info-isearch-filter)
-  (set (make-local-variable 'search-whitespace-regexp)
-       Info-search-whitespace-regexp)
   (set (make-local-variable 'revert-buffer-function)
        'Info-revert-buffer-function)
   (Info-set-mode-line)
@@ -4504,7 +4524,17 @@ first line or header line, and for breadcrumb links.")
              ((not (bobp))
               ;; Hide the punctuation at the end, too.
               (skip-chars-backward " \t,")
-              (put-text-property (point) header-end 'invisible t))))))
+              (put-text-property (point) header-end 'invisible t)
+	      ;; Hide the suffix of the Info file name.
+	      (beginning-of-line)
+	      (if (re-search-forward
+		   (format "File: %s\\([^,\n\t]+\\),"
+			   (if (stringp Info-current-file)
+			       (file-name-nondirectory Info-current-file)
+			     Info-current-file))
+		   header-end t)
+		  (put-text-property (match-beginning 1) (match-end 1)
+				     'invisible t)))))))
 
       ;; Fontify titles
       (goto-char (point-min))
@@ -4792,6 +4822,12 @@ first line or header line, and for breadcrumb links.")
                                  mouse-face highlight
                                  help-echo "mouse-2: go to this URL"))))
 
+      ;; Hide empty lines at the end of the node.
+      (goto-char (point-max))
+      (skip-chars-backward "\n")
+      (when (< (1+ (point)) (point-max))
+	(put-text-property (1+ (point)) (point-max) 'invisible t))
+
       (set-buffer-modified-p nil))))
 
 ;;; Speedbar support:
@@ -5020,11 +5056,18 @@ BUFFER is the buffer speedbar is requesting buttons for."
 (defun Info-bookmark-make-record ()
   "This implements the `bookmark-make-record-function' type (which see)
 for Info nodes."
-  `(,Info-current-node
-    ,@(bookmark-make-record-default 'no-file)
-    (filename . ,Info-current-file)
-    (info-node . ,Info-current-node)
-    (handler . Info-bookmark-jump)))
+  (let* ((file (and (stringp Info-current-file)
+		    (file-name-nondirectory Info-current-file)))
+	 (bookmark-name (if file
+			    (concat "(" file ") " Info-current-node)
+			  Info-current-node))
+	 (defaults (delq nil (list bookmark-name file Info-current-node))))
+    `(,bookmark-name
+      ,@(bookmark-make-record-default 'no-file)
+      (filename . ,Info-current-file)
+      (info-node . ,Info-current-node)
+      (handler . Info-bookmark-jump)
+      (defaults . ,defaults))))
 
 ;;;###autoload
 (defun Info-bookmark-jump (bmk)

@@ -46,8 +46,13 @@ typedef struct {
 #include "msdos.h"
 #endif
 
+INLINE_HEADER_BEGIN
+#ifndef DISPEXTERN_INLINE
+# define DISPEXTERN_INLINE INLINE
+#endif
+
 #include <c-strcase.h>
-static inline int
+DISPEXTERN_INLINE int
 xstrcasecmp (char const *a, char const *b)
 {
   return c_strcasecmp (a, b);
@@ -666,7 +671,7 @@ struct glyph_matrix
 
   /* Values of BEGV and ZV as of last redisplay.  Set in
      mark_window_display_accurate_1.  */
-  int begv, zv;
+  ptrdiff_t begv, zv;
 };
 
 
@@ -1121,11 +1126,11 @@ struct glyph_row *matrix_row (struct glyph_matrix *, int);
       ((ROW)->phys_height - (ROW)->phys_ascent	\
        > (ROW)->height - (ROW)->ascent)
 
-/* Non-zero means that fonts have been loaded since the last glyph
+/* True means that fonts have been loaded since the last glyph
    matrix adjustments.  The function redisplay_internal adjusts glyph
-   matrices when this flag is non-zero.  */
+   matrices when this flag is true.  */
 
-extern int fonts_changed_p;
+extern bool fonts_changed_p;
 
 /* A glyph for a space.  */
 
@@ -1144,7 +1149,7 @@ extern int updated_area;
 /* Non-zero means last display completed.  Zero means it was
    preempted.  */
 
-extern int display_completed;
+extern bool display_completed;
 
 
 
@@ -1374,7 +1379,7 @@ struct glyph_string
       ? current_mode_line_height				\
       : (MATRIX_MODE_LINE_HEIGHT ((W)->current_matrix)		\
 	 ? MATRIX_MODE_LINE_HEIGHT ((W)->current_matrix)	\
-	 : estimate_mode_line_height (XFRAME ((W)->frame),	\
+	 : estimate_mode_line_height (XFRAME (W->frame),	\
 				      CURRENT_MODE_LINE_FACE_ID (W))))
 
 /* Return the current height of the header line of window W.  If not
@@ -1387,7 +1392,7 @@ struct glyph_string
        ? current_header_line_height				\
        : (MATRIX_HEADER_LINE_HEIGHT ((W)->current_matrix)	\
 	  ? MATRIX_HEADER_LINE_HEIGHT ((W)->current_matrix)	\
-	  : estimate_mode_line_height (XFRAME ((W)->frame),	\
+	  : estimate_mode_line_height (XFRAME (W->frame),\
 				       HEADER_LINE_FACE_ID)))
 
 /* Return the height of the desired mode line of window W.  */
@@ -1406,8 +1411,8 @@ struct glyph_string
      (!MINI_WINDOW_P ((W))						\
       && !(W)->pseudo_window_p						\
       && FRAME_WANTS_MODELINE_P (XFRAME (WINDOW_FRAME ((W))))		\
-      && BUFFERP ((W)->buffer)						\
-      && !NILP (BVAR (XBUFFER ((W)->buffer), mode_line_format))		\
+      && BUFFERP (W->buffer)					\
+      && !NILP (BVAR (XBUFFER (W->buffer), mode_line_format))	\
       && WINDOW_TOTAL_LINES (W) > 1)
 
 
@@ -1855,7 +1860,6 @@ struct bidi_it {
   int resolved_level;		/* final resolved level of this character */
   int invalid_levels;		/* how many PDFs to ignore */
   int invalid_rl_levels;	/* how many PDFs from RLE/RLO to ignore */
-  int prev_was_pdf;		/* if non-zero, previous char was PDF */
   struct bidi_saved_info prev;	/* info about previous character */
   struct bidi_saved_info last_strong; /* last-seen strong directional char */
   struct bidi_saved_info next_for_neutral; /* surrounding characters for... */
@@ -1878,6 +1882,7 @@ struct bidi_it {
   struct bidi_string_data string;	/* string to reorder */
   bidi_dir_t paragraph_dir;	/* current paragraph direction */
   ptrdiff_t separator_limit;	/* where paragraph separator should end */
+  unsigned prev_was_pdf : 1;	/* if non-zero, previous char was PDF */
   unsigned first_elt : 1;	/* if non-zero, examine current char first */
   unsigned new_paragraph : 1;	/* if non-zero, we expect a new paragraph */
   unsigned frame_window_p : 1;	/* non-zero if displaying on a GUI frame */
@@ -2084,10 +2089,10 @@ struct composition_it
   ptrdiff_t lookback;
   /* If non-negative, number of glyphs of the glyph-string.  */
   int nglyphs;
-  /* Nonzero iff the composition is created while buffer is scanned in
+  /* True iff the composition is created while buffer is scanned in
      reverse order, and thus the grapheme clusters must be rendered
      from the last to the first.  */
-  int reversed_p;
+  bool reversed_p;
 
   /** The following members contain information about the current
       grapheme cluster.  */
@@ -2137,7 +2142,8 @@ struct it
   const unsigned char *s;
 
   /* Number of characters in the string (s, or it->string) we iterate
-     over.  */
+     over.  Used only in display_string and its subroutines; never
+     used for overlay strings and strings from display properties.  */
   ptrdiff_t string_nchars;
 
   /* Start and end of a visible region; -1 if the region is not
@@ -2755,15 +2761,19 @@ struct image_type
   Lisp_Object *type;
 
   /* Check that SPEC is a valid image specification for the given
-     image type.  Value is non-zero if SPEC is valid.  */
-  int (* valid_p) (Lisp_Object spec);
+     image type.  Value is true if SPEC is valid.  */
+  bool (* valid_p) (Lisp_Object spec);
 
   /* Load IMG which is used on frame F from information contained in
-     IMG->spec.  Value is non-zero if successful.  */
-  int (* load) (struct frame *f, struct image *img);
+     IMG->spec.  Value is true if successful.  */
+  bool (* load) (struct frame *f, struct image *img);
 
   /* Free resources of image IMG which is used on frame F.  */
   void (* free) (struct frame *f, struct image *img);
+
+  /* Initialization function (used for dynamic loading of image
+     libraries on Windows), or NULL if none.  */
+  bool (* init) (void);
 
   /* Next in list of all supported image types.  */
   struct image_type *next;
@@ -3004,14 +3014,14 @@ enum tool_bar_item_image
 
 /* Defined in bidi.c */
 
-extern void bidi_init_it (ptrdiff_t, ptrdiff_t, int, struct bidi_it *);
+extern void bidi_init_it (ptrdiff_t, ptrdiff_t, bool, struct bidi_it *);
 extern void bidi_move_to_visually_next (struct bidi_it *);
-extern void bidi_paragraph_init (bidi_dir_t, struct bidi_it *, int);
+extern void bidi_paragraph_init (bidi_dir_t, struct bidi_it *, bool);
 extern int  bidi_mirror_char (int);
 extern void bidi_push_it (struct bidi_it *);
 extern void bidi_pop_it (struct bidi_it *);
 extern void *bidi_shelve_cache (void);
-extern void bidi_unshelve_cache (void *, int);
+extern void bidi_unshelve_cache (void *, bool);
 
 /* Defined in xdisp.c */
 
@@ -3057,7 +3067,7 @@ void move_it_in_display_line (struct it *it,
 int in_display_vector_p (struct it *);
 int frame_mode_line_height (struct frame *);
 extern Lisp_Object Qtool_bar;
-extern int redisplaying_p;
+extern bool redisplaying_p;
 extern int help_echo_showing_p;
 extern int current_mode_line_height, current_header_line_height;
 extern Lisp_Object help_echo_string, help_echo_window;
@@ -3166,7 +3176,7 @@ extern ptrdiff_t x_create_bitmap_from_xpm_data (struct frame *, const char **);
 extern void x_destroy_bitmap (struct frame *, ptrdiff_t);
 #endif
 extern void x_destroy_all_bitmaps (Display_Info *);
-extern int x_create_bitmap_mask (struct frame *, ptrdiff_t);
+extern void x_create_bitmap_mask (struct frame *, ptrdiff_t);
 extern Lisp_Object x_find_image_file (Lisp_Object);
 
 void x_kill_gs_process (Pixmap, struct frame *);
@@ -3174,7 +3184,7 @@ struct image_cache *make_image_cache (void);
 void free_image_cache (struct frame *);
 void clear_image_caches (Lisp_Object);
 void mark_image_cache (struct image_cache *);
-int valid_image_p (Lisp_Object);
+bool valid_image_p (Lisp_Object);
 void prepare_image_for_display (struct frame *, struct image *);
 ptrdiff_t lookup_image (struct frame *, Lisp_Object);
 
@@ -3195,6 +3205,7 @@ void unrequest_sigio (void);
 int tabs_safe_p (int);
 void init_baud_rate (int);
 void init_sigio (int);
+void ignore_sigio (void);
 
 /* Defined in xfaces.c */
 
@@ -3253,9 +3264,12 @@ void x_implicitly_set_name (struct frame *, Lisp_Object, Lisp_Object);
 
 extern Lisp_Object tip_frame;
 extern Window tip_window;
+extern frame_parm_handler x_frame_parm_handlers[];
+
 extern void start_hourglass (void);
 extern void cancel_hourglass (void);
 extern int hourglass_shown_p;
+
 struct atimer;			/* Defined in atimer.h.  */
 /* If non-null, an asynchronous timer that, when it expires, displays
    an hourglass cursor on all frames.  */
@@ -3306,7 +3320,7 @@ extern Lisp_Object marginal_area_string (struct window *, enum window_part,
 extern void redraw_frame (struct frame *);
 extern void cancel_line (int, struct frame *);
 extern void init_desired_glyphs (struct frame *);
-extern int update_frame (struct frame *, int, int);
+extern bool update_frame (struct frame *, bool, bool);
 extern void bitch_at_user (void);
 void adjust_glyphs (struct frame *);
 void free_glyphs (struct frame *);
@@ -3322,13 +3336,13 @@ void rotate_matrix (struct glyph_matrix *, int, int, int);
 void increment_matrix_positions (struct glyph_matrix *,
                                  int, int, ptrdiff_t, ptrdiff_t);
 void blank_row (struct window *, struct glyph_row *, int);
-void enable_glyph_matrix_rows (struct glyph_matrix *, int, int, int);
+void clear_glyph_matrix_rows (struct glyph_matrix *, int, int);
 void clear_glyph_row (struct glyph_row *);
 void prepare_desired_row (struct glyph_row *);
-void set_window_update_flags (struct window *, int);
-void update_single_window (struct window *, int);
-void do_pending_window_change (int);
-void change_frame_size (struct frame *, int, int, int, int, int);
+void set_window_update_flags (struct window *, bool);
+void update_single_window (struct window *, bool);
+void do_pending_window_change (bool);
+void change_frame_size (struct frame *, int, int, bool, bool, bool);
 void init_display (void);
 void syms_of_display (void);
 extern Lisp_Object Qredisplay_dont_pause;
@@ -3406,5 +3420,7 @@ extern Lisp_Object x_default_parameter (struct frame *, Lisp_Object,
                                         enum resource_types);
 
 #endif /* HAVE_WINDOW_SYSTEM */
+
+INLINE_HEADER_END
 
 #endif /* not DISPEXTERN_H_INCLUDED */

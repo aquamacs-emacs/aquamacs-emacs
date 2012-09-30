@@ -22,7 +22,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include "dispextern.h"
 
-extern Lisp_Object Qleft, Qright;
+INLINE_HEADER_BEGIN
+#ifndef WINDOW_INLINE
+# define WINDOW_INLINE INLINE
+#endif
 
 /* Windows are allocated as if they were vectors, but then the
 Lisp data type is changed to Lisp_Window.  They are garbage
@@ -96,13 +99,15 @@ struct window
 
     /* Following (to right or down) and preceding (to left or up) child
        at same level of tree.  */
-    Lisp_Object next, prev;
+    Lisp_Object next;
+    Lisp_Object prev;
 
     /* First child of this window: vchild is used if this is a vertical
        combination, hchild if this is a horizontal combination.  Of the
        fields vchild, hchild and buffer, one and only one is non-nil
        unless the window is dead.  */
-    Lisp_Object hchild, vchild;
+    Lisp_Object hchild;
+    Lisp_Object vchild;
 
     /* The window this one is a child of.  */
     Lisp_Object parent;
@@ -154,11 +159,13 @@ struct window
 
     /* Width of left and right marginal areas.  A value of nil means
        no margin.  */
-    Lisp_Object left_margin_cols, right_margin_cols;
+    Lisp_Object left_margin_cols;
+    Lisp_Object right_margin_cols;
 
     /* Width of left and right fringes.
        A value of nil or t means use frame values.  */
-    Lisp_Object left_fringe_width, right_fringe_width;
+    Lisp_Object left_fringe_width;
+    Lisp_Object right_fringe_width;
 
     /* Pixel width of scroll bars.
        A value of nil or t means use frame values.  */
@@ -213,13 +220,6 @@ struct window
     /* t means this window's child windows are not (re-)combined.  */
     Lisp_Object combination_limit;
 
-    /* Alist of <buffer, window-start, window-point> triples listing
-       buffers previously shown in this window.  */
-    Lisp_Object prev_buffers;
-
-    /* List of buffers re-shown in this window.  */
-    Lisp_Object next_buffers;
-
     /* An alist with parameters.  */
     Lisp_Object window_parameters;
 
@@ -230,6 +230,14 @@ struct window
     /* Glyph matrices.  */
     struct glyph_matrix *current_matrix;
     struct glyph_matrix *desired_matrix;
+
+    /* The two Lisp_Object fields below are marked in a special way,
+       which is why they're placed after `current_matrix'.  */
+    /* Alist of <buffer, window-start, window-point> triples listing
+       buffers previously shown in this window.  */
+    Lisp_Object prev_buffers;
+    /* List of buffers re-shown in this window.  */
+    Lisp_Object next_buffers;
 
     /* Number saying how recently window was selected.  */
     int use_time;
@@ -340,6 +348,84 @@ struct window
     ptrdiff_t window_end_bytepos;
 };
 
+/* Most code should use these functions to set Lisp fields in struct
+   window.  */
+WINDOW_INLINE void
+wset_buffer (struct window *w, Lisp_Object val)
+{
+  w->buffer = val;
+}
+WINDOW_INLINE void
+wset_frame (struct window *w, Lisp_Object val)
+{
+  w->frame = val;
+}
+WINDOW_INLINE void
+wset_left_col (struct window *w, Lisp_Object val)
+{
+  w->left_col = val;
+}
+WINDOW_INLINE void
+wset_next (struct window *w, Lisp_Object val)
+{
+  w->next = val;
+}
+WINDOW_INLINE void
+wset_prev (struct window *w, Lisp_Object val)
+{
+  w->prev = val;
+}
+WINDOW_INLINE void
+wset_redisplay_end_trigger (struct window *w, Lisp_Object val)
+{
+  w->redisplay_end_trigger = val;
+}
+WINDOW_INLINE void
+wset_top_line (struct window *w, Lisp_Object val)
+{
+  w->top_line = val;
+}
+WINDOW_INLINE void
+wset_total_cols (struct window *w, Lisp_Object val)
+{
+  w->total_cols = val;
+}
+WINDOW_INLINE void
+wset_total_lines (struct window *w, Lisp_Object val)
+{
+  w->total_lines = val;
+}
+WINDOW_INLINE void
+wset_vertical_scroll_bar (struct window *w, Lisp_Object val)
+{
+  w->vertical_scroll_bar = val;
+}
+WINDOW_INLINE void
+wset_window_end_pos (struct window *w, Lisp_Object val)
+{
+  w->window_end_pos = val;
+}
+WINDOW_INLINE void
+wset_window_end_valid (struct window *w, Lisp_Object val)
+{
+  w->window_end_valid = val;
+}
+WINDOW_INLINE void
+wset_window_end_vpos (struct window *w, Lisp_Object val)
+{
+  w->window_end_vpos = val;
+}
+WINDOW_INLINE void
+wset_prev_buffers (struct window *w, Lisp_Object val)
+{
+  w->prev_buffers = val;
+}
+WINDOW_INLINE void
+wset_next_buffers (struct window *w, Lisp_Object val)
+{
+  w->next_buffers = val;
+}
+
 /* 1 if W is a minibuffer window.  */
 
 #define MINI_WINDOW_P(W)	((W)->mini)
@@ -388,13 +474,13 @@ struct window
    This includes scroll bars and fringes.  */
 
 #define WINDOW_TOTAL_COLS(W) \
-  (XFASTINT ((W)->total_cols))
+  (XFASTINT (W->total_cols))
 
 /* Return the height of window W in canonical line units.
    This includes header and mode lines, if any.  */
 
 #define WINDOW_TOTAL_LINES(W) \
-  (XFASTINT ((W)->total_lines))
+  (XFASTINT (W->total_lines))
 
 /* Return the total pixel width of window W.  */
 
@@ -422,7 +508,7 @@ struct window
    This includes a left-hand scroll bar, if any.  */
 
 #define WINDOW_LEFT_EDGE_COL(W) \
-  (XFASTINT ((W)->left_col))
+  (XFASTINT (W->left_col))
 
 /* Return the canonical frame column before which window W ends.
    This includes a right-hand scroll bar, if any.  */
@@ -434,7 +520,7 @@ struct window
    This includes a header line, if any.  */
 
 #define WINDOW_TOP_EDGE_LINE(W) \
-  (XFASTINT ((W)->top_line))
+  (XFASTINT (W->top_line))
 
 /* Return the canonical frame line before which window W ends.
    This includes a mode line, if any.  */
@@ -538,32 +624,32 @@ struct window
 
 /* Width of left margin area in columns.  */
 
-#define WINDOW_LEFT_MARGIN_COLS(W)			\
-  (NILP ((W)->left_margin_cols)				\
-   ? 0							\
-   : XINT ((W)->left_margin_cols))
+#define WINDOW_LEFT_MARGIN_COLS(W)	\
+  (NILP (W->left_margin_cols)		\
+   ? 0					\
+   : XINT (W->left_margin_cols))
 
 /* Width of right marginal area in columns.  */
 
-#define WINDOW_RIGHT_MARGIN_COLS(W)			\
-  (NILP ((W)->right_margin_cols)			\
-   ? 0							\
-   : XINT ((W)->right_margin_cols))
+#define WINDOW_RIGHT_MARGIN_COLS(W)	\
+  (NILP (W->right_margin_cols)		\
+   ? 0					\
+   : XINT (W->right_margin_cols))
 
 /* Width of left margin area in pixels.  */
 
-#define WINDOW_LEFT_MARGIN_WIDTH(W)			\
-  (NILP ((W)->left_margin_cols)				\
-   ? 0							\
-   : (XINT ((W)->left_margin_cols)			\
+#define WINDOW_LEFT_MARGIN_WIDTH(W)	\
+  (NILP (W->left_margin_cols)		\
+   ? 0					\
+   : (XINT (W->left_margin_cols)	\
       * WINDOW_FRAME_COLUMN_WIDTH (W)))
 
 /* Width of right marginal area in pixels.  */
 
-#define WINDOW_RIGHT_MARGIN_WIDTH(W)			\
-  (NILP ((W)->right_margin_cols)			\
-   ? 0							\
-   : (XINT ((W)->right_margin_cols)			\
+#define WINDOW_RIGHT_MARGIN_WIDTH(W)	\
+  (NILP (W->right_margin_cols)		\
+   ? 0					\
+   : (XINT (W->right_margin_cols)	\
       * WINDOW_FRAME_COLUMN_WIDTH (W)))
 
 /* Total width of fringes reserved for drawing truncation bitmaps,
@@ -572,37 +658,37 @@ struct window
    sizes aren't pixel values.  If it weren't the case, we wouldn't be
    able to split windows horizontally nicely.  */
 
-#define WINDOW_FRINGE_COLS(W)				\
-  ((INTEGERP ((W)->left_fringe_width)			\
-    || INTEGERP ((W)->right_fringe_width))		\
-   ? ((WINDOW_LEFT_FRINGE_WIDTH (W)			\
-       + WINDOW_RIGHT_FRINGE_WIDTH (W)			\
-       + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)		\
-      / WINDOW_FRAME_COLUMN_WIDTH (W))			\
+#define WINDOW_FRINGE_COLS(W)			\
+  ((INTEGERP (W->left_fringe_width)		\
+    || INTEGERP (W->right_fringe_width))	\
+   ? ((WINDOW_LEFT_FRINGE_WIDTH (W)		\
+       + WINDOW_RIGHT_FRINGE_WIDTH (W)		\
+       + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)	\
+      / WINDOW_FRAME_COLUMN_WIDTH (W))		\
    : FRAME_FRINGE_COLS (WINDOW_XFRAME (W)))
 
 /* Column-width of the left and right fringe.  */
 
-#define WINDOW_LEFT_FRINGE_COLS(W)			\
-  ((WINDOW_LEFT_FRINGE_WIDTH ((W))			\
-    + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)		\
+#define WINDOW_LEFT_FRINGE_COLS(W)		\
+  ((WINDOW_LEFT_FRINGE_WIDTH ((W))		\
+    + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)	\
    / WINDOW_FRAME_COLUMN_WIDTH (W))
 
-#define WINDOW_RIGHT_FRINGE_COLS(W)			\
-  ((WINDOW_RIGHT_FRINGE_WIDTH ((W))			\
-    + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)		\
+#define WINDOW_RIGHT_FRINGE_COLS(W)		\
+  ((WINDOW_RIGHT_FRINGE_WIDTH ((W))		\
+    + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)	\
    / WINDOW_FRAME_COLUMN_WIDTH (W))
 
 /* Pixel-width of the left and right fringe.  */
 
 #define WINDOW_LEFT_FRINGE_WIDTH(W)			\
-  (INTEGERP ((W)->left_fringe_width)			\
-   ? XFASTINT ((W)->left_fringe_width)			\
+  (INTEGERP (W->left_fringe_width)			\
+   ? XFASTINT (W->left_fringe_width)			\
    : FRAME_LEFT_FRINGE_WIDTH (WINDOW_XFRAME (W)))
 
 #define WINDOW_RIGHT_FRINGE_WIDTH(W)			\
-  (INTEGERP ((W)->right_fringe_width)			\
-   ? XFASTINT ((W)->right_fringe_width)			\
+  (INTEGERP (W->right_fringe_width)			\
+   ? XFASTINT (W->right_fringe_width)			\
    : FRAME_RIGHT_FRINGE_WIDTH (WINDOW_XFRAME (W)))
 
 /* Total width of fringes in pixels.  */
@@ -619,36 +705,36 @@ struct window
    and which side they are on.  */
 
 #define WINDOW_VERTICAL_SCROLL_BAR_TYPE(w)		\
-  (EQ ((w)->vertical_scroll_bar_type, Qt)		\
+  (EQ (w->vertical_scroll_bar_type, Qt)			\
    ? FRAME_VERTICAL_SCROLL_BAR_TYPE (WINDOW_XFRAME (w))	\
-   : EQ ((w)->vertical_scroll_bar_type, Qleft)		\
+   : EQ (w->vertical_scroll_bar_type, Qleft)		\
    ? vertical_scroll_bar_left				\
-   : EQ ((w)->vertical_scroll_bar_type, Qright)		\
+   : EQ (w->vertical_scroll_bar_type, Qright)		\
    ? vertical_scroll_bar_right				\
    : vertical_scroll_bar_none)				\
 
 #define WINDOW_HAS_VERTICAL_SCROLL_BAR(w)		\
-  (EQ ((w)->vertical_scroll_bar_type, Qt)		\
+  (EQ (w->vertical_scroll_bar_type, Qt)			\
    ? FRAME_HAS_VERTICAL_SCROLL_BARS (WINDOW_XFRAME (w))	\
-   : !NILP ((w)->vertical_scroll_bar_type))
+   : !NILP (w->vertical_scroll_bar_type))
 
 #define WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT(w)		\
-  (EQ ((w)->vertical_scroll_bar_type, Qt)			\
+  (EQ (w->vertical_scroll_bar_type, Qt)				\
    ? FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (WINDOW_XFRAME (w))	\
-   : EQ ((w)->vertical_scroll_bar_type, Qleft))
+   : EQ (w->vertical_scroll_bar_type, Qleft))
 
-#define WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT(w)		\
-  (EQ ((w)->vertical_scroll_bar_type, Qt)			\
-   ? FRAME_HAS_VERTICAL_SCROLL_BARS_ON_RIGHT (WINDOW_XFRAME (w))\
-   : EQ ((w)->vertical_scroll_bar_type, Qright))
+#define WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT(w)			\
+  (EQ (w->vertical_scroll_bar_type, Qt)					\
+   ? FRAME_HAS_VERTICAL_SCROLL_BARS_ON_RIGHT (WINDOW_XFRAME (w))	\
+   : EQ (w->vertical_scroll_bar_type, Qright))
 
 /* Width that a scroll bar in window W should have, if there is one.
    Measured in pixels.  If scroll bars are turned off, this is still
    nonzero.  */
 
 #define WINDOW_CONFIG_SCROLL_BAR_WIDTH(w)		\
-  (INTEGERP ((w)->scroll_bar_width)			\
-   ? XFASTINT ((w)->scroll_bar_width)			\
+  (INTEGERP (w->scroll_bar_width)			\
+   ? XFASTINT (w->scroll_bar_width)			\
    : FRAME_CONFIG_SCROLL_BAR_WIDTH (WINDOW_XFRAME (w)))
 
 /* Width that a scroll bar in window W should have, if there is one.
@@ -656,8 +742,8 @@ struct window
    this is still nonzero.  */
 
 #define WINDOW_CONFIG_SCROLL_BAR_COLS(w)		\
-  (INTEGERP ((w)->scroll_bar_width)			\
-   ? ((XFASTINT ((w)->scroll_bar_width)			\
+  (INTEGERP (w->scroll_bar_width)			\
+   ? ((XFASTINT (w->scroll_bar_width)			\
        + WINDOW_FRAME_COLUMN_WIDTH (w) - 1)		\
       / WINDOW_FRAME_COLUMN_WIDTH (w))			\
    : FRAME_CONFIG_SCROLL_BAR_COLS (WINDOW_XFRAME (w)))
@@ -667,14 +753,14 @@ struct window
    the right in this frame, or there are no scroll bars, value is 0.  */
 
 #define WINDOW_LEFT_SCROLL_BAR_COLS(w)	       \
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w) \
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w)  \
    ? (WINDOW_CONFIG_SCROLL_BAR_COLS (w))       \
    : 0)
 
 /* Width of a left scroll bar area in window W , measured in pixels.  */
 
-#define WINDOW_LEFT_SCROLL_BAR_AREA_WIDTH(w) \
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w) \
+#define WINDOW_LEFT_SCROLL_BAR_AREA_WIDTH(w)				 \
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w)				 \
    ? (WINDOW_CONFIG_SCROLL_BAR_COLS (w) * WINDOW_FRAME_COLUMN_WIDTH (w)) \
    : 0)
 
@@ -683,7 +769,7 @@ struct window
    the left in this frame, or there are no scroll bars, value is 0.  */
 
 #define WINDOW_RIGHT_SCROLL_BAR_COLS(w)		\
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (w) \
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (w)	\
    ? WINDOW_CONFIG_SCROLL_BAR_COLS (w)		\
    : 0)
 
@@ -705,7 +791,7 @@ struct window
 /* Width of a left scroll bar area in window W , measured in pixels.  */
 
 #define WINDOW_SCROLL_BAR_AREA_WIDTH(w)					 \
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR (w)					\
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR (w)					 \
    ? (WINDOW_CONFIG_SCROLL_BAR_COLS (w) * WINDOW_FRAME_COLUMN_WIDTH (w)) \
    : 0)
 
@@ -726,7 +812,7 @@ struct window
    ? CURRENT_MODE_LINE_HEIGHT (W)	\
    : 0)
 
-#define WINDOW_MODE_LINE_LINES(W)		\
+#define WINDOW_MODE_LINE_LINES(W)	\
   (!! WINDOW_WANTS_MODELINE_P ((W)))
 
 /* Height in pixels, and in lines, of the header line.
@@ -737,7 +823,7 @@ struct window
    ? CURRENT_HEADER_LINE_HEIGHT (W)	\
    : 0)
 
-#define WINDOW_HEADER_LINE_LINES(W)		\
+#define WINDOW_HEADER_LINE_LINES(W)	\
   (!! WINDOW_WANTS_HEADER_LINE_P ((W)))
 
 /* Pixel height of window W without mode line.  */
@@ -748,36 +834,36 @@ struct window
 
 /* Pixel height of window W without mode and header line.  */
 
-#define WINDOW_BOX_TEXT_HEIGHT(W)		\
-  (WINDOW_TOTAL_HEIGHT ((W))			\
-   - WINDOW_MODE_LINE_HEIGHT ((W))		\
+#define WINDOW_BOX_TEXT_HEIGHT(W)	\
+  (WINDOW_TOTAL_HEIGHT ((W))		\
+   - WINDOW_MODE_LINE_HEIGHT ((W))	\
    - WINDOW_HEADER_LINE_HEIGHT ((W)))
 
 
 /* Convert window W relative pixel X to frame pixel coordinates.  */
 
-#define WINDOW_TO_FRAME_PIXEL_X(W, X)		\
+#define WINDOW_TO_FRAME_PIXEL_X(W, X)	\
   ((X) + WINDOW_BOX_LEFT_EDGE_X ((W)))
 
 /* Convert window W relative pixel Y to frame pixel coordinates.  */
 
-#define WINDOW_TO_FRAME_PIXEL_Y(W, Y)		\
+#define WINDOW_TO_FRAME_PIXEL_Y(W, Y)	\
   ((Y) + WINDOW_TOP_EDGE_Y ((W)))
 
 /* Convert frame relative pixel X to window relative pixel X.  */
 
-#define FRAME_TO_WINDOW_PIXEL_X(W, X)		\
+#define FRAME_TO_WINDOW_PIXEL_X(W, X)	\
   ((X) - WINDOW_BOX_LEFT_EDGE_X ((W)))
 
 /* Convert frame relative pixel Y to window relative pixel Y.  */
 
-#define FRAME_TO_WINDOW_PIXEL_Y(W, Y)		\
+#define FRAME_TO_WINDOW_PIXEL_Y(W, Y)	\
   ((Y) - WINDOW_TOP_EDGE_Y ((W)))
 
 /* Convert a text area relative x-position in window W to frame X
    pixel coordinates.  */
 
-#define WINDOW_TEXT_TO_FRAME_PIXEL_X(W, X)		\
+#define WINDOW_TEXT_TO_FRAME_PIXEL_X(W, X)	\
   (window_box_left ((W), TEXT_AREA) + (X))
 
 /* This is the window in which the terminal's cursor should
@@ -877,18 +963,25 @@ extern void check_frame_size (struct frame *frame, int *rows, int *cols);
 
 struct glyph *get_phys_cursor_glyph (struct window *w);
 
+/* Value is non-zero if WINDOW is a valid window.  */
+#define WINDOW_VALID_P(WINDOW)				\
+  (WINDOWP (WINDOW)					\
+   && (!NILP (XWINDOW (WINDOW)->buffer)			\
+       || !NILP (XWINDOW (WINDOW)->vchild)		\
+       || !NILP (XWINDOW (WINDOW)->hchild)))
+
+
 /* Value is non-zero if WINDOW is a live window.  */
-
-#define WINDOW_LIVE_P(WINDOW) \
-     (WINDOWP ((WINDOW)) && !NILP (XWINDOW ((WINDOW))->buffer))
-
+#define WINDOW_LIVE_P(WINDOW)					\
+  (WINDOWP (WINDOW) && !NILP (XWINDOW (WINDOW)->buffer))
 
 /* These used to be in lisp.h.  */
 
 extern Lisp_Object Qwindowp, Qwindow_live_p;
 extern Lisp_Object Vwindow_list;
 
-extern int compare_window_configurations (Lisp_Object, Lisp_Object, int);
+extern struct window *decode_live_window (Lisp_Object);
+extern bool compare_window_configurations (Lisp_Object, Lisp_Object, bool);
 extern void mark_window_cursors_off (struct window *);
 extern int window_internal_height (struct window *);
 extern int window_body_cols (struct window *w);
@@ -899,5 +992,7 @@ extern void init_window_once (void);
 extern void init_window (void);
 extern void syms_of_window (void);
 extern void keys_of_window (void);
+
+INLINE_HEADER_END
 
 #endif /* not WINDOW_H_INCLUDED */

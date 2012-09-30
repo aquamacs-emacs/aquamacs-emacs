@@ -1,4 +1,4 @@
-/* Definitions and headers for communication on the Microsoft W32 API.
+/* Definitions and headers for communication on the Microsoft Windows API.
    Copyright (C) 1995, 2001-2012 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -302,9 +302,6 @@ struct w32_output
   /* Non-hourglass cursor that is currently active.  */
   Cursor current_cursor;
 
-  /* Flag to set when the window needs to be completely repainted.  */
-  int needs_exposure;
-
   DWORD dwStyle;
 
   /* This is the Emacs structure for the display this frame is on.  */
@@ -345,7 +342,7 @@ extern struct w32_output w32term_display;
 
 /* Return the window associated with the frame F.  */
 #define FRAME_W32_WINDOW(f) ((f)->output_data.w32->window_desc)
-#define FRAME_X_WINDOW(f) ((f)->output_data.w32->window_desc)
+#define FRAME_X_WINDOW(f) FRAME_W32_WINDOW (f)
 
 #define FRAME_FONT(f) ((f)->output_data.w32->font)
 #define FRAME_FONTSET(f) ((f)->output_data.w32->fontset)
@@ -429,7 +426,7 @@ struct scroll_bar {
 #define SCROLL_BAR_VEC_SIZE					\
   ((sizeof (struct scroll_bar)					\
     - sizeof (EMACS_INT) - sizeof (struct Lisp_Vector *))	\
-   / sizeof (Lisp_Object))
+   / word_size)
 
 /* Turning a lisp vector value into a pointer to a struct scroll_bar.  */
 #define XSCROLL_BAR(vec) ((struct scroll_bar *) XVECTOR (vec))
@@ -666,6 +663,9 @@ extern void x_delete_display (struct w32_display_info *dpyinfo);
 #define LEFT_WIN_PRESSED       0x8000
 #define RIGHT_WIN_PRESSED      0x4000
 #define APPS_PRESSED           0x2000
+
+/* The current ANSI input codepage for GUI sessions.  */
+extern int w32_keyboard_codepage;
 
 /* When compiling on Windows 9x/ME and NT 3.x, the following are not defined
    (even though they are supported on 98 and ME.  */

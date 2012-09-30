@@ -247,8 +247,9 @@ Will not do anything if `url-show-status' is nil."
   (cond
    ((null file) "")
    ((string-match "\\?" file)
-    (file-name-directory (substring file 0 (match-beginning 0))))
-   (t (file-name-directory file))))
+    (url-file-directory (substring file 0 (match-beginning 0))))
+   ((string-match "\\(.*\\(/\\|%2[fF]\\)\\)" file)
+    (match-string 1 file))))
 
 ;;;###autoload
 (defun url-file-nondirectory (file)
@@ -256,8 +257,10 @@ Will not do anything if `url-show-status' is nil."
   (cond
    ((null file) "")
    ((string-match "\\?" file)
-    (file-name-nondirectory (substring file 0 (match-beginning 0))))
-   (t (file-name-nondirectory file))))
+    (url-file-nondirectory (substring file 0 (match-beginning 0))))
+   ((string-match ".*\\(?:/\\|%2[fF]\\)\\(.*\\)" file)
+    (match-string 1 file))
+   (t file)))
 
 ;;;###autoload
 (defun url-parse-query-string (query &optional downcase allow-newlines)
@@ -590,6 +593,7 @@ Has a preference for looking backward when not directly on a symbol."
 
 (defun url-generate-unique-filename (&optional fmt)
   "Generate a unique filename in `url-temporary-directory'."
+  (declare (obsolete make-temp-file "23.1"))
   ;; This variable is obsolete, but so is this function.
   (let ((tempdir (with-no-warnings url-temporary-directory)))
     (if (not fmt)
@@ -611,7 +615,6 @@ Has a preference for looking backward when not directly on a symbol."
 	  (setq x (1+ x)
 		fname (format fmt (concat base (int-to-string x)))))
 	(expand-file-name fname tempdir)))))
-(make-obsolete 'url-generate-unique-filename 'make-temp-file "23.1")
 
 (defun url-extract-mime-headers ()
   "Set `url-current-mime-headers' in current buffer."

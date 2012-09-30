@@ -29,7 +29,7 @@
 ;; customizable variables.
 
 ;; Usage:
-;; Put (erc-match-mode 1) into your ~/.emacs file.
+;; Put (erc-match-mode 1) into your init file.
 
 ;;; Code:
 
@@ -231,6 +231,14 @@ current-nick, keyword, pal, dangerous-host, fool"
   :options '(erc-log-matches erc-hide-fools erc-beep-on-match)
   :group 'erc-match
   :type 'hook)
+
+(defcustom erc-match-exclude-server-buffer nil
+  "If true, don't perform match on the server buffer; this is
+useful for excluding all the things like MOTDs from the server
+and other miscellaneous functions."
+  :group 'erc-match
+  :version "24.3"
+  :type 'boolean)
 
 ;; Internal variables:
 
@@ -449,7 +457,9 @@ Use this defun with `erc-insert-modify-hook'."
 					(+ 2 nick-end)
 				      (point-min))
 				    (point-max))))
-    (when vector
+    (when (and vector
+	       (not (and erc-match-exclude-server-buffer
+			 (erc-server-buffer-p))))
       (mapc
        (lambda (match-type)
 	 (goto-char (point-min))

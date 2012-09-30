@@ -279,7 +279,7 @@
 ;; can be used by other packages to read a buffer name, a file name,
 ;; or a directory name in the `ido' way.
 
-;;; Acknowledgements
+;;; Acknowledgments
 
 ;; Infinite amounts of gratitude goes to Stephen Eglen <stephen@cns.ed.ac.uk>
 ;; who wrote iswitch-buffer mode - from which I ripped off 99% of the code
@@ -490,6 +490,18 @@ Value can be toggled within `ido' using `ido-toggle-prefix'."
   "Non-nil means to match leading dot as prefix.
 I.e. hidden files and buffers will match only if you type a dot
 as first char even if `ido-enable-prefix' is nil."
+  :type 'boolean
+  :group 'ido)
+
+;; See http://debbugs.gnu.org/2042 for more info.
+(defcustom ido-buffer-disable-smart-matches t
+  "Non-nil means not to re-order matches for buffer switching.
+By default, ido aranges matches in the following order:
+
+  full-matches > suffix matches > prefix matches > remaining matches
+
+which can get in the way for buffer switching."
+  :version "24.3"
   :type 'boolean
   :group 'ido)
 
@@ -3688,10 +3700,17 @@ This is to make them appear as if they were \"virtual buffers\"."
 	 (rex0 (if ido-enable-regexp text (regexp-quote text)))
 	 (rexq (concat rex0 (if slash ".*/" "")))
 	 (re (if ido-enable-prefix (concat "\\`" rexq) rexq))
-	 (full-re (and do-full (not ido-enable-regexp) (not (string-match "\$\\'" rex0))
+	 (full-re (and do-full
+		       (and (eq ido-cur-item 'buffer)
+			    (not ido-buffer-disable-smart-matches))
+		       (not ido-enable-regexp)
+		       (not (string-match "\$\\'" rex0))
 		       (concat "\\`" rex0 (if slash "/" "") "\\'")))
 	 (suffix-re (and do-full slash
-			 (not ido-enable-regexp) (not (string-match "\$\\'" rex0))
+			 (and (eq ido-cur-item 'buffer)
+			      (not ido-buffer-disable-smart-matches))
+			 (not ido-enable-regexp)
+			 (not (string-match "\$\\'" rex0))
 			 (concat rex0 "/\\'")))
 	 (prefix-re (and full-re (not ido-enable-prefix)
 			 (concat "\\`" rexq)))

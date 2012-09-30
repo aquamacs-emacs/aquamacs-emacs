@@ -34,7 +34,7 @@
 ;;		- some local variables
 
 ;; To use this, use customize to turn on desktop-save-mode or add the
-;; following line somewhere in your .emacs file:
+;; following line somewhere in your init file:
 ;;
 ;;	(desktop-save-mode 1)
 ;;
@@ -1045,11 +1045,10 @@ Using it may cause conflicts.  Use it anyway? " owner)))))
 (defun desktop-load-default ()
   "Load the `default' start-up library manually.
 Also inhibit further loading of it."
+  (declare (obsolete desktop-save-mode "22.1"))
   (unless inhibit-default-init	        ; safety check
     (load "default" t t)
     (setq inhibit-default-init t)))
-(make-obsolete 'desktop-load-default
-               'desktop-save-mode "22.1")
 
 ;; ----------------------------------------------------------------------------
 ;;;###autoload
@@ -1119,11 +1118,8 @@ directory DIRNAME."
 
 (defun desktop-load-file (function)
   "Load the file where auto loaded FUNCTION is defined."
-  (when function
-    (let ((fcell (and (fboundp function) (symbol-function function))))
-      (when (and (listp fcell)
-                 (eq 'autoload (car fcell)))
-        (load (cadr fcell))))))
+  (when (fboundp function)
+    (autoload-do-load (symbol-function function) function)))
 
 ;; ----------------------------------------------------------------------------
 ;; Create a buffer, load its file, set its mode, ...;

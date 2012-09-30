@@ -520,8 +520,8 @@ dos_set_window_size (int *rows, int *cols)
 
   /* If the user specified a special video mode for these dimensions,
      use that mode.  */
-  video_mode 
-    = Fsymbol_value (Fintern_soft (make_formatted_string 
+  video_mode
+    = Fsymbol_value (Fintern_soft (make_formatted_string
 				   (video_name, "screen-dimensions-%dx%d",
 				    *rows, *cols), Qnil));
 
@@ -796,7 +796,7 @@ IT_set_face (int face)
       /* The default face for the frame should always be realized and
 	 cached.  */
       if (!fp)
-	abort ();
+	emacs_abort ();
     }
   screen_face = face;
   fg = fp->foreground;
@@ -1029,7 +1029,6 @@ IT_clear_end_of_line (struct frame *f, int first_unused)
 {
   char *spaces, *sp;
   int i, j, offset = 2 * (new_pos_X + screen_size_X * new_pos_Y);
-  extern int fatal_error_in_progress;
   struct tty_display_info *tty = FRAME_TTY (f);
 
   if (new_pos_X >= first_unused || fatal_error_in_progress)
@@ -1230,7 +1229,7 @@ IT_update_begin (struct frame *f)
   if (display_info->termscript)
     fprintf (display_info->termscript, "\n\n<UPDATE_BEGIN");
 
-  BLOCK_INPUT;
+  block_input ();
 
   if (f && f == mouse_face_frame)
     {
@@ -1280,7 +1279,7 @@ IT_update_begin (struct frame *f)
       hlinfo->mouse_face_mouse_frame = NULL;
     }
 
-  UNBLOCK_INPUT;
+  unblock_input ();
 }
 
 static void
@@ -1303,13 +1302,13 @@ IT_frame_up_to_date (struct frame *f)
   if (hlinfo->mouse_face_deferred_gc
       || (f && f == hlinfo->mouse_face_mouse_frame))
     {
-      BLOCK_INPUT;
+      block_input ();
       if (hlinfo->mouse_face_mouse_frame)
 	note_mouse_highlight (hlinfo->mouse_face_mouse_frame,
 			      hlinfo->mouse_face_mouse_x,
 			      hlinfo->mouse_face_mouse_y);
       hlinfo->mouse_face_deferred_gc = 0;
-      UNBLOCK_INPUT;
+      unblock_input ();
     }
 
   /* Set the cursor type to whatever they wanted.  In a minibuffer
@@ -1394,7 +1393,7 @@ IT_insert_glyphs (struct frame *f, struct glyph *start, int len)
 static void
 IT_delete_glyphs (struct frame *f, int n)
 {
-  abort ();
+  emacs_abort ();
 }
 
 /* set-window-configuration on window.c needs this.  */
@@ -1594,9 +1593,9 @@ IT_set_frame_parameters (struct frame *f, Lisp_Object alist)
   Lisp_Object tail;
   int i, j, length = XINT (Flength (alist));
   Lisp_Object *parms
-    = (Lisp_Object *) alloca (length * sizeof (Lisp_Object));
+    = (Lisp_Object *) alloca (length * word_size);
   Lisp_Object *values
-    = (Lisp_Object *) alloca (length * sizeof (Lisp_Object));
+    = (Lisp_Object *) alloca (length * word_size);
   /* Do we have to reverse the foreground and background colors?  */
   int reverse = EQ (Fcdr (Fassq (Qreverse, f->param_alist)), Qt);
   int redraw = 0, fg_set = 0, bg_set = 0;
@@ -1801,7 +1800,7 @@ internal_terminal_init (void)
     }
 
   tty = FRAME_TTY (sf);
-  KVAR (current_kboard, Vwindow_system) = Qpc;
+  kset_window_system (current_kboard, Qpc);
   sf->output_method = output_msdos_raw;
   if (init_needed)
     {
@@ -2434,10 +2433,10 @@ and then the scan code.  */)
   else
     {
       val = Fvector (NUM_RECENT_DOSKEYS, keys);
-      memcpy (XVECTOR (val)->contents, keys + recent_doskeys_index,
-	      (NUM_RECENT_DOSKEYS - recent_doskeys_index) * sizeof (Lisp_Object));
-      memcpy (XVECTOR (val)->contents + NUM_RECENT_DOSKEYS - recent_doskeys_index,
-	      keys, recent_doskeys_index * sizeof (Lisp_Object));
+      vcopy (val, 0, keys + recent_doskeys_index,
+	     NUM_RECENT_DOSKEYS - recent_doskeys_index);
+      vcopy (val, NUM_RECENT_DOSKEYS - recent_doskeys_index,
+	     keys, recent_doskeys_index);
       return val;
     }
 }
@@ -3014,7 +3013,7 @@ XMenuAddPane (Display *foo, XMenu *menu, const char *txt, int enable)
   const char *p;
 
   if (!enable)
-    abort ();
+    emacs_abort ();
 
   IT_menu_make_room (menu);
   menu->submenu[menu->count] = IT_menu_create ();
@@ -4120,7 +4119,7 @@ sys_select (int nfds, SELECT_TYPE *rfds, SELECT_TYPE *wfds, SELECT_TYPE *efds,
     FD_ZERO (efds);
 
   if (nfds != 1)
-    abort ();
+    emacs_abort ();
 
   /* If we are looking only for the terminal, with no timeout,
      just read it and wait -- that's more efficient.  */
@@ -4215,26 +4214,8 @@ init_gettimeofday (void)
 }
 #endif
 
-#ifdef abort
-#undef abort
 void
-dos_abort (char *file, int line)
-{
-  char buffer1[200], buffer2[400];
-  int i, j;
-
-  sprintf (buffer1, "<EMACS FATAL ERROR IN %s LINE %d>", file, line);
-  for (i = j = 0; buffer1[i]; i++) {
-    buffer2[j++] = buffer1[i];
-    buffer2[j++] = 0x70;
-  }
-  dosmemput (buffer2, j, (int)ScreenPrimary);
-  ScreenSetCursor (2, 0);
-  abort ();
-}
-#else
-void
-abort (void)
+emacs_abort (void)
 {
   dos_ttcooked ();
   ScreenSetCursor (10, 0);
@@ -4250,7 +4231,6 @@ abort (void)
 #endif /* __DJGPP_MINOR__ >= 2 */
   exit (2);
 }
-#endif
 
 void
 syms_of_msdos (void)

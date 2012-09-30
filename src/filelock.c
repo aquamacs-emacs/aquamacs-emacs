@@ -23,7 +23,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/stat.h>
 #include <signal.h>
 #include <stdio.h>
-#include <setjmp.h>
 
 #ifdef HAVE_PWD_H
 #include <pwd.h>
@@ -100,10 +99,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Return the time of the last system boot.  */
 
 static time_t boot_time;
-static int boot_time_initialized;
+static bool boot_time_initialized;
 
 #ifdef BOOT_TIME
-static void get_boot_time_1 (const char *, int);
+static void get_boot_time_1 (const char *, bool);
 #endif
 
 static time_t
@@ -170,7 +169,7 @@ get_boot_time (void)
     {
       char cmd_string[sizeof WTMP_FILE ".19.gz"];
       Lisp_Object tempname, filename;
-      int delete_flag = 0;
+      bool delete_flag = 0;
 
       filename = Qnil;
 
@@ -225,13 +224,13 @@ get_boot_time (void)
 
    If FILENAME is zero, use the same file as before;
    if no FILENAME has ever been specified, this is the utmp file.
-   Use the newest reboot record if NEWEST is nonzero,
+   Use the newest reboot record if NEWEST,
    the first reboot record otherwise.
    Ignore all reboot records on or before BOOT_TIME.
    Success is indicated by setting BOOT_TIME to a larger value.  */
 
 void
-get_boot_time_1 (const char *filename, int newest)
+get_boot_time_1 (const char *filename, bool newest)
 {
   struct utmp ut, *utp;
   int desc;
@@ -331,37 +330,28 @@ fill_in_lock_file_name (register char *lockfile, register Lisp_Object fn)
 }
 
 /* Lock the lock file named LFNAME.
-   If FORCE is nonzero, we do so even if it is already locked.
-   Return 1 if successful, 0 if not.  */
+   If FORCE, do so even if it is already locked.
+   Return true if successful.  */
 
-static int
-lock_file_1 (char *lfname, int force)
+static bool
+lock_file_1 (char *lfname, bool force)
 {
-  register int err;
-  printmax_t boot, pid;
-  const char *user_name;
-  const char *host_name;
-  char *lock_info_str;
-  ptrdiff_t lock_info_size;
+  int err;
   int symlink_errno;
   USE_SAFE_ALLOCA;
 
   /* Call this first because it can GC.  */
-  boot = get_boot_time ();
+  printmax_t boot = get_boot_time ();
 
-  if (STRINGP (Fuser_login_name (Qnil)))
-    user_name = SSDATA (Fuser_login_name (Qnil));
-  else
-    user_name = "";
-  if (STRINGP (Fsystem_name ()))
-    host_name = SSDATA (Fsystem_name ());
-  else
-    host_name = "";
-  lock_info_size = (strlen (user_name) + strlen (host_name)
-		    + 2 * INT_STRLEN_BOUND (printmax_t)
-		    + sizeof "@.:");
-  SAFE_ALLOCA (lock_info_str, char *, lock_info_size);
-  pid = getpid ();
+  Lisp_Object luser_name = Fuser_login_name (Qnil);
+  char const *user_name = STRINGP (luser_name) ? SSDATA (luser_name) : "";
+  Lisp_Object lhost_name = Fsystem_name ();
+  char const *host_name = STRINGP (lhost_name) ? SSDATA (lhost_name) : "";
+  ptrdiff_t lock_info_size = (strlen (user_name) + strlen (host_name)
+			      + 2 * INT_STRLEN_BOUND (printmax_t)
+			      + sizeof "@.:");
+  char *lock_info_str = SAFE_ALLOCA (lock_info_size);
+  printmax_t pid = getpid ();
 
   esprintf (lock_info_str, boot ? "%s@%s.%"pMd":%"pMd : "%s@%s.%"pMd,
 	    user_name, host_name, pid, boot);
@@ -379,9 +369,9 @@ lock_file_1 (char *lfname, int force)
   return err == 0;
 }
 
-/* Return 1 if times A and B are no more than one second apart.  */
+/* Return true if times A and B are no more than one second apart.  */
 
-static int
+static bool
 within_one_second (time_t a, time_t b)
 {
   return (a - b >= -1 && a - b <= 1);
@@ -500,7 +490,7 @@ current_lock_owner (lock_info_type *owner, char *lfname)
 static int
 lock_if_free (lock_info_type *clasher, register char *lfname)
 {
-  while (lock_file_1 (lfname, 0) == 0)
+  while (! lock_file_1 (lfname, 0))
     {
       int locker;
 
@@ -593,7 +583,7 @@ lock_file (Lisp_Object fn)
   locker_size = (strlen (lock_info.user) + strlen (lock_info.host)
 		 + INT_STRLEN_BOUND (printmax_t)
 		 + sizeof "@ (pid )");
-  SAFE_ALLOCA (locker, char *, locker_size);
+  locker = SAFE_ALLOCA (locker_size);
   pid = lock_info.pid;
   esprintf (locker, "%s@%s (pid %"pMd")",
 	    lock_info.user, lock_info.host, pid);

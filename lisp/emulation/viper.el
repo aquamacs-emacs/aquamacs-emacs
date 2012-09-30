@@ -103,8 +103,8 @@
 ;;  (require 'viper)
 ;;
 
-;;; Acknowledgements:
-;;  -----------------
+;;; Acknowledgments:
+;;  ----------------
 ;;  Bug reports and ideas contributed by many users have helped
 ;;  improve Viper and the various versions of VIP.
 ;;  See the on-line manual for a complete list of contributors.
@@ -351,7 +351,7 @@ user decide when to invoke Viper in a major mode."
 If t, viperize Emacs.  If nil -- don't.  If `ask', ask the user.
 This variable is used primarily when Viper is being loaded.
 
-Must be set in `~/.emacs' before Viper is loaded.
+Must be set in your init file before Viper is loaded.
 DO NOT set this variable interactively, unless you are using the customization
 widget."
   :type '(choice (const nil) (const t) (const ask))
@@ -971,9 +971,9 @@ It also can't undo some Viper settings."
   (if (featurep 'emacs)
       (eval-after-load "mule-cmds"
 	'(progn
-	   (defadvice inactivate-input-method (after viper-mule-advice activate)
+	   (defadvice deactivate-input-method (after viper-mule-advice activate)
 	     "Set viper-special-input-method to disable intl. input methods."
-	     (viper-inactivate-input-method-action))
+	     (viper-deactivate-input-method-action))
 	   (defadvice activate-input-method (after viper-mule-advice activate)
 	     "Set viper-special-input-method to enable intl. input methods."
 	     (viper-activate-input-method-action))
@@ -985,14 +985,14 @@ It also can't undo some Viper settings."
       '(progn
 	 (add-hook 'input-method-activate-hook
 		   'viper-activate-input-method-action t)
-	 (add-hook 'input-method-inactivate-hook
-		   'viper-inactivate-input-method-action t)))
+	 (add-hook 'input-method-deactivate-hook
+		   'viper-deactivate-input-method-action t)))
     )
   (eval-after-load "mule-cmds"
     '(defadvice toggle-input-method (around viper-mule-advice activate)
        "Adjust input-method toggling in vi-state."
        (if (and viper-special-input-method (eq viper-current-state 'vi-state))
-	   (viper-inactivate-input-method)
+	   (viper-deactivate-input-method)
 	 ad-do-it)))
 
   ) ; viper-set-hooks
@@ -1173,7 +1173,7 @@ If you wish to Viperize AND make this your way of life, please put
 	(setq viper-mode t)
 	(require 'viper)
 
-in your .emacs file (preferably, close to the top).
+in your init file (preferably, close to the top).
 These two lines must come in the order given.
 
 ** Viper users:

@@ -346,7 +346,7 @@ Optional DATA-P non-nil means SOURCE is a string containing image data."
   "Return non-nil if image type TYPE is available.
 Image types are symbols like `xbm' or `jpeg'."
   (and (fboundp 'init-image-library)
-       (init-image-library type dynamic-library-alist)))
+       (init-image-library type)))
 
 
 ;;;###autoload
@@ -645,8 +645,8 @@ number, play until that number of seconds has elapsed."
     (while tail
       (setq timer (car tail)
 	    tail (cdr tail))
-      (if (and (eq (aref timer 5) 'image-animate-timeout)
-	       (eq (car-safe (aref timer 6)) image))
+      (if (and (eq (timer--function timer) 'image-animate-timeout)
+	       (eq (car-safe (timer--args timer)) image))
 	  (setq tail nil)
 	(setq timer nil)))
     timer))
@@ -774,7 +774,7 @@ has no effect."
   :set (lambda (symbol value)
 	 (set-default symbol value)
 	 (imagemagick-register-types))
-  :version "24.2"
+  :version "24.3"
   :group 'image)
 
 (defcustom imagemagick-enabled-types
@@ -812,7 +812,7 @@ has no effect."
   :set (lambda (symbol value)
 	 (set-default symbol value)
 	 (imagemagick-register-types))
-  :version "24.2"
+  :version "24.3"
   :group 'image)
 
 (imagemagick-register-types)

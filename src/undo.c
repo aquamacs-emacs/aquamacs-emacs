@@ -18,7 +18,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 #include <config.h>
-#include <setjmp.h>
+
 #include "lisp.h"
 #include "character.h"
 #include "buffer.h"
@@ -104,8 +104,9 @@ record_point (ptrdiff_t pt)
   if (at_boundary
       && current_buffer == last_boundary_buffer
       && last_boundary_position != pt)
-    BVAR (current_buffer, undo_list)
-      = Fcons (make_number (last_boundary_position), BVAR (current_buffer, undo_list));
+    bset_undo_list (current_buffer,
+		    Fcons (make_number (last_boundary_position),
+			   BVAR (current_buffer, undo_list)));
 }
 
 /* Record an insertion that just happened or is about to happen,
@@ -141,8 +142,8 @@ record_insert (ptrdiff_t beg, ptrdiff_t length)
 
   XSETFASTINT (lbeg, beg);
   XSETINT (lend, beg + length);
-  BVAR (current_buffer, undo_list) = Fcons (Fcons (lbeg, lend),
-                                     BVAR (current_buffer, undo_list));
+  bset_undo_list (current_buffer,
+		  Fcons (Fcons (lbeg, lend), BVAR (current_buffer, undo_list)));
 }
 
 /* Record that a deletion is about to take place,
@@ -167,8 +168,9 @@ record_delete (ptrdiff_t beg, Lisp_Object string)
       record_point (beg);
     }
 
-  BVAR (current_buffer, undo_list)
-    = Fcons (Fcons (string, sbeg), BVAR (current_buffer, undo_list));
+  bset_undo_list
+    (current_buffer,
+     Fcons (Fcons (string, sbeg), BVAR (current_buffer, undo_list)));
 }
 
 /* Record the fact that MARKER is about to be adjusted by ADJUSTMENT.
@@ -190,9 +192,10 @@ record_marker_adjustment (Lisp_Object marker, ptrdiff_t adjustment)
     Fundo_boundary ();
   last_undo_buffer = current_buffer;
 
-  BVAR (current_buffer, undo_list)
-    = Fcons (Fcons (marker, make_number (adjustment)),
-	     BVAR (current_buffer, undo_list));
+  bset_undo_list
+    (current_buffer,
+     Fcons (Fcons (marker, make_number (adjustment)),
+	    BVAR (current_buffer, undo_list)));
 }
 
 /* Record that a replacement is about to take place,
@@ -225,9 +228,10 @@ record_first_change (void)
   if (base_buffer->base_buffer)
     base_buffer = base_buffer->base_buffer;
 
-  BVAR (current_buffer, undo_list) =
-    Fcons (Fcons (Qt, make_lisp_time (base_buffer->modtime)),
-	   BVAR (current_buffer, undo_list));
+  bset_undo_list
+    (current_buffer,
+     Fcons (Fcons (Qt, make_lisp_time (base_buffer->modtime)),
+	    BVAR (current_buffer, undo_list)));
 }
 
 /* Record a change in property PROP (whose old value was VAL)
@@ -265,7 +269,8 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
   XSETINT (lbeg, beg);
   XSETINT (lend, beg + length);
   entry = Fcons (Qnil, Fcons (prop, Fcons (value, Fcons (lbeg, lend))));
-  BVAR (current_buffer, undo_list) = Fcons (entry, BVAR (current_buffer, undo_list));
+  bset_undo_list (current_buffer,
+		  Fcons (entry, BVAR (current_buffer, undo_list)));
 
   current_buffer = obuf;
 }
@@ -288,11 +293,12 @@ but another undo command will undo to the previous boundary.  */)
 	  /* If we have preallocated the cons cell to use here,
 	     use that one.  */
 	  XSETCDR (pending_boundary, BVAR (current_buffer, undo_list));
-	  BVAR (current_buffer, undo_list) = pending_boundary;
+	  bset_undo_list (current_buffer, pending_boundary);
 	  pending_boundary = Qnil;
 	}
       else
-	BVAR (current_buffer, undo_list) = Fcons (Qnil, BVAR (current_buffer, undo_list));
+	bset_undo_list (current_buffer,
+			Fcons (Qnil, BVAR (current_buffer, undo_list)));
     }
   last_boundary_position = PT;
   last_boundary_buffer = current_buffer;
@@ -318,7 +324,7 @@ truncate_undo_list (struct buffer *b)
   /* Make the buffer current to get its local values of variables such
      as undo_limit.  Also so that Vundo_outer_limit_function can
      tell which buffer to operate on.  */
-  record_unwind_protect (set_buffer_if_live, Fcurrent_buffer ());
+  record_unwind_current_buffer ();
   set_buffer_internal (b);
 
   list = BVAR (b, undo_list);
@@ -433,7 +439,7 @@ truncate_undo_list (struct buffer *b)
     XSETCDR (last_boundary, Qnil);
   /* There's nothing we decided to keep, so clear it out.  */
   else
-    BVAR (b, undo_list) = Qnil;
+    bset_undo_list (b, Qnil);
 
   unbind_to (count, Qnil);
 }
@@ -648,8 +654,9 @@ Return what remains of the list.  */)
      will work right.  */
   if (did_apply
       && EQ (oldlist, BVAR (current_buffer, undo_list)))
-    BVAR (current_buffer, undo_list)
-      = Fcons (list3 (Qapply, Qcdr, Qnil), BVAR (current_buffer, undo_list));
+    bset_undo_list
+      (current_buffer,
+       Fcons (list3 (Qapply, Qcdr, Qnil), BVAR (current_buffer, undo_list)));
 
   UNGCPRO;
   return unbind_to (count, list);

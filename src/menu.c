@@ -20,7 +20,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <stdio.h>
-#include <setjmp.h>
 #include <limits.h> /* for INT_MAX */
 
 #include "lisp.h"
@@ -36,24 +35,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "../lwlib/lwlib.h"
 #endif
 
-#ifdef HAVE_X_WINDOWS
-#include "xterm.h"
-#endif
-
-#ifdef HAVE_NS
-#include "nsterm.h"
-#endif
-
-#ifdef USE_GTK
-#include "gtkutil.h"
-#endif
+#ifdef HAVE_WINDOW_SYSTEM
+#include TERM_HEADER
+#endif /* HAVE_WINDOW_SYSTEM */
 
 #ifdef HAVE_NTGUI
-#include "w32term.h"
-
 extern AppendMenuW_Proc unicode_append_menu;
 extern HMENU current_popup_menu;
-
 #endif /* HAVE_NTGUI  */
 
 #include "menu.h"
@@ -585,9 +573,9 @@ xmalloc_widget_value (void)
 {
   widget_value *value;
 
-  BLOCK_INPUT;
+  block_input ();
   value = malloc_widget_value ();
-  UNBLOCK_INPUT;
+  unblock_input ();
 
   return value;
 }
@@ -614,9 +602,9 @@ free_menubar_widget_value_tree (widget_value *wv)
       free_menubar_widget_value_tree (wv->next);
       wv->next = (widget_value *) 0xDEADBEEF;
     }
-  BLOCK_INPUT;
+  block_input ();
   free_widget_value (wv);
-  UNBLOCK_INPUT;
+  unblock_input ();
 }
 
 /* Create a tree of widget_value objects
@@ -744,7 +732,7 @@ digest_single_submenu (int start, int end, int top_level_items)
 
 	  /* All items should be contained in panes.  */
 	  if (panes_seen == 0)
-	    abort ();
+	    emacs_abort ();
 
 	  item_name = AREF (menu_items, i + MENU_ITEMS_ITEM_NAME);
 	  enable = AREF (menu_items, i + MENU_ITEMS_ITEM_ENABLE);
@@ -818,7 +806,7 @@ digest_single_submenu (int start, int end, int top_level_items)
 	  else if (EQ (type, QCtoggle))
 	    wv->button_type = BUTTON_TYPE_TOGGLE;
 	  else
-	    abort ();
+	    emacs_abort ();
 
 	  wv->selected = !NILP (selected);
 	  if (! STRINGP (help))
@@ -976,8 +964,7 @@ find_and_return_menu_selection (FRAME_PTR f, int keymaps, void *client_data)
 
   prefix = entry = Qnil;
   i = 0;
-  subprefix_stack =
-    (Lisp_Object *)alloca (menu_items_used * sizeof (Lisp_Object));
+  subprefix_stack = alloca (menu_items_used * word_size);
 
   while (i < menu_items_used)
     {
@@ -1006,7 +993,7 @@ find_and_return_menu_selection (FRAME_PTR f, int keymaps, void *client_data)
         {
           entry
             = AREF (menu_items, i + MENU_ITEMS_ITEM_VALUE);
-          if (&AREF (menu_items, i) == client_data)
+          if (aref_addr (menu_items, i) == client_data)
             {
               if (keymaps != 0)
                 {
@@ -1326,7 +1313,7 @@ no quit occurs and `x-popup-menu' returns nil.  */)
 #endif
 
   /* Display them in a menu.  */
-  BLOCK_INPUT;
+  block_input ();
 
   /* FIXME: Use a terminal hook!  */
 #if defined HAVE_NTGUI
@@ -1345,7 +1332,7 @@ no quit occurs and `x-popup-menu' returns nil.  */)
 			  last_event_timestamp);
 #endif
 
-  UNBLOCK_INPUT;
+  unblock_input ();
 
 #ifdef HAVE_NS
   unbind_to (specpdl_count, Qnil);

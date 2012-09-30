@@ -1,3 +1,171 @@
+2012-09-23  Eli Zaretskii  <eliz@gnu.org>
+
+	* inc/ms-w32.h (emacs_raise): Redefine to invoke emacs_abort.
+
+2012-09-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Simplify and avoid signal-handling races (Bug#12471).
+	* inc/ms-w32.h (emacs_raise): New macro.
+
+2012-09-18  Eli Zaretskii  <eliz@gnu.org>
+
+	* configure.bat: Include stddef.h before gif_lib.h, to have size_t
+	defined, as needed by giflib-5.0.0.  (Bug#12464)
+
+2012-09-17  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(BROKEN_SA_RESTART, SYNC_INPUT): Remove.
+
+2012-09-17  Glenn Morris  <rgm@gnu.org>
+
+	* config.nt (COPYRIGHT): New.
+
+2012-09-15  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port _setjmp fix to POSIXish hosts as well as Microsoft.
+	* config.nt: Attempt to sync with autogen/config.in.
+	(HAVE_SIGSETJMP, HAVE__SETJMP): New macros.
+	(_longjmp, _setjmp): Remove.
+
+2012-09-14  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(BROKEN_FIONREAD, BROKEN_SIGAIO, BROKEN_SIGIO, BROKEN_SIGPOLL)
+	(BROKEN_SIGPTY, HAVE_CBRT, HAVE_LOGB, NO_TERMIO): Remove.
+	(USABLE_FIONREAD, USABLE_SIGIO): New macros.
+
+2012-09-10  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(FLOAT_CHECK_DOMAIN, HAVE_FMOD, HAVE_FREXP)
+	(HAVE_INVERSE_HYPERBOLIC, NO_MATHERR): Remove.
+
+2012-09-08  Eli Zaretskii  <eliz@gnu.org>
+
+	* configure.bat <use_extensions>: Don't leave it set in the
+	environment when the script exits.
+
+2012-09-07  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(NO_ABORT, SIGNAL_H_AHB): Remove.
+
+2012-09-07  Eli Zaretskii  <eliz@gnu.org>
+
+	* inc/ms-w32.h (struct sigaction): Declare sa_handler __cdecl.
+
+2012-09-05  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+
+2012-09-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Simplify redefinition of 'abort' (Bug#12316).
+	* inc/ms-w32.h (w32_abort) [HAVE_NTGUI]: Remove.
+
+2012-09-02  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(HAVE_EXECINFO_H, TERM_HEADER): New macros.
+
+2012-09-01  Daniel Colascione  <dancol@dancol.org>
+
+	* inc/ms-w32.h (TERM_HEADER): Add for refactoring
+
+2012-08-22  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+
+2012-08-17  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(HAVE_POSIX_OPENPT): New macro.
+
+2012-08-14  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(_GL_INLINE_HEADER_BEGIN): Update.
+
+2012-08-10  Glenn Morris  <rgm@gnu.org>
+
+	* config.nt (DIRECTORY_SEP): Move here from src/lisp.h.
+
+2012-08-07  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(BROKEN_GETWD, DISPNEW_NEEDS_STDIO_EXT): New macros.
+	(PENDING_OUTPUT_COUNT): Move definition to inc/ms-w32.h.
+
+	* inc/ms-w32.h (PENDING_OUTPUT_COUNT): Define.
+
+2012-08-06  Glenn Morris  <rgm@gnu.org>
+
+	* config.nt (GNU_LIBRARY_PENDING_OUTPUT_COUNT): Remove.
+	(PENDING_OUTPUT_COUNT): Define it as dispnew.c used to.
+
+2012-08-04  Eli Zaretskii  <eliz@gnu.org>
+
+	* paths.h (PATH_LOADSEARCH, PATH_SITELOADSEARCH, PATH_EXEC)
+	(PATH_DATA, PATH_DOC): Replace dummy directory names with
+	directories relative to %emacs_dir%.
+	(PATH_EXEC): Add lib-src/oo-spd/i386 and lib-src/oo/i386, to cater
+	to the use case of running un-installed Emacs.
+
+2012-08-03  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(DOS_NT, MSDOS): New macros.
+	(WRETCODE, wait3): Remove.
+
+	* inc/ms-w32.h (DOS_NT): Remove; defined in config.nt.
+
+2012-08-03  Eli Zaretskii  <eliz@gnu.org>
+
+	* inc/sys/stat.h (S_IFLNK): Define.
+	(S_ISLNK): A non-trivial definition.
+	(lstat): Prototype instead of a macro that redirects to 'stat'.
+
+2012-08-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use C99-style 'extern inline' if available.
+	* config.nt: Sync with autogen/config.in.
+	(_GL_INLINE, _GL_EXTERN_INLINE, _GL_INLINE_HEADER_BEGIN)
+	(_GL_INLINE_HEADER_END): New macros.
+
+2012-08-02  Glenn Morris  <rgm@gnu.org>
+
+	* inc/ms-w32.h: Move here from ../src/s.
+	* config.nt (config_opsysfile): Change to <ms-w32.h>.
+
+2012-08-01  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(DEVICE_SEP, FLOAT_CHECK_DOMAIN, HAVE_INVERSE_HYPERBOLIC)
+	(INTERNAL_TERMINAL, IS_ANY_SEP, IS_DEVICE_SEP, IS_DIRECTORY_SEP):
+	New macros.
+
+2012-08-01  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	Remove code moved to conf_post.h and include <conf_post.h>
+	(NULL_DEVICE, SEPCHAR, SIGNAL_H_AHB, TIOCSIGSEND, USER_FULL_NAME)
+	(USG5_4, WRETCODE, _longjmp, _setjmp, wait3): New macros.
+
+2012-07-29  Juanma Barranquero  <lekktu@gmail.com>
+
+	* config.nt: Sync with autogen/config.in.
+	(HAVE_ENVIRON_DECL): New macro.
+
+2012-07-29  Eli Zaretskii  <eliz@gnu.org>
+
+	* inc/stdalign.h (_Alignas, alignas): Define.
+
+2012-07-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use Gnulib stdalign module (Bug#9772, Bug#9960).
+	* config.nt (HAVE_ATTRIBUTE_ALIGNED): Remove.
+
 2012-07-14  Juanma Barranquero  <lekktu@gmail.com>
 
 	* config.nt: Sync with autogen/config.in.
@@ -900,7 +1068,7 @@
 
 2008-04-04  Jason Rumney  <jasonr@gnu.org>
 
-	* INSTALL: Update W32 API requirements.
+	* INSTALL: Update Windows API requirements.
 
 2008-04-03  Jason Rumney  <jasonr@gnu.org>
 
@@ -2317,7 +2485,7 @@
 	* makefile.def (CP_DIR): Use platform independent switches for xcopy.
 
 	* makefile.nt (install, fast_install, real_install, clean):
-	Don't use switches to del not supported by Win95.
+	Don't use switches to del not supported by Windows 95.
 
 1995-11-07  Kevin Gallo  <kgallo@microsoft.com>
 
@@ -2371,7 +2539,7 @@
 1995-05-27  Geoff Voelker  <voelker@cs.washington.edu>
 
 	* ebuild.bat, emacs.bat, fast-install.bat, install.bat:
-	Add carriage returns; necessary for batch files on Win95.
+	Add carriage returns; necessary for batch files on Windows 95.
 
 1995-05-25  Geoff Voelker  <voelker@cs.washington.edu>
 

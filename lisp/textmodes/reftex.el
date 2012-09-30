@@ -47,7 +47,7 @@
 ;; To turn RefTeX Mode on and off in a buffer, use `M-x reftex-mode'.
 ;;
 ;; To turn on RefTeX Mode for all LaTeX files, add the following lines
-;; to your .emacs file:
+;; to your init file:
 ;;
 ;;   (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; AUCTeX LaTeX mode
 ;;   (add-hook 'latex-mode-hook 'turn-on-reftex)   ; Emacs latex mode
@@ -99,7 +99,7 @@
 ;;
 ;; To turn RefTeX Mode on and off in a particular buffer, use `M-x
 ;; reftex-mode'.  To turn on RefTeX Mode for all LaTeX files, add the
-;; following lines to your `.emacs' file:
+;; following lines to your init file:
 ;;
 ;;      (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
 ;;      (add-hook 'latex-mode-hook 'turn-on-reftex)   ; with Emacs latex mode
@@ -1284,7 +1284,15 @@ This enforces rescanning the buffer on next use."
 ;          (wbol "\\(\\`\\|[\n\r]\\)[ \t]*")
            (wbol "\\(^\\)[ \t]*")  ; Need to keep the empty group because
                                   ;;; because match number are hard coded
-           (label-re "\\\\label{\\([^}]*\\)}")
+           (label-re (concat "\\(?:"
+			     ;; Normal \label{...}
+			     "\\\\label{\\([^}]*\\)}"
+			     "\\|"
+			     ;; keyvals [..., label = {foo}, ...]
+			     ;; forms used by ctable, listings,
+			     ;; minted, ...
+			     "\\[[^]]*label[[:space:]]*=[[:space:]]*{?\\(?1:[^],}]+\\)}?"
+			     "\\)"))
            (include-re (concat wbol
                                "\\\\\\("
                                (mapconcat 'identity
@@ -1312,6 +1320,8 @@ This enforces rescanning the buffer on next use."
                     "\\)\\([[{][^]}]*[]}]\\)*[[{]\\(%s\\)[]}]"))
            (find-label-re-format
             (concat "\\("
+		    "label[[:space:]]*=[[:space:]]*"
+		    "\\|"
                     (mapconcat 'regexp-quote (append '("\\label")
                                                      macros-with-labels) "\\|")
                     "\\)\\([[{][^]}]*[]}]\\)*[[{]\\(%s\\)[]}]"))
@@ -2301,9 +2311,7 @@ IGNORE-WORDS List of words which should be removed from the string."
   ;; Return the first valid face in FACES, or nil if none is valid.
   ;; Also, when finding a nil element in FACES, return nil.  This
   ;; function is just a safety net to catch name changes of builtin
-  ;; fonts. Currently it is only used for reftex-label-face, which has
-  ;; as default font-lock-reference-face, which was recently renamed
-  ;; to font-lock-constant-face.
+  ;; fonts. Currently it is only used for reftex-label-face.
   (let (face)
     (catch 'exit
       (while (setq face (pop faces))

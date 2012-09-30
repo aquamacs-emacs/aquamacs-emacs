@@ -21,7 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef HAVE_DBUS
 #include <stdio.h>
 #include <dbus/dbus.h>
-#include <setjmp.h>
+
 #include "lisp.h"
 #include "frame.h"
 #include "termhooks.h"
@@ -70,7 +70,7 @@ static Lisp_Object QCdbus_registered_signal;
 static Lisp_Object xd_registered_buses;
 
 /* Whether we are reading a D-Bus event.  */
-static int xd_in_read_queued_messages = 0;
+static bool xd_in_read_queued_messages = 0;
 
 
 /* We use "xd_" and "XD_" as prefix for all internal symbols, because
@@ -261,6 +261,7 @@ xd_symbol_to_dbus_type (Lisp_Object object)
 
 #define XD_DBUS_VALIDATE_BUS_ADDRESS(bus)				\
   do {									\
+    char const *session_bus_address = getenv ("DBUS_SESSION_BUS_ADDRESS"); \
     if (STRINGP (bus))							\
       {									\
 	DBusAddressEntry **entries;					\
@@ -272,6 +273,11 @@ xd_symbol_to_dbus_type (Lisp_Object object)
 	/* Cleanup.  */							\
 	dbus_error_free (&derror);					\
 	dbus_address_entries_free (entries);				\
+	/* Canonicalize session bus address.  */			\
+	if ((session_bus_address != NULL)				\
+	    && (!NILP (Fstring_equal					\
+		       (bus, build_string (session_bus_address)))))	\
+	  bus = QCdbus_session_bus;					\
       }									\
 									\
     else								\
@@ -280,8 +286,7 @@ xd_symbol_to_dbus_type (Lisp_Object object)
 	if (!(EQ (bus, QCdbus_system_bus) || EQ (bus, QCdbus_session_bus))) \
 	  XD_SIGNAL2 (build_string ("Wrong bus name"), bus);		\
 	/* We do not want to have an autolaunch for the session bus.  */ \
-	if (EQ (bus, QCdbus_session_bus)				\
-	    && getenv ("DBUS_SESSION_BUS_ADDRESS") == NULL)		\
+	if (EQ (bus, QCdbus_session_bus) && session_bus_address == NULL) \
 	  XD_SIGNAL2 (build_string ("No connection to bus"), bus);	\
       }									\
   } while (0)
@@ -981,7 +986,7 @@ static int
 xd_find_watch_fd (DBusWatch *watch)
 {
 #if HAVE_DBUS_WATCH_GET_UNIX_FD
-  /* TODO: Reverse these on Win32, which prefers the opposite.  */
+  /* TODO: Reverse these on w32, which prefers the opposite.  */
   int fd = dbus_watch_get_unix_fd (watch);
   if (fd == -1)
     fd = dbus_watch_get_socket (watch);
@@ -992,8 +997,7 @@ xd_find_watch_fd (DBusWatch *watch)
 }
 
 /* Prototype.  */
-static void
-xd_read_queued_messages (int fd, void *data, int for_read);
+static void xd_read_queued_messages (int fd, void *data);
 
 /* Start monitoring WATCH for possible I/O.  */
 static dbus_bool_t
@@ -1034,11 +1038,13 @@ xd_remove_watch (DBusWatch *watch, void *data)
     return;
 
   /* Unset session environment.  */
+#if 0
   if (XSYMBOL (QCdbus_session_bus) == data)
     {
-      //      XD_DEBUG_MESSAGE ("unsetenv DBUS_SESSION_BUS_ADDRESS");
-      //      unsetenv ("DBUS_SESSION_BUS_ADDRESS");
+      XD_DEBUG_MESSAGE ("unsetenv DBUS_SESSION_BUS_ADDRESS");
+      unsetenv ("DBUS_SESSION_BUS_ADDRESS");
     }
+#endif
 
   if (flags & DBUS_WATCH_WRITABLE)
     delete_write_fd (fd);
@@ -1071,19 +1077,19 @@ xd_close_bus (Lisp_Object bus)
   /* Retrieve bus address.  */
   connection = xd_get_connection_address (bus);
 
-  /* Close connection, if there isn't another shared application.  */
   if (xd_get_connection_references (connection) == 1)
     {
+      /* Close connection, if there isn't another shared application.  */
       XD_DEBUG_MESSAGE ("Close connection to bus %s",
 			XD_OBJECT_TO_STRING (bus));
       dbus_connection_close (connection);
+
+      xd_registered_buses = Fdelete (val, xd_registered_buses);
     }
 
-  /* Decrement reference count.  */
-  dbus_connection_unref (connection);
-
-  /* Remove bus from list of registered buses.  */
-  xd_registered_buses = Fdelete (val, xd_registered_buses);
+  else
+    /* Decrement reference count.  */
+    dbus_connection_unref (connection);
 
   /* Return.  */
   return;
@@ -1124,65 +1130,76 @@ this connection to those buses.  */)
   /* Close bus if it is already open.  */
   xd_close_bus (bus);
 
-  /* Initialize.  */
-  dbus_error_init (&derror);
-
-  /* Open the connection.  */
-  if (STRINGP (bus))
-    if (NILP (private))
-      connection = dbus_connection_open (SSDATA (bus), &derror);
-    else
-      connection = dbus_connection_open_private (SSDATA (bus), &derror);
+  /* Check, whether we are still connected.  */
+  val = Fassoc (bus, xd_registered_buses);
+  if (!NILP (val))
+    {
+      connection = xd_get_connection_address (bus);
+      dbus_connection_ref (connection);
+    }
 
   else
-    if (NILP (private))
-      connection = dbus_bus_get (EQ (bus, QCdbus_system_bus)
-				 ? DBUS_BUS_SYSTEM : DBUS_BUS_SESSION,
-				 &derror);
-    else
-      connection = dbus_bus_get_private (EQ (bus, QCdbus_system_bus)
-					 ? DBUS_BUS_SYSTEM : DBUS_BUS_SESSION,
-					 &derror);
+    {
+      /* Initialize.  */
+      dbus_error_init (&derror);
 
-  if (dbus_error_is_set (&derror))
-    XD_ERROR (derror);
+      /* Open the connection.  */
+      if (STRINGP (bus))
+	if (NILP (private))
+	  connection = dbus_connection_open (SSDATA (bus), &derror);
+	else
+	  connection = dbus_connection_open_private (SSDATA (bus), &derror);
 
-  if (connection == NULL)
-    XD_SIGNAL2 (build_string ("No connection to bus"), bus);
+      else
+	if (NILP (private))
+	  connection = dbus_bus_get (EQ (bus, QCdbus_system_bus)
+				     ? DBUS_BUS_SYSTEM : DBUS_BUS_SESSION,
+				     &derror);
+	else
+	  connection = dbus_bus_get_private (EQ (bus, QCdbus_system_bus)
+					     ? DBUS_BUS_SYSTEM : DBUS_BUS_SESSION,
+					     &derror);
 
-  /* If it is not the system or session bus, we must register
-     ourselves.  Otherwise, we have called dbus_bus_get, which has
-     configured us to exit if the connection closes - we undo this
-     setting.  */
-  if (STRINGP (bus))
-    dbus_bus_register (connection, &derror);
-  else
-    dbus_connection_set_exit_on_disconnect (connection, FALSE);
+      if (dbus_error_is_set (&derror))
+	XD_ERROR (derror);
 
-  if (dbus_error_is_set (&derror))
-    XD_ERROR (derror);
+      if (connection == NULL)
+	XD_SIGNAL2 (build_string ("No connection to bus"), bus);
 
-  /* Add the watch functions.  We pass also the bus as data, in order
-     to distinguish between the buses in xd_remove_watch.  */
-  if (!dbus_connection_set_watch_functions (connection,
-					    xd_add_watch,
-					    xd_remove_watch,
-                                            xd_toggle_watch,
-					    SYMBOLP (bus)
-					    ? (void *) XSYMBOL (bus)
-					    : (void *) XSTRING (bus),
-					    NULL))
-    XD_SIGNAL1 (build_string ("Cannot add watch functions"));
+      /* If it is not the system or session bus, we must register
+	 ourselves.  Otherwise, we have called dbus_bus_get, which has
+	 configured us to exit if the connection closes - we undo this
+	 setting.  */
+      if (STRINGP (bus))
+	dbus_bus_register (connection, &derror);
+      else
+	dbus_connection_set_exit_on_disconnect (connection, FALSE);
 
-  /* Add bus to list of registered buses.  */
-  XSETFASTINT (val, (intptr_t) connection);
-  xd_registered_buses = Fcons (Fcons (bus, val), xd_registered_buses);
+      if (dbus_error_is_set (&derror))
+	XD_ERROR (derror);
 
-  /* We do not want to abort.  */
-  putenv ((char *) "DBUS_FATAL_WARNINGS=0");
+      /* Add the watch functions.  We pass also the bus as data, in
+	 order to distinguish between the buses in xd_remove_watch.  */
+      if (!dbus_connection_set_watch_functions (connection,
+						xd_add_watch,
+						xd_remove_watch,
+						xd_toggle_watch,
+						SYMBOLP (bus)
+						? (void *) XSYMBOL (bus)
+						: (void *) XSTRING (bus),
+						NULL))
+	XD_SIGNAL1 (build_string ("Cannot add watch functions"));
 
-  /* Cleanup.  */
-  dbus_error_free (&derror);
+      /* Add bus to list of registered buses.  */
+      XSETFASTINT (val, (intptr_t) connection);
+      xd_registered_buses = Fcons (Fcons (bus, val), xd_registered_buses);
+
+      /* We do not want to abort.  */
+      putenv ((char *) "DBUS_FATAL_WARNINGS=0");
+
+      /* Cleanup.  */
+      dbus_error_free (&derror);
+    }
 
   /* Return reference counter.  */
   refcount = xd_get_connection_references (connection);
@@ -1668,7 +1685,7 @@ xd_read_message (Lisp_Object bus)
 
 /* Callback called when something is ready to read or write.  */
 static void
-xd_read_queued_messages (int fd, void *data, int for_read)
+xd_read_queued_messages (int fd, void *data)
 {
   Lisp_Object busp = xd_registered_buses;
   Lisp_Object bus = Qnil;

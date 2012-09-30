@@ -28,7 +28,7 @@
 ;; argument position.
 ;;
 ;; To use pcomplete with shell-mode, for example, you will need the
-;; following in your .emacs file:
+;; following in your init file:
 ;;
 ;;   (add-hook 'shell-mode-hook 'pcomplete-shell-setup)
 ;;
@@ -165,7 +165,7 @@ A non-nil value is useful if `pcomplete-autolist' is non-nil too."
   :group 'pcomplete)
 
 (define-obsolete-variable-alias
-  'pcomplete-arg-quote-list 'comint-file-name-quote-list "24.2")
+  'pcomplete-arg-quote-list 'comint-file-name-quote-list "24.3")
 
 (defcustom pcomplete-man-function 'man
   "A function to that will be called to display a manual page.
@@ -451,9 +451,12 @@ Same as `pcomplete' but using the standard completion UI."
           (list beg (point) table
                 :predicate pred
                 :exit-function
+		;; If completion is finished, add a terminating space.
+		;; We used to also do this if STATUS is `sole', but
+		;; that does not work right when completion cycling.
                 (unless (zerop (length pcomplete-termination-string))
-                  (lambda (_s finished)
-                    (when (memq finished '(sole finished))
+                  (lambda (_s status)
+                    (when (eq status 'finished)
                       (if (looking-at
                            (regexp-quote pcomplete-termination-string))
                           (goto-char (match-end 0))
@@ -721,6 +724,7 @@ this is `comint-dynamic-complete-functions'."
 
 (defun pcomplete-parse-comint-arguments ()
   "Parse whitespace separated arguments in the current region."
+  (declare (obsolete comint-parse-pcomplete-arguments "24.1"))
   (let ((begin (save-excursion (comint-bol nil) (point)))
 	(end (point))
 	begins args)
@@ -740,8 +744,6 @@ this is `comint-dynamic-complete-functions'."
 	(push (buffer-substring-no-properties (car begins) (point))
               args))
       (cons (nreverse args) (nreverse begins)))))
-(make-obsolete 'pcomplete-parse-comint-arguments
-               'comint-parse-pcomplete-arguments "24.1")
 
 (defun pcomplete-parse-arguments (&optional expand-p)
   "Parse the command line arguments.  Most completions need this info."
@@ -791,7 +793,7 @@ this is `comint-dynamic-complete-functions'."
 	    pcomplete-args))))))
 
 (define-obsolete-function-alias
-  'pcomplete-quote-argument #'comint-quote-filename "24.2")
+  'pcomplete-quote-argument #'comint-quote-filename "24.3")
 
 ;; file-system completion lists
 

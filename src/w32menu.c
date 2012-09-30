@@ -1,4 +1,4 @@
-/* Menu support for GNU Emacs on the Microsoft W32 API.
+/* Menu support for GNU Emacs on the Microsoft Windows API.
    Copyright (C) 1986, 1988, 1993-1994, 1996, 1998-1999, 2001-2012
                  Free Software Foundation, Inc.
 
@@ -22,7 +22,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <signal.h>
 #include <stdio.h>
 #include <mbstring.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "keyboard.h"
@@ -86,7 +85,7 @@ MessageBoxW_Proc unicode_message_box = NULL;
 
 Lisp_Object Qdebug_on_next_call;
 
-void set_frame_menubar (FRAME_PTR, int, int);
+void set_frame_menubar (FRAME_PTR, bool, bool);
 
 #ifdef HAVE_DIALOGS
 static Lisp_Object w32_dialog_show (FRAME_PTR, int, Lisp_Object, char**);
@@ -222,9 +221,9 @@ otherwise it is "Question". */)
     list_of_panes (Fcons (contents, Qnil));
 
     /* Display them in a dialog box.  */
-    BLOCK_INPUT;
+    block_input ();
     selection = w32_dialog_show (f, 0, title, header, &error_name);
-    UNBLOCK_INPUT;
+    unblock_input ();
 
     discard_menu_items ();
     FRAME_X_DISPLAY_INFO (f)->grabbed = 0;
@@ -276,7 +275,7 @@ menubar_selection_callback (FRAME_PTR f, void * client_data)
   if (!f)
     return;
   entry = Qnil;
-  subprefix_stack = (Lisp_Object *) alloca (f->menu_bar_items_used * sizeof (Lisp_Object));
+  subprefix_stack = (Lisp_Object *) alloca (f->menu_bar_items_used * word_size);
   vector = f->menu_bar_vector;
   prefix = Qnil;
   i = 0;
@@ -357,7 +356,7 @@ menubar_selection_callback (FRAME_PTR f, void * client_data)
    it is set the first time this is called, from initialize_frame_menubar.  */
 
 void
-set_frame_menubar (FRAME_PTR f, int first_time, int deep_p)
+set_frame_menubar (FRAME_PTR f, bool first_time, bool deep_p)
 {
   HMENU menubar_widget = f->output_data.w32->menubar_widget;
   Lisp_Object items;
@@ -387,7 +386,7 @@ set_frame_menubar (FRAME_PTR f, int first_time, int deep_p)
       int previous_menu_items_used = f->menu_bar_items_used;
       Lisp_Object *previous_items
 	= (Lisp_Object *) alloca (previous_menu_items_used
-				  * sizeof (Lisp_Object));
+				  * word_size);
 
       /* If we are making a new widget, its contents are empty,
 	 do always reinitialize them.  */
@@ -413,14 +412,14 @@ set_frame_menubar (FRAME_PTR f, int first_time, int deep_p)
       /* Run the hooks.  */
       safe_run_hooks (Qactivate_menubar_hook);
       safe_run_hooks (Qmenu_bar_update_hook);
-      FRAME_MENU_BAR_ITEMS (f) = menu_bar_items (FRAME_MENU_BAR_ITEMS (f));
+      fset_menu_bar_items (f, menu_bar_items (FRAME_MENU_BAR_ITEMS (f)));
 
       items = FRAME_MENU_BAR_ITEMS (f);
 
       /* Save the frame's previous menu bar contents data.  */
       if (previous_menu_items_used)
 	memcpy (previous_items, XVECTOR (f->menu_bar_vector)->contents,
-		previous_menu_items_used * sizeof (Lisp_Object));
+		previous_menu_items_used * word_size);
 
       /* Fill in menu_items with the current menu bar contents.
 	 This can evaluate Lisp code.  */
@@ -500,7 +499,7 @@ set_frame_menubar (FRAME_PTR f, int first_time, int deep_p)
 	  return;
 	}
 
-      f->menu_bar_vector = menu_items;
+      fset_menu_bar_vector (f, menu_items);
       f->menu_bar_items_used = menu_items_used;
 
       /* This undoes save_menu_items.  */
@@ -572,7 +571,7 @@ set_frame_menubar (FRAME_PTR f, int first_time, int deep_p)
 
   /* Create or update the menu bar widget.  */
 
-  BLOCK_INPUT;
+  block_input ();
 
   if (menubar_widget)
     {
@@ -602,7 +601,7 @@ set_frame_menubar (FRAME_PTR f, int first_time, int deep_p)
       x_set_window_size (f, 0, FRAME_COLS (f), FRAME_LINES (f));
   }
 
-  UNBLOCK_INPUT;
+  unblock_input ();
 }
 
 /* Called from Fx_create_frame to create the initial menubar of a frame
@@ -615,7 +614,7 @@ initialize_frame_menubar (FRAME_PTR f)
 {
   /* This function is called before the first chance to redisplay
      the frame.  It has to be, so the frame will have the right size.  */
-  FRAME_MENU_BAR_ITEMS (f) = menu_bar_items (FRAME_MENU_BAR_ITEMS (f));
+  fset_menu_bar_items (f, menu_bar_items (FRAME_MENU_BAR_ITEMS (f)));
   set_frame_menubar (f, 1, 1);
 }
 
@@ -625,7 +624,7 @@ initialize_frame_menubar (FRAME_PTR f)
 void
 free_frame_menubar (FRAME_PTR f)
 {
-  BLOCK_INPUT;
+  block_input ();
 
   {
     HMENU old = GetMenu (FRAME_W32_WINDOW (f));
@@ -634,7 +633,7 @@ free_frame_menubar (FRAME_PTR f)
     DestroyMenu (old);
   }
 
-  UNBLOCK_INPUT;
+  unblock_input ();
 }
 
 
@@ -665,7 +664,7 @@ w32_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
   widget_value **submenu_stack
     = (widget_value **) alloca (menu_items_used * sizeof (widget_value *));
   Lisp_Object *subprefix_stack
-    = (Lisp_Object *) alloca (menu_items_used * sizeof (Lisp_Object));
+    = (Lisp_Object *) alloca (menu_items_used * word_size);
   int submenu_depth = 0;
   int first_pane;
 
@@ -820,7 +819,7 @@ w32_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	  else if (EQ (type, QCradio))
 	    wv->button_type = BUTTON_TYPE_RADIO;
 	  else
-	    abort ();
+	    emacs_abort ();
 
 	  wv->selected = !NILP (selected);
 
@@ -1062,7 +1061,7 @@ w32_dialog_show (FRAME_PTR f, int keymaps,
 	if (!NILP (descrip))
 	  wv->key = SSDATA (descrip);
 	wv->value = SSDATA (item_name);
-	wv->call_data = (void *) &AREF (menu_items, i);
+	wv->call_data = aref_addr (menu_items, i);
 	wv->enabled = !NILP (enable);
 	wv->help = Qnil;
 	prev_wv = wv;
@@ -1243,7 +1242,7 @@ simple_dialog_show (FRAME_PTR f, Lisp_Object contents, Lisp_Object header)
 	     one utf16 word, so we cannot simply use the character
 	     length of temp.  */
 	  int utf8_len = strlen (utf8_text);
-	  SAFE_ALLOCA (text, WCHAR *, (utf8_len + 1) * sizeof (WCHAR));
+	  text = SAFE_ALLOCA ((utf8_len + 1) * sizeof (WCHAR));
 	  utf8to16 (utf8_text, utf8_len, text);
 	}
       else
@@ -1386,8 +1385,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
 
       if (wv->key != NULL)
 	{
-	  SAFE_ALLOCA (out_string, char *,
-		       strlen (wv->name) + strlen (wv->key) + 2);
+	  out_string = SAFE_ALLOCA (strlen (wv->name) + strlen (wv->key) + 2);
 	  strcpy (out_string, wv->name);
 	  strcat (out_string, "\t");
 	  strcat (out_string, wv->key);
@@ -1421,7 +1419,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
       if (nlen > orig_len)
         {
           p = out_string;
-          SAFE_ALLOCA (out_string, char *, nlen + 1);
+          out_string = SAFE_ALLOCA (nlen + 1);
           q = out_string;
           while (*p)
             {
@@ -1481,7 +1479,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
       if (fuFlags & MF_OWNERDRAW)
 	utf16_string = local_alloc ((utf8_len + 1) * sizeof (WCHAR));
       else
-	SAFE_ALLOCA (utf16_string, WCHAR *, (utf8_len + 1) * sizeof (WCHAR));
+	utf16_string = SAFE_ALLOCA ((utf8_len + 1) * sizeof (WCHAR));
 
       utf8to16 (out_string, utf8_len, utf16_string);
       return_value = unicode_append_menu (menu, fuFlags,
@@ -1533,7 +1531,14 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
 	     until it is ready to be displayed, since GC can happen while
 	     menus are active.  */
 	  if (!NILP (wv->help))
-	    info.dwItemData = (DWORD) XLI (wv->help);
+	    {
+	      /* As of Jul-2012, w32api headers say that dwItemData
+		 has DWORD type, but that's a bug: it should actually
+		 be ULONG_PTR, which is correct for 32-bit and 64-bit
+		 Windows alike.  MSVC headers get it right; hopefully,
+		 MinGW headers will, too.  */
+	      info.dwItemData = (ULONG_PTR) XLI (wv->help);
+	    }
 	  if (wv->button_type == BUTTON_TYPE_RADIO)
 	    {
 	      /* CheckMenuRadioItem allows us to differentiate TOGGLE and

@@ -207,9 +207,14 @@ causing the user to wonder if anything's really going on..."
 (defun eshell-external-command (command args)
   "Insert output from an external COMMAND, using ARGS."
   (setq args (eshell-stringify-list (eshell-flatten-list args)))
-  ;; (if (file-remote-p default-directory)
-  ;;     (eshell-remote-command command args))
-  (let ((interp (eshell-find-interpreter command)))
+  (let ((interp (eshell-find-interpreter
+		 command
+		 ;; `eshell-find-interpreter' does not work correctly
+		 ;; for Tramp file name syntax.  But we don't need to
+		 ;; know the interpreter in that case, therefore the
+		 ;; check is suppressed.
+		 (or (and (stringp command) (file-remote-p command))
+		     (file-remote-p default-directory)))))
     (cl-assert interp)
     (if (functionp (car interp))
 	(apply (car interp) (append (cdr interp) args))
@@ -226,20 +231,15 @@ causing the user to wonder if anything's really going on..."
 Adds the given PATH to $PATH.")
    (if args
        (progn
-	 (if prepend
-	     (setq args (nreverse args)))
-	 (while args
-	   (setenv "PATH"
-		   (if prepend
-		       (concat (car args) path-separator
-			       (getenv "PATH"))
-		     (concat (getenv "PATH") path-separator
-			     (car args))))
-	   (setq args (cdr args))))
-     (let ((paths (parse-colon-path (getenv "PATH"))))
-       (while paths
-	 (eshell-printn (car paths))
-	 (setq paths (cdr paths)))))))
+	 (setq eshell-path-env (getenv "PATH")
+	       args (mapconcat 'identity args path-separator)
+	       eshell-path-env
+	       (if prepend
+		   (concat args path-separator eshell-path-env)
+		 (concat eshell-path-env path-separator args)))
+	 (setenv "PATH" eshell-path-env))
+     (dolist (dir (parse-colon-path (getenv "PATH")))
+       (eshell-printn dir)))))
 
 (put 'eshell/addpath 'eshell-no-numeric-conversions t)
 

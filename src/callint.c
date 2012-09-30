@@ -19,7 +19,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 #include <config.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "character.h"
@@ -150,7 +149,7 @@ static const char *callint_argfuns[]
     = {"", "point", "mark", "region-beginning", "region-end"};
 
 static void
-check_mark (int for_region)
+check_mark (bool for_region)
 {
   Lisp_Object tem;
   tem = Fmarker_buffer (BVAR (current_buffer, mark));
@@ -273,11 +272,11 @@ invoke it.  If KEYS is omitted or nil, the return value of
   signed char *varies;
 
   ptrdiff_t i, nargs;
-  int foo;
-  int arg_from_tty = 0;
+  ptrdiff_t mark;
+  bool arg_from_tty = 0;
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4, gcpro5;
   ptrdiff_t key_count;
-  int record_then_fail = 0;
+  bool record_then_fail = 0;
 
   Lisp_Object save_this_command, save_last_command;
   Lisp_Object save_this_original_command, save_real_this_command;
@@ -372,7 +371,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
       Vthis_command = save_this_command;
       Vthis_original_command = save_this_original_command;
       Vreal_this_command = save_real_this_command;
-      KVAR (current_kboard, Vlast_command) = save_last_command;
+      kset_last_command (current_kboard, save_last_command);
 
       temporarily_switch_to_single_kboard (NULL);
       return unbind_to (speccount, apply1 (function, specs));
@@ -465,7 +464,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
     }
 
   if (min (MOST_POSITIVE_FIXNUM,
-	   min (PTRDIFF_MAX, SIZE_MAX) / sizeof (Lisp_Object))
+	   min (PTRDIFF_MAX, SIZE_MAX) / word_size)
       < nargs)
     memory_full (SIZE_MAX);
 
@@ -685,7 +684,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
 	    goto have_prefix_arg;
 	case 'n':		/* Read number from minibuffer.  */
 	  {
-	    int first = 1;
+	    bool first = 1;
 	    do
 	      {
 		Lisp_Object str;
@@ -726,11 +725,11 @@ invoke it.  If KEYS is omitted or nil, the return value of
 	  check_mark (1);
 	  set_marker_both (point_marker, Qnil, PT, PT_BYTE);
 	  /* visargs[i+1] = Qnil; */
-	  foo = marker_position (BVAR (current_buffer, mark));
+	  mark = marker_position (BVAR (current_buffer, mark));
 	  /* visargs[i] = Qnil; */
-	  args[i] = PT < foo ? point_marker : BVAR (current_buffer, mark);
+	  args[i] = PT < mark ? point_marker : BVAR (current_buffer, mark);
 	  varies[i] = 3;
-	  args[++i] = PT > foo ? point_marker : BVAR (current_buffer, mark);
+	  args[++i] = PT > mark ? point_marker : BVAR (current_buffer, mark);
 	  varies[i] = 4;
 	  break;
 
@@ -843,7 +842,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
   Vthis_command = save_this_command;
   Vthis_original_command = save_this_original_command;
   Vreal_this_command = save_real_this_command;
-  KVAR (current_kboard, Vlast_command) = save_last_command;
+  kset_last_command (current_kboard, save_last_command);
 
   {
     Lisp_Object val;
@@ -888,10 +887,11 @@ syms_of_callint (void)
   callint_message = Qnil;
   staticpro (&callint_message);
 
-  preserved_fns = pure_cons (intern_c_string ("region-beginning"),
-			 pure_cons (intern_c_string ("region-end"),
-				pure_cons (intern_c_string ("point"),
-				       pure_cons (intern_c_string ("mark"), Qnil))));
+  preserved_fns = listn (CONSTYPE_PURE, 4,
+			 intern_c_string ("region-beginning"),
+			 intern_c_string ("region-end"),
+			 intern_c_string ("point"),
+			 intern_c_string ("mark"));
 
   DEFSYM (Qlist, "list");
   DEFSYM (Qlet, "let");

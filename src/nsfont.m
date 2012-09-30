@@ -23,7 +23,6 @@ Author: Adrian Robert (arobert@cogsci.ucsd.edu)
 /* This should be the first include, as it may set up #defines affecting
    interpretation of even the system includes. */
 #include <config.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "dispextern.h"
@@ -236,23 +235,64 @@ ns_fallback_entity (void)
 }
 
 
-/* Utility: get width of a char c in screen font sfont */
+/* Utility: get width of a char c in screen font SFONT */
 static float
 ns_char_width (NSFont *sfont, int c)
 {
-    NSString *cstr = [NSString stringWithFormat: @"%c", c];
+  float w = -1.0;
+  NSString *cstr = [NSString stringWithFormat: @"%c", c];
 
 #ifdef NS_IMPL_COCOA
-
-    return max (2.0, [cstr sizeWithAttributes:
-			     [NSDictionary dictionaryWithObject:sfont 
-							 forKey:NSFontAttributeName]].width);
-
-#else
-    /* deprecated in OS X 10.4 */
-    return = max (2.0, [sfont widthOfString: cstr]);
+  NSGlyph glyph = [sfont glyphWithName: cstr];
+  if (glyph)
+    w = [sfont advancementForGlyph: glyph].width;
 #endif
+
+  if (w < 0.0)
+    {
+      NSDictionary *attrsDictionary =
+        [NSDictionary dictionaryWithObject: sfont forKey: NSFontAttributeName];
+      w = [cstr sizeWithAttributes: attrsDictionary].width;
     }
+
+  return max (w, 1.0);
+}
+
+/* Return average width over ASCII printable characters for SFONT.  */
+
+static NSString *ascii_printable;
+
+static int
+ns_ascii_average_width (NSFont *sfont)
+{
+  float w = -1.0;
+
+  if (!ascii_printable)
+    {
+      char chars[96];
+      int ch;
+      for (ch = 0; ch < 95; ch++)
+	chars[ch] = ' ' + ch;
+      chars[95] = '\0';
+
+      ascii_printable = [[NSString alloc] initWithFormat: @"%s", chars];
+    }
+
+#ifdef NS_IMPL_COCOA
+  NSGlyph glyph = [sfont glyphWithName: ascii_printable];
+  if (glyph)
+    w = [sfont advancementForGlyph: glyph].width;
+#endif
+
+  if (w < 0.0)
+    {
+      NSDictionary *attrsDictionary =
+	[NSDictionary dictionaryWithObject: sfont forKey: NSFontAttributeName];
+      w = [ascii_printable sizeWithAttributes: attrsDictionary].width;
+    }
+
+  return lrint (w / 95.0);
+}
 
 
 /* Return whether set1 covers set2 to a reasonable extent given by pct.
@@ -584,7 +624,7 @@ static unsigned int nsfont_encode_char (struct font *font, int c);
 static int nsfont_text_extents (struct font *font, unsigned int *code,
                                 int nglyphs, struct font_metrics *metrics);
 static int nsfont_draw (struct glyph_string *s, int from, int to, int x, int y,
-                        int with_background);
+                        bool with_background);
 
 struct font_driver nsfont_driver =
   {
@@ -781,7 +821,7 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
   font_info->glyphs = xzalloc (0x100 * sizeof *font_info->glyphs);
   font_info->metrics = xzalloc (0x100 * sizeof *font_info->metrics);
 
-  BLOCK_INPUT;
+  block_input ();
 
   /* for metrics */
   sfont = [nsfont screenFont];
@@ -792,7 +832,6 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
   font = (struct font *) font_info;
   font->pixel_size = [sfont pointSize];
   font->driver = &nsfont_driver;
-  font->encoding_type = FONT_ENCODING_NOT_DECIDED;
   font->encoding_charset = -1;
   font->repertory_charset = -1;
   font->default_ascent = 0;
@@ -905,10 +944,11 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
     /* set up metrics portion of font struct */
     font->ascent = lrint([sfont ascender]);
     font->descent = -lrint(floor(adjusted_descender));
-    font->min_width = ns_char_width(sfont, '|');
     font->space_width = lrint (ns_char_width (sfont, ' '));
-    font->average_width = lrint (font_info->width);
     font->max_width = lrint (font_info->max_bounds.width);
+    font->min_width = font->space_width;  /* Approximate.  */
+    font->average_width = ns_ascii_average_width (sfont);
+
     font->height = lrint (font_info->height);
     font->underline_position = lrint (font_info->underpos);
     font->underline_thickness = lrint (font_info->underwidth);
@@ -917,7 +957,7 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
     font->props[FONT_FULLNAME_INDEX] =
       make_unibyte_string (font_info->name, strlen (font_info->name));
   }
-  UNBLOCK_INPUT;
+  unblock_input ();
 
   return font_object;
 }
@@ -1025,12 +1065,12 @@ nsfont_text_extents (struct font *font, unsigned int *code, int nglyphs,
 
 
 /* Draw glyphs between FROM and TO of S->char2b at (X Y) pixel
-   position of frame F with S->FACE and S->GC.  If WITH_BACKGROUND
-   is nonzero, fill the background in advance.  It is assured that
-   WITH_BACKGROUND is zero when (FROM > 0 || TO < S->nchars). */
+   position of frame F with S->FACE and S->GC.  If WITH_BACKGROUND,
+   fill the background in advance.  It is assured that WITH_BACKGROUND
+   is false when (FROM > 0 || TO < S->nchars). */
 static int
 nsfont_draw (struct glyph_string *s, int from, int to, int x, int y,
-             int with_background)
+             bool with_background)
 /* NOTE: focus and clip must be set
      also, currently assumed (true in nsterm.m call) from ==0, to ==nchars */
 {
@@ -1304,7 +1344,7 @@ ns_uni_to_glyphs (struct nsfont_info *font_info, unsigned char block)
     fprintf (stderr, "%p\tFinding glyphs for glyphs in block %d\n",
             font_info, block);
 
- BLOCK_INPUT;
+  block_input ();
 
 #ifdef NS_IMPL_COCOA
   if (firstTime)
@@ -1316,7 +1356,7 @@ ns_uni_to_glyphs (struct nsfont_info *font_info, unsigned char block)
 
   font_info->glyphs[block] = xmalloc (0x100 * sizeof (unsigned short));
   if (!unichars || !(font_info->glyphs[block]))
-    abort ();
+    emacs_abort ();
 
   /* create a string containing all Unicode characters in this block */
   for (idx = block<<8, i = 0; i < 0x100; idx++, i++)
@@ -1361,7 +1401,7 @@ ns_uni_to_glyphs (struct nsfont_info *font_info, unsigned char block)
 #endif
   }
 
-  UNBLOCK_INPUT;
+  unblock_input ();
   xfree (unichars);
 }
 
@@ -1386,12 +1426,12 @@ ns_glyph_metrics (struct nsfont_info *font_info, unsigned char block)
     numGlyphs = 0x10000;
 #endif
 
- BLOCK_INPUT;
+  block_input ();
  sfont = [font_info->nsfont screenFont];
 
   font_info->metrics[block] = xzalloc (0x100 * sizeof (struct font_metrics));
   if (!(font_info->metrics[block]))
-    abort ();
+    emacs_abort ();
 
   metrics = font_info->metrics[block];
   for (g = block<<8, i =0; i<0x100 && g < numGlyphs; g++, i++, metrics++)
@@ -1415,7 +1455,7 @@ ns_glyph_metrics (struct nsfont_info *font_info, unsigned char block)
       metrics->ascent = r.size.height - metrics->descent;
 /*-lrint (hshrink* [sfont descender] - expand * hd/2); */
     }
-  UNBLOCK_INPUT;
+  unblock_input ();
 }
 
 
@@ -1515,4 +1555,6 @@ syms_of_nsfont (void)
   DEFSYM (Qmedium, "medium");
   DEFVAR_LISP ("ns-reg-to-script", Vns_reg_to_script,
                doc: /* Internal use: maps font registry to Unicode script. */);
+
+  ascii_printable = NULL;
 }

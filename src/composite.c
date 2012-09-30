@@ -23,7 +23,9 @@ You should have received a copy of the GNU General Public License
 along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
-#include <setjmp.h>
+
+#define COMPOSITE_INLINE EXTERN_INLINE
+
 #include "lisp.h"
 #include "character.h"
 #include "buffer.h"
@@ -425,7 +427,7 @@ get_composition_id (ptrdiff_t charpos, ptrdiff_t bytepos, ptrdiff_t nchars,
 
    This doesn't check the validity of composition.  */
 
-int
+bool
 find_composition (ptrdiff_t pos, ptrdiff_t limit,
 		  ptrdiff_t *start, ptrdiff_t *end,
 		  Lisp_Object *prop, Lisp_Object object)
@@ -706,7 +708,7 @@ static Lisp_Object fill_gstring_header (Lisp_Object, Lisp_Object,
                                         Lisp_Object, Lisp_Object,
                                         Lisp_Object);
 
-int
+bool
 composition_gstring_p (Lisp_Object gstring)
 {
   Lisp_Object header;
@@ -762,7 +764,7 @@ composition_gstring_width (Lisp_Object gstring, ptrdiff_t from, ptrdiff_t to,
 	}
       metrics->width = metrics->lbearing = metrics->rbearing = 0;
     }
-  for (glyph = &LGSTRING_GLYPH (gstring, from); from < to; from++, glyph++)
+  for (glyph = lgstring_glyph_addr (gstring, from); from < to; from++, glyph++)
     {
       int x;
 
@@ -947,20 +949,12 @@ autocmp_chars (Lisp_Object rule, ptrdiff_t charpos, ptrdiff_t bytepos, ptrdiff_t
 				       string);
   if (NILP (LGSTRING_ID (lgstring)))
     {
-      Lisp_Object args[6];
-
       /* Save point as marker before calling out to lisp.  */
       if (NILP (string))
 	record_unwind_protect (restore_point_unwind,
 			       build_marker (current_buffer, pt, pt_byte));
-
-      args[0] = Vauto_composition_function;
-      args[1] = AREF (rule, 2);
-      args[2] = pos;
-      args[3] = make_number (to);
-      args[4] = font_object;
-      args[5] = string;
-      lgstring = safe_call (6, args);
+      lgstring = safe_call (6, Vauto_composition_function, AREF (rule, 2),
+			    pos, make_number (to), font_object, string);
     }
   return unbind_to (count, lgstring);
 }
@@ -1217,15 +1211,14 @@ composition_compute_stop_pos (struct composition_it *cmp_it, ptrdiff_t charpos, 
    string.  In that case, FACE must not be NULL.
 
    If the character is composed, setup members of CMP_IT (id, nglyphs,
-   from, to, reversed_p), and return 1.  Otherwise, update
-   CMP_IT->stop_pos, and return 0.  */
+   from, to, reversed_p), and return true.  Otherwise, update
+   CMP_IT->stop_pos, and return false.  */
 
-int
-composition_reseat_it (struct composition_it *cmp_it, ptrdiff_t charpos, ptrdiff_t bytepos, ptrdiff_t endpos, struct window *w, struct face *face, Lisp_Object string)
+bool
+composition_reseat_it (struct composition_it *cmp_it, ptrdiff_t charpos,
+		       ptrdiff_t bytepos, ptrdiff_t endpos, struct window *w,
+		       struct face *face, Lisp_Object string)
 {
-  if (endpos < 0)
-    endpos = NILP (string) ? BEGV : 0;
-
   if (cmp_it->ch == -2)
     {
       composition_compute_stop_pos (cmp_it, charpos, bytepos, endpos, string);
@@ -1233,6 +1226,9 @@ composition_reseat_it (struct composition_it *cmp_it, ptrdiff_t charpos, ptrdiff
 	/* The current position is not composed.  */
 	return 0;
     }
+
+  if (endpos < 0)
+    endpos = NILP (string) ? BEGV : 0;
 
   if (cmp_it->ch < 0)
     {
@@ -1281,36 +1277,23 @@ composition_reseat_it (struct composition_it *cmp_it, ptrdiff_t charpos, ptrdiff
 	{
 	  ptrdiff_t cpos = charpos, bpos = bytepos;
 
-	  while (1)
-	    {
-	      elt = XCAR (val);
-	      if (cmp_it->lookback > 0)
-		{
-		  cpos = charpos - cmp_it->lookback;
-		  if (STRINGP (string))
-		    bpos = string_char_to_byte (string, cpos);
-		  else
-		    bpos = CHAR_TO_BYTE (cpos);
-		}
-	      lgstring = autocmp_chars (elt, cpos, bpos, charpos + 1, w, face,
-					string);
-	      if (composition_gstring_p (lgstring)
-		  && cpos + LGSTRING_CHAR_LEN (lgstring) - 1 == charpos)
-		break;
-	      /* Composition failed or didn't cover the current
-		 character.  */
-	      if (cmp_it->lookback == 0)
-		goto no_composition;
-	      lgstring = Qnil;
-	      /* Try to find a shorter composition that starts after CPOS.  */
-	      composition_compute_stop_pos (cmp_it, charpos, bytepos, cpos,
-					    string);
-	      if (cmp_it->ch == -2 || cmp_it->stop_pos < charpos)
-		goto no_composition;
-	      val = CHAR_TABLE_REF (Vcomposition_function_table, cmp_it->ch);
-	      for (i = 0; i < cmp_it->rule_idx; i++, val = XCDR (val));
-	    }
 	  cmp_it->reversed_p = 1;
+	  elt = XCAR (val);
+	  if (cmp_it->lookback > 0)
+	    {
+	      cpos = charpos - cmp_it->lookback;
+	      if (STRINGP (string))
+		bpos = string_char_to_byte (string, cpos);
+	      else
+		bpos = CHAR_TO_BYTE (cpos);
+	    }
+	  lgstring = autocmp_chars (elt, cpos, bpos, charpos + 1, w, face,
+				    string);
+	  if (! composition_gstring_p (lgstring)
+	      || cpos + LGSTRING_CHAR_LEN (lgstring) - 1 != charpos)
+	    /* Composition failed or didn't cover the current
+	       character.  */
+	    goto no_composition;
 	}
       if (NILP (lgstring))
 	goto no_composition;
@@ -1345,6 +1328,8 @@ composition_reseat_it (struct composition_it *cmp_it, ptrdiff_t charpos, ptrdiff
       /* BYTEPOS is calculated in composition_compute_stop_pos */
       bytepos = -1;
     }
+  if (cmp_it->reversed_p)
+    endpos = -1;
   composition_compute_stop_pos (cmp_it, charpos, bytepos, endpos, string);
   return 0;
 }
@@ -1487,10 +1472,10 @@ struct position_record
 /* This is like find_composition, but find an automatic composition
    instead.  It is assured that POS is not within a static
    composition.  If found, set *GSTRING to the glyph-string
-   representing the composition, and return 1.  Otherwise, *GSTRING to
-   Qnil, and return 0.  */
+   representing the composition, and return true.  Otherwise, *GSTRING to
+   Qnil, and return false.  */
 
-static int
+static bool
 find_automatic_composition (ptrdiff_t pos, ptrdiff_t limit,
 			    ptrdiff_t *start, ptrdiff_t *end,
 			    Lisp_Object *gstring, Lisp_Object string)
@@ -1503,7 +1488,7 @@ find_automatic_composition (ptrdiff_t pos, ptrdiff_t limit,
   int c;
   Lisp_Object window;
   struct window *w;
-  int need_adjustment = 0;
+  bool need_adjustment = 0;
 
   window = Fget_buffer_window (Fcurrent_buffer (), Qnil);
   if (NILP (window))

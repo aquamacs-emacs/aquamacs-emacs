@@ -139,9 +139,8 @@
 ;; feedmail-send-it. Hers's the best way to use the stuff in this
 ;; file:
 ;;
-;; Save this file as feedmail.el somewhere on your elisp
-;; loadpath; byte-compile it.  Put the following lines somewhere in
-;; your ~/.emacs stuff:
+;; Save this file as feedmail.el somewhere on your elisp loadpath;
+;; byte-compile it.  Put the following lines in your init file:
 ;;
 ;;     (setq send-mail-function 'feedmail-send-it)
 ;;     (autoload 'feedmail-send-it "feedmail")
@@ -2334,7 +2333,7 @@ mapped to mostly alphanumerics for safety."
     (if (and is-fqm is-in-this-dir)
 	(setq filename buffer-file-name)
       (setq filename (feedmail-create-queue-filename queue-directory)))
-    ;; make binary file on DOS/Win95/WinNT, etc
+    ;; make binary file on DOS/Windows 95/Windows NT, etc
     (let ((buffer-file-type feedmail-force-binary-write))
       (write-file filename))
     ;; convenient for moving from draft to q, for example

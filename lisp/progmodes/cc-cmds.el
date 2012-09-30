@@ -493,13 +493,16 @@ inside a literal or a macro, nothing special happens."
       (insert-char ?\n 1)
       ;; In AWK (etc.) or in a macro, make sure this CR hasn't changed
       ;; the syntax.  (There might already be an escaped NL there.)
-      (when (or (c-at-vsemi-p (1- (point)))
-		(let ((pt (point)))
-		  (save-excursion
-		    (backward-char)
-		    (and (c-beginning-of-macro)
-			 (progn (c-end-of-macro)
-				(< (point) pt))))))
+      (when (or
+	     (save-excursion
+	       (c-skip-ws-backward (c-point 'bopl))
+	       (c-at-vsemi-p))
+	     (let ((pt (point)))
+	       (save-excursion
+		 (backward-char)
+		 (and (c-beginning-of-macro)
+		      (progn (c-end-of-macro)
+			     (< (point) pt))))))
 	(backward-char)
 	(insert-char ?\\ 1)
 	(forward-char))
@@ -1826,14 +1829,16 @@ with a brace block."
 	    ;; DEFFLAGSET(syslog_opt_flags,LOG_PID ...) ==> syslog_opt_flags
 	    (match-string-no-properties 1))
 
-	   ;; Objective-C method starting with + or -.
-	   ((and (derived-mode-p 'objc-mode)
-		 (looking-at "[-+]\s*("))
-	    (when (c-syntactic-re-search-forward ")\s*" nil t)
-	      (c-forward-token-2)
-	      (setq name-end (point))
-	      (c-backward-token-2)
-	      (buffer-substring-no-properties (point) name-end)))
+	   ;; Objc selectors.
+	   ((assq 'objc-method-intro (c-guess-basic-syntax))
+	    (let ((bound (save-excursion (c-end-of-statement) (point)))
+		  (kw-re (concat "\\(?:" c-symbol-key "\\)?:"))
+		  (stretches))
+	      (when (c-syntactic-re-search-forward c-symbol-key bound t t t)
+		(push (match-string-no-properties 0) stretches)
+		(while (c-syntactic-re-search-forward kw-re bound t t t)
+		  (push (match-string-no-properties 0) stretches)))
+	      (apply 'concat (nreverse stretches))))
 
 	   (t
 	    ;; Normal function or initializer.

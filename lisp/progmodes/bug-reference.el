@@ -30,6 +30,13 @@
 ;; Two minor modes are provided.  One works on any text in the buffer;
 ;; the other operates only on comments and strings.
 
+;;; Code:
+
+(defgroup bug-reference nil
+  "Hyperlinking references to bug reports"
+  ;; Somewhat arbitrary, by analogy with eg goto-address.
+  :group 'comm)
+
 (defvar bug-reference-map
   (let ((map (make-sparse-keymap)))
     (define-key map [mouse-2] 'bug-reference-push-button)
@@ -61,9 +68,13 @@ so that it is considered safe, see `enable-local-variables'.")
            (and (symbolp s)
                 (get s 'bug-reference-url-format)))))
 
-(defconst bug-reference-bug-regexp
+(defcustom bug-reference-bug-regexp
   "\\([Bb]ug ?#\\|[Pp]atch ?#\\|RFE ?#\\|PR [a-z-+]+/\\)\\([0-9]+\\(?:#[0-9]+\\)?\\)"
-  "Regular expression which matches bug references.")
+  "Regular expression matching bug references.
+The second subexpression should match the bug reference (usually a number)."
+  :type 'string
+  :safe 'stringp
+  :group 'bug-reference)
 
 (defun bug-reference-set-overlay-properties ()
   "Set properties of bug reference overlays."
@@ -154,4 +165,5 @@ the mode if ARG is omitted or nil."
       (widen)
       (bug-reference-unfontify (point-min) (point-max)))))
 
+(provide 'bug-reference)
 ;;; bug-reference.el ends here

@@ -2967,12 +2967,6 @@ When FORCE, rebuild the tool bar."
 	(setq gnus-summary-tool-bar-map map))))
   (set (make-local-variable 'tool-bar-map) gnus-summary-tool-bar-map))
 
-(defun gnus-score-set-default (var value)
-  "A version of set that updates the GNU Emacs menu-bar."
-  (set var value)
-  ;; It is the message that forces the active status to be updated.
-  (message ""))
-
 (defun gnus-make-score-map (type)
   "Make a summary score map of type TYPE."
   (if t
@@ -3258,13 +3252,6 @@ The following commands are available:
   "Say whether this article is a sparse article or not."
   `(memq ,article gnus-newsgroup-ancient))
 
-(defun gnus-article-parent-p (number)
-  "Say whether this article is a parent or not."
-  (let ((data (gnus-data-find-list number)))
-    (and (cdr data)              ; There has to be an article after...
-	 (< (gnus-data-level (car data)) ; And it has to have a higher level.
-	    (gnus-data-level (nth 1 data))))))
-
 (defun gnus-article-children (number)
   "Return a list of all children to NUMBER."
   (let* ((data (gnus-data-find-list number))
@@ -3285,14 +3272,6 @@ The following commands are available:
 (defmacro gnus-summary-article-intangible-p ()
   "Say whether this article is intangible or not."
   '(get-text-property (point) 'gnus-intangible))
-
-(defun gnus-article-read-p (article)
-  "Say whether ARTICLE is read or not."
-  (not (or (memq article gnus-newsgroup-marked)
-	   (memq article gnus-newsgroup-spam-marked)
-	   (memq article gnus-newsgroup-unreads)
-	   (memq article gnus-newsgroup-unselected)
-	   (memq article gnus-newsgroup-dormant))))
 
 ;; Some summary mode macros.
 
@@ -5925,17 +5904,6 @@ If SELECT-ARTICLES, only select those articles from GROUP."
       (setq articles (cdr articles)))
     out))
 
-(defun gnus-uncompress-marks (marks)
-  "Uncompress the mark ranges in MARKS."
-  (let ((uncompressed '(score bookmark))
-	out)
-    (while marks
-      (if (memq (caar marks) uncompressed)
-	  (push (car marks) out)
-	(push (cons (caar marks) (gnus-uncompress-range (cdar marks))) out))
-      (setq marks (cdr marks)))
-    out))
-
 (defun gnus-article-mark-to-type (mark)
   "Return the type of MARK."
   (or (cadr (assq mark gnus-article-special-mark-lists))
@@ -7754,10 +7722,6 @@ be displayed."
 					    gnus-buttonized-mime-types)))
     (gnus-summary-select-article nil 'force)))
 
-(defun gnus-summary-set-current-mark (&optional current-mark)
-  "Obsolete function."
-  nil)
-
 (defun gnus-summary-next-article (&optional unread subject backward push)
   "Select the next article.
 If UNREAD, only unread articles are selected.
@@ -9173,7 +9137,7 @@ To control what happens when you exit the group, see the
 			   (list (cons 'save-article-group ogroup))))
 	   (case-fold-search t)
 	   (buf (current-buffer))
-	   dig to-address)
+	   dig to-address charset)
       (with-current-buffer gnus-original-article-buffer
 	;; Have the digest group inherit the main mail address of
 	;; the parent article.
@@ -9186,16 +9150,32 @@ To control what happens when you exit the group, see the
 				      to-address))))))
 	(setq dig (nnheader-set-temp-buffer " *gnus digest buffer*"))
 	(insert-buffer-substring gnus-original-article-buffer)
-	;; Remove lines that may lead nndoc to misinterpret the
-	;; document type.
 	(narrow-to-region
 	 (goto-char (point-min))
 	 (or (search-forward "\n\n" nil t) (point)))
+	;; Remove lines that may lead nndoc to misinterpret the
+	;; document type.
 	(goto-char (point-min))
 	(delete-matching-lines "^Path:\\|^From ")
+	;; Parse charset, and decode content transfer encoding.
+	(setq charset (mail-content-type-get
+		       (mail-header-parse-content-type
+			(or (gnus-fetch-field "content-type") ""))
+		       'charset))
+	(let ((encoding (gnus-fetch-field "content-transfer-encoding")))
+	  (when encoding
+	    (message-remove-header "content-transfer-encoding")
+	    (goto-char (point-max))
+	    (widen)
+	    (narrow-to-region (point) (point-max))
+	    (mm-decode-content-transfer-encoding
+	     (intern (downcase (mail-header-strip encoding))))))
 	(widen))
       (unwind-protect
-	  (if (let ((gnus-newsgroup-ephemeral-charset gnus-newsgroup-charset)
+	  (if (let ((gnus-newsgroup-ephemeral-charset
+		     (if charset
+			 (intern (downcase (gnus-strip-whitespace charset)))
+		       gnus-newsgroup-charset))
 		    (gnus-newsgroup-ephemeral-ignored-charsets
 		     gnus-newsgroup-ignored-charsets))
 		(gnus-group-read-ephemeral-group

@@ -140,7 +140,7 @@ otherwise."
 
 (defun describe-text-properties-1 (pos output-buffer)
   (let* ((properties (text-properties-at pos))
-	 (overlays (overlays-at pos))
+	 (overlays (overlays-in pos (1+ pos)))
 	 (wid-field (get-char-property pos 'field))
 	 (wid-button (get-char-property pos 'button))
 	 (wid-doc (get-char-property pos 'widget-doc))
@@ -533,7 +533,7 @@ relevant to POS."
                        (col      (current-column)))
                   (if (or (/= beg 1)  (/= end (1+ total)))
                       (format "%d of %d (%d%%), restriction: <%d-%d>, column: %d%s"
-                              pos total percent col beg end hscroll)
+                              pos total percent beg end col hscroll)
                     (if (= pos end)
                         (format "%d of %d (EOB), column: %d%s" pos total col hscroll)
                       (format "%d of %d (%d%%), column: %d%s"
@@ -679,23 +679,17 @@ relevant to POS."
               (when (cadr elt)
                 (insert (format formatter (car elt)))
                 (dolist (clm (cdr elt))
-                  (if (eq (car-safe clm) 'insert-text-button)
-                      (progn (insert " ") (eval clm))
-                    (when (>= (+ (current-column)
-                                 (or (string-match-p "\n" clm)
-                                     (string-width clm))
-                                 1)
-                              (window-width))
-                      (insert "\n")
-                      (indent-to (1+ max-width)))
-                    (unless (zerop (length clm))
-                      (insert " " clm))))
+		  (cond ((eq (car-safe clm) 'insert-text-button)
+			 (insert " ")
+			 (eval clm))
+			((not (zerop (length clm)))
+			 (insert " " clm))))
                 (insert "\n"))))
 
           (when overlays
             (save-excursion
               (goto-char (point-min))
-              (re-search-forward "character:[ \t\n]+")
+              (re-search-forward "(displayed as ")
               (let ((end (+ (point) (length char-description))))
                 (mapc (lambda (props)
                         (let ((o (make-overlay (point) end)))

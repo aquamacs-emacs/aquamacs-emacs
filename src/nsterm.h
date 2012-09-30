@@ -57,7 +57,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (void)sendEvent: (NSEvent *)theEvent;
 - (void)showPreferencesWindow: (id)sender;
 - (BOOL) openFile: (NSString *)fileName;
-- (void)fd_handler: (NSTimer *) fdEntry;
+- (void)fd_handler: (id)unused;
 - (void)timeout_handler: (NSTimer *)timedEntry;
 - (BOOL)fulfillService: (NSString *)name withArg: (NSString *)arg;
 - (void)extractArgumentsFromOdocEvent: (NSAppleEventDescriptor *)desc;
@@ -105,6 +105,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (void) setWindowClosing: (BOOL)closing;
 - (EmacsToolbar *) toolbar;
 - (void) deleteWorkingText;
+- (void) updateFrameSize: (BOOL) delay;
 
 #ifdef NS_IMPL_GNUSTEP
 /* Not declared, but useful. */
@@ -229,12 +230,17 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    NSTextField *title;
    NSMatrix *matrix;
    int rows, cols;
+   BOOL timer_fired, window_closed;
+   Lisp_Object dialog_return;
+   Lisp_Object *button_values;
    }
 - initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
-- addButton: (char *)str value: (Lisp_Object)val row: (int)row;
-- addString: (char *)str row: (int)row;
-- addSplit;
+- (void)process_dialog: (Lisp_Object)list;
+- (void)addButton: (char *)str value: (int)tag row: (int)row;
+- (void)addString: (char *)str row: (int)row;
+- (void)addSplit;
 - (Lisp_Object)runDialogAt: (NSPoint)p;
+- (void)timeout_handler: (NSTimer *)timedEntry;
 @end
 
 #if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
@@ -499,7 +505,10 @@ struct nsfont_info
   struct font font;
 
   char *name;  /* PostScript name, uniquely identifies on NS systems */
-  float width;  /* this and following metrics stored as float rather than int */
+
+  /* The following metrics are stored as float rather than int. */
+
+  float width;  /* Maximum advance for the font.  */
   float height;
   float underpos;
   float underwidth;
@@ -674,6 +683,8 @@ struct x_output
 /* This is the `Display *' which frame F is on.  */
 #define FRAME_NS_DISPLAY(f) (0)
 #define FRAME_X_DISPLAY(f) (0)
+#define FRAME_X_SCREEN(f) (0)
+#define FRAME_X_VISUAL(f) FRAME_NS_DISPLAY_INFO(f)->visual
 
 #define FRAME_FOREGROUND_COLOR(f) ((f)->output_data.ns->foreground_color)
 #define FRAME_BACKGROUND_COLOR(f) ((f)->output_data.ns->background_color)
@@ -786,15 +797,14 @@ extern Lisp_Object ns_get_local_selection (Lisp_Object selection_name,
 extern void nxatoms_of_nsselect (void);
 extern int ns_lisp_to_cursor_type (Lisp_Object arg);
 extern Lisp_Object ns_cursor_type_to_lisp (int arg);
-extern Lisp_Object Qnone;
 extern void ns_set_name_as_filename (struct frame *f);
 extern void ns_set_doc_edited (struct frame *f, Lisp_Object arg);
 
-extern int
+extern bool
 ns_defined_color (struct frame *f,
                   const char *name,
-                  XColor *color_def, int alloc,
-                  char makeIndex);
+                  XColor *color_def, bool alloc,
+                  bool makeIndex);
 extern void
 ns_query_color (void *col, XColor *color_def, int setPixel);
 
@@ -824,31 +834,6 @@ extern Lisp_Object find_and_return_menu_selection (FRAME_PTR f,
 extern Lisp_Object ns_popup_dialog (Lisp_Object position, Lisp_Object contents,
                                     Lisp_Object header);
 
-/* More prototypes that should be moved to a more general include file */
-extern void set_frame_menubar (struct frame *f, int first_time, int deep_p);
-extern void x_set_window_size (struct frame *f, int change_grav,
-                              int cols, int rows);
-extern void x_sync (struct frame *);
-extern Lisp_Object x_get_focus_frame (struct frame *);
-extern void x_set_mouse_position (struct frame *f, int h, int v);
-extern void x_set_mouse_pixel_position (struct frame *f, int pix_x, int pix_y);
-extern void x_make_frame_visible (struct frame *f);
-extern void x_make_frame_invisible (struct frame *f);
-extern void x_iconify_frame (struct frame *f);
-extern int x_char_width (struct frame *f);
-extern int x_char_height (struct frame *f);
-extern int x_pixel_width (struct frame *f);
-extern int x_pixel_height (struct frame *f);
-extern void x_set_frame_alpha (struct frame *f);
-extern void x_set_menu_bar_lines (struct frame *, Lisp_Object, Lisp_Object);
-extern void x_set_tool_bar_lines (struct frame *f,
-                                  Lisp_Object value,
-                                  Lisp_Object oldval);
-extern void x_activate_menubar (struct frame *);
-extern void free_frame_menubar (struct frame *);
-extern void x_free_frame_resources (struct frame *);
-extern void x_destroy_window (struct frame *);
-
 #define NSAPP_DATA2_RUNASSCRIPT 10
 extern void ns_run_ascript (void);
 
@@ -865,8 +850,8 @@ struct image;
 extern void *ns_image_from_XBM (unsigned char *bits, int width, int height);
 extern void *ns_image_for_XPM (int width, int height, int depth);
 extern void *ns_image_from_file (Lisp_Object file);
-extern int ns_load_image (struct frame *f, struct image *img,
-                          Lisp_Object spec_file, Lisp_Object spec_data);
+extern bool ns_load_image (struct frame *f, struct image *img,
+			   Lisp_Object spec_file, Lisp_Object spec_data);
 extern int ns_image_width (void *img);
 extern int ns_image_height (void *img);
 extern unsigned long ns_get_pixel (void *img, int x, int y);

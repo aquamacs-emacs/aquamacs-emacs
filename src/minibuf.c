@@ -21,7 +21,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 #include <errno.h>
 #include <stdio.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "commands.h"
@@ -110,14 +109,16 @@ choose_minibuf_frame (void)
       /* I don't think that any frames may validly have a null minibuffer
 	 window anymore.  */
       if (NILP (sf->minibuffer_window))
-	abort ();
+	emacs_abort ();
 
       /* Under X, we come here with minibuf_window being the
 	 minibuffer window of the unused termcap window created in
 	 init_window_once.  That window doesn't have a buffer.  */
       buffer = XWINDOW (minibuf_window)->buffer;
       if (BUFFERP (buffer))
-	Fset_window_buffer (sf->minibuffer_window, buffer, Qnil);
+	/* Use set_window_buffer instead of Fset_window_buffer (see
+	   discussion of bug#11984, bug#12025, bug#12026).  */
+	set_window_buffer (sf->minibuffer_window, buffer, 0, 0);
       minibuf_window = sf->minibuffer_window;
     }
 
@@ -264,7 +265,7 @@ read_minibuf_noninteractive (Lisp_Object map, Lisp_Object initial,
 	      if (STRING_BYTES_BOUND / 2 < size)
 		memory_full (SIZE_MAX);
 	      size *= 2;
-	      line = (char *) xrealloc (line, size);
+	      line = xrealloc (line, size);
 	    }
 	  line[len++] = c;
 	}
@@ -406,6 +407,7 @@ read_minibuf (Lisp_Object map, Lisp_Object initial, Lisp_Object prompt,
   Lisp_Object dummy, frame;
 
   specbind (Qminibuffer_default, defalt);
+  specbind (intern ("inhibit-read-only"), Qnil);
 
   /* If Vminibuffer_completing_file_name is `lambda' on entry, it was t
      in previous recursive minibuffer, but was not set explicitly
@@ -562,11 +564,11 @@ read_minibuf (Lisp_Object map, Lisp_Object initial, Lisp_Object prompt,
 
   /* Defeat (setq-default truncate-lines t), since truncated lines do
      not work correctly in minibuffers.  (Bug#5715, etc)  */
-  BVAR (current_buffer, truncate_lines) = Qnil;
+  bset_truncate_lines (current_buffer, Qnil);
 
   /* If appropriate, copy enable-multibyte-characters into the minibuffer.  */
   if (inherit_input_method)
-    BVAR (current_buffer, enable_multibyte_characters) = enable_multibyte;
+    bset_enable_multibyte_characters (current_buffer, enable_multibyte);
 
   /* The current buffer's default directory is usually the right thing
      for our minibuffer here.  However, if you're typing a command at
@@ -577,7 +579,7 @@ read_minibuf (Lisp_Object map, Lisp_Object initial, Lisp_Object prompt,
      you think of something better to do?  Find another buffer with a
      better directory, and use that one instead.  */
   if (STRINGP (ambient_dir))
-    BVAR (current_buffer, directory) = ambient_dir;
+    bset_directory (current_buffer, ambient_dir);
   else
     {
       Lisp_Object buf_list;
@@ -591,7 +593,8 @@ read_minibuf (Lisp_Object map, Lisp_Object initial, Lisp_Object prompt,
 	  other_buf = XCDR (XCAR (buf_list));
 	  if (STRINGP (BVAR (XBUFFER (other_buf), directory)))
 	    {
-	      BVAR (current_buffer, directory) = BVAR (XBUFFER (other_buf), directory);
+	      bset_directory (current_buffer,
+			      BVAR (XBUFFER (other_buf), directory));
 	      break;
 	    }
 	}
@@ -616,11 +619,15 @@ read_minibuf (Lisp_Object map, Lisp_Object initial, Lisp_Object prompt,
 
       if (! NILP (mini_window) && ! EQ (mini_window, minibuf_window)
 	  && !NILP (Fwindow_minibuffer_p (mini_window)))
-	Fset_window_buffer (mini_window, empty_minibuf, Qnil);
+	/* Use set_window_buffer instead of Fset_window_buffer (see
+	   discussion of bug#11984, bug#12025, bug#12026).  */
+	set_window_buffer (mini_window, empty_minibuf, 0, 0);
     }
 
   /* Display this minibuffer in the proper window.  */
-  Fset_window_buffer (minibuf_window, Fcurrent_buffer (), Qnil);
+  /* Use set_window_buffer instead of Fset_window_buffer (see
+     discussion of bug#11984, bug#12025, bug#12026).  */
+  set_window_buffer (minibuf_window, Fcurrent_buffer (), 0, 0);
   Fselect_window (minibuf_window, Qnil);
   XWINDOW (minibuf_window)->hscroll = 0;
 
@@ -664,7 +671,7 @@ read_minibuf (Lisp_Object map, Lisp_Object initial, Lisp_Object prompt,
     }
 
   clear_message (1, 1);
-  BVAR (current_buffer, keymap) = map;
+  bset_keymap (current_buffer, map);
 
   /* Turn on an input method stored in INPUT_METHOD if any.  */
   if (STRINGP (input_method) && !NILP (Ffboundp (Qactivate_input_method)))
@@ -673,7 +680,7 @@ read_minibuf (Lisp_Object map, Lisp_Object initial, Lisp_Object prompt,
   Frun_hooks (1, &Qminibuffer_setup_hook);
 
   /* Don't allow the user to undo past this point.  */
-  BVAR (current_buffer, undo_list) = Qnil;
+  bset_undo_list (current_buffer, Qnil);
 
   recursive_edit_1 ();
 
@@ -790,7 +797,7 @@ get_minibuffer (EMACS_INT depth)
       Vminibuffer_list = nconc2 (Vminibuffer_list, tail);
     }
   buf = Fcar (tail);
-  if (NILP (buf) || NILP (BVAR (XBUFFER (buf), name)))
+  if (NILP (buf) || !BUFFER_LIVE_P (XBUFFER (buf)))
     {
       buf = Fget_buffer_create
 	(make_formatted_string (name, " *Minibuf-%"pI"d*", depth));
@@ -809,7 +816,7 @@ get_minibuffer (EMACS_INT depth)
 	 while the buffer doesn't know about them any more.  */
       delete_all_overlays (XBUFFER (buf));
       reset_buffer (XBUFFER (buf));
-      record_unwind_protect (Fset_buffer, Fcurrent_buffer ());
+      record_unwind_current_buffer ();
       Fset_buffer (buf);
       if (!NILP (Ffboundp (intern ("minibuffer-inactive-mode"))))
 	call0 (intern ("minibuffer-inactive-mode"));
@@ -1852,15 +1859,14 @@ the values STRING, PREDICATE and `lambda'.  */)
 }
 
 static Lisp_Object Qmetadata;
-extern Lisp_Object Qbuffer;
 
 DEFUN ("internal-complete-buffer", Finternal_complete_buffer, Sinternal_complete_buffer, 3, 3, 0,
        doc: /* Perform completion on buffer names.
-If the argument FLAG is nil, invoke `try-completion', if it's t, invoke
-`all-completions', otherwise invoke `test-completion'.
+STRING and PREDICATE have the same meanings as in `try-completion',
+`all-completions', and `test-completion'.
 
-The arguments STRING and PREDICATE are as in `try-completion',
-`all-completions', and `test-completion'.  */)
+If FLAG is nil, invoke `try-completion'; if it is t, invoke
+`all-completions'; otherwise invoke `test-completion'.  */)
   (Lisp_Object string, Lisp_Object predicate, Lisp_Object flag)
 {
   if (NILP (flag))

@@ -28,7 +28,6 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 /* This should be the first include, as it may set up #defines affecting
    interpretation of even the system includes. */
 #include <config.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "nsterm.h"
@@ -66,7 +65,7 @@ symbol_to_nsstring (Lisp_Object sym)
   if (EQ (sym, intern ("rtf")))    return NSRTFPboardType;
   if (EQ (sym, intern ("pdf")))    return NSPDFPboardType;
   if (EQ (sym, intern ("txt")))    return NSStringPboardType;
-  return [NSString stringWithUTF8String: SDATA (XSYMBOL (sym)->xname)];
+  return [NSString stringWithUTF8String: SSDATA (SYMBOL_NAME (sym))];
 }
 
 static NSPasteboard *

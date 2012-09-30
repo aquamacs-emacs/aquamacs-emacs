@@ -21,7 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <stdio.h>
-#include <setjmp.h>
+
 #include "lisp.h"
 #include "character.h"
 #include "buffer.h"
@@ -45,14 +45,8 @@ static Lisp_Object Qtemp_buffer_setup_hook;
 
 static Lisp_Object Qfloat_output_format;
 
-#include <math.h>
 #include <float.h>
 #include <ftoastr.h>
-
-/* Default to values appropriate for IEEE floating point.  */
-#ifndef DBL_DIG
-#define DBL_DIG 15
-#endif
 
 /* Avoid actual stack overflow in print.  */
 static ptrdiff_t print_depth;
@@ -197,8 +191,7 @@ int print_output_debug_flag EXTERNALLY_VISIBLE = 1;
 			       ? PT - start_point : 0),			\
 		  old_point_byte + (old_point_byte >= start_point_byte	\
 				    ? PT_BYTE - start_point_byte : 0));	\
-   if (old != current_buffer)						\
-     set_buffer_internal (old);
+   set_buffer_internal (old);
 
 #define PRINTCHAR(ch) printchar (ch, printcharfun)
 
@@ -392,16 +385,14 @@ print_string (Lisp_Object string, Lisp_Object printcharfun)
 	{
 	  /* Output to echo area.  */
 	  ptrdiff_t nbytes = SBYTES (string);
-	  char *buffer;
 
 	  /* Copy the string contents so that relocation of STRING by
 	     GC does not cause trouble.  */
 	  USE_SAFE_ALLOCA;
-
-	  SAFE_ALLOCA (buffer, char *, nbytes);
+	  char *buffer = SAFE_ALLOCA (nbytes);
 	  memcpy (buffer, SDATA (string), nbytes);
 
-	  strout (buffer, chars, SBYTES (string), printcharfun);
+	  strout (buffer, chars, nbytes, printcharfun);
 
 	  SAFE_FREE ();
 	}
@@ -490,20 +481,20 @@ temp_output_buffer_setup (const char *bufname)
   register struct buffer *old = current_buffer;
   register Lisp_Object buf;
 
-  record_unwind_protect (set_buffer_if_live, Fcurrent_buffer ());
+  record_unwind_current_buffer ();
 
   Fset_buffer (Fget_buffer_create (build_string (bufname)));
 
   Fkill_all_local_variables ();
   delete_all_overlays (current_buffer);
-  BVAR (current_buffer, directory) = BVAR (old, directory);
-  BVAR (current_buffer, read_only) = Qnil;
-  BVAR (current_buffer, filename) = Qnil;
-  BVAR (current_buffer, undo_list) = Qt;
+  bset_directory (current_buffer, BVAR (old, directory));
+  bset_read_only (current_buffer, Qnil);
+  bset_filename (current_buffer, Qnil);
+  bset_undo_list (current_buffer, Qt);
   eassert (current_buffer->overlays_before == NULL);
   eassert (current_buffer->overlays_after == NULL);
-  BVAR (current_buffer, enable_multibyte_characters)
-    = BVAR (&buffer_defaults, enable_multibyte_characters);
+  bset_enable_multibyte_characters
+    (current_buffer, BVAR (&buffer_defaults, enable_multibyte_characters));
   specbind (Qinhibit_read_only, Qt);
   specbind (Qinhibit_modification_hooks, Qt);
   Ferase_buffer ();
@@ -588,6 +579,7 @@ A printed representation of an object is text which describes that object.  */)
   (Lisp_Object object, Lisp_Object noescape)
 {
   Lisp_Object printcharfun;
+  bool prev_abort_on_gc;
   /* struct gcpro gcpro1, gcpro2; */
   Lisp_Object save_deactivate_mark;
   ptrdiff_t count = SPECPDL_INDEX ();
@@ -603,7 +595,8 @@ A printed representation of an object is text which describes that object.  */)
        No need for specbind, since errors deactivate the mark.  */
     save_deactivate_mark = Vdeactivate_mark;
     /* GCPRO2 (object, save_deactivate_mark); */
-    abort_on_gc++;
+    prev_abort_on_gc = abort_on_gc;
+    abort_on_gc = 1;
 
     printcharfun = Vprin1_to_string_buffer;
     PRINTPREPARE;
@@ -627,7 +620,7 @@ A printed representation of an object is text which describes that object.  */)
   Vdeactivate_mark = save_deactivate_mark;
   /* UNGCPRO; */
 
-  abort_on_gc--;
+  abort_on_gc = prev_abort_on_gc;
   return unbind_to (count, object);
 }
 
@@ -760,9 +753,9 @@ append to existing target file.  */)
 {
   if (initial_stderr_stream != NULL)
     {
-      BLOCK_INPUT;
+      block_input ();
       fclose (stderr);
-      UNBLOCK_INPUT;
+      unblock_input ();
     }
   stderr = initial_stderr_stream;
   initial_stderr_stream = NULL;
@@ -862,11 +855,11 @@ print_error_message (Lisp_Object data, Lisp_Object stream, const char *context,
   if (!NILP (caller) && SYMBOLP (caller))
     {
       Lisp_Object cname = SYMBOL_NAME (caller);
-      char *name;
+      ptrdiff_t cnamelen = SBYTES (cname);
       USE_SAFE_ALLOCA;
-      SAFE_ALLOCA (name, char *, SBYTES (cname));
-      memcpy (name, SDATA (cname), SBYTES (cname));
-      message_dolog (name, SBYTES (cname), 0, 0);
+      char *name = SAFE_ALLOCA (cnamelen);
+      memcpy (name, SDATA (cname), cnamelen);
+      message_dolog (name, cnamelen, 0, 0);
       message_dolog (": ", 2, 0, 0);
       SAFE_FREE ();
     }
@@ -1196,7 +1189,7 @@ print_preprocess (Lisp_Object obj)
 	{
 	case Lisp_String:
 	  /* A string may have text properties, which can be circular.  */
-	  traverse_intervals_noorder (STRING_INTERVALS (obj),
+	  traverse_intervals_noorder (string_intervals (obj),
 				      print_preprocess_string, Qnil);
 	  break;
 
@@ -1299,7 +1292,7 @@ static Lisp_Object
 print_prune_string_charset (Lisp_Object string)
 {
   print_check_string_result = 0;
-  traverse_intervals (STRING_INTERVALS (string), 0,
+  traverse_intervals (string_intervals (string), 0,
 		      print_check_string_charset_prop, string);
   if (! (print_check_string_result & PRINT_STRING_UNSAFE_CHARSET_FOUND))
     {
@@ -1410,7 +1403,7 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 	  if (! EQ (Vprint_charset_text_property, Qt))
 	    obj = print_prune_string_charset (obj);
 
-	  if (!NULL_INTERVAL_P (STRING_INTERVALS (obj)))
+	  if (string_intervals (obj))
 	    {
 	      PRINTCHAR ('#');
 	      PRINTCHAR ('(');
@@ -1501,9 +1494,9 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 	    }
 	  PRINTCHAR ('\"');
 
-	  if (!NULL_INTERVAL_P (STRING_INTERVALS (obj)))
+	  if (string_intervals (obj))
 	    {
-	      traverse_intervals (STRING_INTERVALS (obj),
+	      traverse_intervals (string_intervals (obj),
 				  0, print_interval, printcharfun);
 	      PRINTCHAR (')');
 	    }
@@ -1778,7 +1771,8 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 	  if (!NILP (XWINDOW (obj)->buffer))
 	    {
 	      strout (" on ", -1, -1, printcharfun);
-	      print_string (BVAR (XBUFFER (XWINDOW (obj)->buffer), name), printcharfun);
+	      print_string (BVAR (XBUFFER (XWINDOW (obj)->buffer), name),
+			    printcharfun);
 	    }
 	  PRINTCHAR ('>');
 	}
@@ -1879,7 +1873,7 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 	}
       else if (BUFFERP (obj))
 	{
-	  if (NILP (BVAR (XBUFFER (obj), name)))
+	  if (!BUFFER_LIVE_P (XBUFFER (obj)))
 	    strout ("#<killed buffer>", -1, -1, printcharfun);
 	  else if (escapeflag)
 	    {
@@ -1897,10 +1891,21 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
       else if (FRAMEP (obj))
 	{
 	  int len;
+	  Lisp_Object frame_name = XFRAME (obj)->name;
+
 	  strout ((FRAME_LIVE_P (XFRAME (obj))
 		   ? "#<frame " : "#<dead frame "),
 		  -1, -1, printcharfun);
-	  print_string (XFRAME (obj)->name, printcharfun);
+	  if (!STRINGP (frame_name))
+	    {
+	      /* A frame could be too young and have no name yet;
+		 don't crash.  */
+	      if (SYMBOLP (frame_name))
+		frame_name = Fsymbol_name (frame_name);
+	      else	/* can't happen: name should be either nil or string */
+		frame_name = build_string ("*INVALID*FRAME*NAME*");
+	    }
+	  print_string (frame_name, printcharfun);
 	  len = sprintf (buf, " %p", XFRAME (obj));
 	  strout (buf, len, len, printcharfun);
 	  PRINTCHAR ('>');
@@ -2049,7 +2054,7 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
       {
 	int len;
 	/* We're in trouble if this happens!
-	   Probably should just abort () */
+	   Probably should just emacs_abort ().  */
 	strout ("#<EMACS BUG: INVALID DATATYPE ", -1, -1, printcharfun);
 	if (MISCP (obj))
 	  len = sprintf (buf, "(MISC 0x%04x)", (int) XMISCTYPE (obj));

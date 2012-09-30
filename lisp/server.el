@@ -94,7 +94,6 @@
              (setq val t)
              (unless load-in-progress
                (message "Local sockets unsupported, using TCP sockets")))
-           (when val (random t))
            (set-default sym val))
   :group 'server
   :type 'boolean
@@ -163,7 +162,7 @@ key."
   :type '(choice
 	  (const :tag "Random" nil)
 	  (string :tag "Password"))
-  :version "24.2")
+  :version "24.3")
 
 (defcustom server-raise-frame 
   (if (eq initial-window-system 'ns) 'activate t)

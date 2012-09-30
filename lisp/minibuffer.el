@@ -211,7 +211,7 @@ case sensitive instead."
       (complete-with-action action table string pred))))
 
 (defun completion-table-subvert (table s1 s2)
-  "Completion table that replaces the prefix S1 with S2 in STRING.
+  "Return a completion table from TABLE with S1 replaced by S2.
 The result is a completion table which completes strings of the
 form (concat S1 S) in the same way as TABLE completes strings of
 the form (concat S2 S)."
@@ -1823,7 +1823,9 @@ Currently supported properties are all the properties that can appear in
  `:predicate'	a predicate that completion candidates need to satisfy.
  `:exclusive'	If `no', means that if the completion table fails to
    match the text at point, then instead of reporting a completion
-   failure, the completion should try the next completion function.")
+   failure, the completion should try the next completion function.
+As is the case with most hooks, the functions are responsible to preserve
+things like point and current buffer.")
 
 (defvar completion--capf-misbehave-funs nil
   "List of functions found on `completion-at-point-functions' that misbehave.
@@ -2265,14 +2267,24 @@ such as making the current buffer visit no file in the case of
 (defun read-file-name (prompt &optional dir default-filename mustmatch initial predicate)
   "Read file name, prompting with PROMPT and completing in directory DIR.
 Value is not expanded---you must call `expand-file-name' yourself.
-Default name to DEFAULT-FILENAME if user exits the minibuffer with
-the same non-empty string that was inserted by this function.
- (If DEFAULT-FILENAME is omitted, the visited file name is used,
-  except that if INITIAL is specified, that combined with DIR is used.
-  If DEFAULT-FILENAME is a list of file names, the first file name is used.)
-If the user exits with an empty minibuffer, this function returns
-an empty string.  (This can only happen if the user erased the
-pre-inserted contents or if `insert-default-directory' is nil.)
+
+DIR is the directory to use for completing relative file names.
+It should be an absolute directory name, or nil (which means the
+current buffer's value of `default-directory').
+
+DEFAULT-FILENAME specifies the default file name to return if the
+user exits the minibuffer with the same non-empty string inserted
+by this function.  If DEFAULT-FILENAME is a string, that serves
+as the default.  If DEFAULT-FILENAME is a list of strings, the
+first string is the default.  If DEFAULT-FILENAME is omitted or
+nil, then if INITIAL is non-nil, the default is DIR combined with
+INITIAL; otherwise, if the current buffer is visiting a file,
+that file serves as the default; otherwise, the default is simply
+the string inserted into the minibuffer.
+
+If the user exits with an empty minibuffer, return an empty
+string.  (This happens only if the user erases the pre-inserted
+contents, or if `insert-default-directory' is nil.)
 
 Fourth arg MUSTMATCH can take the following values:
 - nil means that the user can exit with any input.
@@ -2289,10 +2301,10 @@ Fourth arg MUSTMATCH can take the following values:
 
 Fifth arg INITIAL specifies text to start with.
 
-If optional sixth arg PREDICATE is non-nil, possible completions and
-the resulting file name must satisfy (funcall PREDICATE NAME).
-DIR should be an absolute directory name.  It defaults to the value of
-`default-directory'.
+Sixth arg PREDICATE, if non-nil, should be a function of one
+argument; then a file name is considered an acceptable completion
+alternative only if PREDICATE returns non-nil with the file name
+as its argument.
 
 If this command was invoked with the mouse, use a graphical file
 dialog if `use-dialog-box' is non-nil, and the window system or X

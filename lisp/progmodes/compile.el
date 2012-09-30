@@ -488,9 +488,12 @@ What matched the HYPERLINK'th subexpression has `mouse-face' and
 `compilation-message-face' applied.  If this is nil, the text
 matched by the whole REGEXP becomes the hyperlink.
 
-Additional HIGHLIGHTs take the shape (SUBMATCH FACE), where SUBMATCH is
-the number of a submatch that should be highlighted when it matches,
-and FACE is an expression returning the face to use for that submatch.."
+Additional HIGHLIGHTs take the shape (SUBMATCH FACE), where
+SUBMATCH is the number of a submatch and FACE is an expression
+which evaluates to a face name (a symbol or string).
+Alternatively, FACE can evaluate to a property list of the
+form (face FACE PROP1 VAL1 PROP2 VAL2 ...), in which case all the
+listed text properties PROP# are given values VAL# as well."
   :type '(repeat (choice (symbol :tag "Predefined symbol")
 			 (sexp :tag "Error specification")))
   :link `(file-link :tag "example file"
@@ -684,13 +687,13 @@ starting the compilation process."
     (t (:inverse-video t :weight bold)))
   "Face for Compilation mode's \"error\" mode line indicator."
   :group 'compilation
-  :version "24.2")
+  :version "24.3")
 
 (defface compilation-mode-line-run
   '((t :inherit compilation-warning))
   "Face for Compilation mode's \"running\" mode line indicator."
   :group 'compilation
-  :version "24.2")
+  :version "24.3")
 
 (defface compilation-mode-line-exit
   '((default :inherit compilation-info)
@@ -700,7 +703,7 @@ starting the compilation process."
     (t (:weight bold)))
   "Face for Compilation mode's \"exit\" mode line indicator."
   :group 'compilation
-  :version "24.2")
+  :version "24.3")
 
 (defface compilation-line-number
   '((t :inherit font-lock-keyword-face))
@@ -745,12 +748,10 @@ Faces `compilation-error-face', `compilation-warning-face',
 (defvar compilation-leave-directory-face 'font-lock-builtin-face
   "Face name to use for leaving directory messages.")
 
-
-
 ;; Used for compatibility with the old compile.el.
 (defvar compilation-parse-errors-function nil)
-(make-obsolete 'compilation-parse-errors-function
-               'compilation-error-regexp-alist "24.1")
+(make-obsolete-variable 'compilation-parse-errors-function
+			'compilation-error-regexp-alist "24.1")
 
 (defcustom compilation-auto-jump-to-first-error nil
   "If non-nil, automatically jump to the first error during compilation."
@@ -1328,16 +1329,27 @@ to `compilation-error-regexp-alist' if RULES is nil."
             (compilation--put-prop
              end-col 'font-lock-face compilation-column-face)
 
+	    ;; Obey HIGHLIGHT.
             (dolist (extra-item (nthcdr 6 item))
               (let ((mn (pop extra-item)))
                 (when (match-beginning mn)
                   (let ((face (eval (car extra-item))))
                     (cond
                      ((null face))
-                     ((symbolp face)
+                     ((or (symbolp face) (stringp face))
                       (put-text-property
                        (match-beginning mn) (match-end mn)
                        'font-lock-face face))
+		     ((and (listp face)
+			   (eq (car face) 'face)
+			   (or (symbolp (cadr face))
+			       (stringp (cadr face))))
+                      (put-text-property
+                       (match-beginning mn) (match-end mn)
+                       'font-lock-face (cadr face))
+                      (add-text-properties
+                       (match-beginning mn) (match-end mn)
+                       (nthcdr 2 face)))
                      (t
                       (error "Don't know how to handle face %S"
                              face)))))))
@@ -1485,23 +1497,12 @@ Otherwise, construct a buffer name from NAME-OF-MODE."
 	(t
 	 (concat "*" (downcase name-of-mode) "*"))))
 
-;; This is a rough emulation of the old hack, until the transition to new
-;; compile is complete.
-(defun compile-internal (command error-message
-				 &optional _name-of-mode parser
-				 error-regexp-alist name-function
-				 _enter-regexp-alist _leave-regexp-alist
-				 file-regexp-alist _nomessage-regexp-alist
-				 _no-async highlight-regexp _local-map)
-  (if parser
-      (error "Compile now works very differently, see `compilation-error-regexp-alist'"))
-  (let ((compilation-error-regexp-alist
-	 (append file-regexp-alist (or error-regexp-alist
-				       compilation-error-regexp-alist)))
-	(compilation-error (replace-regexp-in-string "^No more \\(.+\\)s\\.?"
-						     "\\1" error-message)))
-    (compilation-start command nil name-function highlight-regexp)))
-(make-obsolete 'compile-internal 'compilation-start "22.1")
+(defcustom compilation-always-kill nil
+  "If t, always kill a running compilation process before starting a new one.
+If nil, ask to kill it."
+  :type 'boolean
+  :version "24.3"
+  :group 'compilation)
 
 ;;;###autoload
 (defun compilation-start (command &optional mode name-function highlight-regexp)
@@ -1535,19 +1536,20 @@ Returns the compilation buffer created."
 	      (get-buffer-create
                (compilation-buffer-name name-of-mode mode name-function)))
       (let ((comp-proc (get-buffer-process (current-buffer))))
-	(if comp-proc
-	    (if (or (not (eq (process-status comp-proc) 'run))
-		    (yes-or-no-p
-		     (format "A %s process is running; kill it? "
-			     name-of-mode)))
-		(condition-case ()
-		    (progn
-		      (interrupt-process comp-proc)
-		      (sit-for 1)
-		      (delete-process comp-proc))
-		  (error nil))
-	      (error "Cannot have two processes in `%s' at once"
-		     (buffer-name)))))
+      (if comp-proc
+          (if (or (not (eq (process-status comp-proc) 'run))
+                  (eq (process-query-on-exit-flag comp-proc) nil)
+                  (yes-or-no-p
+                   (format "A %s process is running; kill it? "
+                           name-of-mode)))
+              (condition-case ()
+                  (progn
+                    (interrupt-process comp-proc)
+                    (sit-for 1)
+                    (delete-process comp-proc))
+                (error nil))
+            (error "Cannot have two processes in `%s' at once"
+                   (buffer-name)))))
       ;; first transfer directory from where M-x compile was called
       (setq default-directory thisdir)
       ;; Make compilation buffer read-only.  The filter can still write it.
@@ -1602,7 +1604,7 @@ Returns the compilation buffer created."
       (let ((process-environment
 	     (append
 	      compilation-environment
-	      (if (if (boundp 'system-uses-terminfo) ; `if' for compiler warning
+	      (if (if (boundp 'system-uses-terminfo);`If' for compiler warning.
 		      system-uses-terminfo)
 		  (list "TERM=dumb" "TERMCAP="
 			(format "COLUMNS=%d" (window-width)))
@@ -1652,13 +1654,20 @@ Returns the compilation buffer created."
 			   nil `("-c" ,command))))
 		     (start-file-process-shell-command (downcase mode-name)
 						       outbuf command))))
-	      ;; Make the buffer's mode line show process state.
-	      (setq mode-line-process
-		    '(:propertize ":%s" face compilation-mode-line-run))
-	      (set-process-sentinel proc 'compilation-sentinel)
-	      (unless (eq mode t)
-		;; Keep the comint filter, since it's needed for proper handling
-		;; of the prompts.
+              ;; Make the buffer's mode line show process state.
+              (setq mode-line-process
+                    '(:propertize ":%s" face compilation-mode-line-run))
+
+              ;; Set the process as killable without query by default.
+              ;; This allows us to start a new compilation without
+              ;; getting prompted.
+              (when compilation-always-kill
+                (set-process-query-on-exit-flag proc nil))
+
+              (set-process-sentinel proc 'compilation-sentinel)
+              (unless (eq mode t)
+                ;; Keep the comint filter, since it's needed for proper
+		;; handling of the prompts.
 		(set-process-filter proc 'compilation-filter))
 	      ;; Use (point-max) here so that output comes in
 	      ;; after the initial text,
@@ -2461,10 +2470,7 @@ and overlay is highlighted between MK and END-MK."
                 ;; the error location if the two buffers are in two
                 ;; different frames.  So don't do it if it's not necessary.
                 pre-existing
-              (let ((display-buffer-reuse-frames t)
-                    (pop-up-windows t))
-		;; Pop up a window.
-                (display-buffer (marker-buffer msg)))))
+	      (display-buffer (marker-buffer msg))))
 	 (highlight-regexp (with-current-buffer (marker-buffer msg)
 			     ;; also do this while we change buffer
 			     (compilation-set-window w msg)

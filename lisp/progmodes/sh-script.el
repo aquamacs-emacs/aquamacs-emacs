@@ -202,6 +202,11 @@
   (require 'comint))
 (require 'executable)
 
+(autoload 'comint-completion-at-point "comint")
+(autoload 'comint-filename-completion "comint")
+(autoload 'shell-command-completion "shell")
+(autoload 'shell-environment-variable-completion "shell")
+
 (defvar font-lock-comment-face)
 (defvar font-lock-set-defaults)
 (defvar font-lock-string-face)
@@ -327,8 +332,15 @@ shell it really is."
 (defcustom sh-imenu-generic-expression
   `((sh
      . ((nil
-         "^\\s-*\\(function\\s-+\\)?\\([[:alpha:]_][[:alnum:]_]+\\)\\s-*()"
-         2))))
+	 ;; function FOO
+	 ;; function FOO()
+         "^\\s-*function\\s-+\\\([[:alpha:]_][[:alnum:]_]+\\)\\s-*\\(?:()\\)?"
+         1)
+	;; FOO()
+	(nil
+	 "^\\s-*\\([[:alpha:]_][[:alnum:]_]+\\)\\s-*()"
+	 1)
+	)))
   "Alist of regular expressions for recognizing shell function definitions.
 See `sh-feature' and `imenu-generic-expression'."
   :type '(alist :key-type (symbol :tag "Shell")
@@ -463,7 +475,6 @@ This is buffer-local in every such buffer.")
     (define-key map "\C-\M-x" 'sh-execute-region)
     (define-key map "\C-c\C-x" 'executable-interpret)
 
-    (define-key map [remap complete-tag] 'comint-dynamic-complete)
     (define-key map [remap delete-backward-char]
       'backward-delete-char-untabify)
     (define-key map "\C-c:" 'sh-set-shell)
@@ -546,9 +557,9 @@ This is buffer-local in every such buffer.")
   "Value to use for `skeleton-pair-default-alist' in Shell-Script mode.")
 
 (defcustom sh-dynamic-complete-functions
-  '(shell-dynamic-complete-environment-variable
-    shell-dynamic-complete-command
-    comint-dynamic-complete-filename)
+  '(shell-environment-variable-completion
+    shell-command-completion
+    comint-filename-completion)
   "Functions for doing TAB dynamic completion."
   :type '(repeat function)
   :group 'sh-script)
@@ -1051,21 +1062,22 @@ subshells can nest."
               (backward-char 1))
             (when (eq (char-before) ?|)
               (backward-char 1) t)))
-      (when (progn (backward-char 2)
-                   (if (> start (line-end-position))
-                       (put-text-property (point) (1+ start)
-                                          'syntax-multiline t))
-                   ;; FIXME: The `in' may just be a random argument to
-                   ;; a normal command rather than the real `in' keyword.
-                   ;; I.e. we should look back to try and find the
-                   ;; corresponding `case'.
-                   (and (looking-at ";[;&]\\|\\_<in")
-                        ;; ";; esac )" is a case that looks like a case-pattern
-                        ;; but it's really just a close paren after a case
-                        ;; statement.  I.e. if we skipped over `esac' just now,
-                        ;; we're not looking at a case-pattern.
-                        (not (looking-at "..[ \t\n]+esac[^[:word:]_]"))))
-        sh-st-punc))))
+      (and (> (point) (1+ (point-min)))
+           (progn (backward-char 2)
+                  (if (> start (line-end-position))
+                      (put-text-property (point) (1+ start)
+                                         'syntax-multiline t))
+                  ;; FIXME: The `in' may just be a random argument to
+                  ;; a normal command rather than the real `in' keyword.
+                  ;; I.e. we should look back to try and find the
+                  ;; corresponding `case'.
+                  (and (looking-at ";[;&]\\|\\_<in")
+                       ;; ";; esac )" is a case that looks like a case-pattern
+                       ;; but it's really just a close paren after a case
+                       ;; statement.  I.e. if we skipped over `esac' just now,
+                       ;; we're not looking at a case-pattern.
+                       (not (looking-at "..[ \t\n]+esac[^[:word:]_]"))))
+           sh-st-punc))))
 
 (defun sh-font-lock-backslash-quote ()
   (if (eq (save-excursion (nth 3 (syntax-ppss (match-beginning 0)))) ?\')
@@ -1087,7 +1099,7 @@ subshells can nest."
     ;; metacharacters.  The list of special chars is taken from
     ;; the single-unix spec of the shell command language (under
     ;; `quoting') but with `$' removed.
-    ("[^|&;<>()`\\\"' \t\n]\\(#+\\)" (1 "_"))
+    ("\\(?:[^|&;<>()`\\\"' \t\n]\\|\\${\\)\\(#+\\)" (1 "_"))
     ;; In a '...' the backslash is not escaping.
     ("\\(\\\\\\)'" (1 (sh-font-lock-backslash-quote)))
     ;; Make sure $@ and $? are correctly recognized as sexps.
@@ -1096,12 +1108,12 @@ subshells can nest."
     (")" (0 (sh-font-lock-paren (match-beginning 0))))
     ;; Highlight (possibly nested) subshells inside "" quoted
     ;; regions correctly.
-    ("\"\\(?:\\(?:[^\\\"]\\|\\)*?[^\\]\\(?:\\\\\\\\\\)*\\)??\\(\\$(\\|`\\)"
+    ("\"\\(?:\\(?:[^\\\"]\\|\\\\.\\)*?\\)??\\(\\$(\\|`\\)"
      (1 (ignore
-         ;; Save excursion because we want to also apply other
-         ;; syntax-propertize rules within the affected region.
-         (if (nth 8 (syntax-ppss))
+         (if (nth 8 (save-excursion (syntax-ppss (match-beginning 0))))
              (goto-char (1+ (match-beginning 0)))
+           ;; Save excursion because we want to also apply other
+           ;; syntax-propertize rules within the affected region.
            (save-excursion
              (sh-font-lock-quoted-subshell end)))))))
    (point) end))
@@ -1180,7 +1192,7 @@ This value is used for the `+' and `-' symbols in an indentation variable."
   :group 'sh-indentation)
 (put 'sh-basic-offset 'safe-local-variable 'integerp)
 
-(defcustom sh-indent-comment nil
+(defcustom sh-indent-comment t
   "How a comment line is to be indented.
 nil means leave it as it is;
 t  means indent it as a normal line, aligning it to previous non-blank
@@ -1191,6 +1203,7 @@ a number means align to that column, e.g. 0 means first column."
 	  (const :tag "Indent as a normal line."  t)
 	  (integer :menu-tag "Indent to this col (0 means first col)."
 		   :tag "Indent to column number.") )
+  :version "24.3"
   :group 'sh-indentation)
 
 
@@ -1478,6 +1491,7 @@ with your script for an edit-interpret-debug cycle."
   (set (make-local-variable 'local-abbrev-table) sh-mode-abbrev-table)
   (set (make-local-variable 'comint-dynamic-complete-functions)
        sh-dynamic-complete-functions)
+  (add-hook 'completion-at-point-functions 'comint-completion-at-point nil t)
   ;; we can't look if previous line ended with `\'
   (set (make-local-variable 'comint-prompt-regexp) "^[ \t]*")
   (set (make-local-variable 'imenu-case-fold-search) nil)
@@ -4065,11 +4079,10 @@ option followed by a colon `:' if the option accepts an argument."
 (defun sh-maybe-here-document (arg)
   "Insert self.  Without prefix, following unquoted `<' inserts here document.
 The document is bounded by `sh-here-document-word'."
+  (declare (obsolete sh-electric-here-document-mode "24.3"))
   (interactive "*P")
   (self-insert-command (prefix-numeric-value arg))
   (or arg (sh--maybe-here-document)))
-(make-obsolete 'sh--maybe-here-document
-               'sh-electric-here-document-mode "24.2")
 
 (defun sh--maybe-here-document ()
   (or (not (looking-back "[^<]<<"))
@@ -4101,20 +4114,6 @@ The document is bounded by `sh-here-document-word'."
     (remove-hook 'post-self-insert-hook #'sh--maybe-here-document t)))
 
 ;; various other commands
-
-(autoload 'comint-dynamic-complete "comint"
-  "Dynamically perform completion at point." t)
-
-(autoload 'shell-dynamic-complete-command "shell"
-  "Dynamically complete the command at point." t)
-
-(autoload 'comint-dynamic-complete-filename "comint"
-  "Dynamically complete the filename at point." t)
-
-(autoload 'shell-dynamic-complete-environment-variable "shell"
-  "Dynamically complete the environment variable at point." t)
-
-
 
 (defun sh-beginning-of-command ()
   ;; FIXME: Redefine using SMIE.

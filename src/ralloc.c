@@ -25,7 +25,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef emacs
 
 #include <config.h>
-#include <setjmp.h>
+
 #include "lisp.h"		/* Needed for VALBITS.  */
 #include "blockinput.h"
 
@@ -237,7 +237,7 @@ obtain (POINTER address, SIZE size)
     }
 
   if (! heap)
-    abort ();
+    emacs_abort ();
 
   /* If we can't fit SIZE bytes in that heap,
      try successive later heaps.  */
@@ -330,7 +330,7 @@ relinquish (void)
 	  /* This heap should have no blocs in it.  */
 	  if (last_heap->first_bloc != NIL_BLOC
 	      || last_heap->last_bloc != NIL_BLOC)
-	    abort ();
+	    emacs_abort ();
 
 	  /* Return the last heap, with its header, to the system.  */
 	  excess = (char *)last_heap->end - (char *)last_heap->start;
@@ -355,7 +355,7 @@ relinquish (void)
              which returns the entire last heap to the system, seems
              unlikely to trigger this mode of failure.  */
 	  if (last_heap->end != (*real_morecore) (0))
-	    abort ();
+	    emacs_abort ();
 	}
     }
 }
@@ -452,7 +452,7 @@ relocate_blocs (bloc_ptr bloc, heap_ptr heap, POINTER address)
 
   /* No need to ever call this if arena is frozen, bug somewhere!  */
   if (r_alloc_freeze_level)
-    abort ();
+    emacs_abort ();
 
   while (b)
     {
@@ -576,7 +576,7 @@ resize_bloc (bloc_ptr bloc, SIZE size)
 
   /* No need to ever call this if arena is frozen, bug somewhere!  */
   if (r_alloc_freeze_level)
-    abort ();
+    emacs_abort ();
 
   if (bloc == NIL_BLOC || size == bloc->size)
     return 1;
@@ -588,7 +588,7 @@ resize_bloc (bloc_ptr bloc, SIZE size)
     }
 
   if (heap == NIL_HEAP)
-    abort ();
+    emacs_abort ();
 
   old_size = bloc->size;
   bloc->size = size;
@@ -670,6 +670,7 @@ static void
 free_bloc (bloc_ptr bloc)
 {
   heap_ptr heap = bloc->heap;
+  heap_ptr h;
 
   if (r_alloc_freeze_level)
     {
@@ -699,20 +700,38 @@ free_bloc (bloc_ptr bloc)
       bloc->prev->next = bloc->next;
     }
 
-  /* Update the records of which blocs are in HEAP.  */
-  if (heap->first_bloc == bloc)
+  /* Sometimes, 'heap' obtained from bloc->heap above is not really a
+     'heap' structure.  It can even be beyond the current break point,
+     which will cause crashes when we dereference it below (see
+     bug#12242).  Evidently, the reason is bloc allocations done while
+     use_relocatable_buffers was non-positive, because additional
+     memory we get then is not recorded in the heaps we manage.  If
+     bloc->heap records such a "heap", we cannot (and don't need to)
+     update its records.  So we validate the 'heap' value by making
+     sure it is one of the heaps we manage via the heaps linked list,
+     and don't touch a 'heap' that isn't found there.  This avoids
+     accessing memory we know nothing about.  */
+  for (h = first_heap; h != NIL_HEAP; h = h->next)
+    if (heap == h)
+      break;
+
+  if (h)
     {
-      if (bloc->next != 0 && bloc->next->heap == heap)
-	heap->first_bloc = bloc->next;
-      else
-	heap->first_bloc = heap->last_bloc = NIL_BLOC;
-    }
-  if (heap->last_bloc == bloc)
-    {
-      if (bloc->prev != 0 && bloc->prev->heap == heap)
-	heap->last_bloc = bloc->prev;
-      else
-	heap->first_bloc = heap->last_bloc = NIL_BLOC;
+      /* Update the records of which blocs are in HEAP.  */
+      if (heap->first_bloc == bloc)
+	{
+	  if (bloc->next != 0 && bloc->next->heap == heap)
+	    heap->first_bloc = bloc->next;
+	  else
+	    heap->first_bloc = heap->last_bloc = NIL_BLOC;
+	}
+      if (heap->last_bloc == bloc)
+	{
+	  if (bloc->prev != 0 && bloc->prev->heap == heap)
+	    heap->last_bloc = bloc->prev;
+	  else
+	    heap->first_bloc = heap->last_bloc = NIL_BLOC;
+	}
     }
 
   relinquish ();
@@ -918,7 +937,7 @@ r_alloc_free (register POINTER *ptr)
 
   dead_bloc = find_bloc (ptr);
   if (dead_bloc == NIL_BLOC)
-    abort (); /* Double free? PTR not originally used to allocate?  */
+    emacs_abort (); /* Double free? PTR not originally used to allocate?  */
 
   free_bloc (dead_bloc);
   *ptr = 0;
@@ -960,7 +979,7 @@ r_re_alloc (POINTER *ptr, SIZE size)
 
   bloc = find_bloc (ptr);
   if (bloc == NIL_BLOC)
-    abort (); /* Already freed? PTR not originally used to allocate?  */
+    emacs_abort (); /* Already freed? PTR not originally used to allocate?  */
 
   if (size < bloc->size)
     {
@@ -1133,7 +1152,7 @@ r_alloc_reset_variable (POINTER *old, POINTER *new)
     }
 
   if (bloc == NIL_BLOC || bloc->variable != old)
-    abort (); /* Already freed? OLD not originally used to allocate?  */
+    emacs_abort (); /* Already freed? OLD not originally used to allocate?  */
 
   /* Update variable to point to the new location.  */
   bloc->variable = new;
@@ -1174,20 +1193,26 @@ r_alloc_init (void)
   first_heap->start = first_heap->bloc_start
     = virtual_break_value = break_value = (*real_morecore) (0);
   if (break_value == NIL)
-    abort ();
+    emacs_abort ();
 
   extra_bytes = ROUNDUP (50000);
 #endif
 
 #ifdef DOUG_LEA_MALLOC
-  BLOCK_INPUT;
+  block_input ();
   mallopt (M_TOP_PAD, 64 * 4096);
-  UNBLOCK_INPUT;
+  unblock_input ();
 #else
 #ifndef SYSTEM_MALLOC
-  /* Give GNU malloc's morecore some hysteresis
-     so that we move all the relocatable blocks much less often.  */
-  __malloc_extra_blocks = 64;
+  /* Give GNU malloc's morecore some hysteresis so that we move all
+     the relocatable blocks much less often.  The number used to be
+     64, but alloc.c would override that with 32 in code that was
+     removed when SYNC_INPUT became the only input handling mode.
+     That code was conditioned on !DOUG_LEA_MALLOC, so the call to
+     mallopt above is left unchanged.  (Actually, I think there's no
+     system nowadays that uses DOUG_LEA_MALLOC and also uses
+     REL_ALLOC.)  */
+  __malloc_extra_blocks = 32;
 #endif
 #endif
 

@@ -86,7 +86,7 @@ for both actions (NOT RECOMMENDED)."
 The functions get one argument, the first locked buffer found."
   :type 'hook
   :group 'emacs-lock
-  :version "24.2")
+  :version "24.3")
 
 (defvar emacs-lock-mode nil
   "If non-nil, the current buffer is locked.
@@ -249,9 +249,9 @@ Other values are interpreted as usual."
 
 (defun toggle-emacs-lock ()
   "Toggle `emacs-lock-from-exiting' for the current buffer."
+  (declare (obsolete emacs-lock-mode "24.1"))
   (interactive)
   (call-interactively 'emacs-lock-mode))
-(make-obsolete 'toggle-emacs-lock 'emacs-lock-mode "24.1")
 
 (provide 'emacs-lock)
 

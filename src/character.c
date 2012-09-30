@@ -29,12 +29,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 #endif
 
+#define CHARACTER_INLINE EXTERN_INLINE
+
 #include <stdio.h>
 
 #ifdef emacs
 
 #include <sys/types.h>
-#include <setjmp.h>
 #include <intprops.h>
 #include "lisp.h"
 #include "character.h"
@@ -125,8 +126,6 @@ char_string (unsigned int c, unsigned char *p)
       c &= ~CHAR_MODIFIER_MASK;
     }
 
-  MAYBE_UNIFY_CHAR (c);
-
   if (c <= MAX_3_BYTE_CHAR)
     {
       bytes = CHAR_STRING (c, p);
@@ -194,8 +193,6 @@ string_char (const unsigned char *p, const unsigned char **advanced, int *len)
       p += 5;
     }
 
-  MAYBE_UNIFY_CHAR (c);
-
   if (len)
     *len = p - saved_p;
   if (advanced)
@@ -256,6 +253,9 @@ multibyte_char_to_unibyte_safe (int c)
 
 DEFUN ("characterp", Fcharacterp, Scharacterp, 1, 2, 0,
        doc: /* Return non-nil if OBJECT is a character.
+In Emacs Lisp, characters are represented by character codes, which
+are non-negative integers.  The function `max-char' returns the
+maximum character code.
 usage: (characterp OBJECT)  */)
   (Lisp_Object object, Lisp_Object ignore)
 {
@@ -422,7 +422,7 @@ lisp_string_width (Lisp_Object string, ptrdiff_t precision,
   /* This set multibyte to 0 even if STRING is multibyte when it
      contains only ascii and eight-bit-graphic, but that's
      intentional.  */
-  int multibyte = len < SBYTES (string);
+  bool multibyte = len < SBYTES (string);
   unsigned char *str = SDATA (string);
   ptrdiff_t i = 0, i_byte = 0;
   ptrdiff_t width = 0;
@@ -536,7 +536,7 @@ multibyte_chars_in_text (const unsigned char *ptr, ptrdiff_t nbytes)
       int len = MULTIBYTE_LENGTH (ptr, endp);
 
       if (len == 0)
-	abort ();
+	emacs_abort ();
       ptr += len;
       chars++;
     }
@@ -760,13 +760,10 @@ str_as_unibyte (unsigned char *str, ptrdiff_t bytes)
    corresponding byte and store in DST.  CHARS is the number of
    characters in SRC.  The value is the number of bytes stored in DST.
    Usually, the value is the same as CHARS, but is less than it if SRC
-   contains a non-ASCII, non-eight-bit character.  If ACCEPT_LATIN_1
-   is nonzero, a Latin-1 character is accepted and converted to a byte
-   of that character code.
-   Note: Currently the arg ACCEPT_LATIN_1 is not used.  */
+   contains a non-ASCII, non-eight-bit character.  */
 
 ptrdiff_t
-str_to_unibyte (const unsigned char *src, unsigned char *dst, ptrdiff_t chars, int accept_latin_1)
+str_to_unibyte (const unsigned char *src, unsigned char *dst, ptrdiff_t chars)
 {
   ptrdiff_t i;
 
@@ -776,8 +773,7 @@ str_to_unibyte (const unsigned char *src, unsigned char *dst, ptrdiff_t chars, i
 
       if (CHAR_BYTE8_P (c))
 	c = CHAR_TO_BYTE8 (c);
-      else if (! ASCII_CHAR_P (c)
-	       && (! accept_latin_1 || c >= 0x100))
+      else if (! ASCII_CHAR_P (c))
 	return i;
       *dst++ = c;
     }
@@ -788,7 +784,7 @@ str_to_unibyte (const unsigned char *src, unsigned char *dst, ptrdiff_t chars, i
 static ptrdiff_t
 string_count_byte8 (Lisp_Object string)
 {
-  int multibyte = STRING_MULTIBYTE (string);
+  bool multibyte = STRING_MULTIBYTE (string);
   ptrdiff_t nbytes = SBYTES (string);
   unsigned char *p = SDATA (string);
   unsigned char *pend = p + nbytes;
@@ -820,7 +816,7 @@ string_escape_byte8 (Lisp_Object string)
 {
   ptrdiff_t nchars = SCHARS (string);
   ptrdiff_t nbytes = SBYTES (string);
-  int multibyte = STRING_MULTIBYTE (string);
+  bool multibyte = STRING_MULTIBYTE (string);
   ptrdiff_t byte8_count;
   const unsigned char *src, *src_end;
   unsigned char *dst;
@@ -918,12 +914,10 @@ usage: (unibyte-string &rest BYTES)  */)
   (ptrdiff_t n, Lisp_Object *args)
 {
   ptrdiff_t i;
-  unsigned char *buf, *p;
   Lisp_Object str;
   USE_SAFE_ALLOCA;
-
-  SAFE_ALLOCA (buf, unsigned char *, n);
-  p = buf;
+  unsigned char *buf = SAFE_ALLOCA (n);
+  unsigned char *p = buf;
 
   for (i = 0; i < n; i++)
     {

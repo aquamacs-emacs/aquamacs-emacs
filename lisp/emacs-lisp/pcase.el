@@ -60,6 +60,8 @@
 ;; is in a loop, the repeated macro-expansion becomes terribly costly, so we
 ;; memoize previous macro expansions to try and avoid recomputing them
 ;; over and over again.
+;; FIXME: Now that macroexpansion is also performed when loading an interpreted
+;; file, this is not a real problem any more.
 (defconst pcase--memoize (make-hash-table :weakness 'key :test 'eq))
 ;; (defconst pcase--memoize-1 (make-hash-table :test 'eq))
 ;; (defconst pcase--memoize-2 (make-hash-table :weakness 'key :test 'equal))
@@ -114,7 +116,8 @@ QPatterns for vectors are not implemented yet.
 
 PRED can take the form
   FUNCTION	     in which case it gets called with one argument.
-  (FUN ARG1 .. ARGN) in which case it gets called with N+1 arguments.
+  (FUN ARG1 .. ARGN) in which case it gets called with an N+1'th argument
+                        which is the value being matched.
 A PRED of the form FUNCTION is equivalent to one of the form (FUNCTION).
 PRED patterns can refer to variables bound earlier in the pattern.
 E.g. you can match pairs where the cdr is larger than the car with a pattern

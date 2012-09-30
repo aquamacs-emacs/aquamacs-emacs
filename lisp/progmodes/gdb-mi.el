@@ -944,11 +944,16 @@ no input, and GDB is waiting for input."
 (defun gdb-tooltip-print (expr)
   (with-current-buffer (gdb-get-buffer 'gdb-partial-output-buffer)
     (goto-char (point-min))
-    (if (re-search-forward ".*value=\\(\".*\"\\)" nil t)
-        (tooltip-show
-         (concat expr " = " (read (match-string 1)))
-         (or gud-tooltip-echo-area
-             (not (display-graphic-p)))))))
+    (cond
+     ((re-search-forward ".*value=\\(\".*\"\\)" nil t)
+      (tooltip-show
+       (concat expr " = " (read (match-string 1)))
+       (or gud-tooltip-echo-area
+	   (not (display-graphic-p)))))
+     ((re-search-forward  "msg=\\(\".+\"\\)$" nil t)
+      (tooltip-show (read (match-string 1))
+       (or gud-tooltip-echo-area
+	   (not (display-graphic-p))))))))
 
 ;; If expr is a macro for a function don't print because of possible dangerous
 ;; side-effects. Also printing a function within a tooltip generates an
@@ -958,7 +963,7 @@ no input, and GDB is waiting for input."
     (goto-char (point-min))
     (if (search-forward "expands to: " nil t)
 	(unless (looking-at "\\S-+.*(.*).*")
-	  (gdb-input (concat "-data-evaluate-expression " expr)
+	  (gdb-input (concat "-data-evaluate-expression \"" expr "\"")
 		     `(lambda () (gdb-tooltip-print ,expr)))))))
 
 (defun gdb-init-buffer ()
@@ -1408,29 +1413,6 @@ this trigger is subscribed to `gdb-buf-publisher' and called with
      (with-current-buffer ,buffer
        (apply ',expr args))))
 
-;; Used to define all gdb-frame-*-buffer functions except
-;; `gdb-frame-io-buffer'
-(defmacro def-gdb-frame-for-buffer (name buffer &optional doc)
-  "Define a function NAME which shows gdb BUFFER in a separate frame.
-
-DOC is an optional documentation string."
-  `(defun ,name (&optional thread)
-     ,(when doc doc)
-     (interactive)
-     (let ((special-display-regexps (append special-display-regexps '(".*")))
-           (special-display-frame-alist gdb-frame-parameters))
-       (display-buffer (gdb-get-buffer-create ,buffer thread)))))
-
-(defmacro def-gdb-display-buffer (name buffer &optional doc)
-  "Define a function NAME which shows gdb BUFFER.
-
-DOC is an optional documentation string."
-  `(defun ,name (&optional thread)
-     ,(when doc doc)
-     (interactive)
-     (gdb-display-buffer
-      (gdb-get-buffer-create ,buffer thread) t)))
-
 ;; Used to display windows with thread-bound buffers
 (defmacro def-gdb-preempt-display-buffer (name buffer &optional doc
 					       split-horizontal)
@@ -1506,19 +1488,19 @@ DOC is an optional documentation string."
 (defun gdb-display-io-buffer ()
   "Display IO of debugged program in a separate window."
   (interactive)
-  (gdb-display-buffer
-   (gdb-get-buffer-create 'gdb-inferior-io) t))
+  (gdb-display-buffer (gdb-get-buffer-create 'gdb-inferior-io)))
 
 (defun gdb-inferior-io--init-proc (proc)
   ;; Set up inferior I/O.  Needs GDB 6.4 onwards.
   (set-process-filter proc 'gdb-inferior-filter)
   (set-process-sentinel proc 'gdb-inferior-io-sentinel)
-  (gdb-input
-   (concat "-inferior-tty-set "
-	   ;; The process can run on a remote host.
-	   (or (process-get proc 'remote-tty)
-	       (process-tty-name proc)))
-   'ignore))
+  ;; The process can run on a remote host.
+  (let ((tty (or (process-get proc 'remote-tty)
+		 (process-tty-name proc))))
+    (unless (or (null tty)
+		(string= tty ""))
+      (gdb-input
+       (concat "-inferior-tty-set " tty) 'ignore))))
 
 (defun gdb-inferior-io-sentinel (proc str)
   (when (eq (process-status proc) 'failed)
@@ -1534,19 +1516,24 @@ DOC is an optional documentation string."
 	(comint-exec io-buffer "gdb-inferior" nil nil nil)
 	(gdb-inferior-io--init-proc (get-buffer-process io-buffer))))))
 
-(defconst gdb-frame-parameters
-  '((height . 14) (width . 80)
-    (unsplittable . t)
-    (tool-bar-lines . nil)
-    (menu-bar-lines . nil)
-    (minibuffer . nil)))
+(defvar gdb-display-buffer-other-frame-action
+  `((display-buffer-reuse-window display-buffer-pop-up-frame)
+    (reusable-frames . 0)
+    (inhibit-same-window . t)
+    (pop-up-frame-parameters (height . 14)
+			     (width . 80)
+			     (unsplittable . t)
+			     (tool-bar-lines . nil)
+			     (menu-bar-lines . nil)
+			     (minibuffer . nil)))
+  "A `display-buffer' action for displaying GDB utility frames.")
+(put 'gdb-display-buffer-other-frame-action 'risky-local-variable t)
 
 (defun gdb-frame-io-buffer ()
-  "Display IO of debugged program in a new frame."
+  "Display IO of debugged program in another frame."
   (interactive)
-  (let ((special-display-regexps (append special-display-regexps '(".*")))
-	(special-display-frame-alist gdb-frame-parameters))
-    (display-buffer (gdb-get-buffer-create 'gdb-inferior-io))))
+  (display-buffer (gdb-get-buffer-create 'gdb-inferior-io)
+		  gdb-display-buffer-other-frame-action))
 
 (defvar gdb-inferior-io-mode-map
   (let ((map (make-sparse-keymap)))
@@ -1565,7 +1552,7 @@ DOC is an optional documentation string."
 
 (defun gdb-inferior-filter (proc string)
   (unless (string-equal string "")
-    (gdb-display-buffer (gdb-get-buffer-create 'gdb-inferior-io) t))
+    (gdb-display-buffer (gdb-get-buffer-create 'gdb-inferior-io)))
   (with-current-buffer (gdb-get-buffer-create 'gdb-inferior-io)
     (comint-output-filter proc string)))
 
@@ -2100,13 +2087,15 @@ current thread and update GDB buffers."
   (setq gdb-filter-output
 	(gdb-concat-output
 	 gdb-filter-output
-	 (let ((error-message
-		(read output-field)))
-	   (put-text-property
-	    0 (length error-message)
-	    'face font-lock-warning-face
-	    error-message)
-	   error-message))))
+	 (if (string= output-field "\"\\n\"")
+	     ""
+	   (let ((error-message
+		  (read output-field)))
+	     (put-text-property
+	      0 (length error-message)
+	      'face font-lock-warning-face
+	      error-message)
+	     error-message)))))
 
 ;; Remove the trimmings from the console stream and send to GUD buffer
 ;; (frontend MI commands should not print to this stream)
@@ -2487,20 +2476,23 @@ HANDLER-NAME handler uses customization of CUSTOM-DEFUN. See
         (let ((file (bindat-get-field breakpoint 'fullname))
               (flag (bindat-get-field breakpoint 'enabled))
               (bptno (bindat-get-field breakpoint 'number)))
-          (unless (file-exists-p file)
+          (unless (and file (file-exists-p file))
             (setq file (cdr (assoc bptno gdb-location-alist))))
-          (if (and file
-                   (not (string-equal file "File not found")))
-              (with-current-buffer
-                  (find-file-noselect file 'nowarn)
-                (gdb-init-buffer)
-                ;; Only want one breakpoint icon at each location.
-                (gdb-put-breakpoint-icon (string-equal flag "y") bptno
-                                         (string-to-number line)))
-            (gdb-input (concat "list " file ":1") 'ignore)
-            (gdb-input "-file-list-exec-source-file"
-		       `(lambda () (gdb-get-location
-				    ,bptno ,line ,flag)))))))))
+	  (if (or (null file)
+		  (string-equal file "File not found"))
+	      ;; If the full filename is not recorded in the
+	      ;; breakpoint structure or in `gdb-location-alist', use
+	      ;; -file-list-exec-source-file to extract it.
+	      (when (setq file (bindat-get-field breakpoint 'file))
+		(gdb-input (concat "list " file ":1") 'ignore)
+		(gdb-input "-file-list-exec-source-file"
+			   `(lambda () (gdb-get-location
+					,bptno ,line ,flag))))
+	    (with-current-buffer (find-file-noselect file 'nowarn)
+	      (gdb-init-buffer)
+	      ;; Only want one breakpoint icon at each location.
+	      (gdb-put-breakpoint-icon (string-equal flag "y") bptno
+				       (string-to-number line)))))))))
 
 (defvar gdb-source-file-regexp "fullname=\"\\(.*?\\)\"")
 
@@ -2604,15 +2596,16 @@ If not in a source or disassembly buffer just set point."
 (defun gdb-breakpoints-buffer-name ()
   (concat "*breakpoints of " (gdb-get-target-string) "*"))
 
-(def-gdb-display-buffer
-  gdb-display-breakpoints-buffer
-  'gdb-breakpoints-buffer
-  "Display status of user-settable breakpoints.")
+(defun gdb-display-breakpoints-buffer (&optional thread)
+  "Display GDB breakpoints."
+  (interactive)
+  (gdb-display-buffer (gdb-get-buffer-create 'gdb-breakpoints-buffer thread)))
 
-(def-gdb-frame-for-buffer
-  gdb-frame-breakpoints-buffer
-  'gdb-breakpoints-buffer
-  "Display status of user-settable breakpoints in a new frame.")
+(defun gdb-frame-breakpoints-buffer (&optional thread)
+  "Display GDB breakpoints in another frame."
+  (interactive)
+  (display-buffer (gdb-get-buffer-create 'gdb-breakpoints-buffer thread)
+		  gdb-display-buffer-other-frame-action))
 
 (defvar gdb-breakpoints-mode-map
   (let ((map (make-sparse-keymap))
@@ -2673,15 +2666,16 @@ corresponding to the mode line clicked."
 (defun gdb-threads-buffer-name ()
   (concat "*threads of " (gdb-get-target-string) "*"))
 
-(def-gdb-display-buffer
-  gdb-display-threads-buffer
-  'gdb-threads-buffer
-  "Display GDB threads.")
+(defun gdb-display-threads-buffer (&optional thread)
+  "Display GDB threads."
+  (interactive)
+  (gdb-display-buffer (gdb-get-buffer-create 'gdb-threads-buffer thread)))
 
-(def-gdb-frame-for-buffer
-  gdb-frame-threads-buffer
-  'gdb-threads-buffer
-  "Display GDB threads in a new frame.")
+(defun gdb-frame-threads-buffer (&optional thread)
+  "Display GDB threads in another frame."
+  (interactive)
+  (display-buffer (gdb-get-buffer-create 'gdb-threads-buffer thread)
+		  gdb-display-buffer-other-frame-action))
 
 (def-gdb-trigger-and-handler
   gdb-invalidate-threads (gdb-current-context-command "-thread-info")
@@ -2857,26 +2851,22 @@ on the current line."
 (def-gdb-thread-buffer-simple-command
   gdb-frame-stack-for-thread
   gdb-frame-stack-buffer
-  "Display a new frame with stack buffer for the thread at
-current line.")
+  "Display another frame with stack buffer for thread at current line.")
 
 (def-gdb-thread-buffer-simple-command
   gdb-frame-locals-for-thread
   gdb-frame-locals-buffer
-  "Display a new frame with locals buffer for the thread at
-current line.")
+  "Display another frame with locals buffer for thread at current line.")
 
 (def-gdb-thread-buffer-simple-command
   gdb-frame-registers-for-thread
   gdb-frame-registers-buffer
-  "Display a new frame with registers buffer for the thread at
-current line.")
+  "Display another frame with registers buffer for the thread at current line.")
 
 (def-gdb-thread-buffer-simple-command
   gdb-frame-disassembly-for-thread
   gdb-frame-disassembly-buffer
-  "Display a new frame with disassembly buffer for the thread at
-current line.")
+  "Display another frame with disassembly buffer for the thread at current line.")
 
 (defmacro def-gdb-thread-buffer-gud-command (name gud-command &optional doc)
   "Define a NAME which will execute GUD-COMMAND with
@@ -3279,21 +3269,16 @@ DOC is an optional documentation string."
 (defun gdb-memory-buffer-name ()
   (concat "*memory of " (gdb-get-target-string) "*"))
 
-(def-gdb-display-buffer
-  gdb-display-memory-buffer
-  'gdb-memory-buffer
-  "Display memory contents.")
+(defun gdb-display-memory-buffer (&optional thread)
+  "Display GDB memory contents."
+  (interactive)
+  (gdb-display-buffer (gdb-get-buffer-create 'gdb-memory-buffer thread)))
 
 (defun gdb-frame-memory-buffer ()
-  "Display memory contents in a new frame."
+  "Display memory contents in another frame."
   (interactive)
-  (let* ((special-display-regexps (append special-display-regexps '(".*")))
-	 (special-display-frame-alist
-	  `((left-fringe . 0)
-            (right-fringe . 0)
-            (width . 83)
-            ,@gdb-frame-parameters)))
-    (display-buffer (gdb-get-buffer-create 'gdb-memory-buffer))))
+  (display-buffer (gdb-get-buffer-create 'gdb-memory-buffer)
+		  gdb-display-buffer-other-frame-action))
 
 
 ;;; Disassembly view
@@ -3302,19 +3287,20 @@ DOC is an optional documentation string."
   (gdb-current-context-buffer-name
    (concat "disassembly of " (gdb-get-target-string))))
 
-(def-gdb-display-buffer
-  gdb-display-disassembly-buffer
-  'gdb-disassembly-buffer
-  "Display disassembly for current stack frame.")
+(defun gdb-display-disassembly-buffer (&optional thread)
+  "Display GDB disassembly information."
+  (interactive)
+  (gdb-display-buffer (gdb-get-buffer-create 'gdb-disassembly-buffer thread)))
 
 (def-gdb-preempt-display-buffer
   gdb-preemptively-display-disassembly-buffer
   'gdb-disassembly-buffer)
 
-(def-gdb-frame-for-buffer
-  gdb-frame-disassembly-buffer
-  'gdb-disassembly-buffer
-  "Display disassembly in a new frame.")
+(defun gdb-frame-disassembly-buffer (&optional thread)
+  "Display GDB disassembly information in another frame."
+  (interactive)
+  (display-buffer (gdb-get-buffer-create 'gdb-disassembly-buffer thread)
+		  gdb-display-buffer-other-frame-action))
 
 (def-gdb-auto-update-trigger gdb-invalidate-disassembly
   (let* ((frame (gdb-current-buffer-frame))
@@ -3549,19 +3535,20 @@ member."
   (gdb-current-context-buffer-name
    (concat "stack frames of " (gdb-get-target-string))))
 
-(def-gdb-display-buffer
-  gdb-display-stack-buffer
-  'gdb-stack-buffer
-  "Display backtrace of current stack.")
+(defun gdb-display-stack-buffer (&optional thread)
+  "Display GDB backtrace for current stack."
+  (interactive)
+  (gdb-display-buffer (gdb-get-buffer-create 'gdb-stack-buffer thread)))
 
 (def-gdb-preempt-display-buffer
   gdb-preemptively-display-stack-buffer
   'gdb-stack-buffer nil t)
 
-(def-gdb-frame-for-buffer
-  gdb-frame-stack-buffer
-  'gdb-stack-buffer
-  "Display backtrace of current stack in a new frame.")
+(defun gdb-frame-stack-buffer (&optional thread)
+  "Display GDB backtrace for current stack in another frame."
+  (interactive)
+  (display-buffer (gdb-get-buffer-create 'gdb-stack-buffer thread)
+		  gdb-display-buffer-other-frame-action))
 
 (defvar gdb-frames-mode-map
   (let ((map (make-sparse-keymap)))
@@ -3708,19 +3695,20 @@ member."
   (gdb-current-context-buffer-name
    (concat "locals of " (gdb-get-target-string))))
 
-(def-gdb-display-buffer
-  gdb-display-locals-buffer
-  'gdb-locals-buffer
-  "Display local variables of current stack and their values.")
+(defun gdb-display-locals-buffer (&optional thread)
+  "Display the local variables of current GDB stack."
+  (interactive)
+  (gdb-display-buffer (gdb-get-buffer-create 'gdb-locals-buffer thread)))
 
 (def-gdb-preempt-display-buffer
   gdb-preemptively-display-locals-buffer
   'gdb-locals-buffer nil t)
 
-(def-gdb-frame-for-buffer
-  gdb-frame-locals-buffer
-  'gdb-locals-buffer
-  "Display local variables of current stack and their values in a new frame.")
+(defun gdb-frame-locals-buffer (&optional thread)
+  "Display the local variables of the current GDB stack in another frame."
+  (interactive)
+  (display-buffer (gdb-get-buffer-create 'gdb-locals-buffer thread)
+		  gdb-display-buffer-other-frame-action))
 
 
 ;; Registers buffer.
@@ -3807,19 +3795,20 @@ member."
   (gdb-current-context-buffer-name
    (concat "registers of " (gdb-get-target-string))))
 
-(def-gdb-display-buffer
-  gdb-display-registers-buffer
-  'gdb-registers-buffer
-  "Display integer register contents.")
+(defun gdb-display-registers-buffer (&optional thread)
+  "Display GDB register contents."
+  (interactive)
+  (gdb-display-buffer (gdb-get-buffer-create 'gdb-registers-buffer thread)))
 
 (def-gdb-preempt-display-buffer
   gdb-preemptively-display-registers-buffer
   'gdb-registers-buffer nil t)
 
-(def-gdb-frame-for-buffer
-  gdb-frame-registers-buffer
-  'gdb-registers-buffer
-  "Display integer register contents in a new frame.")
+(defun gdb-frame-registers-buffer (&optional thread)
+  "Display GDB register contents in another frame."
+  (interactive)
+  (display-buffer (gdb-get-buffer-create 'gdb-registers-buffer thread)
+		  gdb-display-buffer-other-frame-action))
 
 ;; Needs GDB 6.4 onwards (used to fail with no stack).
 (defun gdb-get-changed-registers ()
@@ -3906,26 +3895,26 @@ overlay arrow in source buffer."
   (setq gdb-filter-output (concat gdb-filter-output gdb-prompt-name)))
 
 ;;;; Window management
-(defun gdb-display-buffer (buf dedicated &optional frame)
-  "Show buffer BUF.
+(defun gdb-display-buffer (buf)
+  "Show buffer BUF, and make that window dedicated."
+  (let ((window (display-buffer buf)))
+    (set-window-dedicated-p window t)
+    window))
 
-If BUF is already displayed in some window, show it, deiconifying
-the frame if necessary. Otherwise, find least recently used
-window and show BUF there, if the window is not used for GDB
-already, in which case that window is split first."
-  (let ((answer (get-buffer-window buf (or frame 0))))
-    (if answer
-	(display-buffer buf nil (or frame 0)) ;Deiconify frame if necessary.
-      (let ((window (get-lru-window)))
-	(if (eq (buffer-local-value 'gud-minor-mode (window-buffer window))
-                'gdbmi)
-	    (let ((largest (get-largest-window)))
-	      (setq answer (split-window largest))
-	      (set-window-buffer answer buf)
-	      (set-window-dedicated-p answer dedicated)
-	      answer)
-	  (set-window-buffer window buf)
-	  window)))))
+  ;; (let ((answer (get-buffer-window buf 0)))
+  ;;   (if answer
+  ;; 	(display-buffer buf nil 0) ;Deiconify frame if necessary.
+  ;;     (let ((window (get-lru-window)))
+  ;; 	(if (eq (buffer-local-value 'gud-minor-mode (window-buffer window))
+  ;;               'gdbmi)
+  ;; 	    (let ((largest (get-largest-window)))
+  ;; 	      (setq answer (split-window largest))
+  ;; 	      (set-window-buffer answer buf)
+  ;; 	      (set-window-dedicated-p answer t)
+  ;; 	      answer)
+  ;; 	  (set-window-buffer window buf)
+  ;; 	  window)))))
+
 
 (defun gdb-preempt-existing-or-display-buffer (buf &optional split-horizontal)
   "Find window displaying a buffer with the same
@@ -3952,7 +3941,7 @@ SPLIT-HORIZONTAL and show BUF in the new window."
               (if dedicated-window
                   (set-window-buffer
                    (split-window dedicated-window nil split-horizontal) buf)
-                (gdb-display-buffer buf t))))))
+                (gdb-display-buffer buf))))))
     (error "Null buffer")))
 
 ;;; Shared keymap initialization:
@@ -4056,7 +4045,7 @@ SPLIT-HORIZONTAL and show BUF in the new window."
   'all-threads)
 
 (defun gdb-frame-gdb-buffer ()
-  "Display GUD buffer in a new frame."
+  "Display GUD buffer in another frame."
   (interactive)
   (display-buffer-other-frame gud-comint-buffer))
 
@@ -4078,13 +4067,12 @@ window is dedicated."
 
 (defun gdb-setup-windows ()
   "Layout the window pattern for `gdb-many-windows'."
-  (gdb-display-locals-buffer)
-  (gdb-display-stack-buffer)
-  (delete-other-windows)
-  (gdb-display-breakpoints-buffer)
-  (delete-other-windows)
-  ;; Don't dedicate.
+  (gdb-get-buffer-create 'gdb-locals-buffer)
+  (gdb-get-buffer-create 'gdb-stack-buffer)
+  (gdb-get-buffer-create 'gdb-breakpoints-buffer)
+  (set-window-dedicated-p (selected-window) nil)
   (switch-to-buffer gud-comint-buffer)
+  (delete-other-windows)
   (let ((win0 (selected-window))
         (win1 (split-window nil ( / ( * (window-height) 3) 4)))
         (win2 (split-window nil ( / (window-height) 3)))

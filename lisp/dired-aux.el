@@ -54,29 +54,38 @@ into this list; they also should call `dired-log' to log the errors.")
 ;;;###autoload
 (defun dired-diff (file &optional switches)
   "Compare file at point with file FILE using `diff'.
-FILE defaults to the file at the mark.  (That's the mark set by
-\\[set-mark-command], not by Dired's \\[dired-mark] command.)
-The prompted-for FILE is the first file given to `diff'.
-With prefix arg, prompt for second argument SWITCHES,
-which is the string of command switches for `diff'."
+If called interactively, prompt for FILE.  If the file at point
+has a backup file, use that as the default.  If the mark is active
+in Transient Mark mode, use the file at the mark as the default.
+\(That's the mark set by \\[set-mark-command], not by Dired's
+\\[dired-mark] command.)
+
+FILE is the first file given to `diff'.  The file at point
+is the second file given to `diff'.
+
+With prefix arg, prompt for second argument SWITCHES, which is
+the string of command switches for the third argument of `diff'."
   (interactive
    (let* ((current (dired-get-filename t))
+	  ;; Get the latest existing backup file.
+	  (oldf (diff-latest-backup-file current))
 	  ;; Get the file at the mark.
-	  (file-at-mark (if (mark t)
+	  (file-at-mark (if (and transient-mark-mode mark-active)
 			    (save-excursion (goto-char (mark t))
 					    (dired-get-filename t t))))
+	  (default-file (or file-at-mark
+			    (and oldf (file-name-nondirectory oldf))))
 	  ;; Use it as default if it's not the same as the current file,
-	  ;; and the target dir is the current dir or the mark is active.
-	  (default (if (and (not (equal file-at-mark current))
+	  ;; and the target dir is current or there is a default file.
+	  (default (if (and (not (equal default-file current))
 			    (or (equal (dired-dwim-target-directory)
 				       (dired-current-directory))
-				mark-active))
-		       file-at-mark))
+				default-file))
+		       default-file))
 	  (target-dir (if default
 			  (dired-current-directory)
 			(dired-dwim-target-directory)))
 	  (defaults (dired-dwim-target-defaults (list current) target-dir)))
-     (require 'diff)
      (list
       (minibuffer-with-setup-hook
 	  (lambda ()
@@ -236,10 +245,17 @@ List has a form of (file-name full-file-name (attribute-list))."
   ;; OP-SYMBOL is the type of operation (for use in `dired-mark-pop-up').
   ;; ARG describes which files to use, as in `dired-get-marked-files'.
   (let* ((files (dired-get-marked-files t arg))
-	 (default (and (eq op-symbol 'touch)
-		       (stringp (car files))
-		       (format-time-string "%Y%m%d%H%M.%S"
-					   (nth 5 (file-attributes (car files))))))
+	 ;; The source of default file attributes is the file at point.
+	 (default-file (dired-get-filename t t))
+	 (default (when default-file
+		    (cond ((eq op-symbol 'touch)
+			   (format-time-string
+			    "%Y%m%d%H%M.%S"
+			    (nth 5 (file-attributes default-file))))
+			  ((eq op-symbol 'chown)
+			   (nth 2 (file-attributes default-file 'string)))
+			  ((eq op-symbol 'chgrp)
+			   (nth 3 (file-attributes default-file 'string))))))
 	 (prompt (concat "Change " attribute-name " of %s to"
 			 (if (eq op-symbol 'touch)
 			     " (default now): "
@@ -257,7 +273,10 @@ List has a form of (file-name full-file-name (attribute-list))."
 			     (function dired-check-process)
 			     (append
 			      (list operation program)
-			      (unless (string-equal new-attribute "")
+			      (unless (or (string-equal new-attribute "")
+					  ;; Use `eq' instead of `equal'
+					  ;; to detect empty input (bug#12399).
+					  (eq new-attribute default))
 				(if (eq op-symbol 'touch)
 				    (list "-t" new-attribute)
 				  (list new-attribute)))
@@ -273,11 +292,15 @@ List has a form of (file-name full-file-name (attribute-list))."
 ;;;###autoload
 (defun dired-do-chmod (&optional arg)
   "Change the mode of the marked (or next ARG) files.
-Symbolic modes like `g+w' are allowed."
+Symbolic modes like `g+w' are allowed.
+Type M-n to pull the file attributes of the file at point
+into the minibuffer."
   (interactive "P")
   (let* ((files (dired-get-marked-files t arg))
-	 (modestr (and (stringp (car files))
-		       (nth 8 (file-attributes (car files)))))
+	 ;; The source of default file attributes is the file at point.
+	 (default-file (dired-get-filename t t))
+	 (modestr (when default-file
+		    (nth 8 (file-attributes default-file))))
 	 (default
 	   (and (stringp modestr)
 		(string-match "^.\\(...\\)\\(...\\)\\(...\\)$" modestr)
@@ -291,7 +314,10 @@ Symbolic modes like `g+w' are allowed."
 		 "Change mode of %s to: "
 		 nil 'chmod arg files default))
 	 num-modes)
-    (cond ((equal modes "")
+    (cond ((or (equal modes "")
+	       ;; Use `eq' instead of `equal'
+	       ;; to detect empty input (bug#12399).
+	       (eq modes default))
 	   ;; We used to treat empty input as DEFAULT, but that is not
 	   ;; such a good idea (Bug#9361).
 	   (error "No file mode specified"))
@@ -307,7 +333,9 @@ Symbolic modes like `g+w' are allowed."
 
 ;;;###autoload
 (defun dired-do-chgrp (&optional arg)
-  "Change the group of the marked (or next ARG) files."
+  "Change the group of the marked (or next ARG) files.
+Type M-n to pull the file attributes of the file at point
+into the minibuffer."
   (interactive "P")
   (if (memq system-type '(ms-dos windows-nt))
       (error "chgrp not supported on this system"))
@@ -315,7 +343,9 @@ Symbolic modes like `g+w' are allowed."
 
 ;;;###autoload
 (defun dired-do-chown (&optional arg)
-  "Change the owner of the marked (or next ARG) files."
+  "Change the owner of the marked (or next ARG) files.
+Type M-n to pull the file attributes of the file at point
+into the minibuffer."
   (interactive "P")
   (if (memq system-type '(ms-dos windows-nt))
       (error "chown not supported on this system"))
@@ -324,7 +354,9 @@ Symbolic modes like `g+w' are allowed."
 ;;;###autoload
 (defun dired-do-touch (&optional arg)
   "Change the timestamp of the marked (or next ARG) files.
-This calls touch."
+This calls touch.
+Type M-n to pull the file attributes of the file at point
+into the minibuffer."
   (interactive "P")
   (dired-do-chxxx "Timestamp" dired-touch-program 'touch arg))
 
@@ -545,8 +577,17 @@ offer a smarter default choice of shell command."
 (defun dired-do-async-shell-command (command &optional arg file-list)
   "Run a shell command COMMAND on the marked files asynchronously.
 
-Like `dired-do-shell-command' but if COMMAND doesn't end in ampersand,
-adds `* &' surrounded by whitespace and executes the command asynchronously.
+Like `dired-do-shell-command', but adds `&' at the end of COMMAND
+to execute it asynchronously.
+
+When operating on multiple files, asynchronous commands
+are executed in the background on each file in parallel.
+In shell syntax this means separating the individual commands
+with `&'.  However, when COMMAND ends in `;' or `;&' then commands
+are executed in the background on each file sequentially waiting
+for each command to terminate before running the next command.
+In shell syntax this means separating the individual commands with `;'.
+
 The output appears in the buffer `*Async Shell Command*'."
   (interactive
    (let ((files (dired-get-marked-files t current-prefix-arg)))
@@ -555,18 +596,14 @@ The output appears in the buffer `*Async Shell Command*'."
       (dired-read-shell-command "& on %s: " current-prefix-arg files)
       current-prefix-arg
       files)))
-  (unless (string-match "[*?][ \t]*\\'" command)
-    (setq command (concat command " *")))
   (unless (string-match "&[ \t]*\\'" command)
     (setq command (concat command " &")))
   (dired-do-shell-command command arg file-list))
 
-;; The in-background argument is only needed in Emacs 18 where
-;; shell-command doesn't understand an appended ampersand `&'.
 ;;;###autoload
 (defun dired-do-shell-command (command &optional arg file-list)
   "Run a shell command COMMAND on the marked files.
-If no files are marked or a specific numeric prefix arg is given,
+If no files are marked or a numeric prefix arg is given,
 the next ARG files are used.  Just \\[universal-argument] means the current file.
 The prompt mentions the file(s) or the marker, as appropriate.
 
@@ -588,7 +625,17 @@ If you want to use `*' as a shell wildcard with whitespace around
 it, write `*\"\"' in place of just `*'.  This is equivalent to just
 `*' in the shell, but avoids Dired's special handling.
 
-If COMMAND produces output, it goes to a separate buffer.
+If COMMAND ends in `&', `;', or `;&', it is executed in the
+background asynchronously, and the output appears in the buffer
+`*Async Shell Command*'.  When operating on multiple files and COMMAND
+ends in `&', the shell command is executed on each file in parallel.
+However, when COMMAND ends in `;' or `;&' then commands are executed
+in the background on each file sequentially waiting for each command
+to terminate before running the next command.  You can also use
+`dired-do-async-shell-command' that automatically adds `&'.
+
+Otherwise, COMMAND is executed synchronously, and the output
+appears in the buffer `*Shell Command Output*'.
 
 This feature does not try to redisplay Dired buffers afterward, as
 there's no telling what files COMMAND may have changed.
@@ -607,10 +654,7 @@ can be produced by `dired-get-marked-files', for example."
    (let ((files (dired-get-marked-files t current-prefix-arg)))
      (list
       ;; Want to give feedback whether this file or marked files are used:
-      (dired-read-shell-command (concat "! on "
-					"%s: ")
-				current-prefix-arg
-				files)
+      (dired-read-shell-command "! on %s: " current-prefix-arg files)
       current-prefix-arg
       files)))
   (let* ((on-each (not (string-match dired-star-subst-regexp command)))
@@ -654,23 +698,34 @@ can be produced by `dired-get-marked-files', for example."
 ;; Might be redefined for smarter things and could then use RAW-ARG
 ;; (coming from interactive P and currently ignored) to decide what to do.
 ;; Smart would be a way to access basename or extension of file names.
-  (let ((stuff-it
-	 (if (or (string-match dired-star-subst-regexp command)
-		 (string-match dired-quark-subst-regexp command))
-	     (lambda (x)
-	       (let ((retval command))
-		 (while (string-match
-			 "\\(^\\|[ \t]\\)\\([*?]\\)\\([ \t]\\|$\\)" retval)
-		   (setq retval (replace-match x t t retval 2)))
-		 retval))
-	   (lambda (x) (concat command dired-mark-separator x)))))
-    (if on-each
-	(mapconcat stuff-it (mapcar 'shell-quote-argument file-list) ";")
-      (let ((files (mapconcat 'shell-quote-argument
-			      file-list dired-mark-separator)))
-	(if (> (length file-list) 1)
-	    (setq files (concat dired-mark-prefix files dired-mark-postfix)))
-	(funcall stuff-it files)))))
+  (let* ((in-background (string-match "[ \t]*&[ \t]*\\'" command))
+	 (command (if in-background
+		      (substring command 0 (match-beginning 0))
+		    command))
+	 (sequentially (string-match "[ \t]*;[ \t]*\\'" command))
+	 (command (if sequentially
+		      (substring command 0 (match-beginning 0))
+		    command))
+	 (stuff-it
+	  (if (or (string-match dired-star-subst-regexp command)
+		  (string-match dired-quark-subst-regexp command))
+	      (lambda (x)
+		(let ((retval command))
+		  (while (string-match
+			  "\\(^\\|[ \t]\\)\\([*?]\\)\\([ \t]\\|$\\)" retval)
+		    (setq retval (replace-match x t t retval 2)))
+		  retval))
+	    (lambda (x) (concat command dired-mark-separator x)))))
+    (concat
+     (if on-each
+	 (mapconcat stuff-it (mapcar 'shell-quote-argument file-list)
+		    (if (and in-background (not sequentially)) "&" ";"))
+       (let ((files (mapconcat 'shell-quote-argument
+			       file-list dired-mark-separator)))
+	 (if (> (length file-list) 1)
+	     (setq files (concat dired-mark-prefix files dired-mark-postfix)))
+	 (funcall stuff-it files)))
+     (if in-background "&" ""))))
 
 ;; This is an extra function so that it can be redefined by ange-ftp.
 ;;;###autoload

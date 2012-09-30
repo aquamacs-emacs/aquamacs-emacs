@@ -66,6 +66,7 @@ lisp = \
 	$(lispsource)/format.elc \
 	$(lispsource)/bindings.elc \
 	$(lispsource)/files.elc \
+	$(lispsource)/emacs-lisp/macroexp.elc \
 	$(lispsource)/cus-face.elc \
 	$(lispsource)/faces.elc \
 	$(lispsource)/button.elc \

@@ -117,10 +117,15 @@ It has `lisp-mode-abbrev-table' as its parent."
 	 (purecopy (concat "^\\s-*("
 			   (eval-when-compile
 			     (regexp-opt
-			      '("defvar" "defconst" "defconstant" "defcustom"
+			      '("defconst" "defconstant" "defcustom"
 				"defparameter" "define-symbol-macro") t))
 			   "\\s-+\\(\\(\\sw\\|\\s_\\)+\\)"))
 	 2)
+   ;; For `defvar', we ignore (defvar FOO) constructs.
+   (list (purecopy "Variables")
+	 (purecopy (concat "^\\s-*(defvar\\s-+\\(\\(\\sw\\|\\s_\\)+\\)"
+			   "[[:space:]\n]+[^)]"))
+	 1)
    (list (purecopy "Types")
 	 (purecopy (concat "^\\s-*("
 			   (eval-when-compile
@@ -158,7 +163,8 @@ It has `lisp-mode-abbrev-table' as its parent."
                                   (goto-char listbeg)
                                   (and (looking-at "([ \t\n]*\\(\\(\\sw\\|\\s_\\)+\\)")
                                        (match-string 1)))))
-                 (docelt (and firstsym (get (intern-soft firstsym)
+                 (docelt (and firstsym
+                              (function-get (intern-soft firstsym)
                                             lisp-doc-string-elt-property))))
             (if (and docelt
                      ;; It's a string in a form that can have a docstring.
@@ -424,6 +430,61 @@ if that value is non-nil."
   (setq imenu-case-fold-search nil)
   (add-hook 'completion-at-point-functions
             'lisp-completion-at-point nil 'local))
+
+;;; Emacs Lisp Byte-Code mode
+
+(eval-and-compile
+  (defconst emacs-list-byte-code-comment-re
+    (concat "\\(#\\)@\\([0-9]+\\) "
+            ;; Make sure it's a docstring and not a lazy-loaded byte-code.
+            "\\(?:[^(]\\|([^\"]\\)")))
+
+(defun emacs-lisp-byte-code-comment (end &optional _point)
+  "Try to syntactically mark the #@NNN ....^_ docstrings in byte-code files."
+  (let ((ppss (syntax-ppss)))
+    (when (and (nth 4 ppss)
+               (eq (char-after (nth 8 ppss)) ?#))
+      (let* ((n (save-excursion
+                  (goto-char (nth 8 ppss))
+                  (when (looking-at emacs-list-byte-code-comment-re)
+                    (string-to-number (match-string 2)))))
+             ;; `maxdiff' tries to make sure the loop below terminates.
+             (maxdiff n))
+        (when n
+          (let* ((bchar (match-end 2))
+                 (b (position-bytes bchar)))
+            (goto-char (+ b n))
+            (while (let ((diff (- (position-bytes (point)) b n)))
+                     (unless (zerop diff)
+                       (when (> diff maxdiff) (setq diff maxdiff))
+                       (forward-char (- diff))
+                       (setq maxdiff (if (> diff 0) diff
+                                       (max (1- maxdiff) 1)))
+                       t))))
+          (if (<= (point) end)
+              (put-text-property (1- (point)) (point)
+                                 'syntax-table
+                                 (string-to-syntax "> b"))
+            (goto-char end)))))))
+
+(defun emacs-lisp-byte-code-syntax-propertize (start end)
+  (emacs-lisp-byte-code-comment end (point))
+  (funcall
+   (syntax-propertize-rules
+    (emacs-list-byte-code-comment-re
+     (1 (prog1 "< b" (emacs-lisp-byte-code-comment end (point))))))
+   start end))
+
+(add-to-list 'auto-mode-alist '("\\.elc\\'" . emacs-lisp-byte-code-mode))
+(define-derived-mode emacs-lisp-byte-code-mode emacs-lisp-mode
+  "Elisp-Byte-Code"
+  "Major mode for *.elc files."
+  ;; TODO: Add way to disassemble byte-code under point.
+  (setq-local open-paren-in-column-0-is-defun-start nil)
+  (setq-local syntax-propertize-function
+              #'emacs-lisp-byte-code-syntax-propertize))
+
+;;; Generic Lisp mode.
 
 (defvar lisp-mode-map
   (let ((map (make-sparse-keymap))
@@ -724,10 +785,12 @@ POS specifies the starting position where EXP was found and defaults to point."
       (let ((vars ()))
         (goto-char (point-min))
         (while (re-search-forward
-                "^(def\\(?:var\\|const\\|custom\\)[ \t\n]+\\([^; '()\n\t]+\\)"
+                "(def\\(?:var\\|const\\|custom\\)[ \t\n]+\\([^; '()\n\t]+\\)"
                 pos t)
           (let ((var (intern (match-string 1))))
-            (unless (special-variable-p var)
+            (and (not (special-variable-p var))
+                 (save-excursion
+                   (zerop (car (syntax-ppss (match-beginning 0)))))
               (push var vars))))
         `(progn ,@(mapcar (lambda (v) `(defvar ,v)) vars) ,exp)))))
 
@@ -770,7 +833,12 @@ Reinitialize the face according to the `defface' specification."
 	      (default-boundp (eval (nth 1 form) lexical-binding)))
 	 ;; Force variable to be bound.
 	 (set-default (eval (nth 1 form) lexical-binding)
-                      (eval (nth 1 (nth 2 form)) lexical-binding))
+		      ;; The second arg is an expression that evaluates to
+		      ;; an expression.  The second evaluation is the one
+		      ;; normally performed not be normal execution but by
+		      ;; custom-initialize-set (for example), which does not
+		      ;; use lexical-binding.
+		      (eval (eval (nth 2 form) lexical-binding)))
 	 form)
 	;; `defface' is macroexpanded to `custom-declare-face'.
 	((eq (car form) 'custom-declare-face)
@@ -809,7 +877,6 @@ if it already has a value.\)
 
 With argument, insert value in current buffer after the defun.
 Return the result of evaluation."
-  (interactive "P")
   ;; FIXME: the print-length/level bindings should only be applied while
   ;; printing, not while evaluating.
   (let ((debug-on-error eval-expression-debug-on-error)
@@ -914,6 +981,7 @@ rigidly along with this one."
     (if (or (null indent) (looking-at "\\s<\\s<\\s<"))
 	;; Don't alter indentation of a ;;; comment line
 	;; or a line that starts in a string.
+        ;; FIXME: inconsistency: comment-indent moves ;;; to column 0.
 	(goto-char (- (point-max) pos))
       (if (and (looking-at "\\s<") (not (looking-at "\\s<\\s<")))
 	  ;; Single-semicolon comment lines should be indented
@@ -928,18 +996,7 @@ rigidly along with this one."
       ;; If initial point was within line's indentation,
       ;; position after the indentation.  Else stay at same point in text.
       (if (> (- (point-max) pos) (point))
-	  (goto-char (- (point-max) pos)))
-      ;; If desired, shift remaining lines of expression the same amount.
-      (and whole-exp (not (zerop shift-amt))
-	   (save-excursion
-	     (goto-char beg)
-	     (forward-sexp 1)
-	     (setq end (point))
-	     (goto-char beg)
-	     (forward-line 1)
-	     (setq beg (point))
-	     (> end beg))
-	   (indent-code-rigidly beg end shift-amt)))))
+	  (goto-char (- (point-max) pos))))))
 
 (defvar calculate-lisp-indent-last-sexp)
 
@@ -1135,7 +1192,8 @@ Lisp function does not specify a special indentation."
       (let ((function (buffer-substring (point)
 					(progn (forward-sexp 1) (point))))
 	    method)
-	(setq method (or (get (intern-soft function) 'lisp-indent-function)
+	(setq method (or (function-get (intern-soft function)
+                                       'lisp-indent-function)
 			 (get (intern-soft function) 'lisp-indent-hook)))
 	(cond ((or (eq method 'defun)
 		   (and (null method)
@@ -1218,7 +1276,6 @@ Lisp function does not specify a special indentation."
 (put 'prog2 'lisp-indent-function 2)
 (put 'save-excursion 'lisp-indent-function 0)
 (put 'save-restriction 'lisp-indent-function 0)
-(put 'save-match-data 'lisp-indent-function 0)
 (put 'save-current-buffer 'lisp-indent-function 0)
 (put 'let 'lisp-indent-function 1)
 (put 'let* 'lisp-indent-function 1)

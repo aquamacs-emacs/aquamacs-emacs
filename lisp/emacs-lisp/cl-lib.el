@@ -99,8 +99,8 @@
 ;;;###autoload
 (define-obsolete-variable-alias
   ;; This alias is needed for compatibility with .elc files that use defstruct
-  ;; and were compiled with Emacs<24.2.
-  'custom-print-functions 'cl-custom-print-functions "24.2")
+  ;; and were compiled with Emacs<24.3.
+  'custom-print-functions 'cl-custom-print-functions "24.3")
 
 ;;;###autoload
 (defvar cl-custom-print-functions nil
@@ -121,7 +121,7 @@ a future Emacs interpreter will be able to use it.")
 
 ;;; Generalized variables.
 ;; These macros are defined here so that they
-;; can safely be used in .emacs files.
+;; can safely be used in init files.
 
 (defmacro cl-incf (place &optional x)
   "Increment PLACE by X (1 by default).
@@ -635,7 +635,7 @@ If ALIST is non-nil, the new pairs are prepended to it."
      (set-buffer-modified-p ,flag)))
 (gv-define-simple-setter buffer-name rename-buffer t)
 (gv-define-setter buffer-string (store)
-  `(progn (erase-buffer) (insert ,store)))
+  `(insert (prog1 ,store (erase-buffer))))
 (gv-define-simple-setter buffer-substring cl--set-buffer-substring)
 (gv-define-simple-setter current-buffer set-buffer)
 (gv-define-simple-setter current-case-table set-case-table)

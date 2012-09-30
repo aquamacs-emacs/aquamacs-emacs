@@ -19,7 +19,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 #include <config.h>
-#include <setjmp.h>
+
 #include "lisp.h"
 #include "commands.h"
 #include "character.h"
@@ -47,10 +47,10 @@ DEFUN ("forward-point", Fforward_point, Sforward_point, 1, 1, 0,
   return make_number (PT + XINT (n));
 }
 
-/* Add N to point; or subtract N if FORWARD is zero.  N defaults to 1.
+/* Add N to point; or subtract N if FORWARD is false.  N defaults to 1.
    Validate the new location.  Return nil.  */
 static Lisp_Object
-move_point (Lisp_Object n, int forward)
+move_point (Lisp_Object n, bool forward)
 {
   /* This used to just set point to point + XINT (n), and then check
      to see if it was within boundaries.  But now that SET_PT can
@@ -85,6 +85,7 @@ move_point (Lisp_Object n, int forward)
 DEFUN ("forward-char", Fforward_char, Sforward_char, 0, 1, "^p",
        doc: /* Move point N characters forward (backward if N is negative).
 On reaching end or beginning of buffer, stop and signal error.
+Interactively, N is the numeric prefix argument.
 
 Depending on the bidirectional context, the movement may be to the
 right or to the left on the screen.  This is in contrast with
@@ -97,6 +98,7 @@ right or to the left on the screen.  This is in contrast with
 DEFUN ("backward-char", Fbackward_char, Sbackward_char, 0, 1, "^p",
        doc: /* Move point N characters backward (forward if N is negative).
 On attempt to pass beginning or end of buffer, stop and signal error.
+Interactively, N is the numeric prefix argument.
 
 Depending on the bidirectional context, the movement may be to the
 right or to the left on the screen.  This is in contrast with
@@ -277,7 +279,7 @@ After insertion, the value of `auto-fill-function' is called if the
 At the end, it runs `post-self-insert-hook'.  */)
   (Lisp_Object n)
 {
-  int remove_boundary = 1;
+  bool remove_boundary = 1;
   CHECK_NATNUM (n);
 
   if (!EQ (Vthis_command, KVAR (current_kboard, Vlast_command)))
@@ -296,9 +298,12 @@ At the end, it runs `post-self-insert-hook'.  */)
 
   if (remove_boundary
       && CONSP (BVAR (current_buffer, undo_list))
-      && NILP (XCAR (BVAR (current_buffer, undo_list))))
+      && NILP (XCAR (BVAR (current_buffer, undo_list)))
+      /* Only remove auto-added boundaries, not boundaries
+	 added be explicit calls to undo-boundary.  */
+      && EQ (BVAR (current_buffer, undo_list), last_undo_boundary))
     /* Remove the undo_boundary that was just pushed.  */
-    BVAR (current_buffer, undo_list) = XCDR (BVAR (current_buffer, undo_list));
+    bset_undo_list (current_buffer, XCDR (BVAR (current_buffer, undo_list)));
 
   /* Barf if the key that invoked this was not a character.  */
   if (!CHARACTERP (last_command_event))
@@ -435,7 +440,7 @@ internal_self_insert (int c, EMACS_INT n)
 		  : UNIBYTE_TO_CHAR (XFASTINT (Fprevious_char ())))
 	  == Sword))
     {
-      int modiff = MODIFF;
+      EMACS_INT modiff = MODIFF;
       Lisp_Object sym;
 
       sym = call0 (Qexpand_abbrev);
@@ -443,7 +448,8 @@ internal_self_insert (int c, EMACS_INT n)
       /* If we expanded an abbrev which has a hook,
 	 and the hook has a non-nil `no-self-insert' property,
 	 return right away--don't really self-insert.  */
-      if (SYMBOLP (sym) && ! NILP (sym) && ! NILP (XSYMBOL (sym)->function)
+      if (SYMBOLP (sym) && ! NILP (sym)
+	  && ! NILP (XSYMBOL (sym)->function)
 	  && SYMBOLP (XSYMBOL (sym)->function))
 	{
 	  Lisp_Object prop;

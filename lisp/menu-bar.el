@@ -481,7 +481,7 @@
                   :help "Copy text in region between mark and current position"
                   :keys ,(if (featurep 'ns)
                              "\\[ns-copy-including-secondary]"
-                                     "\\[kill-ring-save]")))
+                           "\\[kill-ring-save]")))
     (define-key menu [cut]
       `(menu-item ,(purecopy "Cut") kill-region
 	      :enable (and mark-active (not buffer-read-only)
@@ -623,11 +623,11 @@ FNAME is the minor mode's name (variable and function).
 DOC is the text to use for the menu entry.
 HELP is the text to use for the tooltip.
 PROPS are additional properties."
-  `(list 'menu-item ,doc ',fname
-	 ,@(mapcar (lambda (p) (list 'quote p)) props)
-	 :help ,help
-	 :button '(:toggle . (and (default-boundp ',fname)
-				  (default-value ',fname)))))
+  `'(menu-item ,doc ,fname
+	       ,@props
+	       :help ,help
+	       :button (:toggle . (and (default-boundp ',fname)
+				       (default-value ',fname)))))
 
 (defmacro menu-bar-make-toggle (name variable doc message help &rest body)
   `(progn
@@ -650,10 +650,10 @@ by \"Save Options\" in Custom buffers.")
        ;; a candidate for "Save Options", and we do not want to save options
        ;; the user have already set explicitly in his init file.
        (if interactively (customize-mark-as-set ',variable)))
-     (list 'menu-item ,doc ',name
-	   :help ,help
-	   :button '(:toggle . (and (default-boundp ',variable)
-				    (default-value ',variable))))))
+     '(menu-item ,doc ,name
+		 :help ,help
+		 :button (:toggle . (and (default-boundp ',variable)
+					 (default-value ',variable))))))
 
 ;; Function for setting/saving default font.
 

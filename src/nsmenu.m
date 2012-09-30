@@ -24,7 +24,6 @@ Carbon version by Yamamoto Mitsuharu. */
 /* This should be the first include, as it may set up #defines affecting
    interpretation of even the system includes. */
 #include <config.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "window.h"
@@ -120,13 +119,13 @@ popup_activated (void)
 
 /* --------------------------------------------------------------------------
     Update menubar.  Three cases:
-    1) deep_p = 0, submenu = nil: Fresh switch onto a frame -- either set up
+    1) ! deep_p, submenu = nil: Fresh switch onto a frame -- either set up
        just top-level menu strings (OS X), or goto case (2) (GNUstep).
-    2) deep_p = 1, submenu = nil: Recompute all submenus.
-    3) deep_p = 1, submenu = non-nil: Update contents of a single submenu.
+    2) deep_p, submenu = nil: Recompute all submenus.
+    3) deep_p, submenu = non-nil: Update contents of a single submenu.
    -------------------------------------------------------------------------- */
 void
-ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
+ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
 {
   NSAutoreleasePool *pool;
   id menu = [NSApp mainMenu];
@@ -165,7 +164,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
   XSETFRAME (Vmenu_updating_frame, f);
 /*fprintf (stderr, "ns_update_menubar: frame: %p\tdeep: %d\tsub: %p\n", f, deep_p, submenu); */
 
-  BLOCK_INPUT;
+  block_input ();
   pool = [[NSAutoreleasePool alloc] init];
 
   /* Menu may have been created automatically; if so, discard it. */
@@ -232,14 +231,14 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
       if (! NILP (Vlucid_menu_bar_dirty_flag))
 	call0 (Qrecompute_lucid_menubar);
       safe_run_hooks (Qmenu_bar_update_hook);
-      FRAME_MENU_BAR_ITEMS (f) = menu_bar_items (FRAME_MENU_BAR_ITEMS (f));
+      fset_menu_bar_items (f, menu_bar_items (FRAME_MENU_BAR_ITEMS (f)));
 
       /* Now ready to go */
       items = FRAME_MENU_BAR_ITEMS (f);
 
       /* Save the frame's previous menu bar contents data */
       if (previous_menu_items_used)
-	memcpy (previous_items, &AREF (f->menu_bar_vector, 0),
+	memcpy (previous_items, aref_addr (f->menu_bar_vector, 0),
 		previous_menu_items_used * sizeof (Lisp_Object));
 
       /* parse stage 1: extract from lisp */
@@ -290,7 +289,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 	  discard_menu_items ();
 	  unbind_to (specpdl_count, Qnil);
           [pool release];
-          UNBLOCK_INPUT;
+          unblock_input ();
 	  return;
         }
 
@@ -352,13 +351,13 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
               discard_menu_items ();
               unbind_to (specpdl_count, Qnil);
               [pool release];
-              UNBLOCK_INPUT;
+              unblock_input ();
               return;
             }
         }
       /* The menu items are different, so store them in the frame */
       /* FIXME: this is not correct for single-submenu case */
-      f->menu_bar_vector = menu_items;
+      fset_menu_bar_vector (f, menu_items);
       f->menu_bar_items_used = menu_items_used;
 
       /* Calls restore_menu_items, etc., as they were outside */
@@ -423,7 +422,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
         {
           free_menubar_widget_value_tree (first_wv);
           [pool release];
-          UNBLOCK_INPUT;
+          unblock_input ();
           return;
         }
 
@@ -454,7 +453,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
             {
               free_menubar_widget_value_tree (first_wv);
               [pool release];
-              UNBLOCK_INPUT;
+              unblock_input ();
               return;
             }
         }
@@ -517,7 +516,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
     [NSApp setMainMenu: menu];
 
   [pool release];
-  UNBLOCK_INPUT;
+  unblock_input ();
 
 }
 
@@ -526,7 +525,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
    frame's menus have changed, and the *step representation should be updated
    from Lisp. */
 void
-set_frame_menubar (struct frame *f, int first_time, int deep_p)
+set_frame_menubar (struct frame *f, bool first_time, bool deep_p)
 {
   ns_update_menubar (f, deep_p, nil);
 }
@@ -624,12 +623,10 @@ extern NSString *NSMenuDidBeginTrackingNotification;
      From 10.6 on, we could also use -[NSMenu propertiesToUpdate]: In the
      key press case, NSMenuPropertyItemImage (e.g.) won't be set.
   */
-  if (trackingMenu == 0
-      /* Also, don't try this if from an event picked up asynchronously,
-         as lots of lisp evaluation happens in ns_update_menubar. */
-      || handling_signal != 0)
+  if (trackingMenu == 0)
     return;
-  ns_update_menubar (frame, 1, self); /* deep */
+/*fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); */
+  ns_update_menubar (frame, 1, self);
 }
 
 
@@ -1035,8 +1032,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	  /* If this item has a null value,
 	     make the call_data null so that it won't display a box
 	     when the mouse is on it.  */
-	  wv->call_data
-	      = !NILP (def) ? (void *) &AREF (menu_items, i) : 0;
+	  wv->call_data = !NILP (def) ? aref_addr (menu_items, i) : 0;
 	  wv->enabled = !NILP (enable);
 
 	  if (NILP (type))
@@ -1046,7 +1042,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	  else if (EQ (type, QCradio))
 	    wv->button_type = BUTTON_TYPE_RADIO;
 	  else
-	    abort ();
+	    emacs_abort ();
 
 	  wv->selected = !NILP (selected);
 
@@ -1114,10 +1110,10 @@ free_frame_tool_bar (FRAME_PTR f)
     Under NS we just hide the toolbar until it might be needed again.
    -------------------------------------------------------------------------- */
 {
-  BLOCK_INPUT;
+  block_input ();
   [[FRAME_NS_VIEW (f) toolbar] setVisible: NO];
   FRAME_TOOLBAR_HEIGHT (f) = 0;
-  UNBLOCK_INPUT;
+  unblock_input ();
 }
 
 void
@@ -1131,7 +1127,7 @@ update_frame_tool_bar (FRAME_PTR f)
   NSWindow *window = [view window];
   EmacsToolbar *toolbar = [view toolbar];
 
-  BLOCK_INPUT;
+  block_input ();
   [toolbar clearActive];
   [toolbar setAllowsUserCustomization:YES];
   [toolbar setAutosavesConfiguration:NO];
@@ -1281,7 +1277,7 @@ update_frame_tool_bar (FRAME_PTR f)
       NSDictionary *dict = [toolbar configurationDictionary];
       NSMutableDictionary *newDict = [dict mutableCopy];
       NSEnumerator *keys = [[dict allKeys] objectEnumerator];
-      NSObject *key;
+      id key;
       while ((key = [keys nextObject]) != nil)
         {
           NSObject *val = [dict objectForKey: key];
@@ -1303,7 +1299,7 @@ update_frame_tool_bar (FRAME_PTR f)
   FRAME_TOOLBAR_HEIGHT (f) =
     NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
     - FRAME_NS_TITLEBAR_HEIGHT (f);
-  UNBLOCK_INPUT;
+    unblock_input ();
 }
 
 
@@ -1325,11 +1321,11 @@ The tool bar should be visible in FRAME when calling this function.*/)
       f = XFRAME (frame);
     }
 
-  BLOCK_INPUT;
+  block_input();
   update_frame_tool_bar (f);  /* fill in items */
   [[FRAME_NS_VIEW (f) toolbar] setVisible: YES];
   [[FRAME_NS_VIEW (f) toolbar] runCustomizationPalette:FRAME_NS_VIEW (f)];
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1355,7 +1351,7 @@ Items in this list are always Lisp symbols.*/)
       f = XFRAME (frame);
     }
 
-  BLOCK_INPUT;
+  block_input();
   Lisp_Object item_identifiers = Qnil;
   NSEnumerator *itemEnum = [[[FRAME_NS_VIEW (f) toolbar] items] reverseObjectEnumerator];
   NSToolbarItem *item = nil;
@@ -1369,7 +1365,7 @@ Items in this list are always Lisp symbols.*/)
 					[item itemIdentifier])
 					UTF8String]),
 			      item_identifiers);
-  UNBLOCK_INPUT;
+  unblock_input();
   return item_identifiers;
 }
 
@@ -1730,25 +1726,39 @@ a notification */
 
    ========================================================================== */
 
+struct Popdown_data
+{
+  NSAutoreleasePool *pool;
+  EmacsDialogPanel *dialog;
+};
 
 static Lisp_Object
 pop_down_menu (Lisp_Object arg)
 {
   struct Lisp_Save_Value *p = XSAVE_VALUE (arg);
+  struct Popdown_data *unwind_data = (struct Popdown_data *) p->pointer;
+
+  block_input ();
   if (popup_activated_flag)
     {
+      EmacsDialogPanel *panel = unwind_data->dialog;
       popup_activated_flag = 0;
-      BLOCK_INPUT;
       [NSApp endModalSession: popupSession];
       if (popupSheetAlert)
 	{
 	  [NSApp endSheet:[popupSheetAlert window]];
 	  [popupSheetAlert release];
 	} else
-	  [[((EmacsAlertPanel *) (p->pointer)) window] close];
+          [panel close];
+
+      [unwind_data->pool release];
+
       [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
-      UNBLOCK_INPUT;
     }
+
+  xfree (unwind_data);
+  unblock_input ();
+
   return Qnil;
 }
 
@@ -1762,12 +1772,15 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   BOOL useSheet = YES;
 
   NSPoint p;
+  BOOL isQ;
+  NSAutoreleasePool *pool;
 
   NSTRACE (x-popup-dialog);
 
   check_ns ();
 
   CHECK_CONS (contents);
+  isQ = NILP (header);
 
   if (EQ (position, Qt)
       || (CONSP (position) && (EQ (XCAR (position), Qmenu_bar)
@@ -1805,6 +1818,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       CHECK_LIVE_WINDOW (window);
       f = XFRAME (WINDOW_FRAME (XWINDOW (window)));
     }
+  else
+    CHECK_WINDOW (window);
 
   title = Fcar (contents);
   CHECK_STRING (title);
@@ -1814,7 +1829,9 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
        the dialog.  */
     contents = Fcons (title, Fcons (Fcons (build_string ("Ok"), Qt), Qnil));
 
-  BLOCK_INPUT;
+  block_input();
+  pool = [[NSAutoreleasePool alloc] init];
+
   dialog = [[EmacsAlertPanel alloc] init];
 
   if (NILP (header))
@@ -1823,6 +1840,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     [dialog setAlertStyle: NSCriticalAlertStyle];
   else
     [dialog setAlertStyle: NSInformationalAlertStyle];
+
 
   Lisp_Object head;
   /* read contents */
@@ -1858,9 +1876,15 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   NSInteger ret = -1;
 
   {
-    int specpdl_count = SPECPDL_INDEX ();
-    record_unwind_protect (pop_down_menu, make_save_value (dialog, 0));
+    ptrdiff_t specpdl_count = SPECPDL_INDEX ();
+    struct Popdown_data *unwind_data = xmalloc (sizeof (*unwind_data));
+    
     popup_activated_flag = 1;
+
+    unwind_data->pool = pool;
+    unwind_data->dialog = dialog;
+
+    record_unwind_protect (pop_down_menu, make_save_value (unwind_data, 0));
 
   extern EMACS_TIME timer_check (void);  
 
@@ -1907,7 +1931,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     }
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
 }
-  UNBLOCK_INPUT;
+  unblock_input();
   [dialog release];
   if (ret==-2) /*cancel*/
      Fsignal (Qquit, Qnil); /*special button value for cancel*/
@@ -2030,7 +2054,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 
   if (cancel || returnValueCount == 0)
     [[self addButtonWithTitle: @"Cancel"] setTag: -2];
-  }
+        }
 
 @end
 

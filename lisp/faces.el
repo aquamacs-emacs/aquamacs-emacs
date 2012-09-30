@@ -1549,10 +1549,14 @@ If SPEC is nil, return nil."
 	      ;; temacs, prior to loading frame.el.
 	      (unless (and (fboundp 'display-graphic-p)
 			   (display-graphic-p frame))
-		'(:family "default" :foundry "default" :width normal
+		`(:family "default" :foundry "default" :width normal
 		  :height 1 :weight normal :slant normal
-		  :foreground "unspecified-fg"
-		  :background "unspecified-bg")))
+		  :foreground ,(if (frame-parameter nil 'reverse)
+				   "unspecified-bg"
+				 "unspecified-fg")
+		  :background ,(if (frame-parameter nil 'reverse)
+				   "unspecified-fg"
+				 "unspecified-bg"))))
 	   ;; For all other faces, unspecify all attributes.
 	   (apply 'append
 		  (mapcar (lambda (x) (list (car x) 'unspecified))
@@ -1865,6 +1869,7 @@ Return nil if it has no specified face."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (declare-function x-parse-geometry "frame.c" (string))
+(defvar x-display-name)
 
 (defun x-handle-named-frame-geometry (parameters)
   "Add geometry parameters for a named frame to parameter list PARAMETERS.
@@ -2459,7 +2464,7 @@ Note: Other faces cannot inherit from the cursor face."
   :group 'menu
   :group 'basic-faces)
 
-(defface help-argument-name '((((supports :slant italic)) :inherit italic))
+(defface help-argument-name '((t :inherit italic))
   "Face to highlight argument names in *Help* buffers."
   :group 'help)
 

@@ -34,7 +34,6 @@
 
 (eval-when-compile
   (require 'skeleton)
-  (require 'outline)
   (require 'cl-lib))
 
 (defgroup sgml nil
@@ -451,7 +450,7 @@ the next N words.  In Transient Mark mode, when the mark is active,
 N defaults to -1, which means to wrap it around the current region.
 
 If you like upcased tags, put (setq sgml-transformation-function 'upcase)
-in your `.emacs' file.
+in your init file.
 
 Use \\[sgml-validate] to validate your document with an SGML parser.
 
@@ -1937,6 +1936,10 @@ This takes effect when first loading the library.")
     ("var" . "Math variable face")
     ("wbr" . "Enable <br> within <nobr>"))
   "Value of `sgml-tag-help' for HTML mode.")
+
+(defvar outline-regexp)
+(defvar outline-heading-end-regexp)
+(defvar outline-level)
 
 
 ;;;###autoload

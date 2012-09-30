@@ -1,22 +1,25 @@
-;;; gv.el --- Generalized variables  -*- lexical-binding: t -*-
+;;; gv.el --- generalized variables  -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2012  Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Keywords: extensions
+;; Package: emacs
 
-;; This program is free software; you can redistribute it and/or modify
+;; This file is part of GNU Emacs.
+
+;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; This program is distributed in the hope that it will be useful,
+;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -84,14 +87,7 @@ DO must return an Elisp expression."
   (if (symbolp place)
       (funcall do place (lambda (v) `(setq ,place ,v)))
     (let* ((head (car place))
-           (gf (get head 'gv-expander)))
-      ;; Autoload the head, if applicable, since that might define
-      ;; `gv-expander'.
-      (when (and (null gf) (fboundp head)
-                 (eq 'autoload (car-safe (symbol-function head))))
-        (with-demoted-errors
-          (load (nth 1 (symbol-function head)) 'noerror 'nomsg)
-          (setq gf (get head 'gv-expander))))
+           (gf (function-get head 'gv-expander 'autoload)))
       (if gf (apply gf do (cdr place))
         (let ((me (macroexpand place    ;FIXME: expand one step at a time!
                                ;; (append macroexpand-all-environment
@@ -198,8 +194,9 @@ well for simple place forms.
 Assignments of VAL to (NAME ARGS...) are expanded by binding the argument
 forms (VAL ARGS...) according to ARGLIST, then executing BODY, which must
 return a Lisp form that does the assignment.
-Actually, ARGLIST may be bound to temporary variables which are introduced
-automatically to preserve proper execution order of the arguments.  Example:
+The first arg in ARLIST (the one that receives VAL) receives an expression
+which can do arbitrary things, whereas the other arguments are all guaranteed
+to be pure and copyable.  Example use:
   (gv-define-setter aref (v a i) `(aset ,a ,i ,v))"
   (declare (indent 2) (debug (&define name sexp body)))
   `(gv-define-expander ,name
@@ -272,7 +269,7 @@ The return value is the last VAL in the list.
 ;;;###autoload
 (put 'gv-place 'edebug-form-spec 'edebug-match-form)
 ;; CL did the equivalent of:
-;;(gv-define-expand edebug-after (lambda (before index place) place))
+;;(gv-define-macroexpand edebug-after (lambda (before index place) place))
 
 (put 'edebug-after 'gv-expander
      (lambda (do before index place)

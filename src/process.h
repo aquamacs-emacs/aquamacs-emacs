@@ -26,11 +26,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "gnutls.h"
 #endif
 
-/* This structure records information about a subprocess
-   or network connection.
+INLINE_HEADER_BEGIN
+#ifndef PROCESS_INLINE
+# define PROCESS_INLINE INLINE
+#endif
 
-   Every field in this structure except for the header
-   must be a Lisp_Object, for GC's sake.  */
+/* This structure records information about a subprocess
+   or network connection.  */
 
 struct Lisp_Process
   {
@@ -38,45 +40,62 @@ struct Lisp_Process
 
     /* Name of subprocess terminal.  */
     Lisp_Object tty_name;
+
     /* Name of this process */
     Lisp_Object name;
+
     /* List of command arguments that this process was run with.
        Is set to t for a stopped network process; nil otherwise. */
     Lisp_Object command;
+
     /* (funcall FILTER PROC STRING)  (if FILTER is non-nil)
        to dispose of a bunch of chars from the process all at once */
     Lisp_Object filter;
+
     /* (funcall SENTINEL PROCESS) when process state changes */
     Lisp_Object sentinel;
+
     /* (funcall LOG SERVER CLIENT MESSAGE) when a server process
        accepts a connection from a client.  */
     Lisp_Object log;
+
     /* Buffer that output is going to */
     Lisp_Object buffer;
+
     /* t if this is a real child process.  For a network or serial
        connection, it is a plist based on the arguments to
        make-network-process or make-serial-process.  */
+
     Lisp_Object childp;
+
     /* Plist for programs to keep per-process state information, parameters, etc.  */
     Lisp_Object plist;
+
     /* Symbol indicating the type of process: real, network, serial  */
     Lisp_Object type;
+
     /* Marker set to end of last buffer-inserted output from this process */
     Lisp_Object mark;
+
     /* Symbol indicating status of process.
        This may be a symbol: run, open, or closed.
        Or it may be a list, whose car is stop, exit or signal
        and whose cdr is a pair (EXIT_CODE . COREDUMP_FLAG)
        or (SIGNAL_NUMBER . COREDUMP_FLAG).  */
     Lisp_Object status;
+
     /* Coding-system for decoding the input from this process.  */
     Lisp_Object decode_coding_system;
+
     /* Working buffer for decoding.  */
     Lisp_Object decoding_buf;
+
     /* Coding-system for encoding the output to this process.  */
     Lisp_Object encode_coding_system;
+
     /* Working buffer for encoding.  */
     Lisp_Object encoding_buf;
+
     /* Queue for storing waiting writes */
     Lisp_Object write_queue;
 
@@ -146,9 +165,26 @@ struct Lisp_Process
 
 #define ChannelMask(n) (1 << (n))
 
+/* Most code should use these functions to set Lisp fields in struct
+   process.  */
+
+PROCESS_INLINE void
+pset_childp (struct Lisp_Process *p, Lisp_Object val)
+{
+  p->childp = val;
+}
+
+#ifdef HAVE_GNUTLS
+PROCESS_INLINE void
+pset_gnutls_cred_type (struct Lisp_Process *p, Lisp_Object val)
+{
+  p->gnutls_cred_type = val;
+}
+#endif
+
 /* True if we are about to fork off a synchronous process or if we
    are waiting for it.  */
-extern int synch_process_alive;
+extern bool synch_process_alive;
 
 /* Communicate exit status of sync process to from sigchld_handler
    to Fcall_process.  */
@@ -162,12 +198,6 @@ extern int synch_process_termsig;
 /* If synch_process_death is zero,
    this is exit code of synchronous subprocess.  */
 extern int synch_process_retcode;
-
-/* The name of the file open to get a null file, or a data sink.
-   MS-DOS, and OS/2 redefine this.  */
-#ifndef NULL_DEVICE
-#define NULL_DEVICE "/dev/null"
-#endif
 
 /* Nonzero means don't run process sentinels.  This is used
    when exiting.  */
@@ -189,9 +219,11 @@ extern void hold_keyboard_input (void);
 extern void unhold_keyboard_input (void);
 extern int kbd_on_hold_p (void);
 
-typedef void (*fd_callback)(int fd, void *data, int for_read);
+typedef void (*fd_callback) (int fd, void *data);
 
 extern void add_read_fd (int fd, fd_callback func, void *data);
 extern void delete_read_fd (int fd);
 extern void add_write_fd (int fd, fd_callback func, void *data);
 extern void delete_write_fd (int fd);
+
+INLINE_HEADER_END

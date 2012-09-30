@@ -21,6 +21,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/types.h> /* for off_t, time_t */
 #include "systime.h" /* for EMACS_TIME */
 
+INLINE_HEADER_BEGIN
+#ifndef BUFFER_INLINE
+# define BUFFER_INLINE INLINE
+#endif
+
 /* Accessing the parameters of the current buffer.  */
 
 /* These macros come in pairs, one for the char position
@@ -187,9 +192,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Modification count as of last auto-save.  */
 /* FIXME: should we move this into ->text->auto_save_modiff?  */
 #define BUF_AUTOSAVE_MODIFF(buf) ((buf)->auto_save_modified)
-
-/* Interval tree of buffer.  */
-#define BUF_INTERVALS(buf) ((buf)->text->intervals)
 
 /* Marker chain of buffer.  */
 #define BUF_MARKERS(buf) ((buf)->text->markers)
@@ -436,6 +438,9 @@ struct buffer_text
 
     EMACS_INT overlay_modiff;	/* Counts modifications to overlays.  */
 
+    EMACS_INT compact;		/* Set to modiff each time when compact_buffer
+				   is called for this buffer.  */
+
     /* Minimum value of GPT - BEG since last redisplay that finished.  */
     ptrdiff_t beg_unchanged;
 
@@ -466,17 +471,12 @@ struct buffer_text
     /* Usually 0.  Temporarily set to 1 in decode_coding_gap to
        prevent Fgarbage_collect from shrinking the gap and losing
        not-yet-decoded bytes.  */
-    int inhibit_shrinking;
+    bool inhibit_shrinking;
   };
 
-/* Lisp fields in struct buffer are hidden from most code and accessed
-   via the BVAR macro, below.  Only select pieces of code, like the GC,
-   are allowed to use BUFFER_INTERNAL_FIELD.  */
-#define BUFFER_INTERNAL_FIELD(field) field ## _
+/* Most code should use this macro to access Lisp fields in struct buffer.  */
 
-/* Most code should use this macro to access Lisp fields in struct
-   buffer.  */
-#define BVAR(buf, field) ((buf)->BUFFER_INTERNAL_FIELD (field))
+#define BVAR(buf, field) ((buf)->INTERNAL_FIELD (field))
 
 /* This is the structure that the buffer Lisp object points to.  */
 
@@ -490,17 +490,17 @@ struct buffer
   struct vectorlike_header header;
 
   /* The name of this buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (name);
+  Lisp_Object INTERNAL_FIELD (name);
 
   /* The name of the file visited in this buffer, or nil.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (filename);
+  Lisp_Object INTERNAL_FIELD (filename);
 
   /* Directory for expanding relative file names.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (directory);
+  Lisp_Object INTERNAL_FIELD (directory);
 
   /* True if this buffer has been backed up (if you write to the visited
      file and it hasn't been backed up, then a backup will be made).  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (backed_up);
+  Lisp_Object INTERNAL_FIELD (backed_up);
 
   /* Length of file when last read or saved.
      -1 means auto saving turned off because buffer shrank a lot.
@@ -508,132 +508,132 @@ struct buffer
        (That value is used with buffer-swap-text.)
      This is not in the  struct buffer_text
      because it's not used in indirect buffers at all.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (save_length);
+  Lisp_Object INTERNAL_FIELD (save_length);
 
   /* File name used for auto-saving this buffer.
      This is not in the  struct buffer_text
      because it's not used in indirect buffers at all.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (auto_save_file_name);
+  Lisp_Object INTERNAL_FIELD (auto_save_file_name);
 
   /* Non-nil if buffer read-only.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (read_only);
+  Lisp_Object INTERNAL_FIELD (read_only);
 
   /* "The mark".  This is a marker which may
      point into this buffer or may point nowhere.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (mark);
+  Lisp_Object INTERNAL_FIELD (mark);
 
   /* Alist of elements (SYMBOL . VALUE-IN-THIS-BUFFER) for all
      per-buffer variables of this buffer.  For locally unbound
      symbols, just the symbol appears as the element.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (local_var_alist);
+  Lisp_Object INTERNAL_FIELD (local_var_alist);
 
   /* Symbol naming major mode (e.g., lisp-mode).  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (major_mode);
+  Lisp_Object INTERNAL_FIELD (major_mode);
 
   /* Pretty name of major mode (e.g., "Lisp"). */
-  Lisp_Object BUFFER_INTERNAL_FIELD (mode_name);
+  Lisp_Object INTERNAL_FIELD (mode_name);
 
   /* Mode line element that controls format of mode line.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (mode_line_format);
+  Lisp_Object INTERNAL_FIELD (mode_line_format);
 
   /* Analogous to mode_line_format for the line displayed at the top
      of windows.  Nil means don't display that line.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (header_line_format);
+  Lisp_Object INTERNAL_FIELD (header_line_format);
 
   /* Keys that are bound local to this buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (keymap);
+  Lisp_Object INTERNAL_FIELD (keymap);
 
   /* This buffer's local abbrev table.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (abbrev_table);
+  Lisp_Object INTERNAL_FIELD (abbrev_table);
 
   /* This buffer's syntax table.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (syntax_table);
+  Lisp_Object INTERNAL_FIELD (syntax_table);
 
   /* This buffer's category table.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (category_table);
+  Lisp_Object INTERNAL_FIELD (category_table);
 
   /* Values of several buffer-local variables.  */
   /* tab-width is buffer-local so that redisplay can find it
      in buffers that are not current.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (case_fold_search);
-  Lisp_Object BUFFER_INTERNAL_FIELD (tab_width);
-  Lisp_Object BUFFER_INTERNAL_FIELD (fill_column);
-  Lisp_Object BUFFER_INTERNAL_FIELD (left_margin);
+  Lisp_Object INTERNAL_FIELD (case_fold_search);
+  Lisp_Object INTERNAL_FIELD (tab_width);
+  Lisp_Object INTERNAL_FIELD (fill_column);
+  Lisp_Object INTERNAL_FIELD (left_margin);
 
   /* Function to call when insert space past fill column.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (auto_fill_function);
+  Lisp_Object INTERNAL_FIELD (auto_fill_function);
 
   /* Case table for case-conversion in this buffer.
      This char-table maps each char into its lower-case version.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (downcase_table);
+  Lisp_Object INTERNAL_FIELD (downcase_table);
 
   /* Char-table mapping each char to its upper-case version.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (upcase_table);
+  Lisp_Object INTERNAL_FIELD (upcase_table);
 
   /* Char-table for conversion for case-folding search.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (case_canon_table);
+  Lisp_Object INTERNAL_FIELD (case_canon_table);
 
   /* Char-table of equivalences for case-folding search.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (case_eqv_table);
+  Lisp_Object INTERNAL_FIELD (case_eqv_table);
 
   /* Non-nil means do not display continuation lines.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (truncate_lines);
+  Lisp_Object INTERNAL_FIELD (truncate_lines);
 
   /* Non-nil means to use word wrapping when displaying continuation lines.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (word_wrap);
+  Lisp_Object INTERNAL_FIELD (word_wrap);
 
   /* Non-nil means display ctl chars with uparrow.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (ctl_arrow);
+  Lisp_Object INTERNAL_FIELD (ctl_arrow);
 
   /* Non-nil means reorder bidirectional text for display in the
      visual order.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (bidi_display_reordering);
+  Lisp_Object INTERNAL_FIELD (bidi_display_reordering);
 
   /* If non-nil, specifies which direction of text to force in all the
      paragraphs of the buffer.  Nil means determine paragraph
      direction dynamically for each paragraph.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (bidi_paragraph_direction);
+  Lisp_Object INTERNAL_FIELD (bidi_paragraph_direction);
 
   /* Non-nil means do selective display;
      see doc string in syms_of_buffer (buffer.c) for details.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (selective_display);
+  Lisp_Object INTERNAL_FIELD (selective_display);
 
   /* Non-nil means show ... at end of line followed by invisible lines.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (selective_display_ellipses);
+  Lisp_Object INTERNAL_FIELD (selective_display_ellipses);
 
   /* Alist of (FUNCTION . STRING) for each minor mode enabled in buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (minor_modes);
+  Lisp_Object INTERNAL_FIELD (minor_modes);
 
   /* t if "self-insertion" should overwrite; `binary' if it should also
      overwrite newlines and tabs - for editing executables and the like.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (overwrite_mode);
+  Lisp_Object INTERNAL_FIELD (overwrite_mode);
 
   /* Non-nil means abbrev mode is on.  Expand abbrevs automatically.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (abbrev_mode);
+  Lisp_Object INTERNAL_FIELD (abbrev_mode);
 
   /* Display table to use for text in this buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (display_table);
+  Lisp_Object INTERNAL_FIELD (display_table);
 
   /* t means the mark and region are currently active.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (mark_active);
+  Lisp_Object INTERNAL_FIELD (mark_active);
 
   /* Non-nil means the buffer contents are regarded as multi-byte
      form of characters, not a binary code.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (enable_multibyte_characters);
+  Lisp_Object INTERNAL_FIELD (enable_multibyte_characters);
 
   /* Coding system to be used for encoding the buffer contents on
      saving.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (buffer_file_coding_system);
+  Lisp_Object INTERNAL_FIELD (buffer_file_coding_system);
 
   /* List of symbols naming the file format used for visited file.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (file_format);
+  Lisp_Object INTERNAL_FIELD (file_format);
 
   /* List of symbols naming the file format used for auto-save file.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (auto_save_file_format);
+  Lisp_Object INTERNAL_FIELD (auto_save_file_format);
 
   /* True if the newline position cache and width run cache are
      enabled.  See search.c and indent.c.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (cache_long_line_scans);
+  Lisp_Object INTERNAL_FIELD (cache_long_line_scans);
 
   /* If the width run cache is enabled, this table contains the
      character widths width_run_cache (see above) assumes.  When we
@@ -641,102 +641,102 @@ struct buffer
      current display table to see whether the display table has
      affected the widths of any characters.  If it has, we
      invalidate the width run cache, and re-initialize width_table.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (width_table);
+  Lisp_Object INTERNAL_FIELD (width_table);
 
   /* In an indirect buffer, or a buffer that is the base of an
      indirect buffer, this holds a marker that records
      PT for this buffer when the buffer is not current.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (pt_marker);
+  Lisp_Object INTERNAL_FIELD (pt_marker);
 
   /* In an indirect buffer, or a buffer that is the base of an
      indirect buffer, this holds a marker that records
      BEGV for this buffer when the buffer is not current.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (begv_marker);
+  Lisp_Object INTERNAL_FIELD (begv_marker);
 
   /* In an indirect buffer, or a buffer that is the base of an
      indirect buffer, this holds a marker that records
      ZV for this buffer when the buffer is not current.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (zv_marker);
+  Lisp_Object INTERNAL_FIELD (zv_marker);
 
   /* This holds the point value before the last scroll operation.
      Explicitly setting point sets this to nil.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (point_before_scroll);
+  Lisp_Object INTERNAL_FIELD (point_before_scroll);
 
   /* Truename of the visited file, or nil.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (file_truename);
+  Lisp_Object INTERNAL_FIELD (file_truename);
 
   /* Invisibility spec of this buffer.
      t => any non-nil `invisible' property means invisible.
      A list => `invisible' property means invisible
      if it is memq in that list.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (invisibility_spec);
+  Lisp_Object INTERNAL_FIELD (invisibility_spec);
 
   /* This is the last window that was selected with this buffer in it,
      or nil if that window no longer displays this buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (last_selected_window);
+  Lisp_Object INTERNAL_FIELD (last_selected_window);
 
   /* Incremented each time the buffer is displayed in a window.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (display_count);
+  Lisp_Object INTERNAL_FIELD (display_count);
 
   /* Widths of left and right marginal areas for windows displaying
      this buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (left_margin_cols);
-  Lisp_Object BUFFER_INTERNAL_FIELD (right_margin_cols);
+  Lisp_Object INTERNAL_FIELD (left_margin_cols);
+  Lisp_Object INTERNAL_FIELD (right_margin_cols);
 
   /* Widths of left and right fringe areas for windows displaying
      this buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (left_fringe_width);
-  Lisp_Object BUFFER_INTERNAL_FIELD (right_fringe_width);
+  Lisp_Object INTERNAL_FIELD (left_fringe_width);
+  Lisp_Object INTERNAL_FIELD (right_fringe_width);
 
   /* Non-nil means fringes are drawn outside display margins;
      othersize draw them between margin areas and text.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (fringes_outside_margins);
+  Lisp_Object INTERNAL_FIELD (fringes_outside_margins);
 
   /* Width and type of scroll bar areas for windows displaying
      this buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (scroll_bar_width);
-  Lisp_Object BUFFER_INTERNAL_FIELD (vertical_scroll_bar_type);
+  Lisp_Object INTERNAL_FIELD (scroll_bar_width);
+  Lisp_Object INTERNAL_FIELD (vertical_scroll_bar_type);
 
   /* Non-nil means indicate lines not displaying text (in a style
      like vi).  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (indicate_empty_lines);
+  Lisp_Object INTERNAL_FIELD (indicate_empty_lines);
 
   /* Non-nil means indicate buffer boundaries and scrolling.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (indicate_buffer_boundaries);
+  Lisp_Object INTERNAL_FIELD (indicate_buffer_boundaries);
 
   /* Logical to physical fringe bitmap mappings.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (fringe_indicator_alist);
+  Lisp_Object INTERNAL_FIELD (fringe_indicator_alist);
 
   /* Logical to physical cursor bitmap mappings.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (fringe_cursor_alist);
+  Lisp_Object INTERNAL_FIELD (fringe_cursor_alist);
 
   /* Time stamp updated each time this buffer is displayed in a window.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (display_time);
+  Lisp_Object INTERNAL_FIELD (display_time);
 
   /* If scrolling the display because point is below the bottom of a
      window showing this buffer, try to choose a window start so
      that point ends up this number of lines from the top of the
      window.  Nil means that scrolling method isn't used.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (scroll_up_aggressively);
+  Lisp_Object INTERNAL_FIELD (scroll_up_aggressively);
 
   /* If scrolling the display because point is above the top of a
      window showing this buffer, try to choose a window start so
      that point ends up this number of lines from the bottom of the
      window.  Nil means that scrolling method isn't used.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (scroll_down_aggressively);
+  Lisp_Object INTERNAL_FIELD (scroll_down_aggressively);
 
   /* Desired cursor type in this buffer.  See the doc string of
      per-buffer variable `cursor-type'.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (cursor_type);
+  Lisp_Object INTERNAL_FIELD (cursor_type);
 
   /* An integer > 0 means put that number of pixels below text lines
      in the display of this buffer.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (extra_line_spacing);
+  Lisp_Object INTERNAL_FIELD (extra_line_spacing);
 
   /* Cursor type to display in non-selected windows.
      t means to use hollow box cursor.
      See `cursor-type' for other values.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (cursor_in_non_selected_windows);
+  Lisp_Object INTERNAL_FIELD (cursor_in_non_selected_windows);
 
   /* No more Lisp_Object beyond this point.  Except undo_list,
      which is handled specially in Fgarbage_collect .  */
@@ -771,6 +771,11 @@ struct buffer
   /* In an indirect buffer, this points to the base buffer.
      In an ordinary buffer, it is 0.  */
   struct buffer *base_buffer;
+
+  /* In an indirect buffer, this is -1. In an ordinary buffer,
+     it's the number of indirect buffers that share our text;
+     zero means that we're the only owner of this text.  */
+  int indirections;
 
   /* A non-zero value in slot IDX means that per-buffer variable
      with index IDX has a local value in this buffer.  The index IDX
@@ -853,10 +858,120 @@ struct buffer
      buffer of an indirect buffer.  But we can't store it in the
      struct buffer_text because local variables have to be right in
      the struct buffer. So we copy it around in set_buffer_internal.  */
-  Lisp_Object BUFFER_INTERNAL_FIELD (undo_list);
+  Lisp_Object INTERNAL_FIELD (undo_list);
 };
 
-
+/* Most code should use these functions to set Lisp fields in struct
+   buffer.  */
+BUFFER_INLINE void
+bset_bidi_paragraph_direction (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (bidi_paragraph_direction) = val;
+}
+BUFFER_INLINE void
+bset_case_canon_table (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (case_canon_table) = val;
+}
+BUFFER_INLINE void
+bset_case_eqv_table (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (case_eqv_table) = val;
+}
+BUFFER_INLINE void
+bset_directory (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (directory) = val;
+}
+BUFFER_INLINE void
+bset_display_count (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (display_count) = val;
+}
+BUFFER_INLINE void
+bset_display_time (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (display_time) = val;
+}
+BUFFER_INLINE void
+bset_downcase_table (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (downcase_table) = val;
+}
+BUFFER_INLINE void
+bset_enable_multibyte_characters (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (enable_multibyte_characters) = val;
+}
+BUFFER_INLINE void
+bset_filename (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (filename) = val;
+}
+BUFFER_INLINE void
+bset_keymap (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (keymap) = val;
+}
+BUFFER_INLINE void
+bset_last_selected_window (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (last_selected_window) = val;
+}
+BUFFER_INLINE void
+bset_local_var_alist (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (local_var_alist) = val;
+}
+BUFFER_INLINE void
+bset_mark_active (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (mark_active) = val;
+}
+BUFFER_INLINE void
+bset_point_before_scroll (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (point_before_scroll) = val;
+}
+BUFFER_INLINE void
+bset_read_only (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (read_only) = val;
+}
+BUFFER_INLINE void
+bset_truncate_lines (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (truncate_lines) = val;
+}
+BUFFER_INLINE void
+bset_undo_list (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (undo_list) = val;
+}
+BUFFER_INLINE void
+bset_upcase_table (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (upcase_table) = val;
+}
+BUFFER_INLINE void
+bset_width_table (struct buffer *b, Lisp_Object val)
+{
+  b->INTERNAL_FIELD (width_table) = val;
+}
+
+/* Convenient check whether buffer B is live.  */
+
+#define BUFFER_LIVE_P(b) (!NILP (BVAR (b, name)))
+
+/* Chain of all buffers, including killed ones.  */
+
+extern struct buffer *all_buffers;
+
+/* Used to iterate over the chain above.  */
+
+#define FOR_EACH_BUFFER(b) \
+  for ((b) = all_buffers; (b); (b) = (b)->header.next.buffer)
+
 /* This points to the current buffer.  */
 
 extern struct buffer *current_buffer;
@@ -894,22 +1009,46 @@ extern struct buffer buffer_local_symbols;
 
 extern void delete_all_overlays (struct buffer *);
 extern void reset_buffer (struct buffer *);
+extern void compact_buffer (struct buffer *);
 extern void evaporate_overlays (ptrdiff_t);
-extern ptrdiff_t overlays_at (EMACS_INT pos, int extend, Lisp_Object **vec_ptr,
-			      ptrdiff_t *len_ptr, ptrdiff_t *next_ptr,
-			      ptrdiff_t *prev_ptr, int change_req);
+extern ptrdiff_t overlays_at (EMACS_INT, bool, Lisp_Object **,
+			      ptrdiff_t *, ptrdiff_t *, ptrdiff_t *, bool);
 extern ptrdiff_t sort_overlays (Lisp_Object *, ptrdiff_t, struct window *);
 extern void recenter_overlay_lists (struct buffer *, ptrdiff_t);
 extern ptrdiff_t overlay_strings (ptrdiff_t, struct window *, unsigned char **);
 extern void validate_region (Lisp_Object *, Lisp_Object *);
-extern void set_buffer_internal (struct buffer *);
 extern void set_buffer_internal_1 (struct buffer *);
 extern void set_buffer_temp (struct buffer *);
 extern Lisp_Object buffer_local_value_1 (Lisp_Object, Lisp_Object);
 extern void record_buffer (Lisp_Object);
 extern _Noreturn void buffer_slot_type_mismatch (Lisp_Object, int);
 extern void fix_overlays_before (struct buffer *, ptrdiff_t, ptrdiff_t);
-extern void mmap_set_vars (int);
+extern void mmap_set_vars (bool);
+
+/* Set the current buffer to B.
+
+   We previously set windows_or_buffers_changed here to invalidate
+   global unchanged information in beg_unchanged and end_unchanged.
+   This is no longer necessary because we now compute unchanged
+   information on a buffer-basis.  Every action affecting other
+   windows than the selected one requires a select_window at some
+   time, and that increments windows_or_buffers_changed.  */
+
+BUFFER_INLINE void
+set_buffer_internal (struct buffer *b)
+{
+  if (current_buffer != b)
+    set_buffer_internal_1 (b);
+}
+
+/* Arrange to go back to the original buffer after the next
+   call to unbind_to if the original buffer is still alive.  */
+
+BUFFER_INLINE void
+record_unwind_current_buffer (void)
+{
+  record_unwind_protect (set_buffer_if_live, Fcurrent_buffer ());
+}
 
 /* Get overlays at POSN into array OVERLAYS with NOVERLAYS elements.
    If NEXTP is non-NULL, return next overlay there.
@@ -933,7 +1072,33 @@ extern void mmap_set_vars (int);
 extern Lisp_Object Qbefore_change_functions;
 extern Lisp_Object Qafter_change_functions;
 extern Lisp_Object Qfirst_change_hook;
-
+
+/* Get text properties of B.  */
+
+BUFFER_INLINE INTERVAL
+buffer_intervals (struct buffer *b)
+{
+  eassert (b->text != NULL);
+  return b->text->intervals;
+}
+
+/* Set text properties of B to I.  */
+
+BUFFER_INLINE void
+set_buffer_intervals (struct buffer *b, INTERVAL i)
+{
+  eassert (b->text != NULL);
+  b->text->intervals = i;
+}
+
+/* Non-zero if current buffer has overlays.  */
+
+BUFFER_INLINE bool
+buffer_has_overlays (void)
+{
+  return current_buffer->overlays_before || current_buffer->overlays_after;
+}
+
 /* Return character code of multi-byte form at byte position POS.  If POS
    doesn't point the head of valid multi-byte form, only the byte at
    POS is returned.  No range checking.
@@ -948,7 +1113,7 @@ extern Lisp_Object Qfirst_change_hook;
    the buffer to the next character after fetching this one.  Instead,
    use either FETCH_CHAR_ADVANCE or STRING_CHAR_AND_LENGTH.  */
 
-static inline int
+BUFFER_INLINE int
 FETCH_MULTIBYTE_CHAR (ptrdiff_t pos)
 {
   unsigned char *p = ((pos >= GPT_BYTE ? GAP_SIZE : 0)
@@ -960,7 +1125,7 @@ FETCH_MULTIBYTE_CHAR (ptrdiff_t pos)
    If POS doesn't point the head of valid multi-byte form, only the byte at
    POS is returned.  No range checking.  */
 
-static inline int
+BUFFER_INLINE int
 BUF_FETCH_MULTIBYTE_CHAR (struct buffer *buf, ptrdiff_t pos)
 {
   unsigned char *p
@@ -973,21 +1138,21 @@ BUF_FETCH_MULTIBYTE_CHAR (struct buffer *buf, ptrdiff_t pos)
 
 /* Return the marker that stands for where OV starts in the buffer.  */
 
-#define OVERLAY_START(OV) (XOVERLAY (OV)->start)
+#define OVERLAY_START(OV) XOVERLAY (OV)->start
 
 /* Return the marker that stands for where OV ends in the buffer.  */
 
-#define OVERLAY_END(OV) (XOVERLAY (OV)->end)
+#define OVERLAY_END(OV) XOVERLAY (OV)->end
 
 /* Return the plist of overlay OV.  */
 
-#define OVERLAY_PLIST(OV) XOVERLAY ((OV))->plist
+#define OVERLAY_PLIST(OV) XOVERLAY (OV)->plist
 
 /* Return the actual buffer position for the marker P.
    We assume you know which buffer it's pointing into.  */
 
 #define OVERLAY_POSITION(P) \
- (MARKERP (P) ? marker_position (P) : (abort (), 0))
+ (MARKERP (P) ? marker_position (P) : (emacs_abort (), 0))
 
 
 /***********************************************************************
@@ -1002,16 +1167,16 @@ extern int last_per_buffer_idx;
    from the start of a buffer structure.  */
 
 #define PER_BUFFER_VAR_OFFSET(VAR) \
-  offsetof (struct buffer, BUFFER_INTERNAL_FIELD (VAR))
+  offsetof (struct buffer, INTERNAL_FIELD (VAR))
 
 /* Used to iterate over normal Lisp_Object fields of struct buffer (all
    Lisp_Objects except undo_list).  If you add, remove, or reorder
    Lisp_Objects in a struct buffer, make sure that this is still correct.  */
 
-#define for_each_per_buffer_object_at(offset)				 \
+#define FOR_EACH_PER_BUFFER_OBJECT_AT(offset)				 \
   for (offset = PER_BUFFER_VAR_OFFSET (name);				 \
        offset <= PER_BUFFER_VAR_OFFSET (cursor_in_non_selected_windows); \
-       offset += sizeof (Lisp_Object))
+       offset += word_size)
 
 /* Return the index of buffer-local variable VAR.  Each per-buffer
    variable has an index > 0 associated with it, except when it always
@@ -1027,7 +1192,7 @@ extern int last_per_buffer_idx;
 
 #define PER_BUFFER_VALUE_P(B, IDX)		\
     (((IDX) < 0 || IDX >= last_per_buffer_idx)	\
-     ? (abort (), 0)				\
+     ? (emacs_abort (), 0)			\
      : ((B)->local_flags[IDX] != 0))
 
 /* Set whether per-buffer variable with index IDX has a buffer-local
@@ -1036,7 +1201,7 @@ extern int last_per_buffer_idx;
 #define SET_PER_BUFFER_VALUE_P(B, IDX, VAL)	\
      do {						\
        if ((IDX) < 0 || (IDX) >= last_per_buffer_idx)	\
-	 abort ();					\
+	 emacs_abort ();				\
        (B)->local_flags[IDX] = (VAL);			\
      } while (0)
 
@@ -1064,20 +1229,38 @@ extern int last_per_buffer_idx;
 #define PER_BUFFER_IDX(OFFSET) \
       XINT (*(Lisp_Object *)((OFFSET) + (char *) &buffer_local_flags))
 
-/* Return the default value of the per-buffer variable at offset
-   OFFSET in the buffer structure.  */
+/* Functions to get and set default value of the per-buffer
+   variable at offset OFFSET in the buffer structure.  */
 
-#define PER_BUFFER_DEFAULT(OFFSET) \
-      (*(Lisp_Object *)((OFFSET) + (char *) &buffer_defaults))
+BUFFER_INLINE Lisp_Object
+per_buffer_default (int offset)
+{
+  return *(Lisp_Object *)(offset + (char *) &buffer_defaults);
+}
 
-/* Return the buffer-local value of the per-buffer variable at offset
-   OFFSET in the buffer structure.  */
+BUFFER_INLINE void
+set_per_buffer_default (int offset, Lisp_Object value)
+{
+  *(Lisp_Object *)(offset + (char *) &buffer_defaults) = value;
+}
 
-#define PER_BUFFER_VALUE(BUFFER, OFFSET) \
-      (*(Lisp_Object *)((OFFSET) + (char *) (BUFFER)))
-
+/* Functions to get and set buffer-local value of the per-buffer
+   variable at offset OFFSET in the buffer structure.  */
+
+BUFFER_INLINE Lisp_Object
+per_buffer_value (struct buffer *b, int offset)
+{
+  return *(Lisp_Object *)(offset + (char *) b);
+}
+
+BUFFER_INLINE void
+set_per_buffer_value (struct buffer *b, int offset, Lisp_Object value)
+{
+  *(Lisp_Object *)(offset + (char *) b) = value;
+}
+
 /* Downcase a character C, or make no change if that cannot be done.  */
-static inline int
+BUFFER_INLINE int
 downcase (int c)
 {
   Lisp_Object downcase_table = BVAR (current_buffer, downcase_table);
@@ -1086,10 +1269,10 @@ downcase (int c)
 }
 
 /* 1 if C is upper case.  */
-static inline int uppercasep (int c) { return downcase (c) != c; }
+BUFFER_INLINE bool uppercasep (int c) { return downcase (c) != c; }
 
 /* Upcase a character C known to be not upper case.  */
-static inline int
+BUFFER_INLINE int
 upcase1 (int c)
 {
   Lisp_Object upcase_table = BVAR (current_buffer, upcase_table);
@@ -1098,8 +1281,13 @@ upcase1 (int c)
 }
 
 /* 1 if C is lower case.  */
-static inline int lowercasep (int c)
-{ return !uppercasep (c) && upcase1 (c) != c; }
+BUFFER_INLINE bool
+lowercasep (int c)
+{
+  return !uppercasep (c) && upcase1 (c) != c;
+}
 
 /* Upcase a character C, or make no change if that cannot be done.  */
-static inline int upcase (int c) { return uppercasep (c) ? c : upcase1 (c); }
+BUFFER_INLINE int upcase (int c) { return uppercasep (c) ? c : upcase1 (c); }
+
+INLINE_HEADER_END

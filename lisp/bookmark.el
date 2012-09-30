@@ -144,10 +144,7 @@ You can toggle whether files are shown with \\<bookmark-bmenu-mode-map>\\[bookma
 
 (defcustom bookmark-bmenu-toggle-filenames t
   "Non-nil means show filenames when listing bookmarks.
-This may result in truncated bookmark names.  To disable this, put the
-following in your `.emacs' file:
-
-\(setq bookmark-bmenu-toggle-filenames nil)"
+A non-nil value may result in truncated bookmark names."
   :type 'boolean
   :group 'bookmark)
 
@@ -277,8 +274,8 @@ through a file easier.")
 (defvar bookmark-current-buffer nil
   "The buffer in which a bookmark is currently being set or renamed.
 Functions that insert strings into the minibuffer use this to know
-the source buffer for that information; see `bookmark-yank-word' and
-`bookmark-insert-current-bookmark' for example.")
+the source buffer for that information; see `bookmark-yank-word'
+for example.")
 
 
 (defvar bookmark-yank-point 0
@@ -473,6 +470,12 @@ equivalently just return ALIST without NAME.")
 (defun bookmark-make-record ()
   "Return a new bookmark record (NAME . ALIST) for the current location."
   (let ((record (funcall bookmark-make-record-function)))
+    ;; Set up defaults.
+    (bookmark-prop-set
+     record 'defaults
+     (delq nil (delete-dups (append (bookmark-prop-get record 'defaults)
+				    (list bookmark-current-bookmark
+					  (bookmark-buffer-name))))))
     ;; Set up default name.
     (if (stringp (car record))
         ;; The function already provided a default name.
@@ -738,10 +741,6 @@ This expects to be called from `point-min' in a bookmark file."
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map minibuffer-local-map)
     (define-key map "\C-w" 'bookmark-yank-word)
-    ;; This C-u binding might not be very useful any more now that we
-    ;; provide access to the default via the standard M-n binding.
-    ;; Maybe we should just remove it?  --Stef-08
-    (define-key map "\C-u" 'bookmark-insert-current-bookmark)
     map))
 
 ;;;###autoload
@@ -772,7 +771,19 @@ the list of bookmarks.)"
   (interactive (list nil current-prefix-arg))
   (unwind-protect
        (let* ((record (bookmark-make-record))
-              (default (car record)))
+              ;; `defaults' is a transient element of the
+              ;; extensible format described above in the section
+              ;; `File format stuff'.  Bookmark record functions
+              ;; can use it to specify a list of default values
+              ;; accessible via M-n while reading a bookmark name.
+              (defaults (bookmark-prop-get record 'defaults))
+              (default (if (consp defaults) (car defaults) defaults)))
+
+         (if defaults
+             ;; Don't store default values in the record.
+             (setq record (assq-delete-all 'defaults record))
+           ;; When no defaults in the record, use its first element.
+           (setq defaults (car record) default defaults))
 
          (bookmark-maybe-load-default-file)
          ;; Don't set `bookmark-yank-point' and `bookmark-current-buffer'
@@ -788,7 +799,7 @@ the list of bookmarks.)"
                      (format "Set bookmark (%s): " default)
                      nil
                      bookmark-minibuffer-read-name-map
-                     nil nil default))))
+                     nil nil defaults))))
            (and (string-equal str "") (setq str default))
            (bookmark-store str (cdr record) no-overwrite)
 
@@ -886,18 +897,6 @@ Lines beginning with `#' are ignored."
   "Pop up a buffer for editing bookmark BOOKMARK-NAME-OR-RECORD's annotation."
   (pop-to-buffer (generate-new-buffer-name "*Bookmark Annotation Compose*"))
   (bookmark-edit-annotation-mode bookmark-name-or-record))
-
-
-(defun bookmark-insert-current-bookmark ()
-  "Insert into the bookmark name currently being set the value of
-`bookmark-current-bookmark' in `bookmark-current-buffer', defaulting
-to the buffer's file name if `bookmark-current-bookmark' is nil."
-  (interactive)
-  (let ((str
-	 (with-current-buffer bookmark-current-buffer
-	   (or bookmark-current-bookmark
-               (bookmark-buffer-name)))))
-    (insert str)))
 
 
 (defun bookmark-buffer-name ()
@@ -1049,11 +1048,10 @@ The return value has the form (BUFFER . POINT).
 
 Note: this function is deprecated and is present for Emacs 22
 compatibility only."
+  (declare (obsolete bookmark-handle-bookmark "23.1"))
   (save-excursion
     (bookmark-handle-bookmark bookmark)
     (cons (current-buffer) (point))))
-
-(make-obsolete 'bookmark-jump-noselect 'bookmark-handle-bookmark "23.1")
 
 (defun bookmark-handle-bookmark (bookmark-name-or-record)
   "Call BOOKMARK-NAME-OR-RECORD's handler or `bookmark-default-handler'

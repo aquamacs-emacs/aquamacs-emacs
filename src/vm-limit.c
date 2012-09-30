@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
-#include <setjmp.h>
+#include <unistd.h> /* for 'environ', on AIX */
 #include "lisp.h"
 #include "mem-limits.h"
 
@@ -268,7 +268,6 @@ start_of_data (void)
    * is known to live at or near the start of the system crt0.c, and
    * we don't sweat the handful of bytes that might lose.
    */
-  extern char **environ;
   return ((POINTER) &environ);
 #else
   extern int data_start;

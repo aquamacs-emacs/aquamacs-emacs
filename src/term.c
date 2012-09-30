@@ -21,13 +21,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <stdio.h>
-#include <ctype.h>
 #include <errno.h>
 #include <sys/file.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <signal.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "termchar.h"
@@ -756,13 +753,13 @@ tty_write_glyphs (struct frame *f, struct glyph *string, int len)
       conversion_buffer = encode_terminal_code (string, n, coding);
       if (coding->produced > 0)
 	{
-	  BLOCK_INPUT;
+	  block_input ();
 	  fwrite (conversion_buffer, 1, coding->produced, tty->output);
 	  if (ferror (tty->output))
 	    clearerr (tty->output);
 	  if (tty->termscript)
 	    fwrite (conversion_buffer, 1, coding->produced, tty->termscript);
-	  UNBLOCK_INPUT;
+	  unblock_input ();
 	}
       string += n;
 
@@ -817,13 +814,13 @@ tty_write_glyphs_with_face (register struct frame *f, register struct glyph *str
   conversion_buffer = encode_terminal_code (string, len, coding);
   if (coding->produced > 0)
     {
-      BLOCK_INPUT;
+      block_input ();
       fwrite (conversion_buffer, 1, coding->produced, tty->output);
       if (ferror (tty->output))
 	clearerr (tty->output);
       if (tty->termscript)
 	fwrite (conversion_buffer, 1, coding->produced, tty->termscript);
-      UNBLOCK_INPUT;
+      unblock_input ();
     }
 
   /* Turn appearance modes off.  */
@@ -903,13 +900,13 @@ tty_insert_glyphs (struct frame *f, struct glyph *start, int len)
 
       if (coding->produced > 0)
 	{
-	  BLOCK_INPUT;
+	  block_input ();
 	  fwrite (conversion_buffer, 1, coding->produced, tty->output);
 	  if (ferror (tty->output))
 	    clearerr (tty->output);
 	  if (tty->termscript)
 	    fwrite (conversion_buffer, 1, coding->produced, tty->termscript);
-	  UNBLOCK_INPUT;
+	  unblock_input ();
 	}
 
       OUTPUT1_IF (tty, tty->TS_pad_inserted_char);
@@ -1333,7 +1330,7 @@ term_get_fkeys_1 (void)
 
   /* This can happen if CANNOT_DUMP or with strange options.  */
   if (!KEYMAPP (KVAR (kboard, Vinput_decode_map)))
-    KVAR (kboard, Vinput_decode_map) = Fmake_sparse_keymap (Qnil);
+    kset_input_decode_map (kboard, Fmake_sparse_keymap (Qnil));
 
   for (i = 0; i < (sizeof (keys)/sizeof (keys[0])); i++)
     {
@@ -1499,7 +1496,7 @@ append_glyph (struct it *it)
 	{
 	  glyph->resolved_level = it->bidi_it.resolved_level;
 	  if ((it->bidi_it.type & 7) != it->bidi_it.type)
-	    abort ();
+	    emacs_abort ();
 	  glyph->bidi_type = it->bidi_it.type;
 	}
       else
@@ -1696,7 +1693,7 @@ append_composite_glyph (struct it *it)
 	{
 	  glyph->resolved_level = it->bidi_it.resolved_level;
 	  if ((it->bidi_it.type & 7) != it->bidi_it.type)
-	    abort ();
+	    emacs_abort ();
 	  glyph->bidi_type = it->bidi_it.type;
 	}
       else
@@ -1781,7 +1778,7 @@ append_glyphless_glyph (struct it *it, int face_id, const char *str)
     {
       glyph->resolved_level = it->bidi_it.resolved_level;
       if ((it->bidi_it.type & 7) != it->bidi_it.type)
-	abort ();
+	emacs_abort ();
       glyph->bidi_type = it->bidi_it.type;
     }
   else
@@ -2209,11 +2206,10 @@ set_tty_color_mode (struct tty_display_info *tty, struct frame *f)
 
   if (mode != tty->previous_color_mode)
     {
-      Lisp_Object funsym = intern ("tty-set-up-initial-frame-faces");
       tty->previous_color_mode = mode;
       tty_setup_colors (tty , mode);
       /*  This recomputes all the faces given the new color definitions.  */
-      safe_call (1, &funsym);
+      safe_call (1, intern ("tty-set-up-initial-frame-faces"));
     }
 }
 
@@ -2252,7 +2248,7 @@ get_named_tty (const char *name)
   struct terminal *t;
 
   if (!name)
-    abort ();
+    emacs_abort ();
 
   for (t = terminal_list; t; t = t->next_terminal)
     {
@@ -2800,7 +2796,7 @@ create_tty_output (struct frame *f)
   struct tty_output *t = xzalloc (sizeof *t);
 
   if (! FRAME_TERMCAP_P (f))
-    abort ();
+    emacs_abort ();
 
   t->display_info = FRAME_TERMINAL (f)->display_info.tty;
 
@@ -2813,7 +2809,7 @@ static void
 tty_free_frame_resources (struct frame *f)
 {
   if (! FRAME_TERMCAP_P (f))
-    abort ();
+    emacs_abort ();
 
   if (FRAME_FACE_CACHE (f))
     free_frame_faces (f);
@@ -2829,7 +2825,7 @@ static void
 tty_free_frame_resources (struct frame *f)
 {
   if (! FRAME_TERMCAP_P (f) && ! FRAME_MSDOS_P (f))
-    abort ();
+    emacs_abort ();
 
   if (FRAME_FACE_CACHE (f))
     free_frame_faces (f);
@@ -2934,7 +2930,10 @@ dissociate_if_controlling_tty (int fd)
       no_controlling_tty = 1;
 #else
 #ifdef TIOCNOTTY                /* Try BSD ioctls. */
-      sigblock (sigmask (SIGTTOU));
+      sigset_t blocked;
+      sigemptyset (&blocked);
+      sigaddset (&blocked, SIGTTOU);
+      pthread_sigmask (SIG_BLOCK, &blocked, 0);
       fd = emacs_open (DEV_TTY, O_RDWR, 0);
       if (fd != -1 && ioctl (fd, TIOCNOTTY, 0) != -1)
         {
@@ -2942,10 +2941,9 @@ dissociate_if_controlling_tty (int fd)
         }
       if (fd != -1)
         emacs_close (fd);
-      sigunblock (sigmask (SIGTTOU));
+      pthread_sigmask (SIG_UNBLOCK, &blocked, 0);
 #else
-      /* Unknown system. */
-      croak ();
+# error "Unknown system."
 #endif  /* ! TIOCNOTTY */
 #endif  /* ! USG */
     }
@@ -3003,6 +3001,7 @@ init_tty (const char *name, const char *terminal_type, int must_succeed)
 #else
   tty = xzalloc (sizeof *tty);
 #endif
+  tty->top_frame = Qnil;
   tty->next = tty_list;
   tty_list = tty;
 
@@ -3075,9 +3074,14 @@ init_tty (const char *name, const char *terminal_type, int must_succeed)
 
   /* On some systems, tgetent tries to access the controlling
      terminal. */
-  sigblock (sigmask (SIGTTOU));
-  status = tgetent (tty->termcap_term_buffer, terminal_type);
-  sigunblock (sigmask (SIGTTOU));
+  {
+    sigset_t blocked;
+    sigemptyset (&blocked);
+    sigaddset (&blocked, SIGTTOU);
+    pthread_sigmask (SIG_BLOCK, &blocked, 0);
+    status = tgetent (tty->termcap_term_buffer, terminal_type);
+    pthread_sigmask (SIG_UNBLOCK, &blocked, 0);
+  }
 
   if (status < 0)
     {
@@ -3109,7 +3113,7 @@ use the Bourne shell command `TERM=... export TERM' (C-shell:\n\
 
 #ifndef TERMINFO
   if (strlen (tty->termcap_term_buffer) >= buffer_size)
-    abort ();
+    emacs_abort ();
   buffer_size = strlen (tty->termcap_term_buffer);
 #endif
   tty->termcap_strings_buffer = area = xmalloc (buffer_size);
@@ -3282,7 +3286,7 @@ use the Bourne shell command `TERM=... export TERM' (C-shell:\n\
 
   terminal->kboard = xmalloc (sizeof *terminal->kboard);
   init_kboard (terminal->kboard);
-  KVAR (terminal->kboard, Vwindow_system) = Qnil;
+  kset_window_system (terminal->kboard, Qnil);
   terminal->kboard->next_kboard = all_kboards;
   all_kboards = terminal->kboard;
   terminal->kboard->reference_count++;
@@ -3468,7 +3472,7 @@ maybe_fatal (int must_succeed, struct terminal *terminal,
     verror (str1, ap);
 
   va_end (ap);
-  abort ();
+  emacs_abort ();
 }
 
 void
@@ -3495,7 +3499,7 @@ delete_tty (struct terminal *terminal)
     return;
 
   if (terminal->type != output_termcap)
-    abort ();
+    emacs_abort ();
 
   tty = terminal->display_info.tty;
 
@@ -3509,7 +3513,7 @@ delete_tty (struct terminal *terminal)
 
       if (! p)
         /* This should not happen. */
-        abort ();
+        emacs_abort ();
 
       p->next = tty->next;
       tty->next = 0;
@@ -3543,22 +3547,6 @@ delete_tty (struct terminal *terminal)
   xfree (tty);
 }
 
-
-
-/* Mark the pointers in the tty_display_info objects.
-   Called by Fgarbage_collect.  */
-
-void
-mark_ttys (void)
-{
-  struct tty_display_info *tty;
-
-  for (tty = tty_list; tty; tty = tty->next)
-    mark_object (tty->top_frame);
-}
-
-
-
 void
 syms_of_term (void)
 {
@@ -3572,14 +3560,14 @@ This variable can be used by terminal emulator packages.  */);
 #endif
 
   DEFVAR_LISP ("suspend-tty-functions", Vsuspend_tty_functions,
-    doc: /* Functions to be run after suspending a tty.
+    doc: /* Functions run after suspending a tty.
 The functions are run with one argument, the terminal object to be suspended.
 See `suspend-tty'.  */);
   Vsuspend_tty_functions = Qnil;
 
 
   DEFVAR_LISP ("resume-tty-functions", Vresume_tty_functions,
-    doc: /* Functions to be run after resuming a tty.
+    doc: /* Functions run after resuming a tty.
 The functions are run with one argument, the terminal object that was revived.
 See `resume-tty'.  */);
   Vresume_tty_functions = Qnil;

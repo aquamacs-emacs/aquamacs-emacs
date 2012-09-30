@@ -653,7 +653,6 @@
 
 (require 'vc-hooks)
 (require 'vc-dispatcher)
-(require 'ediff)
 
 (declare-function diff-setup-whitespace "diff-mode" ())
 
@@ -808,16 +807,6 @@ is sensitive to blank lines."
 		       (string :tag "Comment Start")
 		       (string :tag "Comment End")))
   :group 'vc)
-
-(defcustom vc-checkout-carefully (= (user-uid) 0)
-  "Non-nil means be extra-careful in checkout.
-Verify that the file really is not locked
-and that its contents match what the repository version says."
-  :type 'boolean
-  :group 'vc)
-(make-obsolete-variable 'vc-checkout-carefully
-                        "the corresponding checks are always done now."
-                        "21.1")
 
 
 ;; Variables users don't need to see
@@ -1116,24 +1105,27 @@ For old-style locking-based version control systems, like RCS:
      ;; Files have local changes
      ((vc-compatible-state state 'edited)
       (let ((ready-for-commit files))
-	;; If files are edited but read-only, give user a chance to correct.
-	(dolist (file files)
-	  ;; If committing a mix of removed and edited files, the
-	  ;; fileset has state = 'edited.  Rather than checking the
-	  ;; state of each individual file in the fileset, it seems
-	  ;; simplest to just check if the file exists.	 Bug#9781.
-	  (when (and (file-exists-p file) (not (file-writable-p file)))
-	    ;; Make the file+buffer read-write.
-	    (unless (y-or-n-p (format "%s is edited but read-only; make it writable and continue? " file))
-	      (error "Aborted"))
-            ;; Maybe we somehow lost permissions on the directory.
-            (condition-case nil
-                (set-file-modes file (logior (file-modes file) 128))
-              (error (error "Unable to make file writable")))
-	    (let ((visited (get-file-buffer file)))
-	      (when visited
-		(with-current-buffer visited
-		  (toggle-read-only -1))))))
+	;; CVS, SVN and bzr don't care about read-only (bug#9781).
+	;; RCS does, SCCS might (someone should check...).
+	(when (memq backend '(RCS SCCS))
+	  ;; If files are edited but read-only, give user a chance to correct.
+	  (dolist (file files)
+	    ;; If committing a mix of removed and edited files, the
+	    ;; fileset has state = 'edited.  Rather than checking the
+	    ;; state of each individual file in the fileset, it seems
+	    ;; simplest to just check if the file exists.	 Bug#9781.
+	    (when (and (file-exists-p file) (not (file-writable-p file)))
+	      ;; Make the file+buffer read-write.
+	      (unless (y-or-n-p (format "%s is edited but read-only; make it writable and continue? " file))
+		(error "Aborted"))
+	      ;; Maybe we somehow lost permissions on the directory.
+	      (condition-case nil
+		  (set-file-modes file (logior (file-modes file) 128))
+		(error (error "Unable to make file writable")))
+	      (let ((visited (get-file-buffer file)))
+		(when visited
+		  (with-current-buffer visited
+		    (read-only-mode -1)))))))
 	;; Allow user to revert files with no changes
 	(save-excursion
           (dolist (file files)
@@ -1344,7 +1336,7 @@ After check-out, runs the normal hook `vc-checkout-hook'."
          ;; Maybe the backend is not installed ;-(
          (when writable
            (let ((buf (get-file-buffer file)))
-             (when buf (with-current-buffer buf (toggle-read-only -1)))))
+             (when buf (with-current-buffer buf (read-only-mode -1)))))
          (signal (car err) (cdr err))))
       `((vc-state . ,(if (or (eq (vc-checkout-model backend (list file)) 'implicit)
                              (not writable))
@@ -1517,8 +1509,9 @@ to override the value of `vc-diff-switches' and `diff-switches'."
       (when (listp switches) switches))))
 
 ;; Old def for compatibility with Emacs-21.[123].
-(defmacro vc-diff-switches-list (backend) `(vc-switches ',backend 'diff))
-(make-obsolete 'vc-diff-switches-list 'vc-switches "22.1")
+(defmacro vc-diff-switches-list (backend)
+  (declare (obsolete vc-switches "22.1"))
+  `(vc-switches ',backend 'diff))
 
 (defun vc-diff-finish (buffer messages)
   ;; The empty sync output case has already been handled, so the only
@@ -1652,8 +1645,9 @@ Return t if the buffer had changes, nil otherwise."
       (setq rev1-default (vc-working-revision first)))
      ;; if the file is not locked, use last and previous revisions as defaults
      (t
-      (setq rev1-default (vc-call-backend backend 'previous-revision first
-                                          (vc-working-revision first)))
+      (setq rev1-default (ignore-errors ;If `previous-revision' doesn't work.
+                           (vc-call-backend backend 'previous-revision first
+                                            (vc-working-revision first))))
       (when (string= rev1-default "") (setq rev1-default nil))
       (setq rev2-default (vc-working-revision first))))
     ;; construct argument list
@@ -1697,7 +1691,9 @@ saving the buffer."
     (vc-diff-internal t (vc-deduce-fileset t) nil nil
 		      (called-interactively-p 'interactive))))
 
-(declare-function ediff-vc-internal (rev1 rev2 &optional startup-hooks))
+(declare-function ediff-load-version-control "ediff" (&optional silent))
+(declare-function ediff-vc-internal "ediff-vers"
+                  (rev1 rev2 &optional startup-hooks))
 
 ;;;###autoload
 (defun vc-version-ediff (files rev1 rev2)
@@ -1718,7 +1714,8 @@ repository history using ediff."
    ;; FIXME We only support running ediff on one file for now.
    ;; We could spin off an ediff session per file in the file set.
    ((= (length files) 1)
-    (ediff-load-version-control)
+    (require 'ediff)
+    (ediff-load-version-control)  ; loads ediff-vers
     (find-file (car files))             ;FIXME: find-file from Elisp is bad.
     (ediff-vc-internal rev1 rev2 nil))
    (t
@@ -1757,10 +1754,15 @@ saving the buffer."
       (call-interactively 'vc-version-diff)
     (when buffer-file-name (vc-buffer-sync not-urgent))
     (let ((backend (vc-deduce-backend))
+	  (default-directory default-directory)
 	  rootdir working-revision)
-      (unless backend
-	(error "Buffer is not version controlled"))
-      (setq rootdir (vc-call-backend backend 'root default-directory))
+      (if backend
+	  (setq rootdir (vc-call-backend backend 'root default-directory))
+	(setq rootdir (read-directory-name "Directory for VC root-diff: "))
+	(setq backend (vc-responsible-backend rootdir))
+	(if backend
+	    (setq default-directory rootdir)
+	  (error "Directory is not version controlled")))
       (setq working-revision (vc-working-revision rootdir))
       ;; VC diff for the root directory produces output that is
       ;; relative to it.  Bind default-directory to the root directory
@@ -2213,10 +2215,15 @@ When called interactively with a prefix argument, prompt for LIMIT."
     (t
      (list (when (> vc-log-show-limit 0) vc-log-show-limit)))))
   (let ((backend (vc-deduce-backend))
+	(default-directory default-directory)
 	rootdir working-revision)
-    (unless backend
-      (error "Buffer is not version controlled"))
-    (setq rootdir (vc-call-backend backend 'root default-directory))
+    (if backend
+	(setq rootdir (vc-call-backend backend 'root default-directory))
+      (setq rootdir (read-directory-name "Directory for VC root-log: "))
+      (setq backend (vc-responsible-backend rootdir))
+      (if backend
+	  (setq default-directory rootdir)
+	(error "Directory is not version controlled")))
     (setq working-revision (vc-working-revision rootdir))
     (vc-print-log-internal backend (list rootdir) working-revision nil limit)))
 
@@ -2793,7 +2800,7 @@ to provide the `find-revision' operation instead."
 
 
 ;; These things should probably be generally available
-(define-obsolete-function-alias 'vc-string-prefix-p 'string-prefix-p "24.2")
+(define-obsolete-function-alias 'vc-string-prefix-p 'string-prefix-p "24.3")
 
 (defun vc-file-tree-walk (dirname func &rest args)
   "Walk recursively through DIRNAME.

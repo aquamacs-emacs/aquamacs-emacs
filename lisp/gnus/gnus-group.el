@@ -2388,7 +2388,7 @@ specified by `gnus-gmane-group-download-format'."
 	       group start (+ start range)))
       (write-region (point-min) (point-max) tmpfile)
       (gnus-group-read-ephemeral-group
-       (format "%s.start-%s.range-%s" group start range)
+       (format "nndoc+ephemeral:%s.start-%s.range-%s" group start range)
        `(nndoc ,tmpfile
 	       (nndoc-article-type mbox))))
     (delete-file tmpfile)))
@@ -2481,7 +2481,8 @@ the bug number, and browsing the URL must return mbox output."
 			 "/.*$" ""))))
       (write-region (point-min) (point-max) tmpfile)
       (gnus-group-read-ephemeral-group
-       "gnus-read-ephemeral-bug"
+       (format "nndoc+ephemeral:bug#%s"
+	       (mapconcat 'number-to-string ids ","))
        `(nndoc ,tmpfile
 	       (nndoc-article-type mbox))
        nil window-conf))
@@ -4450,12 +4451,6 @@ and the second element is the address."
 			     (gnus-list-of-unread-articles (car info))))))
 	(error "No such group: %s" (gnus-info-group info))))))
 
-(defun gnus-group-set-method-info (group select-method)
-  (gnus-group-set-info select-method group 'method))
-
-(defun gnus-group-set-params-info (group params)
-  (gnus-group-set-info params group 'params))
-
 ;; Ad-hoc function for inserting data from a different newsrc.eld
 ;; file.  Use with caution, if at all.
 (defun gnus-import-other-newsrc-file (file)
@@ -4676,6 +4671,8 @@ you the groups that have both dormant articles and cached articles."
 	      (setq mark gnus-expirable-mark))
 	    (setq mark (gnus-request-update-mark
 			group article mark))
+	    (gnus-request-set-mark
+	     group (list (list (list article) 'add '(read))))
 	    (gnus-mark-article-as-read article mark)
 	    (setq gnus-newsgroup-active (gnus-active group))
 	    (when active

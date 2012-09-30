@@ -28,7 +28,6 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 /* This should be the first include, as it may set up #defines affecting
    interpretation of even the system includes. */
 #include <config.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "dispextern.h"
@@ -79,7 +78,7 @@ ns_image_from_file (Lisp_Object file)
   return [EmacsImage allocInitFromFile: file];
 }
 
-int
+bool
 ns_load_image (struct frame *f, struct image *img,
                Lisp_Object spec_file, Lisp_Object spec_data)
 {
@@ -410,7 +409,7 @@ static EmacsImage *ImageList = nil;
                   [bmRep release];
                   return nil;
                 }
-#define hexchar(x) (isdigit (x) ? x - '0' : x - 'a' + 10)
+#define hexchar(x) ('0' <= (x) && (x) <= '9' ? (x) - '0' : (x) - 'a' + 10)
               s1 = *s++;
               s2 = *s++;
               c = hexchar (s1) * 0x10 + hexchar (s2);
@@ -609,4 +608,3 @@ static EmacsImage *ImageList = nil;
 }
 
 @end
-

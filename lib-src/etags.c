@@ -836,8 +836,7 @@ etags --help --lang=ada.");
 static void
 print_version (void)
 {
-  /* Makes it easier to update automatically. */
-  char emacs_copyright[] = "Copyright (C) 2012 Free Software Foundation, Inc.";
+  char emacs_copyright[] = COPYRIGHT;
 
   printf ("%s (%s %s)\n", (CTAGS) ? "ctags" : "etags", EMACS_NAME, VERSION);
   puts (emacs_copyright);
@@ -2878,6 +2877,7 @@ consider_token (register char *str, register int len, register int c, int *c_ext
 	   objdef = omethodtag;
 	   linebuffer_setlen (&token_name, oldlen + len);
 	   memcpy (token_name.buffer + oldlen, str, len);
+	   token_name.buffer[oldlen + len] = '\0';
 	   return TRUE;
 	 }
        return FALSE;
@@ -4651,7 +4651,7 @@ Pascal_functions (FILE *inf)
 	  /* Check if this is an "extern" declaration. */
 	  if (*dbp == '\0')
 	    continue;
-	  if (lowcase (*dbp == 'e'))
+	  if (lowcase (*dbp) == 'e')
 	    {
 	      if (nocase_tail ("extern")) /* superfluous, really! */
 		{

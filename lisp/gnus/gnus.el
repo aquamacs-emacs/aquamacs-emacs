@@ -1647,12 +1647,13 @@ this variable.  I think."
 					     (const :format "%v " mail)
 					     (const :format "%v " none)
 					     (const post-mail))
-			(checklist :inline t
+			(checklist :inline t :greedy t
 				   (const :format "%v " address)
 				   (const :format "%v " prompt-address)
 				   (const :format "%v " physical-address)
-				   (const :format "%v " virtual)
-				   (const respool))))
+				   (const virtual)
+				   (const :format "%v " respool)
+				   (const server-marks))))
   :version "24.1")
 
 (defun gnus-redefine-select-method-widget ()
@@ -3412,15 +3413,6 @@ that that variable is buffer-local to the summary buffers."
 	(t				;Has positive number
 	 (eq (gnus-request-type group article) 'news)))) ;use it.
 
-;; Returns a list of writable groups.
-(defun gnus-writable-groups ()
-  (let ((alist gnus-newsrc-alist)
-	groups group)
-    (while (setq group (car (pop alist)))
-      (unless (gnus-group-read-only-p group)
-	(push group groups)))
-    (nreverse groups)))
-
 ;; Check whether to use long file names.
 (defun gnus-use-long-file-name (symbol)
   ;; The variable has to be set...
@@ -3696,20 +3688,9 @@ server is native)."
       group
     (concat (gnus-method-to-server-name method) ":" group)))
 
-(defun gnus-group-guess-prefixed-name (group)
-  "Guess the whole name from GROUP and METHOD."
-  (gnus-group-prefixed-name group (gnus-find-method-for-group
-			       group)))
-
 (defun gnus-group-full-name (group method)
   "Return the full name from GROUP and METHOD, even if the method is native."
   (gnus-group-prefixed-name group method t))
-
-(defun gnus-group-guess-full-name (group)
-  "Guess the full name from GROUP, even if the method is native."
-  (if (gnus-group-prefixed-p group)
-      group
-    (gnus-group-full-name group (gnus-find-method-for-group group))))
 
 (defun gnus-group-guess-full-name-from-command-method (group)
   "Guess the full name from GROUP, even if the method is native."
@@ -3843,12 +3824,28 @@ You should probably use `gnus-find-method-for-group' instead."
   "Go through PARAMETERS and expand them according to the match data."
   (let (new)
     (dolist (elem parameters)
-      (if (and (stringp (cdr elem))
-	       (string-match "\\\\[0-9&]" (cdr elem)))
-	  (push (cons (car elem)
-		      (gnus-expand-group-parameter match (cdr elem) group))
-		new)
-	(push elem new)))
+      (cond
+       ((and (stringp (cdr elem))
+             (string-match "\\\\[0-9&]" (cdr elem)))
+        (push (cons (car elem)
+                    (gnus-expand-group-parameter match (cdr elem) group))
+              new))
+       ;; For `sieve' group parameters, perform substitutions for every
+       ;; string within the match rule.  This allows for parameters such
+       ;; as:
+       ;;  ("list\\.\\(.*\\)"
+       ;;   (sieve header :is "list-id" "<\\1.domain.org>"))
+       ((eq 'sieve (car elem))
+        (push (mapcar (lambda (sieve-elem)
+                        (if (and (stringp sieve-elem)
+                                 (string-match "\\\\[0-9&]" sieve-elem))
+                            (gnus-expand-group-parameter match sieve-elem
+                                                         group)
+                          sieve-elem))
+                      (cdr elem))
+              new))
+       (t
+	(push elem new))))
     new))
 
 (defun gnus-group-fast-parameter (group symbol &optional allow-list)
@@ -3880,9 +3877,20 @@ The function `gnus-group-find-parameter' will do that for you."
 	      (when this-result
 		(setq result (car this-result))
 		;; Expand if necessary.
-		(if (and (stringp result) (string-match "\\\\[0-9&]" result))
-		    (setq result (gnus-expand-group-parameter
-				  (car head) result group)))))))
+		(cond
+                 ((and (stringp result) (string-match "\\\\[0-9&]" result))
+                  (setq result (gnus-expand-group-parameter
+                                (car head) result group)))
+                 ;; For `sieve' group parameters, perform substitutions
+                 ;; for every string within the match rule (see above).
+                 ((eq symbol 'sieve)
+                  (setq result
+                        (mapcar (lambda (elem)
+                                  (if (stringp elem)
+                                      (gnus-expand-group-parameter (car head)
+                                                                   elem group)
+                                    elem))
+                                result))))))))
 	;; Done.
 	result))))
 

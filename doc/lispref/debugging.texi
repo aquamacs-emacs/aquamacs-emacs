@@ -298,6 +298,11 @@ of @code{(debug)} isn't ignored, it will alter the execution of the
 program!)  The most common suitable places are inside a @code{progn} or
 an implicit @code{progn} (@pxref{Sequencing}).
 
+  If you don't know exactly where in the source code you want to put
+the debug statement, but you want to display a backtrace when a
+certain message is displayed, you can set @code{debug-on-message} to a
+regular expression matching the desired message.
+
 @node Using Debugger
 @subsection Using the Debugger
 
@@ -326,7 +331,7 @@ variable is temporarily set according to
 non-@code{nil}, @code{debug-on-error} will temporarily be set to
 @code{t}.  This means that any further errors that occur while doing a
 debugging session will (by default) trigger another backtrace.  If
-this is not want you want, you can either set
+this is not what you want, you can either set
 @code{eval-expression-debug-on-error} to @code{nil}, or set
 @code{debug-on-error} to @code{nil} in @code{debugger-mode-hook}.
 

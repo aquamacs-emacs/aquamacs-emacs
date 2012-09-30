@@ -2685,7 +2685,6 @@ Obeying it means displaying in another window the specified file and line."
 (declare-function global-hl-line-highlight  "hl-line" ())
 (declare-function hl-line-highlight         "hl-line" ())
 (declare-function gdb-display-source-buffer "gdb-mi"  (buffer))
-(declare-function gdb-display-buffer "gdb-mi" (buf dedicated &optional size))
 
 ;; Make sure the file named TRUE-FILE is in a buffer that appears on the screen
 ;; and that its line LINE is visible.
@@ -2702,10 +2701,7 @@ Obeying it means displaying in another window the specified file and line."
 	 (window (and buffer
 		      (or (get-buffer-window buffer)
 			  (if (eq gud-minor-mode 'gdbmi)
-			      (or (if (get-buffer-window buffer 'visible)
-				      (display-buffer buffer nil 'visible))
-				  (unless (gdb-display-source-buffer buffer)
-				    (gdb-display-buffer buffer nil 'visible))))
+			      (display-buffer buffer nil 'visible))
 			  (display-buffer buffer))))
 	 (pos))
     (if buffer
@@ -3411,7 +3407,7 @@ With arg, dereference expr if ARG is positive, otherwise do not dereference."
 (defun gud-tooltip-print-command (expr)
   "Return a suitable command to print the expression EXPR."
   (pcase gud-minor-mode
-    (`gdbmi (concat "-data-evaluate-expression " expr))
+    (`gdbmi (concat "-data-evaluate-expression \"" expr "\""))
     (`dbx (concat "print " expr))
     ((or `xdb `pdb) (concat "p " expr))
     (`sdb (concat expr "/"))))
@@ -3456,7 +3452,10 @@ This function must return nil if it doesn't handle EVENT."
 	    (let ((cmd (gud-tooltip-print-command expr)))
 	      (when (and gud-tooltip-mode (eq gud-minor-mode 'gdb))
 		(gud-tooltip-mode -1)
-		(message-box "Using GUD tooltips in this mode is unsafe\n\
+		;; The blank before the newline is for MS-Windows,
+		;; whose emulation of message box removes newlines and
+		;; displays a single long line.
+		(message-box "Using GUD tooltips in this mode is unsafe \n\
 so they have been disabled."))
 	      (unless (null cmd) ; CMD can be nil if unknown debugger
 		(if (eq gud-minor-mode 'gdbmi)

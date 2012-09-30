@@ -1,3 +1,146 @@
+2012-09-27  Glenn Morris  <rgm@gnu.org>
+
+	* admin.el (set-version): Set msdos.c's Vwindow_system_version.
+
+2012-09-27  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Check more robustly for timer_settime.
+	* merge-gnulib (GNULIB_MODULES): Add timer-time.
+
+2012-09-26  Juanma Barranquero  <lekktu@gmail.com>
+
+	* unidata/BidiMirroring.txt:
+	* unidata/UnicodeData.txt: Update to Unicode 6.2.
+
+2012-09-17  Glenn Morris  <rgm@gnu.org>
+
+	* admin.el (add-log-time-format): Declare.
+
+	* admin.el (cusver-scan, cusver-check): Bind local variables.
+
+	* admin.el (set-version): Set major version in
+	etc/refcards/ru-refcard.tex and etc/refcards/emacsver.tex.
+	(set-copyright): In etc/refcards, only change ru-refcard.tex
+	and emacsver.tex.
+
+	* admin.el (set-copyright): No more need to set copyrights for
+	nextstep, or .c files.  Add configure.ac and config.nt.
+
+2012-09-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Remove configure's --without-sync-input option (Bug#12450).
+	* CPP-DEFINES (BROKEN_SA_RESTART, SA_RESTART): Remove.
+
+2012-09-16  Glenn Morris  <rgm@gnu.org>
+
+	* admin.el (set-version): No more need to set nextstep versions.
+	(set-copyright): Update for moved nextstep files.
+
+2012-09-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Simplify SIGIO usage (Bug#12408).
+	* CPP_DEFINES (BROKEN_SIGAIO, BROKEN_SIGIO, BROKEN_SIGPOLL)
+	(BROKEN_SIGPTY, NO_TERMIO): Remove.
+
+2012-09-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Simplify, document, and port floating-point (Bug#12381).
+	* CPP-DEFINES (HAVE_CBRT, HAVE_LOGB, logb): Remove.
+
+2012-09-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Assume C89 or later for math functions (Bug#12381).
+	* CPP-DEFINES (HAVE_FMOD, HAVE_FREXP, FLOAT_CHECK_DOMAIN)
+	(HAVE_INVERSE_HYPERBOLIC, NO_MATHERR): Remove.
+
+2012-09-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Simplify redefinition of 'abort' (Bug#12316).
+	* CPP-DEFINES (NO_ABORT): Remove.
+
+2012-08-28  Glenn Morris  <rgm@gnu.org>
+
+	* bzrmerge.el (bzrmerge-merges): Allow unversioned files in the tree.
+
+2012-08-28  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* charsets/mule-charsets.el (header): Fix typo.
+
+2012-08-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	On assertion failure, print backtrace if available.
+	* merge-gnulib (GNULIB_MODULES): Add execinfo.
+
+2012-08-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use ASCII tests for character types.
+	* merge-gnulib (GNULIB_MODULES): Add c-ctype.  This documents a
+	new direct dependency; c-ctype was already being used indirectly
+	via other gnulib modules.
+
+2012-08-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use bool for Emacs Lisp booleans.
+	* merge-gnulib (GNULIB_MODULES): Add stdbool.  This documents a
+	new direct dependency; stdbool was already being used indirectly
+	via other gnulib modules.
+
+2012-08-11  Glenn Morris  <rgm@gnu.org>
+
+	* bzrmerge.el (bzrmerge-resolve): Disable local eval:.
+
+2012-08-07  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* coccinelle/overlay.cocci, coccinelle/symbol.cocci: Remove.
+
+2012-08-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port to Solaris 8.
+	* CPP-DEFINES (WRETCODE): Remove.
+
+2012-08-01  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* coccinelle/overlay.cocci: Semantic patch to replace direct
+	access to Lisp_Object members of struct Lisp_Overlay to MVAR.
+
+2012-08-01  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* coccinelle/symbol.cocci: Semantic patch to replace direct
+	access to Lisp_Object members of struct Lisp_Symbol to SVAR.
+
+2012-08-01  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* coccinelle/process.cocci: Semantic patch to replace direct
+	access to Lisp_Object members of struct Lisp_Process to PVAR.
+
+2012-08-01  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* coccinelle/window.cocci: Semantic patch to replace direct
+	access to Lisp_Object members of struct window to WVAR.
+
+2012-07-31  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* coccinelle/frame.cocci: Semantic patch to replace direct
+	access to Lisp_Object members of struct frame to FVAR.
+
+2012-07-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use Gnulib environ and stdalign modules (Bug#9772, Bug#9960).
+	* merge-gnulib: Add environ, stdalign.
+
+2012-07-20  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* coccinelle/unibyte_string.cocci: Semantic patch to convert from
+	make_unibyte_string to build_unibyte_string where appropriate.
+
+2012-07-17  Eli Zaretskii  <eliz@gnu.org>
+
+	* CPP-DEFINES: Remove FILE_SYSTEM_CASE.
+
+2012-07-17  Chong Yidong  <cyd@gnu.org>
+
+	* Version 24.1 released.
+
 2012-07-11  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Assume mkdir, perror, rename, rmdir, strerror.

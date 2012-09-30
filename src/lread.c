@@ -25,7 +25,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/file.h>
 #include <errno.h>
 #include <limits.h>	/* For CHAR_BIT.  */
-#include <setjmp.h>
 #include <stat-time.h>
 #include "lisp.h"
 #include "intervals.h"
@@ -50,7 +49,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 #include <unistd.h>
-#include <math.h>
 
 #ifdef HAVE_SETLOCALE
 #include <locale.h>
@@ -80,7 +78,7 @@ static Lisp_Object Qascii_character, Qload, Qload_file_name;
 Lisp_Object Qbackquote, Qcomma, Qcomma_at, Qcomma_dot, Qfunction;
 static Lisp_Object Qinhibit_file_name_operation;
 static Lisp_Object Qeval_buffer_list;
-static Lisp_Object Qlexical_binding;
+Lisp_Object Qlexical_binding;
 static Lisp_Object Qfile_truename, Qdo_after_load_evaluation; /* ACM 2006/5/16 */
 
 /* Used instead of Qget_file_char while loading *.elc files compiled
@@ -88,8 +86,6 @@ static Lisp_Object Qfile_truename, Qdo_after_load_evaluation; /* ACM 2006/5/16 *
 static Lisp_Object Qget_emacs_mule_file_char;
 
 static Lisp_Object Qload_force_doc_strings;
-
-extern Lisp_Object Qinternal_interpreter_environment;
 
 static Lisp_Object Qload_in_progress;
 
@@ -189,7 +185,7 @@ static int readbyte_from_string (int, Lisp_Object);
 static int unread_char;
 
 static int
-readchar (Lisp_Object readcharfun, int *multibyte)
+readchar (Lisp_Object readcharfun, bool *multibyte)
 {
   Lisp_Object tem;
   register int c;
@@ -412,9 +408,9 @@ unreadchar (Lisp_Object readcharfun, int c)
     {
       if (load_each_byte)
 	{
-	  BLOCK_INPUT;
+	  block_input ();
 	  ungetc (c, instream);
-	  UNBLOCK_INPUT;
+	  unblock_input ();
 	}
       else
 	unread_char = c;
@@ -435,28 +431,28 @@ readbyte_from_file (int c, Lisp_Object readcharfun)
 {
   if (c >= 0)
     {
-      BLOCK_INPUT;
+      block_input ();
       ungetc (c, instream);
-      UNBLOCK_INPUT;
+      unblock_input ();
       return 0;
     }
 
-  BLOCK_INPUT;
+  block_input ();
   c = getc (instream);
 
 #ifdef EINTR
   /* Interrupted reads have been observed while reading over the network.  */
   while (c == EOF && ferror (instream) && errno == EINTR)
     {
-      UNBLOCK_INPUT;
+      unblock_input ();
       QUIT;
-      BLOCK_INPUT;
+      block_input ();
       clearerr (instream);
       c = getc (instream);
     }
 #endif
 
-  UNBLOCK_INPUT;
+  unblock_input ();
 
   return (c == EOF ? -1 : c);
 }
@@ -757,9 +753,9 @@ DEFUN ("get-file-char", Fget_file_char, Sget_file_char, 0, 0, 0,
   (void)
 {
   register Lisp_Object val;
-  BLOCK_INPUT;
+  block_input ();
   XSETINT (val, getc (instream));
-  UNBLOCK_INPUT;
+  unblock_input ();
   return val;
 }
 
@@ -1354,9 +1350,9 @@ load_unwind (Lisp_Object arg)  /* Used as unwind-protect function in load.  */
   FILE *stream = (FILE *) XSAVE_VALUE (arg)->pointer;
   if (stream != NULL)
     {
-      BLOCK_INPUT;
+      block_input ();
       fclose (stream);
-      UNBLOCK_INPUT;
+      unblock_input ();
     }
   return Qnil;
 }
@@ -1682,6 +1678,17 @@ readevalloop (Lisp_Object readcharfun,
   int whole_buffer = 0;
   /* 1 on the first time around.  */
   int first_sexp = 1;
+  Lisp_Object macroexpand = intern ("internal-macroexpand-for-load");
+
+  if (NILP (Ffboundp (macroexpand))
+      /* Don't macroexpand in .elc files, since it should have been done
+	 already.  We actually don't know whether we're in a .elc file or not,
+	 so we use circumstancial evidence: .el files normally go through
+	 Vload_source_file_function -> load-with-code-conversion
+	 -> eval-buffer.  */
+      || EQ (readcharfun, Qget_file_char)
+      || EQ (readcharfun, Qget_emacs_mule_file_char))
+    macroexpand = Qnil;
 
   if (MARKERP (readcharfun))
     {
@@ -1696,7 +1703,7 @@ readevalloop (Lisp_Object readcharfun,
 
   /* We assume START is nil when input is not from a buffer.  */
   if (! NILP (start) && !b)
-    abort ();
+    emacs_abort ();
 
   specbind (Qstandard_input, readcharfun); /* GCPROs readcharfun.  */
   specbind (Qcurrent_load_list, Qnil);
@@ -1726,7 +1733,7 @@ readevalloop (Lisp_Object readcharfun,
     {
       ptrdiff_t count1 = SPECPDL_INDEX ();
 
-      if (b != 0 && NILP (BVAR (b, name)))
+      if (b != 0 && !BUFFER_LIVE_P (b))
 	error ("Reading from killed buffer");
 
       if (!NILP (start))
@@ -1811,6 +1818,8 @@ readevalloop (Lisp_Object readcharfun,
       unbind_to (count1, Qnil);
 
       /* Now eval what we just read.  */
+      if (!NILP (macroexpand))
+	val = call1 (macroexpand, val);
       val = eval_sub (val);
 
       if (printflag)
@@ -2354,9 +2363,9 @@ read_integer (Lisp_Object readcharfun, EMACS_INT radix)
 static Lisp_Object
 read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 {
-  register int c;
-  unsigned uninterned_symbol = 0;
-  int multibyte;
+  int c;
+  bool uninterned_symbol = 0;
+  bool multibyte;
 
   *pch = 0;
   load_each_byte = 0;
@@ -3189,8 +3198,8 @@ substitute_object_recurse (Lisp_Object object, Lisp_Object placeholder, Lisp_Obj
 	/* Check for text properties in each interval.
 	   substitute_in_interval contains part of the logic.  */
 
-	INTERVAL    root_interval = STRING_INTERVALS (subtree);
-	Lisp_Object arg           = Fcons (object, placeholder);
+	INTERVAL root_interval = string_intervals (subtree);
+	Lisp_Object arg = Fcons (object, placeholder);
 
 	traverse_intervals_noorder (root_interval,
 				    &substitute_in_interval, arg);
@@ -3211,7 +3220,7 @@ substitute_in_interval (INTERVAL interval, Lisp_Object arg)
   Lisp_Object object      = Fcar (arg);
   Lisp_Object placeholder = Fcdr (arg);
 
-  SUBSTITUTE (interval->plist, interval->plist = true_value);
+  SUBSTITUTE (interval->plist, set_interval_plist (interval, true_value));
 }
 
 
@@ -3406,7 +3415,7 @@ read_vector (Lisp_Object readcharfun, int bytecodeflag)
 	      /* Delay handling the bytecode slot until we know whether
 		 it is lazily-loaded (we can tell by whether the
 		 constants slot is nil).  */
-	      ptr[COMPILED_CONSTANTS] = item;
+	      ASET (vector, COMPILED_CONSTANTS, item);
 	      item = Qnil;
 	    }
 	  else if (i == COMPILED_CONSTANTS)
@@ -3432,7 +3441,7 @@ read_vector (Lisp_Object readcharfun, int bytecodeflag)
 		}
 
 	      /* Now handle the bytecode slot.  */
-	      ptr[COMPILED_BYTECODE] = bytestr;
+	      ASET (vector, COMPILED_BYTECODE, bytestr);
 	    }
 	  else if (i == COMPILED_DOC_STRING
 		   && STRINGP (item)
@@ -3444,7 +3453,7 @@ read_vector (Lisp_Object readcharfun, int bytecodeflag)
 		item = Fstring_as_multibyte (item);
 	    }
 	}
-      ptr[i] = item;
+      ASET (vector, i, item);
       otem = XCONS (tem);
       tem = Fcdr (tem);
       free_cons (otem);
@@ -3673,7 +3682,7 @@ intern_c_string_1 (const char *str, ptrdiff_t len)
     /* Creating a non-pure string from a string literal not
        implemented yet.  We could just use make_string here and live
        with the extra copy.  */
-    abort ();
+    emacs_abort ();
 
   return Fintern (make_pure_c_string (str, len), obarray);
 }
@@ -3715,11 +3724,11 @@ it defaults to the value of `obarray'.  */)
       SET_SYMBOL_VAL (XSYMBOL (sym), sym);
     }
 
-  ptr = &AREF (obarray, XINT(tem));
+  ptr = aref_addr (obarray, XINT(tem));
   if (SYMBOLP (*ptr))
-    XSYMBOL (sym)->next = XSYMBOL (*ptr);
+    set_symbol_next (sym, XSYMBOL (*ptr));
   else
-    XSYMBOL (sym)->next = 0;
+    set_symbol_next (sym, NULL);
   *ptr = sym;
   return sym;
 }
@@ -3797,9 +3806,13 @@ OBARRAY defaults to the value of the variable `obarray'.  */)
   if (EQ (AREF (obarray, hash), tem))
     {
       if (XSYMBOL (tem)->next)
-	XSETSYMBOL (AREF (obarray, hash), XSYMBOL (tem)->next);
+	{
+	  Lisp_Object sym;
+	  XSETSYMBOL (sym, XSYMBOL (tem)->next);
+	  ASET (obarray, hash, sym);
+	}
       else
-	XSETINT (AREF (obarray, hash), 0);
+	ASET (obarray, hash, make_number (0));
     }
   else
     {
@@ -3812,7 +3825,7 @@ OBARRAY defaults to the value of the variable `obarray'.  */)
 	  XSETSYMBOL (following, XSYMBOL (tail)->next);
 	  if (EQ (following, tem))
 	    {
-	      XSYMBOL (tail)->next = XSYMBOL (following)->next;
+	      set_symbol_next (tail, XSYMBOL (following)->next);
 	      break;
 	    }
 	}
@@ -3922,13 +3935,12 @@ init_obarray (void)
   /* Fmake_symbol inits fields of new symbols with Qunbound and Qnil,
      so those two need to be fixed manually.  */
   SET_SYMBOL_VAL (XSYMBOL (Qunbound), Qunbound);
-  XSYMBOL (Qunbound)->function = Qunbound;
-  XSYMBOL (Qunbound)->plist = Qnil;
-  /* XSYMBOL (Qnil)->function = Qunbound; */
+  set_symbol_function (Qunbound, Qunbound);
+  set_symbol_plist (Qunbound, Qnil);
   SET_SYMBOL_VAL (XSYMBOL (Qnil), Qnil);
   XSYMBOL (Qnil)->constant = 1;
   XSYMBOL (Qnil)->declared_special = 1;
-  XSYMBOL (Qnil)->plist = Qnil;
+  set_symbol_plist (Qnil, Qnil);
 
   Qt = intern_c_string ("t");
   SET_SYMBOL_VAL (XSYMBOL (Qt), Qt);
@@ -3947,10 +3959,11 @@ init_obarray (void)
 void
 defsubr (struct Lisp_Subr *sname)
 {
-  Lisp_Object sym;
+  Lisp_Object sym, tem;
   sym = intern_c_string (sname->symbol_name);
   XSETTYPED_PVECTYPE (sname, size, PVEC_SUBR);
-  XSETSUBR (XSYMBOL (sym)->function, sname);
+  XSETSUBR (tem, sname);
+  set_symbol_function (sym, tem);
 }
 
 #ifdef NOTDEF /* Use fset in subr.el now!  */
@@ -3983,7 +3996,7 @@ defvar_int (struct Lisp_Intfwd *i_fwd,
    nil if address contains 0.  */
 void
 defvar_bool (struct Lisp_Boolfwd *b_fwd,
-	     const char *namestring, int *address)
+	     const char *namestring, bool *address)
 {
   Lisp_Object sym;
   sym = intern_c_string (namestring);
@@ -4121,18 +4134,13 @@ init_lread (void)
    difference between initialized and !initialized in this case,
    so we'll have to do it unconditionally when Vinstallation_directory
    is non-nil.  */
-#ifdef HAVE_NS
-  /* loadpath already includes the app-bundle's site-lisp.  */
-  if (!no_site_lisp && !egetenv ("EMACSLOADPATH") && !loadpath)
-#else
   if (!no_site_lisp && !egetenv ("EMACSLOADPATH"))
-#endif
     {
       Lisp_Object sitelisp;
       sitelisp = decode_env_path (0, PATH_SITELOADSEARCH);
       if (! NILP (sitelisp)) Vload_path = nconc2 (sitelisp, Vload_path);
     }
-#else
+#else  /* !CANNOT_DUMP */
   if (NILP (Vpurify_flag))
     {
       normal = PATH_LOADSEARCH;
@@ -4254,9 +4262,12 @@ init_lread (void)
                         {
                           tem = Fexpand_file_name (build_string ("site-lisp"),
                                                    Vsource_directory);
-
-                          if (NILP (Fmember (tem, Vload_path)))
-                            Vload_path = Fcons (tem, Vload_path);
+                          tem1 = Ffile_exists_p (tem);
+                          if (!NILP (tem1))
+                            {
+                              if (NILP (Fmember (tem, Vload_path)))
+                                Vload_path = Fcons (tem, Vload_path);
+                            }
                         }
                     }
                 } /* Vinstallation_directory != Vsource_directory */
@@ -4270,12 +4281,7 @@ init_lread (void)
           load_path_check ();
 
           /* Add the site-lisp directories at the front.  */
-#ifdef HAVE_NS
-          /* loadpath already includes the app-bundle's site-lisp.  */
-          if (!no_site_lisp && !loadpath)
-#else
           if (!no_site_lisp)
-#endif
             {
               Lisp_Object sitelisp;
               sitelisp = decode_env_path (0, PATH_SITELOADSEARCH);
@@ -4299,7 +4305,7 @@ init_lread (void)
          be missing unless something went extremely (and improbably)
          wrong, in which case the build will fail in obvious ways.  */
     }
-#endif  /* CANNOT_DUMP */
+#endif  /* !CANNOT_DUMP */
 
   Vvalues = Qnil;
 
@@ -4323,12 +4329,10 @@ dir_warning (const char *format, Lisp_Object dirname)
   /* Don't log the warning before we've initialized!!  */
   if (initialized)
     {
-      char *buffer;
-      ptrdiff_t message_len;
       USE_SAFE_ALLOCA;
-      SAFE_ALLOCA (buffer, char *,
-		   SBYTES (dirname) + strlen (format) - (sizeof "%s" - 1) + 1);
-      message_len = esprintf (buffer, format, SDATA (dirname));
+      char *buffer = SAFE_ALLOCA (SBYTES (dirname)
+				  + strlen (format) - (sizeof "%s" - 1) + 1);
+      ptrdiff_t message_len = esprintf (buffer, format, SDATA (dirname));
       message_dolog (buffer, message_len, 0, STRING_MULTIBYTE (dirname));
       SAFE_FREE ();
     }
@@ -4549,8 +4553,7 @@ to load.  See also `load-dangerous-libraries'.  */);
   Vbytecomp_version_regexp
     = build_pure_c_string ("^;;;.\\(in Emacs version\\|bytecomp version FSF\\)");
 
-  Qlexical_binding = intern ("lexical-binding");
-  staticpro (&Qlexical_binding);
+  DEFSYM (Qlexical_binding, "lexical-binding");
   DEFVAR_LISP ("lexical-binding", Vlexical_binding,
 	       doc: /* Whether to use lexical binding when evaluating code.
 Non-nil means that the code in the current buffer should be evaluated
@@ -4558,6 +4561,7 @@ with lexical binding.
 This variable is automatically set from the file variables of an
 interpreted Lisp file read using `load'.  Unlike other file local
 variables, this must be set in the first line of a file.  */);
+  Vlexical_binding = Qnil;
   Fmake_variable_buffer_local (Qlexical_binding);
 
   DEFVAR_LISP ("eval-buffer-list", Veval_buffer_list,

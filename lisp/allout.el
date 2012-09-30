@@ -1415,7 +1415,7 @@ their settings before allout-mode was started."
 
 ;;;_   = allout-exposure-change-functions
 (define-obsolete-variable-alias 'allout-exposure-change-hook
-  'allout-exposure-change-functions "24.2")
+  'allout-exposure-change-functions "24.3")
 (defcustom allout-exposure-change-functions nil
   "Abnormal hook run after allout outline subtree exposure changes.
 It is run at the conclusion of `allout-flag-region'.
@@ -1429,11 +1429,11 @@ Functions on the hook must take three arguments:
 This hook might be invoked multiple times by a single command."
   :type 'hook
   :group 'allout
-  :version "24.2")
+  :version "24.3")
 
 ;;;_   = allout-structure-added-functions
 (define-obsolete-variable-alias 'allout-structure-added-hook
-  'allout-structure-added-functions "24.2")
+  'allout-structure-added-functions "24.3")
 (defcustom allout-structure-added-functions nil
   "Abnormal hook run after adding items to an Allout outline.
 Functions on the hook should take two arguments:
@@ -1444,11 +1444,11 @@ Functions on the hook should take two arguments:
 This hook might be invoked multiple times by a single command."
   :type 'hook
   :group 'allout
-  :version "24.2")
+  :version "24.3")
 
 ;;;_   = allout-structure-deleted-functions
 (define-obsolete-variable-alias 'allout-structure-deleted-hook
-  'allout-structure-deleted-functions "24.2")
+  'allout-structure-deleted-functions "24.3")
 (defcustom allout-structure-deleted-functions nil
   "Abnormal hook run after deleting subtrees from an Allout outline.
 Functions on the hook must take two arguments:
@@ -1462,11 +1462,11 @@ specifically edits that native allout routines do not control.
 This hook might be invoked multiple times by a single command."
   :type 'hook
   :group 'allout
-  :version "24.2")
+  :version "24.3")
 
 ;;;_   = allout-structure-shifted-functions
 (define-obsolete-variable-alias 'allout-structure-shifted-hook
-  'allout-structure-shifted-functions "24.2")
+  'allout-structure-shifted-functions "24.3")
 (defcustom allout-structure-shifted-functions nil
   "Abnormal hook run after shifting items in an Allout outline.
 Functions on the hook should take two arguments:
@@ -1480,14 +1480,14 @@ that native allout routines do not control.
 This hook might be invoked multiple times by a single command."
   :type 'hook
   :group 'allout
-  :version "24.2")
+  :version "24.3")
 
 ;;;_   = allout-after-copy-or-kill-hook
 (defcustom allout-after-copy-or-kill-hook nil
   "Normal hook run after copying outline text.."
   :type 'hook
   :group 'allout
-  :version "24.2")
+  :version "24.3")
 
 ;;;_   = allout-post-undo-hook
 (defcustom allout-post-undo-hook nil
@@ -1496,7 +1496,7 @@ The item that's current when the hook is run *may* be the one
 that was affected by the undo.."
   :type 'hook
   :group 'allout
-  :version "24.2")
+  :version "24.3")
 
 ;;;_   = allout-outside-normal-auto-fill-function
 (defvar allout-outside-normal-auto-fill-function nil
@@ -1522,8 +1522,8 @@ The verifier string is retained as an Emacs file variable, as well as in
 the Emacs buffer state, if file variable adjustments are enabled.  See
 `allout-enable-file-variable-adjustment' for details about that.")
 (make-variable-buffer-local 'allout-passphrase-verifier-string)
-(make-obsolete 'allout-passphrase-verifier-string
-               'allout-passphrase-verifier-string "23.3")
+(make-obsolete-variable 'allout-passphrase-verifier-string
+			'allout-passphrase-verifier-string "23.3")
 ;;;###autoload
 (put 'allout-passphrase-verifier-string 'safe-local-variable 'stringp)
 ;;;_   = allout-passphrase-hint-string
@@ -1538,8 +1538,8 @@ state, if file variable adjustments are enabled.  See
 `allout-enable-file-variable-adjustment' for details about that.")
 (make-variable-buffer-local 'allout-passphrase-hint-string)
 (setq-default allout-passphrase-hint-string "")
-(make-obsolete 'allout-passphrase-hint-string
-               'allout-passphrase-hint-string "23.3")
+(make-obsolete-variable 'allout-passphrase-hint-string
+			'allout-passphrase-hint-string "23.3")
 ;;;###autoload
 (put 'allout-passphrase-hint-string 'safe-local-variable 'stringp)
 ;;;_   = allout-after-save-decrypt
@@ -1688,11 +1688,10 @@ from what it did before, for backwards compatibility.
 
 MODE is the activation mode - see `allout-auto-activation' for
 valid values."
-
+  (declare (obsolete allout-auto-activation "23.3"))
   (custom-set-variables (list 'allout-auto-activation (format "%s" mode)))
   (format "%s" mode))
-(make-obsolete 'allout-init
-               "customize 'allout-auto-activation' instead." "23.3")
+
 ;;;_  > allout-setup-menubar ()
 (defun allout-setup-menubar ()
   "Populate the current buffer's menubar with `allout-mode' stuff."
@@ -5312,11 +5311,11 @@ Examples:
         Expose children and grandchildren of first topic at current
 	level, and expose children of subsequent topics at current
 	level *except* for the last, which should be opened completely."
-  (list 'save-excursion
-	'(if (not (or (allout-goto-prefix-doublechecked)
-		      (allout-next-heading)))
-	     (error "allout-new-exposure: Can't find any outline topics"))
-	(list 'allout-expose-topic (list 'quote spec))))
+  `(save-excursion
+     (if (not (or (allout-goto-prefix-doublechecked)
+		  (allout-next-heading)))
+	 (error "allout-new-exposure: Can't find any outline topics"))
+     (allout-expose-topic ',spec)))
 
 ;;;_ #7 Systematic outline presentation -- copying, printing, flattening
 

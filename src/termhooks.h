@@ -22,6 +22,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include "systime.h" /* for Time */
 
+INLINE_HEADER_BEGIN
+#ifndef TERMHOOKS_INLINE
+# define TERMHOOKS_INLINE INLINE
+#endif
+
 struct glyph;
 struct frame;
 
@@ -588,24 +593,14 @@ struct terminal
   /* Called to read input events.
 
      TERMINAL indicates which terminal device to read from.  Input
-     events should be read into BUF, the size of which is given in
-     SIZE.  EXPECTED is non-zero if the caller suspects that new input
-     is available.
+     events should be read into HOLD_QUIT.
 
      A positive return value indicates that that many input events
-     where read into BUF.
+     were read into BUF.
      Zero means no events were immediately available.
      A value of -1 means a transient read error, while -2 indicates
-     that the device was closed (hangup), and it should be deleted.
-
-     XXX Please note that a non-zero value of EXPECTED only means that
-     there is available input on at least one of the currently opened
-     terminal devices -- but not necessarily on this device.
-     Therefore, in most cases EXPECTED should be simply ignored.
-
-     XXX This documentation needs to be updated.  */
+     that the device was closed (hangup), and it should be deleted.  */
   int (*read_socket_hook) (struct terminal *terminal,
-                           int expected,
                            struct input_event *hold_quit);
 
   /* Called when a frame's display becomes entirely up to date.  */
@@ -629,6 +624,18 @@ struct terminal
   void (*delete_terminal_hook) (struct terminal *);
 };
 
+/* Most code should use these functions to set Lisp fields in struct
+   terminal.  */
+TERMHOOKS_INLINE void
+tset_charset_list (struct terminal *t, Lisp_Object val)
+{
+  t->charset_list = val;
+}
+TERMHOOKS_INLINE void
+tset_selection_alist (struct terminal *t, Lisp_Object val)
+{
+  t->Vselection_alist = val;
+}
 
 /* Chain of all terminal devices currently in use. */
 extern struct terminal *terminal_list;
@@ -667,3 +674,5 @@ extern unsigned char *encode_terminal_code (struct glyph *, int,
 #ifdef HAVE_GPM
 extern void close_gpm (int gpm_fd);
 #endif
+
+INLINE_HEADER_END

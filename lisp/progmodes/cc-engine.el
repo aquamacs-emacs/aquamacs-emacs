@@ -1688,6 +1688,7 @@ comment at the start of cc-engine.el for more info."
 	;; high as possible.
 	(setq rung-pos (point)))
 
+      (with-silent-modifications
       (while
 	  (progn
 	    (while
@@ -1843,7 +1844,7 @@ comment at the start of cc-engine.el for more info."
 		(1- last-put-in-sws-pos))
 	       (c-remove-is-and-in-sws (1- last-put-in-sws-pos)
 				       last-put-in-sws-pos))))
-      )))
+      ))))
 
 (defun c-backward-sws ()
   ;; Used by `c-backward-syntactic-ws' to implement the unbounded search.
@@ -1881,6 +1882,7 @@ comment at the start of cc-engine.el for more info."
 	  (goto-char (setq rung-pos rung-is-marked))
 	(goto-char simple-ws-beg))
 
+      (with-silent-modifications
       (while
 	  (progn
 	    (while
@@ -2066,7 +2068,7 @@ comment at the start of cc-engine.el for more info."
 		last-put-in-sws-pos)
 	       (c-remove-is-and-in-sws last-put-in-sws-pos
 				       (1+ last-put-in-sws-pos)))))
-      )))
+      ))))
 
 
 ;; Other whitespace tools
@@ -3089,6 +3091,8 @@ comment at the start of cc-engine.el for more info."
 	c-state-cache-good-pos 1
 	c-state-nonlit-pos-cache nil
 	c-state-nonlit-pos-cache-limit 1
+	c-state-semi-nonlit-pos-cache nil
+	c-state-semi-nonlit-pos-cache-limit 1
 	c-state-brace-pair-desert nil
 	c-state-point-min 1
 	c-state-point-min-lit-type nil
@@ -3348,6 +3352,8 @@ comment at the start of cc-engine.el for more info."
 	   c-state-cache-good-pos
 	   c-state-nonlit-pos-cache
 	   c-state-nonlit-pos-cache-limit
+	   c-state-semi-nonlit-pos-cache
+	   c-state-semi-nonlit-pos-cache-limit
 	   c-state-brace-pair-desert
 	   c-state-point-min
 	   c-state-point-min-lit-type
@@ -9577,12 +9583,12 @@ comment at the start of cc-engine.el for more info."
 			     (setq tmpsymbol nil)
 			     (while (and (> (point) placeholder)
 					 (zerop (c-backward-token-2 1 t))
-					 (/= (char-after) ?=))
+					 (not (looking-at "=\\([^=]\\|$\\)")))
 			       (and c-opt-inexpr-brace-list-key
 				    (not tmpsymbol)
 				    (looking-at c-opt-inexpr-brace-list-key)
 				    (setq tmpsymbol 'topmost-intro-cont)))
-			     (eq (char-after) ?=))
+			     (looking-at "=\\([^=]\\|$\\)"))
 			   (looking-at c-brace-list-key))
 		       (save-excursion
 			 (while (and (< (point) indent-point)

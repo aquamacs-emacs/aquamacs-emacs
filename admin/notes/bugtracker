@@ -125,7 +125,7 @@ Resent-CC:   maintainer email address, plus any X-Debbugs-CC: entries
 
 The "maintainer email address" is "bug-gnu-emacs@gnu.org" in most cases.
 
-** To not get acknowledgement mail from the tracker,
+** To not get acknowledgment mail from the tracker,
 add an "X-Debbugs-No-Ack:" header (with any value).  If you use Gnus,
 you can add an element to gnus-posting-styles to do this automatically, eg:
 
@@ -610,13 +610,23 @@ An /etc/aliases entry redirects it to the real emacs-bug-tracker address.
 All discarded messages are stored in /var/lib/mailman/spam.
 If a non-spam message accidentally gets discarded, just do:
 
-cat /var/lib/mailman/spam/not-really-spam.msg | /usr/lib/debbugs/receive
+/usr/lib/debbugs/receive < /var/lib/mailman/spam/not-really-spam.msg
 chown Debian-debbugs:Debian-debbugs /var/lib/debbugs/spool/incoming/*
 ... check it works ...
 mv /var/lib/mailman/spam/not-really-spam.msg /var/lib/mailman/not-spam/
 
 Also check that the sender was not added to the auto-discard/reject list
 in the debbugs-submit Mailman interface.
+
+If you don't have the actual mail, just the mailman moderation mail
+version of it, you need to extract the original mail, and add the
+following headers:
+
+1) The leading envelope From line.
+2) Message-ID (get it from /var/log/mailman/vette).
+3) X-Debbugs-Envelope-To: submit
+
+Then pipe it to receive as above.
 
 ** Administrivia
 

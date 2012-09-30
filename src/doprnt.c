@@ -102,8 +102,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <stdio.h>
-#include <ctype.h>
-#include <setjmp.h>
 #include <float.h>
 #include <unistd.h>
 #include <limits.h>
@@ -114,10 +112,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    don't have to include others because CHAR_HEAD_P does not contains
    another macro.  */
 #include "character.h"
-
-#ifndef DBL_MAX_10_EXP
-#define DBL_MAX_10_EXP 308 /* IEEE double */
-#endif
 
 /* Generate output from a format-spec FORMAT,
    terminated at position FORMAT_END.
@@ -161,10 +155,9 @@ doprnt (char *buffer, ptrdiff_t bufsize, const char *format,
   if (format_end == 0)
     format_end = format + strlen (format);
 
-  if (format_end - format < sizeof (fixed_buffer) - 1)
-    fmtcpy = fixed_buffer;
-  else
-    SAFE_ALLOCA (fmtcpy, char *, format_end - format + 1);
+  fmtcpy = (format_end - format < sizeof (fixed_buffer) - 1
+	    ? fixed_buffer
+	    : SAFE_ALLOCA (format_end - format + 1));
 
   bufsize--;
 

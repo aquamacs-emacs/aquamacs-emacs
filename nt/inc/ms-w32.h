@@ -23,11 +23,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifndef WINDOWSNT
 #define WINDOWSNT
 #endif
-#ifndef DOS_NT
-#define DOS_NT 	/* MSDOS or WINDOWSNT */
-#endif
 
 /* #undef const */
+
+/* Number of chars of output in the buffer of a stdio stream. */
+#ifdef __GNU_LIBRARY__
+#define PENDING_OUTPUT_COUNT(FILE) ((FILE)->__bufp - (FILE)->__buffer)
+#else
+#define PENDING_OUTPUT_COUNT(FILE) ((FILE)->_ptr - (FILE)->_base)
+#endif
 
 /* If you are compiling with a non-C calling convention but need to
    declare vararg routines differently, put it here.  */
@@ -52,10 +56,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #define MAIL_USE_SYSTEM_LOCK 1
 
-/* If the character used to separate elements of the executable path
-   is not ':', #define this to be the appropriate character constant.  */
-#define SEPCHAR ';'
-
 /* Define to 1 if GCC-style __attribute__ ((__aligned__ (expr))) works. */
 #ifdef __GNUC__
 #define HAVE_ATTRIBUTE_ALIGNED 1
@@ -77,13 +77,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    that don't exist on your system, or that do different things on
    your system and must be used only through an encapsulation (which
    you should place, by convention, in sysdep.c).  */
-
-/* Define this to be the separator between devices and paths.  */
-#define DEVICE_SEP ':'
-
-/* We'll support either convention on NT.  */
-#define IS_DIRECTORY_SEP(_c_) ((_c_) == '/' || (_c_) == '\\')
-#define IS_ANY_SEP(_c_) (IS_DIRECTORY_SEP (_c_) || IS_DEVICE_SEP (_c_))
 
 #ifdef __GNUC__
 #ifndef __cplusplus
@@ -134,15 +127,12 @@ typedef int ssize_t;
 
 struct sigaction {
   int sa_flags;
-  void (*sa_handler)(int);
+  void (_CALLBACK_ *sa_handler)(int);
   sigset_t sa_mask;
 };
 #define SIG_BLOCK       1
 #define SIG_SETMASK     2
 #define SIG_UNBLOCK     3
-
-/* The null device on Windows NT.  */
-#define NULL_DEVICE     "NUL:"
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN      _MAX_PATH
@@ -212,6 +202,9 @@ struct sigaction {
 #define wait    sys_wait
 #define kill    sys_kill
 #define signal  sys_signal
+
+/* Internal signals.  */
+#define emacs_raise(sig) emacs_abort()
 
 /* termcap.c calls that are emulated.  */
 #define tputs   sys_tputs
@@ -344,16 +337,7 @@ extern char *get_emacs_configuration_options (void);
 #include <malloc.h>
 #endif
 
-/* stdlib.h must be included after redefining malloc & friends, but
-   before redefining abort.  Isn't library redefinition funny?  */
 #include <stdlib.h>
-
-/* Redefine abort.  */
-#ifdef HAVE_NTGUI
-#define abort	w32_abort
-extern _Noreturn void w32_abort (void);
-#endif
-
 #include <sys/stat.h>
 
 /* Define for those source files that do not include enough NT system files.  */
@@ -388,7 +372,8 @@ extern int getloadavg (double *, int);
 # ifdef WIDE_EMACS_INT
 
 /* Use pre-C99-style 64-bit integers.  */
-# define EMACS_INT __int64
+typedef __int64 EMACS_INT;
+typedef unsigned __int64 EMACS_UINT;
 # define EMACS_INT_MAX _I64_MAX
 # define pI "I64"
 
@@ -432,5 +417,8 @@ extern void _DebPrint (const char *fmt, ...);
 #else
 #define DebPrint(stuff)
 #endif
+
+#define TERM_HEADER "w32term.h"
+
 
 /* ============================================================ */

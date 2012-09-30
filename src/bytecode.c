@@ -33,7 +33,7 @@ by Hallvard:
  */
 
 #include <config.h>
-#include <setjmp.h>
+
 #include "lisp.h"
 #include "character.h"
 #include "buffer.h"
@@ -423,15 +423,11 @@ unmark_byte_stack (void)
 /* Garbage collect if we have consed enough since the last time.
    We do this at every branch, to avoid loops that never GC.  */
 
-#define MAYBE_GC()					\
- do {							\
-  if (consing_since_gc > gc_cons_threshold		\
-      && consing_since_gc > gc_relative_threshold)	\
-    {							\
-      BEFORE_POTENTIAL_GC ();				\
-      Fgarbage_collect ();				\
-      AFTER_POTENTIAL_GC ();				\
-    }							\
+#define MAYBE_GC()		\
+  do {				\
+   BEFORE_POTENTIAL_GC ();	\
+   maybe_gc ();			\
+   AFTER_POTENTIAL_GC ();	\
  } while (0)
 
 /* Check for jumping out of range.  */
@@ -439,7 +435,7 @@ unmark_byte_stack (void)
 #ifdef BYTE_CODE_SAFE
 
 #define CHECK_RANGE(ARG) \
-  if (ARG >= bytestr_length) abort ()
+  if (ARG >= bytestr_length) emacs_abort ()
 
 #else /* not BYTE_CODE_SAFE */
 
@@ -462,7 +458,8 @@ unmark_byte_stack (void)
 	Fsignal (Qquit, Qnil);				\
 	AFTER_POTENTIAL_GC ();				\
       }							\
-    ELSE_PENDING_SIGNALS				\
+    else if (pending_signals)				\
+      process_pending_signals ();			\
   } while (0)
 
 
@@ -512,7 +509,7 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
    if (FRAME_X_P (f)
        && FRAME_FONT (f)->direction != 0
        && FRAME_FONT (f)->direction != 1)
-     abort ();
+     emacs_abort ();
  }
 #endif
 
@@ -540,7 +537,7 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
   stack.byte_string = bytestr;
   stack.pc = stack.byte_string_start = SDATA (bytestr);
   stack.constants = vector;
-  if (MAX_ALLOCA / sizeof (Lisp_Object) <= XFASTINT (maxdepth))
+  if (MAX_ALLOCA / word_size <= XFASTINT (maxdepth))
     memory_full (SIZE_MAX);
   top = alloca ((XFASTINT (maxdepth) + 1) * sizeof *top);
 #if BYTE_MAINTAIN_TOP
@@ -557,7 +554,7 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
   if (INTEGERP (args_template))
     {
       ptrdiff_t at = XINT (args_template);
-      int rest = at & 128;
+      bool rest = (at & 128) != 0;
       int mandatory = at & 127;
       ptrdiff_t nonrest = at >> 8;
       eassert (mandatory <= nonrest);
@@ -604,9 +601,9 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
     {
 #ifdef BYTE_CODE_SAFE
       if (top > stacke)
-	abort ();
+	emacs_abort ();
       else if (top < stack.bottom - 1)
-	abort ();
+	emacs_abort ();
 #endif
 
 #ifdef BYTE_CODE_METER
@@ -822,7 +819,7 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 		&& !EQ (val, Qunbound)
 		&& !XSYMBOL (sym)->redirect
 		&& !SYMBOL_CONSTANT_P (sym))
-	      XSYMBOL (sym)->val.value = val;
+	      SET_SYMBOL_VAL (XSYMBOL (sym), val);
 	    else
 	      {
 		BEFORE_POTENTIAL_GC ();
@@ -1055,7 +1052,7 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 
 	CASE (Bsave_current_buffer): /* Obsolete since ??.  */
 	CASE (Bsave_current_buffer_1):
-	  record_unwind_protect (set_buffer_if_live, Fcurrent_buffer ());
+	  record_unwind_current_buffer ();
 	  NEXT;
 
 	CASE (Bsave_window_excursion): /* Obsolete since 24.1.  */
@@ -1879,7 +1876,7 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 	  /* Actually this is Bstack_ref with offset 0, but we use Bdup
 	     for that instead.  */
 	  /* CASE (Bstack_ref): */
-	  abort ();
+	  error ("Invalid byte opcode");
 
 	  /* Handy byte-codes for lexical binding.  */
 	CASE (Bstack_ref1):
@@ -1932,11 +1929,11 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 #ifdef BYTE_CODE_SAFE
 	  if (op < Bconstant)
 	    {
-	      abort ();
+	      emacs_abort ();
 	    }
 	  if ((op -= Bconstant) >= const_length)
 	    {
-	      abort ();
+	      emacs_abort ();
 	    }
 	  PUSH (vectorp[op]);
 #else
@@ -1955,7 +1952,7 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 #ifdef BYTE_CODE_SAFE
     error ("binding stack not balanced (serious byte compiler bug)");
 #else
-    abort ();
+    emacs_abort ();
 #endif
 
   return result;

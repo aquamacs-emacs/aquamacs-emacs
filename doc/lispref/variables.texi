@@ -403,7 +403,8 @@ unconditionally initializes the variable, whereas @code{defvar}
 initializes it only if it is originally void.
 
   To define a customizable variable, you should use @code{defcustom}
-(which calls @code{defvar} as a subroutine).  @xref{Customization}.
+(which calls @code{defvar} as a subroutine).  @xref{Variable
+Definitions}.
 
 @defspec defvar symbol [value [doc-string]]
 This special form defines @var{symbol} as a variable.  Note that
@@ -967,11 +968,11 @@ wants the current value of a variable, it looks first in the lexical
 environment; if the variable is not specified in there, it looks in
 the symbol's value cell, where the dynamic value is stored.
 
-@cindex closures
+@cindex closures, example of using
   Lexical bindings have indefinite extent.  Even after a binding
 construct has finished executing, its lexical environment can be
 ``kept around'' in Lisp objects called @dfn{closures}.  A closure is
-created when you create a named or anonymous function with lexical
+created when you define a named or anonymous function with lexical
 binding enabled.  @xref{Closures}, for details.
 
   When a closure is called as a function, any lexical variable
@@ -1302,9 +1303,10 @@ This returns @code{t} if @var{variable} is buffer-local in buffer
 @end defun
 
 @defun local-variable-if-set-p variable &optional buffer
-This returns @code{t} if @var{variable} will become buffer-local in
-buffer @var{buffer} (which defaults to the current buffer) if it is
-set there.
+This returns @code{t} if @var{variable} either has a buffer-local
+value in buffer @var{buffer}, or is automatically buffer-local.
+Otherwise, it returns @code{nil}.  If omitted or @code{nil},
+@var{buffer} defaults to the current buffer.
 @end defun
 
 @defun buffer-local-value variable buffer

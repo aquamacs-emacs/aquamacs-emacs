@@ -80,7 +80,7 @@
 For other modes it is disabled.  If this is equal to t,
 then Which Function mode is enabled in any major mode that supports it."
   :group 'which-func
-  :version "24.2"                       ; explicit list -> t
+  :version "24.3"                       ; explicit list -> t
   :type '(choice (const :tag "All modes" t)
 		 (repeat (symbol :tag "Major mode"))))
 
@@ -150,7 +150,7 @@ mouse-2: toggle rest visibility\n\
 mouse-3: go to end")
     "]")
   "Format for displaying the function in the mode line."
-  :version "24.2"                       ; added mouse-face
+  :version "24.2"                  ; added mouse-face; 24point2 is correct
   :group 'which-func
   :type 'sexp)
 ;;;###autoload (put 'which-func-format 'risky-local-variable t)
@@ -234,9 +234,7 @@ It creates the Imenu index for the buffer, if necessary."
 	 (error "Error in which-func-update: %S" info))))))
 
 ;;;###autoload
-(defun which-func-mode (&optional arg)
-  (which-function-mode arg))
-(make-obsolete 'which-func-mode 'which-function-mode "24.1")
+(define-obsolete-function-alias 'which-func-mode 'which-function-mode "24.1")
 
 (defvar which-func-update-timer nil)
 

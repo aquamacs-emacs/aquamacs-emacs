@@ -19,7 +19,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <stdio.h>
-#include <setjmp.h>
 
 #include "lisp.h"
 #include "character.h"
@@ -116,13 +115,13 @@ character_width (int c, struct Lisp_Char_Table *dp)
    for characters as WIDTHTAB.  We use this to decide when to
    invalidate the buffer's width_run_cache.  */
 
-int
+bool
 disptab_matches_widthtab (struct Lisp_Char_Table *disptab, struct Lisp_Vector *widthtab)
 {
   int i;
 
   if (widthtab->header.size != 256)
-    abort ();
+    emacs_abort ();
 
   for (i = 0; i < 256; i++)
     if (character_width (i, disptab)
@@ -141,10 +140,10 @@ recompute_width_table (struct buffer *buf, struct Lisp_Char_Table *disptab)
   struct Lisp_Vector *widthtab;
 
   if (!VECTORP (BVAR (buf, width_table)))
-    BVAR (buf, width_table) = Fmake_vector (make_number (256), make_number (0));
+    bset_width_table (buf, Fmake_vector (make_number (256), make_number (0)));
   widthtab = XVECTOR (BVAR (buf, width_table));
   if (widthtab->header.size != 256)
-    abort ();
+    emacs_abort ();
 
   for (i = 0; i < 256; i++)
     XSETFASTINT (widthtab->contents[i], character_width (i, disptab));
@@ -166,7 +165,7 @@ width_run_cache_on_off (void)
         {
           free_region_cache (current_buffer->width_run_cache);
           current_buffer->width_run_cache = 0;
-          BVAR (current_buffer, width_table) = Qnil;
+          bset_width_table (current_buffer, Qnil);
         }
     }
   else
@@ -321,14 +320,14 @@ invalidate_current_column (void)
 ptrdiff_t
 current_column (void)
 {
-  register ptrdiff_t col;
-  register unsigned char *ptr, *stop;
-  register int tab_seen;
+  ptrdiff_t col;
+  unsigned char *ptr, *stop;
+  bool tab_seen;
   ptrdiff_t post_tab;
-  register int c;
+  int c;
   int tab_width = SANE_TAB_WIDTH (current_buffer);
-  int ctl_arrow = !NILP (BVAR (current_buffer, ctl_arrow));
-  register struct Lisp_Char_Table *dp = buffer_display_table ();
+  bool ctl_arrow = !NILP (BVAR (current_buffer, ctl_arrow));
+  struct Lisp_Char_Table *dp = buffer_display_table ();
 
   if (PT == last_known_column_point
       && MODIFF == last_known_column_modified)
@@ -336,9 +335,8 @@ current_column (void)
 
   /* If the buffer has overlays, text properties,
      or multibyte characters, use a more general algorithm.  */
-  if (BUF_INTERVALS (current_buffer)
-      || current_buffer->overlays_before
-      || current_buffer->overlays_after
+  if (buffer_intervals (current_buffer)
+      || buffer_has_overlays ()
       || Z != Z_BYTE)
     return current_column_1 ();
 
@@ -514,9 +512,9 @@ static void
 scan_for_column (ptrdiff_t *endpos, EMACS_INT *goalcol, ptrdiff_t *prevcol)
 {
   int tab_width = SANE_TAB_WIDTH (current_buffer);
-  register int ctl_arrow = !NILP (BVAR (current_buffer, ctl_arrow));
-  register struct Lisp_Char_Table *dp = buffer_display_table ();
-  int multibyte = !NILP (BVAR (current_buffer, enable_multibyte_characters));
+  bool ctl_arrow = !NILP (BVAR (current_buffer, ctl_arrow));
+  struct Lisp_Char_Table *dp = buffer_display_table ();
+  bool multibyte = !NILP (BVAR (current_buffer, enable_multibyte_characters));
   struct composition_it cmp_it;
   Lisp_Object window;
   struct window *w;
@@ -724,14 +722,14 @@ current_column_1 (void)
 static double
 string_display_width (Lisp_Object string, Lisp_Object beg, Lisp_Object end)
 {
-  register int col;
-  register unsigned char *ptr, *stop;
-  register int tab_seen;
+  int col;
+  unsigned char *ptr, *stop;
+  bool tab_seen;
   int post_tab;
-  register int c;
+  int c;
   int tab_width = SANE_TAB_WIDTH (current_buffer);
-  int ctl_arrow = !NILP (current_buffer->ctl_arrow);
-  register struct Lisp_Char_Table *dp = buffer_display_table ();
+  bool ctl_arrow = !NILP (current_buffer->ctl_arrow);
+  struct Lisp_Char_Table *dp = buffer_display_table ();
   int b, e;
 
   if (NILP (end))
@@ -947,7 +945,7 @@ position_indentation (ptrdiff_t pos_byte)
    Blank lines are treated as if they had the same indentation as the
    preceding line.  */
 
-int
+bool
 indented_beyond_p (ptrdiff_t pos, ptrdiff_t pos_byte, EMACS_INT column)
 {
   ptrdiff_t val;
@@ -1049,11 +1047,11 @@ static struct position val_compute_motion;
    can't hit the requested column exactly (because of a tab or other
    multi-column character), overshoot.
 
-   DID_MOTION is 1 if FROMHPOS has already accounted for overlay strings
+   DID_MOTION is true if FROMHPOS has already accounted for overlay strings
    at FROM.  This is the case if FROMVPOS and FROMVPOS came from an
    earlier call to compute_motion.  The other common case is that FROMHPOS
    is zero and FROM is a position that "belongs" at column zero, but might
-   be shifted by overlay strings; in this case DID_MOTION should be 0.
+   be shifted by overlay strings; in this case DID_MOTION should be false.
 
    WIDTH is the number of columns available to display text;
    compute_motion uses this to handle continuation lines and such.
@@ -1106,17 +1104,20 @@ static struct position val_compute_motion;
    the scroll bars if they are turned on.  */
 
 struct position *
-compute_motion (ptrdiff_t from, EMACS_INT fromvpos, EMACS_INT fromhpos, int did_motion, ptrdiff_t to, EMACS_INT tovpos, EMACS_INT tohpos, EMACS_INT width, ptrdiff_t hscroll, int tab_offset, struct window *win)
+compute_motion (ptrdiff_t from, EMACS_INT fromvpos, EMACS_INT fromhpos,
+		bool did_motion, ptrdiff_t to,
+		EMACS_INT tovpos, EMACS_INT tohpos, EMACS_INT width,
+		ptrdiff_t hscroll, int tab_offset, struct window *win)
 {
-  register EMACS_INT hpos = fromhpos;
-  register EMACS_INT vpos = fromvpos;
+  EMACS_INT hpos = fromhpos;
+  EMACS_INT vpos = fromvpos;
 
-  register ptrdiff_t pos;
+  ptrdiff_t pos;
   ptrdiff_t pos_byte;
-  register int c = 0;
+  int c = 0;
   int tab_width = SANE_TAB_WIDTH (current_buffer);
-  register int ctl_arrow = !NILP (BVAR (current_buffer, ctl_arrow));
-  register struct Lisp_Char_Table *dp = window_display_table (win);
+  bool ctl_arrow = !NILP (BVAR (current_buffer, ctl_arrow));
+  struct Lisp_Char_Table *dp = window_display_table (win);
   EMACS_INT selective
     = (INTEGERP (BVAR (current_buffer, selective_display))
        ? XINT (BVAR (current_buffer, selective_display))
@@ -1136,13 +1137,12 @@ compute_motion (ptrdiff_t from, EMACS_INT fromvpos, EMACS_INT fromhpos, int did_
   ptrdiff_t width_run_end   = from;
   ptrdiff_t width_run_width = 0;
   Lisp_Object *width_table;
-  Lisp_Object buffer;
 
   /* The next buffer pos where we should consult the width run cache. */
   ptrdiff_t next_width_run = from;
   Lisp_Object window;
 
-  int multibyte = !NILP (BVAR (current_buffer, enable_multibyte_characters));
+  bool multibyte = !NILP (BVAR (current_buffer, enable_multibyte_characters));
   /* If previous char scanned was a wide character,
      this is the column where it ended.  Otherwise, this is 0.  */
   EMACS_INT wide_column_end_hpos = 0;
@@ -1156,7 +1156,6 @@ compute_motion (ptrdiff_t from, EMACS_INT fromvpos, EMACS_INT fromhpos, int did_
 
   struct composition_it cmp_it;
 
-  XSETBUFFER (buffer, current_buffer);
   XSETWINDOW (window, win);
 
   width_run_cache_on_off ();
@@ -1312,7 +1311,7 @@ compute_motion (ptrdiff_t from, EMACS_INT fromvpos, EMACS_INT fromhpos, int did_
       if (hpos > width)
 	{
 	  EMACS_INT total_width = width + continuation_glyph_width;
-	  int truncate = 0;
+	  bool truncate = 0;
 
 	  if (!NILP (Vtruncate_partial_width_windows)
 	      && (total_width < FRAME_COLS (XFRAME (WINDOW_FRAME (win)))))
@@ -1831,7 +1830,7 @@ vmotion (register ptrdiff_t from, register EMACS_INT vtarget, struct window *w)
 			 PTRDIFF_MAX)
        : !NILP (BVAR (current_buffer, selective_display)) ? -1 : 0);
   Lisp_Object window;
-  int did_motion;
+  bool did_motion;
   /* This is the object we use for fetching character properties.  */
   Lisp_Object text_prop_object;
 
@@ -2006,9 +2005,9 @@ whether or not it is currently displayed in some window.  */)
       old_buffer = w->buffer;
       old_charpos = XMARKER (w->pointm)->charpos;
       old_bytepos = XMARKER (w->pointm)->bytepos;
-      XSETBUFFER (w->buffer, current_buffer);
-      set_marker_both
-	(w->pointm, w->buffer, BUF_PT (current_buffer), BUF_PT_BYTE (current_buffer));
+      wset_buffer (w, Fcurrent_buffer ());
+      set_marker_both (w->pointm, w->buffer,
+		       BUF_PT (current_buffer), BUF_PT_BYTE (current_buffer));
     }
 
   if (noninteractive)
@@ -2021,8 +2020,8 @@ whether or not it is currently displayed in some window.  */)
     {
       ptrdiff_t it_start, it_overshoot_count = 0;
       int first_x;
-      int overshoot_handled = 0;
-      int disp_string_at_start_p = 0;
+      bool overshoot_handled = 0;
+      bool disp_string_at_start_p = 0;
 
       itdata = bidi_shelve_cache ();
       SET_TEXT_POS (pt, PT, PT_BYTE);
@@ -2149,8 +2148,9 @@ whether or not it is currently displayed in some window.  */)
 
   if (BUFFERP (old_buffer))
     {
-      w->buffer = old_buffer;
-      set_marker_both (w->pointm, w->buffer, old_charpos, old_bytepos);
+      wset_buffer (w, old_buffer);
+      set_marker_both (w->pointm, w->buffer,
+		       old_charpos, old_bytepos);
     }
 
   RETURN_UNGCPRO (make_number (it.vpos));

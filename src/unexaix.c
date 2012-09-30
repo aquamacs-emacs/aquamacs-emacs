@@ -56,8 +56,9 @@ what you give them.   Help stamp out software-hoarding!  */
 #include <unistd.h>
 #include <fcntl.h>
 
+#include "mem-limits.h"
+
 char *start_of_text (void);		        /* Start of text */
-extern char *start_of_data (void);		/* Start of initialized data */
 
 extern int _data;
 extern int _text;
@@ -88,7 +89,6 @@ static int adjust_lnnoptrs (int, int, const char *);
 
 static int pagemask;
 
-#include <setjmp.h>
 #include "lisp.h"
 
 static void

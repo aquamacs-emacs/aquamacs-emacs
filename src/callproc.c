@@ -19,10 +19,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 #include <config.h>
-#include <signal.h>
 #include <errno.h>
 #include <stdio.h>
-#include <setjmp.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -53,6 +51,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "process.h"
 #include "syssignal.h"
 #include "systty.h"
+#include "syswait.h"
 #include "blockinput.h"
 #include "frame.h"
 #include "termhooks.h"
@@ -63,10 +62,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef HAVE_NS
 #include "nsterm.h"
-#endif
-
-#ifndef USE_CRT_DLL
-extern char **environ;
 #endif
 
 #ifdef HAVE_SETPGID
@@ -81,7 +76,7 @@ static Lisp_Object Vtemp_file_name_pattern;
 
 /* True if we are about to fork off a synchronous process or if we
    are waiting for it.  */
-int synch_process_alive;
+bool synch_process_alive;
 
 /* Nonzero => this is a string explaining death of synchronous subprocess.  */
 const char *synch_process_death;
@@ -98,8 +93,8 @@ int synch_process_retcode;
    On MSDOS, delete the temporary file on any kind of termination.
    On Unix, kill the process and any children on termination by signal.  */
 
-/* Nonzero if this is termination due to exit.  */
-static int call_process_exited;
+/* True if this is termination due to exit.  */
+static bool call_process_exited;
 
 static Lisp_Object
 call_process_kill (Lisp_Object fdpid)
@@ -194,7 +189,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
   Lisp_Object infile, buffer, current_dir, path, cleanup_info_tail;
-  int display_p;
+  bool display_p;
   int fd[2];
   int filefd;
 #define CALLPROC_BUFFER_SIZE_MIN (16 * 1024)
@@ -221,7 +216,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
   struct coding_system argument_coding;	/* coding-system of arguments */
   /* Set to the return value of Ffind_operation_coding_system.  */
   Lisp_Object coding_systems;
-  int output_to_buffer = 1;
+  bool output_to_buffer = 1;
 
   /* Qt denotes that Ffind_operation_coding_system is not yet called.  */
   coding_systems = Qt;
@@ -245,7 +240,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
     /* If arguments are supplied, we may have to encode them.  */
     if (nargs >= 5)
       {
-	int must_encode = 0;
+	bool must_encode = 0;
 	Lisp_Object coding_attrs;
 
 	for (i = 4; i < nargs; i++)
@@ -427,8 +422,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
       && SREF (path, 1) == ':')
     path = Fsubstring (path, make_number (2), Qnil);
 
-  SAFE_ALLOCA (new_argv, const unsigned char **,
-	       (nargs > 4 ? nargs - 2 : 2) * sizeof *new_argv);
+  new_argv = SAFE_ALLOCA ((nargs > 4 ? nargs - 2 : 2) * sizeof *new_argv);
   if (nargs > 4)
     {
       ptrdiff_t i;
@@ -503,17 +497,9 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
     register char **save_environ = environ;
     register int fd1 = fd[1];
     int fd_error = fd1;
-#ifdef HAVE_WORKING_VFORK
-    sigset_t procmask;
-    sigset_t blocked;
-    struct sigaction sigpipe_action;
-#endif
 
     if (fd_output >= 0)
       fd1 = fd_output;
-#if 0  /* Some systems don't have sigblock.  */
-    mask = sigblock (sigmask (SIGCHLD));
-#endif
 
     /* Record that we're about to create a synchronous process.  */
     synch_process_alive = 1;
@@ -597,30 +583,19 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 		       0, current_dir);
 #else  /* not WINDOWSNT */
 
-#ifdef HAVE_WORKING_VFORK
-    /* On many hosts (e.g. Solaris 2.4), if a vforked child calls `signal',
-       this sets the parent's signal handlers as well as the child's.
-       So delay all interrupts whose handlers the child might munge,
-       and record the current handlers so they can be restored later.  */
-    sigemptyset (&blocked);
-    sigaddset (&blocked, SIGPIPE);
-    sigaction (SIGPIPE, 0, &sigpipe_action);
-    pthread_sigmask (SIG_BLOCK, &blocked, &procmask);
-#endif
-
-    BLOCK_INPUT;
+    block_input ();
 
     /* vfork, and prevent local vars from being clobbered by the vfork.  */
     {
       Lisp_Object volatile buffer_volatile = buffer;
       Lisp_Object volatile coding_systems_volatile = coding_systems;
       Lisp_Object volatile current_dir_volatile = current_dir;
-      int volatile display_p_volatile = display_p;
+      bool volatile display_p_volatile = display_p;
+      bool volatile output_to_buffer_volatile = output_to_buffer;
+      bool volatile sa_must_free_volatile = sa_must_free;
       int volatile fd1_volatile = fd1;
       int volatile fd_error_volatile = fd_error;
       int volatile fd_output_volatile = fd_output;
-      int volatile output_to_buffer_volatile = output_to_buffer;
-      int volatile sa_must_free_volatile = sa_must_free;
       ptrdiff_t volatile sa_count_volatile = sa_count;
       unsigned char const **volatile new_argv_volatile = new_argv;
 
@@ -652,24 +627,14 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 	setpgrp (pid, pid);
 #endif /* USG */
 
-	/* GConf causes us to ignore SIGPIPE, make sure it is restored
-	   in the child.  */
+	/* Emacs ignores SIGPIPE, but the child should not.  */
 	signal (SIGPIPE, SIG_DFL);
-#ifdef HAVE_WORKING_VFORK
-	pthread_sigmask (SIG_SETMASK, &procmask, 0);
-#endif
 
 	child_setup (filefd, fd1, fd_error, (char **) new_argv,
 		     0, current_dir);
       }
 
-    UNBLOCK_INPUT;
-
-#ifdef HAVE_WORKING_VFORK
-    /* Restore the signal state.  */
-    sigaction (SIGPIPE, &sigpipe_action, 0);
-    pthread_sigmask (SIG_SETMASK, &procmask, 0);
-#endif
+    unblock_input ();
 
 #endif /* not WINDOWSNT */
 
@@ -771,11 +736,11 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 
   if (output_to_buffer)
     {
-      register int nread;
-      int first = 1;
+      int nread;
+      bool first = 1;
       EMACS_INT total_read = 0;
       int carryover = 0;
-      int display_on_the_fly = display_p;
+      bool display_on_the_fly = display_p;
       struct coding_system saved_coding;
 
       saved_coding = process_coding;
@@ -978,8 +943,7 @@ usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &r
   Lisp_Object coding_systems;
   Lisp_Object val, *args2;
   ptrdiff_t i;
-  char *tempfile;
-  Lisp_Object tmpdir, pattern;
+  Lisp_Object tmpdir;
 
   if (STRINGP (Vtemporary_file_directory))
     tmpdir = Vtemporary_file_directory;
@@ -1003,8 +967,8 @@ usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &r
 
   {
     USE_SAFE_ALLOCA;
-    pattern = Fexpand_file_name (Vtemp_file_name_pattern, tmpdir);
-    SAFE_ALLOCA (tempfile, char *, SBYTES (pattern) + 1);
+    Lisp_Object pattern = Fexpand_file_name (Vtemp_file_name_pattern, tmpdir);
+    char *tempfile = SAFE_ALLOCA (SBYTES (pattern) + 1);
     memcpy (tempfile, SDATA (pattern), SBYTES (pattern) + 1);
     coding_systems = Qt;
 
@@ -1012,9 +976,9 @@ usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &r
     {
       int fd;
 
-      BLOCK_INPUT;
+      block_input ();
       fd = mkstemp (tempfile);
-      UNBLOCK_INPUT;
+      unblock_input ();
       if (fd == -1)
 	report_file_error ("Failed to open temporary file",
 			   Fcons (build_string (tempfile), Qnil));
@@ -1092,7 +1056,7 @@ static char **
 add_env (char **env, char **new_env, char *string)
 {
   char **ep;
-  int ok = 1;
+  bool ok = 1;
   if (string == NULL)
     return new_env;
 
@@ -1132,8 +1096,7 @@ add_env (char **env, char **new_env, char *string)
    Therefore, the superior process must save and restore the value
    of environ around the vfork and the call to this function.
 
-   SET_PGRP is nonzero if we should put the subprocess into a separate
-   process group.
+   If SET_PGRP, put the subprocess into a separate process group.
 
    CURRENT_DIR is an elisp string giving the path of the current
    directory the subprocess should have.  Since we can't really signal
@@ -1141,7 +1104,8 @@ add_env (char **env, char **new_env, char *string)
    executable directory by the parent.  */
 
 int
-child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, Lisp_Object current_dir)
+child_setup (int in, int out, int err, char **new_argv, bool set_pgrp,
+	     Lisp_Object current_dir)
 {
   char **env;
   char *pwd_var;
@@ -1400,7 +1364,7 @@ relocate_fd (int fd, int minfd)
 }
 #endif /* not WINDOWSNT */
 
-static int
+static bool
 getenv_internal_1 (const char *var, ptrdiff_t varlen, char **value,
 		   ptrdiff_t *valuelen, Lisp_Object env)
 {
@@ -1435,7 +1399,7 @@ getenv_internal_1 (const char *var, ptrdiff_t varlen, char **value,
   return 0;
 }
 
-static int
+static bool
 getenv_internal (const char *var, ptrdiff_t varlen, char **value,
 		 ptrdiff_t *valuelen, Lisp_Object frame)
 {
@@ -1515,29 +1479,24 @@ egetenv (const char *var)
 void
 init_callproc_1 (void)
 {
-  char *data_dir = egetenv ("EMACSDATA");
-  char *doc_dir = egetenv ("EMACSDOC");
 #ifdef HAVE_NS
   const char *etc_dir = ns_etc_directory ();
   const char *path_exec = ns_exec_path ();
 #endif
 
-  Vdata_directory
-    = Ffile_name_as_directory (build_string (data_dir ? data_dir
+  Vdata_directory = decode_env_path ("EMACSDATA",
 #ifdef HAVE_NS
-                                             : (etc_dir ? etc_dir : PATH_DATA)
-#else
-                                             : PATH_DATA
+                                             etc_dir ? etc_dir :
 #endif
-                                             ));
-  Vdoc_directory
-    = Ffile_name_as_directory (build_string (doc_dir ? doc_dir
+                                             PATH_DATA);
+  Vdata_directory = Ffile_name_as_directory (Fcar (Vdata_directory));
+
+  Vdoc_directory = decode_env_path ("EMACSDOC",
 #ifdef HAVE_NS
-                                             : (etc_dir ? etc_dir : PATH_DOC)
-#else
-                                             : PATH_DOC
+                                             etc_dir ? etc_dir :
 #endif
-                                             ));
+                                             PATH_DOC);
+  Vdoc_directory = Ffile_name_as_directory (Fcar (Vdoc_directory));
 
   /* Check the EMACSPATH environment variable, defaulting to the
      PATH_EXEC path from epaths.h.  */
@@ -1578,7 +1537,7 @@ init_callproc (void)
       Lisp_Object tem;
       tem = Fexpand_file_name (build_string ("lib-src"),
 			       Vinstallation_directory);
-#ifndef DOS_NT
+#ifndef MSDOS
 	  /* MSDOS uses wrapped binaries, so don't do this.  */
       if (NILP (Fmember (tem, Vexec_path)))
 	{
@@ -1595,7 +1554,7 @@ init_callproc (void)
 	}
 
       Vexec_directory = Ffile_name_as_directory (tem);
-#endif /* not DOS_NT */
+#endif /* not MSDOS */
 
       /* Maybe use ../etc as well as ../lib-src.  */
       if (data_dir == 0)
