@@ -745,7 +745,7 @@ may be set to `nil' if such empty frames become visible inadvertently."
 		      (mapcar (lambda (x) (cons x (frame-parameter frame x)))
 			      '(top left width height)) 
 		      )))
-      (when bub-frame
+      (when bup-frame
 	(let ((confirm-nonexistent-file-or-buffer)
 	      (one-buffer-one-frame nil)
 	      (pop-up-frames nil)
