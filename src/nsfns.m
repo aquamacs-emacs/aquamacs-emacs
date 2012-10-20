@@ -104,8 +104,10 @@ Lisp_Object Fx_open_connection (Lisp_Object, Lisp_Object, Lisp_Object);
 extern BOOL ns_in_resize;
 
 /* Static variables to handle applescript execution.  */
-static Lisp_Object as_script, *as_result;
+static NSString *as_script;
+static Lisp_Object *as_result;
 static int as_status;
+
 
 /* ==========================================================================
 
@@ -1999,7 +2001,6 @@ when `ns-popup-save-panel' was called.
 
   // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
   UNBLOCK_INPUT;
-
   return Qnil;
 }
 
@@ -2603,19 +2604,18 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
    string or a number containing the resulting script value.  Otherwise,
    1 is returned. */
 static int
-ns_do_applescript (script, result)
-     Lisp_Object script, *result;
+ns_do_applescript (NSString* script, Lisp_Object *result)
 {
   NSAppleEventDescriptor *desc;
   NSDictionary* errorDict;
   NSAppleEventDescriptor* returnDescriptor = NULL;
 
   NSAppleScript* scriptObject =
-    [[NSAppleScript alloc] initWithSource:
-			     [NSString stringWithUTF8String: SDATA (script)]];
+    [[NSAppleScript alloc] initWithSource: script];
 
   returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
   [scriptObject release];
+  [script release];
 
   *result = Qnil;
 
@@ -2685,7 +2685,10 @@ In case the execution fails, an error is signaled. */)
   BLOCK_INPUT;
   GCPRO1 (script);
 
-  as_script = script;
+  as_script = [[NSString stringWithUTF8String: SDATA (script)] retain];
+  // as_script is released explicitly by ns_do_applescript, so 
+  // we retain it here
+
   as_result = &result;
 
   /* executing apple script requires the event loop to run, otherwise
