@@ -96,7 +96,8 @@ Lisp_Object Fx_open_connection (Lisp_Object, Lisp_Object, Lisp_Object);
 extern BOOL ns_in_resize;
 
 /* Static variables to handle applescript execution.  */
-static Lisp_Object as_script, *as_result;
+static NSString *as_script;
+static Lisp_Object *as_result;
 static int as_status;
 
 #ifdef GLYPH_DEBUG
@@ -1488,7 +1489,7 @@ Shows the NS spell checking panel and brings it to the front.*/)
   check_ns ();
   sc = [NSSpellChecker sharedSpellChecker];
   
-  BLOCK_INPUT;
+  block_input();
   [[sc spellingPanel] orderFront: NSApp];
 
   // Spelling panel should appear with previous content, not empty.
@@ -1500,7 +1501,7 @@ Shows the NS spell checking panel and brings it to the front.*/)
   // does not work
   // if ([sc respondsToSelector:@selector(_updateGrammar)]) 
   //   [sc performSelector:@selector(_updateGrammar)]; 
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1514,10 +1515,10 @@ DEFUN ("ns-close-spellchecker-panel", Fns_close_spellchecker_panel, Sns_close_sp
   check_ns ();
   sc = [NSSpellChecker sharedSpellChecker];
   
-  BLOCK_INPUT;
+  block_input();
   [[sc spellingPanel] close];
 
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1533,10 +1534,10 @@ nil otherwise.*/)
   check_ns ();
   sc = [NSSpellChecker sharedSpellChecker];
   
-  BLOCK_INPUT;
+  block_input();
   visible = [[sc spellingPanel] isVisible];
 
-  UNBLOCK_INPUT;
+  unblock_input();
   return visible ? Qt : Qnil;
 }
 
@@ -1552,12 +1553,12 @@ Give empty string to delete word.*/)
 
   CHECK_STRING (str);
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
   
   [sc updateSpellingPanelWithMisspelledWord:[NSString stringWithUTF8String: SDATA (str)]]; // no word, no spelling errors
 
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1572,7 +1573,7 @@ Not available on 10.4.*/)
 {
   CHECK_STRING (str);
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   id sc = [NSSpellChecker sharedSpellChecker];
 
 #ifdef NS_IMPL_COCOA
@@ -1580,11 +1581,11 @@ Not available on 10.4.*/)
     {
       
       [sc learnWord:[NSString stringWithUTF8String: SDATA (str)]];
-      UNBLOCK_INPUT;
+      unblock_input();
       return str;
     }
 #endif
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1599,7 +1600,7 @@ DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellche
 
   CHECK_STRING (str);
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
   
   NSInteger tag = 1;
@@ -1609,7 +1610,7 @@ DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellche
     }
 
   [sc ignoreWord:[NSString stringWithUTF8String: SDATA (str)] inSpellDocumentWithTag:tag];
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1624,7 +1625,7 @@ for buffer BUFFER */)
   id sc;
 
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
   
   NSInteger tag = 1;
@@ -1642,7 +1643,7 @@ for buffer BUFFER */)
     retval = Fcons (build_string ([[words objectAtIndex:i] UTF8String]),
 		    retval);
   }
-  UNBLOCK_INPUT;
+  unblock_input();
   return retval;
 }
 
@@ -1660,7 +1661,7 @@ words are spelled as in the dictionary.*/)
 
   CHECK_STRING (string);
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
   /*  NSRange first_word = nil;   // Invalid initializer!  NSRange is a struct */
@@ -1690,7 +1691,7 @@ words are spelled as in the dictionary.*/)
 					     language:nil wrap:NO inSpellDocumentWithTag:tag wordCount:nil];
 
     // }
-  UNBLOCK_INPUT;
+  unblock_input();
   if (first_word.location == NSNotFound || (int) first_word.location < 0)
     return Qnil;
   else
@@ -1710,7 +1711,7 @@ of ignored grammatical constructions. */)
 
   CHECK_STRING (sentence);
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
   NSInteger tag = 1;
@@ -1725,7 +1726,7 @@ of ignored grammatical constructions. */)
   NSRange first_word = [sc checkGrammarOfString: [NSString stringWithUTF8String: SDATA (sentence)] startingAt:((NSInteger) 0)
 				       language:nil wrap:NO inSpellDocumentWithTag:tag details:&errdetails];
 
-  UNBLOCK_INPUT;
+  unblock_input();
   if (first_word.location < 0)
     return Qnil;
   else
@@ -1746,7 +1747,7 @@ capitalized in the same way. */)
 
   CHECK_STRING (word);
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
   Lisp_Object retval = Qnil;
@@ -1756,7 +1757,7 @@ capitalized in the same way. */)
   while (--i >= 0)
     retval = Fcons (build_string ([[guesses objectAtIndex:i] UTF8String]),
 		    retval);
-  UNBLOCK_INPUT;
+  unblock_input();
   return retval;
 }
 
@@ -1771,7 +1772,7 @@ Returns nil if not successful.*/)
   Lisp_Object retval = Qnil;
 
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
 #ifdef NS_IMPL_COCOA
@@ -1787,7 +1788,7 @@ Returns nil if not successful.*/)
       }
     }
 #endif
-  UNBLOCK_INPUT;
+  unblock_input();
   return retval;
 }
 
@@ -1800,14 +1801,14 @@ DEFUN ("ns-spellchecker-current-language", Fns_spellchecker_current_language, Sn
   id sc;
 
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
   Lisp_Object retval = Qnil;
   NSString *lang = [sc language];
   retval = build_string ([lang UTF8String]);
 
-  UNBLOCK_INPUT;
+  unblock_input();
   return retval;
 }
 
@@ -1824,11 +1825,11 @@ LANGUAGE must be one of the languages returned by
 
   CHECK_STRING (language);
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
   [sc setLanguage: [NSString stringWithUTF8String: SDATA (language)]];
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1843,7 +1844,7 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
   struct frame *f;
 
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
 
   fm = [NSFontManager sharedFontManager];
   if (NILP (frame))
@@ -1872,7 +1873,7 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
            isMultiple: NO];
   [fm orderFrontFontPanel: NSApp];
 
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1885,7 +1886,7 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
 {
   struct frame *f;
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   if (NILP (frame))
     f = SELECTED_FRAME ();
   else
@@ -1904,7 +1905,7 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
     }
 
   [NSApp orderFrontColorPanel: NSApp];
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1916,7 +1917,7 @@ DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_s
      ()
 {
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
 
   NSPageLayout *pageLayout = [NSPageLayout pageLayout];
 
@@ -1933,7 +1934,7 @@ DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_s
   // [pageLayout runModal];
 
   // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -1945,7 +1946,7 @@ DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
 {
   struct frame *f;
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   if (NILP (frame))
     f = SELECTED_FRAME ();
   else
@@ -1983,7 +1984,7 @@ DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
     }
   else
     {
-      UNBLOCK_INPUT;
+      unblock_input();
       error ("Must give buffer or file path as source for ns-popup-print-panel.");
     }
 
@@ -2016,7 +2017,7 @@ DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
      delegate implemented in nsterm.m */
   [htmlPage setFrameLoadDelegate:FRAME_NS_VIEW (f)];
   
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -2035,7 +2036,7 @@ when `ns-popup-save-panel' was called.
   NSSavePanel *panel;
 
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
 
   NSString *promptS = NILP (prompt) || !STRINGP (prompt) ? nil :
     [NSString stringWithUTF8String: SDATA (prompt)];
@@ -2068,7 +2069,7 @@ when `ns-popup-save-panel' was called.
   // [NSApp setMainMenu: panelMenu];
 
   // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
@@ -2655,18 +2656,18 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
    string or a number containing the resulting script value.  Otherwise,
    1 is returned. */
 static int
-ns_do_applescript (Lisp_Object script, Lisp_Object *result)
+ns_do_applescript (NSString* script, Lisp_Object *result)
 {
   NSAppleEventDescriptor *desc;
   NSDictionary* errorDict;
   NSAppleEventDescriptor* returnDescriptor = NULL;
 
   NSAppleScript* scriptObject =
-    [[NSAppleScript alloc] initWithSource:
-			     [NSString stringWithUTF8String: SSDATA (script)]];
+    [[NSAppleScript alloc] initWithSource: script];
 
   returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
   [scriptObject release];
+  [script release];
 
   *result = Qnil;
 
@@ -2734,7 +2735,7 @@ In case the execution fails, an error is signaled. */)
 
   block_input ();
 
-  as_script = script;
+  as_script = [[NSString stringWithUTF8String: SSDATA (script)] retain];
   as_result = &result;
 
   /* executing apple script requires the event loop to run, otherwise
@@ -2938,7 +2939,7 @@ Lisp_Object URLstring;
 		return Qnil;
     }
 
-	BLOCK_INPUT;
+	block_input();
 	// get default browser
 	
 	
@@ -3004,7 +3005,7 @@ Lisp_Object URLstring;
 		}
 		CFRelease(targetUrlCfs);
 		/* CFRelease(targetUrlCfsEscaped); */
-		UNBLOCK_INPUT;
+		unblock_input();
 		
 		if (! targetUrlRef) 
 		{
@@ -3019,7 +3020,7 @@ Lisp_Object URLstring;
     } 
 	else
     {
-		UNBLOCK_INPUT;
+		unblock_input();
 		error ("Could not determine default browser. Error %d", XINT(status));
 		return Qnil;
     }
@@ -3451,7 +3452,7 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
      Lisp_Object anchor, book;
 {
   check_ns ();
-  BLOCK_INPUT;
+  block_input();
   CHECK_STRING (anchor);
 
   if (! NILP (book) )
@@ -3462,7 +3463,7 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 					     inBook:(NILP (book) ? nil :
 						     [NSString stringWithUTF8String:
 								 SDATA (book)])];
-  UNBLOCK_INPUT;
+  unblock_input();
   return Qnil;
 }
 
