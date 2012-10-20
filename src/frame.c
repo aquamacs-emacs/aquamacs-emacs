@@ -820,9 +820,9 @@ do_switch_frame (Lisp_Object frame, int track, int for_deletion, Lisp_Object nor
 
   if (NILP (norecord))
     {
-      BLOCK_INPUT;
+      block_input();
       Vframe_list = Fcons (frame, Fdelq (frame, Vframe_list));
-      UNBLOCK_INPUT;
+      unblock_input();
     }
 
   return frame;
@@ -1229,7 +1229,7 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
      There is no more chance for errors to prevent it.  */
 
   minibuffer_selected = EQ (minibuf_window, selected_window);
-  BLOCK_INPUT;
+  block_input();
   /* Don't let the frame remain selected.  */
   if (f == sf)
     {
@@ -1314,7 +1314,7 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
   Vframe_list = Fdelq (frame, Vframe_list);
   FRAME_SET_VISIBLE (f, 0);
 
-  UNBLOCK_INPUT;
+  unblock_input();
 
   /* Allow the vector of menu bar contents to be freed in the next
      garbage collection.  The frame object itself may not be garbage
