@@ -5,7 +5,7 @@
 
 GNUNAME=GNU-Emacs-$2.dmg.bz2
 NAME=Aquamacs-$1.tar.bz2
-COPYORLINK='cp'  # 'ln -s'
+COPYORLINK='ln -s'
 CHGLOGSCRIPT=~/aquamacs-web/scripts/push-nightly-changelog.sh
 
 
@@ -58,4 +58,4 @@ fi
 echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\"><link href=\"http://aquamacs.org/iframe.css\" rel=\"stylesheet\" type=\"text/css\" /><BODY style=\"border: none ;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</BODY></HTML>" >>latest.html
-rsync -r builds latest-logs latest.html $DEST/
+rsync -r builds latest-logs latest.html Aquamacs-nightly.tar.bz2 $DEST/
