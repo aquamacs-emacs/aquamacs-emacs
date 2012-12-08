@@ -13,7 +13,7 @@ CHGLOGSCRIPT=~/aquamacs-web/scripts/push-nightly-changelog.sh
 SOURCE=`pwd`/builds
 LOGPATH=`pwd`
 
-DEST=~/Sites/Aquamacs/24
+DEST=dr@cc:/Sites/Aquamacs/24
 
 TMP=/tmp/builds
 
@@ -48,7 +48,9 @@ if [ -e $TMP/${NAME} ]; then
 
 	# update the change log 
         cd `dirname $CHGLOGSCRIPT` ; $CHGLOGSCRIPT
-        cd $DEST
+        #cd $DEST
+	cd -
+	rsync -r . $DEST
     else
         rm -r $TMP 
     fi
