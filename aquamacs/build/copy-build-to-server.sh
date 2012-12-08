@@ -5,7 +5,7 @@
 
 GNUNAME=GNU-Emacs-$2.dmg.bz2
 NAME=Aquamacs-$1.tar.bz2
-COPYORLINK='cp'  # 'ln -s'
+COPYORLINK='ln -s'
 CHGLOGSCRIPT=~/aquamacs-web/scripts/push-nightly-changelog.sh
 
 
@@ -13,16 +13,16 @@ CHGLOGSCRIPT=~/aquamacs-web/scripts/push-nightly-changelog.sh
 SOURCE=`pwd`/builds
 LOGPATH=`pwd`
 
-DEST=~/Sites/Aquamacs
+DEST=dr@cc:Sites/Aquamacs
 
 TMP=/tmp/builds
 
-cd $DEST
+#cd $DEST
 
 
-scp $LOGPATH/cvs-update.log . 2>/dev/null
-scp $LOGPATH/aquamacs-build.log . 2>/dev/null 
-scp $LOGPATH/emacs-build.log . 2>/dev/null
+scp $LOGPATH/cvs-update.log $DEST/ 2>/dev/null
+scp $LOGPATH/aquamacs-build.log $DEST/ 2>/dev/null 
+scp $LOGPATH/emacs-build.log $DEST/ 2>/dev/null
 cp cvs-update.log latest-logs/ 2>/dev/null
 
 rm -r $TMP 2>/dev/null
@@ -48,7 +48,8 @@ if [ -e $TMP/${NAME} ]; then
 
 	# update the change log 
         cd `dirname $CHGLOGSCRIPT` ; $CHGLOGSCRIPT
-        cd $DEST
+        #cd $DEST
+	cd -
     else
         rm -r $TMP 
     fi
@@ -57,3 +58,4 @@ fi
 echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\"><link href=\"http://aquamacs.org/iframe.css\" rel=\"stylesheet\" type=\"text/css\" /><BODY style=\"border: none ;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</BODY></HTML>" >>latest.html
+rsync -r builds latest-logs latest.html Aquamacs-nightly.tar.bz2 $DEST/
