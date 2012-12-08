@@ -17,12 +17,12 @@ DEST=dr@cc:Sites/Aquamacs/24
 
 TMP=/tmp/builds
 
-cd $DEST
+#cd $DEST
 
 
-scp $LOGPATH/cvs-update.log . 2>/dev/null
-scp $LOGPATH/aquamacs-build.log . 2>/dev/null 
-scp $LOGPATH/emacs-build.log . 2>/dev/null
+scp $LOGPATH/cvs-update.log $DEST/ 2>/dev/null
+scp $LOGPATH/aquamacs-build.log $DEST/ 2>/dev/null 
+scp $LOGPATH/emacs-build.log $DEST/ 2>/dev/null
 cp cvs-update.log latest-logs/ 2>/dev/null
 
 rm -r $TMP 2>/dev/null
@@ -50,7 +50,6 @@ if [ -e $TMP/${NAME} ]; then
         cd `dirname $CHGLOGSCRIPT` ; $CHGLOGSCRIPT
         #cd $DEST
 	cd -
-	rsync -r . $DEST
     else
         rm -r $TMP 
     fi
@@ -59,3 +58,4 @@ fi
 echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\"><link href=\"http://aquamacs.org/iframe.css\" rel=\"stylesheet\" type=\"text/css\" /><BODY style=\"border: none ;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</BODY></HTML>" >>latest.html
+rsync -r builds latest-logs $DEST/
