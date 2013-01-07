@@ -51,7 +51,7 @@ test $OMIT_AUTOGEN || ./autogen.sh ; \
 make clean ; \
 make all ; \
 make install ; \
-rm etc/DOC-* ; \
+rm -f etc/DOC-* ; \
 
 
 # generate symbol archive
