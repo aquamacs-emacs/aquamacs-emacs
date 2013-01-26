@@ -161,6 +161,7 @@
 (defvar epg-prompt-alist nil)
 
 (put 'epg-error 'error-conditions '(epg-error error))
+(put 'epg-error 'error-message "GPG error")
 
 (defun epg-make-data-from-file (file)
   "Make a data object from FILE."
@@ -970,7 +971,8 @@ This function is for internal use only."
   "Convert SIGNATURE to a human readable string."
   (let* ((user-id (cdr (assoc (epg-signature-key-id signature)
 			      epg-user-id-alist)))
-	 (pubkey-algorithm (epg-signature-pubkey-algorithm signature)))
+	 (pubkey-algorithm (epg-signature-pubkey-algorithm signature))
+	 (key-id (epg-signature-key-id signature)))
     (concat
      (cond ((eq (epg-signature-status signature) 'good)
 	    "Good signature from ")
@@ -984,7 +986,7 @@ This function is for internal use only."
 	    "Signature made by revoked key ")
 	   ((eq (epg-signature-status signature) 'no-pubkey)
 	    "No public key for "))
-     (epg-signature-key-id signature)
+     key-id
      (if user-id
 	 (concat " "
 		 (if (stringp user-id)
@@ -1130,12 +1132,12 @@ This function is for internal use only."
 	     (if (eq (epg-context-protocol context) 'CMS)
 		 epg-gpgsm-program
 	       epg-gpg-program)))
-  (let* ((args (append (list "--no-tty"
+  (let* ((agent-info (getenv "GPG_AGENT_INFO"))
+	 (args (append (list "--no-tty"
 			     "--status-fd" "1"
 			     "--yes")
 		       (if (and (not (eq (epg-context-protocol context) 'CMS))
-				(string-match ":" (or (getenv "GPG_AGENT_INFO")
-						      "")))
+				(string-match ":" (or agent-info "")))
 			   '("--use-agent"))
 		       (if (and (not (eq (epg-context-protocol context) 'CMS))
 				(epg-context-progress-callback context))
@@ -1161,7 +1163,10 @@ This function is for internal use only."
 	    (setq epg-debug-buffer (generate-new-buffer " *epg-debug*")))
 	  (set-buffer epg-debug-buffer)
 	  (goto-char (point-max))
-	  (insert (format "%s %s\n"
+	  (insert (if agent-info
+		      (format "GPG_AGENT_INFO=%s\n" agent-info)
+		    "GPG_AGENT_INFO is not set\n")
+		  (format "%s %s\n"
 			  (if (eq (epg-context-protocol context) 'CMS)
 			      epg-gpgsm-program
 			   epg-gpg-program)

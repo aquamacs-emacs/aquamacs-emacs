@@ -2718,7 +2718,7 @@ If READ-CHARSET, ask for a coding system."
       (while (re-search-forward
 	      "\\(\\(https?\\|ftp\\)://\\S-+\\) *\n\\(\\S-+\\)" nil t)
 	(replace-match "\\1\\3" t)))
-    (when (interactive-p)
+    (when (gmm-called-interactively-p 'any)
       (gnus-treat-article nil))))
 
 (defun article-wash-html ()
@@ -2877,21 +2877,23 @@ message header will be added to the bodies of the \"text/html\" parts."
 	     ;; Add a meta html tag to specify charset and a header.
 	     (cond
 	      (header
-	       (let (title eheader body hcharset coding force-charset)
+	       (let (title eheader body hcharset coding)
 		 (with-temp-buffer
 		   (mm-enable-multibyte)
 		   (setq case-fold-search t)
 		   (insert header "\n")
 		   (setq title (message-fetch-field "subject"))
 		   (goto-char (point-min))
-		   (while (re-search-forward "\\(<\\)\\|\\(>\\)\\|&" nil t)
+		   (while (re-search-forward "\\(<\\)\\|\\(>\\)\\|\\(&\\)\\|\n"
+					     nil t)
 		     (replace-match (cond ((match-beginning 1) "&lt;")
 					  ((match-beginning 2) "&gt;")
-					  (t "&amp;"))))
+					  ((match-beginning 3) "&amp;")
+					  (t "<br>\n"))))
 		   (goto-char (point-min))
-		   (insert "<pre>\n")
+		   (insert "<div align=\"left\">\n")
 		   (goto-char (point-max))
-		   (insert "</pre>\n<hr>\n")
+		   (insert "</div>\n<hr>\n")
 		   ;; We have to examine charset one by one since
 		   ;; charset specified in parts might be different.
 		   (if (eq charset 'gnus-decoded)
@@ -2900,8 +2902,7 @@ message header will be added to the bodies of the \"text/html\" parts."
 							      charset)
 			     title (when title
 				     (mm-encode-coding-string title charset))
-			     body (mm-encode-coding-string content charset)
-			     force-charset t)
+			     body (mm-encode-coding-string content charset))
 		     (setq hcharset (mm-find-mime-charset-region (point-min)
 								 (point-max)))
 		     (cond ((= (length hcharset) 1)
@@ -2932,8 +2933,7 @@ message header will be added to the bodies of the \"text/html\" parts."
 				       body (mm-encode-coding-string
 					     (mm-decode-coding-string
 					      content body)
-					     charset)
-				       force-charset t)))
+					     charset))))
 			   (setq charset hcharset
 				 eheader (mm-encode-coding-string
 					  (buffer-string) coding)
@@ -2947,7 +2947,7 @@ message header will be added to the bodies of the \"text/html\" parts."
 		   (mm-disable-multibyte)
 		   (insert body)
 		   (when charset
-		     (mm-add-meta-html-tag handle charset force-charset))
+		     (mm-add-meta-html-tag handle charset t))
 		   (when title
 		     (goto-char (point-min))
 		     (unless (search-forward "<title>" nil t)
@@ -4539,18 +4539,17 @@ commands:
 	    (gnus-article-mode))
 	  (setq truncate-lines gnus-article-truncate-lines)
 	  (current-buffer))
-      (with-current-buffer (gnus-get-buffer-create name)
-	(gnus-article-mode)
-	(setq truncate-lines gnus-article-truncate-lines)
-	(make-local-variable 'gnus-summary-buffer)
-	(setq gnus-summary-buffer
-	      (gnus-summary-buffer-name gnus-newsgroup-name))
-	(gnus-summary-set-local-parameters gnus-newsgroup-name)
-	(when article-lapsed-timer
-	  (gnus-stop-date-timer))
-	(when gnus-article-update-date-headers
-	  (gnus-start-date-timer gnus-article-update-date-headers))
-	(current-buffer)))))
+      (let ((summary gnus-summary-buffer))
+	(with-current-buffer (gnus-get-buffer-create name)
+	  (gnus-article-mode)
+	  (setq truncate-lines gnus-article-truncate-lines)
+	  (set (make-local-variable 'gnus-summary-buffer) summary)
+	  (gnus-summary-set-local-parameters gnus-newsgroup-name)
+	  (when article-lapsed-timer
+	    (gnus-stop-date-timer))
+	  (when gnus-article-update-date-headers
+	    (gnus-start-date-timer gnus-article-update-date-headers))
+	  (current-buffer))))))
 
 (defun gnus-article-stop-animations ()
   (dolist (timer (and (boundp 'timer-list)

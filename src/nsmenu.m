@@ -132,8 +132,7 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
   static EmacsMenu *last_submenu = nil;
   BOOL needsSet = NO;
   const char *submenuTitle = [[submenu title] UTF8String];
-  extern int waiting_for_input;
-  int owfi;
+  bool owfi;
   Lisp_Object items;
   widget_value *wv, *first_wv, *prev_wv = 0;
   int i;
@@ -200,7 +199,8 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
       /* Fully parse one or more of the submenus. */
       int n = 0;
       int *submenu_start, *submenu_end;
-      int *submenu_top_level_items, *submenu_n_panes;
+      bool *submenu_top_level_items;
+      int *submenu_n_panes;
       struct buffer *prev = current_buffer;
       Lisp_Object buffer;
       ptrdiff_t specpdl_count = SPECPDL_INDEX ();
@@ -818,11 +818,6 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 #ifdef NS_IMPL_GNUSTEP
   if ([[self window] isVisible])
     [self sizeToFit];
-#else
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_2
-  if ([self supermenu] == nil)
-    [self sizeToFit];
-#endif
 #endif
 }
 
@@ -844,7 +839,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 
 /* run a menu in popup mode */
 - (Lisp_Object)runMenuAt: (NSPoint)p forFrame: (struct frame *)f
-                 keymaps: (int)keymaps
+                 keymaps: (bool)keymaps
 {
   EmacsView *view = FRAME_NS_VIEW (f);
   NSEvent *e, *event;
@@ -883,7 +878,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
    ========================================================================== */
 
 Lisp_Object
-ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
+ns_menu_show (FRAME_PTR f, int x, int y, bool for_click, bool keymaps,
 	      Lisp_Object title, const char **error)
 {
   EmacsMenu *pmenu;
@@ -905,7 +900,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 
 #if 0
   /* FIXME: a couple of one-line differences prevent reuse */
-  wv = digest_single_submenu (0, menu_items_used, Qnil);
+  wv = digest_single_submenu (0, menu_items_used, 0);
 #else
   {
   widget_value *save_wv = 0, *prev_wv = 0;

@@ -93,8 +93,6 @@ EmacsTooltip *ns_tooltip;
 /* Need forward declaration here to preserve organizational integrity of file */
 Lisp_Object Fx_open_connection (Lisp_Object, Lisp_Object, Lisp_Object);
 
-extern BOOL ns_in_resize;
-
 /* Static variables to handle applescript execution.  */
 static NSString *as_script;
 static Lisp_Object *as_result;
@@ -434,9 +432,6 @@ x_set_icon_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   NSView *view = FRAME_NS_VIEW (f);
   NSTRACE (x_set_icon_name);
 
-  if (ns_in_resize)
-    return;
-
   /* see if it's changed */
   if (STRINGP (arg))
     {
@@ -511,9 +506,6 @@ static void
 ns_set_name (struct frame *f, Lisp_Object name, int explicit)
 {
   NSTRACE (ns_set_name);
-
-  if (ns_in_resize)
-    return;
 
   /* Make sure that requests from lisp code override requests from
      Emacs redisplay code.  */
@@ -613,7 +605,7 @@ ns_set_name_as_filename (struct frame *f)
   NSString *str;
   NSTRACE (ns_set_name_as_filename);
 
-  if (f->explicit_name || ! NILP (f->title) || ns_in_resize)
+  if (f->explicit_name || ! NILP (f->title))
     return;
 
   block_input ();
@@ -1019,7 +1011,7 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_fringe_width, /* generic OK */
   x_set_fringe_width, /* generic OK */
   0, /* x_set_wait_for_wm, will ignore */
-  x_set_fullscreen,  /* generic OK */
+  x_set_fullscreen, /* generic OK */
   x_set_font_backend, /* generic OK */
   x_set_alpha,
   0, /* x_set_sticky */
@@ -1184,7 +1176,6 @@ This function is an internal primitive--use `make-frame' instead.  */)
       f = make_frame (1);
 
   XSETFRAME (frame, f);
-  FRAME_CAN_HAVE_SCROLL_BARS (f) = 1;
 
   f->terminal = dpyinfo->terminal;
 
@@ -1347,6 +1338,8 @@ This function is an internal primitive--use `make-frame' instead.  */)
                        RES_TYPE_NUMBER);
   x_default_parameter (f, parms, Qalpha, Qnil,
                        "alpha", "Alpha", RES_TYPE_NUMBER);
+  x_default_parameter (f, parms, Qfullscreen, Qnil,
+                       "fullscreen", "Fullscreen", RES_TYPE_SYMBOL);
 
   width = FRAME_COLS (f);
   height = FRAME_LINES (f);
@@ -2074,13 +2067,15 @@ when `ns-popup-save-panel' was called.
 }
 
 
-DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 4, 0,
+DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 5, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
 Optional arg DIR, if non-nil, supplies a default directory.
 Optional arg MUSTMATCH, if non-nil, means the returned file or
 directory must exist.
-Optional arg INIT, if non-nil, provides a default file name to use.  */)
-     (Lisp_Object prompt, Lisp_Object dir, Lisp_Object mustmatch, Lisp_Object init)
+Optional arg INIT, if non-nil, provides a default file name to use.
+Optional arg DIR_ONLY_P, if non-nil, means choose only directories.  */)
+  (Lisp_Object prompt, Lisp_Object dir, Lisp_Object mustmatch,
+   Lisp_Object init, Lisp_Object dir_only_p)
 {
   static id fileDelegate = nil;
   int ret;
@@ -2097,28 +2092,47 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
 
   check_ns ();
 
+  if (fileDelegate == nil)
+    fileDelegate = [EmacsFileDelegate new];
+
   [NSCursor setHiddenUntilMouseMoves: NO];
 
   if ([dirS characterAtIndex: 0] == '~')
     dirS = [dirS stringByExpandingTildeInPath];
 
-  panel = NILP (mustmatch) ?
+  panel = NILP (mustmatch) && NILP (dir_only_p) ?
     (id)[EmacsSavePanel savePanel] : (id)[EmacsOpenPanel openPanel];
 
   [panel setTitle: promptS];
 
-  /* Puma (10.1) does not have */
-  // if ([panel respondsToSelector: @selector (setAllowsOtherFileTypes:)])
-  //   [panel setAllowsOtherFileTypes: YES];
-
+  [panel setAllowsOtherFileTypes: YES];
   [panel setTreatsFilePackagesAsDirectories: YES];
   /* must provide - users will have a hard time switching this off otherwise */
   [panel setCanSelectHiddenExtension:NO];
   [panel setExtensionHidden:NO];
+  [panel setDelegate: fileDelegate];
 
   panelOK = 0;
+  if (! NILP (dir_only_p)) 
+    {
+      [panel setCanChooseDirectories: YES];
+      [panel setCanChooseFiles: NO];
+    }
+  
   block_input ();
-  if (NILP (mustmatch))
+#if defined (NS_IMPL_COCOA) && \
+  MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+  if (! NILP (mustmatch) || ! NILP (dir_only_p))
+    [panel setAllowedFileTypes: nil];
+  if (dirS) [panel setDirectoryURL: [NSURL fileURLWithPath: dirS]];
+  if (initS && NILP (Ffile_directory_p (init)))
+    [panel setNameFieldStringValue: [initS lastPathComponent]];
+  else
+    [panel setNameFieldStringValue: @""];
+    
+  ret = [panel runModal];
+#else
+  if (NILP (mustmatch) && NILP (dir_only_p))
     {
       ret = [panel runModalForDirectory: dirS file: initS];
     }
@@ -2127,6 +2141,7 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
       [panel setCanChooseDirectories: YES];
       ret = [panel runModalForDirectory: dirS file: initS types: nil];
     }
+#endif
 
   ret = (ret == NSOKButton) || panelOK;
 
@@ -2554,32 +2569,29 @@ DEFUN ("ns-list-services", Fns_list_services, Sns_list_services, 0, 0, 0,
 
   check_ns ();
   svcs = [[NSMenu alloc] initWithTitle: @"Services"];
-  [NSApp setServicesMenu: svcs];  /* this and next rebuild on <10.4 */
+  [NSApp setServicesMenu: svcs];
   [NSApp registerServicesMenuSendTypes: ns_send_types
                            returnTypes: ns_return_types];
 
 /* On Tiger, services menu updating was made lazier (waits for user to
    actually click on the menu), so we have to force things along: */
 #ifdef NS_IMPL_COCOA
-  if (NSAppKitVersionNumber >= 744.0)
+  delegate = [svcs delegate];
+  if (delegate != nil)
     {
-      delegate = [svcs delegate];
-      if (delegate != nil)
+      if ([delegate respondsToSelector: @selector (menuNeedsUpdate:)])
+        [delegate menuNeedsUpdate: svcs];
+      if ([delegate respondsToSelector:
+                       @selector (menu:updateItem:atIndex:shouldCancel:)])
         {
-          if ([delegate respondsToSelector: @selector (menuNeedsUpdate:)])
-              [delegate menuNeedsUpdate: svcs];
-          if ([delegate respondsToSelector:
-                            @selector (menu:updateItem:atIndex:shouldCancel:)])
-            {
-              int i, len = [delegate numberOfItemsInMenu: svcs];
-              for (i =0; i<len; i++)
-                  [svcs addItemWithTitle: @"" action: NULL keyEquivalent: @""];
-              for (i =0; i<len; i++)
-                  if (![delegate menu: svcs
-                           updateItem: (NSMenuItem *)[svcs itemAtIndex: i]
-                              atIndex: i shouldCancel: NO])
-                    break;
-            }
+          int i, len = [delegate numberOfItemsInMenu: svcs];
+          for (i =0; i<len; i++)
+            [svcs addItemWithTitle: @"" action: NULL keyEquivalent: @""];
+          for (i =0; i<len; i++)
+            if (![delegate menu: svcs
+                     updateItem: (NSMenuItem *)[svcs itemAtIndex: i]
+                        atIndex: i shouldCancel: NO])
+              break;
         }
     }
 #endif
@@ -2679,7 +2691,7 @@ ns_do_applescript (NSString* script, Lisp_Object *result)
 	  *result = Qt;
 	  // script returned an AppleScript result
 	  if ((typeUnicodeText == [returnDescriptor descriptorType]) ||
-#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+#if defined (NS_IMPL_COCOA)
 	      (typeUTF16ExternalRepresentation
 	       == [returnDescriptor descriptorType]) ||
 #endif
@@ -2714,7 +2726,9 @@ ns_do_applescript (NSString* script, Lisp_Object *result)
 void
 ns_run_ascript (void)
 {
-  as_status = ns_do_applescript (as_script, as_result);
+  if (! NILP (as_script))
+    as_status = ns_do_applescript (as_script, as_result);
+  as_script = Qnil;
 }
 
 DEFUN ("ns-do-applescript", Fns_do_applescript, Sns_do_applescript, 1, 1, 0,
@@ -2753,11 +2767,14 @@ In case the execution fails, an error is signaled. */)
                                data2: NSAPP_DATA2_RUNASSCRIPT];
 
   [NSApp postEvent: nxev atStart: NO];
-  [NSApp run];
+
+  // If there are other events, the event loop may exit.  Keep running
+  // until the script has been handeled.  */
+  while (! NILP (as_script))
+    [NSApp run];
 
   status = as_status;
   as_status = 0;
-  as_script = Qnil;
   as_result = 0;
   unblock_input ();
   if (status == 0)
@@ -3092,20 +3109,6 @@ int
 x_pixel_height (struct frame *f)
 {
   return FRAME_PIXEL_HEIGHT (f);
-}
-
-
-int
-x_char_width (struct frame *f)
-{
-  return FRAME_COLUMN_WIDTH (f);
-}
-
-
-int
-x_char_height (struct frame *f)
-{
-  return FRAME_LINE_HEIGHT (f);
 }
 
 

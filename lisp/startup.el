@@ -41,15 +41,20 @@
 (defcustom initial-buffer-choice nil
   "Buffer to show after starting Emacs.
 If the value is nil and `inhibit-startup-screen' is nil, show the
-startup screen.  If the value is a string, visit the specified file
-or directory using `find-file'.  If t, open the `*scratch*'
-buffer."
+startup screen.  If the value is a string, switch to a buffer
+visiting the file or directory specified by that string.  If the
+value is a function, switch to the buffer returned by that
+function.  If t, open the `*scratch*' buffer.
+
+A string value also causes emacsclient to open the specified file
+or directory when no target file is specified."
   :type '(choice
 	  (const     :tag "Startup screen" nil)
 	  (directory :tag "Directory" :value "~/")
 	  (file      :tag "File" :value "~/.emacs")
+          (function  :tag "Function")
 	  (const     :tag "Lisp scratch buffer" t))
-  :version "23.1"
+  :version "24.4"
   :group 'initialization)
 
 (defcustom show-scratch-buffer-on-startup t
@@ -900,7 +905,8 @@ Amongst another things, it parses the command-line arguments."
       ;; Initialize the window system. (Open connection, etc.)
       (funcall
        (or (cdr (assq initial-window-system window-system-initialization-alist))
-	   (error "Unsupported window system `%s'" initial-window-system))))
+	   (error "Unsupported window system `%s'" initial-window-system)))
+      (put initial-window-system 'window-system-initialized t))
     ;; If there was an error, print the error message and exit.
     (error
      (princ
@@ -1009,7 +1015,6 @@ Amongst another things, it parses the command-line arguments."
                  (not (eq 0 (cdr tool-bar-lines)))))))
 
   (let ((old-scalable-fonts-allowed scalable-fonts-allowed)
-	(old-font-list-limit font-list-limit)
 	(old-face-ignored-fonts face-ignored-fonts))
 
     ;; Run the site-start library if it exists.  The point of this file is
@@ -1193,7 +1198,6 @@ the `--debug-init' option to view a complete error backtrace."
     ;; face realization, clear the face cache so that new faces will
     ;; be realized.
     (unless (and (eq scalable-fonts-allowed old-scalable-fonts-allowed)
-		 (eq font-list-limit old-font-list-limit)
 		 (eq face-ignored-fonts old-face-ignored-fonts))
       (clear-face-cache)))
 
@@ -1616,27 +1620,24 @@ information given would otherwise be irrelevant to Aquamacs users.
 		       :face '(variable-pitch (:height 0.8))
 		       emacs-copyright
 		       "\n")
-  (and auto-save-list-file-prefix
-       ;; Don't signal an error if the
-       ;; directory for auto-save-list files
-       ;; does not yet exist.
-       (file-directory-p (file-name-directory
-			  auto-save-list-file-prefix))
-       (directory-files
-	(file-name-directory auto-save-list-file-prefix)
-	nil
-	(concat "\\`"
-		(regexp-quote (file-name-nondirectory
-			       auto-save-list-file-prefix)))
-	t)
-       (fancy-splash-insert :face '(variable-pitch font-lock-comment-face)
-			    "\nIf an Emacs session crashed recently, "
-			    "type "
-			    :face '(fixed-pitch font-lock-comment-face)
-			    "Meta-x recover-session RET"
-			    :face '(variable-pitch font-lock-comment-face)
-			    "\nto recover"
-			    " the files you were editing."))
+  (when auto-save-list-file-prefix
+    (let ((dir  (file-name-directory auto-save-list-file-prefix))
+	  (name (file-name-nondirectory auto-save-list-file-prefix))
+	  files)
+      ;; Don't warn if the directory for auto-save-list files does not
+      ;; yet exist.
+      (and (file-directory-p dir)
+	   (setq files (directory-files dir nil (concat "\\`" name) t))
+	   (fancy-splash-insert :face '(variable-pitch font-lock-comment-face)
+				(if (= (length files) 1)
+				    "\nAn auto-save file list was found.  "
+				  "\nAuto-save file lists were found.  ")
+				"If an Emacs session crashed recently,\ntype "
+				:link `("M-x recover-session RET"
+					,(lambda (_button)
+					   (call-interactively
+					    'recover-session)))
+				" to recover the files you were editing."))))
 
   (when concise
     (fancy-splash-insert
@@ -1745,7 +1746,6 @@ splash screen in another window."
 	(force-mode-line-update))
       (use-local-map splash-screen-keymap)
       (setq tab-width 22)
-      (message "%s" (startup-echo-area-message))
       (setq buffer-read-only t)
       (goto-char (point-min))
       (forward-line 3))))
@@ -2361,10 +2361,14 @@ A fancy display is used on graphic displays, normal otherwise."
 	     (set-buffer-modified-p nil))))
 
     (when initial-buffer-choice
-      (cond ((eq initial-buffer-choice t)
-	     (switch-to-buffer (get-buffer-create "*scratch*")))
-	    ((stringp initial-buffer-choice)
-	     (find-file initial-buffer-choice))))
+      (let ((buf
+             (cond ((stringp initial-buffer-choice)
+		    (find-file-noselect initial-buffer-choice))
+		   ((functionp initial-buffer-choice)
+		    (funcall initial-buffer-choice)))))
+	(switch-to-buffer
+	 (if (buffer-live-p buf) buf (get-buffer-create "*scratch*"))
+	 'norecord)))
 
     (if (or inhibit-startup-screen
 	    initial-buffer-choice

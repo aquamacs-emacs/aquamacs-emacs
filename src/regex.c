@@ -28,7 +28,7 @@
      rather than at run-time, so that re_match can be reentrant.
 */
 
-/* AIX requires this to be the first thing in the file. */
+/* AIX requires this to be the first thing in the file.  */
 #if defined _AIX && !defined REGEX_MALLOC
   #pragma alloca
 #endif
@@ -1834,7 +1834,6 @@ typedef struct
 /* Explicit quit checking is needed for Emacs, which uses polling to
    process input events.  */
 #ifdef emacs
-extern int immediate_quit;
 # define IMMEDIATE_QUIT_CHECK			\
     do {					\
       if (immediate_quit) QUIT;			\

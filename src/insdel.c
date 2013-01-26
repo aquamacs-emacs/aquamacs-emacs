@@ -90,7 +90,7 @@ check_markers (void)
 void
 move_gap (ptrdiff_t charpos)
 {
-  move_gap_both (charpos, charpos_to_bytepos (charpos));
+  move_gap_both (charpos, CHAR_TO_BYTE (charpos));
 }
 
 /* Move gap to byte position BYTEPOS, which is also char position CHARPOS.
@@ -1755,9 +1755,9 @@ del_range_2 (ptrdiff_t from, ptrdiff_t from_byte,
 
   return deletion;
 }
-
-/* Call this if you're about to change the region of BUFFER from
-   character positions START to END.  This checks the read-only
+
+/* Call this if you're about to change the region of current buffer
+   from character positions START to END.  This checks the read-only
    properties of the region, calls the necessary modification hooks,
    and warns the next redisplay that it should pay attention to that
    area.
@@ -1766,16 +1766,11 @@ del_range_2 (ptrdiff_t from, ptrdiff_t from_byte,
    Otherwise set CHARS_MODIFF to the new value of MODIFF.  */
 
 void
-modify_region (struct buffer *buffer, ptrdiff_t start, ptrdiff_t end,
-	       bool preserve_chars_modiff)
+modify_region_1 (ptrdiff_t start, ptrdiff_t end, bool preserve_chars_modiff)
 {
-  struct buffer *old_buffer = current_buffer;
-
-  set_buffer_internal (buffer);
-
   prepare_to_modify_buffer (start, end, NULL);
 
-  BUF_COMPUTE_UNCHANGED (buffer, start - 1, end);
+  BUF_COMPUTE_UNCHANGED (current_buffer, start - 1, end);
 
   if (MODIFF <= SAVE_MODIFF)
     record_first_change ();
@@ -1783,11 +1778,9 @@ modify_region (struct buffer *buffer, ptrdiff_t start, ptrdiff_t end,
   if (! preserve_chars_modiff)
     CHARS_MODIFF = MODIFF;
 
-  bset_point_before_scroll (buffer, Qnil);
-
-  set_buffer_internal (old_buffer);
+  bset_point_before_scroll (current_buffer, Qnil);
 }
-
+
 /* Check that it is okay to modify the buffer between START and END,
    which are char positions.
 
@@ -1807,9 +1800,10 @@ prepare_to_modify_buffer (ptrdiff_t start, ptrdiff_t end,
   if (!NILP (BVAR (current_buffer, read_only)))
     Fbarf_if_buffer_read_only ();
 
-  /* Let redisplay consider other windows than selected_window
-     if modifying another buffer.  */
-  if (XBUFFER (XWINDOW (selected_window)->buffer) != current_buffer)
+  /* If we're modifying the buffer other than shown in a selected window,
+     let redisplay consider other windows if this buffer is visible.  */
+  if (XBUFFER (XWINDOW (selected_window)->buffer) != current_buffer
+      && buffer_window_count (current_buffer))
     ++windows_or_buffers_changed;
 
   if (buffer_intervals (current_buffer))
@@ -1861,7 +1855,7 @@ prepare_to_modify_buffer (ptrdiff_t start, ptrdiff_t end,
 	  : (!NILP (Vselect_active_regions)
 	     && !NILP (Vtransient_mark_mode))))
     {
-      ptrdiff_t b = XMARKER (BVAR (current_buffer, mark))->charpos;
+      ptrdiff_t b = marker_position (BVAR (current_buffer, mark));
       ptrdiff_t e = PT;
       if (b < e)
 	Vsaved_region_selection = make_buffer_string (b, e, 0);

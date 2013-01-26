@@ -54,17 +54,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to the number of bits in type 'wint_t'. */
 #undef BITSIZEOF_WINT_T
 
-/* Define if getwd should not be used. */
-#undef BROKEN_GETWD
-
 /* Define if get_current_dir_name should not be used. */
 #undef BROKEN_GET_CURRENT_DIR_NAME
 
 /* Define on FreeBSD to work around an issue when reading from a PTY. */
 #undef BROKEN_PTY_READ_AFTER_EAGAIN
-
-/* Define if the system is compatible with BSD 4.2. */
-#undef BSD4_2
 
 /* Define if the system is compatible with BSD 4.2. */
 #undef BSD_SYSTEM
@@ -76,7 +70,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #undef CANNOT_DUMP
 
 /* Define this to enable compile time checks for the Lisp_Object data type. */
-#undef CHECK_LISP_OBJECT_TYPE
+/* #undef CHECK_LISP_OBJECT_TYPE */
 
 /* Define if you want lock files to be written, so that Emacs can tell
    instantly when you try to modify a file that someone else has modified in
@@ -118,9 +112,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Character that separates directories in a file name. */
 #define DIRECTORY_SEP '/'
 
-/* Define if dispnew.c should include stdio_ext.h. */
-#undef DISPNEW_NEEDS_STDIO_EXT
-
 /* Define if process.c does not need to close a pty to make it a controlling
    terminal (it is already a controlling terminal of the subprocess, because
    we did ioctl TIOCSCTTY). */
@@ -148,7 +139,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Enable compile-time and run-time bounds-checking, and some warnings,
       without upsetting glibc 2.15+. */
-   #if defined __OPTIMIZE__ && __OPTIMIZE__
+   #if !defined _FORTIFY_SOURCE && defined __OPTIMIZE__ && __OPTIMIZE__
    # define _FORTIFY_SOURCE 2
    #endif
 
@@ -183,8 +174,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    setjmp does work.  */
 #define GC_SETJMP_WORKS 1
 
-/* Define to 1 if the `getpgrp' function requires zero arguments. */
-#undef GETPGRP_VOID
+/* Define to the type of elements in the array set by `getgroups'. Usually
+   this is either `int' or `gid_t'. */
+#undef GETGROUPS_T
+
+/* Define this to 1 if getgroups(0,NULL) does not return the number of groups.
+   */
+#undef GETGROUPS_ZERO_BUG
 
 /* Define if gettimeofday clobbers the localtime buffer. */
 #undef GETTIMEOFDAY_CLOBBERS_LOCALTIME
@@ -195,6 +191,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define this to enable glyphs debugging code. */
 /* #undef GLYPH_DEBUG */
+
+/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
+   whether the gnulib module close-stream shall be considered present. */
+#undef GNULIB_CLOSE_STREAM
+
+/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
+   whether the gnulib module faccessat shall be considered present. */
+#undef GNULIB_FACCESSAT
 
 /* Define to a C preprocessor expression that evaluates to 1 or 0, depending
    whether the gnulib module fscanf shall be considered present. */
@@ -216,6 +220,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to set the G_SLICE environment variable to "always-malloc" at
    startup, if using GTK. */
 #undef G_SLICE_ALWAYS_MALLOC
+
+/* Define to 1 if you have the `access' function. */
+#undef HAVE_ACCESS
 
 /* Define to 1 if the file /usr/lpp/X11/bin/smt.exp exists. */
 #undef HAVE_AIX_SMT_EXP
@@ -248,9 +255,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the `clock_settime' function. */
 #undef HAVE_CLOCK_SETTIME
-
-/* Define to 1 if you have the `closedir' function. */
-#define HAVE_CLOSEDIR 1
 
 /* Define to 1 if you have the <coff.h> header file. */
 #undef HAVE_COFF_H
@@ -318,6 +322,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    */
 #define HAVE_DECL_TZNAME 1
 
+/* Define to 1 if you have the declaration of `unsetenv', and to 0 if you
+   don't. */
+#undef HAVE_DECL_UNSETENV
+
+/* Define to 1 if you have the declaration of `__fpending', and to 0 if you
+   don't. */
+#undef HAVE_DECL___FPENDING
+
 /* Define to 1 if you have the declaration of `__sys_siglist', and to 0 if you
    don't. */
 #undef HAVE_DECL___SYS_SIGLIST
@@ -331,11 +343,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the `difftime' function. */
 #undef HAVE_DIFFTIME
 
-/* Define to 1 if you have the <dirent.h> header file. */
-#undef HAVE_DIRENT_H
-
 /* Define to 1 if you have the 'dup2' function. */
 #define HAVE_DUP2 1
+
+/* Define to 1 if you have the `eaccess' function. */
+#undef HAVE_EACCESS
 
 /* Define to 1 if you have the `endgrent' function. */
 #undef HAVE_ENDGRENT
@@ -352,14 +364,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the <execinfo.h> header file. */
 #define HAVE_EXECINFO_H 1
 
-/* Define to 1 if you have the <fcntl.h> header file. */
-#undef HAVE_FCNTL_H
+/* Define to 1 if you have the `faccessat' function. */
+#undef HAVE_FACCESSAT
 
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
-
-/* Define to 1 if you have the `fpathconf' function. */
-#undef HAVE_FPATHCONF
 
 /* Define to 1 if you have the `freeifaddrs' function. */
 #undef HAVE_FREEIFADDRS
@@ -391,17 +400,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the `getaddrinfo' function. */
 #undef HAVE_GETADDRINFO
 
-/* Define to 1 if you have the `getcwd' function.
-   If you think about defining HAVE_GETCWD, don't: the alternative
-   getwd is redefined on w32.c, and does not really return the current
-   directory, to get the desired results elsewhere in Emacs.  */
-#undef HAVE_GETCWD
-
 /* Define to 1 if you have the `getdelim' function. */
 #undef HAVE_GETDELIM
 
 /* Define to 1 if you have the `getgrent' function. */
 #undef HAVE_GETGRENT
+
+/* Define to 1 if your system has a working `getgroups' function. */
+#undef HAVE_GETGROUPS
 
 /* Define to 1 if you have the `gethostname' function. */
 #define HAVE_GETHOSTNAME 1
@@ -441,9 +447,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the `gettimeofday' function. */
 #define HAVE_GETTIMEOFDAY 1
-
-/* Define to 1 if you have the `getwd' function. */
-#undef HAVE_GETWD
 
 /* Define to 1 if you have the `get_current_dir_name' function. */
 #undef HAVE_GET_CURRENT_DIR_NAME
@@ -518,6 +521,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have inet sockets. */
 #define HAVE_INET_SOCKETS 1
 
+/* Define to 1 to use inotify. */
+#undef HAVE_INOTIFY
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -568,6 +574,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the `dnet' library (-ldnet). */
 #undef HAVE_LIBDNET
+
+/* Define to 1 if you have the <libgen.h> header file. */
+#undef HAVE_LIBGEN_H
 
 /* Define to 1 if you have the hesiod library (-lhesiod). */
 #undef HAVE_LIBHESIOD
@@ -682,9 +691,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have a working `mmap' system call. */
 #undef HAVE_MMAP
 
-/* Define if you have mouse support. */
-#define HAVE_MOUSE 1
-
 /* Define to 1 if you have the `nanotime' function. */
 #undef HAVE_NANOTIME
 
@@ -701,6 +707,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    Mac OS X. */
 #undef HAVE_NS
 
+/* Define to use native MS Windows GUI. */
+#define HAVE_NTGUI 1
+
 /* Define to 1 if libotf has OTF_get_variation_glyphs. */
 #undef HAVE_OTF_GET_VARIATION_GLYPHS
 
@@ -712,6 +721,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the <png.h> header file. */
 #undef HAVE_PNG_H
+
+/* Define to 1 if using POSIX ACL support. */
+#define HAVE_POSIX_ACL 1
 
 /* Define to 1 if you have the `posix_memalign' function. */
 #undef HAVE_POSIX_MEMALIGN
@@ -774,22 +786,19 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define HAVE_SENDTO 1
 
 /* Define to 1 if you have the `setitimer' function. */
-#undef HAVE_SETITIMER
+#define HAVE_SETITIMER 1
 
 /* Define to 1 if you have the `setlocale' function. */
 #define HAVE_SETLOCALE 1
 
-/* Define to 1 if you have the `setpgid' function. */
-#undef HAVE_SETPGID
-
 /* Define to 1 if you have the `setrlimit' function. */
 #undef HAVE_SETRLIMIT
 
-/* Define to 1 if you have the `setsid' function. */
-#undef HAVE_SETSID
-
 /* Define to 1 if you have the `shutdown' function. */
 #define HAVE_SHUTDOWN 1
+
+/* Define to 1 if you have the `sig2str' function. */
+#undef HAVE_SIG2STR
 
 /* Define to 1 if 'sig_atomic_t' is a signed integer type. */
 #undef HAVE_SIGNED_SIG_ATOMIC_T
@@ -914,6 +923,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the <sys/bitypes.h> header file. */
 #undef HAVE_SYS_BITYPES_H
 
+/* Define to 1 if you have the <sys/inotify.h> header file. */
+#undef HAVE_SYS_INOTIFY_H
+
 /* Define to 1 if you have the <sys/inttypes.h> header file. */
 #undef HAVE_SYS_INTTYPES_H
 
@@ -960,13 +972,16 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #undef HAVE_SYS_VLIMIT_H
 
 /* Define to 1 if you have <sys/wait.h> that is POSIX.1 compatible. */
-#undef HAVE_SYS_WAIT_H
+#define HAVE_SYS_WAIT_H 1
 
 /* Define to 1 if you have the <term.h> header file. */
 #undef HAVE_TERM_H
 
 /* Define to 1 if you have the tiff library (-ltiff). */
 #undef HAVE_TIFF
+
+/* Define to 1 if you have the `timer_settime' function. */
+#undef HAVE_TIMER_SETTIME
 
 /* Define if struct tm has the tm_gmtoff member. */
 #undef HAVE_TM_GMTOFF
@@ -987,6 +1002,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
+
+/* Define to 1 if you have the `unsetenv' function. */
+#define HAVE_UNSETENV 1
 
 /* Define to 1 if the system has the type 'unsigned long long int'. */
 #undef HAVE_UNSIGNED_LONG_LONG_INT
@@ -1210,8 +1228,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Number of chars of output in the buffer of a stdio stream. */
-#undef PENDING_OUTPUT_COUNT
+/* the number of pending output bytes on stream 'fp' */
+#define PENDING_OUTPUT_N_BYTES  (fp->_ptr - fp->_base)
 
 /* Define to empty to suppress deprecation warnings when building with
    --enable-gcc-warnings and with libpng versions before 1.5, which lack
@@ -1267,9 +1285,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Character that separates PATH elements. */
 #define SEPCHAR ';'
-
-/* Define if process.c:child_setup should not call setpgrp. */
-#undef SETPGRP_RELEASES_CTTY
 
 /* How to set up a slave PTY, if needed. */
 #undef SETUP_SLAVE_PTY
@@ -1336,9 +1351,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    timespec. */
 #undef TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC
 
-/* Undocumented. */
-#undef ULIMIT_BREAK_VALUE
-
 /* Define to 1 for Encore UMAX. */
 #undef UMAX
 
@@ -1393,7 +1405,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #undef USG_SUBTTY_WORKS
 
 /* Version number of package */
-#define VERSION "24.2.50"
+#define VERSION "24.3.50"
+
+/* Define to 1 if unsetenv returns void instead of int. */
+#undef VOID_UNSETENV
 
 /* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
    'wchar_t'. */
@@ -1527,11 +1542,19 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
      when FOO is an inline function in the header; see
      <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54113>.
    _GL_INLINE_HEADER_END contains useful stuff to put
-     in the same include file, after uses of _GL_INLINE.  */
-#if __GNUC__ ? __GNUC_STDC_INLINE__ : 199901L <= __STDC_VERSION__
+     in the same include file, after uses of _GL_INLINE.
+
+   Suppress the use of extern inline on Apple's platforms,
+   as Libc-825.25 (2012-09-19) is incompatible with it; see
+   <http://lists.gnu.org/archive/html/bug-gnulib/2012-12/msg00023.html>.
+   Perhaps Apple will fix this some day.  */
+#if ((__GNUC__ \
+      ? defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__ \
+      : 199901L <= __STDC_VERSION__) \
+     && !defined __APPLE__)
 # define _GL_INLINE inline
 # define _GL_EXTERN_INLINE extern inline
-#elif 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
+#elif 2 < __GNUC__ + (7 <= __GNUC_MINOR__) && !defined __APPLE__
 # if __GNUC_GNU_INLINE__
    /* __gnu_inline__ suppresses a GCC 4.2 diagnostic.  */
 #  define _GL_INLINE extern inline __attribute__ ((__gnu_inline__))
@@ -1540,12 +1563,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 # endif
 # define _GL_EXTERN_INLINE extern
 #else
-# define _GL_INLINE static inline
-# define _GL_EXTERN_INLINE static inline
+# define _GL_INLINE static _GL_UNUSED
+# define _GL_EXTERN_INLINE static _GL_UNUSED
 #endif
 
 #if 4 < __GNUC__ + (6 <= __GNUC_MINOR__)
-# if __GNUC_STDC_INLINE__
+# if defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__
 #  define _GL_INLINE_HEADER_CONST_PRAGMA
 # else
 #  define _GL_INLINE_HEADER_CONST_PRAGMA \
@@ -1568,12 +1591,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to rpl_gmtime if the replacement function should be used. */
 #undef gmtime
-
-/* Define to `__inline__' or `__inline' if that's what the C compiler
-   calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
-#undef inline
-#endif
 
 /* Work around a bug in Apple GCC 4.0.1 build 5465: In C99 mode, it supports
    the ISO C 99 semantics of 'extern inline' (unlike the GNU C semantics of

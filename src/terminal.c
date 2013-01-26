@@ -42,7 +42,7 @@ struct terminal *initial_terminal;
 static void delete_initial_terminal (struct terminal *);
 
 /* This setter is used only in this file, so it can be private.  */
-static inline void
+static void
 tset_param_alist (struct terminal *t, Lisp_Object val)
 {
   t->param_alist = val;
@@ -360,14 +360,7 @@ If FRAME is nil, the selected frame is used.
 The terminal device is represented by its integer identifier.  */)
   (Lisp_Object frame)
 {
-  struct terminal *t;
-
-  if (NILP (frame))
-    frame = selected_frame;
-
-  CHECK_LIVE_FRAME (frame);
-
-  t = FRAME_TERMINAL (XFRAME (frame));
+  struct terminal *t = FRAME_TERMINAL (decode_live_frame (frame));
 
   if (!t)
     return Qnil;
@@ -405,8 +398,6 @@ possible return values.  */)
       return Qw32;
     case output_msdos_raw:
       return Qpc;
-    case output_mac:
-      return Qmac;
     case output_ns:
       return Qns;
     default:

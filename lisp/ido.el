@@ -496,7 +496,7 @@ as first char even if `ido-enable-prefix' is nil."
 ;; See http://debbugs.gnu.org/2042 for more info.
 (defcustom ido-buffer-disable-smart-matches t
   "Non-nil means not to re-order matches for buffer switching.
-By default, ido aranges matches in the following order:
+By default, ido arranges matches in the following order:
 
   full-matches > suffix matches > prefix matches > remaining matches
 
@@ -714,7 +714,7 @@ See also `ido-dir-file-cache' and `ido-save-directory-list-file'."
   :type 'integer
   :group 'ido)
 
-(defcustom ido-max-directory-size 30000
+(defcustom ido-max-directory-size nil
   "Maximum size (in bytes) for directories to use ido completion.
 If you enter a directory with a size larger than this size, ido will
 not provide the normal completion.  To show the completions, use C-a."
@@ -1720,7 +1720,7 @@ This function also adds a hook to the minibuffer."
 	 (ido-final-slash dir)
 	 (not (ido-is-unc-host dir))
 	 (file-directory-p dir)
-	 (> (nth 7 (file-attributes dir)) ido-max-directory-size))))
+	 (> (nth 7 (file-attributes (file-truename dir))) ido-max-directory-size))))
 
 (defun ido-set-current-directory (dir &optional subdir no-merge)
   ;; Set ido's current directory to DIR or DIR/SUBDIR
@@ -2389,7 +2389,10 @@ If cursor is not at the end of the user input, move to end of input."
 	(ido-buffer-internal 'insert 'insert-buffer "Insert buffer: " nil ido-text 'ido-enter-insert-file))
 
        ((eq ido-exit 'dired)
-	(dired (concat ido-current-directory (or ido-text ""))))
+        (funcall (cond ((eq method 'other-window) 'dired-other-window)
+                       ((eq method 'other-frame) 'dired-other-frame)
+                       (t 'dired))
+                 (concat ido-current-directory (or ido-text ""))))
 
        ((eq ido-exit 'ffap)
 	(find-file-at-point))
@@ -3701,14 +3704,14 @@ This is to make them appear as if they were \"virtual buffers\"."
 	 (rexq (concat rex0 (if slash ".*/" "")))
 	 (re (if ido-enable-prefix (concat "\\`" rexq) rexq))
 	 (full-re (and do-full
-		       (and (eq ido-cur-item 'buffer)
-			    (not ido-buffer-disable-smart-matches))
+		       (not (and (eq ido-cur-item 'buffer)
+				 ido-buffer-disable-smart-matches))
 		       (not ido-enable-regexp)
 		       (not (string-match "\$\\'" rex0))
 		       (concat "\\`" rex0 (if slash "/" "") "\\'")))
 	 (suffix-re (and do-full slash
-			 (and (eq ido-cur-item 'buffer)
-			      (not ido-buffer-disable-smart-matches))
+			 (not (and (eq ido-cur-item 'buffer)
+				   ido-buffer-disable-smart-matches))
 			 (not ido-enable-regexp)
 			 (not (string-match "\$\\'" rex0))
 			 (concat rex0 "/\\'")))
@@ -3764,7 +3767,11 @@ This is to make them appear as if they were \"virtual buffers\"."
 	       ido-enable-flex-matching
 	       (> (length ido-text) 1)
 	       (not ido-enable-regexp))
-      (setq re (mapconcat #'regexp-quote (split-string ido-text "") ".*"))
+      (setq re (concat (regexp-quote (string (aref ido-text 0)))
+		       (mapconcat (lambda (c)
+				    (concat "[^" (string c) "]*"
+					    (regexp-quote (string c))))
+				  (substring ido-text 1) "")))
       (if ido-enable-prefix
 	  (setq re (concat "\\`" re)))
       (mapc

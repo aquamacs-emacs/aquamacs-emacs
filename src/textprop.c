@@ -85,8 +85,18 @@ text_read_only (Lisp_Object propval)
   xsignal0 (Qtext_read_only);
 }
 
+/* Prepare to modify the region of BUFFER from START to END.  */
 
-
+static void
+modify_region (Lisp_Object buffer, Lisp_Object start, Lisp_Object end)
+{
+  struct buffer *buf = XBUFFER (buffer), *old = current_buffer;
+
+  set_buffer_internal (buf);
+  modify_region_1 (XINT (start), XINT (end), true);
+  set_buffer_internal (old);
+}
+
 /* Extract the interval at the position pointed to by BEGIN from
    OBJECT, a string or buffer.  Additionally, check that the positions
    pointed to by BEGIN and END are within the bounds of OBJECT, and
@@ -241,7 +251,7 @@ interval_has_all_properties (Lisp_Object plist, INTERVAL i)
 /* Return nonzero if the plist of interval I has any of the
    properties of PLIST, regardless of their values.  */
 
-static inline int
+static int
 interval_has_some_properties (Lisp_Object plist, INTERVAL i)
 {
   register Lisp_Object tail1, tail2, sym;
@@ -263,7 +273,7 @@ interval_has_some_properties (Lisp_Object plist, INTERVAL i)
 /* Return nonzero if the plist of interval I has any of the
    property names in LIST, regardless of their values.  */
 
-static inline int
+static int
 interval_has_some_properties_list (Lisp_Object list, INTERVAL i)
 {
   register Lisp_Object tail1, tail2, sym;
@@ -1164,7 +1174,7 @@ Return t if any property value actually changed, nil otherwise.  */)
     }
 
   if (BUFFERP (object))
-    modify_region (XBUFFER (object), XINT (start), XINT (end), 1);
+    modify_region (object, start, end);
 
   /* We are at the beginning of interval I, with LEN chars to scan.  */
   for (;;)
@@ -1302,7 +1312,7 @@ set_text_properties (Lisp_Object start, Lisp_Object end, Lisp_Object properties,
     }
 
   if (BUFFERP (object) && !NILP (coherent_change_p))
-    modify_region (XBUFFER (object), XINT (start), XINT (end), 1);
+    modify_region (object, start, end);
 
   set_text_properties_1 (start, end, properties, object, i);
 
@@ -1313,14 +1323,13 @@ set_text_properties (Lisp_Object start, Lisp_Object end, Lisp_Object properties,
 }
 
 /* Replace properties of text from START to END with new list of
-   properties PROPERTIES.  BUFFER is the buffer containing
+   properties PROPERTIES.  OBJECT is the buffer or string containing
    the text.  This does not obey any hooks.
-   You can provide the interval that START is located in as I,
-   or pass NULL for I and this function will find it.
+   You should provide the interval that START is located in as I.
    START and END can be in any order.  */
 
 void
-set_text_properties_1 (Lisp_Object start, Lisp_Object end, Lisp_Object properties, Lisp_Object buffer, INTERVAL i)
+set_text_properties_1 (Lisp_Object start, Lisp_Object end, Lisp_Object properties, Lisp_Object object, INTERVAL i)
 {
   register INTERVAL prev_changed = NULL;
   register ptrdiff_t s, len;
@@ -1339,8 +1348,7 @@ set_text_properties_1 (Lisp_Object start, Lisp_Object end, Lisp_Object propertie
   else
     return;
 
-  if (i == NULL)
-    i = find_interval (buffer_intervals (XBUFFER (buffer)), s);
+  eassert (i);
 
   if (i->position != s)
     {
@@ -1351,11 +1359,11 @@ set_text_properties_1 (Lisp_Object start, Lisp_Object end, Lisp_Object propertie
 	{
 	  copy_properties (unchanged, i);
 	  i = split_interval_left (i, len);
-	  set_properties (properties, i, buffer);
+	  set_properties (properties, i, object);
 	  return;
 	}
 
-      set_properties (properties, i, buffer);
+      set_properties (properties, i, object);
 
       if (LENGTH (i) == len)
 	return;
@@ -1378,7 +1386,7 @@ set_text_properties_1 (Lisp_Object start, Lisp_Object end, Lisp_Object propertie
 	  /* We have to call set_properties even if we are going to
 	     merge the intervals, so as to make the undo records
 	     and cause redisplay to happen.  */
-	  set_properties (properties, i, buffer);
+	  set_properties (properties, i, object);
 	  if (prev_changed)
 	    merge_interval_left (i);
 	  return;
@@ -1389,7 +1397,7 @@ set_text_properties_1 (Lisp_Object start, Lisp_Object end, Lisp_Object propertie
       /* We have to call set_properties even if we are going to
 	 merge the intervals, so as to make the undo records
 	 and cause redisplay to happen.  */
-      set_properties (properties, i, buffer);
+      set_properties (properties, i, object);
       if (!prev_changed)
 	prev_changed = i;
       else
@@ -1451,7 +1459,7 @@ Use `set-text-properties' if you want to remove all text properties.  */)
     }
 
   if (BUFFERP (object))
-    modify_region (XBUFFER (object), XINT (start), XINT (end), 1);
+    modify_region (object, start, end);
 
   /* We are at the beginning of an interval, with len to scan */
   for (;;)
@@ -1565,7 +1573,7 @@ Return t if any property was actually removed, nil otherwise.  */)
 	  else if (LENGTH (i) == len)
 	    {
 	      if (!modified && BUFFERP (object))
-		modify_region (XBUFFER (object), XINT (start), XINT (end), 1);
+		modify_region (object, start, end);
 	      remove_properties (Qnil, properties, i, object);
 	      if (BUFFERP (object))
 		signal_after_change (XINT (start), XINT (end) - XINT (start),
@@ -1578,7 +1586,7 @@ Return t if any property was actually removed, nil otherwise.  */)
 	      i = split_interval_left (i, len);
 	      copy_properties (unchanged, i);
 	      if (!modified && BUFFERP (object))
-		modify_region (XBUFFER (object), XINT (start), XINT (end), 1);
+		modify_region (object, start, end);
 	      remove_properties (Qnil, properties, i, object);
 	      if (BUFFERP (object))
 		signal_after_change (XINT (start), XINT (end) - XINT (start),
@@ -1589,7 +1597,7 @@ Return t if any property was actually removed, nil otherwise.  */)
       if (interval_has_some_properties_list (properties, i))
 	{
 	  if (!modified && BUFFERP (object))
-	    modify_region (XBUFFER (object), XINT (start), XINT (end), 1);
+	    modify_region (object, start, end);
 	  remove_properties (Qnil, properties, i, object);
 	  modified = 1;
 	}

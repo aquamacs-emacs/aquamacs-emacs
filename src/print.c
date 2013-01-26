@@ -798,7 +798,7 @@ safe_debug_print (Lisp_Object arg)
   else
     fprintf (stderr, "#<%s_LISP_OBJECT 0x%08"pI"x>\r\n",
 	     !valid ? "INVALID" : "SOME",
-	     XHASH (arg));
+	     XLI (arg));
 }
 
 
@@ -1815,14 +1815,14 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 #endif
 	  /* Implement a readable output, e.g.:
 	    #s(hash-table size 2 test equal data (k1 v1 k2 v2)) */
-	  /* Always print the size. */
+	  /* Always print the size.  */
 	  len = sprintf (buf, "#s(hash-table size %"pD"d", ASIZE (h->next));
 	  strout (buf, len, len, printcharfun);
 
-	  if (!NILP (h->test))
+	  if (!NILP (h->test.name))
 	    {
 	      strout (" test ", -1, -1, printcharfun);
-	      print_object (h->test, printcharfun, escapeflag);
+	      print_object (h->test.name, printcharfun, escapeflag);
 	    }
 
 	  if (!NILP (h->weak))
@@ -2075,7 +2075,7 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 /* Print a description of INTERVAL using PRINTCHARFUN.
    This is part of printing a string that has text properties.  */
 
-void
+static void
 print_interval (INTERVAL interval, Lisp_Object printcharfun)
 {
   if (NILP (interval->plist))

@@ -51,7 +51,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "atimer.h"
 #include "keymap.h"
 
+#ifdef WINDOWSNT
 #include "w32heap.h"
+#endif
+
+#ifndef WINDOWSNT
+#include <io.h> /* for get_osfhandle */
+#endif
+
 #include <shellapi.h>
 
 #include "font.h"
@@ -102,7 +109,7 @@ struct w32_display_info *x_display_list;
 Lisp_Object w32_display_name_list;
 
 
-#ifndef GLYPHSET
+#if _WIN32_WINNT < 0x0500
 /* Pre Windows 2000, this was not available, but define it here so
    that Emacs compiled on such a platform will run on newer versions.  */
 
@@ -121,7 +128,7 @@ typedef struct tagGLYPHSET
   WCRANGE ranges[1];
 } GLYPHSET;
 
-#endif
+#endif /* compiling for pre-Win2k */
 
 /* Dynamic linking to SetLayeredWindowAttribute (only since 2000).  */
 BOOL (WINAPI *pfnSetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
@@ -190,6 +197,10 @@ static int volatile input_signal_count;
 static int input_signal_count;
 #endif
 
+#ifdef CYGWIN
+int w32_message_fd = -1;
+#endif /* CYGWIN */
+
 static void x_update_window_end (struct window *, int, int);
 static void w32_handle_tool_bar_click (struct frame *,
                                        struct input_event *);
@@ -235,6 +246,8 @@ static void x_check_font (struct frame *, struct font *);
 #endif
 
 static Lisp_Object Qvendor_specific_keysyms;
+static Lisp_Object Qadded, Qremoved, Qmodified;
+static Lisp_Object Qrenamed_from, Qrenamed_to;
 
 
 /***********************************************************************
@@ -360,7 +373,11 @@ w32_draw_underwave (struct glyph_string *s, COLORREF color)
 
   /* Find and set clipping rectangle */
 
-  wave_clip = (XRectangle){ x0, y0, width, wave_height };
+  wave_clip.x = x0;
+  wave_clip.y = y0;
+  wave_clip.width = width;
+  wave_clip.height = wave_height;
+
   get_glyph_string_clip_rect (s, &w32_string_clip);
   CONVERT_TO_XRECT (string_clip, w32_string_clip);
 
@@ -708,21 +725,7 @@ static void
 w32_frame_up_to_date (struct frame *f)
 {
   if (FRAME_W32_P (f))
-    {
-      Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
-
-      if (hlinfo->mouse_face_deferred_gc
-	  || f == hlinfo->mouse_face_mouse_frame)
-	{
-	  block_input ();
-	  if (hlinfo->mouse_face_mouse_frame)
-	    note_mouse_highlight (hlinfo->mouse_face_mouse_frame,
-				  hlinfo->mouse_face_mouse_x,
-				  hlinfo->mouse_face_mouse_y);
-	  hlinfo->mouse_face_deferred_gc = 0;
-	  unblock_input ();
-	}
-    }
+    FRAME_MOUSE_UPDATE (f);
 }
 
 
@@ -1737,8 +1740,8 @@ w32_draw_relief_rect (struct frame *f,
   if (left_p)
     for (i = 0; i < width; ++i)
       w32_fill_area (f, hdc, gc.foreground,
-		     left_x + i, top_y + i, 1,
-		     bottom_y - top_y - 2 * i + 1);
+		     left_x + i, top_y + (i + 1) * top_p, 1,
+		     bottom_y - top_y - (i + 1) * (bot_p + top_p) + 1);
 
   if (raised_p)
     gc.foreground = f->output_data.w32->black_relief.gc->foreground;
@@ -1756,8 +1759,8 @@ w32_draw_relief_rect (struct frame *f,
   if (right_p)
     for (i = 0; i < width; ++i)
       w32_fill_area (f, hdc, gc.foreground,
-		     right_x - i, top_y + i + 1, 1,
-		     bottom_y - top_y - 2 * i - 1);
+		     right_x - i, top_y + (i + 1) * top_p, 1,
+		     bottom_y - top_y - (i + 1) * (bot_p + top_p) + 1);
 
   w32_set_clip_rectangle (hdc, NULL);
 
@@ -1951,7 +1954,7 @@ x_draw_image_foreground (struct glyph_string *s)
 static void
 x_draw_image_relief (struct glyph_string *s)
 {
-  int x0, y0, x1, y1, thick, raised_p;
+  int x1, y1, thick, raised_p, top_p, bot_p, left_p, right_p;
   RECT r;
   int x = s->x;
   int y = s->ybase - image_ascent (s->img, s->face, &s->slice);
@@ -1983,19 +1986,23 @@ x_draw_image_relief (struct glyph_string *s)
       raised_p = s->img->relief > 0;
     }
 
-  x0 = x - thick;
-  y0 = y - thick;
-  x1 = x + s->slice.width + thick - 1;
-  y1 = y + s->slice.height + thick - 1;
+  x1 = x + s->slice.width - 1;
+  y1 = y + s->slice.height - 1;
+  top_p = bot_p = left_p = right_p = 0;
+
+  if (s->slice.x == 0)
+    x -= thick, left_p = 1;
+  if (s->slice.y == 0)
+    y -= thick, top_p = 1;
+  if (s->slice.x + s->slice.width == s->img->width)
+    x1 += thick, right_p = 1;
+  if (s->slice.y + s->slice.height == s->img->height)
+    y1 += thick, bot_p = 1;
 
   x_setup_relief_colors (s);
   get_glyph_string_clip_rect (s, &r);
-  w32_draw_relief_rect (s->f, x0, y0, x1, y1, thick, raised_p,
-			s->slice.y == 0,
-			s->slice.y + s->slice.height == s->img->height,
-			s->slice.x == 0,
-			s->slice.x + s->slice.width == s->img->width,
-			&r);
+  w32_draw_relief_rect (s->f, x, y, x1, y1, thick, raised_p,
+			top_p, bot_p, left_p, right_p, &r);
 }
 
 
@@ -3199,6 +3206,124 @@ construct_drag_n_drop (struct input_event *result, W32Msg *msg, struct frame *f)
 }
 
 
+/* File event notifications (see w32notify.c).  */
+
+Lisp_Object
+lispy_file_action (DWORD action)
+{
+  static char unknown_fmt[] = "unknown-action(%d)";
+  Lisp_Object retval;
+
+  switch (action)
+    {
+    case FILE_ACTION_ADDED:
+      retval = Qadded;
+      break;
+    case FILE_ACTION_REMOVED:
+      retval = Qremoved;
+      break;
+    case FILE_ACTION_MODIFIED:
+      retval = Qmodified;
+      break;
+    case FILE_ACTION_RENAMED_OLD_NAME:
+      retval = Qrenamed_from;
+      break;
+    case FILE_ACTION_RENAMED_NEW_NAME:
+      retval = Qrenamed_to;
+      break;
+    default:
+      {
+	char buf[sizeof(unknown_fmt) - 1 + INT_STRLEN_BOUND (DWORD)];
+
+	sprintf (buf, unknown_fmt, action);
+	retval = intern (buf);
+      }
+      break;
+    }
+
+  return retval;
+}
+
+#ifdef WINDOWSNT
+/* Put file notifications into the Emacs input event queue.  This
+   function runs when the WM_EMACS_FILENOTIFY message arrives from a
+   watcher thread.  */
+static void
+queue_notifications (struct input_event *event, W32Msg *msg, struct frame *f,
+		     int *evcount)
+{
+  BYTE *p = file_notifications;
+  FILE_NOTIFY_INFORMATION *fni = (PFILE_NOTIFY_INFORMATION)p;
+  const DWORD min_size
+    = offsetof (FILE_NOTIFY_INFORMATION, FileName) + sizeof(wchar_t);
+  Lisp_Object frame;
+
+  /* We cannot process notification before Emacs is fully initialized,
+     since we need the UTF-16LE coding-system to be set up.  */
+  if (!initialized)
+    {
+      notification_buffer_in_use = 0;
+      return;
+    }
+
+  XSETFRAME (frame, f);
+
+  enter_crit ();
+  if (notification_buffer_in_use)
+    {
+      DWORD info_size = notifications_size;
+      Lisp_Object cs = intern ("utf-16le");
+      Lisp_Object obj = w32_get_watch_object (notifications_desc);
+
+      /* notifications_size could be zero when the buffer of
+	 notifications overflowed on the OS level, or when the
+	 directory being watched was itself deleted.  Do nothing in
+	 that case.  */
+      if (info_size
+	  && !NILP (obj) && CONSP (obj))
+	{
+	  Lisp_Object callback = XCDR (obj);
+
+	  while (info_size >= min_size)
+	    {
+	      Lisp_Object utf_16_fn
+		= make_unibyte_string ((char *)fni->FileName,
+				       fni->FileNameLength);
+	      /* Note: mule-conf is preloaded, so utf-16le must
+		 already be defined at this point.  */
+	      Lisp_Object fname
+		= code_convert_string_norecord (utf_16_fn, cs, 0);
+	      Lisp_Object action = lispy_file_action (fni->Action);
+
+	      event->kind = FILE_NOTIFY_EVENT;
+	      event->code
+		= (ptrdiff_t)XINT (XIL ((EMACS_INT)notifications_desc));
+	      event->timestamp = msg->msg.time;
+	      event->modifiers = 0;
+	      event->frame_or_window = callback;
+	      event->arg = Fcons (action, fname);
+	      kbd_buffer_store_event (event);
+	      (*evcount)++;
+
+	      if (!fni->NextEntryOffset)
+		break;
+	      p += fni->NextEntryOffset;
+	      fni = (PFILE_NOTIFY_INFORMATION)p;
+	      info_size -= fni->NextEntryOffset;
+	    }
+	}
+      notification_buffer_in_use = 0;
+    }
+  else
+    DebPrint (("We were promised notifications, but in-use flag is zero!\n"));
+  leave_crit ();
+
+  /* We've stuffed all the events ourselves, so w32_read_socket shouldn't.  */
+  event->kind = NO_EVENT;
+}
+#endif
+
+
 /* Function to report a mouse movement to the mainstream Emacs code.
    The input handler calls this.
 
@@ -3422,16 +3547,11 @@ w32_handle_tool_bar_click (struct frame *f, struct input_event *button_event)
 static struct scroll_bar *
 x_window_to_scroll_bar (Window window_id)
 {
-  Lisp_Object tail;
+  Lisp_Object tail, frame;
 
-  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+  FOR_EACH_FRAME (tail, frame)
     {
-      Lisp_Object frame, bar, condemned;
-
-      frame = XCAR (tail);
-      /* All elements of Vframe_list should be frames.  */
-      if (! FRAMEP (frame))
-	emacs_abort ();
+      Lisp_Object bar, condemned;
 
       /* Scan this frame's scroll bar list for a scroll bar with the
 	 right window ID.  */
@@ -3611,7 +3731,7 @@ x_scroll_bar_create (struct window *w, int top, int left, int width, int height)
   HWND hwnd;
   SCROLLINFO si;
   struct scroll_bar *bar
-    = XSCROLL_BAR (Fmake_vector (make_number (SCROLL_BAR_VEC_SIZE), Qnil));
+    = XSCROLL_BAR (Fmake_vector (make_number (VECSIZE (struct scroll_bar)), Qnil));
   Lisp_Object barobj;
 
   block_input ();
@@ -4134,6 +4254,9 @@ static char dbcs_lead = 0;
    This routine is called by the SIGIO handler.
    We return as soon as there are no more events to be read.
 
+   For an overview of how Emacs input works on MS-Windows, see the
+   commentary before w32_msg_pump in w32fns.c.
+
    We return the number of characters stored into the buffer,
    thus pretending to be `read'.
 
@@ -4156,17 +4279,25 @@ w32_read_socket (struct terminal *terminal,
   struct frame *f;
   struct w32_display_info *dpyinfo = &one_w32_display_info;
   Mouse_HLInfo *hlinfo = &dpyinfo->mouse_highlight;
+  static char buf[1];
 
   block_input ();
 
   /* So people can tell when we have read the available input.  */
   input_signal_count++;
 
+  /* Process any incoming thread messages.  */
+  drain_message_queue ();
+
   /* TODO: ghostscript integration. */
   while (get_next_msg (&msg, FALSE))
     {
       struct input_event inev;
       int do_help = 0;
+
+      /* DebPrint (("w32_read_socket: %s time:%u\n", */
+      /*            w32_name_of_message (msg.msg.message), */
+      /*            msg.msg.time)); */
 
       EVENT_INIT (inev);
       inev.kind = NO_EVENT;
@@ -4825,6 +4956,14 @@ w32_read_socket (struct terminal *terminal,
 	  check_visibility = 1;
 	  break;
 
+#ifdef WINDOWSNT
+	case WM_EMACS_FILENOTIFY:
+	  f = x_window_to_frame (dpyinfo, msg.msg.hwnd);
+	  if (f)
+	    queue_notifications (&inev, &msg, f, &count);
+	  break;
+#endif
+
 	default:
 	  /* Check for messages registered at runtime.  */
 	  if (msg.msg.message == msh_mousewheel)
@@ -5337,7 +5476,6 @@ x_new_font (struct frame *f, Lisp_Object font_object, int fontset)
   FRAME_FONT (f) = font;
   FRAME_BASELINE_OFFSET (f) = font->baseline_offset;
   FRAME_COLUMN_WIDTH (f) = font->average_width;
-  FRAME_SPACE_WIDTH (f) = font->space_width;
   FRAME_LINE_HEIGHT (f) = font->height;
 
   compute_fringe_widths (f, 1);
@@ -5507,6 +5645,77 @@ x_check_fullscreen (struct frame *f)
           /* Wait for the change of frame size to occur.  */
           f->want_fullscreen |= FULLSCREEN_WAIT;
         }
+    }
+}
+
+static void
+w32fullscreen_hook (FRAME_PTR f)
+{
+  static int normal_width, normal_height, normal_top, normal_left;
+
+  if (f->async_visible)
+    {
+      int width, height, top_pos, left_pos, pixel_height, pixel_width;
+      int cur_w = FRAME_COLS (f), cur_h = FRAME_LINES (f);
+      RECT workarea_rect;
+
+      block_input ();
+      if (normal_height <= 0)
+	normal_height = cur_h;
+      if (normal_width <= 0)
+	normal_width = cur_w;
+      x_real_positions (f, &f->left_pos, &f->top_pos);
+      x_fullscreen_adjust (f, &width, &height, &top_pos, &left_pos);
+
+      SystemParametersInfo (SPI_GETWORKAREA, 0, &workarea_rect, 0);
+      pixel_height = workarea_rect.bottom - workarea_rect.top;
+      pixel_width  = workarea_rect.right  - workarea_rect.left;
+
+      switch (f->want_fullscreen)
+	{
+	  /* No difference between these two when there is no WM */
+	case FULLSCREEN_MAXIMIZED:
+	  PostMessage (FRAME_W32_WINDOW (f), WM_SYSCOMMAND, 0xf030, 0);
+	  break;
+	case FULLSCREEN_BOTH:
+	  height = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (f, pixel_height) - 2;
+	  width  = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (f, pixel_width);
+	  left_pos = workarea_rect.left;
+	  top_pos = workarea_rect.top;
+	  break;
+	case FULLSCREEN_WIDTH:
+	  width  = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (f, pixel_width);
+	  if (normal_height > 0)
+	    height = normal_height;
+	  left_pos = workarea_rect.left;
+	  break;
+	case FULLSCREEN_HEIGHT:
+	  height = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (f, pixel_height) - 2;
+	  if (normal_width > 0)
+	    width = normal_width;
+	  top_pos = workarea_rect.top;
+	  break;
+	case FULLSCREEN_NONE:
+	  if (normal_height > 0)
+	    height = normal_height;
+	  else
+	    normal_height = height;
+	  if (normal_width > 0)
+	    width = normal_width;
+	  else
+	    normal_width = width;
+	  /* FIXME: Should restore the original position of the frame.  */
+	  top_pos = left_pos = 0;
+	  break;
+	}
+
+      if (cur_w != width || cur_h != height)
+	{
+	  x_set_offset (f, left_pos, top_pos, 1);
+	  x_set_window_size (f, 1, width, height);
+	  do_pending_window_change (0);
+	}
+      unblock_input ();
     }
 }
 
@@ -5958,7 +6167,6 @@ x_free_frame_resources (struct frame *f)
       hlinfo->mouse_face_end_row
 	= hlinfo->mouse_face_end_col = -1;
       hlinfo->mouse_face_window = Qnil;
-      hlinfo->mouse_face_deferred_gc = 0;
       hlinfo->mouse_face_mouse_frame = 0;
     }
 
@@ -6201,7 +6409,7 @@ w32_create_terminal (struct w32_display_info *dpyinfo)
   terminal->mouse_position_hook = w32_mouse_position;
   terminal->frame_rehighlight_hook = w32_frame_rehighlight;
   terminal->frame_raise_lower_hook = w32_frame_raise_lower;
-  /* terminal->fullscreen_hook = XTfullscreen_hook; */
+  terminal->fullscreen_hook = w32fullscreen_hook;
   terminal->set_vertical_scroll_bar_hook = w32_set_vertical_scroll_bar;
   terminal->condemn_scroll_bars_hook = w32_condemn_scroll_bars;
   terminal->redeem_scroll_bar_hook = w32_redeem_scroll_bar;
@@ -6300,8 +6508,15 @@ w32_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
     w32_defined_color (0, "black", &color, 1);
   }
 
-  /* Add the default keyboard.  */
+#ifdef WINDOWSNT
+  /* Add the default keyboard.  When !WINDOWSNT, we're using the
+     standard Emacs console handling machinery and don't need an
+     explicit FD here.  */
   add_keyboard_wait_descriptor (0);
+#elif CYGWIN
+  /* /dev/windows wakes us up when we have a thread message pending.  */
+  add_keyboard_wait_descriptor (w32_message_fd);
+#endif
 
   /* Create Fringe Bitmaps and store them for later use.
 
@@ -6311,15 +6526,6 @@ w32_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
      need to bitswap and convert to unsigned shorts before creating
      the bitmaps.  */
   w32_init_fringe (terminal->rif);
-
-#ifdef F_SETOWN
-  fcntl (connection, F_SETOWN, getpid ());
-#endif /* ! defined (F_SETOWN) */
-
-#ifdef SIGIO
-  if (interrupt_input)
-    init_sigio (connection);
-#endif /* ! defined (SIGIO) */
 
   unblock_input ();
 
@@ -6370,6 +6576,7 @@ x_delete_display (struct w32_display_info *dpyinfo)
 
   w32_reset_fringes ();
 }
+
 
 /* Set up use of W32.  */
 
@@ -6406,6 +6613,11 @@ w32_initialize (void)
       if (set_user_model)
 	set_user_model (L"GNU.Emacs");
     }
+
+#ifdef CYGWIN
+  if ((w32_message_fd = open ("/dev/windows", O_RDWR | O_CLOEXEC)) == -1)
+    fatal ("opening /dev/windows: %s", strerror (errno));
+#endif /* CYGWIN */
 
   /* Initialize w32_use_visible_system_caret based on whether a screen
      reader is in use.  */
@@ -6490,6 +6702,12 @@ syms_of_w32term (void)
 
   DEFSYM (Qvendor_specific_keysyms, "vendor-specific-keysyms");
 
+  DEFSYM (Qadded, "added");
+  DEFSYM (Qremoved, "removed");
+  DEFSYM (Qmodified, "modified");
+  DEFSYM (Qrenamed_from, "renamed-from");
+  DEFSYM (Qrenamed_to, "renamed-to");
+
   DEFVAR_INT ("w32-num-mouse-buttons",
 	      w32_num_mouse_buttons,
 	      doc: /* Number of physical mouse buttons.  */);
@@ -6567,4 +6785,6 @@ With MS Windows or Nextstep, the value is t.  */);
 
   staticpro (&last_mouse_motion_frame);
   last_mouse_motion_frame = Qnil;
+
+  Fprovide (intern_c_string ("w32"), Qnil);
 }

@@ -3,6 +3,7 @@
 ;; Copyright (C) 2002-2012 Free Software Foundation, Inc.
 
 ;; Author: Andreas Fuchs <asf@void.at>
+;; Maintainer: FSF
 ;; Keywords: comm, faces
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki.pl?ErcMatch
 
@@ -34,7 +35,6 @@
 ;;; Code:
 
 (require 'erc)
-(eval-when-compile (require 'cl))
 
 ;; Customization:
 

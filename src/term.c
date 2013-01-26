@@ -20,15 +20,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* New redisplay, TTY faces by Gerd Moellmann <gerd@gnu.org>.  */
 
 #include <config.h>
-#include <stdio.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
 #include <sys/file.h>
 #include <sys/time.h>
 #include <unistd.h>
 
 #include "lisp.h"
 #include "termchar.h"
-#include "termopts.h"
 #include "tparam.h"
 #include "character.h"
 #include "buffer.h"
@@ -56,17 +56,10 @@ static int been_here = -1;
 #include "xterm.h"
 #endif
 
-#ifndef O_RDWR
-#define O_RDWR 2
-#endif
-
-#ifndef O_NOCTTY
-#define O_NOCTTY 0
-#endif
-
 /* The name of the default console device.  */
 #ifdef WINDOWSNT
 #define DEV_TTY  "CONOUT$"
+#include "w32term.h"
 #else
 #define DEV_TTY  "/dev/tty"
 #endif
@@ -132,10 +125,6 @@ enum no_color_bit
 /* The largest frame width in any call to calculate_costs.  */
 
 static int max_frame_cols;
-
-/* Non-zero if we have dropped our controlling tty and therefore
-   should not open a frame on stdout. */
-static int no_controlling_tty;
 
 
 
@@ -2918,36 +2907,9 @@ set_tty_hooks (struct terminal *terminal)
 static void
 dissociate_if_controlling_tty (int fd)
 {
-#ifndef DOS_NT
-  int pgid = tcgetpgrp (fd); /* If tcgetpgrp succeeds, fd is the ctty. */
-  if (pgid != -1)
-    {
-#if defined (USG5)
-      setpgrp ();
-      no_controlling_tty = 1;
-#elif defined (CYGWIN)
-      setsid ();
-      no_controlling_tty = 1;
-#else
-#ifdef TIOCNOTTY                /* Try BSD ioctls. */
-      sigset_t blocked;
-      sigemptyset (&blocked);
-      sigaddset (&blocked, SIGTTOU);
-      pthread_sigmask (SIG_BLOCK, &blocked, 0);
-      fd = emacs_open (DEV_TTY, O_RDWR, 0);
-      if (fd != -1 && ioctl (fd, TIOCNOTTY, 0) != -1)
-        {
-          no_controlling_tty = 1;
-        }
-      if (fd != -1)
-        emacs_close (fd);
-      pthread_sigmask (SIG_UNBLOCK, &blocked, 0);
-#else
-# error "Unknown system."
-#endif  /* ! TIOCNOTTY */
-#endif  /* ! USG */
-    }
-#endif	/* !DOS_NT */
+  pid_t pgid = tcgetpgrp (fd); /* If tcgetpgrp succeeds, fd is the ctty. */
+  if (0 <= pgid)
+    setsid ();
 }
 
 /* Create a termcap display on the tty device with the given name and
@@ -3020,22 +2982,18 @@ init_tty (const char *name, const char *terminal_type, int must_succeed)
   set_tty_hooks (terminal);
 
   {
-    int fd;
+    /* Open the terminal device.  */
     FILE *file;
 
-#ifdef O_IGNORE_CTTY
-    if (!ctty)
-      /* Open the terminal device.  Don't recognize it as our
-         controlling terminal, and don't make it the controlling tty
-         if we don't have one at the moment.  */
-      fd = emacs_open (name, O_RDWR | O_IGNORE_CTTY | O_NOCTTY, 0);
-    else
-#endif /* O_IGNORE_CTTY */
-      /* Alas, O_IGNORE_CTTY is a GNU extension that seems to be only
-         defined on Hurd.  On other systems, we need to explicitly
-         dissociate ourselves from the controlling tty when we want to
-         open a frame on the same terminal.  */
-      fd = emacs_open (name, O_RDWR | O_NOCTTY, 0);
+    /* If !ctty, don't recognize it as our controlling terminal, and
+       don't make it the controlling tty if we don't have one now.
+
+       Alas, O_IGNORE_CTTY is a GNU extension that seems to be only
+       defined on Hurd.  On other systems, we need to explicitly
+       dissociate ourselves from the controlling tty when we want to
+       open a frame on the same terminal.  */
+    int flags = O_RDWR | O_NOCTTY | (ctty ? 0 : O_IGNORE_CTTY);
+    int fd = emacs_open (name, flags, 0);
 
     tty->name = xstrdup (name);
     terminal->name = xstrdup (name);
@@ -3054,10 +3012,8 @@ init_tty (const char *name, const char *terminal_type, int must_succeed)
                      name);
       }
 
-#ifndef O_IGNORE_CTTY
-    if (!ctty)
+    if (!O_IGNORE_CTTY && !ctty)
       dissociate_if_controlling_tty (fd);
-#endif
 
     file = fdopen (fd, "w+");
     tty->input = file;
@@ -3235,7 +3191,6 @@ use the Bourne shell command `TERM=... export TERM' (C-shell:\n\
     FrameCols (tty) = FRAME_COLS (f);
     tty->specified_window = FRAME_LINES (f);
 
-    FRAME_CAN_HAVE_SCROLL_BARS (f) = 0;
     FRAME_VERTICAL_SCROLL_BAR_TYPE (f) = vertical_scroll_bar_none;
     terminal->char_ins_del_ok = 1;
     baud_rate = 19200;
@@ -3406,10 +3361,6 @@ use the Bourne shell command `TERM=... export TERM' (C-shell:\n\
   tty->delete_in_insert_mode
     = tty->TS_delete_mode && tty->TS_insert_mode
     && !strcmp (tty->TS_delete_mode, tty->TS_insert_mode);
-
-  tty->se_is_so = (tty->TS_standout_mode
-              && tty->TS_end_standout_mode
-              && !strcmp (tty->TS_standout_mode, tty->TS_end_standout_mode));
 
   UseTabs (tty) = tabs_safe_p (fileno (tty->input)) && TabWidth (tty) == 8;
 

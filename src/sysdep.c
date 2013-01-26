@@ -54,6 +54,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef WINDOWSNT
 #define read sys_read
 #define write sys_write
+#ifndef STDERR_FILENO
+#define STDERR_FILENO fileno(GetStdHandle(STD_ERROR_HANDLE))
+#endif
 #include <windows.h>
 #endif /* not WINDOWSNT */
 
@@ -98,7 +101,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define _P_WAIT 0
 int _cdecl _spawnlp (int, const char *, const char *, ...);
 int _cdecl _getpid (void);
-extern char *getwd (char *);
 #endif
 
 #include "syssignal.h"
@@ -131,12 +133,12 @@ char*
 get_current_dir_name (void)
 {
   char *buf;
-  char *pwd;
+  char *pwd = getenv ("PWD");
   struct stat dotstat, pwdstat;
-  /* If PWD is accurate, use it instead of calling getwd.  PWD is
+  /* If PWD is accurate, use it instead of calling getcwd.  PWD is
      sometimes a nicer name, and using it may avoid a fatal error if a
      parent directory is searchable but not readable.  */
-    if ((pwd = getenv ("PWD")) != 0
+  if (pwd
       && (IS_DIRECTORY_SEP (*pwd) || (*pwd && IS_DEVICE_SEP (pwd[1])))
       && stat (pwd, &pwdstat) == 0
       && stat (".", &dotstat) == 0
@@ -152,7 +154,6 @@ get_current_dir_name (void)
         return NULL;
       strcpy (buf, pwd);
     }
-#ifdef HAVE_GETCWD
   else
     {
       size_t buf_size = 1024;
@@ -176,22 +177,6 @@ get_current_dir_name (void)
             return NULL;
         }
     }
-#else
-  else
-    {
-      /* We need MAXPATHLEN here.  */
-      buf = malloc (MAXPATHLEN + 1);
-      if (!buf)
-        return NULL;
-      if (getwd (buf) == NULL)
-        {
-          int tmp_errno = errno;
-          free (buf);
-          errno = tmp_errno;
-          return NULL;
-        }
-    }
-#endif
   return buf;
 }
 #endif
@@ -281,48 +266,74 @@ init_baud_rate (int fd)
 
 #ifndef MSDOS
 
-static void
-wait_for_termination_1 (pid_t pid, int interruptible)
-{
-  while (1)
-    {
-#ifdef WINDOWSNT
-      wait (0);
-      break;
-#else /* not WINDOWSNT */
-      int status;
-      int wait_result = waitpid (pid, &status, 0);
-      if (wait_result < 0)
-	{
-	  if (errno != EINTR)
-	    break;
-	}
-      else
-	{
-	  record_child_status_change (wait_result, status);
-	  break;
-	}
+/* Wait for the subprocess with process id CHILD to terminate or change status.
+   CHILD must be a child process that has not been reaped.
+   If STATUS is non-null, store the waitpid-style exit status into *STATUS
+   and tell wait_reading_process_output that it needs to look around.
+   Use waitpid-style OPTIONS when waiting.
+   If INTERRUPTIBLE, this function is interruptible by a signal.
 
-#endif /* not WINDOWSNT */
+   Return CHILD if successful, 0 if no status is available;
+   the latter is possible only when options & NOHANG.  */
+static pid_t
+get_child_status (pid_t child, int *status, int options, bool interruptible)
+{
+  pid_t pid;
+
+  /* Invoke waitpid only with a known process ID; do not invoke
+     waitpid with a nonpositive argument.  Otherwise, Emacs might
+     reap an unwanted process by mistake.  For example, invoking
+     waitpid (-1, ...) can mess up glib by reaping glib's subprocesses,
+     so that another thread running glib won't find them.  */
+  eassert (0 < child);
+
+  while ((pid = waitpid (child, status, options)) < 0)
+    {
+      /* Check that CHILD is a child process that has not been reaped,
+	 and that STATUS and OPTIONS are valid.  Otherwise abort,
+	 as continuing after this internal error could cause Emacs to
+	 become confused and kill innocent-victim processes.  */
+      if (errno != EINTR)
+	emacs_abort ();
+
+      /* Note: the MS-Windows emulation of waitpid calls QUIT
+	 internally.  */
       if (interruptible)
 	QUIT;
     }
+
+  /* If successful and status is requested, tell wait_reading_process_output
+     that it needs to wake up and look around.  */
+  if (pid && status && input_available_clear_time)
+    *input_available_clear_time = make_emacs_time (0, 0);
+
+  return pid;
 }
 
-/* Wait for subprocess with process id `pid' to terminate and
-   make sure it will get eliminated (not remain forever as a zombie) */
-
+/* Wait for the subprocess with process id CHILD to terminate.
+   CHILD must be a child process that has not been reaped.
+   If STATUS is non-null, store the waitpid-style exit status into *STATUS
+   and tell wait_reading_process_output that it needs to look around.
+   If INTERRUPTIBLE, this function is interruptible by a signal.  */
 void
-wait_for_termination (pid_t pid)
+wait_for_termination (pid_t child, int *status, bool interruptible)
 {
-  wait_for_termination_1 (pid, 0);
+  get_child_status (child, status, 0, interruptible);
 }
 
-/* Like the above, but allow keyboard interruption. */
-void
-interruptible_wait_for_termination (pid_t pid)
+/* Report whether the subprocess with process id CHILD has changed status.
+   Termination counts as a change of status.
+   CHILD must be a child process that has not been reaped.
+   If STATUS is non-null, store the waitpid-style exit status into *STATUS
+   and tell wait_reading_process_output that it needs to look around.
+   Use waitpid-style OPTIONS to check status, but do not wait.
+
+   Return CHILD if successful, 0 if no status is available because
+   the process's state has not changed.  */
+pid_t
+child_status_changed (pid_t child, int *status, int options)
 {
-  wait_for_termination_1 (pid, 1);
+  return get_child_status (child, status, WNOHANG | options, 0);
 }
 
 /*
@@ -446,20 +457,15 @@ static void restore_signal_handlers (struct save_signal *);
 void
 sys_suspend (void)
 {
-#if defined (SIGTSTP) && !defined (MSDOS)
-
-  {
-    int pgrp = EMACS_GETPGRP (0);
-    EMACS_KILLPG (pgrp, SIGTSTP);
-  }
-
-#else /* No SIGTSTP */
+#ifndef DOS_NT
+  kill (0, SIGTSTP);
+#else
 /* On a system where suspending is not implemented,
    instead fork a subshell and let it talk directly to the terminal
    while we wait.  */
   sys_subshell ();
 
-#endif /* no SIGTSTP */
+#endif
 }
 
 /* Fork a subshell.  */
@@ -471,7 +477,8 @@ sys_subshell (void)
   int st;
   char oldwd[MAXPATHLEN+1]; /* Fixed length is safe on MSDOS.  */
 #endif
-  int pid;
+  pid_t pid;
+  int status;
   struct save_signal saved_handlers[5];
   Lisp_Object dir;
   unsigned char *volatile str_volatile = 0;
@@ -509,7 +516,6 @@ sys_subshell (void)
 #ifdef DOS_NT
   pid = 0;
   save_signal_handlers (saved_handlers);
-  synch_process_alive = 1;
 #else
   pid = vfork ();
   if (pid == -1)
@@ -521,7 +527,7 @@ sys_subshell (void)
       const char *sh = 0;
 
 #ifdef DOS_NT    /* MW, Aug 1993 */
-      getwd (oldwd);
+      getcwd (oldwd, sizeof oldwd);
       if (sh == 0)
 	sh = (char *) egetenv ("SUSPEND");	/* KFS, 1994-12-14 */
 #endif
@@ -578,14 +584,12 @@ sys_subshell (void)
   /* Do this now if we did not do it before.  */
 #ifndef MSDOS
   save_signal_handlers (saved_handlers);
-  synch_process_alive = 1;
 #endif
 
 #ifndef DOS_NT
-  wait_for_termination (pid);
+  wait_for_termination (pid, &status, 0);
 #endif
   restore_signal_handlers (saved_handlers);
-  synch_process_alive = 0;
 }
 
 static void
@@ -679,6 +683,75 @@ ignore_sigio (void)
 #endif
 }
 
+
+/* Saving and restoring the process group of Emacs's terminal.  */
+
+/* The process group of which Emacs was a member when it initially
+   started.
+
+   If Emacs was in its own process group (i.e. inherited_pgroup ==
+   getpid ()), then we know we're running under a shell with job
+   control (Emacs would never be run as part of a pipeline).
+   Everything is fine.
+
+   If Emacs was not in its own process group, then we know we're
+   running under a shell (or a caller) that doesn't know how to
+   separate itself from Emacs (like sh).  Emacs must be in its own
+   process group in order to receive SIGIO correctly.  In this
+   situation, we put ourselves in our own pgroup, forcibly set the
+   tty's pgroup to our pgroup, and make sure to restore and reinstate
+   the tty's pgroup just like any other terminal setting.  If
+   inherited_group was not the tty's pgroup, then we'll get a
+   SIGTTmumble when we try to change the tty's pgroup, and a CONT if
+   it goes foreground in the future, which is what should happen.  */
+
+static pid_t inherited_pgroup;
+
+void
+init_foreground_group (void)
+{
+  pid_t pgrp = getpgrp ();
+  inherited_pgroup = getpid () == pgrp ? 0 : pgrp;
+}
+
+/* Safely set a controlling terminal FD's process group to PGID.
+   If we are not in the foreground already, POSIX requires tcsetpgrp
+   to deliver a SIGTTOU signal, which would stop us.  This is an
+   annoyance, so temporarily ignore the signal.
+
+   In practice, platforms lacking SIGTTOU also lack tcsetpgrp, so
+   skip all this unless SIGTTOU is defined.  */
+static void
+tcsetpgrp_without_stopping (int fd, pid_t pgid)
+{
+#ifdef SIGTTOU
+  signal_handler_t handler;
+  block_input ();
+  handler = signal (SIGTTOU, SIG_IGN);
+  tcsetpgrp (fd, pgid);
+  signal (SIGTTOU, handler);
+  unblock_input ();
+#endif
+}
+
+/* Split off the foreground process group to Emacs alone.  When we are
+   in the foreground, but not started in our own process group,
+   redirect the tty device handle FD to point to our own process
+   group.  FD must be the file descriptor of the controlling tty.  */
+static void
+narrow_foreground_group (int fd)
+{
+  if (inherited_pgroup && setpgid (0, 0) == 0)
+    tcsetpgrp_without_stopping (fd, getpid ());
+}
+
+/* Set the tty to our original foreground group.  */
+static void
+widen_foreground_group (int fd)
+{
+  if (inherited_pgroup && setpgid (0, inherited_pgroup) == 0)
+    tcsetpgrp_without_stopping (fd, inherited_pgroup);
+}
 
 /* Getting and setting emacs_tty structures.  */
 
@@ -795,6 +868,8 @@ init_sys_modes (struct tty_display_info *tty_out)
 
   if (!tty_out->output)
     return;                     /* The tty is suspended. */
+
+  narrow_foreground_group (fileno (tty_out->input));
 
   if (! tty_out->old_tty)
     tty_out->old_tty = xmalloc (sizeof *tty_out->old_tty);
@@ -965,8 +1040,7 @@ init_sys_modes (struct tty_display_info *tty_out)
 #endif
 #endif
 
-#ifdef F_SETFL
-#ifdef F_GETOWN		/* F_SETFL does not imply existence of F_GETOWN */
+#ifdef F_GETOWN
   if (interrupt_input)
     {
       old_fcntl_owner[fileno (tty_out->input)] =
@@ -984,7 +1058,6 @@ init_sys_modes (struct tty_display_info *tty_out)
 #endif /* HAVE_GPM */
     }
 #endif /* F_GETOWN */
-#endif /* F_SETFL */
 
 #ifdef _IOFBF
   /* This symbol is defined on recent USG systems.
@@ -1204,8 +1277,8 @@ reset_sys_modes (struct tty_display_info *tty_out)
   fsync (fileno (tty_out->output));
 #endif
 
-#ifdef F_SETFL
-#ifdef F_SETOWN		/* F_SETFL does not imply existence of F_SETOWN */
+#ifndef DOS_NT
+#ifdef F_SETOWN
   if (interrupt_input)
     {
       reset_sigio (fileno (tty_out->input));
@@ -1213,11 +1286,9 @@ reset_sys_modes (struct tty_display_info *tty_out)
              old_fcntl_owner[fileno (tty_out->input)]);
     }
 #endif /* F_SETOWN */
-#ifdef O_NDELAY
   fcntl (fileno (tty_out->input), F_SETFL,
-         fcntl (fileno (tty_out->input), F_GETFL, 0) & ~O_NDELAY);
+         fcntl (fileno (tty_out->input), F_GETFL, 0) & ~O_NONBLOCK);
 #endif
-#endif /* F_SETFL */
 
   if (tty_out->old_tty)
     while (emacs_set_tty (fileno (tty_out->input),
@@ -1228,6 +1299,7 @@ reset_sys_modes (struct tty_display_info *tty_out)
   dos_ttcooked ();
 #endif
 
+  widen_foreground_group (fileno (tty_out->input));
 }
 
 #ifdef HAVE_PTYS
@@ -1441,11 +1513,12 @@ emacs_sigaction_init (struct sigaction *action, signal_handler_t handler)
   /* When handling a signal, block nonfatal system signals that are caught
      by Emacs.  This makes race conditions less likely.  */
   sigaddset (&action->sa_mask, SIGALRM);
-#ifdef SIGCHLD
   sigaddset (&action->sa_mask, SIGCHLD);
-#endif
 #ifdef SIGDANGER
   sigaddset (&action->sa_mask, SIGDANGER);
+#endif
+#ifdef PROFILER_CPU_SUPPORT
+  sigaddset (&action->sa_mask, SIGPROF);
 #endif
 #ifdef SIGWINCH
   sigaddset (&action->sa_mask, SIGWINCH);
@@ -1537,19 +1610,27 @@ deliver_thread_signal (int sig, signal_handler_t handler)
   errno = old_errno;
 }
 
-#if !defined HAVE_STRSIGNAL && !HAVE_DECL_SYS_SIGLIST
-static char *my_sys_siglist[NSIG];
-# ifdef sys_siglist
-#  undef sys_siglist
+#if !HAVE_DECL_SYS_SIGLIST
+# undef sys_siglist
+# ifdef _sys_siglist
+#  define sys_siglist _sys_siglist
+# else
+#  define sys_siglist my_sys_siglist
+static char const *sys_siglist[NSIG];
 # endif
-# define sys_siglist my_sys_siglist
+#endif
+
+#ifdef _sys_nsig
+# define sys_siglist_entries _sys_nsig
+#else
+# define sys_siglist_entries NSIG
 #endif
 
 /* Handle bus errors, invalid instruction, etc.  */
 static void
 handle_fatal_signal (int sig)
 {
-  terminate_due_to_signal (sig, 10);
+  terminate_due_to_signal (sig, 40);
 }
 
 static void
@@ -1605,25 +1686,18 @@ init_signals (bool dumping)
   main_thread = pthread_self ();
 #endif
 
-#if !defined HAVE_STRSIGNAL && !HAVE_DECL_SYS_SIGLIST
+#if !HAVE_DECL_SYS_SIGLIST && !defined _sys_siglist
   if (! initialized)
     {
       sys_siglist[SIGABRT] = "Aborted";
 # ifdef SIGAIO
       sys_siglist[SIGAIO] = "LAN I/O interrupt";
 # endif
-# ifdef SIGALRM
       sys_siglist[SIGALRM] = "Alarm clock";
-# endif
 # ifdef SIGBUS
       sys_siglist[SIGBUS] = "Bus error";
 # endif
-# ifdef SIGCLD
-      sys_siglist[SIGCLD] = "Child status changed";
-# endif
-# ifdef SIGCHLD
       sys_siglist[SIGCHLD] = "Child status changed";
-# endif
 # ifdef SIGCONT
       sys_siglist[SIGCONT] = "Continued";
 # endif
@@ -1643,9 +1717,7 @@ init_signals (bool dumping)
 # ifdef SIGGRANT
       sys_siglist[SIGGRANT] = "Monitor mode granted";
 # endif
-# ifdef SIGHUP
       sys_siglist[SIGHUP] = "Hangup";
-# endif
       sys_siglist[SIGILL] = "Illegal instruction";
       sys_siglist[SIGINT] = "Interrupt";
 # ifdef SIGIO
@@ -1657,9 +1729,7 @@ init_signals (bool dumping)
 # ifdef SIGIOT
       sys_siglist[SIGIOT] = "IOT trap";
 # endif
-# ifdef SIGKILL
       sys_siglist[SIGKILL] = "Killed";
-# endif
 # ifdef SIGLOST
       sys_siglist[SIGLOST] = "Resource lost";
 # endif
@@ -1672,9 +1742,7 @@ init_signals (bool dumping)
 # ifdef SIGPHONE
       sys_siglist[SIGWIND] = "SIGPHONE";
 # endif
-# ifdef SIGPIPE
       sys_siglist[SIGPIPE] = "Broken pipe";
-# endif
 # ifdef SIGPOLL
       sys_siglist[SIGPOLL] = "Pollable event occurred";
 # endif
@@ -1687,9 +1755,7 @@ init_signals (bool dumping)
 # ifdef SIGPWR
       sys_siglist[SIGPWR] = "Power-fail restart";
 # endif
-# ifdef SIGQUIT
       sys_siglist[SIGQUIT] = "Quit";
-# endif
 # ifdef SIGRETRACT
       sys_siglist[SIGRETRACT] = "Need to relinquish monitor mode";
 # endif
@@ -1753,7 +1819,7 @@ init_signals (bool dumping)
       sys_siglist[SIGXFSZ] = "File size limit exceeded";
 # endif
     }
-#endif /* !defined HAVE_STRSIGNAL && !defined HAVE_DECL_SYS_SIGLIST */
+#endif /* !HAVE_DECL_SYS_SIGLIST && !_sys_siglist */
 
   /* Don't alter signal handlers if dumping.  On some machines,
      changing signal handlers sets static data that would make signals
@@ -1837,7 +1903,7 @@ init_signals (bool dumping)
 #endif
   sigaction (SIGTERM, &process_fatal_action, 0);
 #ifdef SIGPROF
-  sigaction (SIGPROF, &process_fatal_action, 0);
+  signal (SIGPROF, SIG_IGN);
 #endif
 #ifdef SIGVTALRM
   sigaction (SIGVTALRM, &process_fatal_action, 0);
@@ -2044,7 +2110,7 @@ emacs_backtrace (int backtrace_limit)
 void
 emacs_abort (void)
 {
-  terminate_due_to_signal (SIGABRT, 10);
+  terminate_due_to_signal (SIGABRT, 40);
 }
 #endif
 
@@ -2159,82 +2225,6 @@ emacs_readlink (char const *filename, char initial_buf[READLINK_BUFSIZE])
 		       &emacs_norealloc_allocator, careadlinkatcwd);
 }
 
-#ifdef USG
-/*
- *	All of the following are for USG.
- *
- *	On USG systems the system calls are INTERRUPTIBLE by signals
- *	that the user program has elected to catch.  Thus the system call
- *	must be retried in these cases.  To handle this without massive
- *	changes in the source code, we remap the standard system call names
- *	to names for our own functions in sysdep.c that do the system call
- *	with retries.  Actually, for portability reasons, it is good
- *	programming practice, as this example shows, to limit all actual
- *	system calls to a single occurrence in the source.  Sure, this
- *	adds an extra level of function call overhead but it is almost
- *	always negligible.   Fred Fish, Unisoft Systems Inc.
- */
-
-/*
- *	Warning, this function may not duplicate 4.2 action properly
- *	under error conditions.
- */
-
-#if !defined (HAVE_GETWD) || defined (BROKEN_GETWD)
-
-#ifndef MAXPATHLEN
-/* In 4.1, param.h fails to define this.  */
-#define MAXPATHLEN 1024
-#endif
-
-char *
-getwd (char *pathname)
-{
-  char *npath, *spath;
-  extern char *getcwd (char *, size_t);
-
-  block_input ();			/* getcwd uses malloc */
-  spath = npath = getcwd ((char *) 0, MAXPATHLEN);
-  if (spath == 0)
-    {
-      unblock_input ();
-      return spath;
-    }
-  /* On Altos 3068, getcwd can return @hostname/dir, so discard
-     up to first slash.  Should be harmless on other systems.  */
-  while (*npath && *npath != '/')
-    npath++;
-  strcpy (pathname, npath);
-  free (spath);			/* getcwd uses malloc */
-  unblock_input ();
-  return pathname;
-}
-
-#endif /* !defined (HAVE_GETWD) || defined (BROKEN_GETWD) */
-#endif /* USG */
-
-/* Directory routines for systems that don't have them. */
-
-#ifdef HAVE_DIRENT_H
-
-#include <dirent.h>
-
-#if !defined (HAVE_CLOSEDIR)
-
-int
-closedir (DIR *dirp /* stream from opendir */)
-{
-  int rtnval;
-
-  rtnval = emacs_close (dirp->dd_fd);
-  xfree (dirp);
-
-  return rtnval;
-}
-#endif /* not HAVE_CLOSEDIR */
-#endif /* HAVE_DIRENT_H */
-
-
 /* Return a struct timeval that is roughly equivalent to T.
    Use the least timeval not less than T.
    Return an extremal value if the result would overflow.  */
@@ -2274,40 +2264,27 @@ set_file_times (int fd, const char *filename,
   return fdutimens (fd, filename, timespec);
 }
 
-#ifndef HAVE_STRSIGNAL
-char *
-strsignal (int code)
+/* Like strsignal, except async-signal-safe, and this function typically
+   returns a string in the C locale rather than the current locale.  */
+char const *
+safe_strsignal (int code)
 {
-  char *signame = 0;
+  char const *signame = 0;
 
-  if (0 <= code && code < NSIG)
-    {
-      /* Cast to suppress warning if the table has const char *.  */
-      signame = (char *) sys_siglist[code];
-    }
+  if (0 <= code && code < sys_siglist_entries)
+    signame = sys_siglist[code];
+  if (! signame)
+    signame = "Unknown signal";
 
   return signame;
 }
-#endif /* HAVE_STRSIGNAL */
 
 #ifndef DOS_NT
 /* For make-serial-process  */
 int
 serial_open (char *port)
 {
-  int fd = -1;
-
-  fd = emacs_open ((char*) port,
-		   O_RDWR
-#ifdef O_NONBLOCK
-		   | O_NONBLOCK
-#else
-		   | O_NDELAY
-#endif
-#ifdef O_NOCTTY
-		   | O_NOCTTY
-#endif
-		   , 0);
+  int fd = emacs_open (port, O_RDWR | O_NOCTTY | O_NONBLOCK, 0);
   if (fd < 0)
     {
       error ("Could not open %s: %s",

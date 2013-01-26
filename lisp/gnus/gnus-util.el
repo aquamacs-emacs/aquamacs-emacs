@@ -225,7 +225,7 @@ is slower."
 
 
 (defun gnus-goto-colon ()
-  (beginning-of-line)
+  (move-beginning-of-line 1)
   (let ((eol (point-at-eol)))
     (goto-char (or (text-property-any (point) eol 'gnus-position t)
 		   (search-forward ":" eol t)
@@ -866,18 +866,29 @@ If there's no subdirectory, delete DIRECTORY as well."
 	  (setq beg (point)))
 	(gnus-overlay-put (gnus-make-overlay beg (point)) prop val)))))
 
-(defun gnus-put-text-property-excluding-characters-with-faces (beg end
-								   prop val)
-  "The same as `put-text-property', but don't put props on characters with the `gnus-face' property."
-  (let ((b beg))
-    (while (/= b end)
-      (when (get-text-property b 'gnus-face)
-	(setq b (next-single-property-change b 'gnus-face nil end)))
-      (when (/= b end)
+(defun gnus-put-text-property-excluding-characters-with-faces (beg end prop val)
+  "The same as `put-text-property', except where `gnus-face' is set.
+If so, and PROP is `face', set the second element of its value to VAL.
+Otherwise, do nothing."
+  (while (< beg end)
+    ;; Property values are compared with `eq'.
+    (let ((stop (next-single-property-change beg 'face nil end)))
+      (if (get-text-property beg 'gnus-face)
+	  (when (eq prop 'face)
+	    (setcar (cdr (get-text-property beg 'face)) val))
 	(inline
-	  (gnus-put-text-property
-	   b (setq b (next-single-property-change b 'gnus-face nil end))
-	   prop val))))))
+	  (gnus-put-text-property beg stop prop val)))
+      (setq beg stop))))
+
+(defun gnus-get-text-property-excluding-characters-with-faces (pos prop)
+  "The same as `get-text-property', except where `gnus-face' is set.
+If so, and PROP is `face', return the second element of its value.
+Otherwise, return the value."
+  (let ((val (get-text-property pos prop)))
+    (if (and (get-text-property pos 'gnus-face)
+	     (eq prop 'face))
+	(cadr val)
+      (get-text-property pos prop))))
 
 (defmacro gnus-faces-at (position)
   "Return a list of faces at POSITION."
@@ -1937,27 +1948,6 @@ to case differences."
 	   (if ignore-case
 	       (string-equal (downcase str1) (downcase prefix))
 	     (string-equal str1 prefix))))))
-
-(eval-and-compile
-  (if (fboundp 'macroexpand-all)
-      (defalias 'gnus-macroexpand-all 'macroexpand-all)
-    (defun gnus-macroexpand-all (form &optional environment)
-      "Return result of expanding macros at all levels in FORM.
-If no macros are expanded, FORM is returned unchanged.
-The second optional arg ENVIRONMENT specifies an environment of macro
-definitions to shadow the loaded ones for use in file byte-compilation."
-      (if (consp form)
-	  (let ((idx 1)
-		(len (length (setq form (copy-sequence form))))
-		expanded)
-	    (while (< idx len)
-	      (setcar (nthcdr idx form) (gnus-macroexpand-all (nth idx form)
-							      environment))
-	      (setq idx (1+ idx)))
-	    (if (eq (setq expanded (macroexpand form environment)) form)
-		form
-	      (gnus-macroexpand-all expanded environment)))
-	form))))
 
 ;; Simple check: can be a macro but this way, although slow, it's really clear.
 ;; We don't use `bound-and-true-p' because it's not in XEmacs.

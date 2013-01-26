@@ -21,7 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <signal.h>
 #include <stdio.h>
-#include <mbstring.h>
+#include <setjmp.h>
 
 #include "lisp.h"
 #include "keyboard.h"
@@ -40,6 +40,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    if this is not done before the other system files.  */
 #include "w32term.h"
 
+/* Cygwin does not support the multibyte string functions declared in
+ * mbstring.h below --- but that's okay: because Cygwin is
+ * UNICODE-only, we don't need to use these functions anyway.  */
+
+#ifndef NTGUI_UNICODE
+#include <mbstring.h>
+#endif /* !NTGUI_UNICODE */
+
 /* Load sys/types.h if not already loaded.
    In some systems loading it twice is suicidal.  */
 #ifndef makedev
@@ -48,7 +56,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include "dispextern.h"
 
-#include "w32heap.h"	/* for osinfo_cache */
+#include "w32common.h"	/* for osinfo_cache */
 
 #undef HAVE_DIALOGS /* TODO: Implement native dialogs.  */
 
@@ -78,10 +86,17 @@ typedef int (WINAPI * MessageBoxW_Proc) (
     IN WCHAR *caption,
     IN UINT type);
 
+#ifdef NTGUI_UNICODE
+#define get_menu_item_info GetMenuItemInfoA
+#define set_menu_item_info SetMenuItemInfoA
+#define unicode_append_menu AppendMenuW
+#define unicode_message_box MessageBoxW
+#else /* !NTGUI_UNICODE */
 GetMenuItemInfoA_Proc get_menu_item_info = NULL;
 SetMenuItemInfoA_Proc set_menu_item_info = NULL;
 AppendMenuW_Proc unicode_append_menu = NULL;
 MessageBoxW_Proc unicode_message_box = NULL;
+#endif /* NTGUI_UNICODE */
 
 Lisp_Object Qdebug_on_next_call;
 
@@ -98,17 +113,7 @@ static void utf8to16 (unsigned char *, int, WCHAR *);
 static int fill_in_menu (HMENU, widget_value *);
 
 void w32_free_menu_strings (HWND);
-
 
-/* This is set nonzero after the user activates the menu bar, and set
-   to zero again after the menu bars are redisplayed by prepare_menu_bar.
-   While it is nonzero, all calls to set_frame_menubar go deep.
-
-   I don't understand why this is needed, but it does seem to be
-   needed on Motif, according to Marcus Daniels <marcus@sysc.pdx.edu>.  */
-
-int pending_menu_activation;
-
 #ifdef HAVE_MENUS
 
 DEFUN ("x-popup-dialog", Fx_popup_dialog, Sx_popup_dialog, 2, 3, 0,
@@ -372,8 +377,6 @@ set_frame_menubar (FRAME_PTR f, bool first_time, bool deep_p)
   XSETFRAME (Vmenu_updating_frame, f);
 
   if (! menubar_widget)
-    deep_p = 1;
-  else if (pending_menu_activation && !deep_p)
     deep_p = 1;
 
   if (deep_p)
@@ -1405,6 +1408,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
                 nlen++;
             }
         }
+#ifndef NTGUI_UNICODE
       else
         {
           /* If encoded with the system codepage, use multibyte string
@@ -1415,6 +1419,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
                 nlen++;
             }
         }
+#endif /* !NTGUI_UNICODE */
 
       if (nlen > orig_len)
         {
@@ -1429,6 +1434,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
                     *q++ = *p;
                   *q++ = *p++;
                 }
+#ifndef NTGUI_UNICODE
               else
                 {
                   if (_mbsnextc (p) == '&')
@@ -1440,6 +1446,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
                   p = _mbsinc (p);
                   q = _mbsinc (q);
                 }
+#endif /* !NTGUI_UNICODE */
             }
           *q = '\0';
         }
@@ -1483,9 +1490,11 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
 
       utf8to16 (out_string, utf8_len, utf16_string);
       return_value = unicode_append_menu (menu, fuFlags,
-					  item != NULL ? (UINT) item
-					    : (UINT) wv->call_data,
+					  item != NULL ? (UINT_PTR) item
+					    : (UINT_PTR) wv->call_data,
 					  utf16_string);
+
+#ifndef NTGUI_UNICODE /* Fallback does not apply when always UNICODE */
       if (!return_value)
 	{
 	  /* On W9x/ME, Unicode menus are not supported, though AppendMenuW
@@ -1496,7 +1505,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
 	     of minor importance compared with menus not working at all.  */
 	  return_value =
 	    AppendMenu (menu, fuFlags,
-			item != NULL ? (UINT) item: (UINT) wv->call_data,
+			item != NULL ? (UINT_PTR) item: (UINT_PTR) wv->call_data,
 			out_string);
 	  /* Don't use Unicode menus in future, unless this is Windows
 	     NT or later, where a failure of AppendMenuW does NOT mean
@@ -1504,6 +1513,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
 	  if (osinfo_cache.dwPlatformId != VER_PLATFORM_WIN32_NT)
 	    unicode_append_menu = NULL;
 	}
+#endif /* NTGUI_UNICODE */
 
       if (unicode_append_menu && (fuFlags & MF_OWNERDRAW))
 	local_free (out_string);
@@ -1513,7 +1523,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
       return_value =
 	AppendMenu (menu,
 		    fuFlags,
-		    item != NULL ? (UINT) item : (UINT) wv->call_data,
+		    item != NULL ? (UINT_PTR) item : (UINT_PTR) wv->call_data,
 		    out_string );
     }
 
@@ -1550,7 +1560,7 @@ add_menu_item (HMENU menu, widget_value *wv, HMENU item)
 	    }
 
 	  set_menu_item_info (menu,
-			      item != NULL ? (UINT) item : (UINT) wv->call_data,
+			      item != NULL ? (UINT_PTR) item : (UINT_PTR) wv->call_data,
 			      FALSE, &info);
 	}
     }
@@ -1723,10 +1733,12 @@ syms_of_w32menu (void)
 void
 globals_of_w32menu (void)
 {
+#ifndef NTGUI_UNICODE
   /* See if Get/SetMenuItemInfo functions are available.  */
   HMODULE user32 = GetModuleHandle ("user32.dll");
   get_menu_item_info = (GetMenuItemInfoA_Proc) GetProcAddress (user32, "GetMenuItemInfoA");
   set_menu_item_info = (SetMenuItemInfoA_Proc) GetProcAddress (user32, "SetMenuItemInfoA");
   unicode_append_menu = (AppendMenuW_Proc) GetProcAddress (user32, "AppendMenuW");
   unicode_message_box = (MessageBoxW_Proc) GetProcAddress (user32, "MessageBoxW");
+#endif /* !NTGUI_UNICODE */
 }

@@ -391,7 +391,7 @@ size, and full-buffer size."
 	    (shr-indent))
 	  (end-of-line))
 	(insert " ")))
-    (unless (string-match "[ \t\n ]\\'" text)
+    (unless (string-match "[ \t\r\n ]\\'" text)
       (delete-char -1)))))
 
 (defun shr-find-fill-point ()
@@ -894,7 +894,7 @@ ones, in case fg and bg are nil."
   (shr-fontize-cont cont 'italic))
 
 (defun shr-tag-em (cont)
-  (shr-fontize-cont cont 'bold))
+  (shr-fontize-cont cont 'italic))
 
 (defun shr-tag-strong (cont)
   (shr-fontize-cont cont 'bold))
@@ -931,7 +931,8 @@ ones, in case fg and bg are nil."
 	(start (point))
 	shr-start)
     (shr-generic cont)
-    (shr-urlify (or shr-start start) (shr-expand-url url) title)))
+    (when url
+      (shr-urlify (or shr-start start) (shr-expand-url url) title))))
 
 (defun shr-tag-object (cont)
   (let ((start (point))

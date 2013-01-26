@@ -2088,8 +2088,7 @@ This function should be a pre-command hook."
   (if (and comint-scroll-to-bottom-on-input
 	   (memq this-command '(self-insert-command comint-magic-space yank
 				hilit-yank)))
-      (let* ((selected (selected-window))
-	     (current (current-buffer))
+      (let* ((current (current-buffer))
 	     (process (get-buffer-process current))
 	     (scroll comint-scroll-to-bottom-on-input))
 	(if (and process (< (point) (process-mark process)))
@@ -2099,10 +2098,8 @@ This function should be a pre-command hook."
                (lambda (window)
                  (if (and (eq (window-buffer window) current)
                           (or (eq scroll t) (eq scroll 'all)))
-                     (progn
-                       (select-window window)
-                       (goto-char (point-max))
-                       (select-window selected))))
+                     (with-selected-window window
+                       (goto-char (point-max)))))
 	       nil t))))))
 
 (defvar follow-mode)
@@ -2783,11 +2780,8 @@ the load or compile."
     (if (and buff
 	     (buffer-modified-p buff)
 	     (y-or-n-p (format "Save buffer %s first? " (buffer-name buff))))
-	;; save BUFF.
-	(let ((old-buffer (current-buffer)))
-	  (set-buffer buff)
-	  (save-buffer)
-	  (set-buffer old-buffer)))))
+        (with-current-buffer buff
+	  (save-buffer)))))
 
 (defun comint-extract-string ()
   "Return string around point, or nil."
@@ -3496,6 +3490,11 @@ This works by binding `inhibit-read-only' around the insertion.
 This is useful, for instance, for insertion into Help mode buffers.
 You probably want to set it locally to the output buffer.")
 
+(defvar comint-redirect-previous-input-string nil
+  "Last redirected line of text.
+Allows detection of the end of the redirection in case the
+completion string is split between two output segments.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -3533,6 +3532,9 @@ and does not normally need to be invoked by the end user or programmer."
     (make-local-variable 'comint-redirect-completed)
     (setq comint-redirect-completed nil)
 
+    (make-local-variable 'comint-redirect-previous-input-string)
+    (setq comint-redirect-previous-input-string "")
+
     (setq mode-line-process
 	  (if mode-line-process
 	      (list (concat (elt mode-line-process 0) " Redirection"))
@@ -3541,6 +3543,8 @@ and does not normally need to be invoked by the end user or programmer."
 (defun comint-redirect-cleanup ()
   "End a Comint redirection.  See `comint-redirect-send-command'."
   (interactive)
+  ;; Release the last redirected string
+  (setq comint-redirect-previous-input-string nil)
   ;; Restore the process filter
   (set-process-filter (get-buffer-process (current-buffer))
 		      comint-redirect-original-filter-function)
@@ -3622,18 +3626,21 @@ This function does not need to be invoked by the end user."
 
     ;; Message
     (and comint-redirect-verbose
-	 (message "Redirected output to buffer(s) %s"
-		  (mapconcat 'identity output-buffer-list " ")))
+	 (message "Redirected output to buffer(s) %s" output-buffer-list))
 
     ;; If we see the prompt, tidy up
     ;; We'll look for the prompt in the original string, so nobody can
     ;; clobber it
-    (and (string-match comint-redirect-finished-regexp input-string)
+    (and (string-match comint-redirect-finished-regexp 
+                       (concat comint-redirect-previous-input-string 
+                               input-string))
 	 (progn
 	   (and comint-redirect-verbose
 		(message "Redirection completed"))
 	   (comint-redirect-cleanup)
 	   (run-hooks 'comint-redirect-hook)))
+    (setq comint-redirect-previous-input-string input-string)
+
     ;; Echo input?
     (if comint-redirect-echo-input
 	filtered-input-string

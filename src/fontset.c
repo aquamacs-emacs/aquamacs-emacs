@@ -42,7 +42,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef HAVE_X_WINDOWS
 #include "xterm.h"
 #endif
-#ifdef WINDOWSNT
+#ifdef HAVE_NTGUI
 #include "w32term.h"
 #endif
 #ifdef HAVE_NS
@@ -1326,17 +1326,14 @@ static Lisp_Object
 check_fontset_name (Lisp_Object name, Lisp_Object *frame)
 {
   int id;
+  struct frame *f = decode_live_frame (*frame);
 
-  if (NILP (*frame))
-    *frame = selected_frame;
-  CHECK_LIVE_FRAME (*frame);
+  XSETFRAME (*frame, f);
 
   if (EQ (name, Qt))
     return Vdefault_fontset;
   if (NILP (name))
-    {
-      id = FRAME_FONTSET (XFRAME (*frame));
-    }
+    id = FRAME_FONTSET (f);
   else
     {
       CHECK_STRING (name);
@@ -1878,6 +1875,8 @@ DEFUN ("internal-char-font", Finternal_char_font, Sinternal_char_font, 1, 2, 0,
 					 pos + 100, 0, -1);
     }
   if (! CHAR_VALID_P (c))
+    return Qnil;
+  if (!FRAME_WINDOW_P (f))
     return Qnil;
   face_id = FACE_FOR_CHAR (f, FACE_FROM_ID (f, face_id), c, pos, Qnil);
   face = FACE_FROM_ID (f, face_id);

@@ -813,6 +813,14 @@ xg_hide_tooltip (FRAME_PTR f)
     General functions for creating widgets, resizing, events, e.t.c.
  ***********************************************************************/
 
+static void
+my_log_handler (const gchar *log_domain, GLogLevelFlags log_level,
+		const gchar *msg, gpointer user_data)
+{
+  if (!strstr (msg, "visible children"))
+    fprintf (stderr, "XX %s-WARNING **: %s\n", log_domain, msg);
+}
+
 /* Make a geometry string and pass that to GTK.  It seems this is the
    only way to get geometry position right if the user explicitly
    asked for a position when starting Emacs.
@@ -828,6 +836,7 @@ xg_set_geometry (FRAME_PTR f)
       int top = f->top_pos;
       int yneg = f->size_hint_flags & YNegative;
       char geom_str[sizeof "=x--" + 4 * INT_STRLEN_BOUND (int)];
+      guint id;
 
       if (xneg)
         left = -left;
@@ -840,9 +849,15 @@ xg_set_geometry (FRAME_PTR f)
                (xneg ? '-' : '+'), left,
                (yneg ? '-' : '+'), top);
 
+      /* Silence warning about visible children.  */
+      id = g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL
+                              | G_LOG_FLAG_RECURSION, my_log_handler, NULL);
+
       if (!gtk_window_parse_geometry (GTK_WINDOW (FRAME_GTK_OUTER_WIDGET (f)),
                                       geom_str))
         fprintf (stderr, "Failed to parse: '%s'\n", geom_str);
+
+      g_log_remove_handler ("Gtk", id);
     }
 }
 
@@ -1035,9 +1050,9 @@ xg_set_widget_bg (FRAME_PTR f, GtkWidget *w, long unsigned int pixel)
   xbg.pixel = pixel;
   if (XQueryColor (FRAME_X_DISPLAY (f), FRAME_X_COLORMAP (f), &xbg))
     {
-      bg.red = (double)xbg.red/65536.0;
-      bg.green = (double)xbg.green/65536.0;
-      bg.blue = (double)xbg.blue/65536.0;
+      bg.red = (double)xbg.red/65535.0;
+      bg.green = (double)xbg.green/65535.0;
+      bg.blue = (double)xbg.blue/65535.0;
       bg.alpha = 1.0;
       gtk_widget_override_background_color (w, GTK_STATE_FLAG_NORMAL, &bg);
     }
@@ -3781,13 +3796,8 @@ xg_set_toolkit_scroll_bar_thumb (struct scroll_bar *bar,
           shown = (gdouble) portion / whole;
         }
 
-      size = shown * XG_SB_RANGE;
-      size = min (size, XG_SB_RANGE);
-      size = max (size, 1);
-
-      value = top * XG_SB_RANGE;
-      value = min (value, XG_SB_MAX - size);
-      value = max (value, XG_SB_MIN);
+      size = clip_to_bounds (1, shown * XG_SB_RANGE, XG_SB_RANGE);
+      value = clip_to_bounds (XG_SB_MIN, top * XG_SB_RANGE, XG_SB_MAX - size);
 
       /* Assume all lines are of equal size.  */
       new_step = size / max (1, FRAME_LINES (f));
@@ -4128,7 +4138,7 @@ xg_tool_bar_detach_callback (GtkHandleBox *wbox,
   if (f)
     {
       GtkRequisition req, req2;
-      FRAME_X_OUTPUT (f)->toolbar_detached = 1;
+
       gtk_widget_get_preferred_size (GTK_WIDGET (wbox), NULL, &req);
       gtk_widget_get_preferred_size (w, NULL, &req2);
       req.width -= req2.width;
@@ -4163,7 +4173,7 @@ xg_tool_bar_attach_callback (GtkHandleBox *wbox,
   if (f)
     {
       GtkRequisition req, req2;
-      FRAME_X_OUTPUT (f)->toolbar_detached = 0;
+
       gtk_widget_get_preferred_size (GTK_WIDGET (wbox), NULL, &req);
       gtk_widget_get_preferred_size (w, NULL, &req2);
       req.width += req2.width;
@@ -4337,7 +4347,6 @@ xg_create_tool_bar (FRAME_PTR f)
     }
 
   x->toolbar_widget = gtk_toolbar_new ();
-  x->toolbar_detached = 0;
 
   gtk_widget_set_name (x->toolbar_widget, "emacs-toolbar");
 

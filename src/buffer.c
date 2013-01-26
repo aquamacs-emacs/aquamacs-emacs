@@ -150,222 +150,222 @@ static void modify_overlay (struct buffer *, ptrdiff_t, ptrdiff_t);
 static Lisp_Object buffer_lisp_local_variables (struct buffer *, bool);
 
 /* These setters are used only in this file, so they can be private.  */
-static inline void
+static void
 bset_abbrev_mode (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (abbrev_mode) = val;
 }
-static inline void
+static void
 bset_abbrev_table (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (abbrev_table) = val;
 }
-static inline void
+static void
 bset_auto_fill_function (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (auto_fill_function) = val;
 }
-static inline void
+static void
 bset_auto_save_file_format (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (auto_save_file_format) = val;
 }
-static inline void
+static void
 bset_auto_save_file_name (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (auto_save_file_name) = val;
 }
-static inline void
+static void
 bset_backed_up (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (backed_up) = val;
 }
-static inline void
+static void
 bset_begv_marker (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (begv_marker) = val;
 }
-static inline void
+static void
 bset_bidi_display_reordering (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (bidi_display_reordering) = val;
 }
-static inline void
+static void
 bset_buffer_file_coding_system (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (buffer_file_coding_system) = val;
 }
-static inline void
+static void
 bset_cache_long_line_scans (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (cache_long_line_scans) = val;
 }
-static inline void
+static void
 bset_case_fold_search (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (case_fold_search) = val;
 }
-static inline void
+static void
 bset_ctl_arrow (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (ctl_arrow) = val;
 }
-static inline void
+static void
 bset_cursor_in_non_selected_windows (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (cursor_in_non_selected_windows) = val;
 }
-static inline void
+static void
 bset_cursor_type (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (cursor_type) = val;
 }
-static inline void
+static void
 bset_display_table (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (display_table) = val;
 }
-static inline void
+static void
 bset_extra_line_spacing (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (extra_line_spacing) = val;
 }
-static inline void
+static void
 bset_file_format (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (file_format) = val;
 }
-static inline void
+static void
 bset_file_truename (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (file_truename) = val;
 }
-static inline void
+static void
 bset_fringe_cursor_alist (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (fringe_cursor_alist) = val;
 }
-static inline void
+static void
 bset_fringe_indicator_alist (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (fringe_indicator_alist) = val;
 }
-static inline void
+static void
 bset_fringes_outside_margins (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (fringes_outside_margins) = val;
 }
-static inline void
+static void
 bset_header_line_format (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (header_line_format) = val;
 }
-static inline void
+static void
 bset_indicate_buffer_boundaries (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (indicate_buffer_boundaries) = val;
 }
-static inline void
+static void
 bset_indicate_empty_lines (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (indicate_empty_lines) = val;
 }
-static inline void
+static void
 bset_invisibility_spec (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (invisibility_spec) = val;
 }
-static inline void
+static void
 bset_left_fringe_width (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (left_fringe_width) = val;
 }
-static inline void
+static void
 bset_major_mode (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (major_mode) = val;
 }
-static inline void
+static void
 bset_mark (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (mark) = val;
 }
-static inline void
+static void
 bset_minor_modes (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (minor_modes) = val;
 }
-static inline void
+static void
 bset_mode_line_format (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (mode_line_format) = val;
 }
-static inline void
+static void
 bset_mode_name (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (mode_name) = val;
 }
-static inline void
+static void
 bset_name (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (name) = val;
 }
-static inline void
+static void
 bset_overwrite_mode (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (overwrite_mode) = val;
 }
-static inline void
+static void
 bset_pt_marker (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (pt_marker) = val;
 }
-static inline void
+static void
 bset_right_fringe_width (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (right_fringe_width) = val;
 }
-static inline void
+static void
 bset_save_length (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (save_length) = val;
 }
-static inline void
+static void
 bset_scroll_bar_width (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (scroll_bar_width) = val;
 }
-static inline void
+static void
 bset_scroll_down_aggressively (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (scroll_down_aggressively) = val;
 }
-static inline void
+static void
 bset_scroll_up_aggressively (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (scroll_up_aggressively) = val;
 }
-static inline void
+static void
 bset_selective_display (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (selective_display) = val;
 }
-static inline void
+static void
 bset_selective_display_ellipses (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (selective_display_ellipses) = val;
 }
-static inline void
+static void
 bset_vertical_scroll_bar_type (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (vertical_scroll_bar_type) = val;
 }
-static inline void
+static void
 bset_word_wrap (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (word_wrap) = val;
 }
-static inline void
+static void
 bset_zv_marker (struct buffer *b, Lisp_Object val)
 {
   b->INTERNAL_FIELD (zv_marker) = val;
@@ -406,7 +406,6 @@ followed by the rest of the buffers.  */)
       Lisp_Object framelist, prevlist, tail;
       Lisp_Object args[3];
 
-      CHECK_FRAME (frame);
       framelist = Fcopy_sequence (XFRAME (frame)->buffer_list);
       prevlist = Fnreverse (Fcopy_sequence
 			    (XFRAME (frame)->buried_buffer_list));
@@ -548,6 +547,8 @@ even if it is dead.  The return value is never nil.  */)
   b->base_buffer = NULL;
   /* No one shares the text with us now.  */
   b->indirections = 0;
+  /* No one shows us now.  */
+  b->window_count = 0;
 
   BUF_GAP_SIZE (b) = 20;
   block_input ();
@@ -574,6 +575,7 @@ even if it is dead.  The return value is never nil.  */)
   BUF_CHARS_MODIFF (b) = 1;
   BUF_OVERLAY_MODIFF (b) = 1;
   BUF_SAVE_MODIFF (b) = 1;
+  BUF_COMPACT (b) = 1;
   set_buffer_intervals (b, NULL);
   BUF_UNCHANGED_MODIFIED (b) = 1;
   BUF_OVERLAY_UNCHANGED_MODIFIED (b) = 1;
@@ -651,13 +653,13 @@ copy_overlays (struct buffer *b, struct Lisp_Overlay *list)
 
 /* Set an appropriate overlay of B.  */
 
-static inline void
+static void
 set_buffer_overlays_before (struct buffer *b, struct Lisp_Overlay *o)
 {
   b->overlays_before = o;
 }
 
-static inline void
+static void
 set_buffer_overlays_after (struct buffer *b, struct Lisp_Overlay *o)
 {
   b->overlays_after = o;
@@ -795,6 +797,8 @@ CLONE nil means the indirect buffer's state is reset to default values.  */)
   b->indirections = -1;
   /* Notify base buffer that we share the text now.  */
   b->base_buffer->indirections++;
+  /* Always -1 for an indirect buffer.  */
+  b->window_count = -1;
 
   b->pt = b->base_buffer->pt;
   b->begv = b->base_buffer->begv;
@@ -897,6 +901,8 @@ delete_all_overlays (struct buffer *b)
 {
   struct Lisp_Overlay *ov, *next;
 
+  /* FIXME: Since each drop_overlay will scan BUF_MARKERS to unlink its
+     markers, we have an unneeded O(N^2) behavior here.  */
   for (ov = b->overlays_before; ov; ov = next)
     {
       drop_overlay (b, ov);
@@ -1335,7 +1341,7 @@ DEFUN ("set-buffer-modified-p", Fset_buffer_modified_p, Sset_buffer_modified_p,
 A non-nil FLAG means mark the buffer modified.  */)
   (Lisp_Object flag)
 {
-  Lisp_Object fn, buffer, window;
+  Lisp_Object fn;
 
 #ifdef CLASH_DETECTION
   /* If buffer becoming modified, lock the file.
@@ -1388,9 +1394,7 @@ A non-nil FLAG means mark the buffer modified.  */)
      Ideally, I think there should be another mechanism for fontifying
      buffers without "modifying" buffers, or redisplay should be
      smarter about updating the `*' in mode lines.  --gerd  */
-  XSETBUFFER (buffer, current_buffer);
-  window = Fget_buffer_window (buffer, Qt);
-  if (WINDOWP (window))
+  if (buffer_window_count (current_buffer))
     {
       ++update_mode_lines;
       current_buffer->prevent_redisplay_optimizations_p = 1;
@@ -1528,6 +1532,16 @@ This does not change the name of the visited file (if any).  */)
   return BVAR (current_buffer, name);
 }
 
+/* True if B can be used as 'other-than-BUFFER' buffer.  */
+
+static bool
+candidate_buffer (Lisp_Object b, Lisp_Object buffer)
+{
+  return (BUFFERP (b) && !EQ (b, buffer)
+	  && BUFFER_LIVE_P (XBUFFER (b))
+	  && !BUFFER_HIDDEN_P (XBUFFER (b)));
+}
+	  
 DEFUN ("other-buffer", Fother_buffer, Sother_buffer, 0, 3, 0,
        doc: /* Return most recently selected buffer other than BUFFER.
 Buffers not visible in windows are preferred to visible buffers, unless
@@ -1541,23 +1555,15 @@ list first, followed by the list of all buffers.  If no other buffer
 exists, return the buffer `*scratch*' (creating it if necessary).  */)
   (register Lisp_Object buffer, Lisp_Object visible_ok, Lisp_Object frame)
 {
-  Lisp_Object tail, buf, pred;
-  Lisp_Object notsogood = Qnil;
+  struct frame *f = decode_any_frame (frame);
+  Lisp_Object tail = f->buffer_list, pred = f->buffer_predicate;
+  Lisp_Object buf, notsogood = Qnil;
 
-  if (NILP (frame))
-    frame = selected_frame;
-
-  CHECK_FRAME (frame);
-
-  pred = frame_buffer_predicate (frame);
   /* Consider buffers that have been seen in the frame first.  */
-  tail = XFRAME (frame)->buffer_list;
   for (; CONSP (tail); tail = XCDR (tail))
     {
       buf = XCAR (tail);
-      if (BUFFERP (buf) && !EQ (buf, buffer)
-	  && BUFFER_LIVE_P (XBUFFER (buf))
-	  && (SREF (BVAR (XBUFFER (buf), name), 0) != ' ')
+      if (candidate_buffer (buf, buffer)
 	  /* If the frame has a buffer_predicate, disregard buffers that
 	     don't fit the predicate.  */
 	  && (NILP (pred) || !NILP (call1 (pred, buf))))
@@ -1575,9 +1581,7 @@ exists, return the buffer `*scratch*' (creating it if necessary).  */)
   for (; CONSP (tail); tail = XCDR (tail))
     {
       buf = Fcdr (XCAR (tail));
-      if (BUFFERP (buf) && !EQ (buf, buffer)
-	  && BUFFER_LIVE_P (XBUFFER (buf))
-	  && (SREF (BVAR (XBUFFER (buf), name), 0) != ' ')
+      if (candidate_buffer (buf, buffer)
 	  /* If the frame has a buffer_predicate, disregard buffers that
 	     don't fit the predicate.  */
 	  && (NILP (pred) || !NILP (call1 (pred, buf))))
@@ -1613,13 +1617,10 @@ other_buffer_safely (Lisp_Object buffer)
 {
   Lisp_Object tail, buf;
 
-  tail = Vbuffer_alist;
-  for (; CONSP (tail); tail = XCDR (tail))
+  for (tail = Vbuffer_alist; CONSP (tail); tail = XCDR (tail))
     {
       buf = Fcdr (XCAR (tail));
-      if (BUFFERP (buf) && !EQ (buf, buffer)
-	  && BUFFER_LIVE_P (XBUFFER (buf))
-	  && (SREF (BVAR (XBUFFER (buf), name), 0) != ' '))
+      if (candidate_buffer (buf, buffer))
 	return buf;
     }
 
@@ -1661,20 +1662,13 @@ No argument or nil as argument means do this for the current buffer.  */)
 void
 compact_buffer (struct buffer *buffer)
 {
-  /* Verify indirection counters.  */
-  if (buffer->base_buffer)
-    {
-      eassert (buffer->indirections == -1);
-      eassert (buffer->base_buffer->indirections > 0);
-    }
-  else
-    eassert (buffer->indirections >= 0);
+  BUFFER_CHECK_INDIRECTION (buffer);
 
   /* Skip dead buffers, indirect buffers and buffers
      which aren't changed since last compaction.  */
-  if (!NILP (buffer->INTERNAL_FIELD (name))
+  if (BUFFER_LIVE_P (buffer)
       && (buffer->base_buffer == NULL)
-      && (buffer->text->compact != buffer->text->modiff))
+      && (BUF_COMPACT (buffer) != BUF_MODIFF (buffer)))
     {
       /* If a buffer's undo list is Qt, that means that undo is
 	 turned off in that buffer.  Calling truncate_undo_list on
@@ -1699,7 +1693,7 @@ compact_buffer (struct buffer *buffer)
 	      current_buffer = save_current;
 	    }
 	}
-      buffer->text->compact = buffer->text->modiff;
+      BUF_COMPACT (buffer) = BUF_MODIFF (buffer);
     }
 }
 
@@ -1889,12 +1883,16 @@ cleaning up all windows currently displaying the buffer to be killed. */)
       /* Unchain all markers that belong to this indirect buffer.
 	 Don't unchain the markers that belong to the base buffer
 	 or its other indirect buffers.  */
-      for (m = BUF_MARKERS (b); m; )
+      struct Lisp_Marker **mp = &BUF_MARKERS (b);
+      while ((m = *mp))
 	{
-	  struct Lisp_Marker *next = m->next;
 	  if (m->buffer == b)
-	    unchain_marker (m);
-	  m = next;
+	    {
+	      m->buffer = NULL;
+	      *mp = m->next;
+	    }
+	  else
+	    mp = &m->next;
 	}
     }
   else
@@ -1911,8 +1909,12 @@ cleaning up all windows currently displaying the buffer to be killed. */)
       BUF_MARKERS (b) = NULL;
       set_buffer_intervals (b, NULL);
 
-      /* Perhaps we should explicitly free the interval tree here... */
+      /* Perhaps we should explicitly free the interval tree here...  */
     }
+  /* Since we've unlinked the markers, the overlays can't be here any more
+     either.  */
+  b->overlays_before = NULL;
+  b->overlays_after = NULL;
 
   /* Reset the local variables, so that this buffer's local values
      won't be protected from GC.  They would be protected
@@ -1930,10 +1932,16 @@ cleaning up all windows currently displaying the buffer to be killed. */)
       eassert (b->indirections == -1);
       b->base_buffer->indirections--;
       eassert (b->base_buffer->indirections >= 0);
+      /* Make sure that we wasn't confused.  */
+      eassert (b->window_count == -1);
     }
   else
-    /* No one shares our buffer text, can free it.  */
-    free_buffer_text (b);
+    {
+      /* Make sure that no one shows us.  */
+      eassert (b->window_count == 0);
+      /* No one shares our buffer text, can free it.  */
+      free_buffer_text (b);
+    }
 
   if (b->newline_cache)
     {
@@ -2040,7 +2048,7 @@ DEFUN ("bury-buffer-internal", Fbury_buffer_internal, Sbury_buffer_internal,
 DEFUN ("set-buffer-major-mode", Fset_buffer_major_mode, Sset_buffer_major_mode, 1, 1, 0,
        doc: /* Set an appropriate major mode for BUFFER.
 For the *scratch* buffer, use `initial-major-mode', otherwise choose a mode
-according to `default-major-mode'.
+according to the default value of `major-mode'.
 Use this function before selecting the buffer, since it may need to inspect
 the current buffer's major mode.  */)
   (Lisp_Object buffer)
@@ -2104,6 +2112,8 @@ set_buffer_internal_1 (register struct buffer *b)
 
   if (current_buffer == b)
     return;
+
+  BUFFER_CHECK_INDIRECTION (b);
 
   old_buf = current_buffer;
   current_buffer = b;
@@ -2176,7 +2186,7 @@ set_buffer_temp (struct buffer *b)
 DEFUN ("set-buffer", Fset_buffer, Sset_buffer, 1, 1, 0,
        doc: /* Make buffer BUFFER-OR-NAME current for editing operations.
 BUFFER-OR-NAME may be a buffer or the name of an existing buffer.  See
-also `save-excursion' when you want to make a buffer current
+also `with-current-buffer' when you want to make a buffer current
 temporarily.  This function does not display the buffer, so its effect
 ends when the current command terminates.  Use `switch-to-buffer' or
 `pop-to-buffer' to switch buffers permanently.  */)
@@ -2464,7 +2474,7 @@ current buffer is cleared.  */)
     begv = BEGV, zv = ZV;
 
   if (narrowed)
-    Fwiden ();
+    error ("Changing multibyteness in a narrowed buffer");
 
   if (NILP (flag))
     {
@@ -2680,10 +2690,11 @@ current buffer is cleared.  */)
 
   UNGCPRO;
 
-  /* Changing the multibyteness of a buffer means that all windows
-     showing that buffer must be updated thoroughly.  */
   current_buffer->prevent_redisplay_optimizations_p = 1;
-  ++windows_or_buffers_changed;
+
+  /* If buffer is shown in a window, let redisplay consider other windows.  */
+  if (buffer_window_count (current_buffer))
+    ++windows_or_buffers_changed;
 
   /* Copy this buffer's new multibyte status
      into all of its indirect buffers.  */
@@ -3134,8 +3145,8 @@ compare_overlays (const void *v1, const void *v2)
      between "equal" overlays.  The result can still change between
      invocations of Emacs, but it won't change in the middle of
      `find_field' (bug#6830).  */
-  if (XHASH (s1->overlay) != XHASH (s2->overlay))
-    return XHASH (s1->overlay) < XHASH (s2->overlay) ? -1 : 1;
+  if (!EQ (s1->overlay, s2->overlay))
+    return XLI (s1->overlay) < XLI (s2->overlay) ? -1 : 1;
   return 0;
 }
 
@@ -3689,7 +3700,6 @@ fix_start_end_in_overlays (register ptrdiff_t start, register ptrdiff_t end)
       beforep->next = current_buffer->overlays_before;
       set_buffer_overlays_before (current_buffer, before_list);
     }
-  recenter_overlay_lists (current_buffer, current_buffer->overlay_center);
 
   if (afterp)
     {
@@ -3847,17 +3857,16 @@ for the rear of the overlay advance when text is inserted there
   end = OVERLAY_END (overlay);
   if (OVERLAY_POSITION (end) < b->overlay_center)
     {
-      if (b->overlays_after)
-	XOVERLAY (overlay)->next = b->overlays_after;
+      eassert (b->overlays_after || (XOVERLAY (overlay)->next == NULL));
+      XOVERLAY (overlay)->next = b->overlays_after;
       set_buffer_overlays_after (b, XOVERLAY (overlay));
     }
   else
     {
-      if (b->overlays_before)
-	XOVERLAY (overlay)->next = b->overlays_before;
+      eassert (b->overlays_before || (XOVERLAY (overlay)->next == NULL));
+      XOVERLAY (overlay)->next = b->overlays_before;
       set_buffer_overlays_before (b, XOVERLAY (overlay));
     }
-
   /* This puts it in the right list, and in the right order.  */
   recenter_overlay_lists (b, b->overlay_center);
 
@@ -3881,17 +3890,17 @@ modify_overlay (struct buffer *buf, ptrdiff_t start, ptrdiff_t end)
 
   BUF_COMPUTE_UNCHANGED (buf, start, end);
 
-  /* If this is a buffer not in the selected window,
-     we must do other windows.  */
-  if (buf != XBUFFER (XWINDOW (selected_window)->buffer))
-    windows_or_buffers_changed = 1;
-  /* If multiple windows show this buffer, we must do other windows.  */
-  else if (buffer_shared > 1)
-    windows_or_buffers_changed = 1;
-  /* If we modify an overlay at the end of the buffer, we cannot
-     be sure that window end is still valid.  */
-  else if (end >= ZV && start <= ZV)
-    windows_or_buffers_changed = 1;
+  /* If BUF is visible, consider updating the display if ...  */
+  if (buffer_window_count (buf) > 0)
+    {
+      /* ... it's visible in other window than selected,  */
+      if (buf != XBUFFER (XWINDOW (selected_window)->buffer))
+	windows_or_buffers_changed = 1;
+      /* ... or if we modify an overlay at the end of the buffer
+	 and so we cannot be sure that window end is still valid.  */
+      else if (end >= ZV && start <= ZV)
+	windows_or_buffers_changed = 1;
+    }
 
   ++BUF_OVERLAY_MODIFF (buf);
 }
@@ -4141,7 +4150,7 @@ DEFUN ("overlays-at", Foverlays_at, Soverlays_at, 1, 1, 0,
   /* Put all the overlays we want in a vector in overlay_vec.
      Store the length in len.  */
   noverlays = overlays_at (XINT (pos), 1, &overlay_vec, &len,
-			   0, 0, 0);
+			   NULL, NULL, 0);
 
   /* Make a list of them all.  */
   result = Flist (noverlays, overlay_vec);
@@ -5109,11 +5118,6 @@ void
 init_buffer_once (void)
 {
   int idx;
-  /* If you add, remove, or reorder Lisp_Objects in a struct buffer, make
-     sure that this is still correct.  Otherwise, mark_vectorlike may not
-     trace all Lisp_Objects in buffer_defaults and buffer_local_symbols.  */
-  const int pvecsize
-    = (offsetof (struct buffer, own_text) - header_size) / word_size;
 
   memset (buffer_permanent_local_flags, 0, sizeof buffer_permanent_local_flags);
 
@@ -5131,13 +5135,16 @@ init_buffer_once (void)
   /* No one will share the text with these buffers, but let's play it safe.  */
   buffer_defaults.indirections = 0;
   buffer_local_symbols.indirections = 0;
+  /* Likewise no one will display them.  */
+  buffer_defaults.window_count = 0;
+  buffer_local_symbols.window_count = 0;
   set_buffer_intervals (&buffer_defaults, NULL);
   set_buffer_intervals (&buffer_local_symbols, NULL);
   /* This is not strictly necessary, but let's make them initialized.  */
   bset_name (&buffer_defaults, build_pure_c_string (" *buffer-defaults*"));
   bset_name (&buffer_local_symbols, build_pure_c_string (" *buffer-local-symbols*"));
-  XSETPVECTYPESIZE (&buffer_defaults, PVEC_BUFFER, pvecsize);
-  XSETPVECTYPESIZE (&buffer_local_symbols, PVEC_BUFFER, pvecsize);
+  BUFFER_PVEC_INIT (&buffer_defaults);
+  BUFFER_PVEC_INIT (&buffer_local_symbols);
 
   /* Set up the default values of various buffer slots.  */
   /* Must do these before making the first buffer! */
@@ -6210,15 +6217,15 @@ is a member of the list.  */);
 		     doc: /* Cursor to use when this buffer is in the selected window.
 Values are interpreted as follows:
 
-  t 		  use the cursor specified for the frame
-  nil		  don't display a cursor
-  box		  display a filled box cursor
-  hollow	  display a hollow box cursor
-  bar		  display a vertical bar cursor with default width
-  (bar . WIDTH)	  display a vertical bar cursor with width WIDTH
-  hbar		  display a horizontal bar cursor with default height
+  t               use the cursor specified for the frame
+  nil             don't display a cursor
+  box             display a filled box cursor
+  hollow          display a hollow box cursor
+  bar             display a vertical bar cursor with default width
+  (bar . WIDTH)   display a vertical bar cursor with width WIDTH
+  hbar            display a horizontal bar cursor with default height
   (hbar . HEIGHT) display a horizontal bar cursor with height HEIGHT
-  ANYTHING ELSE	  display a hollow box cursor
+  ANYTHING ELSE   display a hollow box cursor
 
 When the buffer is displayed in a non-selected window, the
 cursor's appearance is instead controlled by the variable

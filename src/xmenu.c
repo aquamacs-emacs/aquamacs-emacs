@@ -111,7 +111,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 static Lisp_Object Qdebug_on_next_call;
 
 #if defined (USE_X_TOOLKIT) || defined (USE_GTK)
-static Lisp_Object xdialog_show (FRAME_PTR, int, Lisp_Object, Lisp_Object,
+static Lisp_Object xdialog_show (FRAME_PTR, bool, Lisp_Object, Lisp_Object,
                                  const char **);
 #endif
 
@@ -132,11 +132,8 @@ menubar_id_to_frame (LWLIB_ID id)
   Lisp_Object tail, frame;
   FRAME_PTR f;
 
-  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+  FOR_EACH_FRAME (tail, frame)
     {
-      frame = XCAR (tail);
-      if (!FRAMEP (frame))
-        continue;
       f = XFRAME (frame);
       if (!FRAME_WINDOW_P (f))
 	continue;
@@ -930,7 +927,8 @@ set_frame_menubar (FRAME_PTR f, bool first_time, bool deep_p)
   widget_value *wv, *first_wv, *prev_wv = 0;
   int i;
   int *submenu_start, *submenu_end;
-  int *submenu_top_level_items, *submenu_n_panes;
+  bool *submenu_top_level_items;
+  int *submenu_n_panes;
 
   if (! FRAME_X_P (f))
     emacs_abort ();
@@ -1346,8 +1344,8 @@ free_frame_menubar (FRAME_PTR f)
 /* F is the frame the menu is for.
    X and Y are the frame-relative specified position,
    relative to the inside upper left corner of the frame F.
-   FOR_CLICK is nonzero if this menu was invoked for a mouse click.
-   KEYMAPS is 1 if this menu was specified with keymaps;
+   FOR_CLICK is true if this menu was invoked for a mouse click.
+   KEYMAPS is true if this menu was specified with keymaps;
     in that case, we return a list containing the chosen item's value
     and perhaps also the pane's prefix.
    TITLE is the specified menu title.
@@ -1427,14 +1425,14 @@ pop_down_menu (Lisp_Object arg)
    menu_item_selection will be set to the selection.  */
 static void
 create_and_show_popup_menu (FRAME_PTR f, widget_value *first_wv, int x, int y,
-			    int for_click, Time timestamp)
+			    bool for_click, Time timestamp)
 {
   int i;
   GtkWidget *menu;
   GtkMenuPositionFunc pos_func = 0;  /* Pop up at pointer.  */
   struct next_popup_x_y popup_x_y;
   ptrdiff_t specpdl_count = SPECPDL_INDEX ();
-  int use_pos_func = ! for_click;
+  bool use_pos_func = ! for_click;
 
 #ifdef HAVE_GTK3
   /* Always use position function for Gtk3.  Otherwise menus may become
@@ -1539,7 +1537,7 @@ pop_down_menu (Lisp_Object arg)
    menu_item_selection will be set to the selection.  */
 static void
 create_and_show_popup_menu (FRAME_PTR f, widget_value *first_wv,
-			    int x, int y, int for_click, Time timestamp)
+			    int x, int y, bool for_click, Time timestamp)
 {
   int i;
   Arg av[2];
@@ -1623,7 +1621,7 @@ cleanup_widget_value_tree (Lisp_Object arg)
 }
 
 Lisp_Object
-xmenu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
+xmenu_show (FRAME_PTR f, int x, int y, bool for_click, bool keymaps,
 	    Lisp_Object title, const char **error_name, Time timestamp)
 {
   int i;
@@ -1878,7 +1876,7 @@ xmenu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 		= AREF (menu_items, i + MENU_ITEMS_ITEM_VALUE);
 	      if (menu_item_selection == aref_addr (menu_items, i))
 		{
-		  if (keymaps != 0)
+		  if (keymaps)
 		    {
 		      int j;
 
@@ -2011,7 +2009,7 @@ static const char * button_names [] = {
 
 static Lisp_Object
 xdialog_show (FRAME_PTR f,
-              int keymaps,
+              bool keymaps,
               Lisp_Object title,
               Lisp_Object header,
               const char **error_name)
@@ -2277,7 +2275,7 @@ pop_down_menu (Lisp_Object arg)
 
 
 Lisp_Object
-xmenu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
+xmenu_show (FRAME_PTR f, int x, int y, bool for_click, bool keymaps,
 	    Lisp_Object title, const char **error_name, Time timestamp)
 {
   Window root;
@@ -2528,7 +2526,7 @@ xmenu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 		    {
 		      entry
 			= AREF (menu_items, i + MENU_ITEMS_ITEM_VALUE);
-		      if (keymaps != 0)
+		      if (keymaps)
 			{
 			  entry = Fcons (entry, Qnil);
 			  if (!NILP (pane_prefix))

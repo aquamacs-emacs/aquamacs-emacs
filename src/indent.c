@@ -30,7 +30,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "frame.h"
 #include "window.h"
 #include "termchar.h"
-#include "termopts.h"
 #include "disptab.h"
 #include "intervals.h"
 #include "dispextern.h"
@@ -120,8 +119,7 @@ disptab_matches_widthtab (struct Lisp_Char_Table *disptab, struct Lisp_Vector *w
 {
   int i;
 
-  if (widthtab->header.size != 256)
-    emacs_abort ();
+  eassert (widthtab->header.size == 256);
 
   for (i = 0; i < 256; i++)
     if (character_width (i, disptab)
@@ -142,8 +140,7 @@ recompute_width_table (struct buffer *buf, struct Lisp_Char_Table *disptab)
   if (!VECTORP (BVAR (buf, width_table)))
     bset_width_table (buf, Fmake_vector (make_number (256), make_number (0)));
   widthtab = XVECTOR (BVAR (buf, width_table));
-  if (widthtab->header.size != 256)
-    emacs_abort ();
+  eassert (widthtab->header.size == 256);
 
   for (i = 0; i < 256; i++)
     XSETFASTINT (widthtab->contents[i], character_width (i, disptab));
@@ -574,7 +571,8 @@ scan_for_column (ptrdiff_t *endpos, EMACS_INT *goalcol, ptrdiff_t *prevcol)
 	    col += width;
 	    if (endp > scan) /* Avoid infinite loops with 0-width overlays.  */
 	      {
-		scan = endp; scan_byte = charpos_to_bytepos (scan);
+		scan = endp;
+		scan_byte = CHAR_TO_BYTE (scan);
 		continue;
 	      }
 	  }
@@ -1767,11 +1765,7 @@ visible section of the buffer, and pass LINE and COL as TOPOS.  */)
   else
     hscroll = tab_offset = 0;
 
-  if (NILP (window))
-    window = Fselected_window ();
-  else
-    CHECK_LIVE_WINDOW (window);
-  w = XWINDOW (window);
+  w = decode_live_window (window);
 
   if (XINT (from) < BEGV || XINT (from) > ZV)
     args_out_of_range_3 (from, make_number (BEGV), make_number (ZV));
@@ -1793,8 +1787,7 @@ visible section of the buffer, and pass LINE and COL as TOPOS.  */)
 			       1))
 			 : XINT (XCAR (topos))),
 			(NILP (width) ? -1 : XINT (width)),
-			hscroll, tab_offset,
-			XWINDOW (window));
+			hscroll, tab_offset, w);
 
   XSETFASTINT (bufpos, pos->bufpos);
   XSETINT (hpos, pos->hpos);
@@ -1991,11 +1984,7 @@ whether or not it is currently displayed in some window.  */)
     }
 
   CHECK_NUMBER (lines);
-  if (! NILP (window))
-    CHECK_WINDOW (window);
-  else
-    window = selected_window;
-  w = XWINDOW (window);
+  w = decode_live_window (window);
 
   old_buffer = Qnil;
   GCPRO3 (old_buffer, old_charpos, old_bytepos);
@@ -2003,8 +1992,8 @@ whether or not it is currently displayed in some window.  */)
     {
       /* Set the window's buffer temporarily to the current buffer.  */
       old_buffer = w->buffer;
-      old_charpos = XMARKER (w->pointm)->charpos;
-      old_bytepos = XMARKER (w->pointm)->bytepos;
+      old_charpos = marker_position (w->pointm);
+      old_bytepos = marker_byte_position (w->pointm);
       wset_buffer (w, Fcurrent_buffer ());
       set_marker_both (w->pointm, w->buffer,
 		       BUF_PT (current_buffer), BUF_PT_BYTE (current_buffer));
@@ -2037,7 +2026,11 @@ whether or not it is currently displayed in some window.  */)
 	  const char *s = SSDATA (it.string);
 	  const char *e = s + SBYTES (it.string);
 
-	  disp_string_at_start_p = it.string_from_display_prop_p;
+	  /* If it.area is anything but TEXT_AREA, we need not bother
+	     about the display string, as it doesn't affect cursor
+	     positioning.  */
+	  disp_string_at_start_p =
+	    it.string_from_display_prop_p && it.area == TEXT_AREA;
 	  while (s < e)
 	    {
 	      if (*s++ == '\n')
@@ -2060,7 +2053,13 @@ whether or not it is currently displayed in some window.  */)
 	   comment said this is "so we don't move too far" (2005-01-19
 	   checkin by kfs).  But this does nothing useful that I can
 	   tell, and it causes Bug#2694 .  -- cyd */
-	move_it_to (&it, PT, -1, -1, -1, MOVE_TO_POS);
+	/* When the position we started from is covered by a display
+	   string, move_it_to will overshoot it, while vertical-motion
+	   wants to put the cursor _before_ the display string.  So in
+	   that case, we move to buffer position before the display
+	   string, and avoid overshooting.  */
+	move_it_to (&it, disp_string_at_start_p ? PT - 1 : PT,
+		    -1, -1, -1, MOVE_TO_POS);
 
       /* IT may move too far if truncate-lines is on and PT lies
 	 beyond the right margin.  IT may also move too far if the

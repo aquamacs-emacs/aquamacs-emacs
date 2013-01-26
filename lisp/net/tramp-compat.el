@@ -71,22 +71,6 @@
       (require 'timer-funcs)
     (require 'timer))
 
-  ;; We check whether `start-file-process' is bound.
-  ;; Note: we deactivate this.  There are problems, at least in SXEmacs.
-  (unless t;(fboundp 'start-file-process)
-
-    ;; tramp-util offers integration into other (X)Emacs packages like
-    ;; compile.el, gud.el etc.  Not necessary in Emacs 23.
-    (eval-after-load "tramp"
-      '(require 'tramp-util))
-
-    ;; Make sure that we get integration with the VC package.  When it
-    ;; is loaded, we need to pull in the integration module.  Not
-    ;; necessary in Emacs 23.
-    (eval-after-load "vc"
-      (eval-after-load "tramp"
-	'(require 'tramp-vc))))
-
   ;; Avoid byte-compiler warnings if the byte-compiler supports this.
   ;; Currently, XEmacs supports this.
   (when (featurep 'xemacs)
@@ -132,9 +116,7 @@
   ;; mechanism.
 
   ;; `file-remote-p' has been introduced with Emacs 22.  The version
-  ;; of XEmacs is not a magic file name function (yet); this is
-  ;; corrected in tramp-util.el.  Here it is sufficient if the
-  ;; function exists.
+  ;; of XEmacs is not a magic file name function (yet).
   (unless (fboundp 'file-remote-p)
     (defalias 'file-remote-p
       (lambda (file &optional identification connected)
@@ -322,16 +304,17 @@ Not actually used.  Use `(format \"%o\" i)' instead?"
 	(wrong-number-of-arguments (file-attributes filename))))))
 
 ;; PRESERVE-UID-GID does not exist in XEmacs.
-;; PRESERVE-SELINUX-CONTEXT has been introduced with Emacs 24.1.
+;; PRESERVE-EXTENDED-ATTRIBUTES has been introduced with Emacs 24.1
+;; (as PRESERVE-SELINUX-CONTEXT), and renamed in Emacs 24.3.
 (defun tramp-compat-copy-file
   (filename newname &optional ok-if-already-exists keep-date
-	    preserve-uid-gid preserve-selinux-context)
+	    preserve-uid-gid preserve-extended-attributes)
   "Like `copy-file' for Tramp files (compat function)."
   (cond
-   (preserve-selinux-context
+   (preserve-extended-attributes
     (tramp-compat-funcall
      'copy-file filename newname ok-if-already-exists keep-date
-     preserve-uid-gid preserve-selinux-context))
+     preserve-uid-gid preserve-extended-attributes))
    (preserve-uid-gid
     (tramp-compat-funcall
      'copy-file filename newname ok-if-already-exists keep-date

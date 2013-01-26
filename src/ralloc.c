@@ -72,7 +72,7 @@ static void r_alloc_init (void);
 /* Declarations for working with the malloc, ralloc, and system breaks.  */
 
 /* Function to set the real break value.  */
-POINTER (*real_morecore) (long int);
+POINTER (*real_morecore) (ptrdiff_t);
 
 /* The break value, as seen by malloc.  */
 static POINTER virtual_break_value;
@@ -91,18 +91,18 @@ static int extra_bytes;
 /* Macros for rounding.  Note that rounding to any value is possible
    by changing the definition of PAGE.  */
 #define PAGE (getpagesize ())
-#define ROUNDUP(size) (((unsigned long int) (size) + page_size - 1) \
-		       & ~(page_size - 1))
+#define ROUNDUP(size) (((size_t) (size) + page_size - 1) \
+		       & ~((size_t)(page_size - 1)))
 
 #define MEM_ALIGN sizeof (double)
-#define MEM_ROUNDUP(addr) (((unsigned long int)(addr) + MEM_ALIGN - 1) \
-				   & ~(MEM_ALIGN - 1))
+#define MEM_ROUNDUP(addr) (((size_t)(addr) + MEM_ALIGN - 1) \
+			   & ~(MEM_ALIGN - 1))
 
 /* The hook `malloc' uses for the function which gets more space
    from the system.  */
 
 #ifndef SYSTEM_MALLOC
-extern POINTER (*__morecore) (long int);
+extern POINTER (*__morecore) (ptrdiff_t);
 #endif
 
 
@@ -308,7 +308,7 @@ static void
 relinquish (void)
 {
   register heap_ptr h;
-  long excess = 0;
+  ptrdiff_t excess = 0;
 
   /* Add the amount of space beyond break_value
      in all heaps which have extend beyond break_value at all.  */
@@ -327,35 +327,36 @@ relinquish (void)
 
       if ((char *)last_heap->end - (char *)last_heap->bloc_start <= excess)
 	{
-	  /* This heap should have no blocs in it.  */
+	  heap_ptr lh_prev;
+
+	  /* This heap should have no blocs in it.  If it does, we
+	     cannot return it to the system.  */
 	  if (last_heap->first_bloc != NIL_BLOC
 	      || last_heap->last_bloc != NIL_BLOC)
-	    emacs_abort ();
+	    return;
 
 	  /* Return the last heap, with its header, to the system.  */
 	  excess = (char *)last_heap->end - (char *)last_heap->start;
-	  last_heap = last_heap->prev;
-	  last_heap->next = NIL_HEAP;
+	  lh_prev = last_heap->prev;
+	  /* If the system doesn't want that much memory back, leave
+	     last_heap unaltered to reflect that.  This can occur if
+	     break_value is still within the original data segment.  */
+	  if ((*real_morecore) (- excess) != 0)
+	    {
+	      last_heap = lh_prev;
+	      last_heap->next = NIL_HEAP;
+	    }
 	}
       else
 	{
 	  excess = (char *) last_heap->end
 			- (char *) ROUNDUP ((char *)last_heap->end - excess);
-	  last_heap->end = (char *) last_heap->end - excess;
-	}
-
-      if ((*real_morecore) (- excess) == 0)
-	{
-	  /* If the system didn't want that much memory back, adjust
-             the end of the last heap to reflect that.  This can occur
-             if break_value is still within the original data segment.  */
-	  last_heap->end = (char *) last_heap->end + excess;
-	  /* Make sure that the result of the adjustment is accurate.
-             It should be, for the else clause above; the other case,
-             which returns the entire last heap to the system, seems
-             unlikely to trigger this mode of failure.  */
-	  if (last_heap->end != (*real_morecore) (0))
-	    emacs_abort ();
+	  /* If the system doesn't want that much memory back, leave
+	     the end of the last heap unchanged to reflect that.  This
+	     can occur if break_value is still within the original
+	     data segment.  */
+	  if ((*real_morecore) (- excess) != 0)
+	    last_heap->end = (char *) last_heap->end - excess;
 	}
     }
 }
@@ -752,7 +753,7 @@ free_bloc (bloc_ptr bloc)
    GNU malloc package.  */
 
 static POINTER
-r_alloc_sbrk (long int size)
+r_alloc_sbrk (ptrdiff_t size)
 {
   register bloc_ptr b;
   POINTER address;

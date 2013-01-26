@@ -46,7 +46,6 @@ enum output_method
   output_x_window,
   output_msdos_raw,
   output_w32,
-  output_mac,
   output_ns
 };
 
@@ -237,7 +236,7 @@ struct frame
 
 #if defined (USE_GTK) || defined (HAVE_NS)
   /* Nonzero means using a tool bar that comes from the toolkit.  */
-  int external_tool_bar;
+  unsigned external_tool_bar : 1;
 #endif
 
   /* Margin at the top of the frame.  Used to display the tool-bar.  */
@@ -301,9 +300,6 @@ struct frame
   /* Canonical X unit.  Width of default font, in pixels.  */
   int column_width;
 
-  /* Width of space glyph of default font, in pixels.  */
-  int space_width;
-
   /* Canonical Y unit.  Height of a line, in pixels.  */
   int line_height;
 
@@ -357,9 +353,6 @@ struct frame
   unsigned int external_menu_bar : 1;
 #endif
 
-  /* Nonzero if last attempt at redisplay on this frame was preempted.  */
-  unsigned display_preempted : 1;
-
   /* visible is nonzero if the frame is currently displayed; we check
      it to see if we should bother updating the frame's contents.
      DON'T SET IT DIRECTLY; instead, use FRAME_SET_VISIBLE.
@@ -409,10 +402,6 @@ struct frame
      show no modeline for that window.  */
   unsigned wants_modeline : 1;
 
-  /* Non-zero if the hardware device this frame is displaying on can
-     support scroll bars.  */
-  char can_have_scroll_bars;
-
   /* Non-0 means raise this frame to the top of the heap when selected.  */
   unsigned auto_raise : 1;
 
@@ -438,8 +427,7 @@ struct frame
   /* Nonzero means that the pointer is invisible. */
   unsigned pointer_invisible :1;
 
-  /* If can_have_scroll_bars is non-zero, this is non-zero if we should
-     actually display them on this frame.  */
+  /* Nonzero if we should actually display the scroll bars on this frame.  */
   enum vertical_scroll_bar_type vertical_scroll_bar_type;
 
   /* What kind of text cursor should we draw in the future?
@@ -618,7 +606,7 @@ typedef struct frame *FRAME_PTR;
 #define FRAME_INITIAL_P(f) ((f)->output_method == output_initial)
 #define FRAME_TERMCAP_P(f) ((f)->output_method == output_termcap)
 #define FRAME_X_P(f) ((f)->output_method == output_x_window)
-#ifndef WINDOWSNT
+#ifndef HAVE_NTGUI
 #define FRAME_W32_P(f) (0)
 #else
 #define FRAME_W32_P(f) ((f)->output_method == output_w32)
@@ -646,7 +634,7 @@ typedef struct frame *FRAME_PTR;
 #define FRAME_WINDOW_P(f) FRAME_NS_P(f)
 #endif
 #ifndef FRAME_WINDOW_P
-#define FRAME_WINDOW_P(f) (0)
+#define FRAME_WINDOW_P(f) ((void) (f), 0)
 #endif
 
 /* Return a pointer to the structure holding information about the
@@ -766,11 +754,6 @@ typedef struct frame *FRAME_PTR;
 #define FRAME_MESSAGE_BUF(f) (f)->message_buf
 #define FRAME_SCROLL_BOTTOM_VPOS(f) (f)->scroll_bottom_vpos
 #define FRAME_FOCUS_FRAME(f) f->focus_frame
-
-/* Nonzero if frame F supports scroll bars.
-   If this is zero, then it is impossible to enable scroll bars
-   on frame F.  */
-#define FRAME_CAN_HAVE_SCROLL_BARS(f) ((f)->can_have_scroll_bars)
 
 /* This frame slot says whether scroll bars are currently enabled for frame F,
    and which side they are on.  */
@@ -943,6 +926,21 @@ typedef struct frame *FRAME_PTR;
 	&& (frame_var = XCAR (list_var), 1));	\
        list_var = XCDR (list_var))
 
+/* Reflect mouse movement when a complete frame update is performed.  */
+
+#define FRAME_MOUSE_UPDATE(frame)				\
+  do {								\
+    Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (frame);		\
+    if (frame == hlinfo->mouse_face_mouse_frame)		\
+      {								\
+	block_input ();						\
+	if (hlinfo->mouse_face_mouse_frame)			\
+	  note_mouse_highlight (hlinfo->mouse_face_mouse_frame,	\
+				hlinfo->mouse_face_mouse_x,     \
+				hlinfo->mouse_face_mouse_y);    \
+	unblock_input ();					\
+      }								\
+  } while (0)
 
 extern Lisp_Object Qframep, Qframe_live_p;
 extern Lisp_Object Qtty, Qtty_type;
@@ -953,6 +951,8 @@ extern Lisp_Object Qnoelisp;
 extern struct frame *last_nonminibuf_frame;
 
 extern void set_menu_bar_lines (struct frame *, Lisp_Object, Lisp_Object);
+extern struct frame *decode_live_frame (Lisp_Object);
+extern struct frame *decode_any_frame (Lisp_Object);
 extern struct frame *make_initial_frame (void);
 extern struct frame *make_frame (int);
 #ifdef HAVE_WINDOW_SYSTEM
@@ -995,11 +995,6 @@ extern Lisp_Object selected_frame;
    This value currently equals the average width of the default font of F.  */
 
 #define FRAME_COLUMN_WIDTH(F) ((F)->column_width)
-
-/* Space glyph width of the default font of frame F.  */
-
-#define FRAME_SPACE_WIDTH(F) ((F)->space_width)
-
 
 /* Pixel width of areas used to display truncation marks, continuation
    marks, overlay arrows.  This is 0 for terminal frames.  */
@@ -1182,7 +1177,7 @@ extern Lisp_Object Qalpha;
 extern Lisp_Object Qleft_fringe, Qright_fringe;
 extern Lisp_Object Qheight, Qwidth;
 extern Lisp_Object Qminibuffer, Qmodeline;
-extern Lisp_Object Qx, Qw32, Qmac, Qpc, Qns;
+extern Lisp_Object Qx, Qw32, Qpc, Qns;
 extern Lisp_Object Qvisible;
 extern Lisp_Object Qdisplay_type;
 
@@ -1210,7 +1205,7 @@ extern Lisp_Object x_new_font (struct frame *, Lisp_Object, int);
 
 extern Lisp_Object Qface_set_after_frame_default;
 
-#ifdef WINDOWSNT
+#ifdef HAVE_NTGUI
 extern void x_fullscreen_adjust (struct frame *f, int *, int *,
                                  int *, int *);
 #endif
@@ -1259,8 +1254,6 @@ extern void x_set_mouse_pixel_position (struct frame *f, int pix_x, int pix_y);
 extern void x_make_frame_visible (struct frame *f);
 extern void x_make_frame_invisible (struct frame *f);
 extern void x_iconify_frame (struct frame *f);
-extern int x_char_width (struct frame *f);
-extern int x_char_height (struct frame *f);
 extern int x_pixel_width (struct frame *f);
 extern int x_pixel_height (struct frame *f);
 extern void x_set_frame_alpha (struct frame *f);
@@ -1282,6 +1275,7 @@ extern char *x_get_resource_string (const char *, const char *);
 #endif
 
 extern void x_query_colors (struct frame *f, XColor *, int);
+extern void x_query_color (struct frame *f, XColor *);
 
 #endif /* HAVE_WINDOW_SYSTEM */
 

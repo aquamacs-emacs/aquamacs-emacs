@@ -494,8 +494,7 @@ suitable file is found, return nil."
          (use (car obsolete)))
     (when obsolete
       (insert "\nThis "
-	      (if (eq (car-safe (symbol-function 'with-current-buffer))
-		      'macro)
+	      (if (eq (car-safe (symbol-function function)) 'macro)
 		  "macro"
 		"function")
 	      " is obsolete")
@@ -616,13 +615,11 @@ FILE is the file where FUNCTION was probably defined."
 				  (point)))
       (terpri)(terpri)
 
-      (let* ((doc-raw (condition-case err
-			  (documentation function t)
-			(error (format "No Doc! %S" err))))
+      (let* ((doc-raw (documentation function t))
 	     ;; If the function is autoloaded, and its docstring has
 	     ;; key substitution constructs, load the library.
 	     (doc (progn
-		    (and (autoloadp real-def)
+		    (and (autoloadp real-def) doc-raw
 			 help-enable-auto-load
 			 (string-match "\\([^\\]=\\|[^=]\\|\\`\\)\\\\[[{<]"
 				       doc-raw)
@@ -792,7 +789,7 @@ it is displayed along with the global value."
 	      (cond
                ((bufferp locus)
                 (princ (format "Local in buffer %s; "
-                               (buffer-name))))
+                               (buffer-name buffer))))
                ((framep locus)
                 (princ (format "It is a frame-local variable; ")))
                ((terminal-live-p locus)
@@ -850,12 +847,10 @@ it is displayed along with the global value."
                    (obsolete (get variable 'byte-obsolete-variable))
 		   (use (car obsolete))
 		   (safe-var (get variable 'safe-local-variable))
-                   (doc (condition-case err
-                            (or (documentation-property
-                                 variable 'variable-documentation)
-                                (documentation-property
-                                 alias 'variable-documentation))
-                          (error (format "Doc not found: %S" err))))
+                   (doc (or (documentation-property
+                             variable 'variable-documentation)
+                            (documentation-property
+                             alias 'variable-documentation)))
                    (extra-line nil))
 
 	      ;; Mention if it's a local variable.

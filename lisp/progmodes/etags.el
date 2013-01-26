@@ -702,7 +702,9 @@ Returns t if it visits a tags table, or nil if there are no more in the list."
 	(kill-local-variable 'tags-file-name)
 	(if (eq local-tags-file-name tags-file-name)
 	    (setq tags-file-name nil))
-	(user-error "File %s is not a valid tags table"
+	(user-error (if (file-exists-p local-tags-file-name)
+                        "File %s is not a valid tags table"
+                      "File %s does not exist")
                     local-tags-file-name)))))
 
 (defun tags-reset-tags-tables ()
@@ -1867,7 +1869,7 @@ If FILE-LIST-FORM is non-nil, it should be a form that, when
 evaluated, will return a list of file names.  The search will be
 restricted to these files.
 
-Aleso see the documentation of the `tags-file-name' variable."
+Also see the documentation of the `tags-file-name' variable."
   (interactive "sTags search (regexp): ")
   (if (and (equal regexp "")
 	   (eq (car tags-loop-scan) 're-search-forward)

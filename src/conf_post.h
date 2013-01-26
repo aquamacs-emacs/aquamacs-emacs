@@ -110,7 +110,16 @@ You lose; /* Emacs for DOS must be compiled with DJGPP */
 #else
 # define lstat stat
 #endif
+/* The "portable" definition of _GL_INLINE on config.h does not work
+   with DJGPP GCC 3.4.4: it causes unresolved externals in sysdep.c,
+   although lib/execinfo.h is included and the inline functions there
+   are visible.  */
+#if __GNUC__ < 4
+# define _GL_EXECINFO_INLINE inline
+#endif
 /* End of gnulib-related stuff.  */
+
+#define emacs_raise(sig) msdos_fatal_signal (sig)
 
 /* Define one of these for easier conditionals.  */
 #ifdef HAVE_X_WINDOWS
@@ -142,6 +151,20 @@ You lose; /* Emacs for DOS must be compiled with DJGPP */
 #endif
 #endif
 
+#if defined HAVE_NTGUI && !defined DebPrint
+# ifdef EMACSDEBUG
+extern void _DebPrint (const char *fmt, ...);
+#  define DebPrint(stuff) _DebPrint stuff
+# else
+#  define DebPrint(stuff)
+# endif
+#endif
+
+#if defined CYGWIN && defined HAVE_NTGUI
+# define NTGUI_UNICODE /* Cygwin runs only on UNICODE-supporting systems */
+# define _WIN32_WINNT 0x500 /* Win2k */
+#endif
+
 #ifdef emacs /* Don't do this for lib-src.  */
 /* Tell regex.c to use a type compatible with Emacs.  */
 #define RE_TRANSLATE_TYPE Lisp_Object
@@ -154,6 +177,10 @@ You lose; /* Emacs for DOS must be compiled with DJGPP */
 #define RE_TRANSLATE_P(TBL) (!(INTEGERP (TBL) && XINT (TBL) == 0))
 #endif
 #endif
+
+/* Tell gnulib to omit support for openat-related functions having a
+   first argument other than AT_FDCWD.  */
+#define GNULIB_SUPPORT_ONLY_AT_FDCWD
 
 #include <string.h>
 #include <stdlib.h>

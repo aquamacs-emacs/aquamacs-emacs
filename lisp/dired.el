@@ -137,9 +137,12 @@ A value of t means move to first file."
   "Controls marking of renamed files.
 If t, files keep their previous marks when they are renamed.
 If a character, renamed files (whether previously marked or not)
-are afterward marked with that character."
+are afterward marked with that character.
+This option affects only files renamed by `dired-do-rename' and
+`dired-do-rename-regexp'.  See `wdired-keep-marker-rename'
+if you want to do the same for files renamed in WDired mode."
   :type '(choice (const :tag "Keep" t)
-		 (character :tag "Mark"))
+		 (character :tag "Mark" :value ?R))
   :group 'dired-mark)
 
 (defcustom dired-keep-marker-copy ?C
@@ -248,6 +251,10 @@ This is what the do-commands look for, and what the mark-commands store.")
 ;; I see no reason ever to make this nil -- rms.
 ;;  (> baud-rate search-slow-speed)
   "Non-nil means Dired shrinks the display buffer to fit the marked files.")
+(make-obsolete-variable 'dired-shrink-to-fit
+			"use the Customization interface to add a new rule
+to `display-buffer-alist' where condition regexp is \"^ \\*Marked Files\\*$\",
+action argument symbol is `window-height' and its value is nil." "24.3")
 
 (defvar dired-file-version-alist)
 
@@ -616,7 +623,7 @@ Don't use that together with FILTER."
   (let* ((all-of-them
 	  (save-excursion
 	    (dired-map-over-marks
-	     (dired-get-filename localp)
+	     (dired-get-filename localp 'no-error-if-not-filep)
 	     arg nil distinguish-one-marked)))
 	 result)
     (if (not filter)
@@ -1877,7 +1884,6 @@ for more info):
 
   `dired-listing-switches'
   `dired-trivial-filenames'
-  `dired-shrink-to-fit'
   `dired-marker-char'
   `dired-del-marker'
   `dired-keep-marker-rename'
@@ -2940,6 +2946,7 @@ or \"* [3 files]\"."
 
 (defun dired-pop-to-buffer (buf)
   "Pop up buffer BUF in a way suitable for Dired."
+  (declare (obsolete dired-mark-pop-up "24.3"))
   (let ((split-window-preferred-function
 	 (lambda (window)
 	   (or (and (let ((split-height-threshold 0))
@@ -2981,6 +2988,11 @@ BUFFER-OR-NAME; the default name being \" *Marked Files*\".  The
 window is not shown if there is just one file, `dired-no-confirm'
 is t, or OP-SYMBOL is a member of the list in `dired-no-confirm'.
 
+By default, Dired shrinks the display buffer to fit the marked files.
+To disable this, use the Customization interface to add a new rule
+to `display-buffer-alist' where condition regexp is \"^ \\*Marked Files\\*$\",
+action argument symbol is `window-height' and its value is nil.
+
 FILES is the list of marked files.  It can also be (t FILENAME)
 in the case of one marked file, to distinguish that from using
 just the current file.
@@ -2997,7 +3009,8 @@ argument or confirmation)."
 	(let ((split-height-threshold 0))
 	  (with-temp-buffer-window
 	   buffer
-	   (cons 'display-buffer-below-selected nil)
+	   (cons 'display-buffer-below-selected
+		 '((window-height . fit-window-to-buffer)))
 	   #'(lambda (window _value)
 	       (with-selected-window window
 		 (unwind-protect
@@ -3096,19 +3109,20 @@ argument or confirmation)."
 	    (insert dired-marker-char)))
       (forward-line 1))))
 
-(defun dired-mark (arg)
-  "Mark the current (or next ARG) files.
+(defun dired-mark (arg &optional interactive)
+  "Mark the file at point in the Dired buffer.
+If the region is active, mark all files in the region.
+Otherwise, with a prefix arg, mark files on the next ARG lines.
+
 If on a subdir headerline, mark all its files except `.' and `..'.
-If the region is active in Transient Mark mode, mark all files
-in the active region.
 
 Use \\[dired-unmark-all-files] to remove all marks
 and \\[dired-unmark] on a subdir to remove the marks in
 this subdir."
-  (interactive "P")
+  (interactive (list current-prefix-arg t))
   (cond
    ;; Mark files in the active region.
-   ((and transient-mark-mode mark-active)
+   ((and interactive (use-region-p))
     (save-excursion
       (let ((beg (region-beginning))
 	    (end (region-end)))
@@ -3125,24 +3139,29 @@ this subdir."
        (prefix-numeric-value arg)
        (function (lambda () (delete-char 1) (insert dired-marker-char))))))))
 
-(defun dired-unmark (arg)
-  "Unmark the current (or next ARG) files.
+(defun dired-unmark (arg &optional interactive)
+  "Unmark the file at point in the Dired buffer.
+If the region is active, unmark all files in the region.
+Otherwise, with a prefix arg, unmark files on the next ARG lines.
+
 If looking at a subdir, unmark all its files except `.' and `..'.
 If the region is active in Transient Mark mode, unmark all files
 in the active region."
-  (interactive "P")
+  (interactive (list current-prefix-arg t))
   (let ((dired-marker-char ?\040))
-    (dired-mark arg)))
+    (dired-mark arg interactive)))
 
-(defun dired-flag-file-deletion (arg)
+(defun dired-flag-file-deletion (arg &optional interactive)
   "In Dired, flag the current line's file for deletion.
-With prefix arg, repeat over several lines.
+If the region is active, flag all files in the region.
+Otherwise, with a prefix arg, flag files on the next ARG lines.
+
 If on a subdir headerline, flag all its files except `.' and `..'.
 If the region is active in Transient Mark mode, flag all files
 in the active region."
-  (interactive "P")
+  (interactive (list current-prefix-arg t))
   (let ((dired-marker-char dired-del-marker))
-    (dired-mark arg)))
+    (dired-mark arg interactive)))
 
 (defun dired-unmark-backward (arg)
   "In Dired, move up lines and remove marks or deletion flags there.
@@ -3536,8 +3555,15 @@ With a prefix argument, edit the current listing switches instead."
 	(setq dired-actual-switches
 	      (replace-match "" t t dired-actual-switches 3))))
     ;; Now, if we weren't sorting by date before, add the -t switch.
+    ;; Some simple-minded ls implementations (eg ftp servers) only
+    ;; allow a single option string, so try not to add " -t" if possible.
     (unless sorting-by-date
-      (setq dired-actual-switches (concat dired-actual-switches " -t"))))
+      (setq dired-actual-switches
+            (concat dired-actual-switches
+                    (if (string-match-p "\\`-[[:alnum:]]+\\'"
+                                        dired-actual-switches)
+                        "t"
+                      " -t")))))
   (dired-sort-set-mode-line)
   (revert-buffer))
 
@@ -3706,6 +3732,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;  Desktop support
 
 (eval-when-compile (require 'desktop))
+(declare-function desktop-file-name "desktop" (filename dirname))
 
 (defun dired-desktop-buffer-misc-data (dirname)
   "Auxiliary information to be saved in desktop file."
@@ -4268,7 +4295,7 @@ instead.
 ;;;***
 
 ;;;### (autoloads (dired-do-relsymlink dired-jump-other-window dired-jump)
-;;;;;;  "dired-x" "dired-x.el" "a4e6844421c2c5e6fde90e959fbcc26f")
+;;;;;;  "dired-x" "dired-x.el" "a0a769bf895afcbb6d0e05169ef81923")
 ;;; Generated autoloads from dired-x.el
 
 (autoload 'dired-jump "dired-x" "\

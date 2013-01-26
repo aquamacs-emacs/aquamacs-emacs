@@ -74,6 +74,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define S_ISDOOR(m)    0
 #define S_ISMPB(m)     0
 #define S_ISMPC(m)     0
+#define S_ISMPX(m)     0
 #define S_ISNWK(m)     0
 #define S_ISPORT(m)    0
 #define S_ISWHT(m)     0
@@ -97,6 +98,10 @@ struct stat {
   char		   st_uname[260];
   char		   st_gname[260];
 };
+
+/* Internal variable for asking 'stat'/'lstat' to produce accurate
+   info about owner and group of files. */
+extern int w32_stat_get_owner_group;
 
 /* Prevent redefinition by other headers, e.g. wchar.h.  */
 #define _STAT_DEFINED

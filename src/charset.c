@@ -421,7 +421,7 @@ load_charset_map (struct charset *charset, struct charset_map_entries *entries, 
 /* Read a hexadecimal number (preceded by "0x") from the file FP while
    paying attention to comment character '#'.  */
 
-static inline unsigned
+static unsigned
 read_hex (FILE *fp, bool *eof, bool *overflow)
 {
   int c;
@@ -1142,12 +1142,14 @@ usage: (define-charset-internal ...)  */)
 	     example, the IDs are stuffed into struct
 	     coding_system.charbuf[i] entries, which are 'int'.  */
 	  int old_size = charset_table_size;
+	  ptrdiff_t new_size = old_size;
 	  struct charset *new_table =
-	    xpalloc (0, &charset_table_size, 1,
+	    xpalloc (0, &new_size, 1,
 		     min (INT_MAX, MOST_POSITIVE_FIXNUM),
 		     sizeof *charset_table);
 	  memcpy (new_table, charset_table, old_size * sizeof *new_table);
 	  charset_table = new_table;
+	  charset_table_size = new_size;
 	  /* FIXME: This leaks memory, as the old charset_table becomes
 	     unreachable.  If the old charset table is charset_table_init
 	     then this leak is intentional; otherwise, it's unclear.
@@ -2293,7 +2295,7 @@ init_charset (void)
 {
   Lisp_Object tempdir;
   tempdir = Fexpand_file_name (build_string ("charsets"), Vdata_directory);
-  if (access (SSDATA (tempdir), 0) < 0)
+  if (! file_accessible_directory_p (SSDATA (tempdir)))
     {
       /* This used to be non-fatal (dir_warning), but it should not
          happen, and if it does sooner or later it will cause some

@@ -833,7 +833,8 @@ this is `comint-dynamic-complete-functions'."
                       . ,(lambda (comps)
                            (sort comps pcomplete-compare-entry-function)))
                      ,@(cdr (completion-file-name-table s p a)))
-        (let ((completion-ignored-extensions nil))
+        (let ((completion-ignored-extensions nil)
+	      (completion-ignore-case pcomplete-ignore-case))
           (completion-table-with-predicate
            #'comint-completion-file-name-table pred 'strict s p a))))))
 
@@ -1089,7 +1090,7 @@ Typing SPC flushes the help buffer."
     (setq pcomplete-last-window-config (current-window-configuration)))
   (with-output-to-temp-buffer "*Completions*"
     (display-completion-list completions))
-  (message "Hit space to flush")
+  (minibuffer-message "Hit space to flush")
   (let (event)
     (prog1
         (catch 'done

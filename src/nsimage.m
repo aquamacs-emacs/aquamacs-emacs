@@ -511,7 +511,6 @@ static EmacsImage *ImageList = nil;
       if ([rep respondsToSelector: @selector (getBitmapDataPlanes:)])
         {
           bmRep = (NSBitmapImageRep *) rep;
-          onTiger = [bmRep respondsToSelector: @selector (colorAtX:y:)];
 
           if ([bmRep numberOfPlanes] >= 3)
               [bmRep getBitmapDataPlanes: pixmapData];
@@ -543,7 +542,7 @@ static EmacsImage *ImageList = nil;
        | (pixmapData[0][loc] << 16) | (pixmapData[1][loc] << 8)
        | (pixmapData[2][loc]);
     }
-  else if (onTiger)
+  else
     {
       NSColor *color = [bmRep colorAtX: x y: y];
       CGFloat r, g, b, a;
@@ -553,7 +552,6 @@ static EmacsImage *ImageList = nil;
         | ((int)(b * 255.0));
 
     }
-  return 0;
 }
 
 - (void) setPixelAtX: (int)x Y: (int)y toRed: (unsigned char)r
@@ -571,7 +569,7 @@ static EmacsImage *ImageList = nil;
       pixmapData[2][loc] = b;
       pixmapData[3][loc] = a;
     }
-  else if (onTiger)
+  else
     {
       [bmRep setColor:
                [NSColor colorWithCalibratedRed: (r/255.0) green: (g/255.0)
@@ -591,7 +589,7 @@ static EmacsImage *ImageList = nil;
 
       pixmapData[3][loc] = a;
     }
-  else if (onTiger)
+  else
     {
       NSColor *color = [bmRep colorAtX: x y: y];
       color = [color colorWithAlphaComponent: (a / 255.0)];

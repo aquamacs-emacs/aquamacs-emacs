@@ -636,12 +636,12 @@ newline_cache_on_off (struct buffer *buf)
    If we don't find COUNT instances before reaching END, set *SHORTAGE
    to the number of TARGETs left unfound, and return END.
 
-   If ALLOW_QUIT is non-zero, set immediate_quit.  That's good to do
+   If ALLOW_QUIT, set immediate_quit.  That's good to do
    except when inside redisplay.  */
 
 ptrdiff_t
-scan_buffer (register int target, ptrdiff_t start, ptrdiff_t end,
-	     ptrdiff_t count, ptrdiff_t *shortage, int allow_quit)
+scan_buffer (int target, ptrdiff_t start, ptrdiff_t end,
+	     ptrdiff_t count, ptrdiff_t *shortage, bool allow_quit)
 {
   struct region_cache *newline_cache;
   int direction;
@@ -837,23 +837,23 @@ scan_buffer (register int target, ptrdiff_t start, ptrdiff_t end,
    the number of line boundaries left unfound, and position at
    the limit we bumped up against.
 
-   If ALLOW_QUIT is non-zero, set immediate_quit.  That's good to do
+   If ALLOW_QUIT, set immediate_quit.  That's good to do
    except in special cases.  */
 
 EMACS_INT
 scan_newline (ptrdiff_t start, ptrdiff_t start_byte,
 	      ptrdiff_t limit, ptrdiff_t limit_byte,
-	      register EMACS_INT count, int allow_quit)
+	      EMACS_INT count, bool allow_quit)
 {
   int direction = ((count > 0) ? 1 : -1);
 
-  register unsigned char *cursor;
+  unsigned char *cursor;
   unsigned char *base;
 
   ptrdiff_t ceiling;
-  register unsigned char *ceiling_addr;
+  unsigned char *ceiling_addr;
 
-  int old_immediate_quit = immediate_quit;
+  bool old_immediate_quit = immediate_quit;
 
   /* The code that follows is like scan_buffer
      but checks for either newline or carriage return.  */
@@ -1313,8 +1313,11 @@ search_buffer (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
 	     non-nil, we can use boyer-moore search only if TRT can be
 	     represented by the byte array of 256 elements.  For that,
 	     all non-ASCII case-equivalents of all case-sensitive
-	     characters in STRING must belong to the same charset and
-	     row.  */
+	     characters in STRING must belong to the same character
+	     group (two characters belong to the same group iff their
+	     multibyte forms are the same except for the last byte;
+	     i.e. every 64 characters form a group; U+0000..U+003F,
+	     U+0040..U+007F, U+0080..U+00BF, ...).  */
 
 	  while (--len >= 0)
 	    {
@@ -1406,7 +1409,7 @@ search_buffer (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
 	  char_base = 0;
 	  while (--len >= 0)
 	    {
-	      int c, translated;
+	      int c, translated, inverse;
 
 	      /* If we got here and the RE flag is set, it's because we're
 		 dealing with a regexp known to be trivial, so the backslash
@@ -1420,6 +1423,20 @@ search_buffer (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
 	      c = *base_pat++;
 	      TRANSLATE (translated, trt, c);
 	      *pat++ = translated;
+	      /* Check that none of C's equivalents violates the
+		 assumptions of boyer_moore.  */
+	      TRANSLATE (inverse, inverse_trt, c);
+	      while (1)
+		{
+		  if (inverse >= 0200)
+		    {
+		      boyer_moore_ok = 0;
+		      break;
+		    }
+		  if (c == inverse)
+		    break;
+		  TRANSLATE (inverse, inverse_trt, inverse);
+		}
 	    }
 	}
 
@@ -2585,7 +2602,7 @@ since only regular expressions have distinguished subexpressions.  */)
 	      ptrdiff_t begbyte = CHAR_TO_BYTE (search_regs.start[idx]);
 	      add_len = CHAR_TO_BYTE (search_regs.end[idx]) - begbyte;
 	      if (search_regs.start[idx] < GPT && GPT < search_regs.end[idx])
-		move_gap (search_regs.start[idx]);
+		move_gap_both (search_regs.start[idx], begbyte);
 	      add_stuff = BYTE_POS_ADDR (begbyte);
 	    }
 

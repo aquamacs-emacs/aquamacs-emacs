@@ -669,21 +669,7 @@ static void
 XTframe_up_to_date (struct frame *f)
 {
   if (FRAME_X_P (f))
-    {
-      Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
-
-      if (hlinfo->mouse_face_deferred_gc
-	  || f == hlinfo->mouse_face_mouse_frame)
-	{
-	  block_input ();
-	  if (hlinfo->mouse_face_mouse_frame)
-	    note_mouse_highlight (hlinfo->mouse_face_mouse_frame,
-				  hlinfo->mouse_face_mouse_x,
-				  hlinfo->mouse_face_mouse_y);
-	  hlinfo->mouse_face_deferred_gc = 0;
-	  unblock_input ();
-	}
-    }
+    FRAME_MOUSE_UPDATE (f);
 }
 
 
@@ -1027,7 +1013,7 @@ x_set_mouse_face_gc (struct glyph_string *s)
    Faces to use in the mode line have already been computed when the
    matrix was built, so there isn't much to do, here.  */
 
-static inline void
+static void
 x_set_mode_line_face_gc (struct glyph_string *s)
 {
   s->gc = s->face->gc;
@@ -1038,7 +1024,7 @@ x_set_mode_line_face_gc (struct glyph_string *s)
    S->stippled_p to a non-zero value if the face of S has a stipple
    pattern.  */
 
-static inline void
+static void
 x_set_glyph_string_gc (struct glyph_string *s)
 {
   PREPARE_FACE_FOR_DISPLAY (s->f, s->face);
@@ -1083,7 +1069,7 @@ x_set_glyph_string_gc (struct glyph_string *s)
 /* Set clipping for output of glyph string S.  S may be part of a mode
    line or menu if we don't have X toolkit support.  */
 
-static inline void
+static void
 x_set_glyph_string_clipping (struct glyph_string *s)
 {
   XRectangle *r = s->clip;
@@ -1156,7 +1142,7 @@ x_compute_glyph_string_overhangs (struct glyph_string *s)
 
 /* Fill rectangle X, Y, W, H with background color of glyph string S.  */
 
-static inline void
+static void
 x_clear_glyph_string_rect (struct glyph_string *s, int x, int y, int w, int h)
 {
   XGCValues xgcv;
@@ -1438,7 +1424,7 @@ static struct frame *
 x_frame_of_widget (Widget widget)
 {
   struct x_display_info *dpyinfo;
-  Lisp_Object tail;
+  Lisp_Object tail, frame;
   struct frame *f;
 
   dpyinfo = x_display_info_for_display (XtDisplay (widget));
@@ -1452,15 +1438,15 @@ x_frame_of_widget (Widget widget)
 
   /* Look for a frame with that top-level widget.  Allocate the color
      on that frame to get the right gamma correction value.  */
-  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
-    if (FRAMEP (XCAR (tail))
-	&& (f = XFRAME (XCAR (tail)),
-	    (FRAME_X_P (f)
-             && f->output_data.nothing != 1
-	     && FRAME_X_DISPLAY_INFO (f) == dpyinfo))
-	&& f->output_data.x->widget == widget)
-      return f;
-
+  FOR_EACH_FRAME (tail, frame)
+    {
+      f = XFRAME (frame);
+      if (FRAME_X_P (f)
+	  && f->output_data.nothing != 1
+	  && FRAME_X_DISPLAY_INFO (f) == dpyinfo
+	  && f->output_data.x->widget == widget)
+	return f;
+    }
   emacs_abort ();
 }
 
@@ -2033,7 +2019,8 @@ x_draw_relief_rect (struct frame *f,
 
       for (i = (width > 1 ? 1 : 0); i < width; ++i)
 	XDrawLine (dpy, window, gc,
-		   left_x + i, top_y + i, left_x + i, bottom_y - i + 1);
+		   left_x + i, top_y + (i + 1) * top_p,
+		   left_x + i, bottom_y + 1 - (i + 1) * bot_p);
     }
 
   XSetClipMask (dpy, gc, None);
@@ -2075,7 +2062,8 @@ x_draw_relief_rect (struct frame *f,
       XClearArea (dpy, window, right_x, bottom_y, 1, 1, False);
       for (i = 0; i < width; ++i)
 	XDrawLine (dpy, window, gc,
-		   right_x - i, top_y + i + 1, right_x - i, bottom_y - i);
+		   right_x - i, top_y + (i + 1) * top_p,
+		   right_x - i, bottom_y + 1 - (i + 1) * bot_p);
     }
 
   XSetClipMask (dpy, gc, None);
@@ -2269,8 +2257,7 @@ x_draw_image_foreground (struct glyph_string *s)
 static void
 x_draw_image_relief (struct glyph_string *s)
 {
-  int x0, y0, x1, y1, thick, raised_p;
-  int extra_x, extra_y;
+  int x1, y1, thick, raised_p, top_p, bot_p, left_p, right_p;
   XRectangle r;
   int x = s->x;
   int y = s->ybase - image_ascent (s->img, s->face, &s->slice);
@@ -2301,33 +2288,23 @@ x_draw_image_relief (struct glyph_string *s)
       raised_p = s->img->relief > 0;
     }
 
-  extra_x = extra_y = 0;
-  if (s->face->id == TOOL_BAR_FACE_ID)
-    {
-      if (CONSP (Vtool_bar_button_margin)
-	  && INTEGERP (XCAR (Vtool_bar_button_margin))
-	  && INTEGERP (XCDR (Vtool_bar_button_margin)))
-	{
-	  extra_x = XINT (XCAR (Vtool_bar_button_margin));
-	  extra_y = XINT (XCDR (Vtool_bar_button_margin));
-	}
-      else if (INTEGERP (Vtool_bar_button_margin))
-	extra_x = extra_y = XINT (Vtool_bar_button_margin);
-    }
+  x1 = x + s->slice.width - 1;
+  y1 = y + s->slice.height - 1;
+  top_p = bot_p = left_p = right_p = 0;
 
-  x0 = x - thick - extra_x;
-  y0 = y - thick - extra_y;
-  x1 = x + s->slice.width + thick - 1 + extra_x;
-  y1 = y + s->slice.height + thick - 1 + extra_y;
+  if (s->slice.x == 0)
+    x -= thick, left_p = 1;
+  if (s->slice.y == 0)
+    y -= thick, top_p = 1;
+  if (s->slice.x + s->slice.width == s->img->width)
+    x1 += thick, right_p = 1;
+  if (s->slice.y + s->slice.height == s->img->height)
+    y1 += thick, bot_p = 1;
 
   x_setup_relief_colors (s);
   get_glyph_string_clip_rect (s, &r);
-  x_draw_relief_rect (s->f, x0, y0, x1, y1, thick, raised_p,
-		      s->slice.y == 0,
-		      s->slice.y + s->slice.height == s->img->height,
-		      s->slice.x == 0,
-		      s->slice.x + s->slice.width == s->img->width,
-		      &r);
+  x_draw_relief_rect (s->f, x, y, x1, y1, thick, raised_p,
+		      top_p, bot_p, left_p, right_p, &r);
 }
 
 
@@ -3448,7 +3425,8 @@ x_focus_changed (int type, int state, struct x_display_info *dpyinfo, struct fra
 
           /* Don't stop displaying the initial startup message
              for a switch-frame event we don't need.  */
-          if (NILP (Vterminal_frame)
+          /* When run as a daemon, Vterminal_frame is always NIL.  */
+          if ((NILP (Vterminal_frame) || EQ (Fdaemonp(), Qt))
               && CONSP (Vframe_list)
               && !NILP (XCDR (Vframe_list)))
             {
@@ -4097,20 +4075,15 @@ XTmouse_position (FRAME_PTR *fp, int insist, Lisp_Object *bar_window,
 static struct scroll_bar *
 x_window_to_scroll_bar (Display *display, Window window_id)
 {
-  Lisp_Object tail;
+  Lisp_Object tail, frame;
 
 #if defined (USE_GTK) && defined (USE_TOOLKIT_SCROLL_BARS)
   window_id = (Window) xg_get_scroll_id_for_window (display, window_id);
 #endif /* USE_GTK  && USE_TOOLKIT_SCROLL_BARS */
 
-  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+  FOR_EACH_FRAME (tail, frame)
     {
-      Lisp_Object frame, bar, condemned;
-
-      frame = XCAR (tail);
-      /* All elements of Vframe_list should be frames.  */
-      if (! FRAMEP (frame))
-	emacs_abort ();
+      Lisp_Object bar, condemned;
 
       if (! FRAME_X_P (XFRAME (frame)))
         continue;
@@ -4142,20 +4115,16 @@ x_window_to_scroll_bar (Display *display, Window window_id)
 static Widget
 x_window_to_menu_bar (Window window)
 {
-  Lisp_Object tail;
+  Lisp_Object tail, frame;
 
-  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
-    {
-      if (FRAME_X_P (XFRAME (XCAR (tail))))
-        {
-          Lisp_Object frame = XCAR (tail);
-          Widget menu_bar = XFRAME (frame)->output_data.x->menubar_widget;
+  FOR_EACH_FRAME (tail, frame)
+    if (FRAME_X_P (XFRAME (frame)))
+      {
+	Widget menu_bar = XFRAME (frame)->output_data.x->menubar_widget;
 
-          if (menu_bar && xlwmenu_window_p (menu_bar, window))
-            return menu_bar;
-        }
-    }
-
+	if (menu_bar && xlwmenu_window_p (menu_bar, window))
+	  return menu_bar;
+      }
   return NULL;
 }
 
@@ -4865,9 +4834,7 @@ x_set_toolkit_scroll_bar_thumb (struct scroll_bar *bar, int portion, int positio
       /* Slider size.  Must be in the range [1 .. MAX - MIN] where MAX
          is the scroll bar's maximum and MIN is the scroll bar's minimum
 	 value.  */
-      size = shown * XM_SB_MAX;
-      size = min (size, XM_SB_MAX);
-      size = max (size, 1);
+      size = clip_to_bounds (1, shown * XM_SB_MAX, XM_SB_MAX);
 
       /* Position.  Must be in the range [MIN .. MAX - SLIDER_SIZE].  */
       value = top * XM_SB_MAX;
@@ -6107,7 +6074,6 @@ handle_one_xevent (struct x_display_info *dpyinfo, XEvent *eventptr,
         SELECTION_EVENT_DISPLAY (&inev.sie) = eventp->display;
         SELECTION_EVENT_SELECTION (&inev.sie) = eventp->selection;
         SELECTION_EVENT_TIME (&inev.sie) = eventp->time;
-        inev.ie.frame_or_window = Qnil;
       }
       break;
 
@@ -6127,7 +6093,6 @@ handle_one_xevent (struct x_display_info *dpyinfo, XEvent *eventptr,
           SELECTION_EVENT_TARGET (&inev.sie) = eventp->target;
           SELECTION_EVENT_PROPERTY (&inev.sie) = eventp->property;
           SELECTION_EVENT_TIME (&inev.sie) = eventp->time;
-          inev.ie.frame_or_window = Qnil;
       }
       break;
 
@@ -7935,7 +7900,6 @@ x_new_font (struct frame *f, Lisp_Object font_object, int fontset)
   FRAME_FONT (f) = font;
   FRAME_BASELINE_OFFSET (f) = font->baseline_offset;
   FRAME_COLUMN_WIDTH (f) = font->average_width;
-  FRAME_SPACE_WIDTH (f) = font->space_width;
   FRAME_LINE_HEIGHT (f) = FONT_HEIGHT (font);
 
   compute_fringe_widths (f, 1);
@@ -9512,7 +9476,6 @@ x_free_frame_resources (struct frame *f)
       hlinfo->mouse_face_end_row
 	= hlinfo->mouse_face_end_col = -1;
       hlinfo->mouse_face_window = Qnil;
-      hlinfo->mouse_face_deferred_gc = 0;
       hlinfo->mouse_face_mouse_frame = 0;
     }
 
@@ -9943,10 +9906,7 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
 
         /* Emacs can only handle core input events, so make sure
            Gtk doesn't use Xinput or Xinput2 extensions.  */
-        {
-          static char fix_events[] = "GDK_CORE_DEVICE_EVENTS=1";
-          putenv (fix_events);
-        }
+	xputenv ("GDK_CORE_DEVICE_EVENTS=1");
 
         /* Work around GLib bug that outputs a faulty warning. See
            https://bugzilla.gnome.org/show_bug.cgi?id=563627.  */
@@ -10163,7 +10123,6 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
   dpyinfo->bitmaps_last = 0;
   dpyinfo->scratch_cursor_gc = 0;
   hlinfo->mouse_face_mouse_frame = 0;
-  hlinfo->mouse_face_deferred_gc = 0;
   hlinfo->mouse_face_beg_row = hlinfo->mouse_face_beg_col = -1;
   hlinfo->mouse_face_end_row = hlinfo->mouse_face_end_col = -1;
   hlinfo->mouse_face_face_id = DEFAULT_FACE_ID;
@@ -10869,10 +10828,10 @@ default is nil, which is the same as `super'.  */);
 
   DEFVAR_LISP ("x-keysym-table", Vx_keysym_table,
     doc: /* Hash table of character codes indexed by X keysym codes.  */);
-  Vx_keysym_table = make_hash_table (Qeql, make_number (900),
+  Vx_keysym_table = make_hash_table (hashtest_eql, make_number (900),
 				     make_float (DEFAULT_REHASH_SIZE),
 				     make_float (DEFAULT_REHASH_THRESHOLD),
-				     Qnil, Qnil, Qnil);
+				     Qnil);
 }
 
 #endif /* HAVE_X_WINDOWS */

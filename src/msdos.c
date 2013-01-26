@@ -1275,7 +1275,6 @@ IT_update_begin (struct frame *f)
       hlinfo->mouse_face_beg_row = hlinfo->mouse_face_beg_col = -1;
       hlinfo->mouse_face_end_row = hlinfo->mouse_face_end_col = -1;
       hlinfo->mouse_face_window = Qnil;
-      hlinfo->mouse_face_deferred_gc = 0;
       hlinfo->mouse_face_mouse_frame = NULL;
     }
 
@@ -1295,21 +1294,10 @@ IT_update_end (struct frame *f)
 static void
 IT_frame_up_to_date (struct frame *f)
 {
-  Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
   Lisp_Object new_cursor, frame_desired_cursor;
   struct window *sw;
 
-  if (hlinfo->mouse_face_deferred_gc
-      || (f && f == hlinfo->mouse_face_mouse_frame))
-    {
-      block_input ();
-      if (hlinfo->mouse_face_mouse_frame)
-	note_mouse_highlight (hlinfo->mouse_face_mouse_frame,
-			      hlinfo->mouse_face_mouse_x,
-			      hlinfo->mouse_face_mouse_y);
-      hlinfo->mouse_face_deferred_gc = 0;
-      unblock_input ();
-    }
+  FRAME_MOUSE_UPDATE (f);
 
   /* Set the cursor type to whatever they wanted.  In a minibuffer
      window, we want the cursor to appear only if we are reading input
@@ -1849,7 +1837,6 @@ internal_terminal_init (void)
 	    FRAME_BACKGROUND_PIXEL (SELECTED_FRAME ()) = colors[1];
 	}
       the_only_display_info.mouse_highlight.mouse_face_mouse_frame = NULL;
-      the_only_display_info.mouse_highlight.mouse_face_deferred_gc = 0;
       the_only_display_info.mouse_highlight.mouse_face_beg_row =
 	the_only_display_info.mouse_highlight.mouse_face_beg_col = -1;
       the_only_display_info.mouse_highlight.mouse_face_end_row =
@@ -3305,7 +3292,7 @@ XMenuActivate (Display *foo, XMenu *menu, int *pane, int *selidx,
      Emacs will process them after we return and surprise the user.  */
   discard_mouse_events ();
   mouse_clear_clicks ();
-  if (!kbd_buffer_events_waiting (1))
+  if (!kbd_buffer_events_waiting ())
     clear_input_pending ();
   /* Allow mouse events generation by dos_rawgetc.  */
   mouse_preempted--;
@@ -3927,8 +3914,10 @@ croak (char *badfunc)
 /*
  * A few unimplemented functions that we silently ignore.
  */
-int setpgrp (void) {return 0; }
+pid_t tcgetpgrp (int fd) { return 0; }
+int setpgid (int pid, int pgid) { return 0; }
 int setpriority (int x, int y, int z) { return 0; }
+pid_t setsid (void) { return 0; }
 
 #if __DJGPP__ == 2 && __DJGPP_MINOR__ < 4
 ssize_t
@@ -4214,8 +4203,8 @@ init_gettimeofday (void)
 }
 #endif
 
-void
-emacs_abort (void)
+static void
+msdos_abort (void)
 {
   dos_ttcooked ();
   ScreenSetCursor (10, 0);
@@ -4230,6 +4219,15 @@ emacs_abort (void)
   raise (SIGABRT);
 #endif /* __DJGPP_MINOR__ >= 2 */
   exit (2);
+}
+
+void
+msdos_fatal_signal (int sig)
+{
+  if (sig == SIGABRT)
+    msdos_abort ();
+  else
+    raise (sig);
 }
 
 void

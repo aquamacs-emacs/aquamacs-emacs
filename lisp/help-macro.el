@@ -69,6 +69,10 @@
 
 (require 'backquote)
 
+;; This needs to be autoloaded because it is used in the
+;; make-help-screen macro.  Using (bound-and-true-p three-step-help)
+;; is not an acceptable alternative, because nothing loads help-macro
+;; in a normal session, so any user customization would never be applied.
 ;;;###autoload
 (defcustom three-step-help nil
   "Non-nil means give more info about Help command in three steps.
@@ -130,7 +134,7 @@ and then returns."
 		   (when (or (eq char ??) (eq char help-char)
 			     (memq char help-event-list))
 		     (setq config (current-window-configuration))
-		     (switch-to-buffer-other-window "*Help*")
+		     (pop-to-buffer " *Metahelp*" nil t)
 		     (and (fboundp 'make-frame)
 			  (not (eq (window-frame (selected-window))
 				   prev-frame))

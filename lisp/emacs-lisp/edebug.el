@@ -371,7 +371,7 @@ Return the result of the last expression in BODY."
 	 ((get-buffer-window buffer 0))
 	 ((one-window-p 'nomini)
 	  ;; When there's one window only, split it.
-	  (split-window))
+	  (split-window (minibuffer-selected-window)))
 	 ((let ((trace-window (get-buffer-window edebug-trace-buffer)))
 	    (catch 'found
 	      (dolist (elt (window-list nil 'nomini))
@@ -382,13 +382,10 @@ Return the result of the last expression in BODY."
 		  (throw 'found elt))))))
 	 ;; All windows are dedicated or show `edebug-trace-buffer', split
 	 ;; selected one.
-	 (t (split-window))))
-  (select-window window)
+	 (t (split-window (minibuffer-selected-window)))))
   (set-window-buffer window buffer)
-  (set-window-hscroll window 0);; should this be??
-  ;; Selecting the window does not set the buffer until command loop.
-  ;;(set-buffer buffer)
-  )
+  (select-window window)
+  (set-window-hscroll window 0)) ;; should this be??
 
 (defun edebug-get-displayed-buffer-points ()
   ;; Return a list of buffer point pairs, for all displayed buffers.
@@ -4261,21 +4258,52 @@ With prefix argument, make it a temporary breakpoint."
 ;;; Autoloading of Edebug accessories
 
 ;; edebug-cl-read and cl-read are available from liberte@cs.uiuc.edu
+(defun edebug--require-cl-read ()
+  (require 'edebug-cl-read))
+
 (if (featurep 'cl-read)
-    (add-hook 'edebug-setup-hook
-	      (function (lambda () (require 'edebug-cl-read))))
+    (add-hook 'edebug-setup-hook #'edebug--require-cl-read)
   ;; The following causes edebug-cl-read to be loaded when you load cl-read.el.
-  (add-hook 'cl-read-load-hooks
-	    (function (lambda () (require 'edebug-cl-read)))))
+  (add-hook 'cl-read-load-hooks #'edebug--require-cl-read))
 
 
 ;;; Finalize Loading
+
+;; When edebugging a function, some of the sub-expressions are
+;; wrapped in (edebug-enter (lambda () ..)), so we need to teach
+;; called-interactively-p that calls within the inner lambda should refer to
+;; the outside function.
+(add-hook 'called-interactively-p-functions
+          #'edebug--called-interactively-skip)
+(defun edebug--called-interactively-skip (i frame1 frame2)
+  (when (and (eq (car-safe (nth 1 frame1)) 'lambda)
+             (eq (nth 1 (nth 1 frame1)) '())
+             (eq (nth 1 frame2) 'edebug-enter))
+    ;; `edebug-enter' calls itself on its first invocation.
+    (if (eq (nth 1 (internal--called-interactively-p--get-frame i))
+            'edebug-enter)
+        2 1)))
 
 ;; Finally, hook edebug into the rest of Emacs.
 ;; There are probably some other things that could go here.
 
 ;; Install edebug read and eval functions.
 (edebug-install-read-eval-functions)
+
+(defun edebug-unload-function ()
+  "Unload the Edebug source level debugger."
+  (when edebug-active
+    (setq edebug-active nil)
+    (unwind-protect
+        (abort-recursive-edit)
+      ;; We still want to run unload-feature to completion
+      (run-with-idle-timer 0 nil #'(lambda () (unload-feature 'edebug)))))
+  (remove-hook 'called-interactively-p-functions
+               'edebug--called-interactively-skip)
+  (remove-hook 'cl-read-load-hooks 'edebug--require-cl-read)
+  (edebug-uninstall-read-eval-functions)
+  ;; continue standard unloading
+  nil)
 
 (provide 'edebug)
 
