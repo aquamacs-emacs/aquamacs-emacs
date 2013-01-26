@@ -2359,8 +2359,7 @@ push_key_description (EMACS_INT ch, char *p)
     }
   else if (c < 128
 	   || (NILP (BVAR (current_buffer, enable_multibyte_characters))
-	       && SINGLE_BYTE_CHAR_P (c)
-	       && !force_multibyte))
+	       && SINGLE_BYTE_CHAR_P (c)))
     {
       /* display in upper case */
       if (! NILP (Vns_use_mac_modifier_symbols))

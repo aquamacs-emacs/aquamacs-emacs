@@ -3863,7 +3863,7 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
 }
 
 static void
-ns_fullscreen_hook  (f)
+ns_fullscreen_hook_old  (f)
 FRAME_PTR f;
 {
 #ifdef NS_IMPL_COCOA
@@ -6752,6 +6752,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
     [[self window] performZoom:self];
 }
 
+
 - (void)toggleFullScreen: (id)sender
 {
 #ifdef NEW_STYLE_FS
@@ -7022,7 +7023,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   return;
 }
 
-- toggleFullScreen: (id)sender
+- toggleFullScreen_orig_aquamacs: (id)sender
 {
   if (!emacs_event)
   return self;
@@ -7056,7 +7057,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
     return proposedSize;
 }
 
-- (void)windowDidExitFullScreen:(NSNotification *)notification {
+- (void)windowDidExitFullScreen_orig_Aquamacs:(NSNotification *)notification {
  
    NSWindow* window = [notification object];
 
@@ -7403,107 +7404,26 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   [FRAME_NS_VIEW (f) toggleToolbarShown: sender];
 }
 
-- (BOOL) respondsToNativeFullScreen
-{
-  return (floor (NSAppKitVersionNumber) >= 1110); /*NSAppKitVersionNumber10_7*/
-  /* the following won't work when older build environments are used */
-  // return [super respondsToSelector:@selector(toggleFullScreen:)];
-}
-- (BOOL) shouldUseNativeFullScreen
-{
-  return usingLionScreen;
-}
+// - (BOOL) respondsToNativeFullScreen
+// {
+//   return (floor (NSAppKitVersionNumber) >= 1110); /*NSAppKitVersionNumber10_7*/
+//   /* the following won't work when older build environments are used */
+//   // return [super respondsToSelector:@selector(toggleFullScreen:)];
+// }
+// - (BOOL) shouldUseNativeFullScreen
+// {
+//   return usingLionScreen;
+// }
 
+// enum {
+//    __NSFullScreenWindowMask = 1 << 14
+// };
 
-- (void)toggleFullScreen: (id)sender
-{
-  struct frame *f = ((EmacsView *) [self delegate])->emacsframe;
-  [FRAME_NS_VIEW (f) toggleFullScreen: sender];
-}
-- (void)toggleActualFullScreen: (id)sender
-{
-  if ([self respondsToNativeFullScreen])
-    {
-      usingLionScreen = ! ([self isFullScreen]);
+// - (BOOL)isFullScreen
+// {
+//     return (([self styleMask] & __NSFullScreenWindowMask) == __NSFullScreenWindowMask);
+// }
 
-      [super toggleFullScreen: sender];
-    }
-}
-
-
-enum {
-   __NSFullScreenWindowMask = 1 << 14
-};
-
-- (BOOL)isFullScreen
-{
-    return (([self styleMask] & __NSFullScreenWindowMask) == __NSFullScreenWindowMask);
-}
-
-
-
--(EmacsWindow *)setFullscreen:(BOOL) flag {
-  BOOL isFullscreen = [[self className] isEqualToString:@"EmacsFullWindow"];
-  EmacsFullWindow *f;
-  EmacsWindow *w;
-  EmacsView *view;
-
-
-  usingLionScreen = NO;
-
-  if (isFullscreen) {
-    f = (EmacsFullWindow *)self;
-    w = [f getNormalWindow];
-    if (! flag)
-      {
-	[w setContentView:[f contentView]];
-	[w makeKeyAndOrderFront:nil];
-	[f close];
-	if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
-	  if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
-	    [NSApp setPresentationOptions:NSApplicationPresentationDefault];
-	  }
-	  else {
-	    [NSMenu setMenuBarVisible:YES];
-	  }
-	}
-      }
-    return w;
-  }
-  else if (flag && ! isFullscreen)
-    {
-      [self deminiaturize:nil];
-      
-      if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
-	if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
-	  [NSApp setPresentationOptions:NSApplicationPresentationAutoHideDock 
-		 | NSApplicationPresentationAutoHideMenuBar];
-	}
-	else {
-	  [NSMenu setMenuBarVisible:NO];
-	}
-      }
-      
-      [self orderOut:nil];
-
-      f = [[EmacsFullWindow alloc] initWithNormalWindow:self];
-      view = (EmacsView *)[self delegate];
-      [f setDelegate:view];
-      [f makeFirstResponder:view];
-      [f setContentView:[self contentView]];
-      [f setContentSize:[[self screen] frame].size];
-      [f setTitle:[self title]];
-      [f makeKeyAndOrderFront:nil];
-      [f setCollectionBehavior:__NSWindowCollectionBehaviorManaged
-	    | __NSWindowCollectionBehaviorFullScreenPrimary
-	    | __NSWindowCollectionBehaviorParticipatesInCycle
-	    | __NSWindowCollectionBehaviorFullScreenAuxiliary];
-
-
-      return f;
-    }
-  return self;
-}
 
 /* If we have multiple monitors, one above the other, we don't want to
    restrict the height to just one monitor.  So we override this.  */

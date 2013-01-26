@@ -173,8 +173,17 @@ lisp = \
 	$(lispsource)/calendar/time-date.elc \
 	$(lispsource)/calendar/parse-time.elc \
 	$(lispsource)/emacs-lisp/easy-mmode.elc \
-	$(lispsource)/aquamacs/aquamacs-autoface-mode.elc
+	$(lispsource)/emacs-lisp/advice.elc \
+	$(lispsource)/emacs-lisp/nadvice.elc \
+	$(lispsource)/aquamacs/aquamacs-autoface-mode.elc \
+	$(lispsource)/aquamacs/aquamacs-macros.elc \
+	$(lispsource)/aquamacs/aquamacs-tools.elc \
+	$(lispsource)/aquamacs/macosx/mac-extra-functions.elc \
+	$(lispsource)/aquamacs/aquamacs-tool-bar.elc \
+	$(lispsource)/aquamacs/macosx/osx_defaults.elc \
+	$(lispsource)/aquamacs/aquamacs.elc
 
+#
 
 # entries starting with image-file.elc are specific to Aquamacs
 # where these files are pre-loaded.

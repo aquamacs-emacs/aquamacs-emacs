@@ -87,6 +87,9 @@
 ;(load "emacs-lisp/cl-seq")
 ;(load "emacs-lisp/easy-mmode.el")
 
+(load "emacs-lisp/advice")
+(load "emacs-lisp/nadvice") ;; needed for defadvice
+
 ;; aquamacs
 ;; the function aq-preload is supplied by the make-aquamacs script
 (aq-preload "aquamacs-macros")
@@ -98,8 +101,8 @@
 ;;(aq-preload "aquamacs-mode-specific-themes")
 (load "calendar/time-date")
 (aq-preload "aquamacs-tool-bar")
-(aq-preload "aquamacs")
 (aq-preload "macosx/osx_defaults")
+(aq-preload "aquamacs")
 (aq-preload "macosx/aquamacs-menu")
 ; these define minor modes
 ;(aq-preload "macosx/emulate-mac-keyboard-mode")

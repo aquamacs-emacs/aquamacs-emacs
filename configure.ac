@@ -177,6 +177,7 @@ OPTION_DEFAULT_ON([toolkit-scroll-bars],[don't use Motif or Xaw3d scroll bars])
 OPTION_DEFAULT_ON([xaw3d],[don't use Xaw3d])
 OPTION_DEFAULT_ON([xim],[don't use X11 XIM])
 OPTION_DEFAULT_ON([ns],[don't use nextstep (Cocoa or GNUstep) windowing system])
+OPTION_DEFAULT_OFF([w32], [use native MS Windows GUI])
 
 OPTION_DEFAULT_ON([gpm],[don't use -lgpm for mouse support on a GNU/Linux console])
 OPTION_DEFAULT_ON([dbus],[don't compile with D-Bus support])

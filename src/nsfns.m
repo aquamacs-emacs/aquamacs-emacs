@@ -3515,6 +3515,25 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 @end
 
 
+@implementation EmacsFileDelegate
+/* --------------------------------------------------------------------------
+   Delegate methods for Open/Save panels
+   -------------------------------------------------------------------------- */
+- (BOOL)panel: (id)sender isValidFilename: (NSString *)filename
+{
+  return YES;
+}
+- (BOOL)panel: (id)sender shouldShowFilename: (NSString *)filename
+{
+  return YES;
+}
+- (NSString *)panel: (id)sender userEnteredFilename: (NSString *)filename
+          confirmed: (BOOL)okFlag
+{
+  return filename;
+}
+@end
+
 
 #endif
 
