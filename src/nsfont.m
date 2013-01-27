@@ -1268,7 +1268,7 @@ nsfont_draw (struct glyph_string *s, int from, int to, int x, int y,
     else
       CGContextSetShouldAntialias (gcontext, 1);
 
-    CGContextSetShouldSmoothFonts (gcontext, NO);
+    CGContextSetShouldSmoothFonts (gcontext, YES);  // YES in Aquamacs
     CGContextSetTextMatrix (gcontext, fliptf);
 
     if (bgCol != nil)
