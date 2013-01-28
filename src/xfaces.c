@@ -1,6 +1,6 @@
 /* xfaces.c -- "Face" primitives.
 
-Copyright (C) 1993-1994, 1998-2012  Free Software Foundation, Inc.
+Copyright (C) 1993-1994, 1998-2013 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -4934,6 +4934,8 @@ tty_supports_face_attributes_p (struct frame *f,
     {
       if (STRINGP (val))
 	return 0;		/* ttys can't use colored underlines */
+      else if (EQ (CAR_SAFE (val), QCstyle) && EQ (CAR_SAFE (CDR_SAFE (val)), Qwave))
+	return 0;		/* ttys can't use wave underlines */
       else if (face_attr_equal_p (val, def_attrs[LFACE_UNDERLINE_INDEX]))
 	return 0;		/* same as default */
       else

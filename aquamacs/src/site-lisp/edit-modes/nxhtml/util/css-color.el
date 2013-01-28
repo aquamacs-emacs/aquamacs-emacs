@@ -613,7 +613,7 @@ Returns a list of values in the range of 0 to 255.
 	 (css-color-hsl-to-rgb h s l)))
 
 (defun css-color-hue-to-rgb (x y h)
-  (when (< h 0) (incf h))
+  (when (< h 0) (cl-incf h))
   (when (> h 1) (decf h))
   (cond ((< h (/ 1 6.0))
          (+ x (* (- y x) h 6)))

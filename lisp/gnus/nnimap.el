@@ -1,6 +1,6 @@
 ;;; nnimap.el --- IMAP interface for Gnus
 
-;; Copyright (C) 2010-2012 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2013 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;;         Simon Josefsson <simon@josefsson.org>
@@ -339,7 +339,8 @@ textual parts.")
 			  (nnimap-last-command-time nnimap-object)))
 			;; More than five minutes since the last command.
 			(* 5 60)))
-	    (nnimap-send-command "NOOP")))))))
+            (ignore-errors              ;E.g. "buffer foo has no process".
+              (nnimap-send-command "NOOP"))))))))
 
 (defun nnimap-open-connection (buffer)
   ;; Be backwards-compatible -- the earlier value of nnimap-stream was
@@ -367,7 +368,7 @@ textual parts.")
 (defun nnimap-open-connection-1 (buffer)
   (unless nnimap-keepalive-timer
     (setq nnimap-keepalive-timer (run-at-time (* 60 15) (* 60 15)
-					      'nnimap-keepalive)))
+					      #'nnimap-keepalive)))
   (with-current-buffer (nnimap-make-process-buffer buffer)
     (let* ((coding-system-for-read 'binary)
 	   (coding-system-for-write 'binary)
@@ -980,7 +981,7 @@ textual parts.")
 (defun nnimap-find-article-by-message-id (group message-id)
   (with-current-buffer (nnimap-buffer)
     (erase-buffer)
-    (unless (equal group (nnimap-group nnimap-object))
+    (unless (or (not group) (equal group (nnimap-group nnimap-object)))
       (setf (nnimap-group nnimap-object) nil)
       (setf (nnimap-examined nnimap-object) group)
       (nnimap-send-command "EXAMINE %S" (utf7-encode group t)))
@@ -1420,7 +1421,9 @@ textual parts.")
 		     (gnus-set-difference
 		      (gnus-set-difference
 		       existing
-		       (cdr (assoc '%Seen flags)))
+		       (gnus-sorted-union
+			(cdr (assoc '%Seen flags))
+			(cdr (assoc '%Deleted flags))))
 		      (cdr (assoc '%Flagged flags)))))
 		   (read (gnus-range-difference
 			  (cons start-article high) unread)))

@@ -2,15 +2,15 @@
 
 @include gnus-overrides.texi
 
+@set VERSION 0.3
+
 @setfilename ../../info/auth
 @settitle Emacs auth-source Library @value{VERSION}
-
-@set VERSION 0.3
 
 @copying
 This file describes the Emacs auth-source library.
 
-Copyright @copyright{} 2008--2012 Free Software Foundation, Inc.
+Copyright @copyright{} 2008--2013 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -154,7 +154,8 @@ and simplest configuration is:
 (setq auth-sources '((:source "~/.authinfo.gpg")))
 ;;; even shorter and the @emph{default}:
 (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
-;;; use the Secrets API @var{Login} collection (@pxref{Secret Service API})
+;;; use the Secrets API @var{Login} collection
+;;; (@pxref{Secret Service API})
 (setq auth-sources '("secrets:Login"))
 @end lisp
 
@@ -167,7 +168,8 @@ have unusual setups and the remaining 10% are @emph{really} unusual).
 Here's a mixed example using two sources:
 
 @lisp
-(setq auth-sources '((:source (:secrets default) :host "myserver" :user "joe")
+(setq auth-sources '((:source (:secrets default)
+                      :host "myserver" :user "joe")
                      "~/.authinfo.gpg"))
 @end lisp
 

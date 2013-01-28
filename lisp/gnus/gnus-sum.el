@@ -1,6 +1,6 @@
 ;;; gnus-sum.el --- summary mode commands for Gnus
 
-;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2013 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -1167,7 +1167,7 @@ using `gnus-ignored-from-addresses'."
 
 (defcustom gnus-summary-newsgroup-prefix "=> "
   "*String prefixed to the Newsgroup field in the summary
-line when using `gnus-ignored-from-addresses'."
+line when using the option `gnus-ignored-from-addresses'."
   :version "22.1"
   :group 'gnus-summary
   :type 'string)
@@ -3651,17 +3651,18 @@ buffer that was in action when the last article was fetched."
   (or (car (funcall gnus-extract-address-components from))
       from))
 
-(defun gnus-summary-from-or-to-or-newsgroups (header gnus-tmp-from)
+(defun gnus-summary-from-or-to-or-newsgroups (header from)
   (let ((mail-parse-charset gnus-newsgroup-charset)
-	(ignored-from-addresses (gnus-ignored-from-addresses))
-	; Is it really necessary to do this next part for each summary line?
-	; Luckily, doesn't seem to slow things down much.
-	(mail-parse-ignored-charsets
-	 (with-current-buffer gnus-summary-buffer
-	   gnus-newsgroup-ignored-charsets)))
+        (ignored-from-addresses (gnus-ignored-from-addresses))
+        ;; Is it really necessary to do this next part for each summary line?
+        ;; Luckily, doesn't seem to slow things down much.
+        (mail-parse-ignored-charsets
+         (with-current-buffer gnus-summary-buffer
+           gnus-newsgroup-ignored-charsets))
+        (address (cadr (gnus-extract-address-components from))))
     (or
      (and ignored-from-addresses
-	  (string-match ignored-from-addresses gnus-tmp-from)
+	  (string-match ignored-from-addresses address)
 	  (let ((extra-headers (mail-header-extra header))
 		to
 		newsgroups)
@@ -3680,9 +3681,7 @@ buffer that was in action when the last article was fetched."
                                 gnus-newsgroup-name)) 'nntp)
 		      (gnus-group-real-name gnus-newsgroup-name))))
 	      (concat gnus-summary-newsgroup-prefix newsgroups)))))
-     (gnus-string-mark-left-to-right
-      (inline
-       (gnus-summary-extract-address-component gnus-tmp-from))))))
+     (gnus-string-mark-left-to-right (gnus-summary-extract-address-component from)))))
 
 (defun gnus-summary-insert-line (gnus-tmp-header
 				 gnus-tmp-level gnus-tmp-current
@@ -4059,9 +4058,10 @@ If SELECT-ARTICLES, only select those articles from GROUP."
 		 gnus-auto-select-first)
 	    (progn
 	      (let ((art (gnus-summary-article-number)))
-		(unless (and (not gnus-plugged)
-			     (or (memq art gnus-newsgroup-undownloaded)
-				 (memq art gnus-newsgroup-downloadable)))
+		(when (and art
+			   gnus-plugged
+			   (not (memq art gnus-newsgroup-undownloaded))
+			   (not (memq art gnus-newsgroup-downloadable)))
 		  (gnus-summary-goto-article art))))
 	  ;; Don't select any articles.
 	  (gnus-summary-position-point)

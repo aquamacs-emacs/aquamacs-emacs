@@ -1,5 +1,5 @@
 /* Utility and Unix shadow routines for GNU Emacs on the Microsoft Windows API.
-   Copyright (C) 1994-1995, 2000-2012  Free Software Foundation, Inc.
+   Copyright (C) 1994-1995, 2000-2013 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -37,7 +37,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* must include CRT headers *before* config.h */
 
 #include <config.h>
-#include <mbstring.h>	/* for _mbspbrk */
+#include <mbstring.h>	/* for _mbspbrk and _mbslwr */
 
 #undef access
 #undef chdir
@@ -1531,6 +1531,67 @@ srandom (int seed)
   srand (seed);
 }
 
+/* Current codepage for encoding file names.  */
+static int file_name_codepage;
+
+/* Return the maximum length in bytes of a multibyte character
+   sequence encoded in the current ANSI codepage.  This is required to
+   correctly walk the encoded file names one character at a time.  */
+static int
+max_filename_mbslen (void)
+{
+  /* A simple cache to avoid calling GetCPInfo every time we need to
+     normalize a file name.  The file-name encoding is not supposed to
+     be changed too frequently, if ever.  */
+  static Lisp_Object last_file_name_encoding;
+  static int last_max_mbslen;
+  Lisp_Object current_encoding;
+
+  current_encoding = Vfile_name_coding_system;
+  if (NILP (current_encoding))
+    current_encoding = Vdefault_file_name_coding_system;
+
+  if (!EQ (last_file_name_encoding, current_encoding))
+    {
+      CPINFO cp_info;
+
+      last_file_name_encoding = current_encoding;
+      /* Default to the current ANSI codepage.  */
+      file_name_codepage = w32_ansi_code_page;
+      if (!NILP (current_encoding))
+	{
+	  char *cpname = SDATA (SYMBOL_NAME (current_encoding));
+	  char *cp = NULL, *end;
+	  int cpnum;
+
+	  if (strncmp (cpname, "cp", 2) == 0)
+	    cp = cpname + 2;
+	  else if (strncmp (cpname, "windows-", 8) == 0)
+	    cp = cpname + 8;
+
+	  if (cp)
+	    {
+	      end = cp;
+	      cpnum = strtol (cp, &end, 10);
+	      if (cpnum && *end == '\0' && end - cp >= 2)
+		file_name_codepage = cpnum;
+	    }
+	}
+
+      if (!file_name_codepage)
+	file_name_codepage = CP_ACP; /* CP_ACP = 0, but let's not assume that */
+
+      if (!GetCPInfo (file_name_codepage, &cp_info))
+	{
+	  file_name_codepage = CP_ACP;
+	  if (!GetCPInfo (file_name_codepage, &cp_info))
+	    emacs_abort ();
+	}
+      last_max_mbslen = cp_info.MaxCharSize;
+    }
+
+  return last_max_mbslen;
+}
 
 /* Normalize filename by converting all path separators to
    the specified separator.  Also conditionally convert upper
@@ -1540,14 +1601,20 @@ static void
 normalize_filename (register char *fp, char path_sep)
 {
   char sep;
-  char *elem;
+  char *elem, *p2;
+  int dbcs_p = max_filename_mbslen () > 1;
 
   /* Always lower-case drive letters a-z, even if the filesystem
      preserves case in filenames.
      This is so filenames can be compared by string comparison
      functions that are case-sensitive.  Even case-preserving filesystems
      do not distinguish case in drive letters.  */
-  if (fp[1] == ':' && *fp >= 'A' && *fp <= 'Z')
+  if (dbcs_p)
+    p2 = CharNextExA (file_name_codepage, fp, 0);
+  else
+    p2 = fp + 1;
+
+  if (*p2 == ':' && *fp >= 'A' && *fp <= 'Z')
     {
       *fp += 'a' - 'A';
       fp += 2;
@@ -1559,7 +1626,10 @@ normalize_filename (register char *fp, char path_sep)
 	{
 	  if (*fp == '/' || *fp == '\\')
 	    *fp = path_sep;
-	  fp++;
+	  if (!dbcs_p)
+	    fp++;
+	  else
+	    fp = CharNextExA (file_name_codepage, fp, 0);
 	}
       return;
     }
@@ -1582,13 +1652,20 @@ normalize_filename (register char *fp, char path_sep)
 	if (elem && elem != fp)
 	  {
 	    *fp = 0;		/* temporary end of string */
-	    _strlwr (elem);	/* while we convert to lower case */
+	    _mbslwr (elem);	/* while we convert to lower case */
 	  }
 	*fp = sep;		/* convert (or restore) path separator */
 	elem = fp + 1;		/* next element starts after separator */
 	sep = path_sep;
       }
-  } while (*fp++);
+    if (*fp)
+      {
+	if (!dbcs_p)
+	  fp++;
+	else
+	  fp = CharNextExA (file_name_codepage, fp, 0);
+      }
+  } while (*fp);
 }
 
 /* Destructively turn backslashes into slashes.  */
@@ -1784,6 +1861,7 @@ unsetenv (const char *name)
   /* It is safe to use 'alloca' with 32K size, since the stack is at
      least 2MB, and we set it to 8MB in the link command line.  */
   var = alloca (name_len + 2);
+  strncpy (var, name, name_len);
   var[name_len++] = '=';
   var[name_len] = '\0';
   return _putenv (var);
@@ -2859,15 +2937,22 @@ readdir (DIR *dirp)
     strcpy (dir_static.d_name, dir_find_data.cFileName);
   dir_static.d_namlen = strlen (dir_static.d_name);
   if (dir_is_fat)
-    _strlwr (dir_static.d_name);
+    _mbslwr (dir_static.d_name);
   else if (downcase)
     {
       register char *p;
-      for (p = dir_static.d_name; *p; p++)
-	if (*p >= 'a' && *p <= 'z')
-	  break;
+      int dbcs_p = max_filename_mbslen () > 1;
+      for (p = dir_static.d_name; *p; )
+	{
+	  if (*p >= 'a' && *p <= 'z')
+	    break;
+	  if (dbcs_p)
+	    p = CharNextExA (file_name_codepage, p, 0);
+	  else
+	    p++;
+	}
       if (!*p)
-	_strlwr (dir_static.d_name);
+	_mbslwr (dir_static.d_name);
     }
 
   return &dir_static;
@@ -3647,7 +3732,6 @@ static int
 get_name_and_id (PSECURITY_DESCRIPTOR psd, unsigned *id, char *nm, int what)
 {
   PSID sid = NULL;
-  char machine[MAX_COMPUTERNAME_LENGTH+1];
   BOOL dflt;
   SID_NAME_USE ignore;
   char name[UNLEN+1];
@@ -4164,13 +4248,23 @@ fstat (int desc, struct stat * buf)
   else
     buf->st_ino = fake_inode;
 
-  /* Consider files to belong to current user.
-     FIXME: this should use GetSecurityInfo API, but it is only
-     available for _WIN32_WINNT >= 0x501.  */
-  buf->st_uid = dflt_passwd.pw_uid;
-  buf->st_gid = dflt_passwd.pw_gid;
-  strcpy (buf->st_uname, dflt_passwd.pw_name);
-  strcpy (buf->st_gname, dflt_group.gr_name);
+  /* If the caller so requested, get the true file owner and group.
+     Otherwise, consider the file to belong to the current user.  */
+  if (!w32_stat_get_owner_group || is_windows_9x () == TRUE)
+    get_file_owner_and_group (NULL, buf);
+  else
+    {
+      PSECURITY_DESCRIPTOR psd = NULL;
+
+      psd = get_file_security_desc_by_handle (fh);
+      if (psd)
+	{
+	  get_file_owner_and_group (psd, buf);
+	  LocalFree (psd);
+	}
+      else
+	get_file_owner_and_group (NULL, buf);
+    }
 
   buf->st_dev = info.dwVolumeSerialNumber;
   buf->st_rdev = info.dwVolumeSerialNumber;
@@ -4799,7 +4893,6 @@ acl_set_file (const char *fname, acl_type_t type, acl_t acl)
 {
   TOKEN_PRIVILEGES old1, old2;
   DWORD err;
-  BOOL res;
   int st = 0, retval = -1;
   SECURITY_INFORMATION flags = 0;
   PSID psid;
@@ -4859,8 +4952,50 @@ acl_set_file (const char *fname, acl_type_t type, acl_t acl)
 
   e = errno;
   errno = 0;
-  set_file_security ((char *)fname, flags, (PSECURITY_DESCRIPTOR)acl);
-  err = GetLastError ();
+  if (!set_file_security ((char *)fname, flags, (PSECURITY_DESCRIPTOR)acl))
+    {
+      err = GetLastError ();
+
+      if (errno == ENOTSUP)
+	;
+      else if (err == ERROR_INVALID_OWNER
+	       || err == ERROR_NOT_ALL_ASSIGNED
+	       || err == ERROR_ACCESS_DENIED)
+	{
+	  /* Maybe the requested ACL and the one the file already has
+	     are identical, in which case we can silently ignore the
+	     failure.  (And no, Windows doesn't.)  */
+	  acl_t current_acl = acl_get_file (fname, ACL_TYPE_ACCESS);
+
+	  errno = EPERM;
+	  if (current_acl)
+	    {
+	      char *acl_from = acl_to_text (current_acl, NULL);
+	      char *acl_to = acl_to_text (acl, NULL);
+
+	      if (acl_from && acl_to && xstrcasecmp (acl_from, acl_to) == 0)
+		{
+		  retval = 0;
+		  errno = e;
+		}
+	      if (acl_from)
+		acl_free (acl_from);
+	      if (acl_to)
+		acl_free (acl_to);
+	      acl_free (current_acl);
+	    }
+	}
+      else if (err == ERROR_FILE_NOT_FOUND || err == ERROR_PATH_NOT_FOUND)
+	errno = ENOENT;
+      else
+	errno = EACCES;
+    }
+  else
+    {
+      retval = 0;
+      errno = e;
+    }
+
   if (st)
     {
       if (st >= 2)
@@ -4868,41 +5003,6 @@ acl_set_file (const char *fname, acl_type_t type, acl_t acl)
       restore_privilege (&old1);
       revert_to_self ();
     }
-
-  if (errno == ENOTSUP)
-    ;
-  else if (err == ERROR_SUCCESS)
-    {
-      retval = 0;
-      errno = e;
-    }
-  else if (err == ERROR_INVALID_OWNER || err == ERROR_NOT_ALL_ASSIGNED)
-    {
-      /* Maybe the requested ACL and the one the file already has are
-	 identical, in which case we can silently ignore the
-	 failure.  (And no, Windows doesn't.)  */
-      acl_t current_acl = acl_get_file (fname, ACL_TYPE_ACCESS);
-
-      errno = EPERM;
-      if (current_acl)
-	{
-	  char *acl_from = acl_to_text (current_acl, NULL);
-	  char *acl_to = acl_to_text (acl, NULL);
-
-	  if (acl_from && acl_to && xstrcasecmp (acl_from, acl_to) == 0)
-	    {
-	      retval = 0;
-	      errno = e;
-	    }
-	  if (acl_from)
-	    acl_free (acl_from);
-	  if (acl_to)
-	    acl_free (acl_to);
-	  acl_free (current_acl);
-	}
-    }
-  else if (err == ERROR_FILE_NOT_FOUND || err == ERROR_PATH_NOT_FOUND)
-    errno = ENOENT;
 
   return retval;
 }

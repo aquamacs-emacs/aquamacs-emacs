@@ -1,7 +1,7 @@
 @c -*-texinfo-*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1995, 1998-1999, 2001-2012
-@c   Free Software Foundation, Inc.
+@c Copyright (C) 1990-1995, 1998-1999, 2001-2013 Free Software
+@c Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @node Files
 @chapter Files
@@ -533,9 +533,9 @@ is visiting the file @var{filename}: these include the buffer's visited
 file name and its last save file modtime.  This feature is used by
 @code{find-file-noselect} and you probably should not use it yourself.
 
-If @var{beg} and @var{end} are non-@code{nil}, they should be integers
-specifying the portion of the file to insert.  In this case, @var{visit}
-must be @code{nil}.  For example,
+If @var{beg} and @var{end} are non-@code{nil}, they should be numbers
+that are byte offsets specifying the portion of the file to insert.
+In this case, @var{visit} must be @code{nil}.  For example,
 
 @example
 (insert-file-contents filename nil 0 500)
@@ -605,8 +605,8 @@ that string, rather than text from the buffer.  @var{end} is ignored in
 this case.
 
 If @var{append} is non-@code{nil}, then the specified text is appended
-to the existing file contents (if any).  If @var{append} is an
-integer, @code{write-region} seeks to that byte offset from the start
+to the existing file contents (if any).  If @var{append} is a
+number, @code{write-region} seeks to that byte offset from the start
 of the file and writes the data from there.
 
 If @var{mustbenew} is non-@code{nil}, then @code{write-region} asks
@@ -1363,7 +1363,7 @@ security APIs.
 
 @defun file-acl filename
 This function returns the ACL entries of the file @var{filename}.  The
-return value is a platform-dependent string containing the textual
+return value is a platform-dependent object containing some
 representation of the ACL entries.  Don't use it for anything except
 passing it to the @code{set-file-acl} function (@pxref{Changing Files,
 set-file-acl}).
@@ -1703,9 +1703,11 @@ This function sets the SELinux security context of the file
 @var{filename} to @var{context}.  @xref{File Attributes}, for a brief
 description of SELinux contexts.  The @var{context} argument should be
 a list @code{(@var{user} @var{role} @var{type} @var{range})}, like the
-return value of @code{file-selinux-context}.  The function does
-nothing if SELinux is disabled, or if Emacs was compiled without
-SELinux support.
+return value of @code{file-selinux-context}.  The function returns
+@code{t} if it succeeds to set the SELinux security context of
+@var{filename}, @code{nil} otherwise.  The function does nothing and
+returns @code{nil} if SELinux is disabled, or if Emacs was compiled
+without SELinux support.
 @end defun
 
 @defun set-file-acl filename acl-string
@@ -1713,7 +1715,9 @@ This function sets the ACL entries of the file @var{filename} to
 @var{acl-string}.  @xref{File Attributes}, for a brief description of
 ACLs.  The @var{acl-string} argument should be a string containing the
 textual representation of the desired ACL entries as returned by
-@code{file-acl} (@pxref{File Attributes, file-acl}).
+@code{file-acl} (@pxref{File Attributes, file-acl}).  The function
+returns @code{t} if it succeeds to set the ACL entries of
+@var{filename}, @code{nil} otherwise.
 @end defun
 
 @node File Names
@@ -1733,12 +1737,20 @@ how to manipulate file names.
 can operate on file names that do not refer to an existing file or
 directory.
 
+@findex cygwin-convert-file-name-from-windows
+@findex cygwin-convert-file-name-to-windows
+@cindex MS-Windows file-name syntax
+@cindex converting file names from/to MS-Windows syntax
   On MS-DOS and MS-Windows, these functions (like the function that
 actually operate on files) accept MS-DOS or MS-Windows file-name syntax,
 where backslashes separate the components, as well as Unix syntax; but
 they always return Unix syntax.  This enables Lisp programs to specify
 file names in Unix syntax and work properly on all systems without
-change.
+change.@footnote{In MS-Windows versions of Emacs compiled for the Cygwin
+environment, you can use the functions
+@code{cygwin-convert-file-name-to-windows} and
+@code{cygwin-convert-file-name-from-windows} to convert between the
+two file-name syntaxes.}
 
 @menu
 * File Name Components::  The directory part of a file name, and the rest.

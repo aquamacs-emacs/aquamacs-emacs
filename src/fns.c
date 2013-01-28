@@ -1,6 +1,6 @@
 /* Random utility Lisp functions.
-   Copyright (C) 1985-1987, 1993-1995, 1997-2012
-		 Free Software Foundation, Inc.
+
+Copyright (C) 1985-1987, 1993-1995, 1997-2013 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -66,7 +66,10 @@ and `most-positive-fixnum', inclusive, are equally likely.
 
 With positive integer LIMIT, return random number in interval [0,LIMIT).
 With argument t, set the random number seed from the current time and pid.
-Other values of LIMIT are ignored.  */)
+With a string argument, set the seed based on the string's contents.
+Other values of LIMIT are ignored.
+
+See Info node `(elisp)Random Numbers' for more details.  */)
   (Lisp_Object limit)
 {
   EMACS_INT val;
@@ -86,7 +89,7 @@ Other values of LIMIT are ignored.  */)
    before it's time to do a QUIT.  This must be a power of 2.  */
 enum { QUIT_COUNT_HEURISTIC = 1 << 16 };
 
-/* Random data-structure functions */
+/* Random data-structure functions.  */
 
 DEFUN ("length", Flength, Slength, 1, 1, 0,
        doc: /* Return the length of vector, list or string SEQUENCE.
@@ -2742,7 +2745,7 @@ ARGS are passed as extra arguments to the function.
 usage: (widget-apply WIDGET PROPERTY &rest ARGS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
-  /* This function can GC. */
+  /* This function can GC.  */
   Lisp_Object newargs[3];
   struct gcpro gcpro1, gcpro2;
   Lisp_Object result;

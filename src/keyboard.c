@@ -1,6 +1,7 @@
 /* Keyboard and mouse input; editor command loop.
 
-Copyright (C) 1985-1989, 1993-1997, 1999-2012  Free Software Foundation, Inc.
+Copyright (C) 1985-1989, 1993-1997, 1999-2013 Free Software Foundation,
+Inc.
 
 This file is part of GNU Emacs.
 
@@ -496,97 +497,103 @@ kset_system_key_syms (struct kboard *kb, Lisp_Object val)
 }
 
 
-/* Add C to the echo string, if echoing is going on.
-   C can be a character, which is printed prettily ("M-C-x" and all that
-   jazz), or a symbol, whose name is printed.  */
+/* Add C to the echo string, without echoing it immediately.  C can be
+   a character, which is pretty-printed, or a symbol, whose name is
+   printed.  */
+
+static void
+echo_add_key (Lisp_Object c)
+{
+  int size = KEY_DESCRIPTION_SIZE + 100;
+  char *buffer = alloca (size);
+  char *ptr = buffer;
+  Lisp_Object echo_string;
+
+  echo_string = KVAR (current_kboard, echo_string);
+
+  /* If someone has passed us a composite event, use its head symbol.  */
+  c = EVENT_HEAD (c);
+
+  if (INTEGERP (c))
+    ptr = push_key_description (XINT (c), ptr);
+  else if (SYMBOLP (c))
+    {
+      Lisp_Object name = SYMBOL_NAME (c);
+      int nbytes = SBYTES (name);
+
+      if (size - (ptr - buffer) < nbytes)
+	{
+	  int offset = ptr - buffer;
+	  size = max (2 * size, size + nbytes);
+	  buffer = alloca (size);
+	  ptr = buffer + offset;
+	}
+
+      ptr += copy_text (SDATA (name), (unsigned char *) ptr, nbytes,
+			STRING_MULTIBYTE (name), 1);
+    }
+
+  if ((NILP (echo_string) || SCHARS (echo_string) == 0)
+      && help_char_p (c))
+    {
+      const char *text = " (Type ? for further options)";
+      int len = strlen (text);
+
+      if (size - (ptr - buffer) < len)
+	{
+	  int offset = ptr - buffer;
+	  size += len;
+	  buffer = alloca (size);
+	  ptr = buffer + offset;
+	}
+
+      memcpy (ptr, text, len);
+      ptr += len;
+    }
+
+  /* Replace a dash from echo_dash with a space, otherwise add a space
+     at the end as a separator between keys.  */
+  if (STRINGP (echo_string) && SCHARS (echo_string) > 1)
+    {
+      Lisp_Object last_char, prev_char, idx;
+
+      idx = make_number (SCHARS (echo_string) - 2);
+      prev_char = Faref (echo_string, idx);
+
+      idx = make_number (SCHARS (echo_string) - 1);
+      last_char = Faref (echo_string, idx);
+
+      /* We test PREV_CHAR to make sure this isn't the echoing of a
+	 minus-sign.  */
+      if (XINT (last_char) == '-' && XINT (prev_char) != ' ')
+	Faset (echo_string, idx, make_number (' '));
+      else
+	echo_string = concat2 (echo_string, build_string (" "));
+    }
+  else if (STRINGP (echo_string) && SCHARS (echo_string) > 0)
+    echo_string = concat2 (echo_string, build_string (" "));
+
+  kset_echo_string
+    (current_kboard,
+     concat2 (echo_string, make_string (buffer, ptr - buffer)));
+}
+
+/* Add C to the echo string, if echoing is going on.  C can be a
+   character or a symbol.  */
 
 static void
 echo_char (Lisp_Object c)
 {
   if (current_kboard->immediate_echo)
     {
-      int size = KEY_DESCRIPTION_SIZE + 100;
-      char *buffer = alloca (size);
-      char *ptr = buffer;
-      Lisp_Object echo_string;
-
-      echo_string = KVAR (current_kboard, echo_string);
-
-      /* If someone has passed us a composite event, use its head symbol.  */
-      c = EVENT_HEAD (c);
-
-      if (INTEGERP (c))
-	{
-	  ptr = push_key_description (XINT (c), ptr);
-	}
-      else if (SYMBOLP (c))
-	{
-	  Lisp_Object name = SYMBOL_NAME (c);
-	  int nbytes = SBYTES (name);
-
-	  if (size - (ptr - buffer) < nbytes)
-	    {
-	      int offset = ptr - buffer;
-	      size = max (2 * size, size + nbytes);
-	      buffer = alloca (size);
-	      ptr = buffer + offset;
-	    }
-
-	  ptr += copy_text (SDATA (name), (unsigned char *) ptr, nbytes,
-			    STRING_MULTIBYTE (name), 1);
-	}
-
-      if ((NILP (echo_string) || SCHARS (echo_string) == 0)
-	  && help_char_p (c))
-	{
-	  const char *text = " (Type ? for further options)";
-	  int len = strlen (text);
-
-	  if (size - (ptr - buffer) < len)
-	    {
-	      int offset = ptr - buffer;
-	      size += len;
-	      buffer = alloca (size);
-	      ptr = buffer + offset;
-	    }
-
-	  memcpy (ptr, text, len);
-	  ptr += len;
-	}
-
-      /* Replace a dash from echo_dash with a space, otherwise
-	 add a space at the end as a separator between keys.  */
-      if (STRINGP (echo_string)
-	  && SCHARS (echo_string) > 1)
-	{
-	  Lisp_Object last_char, prev_char, idx;
-
-	  idx = make_number (SCHARS (echo_string) - 2);
-	  prev_char = Faref (echo_string, idx);
-
-	  idx = make_number (SCHARS (echo_string) - 1);
-	  last_char = Faref (echo_string, idx);
-
-	  /* We test PREV_CHAR to make sure this isn't the echoing
-	     of a minus-sign.  */
-	  if (XINT (last_char) == '-' && XINT (prev_char) != ' ')
-	    Faset (echo_string, idx, make_number (' '));
-	  else
-	    echo_string = concat2 (echo_string, build_string (" "));
-	}
-      else if (STRINGP (echo_string))
-	echo_string = concat2 (echo_string, build_string (" "));
-
-      kset_echo_string
-	(current_kboard,
-	 concat2 (echo_string, make_string (buffer, ptr - buffer)));
-
+      echo_add_key (c);
       echo_now ();
     }
 }
 
 /* Temporarily add a dash to the end of the echo string if it's not
-   empty, so that it serves as a mini-prompt for the very next character.  */
+   empty, so that it serves as a mini-prompt for the very next
+   character.  */
 
 static void
 echo_dash (void)
@@ -668,9 +675,8 @@ echo_now (void)
     }
 
   echoing = 1;
-  message3_nolog (KVAR (current_kboard, echo_string),
-		  SBYTES (KVAR (current_kboard, echo_string)),
-		  STRING_MULTIBYTE (KVAR (current_kboard, echo_string)));
+  /* FIXME: Use call (Qmessage) so it can be advised (e.g. emacspeak).  */
+  message3_nolog (KVAR (current_kboard, echo_string));
   echoing = 0;
 
   /* Record in what buffer we echoed, and from which kboard.  */
@@ -1422,7 +1428,7 @@ command_loop_1 (void)
 	  sit_for (Vminibuffer_message_timeout, 0, 2);
 
 	  /* Clear the echo area.  */
-	  message2 (0, 0, 0);
+	  message1 (0);
 	  safe_run_hooks (Qecho_area_clear_hook);
 
 	  unbind_to (count, Qnil);
@@ -8459,12 +8465,6 @@ read_char_x_menu_prompt (ptrdiff_t nmaps, Lisp_Object *maps,
   return Qnil ;
 }
 
-/* Buffer in use so far for the minibuf prompts for menu keymaps.
-   We make this bigger when necessary, and never free it.  */
-static char *read_char_minibuf_menu_text;
-/* Size of that buffer.  */
-static ptrdiff_t read_char_minibuf_menu_width;
-
 static Lisp_Object
 read_char_minibuf_menu_prompt (int commandflag,
 			       ptrdiff_t nmaps, Lisp_Object *maps)
@@ -8477,7 +8477,7 @@ read_char_minibuf_menu_prompt (int commandflag,
   ptrdiff_t idx = -1;
   bool nobindings = 1;
   Lisp_Object rest, vector;
-  char *menu;
+  Lisp_Object prompt_strings = Qnil;
 
   vector = Qnil;
   name = Qnil;
@@ -8497,24 +8497,13 @@ read_char_minibuf_menu_prompt (int commandflag,
   if (!STRINGP (name))
     return Qnil;
 
-  /* Make sure we have a big enough buffer for the menu text.  */
-  width = max (width, SBYTES (name));
-  if (STRING_BYTES_BOUND - 4 < width)
-    memory_full (SIZE_MAX);
-  if (width + 4 > read_char_minibuf_menu_width)
-    {
-      read_char_minibuf_menu_text
-	= xrealloc (read_char_minibuf_menu_text, width + 4);
-      read_char_minibuf_menu_width = width + 4;
-    }
-  menu = read_char_minibuf_menu_text;
-
+#define PUSH_C_STR(str, listvar) \
+  listvar = Fcons (make_unibyte_string (str, strlen (str)), listvar)
+  
   /* Prompt string always starts with map's prompt, and a space.  */
-  strcpy (menu, SSDATA (name));
-  nlength = SBYTES (name);
-  menu[nlength++] = ':';
-  menu[nlength++] = ' ';
-  menu[nlength] = 0;
+  prompt_strings = Fcons (name, prompt_strings);
+  PUSH_C_STR (": ", prompt_strings);
+  nlength = SCHARS (name) + 2;
 
   /* Start prompting at start of first map.  */
   mapno = 0;
@@ -8524,6 +8513,7 @@ read_char_minibuf_menu_prompt (int commandflag,
   while (1)
     {
       bool notfirst = 0;
+      Lisp_Object menu_strings = prompt_strings;
       ptrdiff_t i = nlength;
       Lisp_Object obj;
       Lisp_Object orig_defn_macro;
@@ -8532,6 +8522,8 @@ read_char_minibuf_menu_prompt (int commandflag,
       while (i < width)
 	{
 	  Lisp_Object elt;
+
+	  /* FIXME: Use map_keymap to handle new keymap formats.  */
 
 	  /* If reached end of map, start at beginning of next map.  */
 	  if (NILP (rest))
@@ -8628,7 +8620,7 @@ read_char_minibuf_menu_prompt (int commandflag,
 		      /* Punctuate between strings.  */
 		      if (notfirst)
 			{
-			  strcpy (menu + i, ", ");
+			  PUSH_C_STR (", ", menu_strings);
 			  i += 2;
 			}
 		      notfirst = 1;
@@ -8640,23 +8632,28 @@ read_char_minibuf_menu_prompt (int commandflag,
 			{
 			  /* Add as much of string as fits.  */
 			  thiswidth = min (SCHARS (desc), width - i);
-			  memcpy (menu + i, SDATA (desc), thiswidth);
+			  menu_strings
+			    = Fcons (Fsubstring (desc, make_number (0),
+						 make_number (thiswidth)),
+				     menu_strings);
 			  i += thiswidth;
-			  strcpy (menu + i, " = ");
+			  PUSH_C_STR (" = ", menu_strings);
 			  i += 3;
 			}
 
 		      /* Add as much of string as fits.  */
 		      thiswidth = min (SCHARS (s), width - i);
-		      memcpy (menu + i, SDATA (s), thiswidth);
+		      menu_strings
+			= Fcons (Fsubstring (s, make_number (0),
+					     make_number (thiswidth)),
+				 menu_strings);
 		      i += thiswidth;
-		      menu[i] = 0;
 		    }
 		  else
 		    {
 		      /* If this element does not fit, end the line now,
 			 and save the element for the next line.  */
-		      strcpy (menu + i, "...");
+		      PUSH_C_STR ("...", menu_strings);
 		      break;
 		    }
 		}
@@ -8673,13 +8670,11 @@ read_char_minibuf_menu_prompt (int commandflag,
 	}
 
       /* Prompt with that and read response.  */
-      message2_nolog (menu, strlen (menu),
-		      ! NILP (BVAR (current_buffer, enable_multibyte_characters)));
+      message3_nolog (apply1 (intern ("concat"), menu_strings));
 
-      /* Make believe its not a keyboard macro in case the help char
+      /* Make believe it's not a keyboard macro in case the help char
 	 is pressed.  Help characters are not recorded because menu prompting
-	 is not used on replay.
-	 */
+	 is not used on replay.  */
       orig_defn_macro = KVAR (current_kboard, defining_kbd_macro);
       kset_defining_kbd_macro (current_kboard, Qnil);
       do
@@ -8687,9 +8682,7 @@ read_char_minibuf_menu_prompt (int commandflag,
       while (BUFFERP (obj));
       kset_defining_kbd_macro (current_kboard, orig_defn_macro);
 
-      if (!INTEGERP (obj))
-	return obj;
-      else if (XINT (obj) == -2)
+      if (!INTEGERP (obj) || XINT (obj) == -2)
         return obj;
 
       if (! EQ (obj, menu_prompt_more_char)
@@ -8700,7 +8693,7 @@ read_char_minibuf_menu_prompt (int commandflag,
 	    store_kbd_macro_char (obj);
 	  return obj;
 	}
-      /* Help char - go round again */
+      /* Help char - go round again.  */
     }
 }
 
@@ -9249,8 +9242,12 @@ read_key_sequence (Lisp_Object *keybuf, int bufsize, Lisp_Object prompt,
 	  key = keybuf[t];
 	  add_command_key (key);
 	  if ((FLOATP (Vecho_keystrokes) || INTEGERP (Vecho_keystrokes))
-	      && NILP (Fzerop (Vecho_keystrokes)))
-	    echo_char (key);
+	      && NILP (Fzerop (Vecho_keystrokes))
+	      && current_kboard->immediate_echo)
+	    {
+	      echo_add_key (key);
+	      echo_dash ();
+	    }
 	}
 
       /* If not, we should actually read a character.  */
@@ -10112,7 +10109,7 @@ will read just one key sequence.  */)
     cancel_hourglass ();
 #endif
 
-  i = read_key_sequence (keybuf, (sizeof keybuf/sizeof (keybuf[0])),
+  i = read_key_sequence (keybuf, (sizeof keybuf / sizeof (keybuf[0])),
 			 prompt, ! NILP (dont_downcase_last),
 			 ! NILP (can_return_switch_frame), 0);
 
@@ -10191,7 +10188,7 @@ DEFUN ("command-execute", Fcommand_execute, Scommand_execute, 1, 4, 0,
        doc: /* Execute CMD as an editor command.
 CMD must be a symbol that satisfies the `commandp' predicate.
 Optional second arg RECORD-FLAG non-nil
-means unconditionally put this command in `command-history'.
+means unconditionally put this command in the variable `command-history'.
 Otherwise, that is done only if an arg is read using the minibuffer.
 The argument KEYS specifies the value to use instead of (this-command-keys)
 when reading the arguments; if it is nil, (this-command-keys) is used.
@@ -12076,8 +12073,8 @@ This takes effect only when Transient Mark mode is enabled.  */);
 	       Vsaved_region_selection,
 	       doc: /* Contents of active region prior to buffer modification.
 If `select-active-regions' is non-nil, Emacs sets this to the
-text in the region before modifying the buffer.  The next
-`deactivate-mark' call uses this to set the window selection.  */);
+text in the region before modifying the buffer.  The next call to
+the function `deactivate-mark' uses this to set the window selection.  */);
   Vsaved_region_selection = Qnil;
 
   DEFVAR_LISP ("selection-inhibit-update-commands",

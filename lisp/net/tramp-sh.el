@@ -1,6 +1,6 @@
 ;;; tramp-sh.el --- Tramp access functions for (s)sh-like connections
 
-;; Copyright (C) 1998-2012 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2013 Free Software Foundation, Inc.
 
 ;; (copyright statements below in code to be updated with the above notice)
 
@@ -805,7 +805,7 @@ on the remote host.")
 (defconst tramp-perl-encode
   "%s -e '
 # This script contributed by Juanma Barranquero <lektu@terra.es>.
-# Copyright (C) 2002-2012 Free Software Foundation, Inc.
+# Copyright (C) 2002-2013 Free Software Foundation, Inc.
 use strict;
 
 my %%trans = do {
@@ -843,7 +843,7 @@ This string is passed to `format', so percent characters need to be doubled.")
 (defconst tramp-perl-decode
   "%s -e '
 # This script contributed by Juanma Barranquero <lektu@terra.es>.
-# Copyright (C) 2002-2012 Free Software Foundation, Inc.
+# Copyright (C) 2002-2013 Free Software Foundation, Inc.
 use strict;
 
 my %%trans = do {
@@ -935,6 +935,7 @@ This is used to map a mode number to a permission string.")
     (file-name-nondirectory . tramp-handle-file-name-nondirectory)
     (file-truename . tramp-sh-handle-file-truename)
     (file-exists-p . tramp-sh-handle-file-exists-p)
+    (file-accessible-directory-p . tramp-handle-file-accessible-directory-p)
     (file-directory-p . tramp-sh-handle-file-directory-p)
     (file-executable-p . tramp-sh-handle-file-executable-p)
     (file-readable-p . tramp-sh-handle-file-readable-p)
@@ -1451,7 +1452,8 @@ of."
 (defun tramp-set-file-uid-gid (filename &optional uid gid)
   "Set the ownership for FILENAME.
 If UID and GID are provided, these values are used; otherwise uid
-and gid of the corresponding user is taken.  Both parameters must be integers."
+and gid of the corresponding user is taken.  Both parameters must
+be non-negative integers."
   ;; Modern Unices allow chown only for root.  So we might need
   ;; another implementation, see `dired-do-chown'.  OTOH, it is mostly
   ;; working with su(do)? when it is needed, so it shall succeed in
@@ -1463,9 +1465,9 @@ and gid of the corresponding user is taken.  Both parameters must be integers."
 	  (if (and (zerop (user-uid)) (tramp-local-host-p v))
 	      ;; If we are root on the local host, we can do it directly.
 	      (tramp-set-file-uid-gid localname uid gid)
-	    (let ((uid (or (and (integerp uid) uid)
+	    (let ((uid (or (and (natnump uid) uid)
 			   (tramp-get-remote-uid v 'integer)))
-		  (gid (or (and (integerp gid) gid)
+		  (gid (or (and (natnump gid) gid)
 			   (tramp-get-remote-gid v 'integer))))
 	      (tramp-send-command
 	       v (format
@@ -1474,8 +1476,8 @@ and gid of the corresponding user is taken.  Both parameters must be integers."
 
       ;; We handle also the local part, because there doesn't exist
       ;; `set-file-uid-gid'.  On W32 "chown" might not work.
-      (let ((uid (or (and (integerp uid) uid) (tramp-get-local-uid 'integer)))
-	    (gid (or (and (integerp gid) gid) (tramp-get-local-gid 'integer))))
+      (let ((uid (or (and (natnump uid) uid) (tramp-get-local-uid 'integer)))
+	    (gid (or (and (natnump gid) gid) (tramp-get-local-gid 'integer))))
 	(tramp-compat-call-process
 	 "chown" nil nil nil
          (format "%d:%d" uid gid) (tramp-shell-quote-argument filename))))))
@@ -1529,10 +1531,11 @@ and gid of the corresponding user is taken.  Both parameters must be integers."
 			(if (stringp (nth 3 context))
 			    (format "--range=%s" (nth 3 context)) "")
 			(tramp-shell-quote-argument localname))))
-	(tramp-set-file-property v localname "file-selinux-context" context)
-      (tramp-set-file-property v localname "file-selinux-context" 'undef)))
-  ;; We always return nil.
-  nil)
+	(progn
+	  (tramp-set-file-property v localname "file-selinux-context" context)
+	  t)
+      (tramp-set-file-property v localname "file-selinux-context" 'undef)
+      nil)))
 
 (defun tramp-remote-acl-p (vec)
   "Check, whether ACL is enabled on the remote host."
@@ -1551,20 +1554,26 @@ and gid of the corresponding user is taken.  Both parameters must be integers."
 	(with-current-buffer (tramp-get-connection-buffer v)
 	  (goto-char (point-max))
 	  (delete-blank-lines)
-	  (substring-no-properties (buffer-string)))))))
+	  (when (> (point-max) (point-min))
+	    (tramp-compat-funcall
+	     'substring-no-properties (buffer-string))))))))
 
 (defun tramp-sh-handle-set-file-acl (filename acl-string)
   "Like `set-file-acl' for Tramp files."
-  (with-parsed-tramp-file-name filename nil
-    (if (and (stringp acl-string)
-	     (tramp-remote-acl-p v)
-	     (tramp-send-command-and-check
-	      v (format "setfacl --set-file=- %s <<'EOF'\n%s\nEOF\n"
-			(tramp-shell-quote-argument localname) acl-string)))
-	(tramp-set-file-property v localname "file-acl" acl-string)
-      (tramp-set-file-property v localname "file-acl-string" 'undef)))
-  ;; We always return nil.
-  nil)
+  (with-parsed-tramp-file-name (expand-file-name filename) nil
+    (if (and (stringp acl-string) (tramp-remote-acl-p v)
+	     (progn
+	       (tramp-send-command
+		v (format "setfacl --set-file=- %s <<'EOF'\n%s\nEOF\n"
+			  (tramp-shell-quote-argument localname) acl-string))
+	       (tramp-send-command-and-check v nil)))
+	;; Success.
+	(progn
+	  (tramp-set-file-property v localname "file-acl" acl-string)
+	  t)
+      ;; In case of errors, we return `nil'.
+      (tramp-set-file-property v localname "file-acl-string" 'undef)
+      nil)))
 
 ;; Simple functions using the `test' command.
 
@@ -2087,9 +2096,11 @@ file names."
 	  ;; One of them must be a Tramp file.
 	  (error "Tramp implementation says this cannot happen")))
 
-	;; Handle `preserve-extended-attributes'.
+	;; Handle `preserve-extended-attributes'.  We ignore possible
+	;; errors, because ACL strings could be incompatible.
 	(when attributes
-	  (apply 'set-file-extended-attributes (list newname attributes)))
+	  (ignore-errors
+	    (apply 'set-file-extended-attributes (list newname attributes))))
 
 	;; In case of `rename', we must flush the cache of the source file.
 	(when (and t1 (eq op 'rename))
@@ -4653,7 +4664,7 @@ raises an error."
 		  command (buffer-string))))))))
 
 (defun tramp-convert-file-attributes (vec attr)
-  "Convert file-attributes ATTR generated by perl script, stat or ls.
+  "Convert `file-attributes' ATTR generated by perl script, stat or ls.
 Convert file mode bits to string and set virtual device number.
 Return ATTR."
   (when attr
@@ -4661,6 +4672,17 @@ Return ATTR."
     (when (stringp (car attr))
       (while (string-match tramp-color-escape-sequence-regexp (car attr))
 	(setcar attr (replace-match "" nil nil (car attr)))))
+    ;; Convert uid and gid.  Use -1 as indication of unusable value.
+    (when (and (numberp (nth 2 attr)) (< (nth 2 attr) 0))
+      (setcar (nthcdr 2 attr) -1))
+    (when (and (floatp (nth 2 attr))
+               (<= (nth 2 attr) (tramp-compat-most-positive-fixnum)))
+      (setcar (nthcdr 2 attr) (round (nth 2 attr))))
+    (when (and (numberp (nth 3 attr)) (< (nth 3 attr) 0))
+      (setcar (nthcdr 3 attr) -1))
+    (when (and (floatp (nth 3 attr))
+               (<= (nth 3 attr) (tramp-compat-most-positive-fixnum)))
+      (setcar (nthcdr 3 attr) (round (nth 3 attr))))
     ;; Convert last access time.
     (unless (listp (nth 4 attr))
       (setcar (nthcdr 4 attr)
@@ -5158,34 +5180,6 @@ function cell is returned to be applied on a buffer."
 	  (format "%s >%%s" coding))
 	 (t
 	  (format "%s <%%s" coding)))))))
-
-;;; Integration of eshell.el:
-
-(eval-when-compile
-  (defvar eshell-path-env))
-
-;; eshell.el keeps the path in `eshell-path-env'.  We must change it
-;; when `default-directory' points to another host.
-(defun tramp-eshell-directory-change ()
-  "Set `eshell-path-env' to $PATH of the host related to `default-directory'."
-  (setq eshell-path-env
-	(if (file-remote-p default-directory)
-	    (with-parsed-tramp-file-name default-directory nil
-	      (mapconcat
-	       'identity
-	       (tramp-get-remote-path v)
-	       ":"))
-	  (getenv "PATH"))))
-
-(eval-after-load "esh-util"
-  '(progn
-     (tramp-eshell-directory-change)
-     (add-hook 'eshell-directory-change-hook
-	       'tramp-eshell-directory-change)
-     (add-hook 'tramp-unload-hook
-	       (lambda ()
-		 (remove-hook 'eshell-directory-change-hook
-			      'tramp-eshell-directory-change)))))
 
 (add-hook 'tramp-unload-hook
 	  (lambda ()

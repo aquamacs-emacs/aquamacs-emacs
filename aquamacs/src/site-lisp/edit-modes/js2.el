@@ -867,7 +867,7 @@ Will only be used when we finish implementing the interpreter.")
 (make-variable-buffer-local 'js2-parse-stmt-count)
 
 (defsubst js2-get-next-temp-name ()
-  (format "$%d" (incf js2-temp-name-counter)))
+  (format "$%d" (cl-incf js2-temp-name-counter)))
 
 (defvar js2-parse-interruptable-p t
   "Set this to nil to force parse to continue until finished.
@@ -1621,7 +1621,7 @@ Also updates `js2-ts-hit-eof' and `js2-ts-line-start' as needed."
               c js2-EOF_CHAR)  ; return value
 
       ;; otherwise read next char
-      (setq c (char-before (incf js2-ts-cursor)))
+      (setq c (char-before (cl-incf js2-ts-cursor)))
 
       ;; if we read a newline, update counters
       (if (= c ?\n)
@@ -2511,7 +2511,7 @@ corresponding number.  Otherwise return -1."
                      (t
                       ;; start tag
                       (setq js2-ts-xml-is-tag-content t)
-                      (incf js2-ts-xml-open-tags-count))))
+                      (cl-incf js2-ts-xml-open-tags-count))))
                   (?{
                    (js2-unget-char)
                    (setq js2-ts-string (js2-get-string-from-buffer))
@@ -2577,7 +2577,7 @@ corresponding number.  Otherwise return -1."
         (js2-add-to-string c)
         (case c
           (?<
-           (incf decl-tags))
+           (cl-incf decl-tags))
           (?>
            (decf decl-tags)
            (if (zerop decl-tags)
@@ -5744,7 +5744,7 @@ If SKIP-COMMENTS is non-nil, comment nodes are ignored."
      ((js2-comment-node-p node)
       nil)
      (t
-      (setq abs-pos (incf js2-visitor-offset rel-pos)
+      (setq abs-pos (cl-incf js2-visitor-offset rel-pos)
             ;; we only want to use the node if the point is before
             ;; the last character position in the node, so we decrement
             ;; the absolute end by 1.
@@ -5839,7 +5839,7 @@ If NODE is the ast-root, returns nil."
 (defsubst js2-mode-shift-kids (kids start offset)
   (dolist (kid kids)
     (if (> (js2-node-pos kid) start)
-        (incf (js2-node-pos kid) offset))))
+        (cl-incf (js2-node-pos kid) offset))))
 
 (defsubst js2-mode-shift-children (parent start offset)
   "Update start-positions of all children of PARENT beyond START."
@@ -7517,7 +7517,7 @@ Scanner should be initialized."
         (pn (make-js2-block-node))  ; starts at LC position
         tt
         end)
-    (incf js2-nesting-of-function)
+    (cl-incf js2-nesting-of-function)
     (unwind-protect
         (while (not (or (= (setq tt (js2-peek-token)) js2-ERROR)
                         (= tt js2-EOF)
@@ -7715,7 +7715,7 @@ node are given relative start positions and correct lengths."
 
     ;; coarse-grained user-interrupt check - needs work
     (and js2-parse-interruptable-p
-         (zerop (% (incf js2-parse-stmt-count)
+         (zerop (% (cl-incf js2-parse-stmt-count)
                    js2-statements-per-pause))
          (input-pending-p)
          (throw 'interrupted t))
@@ -10272,7 +10272,7 @@ bracket, brace and statement nesting."
                           (skip-chars-forward " \t\r\n")
                           (current-column)))))
           (when pos
-            (incf pos js2-basic-offset)
+            (cl-incf pos js2-basic-offset)
             (unless (member pos positions)
               (push pos positions)))
 
@@ -11036,7 +11036,7 @@ Actually returns the quote character that begins the string."
       ;; back to just after the user-inserted "{".
       (insert "\n")
       (ignore-errors
-        (incf (cadr buffer-undo-list)))
+        (cl-incf (cadr buffer-undo-list)))
 
       (js2-indent-line)
       (save-excursion

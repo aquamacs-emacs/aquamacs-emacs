@@ -37,7 +37,7 @@
 @end macro
 
 @copying
-Copyright @copyright{} 1999--2012 Free Software Foundation, Inc.
+Copyright @copyright{} 1999--2013 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -374,7 +374,7 @@ This release includes the full documentation and code for
 @value{tramp}, suitable for installation.  But Emacs (22 or later)
 includes @value{tramp} already, and there is a @value{tramp} package
 for XEmacs, as well.  So maybe it is easier to just use those.  But if
-you want the bleeding edge, read on@dots{...}
+you want the bleeding edge, read on@dots{}
 
 For the especially brave, @value{tramp} is available from Git.  The Git
 version is the latest version of the code and may contain incomplete
@@ -515,8 +515,8 @@ Method}.
 * Connection caching::          Reusing connection related information.
 * Remote Programs::             How @value{tramp} finds and uses programs on the remote machine.
 * Remote shell setup::          Remote shell setup hints.
-* Windows setup hints::         Issues with Cygwin ssh.
 * Auto-save and Backup::        Auto-save and Backup.
+* Windows setup hints::         Issues with Cygwin ssh.
 @end menu
 
 
@@ -1279,8 +1279,8 @@ example, if you always have to use the user @samp{john} in the domain
 @end lisp
 
 @noindent
-See the documentation for the variable
-@code{tramp-default-user-alist} for more details.
+See the documentation for the variable @code{tramp-default-user-alist}
+for more details.
 
 One trap to fall in must be known.  If @value{tramp} finds a default
 user, this user will be passed always to the connection command as
@@ -1337,6 +1337,18 @@ to John's home directory on target.
 Note, however, that the most simplification @samp{/::} won't work,
 because @samp{/:} is the prefix for quoted file names.
 @end ifset
+
+@vindex tramp-default-host-alist
+Like with methods and users, you can also specify different default
+hosts for certain method/user combinations via the variable
+@code{tramp-default-host-alist}.  Usually, this isn't necessary,
+because @code{tramp-default-host} should be sufficient.  For some
+methods, like @code{adb}, that default value must be overwritten,
+which is already the initial value of @code{tramp-default-host-alist}.
+
+@noindent
+See the documentation for the variable @code{tramp-default-host-alist}
+for more details.
 
 
 @node Multi-hops
@@ -1899,7 +1911,7 @@ of your (local or remote) host, you might need to adapt this. Example:
           "passwort" "Passwort"
           ;; Fran@,{c}ais
           "mot de passe" "Mot de passe") t)
-      ".*: ? *"))
+      ".*:\0? *"))
 @end lisp
 
 In parallel, it might also be necessary to adapt
@@ -2349,6 +2361,8 @@ Finally, for some methods it is possible to specify a different port
 number than the default one, given by the method.  This is specified
 by adding @file{#<port>} to the host name, like in @file{@trampfn{ssh,
 daniel, melancholia#42, .emacs}}.
+
+Note that @value{tramp} supports only filenames encoded in unibyte.
 
 
 @node Alternative Syntax

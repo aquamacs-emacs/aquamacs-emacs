@@ -1,7 +1,7 @@
 ;;; dired.el --- directory-browsing commands -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1986, 1992-1997, 2000-2012
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1985-1986, 1992-1997, 2000-2013 Free Software
+;; Foundation, Inc.
 
 ;; Author: Sebastian Kremer <sk@thp.uni-koeln.de>
 ;; Maintainer: FSF
@@ -620,12 +620,14 @@ Optional third argument FILTER, if non-nil, is a function to select
 If DISTINGUISH-ONE-MARKED is non-nil, then if we find just one marked file,
 return (t FILENAME) instead of (FILENAME).
 Don't use that together with FILTER."
-  (let* ((all-of-them
-	  (save-excursion
-	    (dired-map-over-marks
-	     (dired-get-filename localp 'no-error-if-not-filep)
-	     arg nil distinguish-one-marked)))
-	 result)
+  (let ((all-of-them
+	 (save-excursion
+	   (delq nil (dired-map-over-marks
+		      (dired-get-filename localp 'no-error-if-not-filep)
+		      arg nil distinguish-one-marked))))
+	result)
+    (when (equal all-of-them '(t))
+      (setq all-of-them nil))
     (if (not filter)
 	(if (and distinguish-one-marked (eq (car all-of-them) t))
 	    all-of-them
@@ -3792,7 +3794,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;;;  dired-run-shell-command dired-do-shell-command dired-do-async-shell-command
 ;;;;;;  dired-clean-directory dired-do-print dired-do-touch dired-do-chown
 ;;;;;;  dired-do-chgrp dired-do-chmod dired-compare-directories dired-backup-diff
-;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "244227ae609852d3dc10ab3fc40ba9ab")
+;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "066bb17769887a7fbc0490003f59e4b3")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\
@@ -4295,7 +4297,7 @@ instead.
 ;;;***
 
 ;;;### (autoloads (dired-do-relsymlink dired-jump-other-window dired-jump)
-;;;;;;  "dired-x" "dired-x.el" "a0a769bf895afcbb6d0e05169ef81923")
+;;;;;;  "dired-x" "dired-x.el" "cdaacce7c861256289ba48493dd6d0ec")
 ;;; Generated autoloads from dired-x.el
 
 (autoload 'dired-jump "dired-x" "\

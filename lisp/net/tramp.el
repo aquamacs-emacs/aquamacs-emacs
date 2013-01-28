@@ -1,6 +1,6 @@
 ;;; tramp.el --- Transparent Remote Access, Multiple Protocol
 
-;; Copyright (C) 1998-2012 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2013 Free Software Foundation, Inc.
 
 ;; Author: Kai Großjohann <kai.grossjohann@gmx.net>
 ;;         Michael Albinus <michael.albinus@gmx.de>
@@ -380,6 +380,23 @@ empty string for the method name."
 Useful for su and sudo methods mostly."
   :group 'tramp
   :type 'string)
+
+;;;###tramp-autoload
+(defcustom tramp-default-host-alist nil
+  "Default host to use for specific method/user pairs.
+This is an alist of items (METHOD USER HOST).  The first matching item
+specifies the host to use for a file name which does not specify a
+host.  METHOD and HOST are regular expressions or nil, which is
+interpreted as a regular expression which always matches.  If no entry
+matches, the variable `tramp-default-host' takes effect.
+
+If the file name does not specify the method, lookup is done using the
+empty string for the method name."
+  :group 'tramp
+  :version "24.4"
+  :type '(repeat (list (choice :tag "Method regexp" regexp sexp)
+		       (choice :tag "  User regexp" regexp sexp)
+		       (choice :tag "    Host name" string (const nil)))))
 
 (defcustom tramp-default-proxies-alist nil
   "Route to be followed for specific host/user pairs.
@@ -918,7 +935,7 @@ See `tramp-file-name-structure' for more explanations.")
 This regexp should match partial Tramp file names only.
 
 Please note that the entry in `file-name-handler-alist' is made when
-this file (tramp.el) is loaded.  This means that this variable must be set
+this file \(tramp.el\) is loaded.  This means that this variable must be set
 before loading tramp.el.  Alternatively, `file-name-handler-alist' can be
 updated after changing this variable.
 
@@ -1123,9 +1140,12 @@ If the `tramp-methods' entry does not exist, return nil."
 
 ;;;###tramp-autoload
 (defun tramp-tramp-file-p (name)
-  "Return t if NAME is a string with Tramp file name syntax."
+  "Return t if NAME is a string with Tramp file name syntax.
+It checks also, whether NAME is unibyte encoded."
   (save-match-data
-    (and (stringp name) (string-match tramp-file-name-regexp name))))
+    (and (stringp name)
+	 (string-equal name (string-as-unibyte name))
+	 (string-match tramp-file-name-regexp name))))
 
 (defun tramp-find-method (method user host)
   "Return the right method string to use.
@@ -1163,6 +1183,15 @@ This is USER, if non-nil. Otherwise, do a lookup in
   "Return the right host string to use.
 This is HOST, if non-nil. Otherwise, it is `tramp-default-host'."
   (or (and (> (length host) 0) host)
+      (let ((choices tramp-default-host-alist)
+	    lhost item)
+	(while choices
+	  (setq item (pop choices))
+	  (when (and (string-match (or (nth 0 item) "") (or method ""))
+		     (string-match (or (nth 1 item) "") (or user "")))
+	    (setq lhost (nth 2 item))
+	    (setq choices nil)))
+	lhost)
       tramp-default-host))
 
 (defun tramp-dissect-file-name (name &optional nodefault)
@@ -1753,28 +1782,23 @@ value of `default-file-modes', without execute permissions."
   (or (file-modes filename)
       (logand (default-file-modes) (tramp-compat-octal-to-decimal "0666"))))
 
-(defalias 'tramp-replace-environment-variables
-  (if (ignore-errors
-        (equal "${ tramp?}"
-	       (tramp-compat-funcall
-		'substitute-env-vars "${ tramp?}" 'only-defined)))
-      (lambda (filename)
-        "Like `substitute-env-vars' with `only-defined' non-nil."
-        (tramp-compat-funcall 'substitute-env-vars filename 'only-defined))
-    (lambda (filename)
-      "Replace environment variables in FILENAME.
+(defun tramp-replace-environment-variables (filename)
+ "Replace environment variables in FILENAME.
 Return the string with the replaced variables."
-      (save-match-data
-        (let ((idx (string-match "$\\(\\w+\\)" filename)))
-          ;; `$' is coded as `$$'.
-          (when (and idx
-                     (or (zerop idx) (not (eq ?$ (aref filename (1- idx)))))
-                     (getenv (match-string 1 filename)))
-            (setq filename
-                  (replace-match
-                   (substitute-in-file-name (match-string 0 filename))
-                   t nil filename)))
-          filename)))))
+ (or (ignore-errors
+       (tramp-compat-funcall 'substitute-env-vars filename 'only-defined))
+     ;; We need an own implementation.
+     (save-match-data
+       (let ((idx (string-match "$\\(\\w+\\)" filename)))
+	 ;; `$' is coded as `$$'.
+	 (when (and idx
+		    (or (zerop idx) (not (eq ?$ (aref filename (1- idx)))))
+		    (getenv (match-string 1 filename)))
+	   (setq filename
+		 (replace-match
+		  (substitute-in-file-name (match-string 0 filename))
+		  t nil filename)))
+	 filename))))
 
 ;; In XEmacs, electricity is implemented via a key map for ?/ and ?~,
 ;; which calls corresponding functions (see minibuf.el).
@@ -2756,6 +2780,11 @@ User is always nil."
   (with-parsed-tramp-file-name
       (if (or dir-p (file-directory-p dir)) dir (file-name-directory dir)) nil
     (tramp-flush-directory-property v localname)))
+
+(defun tramp-handle-file-accessible-directory-p (filename)
+  "Like `file-accessible-directory-p' for Tramp files."
+  (and (file-directory-p filename)
+       (file-executable-p filename)))
 
 (defun tramp-handle-file-exists-p (filename)
   "Like `file-exists-p' for Tramp files."
@@ -3855,6 +3884,39 @@ Only works for Bourne-like shells."
 	  (setq result (replace-match (format "'%s'" tramp-rsh-end-of-line)
 				      t t result)))
 	result))))
+
+;;; Integration of eshell.el:
+
+(eval-when-compile
+  (defvar eshell-path-env))
+
+;; eshell.el keeps the path in `eshell-path-env'.  We must change it
+;; when `default-directory' points to another host.
+(defun tramp-eshell-directory-change ()
+  "Set `eshell-path-env' to $PATH of the host related to `default-directory'."
+  (setq eshell-path-env
+	(if (file-remote-p default-directory)
+	    (with-parsed-tramp-file-name default-directory nil
+	      (mapconcat
+	       'identity
+	       (or
+		;; When `tramp-own-remote-path' is in `tramp-remote-path',
+		;; the remote path is only set in the session cache.
+		(tramp-get-connection-property
+		 (tramp-get-connection-process v) "remote-path" nil)
+		(tramp-get-connection-property v "remote-path" nil))
+	       ":"))
+	  (getenv "PATH"))))
+
+(eval-after-load "esh-util"
+  '(progn
+     (tramp-eshell-directory-change)
+     (add-hook 'eshell-directory-change-hook
+	       'tramp-eshell-directory-change)
+     (add-hook 'tramp-unload-hook
+	       (lambda ()
+		 (remove-hook 'eshell-directory-change-hook
+			      'tramp-eshell-directory-change)))))
 
 ;; Checklist for `tramp-unload-hook'
 ;; - Unload all `tramp-*' packages

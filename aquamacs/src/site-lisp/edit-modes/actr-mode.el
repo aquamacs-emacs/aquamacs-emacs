@@ -184,7 +184,7 @@
 	(skip-chars-forward " \t")
 	(if (< (point) cur-point)
 	    (progn
-	      (incf num-non-spaces)
+	      (cl-incf num-non-spaces)
 	      (skip-chars-forward "^ \t"))))
       num-non-spaces)))
 

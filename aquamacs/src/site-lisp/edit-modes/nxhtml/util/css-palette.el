@@ -350,7 +350,7 @@ If none is found, throw an error."
 	(if (not (member (match-string-no-properties 0) palette))
 	    (setq palette (append (list
 				   (match-string-no-properties 0)
-				   (intern(format "c%d" (incf count))))
+				   (intern(format "c%d" (cl-incf count))))
 				  palette)))
 	(save-match-data (re-search-forward ";" nil t))
 	(insert (format "/*[%S]*/" (cadr (member (match-string-no-properties 0) palette))))))

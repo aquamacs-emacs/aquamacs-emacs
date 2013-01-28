@@ -2144,7 +2144,7 @@ Mantained by lauri@eng.it, http:/www.gest.unipd.it/~saint/"
 
 (defun html-helper-ticker ()
   "Returns the next prop image"
-  (set 'html-helper-count (mod (incf html-helper-count) 8))
+  (set 'html-helper-count (mod (cl-incf html-helper-count) 8))
   (make-string html-helper-count 46))
 
 ;; match html tag attributes

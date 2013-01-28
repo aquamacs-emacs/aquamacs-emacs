@@ -1,7 +1,645 @@
+2013-01-25  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32notify.c (Fw32notify_add_watch): Doc fix.  (Bug#13540)
+
+2013-01-25  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* font.c (num_fonts): Remove the leftover from old
+	debugging code.  Adjust comment style here and there.
+	* insdel.c (insert_1): Remove.
+	* lisp.h (insert_1): Remove prototype.
+	* xdisp.c (message_dolog): Adjust users to call insert_1_both.
+
+2013-01-25  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32.c (max_filename_mbslen): New function.
+	(normalize_filename, readdir): Use it to detect locales where ANSI
+	encoding of file names uses a double-byte character set (DBCS).
+	If a DBCS encoding is used, advance by characters using
+	CharNextExA, instead of incrementing a 'char *' pointer.  Use
+	_mbslwr instead of _strlwr.  (Bug#13515)
+
+	* w32heap.c (allocate_heap) [!_WIN64]: Decrease the initial
+	request of memory reservation to 1.7GB.  (Bug#13065)
+
+2013-01-25  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* coding.c (detect_coding_iso_2022): Move back mis-reordered code
+	at check_extra_latin label.  (Bug#13505)
+
+2013-01-24  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* nsfont.m (ns_escape_name, ns_unescape_name, ns_registry_to_script):
+	Avoid redundant calls to strlen.
+
+2013-01-24  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Drop async_visible and async_iconified fields of struct frame.
+	This is possible because async input is gone; for details, see
+	http://lists.gnu.org/archive/html/emacs-devel/2012-12/msg00734.html.
+	* frame.h (struct frame): Remove async_visible and async_iconified
+	members, convert garbaged to unsigned bitfield.  Adjust comments.
+	(FRAME_SAMPLE_VISIBILITY): Remove.  Adjust all users.
+	(SET_FRAME_VISIBLE, SET_FRAME_ICONIFIED): New macros.
+	* frame.c, gtkutil.c, term.c, w32fns.c, window.c, xdisp.c:
+	Consistently use SET_FRAME_VISIBLE, SET_FRAME_ICONIFIED,
+	FRAME_VISIBLE_P and FRAME_ICONIFIED_P macros where appropriate.
+	* w32term.c: Ditto.
+	(w32_read_socket): Save iconified state to generate DEICONIFY_EVENT
+	properly.  Likewise for obscured.
+	* xterm.c: Ditto.
+	(handle_one_xevent): Save visible state to generate ICONIFY_EVENT
+	properly.
+	* nsterm.m: Ditto.
+	(windowDidDeminiaturize): Generate DEICONIFY_EVENT.
+
+2013-01-24  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* insdel.c (prepare_to_modify_buffer): Revert last change as suggested
+	in http://lists.gnu.org/archive/html/emacs-devel/2013-01/msg00555.html.
+
+2013-01-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xdisp.c (message2, message2_nolog): Remove functions.
+	(message3, message3_nolog): Extract nbytes and multibyteness directly
+	from the string.  Change all callers.
+	(message3_nolog): Don't set message_enable_multibyte since set_message
+	will reset it anyway.
+	(message1, message1_nolog): Use message3.
+	(vmessage): Use a stack allocated buffer rather than f->message_buf.
+	(with_echo_area_buffer): Remove last two arguments.  Update all callers.
+	(set_message): Drop all but the second arg, which has to be a string.
+	(set_message_1): Simplify now that we know that a1 is NULL and the
+	second arg is a string.
+	* frame.h (struct frame): Remove `message_buf' field.
+	Use glyphs_initialized_p instead.
+	(FRAME_MESSAGE_BUF): Remove macro.
+	* w16select.c (Fw16_set_clipboard_data): Prefer message3 to message2.
+	* lisp.h (message2, message2_nolog): Remove declarations.
+	(message3, message3_nolog): Update declarations.
+	* keyboard.c (read_char_minibuf_menu_text)
+	(read_char_minibuf_menu_width): Remove vars.
+	(read_char_minibuf_menu_prompt): Rewrite the menu's construction so as
+	to correctly handle multibyte strings.
+	* frame.c (delete_frame): Don't free message_buf any more.
+	* editfns.c (message_text, message_length): Remove vars.
+	(Fmessage_box): Don't copy the Lisp string's bytes any longer.
+	* fileio.c (auto_save_error): Use message3 instead of message2.
+	* dispnew.c (adjust_frame_message_buffer): Remove function.
+
+2013-01-23  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32term.c (w32fullscreen_hook): Account correctly for the screen
+	real estate used for the tool bar and the menu bar.
+
+2013-01-23  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* insdel.c (prepare_to_modify_buffer): Force redisplay if
+	hidden buffer is prepared to modification (Bug#13164).
+
+2013-01-22  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* window.h (struct window): Change window_end_valid member from
+	Lisp_Object to a bitfield.  Adjust comments.
+	(wset_window_end_valid): Remove.
+	* window.c (adjust_window_count): Clear window_end_valid.
+	(Fwindow_end): Adjust user.  Remove ancient #if 0 code.
+	(Fwindow_line_height, set_window_buffer, Frecenter)
+	(Fsplit_window_internal, Fdelete_other_windows_internal)
+	(Fset_window_fringes, Fset_window_scroll_bars): Adjust users.
+	* dispnew.c (adjust_glyph_matrix, clear_window_matrices): Likewise.
+	* xdisp.c (check_window_end, reconsider_clip_changes)
+	(redisplay_internal, mark_window_display_accurate_1, redisplay_window)
+	(try_window, try_window_reusing_current_matrix, note_mouse_highlight)
+	(find_first_unchanged_at_end_row, try_window_id): Likewise.
+
+2013-01-22  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* xdisp.c (mark_window_display_accurate): Simplify the loop
+	assuming that the only one of vchild, hchild or buffer window
+	slots is non-nil.  Call mark_window_display_accurate_1 for
+	the leaf windows only.
+	(mark_window_display_accurate_1): Always assume leaf window.
+	Adjust comment.
+
+2013-01-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* emacs.c (Qkill_emacs_hook): Now static.
+
+	* fileio.c (Finsert_file_contents): Simplify.
+	Remove unnecessary assignments and tests.
+
+2013-01-21  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32.c (acl_set_file): Don't test for errors unless
+	set_file_security returns FALSE.  Avoids spurious errors when
+	saving files.
+
+2013-01-21  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* fileio.c (Finsert_file_contents): Revert code introduced at
+	2013-01-18 in favor of the simpler and generally better fix.
+	Save stack space by removing 'buffer' and reusing 'read_buf'
+	where appropriate.
+
+2013-01-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lisp.h (eabs): Define unconditionally (Bug#13419).
+	The old "#if !defined (eabs)" was an unnecessary revenant of back
+	when this macro was called "abs".  Document 'eabs' better.
+
+2013-01-19  Glenn Morris  <rgm@gnu.org>
+
+	* fns.c (Frandom): Doc fix.
+
+2013-01-19  Eli Zaretskii  <eliz@gnu.org>
+
+	* editfns.c (get_pos_property): Use SAFE_ALLOCA_LISP, to avoid
+	segfault when there are lots of overlays.
+
+	* buffer.c (sort_overlays): Use SAFE_NALLOCA, to avoid segfault
+	when there are lots of overlays.  See
+	http://lists.gnu.org/archive/html/emacs-devel/2013-01/msg00421.html
+	for the details and a way to reproduce.
+
+2013-01-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* fileio.c: Use O_APPEND to append.
+	This corresponds better to the natural interpretation of "append",
+	and avoids the need to open the output file twice, or to invoke
+	lseek when APPEND is neither nil nor a number.
+	This relies on POSIX 1003.1-1988 or later, which is OK nowadays.
+	(Fwrite_region): Simplify.  Use O_APPEND instead of opening the
+	file possibly twice, and lseeking to its end; this avoids the
+	need to lseek on non-regular files.  Do not use O_EXCL and O_TRUNC
+	at the same time: the combination is never needed and apparently
+	it doesn't work with DOS_NT.
+
+	Fix size bug on DOS_NT introduced by CIFS workaround (Bug#13149).
+	* fileio.c (Fwrite_region): Use O_BINARY in checking code, too.
+
+	Allow floating-point file offsets.
+	Problem reported by Vitalie Spinu in
+	<http://lists.gnu.org/archive/html/emacs-devel/2013-01/msg00411.html>.
+	* fileio.c (emacs_lseek): Remove.
+	(file_offset): New function.
+	(Finsert_file_contents, Fwrite_region): Use it.
+
+2013-01-19  Chong Yidong  <cyd@gnu.org>
+
+	* emacs.c (Fkill_emacs): Set waiting_for_input to 0 to avoid
+	aborting on Fsignal (Bug#13289).
+
+2013-01-19  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32.c (acl_set_file): Treat ERROR_ACCESS_DENIED from
+	set_file_security as failure due to insufficient privileges.
+	Reported by Fabrice Popineau <fabrice.popineau@supelec.fr>.
+	(fstat): Return owner and group like 'stat' and 'lstat' do.
+
+2013-01-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Work around bug in CIFS and vboxsf file systems (Bug#13149).
+	The bug was observed on Ubuntu operating inside a virtual machine,
+	editing files mounted via CIFS or vboxsf from the MS Windows 7 host.
+	The workaround introduces a race condition on non-buggy hosts,
+	but it's an unlikely race and anyway there's a nearly identical
+	nearby race that can't be fixed.
+	* fileio.c (valid_timestamp_file_system, timestamp_file_system):
+	New static vars.
+	(Fwrite_region): Test for file system time stamp bug.
+	(init_fileio): New function.
+	* lisp.h (init_fileio): Declare it.
+	* emacs.c (main): Call it.
+
+	* fileio.c (Finsert_file_contents): Simplify new diagnostic
+	and make it more consistent with other stat-failure diagnostics.
+
+2013-01-18  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Fix crash when inserting data from non-regular files.  See
+	http://lists.gnu.org/archive/html/emacs-devel/2013-01/msg00406.html
+	for the error description produced by valgrind.
+	* fileio.c (read_non_regular): Rename to read_contents.
+	Free Lisp_Save_Value object used to pass parameters.
+	(read_non_regular_quit): Rename to read_contents_quit.
+	(Finsert_file_contents): Redesign internal file reading loop to adjust
+	gap and end positions after each read and so help make_gap to work
+	properly.  Do not signal an I/O error too early and so do not leave
+	not yet decoded characters in a buffer, which was the reason of
+	redisplay crash.  Use list2 to build return value.  Adjust comments.
+
+2013-01-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Close a race when statting and reading files (Bug#13149).
+	* fileio.c (Finsert_file_contents): Use open+fstat, not stat+open.
+	This avoids a race if the file is renamed between stat and open.
+	This race is not the problem originally noted in Bug#13149;
+	see <http://bugs.gnu.org/13149#73> and later messages in the thread.
+
+2013-01-17  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* lisp.h (toplevel): Add comment about using Lisp_Save_Value
+	objects, related functions and macros.
+	(make_save_value): Adjust prototype.
+	(make_save_pointer): New prototype.
+	(SAFE_NALLOCA): Fix indentation.  Use make_save_pointer.
+	(SAFE_ALLOCA_LISP): Adjust make_save_value usage.
+	* alloc.c (format_save_value): Rename to make_save_value.
+	(make_save_pointer): New function.
+	(record_xmalloc): Use make_save_pointer.
+	* dired.c, editfns.c, fileio.c, font.c, gtkutil.c, lread.c:
+	* nsmenu.m, nsterm.m, xfns.c, xmenu.c, xselect.c, keymap.c:
+	Change users of make_save_value to make_save_pointer.
+	Likewise for format_save_value and make_save_value.
+
+2013-01-17  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* buffer.h (NARROWED, BUF_NARROWED): Drop unused macros.
+	(DECODE_POSITION, BUFFER_CHECK_INDIRECTION): Fix indentation.
+	* buffer.c (toplevel, syms_of_buffer): Drop old commented-out
+	debugging stubs.
+
+2013-01-15  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* alloc.c (free_save_value): Now static.
+
+2013-01-15  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* keymap.c (map_keymap_internal): Use format_save_value.
+	(map_keymap_char_table_item): Adjust accordingly.
+	* fileio.c (non_regular_fd, non_regular_inserted)
+	(non_regular_nbytes): Remove.
+	(Finsert_file_contents): Convert trytry to ptrdiff_t.  Use
+	format_save_value to pass parameters to read_non_regular.
+	(read_non_regular): Use XSAVE_ macros to extract parameters.
+	Adjust comment.
+	* xmenu.c (xmenu_show) [!USE_X_TOOLKIT && !USE_GTK]: Use
+	format_save_value.
+	(pop_down_menu) [!USE_X_TOOLKIT && !USE_GTK]: Adjust user.
+
+2013-01-15  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* lisp.h (XSAVE_POINTER, XSAVE_INTEGER): Change to allow
+	extraction from any Lisp_Save_Value slot.  Add type checking.
+	* alloc.c, dired.c, editfns.c, fileio.c, ftfont.c, gtkutil.c:
+	* keymap.c, lread.c, nsterm.h, nsmenu.c, xfns.c, xmenu.c:
+	* xselect.c: All users changed.
+
+2013-01-15  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Some convenient bits to deal with Lisp_Save_Values.
+	* lisp.h (XSAVE_OBJECT): New macro to extract saved objects.
+	(allocate_misc): Remove prototype.
+	(format_save_value): New prototype.
+	* alloc.c (allocate_misc): Revert back to static.
+	(format_save_value): New function to build Lisp_Save_Value
+	object with the specified internal structure.
+	(make_save_value): Reimplement using format_save_value.
+	* editfns.c (save_excursion_save): Use format_save_value.
+	(save_excursion_restore): Use XSAVE_OBJECT.
+
+2013-01-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Avoid needless casts with XSAVE_POINTER.
+	* alloc.c (mark_object) [GC_MARK_STACK]:
+	* dired.c (directory_files_internal_unwind):
+	* fileio.c (do_auto_save_unwind):
+	* gtkutil.c (pop_down_dialog):
+	* keymap.c (map_keymap_char_table_item):
+	* lread.c (load_unwind):
+	* nsmenu.m (pop_down_menu):
+	* print.c (print_object) [GC_MARK_STACK]:
+	* xfns.c (clean_up_file_dialog):
+	* xmenu.c (cleanup_widget_value_tree):
+	Omit casts between XSAVE_POINTER and a pointer type.
+
+2013-01-14  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Fix compilation with GC_MARK_STACK == GC_USE_GCPROS_AS_BEFORE.
+	* eval.c (eval_sub): Protect `form' from being GCed before its
+	car and cdr becomes protected with the backtrace entry.
+
+2013-01-14  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Make Lisp_Save_Value more versatile storage for up to four objects.
+	* lisp.h (toplevel): Enumeration to describe types of saved objects.
+	(struct Lisp_Save_Value): New layout.  Adjust comments.
+	(XSAVE_POINTER): New macro.
+	(XSAVE_INTEGER): Likewise.
+	(allocate_misc): Add prototype.
+	(free_misc): Likewise.
+	* alloc.c (allocate_misc): Now global.
+	(free_misc): Likewise.  Adjust comment.
+	(make_save_value): Use new Lisp_Save_Value layout.  Adjust comment.
+	(free_save_value): Likewise.
+	(mark_object): Likewise.
+	* editfns.c (save_excursion_save): Pack everything within
+	Lisp_Save_Value and so avoid xmalloc.
+	(save_excursion_restore): Adjust to match new layout.  Use free_misc
+	because we do not allocate extra memory any more.  Add eassert.
+	* print.c (print_object): New code to print Lisp_Save_Value.  Do not
+	rely on valid_lisp_object_p if !GC_MARK_STACK.  Adjust comments.
+	* dired.c, fileio.c, font.c, ftfont.c, gtkutil.c, keymap.c,
+	* lread.c, nsmenu.m, nsterm.h, xfns.c, xmenu.c, xselect.c:
+	Use XSAVE_POINTER and XSAVE_INTEGER where appropriate.
+
+2013-01-13  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* nsfont.m (LCD_SMOOTHING_MARGIN): New define.
+	(nsfont_draw): Remove disabling of LCD smoothing.
+	(ns_glyph_metrics): Add LCD_SMOOTHING_MARGIN to bearings to fix
+	Bug#11484 with LCD smoothing on.
+
+2013-01-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix SIGDANGER handlers, for AIX (Bug#13408).
+	* sysdep.c.c (handle_danger_signal, deliver_danger_signal) [SIGDANGER]:
+	Move handlers here from emacs.c; they were out of place.
+
+2013-01-11  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xterm.c (syms_of_xterm): Adjust documentation for
+	scroll-bar-adjust-thumb-portion.
+
+2012-12-31  Adam Sjøgren  <asjo@koldfront.dk>  (tiny change)
+
+	* xterm.c (scroll-bar-adjust-thumb-portion): New variable to
+	determine whether scroll bar thumb size should be adjusted or
+	not. Use variable for MOTIF.
+
+	* gtkutil.c (scroll-bar-adjust-thumb-portion): Use variable for
+	GTK.
+
+2013-01-13  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* nsterm.m (keyDown:): Set processingCompose to NO if an emacs key
+	event is generated.
+	(doCommandBySelector:): Set processingCompose to NO.
+
+	* nsfont.m (ns_findfonts): Add block/unblock_input calls.
+	Remove check for fkeys count > zero, block/unblock fixes the real bug.
+	(nsfont_list_family): Add block/unblock_input calls.
+	(nsfont_open): Move block_input earlier.  Add unblock_input before early
+	return.
+	(nsfont_draw): Add block/unblock_input calls.
+
+2013-01-12  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* indent.c (Fvertical_motion): Remove now-incorrect GCPROs
+	for old_charpos and old_bytepos.
+
+2013-01-12  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix bug with set-time-zone-rule and LOCALTIME_CACHE (Bug#13415).
+	* editfns.c (set_time_zone_rule) [LOCALTIME_CACHE]:
+	Clear tzvalbuf_in_environ if this workaround is in effect.
+	Problem and fix reported by Kazuhiro Ito.
+
+2013-01-11  Aaron S. Hawley  <Aaron.Hawley@vtinfo.com>
+
+	* insdel.c (Fcombine_after_change_execute, syms_of_insdel): Fix
+	 ambiguous doc string cross-reference(s).
+
+	* keyboard.c (Fcommand_execute, syms_of_keyboard): Fix ambiguous
+	 doc string cross-reference(s).
+
+	* window.c (Fwindow_point, syms_of_window): Fix ambiguous doc
+	 string cross-reference(s).
+
+2013-01-11  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Avoid unnecessary byte position calculation for the gap movement.
+	Since all users of move_gap do CHAR_TO_BYTE for other purposes
+	anyway, all of them should use move_gap_both instead.
+	* lisp.h (move_gap): Remove prototype.
+	* insdel.c (move_gap): Remove.
+	(move_gap_both): Add eassert.
+	* editfns.c (Ftranspose_regions): Tweak to use move_gap_both.
+	* xml.c (parse_region): Likewise.
+
+2013-01-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	emacsclient -t should not suspend Emacs server (Bug#13387)
+	* lisp.h, sysdep.c (block_tty_out_signal, unblock_tty_out_signal):
+	New functions.
+	* term.c (init_tty): Use them instead of rolling our own code.
+	* sysdep.c (tcsetpgrp_without_stopping): Likewise.  Here, this
+	switches from 'signal' to 'pthread_sigmask', which is safer in
+	multithreaded applications.
+	* term.c (Fresume_tty): Don't bother dissociating if O_IGNORE_CTTY,
+	which has already arranged for that.
+	(dissociate_if_controlling_tty): If setsid fails, fall back on TIOCNOTTY.
+	This is the main part of the bug fix.
+
+2013-01-10  Rainer Orth  <ro@CeBiTec.Uni-Bielefeld.DE>  (tiny change)
+
+	* gtkutil.c (xg_initialize): Add ifdef HAVE_FREETYPE around
+	x_last_font_name (Bug#13403).
+
+2013-01-10  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Omit buffer_slot_type_mismatch and use generic predicates to enforce
+	the type of per-buffer values where appropriate.
+	* lisp.h (struct Lisp_Buffer_Objfwd): Rename slottype member to
+	predicate, which is how it's really used now.  Adjust comment.
+	* buffer.h (buffer_slot_type_mismatch): Remove prototype.
+	* buffer.c (buffer_slot_type_mismatch): Remove.
+	(DEFVAR_PER_BUFFER, defvar_per_buffer): Rename type argument to
+	predicate.  Adjust comment.
+	(syms_of_buffer): Use Qsymbolp for major-mode.  Use Qintegerp for
+	fill-column, left-margin, tab-width, buffer-saved-size,
+	left-margin-width, right-margin-width, left-fringe-width,
+	right-fringe-width, scroll-bar-width and buffer-display-count.
+	Use Qstringp for default-directory, buffer-file-name,
+	buffer-file-truename and buffer-auto-save-file-name.  Use Qfloatp for
+	scroll-up-aggressively and scroll-down-aggressively.  Use Qnumberp for
+	line-spacing.
+	* data.c (store_symval_forwarding): Adjust to call the predicate.
+
+2013-01-09  Juanma Barranquero  <lekktu@gmail.com>
+
+	* w32.c (get_name_and_id, acl_set_file):
+	* w32term.c (w32fullscreen_hook): Remove unused local variables.
+
+2013-01-09  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* lisp.h (make_gap_1): New prototype.
+	* buffer.h (GAP_BYTES_DFL, GAP_BYTES_MIN): New macros for the special
+	gap size values.
+	* editfns.c (Fbuffer_size): Rename from Fbufsize to fit the common
+	naming convention.
+	(syms_of_editfns): Adjust defsubr.  Drop commented-out obsolete code.
+	* insdel.c (make_gap_larger): Use GAP_BYTES_DFL.  Adjust comment.
+	(make_gap_smaller): Use GAP_BYTES_MIN.  Adjust comment.
+	(make_gap_1): New function to adjust the gap of any buffer.
+	* coding.c (coding_alloc_by_making_gap): Use it.
+	* buffer.c (compact_buffer): Likewise.  Use BUF_Z_BYTE, BUF_GAP_SIZE,
+	GAP_BYTES_DFL and GAP_BYTES_MIN.  Adjust comment.
+
+2013-01-08  Juri Linkov  <juri@jurta.org>
+
+	* xfaces.c (tty_supports_face_attributes_p): Return 0 for the case
+	of (supports :underline (:style wave)).  (Bug#13000)
+
+2013-01-08  Aaron S. Hawley  <aaron.s.hawley@gmail.com>
+
+	* undo.c (Fprimitive_undo): Move to simple.el.
+	(syms_of_undo): Remove declarations for Sprimitive_undo.
+
+2013-01-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* keyboard.c (echo_add_key): Rename from echo_add_char.
+
+2013-01-06  Chong Yidong  <cyd@gnu.org>
+
+	* keyboard.c (echo_add_char): New function, factored out from
+	echo_char.  Don't add a space if the previous echo string was
+	empty (Bug#13255).
+	(echo_char): Use it.
+	(read_key_sequence): When echoing mock input, ensure that the
+	trailing dash is properly added.
+
+2013-01-05  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (dump_glyph): Align glyph data better.  Use "pD" instead
+	of a non-portable "t" to print ptrdiff_t values.  Allow up to 9
+	digits for buffer positions, before misalignment starts.
+	Display "0" for integer "object" field.
+	(dump_glyph_row): Adapt the header line to changes in dump_glyph.
+	Display the newline glyph more unambiguously.
+
+2013-01-04  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* nsterm.m (ns_draw_underwave):
+	* w32term.c (w32_draw_underwave):
+	* xterm.c (x_draw_underwave): Make underwave look more triangular
+	and also degrade gracefully for small fonts.  (Bug#13000)
+
+	* nsterm.m (ns_draw_text_decoration):
+	* w32term.c (x_draw_glyph_string):
+	* xterm.c (x_draw_glyph_string): Don't use previous underline
+	thickness and position if previous underline type is underwave.
+
+2013-01-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* fileio.c (Ffile_acl): Undocument return format.
+
+2013-01-02  Glenn Morris  <rgm@gnu.org>
+
+	* keymap.c (Fkey_description): Doc fix.  (Bug#13323)
+
+2013-01-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Simplify via eabs.
+	* dired.c (file_name_completion):
+	* doc.c (get_doc_string):
+	* floatfns.c (round2):
+	* font.c (font_score, font_delete_unmatched):
+	* fringe.c (compute_fringe_widths):
+	* lread.c (read_list):
+	* minibuf.c (Ftry_completion):
+	* term.c (tty_ins_del_lines):
+	* xterm.c (x_draw_image_foreground, x_draw_image_foreground_1):
+	Use eabs (x) rather than open-coding it as (x < 0 ? -x : x).
+
+2012-12-31  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32.c (unsetenv): Set up the string passed to _putenv
+	correctly.
+	See http://lists.gnu.org/archive/html/emacs-devel/2012-12/msg00863.html
+	for the bug this caused.
+
+2012-12-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* coding.c (Qmac): Now static.
+
+2012-12-30  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* gtkutil.c (TOOLBAR_TOP_WIDGET): New macro.
+	(xg_pack_tool_bar): Use TOOLBAR_TOP_WIDGET, condition out use of
+	handlebox_widget.  Set toolbar_in_hbox to false/true, set
+	toolbar_is_packed to true.
+	(xg_update_tool_bar_sizes): Use widget returned by TOOLBAR_TOP_WIDGET.
+	(update_frame_tool_bar): Check toolbar_is_packed for packing.
+	Show all on TOOLBAR_TOP_WIDGET.
+	(free_frame_tool_bar): Check toolbar_is_packed.  Use widget returned
+	by TOOLBAR_TOP_WIDGET.
+	(xg_change_toolbar_position): Use widget returned by TOOLBAR_TOP_WIDGET.
+	Check toolbar_is_packed.
+	(xg_have_tear_offs, tearoff_remove, tearoff_activate): Condition on
+	HAVE_GTK_TEAROFF_MENU_ITEM_NEW.
+	(xg_have_tear_offs): When ! HAVE_GTK_TEAROFF_MENU_ITEM_NEW, return
+	false.
+	(create_menus): Create tearoff only if HAVE_GTK_TEAROFF_MENU_ITEM_NEW.
+	(xg_update_menubar): Update title only if
+	HAVE_GTK_TEAROFF_MENU_ITEM_NEW.
+	(xg_update_submenu): Skip tearoff only if
+	HAVE_GTK_TEAROFF_MENU_ITEM_NEW.
+	(xg_initialize): Initialize xg_detached_menus only if
+	HAVE_GTK_TEAROFF_MENU_ITEM_NEW.
+
+	* xterm.h (struct x_output): Surround handlebox_widget with
+	#ifdef HAVE_GTK_HANDLE_BOX_NEW.  toolbar_is_packed is new,
+	toolbar_in_hbox is bool.
+
+2012-12-30  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* src/Makefile.in (TEMACS_LDFLAGS2): Remove.
+	(LIBS_GNUSTEP): Define.
+	(LIBES): Add $(LIBS_GNUSTEP).
+	(temacs$(EXEEXT)): Use $(LDFLAGS) instead of $(TEMACS_LDFLAGS2).
+
+2012-12-30  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (set_cursor_from_row): Don't confuse a truncation or
+	continuation glyph on a TTY with an indication of an empty line.
+	(Bug#13277)
+
+2012-12-29  Eli Zaretskii  <eliz@gnu.org>
+
+	* fileio.c (Fset_file_selinux_context, Fset_file_acl): Return t if
+	file's SELinux context or ACLs successfully set, nil otherwise.
+	(Bug#13298)
+	(Fcopy_file) [WINDOWSNT]: Improve diagnostics when CopyFile fails.
+
+	* w32proc.c (reader_thread): Avoid passing NULL handles to
+	SetEvent and WaitForSingleObject.
+
+2012-12-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port EXTERNALLY_VISIBLE to Clang 3.2.
+	* conf_post.h (__has_attribute): New macro.
+	(EXTERNALLY_VISIBLE): Use it.  This ports to Clang 3.2.
+
+2012-12-27  Glenn Morris  <rgm@gnu.org>
+
+	* cygw32.c (Fcygwin_convert_file_name_to_windows)
+	(Fcygwin_convert_file_name_from_windows): Doc fixes.
+
+2012-12-27  Eli Zaretskii  <eliz@gnu.org>
+
+	* fileio.c (file_name_as_directory, directory_file_name):
+	Accept an additional argument MULTIBYTE to indicate whether the input C
+	came from a multibyte or a unibyte Lisp string; all callers
+	adjusted.  Don't assume the input string is always multibyte.
+	(Bug#13262)
+	(Ffile_name_directory) [DOS_NT]: Handle unibyte strings correctly:
+	don't ENCODE_FILE them, and return a unibyte string if the input
+	was unibyte.
+	(Fexpand_file_name): Don't mix unibyte with multibyte strings, and
+	don't assume the input strings will always be multibyte.  If the
+	input strings are multibyte, decode strings obtained from C
+	library functions.
+
 2012-12-26  Dmitry Antipov  <dmantipov@yandex.ru>
 
 	* lisp.h (toplevel): Add two notices to the comment about
 	defining a new Lisp data type.
+	* print.c (print_object): If Lisp_Save_Value object's pointer
+	is the address of a memory area containing Lisp_Objects, try
+	to print them.
+	* alloc.c (valid_lisp_object_p): Adjust comment.
 
 2012-12-26  Dmitry Antipov  <dmantipov@yandex.ru>
 
@@ -66,8 +704,8 @@
 	* w32.c (sys_close): Do not call delete_child on a subprocess
 	whose handle is not yet closed.  Instead, set its file descriptor
 	to a negative value, so that reap_subprocess will call
-	delete_child on that subprocess when its SIGCHLD arrives.  This
-	avoids closing handles used for communications between sys_select
+	delete_child on that subprocess when its SIGCHLD arrives.
+	This avoids closing handles used for communications between sys_select
 	and reader_thread, which doesn't give sys_select a chance to
 	notice that the process exited and invoke the SIGCHLD handler for
 	it.
@@ -146,7 +784,7 @@
 
 	* xdisp.c (select_frame_for_redisplay, ensure_selected_frame): Remove.
 	(redisplay_internal): Don't bother selecting the frame to get the
-	proper value of frame-local variables.
+	proper value of frame-local variables (bug#13225).
 
 2012-12-20  Dmitry Antipov  <dmantipov@yandex.ru>
 
@@ -1506,7 +2144,7 @@
 	* image.c (xpm_make_color_table_h): Fix compiler error because
 	make_hash_table changed.
 
-2012-11-08  Thomas Kappler <tkappler@gmail.com> (tiny change)
+2012-11-08  Thomas Kappler  <tkappler@gmail.com>  (tiny change)
 
 	* nsfont.m (ns_findfonts): Handle empty matchingDescs (Bug#11541).
 
@@ -21198,7 +21836,7 @@ See ChangeLog.11 for earlier changes.
 ;; coding: utf-8
 ;; End:
 
-  Copyright (C) 2011-2012 Free Software Foundation, Inc.
+  Copyright (C) 2011-2013 Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

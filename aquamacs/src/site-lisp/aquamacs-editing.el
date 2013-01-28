@@ -140,10 +140,10 @@ default in case there is not enough text."
 	(search-forward "\n" nil 'noerror)
 	(let ((ll (- (point) last-point)))
 	(if (< ll 2) ;; empty line?
-	    (incf empty-lines)
-	  (incf count)
+	    (cl-incf empty-lines)
+	  (cl-incf count)
 	  (if (> ll fill-column)
-	      (incf longlines-count)))
+	      (cl-incf longlines-count)))
 	(setq last-point (point))))
       (if (> count 0)
 	  (let ((mean-line-length 

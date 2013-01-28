@@ -1,5 +1,6 @@
 /* Lisp functions for making directory listings.
-   Copyright (C) 1985-1986, 1993-1994, 1999-2012 Free Software Foundation, Inc.
+   Copyright (C) 1985-1986, 1993-1994, 1999-2013 Free Software
+   Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -77,7 +78,7 @@ directory_files_internal_w32_unwind (Lisp_Object arg)
 static Lisp_Object
 directory_files_internal_unwind (Lisp_Object dh)
 {
-  DIR *d = (DIR *) XSAVE_VALUE (dh)->pointer;
+  DIR *d = XSAVE_POINTER (dh, 0);
   block_input ();
   closedir (d);
   unblock_input ();
@@ -151,7 +152,7 @@ directory_files_internal (Lisp_Object directory, Lisp_Object full,
      file-attributes on filenames, both of which can throw, so we must
      do a proper unwind-protect.  */
   record_unwind_protect (directory_files_internal_unwind,
-			 make_save_value (d, 0));
+			 make_save_pointer (d));
 
 #ifdef WINDOWSNT
   if (attrs)
@@ -464,7 +465,7 @@ file_name_completion (Lisp_Object file, Lisp_Object dirname, bool all_flag,
     report_file_error ("Opening directory", Fcons (dirname, Qnil));
 
   record_unwind_protect (directory_files_internal_unwind,
-			 make_save_value (d, 0));
+			 make_save_pointer (d));
 
   /* Loop reading blocks */
   /* (att3b compiler bug requires do a null comparison this way) */
@@ -671,10 +672,7 @@ file_name_completion (Lisp_Object file, Lisp_Object dirname, bool all_flag,
 				name, zero,
 				make_number (compare),
 				completion_ignore_case ? Qt : Qnil);
-	  ptrdiff_t matchsize
-	    = (EQ (cmp, Qt)     ? compare
-	       : XINT (cmp) < 0 ? - XINT (cmp) - 1
-	       :                  XINT (cmp) - 1);
+	  ptrdiff_t matchsize = EQ (cmp, Qt) ? compare : eabs (XINT (cmp)) - 1;
 
 	  if (completion_ignore_case)
 	    {

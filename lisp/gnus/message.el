@@ -1,6 +1,6 @@
 ;;; message.el --- composing mail and news messages
 
-;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2013 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: mail, news
@@ -7376,12 +7376,13 @@ Optional DIGEST will use digest to forward."
 	(dolist (elem ignored)
 	  (message-remove-header elem t))))))
 
-(defun message-forward-make-body-mime (forward-buffer)
+(defun message-forward-make-body-mime (forward-buffer &optional beg end)
   (let ((b (point)))
     (insert "\n\n<#part type=message/rfc822 disposition=inline raw=t>\n")
     (save-restriction
       (narrow-to-region (point) (point))
-      (mml-insert-buffer forward-buffer)
+      (insert-buffer-substring forward-buffer beg end)
+      (mml-quote-region (point-min) (point-max))
       (goto-char (point-min))
       (when (looking-at "From ")
 	(replace-match "X-From-Line: "))

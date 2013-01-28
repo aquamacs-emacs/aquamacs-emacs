@@ -1,6 +1,7 @@
 ;;; server.el --- Lisp code for GNU Emacs running as server process -*- lexical-binding: t -*-
 
-;; Copyright (C) 1986-1987, 1992, 1994-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1986-1987, 1992, 1994-2013 Free Software Foundation,
+;; Inc.
 
 ;; Author: William Sommerfeld <wesommer@athena.mit.edu>
 ;; Maintainer: FSF
@@ -362,7 +363,7 @@ Updates `server-clients'."
 
 (defconst server-buffer " *server*"
   "Buffer used internally by Emacs's server.
-One use is to log the I/O for debugging purposes (see `server-log'),
+One use is to log the I/O for debugging purposes (see option `server-log'),
 the other is to provide a current buffer in which the process filter can
 safely let-bind buffer-local variables like `default-directory'.")
 
@@ -370,7 +371,7 @@ safely let-bind buffer-local variables like `default-directory'.")
   "If non-nil, log the server's inputs and outputs in the `server-buffer'.")
 
 (defun server-log (string &optional client)
-  "If `server-log' is non-nil, log STRING to `server-buffer'.
+  "If option `server-log' is non-nil, log STRING to `server-buffer'.
 If CLIENT is non-nil, add a description of it to the logged message."
   (when server-log
     (with-current-buffer (get-buffer-create server-buffer)

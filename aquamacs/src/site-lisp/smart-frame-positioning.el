@@ -540,7 +540,7 @@ so these can be remembered. This is part of Aquamacs Emacs.")
 	   ((eq (let ((c 0))
 		  (mapc (lambda (fr)
 			  (when (and  (frame-live-p fr) (eq (frame-visible-p fr) t))
-			    (incf c) (setq the-f fr))) (frame-list)) c) 1)
+			    (cl-incf c) (setq the-f fr))) (frame-list)) c) 1)
 	    the-f)
 	   ;; otherwise: take original frame at deletion time
 	   ((default-value 'initial-frame-alist))

@@ -1,6 +1,6 @@
 ;;; tramp-gvfs.el --- Tramp access functions for GVFS daemon
 
-;; Copyright (C) 2009-2012 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2013 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, processes
@@ -384,7 +384,7 @@ Every entry is a list (NAME ADDRESS).")
     (dired-uncache . tramp-handle-dired-uncache)
     ;; `executable-find' is not official yet. performed by default handler.
     (expand-file-name . tramp-gvfs-handle-expand-file-name)
-    ;; `file-accessible-directory-p' performed by default handler.
+    (file-accessible-directory-p . tramp-handle-file-accessible-directory-p)
     (file-acl . tramp-gvfs-handle-file-acl)
     (file-attributes . tramp-gvfs-handle-file-attributes)
     (file-directory-p . tramp-gvfs-handle-file-directory-p)

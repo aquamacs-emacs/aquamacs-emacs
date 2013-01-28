@@ -1,6 +1,6 @@
 ;;; org-macs.el --- Top-level definitions for Org-mode
 
-;; Copyright (C) 2004-2012 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2013 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -125,6 +125,15 @@ Also, do not record undo information."
 	 (org-goto-line ,line)
 	 (org-move-to-column ,col)))))
 (def-edebug-spec org-preserve-lc (body))
+
+;; Copied from bookmark.el
+(defmacro org-with-buffer-modified-unmodified (&rest body)
+  "Run BODY while preserving the buffer's `buffer-modified-p' state."
+  (org-with-gensyms (was-modified)
+    `(let ((,was-modified (buffer-modified-p)))
+       (unwind-protect
+           (progn ,@body)
+         (set-buffer-modified-p ,was-modified)))))
 
 (defmacro org-without-partial-completion (&rest body)
   `(if (and (boundp 'partial-completion-mode)

@@ -1,6 +1,6 @@
 ;;; gnus-art.el --- article mode commands for Gnus
 
-;; Copyright (C) 1996-2012 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2013 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -1121,8 +1121,8 @@ parts.  When nil, redisplay article."
 	   (const :tag "Header" head)))
 
 (defvar gnus-article-treat-types '("text/plain" "text/x-verbatim"
-				   "text/x-patch")
-  "Parts to treat.")
+				   "text/x-patch" "text/html")
+  "Part types eligible for treatment.")
 
 (defvar gnus-inhibit-treatment nil
   "Whether to inhibit treatment.")
@@ -8688,9 +8688,7 @@ For example:
 	     gnus-mime-security-button-end-line-format))
 	(gnus-insert-mime-security-button handle)))
     (mm-set-handle-multipart-parameter
-     handle 'gnus-region
-     (cons (set-marker (make-marker) (point-min))
-	   (set-marker (make-marker) (point-max))))
+     handle 'gnus-region (cons (point-min-marker) (point-max-marker)))
     (goto-char (point-max))))
 
 (defun gnus-mime-security-run-function (function)

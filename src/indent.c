@@ -1,6 +1,6 @@
 /* Indentation functions.
-   Copyright (C) 1985-1988, 1993-1995, 1998, 2000-2012
-                 Free Software Foundation, Inc.
+   Copyright (C) 1985-1988, 1993-1995, 1998, 2000-2013 Free Software
+   Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -1970,7 +1970,7 @@ whether or not it is currently displayed in some window.  */)
   struct window *w;
   Lisp_Object old_buffer;
   EMACS_INT old_charpos IF_LINT (= 0), old_bytepos IF_LINT (= 0);
-  struct gcpro gcpro1, gcpro2, gcpro3;
+  struct gcpro gcpro1;
   Lisp_Object lcols = Qnil;
   double cols IF_LINT (= 0);
   void *itdata = NULL;
@@ -1987,7 +1987,7 @@ whether or not it is currently displayed in some window.  */)
   w = decode_live_window (window);
 
   old_buffer = Qnil;
-  GCPRO3 (old_buffer, old_charpos, old_bytepos);
+  GCPRO1 (old_buffer);
   if (XBUFFER (w->buffer) != current_buffer)
     {
       /* Set the window's buffer temporarily to the current buffer.  */

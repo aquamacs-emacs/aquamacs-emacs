@@ -1,5 +1,6 @@
 /* Definitions and headers for communication with NeXT/Open/GNUstep API.
-   Copyright (C) 1989, 1993, 2005, 2008-2012 Free Software Foundation, Inc.
+   Copyright (C) 1989, 1993, 2005, 2008-2013 Free Software Foundation,
+   Inc.
 
 This file is part of GNU Emacs.
 
@@ -124,29 +125,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 @end
 
 
+
 /* Small utility used for processing resize events under Cocoa. */
 @interface EmacsWindow : NSWindow
 {
   NSPoint grabOffset;
-  BOOL usingLionScreen;
 }
-- (BOOL) respondsToNativeFullScreen;
-- (BOOL) shouldUseNativeFullScreen;
-- (BOOL)isFullScreen;
--(EmacsWindow *)setFullscreen: (BOOL) flag;
-- (void)toggleToolbarShown: (id)sender;
-- (void)toggleFullScreen: (id)sender;
-- (void)toggleActualFullScreen: (id)sender;
-@end
-
-/* 10.5 or below is not supported [NSWindow setStyleMask:], so require content swap hack */
-@interface EmacsFullWindow : EmacsWindow {
-    EmacsWindow *normalWindow;
-}
-
--(id)initWithNormalWindow:(EmacsWindow *)window;
--(EmacsWindow *)getNormalWindow;
-
 @end
 
 // dummy for 10.5-
@@ -733,9 +717,9 @@ struct x_output
 #define FRAME_FONT(f) ((f)->output_data.ns->font)
 
 #ifdef __OBJC__
-#define XNS_SCROLL_BAR(vec) ((id) XSAVE_VALUE (vec)->pointer)
+#define XNS_SCROLL_BAR(vec) ((id) XSAVE_POINTER (vec, 0))
 #else
-#define XNS_SCROLL_BAR(vec) XSAVE_VALUE (vec)->pointer
+#define XNS_SCROLL_BAR(vec) XSAVE_POINTER (vec, 0)
 #endif
 
 /* Compute pixel size for vertical scroll bars */

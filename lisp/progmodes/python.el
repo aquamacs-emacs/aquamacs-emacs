@@ -1,6 +1,6 @@
 ;;; python.el --- Python's flying circus support for Emacs
 
-;; Copyright (C) 2003-2012  Free Software Foundation, Inc.
+;; Copyright (C) 2003-2013 Free Software Foundation, Inc.
 
 ;; Author: Fabián E. Gallina <fabian@anue.biz>
 ;; URL: https://github.com/fgallina/python.el
@@ -155,7 +155,10 @@
 ;; dabbrev.  If you have `dabbrev-mode' activated and
 ;; `python-skeleton-autoinsert' is set to t, then whenever you type
 ;; the name of any of those defined and hit SPC, they will be
-;; automatically expanded.
+;; automatically expanded.  As an alternative you can use the defined
+;; skeleton commands: `python-skeleton-class', `python-skeleton-def'
+;; `python-skeleton-for', `python-skeleton-if', `python-skeleton-try'
+;; and `python-skeleton-while'.
 
 ;; FFAP: You can find the filename for a given module when using ffap
 ;; out of the box.  This feature needs an inferior python shell
@@ -204,7 +207,6 @@
 
 (require 'ansi-color)
 (require 'comint)
-(eval-when-compile (require 'cl-lib))
 
 ;; Avoid compiler warnings
 (defvar view-return-to-alist)
@@ -221,7 +223,7 @@
 (defgroup python nil
   "Python Language's flying circus support for Emacs."
   :group 'languages
-  :version "23.2"
+  :version "24.3"
   :link '(emacs-commentary-link "python"))
 
 
@@ -529,7 +531,7 @@ is used to limit the scan."
     (while (and (< i 3)
                 (or (not limit) (< (+ point i) limit))
                 (eq (char-after (+ point i)) quote-char))
-      (cl-incf i))
+      (setq i (1+ i)))
     i))
 
 (defun python-syntax-stringify ()
@@ -607,6 +609,12 @@ It makes underscores and dots word constituent chars.")
   :type 'boolean
   :group 'python
   :safe 'booleanp)
+
+(defcustom python-indent-trigger-commands
+  '(indent-for-tab-command yas-expand yas/expand)
+  "Commands that might trigger a `python-indent-line' call."
+  :type '(repeat symbol)
+  :group 'python)
 
 (define-obsolete-variable-alias
   'python-indent 'python-indent-offset "24.3")
@@ -906,20 +914,21 @@ Uses the offset calculated in
 indicated by the variable `python-indent-levels' to set the
 current indentation.
 
-When the variable `last-command' is equal to
-`indent-for-tab-command' or FORCE-TOGGLE is non-nil it cycles
-levels indicated in the variable `python-indent-levels' by
-setting the current level in the variable
-`python-indent-current-level'.
+When the variable `last-command' is equal to one of the symbols
+inside `python-indent-trigger-commands' or FORCE-TOGGLE is
+non-nil it cycles levels indicated in the variable
+`python-indent-levels' by setting the current level in the
+variable `python-indent-current-level'.
 
-When the variable `last-command' is not equal to
-`indent-for-tab-command' and FORCE-TOGGLE is nil it calculates
-possible indentation levels and saves it in the variable
-`python-indent-levels'.  Afterwards it sets the variable
-`python-indent-current-level' correctly so offset is equal
-to (`nth' `python-indent-current-level' `python-indent-levels')"
+When the variable `last-command' is not equal to one of the
+symbols inside `python-indent-trigger-commands' and FORCE-TOGGLE
+is nil it calculates possible indentation levels and saves it in
+the variable `python-indent-levels'.  Afterwards it sets the
+variable `python-indent-current-level' correctly so offset is
+equal to (`nth' `python-indent-current-level'
+`python-indent-levels')"
   (or
-   (and (or (and (eq this-command 'indent-for-tab-command)
+   (and (or (and (memq this-command python-indent-trigger-commands)
                  (eq last-command this-command))
             force-toggle)
         (not (equal python-indent-levels '(0)))
@@ -1181,16 +1190,36 @@ Returns nil if point is not in a def or class."
                 (forward-line -1))))
   (point-marker))
 
-(defun python-nav-end-of-statement ()
-  "Move to end of current statement."
+(defun python-nav-end-of-statement (&optional noend)
+  "Move to end of current statement.
+Optional argument NOEND is internal and makes the logic to not
+jump to the end of line when moving forward searching for the end
+of the statement."
   (interactive "^")
-  (while (and (goto-char (line-end-position))
-              (not (eobp))
-              (when (or
-                     (python-info-line-ends-backslash-p)
-                     (python-syntax-context 'string)
-                     (python-syntax-context 'paren))
-                (forward-line 1))))
+  (let (string-start bs-pos)
+    (while (and (or noend (goto-char (line-end-position)))
+                (not (eobp))
+                (cond ((setq string-start (python-syntax-context 'string))
+                       (goto-char string-start)
+                       (if (python-syntax-context 'paren)
+                           ;; Ended up inside a paren, roll again.
+                           (python-nav-end-of-statement t)
+                         ;; This is not inside a paren, move to the
+                         ;; end of this string.
+                         (goto-char (+ (point)
+                                       (python-syntax-count-quotes
+                                        (char-after (point)) (point))))
+                         (or (re-search-forward (rx (syntax string-delimiter)) nil t)
+                             (goto-char (point-max)))))
+                      ((python-syntax-context 'paren)
+                       ;; The statement won't end before we've escaped
+                       ;; at least one level of parenthesis.
+                       (condition-case err
+                           (goto-char (scan-lists (point) 1 -1))
+                         (scan-error (goto-char (nth 3 err)))))
+                      ((setq bs-pos (python-info-line-ends-backslash-p))
+                       (goto-char bs-pos)
+                       (forward-line 1))))))
   (point-marker))
 
 (defun python-nav-backward-statement (&optional arg)
@@ -1295,7 +1324,7 @@ backward to previous block."
   "Safe version of standard `forward-sexp'.
 When ARG > 0 move forward, else if ARG is < 0."
   (or arg (setq arg 1))
-  (let ((forward-sexp-function nil)
+  (let ((forward-sexp-function)
         (paren-regexp
          (if (> arg 0) (python-rx close-paren) (python-rx open-paren)))
         (search-fn
@@ -2009,7 +2038,14 @@ Returns the output.  See `python-shell-send-string-no-output'."
 (defun python-shell-send-region (start end)
   "Send the region delimited by START and END to inferior Python process."
   (interactive "r")
-  (python-shell-send-string (buffer-substring start end) nil t))
+  (python-shell-send-string
+   (concat
+    (let ((line-num (line-number-at-pos start)))
+      ;; When sending a region, add blank lines for non sent code so
+      ;; backtraces remain correct.
+      (make-string (1- line-num) ?\n))
+    (buffer-substring start end))
+   nil t))
 
 (defun python-shell-send-buffer (&optional arg)
   "Send the entire buffer to inferior Python process.
@@ -2487,12 +2523,12 @@ JUSTIFY should be used (if applicable) as in `fill-paragraph'."
 JUSTIFY should be used (if applicable) as in `fill-paragraph'."
   (let* ((marker (point-marker))
          (str-start-pos
-          (let ((m (make-marker)))
-            (setf (marker-position m)
-                  (or (python-syntax-context 'string)
-                      (and (equal (string-to-syntax "|")
-                                  (syntax-after (point)))
-                           (point)))) m))
+          (set-marker
+           (make-marker)
+           (or (python-syntax-context 'string)
+               (and (equal (string-to-syntax "|")
+                           (syntax-after (point)))
+                    (point)))))
          (num-quotes (python-syntax-count-quotes
                       (char-after str-start-pos) str-start-pos))
          (str-end-pos

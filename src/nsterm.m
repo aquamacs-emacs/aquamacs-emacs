@@ -1,7 +1,7 @@
 /* NeXT/Open/GNUstep / MacOSX communication module.
 
-Copyright (C) 1989, 1993-1994, 2005-2006, 2008-2012
-  Free Software Foundation, Inc.
+Copyright (C) 1989, 1993-1994, 2005-2006, 2008-2013 Free Software
+Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -841,13 +841,6 @@ ns_focus (struct frame *f, NSRect *r, int n)
             }
 
           if (view)
-	    {
-	      EmacsFullWindow *win = (EmacsFullWindow *) [view window];
-	      if ([win isKindOfClass:[EmacsFullWindow class]])
-		  [[win getNormalWindow] orderOut:nil];
-	    }
-
-          if (view)
 #ifdef NS_IMPL_GNUSTEP
             r ? [view lockFocusInRect: u] : [view lockFocus];
 #else
@@ -1058,11 +1051,8 @@ ns_raise_frame (struct frame *f)
   NSView *view = FRAME_NS_VIEW (f);
   check_ns ();
   block_input ();
-  FRAME_SAMPLE_VISIBILITY (f);
   if (FRAME_VISIBLE_P (f))
-    {
-      [[view window] makeKeyAndOrderFront: NSApp];
-    }
+    [[view window] makeKeyAndOrderFront: NSApp];
   unblock_input ();
 }
 
@@ -1151,7 +1141,8 @@ x_make_frame_visible (struct frame *f)
   if (!FRAME_VISIBLE_P (f))
     {
       EmacsView *view = (EmacsView *)FRAME_NS_VIEW (f);
-      f->async_visible = 1;
+
+      SET_FRAME_VISIBLE (f, 1);
       ns_raise_frame (f);
 
 #ifdef NEW_STYLE_FS
@@ -1181,8 +1172,8 @@ x_make_frame_invisible (struct frame *f)
   NSTRACE (x_make_frame_invisible);
   check_ns ();
   [[view window] orderOut: NSApp];
-  f->async_visible = 0;
-  f->async_iconified = 0;
+  SET_FRAME_VISIBLE (f, 0);
+  SET_FRAME_ICONIFIED (f, 0);
 }
 
 
@@ -1349,14 +1340,14 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
   f->scroll_bar_actual_width = NS_SCROLL_BAR_WIDTH (f);
   compute_fringe_widths (f, 0);
 
-  if ([window isKindOfClass:[EmacsFullWindow class]]) {
-      pixelwidth = [[window screen] frame].size.width;
-      pixelheight = [[window screen] frame].size.height;
-  }
-  else {
+  // if ([window isKindOfClass:[EmacsFullWindow class]]) {
+  //     pixelwidth = [[window screen] frame].size.width;
+  //     pixelheight = [[window screen] frame].size.height;
+  // }
+  // else {
   pixelwidth =  FRAME_TEXT_COLS_TO_PIXEL_WIDTH   (f, cols);
   pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows);
-  }
+  // }
 
   /* If we have a toolbar, take its height into account. */
   if (tb)
@@ -1415,7 +1406,9 @@ ns_fullscreen_hook (FRAME_PTR f)
 {
   EmacsView *view = (EmacsView *)FRAME_NS_VIEW (f);
 
-  if (! f->async_visible) return;
+  if (!FRAME_VISIBLE_P (f))
+    return;
+
 #ifndef NEW_STYLE_FS
   if (f->want_fullscreen == FULLSCREEN_BOTH)
     {
@@ -2656,7 +2649,7 @@ ns_get_glyph_string_clip_rect (struct glyph_string *s, NativeRectangle *nr)
    Draw a wavy line under glyph string s. The wave fills wave_height
    pixels from y.
 
-                    x          wave_length = 3
+                    x          wave_length = 2
                                  --
                 y    *   *   *   *   *
                      |* * * * * * * * *
@@ -2666,14 +2659,14 @@ ns_get_glyph_string_clip_rect (struct glyph_string *s, NativeRectangle *nr)
 static void
 ns_draw_underwave (struct glyph_string *s, CGFloat width, CGFloat x)
 {
-  int wave_height = 3, wave_length = 3;
+  int wave_height = 3, wave_length = 2;
   int y, dx, dy, odd, xmax;
   NSPoint a, b;
   NSRect waveClip;
 
   dx = wave_length;
   dy = wave_height - 1;
-  y =  s->ybase + 1;
+  y =  s->ybase - wave_height + 3;
   xmax = x + width;
 
   /* Find and set clipping rectangle */
@@ -2682,10 +2675,10 @@ ns_draw_underwave (struct glyph_string *s, CGFloat width, CGFloat x)
   NSRectClip (waveClip);
 
   /* Draw the waves */
-  a.x = x - ((int)(x) % dx);
+  a.x = x - ((int)(x) % dx) + 0.5;
   b.x = a.x + dx;
   odd = (int)(a.x/dx) % 2;
-  a.y = b.y = y;
+  a.y = b.y = y + 0.5;
 
   if (odd)
     a.y += dy;
@@ -2696,7 +2689,7 @@ ns_draw_underwave (struct glyph_string *s, CGFloat width, CGFloat x)
     {
       [NSBezierPath strokeLineFromPoint:a toPoint:b];
       a.x = b.x, a.y = b.y;
-      b.x += dx, b.y = y + odd*dy;
+      b.x += dx, b.y = y + 0.5 + odd*dy;
       odd = !odd;
     }
 
@@ -2736,6 +2729,7 @@ ns_draw_text_decoration (struct glyph_string *s, struct face *face,
 
           /* If the prev was underlined, match its appearance. */
           if (s->prev && s->prev->face->underline_p
+	      && s->prev->face->underline_type == FACE_UNDER_LINE
               && s->prev->underline_thickness > 0)
             {
               thickness = s->prev->underline_thickness;
@@ -3769,7 +3763,7 @@ ns_set_vertical_scroll_bar (struct window *window,
         }
 
       bar = [[EmacsScroller alloc] initFrame: r window: win];
-      wset_vertical_scroll_bar (window, make_save_value (bar, 0));
+      wset_vertical_scroll_bar (window, make_save_pointer (bar));
     }
   else
     {
@@ -3862,52 +3856,6 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
   /* XXX irrelevant under NS */
 }
 
-static void
-ns_fullscreen_hook_old  (f)
-FRAME_PTR f;
-{
-#ifdef NS_IMPL_COCOA
-  EmacsWindow *new_window = (EmacsWindow *) [FRAME_NS_VIEW (f) window];
-
-  /* Lion full-screen implementation available? */
-  if ([new_window respondsToNativeFullScreen]
-      /* just disable this to get old fullscreen back! */
-      && (f->want_fullscreen == FULLSCREEN_BOTH  // not just maximized
-	  || ( [(EmacsWindow *) [FRAME_NS_VIEW (f) window] isFullScreen]
-	       &&  [(EmacsWindow *) [FRAME_NS_VIEW (f) window] shouldUseNativeFullScreen])))
-	  {
-	    if (f && FRAME_NS_WINDOW(f))
-	      if ((f->want_fullscreen & FULLSCREEN_BOTH) ^ [new_window isFullScreen])
-		{
-		  if ([new_window isVisible])
-		    [new_window toggleActualFullScreen: new_window];
-		}
-	  }
-  else
-    {
-      NSRect r;
-  int rows, cols;
-  new_window = [(EmacsWindow *) [FRAME_NS_VIEW (f) window]
-		 setFullscreen:(f->want_fullscreen & FULLSCREEN_BOTH ? YES : NO)];
-  FRAME_NS_WINDOW(f) = new_window;
-
-  r = [new_window contentRectForFrameRect:[new_window frame]];
-  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(f, r.size.width);
-  rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(f, r.size.height);
-
-  change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
-  FRAME_PIXEL_WIDTH (f) = (int)r.size.width;
-  FRAME_PIXEL_HEIGHT (f) = (int)r.size.height;
-
-  f->border_width = [new_window frame].size.width - r.size.width;
-  FRAME_NS_TITLEBAR_HEIGHT (f) =
-    [new_window frame].size.height - r.size.height;
-
-  [[new_window delegate] windowDidMove:nil];
-   }
-#endif
-    return;
-}
 
 
 /* ==========================================================================
@@ -5764,6 +5712,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 
           emacs_event->code = code;
           EV_TRAILER (theEvent);
+          processingCompose = NO;
           return;
         }
     }
@@ -5954,6 +5903,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   if (NS_KEYLOG)
     NSLog (@"doCommandBySelector: %@", NSStringFromSelector (aSelector));
 
+  processingCompose = NO;
   if (aSelector == @selector (deleteBackward:))
     {
       /* happens when user backspaces over an ongoing composition:
@@ -6377,18 +6327,6 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   else
     [NSApp setMainMenu: mainMenu];
 
-  /* frame was iconified or is not otherwise visible (to emacs)
-   yet, but is being made visible*/
-  if (0 && ! FRAME_VISIBLE_P (emacsframe))
-    {
-      emacsframe->async_iconified = 0;
-      emacsframe->async_visible   = 1;
-      windows_or_buffers_changed++;
-      SET_FRAME_GARBAGED (emacsframe);
-      ns_raise_frame (emacsframe);
-      // hide again:  (don't)
-      //[[FRAME_NS_VIEW (emacsframe) window] orderOut: NSApp];
-    }
   ns_frame_rehighlight (emacsframe);
   if (emacs_event)
     {
@@ -6689,8 +6627,9 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   NSTRACE (windowDidDeminiaturize);
   if (!emacsframe->output_data.ns)
     return;
-  emacsframe->async_iconified = 0;
-  emacsframe->async_visible   = 1;
+
+  SET_FRAME_ICONIFIED (emacsframe, 0);
+  SET_FRAME_VISIBLE (emacsframe, 1);
   windows_or_buffers_changed++;
 
   if (emacs_event)
@@ -6701,14 +6640,28 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 }
 
 
+- (void)windowDidExpose: sender
+{
+  NSTRACE (windowDidExpose);
+  if (!emacsframe->output_data.ns)
+    return;
+
+  SET_FRAME_VISIBLE (emacsframe, 1);
+  SET_FRAME_GARBAGED (emacsframe);
+
+  if (send_appdefined)
+    ns_send_appdefined (-1);
+}
+
+
 - (void)windowDidMiniaturize: sender
 {
   NSTRACE (windowDidMiniaturize);
   if (!emacsframe->output_data.ns)
     return;
 
-  emacsframe->async_iconified = 1;
-  emacsframe->async_visible = 0;
+  SET_FRAME_ICONIFIED (emacsframe, 1);
+  SET_FRAME_VISIBLE (emacsframe, 0);
 
   if (emacs_event)
     {
@@ -7466,30 +7419,6 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 
 @end
 
-@implementation EmacsFullWindow
-
--(BOOL)canBecomeKeyWindow {
-    return YES;
-}
-
--(id)initWithNormalWindow:(EmacsWindow *)window {
-    self = [super initWithContentRect:[window contentRectForFrameRect:[[window screen] frame]]
-                            styleMask:NSBorderlessWindowMask
-                              backing:NSBackingStoreBuffered
-                                defer:YES];
-    if (self) {
-        normalWindow = window;
-        [self setAcceptsMouseMovedEvents: YES];
-        [self useOptimizedDrawing: YES];
-    }
-    return self;
-}
-
--(EmacsWindow *)getNormalWindow {
-    return normalWindow;
-}
-
-@end /* EmacsFullWindow */
 
 
 /* ==========================================================================

@@ -1,6 +1,6 @@
 ;;; ert.el --- Emacs Lisp Regression Testing  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2007-2008, 2010-2012 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2008, 2010-2013 Free Software Foundation, Inc.
 
 ;; Author: Christian Ohler <ohler@gnu.org>
 ;; Keywords: lisp, tools
@@ -937,7 +937,7 @@ Returns the result and stores it in ERT-TEST's `most-recent-result' slot."
   (cl-block error
     (let ((begin-marker
            (with-current-buffer (get-buffer-create "*Messages*")
-             (set-marker (make-marker) (point-max)))))
+             (point-max-marker))))
       (unwind-protect
           (let ((info (make-ert--test-execution-info
                        :test ert-test

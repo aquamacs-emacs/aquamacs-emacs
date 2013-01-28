@@ -1,6 +1,6 @@
 ;;; mule.el --- basic commands for multilingual environment
 
-;; Copyright (C) 1997-2012 Free Software Foundation, Inc.
+;; Copyright (C) 1997-2013 Free Software Foundation, Inc.
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
 ;;   2005, 2006, 2007, 2008, 2009, 2010, 2011
 ;;   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -891,7 +891,7 @@ or one is an alias of the other."
 		 (and (vectorp eol-type-1) (vectorp eol-type-2)))))))
 
 (defun add-to-coding-system-list (coding-system)
-  "Add CODING-SYSTEM to `coding-system-list' while keeping it sorted."
+  "Add CODING-SYSTEM to variable `coding-system-list' while keeping it sorted."
   (if (or (null coding-system-list)
 	  (coding-system-lessp coding-system (car coding-system-list)))
       (setq coding-system-list (cons coding-system coding-system-list))

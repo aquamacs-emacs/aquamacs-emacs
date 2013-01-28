@@ -1,7 +1,7 @@
 /* Header file for the buffer manipulation primitives.
 
-Copyright (C) 1985-1986, 1993-1995, 1997-2012
-                 Free Software Foundation, Inc.
+Copyright (C) 1985-1986, 1993-1995, 1997-2013 Free Software Foundation,
+Inc.
 
 This file is part of GNU Emacs.
 
@@ -81,9 +81,6 @@ INLINE_HEADER_BEGIN
 
 /* Size of gap.  */
 #define GAP_SIZE (current_buffer->text->gap_size)
-
-/* Is the current buffer narrowed?  */
-#define NARROWED	((BEGV != BEG) || (ZV != Z))
 
 /* Modification count.  */
 #define MODIFF (current_buffer->text->modiff)
@@ -172,10 +169,6 @@ INLINE_HEADER_BEGIN
 
 /* Size of gap.  */
 #define BUF_GAP_SIZE(buf) ((buf)->text->gap_size)
-
-/* Is this buffer narrowed?  */
-#define BUF_NARROWED(buf) ((BUF_BEGV (buf) != BUF_BEG (buf)) \
-			   || (BUF_ZV (buf) != BUF_Z (buf)))
 
 /* Modification count.  */
 #define BUF_MODIFF(buf) ((buf)->text->modiff)
@@ -294,24 +287,24 @@ extern void enlarge_buffer_text (struct buffer *, ptrdiff_t);
 /* Access a Lisp position value in POS,
    and store the charpos in CHARPOS and the bytepos in BYTEPOS.  */
 
-#define DECODE_POSITION(charpos, bytepos, pos)			\
-do								\
-  {								\
-    Lisp_Object __pos = (pos);					\
-    if (NUMBERP (__pos))					\
-      {								\
-	charpos = __pos;					\
-	bytepos = buf_charpos_to_bytepos (current_buffer, __pos);  \
-      }								\
-    else if (MARKERP (__pos))					\
-      {								\
-	charpos = marker_position (__pos);			\
-	bytepos = marker_byte_position (__pos);			\
-      }								\
-    else							\
-      wrong_type_argument (Qinteger_or_marker_p, __pos);	\
-  }								\
-while (0)
+#define DECODE_POSITION(charpos, bytepos, pos)				\
+  do									\
+    {									\
+      Lisp_Object __pos = (pos);					\
+      if (NUMBERP (__pos))						\
+	{								\
+	  charpos = __pos;						\
+	  bytepos = buf_charpos_to_bytepos (current_buffer, __pos);	\
+	}								\
+      else if (MARKERP (__pos))						\
+	{								\
+	  charpos = marker_position (__pos);				\
+	  bytepos = marker_byte_position (__pos);			\
+	}								\
+      else								\
+	wrong_type_argument (Qinteger_or_marker_p, __pos);		\
+    }									\
+  while (0)
 
 /* Maximum number of bytes in a buffer.
    A buffer cannot contain more bytes than a 1-origin fixnum can represent,
@@ -319,6 +312,16 @@ while (0)
    The ptrdiff_t cast ensures that this is signed, not unsigned.  */
 #define BUF_BYTES_MAX \
   (ptrdiff_t) min (MOST_POSITIVE_FIXNUM - 1, min (SIZE_MAX, PTRDIFF_MAX))
+
+/* Maximum gap size after compact_buffer, in bytes.  Also
+   used in make_gap_larger to get some extra reserved space.  */
+
+#define GAP_BYTES_DFL 2000
+
+/* Minimum gap size after compact_buffer, in bytes.  Also
+   used in make_gap_smaller to avoid too small gap size.  */
+
+#define GAP_BYTES_MIN 20
 
 /* Return the address of byte position N in current buffer.  */
 
@@ -999,15 +1002,15 @@ bset_width_table (struct buffer *b, Lisp_Object val)
 #define BUFFER_CHECK_INDIRECTION(b)			\
   do {							\
     if (BUFFER_LIVE_P (b))				\
-    {							\
-      if (b->base_buffer)				\
-	{						\
-	  eassert (b->indirections == -1);		\
-	  eassert (b->base_buffer->indirections > 0);	\
-	}						\
-      else						\
-	eassert (b->indirections >= 0);			\
-    }							\
+      {							\
+	if (b->base_buffer)				\
+	  {						\
+	    eassert (b->indirections == -1);		\
+	    eassert (b->base_buffer->indirections > 0);	\
+	  }						\
+	else						\
+	  eassert (b->indirections >= 0);		\
+      }							\
   } while (0)
 
 /* Chain of all buffers, including killed ones.  */
@@ -1068,7 +1071,6 @@ extern void set_buffer_internal_1 (struct buffer *);
 extern void set_buffer_temp (struct buffer *);
 extern Lisp_Object buffer_local_value_1 (Lisp_Object, Lisp_Object);
 extern void record_buffer (Lisp_Object);
-extern _Noreturn void buffer_slot_type_mismatch (Lisp_Object, int);
 extern void fix_overlays_before (struct buffer *, ptrdiff_t, ptrdiff_t);
 extern void mmap_set_vars (bool);
 

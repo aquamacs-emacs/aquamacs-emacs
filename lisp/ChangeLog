@@ -1,3 +1,1020 @@
+2013-01-27  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el (auto-revert-handler): Notifications which result
+	from a saved file shall not be taken into account.  (Bug#13557)
+
+2013-01-26  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* emacs-lisp/lisp-mode.el (lisp-mode-variables): Add optional
+	parameter BAR-NOT-SYMBOL to control syntax of | for font-lock.
+	(lisp-mode): Pass t for it.  (Bug#13556)
+
+2013-01-25  Alan Mackenzie  <acm@muc.de>
+
+	AWK Mode: Fix indentation bug at top level.  Bug #12274.
+
+	* progmodes/cc-engine.el (c-guess-basic-syntax): Move CASE 5P to
+	just before CASE 5D.
+
+2013-01-25  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* net/socks.el (socks-nslookup-host): Use string-to-number.
+
+2013-01-25  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el (auto-revert-remote-files)
+	(auto-revert-notify-exclude-dir-regexp): New defcustoms.
+	(auto-revert-notify-enabled, auto-revert-use-notify)
+	(auto-revert-notify-watch-descriptor-hash-list)
+	(auto-revert-notify-modified-p, auto-revert-notify-event-p)
+	(auto-revert-notify-event-descriptor)
+	(auto-revert-notify-event-action)
+	(auto-revert-notify-event-file-name): Doc fix.
+	(global-auto-revert-mode): Reorder checks.
+	(auto-revert-notify-rm-watch): Respect changed values of
+	`auto-revert-notify-watch-descriptor-hash-list'.
+	(auto-revert-notify-add-watch): Check for
+	`auto-revert-notify-exclude-dir-regexp'.  Adapt filters for
+	`inotify-add-watch'.  Watch `default-directory' instead of
+	`buffer-file-name'.  `auto-revert-notify-watch-descriptor-hash-list'
+	has a changed meaning now.  (Bug#13540)
+	(auto-revert-notify-handler): Change implementation wrt events
+	returning from a directory.
+	(auto-revert-handler): Reorder implementation for checks of remote
+	files.
+	(auto-revert-buffers): Fix parentheses error.
+
+2013-01-25  Fabián Ezequiel Gallina  <fgallina@cuca>
+
+	* progmodes/python.el: Enhancements to header documentation about
+	skeletons.  (Bug#5716)
+
+	* imenu.el (imenu-default-create-index-function): Remove useless
+	infinite loop check.  (Bug#13438)
+
+2013-01-25  Alan Mackenzie  <acm@muc.de>
+
+	Fix a bug in the state cache mechanism.  Refactor this a bit.
+
+	* progmodes/cc-engine.el (c-parse-state-get-strategy): Remove the
+	`cache-pos' element from the return value.
+	(c-append-lower-brace-pair-to-state-cache): "Narrow" to end of
+	buffer to enable proper searching from beyond HERE.  Amend the
+	test for detecting the sought brace pair.  Amend the value written
+	to the "brace desert cache" when the brace isn't found.
+	(c-remove-stale-state-cache): Rename `good-pos' to `start-point',
+	and several other variables analogously.
+	(c-remove-stale-state-cache-backwards): Change `cache-pos' from a
+	parameter to a locally calculated variable.
+	(c-parse-state-1): Change the calling conventions to the two
+	defuns involving `cache-pos'.
+
+2013-01-25  Chong Yidong  <cyd@gnu.org>
+
+	* xml.el (xml-entity-or-char-ref-re): Fix regexp.
+
+2013-01-24  Aaron Ecay <aaronecay@gmail.com>  (tiny change)
+
+	* paren.el (show-paren-function): Make sure to set 'priority and
+	'face only if the overlay does exist.
+
+2013-01-24  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-tramp-file-p): Check, whether NAME is unibyte.
+
+	* net/tramp-sh.el (tramp-sh-handle-set-file-acl): Do not suppress
+	basic attributes.
+	(tramp-sh-handle-set-file-acl): Improve error checking.
+
+2013-01-24  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* doc-view.el (doc-view-display): Force mode line update until all
+	document is converted.  Suggested by Stefan Monnier (Bug#13164).
+
+2013-01-23  Bastien Guerry  <bzg@gnu.org>
+
+	* paren.el (show-paren-function): Make sure an overlay exists
+	before trying to delete it.  Also use `pos' as a position only
+	when it is an integer.
+
+2013-01-23  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* play/gametree.el (gametree-break-line-here): Use point-marker.
+
+2013-01-22  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-cmds.el (tramp-bug, tramp-append-tramp-buffers): Mark
+	descriptive parts with `display' property.
+
+2013-01-21  Agustín Martín Domingo  <agustin.martin@hispalinux.es>
+
+	* textmodes/ispell.el (ispell-hunspell-dictionary-equivs-alist):
+	New variable to map standard dict names to hunspell ones.
+	(ispell-set-spellchecker-params): Make sure specific dict names
+	are used for standard dicts with hunspell.
+
+2013-01-21  Tassilo Horn  <tsdh@gnu.org>
+
+	* textmodes/reftex-cite.el (reftex-format-citation): Add format
+	chars for note (%N) and url (%U).
+	* textmodes/reftex-vars.el (reftex-cite-format): Document them.
+
+2013-01-21  Juri Linkov  <juri@jurta.org>
+
+	* frame.el: Bind `f10' in `esc-map' to `toggle-frame-maximized'
+	in addition to existing separate binding `meta f10' in `global-map'.
+	(Bug#13484)
+
+2013-01-21  Michael Albinus  <michael.albinus@gmx.de>
+
+	Improve XEmacs compatibility.
+
+	* net/tramp.el (tramp-replace-environment-variables): Make it a defun.
+
+	* net/tramp-adb.el (top): Require `time-date'.
+	(tramp-adb-ls-output-time-less-p): Use `tramp-time-less-p'.
+	(tramp-adb-handle-copy-file, tramp-adb-handle-rename-file): Use
+	`tramp-file-name-handler'.
+	(tramp-adb-maybe-open-connection): Use
+	`tramp-compat-set-process-query-on-exit-flag'.
+
+	* net/tramp-sh.el (tramp-sh-handle-file-acl): Use
+	`tramp-compat-funcall'.
+
+	* net/tramp-smb.el (tramp-smb-handle-file-acl): Use `looking-at' and
+	`tramp-compat-funcall'.
+
+2013-01-21  Jürgen Hötzel  <juergen@archlinux.org>
+
+	* net/tramp-adb.el (tramp-adb-handle-start-file-process): Complete
+	reimplementation using "adb shell command ..." instead of running
+	remote shell interactively.
+
+2013-01-20  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/lisp-mode.el (emacs-lisp-mode-map):
+	Add native profiler menu entries.
+
+	* profiler.el (profiler-running-p): New function.
+	(profiler-cpu-profile): Use profiler-running-p.
+	(profiler-report-mode-map): Add some more menu entries.
+
+2013-01-19  Glenn Morris  <rgm@gnu.org>
+
+	* mail/unrmail.el (unrmail): Do not mangle the mbox From line;
+	fixes 2012-12-07 change.  (Bug#13499)
+
+2013-01-19  Leo Liu  <sdl.web@gmail.com>
+
+	* dired.el (dired-get-marked-files): Prune erroneous values due to
+	last change.  (Bug#13152)
+
+2013-01-19  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/etags.el (tags-table-check-computed-list):
+	Preserve point in tags buffer.  (Bug#13412)
+
+	* emacs-lisp/lisp-mode.el (lisp-indent-function): Doc fix.
+
+2013-01-19  Christian Wittern  <cwittern@gmail.com>  (tiny change)
+	    Chong Yidong  <cyd@gnu.org>
+
+	* image-mode.el (image-next-file, image-previous-file): New
+	commands (Bug#8453).
+	(image-mode-map): Bind them to n and p.
+	(image-mode--images-in-directory): New helper function.
+
+2013-01-19  Chong Yidong  <cyd@gnu.org>
+
+	* image-mode.el (image-mode-fit-frame): Add a frame argument.
+	Suggested by Drew Adams (Bug#7730).  Handle window decorations;
+	save and restore the old window configuration.
+
+2013-01-18  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/js.el: Tweak autoload cookie for alias.
+
+2013-01-17  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el (auto-revert-notify-watch-descriptor): Make it
+	buffer local, again.  This was lost with the fix on 2013-01-12.
+
+2013-01-17  Jürgen Hötzel  <juergen@archlinux.org>
+
+	* eshell/esh-util.el (eshell-path-env): Make it buffer local, in
+	order to support several eshell buffers in parallel.
+
+2013-01-17  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el (auto-revert-use-notify): In the :set function, do
+	not modify `kill-buffer-hook'.
+	(auto-revert-notify-rm-watch): Remove
+	`auto-revert-notify-rm-watch' from `kill-buffer-hook'.
+	(auto-revert-notify-add-watch): Do not call
+	`auto-revert-notify-rm-watch', but add it to a buffer local
+	`kill-buffer-hook'.
+
+2013-01-16  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/trace.el (trace--read-args): Use a closure and an honest
+	call to `eval' rather than a backquoted lambda.
+
+2013-01-15  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/nadvice.el (advice--tweak): Make it possible for `tweak'
+	to return an explicit nil.
+	(advice--remove-function): Change accordingly.
+
+	* emacs-lisp/advice.el (ad-preactivate-advice): Adjust the cleanup to
+	the use of nadvice.el.
+
+	* progmodes/which-func.el (which-function): Silence imenu errors
+	(bug#13433).
+
+2013-01-15  Michael R. Mauger  <mmaug@yahoo.com>
+
+	* progmodes/sql.el: (sql-imenu-generic-expression):
+	(sql-mode-font-lock-object-name): Match schema qualified names.
+	(sql-connect): Use string keys.
+	(sql-product-interactive): Wait for interpreter prompt.
+	(sql-comint-oracle): Set process coding based on NLS_LANG.
+
+2013-01-15  Michael R. Mauger  <mmaug@yahoo.com>
+
+	* progmodes/sql.el (sql-output-to-send): Remove, unused.
+	(sql-interactive-remove-continuation-prompt):
+	(sql-send-magic-terminator, sql-interactive-mode): Remove references.
+
+2013-01-14  Leo Liu  <sdl.web@gmail.com>
+
+	* calendar/calendar.el (calendar-redraw): Sync window-point and point.
+	(Bug#13420)
+
+2013-01-14  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/compile.el (compilation-error-regexp-alist-alist):
+	Fix interpretation of gnu line.col1-col2 format.  (Bug#13335)
+
+2013-01-13  Fabián Ezequiel Gallina  <fgallina@cuca>
+
+	* progmodes/python.el (python-nav-end-of-statement):
+	Fix cornercase when handling multiline strings.
+
+2013-01-13  Richard Stallman  <rms@gnu.org>
+
+	* mail/sendmail.el (mail-position-on-field): Add doc string.
+
+	* mail/rmailmm.el (rmail-insert-mime-forwarded-message):
+	Get current message boundaries and pass them to
+	message-forward-make-body-mime.  Minor style changes.
+
+2013-01-13  Eli Zaretskii  <eliz@gnu.org>
+
+	* cus-start.el (all): Avoid warnings about
+	scroll-bar-adjust-thumb-portion on platforms where it is not defined.
+
+2013-01-11  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* cus-start.el (all): Add scroll-bar-adjust-thumb-portion.
+
+2013-01-13  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* jit-lock.el (jit-lock-debug-mode): New minor mode.
+	(jit-lock--debug-fontifying): New var.
+	(jit-lock--debug-fontify): New function.
+	* subr.el (condition-case-unless-debug): Don't prevent catching the
+	error, just let the debbugger run.
+	* emacs-lisp/timer.el (timer-event-handler): Don't prevent debugging
+	timer code and don't drop errors silently.
+
+2013-01-12  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el (auto-revert-notify-watch-descriptor): Give it
+	`permanent-local' property.
+	(auto-revert-notify-handler): Use `file-equal-p'.
+
+2013-01-12  Eli Zaretskii  <eliz@gnu.org>
+
+	* autorevert.el (auto-revert-notify-handler): Fix filtering of
+	file notification by ACTION. For filtering by file name, compare
+	only the non-directory part of the file name.
+
+2013-01-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* autorevert.el: Use cl-lib instead of cl.
+
+	* vc/vc-bzr.el (vc-bzr--sanitize-header): New function (bug#13307).
+	(vc-bzr-checkin): Use it.
+	* vc/log-edit.el (log-edit-extract-headers): Don't presume FUNCTION
+	will preserve match-data.
+
+2013-01-11  Felix H. Dahlke  <fhd@ubercode.de>
+
+	* progmodes/js.el: Fix multiline declarations's indentation (bug#8576).
+	(js--declaration-keyword-re): New var.
+	(js--multi-line-declaration-indentation): New function.
+	(js--proper-indentation): Use it.
+
+2013-01-11  Aaron S. Hawley  <Aaron.Hawley@vtinfo.com>
+
+	* calc/calc.el (calc-highlight-selections-with-faces)
+	 (calc-dispatch):
+	* comint.el (comint-history-isearch-message):
+	* emacs-lisp/edebug.el (edebug-read, edebug-eval-defun):
+	* ffap.el (ffap-string-at-point-region, ffap-next)
+	(ffap-string-at-point, ffap-string-around)
+	(ffap-copy-string-as-kill, ffap-highlight-overlay)
+	(ffap-literally):
+	* font-lock.el (font-lock-keywords-alist)
+	(font-lock-removed-keywords-alist):
+	* help-mode.el (help-xref-symbol-regexp):
+	* info.el (Info-find-emacs-command-nodes):
+	* international/mule.el (add-to-coding-system-list):
+	* isearch.el (isearch-message-function, isearch-fail-pos):
+	* misearch.el (multi-isearch-next-buffer-function):
+	* newcomment.el (comment-box):
+	* printing.el (pr-txt-printer-alist, pr-ps-printer-alist)
+	(pr-setting-database):
+	* progmodes/cc-fonts.el (c-font-lock-keywords-3)
+	(c++-font-lock-keywords-3, objc-font-lock-keywords-3)
+	(java-font-lock-keywords-3, idl-font-lock-keywords-3)
+	(pike-font-lock-keywords-3):
+	* progmodes/compile.el (compile):
+	* progmodes/etags.el (tags-table-files)
+	(tags-table-files-function, tags-included-tables-function):
+	* progmodes/gdb-mi.el (gdb, gdb-setup-windows)
+	(gdb-restore-windows):
+	* ps-print.el (ps-even-or-odd-pages, ps-spool-buffer-with-faces)
+	(ps-n-up-filling-database):
+	* server.el (server-buffer, server-log):
+	* simple.el (newline, delete-backward-char, delete-forward-char)
+	(minibuffer-history-isearch-message, kill-line, track-eol)
+	(temporary-goal-column):
+	* textmodes/flyspell.el (flyspell-mark-duplications-flag)
+	(flyspell-default-deplacement-commands):
+	* textmodes/ispell.el (ispell-accept-output):
+	* textmodes/sgml-mode.el (html-tag-help):
+	* vc/compare-w.el (compare-ignore-whitespace)
+	(compare-ignore-case, compare-windows-dehighlight):
+	* vc/diff.el (diff):
+	* whitespace.el (whitespace-point)
+	(whitespace-font-lock-refontify, whitespace-bob-marker)
+	(whitespace-eob-marker): Fix ambiguous doc string cross-reference(s).
+
+2013-01-11  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el (top): Require 'cl in order to pacify byte compiler.
+	(auto-revert-notify-rm-watch): Ignore errors.
+	(auto-revert-notify-add-watch): Ignore errors.  Use '(modify) for
+	inotify, and '(size last-write-time) for w32notify.
+	Set buffer-local `auto-revert-use-notify' to nil when adding a file
+	watch fails - this is a fallback to the file modification check.
+	(auto-revert-notify-event-p, auto-revert-notify-event-descriptor)
+	(auto-revert-notify-event-action)
+	(auto-revert-notify-event-file-name): New defuns.
+	(auto-revert-notify-handler): Use them.  Implement first
+	plausibility checks.
+	(auto-revert-handler): Handle also `auto-revert-tail-mode'.
+
+2013-01-11  Julien Danjou  <julien@danjou.info>
+
+	* color.el (color-rgb-to-hsv): Fix conversion computing in case min and
+	max are almost equal. Also return the correct value for V which is
+	already between 0 and 1.
+
+2013-01-11  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* emacs-lisp/ert.el (ert-run-test): Use point-max-marker.
+
+2013-01-11  Eli Zaretskii  <eliz@gnu.org>
+
+	* autorevert.el (auto-revert-notify-rm-watch)
+	(auto-revert-notify-add-watch): Fix typos in w32notify function
+	names.
+
+2013-01-10  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el (auto-revert-notify-enabled): Move up.
+	(auto-revert-use-notify): New defcustom.
+	(auto-revert-mode, global-auto-revert-mode)
+	(auto-revert-notify-add-watch, auto-revert-handler)
+	(auto-revert-buffers): Use `auto-revert-use-notify' instead of
+	`auto-revert-notify-enabled'.
+
+2013-01-10  Elias Pipping  <pipping@exherbo.org>
+
+	* files.el (auto-mode-alist): Use doc-view for djvu files (bug#13164).
+	* doc-view.el (doc-view-document->bitmap):
+	Use doc-view-single-page-converter-function instead of
+	single-page-converter arg; adjust callers.
+
+2013-01-10  Feng Li  <fengli@gmail.com>  (tiny change)
+
+	* progmodes/which-func.el (which-function): Understand Semantic's use
+	of overlays in imenu--index-alist.
+
+2013-01-10  Wolfgang Jenkner  <wjenkner@inode.at>
+
+	* man.el: Handle different "man -k" behaviors (bug#13160).  Use utf-8.
+	(Man-man-k-use-anchor): New var.
+	(Man-parse-man-k): New function.
+	(Man-completion-table): Use it.
+	(man): Flush the completion cache between uses.
+
+2013-01-10  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el: Add file watch support.
+	(auto-revert-notify-enabled): New defconst.
+	(auto-revert-notify-watch-descriptor-hash-list)
+	(auto-revert-notify-watch-descriptor)
+	(auto-revert-notify-modified-p): New defvars.
+	(auto-revert-notify-rm-watch, auto-revert-notify-add-watch)
+	(auto-revert-notify-handler): New defuns.
+	(auto-revert-mode, global-auto-revert-mode): Remove file watches
+	when mode is disabled.
+	(auto-revert-handler): Check for `auto-revert-notify-modified-p'.
+	(auto-revert-buffers): Add file watches for active buffers.
+
+2013-01-10  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* cus-start.el (toplevel): Only allow float values for
+	scroll-up-aggressively and scroll-down-aggressively.
+	Allow any number for line-spacing.
+
+2013-01-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* doc-view.el (doc-view-pdfdraw-program): Allow "pdfdraw" name.
+	(doc-view-pdf->png-converter-function): Use mupdf if available.
+	(doc-view-djvu->png-converter-function)
+	(doc-view-ps->png-converter-function): Remove.
+	(doc-view--image-file-pattern): Replace doc-view--image-file-extension.
+	(doc-view-goto-page, doc-view-convert-current-doc, doc-view-display)
+	(doc-view-already-converted-p): Adjust accordingly.
+	(doc-view-mode-p): Simplify.
+	(doc-view-enlarge): Use setq-local.
+	(doc-view-pdf->png-converter-ghostscript)
+	(doc-view-djvu->png-converter-ddjvu)
+	(doc-view-pdf->png-converter-mupdf): Rework to call
+	doc-view-start-process directly.
+	(doc-view-pdf/ps->png): Simplify accordingly.
+	(doc-view-pdf->png-1, doc-view-djvu->png-1): Remove.
+	(doc-view-document->bitmap): Rename from doc-view-document->png.
+	(doc-view-convert-current-doc): Merge pdf and djvu cases.
+	(doc-view-set-slice-from-bounding-box): Fix completion table.
+	(doc-view-mode): Use add-hook for after-revert-hook.
+
+2013-01-10  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/authors.el (authors-ignored-files)
+	(authors-valid-file-names, authors-renamed-files-alist):
+	Add some more entries.
+
+2013-01-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* image-mode.el (image-mode-winprops): Don't throw away the fallback
+	`t' pseudo-window entry.
+
+2013-01-10  Alan Mackenzie  <acm@muc.de>
+
+	Fix bugs in the c-parse-state mechanism.  Reuse some markers
+	instead of continually generating new ones.
+
+	* progmodes/cc-engine.el (c-state-old-cpp-beg-marker)
+	(c-state-old-cpp-end-marker): New variables.
+	(c-append-lower-brace-pair-to-state-cache): Start a backward
+	search for "}" definitively outside CPP constructs.
+	(c-remove-stale-state-cache): Inform the caller of a need to
+	search back for a brace pair in certain circumstances.
+	(c-state-maybe-marker): New macro.
+	(c-parse-state): Reuse markers when appropriate.
+
+2013-01-10  Glenn Morris  <rgm@gnu.org>
+
+	* simple.el (execute-extended-command): Doc fix.
+	Bind prefix-arg around read-extended-command, for prompt.  (Bug#13395)
+
+2013-01-10  Chong Yidong  <cyd@gnu.org>
+
+	* faces.el (read-face-name): Doc fix.
+
+2013-01-10  Roland Winkler  <winkler@gnu.org>
+
+	* emacs-lisp/crm.el: Allow any regexp for separators.
+	(crm-default-separator): All spaces around the default comma separator.
+	(crm--completion-command): New macro.
+	(crm-completion-help, crm-complete, crm-complete-word): Use it.
+	(crm-complete-and-exit): Handle non-single-char separators.
+
+2013-01-09  Elias Pipping  <pipping@lavabit.com>
+
+	* doc-view.el: Add support for DjVu (bug#13164).
+	(doc-view-djvu->png-converter-function): New config var.
+	(doc-view-single-page-converter-function, doc-view--image-type)
+	(doc-view--image-file-extension): New vars.
+	(doc-view-mode): Initialize them.
+	(doc-view-goto-page): Use them.
+	(doc-view-mode-p): Add support for ddjvu.
+	(doc-view-djvu->png-converter-ddjvu, doc-view-djvu->png-1)
+	(doc-view-set-up-single-converter): New funs.
+	(doc-view-pdf/ps->png): Extend for djvu.
+	(doc-view-document->png): Rename from doc-view-pdf->png.
+	(doc-view-convert-current-doc): Handle djvu.
+	(doc-view-insert-image, doc-view-display)
+	(doc-view-already-converted-p): Don't hardcode png.
+	(doc-view-set-doc-type): Recognize djvu docs.
+
+2013-01-09  Elias Pipping  <pipping@lavabit.com>
+
+	* doc-view.el: Add support for mupdf converter (bug#13164).
+	(doc-view-pdfdraw-program, doc-view-pdf->png-converter-function)
+	(doc-view-ps->png-converter-function): New config vars.
+	(doc-view-pdf->png-converter-ghostscript)
+	(doc-view-ps->png-converter-ghostscript)
+	(doc-view-pdf->png-converter-mupdf): New functions.
+	(doc-view-pdf/ps->png, doc-view-pdf->png-1): Use them.
+
+2013-01-09  Jürgen Hötzel  <juergen@archlinux.org>
+
+	* net/tramp.el (tramp-eshell-directory-change): Check remote-path
+	first in session cache: When `tramp-own-remote-path' is in
+	`tramp-remote-path', the remote path is only set in the session
+	cache.
+
+2013-01-09  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/trace.el (trace-function-foreground)
+	(trace-function-background): Doc fix.
+
+2013-01-09  Juri Linkov  <juri@jurta.org>
+
+	* international/mule-cmds.el (read-char-by-name): Move let-binding
+	of completion-ignore-case around completing-read to fix regression
+	exhibited by the test case `C-x 8 RET *acc TAB' and caused by
+	`string-match-p' using the nil value of `case-fold-search' and
+	`completion-ignore-case' in `completion-pcm--all-completions'.
+	(Bug#12615).
+
+2013-01-09  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/compile.el (compilation-parse-errors):
+	Fix typo.  (Bug#13369)
+
+2013-01-09  Vitalie Spinu  <spinuvit@gmail.com>  (tiny change)
+
+	* comint.el (comint-send-input): Check size of buffer before
+	waiting for process output, in case already accepted.  (Bug#13290)
+
+2013-01-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Spelling fixes.
+	* net/tramp-adb.el (tramp-adb-get-toolbox):
+	Fix misspelling of 'unknown'.
+
+2013-01-08  Juri Linkov  <juri@jurta.org>
+
+	* textmodes/flyspell.el (flyspell-incorrect, flyspell-duplicate):
+	* progmodes/flymake.el (flymake-errline, flymake-warnline):
+	Use underline style wave on terminals that support it.  (Bug#13000)
+
+2013-01-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/pcase.el (pcase--split-equal): Also take advantage if
+	the predicate returns nil.
+
+	* simple.el: Use lexical-binding.
+	(primitive-undo): Use pcase.
+	(minibuffer-history-isearch-push-state): Use a closure.
+
+2013-01-08  Aaron S. Hawley  <aaron.s.hawley@gmail.com>
+
+	* simple.el (primitive-undo): Move from undo.c.
+
+2013-01-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* vc/pcvs.el (cvs-cleanup-collection): Extend meaning of `rm-handled'.
+	(cvs-mode-remove-handled): Use it (bug#13380).
+
+	* emacs-lisp/nadvice.el (advice--tweak): New function.
+	(advice--remove-function, advice--subst-main): Use it.
+
+	* emacs-lisp/advice.el: Update commentary.
+
+2013-01-08  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-adb.el (tramp-adb-file-name-handler-alist):
+	Remove spurious entry.
+
+2013-01-08  Glenn Morris  <rgm@gnu.org>
+
+	* net/tramp.el (tramp-default-host-alist): Add :version.
+
+2013-01-08  Juri Linkov  <juri@jurta.org>
+
+	* info.el (Info-read-node-name-2): Don't duplicate suffixes for
+	single completion.  (Bug#12456)
+	(info--manual-names): Expand node completions into an explicit list
+	before appending it to another list.  Filter out internal buffers
+	with the leading space in the buffer name.  (Bug#10771)
+
+2013-01-08  Juri Linkov  <juri@jurta.org>
+
+	* info.el (Info-read-node-name-1): Allow empty node name in (FILENAME)
+	that defaults to the Top node.
+	(Info-goto-node, Info-read-node-name): Doc fix to mention that
+	the short format (FILENAME) goes to the Top node.
+	(Info-build-node-completions): Rename arg `file' to `filename'.
+	(Bug#13365)
+
+2013-01-07  Bastien Guerry  <bzg@gnu.org>
+
+	* menu-bar.el (menu-bar-search-documentation-menu):
+	Use `apropos-user-option' and fix the help message.
+
+2013-01-07  Bastien Guerry  <bzg@gnu.org>
+
+	* apropos.el (apropos-do-all): Update docstring.
+	(apropos-user-option-button): New face.
+	(apropos-user-option): Rename from `apropos-variable' and update
+	docstring.
+	(apropos-variable): Rewrite, now show all variables by default.
+	(apropos-print): Mention "User option" instead of "Variable" when
+	printing doc for user options.  (Bug#13276)
+
+2013-01-07  Jürgen Hötzel  <juergen@archlinux.org>
+
+	* net/tramp-adb.el (tramp-do-parse-file-attributes-with-ls):
+	Handle filename correctly, when parsing "source -> target" symlink
+	output.
+	(tramp-adb-handle-set-file-times): New defun.
+
+2013-01-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/advice.el (ad-activate-advised-definition): Refresh the
+	advice list when the interactive-spec of ad-Advice-* changes.
+
+2013-01-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* wid-edit.el (widget-default-get): Work for inlined elements.
+	(Bug#12670)
+
+2013-01-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-default-host-alist): New defcustom.
+	(tramp-find-host): Use it.
+	(tramp-eshell-directory-change): Move from tramp-sh.el.  Add to
+	`eshell-directory-change-hook'.
+
+	* net/tramp-adb.el (top): Add adb specific entry in
+	`tramp-default-host-alist'.
+	(tramp-adb-file-name-host): Remove function.
+	(tramp-adb-execute-adb-command, tramp-adb-maybe-open-connection):
+	Use `tramp-file-name-host' instead of `tramp-adb-file-name-host'.
+
+	* net/tramp-sh.el: Move eshell integration code to tramp.el.
+
+2013-01-06  Jürgen Hötzel  <juergen@archlinux.org>
+
+	* net/tramp-adb.el (tramp-methods): Add `tramp-tmpdir' entry.
+
+2013-01-06  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-adb.el (tramp-adb-ls-toolbox-regexp): The file size can
+	consist of more than one digit.
+	(tramp-adb-file-name-handler-alist):
+	Use `tramp-handle-file-exists-p' consistently.
+	(tramp-adb-file-name-handler): Don't tweak `tramp-default-host'.
+	(tramp-adb-handle-file-exists-p): Remove function.
+	(tramp-adb-file-name-host): New defun.
+	(tramp-adb-execute-adb-command, tramp-adb-maybe-open-connection):
+	Use it.
+	(tramp-adb-maybe-open-connection): Set "remote-path" property.
+
+2013-01-06  Chong Yidong  <cyd@gnu.org>
+
+	* vc/vc.el (vc-next-action): Detect buffer modifications
+	conflicting with locking VCS operation (Bug#11490).
+
+	* vc/vc-hooks.el (vc-after-save): DTRT for locking VCSes.
+
+2013-01-05  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-adb.el (tramp-do-parse-file-attributes-with-ls):
+	(tramp-adb-handle-directory-files-and-attributes): Fix typos.
+
+2013-01-05  Jürgen Hötzel  <juergen@archlinux.org>
+
+	* net/tramp-adb.el (tramp-adb-handle-file-attributes): More robust
+	parsing of ls output using regular expression (handle filenames
+	with spaces).  Use virtual device number.
+	(tramp-do-parse-file-attributes-with-ls): New defun (Code
+	cleanup).
+
+2013-01-04  Daiki Ueno  <ueno@gnu.org>
+
+	* epg.el: Silence byte-compiler warnings.
+	(epg--start): Use delete-char instead of delete-backward-char.
+	(epg-wait-for-completion): Pass FRAME arg to redraw-frame.
+
+2013-01-04  Daiki Ueno  <ueno@gnu.org>
+
+	* epg.el (epg--start): Don't call "tty" program on W32 platforms.
+	Suggested by Eli Zaretskii  <eliz@gnu.org>.
+
+2013-01-04  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-set-file-uid-gid): UID and GID must be
+	non-negative integers.  Otherwise, the default values are used.
+	(tramp-convert-file-attributes): Convert uid and gid to integers.
+
+2013-01-04  Glenn Morris  <rgm@gnu.org>
+
+	* term.el (term-handle-colors-array): Ensure face attributes
+	are fully specified, not nil.  (Bug#13337)
+
+	* term.el (term-default-fg-color, term-default-bg-color):
+	Fix custom type.
+
+	* progmodes/etags.el (tags-compression-info-list): Doc fix.
+	(tag-find-file-of-tag-noselect): Check auto-compression-mode
+	rather than 'jka-compr being loaded.  (Bug#13338)
+
+2013-01-04  Wesley Dawson  <whd@lavabit.com>  (tiny change)
+
+	* icomplete.el (icomplete-completions):
+	Honor icomplete-prospects-height once more following
+	2012-11-29 changes.  (Bug#13224)
+
+2013-01-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (internal--called-interactively-p--get-frame): Find aliases
+	of called-interactively-p as well (bug#13237).
+
+	* view.el (view--enable, view--disable): Rename from view-mode-enable
+	and view-mode-disable and assume it's called from view-mode.
+	(view-mode-enable, view-mode-disable): Redefine as obsolete
+	compatibility layer above view-mode.
+	(view-mode-enter): Call `view-mode'.
+
+	* files.el (after-find-file): Call `view-mode'.
+
+	* doc-view.el (doc-view-scale-internally): New var.
+	(doc-view-enlarge, doc-view-insert-image): Obey it.
+
+2013-01-03  Daiki Ueno  <ueno@gnu.org>
+
+	* epg.el (epg--start): Ignore errors when /dev/fd/0 does not
+	exist.  (Bug#13344)
+
+2013-01-03  Glenn Morris  <rgm@gnu.org>
+
+	* mail/rmail.el (rmail-set-header-1): Ignore case.
+	Handle multi-line headers.  (Bug#13330)
+
+	* progmodes/make-mode.el (makefile-fill-paragraph): Add doc.
+	Handle paragraph starting at beginning of buffer.
+
+	* subr.el (eval-after-load): Don't purecopy the form, so that it
+	can be nconc'd later on; reverts 2009-11-11 change.  (Bug#13331)
+
+	* emacs-lisp/byte-run.el (defun): Place cl declarations
+	after any interactive spec.  (Bug#13265)
+
+2013-01-02  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* emacs-lisp/byte-run.el (defmacro): Use same argument parsing as
+	defun.  Don't check for DECL if DOCSTRING isn't a string.
+	(defun): Likewise.
+
+2013-01-02  Glenn Morris  <rgm@gnu.org>
+
+	* eshell/em-cmpl.el (eshell-pcomplete):
+	More thoroughly imitate pcomplete.  (Bug#13293)
+
+	* files.el (parse-colon-path): Doc fix.  (Bug#12351)
+	Return nil for empty path elements.  (Bug#13296)
+
+2013-01-02  Fabián Ezequiel Gallina  <fgallina@cuca>
+
+	* progmodes/python.el (python-nav-end-of-statement): Rewrite in
+	order to improve efficiency (Based on Daniel Colascione's
+	<dancol@dancol.org> patch).  (Bug#13182)
+
+2013-01-02  Glenn Morris  <rgm@gnu.org>
+
+	* vc/log-edit.el (log-edit-header-contents-regexp): Add doc string.
+
+2013-01-02  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* emacs-lisp/byte-run.el (defmacro): Don't lose final nil if
+	neither DOCSTRING nor DECL was given.  (Bug#13316)
+
+2013-01-02  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-sh-handle-set-file-acl): Add argument to
+	`error' call.
+	(tramp-do-copy-or-rename-file): Ignore errors when calling
+	`set-file-extended-attributes'.
+
+	* net/tramp-smb.el (tramp-smb-file-name-handler-alist):
+	Add handler for `file-acl'.
+	(tramp-smb-handle-file-acl): New defun.
+
+2013-01-02  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* calc/README: Mention ISO 8601 week-numbering dates.
+
+2013-01-01  Martin Rudalics  <rudalics@gmx.at>
+
+	* view.el (view-mode-enable): New argument run-view-mode-hook.
+	Run view-mode-hook only when it's non-nil (Bug#13315).
+	(view-mode-enter): Call view-mode-enable with run-view-mode-hook
+	argument t.
+
+2012-12-31  Jürgen Hötzel  <juergen@archlinux.org>
+
+	* net/tramp-adb.el (tramp-adb-maybe-open-connection): Handle errors
+	(No device connected, invalid device name). (Bug #13299)
+
+2012-12-31  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.el (window-resizable--p): Rename to window-resizable-p.
+	(window-resize-no-error): New function.
+
+	* mail/rmail.el (rmail-maybe-display-summary): Restore behavior
+	broken in fix from 2012-12-28.
+
+2012-12-31  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (special-form-p): Don't signal errors on undef aliases.
+
+2012-12-31  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* calc/calc-forms.el (math-parse-date): Try using
+	`math-parse-iso-date' when it looks like it might be needed.
+	Allow times of 24:00.
+	(math-parse-date-validate, math-parse-iso-date-validate):  Allow times
+	of 24:00.
+
+2012-12-30  Glenn Morris  <rgm@gnu.org>
+
+	* net/mairix.el (rmail, rmail-summary-displayed, rmail-summary):
+	Remove unnecessary/buggy autoloads (missing interactive).  (Bug#13294)
+	(rmail-summary-displayed, rmail-summary): Declare.
+	(mairix-rmail-display): Just require rmail.
+
+2012-12-30  Chong Yidong  <cyd@gnu.org>
+
+	* emacs-lisp/package.el (package-untar-buffer): Improve integrity
+	check for the tarball contents.
+
+2012-12-30  Matt Fidler  <matt.fidler@alcon.com>  (tiny change)
+
+	* emacs-lisp/package.el (package-untar-buffer): Handle problematic
+	tarfile content listings (Bug#13136).
+
+2012-12-30  Mark Lillibridge  <mark.lillibridge@hp.com>
+
+	* mail/rmailmm.el (rmail-insert-mime-forwarded-message):
+	Insert the undecoded text of the message being forwarded.  (Bug#9521)
+
+2012-12-30  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-set-file-uid-gid): Convert UID and GID to
+	integers, if they are real numbers.  (Bug#13282)
+
+	* net/tramp-sh.el (tramp-sh-handle-set-file-selinux-context):
+	Return `t' on success.
+
+	* net/tramp-smb.el (tramp-smb-file-name-handler-alist):
+	Add handler for `set-file-selinux-context'.
+
+2012-12-29  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-sh-handle-file-acl): Suppress basic attributes.
+	(tramp-sh-handle-set-file-acl): Return `t' on success.
+
+2012-12-29  Eli Zaretskii  <eliz@gnu.org>
+
+	* files.el (backup-buffer-copy, basic-save-buffer-2):
+	If set-file-extended-attributes fails, fall back on set-file-modes
+	instead of signaling an error.  (Bug#13298)
+	(basic-save-buffer): Likewise.
+
+2012-12-29  Fabián Ezequiel Gallina  <fgallina@cuca>
+
+	* progmodes/python.el: Support other commands triggering
+	python-indent-line so indentation cycling continues to work.
+	(python-indent-trigger-commands): New defcustom.
+	(python-indent-line): Use it.
+
+2012-12-29  Fabián Ezequiel Gallina  <fgallina@cuca>
+
+	* progmodes/python.el (python-shell-send-region): Add blank lines
+	for non sent code so backtraces remain correct.
+
+2012-12-29  Fabián Ezequiel Gallina  <fgallina@cuca>
+
+	* progmodes/python.el: Remove cl dependency.
+	(python-syntax-count-quotes): Replace incf call.
+	(python-fill-string): Replace setf call.
+
+2012-12-29  Damien Cassou  <damien.cassou@gmail.com>
+
+	* info.el (info-other-window): New arg, for consistency with info.
+
+2012-12-28  Martin Rudalics  <rudalics@gmx.at>
+
+	* mail/rmail.el (rmail-maybe-display-summary):
+	Rewrite (Bug#13066).
+
+2012-12-28  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* epg.el (epg--start): Modify process-environment locally.
+
+2012-12-28  Daiki Ueno  <ueno@gnu.org>
+
+	* epg.el: Support pinentry-curses.
+	Suggested by Werner Koch in
+	<http://lists.gnu.org/archive/html/emacs-devel/2007-02/msg00755.html>.
+	(epg-agent-file, epg-agent-mtime): New variable.
+	(epg--start): Record the modified time of gpg-agent socket file,
+	to restore Emacs frame after pinentry-curses termination.
+	(epg-wait-for-completion): Restore Emacs frame here.
+
+2012-12-27  Juri Linkov  <juri@jurta.org>
+
+	* info.el (Info-file-completions): New variable.
+	(Info-read-node-name-1): Complete node names in the Info file
+	when a file name is given.  Call `Info-build-node-completions'
+	with a file name.
+	(Info-build-node-completions): Add new arg `file'.  When it is
+	non-nil, visit it in a temporary buffer and cache its completions in
+	`Info-current-file-completions'.  Move most of the function body to
+	`Info-build-node-completions-1'.
+	(Info-build-node-completions-1): New function with the body from
+	`Info-build-node-completions'.  (Bug#12456)
+
+2012-12-27  Juri Linkov  <juri@jurta.org>
+
+	* frame.el (frame-maximization-style): Remove user option.
+	(cycle-frame-maximized): Remove function.
+	(toggle-frame-maximized): Rewrite and bind to M-<f10>.
+	(toggle-frame-fullscreen): New command bound to <f11> instead of
+	`toggle-frame-maximized'.
+	http://lists.gnu.org/archive/html/emacs-devel/2012-12/msg00703.html
+
+2012-12-27  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-handle-file-accessible-directory-p): New defun.
+
+	* net/tramp-adb.el (tramp-adb-file-name-handler-alist):
+	* net/tramp-gvfs.el (tramp-gvfs-file-name-handler-alist):
+	* net/tramp-sh.el (tramp-sh-file-name-handler-alist): Add handler
+	for `file-accessible-directory-p'.  (Bug#13275)
+
+2012-12-27  Sam Steingold  <sds@gnu.org>
+
+	* progmodes/cperl-mode.el (cperl-calculate-indent): Do not stagger
+	continuations, see <http://stackoverflow.com/questions/3582436>.
+
+2012-12-27  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-indent-beg-re): Only allow "class",
+	"module" and "def" to have indentation before them.
+	Regression from revno:109911 (see the new test).
+
+	* progmodes/ruby-mode.el: Bump the version to 1.2 (Bug#13200).
+
+2012-12-27  Alan Mackenzie  <acm@muc.de>
+
+	Speed up fontification where there's large brace blocks.
+	* progmodes/cc-fonts.el (c-font-lock-enclosing-decls): Add a limit
+	to a call of c-beginning-of-decl-1.
+
+2012-12-27  Vitalie Spinu  <spinuvit@gmail.com>  (tiny change)
+
+	* comint.el (comint-adjust-window-point): New function.
+	(comint-postoutput-scroll-to-bottom):
+	Call comint-adjust-window-point (Bug#13248).
+
+2012-12-26  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (auto-mode-alist): `purecopy' the
+	Rakefile regexp.
+	(auto-mode-alist): Associate .gemspec files with ruby-mode
+	(https://bugs.ruby-lang.org/issues/5453).
+
+2012-12-26  Jürgen Hötzel  <juergen@archlinux.org>
+
+	* net/tramp-adb.el (tramp-adb-get-ls-command): New defun.
+	Suppress coloring, if possible (required for BusyBox based systems like
+	CyanogenMod).
+	(tramp-adb-handle-file-attributes)
+	(tramp-adb-handle-insert-directory)
+	(tramp-adb-handle-file-name-all-completions): Use it.
+	(tramp-adb-get-toolbox): New defun.  Check for remote shell
+	implementation (BusyBox or Toolbox).
+
 2012-12-24  Constantin Kulikov <zxnotdead@gmail.com>  (tiny change)
 
 	* startup.el (initial-buffer-choice): Allow function as value
@@ -19,8 +1036,8 @@
 	* notifications.el (notifications-notify): Protect body with
 	`with-demoted-errors'.
 
-	* net/tramp-adb.el (tramp-adb-maybe-open-connection): Check
-	properties of remote device.  Restart connection, if there is a
+	* net/tramp-adb.el (tramp-adb-maybe-open-connection):
+	Check properties of remote device.  Restart connection, if there is a
 	change.
 
 2012-12-21  Chong Yidong  <cyd@gnu.org>
@@ -87,6 +1104,8 @@
 	the first line.
 	(lm-homepage): New function.
 	(lm-with-file): Don't be confused if narrowing is in effect.
+
+2012-12-19  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* vc/diff-mode.el (diff-post-command-hook): Don't ignore changes at the
 	very beginning of a hunk (e.g. killing the first line).
@@ -5433,7 +6452,7 @@
 
 2012-08-08  Fabián Ezequiel Gallina  <fgallina@cuca>
 
-	* progmodes/python.el Fixed defsubst warning.
+	* progmodes/python.el: Fix defsubst warning.
 	(python-syntax-context) Rename from python-info-ppss-context.
 	(python-syntax-context-type): Rename from
 	python-info-ppss-context-type.
@@ -11162,7 +12181,7 @@
 
 2012-03-16  Alan Mackenzie  <acm@muc.de>
 
-	Further optimise the handling of large macros.
+	Further optimize the handling of large macros.
 
 	* progmodes/cc-engine.el (c-crosses-statement-barrier-p): Use a
 	limit to a call of `c-literal-limits'.
@@ -12814,7 +13833,7 @@
 
 2012-01-08  Alan Mackenzie  <acm@muc.de>
 
-	Optimise font locking in long enum definitions.
+	Optimize font locking in long enum definitions.
 
 	* progmodes/cc-fonts.el (c-font-lock-declarations): Add an extra
 	arm to a cond form to handle enums.
@@ -22717,7 +23736,7 @@ See ChangeLog.15 for earlier changes.
 ;; coding: utf-8
 ;; End:
 
-  Copyright (C) 2011-2012  Free Software Foundation, Inc.
+  Copyright (C) 2011-2013 Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

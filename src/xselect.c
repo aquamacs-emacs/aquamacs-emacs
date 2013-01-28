@@ -1,5 +1,5 @@
 /* X Selection processing for Emacs.
-   Copyright (C) 1993-1997, 2000-2012 Free Software Foundation, Inc.
+   Copyright (C) 1993-1997, 2000-2013 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -1120,7 +1120,7 @@ unexpect_property_change (struct prop_location *location)
 static Lisp_Object
 wait_for_property_change_unwind (Lisp_Object loc)
 {
-  struct prop_location *location = XSAVE_VALUE (loc)->pointer;
+  struct prop_location *location = XSAVE_POINTER (loc, 0);
 
   unexpect_property_change (location);
   if (location == property_change_reply_object)
@@ -1141,7 +1141,7 @@ wait_for_property_change (struct prop_location *location)
 
   /* Make sure to do unexpect_property_change if we quit or err.  */
   record_unwind_protect (wait_for_property_change_unwind,
-			 make_save_value (location, 0));
+			 make_save_pointer (location));
 
   XSETCAR (property_change_reply, Qnil);
   property_change_reply_object = location;

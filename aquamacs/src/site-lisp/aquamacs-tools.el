@@ -23,7 +23,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2007, 2009 David Reitter
+;; Copyright (C) 2005, 2007, 2009, 2013 David Reitter
 
 
 ; remove an element from an associative list (alist) 
@@ -499,6 +499,8 @@ Specifies the major mode to be used for `new-empty-buffer'
 and `new-empty-buffer-other-frame'."
   :group 'Aquamacs)
 
+
+
 (defvar aquamacs--new-buffer-last-timestamp nil)
 (defvar aquamacs--new-buffer-timestamp-counter 0)
 (defun new-empty-buffer  (&optional other-frame mode)
@@ -525,7 +527,7 @@ the value of `aquamacs-default-major-mode'."
     (let* ((ts (format-time-string "%d%H%MZ" nil t))
 	   (ts2 ts))
       (if (equal ts2 aquamacs--new-buffer-last-timestamp)
-	  (setq ts2 (format "%s.%s" ts (incf aquamacs--new-buffer-timestamp-counter)))
+	  (setq ts2 (format "%s.%s" ts (cl-incf aquamacs--new-buffer-timestamp-counter)))
 	(setq aquamacs--new-buffer-timestamp-counter 0))
       (setq aquamacs--new-buffer-last-timestamp ts)
       (setq aquamacs-untitled-buffer-creation-time ts2))

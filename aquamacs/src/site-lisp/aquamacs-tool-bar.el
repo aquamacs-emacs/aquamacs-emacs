@@ -76,7 +76,7 @@
 
       (if (eq (nth n list) prop)
 	  (setf (nthcdr n list) (nthcdr (+ 2 n) list)))
-      (incf n)))
+      (cl-incf n)))
   list)
 
 ;; (setq ll '(2313 88 36 :v nil))
@@ -366,7 +366,7 @@ If there is a user-supplied visibility term, set it."
 			    (and show-message
 				 (message "Toolbar item \"%s\" not available here." key)
 				 nil))
-			`((,(intern (format "space-%s" (incf space-idx)))
+			`((,(intern (format "space-%s" (cl-incf space-idx)))
 			   menu-item "--" nil :enable nil))))
 		    config))
 		  (apply 
@@ -432,14 +432,14 @@ If there is a user-supplied visibility term, set it."
 ;; 		   (setq new-tool-bar (cons (cdr (assq (nth uc-index user-config) store))
 ;; 					    new-tool-bar))
 ;; 		   (assq-delete-all (nth uc-index user-config) 'store)
-;; 		   (incf uc-index))
+;; 		   (cl-incf uc-index))
 ;; 		 (print store)
 ;; 		 (if (and (not (eq (car item) (nth uc-index user-config)))
 ;; 			  cvis)
 ;; 		     ;; put in storage
 ;; 		     (setq store (cons item store))
 ;; 		   ;; else
-;; 		   (incf uc-index)
+;; 		   (cl-incf uc-index)
 ;; 		   (setq new-tool-bar (cons item new-tool-bar))))
 ;; 	     (setq new-tool-bar (cons item  new-tool-bar))))
 ;; 	 tb)

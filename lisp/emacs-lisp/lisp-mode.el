@@ -1,6 +1,6 @@
 ;;; lisp-mode.el --- Lisp mode, and its idiosyncratic commands
 
-;; Copyright (C) 1985-1986, 1999-2012 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1986, 1999-2013 Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: lisp, languages
@@ -187,12 +187,14 @@ It has `lisp-mode-abbrev-table' as its parent."
               font-lock-string-face))))
     font-lock-comment-face))
 
-(defun lisp-mode-variables (&optional lisp-syntax keywords-case-insensitive)
+(defun lisp-mode-variables (&optional lisp-syntax keywords-case-insensitive
+				      bar-not-symbol)
   "Common initialization routine for lisp modes.
 The LISP-SYNTAX argument is used by code in inf-lisp.el and is
 \(uselessly) passed from pp.el, chistory.el, gnus-kill.el and
 score-mode.el.  KEYWORDS-CASE-INSENSITIVE non-nil means that for
-font-lock keywords will not be case sensitive."
+font-lock keywords will not be case sensitive.  BAR-NOT-SYMBOL
+non-nil means that | is not a symbol character."
   (when lisp-syntax
     (set-syntax-table lisp-mode-syntax-table))
   (setq-local paragraph-ignore-fill-prefix t)
@@ -226,7 +228,9 @@ font-lock keywords will not be case sensitive."
   (setq font-lock-defaults
 	`((lisp-font-lock-keywords
 	   lisp-font-lock-keywords-1 lisp-font-lock-keywords-2)
-	  nil ,keywords-case-insensitive (("+-*/.<>=!?$%_&~^:@" . "w")) nil
+	  nil ,keywords-case-insensitive
+	  ((,(concat "+-*/.<>=!?$%_&~^:@" (if bar-not-symbol "" "|")) . "w"))
+	  nil
 	  (font-lock-mark-block-function . mark-defun)
 	  (font-lock-syntactic-face-function
 	   . lisp-font-lock-syntactic-face-function))))
@@ -335,6 +339,22 @@ font-lock keywords will not be case sensitive."
     (bindings--define-key prof-map [prof-func]
       '(menu-item "Instrument Function..." elp-instrument-function
 		  :help "Instrument a function for profiling"))
+    ;; Maybe this should be in a separate submenu from the ELP stuff?
+    (bindings--define-key prof-map [sep-natprof] menu-bar-separator)
+    (bindings--define-key prof-map [prof-natprof-stop]
+      '(menu-item "Stop Native Profiler" profiler-stop
+		  :help "Stop recording profiling information"
+		  :enable (and (featurep 'profiler)
+			       (profiler-running-p))))
+    (bindings--define-key prof-map [prof-natprof-report]
+      '(menu-item "Show Profiler Report" profiler-report
+		  :help "Show the current profiler report"
+		  :enable (and (featurep 'profiler)
+			       (profiler-running-p))))
+    (bindings--define-key prof-map [prof-natprof-start]
+      '(menu-item "Start Native Profiler..." profiler-start
+		  :help "Start recording profiling information"))
+
     (bindings--define-key menu-map [lint] (cons "Linting" lint-map))
     (bindings--define-key lint-map [lint-di]
       '(menu-item "Lint Directory..." elint-directory
@@ -533,7 +553,7 @@ or to switch back to an existing one.
 
 Entry to this mode calls the value of `lisp-mode-hook'
 if that value is non-nil."
-  (lisp-mode-variables nil t)
+  (lisp-mode-variables nil t t)
   (setq-local find-tag-default-function 'lisp-find-tag-default)
   (setq-local comment-start-skip
 	      "\\(\\(^\\|[^\\\\\n]\\)\\(\\\\\\\\\\)*\\)\\(;+\\|#|\\) *")
@@ -1156,7 +1176,7 @@ is the buffer position of the start of the containing expression."
 The function `calculate-lisp-indent' calls this to determine
 if the arguments of a Lisp function call should be indented specially.
 
-INDENT-POINT is the position where the user typed TAB, or equivalent.
+INDENT-POINT is the position at which the line being indented begins.
 Point is located at the point to indent under (for default indentation);
 STATE is the `parse-partial-sexp' state for that position.
 
