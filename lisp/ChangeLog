@@ -1,3 +1,84 @@
+2013-01-30  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* calc-units.el (math-default-units-table): Remove initial value.
+	(calc-convert-units): Treat expressions where all the units cancel as
+	if they didn't have units.
+
+2013-01-30  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-process-connection-type): Fix docstring.
+	(tramp-completion-reread-directory-timeout): Fix type.
+	(tramp-connection-min-time-diff): New defcustom.
+
+	* net/tramp-sh.el (tramp-maybe-open-connection): Use it.
+
+2013-01-30  Glenn Morris  <rgm@gnu.org>
+
+	* imenu.el (imenu-default-create-index-function):
+	Put back a version of the infinite loop test removed 2013-01-23.
+
+2013-01-30  Fabián Ezequiel Gallina  <fgallina@cuca>
+
+	* progmodes/python.el (python-shell-parse-command): Find
+	python-shell-interpreter with modified environment.
+
+2013-01-30  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/cl.el (cl-set-getf): Add compatibility alias.
+
+2013-01-29  Alan Mackenzie  <acm@muc.de>
+
+	Amend to fontify /regexp/s in actions correctly.
+	* cc-awk.el (c-awk-harmless-char-re, c-awk-harmless-string*-re):
+	(c-awk-harmless-string*-here-re): braces, parens and semicolons
+	are no longer included.
+	(c-awk-harmless-line-char-re, c-awk-harmless-line-string*-re):
+	What used to be these variables without "-line" in the name.
+	(c-awk-neutral-re): { is no longer neutral.  Escaped newlines now
+	are.
+	(c-awk-non-arith-op-bra-re): Now also matches {.
+	(c-awk-pre-exp-alphanum-kwd-re): New regexp to match "print",
+	"return", and "case".
+	(c-awk-kwd-regexp-sign-re): New, to match "print", etc., followed
+	by /.
+	(c-awk-syntax-tablify-/): Check special cases "print /re/", etc.
+	(c-awk-set-syntax-table-properties): Extend FSM to handle
+	{,},(,),;.
+
+2013-01-29  Michael Albinus  <michael.albinus@gmx.de>
+
+	* autorevert.el (auto-revert-use-notify): Use
+	`custom-initialize-default' for initialization.  (Bug#13583)
+
+	* net/ange-ftp.el (ange-ftp-skip-msgs): Add another message.
+
+	* net/tramp-sh.el (tramp-sh-handle-start-file-process): Catch
+	`suppress'.  Otherwise, `tramp-run-real-handler' might be called
+	in `tramp-file-name-handler'.
+	(tramp-gw-tunnel-method, tramp-gw-socks-method): Declare for
+	compatibility.
+	(tramp-compute-multi-hops): Check, whether
+	`tramp-gw-tunnel-method' and `tramp-gw-socks-method' are non-nil.
+
+2013-01-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* hi-lock.el (hi-lock-unface-buffer): Don't assume `face' is a symbol
+	(bug#13297).
+
+2013-01-27  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-font-lock-keywords): Remove some
+	checks made superfluous by the \_< operator.
+	* progmodes/ruby-mode.el (ruby-move-to-block): Work with (maybe
+	temporarily) broken indentation.
+	* progmodes/ruby-mode.el (ruby-font-lock-keywords):
+	Highlight nested constants, too.  \_< broke that.
+
+2013-01-27  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* progmodes/ruby-mode.el (ruby-font-lock-keywords): Use "\\_<"
+	instead of "\\b".
+
 2013-01-27  Michael Albinus  <michael.albinus@gmx.de>
 
 	* autorevert.el (auto-revert-handler): Notifications which result
@@ -103,8 +184,8 @@
 
 2013-01-22  Michael Albinus  <michael.albinus@gmx.de>
 
-	* net/tramp-cmds.el (tramp-bug, tramp-append-tramp-buffers): Mark
-	descriptive parts with `display' property.
+	* net/tramp-cmds.el (tramp-bug, tramp-append-tramp-buffers):
+	Mark descriptive parts with `display' property.
 
 2013-01-21  Agustín Martín Domingo  <agustin.martin@hispalinux.es>
 
@@ -133,13 +214,13 @@
 
 	* net/tramp-adb.el (top): Require `time-date'.
 	(tramp-adb-ls-output-time-less-p): Use `tramp-time-less-p'.
-	(tramp-adb-handle-copy-file, tramp-adb-handle-rename-file): Use
-	`tramp-file-name-handler'.
-	(tramp-adb-maybe-open-connection): Use
-	`tramp-compat-set-process-query-on-exit-flag'.
+	(tramp-adb-handle-copy-file, tramp-adb-handle-rename-file):
+	Use `tramp-file-name-handler'.
+	(tramp-adb-maybe-open-connection):
+	Use `tramp-compat-set-process-query-on-exit-flag'.
 
-	* net/tramp-sh.el (tramp-sh-handle-file-acl): Use
-	`tramp-compat-funcall'.
+	* net/tramp-sh.el (tramp-sh-handle-file-acl):
+	Use `tramp-compat-funcall'.
 
 	* net/tramp-smb.el (tramp-smb-handle-file-acl): Use `looking-at' and
 	`tramp-compat-funcall'.
@@ -179,8 +260,8 @@
 2013-01-19  Christian Wittern  <cwittern@gmail.com>  (tiny change)
 	    Chong Yidong  <cyd@gnu.org>
 
-	* image-mode.el (image-next-file, image-previous-file): New
-	commands (Bug#8453).
+	* image-mode.el (image-next-file, image-previous-file):
+	New commands (Bug#8453).
 	(image-mode-map): Bind them to n and p.
 	(image-mode--images-in-directory): New helper function.
 
@@ -208,8 +289,8 @@
 
 	* autorevert.el (auto-revert-use-notify): In the :set function, do
 	not modify `kill-buffer-hook'.
-	(auto-revert-notify-rm-watch): Remove
-	`auto-revert-notify-rm-watch' from `kill-buffer-hook'.
+	(auto-revert-notify-rm-watch):
+	Remove `auto-revert-notify-rm-watch' from `kill-buffer-hook'.
 	(auto-revert-notify-add-watch): Do not call
 	`auto-revert-notify-rm-watch', but add it to a buffer local
 	`kill-buffer-hook'.
@@ -20949,7 +21030,7 @@
 	* nxml/rng-xsd.el (rng-xsd-check-pattern): Use case-sensitive
 	matching (Bug#8516).
 
-2011-01-22  Jari Aalto  <jari.aalto@cante.net>
+2011-05-22  Jari Aalto  <jari.aalto@cante.net>
 
 	* vc/vc-dir.el (vc-default-dir-printer): Give edited tag a
 	different face (Bug#8178).

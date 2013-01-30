@@ -2824,6 +2824,8 @@ the result will be a local, non-Tramp, filename."
 
       (with-current-buffer (tramp-get-connection-buffer v)
 	(unwind-protect
+	    ;; We catch this event.  Otherwise, `start-process' could
+	    ;; be called on the local host.
 	    (save-excursion
 	      (save-restriction
 		;; Activate narrowing in order to save BUFFER
@@ -2837,31 +2839,32 @@ the result will be a local, non-Tramp, filename."
 		  (narrow-to-region (point-max) (point-max))
 		  ;; We call `tramp-maybe-open-connection', in order
 		  ;; to cleanup the prompt afterwards.
-		  (tramp-maybe-open-connection v)
-		  (widen)
-		  (delete-region mark (point))
-		  (narrow-to-region (point-max) (point-max))
-		  ;; Now do it.
-		  (if command
-		      ;; Send the command.
-		      (tramp-send-command v command nil t) ; nooutput
-		    ;; Check, whether a pty is associated.
-		    (unless (tramp-compat-process-get
-			     (tramp-get-connection-process v) 'remote-tty)
-		      (tramp-error
-		       v 'file-error
-		       "pty association is not supported for `%s'" name))))
-		(let ((p (tramp-get-connection-process v)))
-		  ;; Set query flag for this process.  We ignore errors,
-		  ;; because the process could have finished already.
-		  (ignore-errors
-		    (tramp-compat-set-process-query-on-exit-flag p t))
-		  ;; Return process.
-		  p)))
+		  (catch 'suppress
+		    (tramp-maybe-open-connection v)
+		    (widen)
+		    (delete-region mark (point))
+		    (narrow-to-region (point-max) (point-max))
+		    ;; Now do it.
+		    (if command
+			;; Send the command.
+			(tramp-send-command v command nil t) ; nooutput
+		      ;; Check, whether a pty is associated.
+		      (unless (tramp-compat-process-get
+			       (tramp-get-connection-process v) 'remote-tty)
+			(tramp-error
+			 v 'file-error
+			 "pty association is not supported for `%s'" name))))
+		  (let ((p (tramp-get-connection-process v)))
+		    ;; Set query flag for this process.  We ignore errors,
+		    ;; because the process could have finished already.
+		    (ignore-errors
+		      (tramp-compat-set-process-query-on-exit-flag p t))
+		    ;; Return process.
+		    p))))
 
 	  ;; Save exit.
 	  (if (string-match tramp-temp-buffer-name (buffer-name))
-	      (progn
+	      (ignore-errors
 		(set-process-buffer (tramp-get-connection-process v) nil)
 		(kill-buffer (current-buffer)))
 	    (set-buffer-modified-p bmp))
@@ -4206,6 +4209,9 @@ Goes through the list `tramp-inline-compress-commands'."
 	(tramp-message
 	 vec 2 "Couldn't find an inline transfer compress command")))))
 
+(defvar tramp-gw-tunnel-method)
+(defvar tramp-gw-socks-method)
+
 (defun tramp-compute-multi-hops (vec)
   "Expands VEC according to `tramp-default-proxies-alist'.
 Gateway hops are already opened."
@@ -4266,10 +4272,11 @@ Gateway hops are already opened."
 	    (setq choices tramp-default-proxies-alist)))))
 
     ;; Handle gateways.
-    (when (string-match
-	   (format
-	    "^\\(%s\\|%s\\)$" tramp-gw-tunnel-method tramp-gw-socks-method)
-	   (tramp-file-name-method (car target-alist)))
+    (when (and tramp-gw-tunnel-method tramp-gw-socks-method
+	       (string-match
+		(format
+		 "^\\(%s\\|%s\\)$" tramp-gw-tunnel-method tramp-gw-socks-method)
+		(tramp-file-name-method (car target-alist))))
       (let ((gw (pop target-alist))
 	    (hop (pop target-alist)))
 	;; Is the method prepared for gateways?
@@ -4350,7 +4357,7 @@ connection if a previous connection has died for some reason."
 			      (car tramp-current-connection)))
 		  (> (tramp-time-diff
 		      (current-time) (cdr tramp-current-connection))
-		     5))
+		     (or tramp-connection-min-time-diff 0)))
 	(throw 'suppress 'suppress))
 
       ;; If too much time has passed since last command was sent, look

@@ -905,7 +905,7 @@ current block, a sibling block, or an outer block.  Do that (abs N) times."
          ((and backward (looking-at "^=end\\>"))
           (re-search-backward "^=begin\\>"))
          (t
-          (setq pos (current-indentation))
+          (setq pos (ruby-calculate-indent))
           (cond
            ;; Deeper indentation, we found a block.
            ;; FIXME: We can't recognize empty blocks this way.
@@ -1552,7 +1552,7 @@ See `font-lock-syntax-table'.")
      1 font-lock-function-name-face)
    ;; keywords
    (cons (concat
-          "\\(^\\|[^_:.@$]\\|\\.\\.\\)\\b\\(defined\\?\\|"
+          "\\(^\\|[^.@$]\\|\\.\\.\\)\\_<\\(defined\\?\\|"
           (regexp-opt
            '("alias_method"
              "alias"
@@ -1602,7 +1602,7 @@ See `font-lock-syntax-table'.")
    `(,ruby-here-doc-beg-re 0 (unless (ruby-singleton-class-p (match-beginning 0))
                                'font-lock-string-face))
    ;; variables
-   '("\\(^\\|[^_:.@$]\\|\\.\\.\\)\\b\\(nil\\|self\\|true\\|false\\)\\>"
+   '("\\(^\\|[^.@$]\\|\\.\\.\\)\\_<\\(nil\\|self\\|true\\|false\\)\\>"
      2 font-lock-variable-name-face)
    ;; symbols
    '("\\(^\\|[^:]\\)\\(:\\([-+~]@?\\|[/%&|^`]\\|\\*\\*?\\|<\\(<\\|=>?\\)?\\|>[>=]?\\|===?\\|=~\\|![~=]?\\|\\[\\]=?\\|@?\\(\\w\\|_\\)+\\([!?=]\\|\\b_*\\)\\|#{[^}\n\\\\]*\\(\\\\.[^}\n\\\\]*\\)*}\\)\\)"
@@ -1613,8 +1613,8 @@ See `font-lock-syntax-table'.")
    '("\\(\\$\\|@\\|@@\\)\\(\\w\\|_\\)+"
      0 font-lock-variable-name-face)
    ;; constants
-   '("\\(^\\|[^_]\\)\\b\\([A-Z]+\\(\\w\\|_\\)*\\)"
-     2 font-lock-type-face)
+   '("\\(?:\\_<\\|::\\)\\([A-Z]+\\(\\w\\|_\\)*\\)"
+     1 font-lock-type-face)
    '("\\(^\\s *\\|[\[\{\(,]\\s *\\|\\sw\\s +\\)\\(\\(\\sw\\|_\\)+\\):[^:]" 2 font-lock-constant-face)
    ;; expression expansion
    '(ruby-match-expression-expansion
