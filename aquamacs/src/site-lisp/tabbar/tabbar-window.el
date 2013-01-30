@@ -152,7 +152,7 @@ displayed buffer.  Result is an alist of alists."
 "Should tabbar work around a display bug?
 The bug leaves horizontal lines when the window is split.
 Comes with side-effects (e.g., tabbar blinking in edebug).")
-; (setq tabbar-display-bug-workaround nil)
+
 
 (defun tabbar-window-alist-cleanup ()
   "Remove from tabbar-window-alist any elements (windows OR
@@ -272,16 +272,19 @@ Return the current tabset, which corresponds to (selected-window)."
     ;; tabbar-window cache)
     (setq tabbar-window-cache (copy-tree tabbar-window-alist)))
   (tabbar-get-tabset (number-to-string (window-number (selected-window))))
-  )
+  ;; when triggered idle timers, Emacs does not recognize the change in the header line
+  (force-window-update (window-buffer)))
 
+(defvar tabbar-window-immediate-screen-fresh nil "See macro `fast-screen-refresh' in aquamacs-tabbar.")
 (defun tabbar-window-update-tabsets-when-idle ()
   "Wait for emacs to be idle before updating tabsets.  This prevents tabs from
 updating when a new window shows the current buffer, just before the window shows
 new buffer."
  ; (if (eq this-command 'split-window-vertically)
- ;     (tabbar-window-update-tabsets)
+  (if tabbar-window-immediate-screen-fresh ;; see macro `fast-screen-refresh' in aquamacs-tabbar
+      (tabbar-window-update-tabsets)
     (run-with-idle-timer 0 nil
-			 'tabbar-window-update-tabsets))
+			 'tabbar-window-update-tabsets)))
 
 (defadvice dnd-open-local-file (after dnd-update-tabs activate)
   (if tabbar-mode

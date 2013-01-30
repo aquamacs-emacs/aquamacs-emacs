@@ -57,6 +57,13 @@
 			      (setq tool-bar-border tool-bar-border-saved
 				    tool-bar-border-saved nil)))
 
+;; used by tabbar-window-update-tabsets-when-idle
+(defmacro fast-screen-refresh (&rest code)
+  `(let ((tabbar-window-immediate-screen-fresh 
+	  (or tabbar-window-immediate-screen-fresh (interactive-p))))
+     ,@code
+     ))
+
 ;; improve tabbar-selected-tab such that it defaults to (tabbar-current-tabset)
 ;; if no tabset is passed
 (defsubst tabbar-selected-tab (&optional tabset)
@@ -86,8 +93,9 @@ argument is the MODE for the new buffer.")
 tabbar-close-tab-function.  Passes a single argument: the tab construct
 to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
   (interactive)
-  (let ((thetab (or tab (tabbar-selected-tab))))
-    (funcall tabbar-close-tab-function thetab)))
+  (fast-screen-refresh
+    (let ((thetab (or tab (tabbar-selected-tab))))
+      (funcall tabbar-close-tab-function thetab))))
 
 
 ;; change faces for better-looking tabs (and more obvious selected tab!)
@@ -846,30 +854,34 @@ buffer; see also `char-width'."
   "Creates a new tab.
 Turns on `tabbar-mode'."
   (interactive)
-  (tabbar-mode 1)
-  (tabbar-new-tab major-mode))
+  (fast-screen-refresh
+    (tabbar-mode 1)
+    (tabbar-new-tab major-mode)))
   
 (defun new-tab-or-buffer (&optional mode)
   "Calls tabbar-new-tab-function if tabbar-mode is on; otherwise,
 creates a new buffer.  Mode for new buffer can optionally be specified."
     (interactive)
   (if (and (boundp tabbar-mode) tabbar-mode)
-      (funcall tabbar-new-tab-function mode)
+       (fast-screen-refresh
+	(funcall tabbar-new-tab-function mode))
     (new-frame-with-new-scratch one-buffer-one-frame mode)))
 
 (defun next-tab-or-buffer ()
   "Call (tabbar-forward) if tabbar-mode is on; otherwise, call (next-buffer)."
   (interactive)
-  (if (and (boundp tabbar-mode) tabbar-mode)
-      (tabbar-forward)
-    (next-buffer)))
+  (fast-screen-refresh
+    (if (and (boundp tabbar-mode) tabbar-mode)
+	(tabbar-forward)
+      (next-buffer))))
 
 (defun previous-tab-or-buffer ()
   "Call (tabbar-forward) if tabbar-mode is on; otherwise, call (next-buffer)."
   (interactive)
-  (if (and (boundp tabbar-mode) tabbar-mode)
-      (tabbar-backward)
-    (previous-buffer)))
+  (fast-screen-refresh
+    (if (and (boundp tabbar-mode) tabbar-mode)
+	(tabbar-backward)
+      (previous-buffer))))
 
 ;;; Tabbar-Mwheel mode: redefine mwheel actions
 ;
