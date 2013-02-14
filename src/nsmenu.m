@@ -1745,7 +1745,9 @@ pop_down_menu (Lisp_Object arg)
 	  [NSApp endSheet:[popupSheetAlert window]];
 	  [popupSheetAlert release];
 	} else
+	{
           [panel close];
+	}
 
       [unwind_data->pool release];
 
@@ -1971,6 +1973,10 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   [super dealloc];
 }
 
+- (void)close
+{
+   [[self window] close]; 
+}
 
 - (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
