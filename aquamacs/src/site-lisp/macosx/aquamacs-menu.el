@@ -1456,5 +1456,8 @@ that should be represented in the Aquamacs menus."
 (easy-menu-remove-item global-map 
 		       '("menu-bar" "file") 'make-frame-on-display)
 
+; Ensure that menu entries show the command modifier when available
+(aquamacs-set-defaults '((where-is-preferred-modifier alt)))
+
 (provide 'aquamacs-menu)
   
