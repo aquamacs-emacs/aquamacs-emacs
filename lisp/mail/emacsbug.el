@@ -195,11 +195,10 @@ and may appear in other public locations.\n\n"
 	    "and the precise symptoms of the bug.  If you can, give\n"
 	    "a recipe starting with an Aquamacs without customization\n"
 	    "for which see the Help / Diagnose and Report Bug menu:\n\n")
-    (add-text-properties (save-excursion
-                           (rfc822-goto-eoh)
-                           (line-beginning-position 2))
-                         (point)
-                         prompt-properties)
+    (let ((txt (delete-and-extract-region
+                (save-excursion (rfc822-goto-eoh) (line-beginning-position 2))
+                (point))))
+      (insert (propertize "\n" 'display txt)))
     (setq user-point (point))
     (insert "\n\n")
 
