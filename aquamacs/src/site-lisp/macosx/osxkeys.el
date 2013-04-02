@@ -31,7 +31,7 @@
 ;; Boston, MA 02111-1307, USA.
 
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2012, 2013 David Reitter
 
 
 ;; Unit test  / check requirements
@@ -570,7 +570,7 @@ and selects that window."
 	  (let* ((adjusted-major-mode major-mode) elt)
 	    (let ((tail mouse-buffer-menu-mode-groups))
 	      (while tail
-		(if (string-match (car (car tail)) mode-name)
+		(if (string-match (car (car tail)) (format-mode-line mode-name))
 		    (setq adjusted-major-mode (cdr (car tail))))
 		(setq tail (cdr tail))))
 	    (setq elt (assoc adjusted-major-mode split-by-major-mode))
@@ -578,7 +578,7 @@ and selects that window."
 		(setq elt (list adjusted-major-mode
 				(if (stringp adjusted-major-mode)
 				    adjusted-major-mode
-				  mode-name))
+				  (format-mode-line mode-name)))
 		      split-by-major-mode (cons elt split-by-major-mode)))
 	    (or (memq (car tail) (cdr (cdr elt)))
 		(setcdr (cdr elt) (cons (car tail) (cdr (cdr elt)))))))
@@ -673,7 +673,7 @@ Defaults to nil if the major mode doesn't define a menu."
 	 ;; Make a keymap in which our last command leads to a menu or
 	 ;; default to the edit menu.
 	 (newmap (if ancestor
-		     (make-sparse-keymap (concat mode-name " Mode"))
+		     (make-sparse-keymap (concat (format-mode-line mode-name) " Mode"))
 		   nil)))
     (if ancestor
 	;; Make our menu inherit from the desired keymap which we want
