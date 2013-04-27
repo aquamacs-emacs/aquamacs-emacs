@@ -380,7 +380,7 @@ Subject: %s\n\n"
 
 ;; Remembering to plain files
 
-(defcustom remember-data-file (convert-standard-filename "~/.notes")
+(defcustom remember-data-file (locate-user-emacs-file "notes" ".notes")
   "The file in which to store unprocessed data."
   :type 'file
   :group 'remember)
@@ -432,8 +432,7 @@ If you want to remember a region, supply a universal prefix to
 ;;;###autoload
 (defun remember-clipboard ()
   "Remember the contents of the current clipboard.
-Most useful for remembering things from Netscape or other X Windows
-application."
+Most useful for remembering things from other applications."
   (interactive)
   (remember (current-kill 0)))
 

@@ -84,7 +84,7 @@ static ptrdiff_t print_number_index;
 static void print_interval (INTERVAL interval, Lisp_Object printcharfun);
 
 /* GDB resets this to zero on W32 to disable OutputDebugString calls.  */
-int print_output_debug_flag EXTERNALLY_VISIBLE = 1;
+bool print_output_debug_flag EXTERNALLY_VISIBLE = 1;
 
 
 /* Low level output routines for characters and strings.  */
@@ -101,8 +101,9 @@ int print_output_debug_flag EXTERNALLY_VISIBLE = 1;
    ptrdiff_t old_point = -1, start_point = -1;				\
    ptrdiff_t old_point_byte = -1, start_point_byte = -1;		\
    ptrdiff_t specpdl_count = SPECPDL_INDEX ();				\
-   int free_print_buffer = 0;						\
-   int multibyte = !NILP (BVAR (current_buffer, enable_multibyte_characters));	\
+   bool free_print_buffer = 0;						\
+   bool multibyte							\
+     = !NILP (BVAR (current_buffer, enable_multibyte_characters));	\
    Lisp_Object original
 
 #define PRINTPREPARE							\
@@ -226,9 +227,9 @@ printchar (unsigned int ch, Lisp_Object fun)
       if (NILP (fun))
 	{
 	  ptrdiff_t incr = len - (print_buffer_size - print_buffer_pos_byte);
-	  if (0 < incr)
-	    print_buffer =
-	      xpalloc (print_buffer, &print_buffer_size, incr, -1, 1);
+	  if (incr > 0)
+	    print_buffer = xpalloc (print_buffer, &print_buffer_size,
+				    incr, -1, 1);
 	  memcpy (print_buffer + print_buffer_pos_byte, str, len);
 	  print_buffer_pos += 1;
 	  print_buffer_pos_byte += len;
@@ -240,7 +241,7 @@ printchar (unsigned int ch, Lisp_Object fun)
 	}
       else
 	{
-	  int multibyte_p
+	  bool multibyte_p
 	    = !NILP (BVAR (current_buffer, enable_multibyte_characters));
 
 	  setup_echo_area_for_printing (multibyte_p);
@@ -272,7 +273,7 @@ strout (const char *ptr, ptrdiff_t size, ptrdiff_t size_byte,
   if (NILP (printcharfun))
     {
       ptrdiff_t incr = size_byte - (print_buffer_size - print_buffer_pos_byte);
-      if (0 < incr)
+      if (incr > 0)
 	print_buffer = xpalloc (print_buffer, &print_buffer_size, incr, -1, 1);
       memcpy (print_buffer + print_buffer_pos_byte, ptr, size_byte);
       print_buffer_pos += size;
@@ -289,7 +290,7 @@ strout (const char *ptr, ptrdiff_t size, ptrdiff_t size_byte,
 	 here, that's the reason we don't call printchar to do the
 	 job.  */
       int i;
-      int multibyte_p
+      bool multibyte_p
 	= !NILP (BVAR (current_buffer, enable_multibyte_characters));
 
       setup_echo_area_for_printing (multibyte_p);
@@ -507,10 +508,10 @@ temp_output_buffer_setup (const char *bufname)
   specbind (Qstandard_output, buf);
 }
 
-static void print (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag);
-static void print_preprocess (Lisp_Object obj);
-static void print_preprocess_string (INTERVAL interval, Lisp_Object arg);
-static void print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag);
+static void print (Lisp_Object, Lisp_Object, bool);
+static void print_preprocess (Lisp_Object);
+static void print_preprocess_string (INTERVAL, Lisp_Object);
+static void print_object (Lisp_Object, Lisp_Object, bool);
 
 DEFUN ("terpri", Fterpri, Sterpri, 0, 1, 0,
        doc: /* Output a newline to stream PRINTCHARFUN.
@@ -726,9 +727,9 @@ to make it write to the debugging output.  */)
 /* This function is never called.  Its purpose is to prevent
    print_output_debug_flag from being optimized away.  */
 
-extern void debug_output_compilation_hack (int) EXTERNALLY_VISIBLE;
+extern void debug_output_compilation_hack (bool) EXTERNALLY_VISIBLE;
 void
-debug_output_compilation_hack (int x)
+debug_output_compilation_hack (bool x)
 {
   print_output_debug_flag = x;
 }
@@ -966,7 +967,7 @@ float_to_string (char *buf, double data)
       static char const NaN_string[] = "0.0e+NaN";
       int i;
       union { double d; char c[sizeof (double)]; } u_data, u_minus_zero;
-      int negative = 0;
+      bool negative = 0;
       u_data.d = data;
       u_minus_zero.d = - 0.0;
       for (i = 0; i < sizeof (double); i++)
@@ -1063,7 +1064,7 @@ float_to_string (char *buf, double data)
 
 
 static void
-print (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag)
+print (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 {
   new_backquote_output = 0;
 
@@ -1313,7 +1314,7 @@ print_prune_string_charset (Lisp_Object string)
 }
 
 static void
-print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag)
+print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 {
   char buf[max (sizeof "from..to..in " + 2 * INT_STRLEN_BOUND (EMACS_INT),
 		max (sizeof " . #" + INT_STRLEN_BOUND (printmax_t),
@@ -1395,8 +1396,8 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 	  ptrdiff_t size_byte;
 	  /* 1 means we must ensure that the next character we output
 	     cannot be taken as part of a hex character escape.  */
-	  int need_nonhex = 0;
-	  int multibyte = STRING_MULTIBYTE (obj);
+	  bool need_nonhex = 0;
+	  bool multibyte = STRING_MULTIBYTE (obj);
 
 	  GCPRO1 (obj);
 
@@ -1507,10 +1508,10 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 
     case Lisp_Symbol:
       {
-	register int confusing;
-	register unsigned char *p = SDATA (SYMBOL_NAME (obj));
-	register unsigned char *end = p + SBYTES (SYMBOL_NAME (obj));
-	register int c;
+	bool confusing;
+	unsigned char *p = SDATA (SYMBOL_NAME (obj));
+	unsigned char *end = p + SBYTES (SYMBOL_NAME (obj));
+	int c;
 	ptrdiff_t i, i_byte;
 	ptrdiff_t size_byte;
 	Lisp_Object name;
@@ -1766,12 +1767,12 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 	{
 	  int len;
 	  strout ("#<window ", -1, -1, printcharfun);
-	  len = sprintf (buf, "%d", XWINDOW (obj)->sequence_number);
+	  len = sprintf (buf, "%p", XWINDOW (obj));
 	  strout (buf, len, len, printcharfun);
-	  if (!NILP (XWINDOW (obj)->buffer))
+	  if (BUFFERP (XWINDOW (obj)->contents))
 	    {
 	      strout (" on ", -1, -1, printcharfun);
-	      print_string (BVAR (XBUFFER (XWINDOW (obj)->buffer), name),
+	      print_string (BVAR (XBUFFER (XWINDOW (obj)->contents), name),
 			    printcharfun);
 	    }
 	  PRINTCHAR ('>');
@@ -2041,17 +2042,15 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 
 	    strout ("#<save-value ", -1, -1, printcharfun);
 
-	    if (v->area)
+	    if (v->save_type == SAVE_TYPE_MEMORY)
 	      {
 		ptrdiff_t amount = v->data[1].integer;
 
 #if GC_MARK_STACK
 
-		/* If GC_MARK_STACK, valid_lisp_object_p is quite reliable,
-		   and so we try to print up to 8 objects we have saved.
-		   Although valid_lisp_object_p is slow, this shouldn't be
-		   a real bottleneck because we do not use this code under
-		   normal circumstances.  */
+		/* valid_lisp_object_p is reliable, so try to print up
+		   to 8 saved objects.  This code is rarely used, so
+		   it's OK that valid_lisp_object_p is slow.  */
 
 		int limit = min (amount, 8);
 		Lisp_Object *area = v->data[0].pointer;
@@ -2076,9 +2075,8 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 
 #else /* not GC_MARK_STACK */
 
-		/* If !GC_MARK_STACK, we have no reliable way to find
-		   whether Lisp_Object pointers points to an initialized
-		   objects, and so we do not ever trying to print them.  */
+		/* There is no reliable way to determine whether the objects
+		   are initialized, so do not try to print them.  */
 
 		i = sprintf (buf, "with %"pD"d objects", amount);
 		strout (buf, i, i, printcharfun);
@@ -2087,33 +2085,37 @@ print_object (Lisp_Object obj, register Lisp_Object printcharfun, int escapeflag
 	      }
 	    else
 	      {
-		/* Print each `data[N]' slot according to its type.  */
+		/* Print each slot according to its type.  */
+		int index;
+		for (index = 0; index < SAVE_VALUE_SLOTS; index++)
+		  {
+		    if (index)
+		      PRINTCHAR (' ');
 
-#define PRINTX(index)							\
-  do {									\
-    i = 0;								\
-    if (v->type ## index == SAVE_UNUSED)				\
-      i = sprintf (buf, "<unused>");					\
-    else if (v->type ## index == SAVE_INTEGER)				\
-      i = sprintf (buf, "<integer %"pD"d>", v->data[index].integer);	\
-    else if (v->type ## index == SAVE_POINTER)				\
-      i = sprintf (buf, "<pointer %p>", v->data[index].pointer);	\
-    else /* SAVE_OBJECT */						\
-      print_object (v->data[index].object, printcharfun, escapeflag);	\
-    if (i)								\
-      strout (buf, i, i, printcharfun);					\
-  } while (0)
+		    switch (save_type (v, index))
+		      {
+		      case SAVE_UNUSED:
+			i = sprintf (buf, "<unused>");
+			break;
 
-		PRINTX (0);
-		PRINTCHAR (' ');
-		PRINTX (1);
-		PRINTCHAR (' ');
-		PRINTX (2);
-		PRINTCHAR (' ');
-		PRINTX (3);
+		      case SAVE_POINTER:
+			i = sprintf (buf, "<pointer %p>",
+				     v->data[index].pointer);
+			break;
 
-#undef PRINTX
+		      case SAVE_INTEGER:
+			i = sprintf (buf, "<integer %"pD"d>",
+				     v->data[index].integer);
+			break;
 
+		      case SAVE_OBJECT:
+			print_object (v->data[index].object, printcharfun,
+				      escapeflag);
+			continue;
+		      }
+
+		    strout (buf, i, i, printcharfun);
+		  }
 	      }
 	    PRINTCHAR ('>');
 	  }
@@ -2164,7 +2166,16 @@ print_interval (INTERVAL interval, Lisp_Object printcharfun)
   print_object (interval->plist, printcharfun, 1);
 }
 
-
+/* Initialize debug_print stuff early to have it working from the very
+   beginning.  */
+
+void
+init_print_once (void)
+{
+  DEFSYM (Qexternal_debugging_output, "external-debugging-output");
+  defsubr (&Sexternal_debugging_output);
+}
+
 void
 syms_of_print (void)
 {
@@ -2296,12 +2307,10 @@ priorities.  */);
   defsubr (&Sprint);
   defsubr (&Sterpri);
   defsubr (&Swrite_char);
-  defsubr (&Sexternal_debugging_output);
 #ifdef WITH_REDIRECT_DEBUGGING_OUTPUT
   defsubr (&Sredirect_debugging_output);
 #endif
 
-  DEFSYM (Qexternal_debugging_output, "external-debugging-output");
   DEFSYM (Qprint_escape_newlines, "print-escape-newlines");
   DEFSYM (Qprint_escape_multibyte, "print-escape-multibyte");
   DEFSYM (Qprint_escape_nonascii, "print-escape-nonascii");

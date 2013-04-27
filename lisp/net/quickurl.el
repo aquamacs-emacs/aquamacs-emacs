@@ -94,7 +94,8 @@
   :group  'abbrev
   :prefix "quickurl-")
 
-(defcustom quickurl-url-file (convert-standard-filename "~/.quickurls")
+(defcustom quickurl-url-file
+  (locate-user-emacs-file "quickurls" ".quickurls")
   "File that contains the URL list."
   :type  'file
   :group 'quickurl)
@@ -272,7 +273,8 @@ It also restores point after the `read'."
 (defun quickurl-save-urls ()
   "Save the contents of `quickurl-urls' to `quickurl-url-file'."
   (with-temp-buffer
-    (let ((standard-output (current-buffer)))
+    (let ((standard-output (current-buffer))
+          (print-length nil))
       (princ quickurl-prefix)
       (pp quickurl-urls)
       (princ quickurl-postfix)

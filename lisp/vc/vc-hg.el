@@ -176,7 +176,7 @@ highlighting the Log View buffer."
 ;;;###autoload   "Return non-nil if FILE is registered with hg."
 ;;;###autoload   (if (vc-find-root file ".hg")       ; short cut
 ;;;###autoload       (progn
-;;;###autoload         (load "vc-hg")
+;;;###autoload         (load "vc-hg" nil t)
 ;;;###autoload         (vc-hg-registered file))))
 
 ;; Modeled after the similar function in vc-bzr.el
@@ -357,7 +357,7 @@ Optional arg REVISION is a revision to annotate from."
 ;;215 Wed Jun 20 21:22:58 2007 -0700 foo.c: CONTENTS
 ;; i.e. VERSION_NUMBER DATE FILENAME: CONTENTS
 (defconst vc-hg-annotate-re
-  "^[ \t]*\\([0-9]+\\) \\(.\\{30\\}\\)\\(?:\\(: \\)\\|\\(?: +\\(.+\\): \\)\\)")
+  "^[ \t]*\\([0-9]+\\) \\(.\\{30\\}\\)\\(?:\\(: \\)\\|\\(?: +\\([^:\n]+\\(?::\\(?:[^: \n][^:\n]*\\)?\\)*\\): \\)\\)")
 
 (defun vc-hg-annotate-time ()
   (when (looking-at vc-hg-annotate-re)

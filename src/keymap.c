@@ -565,7 +565,8 @@ map_keymap_char_table_item (Lisp_Object args, Lisp_Object key, Lisp_Object val)
 {
   if (!NILP (val))
     {
-      map_keymap_function_t fun = XSAVE_POINTER (args, 0);
+      map_keymap_function_t fun
+	= (map_keymap_function_t) XSAVE_POINTER (args, 0);
       /* If the key is a range, make a copy since map_char_table modifies
 	 it in place.  */
       if (CONSP (key))
@@ -610,7 +611,8 @@ map_keymap_internal (Lisp_Object map,
 	}
       else if (CHAR_TABLE_P (binding))
 	map_char_table (map_keymap_char_table_item, Qnil, binding,
-			make_save_value ("ppo", fun, data, args));
+			make_save_value (SAVE_TYPE_PTR_PTR_OBJ,
+					 fun, data, args));
     }
   UNGCPRO;
   return tail;
@@ -1244,7 +1246,7 @@ remapping in all currently active keymaps.  */)
   return INTEGERP (command) ? Qnil : command;
 }
 
-/* Value is number if KEY is too long; nil if valid but has no definition. */
+/* Value is number if KEY is too long; nil if valid but has no definition.  */
 /* GC is possible in this function.  */
 
 DEFUN ("lookup-key", Flookup_key, Slookup_key, 2, 3, 0,
@@ -1536,7 +1538,7 @@ DEFUN ("current-active-maps", Fcurrent_active_maps, Scurrent_active_maps,
        doc: /* Return a list of the currently active keymaps.
 OLP if non-nil indicates that we should obey `overriding-local-map' and
 `overriding-terminal-local-map'.  POSITION can specify a click position
-like in the respective argument of `key-binding'. */)
+like in the respective argument of `key-binding'.  */)
   (Lisp_Object olp, Lisp_Object position)
 {
   ptrdiff_t count = SPECPDL_INDEX ();
@@ -1545,7 +1547,7 @@ like in the respective argument of `key-binding'. */)
 
   /* If a mouse click position is given, our variables are based on
      the buffer clicked on, not the current buffer.  So we may have to
-     switch the buffer here. */
+     switch the buffer here.  */
 
   if (CONSP (position))
     {
@@ -1554,8 +1556,8 @@ like in the respective argument of `key-binding'. */)
       window = POSN_WINDOW (position);
 
       if (WINDOWP (window)
-	  && BUFFERP (XWINDOW (window)->buffer)
-	  && XBUFFER (XWINDOW (window)->buffer) != current_buffer)
+	  && BUFFERP (XWINDOW (window)->contents)
+	  && XBUFFER (XWINDOW (window)->contents) != current_buffer)
 	{
 	  /* Arrange to go back to the original buffer once we're done
 	     processing the key sequence.  We don't use
@@ -1565,7 +1567,7 @@ like in the respective argument of `key-binding'. */)
 	     things the same.
 	  */
 	  record_unwind_current_buffer ();
-	  set_buffer_internal (XBUFFER (XWINDOW (window)->buffer));
+	  set_buffer_internal (XBUFFER (XWINDOW (window)->contents));
 	}
     }
 
@@ -2425,7 +2427,6 @@ around function keys and event symbols.  */)
     return Fcopy_sequence (key);
   else
     error ("KEY must be an integer, cons, symbol, or string");
-  return Qnil;
 }
 
 static char *

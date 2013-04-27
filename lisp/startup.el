@@ -783,11 +783,20 @@ Amongst another things, it parses the command-line arguments."
 	 (locate-file "simple" load-path (get-load-suffixes)))
 	lisp-dir)
     ;; Don't abort if simple.el cannot be found, but print a warning.
+    ;; Although in most usage we are going to cryptically abort a moment
+    ;; later anyway, due to missing required bidi data files (eg bug#13430).
     (if (null simple-file-name)
-	(progn
-	  (princ "Warning: Could not find simple.el nor simple.elc"
-		 'external-debugging-output)
-	  (terpri 'external-debugging-output))
+	(let ((standard-output 'external-debugging-output)
+	      (lispdir (expand-file-name "../lisp" data-directory)))
+	  (princ "Warning: Could not find simple.el or simple.elc")
+	  (terpri)
+	  (when (getenv "EMACSLOADPATH")
+	    (princ "The EMACSLOADPATH environment variable is set, \
+please check its value")
+	    (terpri))
+	  (unless (file-readable-p lispdir)
+	    (princ (format "Lisp directory %s not readable?" lispdir))
+	    (terpri)))
       (setq lisp-dir (file-truename (file-name-directory simple-file-name)))
       (setq load-history
 	    (mapcar (lambda (elt)
@@ -1502,6 +1511,7 @@ Each element in the list should be a list of strings or pairs
     (suppress-keymap map)
     (set-keymap-parent map button-buffer-map)
     (define-key map "\C-?" 'scroll-down-command)
+    (define-key map [?\S-\ ] 'scroll-down-command)
     (define-key map " " 'scroll-up-command)
     (define-key map "q" 'exit-splash-screen)
     map)
@@ -1988,7 +1998,7 @@ If you have no Meta key, you may instead type ESC followed by the character.)")
   (insert "\n" (emacs-version) "\n" emacs-copyright "\n")
 
   (if (and (eq (key-binding "\C-h\C-c") 'describe-copying)
-	   (eq (key-binding "\C-h\C-d") 'describe-distribution)
+	   (eq (key-binding "\C-h\C-o") 'describe-distribution)
 	   (eq (key-binding "\C-h\C-w") 'describe-no-warranty))
       (progn
 	(insert
@@ -2432,13 +2442,17 @@ A fancy display is used on graphic displays, normal otherwise."
     ;; Use arg 1 so that we don't collapse // at the start of the file name.
     ;; That is significant on some systems.
     ;; However, /// at the beginning is supposed to mean just /, not //.
-    (if (string-match "^///+" file)
+    (if (string-match
+	 (if (memq system-type '(ms-dos windows-nt))
+	     "^\\([\\/][\\/][\\/]\\)+"
+	   "^///+")
+	 file)
 	(setq file (replace-match "/" t t file)))
-    (and (memq system-type '(ms-dos windows-nt))
-	 (string-match "^[A-Za-z]:\\(\\\\[\\\\/]\\)" file) ; C:\/ or C:\\
-	 (setq file (replace-match "/" t t file 1)))
-    (while (string-match "//+" file 1)
-      (setq file (replace-match "/" t t file)))
+    (if (memq system-type '(ms-dos windows-nt))
+	(while (string-match "\\([\\/][\\/]\\)+" file 1)
+	  (setq file (replace-match "/" t t file)))
+      (while (string-match "//+" file 1)
+	(setq file (replace-match "/" t t file))))
     file))
 
 ;;; startup.el ends here

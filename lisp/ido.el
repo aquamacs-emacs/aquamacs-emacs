@@ -765,7 +765,7 @@ Obsolete.  Set 3rd element of `ido-decorations' instead."
 
 (defcustom ido-decorations '( "{" "}" " | " " | ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")
   "List of strings used by ido to display the alternatives in the minibuffer.
-There are 11 elements in this list:
+There are between 11 and 13 elements in this list:
 1st and 2nd elements are used as brackets around the prospect list,
 3rd element is the separator between prospects (ignored if `ido-separator' is set),
 4th element is the string inserted at the end of a truncated list of prospects,
@@ -775,7 +775,9 @@ can be completed using TAB,
 8th element is displayed if there is a single match (and faces are not used),
 9th element is displayed when the current directory is non-readable,
 10th element is displayed when directory exceeds `ido-max-directory-size',
-11th element is displayed to confirm creating new file or buffer."
+11th element is displayed to confirm creating new file or buffer.
+12th and 13th elements (if present) are used as brackets around the sole
+remaining completion.  If absent, elements 5 and 6 are used instead."
   :type '(repeat string)
   :group 'ido)
 
@@ -927,7 +929,8 @@ ido is running.  Copied from `icomplete-minibuffer-setup-hook'."
   :type 'hook
   :group 'ido)
 
-(defcustom ido-save-directory-list-file (convert-standard-filename "~/.ido.last")
+(defcustom ido-save-directory-list-file
+  (locate-user-emacs-file "ido.last" ".ido.last")
   "File in which the ido state is saved between invocations.
 Variables stored are: `ido-last-directory-list', `ido-work-directory-list',
 `ido-work-file-list', and `ido-dir-file-cache'.
@@ -1585,6 +1588,8 @@ This function also adds a hook to the minibuffer."
     (define-key map "\C-p" 'ido-toggle-prefix)
     (define-key map "\C-r" 'ido-prev-match)
     (define-key map "\C-s" 'ido-next-match)
+    (define-key map [?\C-.] 'ido-next-match)
+    (define-key map [?\C-,] 'ido-prev-match)
     (define-key map "\C-t" 'ido-toggle-regexp)
     (define-key map "\C-z" 'ido-undo-merge-work-directory)
     (define-key map [(control ?\s)] 'ido-restrict-to-matches)
@@ -3147,13 +3152,15 @@ for first matching file."
     (exit-minibuffer)))
 
 (defun ido-chop (items elem)
-  "Remove all elements before ELEM and put them at the end of ITEMS."
+  "Remove all elements before ELEM and put them at the end of ITEMS.
+Use `eq' for comparison."
   (let ((ret nil)
 	(next nil)
 	(sofar nil))
     (while (not ret)
       (setq next (car items))
-      (if (equal next elem)
+      ;; Use `eq' to avoid bug http://debbugs.gnu.org/10994
+      (if (eq next elem)
 	  (setq ret (append items (nreverse sofar)))
 	;; else
 	(progn
@@ -4576,10 +4583,12 @@ For details of keybindings, see `ido-find-file'."
                          (string-equal (match-string 0 (ido-name (car comps)))
                                        (ido-name (car comps))))
                        ""
-                     ;; when there is one match, show the matching file name in full
-                     (concat (nth 4 ido-decorations)  ;; [ ... ]
-                             (ido-name (car comps))
-                             (nth 5 ido-decorations)))
+                     ;; When there is only one match, show the matching file
+                     ;; name in full, wrapped in [ ... ].
+                     (concat
+                      (or (nth 11 ido-decorations) (nth 4 ido-decorations))
+                      (ido-name (car comps))
+                      (or (nth 12 ido-decorations) (nth 5 ido-decorations))))
 		   (if (not ido-use-faces) (nth 7 ido-decorations))))  ;; [Matched]
 	  (t				;multiple matches
 	   (let* ((items (if (> ido-max-prospects 0) (1+ ido-max-prospects) 999))

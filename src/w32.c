@@ -29,10 +29,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <ctype.h>
 #include <signal.h>
 #include <sys/file.h>
+#include <time.h>	/* must be before nt/inc/sys/time.h, for MinGW64 */
 #include <sys/time.h>
 #include <sys/utime.h>
 #include <math.h>
-#include <time.h>
 
 /* must include CRT headers *before* config.h */
 
@@ -69,7 +69,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <pwd.h>
 #include <grp.h>
 
-#ifdef __GNUC__
+/* MinGW64 (_W64) defines these in its _mingw.h.  */
+#if defined(__GNUC__) && !defined(_W64)
 #define _ANONYMOUS_UNION
 #define _ANONYMOUS_STRUCT
 #endif
@@ -96,6 +97,7 @@ typedef struct _MEMORY_STATUS_EX {
 #ifndef _MSC_VER
 #include <w32api.h>
 #endif
+#if _WIN32_WINNT < 0x0500
 #if !defined (__MINGW32__) || __W32API_MAJOR_VERSION < 3 || (__W32API_MAJOR_VERSION == 3 && __W32API_MINOR_VERSION < 15)
 /* This either is not in psapi.h or guarded by higher value of
    _WIN32_WINNT than what we use.  w32api supplied with MinGW 3.15
@@ -114,6 +116,7 @@ typedef struct _PROCESS_MEMORY_COUNTERS_EX {
   SIZE_T PrivateUsage;
 } PROCESS_MEMORY_COUNTERS_EX,*PPROCESS_MEMORY_COUNTERS_EX;
 #endif
+#endif
 
 #include <winioctl.h>
 #include <aclapi.h>
@@ -127,11 +130,11 @@ typedef struct _PROCESS_MEMORY_COUNTERS_EX {
 #define SDDL_REVISION_1	1
 #endif	/* SDDL_REVISION_1 */
 
-#ifdef _MSC_VER
-/* MSVC doesn't provide the definition of REPARSE_DATA_BUFFER and the
-   associated macros, except on ntifs.h, which cannot be included
-   because it triggers conflicts with other Windows API headers.  So
-   we define it here by hand.  */
+#if defined(_MSC_VER) || defined(_W64)
+/* MSVC and MinGW64 don't provide the definition of
+   REPARSE_DATA_BUFFER and the associated macros, except on ntifs.h,
+   which cannot be included because it triggers conflicts with other
+   Windows API headers.  So we define it here by hand.  */
 
 typedef struct _REPARSE_DATA_BUFFER {
     ULONG  ReparseTag;
@@ -171,8 +174,11 @@ typedef struct _REPARSE_DATA_BUFFER {
 #ifndef CTL_CODE
 #define CTL_CODE(t,f,m,a)       (((t)<<16)|((a)<<14)|((f)<<2)|(m))
 #endif
+/* MinGW64 defines FSCTL_GET_REPARSE_POINT on winioctl.h.  */
+#ifndef FSCTL_GET_REPARSE_POINT
 #define FSCTL_GET_REPARSE_POINT \
   CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 42, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#endif
 #endif
 
 /* TCP connection support.  */
@@ -1598,11 +1604,16 @@ max_filename_mbslen (void)
    case path name components to lower case.  */
 
 static void
-normalize_filename (register char *fp, char path_sep)
+normalize_filename (register char *fp, char path_sep, int multibyte)
 {
   char sep;
   char *elem, *p2;
   int dbcs_p = max_filename_mbslen () > 1;
+
+  /* Multibyte file names are in the Emacs internal representation, so
+     we can traverse them by bytes with no problems.  */
+  if (multibyte)
+    dbcs_p = 0;
 
   /* Always lower-case drive letters a-z, even if the filesystem
      preserves case in filenames.
@@ -1620,7 +1631,7 @@ normalize_filename (register char *fp, char path_sep)
       fp += 2;
     }
 
-  if (NILP (Vw32_downcase_file_names))
+  if (multibyte || NILP (Vw32_downcase_file_names))
     {
       while (*fp)
 	{
@@ -1668,18 +1679,20 @@ normalize_filename (register char *fp, char path_sep)
   } while (*fp);
 }
 
-/* Destructively turn backslashes into slashes.  */
+/* Destructively turn backslashes into slashes.  MULTIBYTE non-zero
+   means the file name is a multibyte string in Emacs's internal
+   representation.  */
 void
-dostounix_filename (register char *p)
+dostounix_filename (register char *p, int multibyte)
 {
-  normalize_filename (p, '/');
+  normalize_filename (p, '/', multibyte);
 }
 
 /* Destructively turn slashes into backslashes.  */
 void
 unixtodos_filename (register char *p)
 {
-  normalize_filename (p, '\\');
+  normalize_filename (p, '\\', 0);
 }
 
 /* Remove all CR's that are followed by a LF.
@@ -2222,7 +2235,7 @@ emacs_root_dir (void)
     emacs_abort ();
   strcpy (root_dir, p);
   root_dir[parse_root (root_dir, NULL)] = '\0';
-  dostounix_filename (root_dir);
+  dostounix_filename (root_dir, 0);
   return root_dir;
 }
 
@@ -3213,14 +3226,6 @@ sys_chmod (const char * path, int mode)
 }
 
 int
-sys_chown (const char *path, uid_t owner, gid_t group)
-{
-  if (sys_chmod (path, S_IREAD) == -1) /* check if file exists */
-    return -1;
-  return 0;
-}
-
-int
 sys_creat (const char * path, int mode)
 {
   return _creat (map_w32_filename (path, NULL), mode);
@@ -3403,20 +3408,27 @@ int
 sys_open (const char * path, int oflag, int mode)
 {
   const char* mpath = map_w32_filename (path, NULL);
-  /* Try to open file without _O_CREAT, to be able to write to hidden
-     and system files. Force all file handles to be
-     non-inheritable. */
-  int res = _open (mpath, (oflag & ~_O_CREAT) | _O_NOINHERIT, mode);
+  int res = -1;
+
+  /* If possible, try to open file without _O_CREAT, to be able to
+     write to existing hidden and system files.  Force all file
+     handles to be non-inheritable. */
+  if ((oflag & (_O_CREAT | _O_EXCL)) != (_O_CREAT | _O_EXCL))
+    res = _open (mpath, (oflag & ~_O_CREAT) | _O_NOINHERIT, mode);
   if (res < 0)
     res = _open (mpath, oflag | _O_NOINHERIT, mode);
-  if (res >= 0 && res < MAXDESC)
-    fd_info[res].flags = 0;
 
   return res;
 }
 
 int
-sys_rename (const char * oldname, const char * newname)
+fchmod (int fd, mode_t mode)
+{
+  return 0;
+}
+
+int
+sys_rename_replace (const char *oldname, const char *newname, BOOL force)
 {
   BOOL result;
   char temp[MAX_PATH];
@@ -3472,7 +3484,7 @@ sys_rename (const char * oldname, const char * newname)
 	return -1;
     }
 
-  /* Emulate Unix behavior - newname is deleted if it already exists
+  /* If FORCE, emulate Unix behavior - newname is deleted if it already exists
      (at least if it is a file; don't do this for directories).
 
      Since we mustn't do this if we are just changing the case of the
@@ -3490,7 +3502,7 @@ sys_rename (const char * oldname, const char * newname)
 
   result = rename (temp, newname);
 
-  if (result < 0)
+  if (result < 0 && force)
     {
       DWORD w32err = GetLastError ();
 
@@ -3527,6 +3539,12 @@ sys_rename (const char * oldname, const char * newname)
     }
 
   return result;
+}
+
+int
+sys_rename (char const *old, char const *new)
+{
+  return sys_rename_replace (old, new, TRUE);
 }
 
 int
@@ -4274,6 +4292,30 @@ lstat (const char * path, struct stat * buf)
   return stat_worker (path, buf, 0);
 }
 
+int
+fstatat (int fd, char const *name, struct stat *st, int flags)
+{
+  /* Rely on a hack: an open directory is modeled as file descriptor 0.
+     This is good enough for the current usage in Emacs, but is fragile.
+
+     FIXME: Add proper support for fdopendir, fstatat, readlinkat.
+     Gnulib does this and can serve as a model.  */
+  char fullname[MAX_PATH];
+
+  if (fd != AT_FDCWD)
+    {
+      if (_snprintf (fullname, sizeof fullname, "%s/%s", dir_pathname, name)
+	  < 0)
+	{
+	  errno = ENAMETOOLONG;
+	  return -1;
+	}
+      name = fullname;
+    }
+
+  return stat_worker (name, st, ! (flags & AT_SYMLINK_NOFOLLOW));
+}
+
 /* Provide fstat and utime as well as stat for consistent handling of
    file timestamps. */
 int
@@ -4816,6 +4858,28 @@ readlink (const char *name, char *buf, size_t buf_size)
   return retval;
 }
 
+ssize_t
+readlinkat (int fd, char const *name, char *buffer,
+	    size_t buffer_size)
+{
+  /* Rely on a hack: an open directory is modeled as file descriptor 0,
+     as in fstatat.  FIXME: Add proper support for readlinkat.  */
+  char fullname[MAX_PATH];
+
+  if (fd != AT_FDCWD)
+    {
+      if (_snprintf (fullname, sizeof fullname, "%s/%s", dir_pathname, name)
+	  < 0)
+	{
+	  errno = ENAMETOOLONG;
+	  return -1;
+	}
+      name = fullname;
+    }
+
+  return readlink (name, buffer, buffer_size);
+}
+
 /* If FILE is a symlink, return its target (stored in a static
    buffer); otherwise return FILE.
 
@@ -5168,12 +5232,6 @@ careadlinkat (int fd, char const *filename,
   char linkname[MAX_PATH];
   ssize_t link_size;
 
-  if (fd != AT_FDCWD)
-    {
-      errno = EINVAL;
-      return NULL;
-    }
-
   link_size = preadlinkat (fd, filename, linkname, sizeof(linkname));
 
   if (link_size > 0)
@@ -5189,14 +5247,6 @@ careadlinkat (int fd, char const *filename,
       return retval;
     }
   return NULL;
-}
-
-ssize_t
-careadlinkatcwd (int fd, char const *filename, char *buffer,
-                 size_t buffer_size)
-{
-  (void) fd;
-  return readlink (filename, buffer, buffer_size);
 }
 
 
@@ -5536,10 +5586,8 @@ ltime (ULONGLONG time_100ns)
 {
   ULONGLONG time_sec = time_100ns / 10000000;
   int subsec = time_100ns % 10000000;
-  return list4 (make_number (time_sec >> 16),
-		make_number (time_sec & 0xffff),
-		make_number (subsec / 10),
-		make_number (subsec % 10 * 100000));
+  return list4i (time_sec >> 16, time_sec & 0xffff,
+		 subsec / 10, subsec % 10 * 100000);
 }
 
 #define U64_TO_LISP_TIME(time) ltime (time)
@@ -6053,35 +6101,39 @@ init_winsock (int load_now)
 
 int h_errno = 0;
 
-/* function to set h_errno for compatibility; map winsock error codes to
-   normal system codes where they overlap (non-overlapping definitions
-   are already in <sys/socket.h> */
+/* Function to map winsock error codes to errno codes for those errno
+   code defined in errno.h (errno values not defined by errno.h are
+   already in nt/inc/sys/socket.h).  */
 static void
 set_errno (void)
 {
-  if (winsock_lib == NULL)
-    h_errno = EINVAL;
-  else
-    h_errno = pfn_WSAGetLastError ();
+  int wsa_err;
 
-  switch (h_errno)
+  h_errno = 0;
+  if (winsock_lib == NULL)
+    wsa_err = EINVAL;
+  else
+    wsa_err = pfn_WSAGetLastError ();
+
+  switch (wsa_err)
     {
-    case WSAEACCES:		h_errno = EACCES; break;
-    case WSAEBADF: 		h_errno = EBADF; break;
-    case WSAEFAULT:		h_errno = EFAULT; break;
-    case WSAEINTR: 		h_errno = EINTR; break;
-    case WSAEINVAL:		h_errno = EINVAL; break;
-    case WSAEMFILE:		h_errno = EMFILE; break;
-    case WSAENAMETOOLONG: 	h_errno = ENAMETOOLONG; break;
-    case WSAENOTEMPTY:		h_errno = ENOTEMPTY; break;
+    case WSAEACCES:		errno = EACCES; break;
+    case WSAEBADF: 		errno = EBADF; break;
+    case WSAEFAULT:		errno = EFAULT; break;
+    case WSAEINTR: 		errno = EINTR; break;
+    case WSAEINVAL:		errno = EINVAL; break;
+    case WSAEMFILE:		errno = EMFILE; break;
+    case WSAENAMETOOLONG: 	errno = ENAMETOOLONG; break;
+    case WSAENOTEMPTY:		errno = ENOTEMPTY; break;
+    default:			errno = wsa_err; break;
     }
-  errno = h_errno;
 }
 
 static void
 check_errno (void)
 {
-  if (h_errno == 0 && winsock_lib != NULL)
+  h_errno = 0;
+  if (winsock_lib != NULL)
     pfn_WSASetLastError (0);
 }
 
@@ -6193,7 +6245,7 @@ sys_socket (int af, int type, int protocol)
 
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return INVALID_SOCKET;
     }
 
@@ -6270,6 +6322,7 @@ socket_to_fd (SOCKET s)
 	      }
 	  }
       }
+      eassert (fd < MAXDESC);
       fd_info[fd].hnd = (HANDLE) s;
 
       /* set our own internal flags */
@@ -6298,8 +6351,9 @@ socket_to_fd (SOCKET s)
       /* clean up */
       _close (fd);
     }
+  else
   pfn_closesocket (s);
-  h_errno = EMFILE;
+  errno = EMFILE;
   return -1;
 }
 
@@ -6308,7 +6362,7 @@ sys_bind (int s, const struct sockaddr * addr, int namelen)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENOTSOCK;
+      errno = ENOTSOCK;
       return SOCKET_ERROR;
     }
 
@@ -6320,7 +6374,7 @@ sys_bind (int s, const struct sockaddr * addr, int namelen)
 	set_errno ();
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6329,7 +6383,7 @@ sys_connect (int s, const struct sockaddr * name, int namelen)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENOTSOCK;
+      errno = ENOTSOCK;
       return SOCKET_ERROR;
     }
 
@@ -6341,7 +6395,7 @@ sys_connect (int s, const struct sockaddr * name, int namelen)
 	set_errno ();
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6370,12 +6424,20 @@ int
 sys_gethostname (char * name, int namelen)
 {
   if (winsock_lib != NULL)
-    return pfn_gethostname (name, namelen);
+    {
+      int retval;
+
+      check_errno ();
+      retval = pfn_gethostname (name, namelen);
+      if (retval == SOCKET_ERROR)
+	set_errno ();
+      return retval;
+    }
 
   if (namelen > MAX_COMPUTERNAME_LENGTH)
     return !GetComputerName (name, (DWORD *)&namelen);
 
-  h_errno = EFAULT;
+  errno = EFAULT;
   return SOCKET_ERROR;
 }
 
@@ -6383,17 +6445,24 @@ struct hostent *
 sys_gethostbyname (const char * name)
 {
   struct hostent * host;
+  int h_err = h_errno;
 
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      h_errno = NO_RECOVERY;
+      errno = ENETDOWN;
       return NULL;
     }
 
   check_errno ();
   host = pfn_gethostbyname (name);
   if (!host)
-    set_errno ();
+    {
+      set_errno ();
+      h_errno = errno;
+    }
+  else
+    h_errno = h_err;
   return host;
 }
 
@@ -6404,7 +6473,7 @@ sys_getservbyname (const char * name, const char * proto)
 
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return NULL;
     }
 
@@ -6420,7 +6489,7 @@ sys_getpeername (int s, struct sockaddr *addr, int * namelen)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return SOCKET_ERROR;
     }
 
@@ -6432,7 +6501,7 @@ sys_getpeername (int s, struct sockaddr *addr, int * namelen)
 	set_errno ();
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6441,7 +6510,7 @@ sys_shutdown (int s, int how)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return SOCKET_ERROR;
     }
 
@@ -6453,7 +6522,7 @@ sys_shutdown (int s, int how)
 	set_errno ();
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6462,7 +6531,7 @@ sys_setsockopt (int s, int level, int optname, const void * optval, int optlen)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return SOCKET_ERROR;
     }
 
@@ -6475,7 +6544,7 @@ sys_setsockopt (int s, int level, int optname, const void * optval, int optlen)
 	set_errno ();
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6484,7 +6553,7 @@ sys_listen (int s, int backlog)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return SOCKET_ERROR;
     }
 
@@ -6498,7 +6567,7 @@ sys_listen (int s, int backlog)
 	fd_info[s].flags |= FILE_LISTEN;
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6507,7 +6576,7 @@ sys_getsockname (int s, struct sockaddr * name, int * namelen)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return SOCKET_ERROR;
     }
 
@@ -6519,7 +6588,7 @@ sys_getsockname (int s, struct sockaddr * name, int * namelen)
 	set_errno ();
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6528,7 +6597,7 @@ sys_accept (int s, struct sockaddr * addr, int * addrlen)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return -1;
     }
 
@@ -6542,11 +6611,14 @@ sys_accept (int s, struct sockaddr * addr, int * addrlen)
       else
 	fd = socket_to_fd (t);
 
-      fd_info[s].cp->status = STATUS_READ_ACKNOWLEDGED;
-      ResetEvent (fd_info[s].cp->char_avail);
+      if (fd >= 0)
+	{
+	  fd_info[s].cp->status = STATUS_READ_ACKNOWLEDGED;
+	  ResetEvent (fd_info[s].cp->char_avail);
+	}
       return fd;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return -1;
 }
 
@@ -6556,7 +6628,7 @@ sys_recvfrom (int s, char * buf, int len, int flags,
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return SOCKET_ERROR;
     }
 
@@ -6568,7 +6640,7 @@ sys_recvfrom (int s, char * buf, int len, int flags,
 	set_errno ();
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6578,7 +6650,7 @@ sys_sendto (int s, const char * buf, int len, int flags,
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return SOCKET_ERROR;
     }
 
@@ -6590,7 +6662,7 @@ sys_sendto (int s, const char * buf, int len, int flags,
 	set_errno ();
       return rc;
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6601,7 +6673,7 @@ fcntl (int s, int cmd, int options)
 {
   if (winsock_lib == NULL)
     {
-      h_errno = ENETDOWN;
+      errno = ENETDOWN;
       return -1;
     }
 
@@ -6620,11 +6692,11 @@ fcntl (int s, int cmd, int options)
 	}
       else
 	{
-	  h_errno = EINVAL;
+	  errno = EINVAL;
 	  return SOCKET_ERROR;
 	}
     }
-  h_errno = ENOTSOCK;
+  errno = ENOTSOCK;
   return SOCKET_ERROR;
 }
 
@@ -6761,6 +6833,7 @@ sys_pipe (int * phandles)
 	{
 	  _close (phandles[0]);
 	  _close (phandles[1]);
+	  errno = EMFILE;
 	  rc = -1;
 	}
       else
@@ -6834,19 +6907,31 @@ _sys_read_ahead (int fd)
 
       /* Configure timeouts for blocking read.  */
       if (!GetCommTimeouts (hnd, &ct))
-	return STATUS_READ_ERROR;
+	{
+	  cp->status = STATUS_READ_ERROR;
+	  return STATUS_READ_ERROR;
+	}
       ct.ReadIntervalTimeout		= 0;
       ct.ReadTotalTimeoutMultiplier	= 0;
       ct.ReadTotalTimeoutConstant	= 0;
       if (!SetCommTimeouts (hnd, &ct))
-	return STATUS_READ_ERROR;
+	{
+	  cp->status = STATUS_READ_ERROR;
+	  return STATUS_READ_ERROR;
+	}
 
       if (!ReadFile (hnd, &cp->chr, sizeof (char), (DWORD*) &rc, ovl))
 	{
 	  if (GetLastError () != ERROR_IO_PENDING)
-	    return STATUS_READ_ERROR;
+	    {
+	      cp->status = STATUS_READ_ERROR;
+	      return STATUS_READ_ERROR;
+	    }
 	  if (!GetOverlappedResult (hnd, ovl, (DWORD*) &rc, TRUE))
-	    return STATUS_READ_ERROR;
+	    {
+	      cp->status = STATUS_READ_ERROR;
+	      return STATUS_READ_ERROR;
+	    }
 	}
     }
   else if (fd_info[fd].flags & FILE_SOCKET)
@@ -7042,7 +7127,7 @@ sys_read (int fd, char * buffer, unsigned int count)
 	      pfn_ioctlsocket (SOCK_HANDLE (fd), FIONREAD, &waiting);
 	      if (waiting == 0 && nchars == 0)
 	        {
-		  h_errno = errno = EWOULDBLOCK;
+		  errno = EWOULDBLOCK;
 		  return -1;
 		}
 
@@ -7754,47 +7839,26 @@ serial_configure (struct Lisp_Process *p, Lisp_Object contact)
 ssize_t
 emacs_gnutls_pull (gnutls_transport_ptr_t p, void* buf, size_t sz)
 {
-  int n, sc, err;
+  int n, err;
   SELECT_TYPE fdset;
   EMACS_TIME timeout;
   struct Lisp_Process *process = (struct Lisp_Process *)p;
   int fd = process->infd;
 
-  for (;;)
-    {
-      n = sys_read (fd, (char*)buf, sz);
+  n = sys_read (fd, (char*)buf, sz);
 
-      if (n >= 0)
-        return n;
+  if (n >= 0)
+    return n;
 
-      err = errno;
+  err = errno;
 
-      if (err == EWOULDBLOCK)
-        {
-          /* Set a small timeout.  */
-	  timeout = make_emacs_time (1, 0);
-          FD_ZERO (&fdset);
-          FD_SET ((int)fd, &fdset);
+  /* Translate the WSAEWOULDBLOCK alias EWOULDBLOCK to EAGAIN. */
+  if (err == EWOULDBLOCK)
+    err = EAGAIN;
 
-          /* Use select with the timeout to poll the selector.  */
-          sc = select (fd + 1, &fdset, (SELECT_TYPE *)0, (SELECT_TYPE *)0,
-                       &timeout, NULL);
+  emacs_gnutls_transport_set_errno (process->gnutls_state, err);
 
-          if (sc > 0)
-            continue;  /* Try again.  */
-
-          /* Translate the WSAEWOULDBLOCK alias EWOULDBLOCK to EAGAIN.
-             Also accept select return 0 as an indicator to EAGAIN.  */
-          if (sc == 0 || errno == EWOULDBLOCK)
-            err = EAGAIN;
-          else
-            err = errno; /* Other errors are just passed on.  */
-        }
-
-      emacs_gnutls_transport_set_errno (process->gnutls_state, err);
-
-      return -1;
-    }
+  return -1;
 }
 
 ssize_t

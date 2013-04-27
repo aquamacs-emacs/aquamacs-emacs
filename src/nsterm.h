@@ -42,6 +42,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifndef MAC_OS_X_VERSION_10_8
 #define MAC_OS_X_VERSION_10_8 1080
 #endif
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+#define HAVE_NATIVE_FS
+#endif
+
 #endif /* NS_IMPL_COCOA */
 
 #ifdef __OBJC__
@@ -90,6 +95,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    int tibar_height, tobar_height, bwidth;
    int maximized_width, maximized_height;
    NSWindow *nonfs_window;
+   BOOL fs_is_native;
 @public
    struct frame *emacsframe;
    int rows, cols;
@@ -117,6 +123,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (void) handleFS;
 - (void) setFSValue: (int)value;
 - (void) toggleFullScreen: (id) sender;
+- (BOOL) fsIsNative;
+- (BOOL) isFullscreen;
+#ifdef HAVE_NATIVE_FS
+- (void) updateCollectionBehaviour;
+#endif
 
 #ifdef NS_IMPL_GNUSTEP
 /* Not declared, but useful. */
@@ -285,11 +296,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 @interface EmacsSavePanel : NSSavePanel
 {
 }
+- (NSString *) getFilename;
+- (NSString *) getDirectory;
 - (Lisp_Object)runPanel;
 @end
 @interface EmacsOpenPanel : NSOpenPanel
 {
 }
+- (NSString *) getFilename;
+- (NSString *) getDirectory;
 @end
 
 @interface EmacsFileDelegate : NSObject
@@ -604,8 +619,6 @@ extern Lisp_Object ns_display_name_list;
 extern struct ns_display_info *ns_display_info_for_name (Lisp_Object name);
 
 struct ns_display_info *check_x_display_info (Lisp_Object frame);
-FRAME_PTR check_x_frame (Lisp_Object frame);
-
 
 struct ns_output
 {
@@ -791,7 +804,6 @@ extern void ns_clear_frame (struct frame *f);
 
 extern const char *ns_xlfd_to_fontname (const char *xlfd);
 
-extern void check_ns (void);
 extern Lisp_Object ns_map_event_to_object (void);
 #ifdef __OBJC__
 extern Lisp_Object ns_string_from_pasteboard (id pb);
@@ -819,6 +831,9 @@ extern int ns_lisp_to_color (Lisp_Object color, NSColor **col);
 extern NSColor *ns_lookup_indexed_color (unsigned long idx, struct frame *f);
 extern unsigned long ns_index_color (NSColor *color, struct frame *f);
 extern void ns_free_indexed_color (unsigned long idx, struct frame *f);
+extern const char *ns_get_pending_menu_title ();
+extern void ns_check_menu_open (NSMenu *menu);
+extern void ns_check_pending_open_menu ();
 #endif
 
 /* C access to ObjC functionality */

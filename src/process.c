@@ -136,7 +136,7 @@ extern int sys_select (int, SELECT_TYPE *, SELECT_TYPE *, SELECT_TYPE *,
 /* Work around GCC 4.7.0 bug with strict overflow checking; see
    <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=52904>.
    These lines can be removed once the GCC bug is fixed.  */
-#if (__GNUC__ == 4 && 3 <= __GNUC_MINOR__) || 4 < __GNUC__
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
 # pragma GCC diagnostic ignored "-Wstrict-overflow"
 #endif
 
@@ -146,13 +146,13 @@ Lisp_Object Qcutime, Qpri, Qnice, Qthcount, Qstart, Qvsize, Qrss, Qargs;
 Lisp_Object Quser, Qgroup, Qetime, Qpcpu, Qpmem, Qtime, Qctime;
 Lisp_Object QCname, QCtype;
 
-/* Non-zero if keyboard input is on hold, zero otherwise.  */
+/* True if keyboard input is on hold, zero otherwise.  */
 
-static int kbd_is_on_hold;
+static bool kbd_is_on_hold;
 
 /* Nonzero means don't run process sentinels.  This is used
    when exiting.  */
-int inhibit_sentinels;
+bool inhibit_sentinels;
 
 #ifdef subprocesses
 
@@ -179,10 +179,6 @@ static Lisp_Object Qlast_nonmenu_event;
 #define NETCONN1_P(p) (EQ (p->type, Qnetwork))
 #define SERIALCONN_P(p) (EQ (XPROCESS (p)->type, Qserial))
 #define SERIALCONN1_P(p) (EQ (p->type, Qserial))
-
-#ifndef HAVE_H_ERRNO
-extern int h_errno;
-#endif
 
 /* Number of events of change of status of a process.  */
 static EMACS_INT process_tick;
@@ -238,9 +234,9 @@ static EMACS_INT update_tick;
 
 static int process_output_delay_count;
 
-/* Non-zero if any process has non-nil read_output_skip.  */
+/* True if any process has non-nil read_output_skip.  */
 
-static int process_output_skip;
+static bool process_output_skip;
 
 #else
 #define process_output_delay_count 0
@@ -248,7 +244,7 @@ static int process_output_skip;
 
 static void create_process (Lisp_Object, char **, Lisp_Object);
 #ifdef USABLE_SIGIO
-static int keyboard_bit_set (SELECT_TYPE *);
+static bool keyboard_bit_set (SELECT_TYPE *);
 #endif
 static void deactivate_process (Lisp_Object);
 static void status_notify (struct Lisp_Process *);
@@ -531,7 +527,7 @@ status_convert (int w)
    and store them individually through the three pointers.  */
 
 static void
-decode_status (Lisp_Object l, Lisp_Object *symbol, int *code, int *coredump)
+decode_status (Lisp_Object l, Lisp_Object *symbol, int *code, bool *coredump)
 {
   Lisp_Object tem;
 
@@ -558,7 +554,8 @@ status_message (struct Lisp_Process *p)
 {
   Lisp_Object status = p->status;
   Lisp_Object symbol;
-  int code, coredump;
+  int code;
+  bool coredump;
   Lisp_Object string, string2;
 
   decode_status (status, &symbol, &code, &coredump);
@@ -1583,7 +1580,7 @@ create_process (Lisp_Object process, char **new_argv, Lisp_Object current_dir)
   sigset_t blocked;
   /* Use volatile to protect variables from being clobbered by vfork.  */
   volatile int forkin, forkout;
-  volatile int pty_flag = 0;
+  volatile bool pty_flag = 0;
   volatile Lisp_Object lisp_pty_name = Qnil;
   volatile Lisp_Object encoded_current_dir;
 
@@ -1807,7 +1804,7 @@ create_process (Lisp_Object process, char **new_argv, Lisp_Object current_dir)
   /* Back in the parent process.  */
 
   XPROCESS (process)->pid = pid;
-  if (0 <= pid)
+  if (pid >= 0)
     XPROCESS (process)->alive = 1;
 
   /* Stop blocking signals in the parent.  */
@@ -1875,7 +1872,7 @@ void
 create_pty (Lisp_Object process)
 {
   int inchannel, outchannel;
-  int pty_flag = 0;
+  bool pty_flag = 0;
 
   inchannel = outchannel = -1;
 
@@ -2158,7 +2155,7 @@ Returns nil upon error setting address, ADDRESS otherwise.  */)
   channel = XPROCESS (process)->infd;
 
   len = get_lisp_to_sockaddr_size (address, &family);
-  if (datagram_address[channel].len != len)
+  if (len == 0 || datagram_address[channel].len != len)
     return Qnil;
   conv_lisp_to_sockaddr (family, address, datagram_address[channel].sa, len);
   return address;
@@ -2823,8 +2820,9 @@ usage: (make-network-process &rest ARGS)  */)
   Lisp_Object tem;
   Lisp_Object name, buffer, host, service, address;
   Lisp_Object filter, sentinel;
-  int is_non_blocking_client = 0;
-  int is_server = 0, backlog = 5;
+  bool is_non_blocking_client = 0;
+  bool is_server = 0;
+  int backlog = 5;
   int socktype;
   int family = -1;
 
@@ -3271,7 +3269,8 @@ usage: (make-network-process &rest ARGS)  */)
 		{
 		  int rfamily, rlen;
 		  rlen = get_lisp_to_sockaddr_size (remote, &rfamily);
-		  if (rfamily == lres->ai_family && rlen == lres->ai_addrlen)
+		  if (rlen != 0 && rfamily == lres->ai_family
+		      && rlen == lres->ai_addrlen)
 		    conv_lisp_to_sockaddr (rfamily, remote,
 					   datagram_address[s].sa, rlen);
 		}
@@ -3501,7 +3500,7 @@ format; see the description of ADDRESS in `make-network-process'.  */)
   struct ifreq *ifreq;
   void *buf = NULL;
   ptrdiff_t buf_size = 512;
-  int s, i;
+  int s;
   Lisp_Object res;
 
   s = socket (AF_INET, SOCK_STREAM, 0);
@@ -3539,7 +3538,6 @@ format; see the description of ADDRESS in `make-network-process'.  */)
       int len = sizeof (*ifreq);
 #endif
       char namebuf[sizeof (ifq->ifr_name) + 1];
-      i += len;
       ifreq = (struct ifreq *) ((char *) ifreq + len);
 
       if (ifq->ifr_addr.sa_family != AF_INET)
@@ -3649,7 +3647,7 @@ FLAGS is the current flags of the interface.  */)
   Lisp_Object res = Qnil;
   Lisp_Object elt;
   int s;
-  int any = 0;
+  bool any = 0;
 #if (! (defined SIOCGIFHWADDR && defined HAVE_STRUCT_IFREQ_IFR_HWADDR)	\
      && defined HAVE_GETIFADDRS && defined LLADDR)
   struct ifaddrs *ifap;
@@ -3903,7 +3901,7 @@ Return non-nil if we received any output before the timeout expired.  */)
     {
       if (INTEGERP (seconds))
 	{
-	  if (0 < XINT (seconds))
+	  if (XINT (seconds) > 0)
 	    {
 	      secs = XINT (seconds);
 	      nsecs = 0;
@@ -3911,7 +3909,7 @@ Return non-nil if we received any output before the timeout expired.  */)
 	}
       else if (FLOATP (seconds))
 	{
-	  if (0 < XFLOAT_DATA (seconds))
+	  if (XFLOAT_DATA (seconds) > 0)
 	    {
 	      EMACS_TIME t = EMACS_TIME_FROM_DOUBLE (XFLOAT_DATA (seconds));
 	      secs = min (EMACS_SECS (t), WAIT_READING_MAX);
@@ -3935,7 +3933,7 @@ Return non-nil if we received any output before the timeout expired.  */)
 
 /* Accept a connection for server process SERVER on CHANNEL.  */
 
-static int connect_counter = 0;
+static EMACS_INT connect_counter = 0;
 
 static void
 server_accept_connection (Lisp_Object server, int channel)
@@ -4190,7 +4188,7 @@ wait_reading_process_output_1 (void)
      process.  The return value is true if we read some input from
      that process.
 
-   If JUST_WAIT_PROC is non-nil, handle only output from WAIT_PROC
+   If JUST_WAIT_PROC is nonzero, handle only output from WAIT_PROC
      (suspending output from other processes).  A negative value
      means don't run any timers either.
 
@@ -4198,22 +4196,23 @@ wait_reading_process_output_1 (void)
      received input from that process before the timeout elapsed.
    Otherwise, return true if we received input from any process.  */
 
-int
+bool
 wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 			     bool do_display,
 			     Lisp_Object wait_for_cell,
 			     struct Lisp_Process *wait_proc, int just_wait_proc)
 {
-  register int channel, nfds;
+  int channel, nfds;
   SELECT_TYPE Available;
   SELECT_TYPE Writeok;
-  int check_write;
-  int check_delay, no_avail;
+  bool check_write;
+  int check_delay;
+  bool no_avail;
   int xerrno;
   Lisp_Object proc;
   EMACS_TIME timeout, end_time;
   int wait_channel = -1;
-  int got_some_input = 0;
+  bool got_some_input = 0;
   ptrdiff_t count = SPECPDL_INDEX ();
 
   FD_ZERO (&Available);
@@ -4222,7 +4221,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
   if (time_limit == 0 && nsecs == 0 && wait_proc && !NILP (Vinhibit_quit)
       && !(CONSP (wait_proc->status)
 	   && EQ (XCAR (wait_proc->status), Qexit)))
-    message ("Blocking call to accept-process-output with quit inhibited!!");
+    message1 ("Blocking call to accept-process-output with quit inhibited!!");
 
   /* If wait_proc is a process to watch, set wait_channel accordingly.  */
   if (wait_proc != NULL)
@@ -4242,7 +4241,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 
   /* Since we may need to wait several times,
      compute the absolute time to return at.  */
-  if (time_limit || 0 < nsecs)
+  if (time_limit || nsecs > 0)
     {
       timeout = make_emacs_time (time_limit, nsecs);
       end_time = add_emacs_time (current_emacs_time (), timeout);
@@ -4250,7 +4249,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 
   while (1)
     {
-      int timeout_reduced_for_timers = 0;
+      bool timeout_reduced_for_timers = 0;
 
       /* If calling from keyboard input, do not quit
 	 since we want to return C-g as an input character.
@@ -4274,7 +4273,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 
 	  timeout = make_emacs_time (0, 0);
 	}
-      else if (time_limit || 0 < nsecs)
+      else if (time_limit || nsecs > 0)
 	{
 	  EMACS_TIME now = current_emacs_time ();
 	  if (EMACS_TIME_LE (end_time, now))
@@ -4326,7 +4325,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 	    break;
 
 	  /* A negative timeout means do not wait at all.  */
-	  if (0 <= nsecs)
+	  if (nsecs >= 0)
 	    {
 	      if (EMACS_TIME_VALID_P (timer_delay))
 		{
@@ -4408,7 +4407,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 	      if (nread == 0)
 		break;
 
-	      if (0 < nread)
+	      if (nread > 0)
 		{
 		  total_nread += nread;
 		  got_some_input = 1;
@@ -4628,7 +4627,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 	  unsigned old_timers_run = timers_run;
 	  struct buffer *old_buffer = current_buffer;
 	  Lisp_Object old_window = selected_window;
-	  int leave = 0;
+	  bool leave = 0;
 
 	  if (detect_input_pending_run_timers (do_display))
 	    {
@@ -4949,7 +4948,7 @@ read_process_output (Lisp_Object proc, register int channel)
   else
 #endif
     {
-      int buffered = 0 <= proc_buffered_char[channel];
+      bool buffered = proc_buffered_char[channel] >= 0;
       if (buffered)
 	{
 	  chars[carryover] = proc_buffered_char[channel];
@@ -5265,7 +5264,7 @@ read_process_output (Lisp_Object proc, register int channel)
 
 static void
 write_queue_push (struct Lisp_Process *p, Lisp_Object input_obj,
-                  const char *buf, ptrdiff_t len, int front)
+                  const char *buf, ptrdiff_t len, bool front)
 {
   ptrdiff_t offset;
   Lisp_Object entry, obj;
@@ -5290,10 +5289,10 @@ write_queue_push (struct Lisp_Process *p, Lisp_Object input_obj,
 }
 
 /* Remove the first element in the write_queue of process P, put its
-   contents in OBJ, BUF and LEN, and return non-zero.  If the
-   write_queue is empty, return zero.  */
+   contents in OBJ, BUF and LEN, and return true.  If the
+   write_queue is empty, return false.  */
 
-static int
+static bool
 write_queue_pop (struct Lisp_Process *p, Lisp_Object *obj,
 		 const char **buf, ptrdiff_t *len)
 {
@@ -5456,7 +5455,7 @@ send_process (Lisp_Object proc, const char *buf, ptrdiff_t len,
 	      rv = sendto (outfd, cur_buf, cur_len,
 			   0, datagram_address[outfd].sa,
 			   datagram_address[outfd].len);
-	      if (0 <= rv)
+	      if (rv >= 0)
 		written = rv;
 	      else if (errno == EMSGSIZE)
 		report_file_error ("sending datagram", Fcons (proc, Qnil));
@@ -5567,7 +5566,7 @@ Output from processes can arrive in between bunches.  */)
   if (XINT (start) < GPT && XINT (end) > GPT)
     move_gap_both (XINT (start), start_byte);
 
-  send_process (proc, (char *) BYTE_POS_ADDR (start_byte), 
+  send_process (proc, (char *) BYTE_POS_ADDR (start_byte),
 		end_byte - start_byte, Fcurrent_buffer ());
 
   return Qnil;
@@ -5654,7 +5653,7 @@ return t unconditionally.  */)
    If CURRENT_GROUP is lambda, that means send to the process group
    that currently owns the terminal, but only if it is NOT the shell itself.
 
-   If NOMSG is zero, insert signal-announcements into process's buffers
+   If NOMSG is false, insert signal-announcements into process's buffers
    right away.
 
    If we can, we try to signal PROCESS by sending control characters
@@ -5663,12 +5662,12 @@ return t unconditionally.  */)
 
 static void
 process_send_signal (Lisp_Object process, int signo, Lisp_Object current_group,
-		     int nomsg)
+		     bool nomsg)
 {
   Lisp_Object proc;
-  register struct Lisp_Process *p;
+  struct Lisp_Process *p;
   pid_t gid;
-  int no_pgrp = 0;
+  bool no_pgrp = 0;
 
   proc = get_process (process);
   p = XPROCESS (proc);
@@ -6165,7 +6164,7 @@ handle_child_signal (int sig)
 	  /* If process has terminated, stop waiting for its output.  */
 	  if (WIFSIGNALED (status) || WIFEXITED (status))
 	    {
-	      int clear_desc_flag = 0;
+	      bool clear_desc_flag = 0;
 	      p->alive = 0;
 	      if (p->infd >= 0)
 		clear_desc_flag = 1;
@@ -6508,10 +6507,10 @@ delete_gpm_wait_descriptor (int desc)
 
 # ifdef USABLE_SIGIO
 
-/* Return nonzero if *MASK has a bit set
+/* Return true if *MASK has a bit set
    that corresponds to one of the keyboard input descriptors.  */
 
-static int
+static bool
 keyboard_bit_set (fd_set *mask)
 {
   int fd;
@@ -6561,7 +6560,7 @@ extern int sys_select (int, SELECT_TYPE *, SELECT_TYPE *, SELECT_TYPE *,
 
    Return true if we received input from any process.  */
 
-int
+bool
 wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 			     bool do_display,
 			     Lisp_Object wait_for_cell,
@@ -6579,7 +6578,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
     time_limit = TYPE_MAXIMUM (time_t);
 
   /* What does time_limit really mean?  */
-  if (time_limit || 0 < nsecs)
+  if (time_limit || nsecs > 0)
     {
       timeout = make_emacs_time (time_limit, nsecs);
       end_time = add_emacs_time (current_emacs_time (), timeout);
@@ -6593,7 +6592,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 
   while (1)
     {
-      int timeout_reduced_for_timers = 0;
+      bool timeout_reduced_for_timers = 0;
       SELECT_TYPE waitchannels;
       int xerrno;
 
@@ -6617,7 +6616,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 
 	  timeout = make_emacs_time (0, 0);
 	}
-      else if (time_limit || 0 < nsecs)
+      else if (time_limit || nsecs > 0)
 	{
 	  EMACS_TIME now = current_emacs_time ();
 	  if (EMACS_TIME_LE (end_time, now))
@@ -6655,7 +6654,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 	      && requeued_events_pending_p ())
 	    break;
 
-	  if (EMACS_TIME_VALID_P (timer_delay) && 0 <= nsecs)
+	  if (EMACS_TIME_VALID_P (timer_delay) && nsecs >= 0)
 	    {
 	      if (EMACS_TIME_LT (timer_delay, timeout))
 		{
@@ -6944,9 +6943,9 @@ unhold_keyboard_input (void)
   kbd_is_on_hold = 0;
 }
 
-/* Return non-zero if keyboard input is on hold, zero otherwise.  */
+/* Return true if keyboard input is on hold, zero otherwise.  */
 
-int
+bool
 kbd_on_hold_p (void)
 {
   return kbd_is_on_hold;

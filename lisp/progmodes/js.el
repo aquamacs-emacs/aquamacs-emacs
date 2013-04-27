@@ -1785,13 +1785,13 @@ statement spanning multiple lines; otherwise, return nil."
                         (or (eq (char-before) ?,)
                             (and (not (eq (char-before) ?\;))
                                  (prog2
-                                     (skip-chars-backward "[[:punct:]]")
+                                     (skip-syntax-backward ".")
                                      (looking-at js--indent-operator-re)
                                    (js--backward-syntactic-ws))
                                  (not (eq (char-before) ?\;)))
                             (and (>= pos (point-at-bol))
                                  (<= pos (point-at-eol)))))))
-          (condition-case err
+          (condition-case nil
               (backward-sexp)
             (scan-error (setq at-opening-bracket t))))
         (when (looking-at js--declaration-keyword-re)

@@ -123,10 +123,6 @@ extern LWLIB_ID widget_id_tick;
 
 #define MAXREQUEST(dpy) (XMaxRequestSize (dpy))
 
-/* Nonzero if using X.  */
-
-int x_in_use;
-
 static Lisp_Object Qsuppress_icon;
 static Lisp_Object Qundefined_color;
 static Lisp_Object Qcompound_text, Qcancel_timer;
@@ -138,38 +134,6 @@ static int dpyinfo_refcount;
 #endif
 
 static struct x_display_info *x_display_info_for_name (Lisp_Object);
-
-
-/* Error if we are not connected to X.  */
-
-void
-check_x (void)
-{
-  if (! x_in_use)
-    error ("X windows are not in use or not initialized");
-}
-
-/* Nonzero if we can use mouse menus.
-   You should not call this unless HAVE_MENUS is defined.  */
-
-int
-have_menus_p (void)
-{
-  return x_in_use;
-}
-
-/* Extract a frame as a FRAME_PTR, defaulting to the selected frame
-   and checking validity for X.  */
-
-FRAME_PTR
-check_x_frame (Lisp_Object frame)
-{
-  struct frame *f = decode_live_frame (frame);
-
-  if (! FRAME_X_P (f))
-    error ("Non-X frame used");
-  return f;
-}
 
 /* Let the user specify an X display with a Lisp object.
    OBJECT may be nil, a frame or a terminal object.
@@ -205,7 +169,7 @@ check_x_display_info (Lisp_Object object)
     dpyinfo = x_display_info_for_name (object);
   else
     {
-      FRAME_PTR f = check_x_frame (object);
+      FRAME_PTR f = decode_window_system_frame (object);
       dpyinfo = FRAME_X_DISPLAY_INFO (f);
     }
 
@@ -2992,7 +2956,7 @@ If FRAME is omitted or nil, use the selected frame.
 Signal error if FRAME is not an X frame.  */)
   (Lisp_Object frame)
 {
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
 
   block_input ();
   x_wm_set_size_hint (f, 0, 0);
@@ -3181,9 +3145,6 @@ This function is an internal primitive--use `make-frame' instead.  */)
       /* use the frame's title when getting resources for this frame.  */
       specbind (Qx_resource_name, name);
     }
-
-  f->resx = dpyinfo->resx;
-  f->resy = dpyinfo->resy;
 
 #ifdef HAVE_FREETYPE
 #ifdef HAVE_XFT
@@ -3486,7 +3447,7 @@ DEFUN ("x-focus-frame", Fx_focus_frame, Sx_focus_frame, 1, 1, 0,
 FRAME nil means use the selected frame.  */)
   (Lisp_Object frame)
 {
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   Display *dpy = FRAME_X_DISPLAY (f);
 
   block_input ();
@@ -3519,7 +3480,7 @@ DEFUN ("xw-color-defined-p", Fxw_color_defined_p, Sxw_color_defined_p, 1, 2, 0,
   (Lisp_Object color, Lisp_Object frame)
 {
   XColor foo;
-  FRAME_PTR f = check_x_frame (frame);
+  FRAME_PTR f = decode_window_system_frame (frame);
 
   CHECK_STRING (color);
 
@@ -3534,14 +3495,12 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
   (Lisp_Object color, Lisp_Object frame)
 {
   XColor foo;
-  FRAME_PTR f = check_x_frame (frame);
+  FRAME_PTR f = decode_window_system_frame (frame);
 
   CHECK_STRING (color);
 
   if (x_defined_color (f, SSDATA (color), &foo, 0))
-    return list3 (make_number (foo.red),
-		  make_number (foo.green),
-		  make_number (foo.blue));
+    return list3i (foo.red, foo.green, foo.blue);
   else
     return Qnil;
 }
@@ -3703,9 +3662,8 @@ If omitted or nil, that stands for the selected frame's display.  */)
   struct x_display_info *dpyinfo = check_x_display_info (terminal);
   Display *dpy = dpyinfo->display;
 
-  return Fcons (make_number (ProtocolVersion (dpy)),
-		Fcons (make_number (ProtocolRevision (dpy)),
-		       Fcons (make_number (VendorRelease (dpy)), Qnil)));
+  return list3i (ProtocolVersion (dpy), ProtocolRevision (dpy),
+		 VendorRelease (dpy));
 }
 
 DEFUN ("x-display-screens", Fx_display_screens, Sx_display_screens, 0, 1, 0,
@@ -3772,7 +3730,6 @@ If omitted or nil, that stands for the selected frame's display.  */)
 
     default:
       error ("Strange value for BackingStore parameter of screen");
-      result = Qnil;
     }
 
   return result;
@@ -3814,7 +3771,6 @@ If omitted or nil, that stands for the selected frame's display.  */)
       break;
     default:
       error ("Display has an unknown visual class");
-      result = Qnil;
     }
 
   return result;
@@ -4004,7 +3960,6 @@ x_display_info_for_name (Lisp_Object name)
   if (dpyinfo == 0)
     error ("Cannot connect to X server %s", SDATA (name));
 
-  x_in_use = 1;
   XSETFASTINT (Vwindow_system_version, 11);
 
   return dpyinfo;
@@ -4057,8 +4012,6 @@ An insecure way to solve the problem may be to use `xhost'.\n",
       else
 	error ("Cannot connect to X server %s", SDATA (display));
     }
-
-  x_in_use = 1;
 
   XSETFASTINT (Vwindow_system_version, 11);
   return Qnil;
@@ -4151,7 +4104,7 @@ FRAME.  Default is to change on the edit X window.  */)
   (Lisp_Object prop, Lisp_Object value, Lisp_Object frame,
    Lisp_Object type, Lisp_Object format, Lisp_Object outer_p)
 {
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   Atom prop_atom;
   Atom target_type = XA_STRING;
   int element_format = 8;
@@ -4229,7 +4182,7 @@ DEFUN ("x-delete-window-property", Fx_delete_window_property,
 FRAME nil or omitted means use the selected frame.  Value is PROP.  */)
   (Lisp_Object prop, Lisp_Object frame)
 {
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   Atom prop_atom;
 
   CHECK_STRING (prop);
@@ -4265,7 +4218,7 @@ no value of TYPE (always string in the MS Windows case).  */)
   (Lisp_Object prop, Lisp_Object frame, Lisp_Object type,
    Lisp_Object source, Lisp_Object delete_p, Lisp_Object vector_ret_p)
 {
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   Atom prop_atom;
   int rc;
   Lisp_Object prop_value = Qnil;
@@ -4330,7 +4283,7 @@ no value of TYPE (always string in the MS Windows case).  */)
              property and those are indeed in 32 bit quantities if format is
              32.  */
 
-          if (32 < BITS_PER_LONG && actual_format == 32)
+          if (BITS_PER_LONG > 32 && actual_format == 32)
             {
               unsigned long i;
               int  *idata = (int *) tmp_data;
@@ -4533,8 +4486,6 @@ x_create_tip_frame (struct x_display_info *dpyinfo,
   Lisp_Object buffer;
   struct buffer *old_buffer;
 
-  check_x ();
-
   if (!dpyinfo->terminal->name)
     error ("Terminal is not live, can't create new frames on it");
 
@@ -4635,9 +4586,6 @@ x_create_tip_frame (struct x_display_info *dpyinfo,
       /* use the frame's title when getting resources for this frame.  */
       specbind (Qx_resource_name, name);
     }
-
-  f->resx = dpyinfo->resx;
-  f->resy = dpyinfo->resy;
 
   register_font_driver (&xfont_driver, f);
 #ifdef HAVE_FREETYPE
@@ -4934,7 +4882,7 @@ Text larger than the specified size is clipped.  */)
   if (SCHARS (string) == 0)
     string = make_unibyte_string (" ", 1);
 
-  f = check_x_frame (frame);
+  f = decode_window_system_frame (frame);
   if (NILP (timeout))
     timeout = make_number (5);
   else
@@ -5032,29 +4980,29 @@ Text larger than the specified size is clipped.  */)
 
   /* Set up the frame's root window.  */
   w = XWINDOW (FRAME_ROOT_WINDOW (f));
-  wset_left_col (w, make_number (0));
-  wset_top_line (w, make_number (0));
+  w->left_col = 0;
+  w->top_line = 0;
 
   if (CONSP (Vx_max_tooltip_size)
       && RANGED_INTEGERP (1, XCAR (Vx_max_tooltip_size), INT_MAX)
       && RANGED_INTEGERP (1, XCDR (Vx_max_tooltip_size), INT_MAX))
     {
-      wset_total_cols (w, XCAR (Vx_max_tooltip_size));
-      wset_total_lines (w, XCDR (Vx_max_tooltip_size));
+      w->total_cols = XFASTINT (XCAR (Vx_max_tooltip_size));
+      w->total_lines = XFASTINT (XCDR (Vx_max_tooltip_size));
     }
   else
     {
-      wset_total_cols (w, make_number (80));
-      wset_total_lines (w, make_number (40));
+      w->total_cols = 80;
+      w->total_lines = 40;
     }
 
-  FRAME_TOTAL_COLS (f) = XINT (w->total_cols);
+  FRAME_TOTAL_COLS (f) = w->total_cols;
   adjust_glyphs (f);
   w->pseudo_window_p = 1;
 
   /* Display the tooltip text in a temporary buffer.  */
   old_buffer = current_buffer;
-  set_buffer_internal_1 (XBUFFER (XWINDOW (FRAME_ROOT_WINDOW (f))->buffer));
+  set_buffer_internal_1 (XBUFFER (XWINDOW (FRAME_ROOT_WINDOW (f))->contents));
   bset_truncate_lines (current_buffer, Qnil);
   clear_glyph_matrix (w->desired_matrix);
   clear_glyph_matrix (w->current_matrix);
@@ -5070,7 +5018,7 @@ Text larger than the specified size is clipped.  */)
       int row_width;
 
       /* Stop at the first empty row at the end.  */
-      if (!row->enabled_p || !row->displays_text_p)
+      if (!row->enabled_p || !MATRIX_ROW_DISPLAYS_TEXT_P (row))
 	break;
 
       /* Let the row go over the full width of the frame.  */
@@ -5115,7 +5063,7 @@ Text larger than the specified size is clipped.  */)
       /* w->total_cols and FRAME_TOTAL_COLS want the width in columns,
 	 not in pixels.  */
       width /= WINDOW_FRAME_COLUMN_WIDTH (w);
-      wset_total_cols (w, make_number (width));
+      w->total_cols = width;
       FRAME_TOTAL_COLS (f) = width;
       adjust_glyphs (f);
       clear_glyph_matrix (w->desired_matrix);
@@ -5129,7 +5077,7 @@ Text larger than the specified size is clipped.  */)
 	  struct glyph *last;
 	  int row_width;
 
-	  if (!row->enabled_p || !row->displays_text_p)
+	  if (!row->enabled_p || !MATRIX_ROW_DISPLAYS_TEXT_P (row))
 	    break;
 	  row->full_width_p = 1;
 	  row_width = row->pixel_width;
@@ -5257,7 +5205,7 @@ DEFUN ("x-uses-old-gtk-dialog", Fx_uses_old_gtk_dialog,
 #ifdef USE_GTK
   if (use_dialog_box
       && use_file_dialog
-      && have_menus_p ()
+      && window_system_available (SELECTED_FRAME ())
       && xg_uses_old_file_dialog ())
     return Qt;
 #endif
@@ -5327,7 +5275,7 @@ Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
   ptrdiff_t count = SPECPDL_INDEX ();
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4, gcpro5, gcpro6;
 
-  check_x ();
+  check_window_system (f);
 
   GCPRO6 (prompt, dir, default_filename, mustmatch, only_dir_p, file);
 
@@ -5497,7 +5445,7 @@ Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4, gcpro5, gcpro6;
   char *cdef_file;
 
-  check_x ();
+  check_window_system (f);
 
   GCPRO6 (prompt, dir, default_filename, mustmatch, only_dir_p, file);
 
@@ -5552,14 +5500,12 @@ FRAME is the frame on which to pop up the font chooser.  If omitted or
 nil, it defaults to the selected frame. */)
   (Lisp_Object frame, Lisp_Object ignored)
 {
-  FRAME_PTR f = check_x_frame (frame);
+  FRAME_PTR f = decode_window_system_frame (frame);
   Lisp_Object font;
   Lisp_Object font_param;
   char *default_name = NULL;
   struct gcpro gcpro1, gcpro2;
   ptrdiff_t count = SPECPDL_INDEX ();
-
-  check_x ();
 
   if (popup_activated ())
     error ("Trying to use a menu from within a menu-entry");
@@ -5602,7 +5548,7 @@ nil, it defaults to the selected frame. */)
 			       Keyboard
  ***********************************************************************/
 
-#ifdef HAVE_XKBGETKEYBOARD
+#ifdef HAVE_XKB
 #include <X11/XKBlib.h>
 #include <X11/keysym.h>
 #endif
@@ -5616,9 +5562,11 @@ usual X keysyms.  Value is `lambda' if we cannot determine if both keys are
 present and mapped to the usual X keysyms.  */)
   (Lisp_Object frame)
 {
-#ifdef HAVE_XKBGETKEYBOARD
+#ifndef HAVE_XKB
+  return Qlambda;
+#else
   XkbDescPtr kb;
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   Display *dpy = FRAME_X_DISPLAY (f);
   Lisp_Object have_keys;
   int major, minor, op, event, error_code;
@@ -5694,9 +5642,7 @@ present and mapped to the usual X keysyms.  */)
     }
   unblock_input ();
   return have_keys;
-#else /* not HAVE_XKBGETKEYBOARD */
-  return Qlambda;
-#endif /* not HAVE_XKBGETKEYBOARD */
+#endif
 }
 
 
@@ -5748,9 +5694,6 @@ frame_parm_handler x_frame_parm_handlers[] =
 void
 syms_of_xfns (void)
 {
-  /* This is zero if not using X windows.  */
-  x_in_use = 0;
-
   /* The section below is built by the lisp expression at the top of the file,
      just above where these variables are declared.  */
   /*&&& init symbols here &&&*/
@@ -5929,9 +5872,6 @@ When using Gtk+ tooltips, the tooltip face is not used.  */);
   defsubr (&Sx_synchronize);
   defsubr (&Sx_focus_frame);
   defsubr (&Sx_backspace_delete_keys_p);
-
-  /* Setting callback functions for fontset handler.  */
-  check_window_system_func = check_x;
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);

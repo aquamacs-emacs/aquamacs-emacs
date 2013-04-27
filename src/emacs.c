@@ -44,7 +44,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "w32common.h"
 #endif
 
-#if defined HAVE_NTGUI && defined CYGWIN
+#if defined CYGWIN
 #include "cygw32.h"
 #endif
 
@@ -520,32 +520,6 @@ DEFUN ("invocation-directory", Finvocation_directory, Sinvocation_directory,
    It is OK (though a bit slower) if the user actually chooses this value.  */
 static char const dump_tz[] = "UtC0";
 #endif
-
-#ifndef ORDINARY_LINK
-/* We don't include crtbegin.o and crtend.o in the link,
-   so these functions and variables might be missed.
-   Provide dummy definitions to avoid error.
-   (We don't have any real constructors or destructors.)  */
-#ifdef __GNUC__
-
-/* Define a dummy function F.  Declare F too, to pacify gcc
-   -Wmissing-prototypes.  */
-#define DEFINE_DUMMY_FUNCTION(f) \
-  void f (void) ATTRIBUTE_CONST EXTERNALLY_VISIBLE; void f (void) {}
-
-#ifndef GCC_CTORS_IN_LIBC
-DEFINE_DUMMY_FUNCTION (__do_global_ctors)
-DEFINE_DUMMY_FUNCTION (__do_global_ctors_aux)
-DEFINE_DUMMY_FUNCTION (__do_global_dtors)
-/* GNU/Linux has a bug in its library; avoid an error.  */
-#ifndef GNU_LINUX
-char * __CTOR_LIST__[2] EXTERNALLY_VISIBLE = { (char *) (-1), 0 };
-#endif
-char * __DTOR_LIST__[2] EXTERNALLY_VISIBLE = { (char *) (-1), 0 };
-#endif /* GCC_CTORS_IN_LIBC */
-DEFINE_DUMMY_FUNCTION (__main)
-#endif /* __GNUC__ */
-#endif /* ORDINARY_LINK */
 
 /* Test whether the next argument in ARGV matches SSTR or a prefix of
    LSTR (at least MINLEN characters).  If so, then if VALPTR is non-null
@@ -1059,7 +1033,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 
             argv[skip_args] = fdStr;
 
-            execv (argv[0], argv);
+            execvp (argv[0], argv);
             fprintf (stderr, "emacs daemon: exec failed: %d\n", errno);
             exit (1);
           }
@@ -1106,7 +1080,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 
   noninteractive1 = noninteractive;
 
-/* Perform basic initializations (not merely interning symbols).  */
+  /* Perform basic initializations (not merely interning symbols).  */
 
   if (!initialized)
     {
@@ -1117,8 +1091,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
       init_coding_once ();
       init_syntax_once ();	/* Create standard syntax table.  */
       init_category_once ();	/* Create standard category table.  */
-		      /* Must be done before init_buffer.  */
-      init_casetab_once ();
+      init_casetab_once ();	/* Must be done before init_buffer_once.  */
       init_buffer_once ();	/* Create buffer table and some buffers.  */
       init_minibuf_once ();	/* Create list of minibuffers.  */
 				/* Must precede init_window_once.  */
@@ -1143,6 +1116,8 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
       syms_of_fileio ();
       /* Before syms_of_coding to initialize Vgc_cons_threshold.  */
       syms_of_alloc ();
+      /* May call Ffuncall and so GC, thus the latter should be initialized.  */
+      init_print_once ();
       /* Before syms_of_coding because it initializes Qcharsetp.  */
       syms_of_charset ();
       /* Before init_window_once, because it sets up the
@@ -1374,7 +1349,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 #ifdef WINDOWSNT
       syms_of_ntproc ();
 #endif /* WINDOWSNT */
-#if defined CYGWIN && defined HAVE_NTGUI
+#if defined CYGWIN
       syms_of_cygw32 ();
 #endif
       syms_of_window ();
@@ -2152,7 +2127,7 @@ decode_env_path (const char *evarname, const char *defalt)
     {
       char *path_copy = alloca (strlen (path) + 1);
       strcpy (path_copy, path);
-      dostounix_filename (path_copy);
+      dostounix_filename (path_copy, 0);
       path = path_copy;
     }
 #endif

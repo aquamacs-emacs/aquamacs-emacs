@@ -95,10 +95,6 @@ static HWND hourglass_hwnd = NULL;
 #define IDC_HAND MAKEINTRESOURCE(32649)
 #endif
 
-/* Nonzero if using Windows.  */
-
-static int w32_in_use;
-
 Lisp_Object Qsuppress_icon;
 Lisp_Object Qundefined_color;
 Lisp_Object Qcancel_timer;
@@ -161,6 +157,8 @@ typedef HWND (WINAPI * ImmSetCompositionWindow_Proc) (IN HIMC context,
 typedef HMONITOR (WINAPI * MonitorFromPoint_Proc) (IN POINT pt, IN DWORD flags);
 typedef BOOL (WINAPI * GetMonitorInfo_Proc)
   (IN HMONITOR monitor, OUT struct MONITOR_INFO* info);
+typedef HMONITOR (WINAPI * MonitorFromWindow_Proc)
+  (IN HWND hwnd, IN DWORD dwFlags);
 
 TrackMouseEvent_Proc track_mouse_event_fn = NULL;
 ImmGetCompositionString_Proc get_composition_string_fn = NULL;
@@ -169,6 +167,7 @@ ImmReleaseContext_Proc release_ime_context_fn = NULL;
 ImmSetCompositionWindow_Proc set_ime_composition_window_fn = NULL;
 MonitorFromPoint_Proc monitor_from_point_fn = NULL;
 GetMonitorInfo_Proc get_monitor_info_fn = NULL;
+MonitorFromWindow_Proc monitor_from_window_fn = NULL;
 
 #ifdef NTGUI_UNICODE
 #define unicode_append_menu AppendMenuW
@@ -238,37 +237,6 @@ HINSTANCE hinst = NULL;
 
 static unsigned int sound_type = 0xFFFFFFFF;
 #define MB_EMACS_SILENT (0xFFFFFFFF - 1)
-
-
-/* Error if we are not connected to MS-Windows.  */
-void
-check_w32 (void)
-{
-  if (! w32_in_use)
-    error ("MS-Windows not in use or not initialized");
-}
-
-/* Nonzero if we can use mouse menus.
-   You should not call this unless HAVE_MENUS is defined.  */
-
-int
-have_menus_p (void)
-{
-  return w32_in_use;
-}
-
-/* Extract a frame as a FRAME_PTR, defaulting to the selected frame
-   and checking validity for W32.  */
-
-FRAME_PTR
-check_x_frame (Lisp_Object frame)
-{
-  struct frame *f = decode_live_frame (frame);
-
-  if (! FRAME_W32_P (f))
-    error ("Non-W32 frame used");
-  return f;
-}
 
 /* Let the user specify a display with a frame.
    nil stands for the selected frame--or, if that is not a w32 frame,
@@ -369,6 +337,66 @@ x_real_positions (FRAME_PTR f, int *xptr, int *yptr)
 
   *xptr = rect.left;
   *yptr = rect.top;
+}
+
+/* Returns the window rectangle appropriate for the given fullscreen mode.
+   The normal rect parameter was the window's rectangle prior to entering
+   fullscreen mode.  If multiple monitor support is available, the nearest
+   monitor to the window is chosen.  */
+
+void
+w32_fullscreen_rect (HWND hwnd, int fsmode, RECT normal, RECT *rect)
+{
+  struct MONITOR_INFO mi = { sizeof(mi) };
+  if (monitor_from_window_fn && get_monitor_info_fn)
+    {
+      HMONITOR monitor =
+        monitor_from_window_fn (hwnd, MONITOR_DEFAULT_TO_NEAREST);
+      get_monitor_info_fn (monitor, &mi);
+    }
+  else
+    {
+      mi.rcMonitor.left = 0;
+      mi.rcMonitor.top = 0;
+      mi.rcMonitor.right = GetSystemMetrics (SM_CXSCREEN);
+      mi.rcMonitor.bottom = GetSystemMetrics (SM_CYSCREEN);
+      mi.rcWork.left = 0;
+      mi.rcWork.top = 0;
+      mi.rcWork.right = GetSystemMetrics (SM_CXMAXIMIZED);
+      mi.rcWork.bottom = GetSystemMetrics (SM_CYMAXIMIZED);
+    }
+
+  switch (fsmode)
+    {
+    case FULLSCREEN_BOTH:
+      rect->left = mi.rcMonitor.left;
+      rect->top = mi.rcMonitor.top;
+      rect->right = mi.rcMonitor.right;
+      rect->bottom = mi.rcMonitor.bottom;
+      break;
+    case FULLSCREEN_MAXIMIZED:
+      rect->left = mi.rcWork.left;
+      rect->top = mi.rcWork.top;
+      rect->right = mi.rcWork.right;
+      rect->bottom = mi.rcWork.bottom;
+      break;
+    case FULLSCREEN_WIDTH:
+      rect->left = mi.rcWork.left;
+      rect->top = normal.top;
+      rect->right = mi.rcWork.right;
+      rect->bottom = normal.bottom;
+      break;
+    case FULLSCREEN_HEIGHT:
+      rect->left = normal.left;
+      rect->top = mi.rcWork.top;
+      rect->right = normal.right;
+      rect->bottom = mi.rcWork.bottom;
+      break;
+    case FULLSCREEN_NONE:
+    default:
+      *rect = normal;
+      break;
+    }
 }
 
 
@@ -1721,11 +1749,9 @@ x_set_name (struct frame *f, Lisp_Object name, int explicit)
 
   if (FRAME_W32_WINDOW (f))
     {
-      if (STRING_MULTIBYTE (name))
-	name = ENCODE_SYSTEM (name);
-
       block_input ();
-      SetWindowText (FRAME_W32_WINDOW (f), SDATA (name));
+      GUI_FN (SetWindowText) (FRAME_W32_WINDOW (f),
+                              GUI_SDATA (GUI_ENCODE_SYSTEM (name)));
       unblock_input ();
     }
 }
@@ -1767,11 +1793,9 @@ x_set_title (struct frame *f, Lisp_Object name, Lisp_Object old_name)
 
   if (FRAME_W32_WINDOW (f))
     {
-      if (STRING_MULTIBYTE (name))
-	name = ENCODE_SYSTEM (name);
-
       block_input ();
-      SetWindowText (FRAME_W32_WINDOW (f), SDATA (name));
+      GUI_FN (SetWindowText) (FRAME_W32_WINDOW (f),
+                              GUI_SDATA (GUI_ENCODE_SYSTEM (name)));
       unblock_input ();
     }
 }
@@ -3159,8 +3183,28 @@ w32_wnd_proc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	  form.ptCurrentPos.y = w32_system_caret_y;
 
 	  form.rcArea.left = WINDOW_TEXT_TO_FRAME_PIXEL_X (w, 0);
+
+#ifdef ENABLE_CHECKING
+	  /* Temporary code to catch crashes in computing form.rcArea.top.  */
+	  eassert (FRAMEP (w->frame));
+	  eassert (BUFFERP (w->contents));
+	  {
+	    int wmbp = WINDOW_MENU_BAR_P (w);
+	    int wtbp = WINDOW_TOOL_BAR_P (w);
+	    struct frame *wf = WINDOW_XFRAME (w);
+	    int fibw = FRAME_INTERNAL_BORDER_WIDTH (wf);
+	    int wtel = WINDOW_TOP_EDGE_LINE (w);
+	    int wflh = FRAME_LINE_HEIGHT (wf);
+	    int wwhlp= WINDOW_WANTS_HEADER_LINE_P (w);
+	    int chlh = CURRENT_HEADER_LINE_HEIGHT (w);
+	    int whlh = (wwhlp ? chlh : 0);
+
+	    form.rcArea.top = ((wmbp || wtbp) ? 0 : fibw) + wtel * wflh + whlh;
+	  }
+#else
 	  form.rcArea.top = (WINDOW_TOP_EDGE_Y (w)
 			     + WINDOW_HEADER_LINE_HEIGHT (w));
+#endif
 	  form.rcArea.right = (WINDOW_BOX_RIGHT_EDGE_X (w)
 			       - WINDOW_RIGHT_MARGIN_WIDTH (w)
 			       - WINDOW_RIGHT_FRINGE_WIDTH (w));
@@ -3712,6 +3756,13 @@ w32_wnd_proc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       /* Don't restrict the sizing of tip frames.  */
       if (hwnd == tip_window)
 	return 0;
+
+      /* Don't restrict the sizing of fullscreened frames, allowing them to be
+         flush with the sides of the screen.  */
+      f = x_window_to_frame (dpyinfo, hwnd);
+      if (f && FRAME_PREV_FSMODE (f) != FULLSCREEN_NONE)
+        return 0;
+
       {
 	WINDOWPLACEMENT wp;
 	LPWINDOWPOS lppos = (WINDOWPOS *) lParam;
@@ -4357,9 +4408,6 @@ This function is an internal primitive--use `make-frame' instead.  */)
       specbind (Qx_resource_name, name);
     }
 
-  f->resx = dpyinfo->resx;
-  f->resy = dpyinfo->resy;
-
   if (uniscribe_available)
     register_font_driver (&uniscribe_font_driver, f);
   register_font_driver (&w32font_driver, f);
@@ -4556,7 +4604,7 @@ DEFUN ("x-focus-frame", Fx_focus_frame, Sx_focus_frame, 1, 1, 0,
        doc: /* Give FRAME input focus, raising to foreground if necessary.  */)
   (Lisp_Object frame)
 {
-  x_focus_on_frame (check_x_frame (frame));
+  x_focus_on_frame (decode_window_system_frame (frame));
   return Qnil;
 }
 
@@ -4567,7 +4615,7 @@ DEFUN ("xw-color-defined-p", Fxw_color_defined_p, Sxw_color_defined_p, 1, 2, 0,
   (Lisp_Object color, Lisp_Object frame)
 {
   XColor foo;
-  FRAME_PTR f = check_x_frame (frame);
+  FRAME_PTR f = decode_window_system_frame (frame);
 
   CHECK_STRING (color);
 
@@ -4582,17 +4630,14 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
   (Lisp_Object color, Lisp_Object frame)
 {
   XColor foo;
-  FRAME_PTR f = check_x_frame (frame);
+  FRAME_PTR f = decode_window_system_frame (frame);
 
   CHECK_STRING (color);
 
   if (w32_defined_color (f, SDATA (color), &foo, 0))
-    return list3 (make_number ((GetRValue (foo.pixel) << 8)
-			       | GetRValue (foo.pixel)),
-		  make_number ((GetGValue (foo.pixel) << 8)
-			       | GetGValue (foo.pixel)),
-		  make_number ((GetBValue (foo.pixel) << 8)
-			       | GetBValue (foo.pixel)));
+    return list3i ((GetRValue (foo.pixel) << 8) | GetRValue (foo.pixel),
+		   (GetGValue (foo.pixel) << 8) | GetGValue (foo.pixel),
+		   (GetBValue (foo.pixel) << 8) | GetBValue (foo.pixel));
   else
     return Qnil;
 }
@@ -4718,9 +4763,7 @@ DISPLAY should be either a frame or a display name (a string).
 If omitted or nil, that stands for the selected frame's display.  */)
   (Lisp_Object display)
 {
-  return Fcons (make_number (w32_major_version),
-		Fcons (make_number (w32_minor_version),
-		       Fcons (make_number (w32_build_number), Qnil)));
+  return list3i (w32_major_version, w32_minor_version, w32_build_number);
 }
 
 DEFUN ("x-display-screens", Fx_display_screens, Sx_display_screens, 0, 1, 0,
@@ -4905,7 +4948,6 @@ x_display_info_for_name (Lisp_Object name)
   if (dpyinfo == 0)
     error ("Cannot connect to server %s", SDATA (name));
 
-  w32_in_use = 1;
   XSETFASTINT (Vwindow_system_version, w32_major_version);
 
   return dpyinfo;
@@ -4935,7 +4977,7 @@ terminate Emacs if we can't open the connection.
 
   /* If initialization has already been done, return now to avoid
      overwriting critical parts of one_w32_display_info.  */
-  if (w32_in_use)
+  if (window_system_available (NULL))
     return Qnil;
 
   if (! NILP (xrm_string))
@@ -5003,8 +5045,6 @@ terminate Emacs if we can't open the connection.
       else
 	error ("Cannot connect to server %s", SDATA (display));
     }
-
-  w32_in_use = 1;
 
   XSETFASTINT (Vwindow_system_version, w32_major_version);
   return Qnil;
@@ -5089,7 +5129,7 @@ FRAME.  Default is to change on the edit X window.  */)
   (Lisp_Object prop, Lisp_Object value, Lisp_Object frame,
    Lisp_Object type, Lisp_Object format, Lisp_Object outer_p)
 {
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   Atom prop_atom;
 
   CHECK_STRING (prop);
@@ -5115,7 +5155,7 @@ DEFUN ("x-delete-window-property", Fx_delete_window_property,
 FRAME nil or omitted means use the selected frame.  Value is PROP.  */)
   (Lisp_Object prop, Lisp_Object frame)
 {
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   Atom prop_atom;
 
   CHECK_STRING (prop);
@@ -5151,7 +5191,7 @@ no value of TYPE (always string in the MS Windows case).  */)
   (Lisp_Object prop, Lisp_Object frame, Lisp_Object type,
    Lisp_Object source, Lisp_Object delete_p, Lisp_Object vector_ret_p)
 {
-  struct frame *f = check_x_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   Atom prop_atom;
   int rc;
   Lisp_Object prop_value = Qnil;
@@ -5352,8 +5392,6 @@ x_create_tip_frame (struct w32_display_info *dpyinfo,
   Lisp_Object buffer;
   struct buffer *old_buffer;
 
-  check_w32 ();
-
   /* Use this general default value to start with until we know if
      this frame has a specified name.  */
   Vx_resource_name = Vinvocation_name;
@@ -5428,9 +5466,6 @@ x_create_tip_frame (struct w32_display_info *dpyinfo,
       /* use the frame's title when getting resources for this frame.  */
       specbind (Qx_resource_name, name);
     }
-
-  f->resx = dpyinfo->resx;
-  f->resy = dpyinfo->resy;
 
   if (uniscribe_available)
     register_font_driver (&uniscribe_font_driver, f);
@@ -5700,7 +5735,7 @@ Text larger than the specified size is clipped.  */)
   GCPRO4 (string, parms, frame, timeout);
 
   CHECK_STRING (string);
-  f = check_x_frame (frame);
+  f = decode_window_system_frame (frame);
   if (NILP (timeout))
     timeout = make_number (5);
   else
@@ -5789,8 +5824,8 @@ Text larger than the specified size is clipped.  */)
 
   /* Set up the frame's root window.  */
   w = XWINDOW (FRAME_ROOT_WINDOW (f));
-  wset_left_col (w, make_number (0));
-  wset_top_line (w, make_number (0));
+  w->left_col = 0;
+  w->top_line = 0;
 
   if (CONSP (Vx_max_tooltip_size)
       && INTEGERP (XCAR (Vx_max_tooltip_size))
@@ -5798,22 +5833,22 @@ Text larger than the specified size is clipped.  */)
       && INTEGERP (XCDR (Vx_max_tooltip_size))
       && XINT (XCDR (Vx_max_tooltip_size)) > 0)
     {
-      wset_total_cols (w, XCAR (Vx_max_tooltip_size));
-      wset_total_lines (w, XCDR (Vx_max_tooltip_size));
+      w->total_cols = XFASTINT (XCAR (Vx_max_tooltip_size));
+      w->total_lines = XFASTINT (XCDR (Vx_max_tooltip_size));
     }
   else
     {
-      wset_total_cols (w, make_number (80));
-      wset_total_lines (w, make_number (40));
+      w->total_cols = 80;
+      w->total_lines = 40;
     }
 
-  FRAME_TOTAL_COLS (f) = XINT (w->total_cols);
+  FRAME_TOTAL_COLS (f) = WINDOW_TOTAL_COLS (w);
   adjust_glyphs (f);
   w->pseudo_window_p = 1;
 
   /* Display the tooltip text in a temporary buffer.  */
   old_buffer = current_buffer;
-  set_buffer_internal_1 (XBUFFER (XWINDOW (FRAME_ROOT_WINDOW (f))->buffer));
+  set_buffer_internal_1 (XBUFFER (XWINDOW (FRAME_ROOT_WINDOW (f))->contents));
   bset_truncate_lines (current_buffer, Qnil);
   clear_glyph_matrix (w->desired_matrix);
   clear_glyph_matrix (w->current_matrix);
@@ -5829,7 +5864,7 @@ Text larger than the specified size is clipped.  */)
       int row_width;
 
       /* Stop at the first empty row at the end.  */
-      if (!row->enabled_p || !row->displays_text_p)
+      if (!row->enabled_p || !MATRIX_ROW_DISPLAYS_TEXT_P (row))
 	break;
 
       /* Let the row go over the full width of the frame.  */
@@ -5875,7 +5910,7 @@ Text larger than the specified size is clipped.  */)
       /* w->total_cols and FRAME_TOTAL_COLS want the width in columns,
 	 not in pixels.  */
       width /= WINDOW_FRAME_COLUMN_WIDTH (w);
-      wset_total_cols (w, make_number (width));
+      w->total_cols = width;
       FRAME_TOTAL_COLS (f) = width;
       adjust_glyphs (f);
       w->pseudo_window_p = 1;
@@ -5890,7 +5925,7 @@ Text larger than the specified size is clipped.  */)
 	  struct glyph *last;
 	  int row_width;
 
-	  if (!row->enabled_p || !row->displays_text_p)
+	  if (!row->enabled_p || !MATRIX_ROW_DISPLAYS_TEXT_P (row))
 	    break;
 	  row->full_width_p = 1;
 	  row_width = row->pixel_width;
@@ -6010,14 +6045,6 @@ Value is t if tooltip was open, nil otherwise.  */)
 #define FILE_NAME_TEXT_FIELD edt1
 #define FILE_NAME_COMBO_BOX cmb13
 #define FILE_NAME_LIST lst1
-
-#ifdef NTGUI_UNICODE
-#define GUISTR(x) (L ## x)
-typedef wchar_t guichar_t;
-#else /* !NTGUI_UNICODE */
-#define GUISTR(x) x
-typedef char guichar_t;
-#endif /* NTGUI_UNICODE */
 
 /* Callback for altering the behavior of the Open File dialog.
    Makes the Filename text field contain "Current Directory" and be
@@ -6235,11 +6262,7 @@ Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
       block_input ();
       file_details->lpfnHook = file_dialog_callback;
 
-#ifdef NTGUI_UNICODE
-      file_opened = GetOpenFileNameW (file_details);
-#else /* !NTGUI_UNICODE */
-      file_opened = GetOpenFileNameA (file_details);
-#endif /* NTGUI_UNICODE */
+      file_opened = GUI_FN (GetOpenFileName) (file_details);
       unblock_input ();
       unbind_to (count, Qnil);
     }
@@ -6248,13 +6271,9 @@ Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
       {
         /* Get an Emacs string from the value Windows gave us.  */
 #ifdef NTGUI_UNICODE
-        filename = from_unicode (
-          make_unibyte_string (
-            (char*) filename_buf,
-            /* we get one of the two final 0 bytes for free. */
-            1 + sizeof (wchar_t) * wcslen (filename_buf)));
+        filename = from_unicode_buffer (filename_buf);
 #else /* !NTGUI_UNICODE */
-        dostounix_filename (filename_buf);
+        dostounix_filename (filename_buf, 0);
         filename = DECODE_FILE (build_string (filename_buf));
 #endif /* NTGUI_UNICODE */
 
@@ -6367,7 +6386,7 @@ screen saver if defined.
 If optional parameter FRAME is not specified, use selected frame.  */)
   (Lisp_Object command, Lisp_Object frame)
 {
-  FRAME_PTR f = check_x_frame (frame);
+  FRAME_PTR f = decode_window_system_frame (frame);
 
   CHECK_NUMBER (command);
 
@@ -6426,20 +6445,29 @@ an integer representing a ShowWindow flag:
   CHECK_STRING (document);
 
   /* Encode filename, current directory and parameters.  */
-  current_dir = ENCODE_FILE (BVAR (current_buffer, directory));
-  document = ENCODE_FILE (document);
-  if (STRINGP (parameters))
-    parameters = ENCODE_SYSTEM (parameters);
+  current_dir = BVAR (current_buffer, directory);
 
-  if ((int) ShellExecute (NULL,
-			  (STRINGP (operation) ?
-			   SDATA (operation) : NULL),
-			  SDATA (document),
-			  (STRINGP (parameters) ?
-			   SDATA (parameters) : NULL),
-			  SDATA (current_dir),
-			  (INTEGERP (show_flag) ?
-			   XINT (show_flag) : SW_SHOWDEFAULT))
+#ifdef CYGWIN
+  current_dir = Fcygwin_convert_file_name_to_windows (current_dir, Qt);
+  if (STRINGP (document))
+    document = Fcygwin_convert_file_name_to_windows (document, Qt);
+#endif /* CYGWIN */
+
+  current_dir = GUI_ENCODE_FILE (current_dir);
+  if (STRINGP (document))
+    document = GUI_ENCODE_FILE (document);
+  if (STRINGP (parameters))
+    parameters = GUI_ENCODE_SYSTEM (parameters);
+
+  if ((int) GUI_FN (ShellExecute) (NULL,
+                                   (STRINGP (operation) ?
+                                    GUI_SDATA (operation) : NULL),
+                                   GUI_SDATA (document),
+                                   (STRINGP (parameters) ?
+                                    GUI_SDATA (parameters) : NULL),
+                                   GUI_SDATA (current_dir),
+                                   (INTEGERP (show_flag) ?
+                                    XINT (show_flag) : SW_SHOWDEFAULT))
       > 32)
     return Qt;
   errstr = w32_strerror (0);
@@ -6484,12 +6512,12 @@ w32_parse_hot_key (Lisp_Object key)
 
   CHECK_VECTOR (key);
 
-  if (XFASTINT (Flength (key)) != 1)
+  if (ASIZE (key) != 1)
     return Qnil;
 
   GCPRO1 (key);
 
-  c = Faref (key, make_number (0));
+  c = AREF (key, 0);
 
   if (CONSP (c) && lucid_event_type_list_p (c))
     c = Fevent_convert_list (c);
@@ -6808,6 +6836,7 @@ The following %-sequences are provided:
 }
 
 
+#ifdef WINDOWSNT
 DEFUN ("file-system-info", Ffile_system_info, Sfile_system_info, 1, 1, 0,
        doc: /* Return storage information about the file system FILENAME is on.
 Value is a list of floats (TOTAL FREE AVAIL), where TOTAL is the total
@@ -6903,6 +6932,8 @@ If the underlying system call fails, value is nil.  */)
 
   return value;
 }
+#endif /* WINDOWSNT */
+
 
 DEFUN ("default-printer-name", Fdefault_printer_name, Sdefault_printer_name,
        0, 0, 0, doc: /* Return the name of Windows default printer device.  */)
@@ -7313,8 +7344,6 @@ void
 syms_of_w32fns (void)
 {
   globals_of_w32fns ();
-  /* This is zero if not using MS-Windows.  */
-  w32_in_use = 0;
   track_mouse_window = NULL;
 
   w32_visible_system_caret_hwnd = NULL;
@@ -7629,11 +7658,12 @@ only be necessary if the default setting causes problems.  */);
   defsubr (&Sw32_window_exists_p);
   defsubr (&Sw32_battery_status);
 
+#ifdef WINDOWSNT
   defsubr (&Sfile_system_info);
+#endif
+
   defsubr (&Sdefault_printer_name);
   defsubr (&Sset_message_beep);
-
-  check_window_system_func = check_w32;
 
   hourglass_hwnd = NULL;
 
@@ -7677,6 +7707,8 @@ globals_of_w32fns (void)
     GetProcAddress (user32_lib, "MonitorFromPoint");
   get_monitor_info_fn = (GetMonitorInfo_Proc)
     GetProcAddress (user32_lib, "GetMonitorInfoA");
+  monitor_from_window_fn = (MonitorFromWindow_Proc)
+    GetProcAddress (user32_lib, "MonitorFromWindow");
 
   {
     HMODULE imm32_lib = GetModuleHandle ("imm32.dll");
@@ -7775,6 +7807,9 @@ emacs_abort (void)
 #endif
 	    if (stderr_fd >= 0)
 	      write (stderr_fd, "\r\nBacktrace:\r\n", 14);
+#ifdef CYGWIN
+#define _open open
+#endif
 	    errfile_fd = _open ("emacs_backtrace.txt", O_RDWR | O_CREAT | O_BINARY, S_IREAD | S_IWRITE);
 	    if (errfile_fd >= 0)
 	      {
@@ -7810,3 +7845,15 @@ emacs_abort (void)
       }
     }
 }
+
+#ifdef NTGUI_UNICODE
+
+Lisp_Object
+ntgui_encode_system (Lisp_Object str)
+{
+  Lisp_Object encoded;
+  to_unicode (str, &encoded);
+  return encoded;
+}
+
+#endif /* NTGUI_UNICODE */

@@ -655,9 +655,8 @@ the new frame according to its own rules."
       (error "Don't know how to create a frame on window system %s" w))
 
     (unless (get w 'window-system-initialized)
-      (unless x-display-name
-        (setq x-display-name display))
-      (funcall (cdr (assq w window-system-initialization-alist)))
+      (funcall (cdr (assq w window-system-initialization-alist)) display)
+      (setq x-display-name display)
       (put w 'window-system-initialized t))
 
     ;; Add parameters from `window-system-default-frame-alist'.
@@ -1675,7 +1674,7 @@ so the frame will go to the right maximization state
 after disabling fullscreen mode.
 See also `toggle-frame-fullscreen'."
   (interactive)
-  (if (eq (frame-parameter nil 'fullscreen) 'fullscreen)
+  (if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
       (modify-frame-parameters
        nil
        `((maximized
@@ -1699,10 +1698,10 @@ See also `toggle-frame-maximized'."
   (modify-frame-parameters
    nil
    `((maximized
-      . ,(unless (eq (frame-parameter nil 'fullscreen) 'fullscreen)
+      . ,(unless (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
 	   (frame-parameter nil 'fullscreen)))
      (fullscreen
-      . ,(if (eq (frame-parameter nil 'fullscreen) 'fullscreen)
+      . ,(if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
 	     (if (eq (frame-parameter nil 'maximized) 'maximized)
 		 'maximized)
 	   'fullscreen)))))

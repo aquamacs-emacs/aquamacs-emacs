@@ -37,6 +37,7 @@
 
 @set edition-number 3.10
 @set update-date 28 October 2009
+@c FIXME can this be updated?  -- xfq
 
 @ignore
  ## Summary of shell commands to create various output formats:
@@ -227,6 +228,14 @@ This is an @cite{Introduction to Programming in Emacs Lisp}, for
 people who are not programmers.
 @sp 1
 Edition @value{edition-number}, @value{update-date}
+@ifset WWW_GNU_ORG
+@html
+<p>The homepage for GNU Emacs is at
+<a href="http://www.gnu.org/software/emacs/">http://www.gnu.org/software/emacs/</a>.
+<br>To view this manual in other formats, click
+<a href="/software/emacs/emacs-lisp-intro/emacs-lisp-intro.html">here</a>.
+@end html
+@end ifset
 @sp 1
 Copyright @copyright{} 1990--1995, 1997, 2001--2013 Free Software
 Foundation, Inc.
@@ -3086,18 +3095,15 @@ unless you investigate, you won't know whether an already-written
 function is written in Emacs Lisp or C.
 
 @node defun
-@section The @code{defun} Special Form
+@section The @code{defun} Macro
 @findex defun
-@cindex Special form of @code{defun}
 
 @cindex @samp{function definition} defined
 In Lisp, a symbol such as @code{mark-whole-buffer} has code attached to
 it that tells the computer what to do when the function is called.
 This code is called the @dfn{function definition} and is created by
 evaluating a Lisp expression that starts with the symbol @code{defun}
-(which is an abbreviation for @emph{define function}).  Because
-@code{defun} does not evaluate its arguments in the usual way, it is
-called a @dfn{special form}.
+(which is an abbreviation for @emph{define function}).
 
 In subsequent sections, we will look at function definitions from the
 Emacs source code, such as @code{mark-whole-buffer}.  In this section,
@@ -4246,7 +4252,7 @@ On the other hand, this function returns @code{nil} if the test is false.
 @findex point
 @findex mark
 
-The @code{save-excursion} function is the fourth and final special form
+The @code{save-excursion} function is the third and final special form
 that we will discuss in this chapter.
 
 In Emacs Lisp programs used for editing, the @code{save-excursion}
@@ -4373,9 +4379,9 @@ within the body of a @code{let} expression.  It looks like this:
 @node Review
 @section Review
 
-In the last few chapters we have introduced a fair number of functions
-and special forms.  Here they are described in brief, along with a few
-similar functions that have not been mentioned yet.
+In the last few chapters we have introduced a macro and a fair number
+of functions and special forms.  Here they are described in brief,
+along with a few similar functions that have not been mentioned yet.
 
 @table @code
 @item eval-last-sexp
@@ -4385,10 +4391,10 @@ invoked with an argument; in that case, the output is printed in the
 current buffer.  This command is normally bound to @kbd{C-x C-e}.
 
 @item defun
-Define function.  This special form has up to five parts: the name,
-a template for the arguments that will be passed to the function,
-documentation, an optional interactive declaration, and the body of the
-definition.
+Define function.  This macro has up to five parts: the name, a
+template for the arguments that will be passed to the function,
+documentation, an optional interactive declaration, and the body of
+the definition.
 
 @need 1250
 For example, in an early version of Emacs, the function definition was
@@ -4583,7 +4589,7 @@ argument to the value returned by its second argument.
 @item buffer-name
 Without an argument, return the name of the buffer, as a string.
 
-@itemx buffer-file-name
+@item buffer-file-name
 Without an argument, return the name of the file the buffer is
 visiting.
 
@@ -4795,7 +4801,7 @@ leave mark at previous position."
 @end smallexample
 
 Like all function definitions, this definition has five parts following
-the special form @code{defun}:
+the macro @code{defun}:
 
 @enumerate
 @item
@@ -9116,8 +9122,8 @@ Lisp; it is written in C and is one of the primitives of the GNU Emacs
 system.  Since it is very simple, I will digress briefly from Lisp and
 describe it here.
 
-@c GNU Emacs 22  in /usr/local/src/emacs/src/editfns.c
-@c the DEFUN for  buffer-substring-no-properties
+@c GNU Emacs 24  in src/editfns.c
+@c the DEFUN for  delete-and-extract-region
 
 @need 1500
 Like many of the other Emacs primitives,
@@ -9127,22 +9133,15 @@ like this:
 
 @smallexample
 @group
-DEFUN ("buffer-substring-no-properties", Fbuffer_substring_no_properties,
-       Sbuffer_substring_no_properties, 2, 2, 0,
-       doc: /* Return the characters of part of the buffer,
-without the text properties.
-The two arguments START and END are character positions;
-they can be in either order.  */)
-     (start, end)
-     Lisp_Object start, end;
+DEFUN ("delete-and-extract-region", Fdelete_and_extract_region,
+       Sdelete_and_extract_region, 2, 2, 0,
+       doc: /* Delete the text between START and END and return it.  */)
+       (Lisp_Object start, Lisp_Object end)
 @{
-  register int b, e;
-
   validate_region (&start, &end);
-  b = XINT (start);
-  e = XINT (end);
-
-  return make_buffer_string (b, e, 0);
+  if (XINT (start) == XINT (end))
+    return empty_unibyte_string;
+  return del_range_1 (XINT (start), XINT (end), 1, 1);
 @}
 @end group
 @end smallexample
@@ -9192,20 +9191,9 @@ and provides a prompt.
 
 @item
 The seventh part is a documentation string, just like the one for a
-function written in Emacs Lisp, except that every newline must be
-written explicitly as @samp{\n} followed by a backslash and carriage
-return.
-
-@need 1000
-Thus, the first two lines of documentation for  @code{goto-char} are
-written like this:
-
-@smallexample
-@group
-  "Set point to POSITION, a number or marker.\n\
-Beginning of buffer is position (point-min), end is (point-max)."
-@end group
-@end smallexample
+function written in Emacs Lisp.  This is written as a C comment.  (When
+you build Emacs, the program @command{lib-src/make-docfile} extracts
+these comments and uses them to make the ``real'' documentation.)
 @end itemize
 
 @need 1200
@@ -9218,15 +9206,15 @@ consists of the following four lines:
 @group
 validate_region (&start, &end);
 if (XINT (start) == XINT (end))
-  return build_string ("");
+  return empty_unibyte_string;
 return del_range_1 (XINT (start), XINT (end), 1, 1);
 @end group
 @end smallexample
 
-The   @code{validate_region} function checks whether the values
+The @code{validate_region} function checks whether the values
 passed as the beginning and end of the region are the proper type and
 are within range.  If the beginning and end positions are the same,
-then return and empty string.
+then return an empty string.
 
 The @code{del_range_1} function actually deletes the text.  It is a
 complex function we will not look into.  It updates the buffer and
@@ -9302,10 +9290,6 @@ it only sets the value of the variable if the variable does not already
 have a value.  If the variable already has a value, @code{defvar} does
 not override the existing value.  Second, @code{defvar} has a
 documentation string.
-
-(Another special form, @code{defcustom}, is designed for variables
-that people customize.  It has more features than @code{defvar}.
-(@xref{defcustom, , Setting Variables with @code{defcustom}}.)
 
 @menu
 * See variable current value::
@@ -11310,11 +11294,11 @@ Let's expand on the metaphor in which a computer program is a robot.
 
 A function definition provides the blueprints for a robot.  When you
 install a function definition, that is, when you evaluate a
-@code{defun} special form, you install the necessary equipment to
-build robots.  It is as if you were in a factory, setting up an
-assembly line.  Robots with the same name are built according to the
-same blueprints.  So they have, as it were, the same `model number',
-but a different `serial number'.
+@code{defun} macro, you install the necessary equipment to build
+robots.  It is as if you were in a factory, setting up an assembly
+line.  Robots with the same name are built according to the same
+blueprints.  So they have, as it were, the same `model number', but a
+different `serial number'.
 
 We often say that a recursive function `calls itself'.  What we mean
 is that the instructions in a recursive function cause the Lisp
@@ -16981,10 +16965,9 @@ definitions; but you can write @code{defuns} in your @file{.emacs}
 file.  Indeed, you can write any Lisp expression in your @file{.emacs}
 file.)
 
-The @code{customize} feature depends on the @code{defcustom} special
-form.  Although you can use @code{defvar} or @code{setq} for variables
-that users set, the @code{defcustom} special form is designed for the
-job.
+The @code{customize} feature depends on the @code{defcustom} macro.
+Although you can use @code{defvar} or @code{setq} for variables that
+users set, the @code{defcustom} macro is designed for the job.
 
 You can use your knowledge of @code{defvar} for writing the
 first three arguments for @code{defcustom}.  The first argument to
@@ -17010,7 +16993,7 @@ For example, the customizable user option variable
   "Normal hook run when entering Text mode and many related modes."
   :type 'hook
   :options '(turn-on-auto-fill flyspell-mode)
-  :group 'data)
+  :group 'wp)
 @end group
 @end smallexample
 
@@ -17829,7 +17812,7 @@ emacs -q --no-site-file -eval '(blink-cursor-mode nil)'
 
 @exdent Or nowadays, using an even more sophisticated set of options,
 
-emacs -Q - D
+emacs -Q -D
 @end smallexample
 }:
 

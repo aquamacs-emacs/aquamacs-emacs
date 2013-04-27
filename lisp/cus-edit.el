@@ -443,6 +443,7 @@
     (define-key map [remap self-insert-command] 'Custom-no-edit)
     (define-key map "\^m" 'Custom-newline)
     (define-key map " " 'scroll-up-command)
+    (define-key map [?\S-\ ] 'scroll-down-command)
     (define-key map "\177" 'scroll-down-command)
     (define-key map "\C-c\C-c" 'Custom-set)
     (define-key map "\C-x\C-s" 'Custom-save)
@@ -1318,7 +1319,8 @@ If OTHER-WINDOW is non-nil, display in another window.
 
 Interactively, when point is on text which has a face specified,
 suggest to customize that face, if it's customizable."
-  (interactive (list (read-face-name "Customize face" "all faces" t)))
+  (interactive (list (read-face-name "Customize face"
+                                     (or (face-at-point t t) "all faces") t)))
   (if (member face '(nil ""))
       (setq face (face-list)))
   (if (and (listp face) (null (cdr face)))
@@ -1349,7 +1351,8 @@ If FACE is actually a face-alias, customize the face it is aliased to.
 
 Interactively, when point is on text which has a face specified,
 suggest to customize that face, if it's customizable."
-  (interactive (list (read-face-name "Customize face" "all faces" t)))
+  (interactive (list (read-face-name "Customize face"
+                                     (or (face-at-point t t) "all faces") t)))
   (customize-face face t))
 
 (defalias 'customize-customized 'customize-unsaved)

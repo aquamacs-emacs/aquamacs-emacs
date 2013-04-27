@@ -287,7 +287,7 @@ font_pixel_size (FRAME_PTR f, Lisp_Object spec)
   if (INTEGERP (val))
     dpi = XINT (val);
   else
-    dpi = f->resy;
+    dpi = FRAME_RES_Y (f);
   pixel_size = POINT_TO_PIXEL (point_size, dpi);
   return pixel_size;
 #else
@@ -3117,7 +3117,7 @@ font_find_for_lface (FRAME_PTR f, Lisp_Object *attrs, Lisp_Object spec, int c)
     {
       double pt = XINT (attrs[LFACE_HEIGHT_INDEX]);
 
-      pixel_size = POINT_TO_PIXEL (pt / 10, f->resy);
+      pixel_size = POINT_TO_PIXEL (pt / 10, FRAME_RES_Y (f));
     }
   ASET (work, FONT_SIZE_INDEX, Qnil);
   foundry[0] = AREF (work, FONT_FOUNDRY_INDEX);
@@ -3247,12 +3247,13 @@ font_open_for_lface (FRAME_PTR f, Lisp_Object entity, Lisp_Object *attrs, Lisp_O
 	    }
 
 	  pt /= 10;
-	  size = POINT_TO_PIXEL (pt, f->resy);
+	  size = POINT_TO_PIXEL (pt, FRAME_RES_Y (f));
 #ifdef HAVE_NS
 	  if (size == 0)
 	    {
 	      Lisp_Object ffsize = get_frame_param (f, Qfontsize);
-	      size = NUMBERP (ffsize) ? POINT_TO_PIXEL (XINT (ffsize), f->resy) : 0;
+	      size = (NUMBERP (ffsize)
+		      ? POINT_TO_PIXEL (XINT (ffsize), FRAME_RES_Y (f)) : 0);
 	    }
 #endif
 	}
@@ -3689,11 +3690,11 @@ font_at (int c, ptrdiff_t pos, struct face *face, struct window *w,
 
 #ifdef HAVE_WINDOW_SYSTEM
 
-/* Check how many characters after POS (at most to *LIMIT) can be
-   displayed by the same font in the window W.  FACE, if non-NULL, is
-   the face selected for the character at POS.  If STRING is not nil,
-   it is the string to check instead of the current buffer.  In that
-   case, FACE must be not NULL.
+/* Check how many characters after character/byte position POS/POS_BYTE
+   (at most to *LIMIT) can be displayed by the same font in the window W.
+   FACE, if non-NULL, is the face selected for the character at POS.
+   If STRING is not nil, it is the string to check instead of the current
+   buffer.  In that case, FACE must be not NULL.
 
    The return value is the font-object for the character at POS.
    *LIMIT is set to the position where that font can't be used.
@@ -3701,15 +3702,15 @@ font_at (int c, ptrdiff_t pos, struct face *face, struct window *w,
    It is assured that the current buffer (or STRING) is multibyte.  */
 
 Lisp_Object
-font_range (ptrdiff_t pos, ptrdiff_t *limit, struct window *w, struct face *face, Lisp_Object string)
+font_range (ptrdiff_t pos, ptrdiff_t pos_byte, ptrdiff_t *limit,
+	    struct window *w, struct face *face, Lisp_Object string)
 {
-  ptrdiff_t pos_byte, ignore;
+  ptrdiff_t ignore;
   int c;
   Lisp_Object font_object = Qnil;
 
   if (NILP (string))
     {
-      pos_byte = CHAR_TO_BYTE (pos);
       if (! face)
 	{
 	  int face_id;
@@ -3720,10 +3721,7 @@ font_range (ptrdiff_t pos, ptrdiff_t *limit, struct window *w, struct face *face
 	}
     }
   else
-    {
-      eassert (face);
-      pos_byte = string_char_to_byte (string, pos);
-    }
+    eassert (face);
 
   while (pos < *limit)
     {
@@ -4024,7 +4022,7 @@ are to be displayed on.  If omitted, the selected frame is used.  */)
   if (INTEGERP (val))
     {
       Lisp_Object font_dpi = AREF (font, FONT_DPI_INDEX);
-      int dpi = INTEGERP (font_dpi) ? XINT (font_dpi) : f->resy;
+      int dpi = INTEGERP (font_dpi) ? XINT (font_dpi) : FRAME_RES_Y (f);
       plist[n++] = QCheight;
       plist[n++] = make_number (PIXEL_TO_POINT (XINT (val) * 10, dpi));
     }
@@ -4535,7 +4533,7 @@ DEFUN ("open-font", Fopen_font, Sopen_font, 1, 3, 0,
     {
       CHECK_NUMBER_OR_FLOAT (size);
       if (FLOATP (size))
-	isize = POINT_TO_PIXEL (XFLOAT_DATA (size), f->resy);
+	isize = POINT_TO_PIXEL (XFLOAT_DATA (size), FRAME_RES_Y (f));
       else
 	isize = XINT (size);
       if (! (INT_MIN <= isize && isize <= INT_MAX))
@@ -4603,7 +4601,7 @@ If the font is not OpenType font, CAPABILITY is nil.  */)
 
   CHECK_FONT_GET_OBJECT (font_object, font);
 
-  val = Fmake_vector (make_number (9), Qnil);
+  val = make_uninit_vector (9);
   ASET (val, 0, AREF (font_object, FONT_NAME_INDEX));
   ASET (val, 1, AREF (font_object, FONT_FILE_INDEX));
   ASET (val, 2, make_number (font->pixel_size));
@@ -4614,6 +4612,8 @@ If the font is not OpenType font, CAPABILITY is nil.  */)
   ASET (val, 7, make_number (font->average_width));
   if (font->driver->otf_capability)
     ASET (val, 8, Fcons (Qopentype, font->driver->otf_capability (font)));
+  else
+    ASET (val, 8, Qnil);
   return val;
 }
 
@@ -4706,7 +4706,7 @@ the corresponding element is nil.  */)
       chars = aref_addr (object, XFASTINT (from));
     }
 
-  vec = Fmake_vector (make_number (len), Qnil);
+  vec = make_uninit_vector (len);
   for (i = 0; i < len; i++)
     {
       Lisp_Object g;
@@ -4716,8 +4716,11 @@ the corresponding element is nil.  */)
 
       code = font->driver->encode_char (font, c);
       if (code == FONT_INVALID_CODE)
-	continue;
-      g = Fmake_vector (make_number (LGLYPH_SIZE), Qnil);
+	{
+	  ASET (vec, i, Qnil);
+	  continue;
+	}
+      g = LGLYPH_NEW ();
       LGLYPH_SET_FROM (g, i);
       LGLYPH_SET_TO (g, i);
       LGLYPH_SET_CHAR (g, c);
@@ -4758,7 +4761,7 @@ character at index specified by POSITION.  */)
 
   if (NILP (string))
     {
-      if (XBUFFER (w->buffer) != current_buffer)
+      if (XBUFFER (w->contents) != current_buffer)
 	error ("Specified window is not displaying the current buffer.");
       CHECK_NUMBER_COERCE_MARKER (position);
       if (! (BEGV <= XINT (position) && XINT (position) < ZV))
@@ -4829,7 +4832,7 @@ where
   OPENED-NAME is the name used for opening the font,
   FULL-NAME is the full name of the font,
   SIZE is the pixelsize of the font,
-  HEIGHT is the pixel-height of the font (i.e ascent + descent),
+  HEIGHT is the pixel-height of the font (i.e., ascent + descent),
   BASELINE-OFFSET is the upward offset pixels from ASCII baseline,
   RELATIVE-COMPOSE and DEFAULT-ASCENT are the numbers controlling
     how to compose characters.
@@ -4841,11 +4844,9 @@ If the named font is not yet loaded, return nil.  */)
   Lisp_Object info;
   Lisp_Object font_object;
 
-  (*check_window_system_func) ();
-
   if (! FONTP (name))
     CHECK_STRING (name);
-  f = decode_live_frame (frame);
+  f = decode_window_system_frame (frame);
 
   if (STRINGP (name))
     {
@@ -4870,7 +4871,7 @@ If the named font is not yet loaded, return nil.  */)
     return Qnil;
   font = XFONT_OBJECT (font_object);
 
-  info = Fmake_vector (make_number (7), Qnil);
+  info = make_uninit_vector (7);
   ASET (info, 0, AREF (font_object, FONT_NAME_INDEX));
   ASET (info, 1, AREF (font_object, FONT_FULLNAME_INDEX));
   ASET (info, 2, make_number (font->pixel_size));
@@ -4899,7 +4900,7 @@ build_style_table (const struct table_entry *entry, int nelement)
   int i, j;
   Lisp_Object table, elt;
 
-  table = Fmake_vector (make_number (nelement), Qnil);
+  table = make_uninit_vector (nelement);
   for (i = 0; i < nelement; i++)
     {
       for (j = 0; entry[i].names[j]; j++);
@@ -5163,7 +5164,7 @@ See `font-weight-table' for the format of the vector. */);
   XSYMBOL (intern_c_string ("font-width-table"))->constant = 1;
 
   staticpro (&font_style_table);
-  font_style_table = Fmake_vector (make_number (3), Qnil);
+  font_style_table = make_uninit_vector (3);
   ASET (font_style_table, 0, Vfont_weight_table);
   ASET (font_style_table, 1, Vfont_slant_table);
   ASET (font_style_table, 2, Vfont_width_table);

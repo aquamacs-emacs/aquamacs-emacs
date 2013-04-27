@@ -108,43 +108,6 @@ static ptrdiff_t image_cache_refcount;
 
    ========================================================================== */
 
-
-void
-check_ns (void)
-{
- if (NSApp == nil)
-   error ("OpenStep is not in use or not initialized");
-}
-
-
-/* Nonzero if we can use mouse menus. */
-int
-have_menus_p (void)
-{
-  return NSApp != nil;
-}
-
-
-/* Extract a frame as a FRAME_PTR, defaulting to the selected frame
-   and checking validity for NS.  */
-static FRAME_PTR
-check_ns_frame (Lisp_Object frame)
-{
-  FRAME_PTR f;
-
-  if (NILP (frame))
-      f = SELECTED_FRAME ();
-  else
-    {
-      CHECK_LIVE_FRAME (frame);
-      f = XFRAME (frame);
-    }
-  if (! FRAME_NS_P (f))
-    error ("non-Nextstep frame used");
-  return f;
-}
-
-
 /* Let the user specify an Nextstep display with a frame.
    nil stands for the selected frame--or, if that is not an Nextstep frame,
    the first Nextstep display on the list.  */
@@ -262,6 +225,29 @@ ns_display_info_for_name (Lisp_Object name)
   return dpyinfo;
 }
 
+static NSString *
+ns_filename_from_panel (NSSavePanel *panel)
+{
+#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+  NSURL *url = [panel URL];
+  NSString *str = [url path];
+  return str;
+#else
+  return [panel filename];
+#endif
+}
+
+static NSString *
+ns_directory_from_panel (NSSavePanel *panel)
+{
+#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+  NSURL *url = [panel directoryURL];
+  NSString *str = [url path];
+  return str;
+#else
+  return [panel directory];
+#endif
+}
 
 static Lisp_Object
 interpret_services_menu (NSMenu *menu, Lisp_Object prefix, Lisp_Object old)
@@ -597,7 +583,7 @@ ns_set_name_as_filename (struct frame *f)
 {
   NSView *view;
   Lisp_Object name, filename;
-  Lisp_Object buf = XWINDOW (f->selected_window)->buffer;
+  Lisp_Object buf = XWINDOW (f->selected_window)->contents;
   const char *title;
   NSAutoreleasePool *pool;
   struct gcpro gcpro1;
@@ -1123,8 +1109,6 @@ This function is an internal primitive--use `make-frame' instead.  */)
   Lisp_Object tfont, tfontsize;
   static int desc_ctr = 1;
 
-  check_ns ();
-
   /* x_get_arg modifies parms.  */
   parms = Fcopy_alist (parms);
 
@@ -1220,9 +1204,6 @@ This function is an internal primitive--use `make-frame' instead.  */)
       f->explicit_name = 1;
       specbind (Qx_resource_name, name);
     }
-
-  f->resx = dpyinfo->resx;
-  f->resy = dpyinfo->resy;
 
   block_input ();
   register_font_driver (&nsfont_driver, f);
@@ -1399,7 +1380,7 @@ DEFUN ("x-focus-frame", Fx_focus_frame, Sx_focus_frame, 1, 1, 0,
 FRAME nil means use the selected frame.  */)
      (Lisp_Object frame)
 {
-  struct frame *f = check_ns_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
   struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
 
   if (dpyinfo->x_focus_frame != f)
@@ -1459,7 +1440,7 @@ OS X 10.6 only; returns non-nil prior to 10.5 or for non-NS frames.*/)
      Lisp_Object frame;
 {
   struct frame *f;
-  check_ns ();
+  check_window_system (NULL);
   CHECK_LIVE_FRAME (frame);
   f = XFRAME (frame);
   NSWindow *win = [FRAME_NS_VIEW (f) window];
@@ -1479,7 +1460,7 @@ Shows the NS spell checking panel and brings it to the front.*/)
 {
   id sc;
 
-  check_ns ();
+  check_window_system (NULL);
   sc = [NSSpellChecker sharedSpellChecker];
   
   block_input();
@@ -1505,7 +1486,7 @@ DEFUN ("ns-close-spellchecker-panel", Fns_close_spellchecker_panel, Sns_close_sp
 {
   id sc;
 
-  check_ns ();
+  check_window_system (NULL);
   sc = [NSSpellChecker sharedSpellChecker];
   
   block_input();
@@ -1524,7 +1505,7 @@ nil otherwise.*/)
   id sc;
   BOOL visible;
 
-  check_ns ();
+  check_window_system (NULL);
   sc = [NSSpellChecker sharedSpellChecker];
   
   block_input();
@@ -1545,7 +1526,7 @@ Give empty string to delete word.*/)
   id sc;
 
   CHECK_STRING (str);
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
   
@@ -1565,7 +1546,7 @@ Not available on 10.4.*/)
      Lisp_Object str;
 {
   CHECK_STRING (str);
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   id sc = [NSSpellChecker sharedSpellChecker];
 
@@ -1592,7 +1573,7 @@ DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellche
   id sc;
 
   CHECK_STRING (str);
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
   
@@ -1617,7 +1598,7 @@ for buffer BUFFER */)
 {
   id sc;
 
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
   
@@ -1653,7 +1634,7 @@ words are spelled as in the dictionary.*/)
   id sc;
 
   CHECK_STRING (string);
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
@@ -1703,7 +1684,7 @@ of ignored grammatical constructions. */)
   id sc;
 
   CHECK_STRING (sentence);
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
@@ -1739,7 +1720,7 @@ capitalized in the same way. */)
   id sc;
 
   CHECK_STRING (word);
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
@@ -1764,7 +1745,7 @@ Returns nil if not successful.*/)
   id sc;
   Lisp_Object retval = Qnil;
 
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
@@ -1793,7 +1774,7 @@ DEFUN ("ns-spellchecker-current-language", Fns_spellchecker_current_language, Sn
 {
   id sc;
 
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
@@ -1817,7 +1798,7 @@ LANGUAGE must be one of the languages returned by
   id sc;
 
   CHECK_STRING (language);
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   sc = [NSSpellChecker sharedSpellChecker];
 
@@ -1833,10 +1814,10 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
      (frame, face)
      Lisp_Object frame, face;
 {
-  id fm;
-  struct frame *f;
+  struct frame *f = decode_window_system_frame (frame);
+  id fm = [NSFontManager sharedFontManager];
 
-  check_ns ();
+  check_window_system (NULL);
   block_input();
 
   fm = [NSFontManager sharedFontManager];
@@ -1844,8 +1825,7 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
     f = SELECTED_FRAME ();
   else
     {
-      CHECK_FRAME (frame);
-      f = XFRAME (frame);
+      f = decode_window_system_frame (frame);
     }
 
   if (! NILP (face))
@@ -1878,7 +1858,8 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
      Lisp_Object frame, color;
 {
   struct frame *f;
-  check_ns ();
+  check_window_system (NULL);
+  check_window_system (NULL);
   block_input();
   if (NILP (frame))
     f = SELECTED_FRAME ();
@@ -1909,7 +1890,7 @@ DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_s
        doc: /* Pop up the page setup panel.  */)
      ()
 {
-  check_ns ();
+  check_window_system (NULL);
   block_input();
 
   NSPageLayout *pageLayout = [NSPageLayout pageLayout];
@@ -1938,7 +1919,7 @@ DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
      Lisp_Object frame, source;
 {
   struct frame *f;
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   if (NILP (frame))
     f = SELECTED_FRAME ();
@@ -2028,7 +2009,7 @@ when `ns-popup-save-panel' was called.
 {
   NSSavePanel *panel;
 
-  check_ns ();
+  check_window_system (NULL);
   block_input();
 
   NSString *promptS = NILP (prompt) || !STRINGP (prompt) ? nil :
@@ -2078,7 +2059,7 @@ Optional arg DIR_ONLY_P, if non-nil, means choose only directories.  */)
    Lisp_Object init, Lisp_Object dir_only_p)
 {
   static id fileDelegate = nil;
-  int ret;
+  BOOL ret;
   id panel;
   Lisp_Object fname;
 
@@ -2090,7 +2071,7 @@ Optional arg DIR_ONLY_P, if non-nil, means choose only directories.  */)
   NSString *initS = NILP (init) || !STRINGP (init) ? nil :
     [NSString stringWithUTF8String: SSDATA (init)];
 
-  check_ns ();
+  check_window_system (NULL);
 
   if (fileDelegate == nil)
     fileDelegate = [EmacsFileDelegate new];
@@ -2118,6 +2099,13 @@ Optional arg DIR_ONLY_P, if non-nil, means choose only directories.  */)
       [panel setCanChooseDirectories: YES];
       [panel setCanChooseFiles: NO];
     }
+  else
+    {
+      /* This is not quite what the documentation says, but it is compatible
+         with the Gtk+ code.  Also, the menu entry says "Open File...".  */
+      [panel setCanChooseDirectories: NO];
+      [panel setCanChooseFiles: YES];
+    }
 
   block_input ();
 #if defined (NS_IMPL_COCOA) && \
@@ -2138,15 +2126,19 @@ Optional arg DIR_ONLY_P, if non-nil, means choose only directories.  */)
     }
   else
     {
-      [panel setCanChooseDirectories: YES];
       ret = [panel runModalForDirectory: dirS file: initS types: nil];
     }
 #endif
 
   ret = (ret == NSOKButton) || panelOK;
 
-  if (ret)
-    fname = build_string ([[panel filename] UTF8String]);
+  if (ret) 
+    {
+      NSString *str = [panel getFilename];
+      if (! str) str = [panel getDirectory];
+      if (! str) ret = NO;
+      else fname = build_string ([str UTF8String]);
+    }
 
   [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
   unblock_input ();
@@ -2173,11 +2165,10 @@ If OWNER is nil, Emacs is assumed.  */)
 {
   const char *value;
 
-  check_ns ();
+  check_window_system (NULL);
   if (NILP (owner))
     owner = build_string([ns_app_name UTF8String]);
   CHECK_STRING (name);
-/*fprintf (stderr, "ns-get-resource checking resource '%s'\n", SSDATA (name)); */
 
   value = ns_get_defaults_value (SSDATA (name));
 
@@ -2192,7 +2183,7 @@ If OWNER is nil, Emacs is assumed.
 If VALUE is nil, the default is removed.  */)
      (Lisp_Object owner, Lisp_Object name, Lisp_Object value)
 {
-  check_ns ();
+  check_window_system (NULL);
   if (NILP (owner))
     owner = build_string ([ns_app_name UTF8String]);
   CHECK_STRING (name);
@@ -2220,7 +2211,7 @@ DEFUN ("x-server-max-request-size", Fx_server_max_request_size,
        doc: /* This function is a no-op.  It is only present for completeness.  */)
      (Lisp_Object display)
 {
-  check_ns ();
+  check_ns_display_info (display);
   /* This function has no real equivalent under NeXTstep.  Return nil to
      indicate this. */
   return Qnil;
@@ -2258,9 +2249,7 @@ If omitted or nil, that stands for the selected frame's display.  */)
           The last number is where we distinguish between the Apple
           and GNUstep implementations ("distributor-specific release
           number") and give int'ized versions of major.minor. */
-  return Fcons (make_number (10),
-		Fcons (make_number (3),
-		       Fcons (make_number (ns_appkit_version_int()), Qnil)));
+  return list3i (10, 3, ns_appkit_version_int ());
 }
 
 
@@ -2272,7 +2261,7 @@ If omitted or nil, the selected frame's display is used.  */)
 {
   int num;
 
-  check_ns ();
+  check_ns_display_info (display);
   num = [[NSScreen screens] count];
 
   return (num != 0) ? make_number (num) : Qnil;
@@ -2286,7 +2275,7 @@ DISPLAY should be a frame, the display name as a string, or a terminal ID.
 If omitted or nil, the selected frame's display is used.  */)
      (Lisp_Object display)
 {
-  check_ns ();
+  check_ns_display_info (display);
 
   NSScreen *screen = ns_get_screen (display);
 
@@ -2305,7 +2294,7 @@ DISPLAY should be a frame, the display name as a string, or a terminal ID.
 If omitted or nil, the selected frame's display is used.  */)
      (Lisp_Object display)
 {
-  check_ns ();
+  check_ns_display_info (display);
 
   NSScreen *screen = ns_get_screen (display);
 
@@ -2325,7 +2314,7 @@ DISPLAY should be a frame, the display name as a string, or a terminal ID.
 If omitted or nil, the selected frame's display is used.  */)
      (Lisp_Object display)
 {
-  check_ns ();
+  check_ns_display_info (display);
   switch ([ns_get_window (display) backingType])
     {
     case NSBackingStoreBuffered:
@@ -2351,7 +2340,8 @@ If omitted or nil, the selected frame's display is used.  */)
      (Lisp_Object display)
 {
   NSWindowDepth depth;
-  check_ns ();
+  
+  check_ns_display_info (display);
   depth = [ns_get_screen (display) depth];
 
   if ( depth == NSBestDepth (NSCalibratedWhiteColorSpace, 2, 2, YES, NULL))
@@ -2378,7 +2368,7 @@ DISPLAY should be a frame, the display name as a string, or a terminal ID.
 If omitted or nil, the selected frame's display is used.  */)
      (Lisp_Object display)
 {
-  check_ns ();
+  check_ns_display_info (display);
   switch ([ns_get_window (display) backingType])
     {
     case NSBackingStoreBuffered:
@@ -2428,11 +2418,10 @@ terminate Emacs if we can't open the connection.
 DEFUN ("x-close-connection", Fx_close_connection, Sx_close_connection,
        1, 1, 0,
        doc: /* Close the connection to the current Nextstep display server.
-The argument DISPLAY is currently ignored.  */)
+DISPLAY should be a frame, the display name as a string, or a terminal ID.  */)
      (Lisp_Object display)
 {
-  check_ns ();
-  /*ns_delete_terminal (dpyinfo->terminal); */
+  check_ns_display_info (display);
   [NSApp terminate: NSApp];
   return Qnil;
 }
@@ -2457,7 +2446,7 @@ DEFUN ("ns-hide-others", Fns_hide_others, Sns_hide_others,
        doc: /* Hides all applications other than Emacs.  */)
      (void)
 {
-  check_ns ();
+  check_window_system (NULL);
   [NSApp hideOtherApplications: NSApp];
   return Qnil;
 }
@@ -2470,7 +2459,7 @@ If ON is equal to `activate', Emacs is unhidden and becomes
 the active application.  */)
      (Lisp_Object on)
 {
-  check_ns ();
+  check_window_system (NULL);
   if (EQ (on, intern ("activate")))
     {
       [NSApp unhide: NSApp];
@@ -2489,7 +2478,7 @@ DEFUN ("ns-emacs-info-panel", Fns_emacs_info_panel, Sns_emacs_info_panel,
        doc: /* Shows the 'Info' or 'About' panel for Emacs.  */)
      (void)
 {
-  check_ns ();
+  check_window_system (NULL);
   [NSApp orderFrontStandardAboutPanel: nil];
   return Qnil;
 }
@@ -2567,7 +2556,7 @@ DEFUN ("ns-list-services", Fns_list_services, Sns_list_services, 0, 0, 0,
   NSMenu *svcs;
   id delegate;
 
-  check_ns ();
+  check_window_system (NULL);
   svcs = [[NSMenu alloc] initWithTitle: @"Services"];
   [NSApp setServicesMenu: svcs];
   [NSApp registerServicesMenuSendTypes: ns_send_types
@@ -2620,7 +2609,7 @@ there was no result.  */)
   char *utfStr;
 
   CHECK_STRING (service);
-  check_ns ();
+  check_window_system (NULL);
 
   utfStr = SSDATA (service);
   svcName = [NSString stringWithUTF8String: utfStr];
@@ -2745,7 +2734,7 @@ In case the execution fails, an error is signaled. */)
   NSEvent *nxev;
 
   CHECK_STRING (script);
-  check_ns ();
+  check_window_system (NULL);
 
   block_input ();
 
@@ -2921,7 +2910,7 @@ DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidd
     ()
 {
 
-  check_ns ();
+  check_window_system (NULL);
   return ([NSApp isHidden] == YES ?
 	  Qt : Qnil);
 }
@@ -2933,13 +2922,6 @@ DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidd
    ========================================================================== */
 
 
-/* called from image.c */
-FRAME_PTR
-check_x_frame (Lisp_Object frame)
-{
-  return check_ns_frame (frame);
-}
-
 DEFUN ("ns-launch-URL-with-default-browser", Fns_launch_url_with_default_browser, Sns_launch_url_with_default_browser, 1, 1, 0,
        doc: /* Launch the URL with the appropriate handler application.
  file:// URLs are always opened with the system's default browser, i.e.
@@ -2948,9 +2930,10 @@ DEFUN ("ns-launch-URL-with-default-browser", Fns_launch_url_with_default_browser
 (URLstring)
 Lisp_Object URLstring;
 {
-	check_ns();
-	CHECK_STRING (URLstring);
-	if (NILP (URLstring))
+  check_window_system (NULL);
+
+  CHECK_STRING (URLstring);
+  if (NILP (URLstring))
     {
 		error ("URL is nil.");
 		return Qnil;
@@ -3071,7 +3054,7 @@ x_get_string_resource (XrmDatabase rdb, char *name, char *class)
   /* remove appname prefix; TODO: allow for !="Emacs" */
   char *toCheck = class + (!strncmp (class, "Emacs.", 6) ? 6 : 0);
   const char *res;
-  check_ns ();
+  check_window_system (NULL);
 
   if (inhibit_x_resources)
     /* --quick was passed, so this is a no-op.  */
@@ -3141,7 +3124,7 @@ DEFUN ("xw-color-defined-p", Fxw_color_defined_p, Sxw_color_defined_p, 1, 2, 0,
      (Lisp_Object color, Lisp_Object frame)
 {
   NSColor * col;
-  check_ns ();
+  check_window_system (NULL);
   return ns_lisp_to_color (color, &col) ? Qnil : Qt;
 }
 
@@ -3153,7 +3136,7 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
   NSColor * col;
   CGFloat red, green, blue, alpha;
 
-  check_ns ();
+  check_window_system (NULL);
   CHECK_STRING (color);
 
   if (ns_lisp_to_color (color, &col))
@@ -3161,9 +3144,8 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
 
   [[col colorUsingColorSpaceName: NSCalibratedRGBColorSpace]
         getRed: &red green: &green blue: &blue alpha: &alpha];
-  return list3 (make_number (lrint (red*65280)),
-		make_number (lrint (green*65280)),
-		make_number (lrint (blue*65280)));
+  return list3i (lrint (red * 65280), lrint (green * 65280),
+		 lrint (blue * 65280));
 }
 
 
@@ -3173,7 +3155,8 @@ DEFUN ("xw-display-color-p", Fxw_display_color_p, Sxw_display_color_p, 0, 1, 0,
 {
   NSWindowDepth depth;
   NSString *colorSpace;
-  check_ns ();
+  
+  check_ns_display_info (display);
   depth = [ns_get_screen (display) depth];
   colorSpace = NSColorSpaceFromDepth (depth);
 
@@ -3193,7 +3176,8 @@ If omitted or nil, that stands for the selected frame's display. */)
      (Lisp_Object display)
 {
   NSWindowDepth depth;
-  check_ns ();
+
+  check_ns_display_info (display);
   depth = [ns_get_screen (display) depth];
 
   return NSBitsPerPixelFromDepth (depth) > 1 ? Qt : Qnil;
@@ -3208,7 +3192,7 @@ DISPLAY should be either a frame, a display name (a string), or terminal ID.
 If omitted or nil, that stands for the selected frame's display.  */)
      (Lisp_Object display)
 {
-  check_ns ();
+  check_ns_display_info (display);
   return make_number ((int) [ns_get_screen (display) frame].size.width);
 }
 
@@ -3221,7 +3205,7 @@ DISPLAY should be either a frame, a display name (a string), or terminal ID.
 If omitted or nil, that stands for the selected frame's display.  */)
      (Lisp_Object display)
 {
-  check_ns ();
+  check_ns_display_info (display);
   return make_number ((int) [ns_get_screen (display) frame].size.height);
 }
 
@@ -3244,7 +3228,7 @@ May return nil if a frame passed in DISPLAY is not on any available display.  */
   NSScreen *screen;
   NSRect vScreen;
 
-  check_ns ();
+  check_ns_display_info (display);
   screen = ns_get_screen (display);
   if (!screen)
     return Qnil;
@@ -3253,11 +3237,10 @@ May return nil if a frame passed in DISPLAY is not on any available display.  */
 
   /* NS coordinate system is upside-down.
      Transform to screen-specific coordinates. */
-  return list4 (make_number ((int) vScreen.origin.x),
-		make_number ((int) [screen frame].size.height
-			     - vScreen.size.height - vScreen.origin.y),
-                make_number ((int) vScreen.size.width),
-                make_number ((int) vScreen.size.height));
+  return list4i (vScreen.origin.x,
+		 [screen frame].size.height
+		 - vScreen.size.height - vScreen.origin.y,
+		 vScreen.size.width, vScreen.size.height);
 }
 
 
@@ -3269,7 +3252,7 @@ DISPLAY should be either a frame, a display name (a string), or terminal ID.
 If omitted or nil, that stands for the selected frame's display.  */)
      (Lisp_Object display)
 {
-  check_ns ();
+  check_ns_display_info (display);
   return make_number
     (NSBitsPerPixelFromDepth ([ns_get_screen (display) depth]));
 }
@@ -3283,10 +3266,7 @@ DISPLAY should be either a frame, a display name (a string), or terminal ID.
 If omitted or nil, that stands for the selected frame's display.  */)
      (Lisp_Object display)
 {
-  struct ns_display_info *dpyinfo;
-  check_ns ();
-
-  dpyinfo = check_ns_display_info (display);
+  struct ns_display_info *dpyinfo = check_ns_display_info (display);
   /* We force 24+ bit depths to 24-bit to prevent an overflow.  */
   return make_number (1 << min (dpyinfo->n_planes, 24));
 }
@@ -3399,7 +3379,7 @@ Text larger than the specified size is clipped.  */)
 
   CHECK_STRING (string);
   str = SSDATA (string);
-  f = check_x_frame (frame);
+  f = decode_window_system_frame (frame);
   if (NILP (timeout))
     timeout = make_number (5);
   else
@@ -3454,7 +3434,7 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
      (anchor, book)
      Lisp_Object anchor, book;
 {
-  check_ns ();
+  check_window_system (NULL);
   block_input();
   CHECK_STRING (anchor);
 
@@ -3490,6 +3470,14 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 }
 
 #endif
+- (NSString *) getFilename
+{
+  return ns_filename_from_panel (self);
+}
+- (NSString *) getDirectory
+{
+  return ns_directory_from_panel (self);
+}
 @end
 
 
@@ -3503,6 +3491,12 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 - (void) ok: (id)sender
 {
   [super ok: sender];
+
+  // If not choosing directories, and Open is pressed on a directory, return.
+  if (! [self canChooseDirectories] && [self getDirectory] &&
+      ! [self getFilename])
+    return;
+
   panelOK = 1;
   [NSApp stop: self];
 }
@@ -3511,7 +3505,17 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
   [super cancel: sender];
   [NSApp stop: self];
 }
+
 #endif
+- (NSString *) getFilename
+{
+  return ns_filename_from_panel (self);
+}
+- (NSString *) getDirectory
+{
+  return ns_directory_from_panel (self);
+}
+
 @end
 
 
@@ -3642,9 +3646,6 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sx_hide_tip);
 
   defsubr (&Sns_open_help_anchor);
-
-  /* used only in fontset.c */
-  check_window_system_func = check_ns;
 
   as_status = 0;
   as_script = Qnil;

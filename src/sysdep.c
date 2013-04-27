@@ -30,9 +30,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <limits.h>
 #include <unistd.h>
 
-#include <allocator.h>
 #include <c-ctype.h>
-#include <careadlinkat.h>
 #include <ignore-value.h>
 #include <utimens.h>
 
@@ -40,9 +38,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "sysselect.h"
 #include "blockinput.h"
 
-#ifdef BSD_SYSTEM
-#include <sys/param.h>
-#include <sys/sysctl.h>
+#if defined DARWIN_OS || defined __FreeBSD__
+# include <sys/sysctl.h>
 #endif
 
 #ifdef __FreeBSD__
@@ -71,9 +68,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef MSDOS	/* Demacs 1.1.2 91/10/20 Manabu Higashida, MW Aug 1993 */
 #include "msdos.h"
-#include <sys/param.h>
 #endif
 
+#include <sys/param.h>
 #include <sys/file.h>
 #include <fcntl.h>
 
@@ -285,7 +282,7 @@ get_child_status (pid_t child, int *status, int options, bool interruptible)
      reap an unwanted process by mistake.  For example, invoking
      waitpid (-1, ...) can mess up glib by reaping glib's subprocesses,
      so that another thread running glib won't find them.  */
-  eassert (0 < child);
+  eassert (child > 0);
 
   while ((pid = waitpid (child, status, options)) < 0)
     {
@@ -529,10 +526,10 @@ sys_subshell (void)
 #ifdef DOS_NT    /* MW, Aug 1993 */
       getcwd (oldwd, sizeof oldwd);
       if (sh == 0)
-	sh = (char *) egetenv ("SUSPEND");	/* KFS, 1994-12-14 */
+	sh = egetenv ("SUSPEND");	/* KFS, 1994-12-14 */
 #endif
       if (sh == 0)
-	sh = (char *) egetenv ("SHELL");
+	sh = egetenv ("SHELL");
       if (sh == 0)
 	sh = "sh";
 
@@ -1292,10 +1289,9 @@ reset_sys_modes (struct tty_display_info *tty_out)
   if (tty_out->terminal->reset_terminal_modes_hook)
     tty_out->terminal->reset_terminal_modes_hook (tty_out->terminal);
 
-#ifdef BSD_SYSTEM
   /* Avoid possible loss of output when changing terminal modes.  */
-  fsync (fileno (tty_out->output));
-#endif
+  while (fdatasync (fileno (tty_out->output)) != 0 && errno == EINTR)
+    continue;
 
 #ifndef DOS_NT
 #ifdef F_SETOWN
@@ -2247,22 +2243,6 @@ emacs_write (int fildes, const char *buf, ptrdiff_t nbyte)
 
   return (bytes_written);
 }
-
-static struct allocator const emacs_norealloc_allocator =
-  { xmalloc, NULL, xfree, memory_full };
-
-/* Get the symbolic link value of FILENAME.  Return a pointer to a
-   NUL-terminated string.  If readlink fails, return NULL and set
-   errno.  If the value fits in INITIAL_BUF, return INITIAL_BUF.
-   Otherwise, allocate memory and return a pointer to that memory.  If
-   memory allocation fails, diagnose and fail without returning.  If
-   successful, store the length of the symbolic link into *LINKLEN.  */
-char *
-emacs_readlink (char const *filename, char initial_buf[READLINK_BUFSIZE])
-{
-  return careadlinkat (AT_FDCWD, filename, initial_buf, READLINK_BUFSIZE,
-		       &emacs_norealloc_allocator, careadlinkatcwd);
-}
 
 /* Return a struct timeval that is roughly equivalent to T.
    Use the least timeval not less than T.
@@ -2559,12 +2539,12 @@ list_system_processes (void)
   return proclist;
 }
 
-#elif defined BSD_SYSTEM
+#elif defined DARWIN_OS || defined __FreeBSD__
 
 Lisp_Object
 list_system_processes (void)
 {
-#if defined DARWIN_OS || defined __NetBSD__ || defined __OpenBSD__
+#ifdef DARWIN_OS
   int mib[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL};
 #else
   int mib[] = {CTL_KERN, KERN_PROC, KERN_PROC_PROC};
@@ -2590,10 +2570,8 @@ list_system_processes (void)
   len /= sizeof (struct kinfo_proc);
   for (i = 0; i < len; i++)
     {
-#if defined DARWIN_OS || defined __NetBSD__
+#ifdef DARWIN_OS
       proclist = Fcons (make_fixnum_or_float (procs[i].kp_proc.p_pid), proclist);
-#elif defined __OpenBSD__
-      proclist = Fcons (make_fixnum_or_float (procs[i].p_pid), proclist);
 #else
       proclist = Fcons (make_fixnum_or_float (procs[i].ki_pid), proclist);
 #endif
@@ -2713,7 +2691,7 @@ procfs_ttyname (int rdev)
 
       while (!feof (fdev) && !ferror (fdev))
 	{
-	  if (3 <= fscanf (fdev, "%*s %s %u %s %*s\n", name, &major, minor)
+	  if (fscanf (fdev, "%*s %s %u %s %*s\n", name, &major, minor) >= 3
 	      && major == MAJOR (rdev))
 	    {
 	      minor_beg = strtoul (minor, &endp, 0);
@@ -2753,7 +2731,7 @@ procfs_get_total_memory (void)
 
       while (!feof (fmem) && !ferror (fmem))
 	{
-	  if (2 <= fscanf (fmem, "%s %lu kB\n", entry_name, &entry_value)
+	  if (fscanf (fmem, "%s %lu kB\n", entry_name, &entry_value) >= 2
 	      && strcmp (entry_name, "MemTotal:") == 0)
 	    {
 	      retval = entry_value;

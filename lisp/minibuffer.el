@@ -525,7 +525,7 @@ for use at QPOS."
   (eq t (compare-strings s1 nil nil s2 nil nil 'ignore-case)))
 
 (defun completion--twq-all (string ustring completions boundary
-                                   unquote requote)
+                                   _unquote requote)
   (when completions
     (pcase-let*
         ((prefix
@@ -638,7 +638,8 @@ If ARGS are provided, then pass MESSAGE through `format'."
 
 (defun minibuffer-completion-contents ()
   "Return the user input in a minibuffer before point as a string.
-That is what completion commands operate on."
+That used to be what completion commands operate on."
+  (declare (obsolete minibuffer-contents "24.4"))
   (buffer-substring (field-beginning) (point)))
 
 (defun delete-minibuffer-contents ()
@@ -1043,7 +1044,8 @@ scroll the window of possible completions."
   (cond
    ;; If there's a fresh completion window with a live buffer,
    ;; and this command is repeated, scroll that window.
-   ((window-live-p minibuffer-scroll-window)
+   ((and (window-live-p minibuffer-scroll-window)
+         (eq t (frame-visible-p (window-frame minibuffer-scroll-window))))
     (let ((window minibuffer-scroll-window))
       (with-current-buffer (window-buffer window)
         (if (pos-visible-in-window-p (point-max) window)
@@ -1140,6 +1142,7 @@ scroll the window of possible completions."
   "Complete the minibuffer to an exact match.
 Repeated uses step through the possible completions."
   (interactive)
+  (setq minibuffer-scroll-window nil)
   ;; FIXME: Need to deal with the extra-size issue here as well.
   ;; FIXME: ~/src/emacs/t<M-TAB>/lisp/minibuffer.el completes to
   ;; ~/src/emacs/trunk/ and throws away lisp/minibuffer.el.
@@ -1162,6 +1165,7 @@ Repeated uses step through the possible completions."
       (completion--done (buffer-substring-no-properties start (point)) 'sole)
       ;; Set cycling after modifying the buffer since the flush hook resets it.
       (setq completion-cycling t)
+      (setq this-command 'completion-at-point) ;For minibuffer-complete.
       ;; If completing file names, (car all) may be a directory, so we'd now
       ;; have a new set of possible completions and might want to reset
       ;; completion-all-sorted-completions to nil, but we prefer not to,
@@ -1460,9 +1464,11 @@ It also eliminates runs of equal strings."
                                    'mouse-face 'highlight)
               (put-text-property (point) (progn (insert (car str)) (point))
                                  'mouse-face 'highlight)
-              (add-text-properties (point) (progn (insert (cadr str)) (point))
-                                   '(mouse-face nil
-                                     face completions-annotations)))
+              (let ((beg (point))
+                    (end (progn (insert (cadr str)) (point))))
+                (put-text-property beg end 'mouse-face nil)
+                (font-lock-prepend-text-property beg end 'face
+                                                 'completions-annotations)))
 	    (cond
 	     ((eq completions-format 'vertical)
 	      ;; Vertical format
@@ -1489,12 +1495,11 @@ See also `display-completion-list'.")
 
 (defface completions-first-difference
   '((t (:inherit bold)))
-  "Face put on the first uncommon character in completions in *Completions* buffer."
+  "Face added on the first uncommon character in completions in *Completions* buffer."
   :group 'completion)
 
-(defface completions-common-part
-  '((t (:inherit default)))
-  "Face put on the common prefix substring in completions in *Completions* buffer.
+(defface completions-common-part '((t nil))
+  "Face added on the common prefix substring in completions in *Completions* buffer.
 The idea of `completions-common-part' is that you can use it to
 make the common parts less visible than normal, so that the rest
 of the differing parts is, by contrast, slightly highlighted."
@@ -1515,17 +1520,18 @@ of the differing parts is, by contrast, slightly highlighted."
                      (car (setq elem (cons (copy-sequence (car elem))
                                            (cdr elem))))
                    (setq elem (copy-sequence elem)))))
-            (put-text-property 0
-			       ;; If completion-boundaries returns incorrect
-			       ;; values, all-completions may return strings
-			       ;; that don't contain the prefix.
-			       (min com-str-len (length str))
-                               'font-lock-face 'completions-common-part
-                               str)
+            (font-lock-prepend-text-property
+             0
+             ;; If completion-boundaries returns incorrect
+             ;; values, all-completions may return strings
+             ;; that don't contain the prefix.
+             (min com-str-len (length str))
+             'face 'completions-common-part str)
             (if (> (length str) com-str-len)
-                (put-text-property com-str-len (1+ com-str-len)
-                                   'font-lock-face 'completions-first-difference
-                                   str)))
+                (font-lock-prepend-text-property com-str-len (1+ com-str-len)
+                                                 'face
+                                                 'completions-first-difference
+                                                 str)))
           elem)
         completions)
        base-size))))
@@ -1760,14 +1766,15 @@ variables.")
   (exit-minibuffer))
 
 (defvar completion-in-region-functions nil
-  "Wrapper hook around `completion-in-region'.
-The functions on this special hook are called with 5 arguments:
-  NEXT-FUN START END COLLECTION PREDICATE.
-NEXT-FUN is a function of four arguments (START END COLLECTION PREDICATE)
-that performs the default operation.  The other four arguments are like
-the ones passed to `completion-in-region'.  The functions on this hook
-are expected to perform completion on START..END using COLLECTION
-and PREDICATE, either by calling NEXT-FUN or by doing it themselves.")
+  "Wrapper hook around `completion-in-region'.")
+(make-obsolete-variable 'completion-in-region-functions
+                        'completion-in-region-function "24.4")
+
+(defvar completion-in-region-function #'completion--in-region
+  "Function to perform the job of `completion-in-region'.
+The function is called with 4 arguments: START END COLLECTION PREDICATE.
+The arguments and expected return value are like the ones of
+`completion-in-region'.")
 
 (defvar completion-in-region--data nil)
 
@@ -1789,6 +1796,9 @@ Point needs to be somewhere between START and END.
 PREDICATE (a function called with no arguments) says when to
 exit."
   (cl-assert (<= start (point)) (<= (point) end))
+  (funcall completion-in-region-function start end collection predicate))
+
+(defun completion--in-region (start end collection &optional predicate)
   (with-wrapper-hook
       ;; FIXME: Maybe we should use this hook to provide a "display
       ;; completions" operation as well.
@@ -2051,10 +2061,7 @@ with `minibuffer-local-must-match-map'.")
     (define-key map "i" 'info)
     (define-key map "m" 'mail)
     (define-key map "n" 'make-frame)
-    (define-key map [mouse-1] (lambda () (interactive)
-				(with-current-buffer "*Messages*"
-				  (goto-char (point-max))
-				  (display-buffer (current-buffer)))))
+    (define-key map [mouse-1] 'view-echo-area-messages)
     ;; So the global down-mouse-1 binding doesn't clutter the execution of the
     ;; above mouse-1 binding.
     (define-key map [down-mouse-1] #'ignore)
@@ -3004,12 +3011,21 @@ the same set of elements."
                 ;; here any more.
                 (unless unique
                   (push elem res)
-                  (when (memq elem '(star point prefix))
-                    ;; Extract common suffix additionally to common prefix.
-                    ;; Only do it for `point', `star', and `prefix' since for
-                    ;; `any' it could lead to a merged completion that
-                    ;; doesn't itself match the candidates.
-                    (let ((suffix (completion--common-suffix comps)))
+                  ;; Extract common suffix additionally to common prefix.
+                  ;; Don't do it for `any' since it could lead to a merged
+                  ;; completion that doesn't itself match the candidates.
+                  (when (and (memq elem '(star point prefix))
+                             ;; If prefix is one of the completions, there's no
+                             ;; suffix left to find.
+                             (not (assoc-string prefix comps t)))
+                    (let ((suffix
+                           (completion--common-suffix
+                            (if (zerop (length prefix)) comps
+                              ;; Ignore the chars in the common prefix, so we
+                              ;; don't merge '("abc" "abbc") as "ab*bc".
+                              (let ((skip (length prefix)))
+                                (mapcar (lambda (str) (substring str skip))
+                                        comps))))))
                       (cl-assert (stringp suffix))
                       (unless (equal suffix "")
                         (push suffix res)))))

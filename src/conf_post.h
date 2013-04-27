@@ -44,19 +44,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 # define __has_attribute(a) 0 /* non-clang */
 #endif
 
-/* This silences a few compilation warnings on FreeBSD.  */
-#ifdef BSD_SYSTEM_AHB
-#undef BSD_SYSTEM_AHB
-#undef BSD_SYSTEM
-#if __FreeBSD__ == 1
-#define BSD_SYSTEM 199103
-#elif __FreeBSD__ == 2
-#define BSD_SYSTEM 199306
-#elif __FreeBSD__ >= 3
-#define BSD_SYSTEM 199506
-#endif
-#endif
-
 #ifdef DARWIN_OS
 #ifdef emacs
 #define malloc unexec_malloc
@@ -181,10 +168,6 @@ extern void _DebPrint (const char *fmt, ...);
 #define RE_TRANSLATE_P(TBL) (!(INTEGERP (TBL) && XINT (TBL) == 0))
 #endif
 #endif
-
-/* Tell gnulib to omit support for openat-related functions having a
-   first argument other than AT_FDCWD.  */
-#define GNULIB_SUPPORT_ONLY_AT_FDCWD
 
 #include <string.h>
 #include <stdlib.h>

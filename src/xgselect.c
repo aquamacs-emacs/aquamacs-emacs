@@ -15,7 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with GNU Emacs.  If not, see <http§://www.gnu.org/licenses/>.  */
+along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 
@@ -26,6 +26,7 @@ along with GNU Emacs.  If not, see <http§://www.gnu.org/licenses/>.  */
 #include <glib.h>
 #include <errno.h>
 #include "xterm.h"
+#include "frame.h"
 
 int
 xg_select (int fds_lim, SELECT_TYPE *rfds, SELECT_TYPE *wfds, SELECT_TYPE *efds,
@@ -43,7 +44,7 @@ xg_select (int fds_lim, SELECT_TYPE *rfds, SELECT_TYPE *wfds, SELECT_TYPE *efds,
   int i, nfds, tmo_in_millisec;
   USE_SAFE_ALLOCA;
 
-  if (! (x_in_use
+  if (! (window_system_available (NULL)
 	 && g_main_context_pending (context = g_main_context_default ())))
     return pselect (fds_lim, rfds, wfds, efds, timeout, sigmask);
 

@@ -47,17 +47,16 @@ The whitespace before and including \"|\" on each line is removed."
 (defun ruby-test-string (s &rest args)
   (apply 'format (replace-regexp-in-string "^[ \t]*|" "" s) args))
 
-(defun ruby-assert-state (content &rest values-plist)
+(defun ruby-assert-state (content index value &optional point)
   "Assert syntax state values at the end of CONTENT.
 
 VALUES-PLIST is a list with alternating index and value elements."
   (ruby-with-temp-buffer content
+    (when point (goto-char point))
     (syntax-propertize (point))
-    (while values-plist
-      (should (eq (nth (car values-plist)
-                       (parse-partial-sexp (point-min) (point)))
-                  (cadr values-plist)))
-      (setq values-plist (cddr values-plist)))))
+    (should (eq (nth index
+                     (parse-partial-sexp (point-min) (point)))
+                value))))
 
 (defun ruby-assert-face (content pos face)
   (ruby-with-temp-buffer content
@@ -103,6 +102,12 @@ VALUES-PLIST is a list with alternating index and value elements."
   (ruby-should-indent "a = \"abc\nif\"\n  " 0)
   (ruby-should-indent "a = %w[abc\n       def]\n  " 0)
   (ruby-should-indent "a = \"abc\n      def\"\n  " 0))
+
+(ert-deftest ruby-regexp-doesnt-start-in-string ()
+  (ruby-assert-state "'(/', /\d+/" 3 nil))
+
+(ert-deftest ruby-regexp-starts-after-string ()
+  (ruby-assert-state "'(/', /\d+/" 3 ?/ 8))
 
 (ert-deftest ruby-indent-simple ()
   (ruby-should-indent-buffer
@@ -390,11 +395,13 @@ VALUES-PLIST is a list with alternating index and value elements."
                           |  class C
                           |    class D
                           |    end
-                          |    _
+                          |    def foo
+                          |      _
+                          |    end
                           |  end
                           |end")
     (search-backward "_")
-    (should (string= (ruby-add-log-current-method) "M::C"))))
+    (should (string= (ruby-add-log-current-method) "M::C#foo"))))
 
 (defvar ruby-block-test-example
   (ruby-test-string
@@ -444,6 +451,77 @@ VALUES-PLIST is a list with alternating index and value elements."
   (goto-line 10)
   (ruby-move-to-block -2)
   (should (= 2 (line-number-at-pos))))
+
+(ert-deftest ruby-move-to-block-skips-percent-literal ()
+  (dolist (s (list (ruby-test-string
+                    "foo do
+                    |  a = %%w(
+                    |    def yaa
+                    |  )
+                    |end")
+                   (ruby-test-string
+                    "foo do
+                    |  a = %%w|
+                    |    end
+                    |  |
+                    |end")))
+    (ruby-with-temp-buffer s
+      (goto-line 1)
+      (ruby-end-of-block)
+      (should (= 5 (line-number-at-pos)))
+      (ruby-beginning-of-block)
+      (should (= 1 (line-number-at-pos))))))
+
+(ert-deftest ruby-move-to-block-skips-heredoc ()
+  (ruby-with-temp-buffer
+      (ruby-test-string
+       "if something_wrong?
+       |  ActiveSupport::Deprecation.warn(<<-eowarn)
+       |  boo hoo
+       |  end
+       |  eowarn
+       |end")
+    (goto-line 1)
+    (ruby-end-of-block)
+    (should (= 6 (line-number-at-pos)))
+    (ruby-beginning-of-block)
+    (should (= 1 (line-number-at-pos)))))
+
+(ert-deftest ruby-move-to-block-does-not-fold-case ()
+  (ruby-with-temp-buffer
+      (ruby-test-string
+       "foo do
+       |  Module.to_s
+       |end")
+    (end-of-buffer)
+    (let ((case-fold-search t))
+      (ruby-beginning-of-block))
+    (should (= 1 (line-number-at-pos)))))
+
+(ert-deftest ruby-beginning-of-defun-does-not-fold-case ()
+  (ruby-with-temp-buffer
+      (ruby-test-string
+       "class C
+       |  def bar
+       |    Class.to_s
+       |  end
+       |end")
+    (goto-line 4)
+    (let ((case-fold-search t))
+      (beginning-of-defun))
+    (should (= 2 (line-number-at-pos)))))
+
+(ert-deftest ruby-end-of-defun-skips-to-next-line-after-the-method ()
+  (ruby-with-temp-buffer
+      (ruby-test-string
+       "class D
+       |  def tee
+       |    'ho hum'
+       |  end
+       |end")
+    (goto-line 2)
+    (end-of-defun)
+    (should (= 5 (line-number-at-pos)))))
 
 (provide 'ruby-mode-tests)
 

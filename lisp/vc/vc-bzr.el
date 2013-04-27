@@ -291,7 +291,7 @@ in the repository root directory of FILE."
 ;;;###autoload (defun vc-bzr-registered (file)
 ;;;###autoload   (if (vc-find-root file vc-bzr-admin-checkout-format-file)
 ;;;###autoload       (progn
-;;;###autoload         (load "vc-bzr")
+;;;###autoload         (load "vc-bzr" nil t)
 ;;;###autoload         (vc-bzr-registered file))))
 
 (defun vc-bzr-registered (file)
@@ -653,7 +653,7 @@ REV non-nil gets an error."
 
 (defun vc-bzr-revert (file &optional contents-done)
   (unless contents-done
-    (with-temp-buffer (vc-bzr-command "revert" t 0 file))))
+    (with-temp-buffer (vc-bzr-command "revert" t 0 file "--no-backup"))))
 
 (defvar log-view-message-re)
 (defvar log-view-file-re)

@@ -54,6 +54,9 @@
 # make bootstrap
 #      Removes all the compiled files to force a new bootstrap from a
 #      clean slate, and then build in the normal way.
+#
+# make docs
+#      Make Emacs documentation files from their sources; requires makeinfo.
 
 SHELL = /bin/sh
 
@@ -63,6 +66,10 @@ CDPATH=
 
 # If Make doesn't predefine MAKE, set it here.
 @SET_MAKE@
+
+# Prevent submakes from outputting "Entering directory ..." and
+# "Leaving directory..." diagnostics that would mess up 'make echo-info'.
+QUIET_SUBMAKE = MAKELEVEL=0
 
 # ==================== Things `configure' Might Edit ====================
 
@@ -246,7 +253,8 @@ INSTALL_INFO = @INSTALL_INFO@
 # By default, we uphold the dignity of our programs.
 INSTALL_STRIP =
 MKDIR_P = @MKDIR_P@
-LN_S = @LN_S@
+# Create a link to a file in the same directory as the target.
+LN_S_FILEONLY = @LN_S_FILEONLY@
 
 # We use gzip to compress installed .el files.
 GZIP_PROG = @GZIP_PROG@
@@ -450,7 +458,7 @@ install-arch-dep: src install-arch-indep install-doc
 	  chmod 1755 $(DESTDIR)${bindir}/$(EMACSFULL) || true; \
 	  if test "x${NO_BIN_LINK}" = x; then \
 	    rm -f $(DESTDIR)${bindir}/$(EMACS) ; \
-	    cd $(DESTDIR)${bindir} && $(LN_S) $(EMACSFULL) $(EMACS); \
+	    cd $(DESTDIR)${bindir} && $(LN_S_FILEONLY) $(EMACSFULL) $(EMACS); \
 	  fi; \
 	else \
 	  subdir=${ns_appresdir}/site-lisp; \
@@ -645,7 +653,9 @@ install-info: info
 	   [ -f dir ] || \
 	     (cd $${thisdir}; \
 	      ${INSTALL_DATA} ${srcdir}/info/dir $(DESTDIR)${infodir}/dir) ; \
-	   info_misc=`cd $${thisdir}/doc/misc; ${MAKE} -s echo-info`; \
+	   info_misc=`cd $${thisdir}/doc/misc && \
+		$(QUIET_SUBMAKE) $(MAKE) -s echo-info \
+	   `; \
 	   cd ${srcdir}/info ; \
 	   for elt in ${INFO_NONMISC} $${info_misc}; do \
 	      test "$(HAVE_MAKEINFO)" = "no" && test ! -f $$elt && continue; \
@@ -660,6 +670,12 @@ install-info: info
 	      ${INSTALL_INFO} --info-dir=$(DESTDIR)${infodir} $(DESTDIR)${infodir}/$$elt); \
 	   done)
 
+## "gzip || true" is because some gzips exit with non-zero status
+## if compression would not reduce the file size.  Eg, the gzip in
+## OpenBSD 4.9 seems to do this (2013/03).  In Emacs, this can
+## only happen with the tiny ctags.1 manpage.  We don't really care if
+## ctags.1 is compressed or not.  "gzip -f" is another option here,
+## but not sure if portable.
 install-man:
 	umask 022; ${MKDIR_P} $(DESTDIR)${man1dir}
 	thisdir=`/bin/pwd`; \
@@ -670,7 +686,7 @@ install-man:
 	   ${INSTALL_DATA} ${mansrcdir}/$${page} $(DESTDIR)${man1dir}/$${dest}); \
 	  ( [ -n "${GZIP_INFO}" ] && [ -n "${GZIP_PROG}" ] ) || continue ; \
 	  rm -f $(DESTDIR)${man1dir}/$${dest}.gz; \
-	  ${GZIP_PROG} -9n $(DESTDIR)${man1dir}/$${dest}; \
+	  ${GZIP_PROG} -9n $(DESTDIR)${man1dir}/$${dest} || true; \
 	done
 
 ## Install those items from etc/ that need to end up elsewhere.
@@ -732,7 +748,7 @@ uninstall:
 	done
 	-rm -rf $(DESTDIR)${libexecdir}/emacs/${version}
 	thisdir=`/bin/pwd`; \
-	(info_misc=`cd doc/misc; ${MAKE} -s echo-info`; \
+	(info_misc=`cd doc/misc && $(QUIET_SUBMAKE) $(MAKE) -s echo-info`; \
 	 if cd $(DESTDIR)${infodir}; then \
 	   for elt in ${INFO_NONMISC} $${info_misc}; do \
 	     (cd $${thisdir}; \
@@ -898,13 +914,25 @@ check:
 dist:
 	cd ${srcdir}; ./make-dist
 
+DVIS  = lispref-dvi  lispintro-dvi  emacs-dvi  misc-dvi
+HTMLS = lispref-html lispintro-html emacs-html misc-html
+INFOS = lispref-info lispintro-info emacs-info misc-info
+PDFS  = lispref-pdf  lispintro-pdf  emacs-pdf  misc-pdf
+PSS   = lispref-ps   lispintro-ps   emacs-ps # no misc-ps
+
+DOCS = $(DVIS) $(HTMLS) $(INFOS) $(PDFS) $(PSS)
+$(DOCS):
+	t=$@; IFS=-; set $$t; IFS=; cd doc/$$1 && $(MAKE) $(MFLAGS) $$2
+
+.PHONY: $(DOCS) docs pdf ps
 .PHONY: info dvi dist check html info-real force-info check-info-dir
 
-info-real:
-	(cd doc/emacs; $(MAKE) $(MFLAGS) info)
-	(cd doc/misc; $(MAKE) $(MFLAGS) info)
-	(cd doc/lispref; $(MAKE) $(MFLAGS) info)
-	(cd doc/lispintro; $(MAKE) $(MFLAGS) info)
+docs: $(DOCS)
+dvi: $(DVIS)
+html: $(HTMLS)
+info-real: $(INFOS)
+pdf: $(PDFS)
+ps: $(PSS)
 
 force-info:
 # Note that man/Makefile knows how to put the info files in $(srcdir),
@@ -942,12 +970,6 @@ check-info-dir: info
 	  exit 1 ; \
 	fi ; \
 	echo "info/dir is OK"
-
-dvi:
-	(cd doc/emacs; $(MAKE) $(MFLAGS) dvi)
-	(cd doc/misc; $(MAKE) $(MFLAGS) dvi)
-	(cd doc/lispref; $(MAKE) $(MFLAGS) elisp.dvi)
-	(cd doc/lispintro; $(MAKE) $(MFLAGS) emacs-lisp-intro.dvi)
 
 #### Bootstrapping.
 

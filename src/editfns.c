@@ -373,7 +373,7 @@ get_pos_property (Lisp_Object position, register Lisp_Object prop, Lisp_Object o
   if (NILP (object))
     XSETBUFFER (object, current_buffer);
   else if (WINDOWP (object))
-    object = XWINDOW (object)->buffer;
+    object = XWINDOW (object)->contents;
 
   if (!BUFFERP (object))
     /* pos-property only makes sense in buffers right now, since strings
@@ -669,7 +669,8 @@ If the optional argument INHIBIT-CAPTURE-PROPERTY is non-nil, and OLD-POS has
 a non-nil property of that name, then any field boundaries are ignored.
 
 Field boundaries are not noticed if `inhibit-field-text-motion' is non-nil.  */)
-  (Lisp_Object new_pos, Lisp_Object old_pos, Lisp_Object escape_from_edge, Lisp_Object only_in_line, Lisp_Object inhibit_capture_property)
+  (Lisp_Object new_pos, Lisp_Object old_pos, Lisp_Object escape_from_edge,
+   Lisp_Object only_in_line, Lisp_Object inhibit_capture_property)
 {
   /* If non-zero, then the original point, before re-positioning.  */
   ptrdiff_t orig_point = 0;
@@ -735,9 +736,9 @@ Field boundaries are not noticed if `inhibit-field-text-motion' is non-nil.  */)
 	      /* This is the ONLY_IN_LINE case, check that NEW_POS and
 		 FIELD_BOUND are on the same line by seeing whether
 		 there's an intervening newline or not.  */
-	      || (scan_buffer ('\n',
-			       XFASTINT (new_pos), XFASTINT (field_bound),
-			       fwd ? -1 : 1, &shortage, 1),
+	      || (find_newline (XFASTINT (new_pos), -1,
+				XFASTINT (field_bound), -1,
+				fwd ? -1 : 1, &shortage, NULL, 1),
 		  shortage != 0)))
 	/* Constrain NEW_POS to FIELD_BOUND.  */
 	new_pos = field_bound;
@@ -822,7 +823,8 @@ This function does not move point.  */)
     CHECK_NUMBER (n);
 
   clipped_n = clip_to_bounds (PTRDIFF_MIN + 1, XINT (n), PTRDIFF_MAX);
-  end_pos = find_before_next_newline (orig, 0, clipped_n - (clipped_n <= 0));
+  end_pos = find_before_next_newline (orig, 0, clipped_n - (clipped_n <= 0),
+				      NULL);
 
   /* Return END_POS constrained to the current input field.  */
   return Fconstrain_to_field (make_number (end_pos), make_number (orig),
@@ -837,14 +839,14 @@ Lisp_Object
 save_excursion_save (void)
 {
   return make_save_value
-    ("oooo",
+    (SAVE_TYPE_OBJ_OBJ_OBJ_OBJ,
      Fpoint_marker (),
      /* Do not copy the mark if it points to nowhere.  */
      (XMARKER (BVAR (current_buffer, mark))->buffer
       ? Fcopy_marker (BVAR (current_buffer, mark), Qnil)
       : Qnil),
      /* Selected window if current buffer is shown in it, nil otherwise.  */
-     ((XBUFFER (XWINDOW (selected_window)->buffer) == current_buffer)
+     (EQ (XWINDOW (selected_window)->contents, Fcurrent_buffer ())
       ? selected_window : Qnil),
      BVAR (current_buffer, mark_active));
 }
@@ -913,7 +915,7 @@ save_excursion_restore (Lisp_Object info)
   tem = XSAVE_OBJECT (info, 2);
   if (WINDOWP (tem)
       && !EQ (tem, selected_window)
-      && (tem1 = XWINDOW (tem)->buffer,
+      && (tem1 = XWINDOW (tem)->contents,
 	  (/* Window is live...  */
 	   BUFFERP (tem1)
 	   /* ...and it shows the current buffer.  */
@@ -1484,9 +1486,7 @@ Lisp_Object
 make_lisp_time (EMACS_TIME t)
 {
   int ns = EMACS_NSECS (t);
-  return make_time_tail (EMACS_SECS (t),
-			 list2 (make_number (ns / 1000),
-				make_number (ns % 1000 * 1000)));
+  return make_time_tail (EMACS_SECS (t), list2i (ns / 1000, ns % 1000 * 1000));
 }
 
 /* Decode a Lisp list SPECIFIED_TIME that represents a time.
@@ -3452,7 +3452,7 @@ usage: (message FORMAT-STRING &rest ARGS)  */)
       || (STRINGP (args[0])
 	  && SBYTES (args[0]) == 0))
     {
-      message (0);
+      message1 (0);
       return args[0];
     }
   else
@@ -3478,7 +3478,7 @@ usage: (message-box FORMAT-STRING &rest ARGS)  */)
 {
   if (NILP (args[0]))
     {
-      message (0);
+      message1 (0);
       return Qnil;
     }
   else
@@ -3958,7 +3958,7 @@ usage: (format STRING &rest OBJECTS)  */)
 		   trailing "d").  */
 		pMlen = sizeof pMd - 2
 	      };
-	      verify (0 < USEFUL_PRECISION_MAX);
+	      verify (USEFUL_PRECISION_MAX > 0);
 
 	      int prec;
 	      ptrdiff_t padding, sprintf_bytes;
@@ -4241,7 +4241,10 @@ usage: (format STRING &rest OBJECTS)  */)
 	    memcpy (buf, initial_buffer, used);
 	  }
 	else
-	  XSAVE_POINTER (buf_save_value, 0) = buf = xrealloc (buf, bufsize);
+	  {
+	    buf = xrealloc (buf, bufsize);
+	    set_save_pointer (buf_save_value, 0, buf);
+	  }
 
 	p = buf + used;
       }

@@ -1551,7 +1551,7 @@ the value of a list `foo'.  */)
 
   tail = list;
   prev = Qnil;
-  while (!NILP (tail))
+  while (CONSP (tail))
     {
       CHECK_LIST_CONS (tail, list);
       tem = XCAR (tail);
@@ -2443,10 +2443,9 @@ is nil, and `use-dialog-box' is non-nil.  */)
   CHECK_STRING (prompt);
 
 #ifdef HAVE_MENUS
-  if (FRAME_WINDOW_P (SELECTED_FRAME ())
-      && (NILP (last_nonmenu_event) || CONSP (last_nonmenu_event))
+  if ((NILP (last_nonmenu_event) || CONSP (last_nonmenu_event))
       && use_dialog_box
-      && have_menus_p ())
+      && window_system_available (SELECTED_FRAME ()))
     {
       Lisp_Object pane, menu, obj;
       redisplay_preserve_echo_area (4);
@@ -2485,7 +2484,7 @@ is nil, and `use-dialog-box' is non-nil.  */)
 
       Fding (Qnil);
       Fdiscard_input ();
-      message ("Please answer yes or no.");
+      message1 ("Please answer yes or no.");
       Fsleep_for (make_number (2), Qnil);
     }
 }
@@ -2807,9 +2806,8 @@ The data read from the system are decoded using `locale-coding-system'.  */)
 	  val = build_unibyte_string (str);
 	  /* Fixme: Is this coding system necessarily right, even if
 	     it is consistent with CODESET?  If not, what to do?  */
-	  Faset (v, make_number (i),
-		 code_convert_string_norecord (val, Vlocale_coding_system,
-					       0));
+	  ASET (v, i, code_convert_string_norecord (val, Vlocale_coding_system,
+						    0));
 	}
       UNGCPRO;
       return v;
@@ -2829,8 +2827,8 @@ The data read from the system are decoded using `locale-coding-system'.  */)
 	{
 	  str = nl_langinfo (months[i]);
 	  val = build_unibyte_string (str);
-	  Faset (v, make_number (i),
-		 code_convert_string_norecord (val, Vlocale_coding_system, 0));
+	  ASET (v, i, code_convert_string_norecord (val, Vlocale_coding_system,
+						    0));
 	}
       UNGCPRO;
       return v;
@@ -2840,10 +2838,7 @@ The data read from the system are decoded using `locale-coding-system'.  */)
    but is in the locale files.  This could be used by ps-print.  */
 #ifdef PAPER_WIDTH
   else if (EQ (item, Qpaper))
-    {
-      return list2 (make_number (nl_langinfo (PAPER_WIDTH)),
-		    make_number (nl_langinfo (PAPER_HEIGHT)));
-    }
+    return list2i (nl_langinfo (PAPER_WIDTH), nl_langinfo (PAPER_HEIGHT));
 #endif	/* PAPER_WIDTH */
 #endif	/* HAVE_LANGINFO_CODESET*/
   return Qnil;
@@ -4046,10 +4041,6 @@ sweep_weak_hash_tables (void)
 
 #define SXHASH_MAX_LEN   7
 
-/* Hash X, returning a value that fits into a Lisp integer.  */
-#define SXHASH_REDUCE(X) \
-  ((((X) ^ (X) >> (BITS_PER_EMACS_INT - FIXNUM_BITS))) & INTMASK)
-
 /* Return a hash for string PTR which has length LEN.  The hash value
    can be any EMACS_UINT value.  */
 
@@ -4082,7 +4073,7 @@ sxhash_string (char const *ptr, ptrdiff_t len)
 
 /* Return a hash for the floating point value VAL.  */
 
-static EMACS_INT
+static EMACS_UINT
 sxhash_float (double val)
 {
   EMACS_UINT hash = 0;

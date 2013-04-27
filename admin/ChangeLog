@@ -1,3 +1,84 @@
+2013-04-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use UTF-8 for most files with non-ASCII characters (Bug#13936).
+	* notes/unicode (etc/tutorials/TUTORIAL.ko, leim/quail/hanja.el)
+	(leim/quail/hanja3.el, leim/quail/symbol-ksc.el):
+	Now utf-8, not iso-2022-7bit.  Also, files that contain non-UTF-8
+	characters are now encoded in utf-8-emacs, not iso-2022-7bit.
+
+2013-03-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* notes/unicode: Mention some more iso-2022-7bit files (Bug#13936).
+
+	Automate the build of ja-dic.el (Bug#13984).
+	* notes/unicode: ja-dic.el is now UTF-8.
+
+2013-03-16  Glenn Morris  <rgm@gnu.org>
+
+	* admin.el (manual-pdf, manual-dvi): Pass -I to texi2pdf, texi2dvi.
+
+2013-03-16  Glenn Morris  <rgm@gnu.org>
+
+	* admin.el (manual-html-mono, manual-html-node): Add -DWWW_GNU_ORG.
+
+2013-03-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	File synchronization fixes (Bug#13944).
+	* CPP-DEFINES (BSD_SYSTEM, HAVE_FSYNC): Remove.
+	* merge-gnulib (GNULIB_MODULES): Add fsync, fdatasync.
+
+2013-03-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* notes/unicode: Improve notes about Emacs source file encoding.
+
+2013-03-11  Glenn Morris  <rgm@gnu.org>
+
+	* admin.el (make-manuals): Add emacs-lisp-intro and some more
+	doc/misc manuals.
+	(manual-html-mono, manual-html-node, manual-txt):
+	Pass -I to makeinfo.
+
+2013-03-10  Glenn Morris  <rgm@gnu.org>
+
+	* admin.el (add-release-logs): Use UTC for release date.
+
+2013-03-09  Glenn Morris  <rgm@gnu.org>
+
+	* admin.el (add-release-logs): Provide interactive defaults.
+	Allow specification of the release date.  Don't exclude gnus/.
+
+2013-03-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* notes/unicode: Add notes about Emacs source file encoding.
+
+2013-03-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* grammars/java-tags.wy (CHAR): Remove "('\u0000' to '\uffff')"
+	from summary, as this causes javat-wy.el to contain both a null byte
+	and a byte sequence that is not valid UTF-8, which is inconvenient.
+
+2013-03-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* bzrmerge.el (bzrmerge-apply): Omit Latin-1 char from diagnostic.
+	If there were a real need, it should be UTF-8 anyway.
+
+2013-02-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Simplify data_start configuration (Bug#13783).
+	* CPP-DEFINES (DATA_START, ORDINARY_LINK): Remove.
+
+2013-02-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Tune by using memchr and memrchr.
+	* merge-gnulib (GNULIB_MODULES): Add memrchr.
+
+2013-02-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use fdopendir, fstatat and readlinkat, for efficiency (Bug#13539).
+	* merge-gnulib (GNULIB_MODULES): Add fdopendir, fstatat, readlinkat.
+	(GNULIB_TOOL_FLAGS): Do not avoid at-internal, openat-h.
+	Avoid dup, open, opendir.
+
 2013-01-15  Dmitry Antipov  <dmantipov@yandex.ru>
 
 	* coccinelle/xsave.cocci: Semantic patch to adjust users of

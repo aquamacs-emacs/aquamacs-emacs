@@ -471,6 +471,8 @@ interfere with other minibuffer usage.")
     (define-key map "?" 'iswitchb-completion-help)
     (define-key map "\C-s" 'iswitchb-next-match)
     (define-key map "\C-r" 'iswitchb-prev-match)
+    (define-key map [?\C-.] 'iswitchb-next-match)
+    (define-key map [?\C-,] 'iswitchb-prev-match)
     (define-key map "\t" 'iswitchb-complete)
     (define-key map "\C-j" 'iswitchb-select-buffer-text)
     (define-key map "\C-t" 'iswitchb-toggle-regexp)
@@ -595,7 +597,7 @@ the selection process begins.  Used by isearchb.el."
   ;; The map is generated every time so that it can inherit new
   ;; functions.
   (let ((map (copy-keymap minibuffer-local-map))
-	buf-sel iswitchb-final-text map
+	buf-sel iswitchb-final-text
 	icomplete-mode)  ; prevent icomplete starting up
     (define-key map "?" 'iswitchb-completion-help)
     (define-key map "\C-s" 'iswitchb-next-match)

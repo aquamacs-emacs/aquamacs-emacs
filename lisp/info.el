@@ -59,15 +59,6 @@ to the user."
   :group 'info
   :version "24.1")
 
-(defcustom Info-enable-edit nil
-  "Non-nil means the \\<Info-mode-map>\\[Info-edit] command in Info can edit the current node.
-This is convenient if you want to write Info files by hand.
-However, we recommend that you not do this.
-It is better to write a Texinfo file and generate the Info file from that,
-because that gives you a printed manual as well."
-  :type 'boolean
-  :group 'info)
-
 (defvar Info-enable-active-nodes nil
   "Non-nil allows Info to execute Lisp code associated with nodes.
 The Lisp code is executed when the node is selected.")
@@ -166,6 +157,12 @@ A header-line does not scroll with the rest of the buffer."
   '((t :inherit info-node))
   "Face for Info nodes in a node header."
   :group 'info)
+
+(defface info-index-match
+  '((t :inherit match))
+  "Face used to highlight matches in an index entry."
+  :group 'info
+  :version "24.4")
 
 ;; This is a defcustom largely so that we can get the benefit
 ;; of custom-initialize-delay.  Perhaps it would work to make it a
@@ -374,6 +371,9 @@ with wrapping around the current Info node."
 
 (defvar Info-edit-mode-hook nil
   "Hooks run when `Info-edit-mode' is called.")
+
+(make-obsolete-variable 'Info-edit-mode-hook
+			"editing Info nodes by hand is not recommended." "24.4")
 
 (defvar Info-current-file nil
   "Info file that Info is now looking at, or nil.
@@ -2151,7 +2151,7 @@ and is not in the header line or a tag table."
     (let ((backward (< found beg-found)))
       (not
        (or
-	(and (not (eq search-invisible t))
+	(and (not search-invisible)
 	     (if backward
 		 (or (text-property-not-all found beg-found 'invisible nil)
 		     (text-property-not-all found beg-found 'display nil))
@@ -3063,48 +3063,92 @@ See `Info-scroll-down'."
 	(select-window (posn-window (event-start e))))
     (Info-scroll-down)))
 
-(defun Info-next-reference (&optional recur)
-  "Move cursor to the next cross-reference or menu item in the node."
-  (interactive)
-  (let ((pat "\\*note[ \n\t]+\\([^:]+\\):\\|^\\* .*:\\|[hf]t?tps?://")
-	(old-pt (point))
-	(case-fold-search t))
-    (or (eobp) (forward-char 1))
-    (or (re-search-forward pat nil t)
-	(progn
-	  (goto-char (point-min))
-	  (or (re-search-forward pat nil t)
-	      (progn
-		(goto-char old-pt)
-		(user-error "No cross references in this node")))))
-    (goto-char (or (match-beginning 1) (match-beginning 0)))
-    (if (looking-at "\\* Menu:")
-	(if recur
-	    (user-error "No cross references in this node")
-	  (Info-next-reference t))
-      (if (looking-at "^\\* ")
-	  (forward-char 2)))))
+(defun Info-next-reference-or-link (pat prop)
+  "Move point to the next pattern-based cross-reference or property-based link.
+The next cross-reference is searched using the regexp PAT, and the next link
+is searched using the text property PROP.  Move point to the closest found position
+of either a cross-reference found by `re-search-forward' or a link found by
+`next-single-char-property-change'.  Return the new position of point, or nil."
+  (let ((pxref (save-excursion (re-search-forward pat nil t)))
+	(plink (next-single-char-property-change (point) prop)))
+    (when (and (< plink (point-max)) (not (get-char-property plink prop)))
+      (setq plink (next-single-char-property-change plink prop)))
+    (if (< plink (point-max))
+	(if (and pxref (<= pxref plink))
+	    (goto-char (or (match-beginning 1) (match-beginning 0)))
+	  (goto-char plink))
+      (if pxref (goto-char (or (match-beginning 1) (match-beginning 0)))))))
 
-(defun Info-prev-reference (&optional recur)
-  "Move cursor to the previous cross-reference or menu item in the node."
-  (interactive)
-  (let ((pat "\\*note[ \n\t]+\\([^:]+\\):\\|^\\* .*:\\|[hf]t?tps?://")
-	(old-pt (point))
-	(case-fold-search t))
-    (or (re-search-backward pat nil t)
-	(progn
-	  (goto-char (point-max))
-	  (or (re-search-backward pat nil t)
-	      (progn
-		(goto-char old-pt)
-		(user-error "No cross references in this node")))))
-    (goto-char (or (match-beginning 1) (match-beginning 0)))
-    (if (looking-at "\\* Menu:")
-	(if recur
-	    (user-error "No cross references in this node")
-	  (Info-prev-reference t))
-      (if (looking-at "^\\* ")
-	  (forward-char 2)))))
+(defun Info-prev-reference-or-link (pat prop)
+  "Move point to the previous pattern-based cross-reference or property-based link.
+The previous cross-reference is searched using the regexp PAT, and the previous link
+is searched using the text property PROP.  Move point to the closest found position
+of either a cross-reference found by `re-search-backward' or a link found by
+`previous-single-char-property-change'.  Return the new position of point, or nil."
+  (let ((pxref (save-excursion (re-search-backward pat nil t)))
+	(plink (previous-single-char-property-change (point) prop)))
+    (when (and (> plink (point-min)) (not (get-char-property plink prop)))
+      (setq plink (previous-single-char-property-change plink prop)))
+    (if (> plink (point-min))
+	(if (and pxref (>= pxref plink))
+	    (goto-char (or (match-beginning 1) (match-beginning 0)))
+	  (goto-char plink))
+      (if pxref (goto-char (or (match-beginning 1) (match-beginning 0)))))))
+
+(defun Info-next-reference (&optional recur count)
+  "Move cursor to the next cross-reference or menu item in the node.
+If COUNT is non-nil (interactively with a prefix arg), jump over
+COUNT cross-references."
+  (interactive "i\np")
+  (unless count
+    (setq count 1))
+  (if (< count 0)
+      (Info-prev-reference recur (- count))
+    (while (unless (zerop count) (setq count (1- count)))
+      (let ((pat "\\*note[ \n\t]+\\([^:]+\\):\\|^\\* .*:\\|[hf]t?tps?://")
+	    (old-pt (point))
+	    (case-fold-search t))
+	(or (eobp) (forward-char 1))
+	(or (Info-next-reference-or-link pat 'link)
+	    (progn
+	      (goto-char (point-min))
+	      (or (Info-next-reference-or-link pat 'link)
+		  (progn
+		    (goto-char old-pt)
+		    (user-error "No cross references in this node")))))
+	(if (looking-at "\\* Menu:")
+	    (if recur
+		(user-error "No cross references in this node")
+	      (Info-next-reference t))
+	  (if (looking-at "^\\* ")
+	      (forward-char 2)))))))
+
+(defun Info-prev-reference (&optional recur count)
+  "Move cursor to the previous cross-reference or menu item in the node.
+If COUNT is non-nil (interactively with a prefix arg), jump over
+COUNT cross-references."
+  (interactive "i\np")
+  (unless count
+    (setq count 1))
+  (if (< count 0)
+      (Info-next-reference recur (- count))
+    (while (unless (zerop count) (setq count (1- count)))
+      (let ((pat "\\*note[ \n\t]+\\([^:]+\\):\\|^\\* .*:\\|[hf]t?tps?://")
+	    (old-pt (point))
+	    (case-fold-search t))
+	(or (Info-prev-reference-or-link pat 'link)
+	    (progn
+	      (goto-char (point-max))
+	      (or (Info-prev-reference-or-link pat 'link)
+		  (progn
+		    (goto-char old-pt)
+		    (user-error "No cross references in this node")))))
+	(if (looking-at "\\* Menu:")
+	    (if recur
+		(user-error "No cross references in this node")
+	      (Info-prev-reference t))
+	  (if (looking-at "^\\* ")
+	      (forward-char 2)))))))
 
 (defun Info-index-nodes (&optional file)
   "Return a list of names of all index nodes in Info FILE.
@@ -3238,7 +3282,7 @@ Give an empty topic name to go to the Index node itself."
 	   (= (aref topic 0) ?:))
       (setq topic (substring topic 1)))
   (let ((orignode Info-current-node)
-	(pattern (format "\n\\* +\\([^\n]*%s[^\n]*\\):[ \t]+\\([^\n]*\\)\\.\\(?:[ \t\n]*(line +\\([0-9]+\\))\\)?"
+	(pattern (format "\n\\* +\\([^\n]*\\(%s\\)[^\n]*\\):[ \t]+\\([^\n]*\\)\\.\\(?:[ \t\n]*(line +\\([0-9]+\\))\\)?"
 			 (regexp-quote topic)))
 	node (nodes (Info-index-nodes))
 	(ohist-list Info-history-list)
@@ -3257,12 +3301,14 @@ Give an empty topic name to go to the Index node itself."
 	      (progn
 		(goto-char (point-min))
 		(while (re-search-forward pattern nil t)
-		  (push (list (match-string-no-properties 1)
-			      (match-string-no-properties 2)
-			      Info-current-node
-			      (string-to-number (concat "0"
-							(match-string 3))))
-			matches))
+		  (let ((entry (match-string-no-properties 1))
+			(nodename (match-string-no-properties 3))
+			(line (string-to-number (concat "0" (match-string 4)))))
+		    (add-text-properties
+		     (- (match-beginning 2) (match-beginning 1))
+		     (- (match-end 2) (match-beginning 1))
+		     '(face info-index-match) entry)
+		    (push (list entry nodename Info-current-node line) matches)))
 		(setq nodes (cdr nodes) node (car nodes)))
 	    (Info-goto-node node))
 	  (or matches
@@ -3488,7 +3534,7 @@ MATCHES is a list of index matches found by `Info-apropos-matches'.")
 Return a list of matches where each element is in the format
 \((FILENAME INDEXTEXT NODENAME LINENUMBER))."
   (unless (string= string "")
-    (let ((pattern (format "\n\\* +\\([^\n]*%s[^\n]*\\):[ \t]+\\([^\n]+\\)\\.\\(?:[ \t\n]*(line +\\([0-9]+\\))\\)?"
+    (let ((pattern (format "\n\\* +\\([^\n]*\\(%s\\)[^\n]*\\):[ \t]+\\([^\n]+\\)\\.\\(?:[ \t\n]*(line +\\([0-9]+\\))\\)?"
 			   (regexp-quote string)))
 	  (ohist Info-history)
 	  (ohist-list Info-history-list)
@@ -3521,12 +3567,15 @@ Return a list of matches where each element is in the format
                         (progn
                           (goto-char (point-min))
                           (while (re-search-forward pattern nil t)
-			    (setq matches
-				  (cons (list manual
-					      (match-string-no-properties 1)
-					      (match-string-no-properties 2)
-					      (match-string-no-properties 3))
-					matches)))
+			    (let ((entry (match-string-no-properties 1))
+				  (nodename (match-string-no-properties 3))
+				  (line (match-string-no-properties 4)))
+			      (add-text-properties
+			       (- (match-beginning 2) (match-beginning 1))
+			       (- (match-end 2) (match-beginning 1))
+			       '(face info-index-match) entry)
+			      (setq matches (cons (list manual entry nodename line)
+						  matches))))
                           (setq nodes (cdr nodes) node (car nodes)))
                       (Info-goto-node node))))
 	    (error
@@ -3832,7 +3881,25 @@ If FORK is non-nil, it is passed to `Info-goto-node'."
      ((setq node (Info-get-token (point) "File: " "File: \\([^,\n\t]*\\)"))
       (Info-goto-node "Top" fork))
      ((setq node (Info-get-token (point) "Prev: " "Prev: \\([^,\n\t]*\\)"))
-      (Info-goto-node node fork)))
+      (Info-goto-node node fork))
+     ;; footnote
+     ((setq node (Info-get-token (point) "(" "\\(([0-9]+)\\)"))
+      (let ((old-point (point)) new-point)
+	(save-excursion
+	  (goto-char (point-min))
+	  (when (re-search-forward "^[ \t]*-+ Footnotes -+$" nil t)
+	    (setq new-point (if (< old-point (point))
+				;; Go to footnote reference
+				(and (search-forward node nil t)
+				     ;; Put point at beginning of link
+				     (match-beginning 0))
+			      ;; Go to footnote definition
+			      (search-backward node nil t)))))
+	(if new-point
+	    (progn
+	      (goto-char new-point)
+	      (setq node t))
+	  (setq node nil)))))
     node))
 
 (defun Info-mouse-follow-link (click)
@@ -3860,6 +3927,7 @@ If FORK is non-nil, it is passed to `Info-goto-node'."
     (suppress-keymap map)
     (define-key map "." 'beginning-of-buffer)
     (define-key map " " 'Info-scroll-up)
+    (define-key map [?\S-\ ] 'Info-scroll-down)
     (define-key map "\C-m" 'Info-follow-nearest-node)
     (define-key map "\t" 'Info-next-reference)
     (define-key map "\e\t" 'Info-prev-reference)
@@ -4238,6 +4306,10 @@ Advanced commands:
 			map)
   "Local keymap used within `e' command of Info.")
 
+(make-obsolete-variable 'Info-edit-map
+			"editing Info nodes by hand is not recommended."
+			"24.4")
+
 ;; Info-edit mode is suitable only for specially formatted data.
 (put 'Info-edit-mode 'mode-class 'special)
 
@@ -4255,15 +4327,21 @@ which returns to Info mode for browsing.
   (buffer-enable-undo (current-buffer))
   (run-mode-hooks 'Info-edit-mode-hook))
 
+(make-obsolete 'Info-edit-mode
+	       "editing Info nodes by hand is not recommended." "24.4")
+
 (defun Info-edit ()
-  "Edit the contents of this Info node.
-Allowed only if variable `Info-enable-edit' is non-nil."
+  "Edit the contents of this Info node."
   (interactive)
-  (or Info-enable-edit
-      (error "Editing Info nodes is not enabled"))
   (Info-edit-mode)
   (message "%s" (substitute-command-keys
 		 "Editing: Type \\<Info-edit-map>\\[Info-cease-edit] to return to info")))
+
+(put 'Info-edit 'disabled "Editing Info nodes by hand is not recommended.
+This feature will be removed in future.")
+
+(make-obsolete 'Info-edit
+	       "editing Info nodes by hand is not recommended." "24.4")
 
 (defun Info-cease-edit ()
   "Finish editing Info node; switch back to Info proper."
@@ -4281,6 +4359,9 @@ Allowed only if variable `Info-enable-edit' is non-nil."
   (and (marker-position Info-tag-table-marker)
        (buffer-modified-p)
        (message "Tags may have changed.  Use Info-tagify if necessary")))
+
+(make-obsolete 'Info-cease-edit
+	       "editing Info nodes by hand is not recommended." "24.4")
 
 (defvar Info-file-list-for-emacs
   '("ediff" "eudc" "forms" "gnus" "info" ("Info" . "info") ("mh" . "mh-e")
@@ -4302,7 +4383,8 @@ Allowed only if variable `Info-enable-edit' is non-nil."
     ("ietf-drums" . "emacs-mime")  ("quoted-printable" . "emacs-mime")
     ("binhex" . "emacs-mime") ("uudecode" . "emacs-mime")
     ("mailcap" . "emacs-mime") ("mm" . "emacs-mime")
-    ("mml" . "emacs-mime"))
+    ("mml" . "emacs-mime")
+    "tramp" "dbus")
   "List of Info files that describe Emacs commands.
 An element can be a file name, or a list of the form (PREFIX . FILE)
 where PREFIX is a name prefix and FILE is the file to look in.
@@ -4873,6 +4955,21 @@ first line or header line, and for breadcrumb links.")
                                '(font-lock-face info-xref
                                  mouse-face highlight
                                  help-echo "mouse-2: go to this URL"))))
+
+      ;; Fontify footnotes
+      (goto-char (point-min))
+      (when (and not-fontified-p (re-search-forward "^[ \t]*-+ Footnotes -+$" nil t))
+        (let ((limit (point)))
+          (goto-char (point-min))
+          (while (re-search-forward "\\(([0-9]+)\\)" nil t)
+            (add-text-properties (match-beginning 0) (match-end 0)
+                                 `(font-lock-face info-xref
+                                   link t
+                                   mouse-face highlight
+                                   help-echo
+                                   ,(if (< (point) limit)
+                                        "mouse-2: go to footnote definition"
+                                      "mouse-2: go to footnote reference"))))))
 
       ;; Hide empty lines at the end of the node.
       (goto-char (point-max))

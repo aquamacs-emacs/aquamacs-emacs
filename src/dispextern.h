@@ -602,8 +602,8 @@ struct glyph_pool
 
    2. Window glyph matrices on frames having frame glyph matrices.
    Such matrices are sub-matrices of their corresponding frame matrix,
-   i.e. frame glyph matrices and window glyph matrices share the same
-   glyph memory which is allocated in form of a glyph_pool structure.
+   i.e., frame glyph matrices and window glyph matrices share the same
+   glyph memory, which is allocated in the form of a glyph_pool structure.
    Glyph rows in such a window matrix are slices of frame matrix rows.
 
    2. Free-standing window glyph matrices managing their own glyph
@@ -1384,7 +1384,7 @@ struct glyph_string
       ? current_mode_line_height				\
       : (MATRIX_MODE_LINE_HEIGHT ((W)->current_matrix)		\
 	 ? MATRIX_MODE_LINE_HEIGHT ((W)->current_matrix)	\
-	 : estimate_mode_line_height (XFRAME (W->frame),	\
+	 : estimate_mode_line_height (XFRAME ((W)->frame),	\
 				      CURRENT_MODE_LINE_FACE_ID (W))))
 
 /* Return the current height of the header line of window W.  If not
@@ -1397,7 +1397,7 @@ struct glyph_string
        ? current_header_line_height				\
        : (MATRIX_HEADER_LINE_HEIGHT ((W)->current_matrix)	\
 	  ? MATRIX_HEADER_LINE_HEIGHT ((W)->current_matrix)	\
-	  : estimate_mode_line_height (XFRAME (W->frame),\
+	  : estimate_mode_line_height (XFRAME ((W)->frame),	\
 				       HEADER_LINE_FACE_ID)))
 
 /* Return the height of the desired mode line of window W.  */
@@ -1412,13 +1412,13 @@ struct glyph_string
 
 /* Value is non-zero if window W wants a mode line.  */
 
-#define WINDOW_WANTS_MODELINE_P(W)					\
-     (!MINI_WINDOW_P ((W))						\
-      && !(W)->pseudo_window_p						\
-      && FRAME_WANTS_MODELINE_P (XFRAME (WINDOW_FRAME ((W))))		\
-      && BUFFERP (W->buffer)					\
-      && !NILP (BVAR (XBUFFER (W->buffer), mode_line_format))	\
-      && WINDOW_TOTAL_LINES (W) > 1)
+#define WINDOW_WANTS_MODELINE_P(W)				\
+  (!MINI_WINDOW_P ((W))						\
+   && !(W)->pseudo_window_p					\
+   && FRAME_WANTS_MODELINE_P (XFRAME (WINDOW_FRAME ((W))))	\
+   && BUFFERP ((W)->contents)					\
+   && !NILP (BVAR (XBUFFER ((W)->contents), mode_line_format))	\
+   && WINDOW_TOTAL_LINES (W) > 1)
 
 
 extern Lisp_Object Qwindow_wants_header_line_function,
@@ -1426,16 +1426,15 @@ extern Lisp_Object Qwindow_wants_header_line_function,
 
 /* Value is non-zero if window W wants a header line.  */
 #define WINDOW_WANTS_HEADER_LINE_P(W)					\
-     (!MINI_WINDOW_P ((W))						\
-      && !(W)->pseudo_window_p						\
-      && FRAME_WANTS_MODELINE_P (XFRAME (WINDOW_FRAME ((W))))		\
-      && BUFFERP ((W)->buffer)						\
-      && !NILP (BVAR (XBUFFER ((W)->buffer), header_line_format))		\
-      && WINDOW_TOTAL_LINES (W) > 1 + !NILP (BVAR (XBUFFER ((W)->buffer), mode_line_format))  \
+  (!MINI_WINDOW_P ((W))							\
+   && !(W)->pseudo_window_p						\
+   && FRAME_WANTS_MODELINE_P (XFRAME (WINDOW_FRAME ((W))))		\
+   && BUFFERP ((W)->contents)						\
+   && !NILP (BVAR (XBUFFER ((W)->contents), header_line_format))	\
+   && WINDOW_TOTAL_LINES (W) > 1					\
+   + !NILP (BVAR (XBUFFER ((W)->contents), mode_line_format))  \
       && !window_header_line_inhibited_p (W))
 
-
- 
 /* Return proper value to be used as baseline offset of font that has
    ASCENT and DESCENT to draw characters by the font at the vertical
    center of the line of frame F.
@@ -3193,7 +3192,15 @@ bool valid_image_p (Lisp_Object);
 void prepare_image_for_display (struct frame *, struct image *);
 ptrdiff_t lookup_image (struct frame *, Lisp_Object);
 
-unsigned long image_background (struct image *, struct frame *,
+#if defined (HAVE_X_WINDOWS) ||  defined (HAVE_NS)
+#define RGB_PIXEL_COLOR unsigned long
+#endif
+
+#ifdef HAVE_NTGUI
+#define RGB_PIXEL_COLOR COLORREF
+#endif
+
+RGB_PIXEL_COLOR image_background (struct image *, struct frame *,
                                 XImagePtr_or_DC ximg);
 int image_background_transparent (struct image *, struct frame *,
                                   XImagePtr_or_DC mask);

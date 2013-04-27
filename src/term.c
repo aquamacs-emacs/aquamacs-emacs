@@ -1321,7 +1321,7 @@ term_get_fkeys_1 (void)
   if (!KEYMAPP (KVAR (kboard, Vinput_decode_map)))
     kset_input_decode_map (kboard, Fmake_sparse_keymap (Qnil));
 
-  for (i = 0; i < (sizeof (keys)/sizeof (keys[0])); i++)
+  for (i = 0; i < (sizeof (keys) / sizeof (keys[0])); i++)
     {
       char *sequence = tgetstr (keys[i].cap, address);
       if (sequence)
@@ -2909,7 +2909,7 @@ dissociate_if_controlling_tty (int fd)
 {
   /* If tcgetpgrp succeeds, fd is the controlling terminal,
      so dissociate it by invoking setsid.  */
-  if (0 <= tcgetpgrp (fd) && setsid () < 0)
+  if (tcgetpgrp (fd) >= 0 && setsid () < 0)
     {
 #ifdef TIOCNOTTY
       /* setsid failed, presumably because Emacs is already a process
@@ -3426,9 +3426,6 @@ maybe_fatal (int must_succeed, struct terminal *terminal,
     vfatal (str2, ap);
   else
     verror (str1, ap);
-
-  va_end (ap);
-  emacs_abort ();
 }
 
 void
@@ -3437,7 +3434,6 @@ fatal (const char *str, ...)
   va_list ap;
   va_start (ap, str);
   vfatal (str, ap);
-  va_end (ap);
 }
 
 

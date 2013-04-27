@@ -1743,7 +1743,7 @@ no, only reply back to the author."
 				   (file-error))
 				 (mm-coding-system-p 'utf-8)
 				 (executable-find idna-program)
-				 (string= (idna-to-ascii "räksmörgås")
+				 (string= (idna-to-ascii "rÃ¤ksmÃ¶rgÃ¥s")
 					  "xn--rksmrgs-5wao1o")
 				 t)
   "Whether to encode non-ASCII in domain names into ASCII according to IDNA.
@@ -4097,11 +4097,9 @@ Instead, just auto-save the buffer and then bury it."
 
 (defun message-bury (buffer)
   "Bury this mail BUFFER."
-  (if message-return-action
-      (progn
-        (bury-buffer buffer)
-        (apply (car message-return-action) (cdr message-return-action)))
-    (with-current-buffer buffer (bury-buffer))))
+  (bury-buffer buffer)
+  (when message-return-action
+    (apply (car message-return-action) (cdr message-return-action))))
 
 (defun message-send (&optional arg)
   "Send the message in the current buffer.
@@ -8421,7 +8419,7 @@ Used in `message-simplify-recipients'."
 (run-hooks 'message-load-hook)
 
 ;; Local Variables:
-;; coding: iso-8859-1
+;; coding: utf-8
 ;; End:
 
 ;;; message.el ends here

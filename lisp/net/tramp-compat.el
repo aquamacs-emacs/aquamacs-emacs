@@ -52,6 +52,7 @@
   (require 'format-spec)
   (require 'shell)
 
+  (require 'trampver)
   (require 'tramp-loaddefs)
 
   ;; As long as password.el is not part of (X)Emacs, it shouldn't be
@@ -96,7 +97,8 @@
   ;; `remote-file-name-inhibit-cache' has been introduced with Emacs 24.1.
   ;; Besides `t', `nil', and integer, we use also timestamps (as
   ;; returned by `current-time') internally.
-  (defvar remote-file-name-inhibit-cache nil)
+  (unless (boundp 'remote-file-name-inhibit-cache)
+    (defvar remote-file-name-inhibit-cache nil))
 
   ;; For not existing functions, or functions with a changed argument
   ;; list, there are compiler warnings.  We want to avoid them in
@@ -382,25 +384,30 @@ Not actually used.  Use `(format \"%o\" i)' instead?"
 		 trash)))
        (delete-file filename)))))
 
-;; RECURSIVE has been introduced with Emacs 23.2.
-(defun tramp-compat-delete-directory (directory &optional recursive)
+;; RECURSIVE has been introduced with Emacs 23.2.  TRASH has been
+;; introduced with Emacs 24.1.
+(defun tramp-compat-delete-directory (directory &optional recursive trash)
   "Like `delete-directory' for Tramp files (compat function)."
-  (if (null recursive)
-      (delete-directory directory)
-    (condition-case nil
-	(tramp-compat-funcall 'delete-directory directory recursive)
-      ;; This Emacs version does not support the RECURSIVE flag.  We
-      ;; use the implementation from Emacs 23.2.
-      (wrong-number-of-arguments
-       (setq directory (directory-file-name (expand-file-name directory)))
-       (if (not (file-symlink-p directory))
-	   (mapc (lambda (file)
-		   (if (eq t (car (file-attributes file)))
-		       (tramp-compat-delete-directory file recursive)
-		     (delete-file file)))
-		 (directory-files
-		  directory 'full "^\\([^.]\\|\\.\\([^.]\\|\\..\\)\\).*")))
-       (delete-directory directory)))))
+  (condition-case nil
+      (cond
+       (trash
+	(tramp-compat-funcall 'delete-directory directory recursive trash))
+       (recursive
+	(tramp-compat-funcall 'delete-directory directory recursive))
+       (t
+	(delete-directory directory)))
+    ;; This Emacs version does not support the RECURSIVE or TRASH flag.  We
+    ;; use the implementation from Emacs 23.2.
+    (wrong-number-of-arguments
+     (setq directory (directory-file-name (expand-file-name directory)))
+     (if (not (file-symlink-p directory))
+	 (mapc (lambda (file)
+		 (if (eq t (car (file-attributes file)))
+		     (tramp-compat-delete-directory file recursive trash)
+		   (tramp-compat-delete-file file trash)))
+	       (directory-files
+		directory 'full "^\\([^.]\\|\\.\\([^.]\\|\\..\\)\\).*")))
+     (delete-directory directory))))
 
 ;; `number-sequence' does not exist in XEmacs.  Implementation is
 ;; taken from Emacs 23.
@@ -430,20 +437,6 @@ In Emacs, (split-string \"/foo/bar\" \"/\") returns (\"foo\" \"bar\").
 This is, the first, empty, element is omitted.  In XEmacs, the first
 element is not omitted."
   (delete "" (split-string string pattern)))
-
-(defun tramp-compat-call-process
-  (program &optional infile destination display &rest args)
-  "Calls `call-process' on the local host.
-This is needed because for some Emacs flavors Tramp has
-defadvised `call-process' to behave like `process-file'.  The
-Lisp error raised when PROGRAM is nil is trapped also, returning 1."
-  (let ((default-directory
-	  (if (file-remote-p default-directory)
-	      (tramp-compat-temporary-file-directory)
-	    default-directory)))
-    (if (executable-find program)
-	(apply 'call-process program infile destination display args)
-      1)))
 
 (defun tramp-compat-process-running-p (process-name)
   "Returns `t' if system process PROCESS-NAME is running for `user-login-name'."
@@ -525,6 +518,11 @@ EOL-TYPE can be one of `dos', `unix', or `mac'."
 			eol-type
 			"`dos', `unix', or `mac'")))))
         (t (error "Can't change EOL conversion -- is MULE missing?"))))
+
+;; `user-error' has been added to Emacs 24.3.
+(defun tramp-compat-user-error (format &rest args)
+  "Signal a pilot error."
+  (apply (if (fboundp 'user-error) 'user-error 'error) format args))
 
 (add-hook 'tramp-unload-hook
 	  (lambda ()

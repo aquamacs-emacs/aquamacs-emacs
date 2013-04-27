@@ -96,11 +96,6 @@ static Lisp_Object Qload_in_progress;
    It must be set to nil before all top-level calls to read0.  */
 static Lisp_Object read_objects;
 
-/* True means READCHAR should read bytes one by one (not character)
-   when READCHARFUN is Qget_file_char or Qget_emacs_mule_file_char.
-   This is set by read1 temporarily while handling #@NUMBER.  */
-static bool load_each_byte;
-
 /* List of descriptors now open for Fload.  */
 static Lisp_Object load_descriptor_list;
 
@@ -328,7 +323,7 @@ readchar (Lisp_Object readcharfun, bool *multibyte)
       return c;
     }
   c = (*readbyte) (-1, readcharfun);
-  if (c < 0 || load_each_byte)
+  if (c < 0)
     return c;
   if (multibyte)
     *multibyte = 1;
@@ -351,6 +346,33 @@ readchar (Lisp_Object readcharfun, bool *multibyte)
       buf[i++] = c;
     }
   return STRING_CHAR (buf);
+}
+
+#define FROM_FILE_P(readcharfun)			\
+  (EQ (readcharfun, Qget_file_char)			\
+   || EQ (readcharfun, Qget_emacs_mule_file_char))
+
+static void
+skip_dyn_bytes (Lisp_Object readcharfun, ptrdiff_t n)
+{
+  if (FROM_FILE_P (readcharfun))
+    {
+      block_input ();		/* FIXME: Not sure if it's needed.  */
+      fseek (instream, n, SEEK_CUR);
+      unblock_input ();
+    }
+  else
+    { /* We're not reading directly from a file.  In that case, it's difficult
+	 to reliably count bytes, since these are usually meant for the file's
+	 encoding, whereas we're now typically in the internal encoding.
+	 But luckily, skip_dyn_bytes is used to skip over a single
+	 dynamic-docstring (or dynamic byte-code) which is always quoted such
+	 that \037 is the final char.  */
+      int c;
+      do {
+	c = READCHAR;
+      } while (c >= 0 && c != '\037');
+    }
 }
 
 /* Unread the character C in the way appropriate for the stream READCHARFUN.
@@ -404,17 +426,9 @@ unreadchar (Lisp_Object readcharfun, int c)
     {
       unread_char = c;
     }
-  else if (EQ (readcharfun, Qget_file_char)
-	   || EQ (readcharfun, Qget_emacs_mule_file_char))
+  else if (FROM_FILE_P (readcharfun))
     {
-      if (load_each_byte)
-	{
-	  block_input ();
-	  ungetc (c, instream);
-	  unblock_input ();
-	}
-      else
-	unread_char = c;
+      unread_char = c;
     }
   else
     call1 (readcharfun, make_number (c));
@@ -602,17 +616,17 @@ read_filtered_event (bool no_switch_frame, bool ascii_required,
       end_time = add_emacs_time (current_emacs_time (), wait_time);
     }
 
-/* Read until we get an acceptable event.  */
+  /* Read until we get an acceptable event.  */
  retry:
   do
-    val = read_char (0, 0, 0, (input_method ? Qnil : Qt), 0,
+    val = read_char (0, Qnil, (input_method ? Qnil : Qt), 0,
 		     NUMBERP (seconds) ? &end_time : NULL);
   while (INTEGERP (val) && XINT (val) == -2); /* wrong_kboard_jmpbuf */
 
   if (BUFFERP (val))
     goto retry;
 
-  /* switch-frame events are put off until after the next ASCII
+  /* `switch-frame' events are put off until after the next ASCII
      character.  This is better than signaling an error just because
      the last characters were typed to a separate minibuffer frame,
      for example.  Eventually, some code which can deal with
@@ -1557,7 +1571,7 @@ openp (Lisp_Object path, Lisp_Object str, Lisp_Object suffixes, Lisp_Object *sto
 		{
 		  struct stat st;
 		  fd = emacs_open (pfn, O_RDONLY, 0);
-		  if (0 <= fd
+		  if (fd >= 0
 		      && (fstat (fd, &st) != 0 || S_ISDIR (st.st_mode)))
 		    {
 		      emacs_close (fd);
@@ -2345,7 +2359,7 @@ read_integer (Lisp_Object readcharfun, EMACS_INT radix)
 	  while (c == '0');
 	}
 
-      while (-1 <= (digit = digit_to_number (c, radix)))
+      while ((digit = digit_to_number (c, radix)) >= -1)
 	{
 	  if (digit == -1)
 	    valid = 0;
@@ -2388,7 +2402,6 @@ read1 (Lisp_Object readcharfun, int *pch, bool first_in_list)
   bool multibyte;
 
   *pch = 0;
-  load_each_byte = 0;
 
  retry:
 
@@ -2598,7 +2611,7 @@ read1 (Lisp_Object readcharfun, int *pch, bool first_in_list)
 	  return tmp;
 	}
 
-      /* #@NUMBER is used to skip NUMBER following characters.
+      /* #@NUMBER is used to skip NUMBER following bytes.
 	 That's used in .elc files to skip over doc strings
 	 and function definitions.  */
       if (c == '@')
@@ -2606,7 +2619,6 @@ read1 (Lisp_Object readcharfun, int *pch, bool first_in_list)
 	  enum { extra = 100 };
 	  ptrdiff_t i, nskip = 0;
 
-	  load_each_byte = 1;
 	  /* Read a decimal integer.  */
 	  while ((c = READCHAR) >= 0
 		 && c >= '0' && c <= '9')
@@ -2616,11 +2628,17 @@ read1 (Lisp_Object readcharfun, int *pch, bool first_in_list)
 	      nskip *= 10;
 	      nskip += c - '0';
 	    }
-	  UNREAD (c);
+	  if (nskip > 0)
+	    /* We can't use UNREAD here, because in the code below we side-step
+               READCHAR.  Instead, assume the first char after #@NNN occupies
+               a single byte, which is the case normally since it's just
+               a space.  */
+	    nskip--;
+	  else
+	    UNREAD (c);
 
 	  if (load_force_doc_strings
-	      && (EQ (readcharfun, Qget_file_char)
-		  || EQ (readcharfun, Qget_emacs_mule_file_char)))
+	      && (FROM_FILE_P (readcharfun)))
 	    {
 	      /* If we are supposed to force doc strings into core right now,
 		 record the last string that we skipped,
@@ -2659,19 +2677,17 @@ read1 (Lisp_Object readcharfun, int *pch, bool first_in_list)
 	      saved_doc_string_position = file_tell (instream);
 
 	      /* Copy that many characters into saved_doc_string.  */
+	      block_input ();
 	      for (i = 0; i < nskip && c >= 0; i++)
-		saved_doc_string[i] = c = READCHAR;
+		saved_doc_string[i] = c = getc (instream);
+	      unblock_input ();
 
 	      saved_doc_string_length = i;
 	    }
 	  else
-	    {
-	      /* Skip that many characters.  */
-	      for (i = 0; i < nskip && c >= 0; i++)
-		c = READCHAR;
-	    }
+	    /* Skip that many bytes.  */
+	    skip_dyn_bytes (readcharfun, nskip);
 
-	  load_each_byte = 0;
 	  goto retry;
 	}
       if (c == '!')
@@ -3282,12 +3298,12 @@ string_to_number (char const *string, int base, bool ignore_trailing)
   state = 0;
 
   leading_digit = digit_to_number (*cp, base);
-  if (0 <= leading_digit)
+  if (leading_digit >= 0)
     {
       state |= LEAD_INT;
       do
 	++cp;
-      while (0 <= digit_to_number (*cp, base));
+      while (digit_to_number (*cp, base) >= 0);
     }
   if (*cp == '.')
     {
@@ -3364,7 +3380,7 @@ string_to_number (char const *string, int base, bool ignore_trailing)
 
   /* If the number uses integer and not float syntax, and is in C-language
      range, use its value, preferably as a fixnum.  */
-  if (0 <= leading_digit && ! float_syntax)
+  if (leading_digit >= 0 && ! float_syntax)
     {
       uintmax_t n;
 
@@ -3558,8 +3574,10 @@ read_list (bool flag, Lisp_Object readcharfun)
 		{
 		  if (doc_reference == 1)
 		    return make_number (0);
-		  if (doc_reference == 2)
+		  if (doc_reference == 2 && INTEGERP (XCDR (val)))
 		    {
+		      char *saved = NULL;
+		      file_offset saved_position;
 		      /* Get a doc string from the file we are loading.
 			 If it's in saved_doc_string, get it from there.
 
@@ -3576,65 +3594,42 @@ read_list (bool flag, Lisp_Object readcharfun)
 			  && pos < (saved_doc_string_position
 				    + saved_doc_string_length))
 			{
-			  ptrdiff_t start = pos - saved_doc_string_position;
-			  ptrdiff_t from, to;
-
-			  /* Process quoting with ^A,
-			     and find the end of the string,
-			     which is marked with ^_ (037).  */
-			  for (from = start, to = start;
-			       saved_doc_string[from] != 037;)
-			    {
-			      int c = saved_doc_string[from++];
-			      if (c == 1)
-				{
-				  c = saved_doc_string[from++];
-				  if (c == 1)
-				    saved_doc_string[to++] = c;
-				  else if (c == '0')
-				    saved_doc_string[to++] = 0;
-				  else if (c == '_')
-				    saved_doc_string[to++] = 037;
-				}
-			      else
-				saved_doc_string[to++] = c;
-			    }
-
-			  return make_unibyte_string (saved_doc_string + start,
-						      to - start);
+			  saved = saved_doc_string;
+			  saved_position = saved_doc_string_position;
 			}
 		      /* Look in prev_saved_doc_string the same way.  */
 		      else if (pos >= prev_saved_doc_string_position
 			       && pos < (prev_saved_doc_string_position
 					 + prev_saved_doc_string_length))
 			{
-			  ptrdiff_t start =
-			    pos - prev_saved_doc_string_position;
+			  saved = prev_saved_doc_string;
+			  saved_position = prev_saved_doc_string_position;
+			}
+		      if (saved)
+			{
+			  ptrdiff_t start = pos - saved_position;
 			  ptrdiff_t from, to;
 
 			  /* Process quoting with ^A,
 			     and find the end of the string,
 			     which is marked with ^_ (037).  */
 			  for (from = start, to = start;
-			       prev_saved_doc_string[from] != 037;)
+			       saved[from] != 037;)
 			    {
-			      int c = prev_saved_doc_string[from++];
+			      int c = saved[from++];
 			      if (c == 1)
 				{
-				  c = prev_saved_doc_string[from++];
-				  if (c == 1)
-				    prev_saved_doc_string[to++] = c;
-				  else if (c == '0')
-				    prev_saved_doc_string[to++] = 0;
-				  else if (c == '_')
-				    prev_saved_doc_string[to++] = 037;
+				  c = saved[from++];
+				  saved[to++] = (c == 1 ? c
+						 : c == '0' ? 0
+						 : c == '_' ? 037
+						 : c);
 				}
 			      else
-				prev_saved_doc_string[to++] = c;
+				saved[to++] = c;
 			    }
 
-			  return make_unibyte_string (prev_saved_doc_string
-						      + start,
+			  return make_unibyte_string (saved + start,
 						      to - start);
 			}
 		      else

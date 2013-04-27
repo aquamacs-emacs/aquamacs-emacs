@@ -159,7 +159,7 @@ If nil then it is bound to `delete-backward-char'."
 
 (defvar vip-inhibit-startup-message nil)
 
-(defvar vip-startup-file (convert-standard-filename "~/.vip")
+(defvar vip-startup-file (locate-user-emacs-file "vip" ".vip")
   "Filename used as startup file for vip.")
 
 ;; key bindings
@@ -183,6 +183,7 @@ If nil then it is bound to `delete-backward-char'."
     (define-key map "\C-z" 'vip-change-mode-to-emacs)
     (define-key map "\e" 'vip-ESC)
 
+    (define-key map [?\S-\ ] 'vip-scroll-back)
     (define-key map " " 'vip-scroll)
     (define-key map "!" 'vip-command-argument)
     (define-key map "\"" 'vip-command-argument)

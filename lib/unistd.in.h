@@ -61,8 +61,10 @@
 /* mingw, MSVC, BeOS, Haiku declare environ in <stdlib.h>, not in
    <unistd.h>.  */
 /* Solaris declares getcwd not only in <unistd.h> but also in <stdlib.h>.  */
+/* OSF Tru64 Unix cannot see gnulib rpl_strtod when system <stdlib.h> is
+   included here.  */
 /* But avoid namespace pollution on glibc systems.  */
-#ifndef __GLIBC__
+#if !defined __GLIBC__ && !defined __osf__
 # define __need_system_stdlib_h
 # include <stdlib.h>
 # undef __need_system_stdlib_h
@@ -110,6 +112,7 @@
 /* Get getopt(), optarg, optind, opterr, optopt.
    But avoid namespace pollution on glibc systems.  */
 #if @GNULIB_UNISTD_H_GETOPT@ && !defined __GLIBC__ && !defined _GL_SYSTEM_GETOPT
+# define __need_getopt
 # include <getopt.h>
 #endif
 

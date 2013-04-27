@@ -92,14 +92,6 @@ static int trackingMenu;
    ========================================================================== */
 
 
-/* FIXME: not currently used, but should normalize with other terms. */
-void
-x_activate_menubar (struct frame *f)
-{
-    fprintf (stderr, "XXX: Received x_activate_menubar event.\n");
-}
-
-
 /* Supposed to discard menubar and free storage.  Since we share the
    menubar among frames and update its context for the focused window,
    there is nothing to do here. */
@@ -142,7 +134,8 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
   long t;
 #endif
 
-  NSTRACE (set_frame_menubar);
+  NSTRACE (ns_update_menubar);
+
   if (f != SELECTED_FRAME ())
       return;
   if ([[FRAME_NS_VIEW (f) window] attachedSheet] &&
@@ -209,7 +202,7 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
 	= alloca (previous_menu_items_used * sizeof *previous_items);
 
       /* lisp preliminaries */
-      buffer = XWINDOW (FRAME_SELECTED_WINDOW (f))->buffer;
+      buffer = XWINDOW (FRAME_SELECTED_WINDOW (f))->contents;
       specbind (Qinhibit_quit, Qt);
       specbind (Qdebug_on_next_call, Qnil);
       record_unwind_save_match_data ();
@@ -530,6 +523,26 @@ set_frame_menubar (struct frame *f, bool first_time, bool deep_p)
   ns_update_menubar (f, deep_p, nil);
 }
 
+void
+x_activate_menubar (struct frame *f)
+{
+  NSArray *a = [[NSApp mainMenu] itemArray];
+  /* Update each submenu separately so ns_update_menubar doesn't reset
+     the delegate.  */
+  int i = 0;
+  while (i < [a count])
+    {
+      EmacsMenu *menu = (EmacsMenu *)[[a objectAtIndex:i] submenu];
+      const char *title = [[menu title] UTF8String];
+      if (strcmp (title, ns_get_pending_menu_title ()) == 0)
+        {
+          ns_update_menubar (f, true, menu);
+          break;
+        }
+      ++i;
+    }
+  ns_check_pending_open_menu ();
+}
 /* Utility (from macmenu.c): is this item a separator? */
 static int
 name_is_separator (name)
@@ -597,6 +610,14 @@ extern NSString *NSMenuDidBeginTrackingNotification;
   trackingMenu = ([notification name] == NSMenuDidBeginTrackingNotification
                   ? 1 : 0);
 }
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+- (void)menuWillOpen:(NSMenu *)menu
+{
+  ns_check_menu_open (menu);
+}
+#endif
+
 #endif
 
 /* delegate method called when a submenu is being opened: run a 'deep' call
@@ -626,7 +647,12 @@ extern NSString *NSMenuDidBeginTrackingNotification;
   if (trackingMenu == 0)
     return;
 /*fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); */
-  ns_update_menubar (frame, 1, self);
+#if ! defined(NS_IMPL_COCOA) || \
+  MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+  /* Don't know how to do this for anything other than OSX >= 10.5
+     This is wrong, as it might run Lisp code in the event loop.  */
+  ns_update_menubar (frame, true, self);
+#endif
 }
 
 
@@ -1294,6 +1320,8 @@ update_frame_tool_bar (FRAME_PTR f)
   FRAME_TOOLBAR_HEIGHT (f) =
     NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
     - FRAME_NS_TITLEBAR_HEIGHT (f);
+    if (FRAME_TOOLBAR_HEIGHT (f) < 0) // happens if frame is fullscreen.
+      FRAME_TOOLBAR_HEIGHT (f) = 0;
     unblock_input ();
 }
 
@@ -1681,6 +1709,7 @@ a notification */
   wr.size = [textField frame].size;
 
   [win setFrame: wr display: YES];
+  [win setLevel: NSPopUpMenuWindowLevel];
   [win orderFront: self];
   [win display];
   timer = [NSTimer scheduledTimerWithTimeInterval: (float)seconds target: self
@@ -1746,7 +1775,7 @@ pop_down_menu (Lisp_Object arg)
 	  [popupSheetAlert release];
 	} else
 	{
-          [panel close];
+      [panel close];
 	}
 
       [unwind_data->pool release];
@@ -1775,7 +1804,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 
   NSTRACE (x-popup-dialog);
 
-  check_ns ();
+  check_window_system (NULL);
 
   CHECK_CONS (contents);
   isQ = NILP (header);
@@ -1819,6 +1848,11 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   else
     CHECK_WINDOW (window);
 
+  check_window_system (f);
+
+  p.x = (int)f->left_pos + ((int)FRAME_COLUMN_WIDTH (f) * f->text_cols)/2;
+  p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
+
   title = Fcar (contents);
   CHECK_STRING (title);
 
@@ -1827,7 +1861,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
        the dialog.  */
     contents = Fcons (title, Fcons (Fcons (build_string ("Ok"), Qt), Qnil));
 
-  block_input();
+  block_input ();
   pool = [[NSAutoreleasePool alloc] init];
 
   dialog = [[EmacsAlertPanel alloc] init];
@@ -1843,7 +1877,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   Lisp_Object head;
   /* read contents */
   if (XTYPE (contents) == Lisp_Cons)
-{
+  {
       head = Fcar (contents);
       [((EmacsAlertPanel*)dialog) processDialogFromList: Fcdr (contents)];
 }
@@ -1876,7 +1910,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   {
     ptrdiff_t specpdl_count = SPECPDL_INDEX ();
     struct Popdown_data *unwind_data = xmalloc (sizeof (*unwind_data));
-    
+
     popup_activated_flag = 1;
 
     unwind_data->pool = pool;
@@ -1928,14 +1962,14 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
         }
     }
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
-}
-  unblock_input();
+  }
+  unblock_input ();
   [dialog release];
   if (ret==-2) /*cancel*/
      Fsignal (Qquit, Qnil); /*special button value for cancel*/
 
   return tem;
-    }
+}
 
 }
 
@@ -1946,8 +1980,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
    ========================================================================== */
 
 @interface FlippedView : NSView
-    {
-    }
+{
+}
 @end
 
 @implementation FlippedView
@@ -1976,16 +2010,16 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 - (void)close
 {
    [[self window] close]; 
-}
+    }
 
 - (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
+    {
   * ((NSInteger*) contextInfo) = returnCode;
-    }
+        }
 
 /* do to: move this into init: */
 - (void) processDialogFromList: (Lisp_Object)list
-  {
+{
   Lisp_Object item;
   int cancel = 1;
   for (; CONSP (list) && returnValueCount<20; list = XCDR (list))
@@ -1995,7 +2029,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       if (STRINGP (item))
         { /* inactive button */
           [[self addButtonWithTitle: [NSString stringWithUTF8String: SDATA (item)] ] setEnabled:NO];
-          }
+    }
       else if (NILP (item))
         { /* unfortunately, NSAlert will resize this button.  We can
 	     only customize after a call to update:, but then the
@@ -2003,36 +2037,36 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	     pointless.  */
 	  NSButton *space = [self addButtonWithTitle: @" " ];
 	  [space setHidden:YES];
-      }
+}
       else if (CONSP (item)) 
-    {
+{
 	  NSString *title = @"malformed";
 	  NSString *key = nil;
 	  NSButton *button = nil;
 	  if (CONSP (XCAR (item))) /* key specified? */
-        {
+{
 	      if (STRINGP (XCAR (XCAR (item))))
 		title = [NSString stringWithUTF8String: SDATA (XCAR (XCAR (item)))];
 	      if (INTEGERP ( XCDR (XCAR (item))))
 		key =  [[NSString stringWithFormat: @"%c", XINT (XCDR (XCAR (item)))] retain];
 	      else
 		key = nil;
-        }
-	  else
-	    {
+}
+  else
+  {
 	      if (STRINGP (XCAR (item)))
 		title = [NSString stringWithUTF8String: SDATA (XCAR (item))];
-    }
+          }
 	  if (EQ (XCDR (item), intern ("suppress")))
-      {
+    {
 	      [self setShowsSuppressionButton:YES];
 	      button = [self suppressionButton];
 	      [button setTitle:title];
-      }
+        }
 	  else
 	    { /* normal button*/
 	      button = [self addButtonWithTitle: title];
-	    }
+    }
 	  [button setTag: returnValueCount];
 	  if (key)
       {
@@ -2042,17 +2076,17 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	      [button setKeyEquivalentModifierMask: 0];
       }
 	  returnValues[returnValueCount++] = XCDR (item);
-  }
+      }
       else if (EQ (item, intern ("cancel")))
 	{ /* add cancel button */
 	  [[self addButtonWithTitle:  @"Cancel"] setTag: -2];
 	  cancel = 0;
-}
+  }
       else if (EQ (item, intern ("no-cancel")))
 	{ /* skip cancel button */
 	  cancel = 0;
 }
-    }
+}
 
   if (cancel || returnValueCount == 0)
     [[self addButtonWithTitle: @"Cancel"] setTag: -2];

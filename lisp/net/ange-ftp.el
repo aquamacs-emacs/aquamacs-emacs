@@ -3297,7 +3297,6 @@ system TYPE.")
 		     (name (ange-ftp-quote-string (nth 2 parsed)))
 		     (temp (ange-ftp-make-tmp-name host))
 		     (binary (ange-ftp-binary-file filename))
-		     (buffer-file-type buffer-file-type)
 		     (abbr (ange-ftp-abbreviate-filename filename))
 		     (coding-system-used last-coding-system-used)
 		     size)
@@ -3322,10 +3321,7 @@ system TYPE.")
 			   size
 			   (nth 1 (ange-ftp-real-insert-file-contents
 				   temp visit beg end replace))
-			   coding-system-used last-coding-system-used
-			   ;; override autodetection of buffer file type
-			   ;; to ensure buffer is saved in DOS format
-			   buffer-file-type binary)
+			   coding-system-used last-coding-system-used)
 			(signal 'ftp-error
 				(list
 				 "Opening input file:"
@@ -4088,7 +4084,8 @@ directory, so that Emacs will know its current contents."
 	(or (file-exists-p parent)
 	    (ange-ftp-make-directory parent parents))))
   (if (file-exists-p dir)
-      (error "Cannot make directory %s: file already exists" dir)
+      (unless parents
+	(error "Cannot make directory %s: file already exists" dir))
     (let ((parsed (ange-ftp-ftp-name dir)))
       (if parsed
 	  (let* ((host (nth 0 parsed))
@@ -4440,16 +4437,18 @@ NEWNAME should be the name to give the new compressed or uncompressed file.")
 ;;; Define ways of getting at unmodified Emacs primitives,
 ;;; turning off our handler.
 
-;(defun ange-ftp-run-real-handler (operation args)
-;  (let ((inhibit-file-name-handlers
-;	 (cons 'ange-ftp-hook-function
-;	       (cons 'ange-ftp-completion-hook-function
-;		     (and (eq inhibit-file-name-operation operation)
-;			  inhibit-file-name-handlers))))
-;	(inhibit-file-name-operation operation))
-;    (apply operation args)))
+(defun ange-ftp-run-real-handler-orig (operation args)
+  (let ((inhibit-file-name-handlers
+	 (cons 'ange-ftp-hook-function
+	       (cons 'ange-ftp-completion-hook-function
+		     (and (eq inhibit-file-name-operation operation)
+			  inhibit-file-name-handlers))))
+	(inhibit-file-name-operation operation))
+    (apply operation args)))
 
-(defalias 'ange-ftp-run-real-handler 'tramp-run-real-handler)
+(defalias 'ange-ftp-run-real-handler
+  (if (fboundp 'tramp-run-real-handler)
+      'tramp-run-real-handler 'ange-ftp-run-real-handler-orig))
 
 (defun ange-ftp-real-file-name-directory (&rest args)
   (ange-ftp-run-real-handler 'file-name-directory args))
@@ -5137,7 +5136,7 @@ Other orders of $ and _ seem to all work just fine.")
 	(forward-line 1))
       ;; Would like to look for a "Total" line, or a "Directory" line to
       ;; make sure that the listing isn't complete garbage before putting
-      ;; in "." and "..", but we can't even count on all VAX's giving us
+      ;; in "." and "..", but we can't count on VMS giving us
       ;; either of these.
       (puthash "." t tbl)
       (puthash ".." t tbl))

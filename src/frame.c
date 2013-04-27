@@ -149,25 +149,56 @@ decode_any_frame (register Lisp_Object frame)
   return XFRAME (frame);
 }
 
+bool
+window_system_available (struct frame *f)
+{
+  if (f)
+    return FRAME_WINDOW_P (f) || FRAME_MSDOS_P (f);
+  else
+#ifdef HAVE_WINDOW_SYSTEM
+    return x_display_list != NULL;
+#else
+    return 0;
+#endif
+}
+
+struct frame *
+decode_window_system_frame (Lisp_Object frame)
+{
+  struct frame *f = decode_live_frame (frame);
+  
+  if (!window_system_available (f))
+    error ("Window system frame should be used");
+  return f;
+}
+
+void
+check_window_system (struct frame *f)
+{
+  if (!window_system_available (f))
+    error (f ? "Window system frame should be used"
+	   : "Window system is not in use or not initialized");
+}
+
 static void
 set_menu_bar_lines_1 (Lisp_Object window, int n)
 {
   struct window *w = XWINDOW (window);
 
   w->last_modified = 0;
-  wset_top_line (w, make_number (XFASTINT (w->top_line) + n));
-  wset_total_lines (w, make_number (XFASTINT (w->total_lines) - n));
+  w->top_line += n;
+  w->total_lines -= n;
 
   /* Handle just the top child in a vertical split.  */
-  if (!NILP (w->vchild))
-    set_menu_bar_lines_1 (w->vchild, n);
-
-  /* Adjust all children in a horizontal split.  */
-  for (window = w->hchild; !NILP (window); window = w->next)
-    {
-      w = XWINDOW (window);
-      set_menu_bar_lines_1 (window, n);
-    }
+  if (WINDOW_VERTICAL_COMBINATION_P (w))
+    set_menu_bar_lines_1 (w->contents, n);
+  else if (WINDOW_HORIZONTAL_COMBINATION_P (w))
+    /* Adjust all children in a horizontal split.  */
+    for (window = w->contents; !NILP (window); window = w->next)
+      {
+	w = XWINDOW (window);
+	set_menu_bar_lines_1 (window, n);
+      }
 }
 
 void
@@ -332,14 +363,14 @@ make_frame (int mini_p)
   SET_FRAME_COLS (f, 10);
   FRAME_LINES (f) = 10;
 
-  wset_total_cols (XWINDOW (root_window), make_number (10));
-  wset_total_lines (XWINDOW (root_window), make_number (mini_p ? 9 : 10));
+  XWINDOW (root_window)->total_cols = 10;
+  XWINDOW (root_window)->total_lines = mini_p ? 9 : 10;
 
   if (mini_p)
     {
-      wset_total_cols (XWINDOW (mini_window), make_number (10));
-      wset_top_line (XWINDOW (mini_window), make_number (9));
-      wset_total_lines (XWINDOW (mini_window), make_number (1));
+      XWINDOW (mini_window)->total_cols = 10;
+      XWINDOW (mini_window)->top_line = 9;
+      XWINDOW (mini_window)->total_lines = 1;
     }
 
   /* Choose a buffer for the frame's root window.  */
@@ -421,7 +452,7 @@ make_frame_without_minibuffer (register Lisp_Object mini_window, KBOARD *kb, Lis
 
   /* Make the chosen minibuffer window display the proper minibuffer,
      unless it is already showing a minibuffer.  */
-  if (NILP (Fmemq (XWINDOW (mini_window)->buffer, Vminibuffer_list)))
+  if (NILP (Fmemq (XWINDOW (mini_window)->contents, Vminibuffer_list)))
     /* Use set_window_buffer instead of Fset_window_buffer (see
        discussion of bug#11984, bug#12025, bug#12026).  */
     set_window_buffer (mini_window,
@@ -803,10 +834,18 @@ do_switch_frame (Lisp_Object frame, int track, int for_deletion, Lisp_Object nor
 
   if (FRAME_TERMCAP_P (XFRAME (frame)) || FRAME_MSDOS_P (XFRAME (frame)))
     {
-      if (FRAMEP (FRAME_TTY (XFRAME (frame))->top_frame))
-	/* Mark previously displayed frame as now obscured.  */
-	SET_FRAME_VISIBLE (XFRAME (FRAME_TTY (XFRAME (frame))->top_frame), 2);
-      SET_FRAME_VISIBLE (XFRAME (frame), 1);
+      Lisp_Object top_frame = FRAME_TTY (XFRAME (frame))->top_frame;
+
+      /* Don't mark the frame garbaged and/or obscured if we are
+	 switching to the frame that is already the top frame of that
+	 TTY.  */
+      if (!EQ (frame, top_frame))
+	{
+	  if (FRAMEP (top_frame))
+	    /* Mark previously displayed frame as now obscured.  */
+	    SET_FRAME_VISIBLE (XFRAME (top_frame), 2);
+	  SET_FRAME_VISIBLE (XFRAME (frame), 1);
+	}
       FRAME_TTY (XFRAME (frame))->top_frame = frame;
     }
 
@@ -897,7 +936,7 @@ DEFUN ("frame-list", Fframe_list, Sframe_list,
 /* Return CANDIDATE if it can be used as 'other-than-FRAME' frame on the
    same tty (for tty frames) or among frames which uses FRAME's keyboard.
    If MINIBUF is nil, do not consider minibuffer-only candidate.
-   If MINIBUF is `visible', do not consider an invisible candidate. 
+   If MINIBUF is `visible', do not consider an invisible candidate.
    If MINIBUF is a window, consider only its own frame and candidate now
    using that window as the minibuffer.
    If MINIBUF is 0, consider candidate if it is visible or iconified.
@@ -1196,7 +1235,7 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
       /* Use set_window_buffer instead of Fset_window_buffer (see
 	 discussion of bug#11984, bug#12025, bug#12026).  */
       set_window_buffer (sf->minibuffer_window,
-			 XWINDOW (minibuf_window)->buffer, 0, 0);
+			 XWINDOW (minibuf_window)->contents, 0, 0);
       minibuf_window = sf->minibuffer_window;
 
       /* If the dying minibuffer window was selected,
@@ -1602,17 +1641,13 @@ make_frame_visible_1 (Lisp_Object window)
 {
   struct window *w;
 
-  for (;!NILP (window); window = w->next)
+  for (; !NILP (window); window = w->next)
     {
       w = XWINDOW (window);
-
-      if (!NILP (w->buffer))
-	bset_display_time (XBUFFER (w->buffer), Fcurrent_time ());
-
-      if (!NILP (w->vchild))
-	make_frame_visible_1 (w->vchild);
-      if (!NILP (w->hchild))
-	make_frame_visible_1 (w->hchild);
+      if (WINDOWP (w->contents))
+	make_frame_visible_1 (w->contents);
+      else
+	bset_display_time (XBUFFER (w->contents), Fcurrent_time ());
     }
 }
 
@@ -1643,7 +1678,7 @@ displayed in the terminal.  */)
       /* Use set_window_buffer instead of Fset_window_buffer (see
 	 discussion of bug#11984, bug#12025, bug#12026).  */
       set_window_buffer (sf->minibuffer_window,
-			 XWINDOW (minibuf_window)->buffer, 0, 0);
+			 XWINDOW (minibuf_window)->contents, 0, 0);
       minibuf_window = sf->minibuffer_window;
     }
 
@@ -1674,7 +1709,7 @@ If omitted, FRAME defaults to the currently selected frame.  */)
       /* Use set_window_buffer instead of Fset_window_buffer (see
 	 discussion of bug#11984, bug#12025, bug#12026).  */
       set_window_buffer (sf->minibuffer_window,
-			 XWINDOW (minibuf_window)->buffer, 0, 0);
+			 XWINDOW (minibuf_window)->contents, 0, 0);
       minibuf_window = sf->minibuffer_window;
     }
 
@@ -1828,7 +1863,7 @@ See `redirect-frame-focus'.  */)
 /* Return the value of frame parameter PROP in frame FRAME.  */
 
 #ifdef HAVE_WINDOW_SYSTEM
-#if !HAVE_NS
+#if !HAVE_NS && !defined(WINDOWSNT)
 static
 #endif
 Lisp_Object
@@ -3327,16 +3362,15 @@ x_set_alpha (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
       else if (FLOATP (item))
 	{
 	  alpha = XFLOAT_DATA (item);
-	  if (alpha < 0.0 || 1.0 < alpha)
+	  if (! (0 <= alpha && alpha <= 1.0))
 	    args_out_of_range (make_float (0.0), make_float (1.0));
 	}
       else if (INTEGERP (item))
 	{
 	  EMACS_INT ialpha = XINT (item);
-	  if (ialpha < 0 || 100 < ialpha)
+	  if (! (0 <= ialpha && alpha <= 100))
 	    args_out_of_range (make_number (0), make_number (100));
-	  else
-	    alpha = ialpha / 100.0;
+	  alpha = ialpha / 100.0;
 	}
       else
 	wrong_type_argument (Qnumberp, item);
@@ -3507,11 +3541,10 @@ The optional arguments COMPONENT and SUBCLASS add to the key and the
 class, respectively.  You must specify both of them or neither.
 If you specify them, the key is `INSTANCE.COMPONENT.ATTRIBUTE'
 and the class is `Emacs.CLASS.SUBCLASS'.  */)
-  (Lisp_Object attribute, Lisp_Object class, Lisp_Object component, Lisp_Object subclass)
+  (Lisp_Object attribute, Lisp_Object class, Lisp_Object component,
+   Lisp_Object subclass)
 {
-#ifdef HAVE_X_WINDOWS
-  check_x ();
-#endif
+  check_window_system (NULL);
 
   return xrdb_get_resource (check_x_display_info (Qnil)->xrdb,
 			    attribute, class, component, subclass);
@@ -3520,7 +3553,9 @@ and the class is `Emacs.CLASS.SUBCLASS'.  */)
 /* Get an X resource, like Fx_get_resource, but for display DPYINFO.  */
 
 Lisp_Object
-display_x_get_resource (Display_Info *dpyinfo, Lisp_Object attribute, Lisp_Object class, Lisp_Object component, Lisp_Object subclass)
+display_x_get_resource (Display_Info *dpyinfo, Lisp_Object attribute,
+			Lisp_Object class, Lisp_Object component,
+			Lisp_Object subclass)
 {
   return xrdb_get_resource (dpyinfo->xrdb,
 			    attribute, class, component, subclass);
@@ -4244,6 +4279,16 @@ Setting this variable does not affect existing frames, only new ones.  */);
 #else
   Vdefault_frame_scroll_bars = Qnil;
 #endif
+
+  DEFVAR_BOOL ("scroll-bar-adjust-thumb-portion",
+               scroll_bar_adjust_thumb_portion_p,
+               doc: /* Adjust thumb for overscrolling for Gtk+ and MOTIF.
+Non-nil means adjust the thumb in the scroll bar so it can be dragged downwards
+even if the end of the buffer is shown (i.e. overscrolling).
+Set to nil if you want the thumb to be at the bottom when the end of the buffer
+is shown.  Also, the thumb fills the whole scroll bar when the entire buffer
+is visible.  In this case you can not overscroll.  */);
+  scroll_bar_adjust_thumb_portion_p = 1;
 
   DEFVAR_LISP ("terminal-frame", Vterminal_frame,
                doc: /* The initial frame-object, which represents Emacs's stdout.  */);

@@ -1066,14 +1066,17 @@ and `event-end' functions."
 		(nth 1 position))))
     (and (symbolp area) area)))
 
-(defsubst posn-point (position)
+(defun posn-point (position)
   "Return the buffer location in POSITION.
 POSITION should be a list of the form returned by the `event-start'
-and `event-end' functions."
+and `event-end' functions.
+Returns nil if POSITION does not correspond to any buffer location (e.g.
+a click on a scroll bar)."
   (or (nth 5 position)
-      (if (consp (nth 1 position))
-	  (car (nth 1 position))
-	(nth 1 position))))
+      (let ((pt (nth 1 position)))
+        (or (car-safe pt)
+            ;; Apparently this can also be `vertical-scroll-bar' (bug#13979).
+            (if (integerp pt) pt)))))
 
 (defun posn-set-point (position)
   "Move point to POSITION.
@@ -1146,12 +1149,14 @@ POSITION should be a list of the form returned by the `event-start'
 and `event-end' functions."
   (nth 3 position))
 
-(defsubst posn-string (position)
+(defun posn-string (position)
   "Return the string object of POSITION.
 Value is a cons (STRING . STRING-POS), or nil if not a string.
 POSITION should be a list of the form returned by the `event-start'
 and `event-end' functions."
-  (nth 4 position))
+  (let ((x (nth 4 position)))
+    ;; Apparently this can also be `handle' or `below-handle' (bug#13979).
+    (when (consp x) x)))
 
 (defsubst posn-image (position)
   "Return the image object of POSITION.
@@ -1251,7 +1256,6 @@ is converted into a string by expressing it in decimal."
 (make-obsolete-variable 'default-scroll-down-aggressively 'scroll-down-aggressively "23.2")
 (make-obsolete-variable 'default-fill-column 'fill-column "23.2")
 (make-obsolete-variable 'default-cursor-type 'cursor-type "23.2")
-(make-obsolete-variable 'default-buffer-file-type 'buffer-file-type "23.2")
 (make-obsolete-variable 'default-cursor-in-non-selected-windows 'cursor-in-non-selected-windows "23.2")
 (make-obsolete-variable 'default-buffer-file-coding-system 'buffer-file-coding-system "23.2")
 (make-obsolete-variable 'default-major-mode 'major-mode "23.2")
@@ -1432,7 +1436,9 @@ Of course, a subsequent hook function may do the same thing.
 Each hook function definition is used to construct the FUN passed
 to the next hook function, if any.  The last (or \"outermost\")
 FUN is then called once."
-  (declare (indent 2) (debug (form sexp body)))
+  (declare (indent 2) (debug (form sexp body))
+           (obsolete "use a <foo>-function variable modified by add-function."
+                     "24.4"))
   ;; We need those two gensyms because CL's lexical scoping is not available
   ;; for function arguments :-(
   (let ((funs (make-symbol "funs"))
@@ -2645,15 +2651,6 @@ When the hook runs, the temporary buffer is current.
 This hook is normally set up with a function to put the buffer in Help
 mode.")
 
-(defvar-local buffer-file-type nil
-  "Non-nil if the visited file is a binary file.
-This variable is meaningful on MS-DOG and MS-Windows.
-On those systems, it is automatically local in every buffer.
-On other systems, this variable is normally always nil.
-
-WARNING: This variable is obsolete and will disappear Real Soon Now.
-Don't use it!")
-
 ;; The `assert' macro from the cl package signals
 ;; `cl-assertion-failed' at runtime so always define it.
 (put 'cl-assertion-failed 'error-conditions '(error))
@@ -2729,6 +2726,22 @@ If there is no plausible default, return nil."
 		     (skip-syntax-forward "w_")
 		     (setq to (point)))))
       (buffer-substring-no-properties from to))))
+
+(defun find-tag-default-as-regexp ()
+  "Return regexp that matches the default tag at point.
+If there is no tag at point, return nil.
+
+When in a major mode that does not provide its own
+`find-tag-default-function', return a regexp that matches the
+symbol at point exactly."
+  (let* ((tagf (or find-tag-default-function
+		   (get major-mode 'find-tag-default-function)
+		   'find-tag-default))
+	 (tag (funcall tagf)))
+    (cond ((not tag))
+	  ((eq tagf 'find-tag-default)
+	   (format "\\_<%s\\_>" (regexp-quote tag)))
+	  (t (regexp-quote tag)))))
 
 (defun play-sound (sound)
   "SOUND is a list of the form `(sound KEYWORD VALUE...)'.
@@ -3851,6 +3864,58 @@ node `(elisp)Syntax Table Internals' for a list of codes.
 If SYNTAX is nil, return nil."
   (and syntax (logand (car syntax) 65535)))
 
+;; Utility motion commands
+
+;;  Whitespace
+
+(defun forward-whitespace (arg)
+  "Move point to the end of the next sequence of whitespace chars.
+Each such sequence may be a single newline, or a sequence of
+consecutive space and/or tab characters.
+With prefix argument ARG, do it ARG times if positive, or move
+backwards ARG times if negative."
+  (interactive "^p")
+  (if (natnump arg)
+      (re-search-forward "[ \t]+\\|\n" nil 'move arg)
+    (while (< arg 0)
+      (if (re-search-backward "[ \t]+\\|\n" nil 'move)
+	  (or (eq (char-after (match-beginning 0)) ?\n)
+	      (skip-chars-backward " \t")))
+      (setq arg (1+ arg)))))
+
+;;  Symbols
+
+(defun forward-symbol (arg)
+  "Move point to the next position that is the end of a symbol.
+A symbol is any sequence of characters that are in either the
+word constituent or symbol constituent syntax class.
+With prefix argument ARG, do it ARG times if positive, or move
+backwards ARG times if negative."
+  (interactive "^p")
+  (if (natnump arg)
+      (re-search-forward "\\(\\sw\\|\\s_\\)+" nil 'move arg)
+    (while (< arg 0)
+      (if (re-search-backward "\\(\\sw\\|\\s_\\)+" nil 'move)
+	  (skip-syntax-backward "w_"))
+      (setq arg (1+ arg)))))
+
+;;  Syntax blocks
+
+(defun forward-same-syntax (&optional arg)
+  "Move point past all characters with the same syntax class.
+With prefix argument ARG, do it ARG times if positive, or move
+backwards ARG times if negative."
+  (interactive "^p")
+  (or arg (setq arg 1))
+  (while (< arg 0)
+    (skip-syntax-backward
+     (char-to-string (char-syntax (char-before))))
+    (setq arg (1+ arg)))
+  (while (> arg 0)
+    (skip-syntax-forward (char-to-string (char-syntax (char-after))))
+    (setq arg (1- arg))))
+
+
 ;;;; Text clones
 
 (defun text-clone-maintain (ol1 after beg end &optional _len)
@@ -3999,12 +4064,13 @@ the number of frames to skip (minus 1).")
   ;; "static" variables.
   (let ((sym (make-symbol "base-index")))
     `(progn
-       (defvar ,sym
+       (defvar ,sym)
+       (unless (boundp ',sym)
          (let ((i 1))
            (while (not (eq (indirect-function (nth 1 (backtrace-frame i)) t)
                            (indirect-function 'called-interactively-p)))
              (setq i (1+ i)))
-           i))
+           (setq ,sym i)))
        ;; (unless (eq (nth 1 (backtrace-frame ,sym)) 'called-interactively-p)
        ;;   (error "called-interactively-p: %s is out-of-sync!" ,sym))
        (backtrace-frame (+ ,sym ,n)))))

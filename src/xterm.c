@@ -130,6 +130,10 @@ extern void _XEditResCheckMessages (Widget, XtPointer, XEvent *, Boolean *);
 
 #include "bitmaps/gray.xbm"
 
+#ifdef HAVE_XKB
+#include <X11/XKBlib.h>
+#endif
+
 /* Default to using XIM if available.  */
 #ifdef USE_XIM
 int use_xim = 1;
@@ -3218,7 +3222,11 @@ XTring_bell (struct frame *f)
       else
 	{
 	  block_input ();
+#ifdef HAVE_XKB
+          XkbBell (FRAME_X_DISPLAY (f), None, 0, None);
+#else
 	  XBell (FRAME_X_DISPLAY (f), 0);
+#endif
 	  XFlush (FRAME_X_DISPLAY (f));
 	  unblock_input ();
 	}
@@ -5076,7 +5084,7 @@ x_scroll_bar_set_handle (struct scroll_bar *bar, int start, int end, int rebuild
 
     /* Draw the empty space above the handle.  Note that we can't clear
        zero-height areas; that means "clear to end of window."  */
-    if (0 < start)
+    if (start > 0)
       x_clear_area (FRAME_X_DISPLAY (f), w,
 		    /* x, y, width, height, and exposures.  */
 		    VERTICAL_SCROLL_BAR_LEFT_BORDER,
@@ -8951,10 +8959,7 @@ x_ewmh_activate_frame (FRAME_PTR f)
       XSETFRAME (frame, f);
       x_send_client_event (frame, make_number (0), frame,
                            dpyinfo->Xatom_net_active_window,
-                           make_number (32),
-                           Fcons (make_number (1),
-                                  Fcons (make_number (last_user_time),
-                                         Qnil)));
+                           make_number (32), list2i (1, last_user_time));
     }
 }
 
@@ -10772,16 +10777,6 @@ With MS Windows or Nextstep, the value is t.  */);
 #else
   Vx_toolkit_scroll_bars = Qnil;
 #endif
-
-  DEFVAR_BOOL ("scroll-bar-adjust-thumb-portion",
-               scroll_bar_adjust_thumb_portion_p,
-               doc: /* Adjust thumb for overscrolling for Gtk+ and MOTIF.
-Non-nil means adjust the thumb in the scroll bar so it can be dragged downwards
-even if the end of the buffer is shown (i.e. overscrolling).
-Set to nil if you want the thumb to be at the bottom when the end of the buffer
-is shown.  Also, the thumb fills the whole scroll bar when the entire buffer
-is visible.  In this case you can not overscroll.  */);
-  scroll_bar_adjust_thumb_portion_p = 1;
 
   staticpro (&last_mouse_motion_frame);
   last_mouse_motion_frame = Qnil;
