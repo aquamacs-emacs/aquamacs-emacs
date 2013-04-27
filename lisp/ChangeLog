@@ -1,3 +1,219 @@
+2013-04-27  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (octave-function-file-p)
+	(octave-skip-comment-forward, octave-function-file-comment)
+	(octave-update-function-file-comment): New functions.
+	(octave-mode-map): Bind C-c ; to
+	octave-update-function-file-comment.
+	(octave-mode-menu): Add octave-update-function-file-comment.
+	(octave-mode, inferior-octave-mode): Fix doc-string.
+	(octave-insert-defun): Conform to Octave's coding convention.
+	(Bug#14285)
+
+	* files.el (basic-save-buffer): Don't let errors in
+	before-save-hook prevent saving buffer.
+
+2013-04-20  Roland Winkler  <winkler@gnu.org>
+
+	* faces.el (read-face-name): Use completing-read if arg multiple
+	is nil.
+
+2013-04-27  Ingo Lohmar  <i.lohmar@gmail.com>  (tiny change)
+
+	* ls-lisp.el (ls-lisp-insert-directory): If no files are
+	displayed, move point to after the totals line.  See
+	http://lists.gnu.org/archive/html/emacs-devel/2013-04/msg00677.html
+	for the details.
+
+2013-04-27  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/package.el (package-autoload-ensure-default-file):
+	Add current dir to the load-path.
+	(package-generate-autoloads): Don't rely on
+	autoload-ensure-default-file.
+
+2013-04-26  Reuben Thomas  <rrt@sc3d.org>
+
+	* textmodes/remember.el (remember-store-in-files): Document that
+	the file name format is passed to `format-time-string'.
+
+2013-04-26  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (octave-sync-function-file-names): New function.
+	(octave-mode): Use it in before-save-hook.
+
+2013-04-26  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/tabulated-list.el (tabulated-list-mode): Disable undo
+	(bug#14274).
+
+	* progmodes/octave.el (octave-smie-forward-token): Properly skip
+	\n and comment, even if it's not an implicit ; (bug#14218).
+
+2013-04-26  Glenn Morris  <rgm@gnu.org>
+
+	* subr.el (read-number): Once more use `read' rather than
+	`string-to-number', to trap non-numeric input.  (Bug#14254)
+
+2013-04-26  Erik Charlebois  <erikcharlebois@gmail.com>
+
+	* emacs-lisp/syntax.el (syntax-propertize-multiline):
+	Use `syntax-multiline' text property consistently instead of
+	`font-lock-multiline'. (bug#14237).
+
+2013-04-26  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/shadow.el (list-load-path-shadows):
+	No longer necessary to check for duplicate simple.el, since
+	2012-07-07 change to init_lread to not include installation lisp
+	directories in load-path when running uninstalled.  (Bug#14270)
+
+2013-04-26  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (octave-submit-bug-report): Obsolete.
+	(octave-mode, inferior-octave-mode): Use setq-local.
+	(octave-not-in-string-or-comment-p): Rename to
+	octave-in-string-or-comment-p.
+	(octave-in-comment-p, octave-in-string-p)
+	(octave-in-string-or-comment-p): Replace defsubst with defun.
+
+2013-04-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* Makefile.in (distclean): Remove $(lisp)/loaddefs.el~.
+
+2013-04-25  Bastien Guerry  <bzg@gnu.org>
+
+	* textmodes/remember.el (remember-data-directory)
+	(remember-directory-file-name-format): Fix custom types.
+
+2013-04-25  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (octave-completion-at-point-function):
+	Make use of inferior octave process.
+	(octave-initialize-completions): Remove.
+	(inferior-octave-completion-table): New function.
+	(inferior-octave-completion-at-point): Use it.
+	(octave-completion-alist): Remove.
+
+2013-04-25  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/opascal.el: Use font-lock and syntax-propertize.
+	(opascal-mode-syntax-table): New var.
+	(opascal-literal-kind, opascal-is-literal-end)
+	(opascal-literal-token-at): Rewrite.
+	(opascal--literal-start-re, opascal-font-lock-keywords)
+	(opascal--syntax-propertize): New constants.
+	(opascal-font-lock-defaults): Adjust.
+	(opascal-mode): Use them.  Set comment-<foo> variables as well.
+	(delphi-comment-face, opascal-comment-face, delphi-string-face)
+	(opascal-string-face, delphi-keyword-face, opascal-keyword-face)
+	(delphi-other-face, opascal-other-face): Remove face variables.
+	(opascal-save-state): Remove macro.
+	(opascal-fontifying-progress-step): Remove constant.
+	(opascal--ignore-changes): Remove var.
+	(opascal-set-token-property, opascal-parse-next-literal)
+	(opascal-is-stable-literal, opascal-complete-literal)
+	(opascal-is-literal-start, opascal-face-of)
+	(opascal-parse-region, opascal-parse-region-until-stable)
+	(opascal-fontify-region, opascal-after-change)
+	(opascal-debug-show-is-stable, opascal-debug-unparse-buffer)
+	(opascal-debug-parse-region, opascal-debug-parse-window)
+	(opascal-debug-parse-buffer, opascal-debug-fontify-window)
+	(opascal-debug-fontify-buffer): Remove.
+	(opascal-debug-mode-map): Adjust accordingly.
+
+2013-04-25  Leo Liu  <sdl.web@gmail.com>
+
+	Merge octave-mod.el and octave-inf.el into octave.el with some
+	cleanups.
+	* progmodes/octave.el: New file renamed from octave-mod.el.
+	* progmodes/octave-inf.el: Merged into octave.el.
+	* progmodes/octave-mod.el: Renamed to octave.el.
+
+2013-04-25  Tassilo Horn  <tsdh@gnu.org>
+
+	* textmodes/reftex-vars.el
+	(reftex-label-ignored-macros-and-environments): New defcustom.
+
+	* textmodes/reftex-parse.el (reftex-parse-from-file): Use it.
+
+2013-04-25  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/smie.el (smie-indent--hanging-p): Don't burp at EOB.
+	(smie-indent-keyword): Improve the check to ensure that the next
+	comment is really on the same line.
+	(smie-indent-comment): Don't align with a subsequent closer (or eob).
+
+	* progmodes/octave-mod.el (octave-smie-forward-token): Only emit
+	semi-colons if the line is not otherwise empty (bug#14218).
+
+2013-04-25  Glenn Morris  <rgm@gnu.org>
+
+	* vc/vc-bzr.el (vc-bzr-print-log): Tweak LIMIT = 1 case.
+
+2013-04-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/opascal.el (opascal-set-token-property): Rename from
+	opascal-set-text-properties and only set `token' (bug#14134).
+	Suggested by Erik Knowles <eknowles@geosystemsoftware.com>.
+	(opascal-literal-text-properties): Remove.
+	(opascal-parse-next-literal, opascal-debug-unparse-buffer):
+	Adjust callers.
+
+2013-04-24  Reuben Thomas <rrt@sc3d.org>
+
+	* textmodes/remember.el (remember-handler-functions): Add an
+	option for a new handler `remember-store-in-files'.
+	(remember-data-directory, remember-directory-file-name-format):
+	New options.
+	(remember-store-in-files): New function to store remember notes
+	as separate files within a directory.
+
+2013-04-24  Magnus Henoch  <magnus.henoch@gmail.com>
+
+	* progmodes/compile.el (compilation-next-error-function):
+	Pass "formats" to compilation-find-file (bug#11777).
+
+2013-04-24  Glenn Morris  <rgm@gnu.org>
+
+	* vc/vc-bzr.el (vc-bzr-print-log):
+	* vc/vc-hg.el (vc-hg-print-log):
+	* vc/vc-svn.el (vc-svn-print-log):
+	Fix START-REVISION with LIMIT != 1.  (Bug#14168)
+
+	* vc/vc-bzr.el (vc-bzr-print-log):
+	* vc/vc-cvs.el (vc-cvs-print-log):
+	* vc/vc-git.el (vc-git-print-log):
+	* vc/vc-hg.el (vc-hg-print-log):
+	* vc/vc-mtn.el (vc-mtn-print-log):
+	* vc/vc-rcs.el (vc-rcs-print-log):
+	* vc/vc-sccs.el (vc-sccs-print-log):
+	* vc/vc-svn.el (vc-svn-print-log):
+	* vc/vc.el (vc-print-log-internal): Doc fixes.
+
+2013-04-23  Glenn Morris  <rgm@gnu.org>
+
+	* startup.el (normal-no-mouse-startup-screen, normal-about-screen):
+	Remove venerable code attempting to avoid substitute-command-keys.
+
+2013-04-23  Tassilo Horn  <tsdh@gnu.org>
+
+	* textmodes/reftex-vars.el (reftex-label-regexps):
+	Call `reftex-compile-variables' after changes to this variable.
+
+2013-04-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* jit-lock.el: Fix signals in jit-lock-force-redisplay (bug#13542).
+	Use lexical-binding.
+	(jit-lock-force-redisplay): Use markers, check buffer's continued
+	existence and beware narrowed buffers.
+	(jit-lock-fontify-now): Adjust call accordingly.
+
+2013-04-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (minibuffer-completion-contents): Fix obsolescence info
+	to avoid misleading the user.
+
 2013-04-22  Leo Liu  <sdl.web@gmail.com>
 
 	* info-look.el: Prefer latex2e.info.  (Bug#14240)

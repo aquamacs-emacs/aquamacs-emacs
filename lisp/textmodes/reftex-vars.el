@@ -873,9 +873,37 @@ DOWNCASE    t:   Downcase words before using them."
 The default value matches usual \\label{...} definitions and
 keyval style [..., label = {...}, ...] label definitions.  It is
 assumed that the regexp group 1 matches the label text, so you
-have to define it using \\(?1:...\\) when adding new regexps."
+have to define it using \\(?1:...\\) when adding new regexps.
+
+When changed from Lisp, make sure to call
+`reftex-compile-variables' afterwards to make the change
+effective."
+  :set (lambda (symbol value)
+	 (set symbol value)
+	 (when (fboundp 'reftex-compile-variables)
+	   (reftex-compile-variables)))
   :group 'reftex-defining-label-environments
   :type '(repeat (regexp :tag "Regular Expression")))
+
+(defcustom reftex-label-ignored-macros-and-environments nil
+  "List of macros and environments to be ignored when searching for labels.
+The purpose is to ignore environments and macros that use keyval
+style label=foo arguments, but the label has a different meaning
+than a \\label{foo}.  Standard \\label{...} definitions are never
+ignored.
+
+E.g., TikZ defines several macros/environments where [label=foo]
+defines the label to be printed at some node or edge, but it's
+not a label used for referencing.
+
+Note that this feature is only supported if you are using AUCTeX
+and the functions `TeX-current-macro' and
+`LaTeX-current-environment' are bound.  Also note that this
+feature might slow down the reftex parsing process for large TeX
+files."
+  :version "24.4"
+  :group 'reftex-defining-label-environments
+  :type '(repeat string))
 
 (defcustom reftex-label-illegal-re "[^-a-zA-Z0-9_+=:;,.]"
   "Regexp matching characters not valid in labels."
