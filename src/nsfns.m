@@ -3315,7 +3315,8 @@ compute_tip_xy (struct frame *f,
   /* Ensure in bounds.  (Note, screen origin = lower left.) */
   /* valid coordinates may be negative */
   if (pt.x + XINT (dx) <= vScreen.origin.x)
-    *root_x = vScreen.origin.x; /* Can happen for negative dx */
+    //*root_x = vScreen.origin.x; /* Can happen for negative dx */
+    *root_x = [[view window] frame].origin.x;  // better than just the screen origin
   else if (pt.x + XINT (dx) + width
 	   <= vScreen.origin.x + vScreen.size.width) 
     /* It fits to the right of the pointer.  */
@@ -3325,7 +3326,7 @@ compute_tip_xy (struct frame *f,
     *root_x = pt.x - width - XINT (dx);
   else
     /* Put it left justified on the screen -- it ought to fit that way.  */
-    *root_x = 0;
+    *root_x = vScreen.origin.x;
 
   if (pt.y - XINT (dy) - height >= vScreen.origin.y)
     /* It fits below the pointer.  */
@@ -3336,7 +3337,10 @@ compute_tip_xy (struct frame *f,
       *root_y = pt.y + XINT (dy);
   else
     /* Put it on the top.  */
-    *root_y = vScreen.origin.y + vScreen.size.height - height;
+    { *root_y = [[view window] frame].origin.y; 
+      if (*root_y - XINT (dy) - height < vScreen.origin.y)
+	*root_y = vScreen.origin.y + vScreen.size.height - height;
+    }
 }
 
 
