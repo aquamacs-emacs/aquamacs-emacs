@@ -76,7 +76,7 @@
 
 (defun TeX-save-document (name)
   "Save all files belonging to the current document.
-Return non-nil if document need to be re-TeX'ed."
+Return non-nil if document needs to be re-TeX'ed."
   (interactive (list (TeX-master-file)))
   (if (string-equal name "")
       (setq name (TeX-master-file)))
@@ -366,36 +366,38 @@ without further expansion."
   command)
 
 (defun TeX-check-files (derived originals extensions)
-  "Check that DERIVED is newer than any of the ORIGINALS.
+  "Check if DERIVED is newer than any of the ORIGINALS.
 Try each original with each member of EXTENSIONS, in all directories
-in `TeX-check-path'."
-  (let ((found nil)
-	(regexp (concat "\\`\\("
-			(mapconcat (lambda (dir)
-				     (regexp-quote
-				      (expand-file-name
-				       (file-name-as-directory dir))))
-				   TeX-check-path "\\|")
-			"\\).*\\("
-			(mapconcat 'regexp-quote originals "\\|")
-			"\\)\\.\\("
-			(mapconcat 'regexp-quote extensions "\\|")
-			"\\)\\'"))
-	(buffers (buffer-list)))
+in `TeX-check-path'. Returns true if any of the ORIGINALS with any of the
+EXTENSIONS are newer than DERIVED. Will prompt to save the buffer of any
+ORIGINALS which are modified but not saved yet."
+  (let (existingoriginals
+        found
+	(extensions (TeX-delete-duplicate-strings extensions))
+        (buffers (buffer-list)))
+    (dolist (path (mapcar (lambda (dir)
+			    (expand-file-name (file-name-as-directory dir)))
+			  TeX-check-path))
+      (dolist (orig originals)
+	(dolist (ext extensions)
+	  (let ((filepath (concat path orig "." ext)))
+	    (if (file-exists-p filepath)
+                (setq existingoriginals (cons filepath existingoriginals)))))))
     (while buffers
       (let* ((buffer (car buffers))
-	     (name (buffer-file-name buffer)))
-	(setq buffers (cdr buffers))
-	(if (and name (string-match regexp name))
-	    (progn
-	      (and (buffer-modified-p buffer)
-		   (or (not TeX-save-query)
-		       (y-or-n-p (concat "Save file "
-					 (buffer-file-name buffer)
-					 "? ")))
-		   (save-excursion (set-buffer buffer) (save-buffer)))
-	      (if (file-newer-than-file-p name derived)
-		  (setq found t))))))
+             (name (buffer-file-name buffer)))
+        (setq buffers (cdr buffers))
+        (if (and name (member name existingoriginals))
+            (progn
+              (and (buffer-modified-p buffer)
+                   (or (not TeX-save-query)
+                       (y-or-n-p (concat "Save file "
+                                         (buffer-file-name buffer)
+                                         "? ")))
+                   (save-excursion (set-buffer buffer) (save-buffer)))))))
+    (dolist (eo existingoriginals)
+      (if (file-newer-than-file-p eo derived)
+          (setq found t)))
     found))
 
 (defcustom TeX-save-query t
@@ -407,34 +409,38 @@ in `TeX-check-path'."
 
 (defun TeX-command-query (name)
   "Query the user for what TeX command to use."
-  (let* ((default (cond ((if (string-equal name TeX-region)
-			     (TeX-check-files (concat name "." (TeX-output-extension))
-					      (list name)
-					      TeX-file-extensions)
-			   (TeX-save-document (TeX-master-file)))
-			 TeX-command-default)
-			((and (memq major-mode '(doctex-mode latex-mode))
-			      (TeX-check-files (concat name ".bbl")
-					       (mapcar 'car
-						       (LaTeX-bibliography-list))
-					       BibTeX-file-extensions))
-			 ;; We should check for bst files here as well.
-			 TeX-command-BibTeX)
-			((TeX-process-get-variable name
-						   'TeX-command-next
-						   TeX-command-Show))
-			(TeX-command-Show)))
-	 (completion-ignore-case t)
-	 (answer (or TeX-command-force
-		     (completing-read
-		      (concat "Command: (default " default ") ")
-		      (TeX-mode-specific-command-list major-mode) nil t
-		      nil 'TeX-command-history))))
-    ;; If the answer "latex" it will not be expanded to "LaTeX"
+  (let* ((default
+	   (cond ((if (string-equal name TeX-region)
+		      (TeX-check-files (concat name "." (TeX-output-extension))
+				       (list name)
+				       TeX-file-extensions)
+		    (TeX-save-document (TeX-master-file)))
+		  TeX-command-default)
+		 ((and (memq major-mode '(doctex-mode latex-mode))
+		       ;; Want to know if bib file is newer than .bbl
+		       ;; We don't care whether the bib files are open in emacs
+		       (TeX-check-files (concat name ".bbl")
+					(mapcar 'car
+						(LaTeX-bibliography-list))
+					(append BibTeX-file-extensions
+						TeX-Biber-file-extensions)))
+		  ;; We should check for bst files here as well.
+		  (if LaTeX-using-Biber TeX-command-Biber TeX-command-BibTeX))
+		 ((TeX-process-get-variable name
+					    'TeX-command-next
+					    TeX-command-Show))
+		 (TeX-command-Show)))
+         (completion-ignore-case t)
+         (answer (or TeX-command-force
+                     (completing-read
+                      (concat "Command: (default " default ") ")
+                      (TeX-mode-specific-command-list major-mode) nil t
+                      nil 'TeX-command-history))))
+    ;; If the answer is "latex" it will not be expanded to "LaTeX"
     (setq answer (car-safe (TeX-assoc answer TeX-command-list)))
     (if (and answer
-	     (not (string-equal answer "")))
-	answer
+             (not (string-equal answer "")))
+        answer
       default)))
 
 (defvar TeX-command-next nil
@@ -673,6 +679,14 @@ run of `TeX-run-TeX', use
 	process
       (TeX-synchronous-sentinel name file process))))
 
+(defun TeX-run-Biber (name command file)
+  "Create a process for NAME using COMMAND to format FILE with Biber." 
+  (let ((process (TeX-run-command name command file)))
+    (setq TeX-sentinel-function 'TeX-Biber-sentinel)
+    (if TeX-process-asynchronous
+        process
+      (TeX-synchronous-sentinel name file process))))
+
 (defun TeX-run-compile (name command file)
   "Ignore first and third argument, start compile with second argument."
   (compile command))
@@ -796,7 +810,7 @@ reasons.  Use `TeX-run-function' instead."
 
 (defun TeX-synchronous-sentinel (name file result)
   "Process TeX command output buffer after the process dies."
-  (let* ((buffer (TeX-process-buffer file)))
+  (let ((buffer (TeX-process-buffer (file-name-nondirectory file))))
     (save-excursion
       (set-buffer buffer)
 
@@ -940,17 +954,40 @@ Warnings can be indicated by LaTeX or packages."
   (cond ((TeX-TeX-sentinel-check process name))
 	((and (save-excursion
 		(re-search-forward
+		 "^Package biblatex Warning: Please (re)run Biber on the file"
+		 nil t))
+	      (with-current-buffer TeX-command-buffer
+		(and (LaTeX-bibliography-list)
+		     (TeX-check-files (TeX-master-file "bbl")
+				      (TeX-style-list)
+				      (append TeX-file-extensions
+					      BibTeX-file-extensions
+					      TeX-Biber-file-extensions)))))
+	 (message "%s%s" "You should run Biber to get citations right, "
+		  (TeX-current-pages))
+	 (setq TeX-command-next (with-current-buffer TeX-command-buffer
+				  TeX-command-Biber)))
+	((and (save-excursion
+		(re-search-forward
 		 "^\\(?:LaTeX\\|Package natbib\\) Warning: Citation" nil t))
 	      (with-current-buffer TeX-command-buffer
 		(and (LaTeX-bibliography-list)
 		     (TeX-check-files (TeX-master-file "bbl")
 				      (TeX-style-list)
 				      (append TeX-file-extensions
-					      BibTeX-file-extensions)))))
+					      BibTeX-file-extensions
+					      TeX-Biber-file-extensions)))))
 	 (message "%s%s" "You should run BibTeX to get citations right, "
 		  (TeX-current-pages))
 	 (setq TeX-command-next (with-current-buffer TeX-command-buffer
 				  TeX-command-BibTeX)))
+  ((re-search-forward "Package biblatex Warning: Please rerun LaTeX" nil t)
+	 (message "%s%s" "You should run LaTeX again, " (TeX-current-pages))
+	 (setq TeX-command-next TeX-command-default))
+	((re-search-forward "^(biblatex)\\W+Page breaks have changed" nil t)
+	 (message "%s%s" "You should run LaTeX again - page breaks have changed, "
+		  (TeX-current-pages))
+	 (setq TeX-command-next TeX-command-default))
 	((re-search-forward "^\\(?:LaTeX Warning: Label(s)\\|\
 Package natbib Warning: Citation(s)\\)" nil t)
 	 (message "%s%s" "You should run LaTeX again to get references right, "
@@ -1008,8 +1045,32 @@ changed\\. Rerun LaTeX\\." nil t)
 	      "\\<TeX-mode-map>\\[TeX-recenter-output-buffer]")))
    (t
     (message (concat "BibTeX finished successfully. "
-		     "Run LaTeX again to get citations right."))))
-  (setq TeX-command-next TeX-command-default))
+		     "Run LaTeX again to get citations right."))
+  (setq TeX-command-next TeX-command-default))))
+
+(defun TeX-Biber-sentinel (process name)
+  "Cleanup TeX output buffer after running Biber."
+  (goto-char (point-max))
+  (cond
+   ((re-search-backward (concat
+                         "^INFO - \\(WARNINGS\\|ERRORS\\): \\([0-9]+\\)") nil t)
+    (message (concat "Biber finished with %s %s. "
+                     "Type `%s' to display output.")
+             (match-string 2) (downcase (match-string 1))
+             (substitute-command-keys
+              "\\<TeX-mode-map>\\[TeX-recenter-output-buffer]"))
+    (setq TeX-command-next TeX-command-default))
+   ((re-search-backward (concat
+                         "^FATAL") nil t)
+    (message (concat "Biber had a fatal error and did not finish! "
+                     "Type `%s' to display output.")
+             (substitute-command-keys
+              "\\<TeX-mode-map>\\[TeX-recenter-output-buffer]"))
+    (setq TeX-command-next TeX-command-Biber))
+   (t
+    (message (concat "Biber finished successfully. "
+                     "Run LaTeX again to get citations right."))
+    (setq TeX-command-next TeX-command-default))))
 
 ;;; Process Control
 
@@ -1114,7 +1175,7 @@ command."
 	;; Remove line breaks at column 79
 	(while (> (point) pt)
 	  (end-of-line 0)
-	  (when (and (= (current-column) 79)
+	  (when (and (= (- (point) (line-beginning-position)) 79)
 		     ;; Heuristic: Don't delete the linebreak if the
 		     ;; next line is empty or starts with an opening
 		     ;; parenthesis or if point is located after a period.
@@ -1491,7 +1552,7 @@ You might want to examine and modify the free variables `file',
 	 
 	 ;; End of file -- Pop from stack
 	 ((match-beginning 4)
-	  (when (> (length TeX-error-file) 1)
+	  (when (> (length TeX-error-file) 0)
 	    (pop TeX-error-file)
 	    (pop TeX-error-offset))
 	  (goto-char (match-end 4))
@@ -1633,6 +1694,9 @@ You might want to examine and modify the free variables `file',
     ;; This is where we start next time.
     (goto-char error-point)
     (setq TeX-error-point (point))
+
+    (unless file
+      (error "Could not determine file for warning"))
 
     ;; Go back to TeX-buffer
     (let ((runbuf (current-buffer))

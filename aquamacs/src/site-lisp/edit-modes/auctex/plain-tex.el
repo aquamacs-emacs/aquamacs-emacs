@@ -108,6 +108,8 @@ Install tool bar if `plain-TeX-enable-toolbar' is non-nil."
   :type 'hook
   :group 'TeX-misc)
 
+(TeX-abbrev-mode-setup plain-tex-mode)
+
 ;;;###autoload
 (defun TeX-plain-tex-mode ()
   "Major mode in AUCTeX for editing plain TeX files.
@@ -140,6 +142,7 @@ of plain-TeX-mode-hook."
   "Common initialization for plain TeX like modes."
   (VirTeX-common-initialization)
   (set-syntax-table TeX-mode-syntax-table)
+  (setq local-abbrev-table latex-mode-abbrev-table)
   (setq paragraph-start
 	(concat
 	 "\\(^[ \t]*$"

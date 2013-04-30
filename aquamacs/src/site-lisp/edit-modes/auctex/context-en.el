@@ -164,6 +164,10 @@
   :group 'ConTeXt-en-environment
   :type 'string)
 
+(defvar ConTeXt-extra-paragraph-commands-en
+  '("crlf" "par" "place[A-Za-z]+")
+  "List of ConTeXt macros that should have their own line.
+That is, besides the section(-block) commands.")
 
 ;; Emacs en menu names and labels should go here
 ;; to be done

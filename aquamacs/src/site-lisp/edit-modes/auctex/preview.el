@@ -1,7 +1,7 @@
 ;;; preview.el --- embed preview LaTeX images in source buffer
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005,
-;;               2006  Free Software Foundation, Inc.
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2010 Free
+;;   Software Foundation, Inc.
 
 ;; Author: David Kastrup
 ;; Keywords: tex, wp, convenience
@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; $Id: preview.el,v 1.284 2009/06/18 19:20:46 angeli Exp $
+;; $Id: preview.el,v 1.286 2011/01/23 18:53:55 angeli Exp $
 ;;
 ;; This style is for the "seamless" embedding of generated images
 ;; into LaTeX source code.  Please see the README and INSTALL files
@@ -355,7 +355,7 @@ LIST consists of TeX dimensions in sp (1/65536 TeX point)."
   :group 'preview-gs
   :type 'string)
 
-(defcustom preview-gs-options '("-q" "-dSAFER" "-dNOPAUSE"
+(defcustom preview-gs-options '("-q" "-dDELAYSAFER" "-dNOPAUSE"
 				"-DNOPLATFONTS" "-dPrinted"
 				"-dTextAlphaBits=4"
 				"-dGraphicsAlphaBits=4")
@@ -1066,14 +1066,21 @@ NONREL is not NIL."
 
 (defun preview-prepare-fast-conversion ()
   "This fixes up all parameters for fast conversion."
-  (let ((file (if (consp (car preview-ps-file))
-		  (if (consp (caar preview-ps-file))
-		      (car (last (caar preview-ps-file)))
-		    (caar preview-ps-file))
-		(car preview-ps-file))))
+  (let* ((file (if (consp (car preview-ps-file))
+		   (if (consp (caar preview-ps-file))
+		       (car (last (caar preview-ps-file)))
+		     (caar preview-ps-file))
+		 (car preview-ps-file)))
+	 (all-files (if (and (consp (car preview-ps-file))
+			     (consp (caar preview-ps-file)))
+			(caar preview-ps-file)
+		      (list file))))
     (setq preview-gs-dsc (preview-dsc-parse file))
     (setq preview-gs-init-string
-	  (concat preview-gs-init-string
+	  (concat (format "{<</PermitFileReading[%s]>> setuserparams \
+.locksafe} stopped pop "
+			  (mapconcat 'preview-ps-quote-filename all-files ""))
+		  preview-gs-init-string
 		  (format "[%s(r)file]aload exch %s .runandhide aload pop "
 			  (preview-ps-quote-filename file)
 			  (preview-gs-dsc-cvx 0 preview-gs-dsc))))))
@@ -1456,9 +1463,9 @@ numbers (can be float if available)."
 Fallback to :inherit and 'default implemented."
   :group 'preview-appearance)
 
-(defcustom preview-auto-reveal '(eval (preview-arrived-via
-				       (key-binding [left])
-				       (key-binding [right])))
+(defcustom preview-auto-reveal
+  '(eval (preview-arrived-via (key-binding [left]) (key-binding [right])
+			      'backward-char 'forward-char))
   "*Cause previews to open automatically when entered.
 Possibilities are:
 T autoopens,
@@ -3511,8 +3518,8 @@ internal parameters, STR may be a log to insert into the current log."
 	     (preview-reraise-error process)))))
 
 (defconst preview-version (eval-when-compile
-  (let ((name "$Name: release_11_86 $")
-	(rev "$Revision: 1.284 $"))
+  (let ((name "$Name: release_11_87 $")
+	(rev "$Revision: 1.286 $"))
     (or (when (string-match "\\`[$]Name: *release_\\([^ ]+\\) *[$]\\'" name)
 	  (setq name (match-string 1 name))
 	  (while (string-match "_" name)
@@ -3526,7 +3533,7 @@ If not a regular release, CVS revision of `preview.el'.")
 
 (defconst preview-release-date
   (eval-when-compile
-    (let ((date "$Date: 2009/06/18 19:20:46 $"))
+    (let ((date "$Date: 2011/01/23 18:53:55 $"))
       (string-match
        "\\`[$]Date: *\\([0-9]+\\)/\\([0-9]+\\)/\\([0-9]+\\)"
        date)

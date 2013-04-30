@@ -119,7 +119,9 @@
     '("actionenv")
     '("alertblock" 1)
     '("beamerboxesrounded" 1)
-    '("block" 1)
+    '("block" (lambda (env &rest ignore)
+		(LaTeX-insert-environment
+		 env (format "{%s}" (read-string "Title: ")))))
     '("column" "Width")
     "columns"
     "columnsonlytextwidth"

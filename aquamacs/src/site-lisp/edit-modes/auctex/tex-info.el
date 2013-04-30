@@ -1,7 +1,7 @@
 ;;; tex-info.el --- Support for editing Texinfo source.
 
-;; Copyright (C) 1993, 1994, 1997, 2000, 2001,
-;;               2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 1993, 1994, 1997, 2000, 2001, 2004, 2005, 2006, 2011
+;;   Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -49,7 +49,7 @@
     ("ifxml") ("ignore") ("itemize") ("lisp") ("macro") ("menu")
     ("multitable") ("quotation") ("smalldisplay") ("smallexample")
     ("smallformat") ("smalllisp") ("table") ("tex") ("titlepage")
-    ("verbatim") ("vtable")) 
+    ("verbatim") ("vtable"))
   "Alist of Texinfo environments.")
 
 (defconst texinfo-environment-regexp
@@ -112,14 +112,18 @@ With optional ARG, modify current environment."
   (let* ((envs (mapcar 'car Texinfo-environment-list))
 	 (regexp (concat "^[ \t]*" (regexp-quote TeX-esc) "\\(end \\)*"
 			 (regexp-opt envs t) "\\b"))
+	 (orig-pos (point))
 	 (level 1)
 	 case-fold-search)
     (save-restriction
       (save-excursion
 	(save-excursion
 	  (beginning-of-line)
+	  ;; Stop if point is inside of an @end <env> command, but not
+	  ;; if it is behind it.
 	  (when (and (looking-at regexp)
-		     (match-string 1))
+		     (match-string 1)
+		     (> (match-end 0) orig-pos))
 	    (setq level 0)))
 	(while (and (> level 0) (re-search-forward regexp nil t))
 	  (if (match-string 1)
@@ -128,29 +132,162 @@ With optional ARG, modify current environment."
       (if (= level 0)
 	  (goto-char (match-end 0))
 	(error "Can't locate end of current environment")))))
-      
+
 (defun Texinfo-find-env-start ()
   "Move point to the start of the current environment."
   (interactive)
   (let* ((envs (mapcar 'car Texinfo-environment-list))
-	 (regexp (concat "^[ \t]*" (regexp-quote TeX-esc) "\\(end \\)*"
+	 (regexp (concat "^[ \t]*\\(" (regexp-quote TeX-esc) "\\)\\(end \\)*"
 			 (regexp-opt envs t) "\\b"))
 	 (level 1)
+	 (orig-pos (point))
 	 case-fold-search)
     (save-restriction
       (save-excursion
 	(save-excursion
 	  (beginning-of-line)
+	  ;; Stop if point is inside of an @<env> command, but not if
+	  ;; it is before it.
 	  (when (and (looking-at regexp)
-		     (not (match-string 1)))
+		     (not (match-string 2))
+		     (< (match-beginning 1) orig-pos))
 	    (setq level 0)))
 	(while (and (> level 0) (re-search-backward regexp nil t))
-	  (if (match-string 1)
+	  (if (match-string 2)
 	      (setq level (1+ level))
 	    (setq level (1- level)))))
       (if (= level 0)
 	  (goto-char (match-beginning 0))
 	(error "Can't locate start of current environment")))))
+
+(defun Texinfo-mark-environment (&optional count)
+  "Set mark to end of current environment and point to the matching begin.
+If prefix argument COUNT is given, mark the respective number of
+enclosing environments.  The command will not work properly if
+there are unbalanced begin-end pairs in comments and verbatim
+environments."
+  ;; TODO:
+  ;; This is identical to the LaTeX counterpart but for the find begin/end
+  ;; functions. So some day the implemenation should be factorized.
+  (interactive "p")
+  (setq count (if count (abs count) 1))
+  (let ((cur (point)) beg end)
+    ;; Only change point and mark after beginning and end were found.
+    ;; Point should not end up in the middle of nowhere if the search fails.
+    (save-excursion
+      (dotimes (c count)
+	(Texinfo-find-env-end))
+      (setq end (line-beginning-position 2))
+      (goto-char cur)
+      (dotimes (c count)
+	(Texinfo-find-env-start)
+	(unless (= (1+ c) count)
+	  (beginning-of-line 0)))
+      (setq beg (point)))
+    (set-mark end)
+    (goto-char beg)
+    (TeX-activate-region)))
+
+(defun Texinfo-mark-section (&optional no-subsection)
+  "Mark current section, with inclusion of any containing node.
+
+The current section is detected as starting by any of the
+structuring commands matched by regexp in variable
+`outline-regexp' which in turn is a regexp matching any element
+of variable `texinfo-section-list'.
+
+If optional argument NO-SUBSECTION is set to any integer or is a
+non nil empty argument (i.e. `C-u \\[Texinfo-mark-section]'),
+then mark the current section with exclusion of any subsections.
+
+Otherwise, any included subsections are also marked along with
+current section.
+
+Note that when current section is starting immediatley after a
+node commande, then the node command is also marked as part as
+the section."
+  (interactive "P")
+  (let (beg end is-beg-section is-end-section
+	    (section-re (concat "^\\s-*" outline-regexp)))
+    (if (and (consp no-subsection) (eq (car no-subsection) 4))
+	;; section with exclusion of any subsection
+	(setq beg (save-excursion
+		    (unless (looking-at section-re)
+		      (end-of-line))
+		    (re-search-backward section-re nil t))
+	      is-beg-section t
+	      end (save-excursion
+		    (beginning-of-line)
+		    (when
+			(re-search-forward (concat section-re
+						   "\\|^\\s-*@bye\\_>" ) nil t)
+		      (save-match-data
+			(beginning-of-line)
+			(point))))
+	      is-end-section (match-string 1))
+      ;; full section without exclusion of any subsection
+      (let (section-command-level)
+	(setq beg
+	      (save-excursion
+		(end-of-line)
+		(re-search-backward section-re nil t)))
+	(when beg
+	  (setq is-beg-section t
+		section-command-level
+		(cadr (assoc (match-string 1) texinfo-section-list))
+		end
+		(save-excursion
+		  (beginning-of-line)
+		  (while
+		      (and (re-search-forward
+			    (concat section-re "\\|^\\s-*@bye\\_>" ) nil t)
+			   (or (null (setq is-end-section  (match-string 1)))
+			       (> (cadr (assoc is-end-section
+					       texinfo-section-list))
+				  section-command-level))))
+		  (when (match-string 0)
+		    (beginning-of-line)
+		    (point)))))));  (if ...)
+    (when (and beg end)
+      ;; now take also enclosing node of beg and end
+      (dolist
+	  (boundary '(beg end))
+	(when (symbol-value (intern (concat "is-" (symbol-name boundary)
+					    "-section")))
+	  (save-excursion
+	    (goto-char (symbol-value boundary))
+	    (while
+		(and
+		 (null (bobp))
+		 (progn
+		   (beginning-of-line 0)
+		   (looking-at "^\\s-*\\($\\|@\\(c\\|comment\\)\\_>\\)"))))
+	    (when  (looking-at "^\\s-*@node\\_>")
+	      (set boundary (point))))))
+
+      (set-mark end)
+      (goto-char beg)
+      (TeX-activate-region) )))
+
+(defun Texinfo-mark-node ()
+  "Mark the current node.  \
+This is the node in which the pointer is.  It is starting at
+previous beginning of keyword `@node' and ending at next
+beginning of keyword `@node' or `@bye'."
+  (interactive)
+  (let ((beg (save-excursion
+	       (unless (looking-at "^\\s-*@\\(?:node\\)\\_>")
+		 (end-of-line))
+	       (re-search-backward "^\\s-*@\\(?:node\\)\\_>" nil t )))
+	(end (save-excursion
+	       (beginning-of-line)
+	       (and (re-search-forward "^\\s-*@\\(?:node\\|bye\\)\\_>" nil t )
+		    (progn (beginning-of-line) (point))))))
+
+    (when (and beg end)
+      (set-mark end)
+      (goto-char beg)
+      (TeX-activate-region) )))
 
 (defun Texinfo-insert-node ()
   "Insert a Texinfo node in the current buffer.
@@ -206,6 +343,70 @@ for @node."
 	      (progn (skip-chars-forward "^,") (forward-char 2))
 	    (throw 'break nil)))))))
 
+;; Silence the byte-compiler from warnings for variables and functions declared
+;; in reftex.
+(eval-when-compile
+  (defvar reftex-section-levels-all)
+  (defvar reftex-level-indent)
+  (defvar reftex-label-menu-flags)
+  (defvar reftex-tables-dirty)
+
+  (when (fboundp 'declare-function)
+    (declare-function reftex-match-string "reftex" (n))
+    (declare-function reftex-section-number "reftex-parse" (&optional level star))
+    (declare-function reftex-nicify-text "reftex" (text))
+    (declare-function reftex-ensure-compiled-variables "reftex" ())))
+
+(defun Texinfo-reftex-section-info (file)
+  ;; Return a section entry for the current match.
+  ;; Carefull: This function expects the match-data to be still in place!
+  (let* ((marker (set-marker (make-marker) (1- (match-beginning 3))))
+         (macro (reftex-match-string 3))
+         (level-exp (cdr (assoc macro reftex-section-levels-all)))
+         (level (if (symbolp level-exp)
+                    (save-match-data (funcall level-exp))
+                  level-exp))
+         (unnumbered  (< level 0))
+         (level (abs level))
+         (section-number (reftex-section-number level unnumbered))
+         (text1 (save-match-data
+                  (save-excursion
+		    (buffer-substring-no-properties (point) (progn (end-of-line) (point))))))
+         (literal (buffer-substring-no-properties
+                   (1- (match-beginning 3))
+                   (min (point-max) (+ (match-end 0) (length text1) 1))))
+         ;; Literal can be too short since text1 too short. No big problem.
+         (text (reftex-nicify-text text1)))
+
+    ;; Add section number and indentation
+    (setq text
+          (concat
+           (make-string (* reftex-level-indent level) ?\ )
+           (if (nth 1 reftex-label-menu-flags) ; section number flag
+               (concat section-number " "))
+           text))
+    (list 'toc "toc" text file marker level section-number
+          literal (marker-position marker))))
+
+(defun Texinfo-reftex-hook ()
+  "Hook function to plug Texinfo into RefTeX."
+  ;; force recompilation of variables
+  (when (string= TeX-base-mode-name "Texinfo")
+    (dolist (v `((reftex-section-pre-regexp . "@")
+		 ; section post-regexp must contain exactly one group
+		 (reftex-section-post-regexp . "\\([ \t]+\\)")
+		 (reftex-section-info-function . Texinfo-reftex-section-info)
+	       (reftex-section-levels
+		. ,(mapcar
+		    (lambda (x)
+		      (if (string-match "\\(\\`unnumbered\\)\\|\\(heading\\'\\)\\|\\(\\`top\\'\\)"
+					(car x))
+			  (cons (car x) (- (cadr x)))
+			(cons (car x) (cadr x))))
+		    texinfo-section-list))))
+      (set (make-local-variable (car v) ) (cdr v)))
+    (setq reftex-tables-dirty t)
+    (reftex-ensure-compiled-variables)))
 
 ;;; Keymap:
 
@@ -223,6 +424,9 @@ for @node."
 
     ;; Simulating LaTeX-mode
     (define-key map "\C-c\C-e" 'Texinfo-environment)
+    (define-key map "\C-c." 'Texinfo-mark-environment)
+    (define-key map "\C-c*" 'Texinfo-mark-section)
+    (define-key map "\M-\C-h" 'Texinfo-mark-node)
     (define-key map "\C-c\n"   'texinfo-insert-@item)
     (or (key-binding "\e\r")
 	(define-key map "\e\r" 'texinfo-insert-@item)) ;*** Alias
@@ -310,7 +514,7 @@ for @node."
     (?C    "@cite{" "}")
     (?\C-d "" "" t))
   "Font commands used in Texinfo mode.  See `TeX-font-list'.")
-  
+
 ;;; Mode:
 
 ;;;###autoload
@@ -334,10 +538,10 @@ value of `Texinfo-mode-hook'."
   (use-local-map Texinfo-mode-map)
   (set-syntax-table texinfo-mode-syntax-table)
   (make-local-variable 'page-delimiter)
-  (setq page-delimiter 
-	(concat 
-	 "^@node [ \t]*[Tt]op\\|^@\\(" 
-	 texinfo-chapter-level-regexp 
+  (setq page-delimiter
+	(concat
+	 "^@node [ \t]*[Tt]op\\|^@\\("
+	 texinfo-chapter-level-regexp
 	 "\\)"))
   (make-local-variable 'require-final-newline)
   (setq require-final-newline t)
@@ -376,13 +580,13 @@ value of `Texinfo-mode-hook'."
       ;; This was included in 19.31.
       ()
     (make-local-variable 'outline-regexp)
-    (setq outline-regexp 
+    (setq outline-regexp
 	  (concat "@\\("
 		  (mapconcat 'car texinfo-section-list "\\>\\|")
 		  "\\>\\)"))
     (make-local-variable 'outline-level)
     (setq outline-level 'texinfo-outline-level))
-  
+
   ;; Mostly AUCTeX stuff
   (easy-menu-add Texinfo-mode-menu Texinfo-mode-map)
   (easy-menu-add Texinfo-command-menu Texinfo-mode-map)
@@ -401,7 +605,7 @@ value of `Texinfo-mode-hook'."
   (setq TeX-command-default "TeX")
   (setq TeX-header-end "%*end")
   (setq TeX-trailer-start (regexp-quote (concat TeX-esc "bye")))
-  
+
   (make-local-variable 'TeX-complete-list)
   (setq TeX-complete-list
 	(list (list "@\\([a-zA-Z]*\\)" 1 'TeX-symbol-list nil)
@@ -411,7 +615,7 @@ value of `Texinfo-mode-hook'."
   (setq TeX-font-list Texinfo-font-list)
   (make-local-variable 'TeX-font-replace-function)
   (setq TeX-font-replace-function 'TeX-font-replace-macro)
-  
+
   (add-hook 'find-file-hooks (lambda ()
 			       (unless (file-exists-p (buffer-file-name))
 				 (TeX-master-file nil nil t))) nil t)
@@ -540,7 +744,12 @@ value of `Texinfo-mode-hook'."
    '("vskip" (TeX-arg-literal " ") (TeX-arg-free "Amount"))
    '("w" "Text")
    '("xref" "Node name"))
-  
+
+  ;; RefTeX plugging
+  (add-hook 'reftex-mode-hook 'Texinfo-reftex-hook)
+  (if (and (boundp 'reftex-mode) reftex-mode)
+      (Texinfo-reftex-hook))
+
   (TeX-run-mode-hooks 'text-mode-hook 'Texinfo-mode-hook)
   (TeX-set-mode-name))
 
@@ -560,7 +769,7 @@ The regexps will be anchored at the end of the file name to be matched,
 i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
   :type '(repeat regexp)
   :group 'TeX-command)
-  
+
 (provide 'tex-info)
-  
+
 ;;; tex-info.el ends here

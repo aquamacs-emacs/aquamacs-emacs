@@ -213,6 +213,13 @@ It can be a list of themes or a function.  If it is the symbol
 	     :tag "Other"
 	     (string)))))
 
+;; style/biblatex.el
+
+(defcustom LaTeX-biblatex-use-Biber t
+  "Whether to use Biber with biblatex."
+  :type 'boolean
+  :group 'LaTeX-style)
+
 ;; style/comment.el
 
 (defcustom LaTeX-comment-env-list '("comment")
