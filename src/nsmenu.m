@@ -1798,7 +1798,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   struct frame *f;
   BOOL useSheet = YES;
 
-  NSPoint p;
+  //NSPoint p;
   BOOL isQ;
   NSAutoreleasePool *pool;
 
@@ -1846,12 +1846,15 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       f = XFRAME (WINDOW_FRAME (XWINDOW (window)));
     }
   else
-    CHECK_WINDOW (window);
+    f = nil;
+  //CHECK_WINDOW (window);
 
+  if (f) 
+    {
   check_window_system (f);
 
-  p.x = (int)f->left_pos + ((int)FRAME_COLUMN_WIDTH (f) * f->text_cols)/2;
-  p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
+    }
+  
 
   title = Fcar (contents);
   CHECK_STRING (title);
