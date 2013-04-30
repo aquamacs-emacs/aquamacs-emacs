@@ -1115,5 +1115,6 @@ An Aquamacs-only function."
 
 ;; for ae24windowing branch
 
-(ad-disable-advice 'switch-to-buffer 'around 'sw-force-other-frame)
+(when (ad-is-advised 'switch-to-buffer)
+  (ad-disable-advice 'switch-to-buffer 'around 'sw-force-other-frame))
 (setq display-buffer-function nil)
