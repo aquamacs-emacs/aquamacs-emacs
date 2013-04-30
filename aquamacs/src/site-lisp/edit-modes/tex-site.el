@@ -142,11 +142,11 @@ set it with `TeX-modes-set'."
 		      `(TeX-modes-set ',var ,var t))
 		    (setq list (cdr list))))))
 
-(defconst AUCTeX-version "11.86"
+(defconst AUCTeX-version "11.87"
     "AUCTeX version.
 If not a regular release, the date of the last change.")
 
-(defconst AUCTeX-date "2010-02-21"
+(defconst AUCTeX-date "2012-11-30"
   "AUCTeX release date using the ISO 8601 format, yyyy-mm-dd.")
 
 ;; Store bibitems when saving a BibTeX buffer
@@ -176,7 +176,7 @@ Unconditionally turn on Bib Cite mode.
 
 ;;;***
 
-;;;### (autoloads (context-mode) "context" "context.el" (19318 46167))
+;;;### (autoloads (context-mode) "context" "context.el" (19707 64211))
 ;;; Generated autoloads from context.el
 
 (defalias 'ConTeXt-mode 'context-mode)
@@ -196,7 +196,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (context-en-mode) "context-en" "context-en.el"
-;;;;;;  (18541 18440))
+;;;;;;  (19618 16518))
 ;;; Generated autoloads from context-en.el
 
 (autoload 'context-en-mode "context-en" "\
@@ -214,7 +214,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (context-nl-mode) "context-nl" "context-nl.el"
-;;;;;;  (18489 3127))
+;;;;;;  (19618 16529))
 ;;; Generated autoloads from context-nl.el
 
 (autoload 'context-nl-mode "context-nl" "\
@@ -232,7 +232,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (font-latex-setup) "font-latex" "font-latex.el"
-;;;;;;  (19254 11585))
+;;;;;;  (20561 45562))
 ;;; Generated autoloads from font-latex.el
 
 (autoload 'font-latex-setup "font-latex" "\
@@ -243,7 +243,7 @@ Setup this buffer for LaTeX font-lock.  Usually called from a hook.
 ;;;***
 
 ;;;### (autoloads (docTeX-mode TeX-latex-mode BibTeX-auto-store)
-;;;;;;  "latex" "latex.el" (19180 28128))
+;;;;;;  "latex" "latex.el" (20659 51557))
 ;;; Generated autoloads from latex.el
 
 (autoload 'BibTeX-auto-store "latex" "\
@@ -310,10 +310,9 @@ The return value is the string as entered in the minibuffer.
 
 ;;;***
 
-;;;### (autoloads (TeX-submit-bug-report ams-tex-mode TeX-auto-generate-global
-;;;;;;  TeX-auto-generate TeX-plain-tex-mode TeX-tex-mode) "tex"
-;;;;;;  "tex.el" (19327 63823))
-;;; Generated autoloads from tex.el
+;;;### (autoloads (ams-tex-mode TeX-plain-tex-mode) "plain-tex" "plain-tex.el"
+;;;;;;  (19707 64159))
+;;; Generated autoloads from plain-tex.el
 
 (autoload 'TeX-tex-mode "tex" "\
 Major mode in AUCTeX for editing TeX or LaTeX files.
@@ -395,7 +394,7 @@ Install toolbar buttons for LaTeX mode.
 
 ;;;***
 
-;;;### (autoloads nil "tex-fold" "tex-fold.el" (19227 40177))
+;;;### (autoloads nil "tex-fold" "tex-fold.el" (19887 15736))
 ;;; Generated autoloads from tex-fold.el
  (autoload 'TeX-fold-mode "tex-fold" "Minor mode for hiding and revealing macros and environments." t)
 
@@ -414,8 +413,8 @@ Setup font lock support for TeX.
 
 ;;;***
 
-;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (18903
-;;;;;;  48810))
+;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (20659
+;;;;;;  23181))
 ;;; Generated autoloads from tex-info.el
 
 (defalias 'Texinfo-mode 'texinfo-mode)
@@ -434,7 +433,7 @@ value of `Texinfo-mode-hook'.
 ;;;***
 
 ;;;### (autoloads (japanese-latex-mode japanese-plain-tex-mode) "tex-jp"
-;;;;;;  "tex-jp.el" (18768 5174))
+;;;;;;  "tex-jp.el" (20588 36944))
 ;;; Generated autoloads from tex-jp.el
 
 (autoload 'japanese-plain-tex-mode "tex-jp" "\

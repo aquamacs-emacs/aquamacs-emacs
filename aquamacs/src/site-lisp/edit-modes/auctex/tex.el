@@ -1,8 +1,8 @@
 ;;; tex.el --- Support for TeX documents.
 
 ;; Copyright (C) 1985, 1986, 1987, 1991, 1993, 1994, 1996, 1997, 1999,
-;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-;;   Free Software Foundation, Inc.
+;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+;;   2011 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -61,32 +61,7 @@
 ;;; Site Customization
 ;;
 ;; The following variables are likely to need to be changed for your
-;; site.  You should do this with customize.  Here is the beef: If you
-;; want to print, TeX-print-command must be non-nil (if it is nil,
-;; you'll get a complaint when using the print menu).  If you want to
-;; view the queue, TeX-queue-command needs to be non-nil (if it is
-;; nil, it won't get mentioned in the menu).  If TeX-printer-list is
-;; nil, nothing else gets asked: the menu entries lead directly to the
-;; respective commands.  If those commands contain %p, the value of
-;; TeX-printer-default gets inserted there, no questions asked.  Now
-;; if TeX-printer-list is non-nil, you'll always get asked which
-;; printer you want to use.  You can enter a configured printer from
-;; TeX-printer-list, or an unknown one.  The respective menus will
-;; show all configured printers.  Since you can enter unknown
-;; printers, the printer name _must_ be set with %p in
-;; TeX-print-command.
-
-;; How to print.
-
-(defcustom TeX-print-command "%(o?)dvips -P%p %r %s"
-  "*Command used to print a file.
-
-First `%p' is expanded to the printer name, then ordinary expansion is
-performed as specified in `TeX-expand-list'.  If it is nil,
-then customization is requested."
-  :group 'TeX-command
-  :type '(choice (string :tag "Print command")
-		 (const :tag "No print command customized" nil)))
+;; site.  You should do this with customize.
 
 (defcustom TeX-command "tex"
   "Command to run plain TeX."
@@ -123,16 +98,6 @@ If nil, none is specified."
 		 string))
 ;; At least in TeXLive 2009 ConTeXt does not support an omega option anymore.
 (make-obsolete-variable 'ConTeXt-Omega-engine 'TeX-engine-alist)
-
-(defcustom TeX-queue-command "lpq -P%p"
-  "*Command used to show the status of a printer queue.
-
-First `%p' is expanded to the printer name, then ordinary expansion is
-performed as specified in `TeX-expand-list'.  If this is nil,
-the printer has no corresponding command."
-  :group 'TeX-command
-  :type '(choice (string :tag "Queue check command")
-		 (const :tag "No such command" nil)))
 
 (defcustom TeX-mode-hook nil
   "A hook run in TeX mode buffers."
@@ -172,6 +137,7 @@ the printer has no corresponding command."
      TeX-run-TeX nil
      (context-mode) :help "Run ConTeXt until completion")
     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
+    ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
     ,(if (or window-system (getenv "DISPLAY"))
 	 '("View" "%V" TeX-run-discard-or-function nil t :help "Run Viewer")
        '("View" "dvi2tty -q -w 132 %s" TeX-run-command t t
@@ -215,6 +181,8 @@ TeX-run-TeX: For TeX output.
 TeX-run-interactive: Run TeX or LaTeX interactively.
 
 TeX-run-BibTeX: For BibTeX output.
+
+TeX-run-Biber: For Biber output.
 
 TeX-run-compile: Use `compile' to run the process.
 
@@ -264,6 +232,7 @@ Any additional elements get just transferred to the respective menu entries."
 				(function-item TeX-run-TeX)
 				(function-item TeX-run-interactive)
 				(function-item TeX-run-BibTeX)
+				(function-item TeX-run-Biber)
 				(function-item TeX-run-compile)
 				(function-item TeX-run-shell)
 				(function-item TeX-run-discard)
@@ -344,11 +313,52 @@ string."
   :type '(repeat (group :value ("" "")
 			regexp (string :tag "Style"))))
 
+;; Printing: If you want to print, TeX-print-command must be non-nil
+;; (if it is nil, you'll get a complaint when using the print menu).
+;; If you want to view the queue, TeX-queue-command needs to be
+;; non-nil (if it is nil, it won't get mentioned in the menu).  If
+;; TeX-printer-list is nil, nothing else gets asked: the menu entries
+;; lead directly to the respective commands.  If those commands
+;; contain %p, the value of TeX-printer-default gets inserted there,
+;; no questions asked.  Now if TeX-printer-list is non-nil, you'll
+;; always get asked which printer you want to use.  You can enter a
+;; configured printer from TeX-printer-list, or an unknown one.  The
+;; respective menus will show all configured printers.  Since you can
+;; enter unknown printers, the printer name _must_ be set with %p in
+;; TeX-print-command.
+
+(defcustom TeX-print-command
+  "{ test -e %s.dvi && %(o?)dvips -P%p %r %s; } || lpr -P%p %o"
+  "Command used to print a file.
+
+First `%p' is expanded to the printer name, then ordinary expansion is
+performed as specified in `TeX-expand-list'.  If it is nil,
+then customization is requested."
+  :group 'TeX-command
+  :type '(choice (string :tag "Print command")
+		 (const :tag "No print command customized" nil)))
+
+(defcustom TeX-queue-command "lpq -P%p"
+  "Command used to show the status of a printer queue.
+
+First `%p' is expanded to the printer name, then ordinary expansion is
+performed as specified in `TeX-expand-list'.  If this is nil,
+the printer has no corresponding command."
+  :group 'TeX-command
+  :type '(choice (string :tag "Queue check command")
+		 (const :tag "No such command" nil)))
+
 ;; Enter the names of the printers available at your site, or nil if
 ;; you only have one printer.
 
 (defcustom TeX-printer-list
-  '(("Default" "%(o?)dvips -f %s | lpr" "lpq"))
+  '(("Default"
+     ;; Print to the (unnamed) default printer.  If there is a DVI
+     ;; file print via Dvips.  If not, pass the output file (which
+     ;; should then be a Postscript or PDF file) directly to lpr.
+     "{ test -e %s.dvi && %(o?)dvips -f %r %s | lpr; } || lpr %o"
+     ;; Show the queue for the (unnamed) default printer.
+     "lpq"))
   "List of available printers.
 
 The first element of each entry is the printer name.
@@ -383,7 +393,7 @@ get consulted."
 				   (and TeX-printer-list
 					(car (car TeX-printer-list)))
 				   "lp")
-  "*Default printer to use with `TeX-command'."
+  "Default printer to use with `TeX-command'."
   :group 'TeX-command
   :type 'string)
 
@@ -450,9 +460,9 @@ string."
     ("%(Ad)" aquamacs-directory)
     ("%cS" TeX-source-specials-view-expand-client)
     ("%(outpage)" (lambda ()
-		    (if TeX-source-correlate-output-page-function
-			(funcall TeX-source-correlate-output-page-function)
-		      "1")))
+		    (or (when TeX-source-correlate-output-page-function
+			  (funcall TeX-source-correlate-output-page-function))
+			"1")))
     ;; `file' means to call `TeX-master-file' or `TeX-region-file'
     ("%s" file nil t)
     ("%t" file t t)
@@ -846,13 +856,14 @@ If RESET is non-nil, `TeX-command-next' is reset to
 				      'TeX-command-next TeX-command-default))
 	  (set-buffer-modified-p (buffer-modified-p))))))
 
-(defun TeX-mode-prefix ()
-  "Return the prefix of the current mode as string."
-  (cdr (assoc major-mode '((plain-tex-mode . "plain-TeX")
-			   (latex-mode . "LaTeX")
-			   (doctex-mode . "docTeX")
-			   (texinfo-mode . "Texinfo")
-			   (context-mode . "ConTeXt")))))
+(defun TeX-mode-prefix (&optional mode)
+  "Return the prefix for the symbol MODE as string.
+If no mode is given the current major mode is used."
+  (cdr (assoc (or mode major-mode) '((plain-tex-mode . "plain-TeX")
+				     (latex-mode . "LaTeX")
+				     (doctex-mode . "docTeX")
+				     (texinfo-mode . "Texinfo")
+				     (context-mode . "ConTeXt")))))
 
 ;;; Viewing
 
@@ -999,6 +1010,72 @@ The following built-in predicates are available:
   :group 'TeX-view
   :type '(alist :key-type symbol :value-type (group sexp)))
 
+(defun TeX-evince-dbus-p (&rest options)
+  "Return non-nil, if evince is installed and accessible via DBUS.
+Additional OPTIONS may be given to extend the check.  If none are
+given, only the minimal requirements needed by backward search
+are checked.  If OPTIONS include `:forward', which is currently
+the only option, then additional requirements needed by forward
+search are checked, too."
+  (and (not (featurep 'xemacs)) ; XEmacs 21.4 has no `require' with
+			        ; arity 3, and no dbus support anyway.
+       (require 'dbus nil :no-error)
+       (functionp 'dbus-register-signal)
+       (getenv "DBUS_SESSION_BUS_ADDRESS")
+       (executable-find "evince")
+       (or (not (memq :forward options))
+	   (let ((spec (dbus-introspect-get-method
+			:session "org.gnome.evince.Daemon"
+			"/org/gnome/evince/Daemon"
+			"org.gnome.evince.Daemon"
+			"FindDocument")))
+	     ;; FindDocument must exist, and its signature must be (String,
+	     ;; Boolean, String).  Evince versions between 2.30 and 2.91.x
+	     ;; didn't have the Boolean spawn argument we need to start evince
+	     ;; initially.
+	     (and spec
+		  (equal '("s" "b" "s")
+			 (delq nil (mapcar (lambda (elem)
+					     (when (and (listp elem)
+							(eq (car elem) 'arg))
+					       (cdr (caar (cdr elem)))))
+					   spec))))))))
+
+(defun TeX-evince-sync-view ()
+  "Focus the focused page/paragraph in Evince with the position
+of point in emacs by using Evince's DBUS API.  Used by default
+for the Evince viewer entry in `TeX-view-program-list-builtin' if
+the requirements are met."
+  (let* ((uri (concat "file://" (expand-file-name
+				 (concat file "." (TeX-output-extension)))))
+	 (owner (dbus-call-method
+		 :session "org.gnome.evince.Daemon"
+		 "/org/gnome/evince/Daemon"
+		 "org.gnome.evince.Daemon"
+		 "FindDocument"
+		 uri
+		 t)))
+    (if owner
+	(dbus-call-method
+	 :session owner
+	 "/org/gnome/evince/Window/0"
+	 "org.gnome.evince.Window"
+	 "SyncView"
+	 (buffer-file-name)
+	 (list :struct :int32 (line-number-at-pos) :int32 (1+ (current-column)))
+	 :uint32 (let ((time (float-time)))
+		   ;; FIXME: Evince wants a timestamp as UInt32, but POSIX time
+		   ;; is too large for emacs integers on 32 bit systems.  Emacs
+		   ;; 24.2 will allow providing DBUS ints as floats, and this
+		   ;; dbus version will be identifiable by its new variables
+		   ;; `dbus-compiled-version' and `dbus-runtime-version'.  But
+		   ;; it seems providing just 1 as timestamp has no negative
+		   ;; consequences, anyway.
+		   (if (> most-positive-fixnum time)
+		       (round time)
+		     1)))
+      (error "Couldn't find the Evince instance for %s" uri))))
+
 (defvar TeX-view-program-list-builtin
   (cond
    ((eq system-type 'windows-nt)
@@ -1023,7 +1100,7 @@ The following built-in predicates are available:
        )
       )
    (t
-    '(("xdvi" ("%(o?)xdvi"
+    `(("xdvi" ("%(o?)xdvi"
 	       (mode-io-correlate " -sourceposition \"%n %b\" -editor \"%cS\"")
 	       ((paper-a4 paper-portrait) " -paper a4")
 	       ((paper-a4 paper-landscape) " -paper a4r")
@@ -1037,7 +1114,16 @@ The following built-in predicates are available:
       ("dvips and gv" "%(o?)dvips %d -o && gv %f")
       ("gv" "gv %o")
       ("xpdf" ("xpdf -remote %s -raise %o" (mode-io-correlate " %(outpage)")))
-      ("Evince" ("evince" (mode-io-correlate " -p %(outpage)") " %o"))
+      ("Evince" ,(if (TeX-evince-dbus-p :forward)
+		     'TeX-evince-sync-view
+		   `("evince" (mode-io-correlate
+			       ;; With evince 3, -p N opens the page *labeled* N,
+			       ;; and -i,--page-index the physical page N.
+			       ,(if (string-match "--page-index"
+						  (shell-command-to-string "evince --help"))
+				    " -i %(outpage)"
+				  " -p %(outpage)")) " %o")))
+      ("Okular" ("okular --unique %o" (mode-io-correlate "#src:%n%b")))
       ("xdg-open" "xdg-open %o"))))
   "Alist of built-in viewer specifications.
 This variable should not be changed by the user who can use
@@ -1230,7 +1316,9 @@ predicates are true, nil otherwise."
 (defvar TeX-engine-alist-builtin
   '((default "Default" TeX-command LaTeX-command ConTeXt-engine)
     (xetex "XeTeX" "xetex" "xelatex" "xetex")
-    (luatex "LuaTeX" "luatex" "lualatex" "luatex")
+    ;; Some lualatex versions before 0.71 would use "texput" as file
+    ;; name if --jobname were not supplied
+    (luatex "LuaTeX" "luatex" "lualatex --jobname=%s" "luatex")
     (omega "Omega" TeX-Omega-command LaTeX-Omega-command ConTeXt-Omega-engine))
   "Alist of built-in TeX engines and associated commands.
 For a description of the format see `TeX-engine-alist'.")
@@ -1278,10 +1366,8 @@ It should be one of the following symbols:\n\n"
      (lambda (arg) (memq arg (mapcar 'car TeX-engine-alist-builtin))))
 
 (defun TeX-engine-set (type)
-  (concat "Set TeX engine to TYPE.
-TYPE can be one of the following symbols:\n"
-	  (mapconcat (lambda (x) (format "* `%s'" (car x)))
-		     (TeX-engine-alist) "\n"))
+  "Set TeX engine to TYPE.
+For available TYPEs, see variable `TeX-engine'."
   (interactive (list (completing-read "Engine: "
 				      (mapcar (lambda (x)
 						(symbol-name (car x)))
@@ -1388,7 +1474,7 @@ This is the case if `TeX-source-correlate-start-server-flag' is non-nil."
 		    (call-process LaTeX-command
 				  nil (list standard-output nil) nil "--help"))
 		(error ""))))
-    (if (string-match "^[ ]*-synctex" help)
+    (if (string-match "^[ ]*-?-synctex" help)
 	'synctex
       'source-specials)))
 
@@ -1420,6 +1506,36 @@ If this is nil, an empty string will be returned."
   "Keymap for `TeX-source-correlate-mode'.
 You could use this for unusual mouse bindings.")
 
+(defun TeX-source-correlate-sync-source (file linecol &rest ignored)
+  "Show TeX FILE with point at LINECOL.
+This function is called when emacs receives a SyncSource signal
+emitted from the Evince document viewer.  IGNORED absorbs an
+unused id field accompanying the DBUS signal sent by Evince-3.0.0
+or newer."
+  ;; FILE may be given as relative path to the TeX-master root document or as
+  ;; absolute file:// URL.  In the former case, the tex file has to be already
+  ;; opened.
+  (let ((buf (let ((f (condition-case nil
+			  (progn
+			    (require 'url-parse)
+			    (aref (url-generic-parse-url file) 6))
+			;; For Emacs 21 compatibility, which doesn't have the
+			;; url package.
+			(file-error (replace-regexp-in-string "^file://" "" file)))))
+	       (if (file-name-absolute-p f)
+		   (find-file f)
+		 (get-buffer (file-name-nondirectory file)))))
+        (line (car linecol))
+        (col (cadr linecol)))
+    (if (null buf)
+        (message "No buffer for %s." file)
+      (switch-to-buffer buf)
+      (push-mark (point) 'nomsg)
+      (goto-char (point-min))
+      (forward-line (1- line))
+      (unless (= col -1)
+        (move-to-column col)))))
+
 (define-minor-mode TeX-source-correlate-mode
   "Minor mode for forward and inverse search.
 
@@ -1441,6 +1557,12 @@ SyncTeX are recognized."
 				       TeX-source-correlate-map))
   (TeX-set-mode-name 'TeX-source-correlate-mode t t)
   (setq TeX-source-correlate-start-server-flag TeX-source-correlate-mode)
+  ;; Register Emacs for the SyncSource DBUS signal emitted by Evince.
+  (when (TeX-evince-dbus-p)
+    (dbus-register-signal
+     :session nil "/org/gnome/evince/Window/0"
+     "org.gnome.evince.Window" "SyncSource"
+     'TeX-source-correlate-sync-source))
   (unless TeX-source-correlate-method-active
     (setq TeX-source-correlate-method-active
 	  (if (eq TeX-source-correlate-method 'auto)
@@ -1551,8 +1673,8 @@ returned."
 (defvar TeX-synctex-tex-flags "--synctex=1"
   "Extra flags to pass to TeX commands to enable SyncTeX.")
 
-(defun TeX-synctex-output-page ()
-  "Return the page corresponding to the current source position.
+(defun TeX-synctex-output-page-1 (file)
+  "Return the page corresponding to the current position in FILE.
 This method assumes that the document was compiled with SyncTeX
 enabled and the `synctex' binary is available."
   (let ((synctex-output
@@ -1560,15 +1682,29 @@ enabled and the `synctex' binary is available."
 	   (call-process "synctex" nil (list standard-output nil) nil "view"
 			 "-i" (format "%s:%s:%s" (line-number-at-pos)
 				      (current-column)
-				      ;; The file name relative to the
-				      ;; directory of the master file.
-				      (file-relative-name
-				       (buffer-file-name)
-				       (file-name-directory
-					(TeX-active-master))))
+				      file)
 			 "-o" (TeX-active-master (TeX-output-extension))))))
     (when (string-match "Page:\\([0-9]+\\)" synctex-output)
       (match-string 1 synctex-output))))
+
+(defun TeX-synctex-output-page ()
+  "Return the page corresponding to the position in the current buffer.
+This method assumes that the document was compiled with SyncTeX
+enabled and the `synctex' binary is available."
+  (let* ((file (file-relative-name (buffer-file-name)
+				   (file-name-directory
+				    (TeX-active-master))))
+	 (abs-file (concat (expand-file-name (or (file-name-directory (TeX-active-master))
+						 (file-name-directory (buffer-file-name))))
+			   "./" file)))
+    ;; It's known that depending on synctex version one of
+    ;; /absolute/path/./foo/bar.tex, foo/bar.tex, or ./foo/bar.tex (relative to
+    ;; TeX-master, and the "." in the absolute path is important) are needed.
+    ;; So try all variants before falling back to page 1.
+    (or (TeX-synctex-output-page-1 abs-file)
+	(TeX-synctex-output-page-1 file)
+	(TeX-synctex-output-page-1 (concat "./" file))
+	"1")))
 
 ;;; Miscellaneous minor modes
 
@@ -1669,6 +1805,12 @@ already established, don't do anything."
   :type 'string)
   (make-variable-buffer-local 'TeX-command-BibTeX)
 
+(defcustom TeX-command-Biber "Biber"
+  "*The name of the Biber entry in `TeX-command-list'."
+  :group 'TeX-command-name
+  :type 'string)
+  (make-variable-buffer-local 'TeX-command-Biber)
+
 (defcustom TeX-command-Show "View"
   "*The default command to show (view or print) a TeX file.
 Must be the car of an entry in `TeX-command-list'."
@@ -1707,7 +1849,8 @@ Must be the car of an entry in `TeX-command-list'."
   '("\\.aux" "\\.bbl" "\\.blg" "\\.brf" "\\.fot"
     "\\.glo" "\\.gls" "\\.idx" "\\.ilg" "\\.ind"
     "\\.lof" "\\.log" "\\.lot" "\\.nav" "\\.out"
-    "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz")
+    "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz"
+    "\\.bcf" "\\.run\\.xml")
   "List of regexps matching suffixes of files to be cleaned.
 Used as a default in TeX, LaTeX and docTeX mode.")
 
@@ -2072,43 +2215,23 @@ If REGEXP is nil, or \"\", an error will occur."
 	  (setq answers (cons entry answers))))
     answers))
 
-(defun TeX-macro-global ()
-  "Return directories containing the site's TeX macro and style files."
-  (or (TeX-tree-expand '("$SYSTEXMF" "$TEXMFLOCAL" "$TEXMFMAIN" "$TEXMFDIST")
-		       "latex" '("/tex/" "/bibtex/bst/"))
-      '("/usr/share/texmf/tex/" "/usr/share/texmf/bibtex/bst/")))
-
-(defun TeX-macro-private ()
-  "Return directories containing the user's TeX macro and style files."
-  (TeX-tree-expand '("$TEXMFHOME") "latex" '("/tex/" "/bibtex/bst/")))
-
-(defun TeX-tree-expand (trees program subdirs)
-  "Return directories corresponding to the TeX trees TREES.
-This is done calling `kpsewhich' where PROGRAM is passed as the
-parameter for --progname.  SUBDIRS are subdirectories which are
-appended to the directories of the TeX trees."
+(defun TeX-tree-expand (vars program &optional subdirs)
+  "Return directories corresponding to the kpathsea variables VARS.
+This is done calling `kpsewhich --expand-path' for each variable.
+PROGRAM is passed as the parameter for --progname.  SUBDIRS are
+subdirectories which are appended to the directories of the TeX
+trees.  Only existing directories are returned."
   (let (path-list path exit-status input-dir-list)
     (condition-case nil
-	(catch 'success
-	  (dotimes (i (safe-length trees))
-	    (setq path (with-output-to-string
-			 (setq exit-status
-			       (call-process
-				"kpsewhich"  nil
-				(list standard-output nil) nil
-				"--progname" program
-				"--expand-braces" (nth i trees)))))
-	    (if (zerop exit-status)
-		(progn (add-to-list 'path-list path)
-		       (when (zerop i) (throw 'success nil)))
-	      (setq path (with-output-to-string
-			   (setq exit-status
-				 (call-process
-				  "kpsewhich"  nil
-				  (list standard-output nil) nil
-				  "--progname" program
-				  "--expand-path" (nth i trees)))))
-	      (when (zerop exit-status) (add-to-list 'path-list path)))))
+	(dolist (var vars)
+	  (setq path (with-output-to-string
+		       (setq exit-status (call-process
+					  "kpsewhich"  nil
+					  (list standard-output nil) nil
+					  "--progname" program
+					  "--expand-path" var))))
+	  (when (zerop exit-status)
+	    (add-to-list 'path-list path t)))
       (error nil))
     (dolist (elt path-list)
       (let ((separators (if (string-match "^[A-Za-z]:" elt)
@@ -2118,14 +2241,25 @@ appended to the directories of the TeX trees."
 			  (split-string elt separators t)
 			;; COMPATIBILITY for XEmacs <= 21.4.15
 			(error (delete "" (split-string elt separators)))))
-	  (when (string-match "^!+" item)
-	    (setq item (substring item (match-end 0) (length item))))
-	  (when (string-match "/+$" item)
-	    (setq item (substring item 0 (match-beginning 0))))
-	  (dolist (subdir subdirs)
-	    (when (file-exists-p (file-name-as-directory (concat item subdir)))
-	      (add-to-list 'input-dir-list (concat item subdir)))))))
+	  (if subdirs
+	      (dolist (subdir subdirs)
+		(setq path (file-name-as-directory (concat item subdir)))
+		(when (file-exists-p path)
+		  (add-to-list 'input-dir-list path t)))
+	    (setq path (file-name-as-directory item))
+	    (when (file-exists-p path)
+	      (add-to-list 'input-dir-list path t))))))
     input-dir-list))
+
+(defun TeX-macro-global ()
+  "Return directories containing the site's TeX macro and style files."
+  (or (TeX-tree-expand '("$SYSTEXMF" "$TEXMFLOCAL" "$TEXMFMAIN" "$TEXMFDIST")
+		       "latex" '("/tex/" "/bibtex/bst/"))
+      '("/usr/share/texmf/tex/" "/usr/share/texmf/bibtex/bst/")))
+
+(defun TeX-macro-private ()
+  "Return directories containing the user's TeX macro and style files."
+  (TeX-tree-expand '("$TEXMFHOME") "latex" '("/tex/" "/bibtex/bst/")))
 
 (defcustom TeX-macro-global (TeX-macro-global)
   "Directories containing the site's TeX macro and style files."
@@ -2432,11 +2566,14 @@ Or alternatively:
 	       (pattern (TeX-match-buffer 0))
 	       (symbol (buffer-substring begin end))
 	       (list (funcall (nth 2 entry)))
-	       (completion (try-completion symbol list)))
+	       (completion (try-completion symbol list))
+	       (buf-name "*Completions*"))
 	  (cond ((eq completion t)
 		 (and close
 		      (not (looking-at (regexp-quote close)))
-		      (insert close)))
+		      (insert close))
+		 (let ((window (get-buffer-window buf-name)))
+		   (when window (delete-window window))))
 		((null completion)
 		 (error "Can't find completion for \"%s\"" pattern))
 		((not (string-equal symbol completion))
@@ -2445,13 +2582,19 @@ Or alternatively:
 		 (and close
 		      (eq (try-completion completion list) t)
 		      (not (looking-at (regexp-quote close)))
-		      (insert close)))
+		      (insert close))
+		 (let ((window (get-buffer-window buf-name)))
+		   (when window (delete-window window))))
 		(t
-		 (message "Making completion list...")
-		 (let ((list (all-completions symbol list nil)))
-		   (with-output-to-temp-buffer "*Completions*"
-		     (display-completion-list list)))
-		 (message "Making completion list...done"))))
+		 (if (fboundp 'completion-in-region)
+		     (completion-in-region begin end
+					   (all-completions symbol list nil))
+		   (message "Making completion list...")
+		   (let ((list (all-completions symbol list nil)))
+		     (with-output-to-temp-buffer buf-name
+		       (display-completion-list list)))
+		   (set-window-dedicated-p (get-buffer-window buf-name) 'soft)
+		   (message "Making completion list...done")))))
       (funcall (nth 1 entry)))))
 
 (defcustom TeX-default-macro "ref"
@@ -2589,10 +2732,10 @@ type of ARGS:
 	   (goto-char (marker-position exit-mark))
 	   (set-marker exit-mark nil))
 	  ((and TeX-insert-braces
-		;; Do not add braces for macros defined as `("foo" 0)'
+		;; Do not add braces if the argument is 0 or -1.
 		(not (and (= (safe-length args) 1)
 			  (numberp (car args))
-			  (= (car args) 0)))
+			  (<= (car args) 0)))
 		(equal position (point))
 		(string-match "[a-zA-Z]+" symbol)
 		(not (texmathp)))
@@ -2657,11 +2800,25 @@ See `TeX-parse-macro' for details."
 	   (TeX-arg-string optional arg)
 	   (setq insert-flag t))
 	  ((numberp arg)
-	   (unless (< arg 1)
-	     (TeX-parse-argument optional t)
-	     (while (> arg 1)
-	       (TeX-parse-argument optional nil)
-	       (setq arg (- arg 1)))))
+	   (cond ((< arg 0)
+		  (when (TeX-active-mark)
+		    ;; Put both the macro and the marked region in a TeX group.
+		    (let ((beg (min (point) (mark)))
+			  (end (set-marker (make-marker) (max (point) (mark)))))
+		      (insert " ")
+		      (goto-char beg)
+		      (skip-chars-backward "^\\\\")
+		      (backward-char)
+		      (insert TeX-arg-opening-brace)
+		      (goto-char (marker-position end))
+		      (insert TeX-arg-closing-brace)
+		      (setq insert-flag t))))
+		 ((= arg 0)) ; nop for clarity
+		 ((> arg 0)
+		  (TeX-parse-argument optional t)
+		  (while (> arg 1)
+		    (TeX-parse-argument optional nil)
+		    (setq arg (- arg 1))))))
 	  ((null arg)
 	   (insert TeX-arg-opening-brace)
 	   (when (and (not optional) (TeX-active-mark))
@@ -2855,7 +3012,6 @@ The algorithm is as follows:
   (kill-all-local-variables)
   (setq TeX-mode-p t)
   (setq TeX-output-extension (if TeX-PDF-mode "pdf" "dvi"))
-  (setq local-abbrev-table text-mode-abbrev-table)
   (setq indent-tabs-mode nil)
 
   ;; Ispell support
@@ -3215,6 +3371,24 @@ Generated by `TeX-auto-add-type'.")
   :group 'TeX-file
   :type 'directory)
 
+(defcustom TeX-ignore-file
+  "\\(^\\|[/\\]\\)\\(\\.\\|\\.\\.\\|RCS\\|SCCS\\|CVS\\|babel\\..*\\)$"
+  "Regular expression matching file names to ignore.
+
+These files or directories will not be considered when searching for
+TeX files in a directory."
+  :group 'TeX-parse
+  :type 'regexp)
+
+(defcustom TeX-file-recurse t
+  "Whether to search TeX directories recursively.
+nil means do not recurse, a positive integer means go that far deep in the
+directory hierarchy, t means recurse indefinitely."
+  :group 'TeX-parse
+  :type '(choice (const :tag "On" t)
+		 (const :tag "Off" nil)
+		 (integer :tag "Depth" :value 1)))
+
 ;;;###autoload
 (defun TeX-auto-generate (tex auto)
   "Generate style file for TEX and store it in AUTO.
@@ -3250,8 +3424,10 @@ If TEX is a directory, generate style files for all files in the directory."
 	       (concat (file-name-as-directory auto)
 		       (TeX-strip-extension tex TeX-all-extensions t)
 		       ".el"))))
-	((TeX-match-extension tex (append TeX-file-extensions
-					  BibTeX-file-extensions))
+	((TeX-match-extension tex (TeX-delete-duplicate-strings
+				   (append TeX-file-extensions
+					   BibTeX-file-extensions
+					   TeX-Biber-file-extensions)))
 	 (save-excursion
 	   (set-buffer (let (enable-local-eval)
 			 (find-file-noselect tex)))
@@ -3271,7 +3447,8 @@ If TEX is a directory, generate style files for all files in the directory."
   (unless (file-directory-p TeX-auto-global)
     (make-directory TeX-auto-global))
   (let ((TeX-file-extensions '("cls" "sty"))
-	(BibTeX-file-extensions nil))
+	(BibTeX-file-extensions nil)
+	(TeX-Biber-file-extensions nil))
     (mapc (lambda (macro) (TeX-auto-generate macro TeX-auto-global))
 	  TeX-macro-global))
   (byte-recompile-directory TeX-auto-global 0))
@@ -3327,6 +3504,22 @@ If SKIP is not-nil, don't insert code for SKIP."
     "labelenumv" "theenumi" "theenumii" "theenumiii" "theenumiv"
     "theenumv" "document" "par" "do" "expandafter")
   "List of symbols to ignore when scanning a TeX style file.")
+
+(defcustom TeX-auto-regexp-list 'TeX-auto-full-regexp-list
+  "List of regular expressions used for parsing the current file."
+  :type '(radio (variable-item TeX-auto-empty-regexp-list)
+		(variable-item TeX-auto-full-regexp-list)
+		(variable-item plain-TeX-auto-regexp-list)
+		(variable-item LaTeX-auto-minimal-regexp-list)
+		(variable-item LaTeX-auto-label-regexp-list)
+		(variable-item LaTeX-auto-regexp-list)
+		(symbol :tag "Other")
+		(repeat :tag "Specify"
+			(group (regexp :tag "Match")
+			       (sexp :tag "Groups")
+			       symbol)))
+  :group 'TeX-parse)
+  (make-variable-buffer-local 'TeX-auto-regexp-list)
 
 (defun TeX-auto-add-regexp (regexp)
   "Add REGEXP to `TeX-auto-regexp-list' if not already a member."
@@ -3524,26 +3717,8 @@ Check for potential LaTeX environments."
 	    (add-to-list 'TeX-auto-symbol elt))
 	(add-to-list 'TeX-auto-symbol symbol)))))
 
-;;; Utilities
-;;
-;; Some of these functions has little to do with TeX, but nonetheless we
-;; should use the "TeX-" prefix to avoid name clashes.
 
-(defcustom TeX-auto-regexp-list 'TeX-auto-full-regexp-list
-  "*List of regular expressions used for parsing the current file."
-  :type '(radio (variable-item TeX-auto-empty-regexp-list)
-		(variable-item TeX-auto-full-regexp-list)
-		(variable-item plain-TeX-auto-regexp-list)
-		(variable-item LaTeX-auto-minimal-regexp-list)
-		(variable-item LaTeX-auto-label-regexp-list)
-		(variable-item LaTeX-auto-regexp-list)
-		(symbol :tag "Other")
-		(repeat :tag "Specify"
-			(group (regexp :tag "Match")
-			       (sexp :tag "Groups")
-			       symbol)))
-  :group 'TeX-parse)
-  (make-variable-buffer-local 'TeX-auto-regexp-list)
+;;; File Extensions
 
 (defgroup TeX-file-extension nil
   "File extensions recognized by AUCTeX."
@@ -3566,6 +3741,11 @@ Check for potential LaTeX environments."
 
   (make-variable-buffer-local 'TeX-default-extension)
 
+(defvar TeX-doc-extensions
+  '("dvi" "pdf" "ps" "txt" "html" "dvi.gz" "pdf.gz" "ps.gz" "txt.gz" "html.gz"
+    "dvi.bz2" "pdf.bz2" "ps.bz2" "txt.bz2" "html.bz2")
+  "File extensions of documentation files.")
+
 (defcustom docTeX-default-extension "dtx"
   "*Default extension for docTeX files."
   :group 'TeX-file-extension
@@ -3579,6 +3759,11 @@ Access to the value should be through the function `TeX-output-extension'.")
 
   (make-variable-buffer-local 'TeX-output-extension)
 
+(defcustom TeX-Biber-file-extensions '("bib" "ris" "xml")
+  "Valid file extensions for Biber files."
+  :group 'TeX-file-extension
+  :type '(repeat (string :format "%v")))
+
 (defcustom BibTeX-file-extensions '("bib")
   "Valid file extensions for BibTeX files."
   :group 'TeX-file-extension
@@ -3588,23 +3773,6 @@ Access to the value should be through the function `TeX-output-extension'.")
   "Valid file extensions for BibTeX styles."
   :group 'TeX-file-extension
   :type '(repeat (string :format "%v")))
-
-(defcustom TeX-ignore-file "\\(^\\|[/\\]\\)\\(\\.\\|\\.\\.\\|RCS\\|SCCS\\|CVS\\|babel\\..*\\)$"
-  "Regular expression matching file names to ignore.
-
-These files or directories will not be considered when searching for
-TeX files in a directory."
-  :group 'TeX-parse
-  :type 'regexp)
-
-(defcustom TeX-file-recurse t
-  "*Whether to search TeX directories recursively.
-nil means do not recurse, a positive integer means go that far deep in the
-directory hierarchy, t means recurse indefinitely."
-  :group 'TeX-parse
-  :type '(choice (const :tag "On" t)
-		 (const :tag "Off" nil)
-		 (integer :tag "Depth" :value 1)))
 
 (defun TeX-match-extension (file &optional extensions)
   "Return non-nil if FILE has one of EXTENSIONS.
@@ -3648,6 +3816,23 @@ EXTENSIONS defaults to `TeX-file-extensions'."
 	(file-name-nondirectory strip)
       strip)))
 
+
+;;; File Searching
+
+(defun TeX-tree-roots ()
+  "Return a list of available TeX tree roots."
+  (let (list)
+    (dolist (dir (TeX-tree-expand '("$TEXMFHOME" "$TEXMFMAIN" "$TEXMFLOCAL"
+				    "$TEXMFDIST") "latex"))
+      (when (file-readable-p dir)
+	(add-to-list 'list dir t)))
+    list))
+
+(defcustom TeX-tree-roots (TeX-tree-roots)
+  "List of all available TeX tree root directories."
+  :group 'TeX-file
+  :type '(repeat directory))
+
 (defcustom TeX-kpathsea-path-delimiter t
   "Path delimiter for kpathsea output.
 t means autodetect, nil means kpathsea is disabled."
@@ -3657,78 +3842,46 @@ t means autodetect, nil means kpathsea is disabled."
 		 (const :tag "Autodetect" t)
 		 (const :tag "Off" nil)))
 
-(defcustom TeX-kpathsea-format-alist
-  '(("tex" "${TEXINPUTS.latex}" TeX-file-extensions)
-    ("sty" "${TEXINPUTS.latex}" '("sty"))
-    ("dvi" "${TEXDOCS}" '("dvi" "pdf" "ps" "txt" "html"
-			  "dvi.gz" "pdf.gz" "ps.gz" "txt.gz" "html.gz"
-			  "dvi.bz2" "pdf.bz2" "ps.bz2" "txt.bz2" "html.bz2"))
-    ("eps" "${TEXINPUTS}" LaTeX-includegraphics-extensions)
-    ("pdf" "${TEXINPUTS}" LaTeX-includegraphics-extensions)
-    ("png" "${TEXINPUTS}" LaTeX-includegraphics-extensions)
-    ("jpg" "${TEXINPUTS}" LaTeX-includegraphics-extensions)
-    ("jpeg" "${TEXINPUTS}" LaTeX-includegraphics-extensions)
-    ("bib" "$BIBINPUTS" BibTeX-file-extensions)
-    ("bst" "$BSTINPUTS" BibTeX-style-extensions))
-  "Formats to search for expansion using kpathsea.
-The key of the alist represents the name of the format.  The
-first element of the cdr of the alist is string to expand by the
-respective kpathsea program and the second element is a list of
-file extensions to match."
-  :group 'TeX-file
-  :type '(alist :key-type string :value-type (group string sexp)))
-
-;; FIXME: Despite the first parameter named `extensions',
-;; `TeX-search-files-kpathsea' basically treats this as a format
-;; specifier.  Only the first element in the respective list will be
-;; used to determine the search paths and file extensions with the
-;; help of `TeX-kpathsea-format-alist'.  Out of these differences
-;; arises a need to unify the behavior of `TeX-search-files' and
-;; `TeX-search-files-kpathsea' and their treatment of parameters.
-;; Additionally `TeX-search-files-kpathsea' should be made more
-;; general to work with other platforms and TeX systems as well.
-(defun TeX-search-files-kpathsea (extensions nodir strip)
-  "The kpathsea-enabled version of `TeX-search-files'.
-Except for DIRECTORIES (a kpathsea string), the arguments for
-EXTENSIONS, NODIR and STRIP are explained there."
+;; We keep this function in addition to `TeX-search-files' because it
+;; is faster.  Since it does not look further into subdirectories,
+;; this comes at the price of finding a smaller number of files.
+(defun TeX-search-files-kpathsea (var extensions scope nodir strip)
+  "Return a list of files in directories determined by expanding VAR.
+Only files which match EXTENSIONS are returned.  SCOPE defines
+the scope for the search and can be `local' or `global' besides
+nil.  If NODIR is non-nil, remove directory part.  If STRIP is
+non-nil, remove file extension."
   (and TeX-kpathsea-path-delimiter
        (catch 'no-kpathsea
-	 (let* ((format-spec (assoc (car extensions)
-				    TeX-kpathsea-format-alist))
-		(dirs (with-output-to-string
-			(unless (zerop
-				 (call-process
-				  "kpsewhich" nil (list standard-output nil)
-				  nil
-				  (concat
-				   "-expand-path="
-				   (nth 1 format-spec))))
-			 (if (eq TeX-kpathsea-path-delimiter t)
-			     (throw 'no-kpathsea
-				    (setq TeX-kpathsea-path-delimiter nil))
-			   (error "kpsewhich error")))))
-	       result)
+	 (let* ((dirs (if (eq scope 'local)
+			  "."
+			(with-output-to-string
+			  (unless (zerop (call-process
+					  "kpsewhich" nil
+					  (list standard-output nil) nil
+					  (concat "-expand-path=" var)))
+			    (if (eq TeX-kpathsea-path-delimiter t)
+				(throw 'no-kpathsea
+				       (setq TeX-kpathsea-path-delimiter nil))
+			      (error "kpsewhich error"))))))
+		result)
 	   (when (eq TeX-kpathsea-path-delimiter t)
 	     (setq TeX-kpathsea-path-delimiter
-		   (cond ((string-match ";" dirs)
-			  ";")
-			 ((string-match ":" dirs)
-			  ":"))))
+		   (if (string-match ";" dirs) ";" ":")))
 	   (unless TeX-kpathsea-path-delimiter
 	     (throw 'no-kpathsea nil))
-	   (setq dirs (split-string dirs (concat "[\n\r"
-						 TeX-kpathsea-path-delimiter
-						 "]+")))
-	   (setq extensions (concat "\\."
-				    (regexp-opt (eval (nth 2 format-spec)) t)
-				    "\\'"))
-	   (setq result
-		 (apply #'append
-			(mapcar
-			 (lambda(x) (directory-files x
-						     (not nodir)
-						     extensions))
-			 dirs)))
+	   (setq dirs (delete "" (split-string
+				  dirs (concat "[\n\r"
+					       TeX-kpathsea-path-delimiter
+					       "]+"))))
+	   (if (eq scope 'global)
+	       (delete "." dirs))
+	   (setq extensions (concat "\\." (regexp-opt extensions t) "\\'")
+		 result (apply #'append (mapcar (lambda (x)
+						  (when (file-readable-p x)
+						    (directory-files
+						     x (not nodir) extensions)))
+						dirs)))
 	   (if strip
 	       (mapcar (lambda(x)
 			 (if (string-match extensions x)
@@ -3744,46 +3897,117 @@ If optional argument STRIP is set, remove file extension.
 If optional argument DIRECTORIES is set, search in those directories.
 Otherwise, search in all TeX macro directories.
 If optional argument EXTENSIONS is not set, use `TeX-file-extensions'"
-  (if (null extensions)
-      (setq extensions TeX-file-extensions))
-  (or (TeX-search-files-kpathsea extensions nodir strip)
-      (progn
-	(if (null directories)
-	    (setq directories
-		  (cons "./" (append TeX-macro-private TeX-macro-global))))
-	(let (match
-	      (TeX-file-recurse (cond ((symbolp TeX-file-recurse)
-				       TeX-file-recurse)
-				      ((zerop TeX-file-recurse)
-				       nil)
-				      ((1- TeX-file-recurse)))))
-	  (while directories
-	    (let* ((directory (car directories))
-		   (content (and directory
-				 (file-readable-p directory)
-				 (file-directory-p directory)
-				 (directory-files directory))))
-	      (setq directories (cdr directories))
-	      (while content
-		(let ((file (concat directory (car content))))
-		  (setq content (cdr content))
-		  (cond ((string-match TeX-ignore-file file))
-			((not (file-readable-p file)))
-			((file-directory-p file)
-			 (if TeX-file-recurse
-			     (setq match
-				   (append match
-					   (TeX-search-files
-					    (list (file-name-as-directory file))
-					    extensions
-					    nodir strip)))))
-			((TeX-match-extension file extensions)
-			 (setq match (cons (TeX-strip-extension file
-								extensions
-								nodir
-								(not strip))
-					   match))))))))
-	  match))))
+  (when (null extensions)
+    (setq extensions TeX-file-extensions))
+  (when (null directories)
+    (setq directories (cons "./" (append TeX-macro-private TeX-macro-global))))
+  (let (match
+	(TeX-file-recurse (cond ((symbolp TeX-file-recurse)
+				 TeX-file-recurse)
+				((zerop TeX-file-recurse)
+				 nil)
+				((1- TeX-file-recurse)))))
+    (while directories
+      (let* ((directory (car directories))
+	     (content (and directory
+			   (file-readable-p directory)
+			   (file-directory-p directory)
+			   (directory-files directory))))
+	(setq directories (cdr directories))
+	(while content
+	  (let ((file (concat directory (car content))))
+	    (setq content (cdr content))
+	    (cond ((string-match TeX-ignore-file file))
+		  ((not (file-readable-p file)))
+		  ((file-directory-p file)
+		   (if TeX-file-recurse
+		       (setq match
+			     (append match
+				     (TeX-search-files
+				      (list (file-name-as-directory file))
+				      extensions nodir strip)))))
+		  ((TeX-match-extension file extensions)
+		   (setq match (cons (TeX-strip-extension
+				      file extensions nodir (not strip))
+				     match))))))))
+    match))
+
+;; The variables `TeX-macro-private' and `TeX-macro-global' are not
+;; used for specifying the directories because the number of
+;; directories to be searched should be limited as much as possible
+;; and the TeX-macro-* variables are just too broad for this.
+(defvar TeX-search-files-type-alist
+  '((texinputs "${TEXINPUTS}" ("tex/") TeX-file-extensions)
+    (docs "${TEXDOCS}" ("doc/") TeX-doc-extensions)
+    (graphics "${TEXINPUTS}" ("tex/") LaTeX-includegraphics-extensions)
+    (bibinputs "${BIBINPUTS}" ("bibtex/bib/") BibTeX-file-extensions)
+    (bstinputs "${BSTINPUTS}" ("bibtex/bst/") BibTeX-style-extensions))
+  "Alist of filetypes with locations and file extensions.
+Each element of the alist consists of a symbol expressing the
+filetype, a variable which can be expanded on kpathsea-based
+systems into the directories where files of the given type
+reside, a list of absolute directories, relative directories
+below the root of a TDS-compliant TeX tree or a list of variables
+with either type of directories as an alternative for
+non-kpathsea-based systems and a list of extensions to be matched
+upon a file search.  Note that the directories have to end with a
+directory separator.
+
+Each AUCTeX mode should set the variable buffer-locally with a
+more specific value.  See `LateX-search-files-type-alist' for an
+example.")
+
+(defun TeX-search-files-by-type (filetype &optional scope nodir strip)
+  "Return a list of files in TeX's search path with type FILETYPE.
+FILETYPE is a symbol used to choose the search paths and
+extensions.  See `TeX-search-file-type-alist' for supported
+symbols.
+
+The optional argument SCOPE sets the scope for the search.
+Besides nil the symbols `local' and `global' are accepted.
+`local' means to search in the current directory only, `global'
+in the global directories only and nil in both.
+
+If optional argument NODIR is non-nil, remove directory part.
+
+If optional argument STRIP is non-nil, remove file extension."
+  (let* ((spec (assq filetype TeX-search-files-type-alist))
+	 (kpse-var (nth 1 spec))
+	 (rawdirs (nth 2 spec))
+	 (exts (nth 3 spec))
+	 expdirs dirs local-files)
+    (setq exts (if (symbolp exts) (eval exts) exts))
+    (or (TeX-search-files-kpathsea kpse-var exts scope nodir strip)
+	(progn
+	  (unless (eq scope 'global)
+	    (setq local-files
+		  (let ((TeX-file-recurse nil))
+		    (TeX-search-files '("./") exts nodir strip))))
+	  (if (eq scope 'local)
+	      local-files
+	    (if (null TeX-tree-roots)
+		(error "No TeX trees available; configure `TeX-tree-roots'")
+	      ;; Expand variables.
+	      (dolist (rawdir rawdirs)
+		(if (symbolp rawdir)
+		    (setq expdirs (append expdirs (eval rawdir)))
+		  (add-to-list 'expdirs rawdir t)))
+	      (delete-dups expdirs)
+	      ;; Assumption: Either all paths are absolute or all are relative.
+	      (if (file-name-absolute-p (car expdirs))
+		  (setq dirs expdirs)
+		;; Append relative TDS subdirs to all TeX tree roots.
+		(dolist (root TeX-tree-roots)
+		  (dolist (dir expdirs)
+		    (add-to-list 'dirs (concat (file-name-as-directory root)
+					       dir) t)))))
+	    (append local-files (TeX-search-files dirs exts nodir strip)))))))
+
+
+;;; Utilities
+;;
+;; Some of these functions has little to do with TeX, but nonetheless we
+;; should use the "TeX-" prefix to avoid name clashes.
 
 (defun TeX-car-string-lessp (s1 s2)
   "Compare the cars of S1 and S2 in lexicographic order.
@@ -5149,7 +5373,7 @@ sign.  With optional ARG, insert that many dollar signs."
   (TeX-math-input-method-off))
 
 (defvar TeX-math-input-method-off-regexp
-  "^\\(chinese\\|japanese\\|korean\\bulgarian\\russian\\)"
+  "^\\(chinese\\|japanese\\|korean\\|bulgarian\\|russian\\)"
   "Regexp matching input methods to be deactivated when entering math mode.")
 
 (defun TeX-math-input-method-off ()
@@ -5172,6 +5396,7 @@ With optional argument ARG, also reload the style hooks."
       (setq TeX-style-hook-list nil
 	    BibTeX-global-style-files nil
 	    BibTeX-global-files nil
+	    TeX-Biber-global-files nil
 	    TeX-global-input-files nil))
   (let ((TeX-auto-save t))
     (if (buffer-modified-p)
@@ -5587,6 +5812,20 @@ NAME may be a package, a command, or a document."
 (setq ispell-tex-major-modes
       (append '(plain-tex-mode ams-tex-mode latex-mode doctex-mode)
 	      ispell-tex-major-modes))
+
+
+;;; Abbrev mode
+
+(defmacro TeX-abbrev-mode-setup (mode)
+  "Set up the abbrev table and variable for MODE."
+  (let ((symbol (intern (concat (symbol-name mode) "-abbrev-table")))
+	(name (TeX-mode-prefix mode)))
+    `(progn
+       (defvar ,symbol nil
+	 ,(format "Abbrev table for %s mode." name))
+       (define-abbrev-table ',symbol nil)
+       (when (fboundp 'abbrev-table-put)
+	 (abbrev-table-put ,symbol :parents (list text-mode-abbrev-table))))))
 
 
 ;;; Special provisions for other modes and libraries

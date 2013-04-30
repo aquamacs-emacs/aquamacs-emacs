@@ -41,7 +41,8 @@
  "icelandic"
  (lambda ()
    (set-syntax-table LaTeX-icelandic-mode-syntax-table)
-   (setq TeX-quote-language '("icelandic" "\"`" "\"'" t))
+   (unless (eq (car TeX-quote-language) 'override)
+     (setq TeX-quote-language '("icelandic" "\"`" "\"'" t)))
    (setq LaTeX-babel-hyphen-language "icelandic")
    ;; Fontification of quotation marks.
    (when (fboundp 'font-latex-add-quotes)

@@ -3,7 +3,8 @@
 (TeX-add-style-hook
  "slovak"
  (lambda ()
-   (setq TeX-quote-language `("slovak" "\\uv{" "}" ,TeX-quote-after-quote))
+   (unless (eq (car TeX-quote-language) 'override)
+     (setq TeX-quote-language `("slovak" "\\uv{" "}" ,TeX-quote-after-quote)))
    (when (fboundp 'font-latex-add-quotes)
      (font-latex-add-quotes '("\"`" "\"'"))
      (font-latex-add-quotes '("\"<" "\">" french)))

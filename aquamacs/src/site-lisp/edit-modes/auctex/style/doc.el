@@ -57,101 +57,101 @@
 
 (TeX-add-style-hook
  "doc"
- (function
-  (lambda ()
-    (add-to-list (make-local-variable 'LaTeX-indent-environment-list)
-		 '("macrocode" current-indentation))
-    (add-to-list 'LaTeX-indent-environment-list
-		 '("macrocode*" current-indentation))
-    (add-hook 'LaTeX-after-insert-env-hooks 'LaTeX-doc-after-insert-macrocode
-	      nil t)
-    (LaTeX-add-environments
-     "theglossary"
-     '("macrocode" LaTeX-env-no-comment)
-     '("macrocode*" LaTeX-env-no-comment)
-     '("macro" "Macro"))
-    (TeX-add-symbols
-     "EnableCrossrefs"
-     "DisableCrossrefs"
-     "DoNotIndex"
-     "DontCheckModules"
-     "CheckModules"
-     "Module"
-     '("DescribeMacro" "Macro")
-     '("DescribeEnv" "Environment")
-     "verbatim"
-     "verb"
-     "parg"
-     "oarg"
-     "marg"
-     "meta"
-     "cmd"
-     "makelabel"
-     "MacroFont"
-     "MacroFont"
-     "AltMacroFont"
-     "AltMacroFont"
-     "PrintMacroName"
-     "PrintDescribeMacro"
-     "PrintDescribeEnv"
-     "PrintEnvName"
-     "MakePrivateLetters"
-     "actualchar"
-     "quotechar"
-     "levelchar"
-     "encapchar"
-     "verbatimchar"
-     "SpecialIndex"
-     "SpecialMainIndex"
-     "SpecialMainEnvIndex"
-     "SpecialUsageIndex"
-     "SpecialEnvIndex"
-     "SortIndex"
-     "LeftBraceIndex"
-     "RightBraceIndex"
-     "PercentIndex"
-     "OldMakeindex"
-     "PercentIndex"
-     "IndexPrologue"
-     "IndexParms"
-     "subitem"
-     "subsubitem"
-     "indexspace"
-     "efill"
-     "pfill"
-     "PrintIndex"
-     '("changes" "version" "date (YYYY/MM/DD)")
-     "generalname"
-     "RecordChanges"
-     "GlossaryPrologue"
-     "GlossaryParms"
-     "PrintChanges"
-     "AlsoImplementation"
-     "StopEventually"
-     "OnlyDescription"
-     "Finale"
-     "IndexInput"
-     "maketitle"
-     "MakeShortVerb"
-     "DeleteShortVerb"
-     "MakeShortverb"
-     "DeleteShortverb"
-     "CheckSum"
-     "CharacterTable"
-     "CharTableChanges"
-     "CodelineNumbered"
-     "CodelineIndex"
-     "PageIndex"
-     "theCodelineNo"
-     "theCodelineNo"
-     "DocstyleParms"
-     "MakePercentIgnore"
-     "MakePercentComment"
-     "DocInput"
-     "DocInclude"
-     "GetFileInfo"
-     "filename"
-     "fileinfo"))))
+ (lambda ()
+   (add-to-list (make-local-variable 'LaTeX-indent-environment-list)
+		'("macrocode" current-indentation))
+   (add-to-list 'LaTeX-indent-environment-list
+		'("macrocode*" current-indentation))
+   (add-hook 'LaTeX-after-insert-env-hooks 'LaTeX-doc-after-insert-macrocode
+	     nil t)
+   (LaTeX-add-environments
+    "theglossary"
+    '("macrocode" LaTeX-env-no-comment)
+    '("macrocode*" LaTeX-env-no-comment)
+    '("macro" "Macro"))
+   (TeX-add-symbols
+    "EnableCrossrefs"
+    "DisableCrossrefs"
+    "DoNotIndex"
+    "DontCheckModules"
+    "CheckModules"
+    "Module"
+    '("DescribeMacro" "Macro")
+    '("DescribeEnv" "Environment")
+    "verbatim"
+    "verb"
+    "parg"
+    "oarg"
+    "marg"
+    "meta"
+    "cmd"
+    "makelabel"
+    "MacroFont"
+    "MacroFont"
+    "AltMacroFont"
+    "AltMacroFont"
+    "PrintMacroName"
+    "PrintDescribeMacro"
+    "PrintDescribeEnv"
+    "PrintEnvName"
+    "MakePrivateLetters"
+    "actualchar"
+    "quotechar"
+    "levelchar"
+    "encapchar"
+    "verbatimchar"
+    "SpecialIndex"
+    "SpecialMainIndex"
+    "SpecialMainEnvIndex"
+    "SpecialUsageIndex"
+    "SpecialEnvIndex"
+    "SortIndex"
+    "LeftBraceIndex"
+    "RightBraceIndex"
+    "PercentIndex"
+    "OldMakeindex"
+    "PercentIndex"
+    "IndexPrologue"
+    "IndexParms"
+    "subitem"
+    "subsubitem"
+    "indexspace"
+    "efill"
+    "pfill"
+    "PrintIndex"
+    '("changes" "version" "date (YYYY/MM/DD)")
+    "generalname"
+    "RecordChanges"
+    "GlossaryPrologue"
+    "GlossaryParms"
+    "PrintChanges"
+    "AlsoImplementation"
+    "StopEventually"
+    "OnlyDescription"
+    "Finale"
+    "IndexInput"
+    "maketitle"
+    "MakeShortVerb"
+    "DeleteShortVerb"
+    "MakeShortverb"
+    "DeleteShortverb"
+    "CheckSum"
+    "CharacterTable"
+    "CharTableChanges"
+    "CodelineNumbered"
+    "CodelineIndex"
+    "PageIndex"
+    "theCodelineNo"
+    "theCodelineNo"
+    "DocstyleParms"
+    "MakePercentIgnore"
+    "MakePercentComment"
+    "DocInput"
+    "DocInclude"
+    "GetFileInfo"
+    "filename"
+    "fileinfo")
+   (TeX-run-style-hooks "shortvrb")))
 
 ;; Local Variables:
 ;; coding: iso-8859-1

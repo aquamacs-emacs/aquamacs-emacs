@@ -45,7 +45,8 @@
     "pauza"
     "ppauza")
    ;; Quotation marks
-   (setq TeX-quote-language '("polski" ",," "''" t))
+   (unless (eq (car TeX-quote-language) 'override)
+     (setq TeX-quote-language '("polski" ",," "''" t)))
    ;; Fontification of quotation marks.
    (when (fboundp 'font-latex-add-quotes)
      (font-latex-add-quotes '(",," "''")))

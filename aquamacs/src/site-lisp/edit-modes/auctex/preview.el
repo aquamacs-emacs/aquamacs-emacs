@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; $Id: preview.el,v 1.285 2010/10/14 19:30:38 angeli Exp $
+;; $Id: preview.el,v 1.286 2011/01/23 18:53:55 angeli Exp $
 ;;
 ;; This style is for the "seamless" embedding of generated images
 ;; into LaTeX source code.  Please see the README and INSTALL files
@@ -1464,9 +1464,9 @@ numbers (can be float if available)."
 Fallback to :inherit and 'default implemented."
   :group 'preview-appearance)
 
-(defcustom preview-auto-reveal '(eval (preview-arrived-via
-				       (key-binding [left])
-				       (key-binding [right])))
+(defcustom preview-auto-reveal
+  '(eval (preview-arrived-via (key-binding [left]) (key-binding [right])
+			      'backward-char 'forward-char))
   "*Cause previews to open automatically when entered.
 Possibilities are:
 T autoopens,
@@ -2990,7 +2990,7 @@ is done in current buffer."
 			     (/ (* 25.4 (display-pixel-width))
 				(display-mm-width)))
 			  (* preview-resolution-factor
-			     (/ (* 25.4 (display-pixel-height))
+			  (/ (* 25.4 (display-pixel-height))
 				(display-mm-height))))
 		    (preview-get-colors)))
 	     (preview-min-spec
@@ -3524,8 +3524,8 @@ internal parameters, STR may be a log to insert into the current log."
 	     (preview-reraise-error process)))))
 
 (defconst preview-version (eval-when-compile
-  (let ((name "$Name: release_11_86 $")
-	(rev "$Revision: 1.285 $"))
+  (let ((name "$Name: release_11_87 $")
+	(rev "$Revision: 1.286 $"))
     (or (when (string-match "\\`[$]Name: *release_\\([^ ]+\\) *[$]\\'" name)
 	  (setq name (match-string 1 name))
 	  (while (string-match "_" name)
@@ -3539,7 +3539,7 @@ If not a regular release, CVS revision of `preview.el'.")
 
 (defconst preview-release-date
   (eval-when-compile
-    (let ((date "$Date: 2010/10/14 19:30:38 $"))
+    (let ((date "$Date: 2011/01/23 18:53:55 $"))
       (string-match
        "\\`[$]Date: *\\([0-9]+\\)/\\([0-9]+\\)/\\([0-9]+\\)"
        date)

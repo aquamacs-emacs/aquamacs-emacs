@@ -66,12 +66,13 @@
      "ThinSpaceInFrenchNumbers"
      "FrenchLayout"
      "StandardLayout")
-   (setq TeX-quote-language
-	 `("french" "\\og "
-	   (lambda ()
-	     (concat "\\fg"
-		     (unless (member "xspace" TeX-active-styles) "{}")))
-	   ,TeX-quote-after-quote))
+   (unless (eq (car TeX-quote-language) 'override)
+     (setq TeX-quote-language
+	   `("french" "\\og "
+	     (lambda ()
+	       (concat "\\fg"
+		       (unless (member "xspace" TeX-active-styles) "{}")))
+	     ,TeX-quote-after-quote)))
    (run-hooks 'TeX-language-fr-hook)))
 
 ;;; frenchb.el ends here

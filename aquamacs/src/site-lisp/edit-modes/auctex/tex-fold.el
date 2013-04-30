@@ -1,6 +1,7 @@
 ;;; tex-fold.el --- Fold TeX macros.
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2011 Free Software
+;;   Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -763,21 +764,21 @@ Return non-nil if a removal happened, nil otherwise."
 Replace them with the respective macro argument."
   (let ((spec-list (split-string spec "||"))
 	(delims '((?{ . ?}) (?[ . ?]) (?< . ?>) (?\( . ?\))))
-	match-end success)
+	index success)
     (catch 'success
       ;; Iterate over alternatives.
       (dolist (elt spec-list)
-	(setq spec elt)
+	(setq spec elt
+	      index nil)
 	;; Find and expand every placeholder.
-	(while (and (string-match "\\([[{<]\\)\\([1-9]\\)\\([]}>]\\)" elt
-				  match-end)
-		    ;; Does the closing delim fit to the opening one?
+	(while (and (string-match "\\([[{<]\\)\\([1-9]\\)\\([]}>]\\)" elt index)
+		    ;; Does the closing delim match the opening one?
 		    (string-equal
 		     (match-string 3 elt)
 		     (char-to-string
 		      (cdr (assq (string-to-char (match-string 1 elt))
 				 delims)))))
-	  (setq match-end (match-beginning 0))
+	  (setq index (match-end 0))
 	  (let ((arg (car (save-match-data
 			    ;; Get the argument.
 			    (TeX-fold-macro-nth-arg
@@ -788,6 +789,7 @@ Replace them with the respective macro argument."
 	    (when arg (setq success t))
 	    ;; Replace the placeholder in the string.
 	    (setq elt (replace-match (or arg TeX-fold-ellipsis) nil t elt)
+		  index (+ index (- (length elt) (length spec)))
 		  spec elt)))
 	(when success (throw 'success nil))))
     spec))
@@ -882,9 +884,10 @@ Remove the respective properties from the overlay OV."
 			(and (boundp 'global-disable-point-adjustment)
 			     global-disable-point-adjustment)
 			;; See preview.el on how to make this configurable.
-			(memq this-command (list (key-binding [left])
-						 (key-binding [right])
-						 'mouse-set-point)))
+			(memq this-command
+			      (list (key-binding [left]) (key-binding [right])
+				    'backward-char 'forward-char
+				    'mouse-set-point)))
 		;; Open new overlays.
 		(dolist (ol (nconc (when (and TeX-fold-unfold-around-mark
 					      (boundp 'mark-active)

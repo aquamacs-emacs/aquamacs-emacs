@@ -37,10 +37,13 @@
        (setq TeX-quote-language
 	     `("ngerman" ,open-quote ,close-quote ,q-after-q))))
    (setq LaTeX-babel-hyphen-language "ngerman")
-   ;; Fontification of quotation marks.
-   (when (fboundp 'font-latex-add-quotes)
+   ;; Fontification
+   (when (and (eq TeX-install-font-lock 'font-latex-setup)
+	      (featurep 'font-latex))
      (font-latex-add-quotes '("\"`" "\"'"))
-     (font-latex-add-quotes '("\">" "\"<" german)))
+     (font-latex-add-quotes '("\">" "\"<" german))
+     ;; Prevent "| from leading to color bleed.
+     (font-latex-add-to-syntax-alist (list (cons ?\" "\\"))))
    (run-hooks 'TeX-language-de-hook)))
 
 ;;; ngerman.el ends here
