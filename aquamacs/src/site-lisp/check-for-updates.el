@@ -174,7 +174,7 @@ The Aquamacs Project depends on your support. Please consider to help us by dona
 
 Would you like to see the donations site now?
 
-\(This reminder won't be displayed again in this version.)" ("Yes, Donate" . t) no-cancel ("No" . nil))))
+\(This reminder won't be displayed again in this version.)" ("Donate" . t) no-cancel ("No" . nil))))
       (aquamacs-donate)))
 
 (defun aquamacs-welcome-notify ()
