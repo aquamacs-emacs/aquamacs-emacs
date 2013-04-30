@@ -10,7 +10,7 @@ BRANCH=aquamacs24
 EMACS_ROOT=`pwd`
 AQUAMACS_ROOT=`pwd`/aquamacs
 # find git:
-PATH=/usr/local/bin:$PATH
+PATH=/opt/local/bin:/usr/local/bin:/usr/local/git/bin:$PATH
 
 rm aquamacs-build.log
 echo "Begin building Aquamacs." >>aquamacs-build.log
