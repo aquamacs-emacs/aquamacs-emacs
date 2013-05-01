@@ -43,10 +43,12 @@ if ($VOL =~ /\/Volumes\/Aquam/i)
 
 &sys("rm -rf \"$VOL/Aquamacs.app\"");
  
+&sys("cd \"$BINARY\"; $REPO_DIR . "/aquamacs/build/sign");
+
 &sys("cp  -pR \"$BINARY\" \"$VOL/\"");
   } else 
   {
-    warn "couldnt find proper volume. abort. vol=$VOL";
+    warn "couldn't find proper volume. abort. vol=$VOL";
     exit;
   }
  
