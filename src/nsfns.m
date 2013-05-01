@@ -2741,6 +2741,16 @@ In case the execution fails, an error is signaled. */)
   as_script = [[NSString stringWithUTF8String: SSDATA (script)] retain];
   as_result = &result;
 
+  NSWindow *win = [NSApp mainWindow];
+  if (win == nil)
+  {
+    // if application hidden, try to get the first of all windows
+    NSArray *a = [NSApp windows];
+    if ([a count]>0)
+      {
+	win = [a objectAtIndex:0];
+      }
+  }
   /* executing apple script requires the event loop to run, otherwise
      errors aren't returned and executeAndReturnError hangs forever.
      Post an event that runs applescript and then start the event loop.
@@ -2749,7 +2759,7 @@ In case the execution fails, an error is signaled. */)
                             location: NSMakePoint (0, 0)
                        modifierFlags: 0
                            timestamp: 0
-                        windowNumber: [[NSApp mainWindow] windowNumber]
+                        windowNumber: [win windowNumber]
                              context: [NSApp context]
                              subtype: 0
                                data1: 0
@@ -2761,7 +2771,7 @@ In case the execution fails, an error is signaled. */)
   // until the script has been handled.  */
   while (! NILP (as_script))
     [NSApp run];
-
+  
   status = as_status;
   as_status = 0;
   as_result = 0;

@@ -3463,11 +3463,22 @@ ns_send_appdefined (int value)
           timed_entry = nil;
         }
 
+
+      NSWindow *win = [NSApp mainWindow];
+      if (win == nil)
+      {
+	// if application hidden, try to get the first of all windows 
+	NSArray *a = [NSApp windows];
+	if ([a count]>0)
+	{
+	  win = [a objectAtIndex:0];
+	}
+      }
       nxev = [NSEvent otherEventWithType: NSApplicationDefined
                                 location: NSMakePoint (0, 0)
                            modifierFlags: 0
                                timestamp: 0
-                            windowNumber: [[NSApp mainWindow] windowNumber]
+                            windowNumber: [win windowNumber]
                                  context: [NSApp context]
                                  subtype: 0
                                    data1: value
