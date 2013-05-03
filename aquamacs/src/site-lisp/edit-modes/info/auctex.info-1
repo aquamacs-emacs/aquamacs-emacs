@@ -1,10 +1,10 @@
 This is auctex.info, produced by makeinfo version 4.13 from auctex.texi.
 
-This manual is for AUCTeX (version 11.86 from 2010-02-21), a
+This manual is for AUCTeX (version 11.87 from 2012-11-30), a
 sophisticated TeX environment for Emacs.
 
    Copyright (C) 1992, 1993, 1994, 1995, 2001, 2002, 2004, 2005, 2006,
-2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+2007, 2008, 2009, 2010, 2011, 2012 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -80,7 +80,7 @@ announcement list by sending "subscribe" in the subject of a mail to
 * Display::                     Controlling Screen Display
 * Processing::                  Starting Processors, Viewers and Other Programs
 * Customization::               Customization and Extension
-* Appendices::                  Copying, Changes, Development, FAQ
+* Appendices::                  Copying, Changes, Development, FAQ, Texinfo mode
 * Indices::                     Indices
 
  --- The Detailed Node Listing ---
@@ -173,6 +173,7 @@ Copying, Changes, Development, FAQ
 * Changes::
 * Development::
 * FAQ::
+* Texinfo mode::
 
 Copying this Manual
 
@@ -303,6 +304,15 @@ File: auctex.info,  Node: Installation,  Next: Quick Start,  Prev: Summary,  Up:
 1.2 Installing AUCTeX
 =====================
 
+   The simplest way of installing AUCTeX is by using the Emacs package
+manager integrated in Emacs 24 and greater (ELPA).  Simply do `M-x
+package-list-packages RET', mark the auctex package for installation
+with `i', and hit `x' to execute the installation procedure.  That's
+all.
+
+   The remainder of this section is about installing AUCTeX from a
+release tarball or from a checkout of the AUCTeX repository.
+
    Installing AUCTeX should be simple: merely `./configure', `make',
 and `make install' for a standard site-wide installation (most other
 installations can be done by specifying a `--prefix=...' option).
@@ -337,7 +347,7 @@ File: auctex.info,  Node: Prerequisites,  Next: Configure,  Up: Installation
      version of `xemacs-base' older than 1.84 (released in sumo from
      02/02/2004).  Using preview-latex requires a version of Emacs
      compiled with image support.  While the X11 version of Emacs 21
-     will likely work, Emacs 22 and later is the preferred platform.
+     will likely work, Emacs 22 and later is preferred.
 
     Windows
           Precompiled versions are available from
@@ -349,8 +359,8 @@ File: auctex.info,  Node: Prerequisites,  Next: Configure,  Up: Installation
           `http://www.emacswiki.org/cgi-bin/wiki/EmacsForMacOS'.
 
     GNU/Linux
-          Most GNU/Linux distributions nowadays provide a variant of
-          Emacs 22 or later via their package repositories.
+          Most GNU/Linux distributions nowadays provide a recent
+          variant of Emacs via their package repositories.
 
     Self-compiled
           Compiling Emacs yourself requires a C compiler and a number
@@ -1045,12 +1055,10 @@ used single quotes for that.
      `~/.xemacs/init.el' from within XEmacs).
 
      The default configuration of AUCTeX is probably not the best fit
-     for Windows systems.  You might want to add
+     for Windows systems with MiKTeX.  You might want to add
           (require 'tex-mik)
-     or
-          (require 'tex-fptex)
-     in order to get more appropriate values for MiKTeX and fpTeX,
-     respectively after loading `auctex.el' and `preview-latex.el'.
+     after loading `auctex.el' and `preview-latex.el' in order to get
+     more appropriate values for some customization options.
 
      You can always use
 
@@ -1150,9 +1158,14 @@ inserting
 
      (load "auctex.el" nil t t)
 
-   in your user init file.(1)  In order to get support for many of the
-LaTeX packages you will use in your documents, you should enable
-document parsing as well, which can be achieved by putting
+   in your user init file.(1)  If you've installed AUCTeX from the
+Emacs package manager (ELPA), you must not have this line in your user
+init file.  The installation procedure already cares about loading
+AUCTeX correctly.
+
+   In order to get support for many of the LaTeX packages you will use
+in your documents, you should enable document parsing as well, which can
+be achieved by putting
 
      (setq TeX-auto-save t)
      (setq TeX-parse-self t)
@@ -1413,6 +1426,7 @@ by indenting and filling and for navigating through the document.
 * Environments::                Inserting Environment Templates
 * Mathematics::                 Entering Mathematics
 * Completion::                  Completion of macros
+* Marking::                     Marking Environments, Sections, or Texinfo Nodes
 * Commenting::                  Commenting text
 * Indenting::                   Reflecting syntactic constructs with whitespace
 * Filling::                     Automatic and manual line breaking
@@ -1938,7 +1952,7 @@ enable this feature, set the variable
      If non-nil, insert braces after typing <^> and <_> in math mode.
 
 
-File: auctex.info,  Node: Completion,  Next: Commenting,  Prev: Mathematics,  Up: Editing
+File: auctex.info,  Node: Completion,  Next: Marking,  Prev: Mathematics,  Up: Editing
 
 2.6 Completion
 ==============
@@ -2030,9 +2044,91 @@ after you enabled automatic parsing on save, and that the basename of
 the BibTeX file does not conflict with the basename of one of TeX files.
 
 
-File: auctex.info,  Node: Commenting,  Next: Indenting,  Prev: Completion,  Up: Editing
+File: auctex.info,  Node: Marking,  Next: Commenting,  Prev: Completion,  Up: Editing
 
-2.7 Commenting
+2.7 Marking Environments, Sections, or Texinfo Nodes
+====================================================
+
+You can mark the current environment by typing `C-c .', or the current
+section by typing `C-c *'.
+
+   In Texinfo documents you can type `M-C-h' to mark the current node.
+
+   When the region is set, the point is moved to its beginning and the
+mark to its end.
+
+* Menu:
+
+* Marking (LaTeX):: LaTeX Commands for Marking Environments and Sections
+* Marking (Texinfo):: Texinfo Commands for Marking Environments, Sections, and Nodes
+
+
+File: auctex.info,  Node: Marking (LaTeX),  Next: Marking (Texinfo),  Up: Marking
+
+2.7.1 LaTeX Commands for Marking Environments and Sections
+----------------------------------------------------------
+
+ -- Command: LaTeX-mark-section
+     (`C-c *') Set mark at end of current logical section, and point at
+     top.
+
+     With a non-nil prefix argument, mark only the region from the
+     current section start to the next sectioning command.  Thereby
+     subsections are not being marked.  Otherwise, any included
+     subsections are also marked along with current section.
+
+ -- Command: LaTeX-mark-environment
+     (`C-c .') Set mark to the end of the current environment and point
+     to the matching beginning.
+
+     If a prefix argument is given, mark the respective number of
+     enclosing environments.  The command will not work properly if
+     there are unbalanced begin-end pairs in comments and verbatim
+     environments.
+
+
+File: auctex.info,  Node: Marking (Texinfo),  Prev: Marking (LaTeX),  Up: Marking
+
+2.7.2 Texinfo Commands for Marking Environments and Sections
+------------------------------------------------------------
+
+ -- Command: Texinfo-mark-section
+     (`C-c *') Mark the current section, with inclusion of any
+     containing node.
+
+     The current section is detected as starting by any of the
+     structuring commands matched by the regular expression in the
+     variable `outline-regexp' which in turn is a regular expression
+     matching any element of the variable `texinfo-section-list'.
+
+     With a non-nil prefix argument, mark only the region from the
+     current section start to the next sectioning command.  Thereby
+     subsections are not being marked.  Otherwise, any included
+     subsections are also marked
+
+     Note that when the current section is starting immediately after a
+     node command, then the node command is also marked as part of the
+     section.
+
+ -- Command: Texinfo-mark-environment
+     (`C-c .') Set mark to the end of the current environment and point
+     to the matching beginning.
+
+     If a prefix argument is given, mark the respective number of
+     enclosing environments.  The command will not work properly if
+     there are unbalanced begin-end pairs in comments and verbatim
+     environments.
+
+ -- Command: Texinfo-mark-node
+     (`M-C-h') Mark the current node.  This is the node in which point
+     is located.  It is starting at the previous occurrence of the
+     keyword `@node' and ending at next occurrence of the keywords
+     `@node' or `@bye'.
+
+
+File: auctex.info,  Node: Commenting,  Next: Indenting,  Prev: Marking,  Up: Editing
+
+2.8 Commenting
 ==============
 
 It is often necessary to comment out temporarily a region of TeX or
@@ -2060,7 +2156,7 @@ or remove a single `%' respectively.
 
 File: auctex.info,  Node: Indenting,  Next: Filling,  Prev: Commenting,  Up: Editing
 
-2.8 Indenting
+2.9 Indenting
 =============
 
 Indentation means the addition of whitespace at the beginning of lines
@@ -2182,8 +2278,8 @@ to indenting with a small summary in each case:
 
 File: auctex.info,  Node: Filling,  Prev: Indenting,  Up: Editing
 
-2.9 Filling
-===========
+2.10 Filling
+============
 
 Filling deals with the insertion of line breaks to prevent lines from
 becoming wider than what is specified in `fill-column'.  The linebreaks
@@ -3146,6 +3242,10 @@ variable (*note File Variables: (emacs)File Variables.).
  -- User Option: TeX-command-default
      The default command to run in this buffer.  Must be an entry in
      `TeX-command-list'.
+
+   In case you use biblatex in a document, AUCTeX switches from BibTeX
+to Biber for bibliography processing.  In case you want to keep using
+BibTeX, set the variable `LaTeX-biblatex-use-Biber' to nil.
 
    After confirming a command to execute, AUCTeX will try to save any
 buffers related to the document, and check if the document needs to be
@@ -4132,7 +4232,7 @@ recursively search through subdirectories.
      recurse, a positive integer means go that far deep in the directory
      hierarchy, t means recurse indefinitely.
 
-   By default, AUCTeX will ignore files name `.', `..', `SCCS', `RCS',
+   By default, AUCTeX will ignore files named `.', `..', `SCCS', `RCS',
 and `CVS'.
 
  -- User Option: TeX-ignore-file
@@ -4269,17 +4369,22 @@ Here is a simple example of a style file.
       (lambda ()
         (LaTeX-largest-level-set "chapter")))
 
-   This file specifies that the largest kind of section in a LaTeX
-document using the book document style is chapter.  The interesting
-thing to notice is that the style file defines an (anonymous) function,
-and adds it to the list of loaded style hooks by calling
-`TeX-add-style-hook'.
+   The example is from the AUCTeX sources and is loaded for any LaTeX
+document using the book document class (or style before LaTeX2e).  The
+file specifies that the largest kind of section in such a document is
+chapter.  The interesting thing to notice is that the style file
+defines an (anonymous) function, and adds it to the list of loaded style
+hooks by calling `TeX-add-style-hook'.
 
-   The first time the user indirectly tries to access some style
-specific information, such as the largest sectioning command available,
-the style hooks for all files directly or indirectly read by the
-current document is executed.  The actual files will only be evaluated
-once, but the hooks will be called for each buffer using the style file.
+   The first time the user indirectly tries to access some
+style-specific information, such as the largest sectioning command
+available, the style hooks for all files directly or indirectly read by
+the current document are executed.  The actual files will only be
+evaluated once, but the hooks will be called for each buffer using the
+style file.
+
+   Note that the basename of the style file and the name of the style
+hook should usually be identical.
 
  -- Function: TeX-add-style-hook STYLE HOOK
      Add HOOK to the list of functions to run when we use the TeX file
@@ -4338,7 +4443,11 @@ a `tref' you will be prompted for a label and no more.
      Use the string as a prompt to prompt for the argument.
 
 `number'
-     Insert that many braces, leave point inside the first.
+     Insert that many braces, leave point inside the first.  0 and -1
+     are special.  0 means that no braces are inserted.  -1 means that
+     braces are inserted around the macro and an active region (e.g.
+     `{\tiny foo}').  If there is no active region, no braces are
+     inserted.
 
 `nil'
      Insert empty braces.
@@ -4406,6 +4515,9 @@ overwrite the default prompt.
 `TeX-arg-input-file'
      Prompt for the name of an input file in TeX's search path, and use
      it without the extension.  Run the style hooks for the file.
+     (Note that the behavior (type of prompt and inserted file name) of
+     the function can be controlled by the variable
+     `TeX-arg-input-file-search'.)
 
 `TeX-arg-define-label'
      Prompt for a label completing with known labels.  Add label to
@@ -4706,8 +4818,8 @@ symbols found.
 
 File: auctex.info,  Node: Appendices,  Next: Indices,  Prev: Customization,  Up: Top
 
-Appendix A Copying, Changes, Development, FAQ
-*********************************************
+Appendix A Copying, Changes, Development, FAQ, Texinfo Mode
+***********************************************************
 
 * Menu:
 
@@ -4715,6 +4827,7 @@ Appendix A Copying, Changes, Development, FAQ
 * Changes::
 * Development::
 * FAQ::
+* Texinfo mode::
 
 
 File: auctex.info,  Node: Copying this Manual,  Next: Changes,  Up: Appendices
@@ -4724,11 +4837,11 @@ A.1 Copying this Manual
 
 The copyright notice for this manual is:
 
-   This manual is for AUCTeX (version 11.86 from 2010-02-21), a
+   This manual is for AUCTeX (version 11.87 from 2012-11-30), a
 sophisticated TeX environment for Emacs.
 
    Copyright (C) 1992, 1993, 1994, 1995, 2001, 2002, 2004, 2005, 2006,
-2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+2007, 2008, 2009, 2010, 2011, 2012 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -5234,6 +5347,31 @@ File: auctex.info,  Node: Changes,  Next: Development,  Prev: Copying this Manua
 
 A.2 Changes and New Features
 ============================
+
+News since 11.87
+----------------
+
+   * AUCTeX now supports Biber in conjunction with biblatex in addition
+     to BibTeX.
+
+   * Each AUCTeX mode now has its own abbrev table.  On Emacsen which
+     provide the possibility to inherit abbrevs from other tables, the
+     abbrevs from the Text mode abbrev table are available as well.
+     Newly defined abbrevs are written to the mode-specific tables,
+     though.
+
+   * The file `tex-fptex.el' was removed.
+
+   * Forward/backward search for Evince has been improved.  If Emacs is
+     compiled with DBUS support and a recent Evince version (3.x) is
+     installed, the communication goes over the desktop bus instead of
+     the command line, resulting in more accurate positioning of point
+     in Emacs and highlighting of the target paragraph in Evince.
+
+   * A problem where Ghostscript threw an /invalidfileaccess error when
+     running preview-latex was fixed.
+
+   * A lot of smaller fixes and additions have been made.
 
 News in 11.86
 -------------
@@ -6095,7 +6233,7 @@ A.3.3 Bugs
      in overfull lines. (XEmacs only)
 
 
-File: auctex.info,  Node: FAQ,  Prev: Development,  Up: Appendices
+File: auctex.info,  Node: FAQ,  Next: Texinfo mode,  Prev: Development,  Up: Appendices
 
 A.4 Frequently Asked Questions
 ==============================
@@ -6118,9 +6256,9 @@ A.4 Frequently Asked Questions
      cause of the error yourself.
 
      First, you can try to generate a so-called backtrace which shows
-     functions involved in a program error.  In order to do this, start
-     Emacs with the command line `emacs --debug-init' and/or put the
-     line
+     the functions involved in a program error.  In order to do this,
+     start Emacs with the command line `emacs --debug-init' and/or put
+     the line
 
           (setq debug-on-error t)
 
@@ -6133,17 +6271,12 @@ A.4 Frequently Asked Questions
      Second, you can try to figure out if something in your personal or
      site configuration triggers the error by starting Emacs without
      such customizations.  You can do this by invoking Emacs with the
-     command line `emacs -q -no-site-file'.  Once Emacs is running,
-     copy the line
-
-          (load "auctex.el" nil t t)
-
-     into the `*scratch*' buffer and type `M-x eval-buffer RET'.  This
-     makes sure that AUCTeX will be used for the file types it
-     supports.  After you have done so, you can load the file
-     triggering the error.  If everything is working now, you know that
-     you have to search either in the site configuration file or your
-     personal init file for statements related to the problem.
+     command line `emacs -q -no-site-file -l auctex'.  The `-l' option
+     `auctex.el' which you normally do in your init file.  After you
+     have started Emacs like this, you can load the file triggering the
+     error.  If everything is working now, you know that you have to
+     search either in the site configuration file or your personal init
+     file for statements related to the problem.
 
   2. What versions of Emacs and XEmacs are supported?
 
@@ -6153,28 +6286,17 @@ A.4 Frequently Asked Questions
      through the XEmacs package system.  If you are looking for a
      recommendation, it would appear that the smoothest working
      platform on all operating systems at the current point of time
-     would be Emacs 22.1.  At the time of this writing, however, it has
-     not been released and is still under development.  The quality of
-     the development version is quite solid, so we recommend giving it
-     a try.  With a developer version, of course, you have to be
-     prepared to update in case you managed to get your snapshot at a
-     bad time.  The second best choice would be the latest released
-     Emacs 21.4.  However, Unicode support is less good, there is no
-     version for the popular GTK toolkit, and the native versions for
-     Windows and MacOS don't offer toolbar and preview-latex support.
+     would be Emacs 22 or higher.
 
-     Our success with XEmacs has been less than convincing.  Under the
-     Windows operating system, nominally the only option for a released,
-     stable Emacs variant supporting toolbars and preview-latex would be
-     XEmacs 21.4.  However, code for core functionality like formatting
-     and syntax highlighting tends to be different and often older than
-     even Emacs 21.4, and Unicode support as delivered is problematic
-     at best, missing on Windows.  Both AUCTeX and XEmacs developers
-     don't hear much from active users of the combination.  Partly for
-     that reason, problems tend to go unnoticed for long amounts of
-     time and are often found, if at all, after releases.  No
-     experiences or recommendations can be given for beta or developer
-     versions of XEmacs.
+     Our success with XEmacs has been less than convincing.  Code for
+     core functionality like formatting and syntax highlighting tends
+     to be different and often older than even Emacs 21.4, and Unicode
+     support as delivered is problematic at best, missing on Windows.
+     Both AUCTeX and XEmacs developers don't hear much from active
+     users of the combination.  Partly for that reason, problems tend
+     to go unnoticed for long amounts of time and are often found, if
+     at all, after releases.  No experiences or recommendations can be
+     given for beta or developer versions of XEmacs.
 
   3. What should I do when `./configure' does not find programs like
      latex?
@@ -6218,12 +6340,226 @@ A.4 Frequently Asked Questions
      The information in the debugging buffer can help you find the
      cause of the error in your init file.
 
-  8. What does AUC stand for?
+  8. Why does `TeX-next-error' (`C-c `') fail?
+
+     When writing the log file, TeX puts information related to a file,
+     including error messages, between a pair of parentheses.  AUCTeX
+     determines the file where the error happened by parsing the log
+     file and counting the parentheses.  This can fail when there are
+     other, unbalanced parentheses present.
+
+     As a workaround you can activate so-called file:line:error
+     messages for the log file.  (Those are are easier to parse, but
+     may lack some details.)  Either you do this in the configuration
+     of your TeX system (consult its manual to see where this is) or
+     you add a command line switch to the (la)tex call, e.g. by
+     customizing `LaTeX-command-style' or `TeX-command-list'.
+
+  9. What does AUC stand for?
 
      AUCTeX came into being at Aalborg University in Denmark.  Back then
      the Danish name of the university was Aalborg Universitetscenter;
      AUC for short.
 
+
+
+File: auctex.info,  Node: Texinfo mode,  Prev: FAQ,  Up: Appendices
+
+A.5 Features specific to AUCTeX's Texinfo major mode
+====================================================
+
+AUCTeX includes a major mode for editting Texinfo files.  This major
+mode is not the same mode as the native Texinfo mode (*note (texinfo)
+Texinfo Mode::) of Emacs, although they have the same name.  However,
+AUCTeX still relies on a number of functions from the native Texinfo
+mode.
+
+   The following text describes which functionality is offered by AUCTeX
+and which by the native Texinfo mode.  This should enable you to decide
+when to consult the AUCTeX manual and when the manual of the native
+mode.  And in case you are a seasoned user of the native mode, the
+information should help you to swiftly get to know the AUCTeX-specific
+commands.
+
+* Menu:
+
+* Exploiting::                  How AUCTeX and the native mode work together
+* Superseding::                 Where the native mode is superseded
+* Mapping::                     Where key bindings are mapped to the native mode
+* Unbinding::                   Which native mode key bindings are missing
+
+
+File: auctex.info,  Node: Exploiting,  Next: Superseding,  Up: Texinfo mode
+
+A.5.1 How AUCTeX and the native mode work together
+--------------------------------------------------
+
+In a nutshell the split between AUCTeX Texinfo mode, and native Texinfo
+mode is as follows:
+
+   * Most of the editing (environment creation, commenting, font command
+     insertions) and/or processing commands (e.g. compiling or printing)
+     which are available in other AUCTeX modes are also handled by
+     AUCTeX in Texinfo mode.
+
+   * Texinfo-related features (e.g. info node linkage or menu creation)
+     rely on the commands provided by the native Texinfo mode.  AUCTeX
+     provides the key bindings to reach these functions, keeping the
+     same keys as in native Texinfo whenever possible, or similar ones
+     otherwise.
+
+
+File: auctex.info,  Node: Superseding,  Next: Mapping,  Prev: Exploiting,  Up: Texinfo mode
+
+A.5.2 Where the native mode is superseded
+-----------------------------------------
+
+This section is directed to users of the native Texinfo mode switching
+to AUCTeX.  It follows the summary of the native mode (*note (texinfo)
+Texinfo Mode Summary::) and lists which of its commands are no longer
+of use.
+
+Insert commands
+     In the native Texinfo mode, frequently used Texinfo commands can be
+     inserted with key bindings of the form `C-c C-c K' where K differs
+     for each Texinfo command; `c' inserts @code, `d' inserts @dfn, `k'
+     @kbd, etc.
+
+     In AUCTeX commands are inserted with the key binding `C-c C-m'
+     instead which prompts for the macro to be inserted.  For font
+     selection commands (like @b, @i, or @emph) and a few related ones
+     (like @var, @key or @code) there are bindings which insert the
+     respective macros directly.  They have the form `C-c C-f K' or
+     `C-c C-f C-K' and call the function `TeX-font'.  Type `C-c C-f
+     <RET>' to get a list of supported commands.
+
+     Note that the prefix argument is not handled the same way by
+     AUCTeX.  Note also that the node insertion command from the native
+     mode (`texinfo-insert-@node') can still accessed from the Texinfo
+     menu in AUCTeX.
+
+Insert braces
+     In AUCTeX braces can be inserted with the same key binding as in
+     the native Texinfo mode: `C-c {'.  But AUCTeX uses its own function
+     for the feature: `TeX-insert-braces'.
+
+Insert environments
+     The native Texinfo mode does not insert full environments.
+     Instead, it provides the function `texinfo-insert-@end' (mapped to
+     `C-c C-c e') for closing an open environment with a matching @end
+     statement.
+
+     In AUCTeX you can insert full environments, i.e. both the opening
+     and closing statements, with the function `Texinfo-environment'
+     (mapped to `C-c C-e').
+
+Format info files with makeinfo and TeX
+     In the native Texinfo mode there are various functions and
+     bindings to format a region or the whole buffer for info or to
+     typeset the respective text.  For example, there is
+     `makeinfo-buffer' (mapped to `C-c C-m C-b') which runs `makeinfo'
+     on the buffer or there is `texinfo-tex-buffer' (mapped to `C-c C-t
+     C-b') which runs TeX on the buffer in order to produce a DVI file.
+
+     In AUCTeX different commands for formatting or typesetting can be
+     invoked through the function `TeX-command-master' (mapped to `C-c
+     C-c').  After typing `C-c C-c', you can select the desired
+     command, e.g `Makeinfo' or `TeX', through a prompt in the mini
+     buffer.  Note that you can make, say `Makeinfo', the default by
+     adding this statement in your init file:
+
+          (add-hook 'Texinfo-mode-hook
+                    (lambda () (setq TeX-command-default "Makeinfo")))
+
+     Note also that `C-c C-c Makeinfo <RET>' is not completely
+     functionally equivalent to `makeinfo-buffer' as the latter will
+     display the resulting info file in Emacs, showing the node
+     corresponding to the position in the source file, just after a
+     successful compilation.  This is why, while using AUCTeX, invoking
+     `makeinfo-buffer' might still be more convenient.
+
+     Note also that in the case of a multifile document, `C-c C-c' in
+     AUCTeX will work on the whole document (provided that the file
+     variable `TeX-master' is set correctly), while `makeinfo-buffer'
+     in the native mode will process only the current buffer, provided
+     at the `@setfilename' statement is provided.
+
+Produce indexes and print
+     The native Texinfo mode provides the binding `C-c C-t C-i'
+     (`texinfo-texindex') for producing an index and the bindings `C-c
+     C-t C-p' (`texinfo-tex-print') and `C-c C-t C-q'
+     (`tex-show-print-queue') for printing and showing the printer
+     queue.  These are superseded by the respective commands available
+     through `C-c C-c' (`TeX-command-master') in AUCTeX: Index, Print,
+     and Queue.
+
+Kill jobs
+     The command `C-c C-t C-k' (`tex-kill-job') in the native mode is
+     superseded by `C-c C-k' (`TeX-kill-job') in AUCTeX.
+
+
+File: auctex.info,  Node: Mapping,  Next: Unbinding,  Prev: Superseding,  Up: Texinfo mode
+
+A.5.3 Where key bindings are mapped to the native mode
+------------------------------------------------------
+
+This node follows the native Texinfo mode summary (*note (texinfo)
+Texinfo Mode Summary::) and lists only those commands to which AUCTeX
+provides a keybinding.
+
+   Basically all commands of the native mode related to producing menus
+and interlinking nodes are mapped to same or similar keys in AUCTeX,
+while a few insertion commands are mapped to AUCTeX-like keys.
+
+`@item' insertion
+     The binding `C-c C-c i' for the insertion of `@item' in the native
+     mode is mapped to `M-<RET>' or `C-c C-j' in AUCTeX, similar to
+     other AUCTeX modes.
+
+`@end' insertion
+     The binding `C-c C-c e' for closing a `@FOO' command by a
+     corresponding `@end FOO' statement in the native mode is mapped to
+     `C-c C-]' in AUCTeX, similar to other AUCTeX modes.
+
+Move out of balanced braces
+     The binding `C-}' (`up-list') is available both in the native mode
+     and in AUCTeX.  (This is because the command is not implemented in
+     either mode but a native Emacs command.)  However, in AUCTeX, you
+     cannot use `C-]' for this, as it is used for `@end' insertion.
+
+Update pointers
+     The bindings `C-c C-u C-n' (`texinfo-update-node') and `C-c C-u
+     C-e' (`texinfo-every-node-update') from the native mode are
+     available in AUCTeX as well.
+
+Update menus
+     The bindings `C-c C-u m' (`texinfo-master-menu'), `C-c C-u C-m'
+     (`texinfo-make-menu'), and `C-c C-u C-a'
+     (`texinfo-all-menus-update') from the native mode are available in
+     AUCTeX as well.  The command `texinfo-start-menu-description',
+     bound to `C-c C-c C-d' in the native mode, is bound to `C-c C-u
+     C-d' in AUCTeX instead.
+
+
+File: auctex.info,  Node: Unbinding,  Prev: Mapping,  Up: Texinfo mode
+
+A.5.4 Which native mode key bindings are missing
+------------------------------------------------
+
+The following commands from the native commands might still be useful
+when working with AUCTeX, however, they are not accessible with a key
+binding any longer.
+
+`@node' insertion
+     The node insertion command, mapped to `C-c C-c n' in the native
+     mode, is not mapped to any key in AUCTeX.  You can still access it
+     through the Texinfo menu, though.  Another alternative is to use
+     the `C-c C-m' binding for macro insertion in AUCTeX.
+
+Show the section structure
+     The command `texinfo-show-structure' (`C-c C-s') from the native
+     mode does not have a key binding in AUCTeX.  The binding is used
+     by AUCTeX for sectioning.
 
 
 File: auctex.info,  Node: Indices,  Prev: Appendices,  Up: Top
@@ -6252,6 +6588,10 @@ Key Index
 * <LFD>:                                 Indenting.           (line  72)
 * <TAB>:                                 Indenting.           (line  69)
 * C-c %:                                 Commenting.          (line  23)
+* C-c * <1>:                             Marking (Texinfo).   (line   7)
+* C-c *:                                 Marking (LaTeX).     (line   7)
+* C-c . <1>:                             Marking (Texinfo).   (line  25)
+* C-c .:                                 Marking (LaTeX).     (line  16)
 * C-c ;:                                 Commenting.          (line  15)
 * C-c <LFD>:                             Itemize-like.        (line  10)
 * C-c ?:                                 Documentation.       (line   7)
@@ -6313,6 +6653,7 @@ Key Index
 * C-c ~:                                 Mathematics.         (line  12)
 * C-j:                                   Indenting.           (line  81)
 * M-<TAB>:                               Completion.          (line  20)
+* M-C-h:                                 Marking (Texinfo).   (line  34)
 * M-q:                                   Filling.             (line  89)
 
 
@@ -6347,6 +6688,8 @@ Function Index
 * LaTeX-indent-line:                     Indenting.           (line  69)
 * LaTeX-insert-environment:              Adding Environments. (line  70)
 * LaTeX-insert-item:                     Itemize-like.        (line  10)
+* LaTeX-mark-environment:                Marking (LaTeX).     (line  16)
+* LaTeX-mark-section:                    Marking (LaTeX).     (line   7)
 * LaTeX-math-mode:                       Mathematics.         (line  12)
 * LaTeX-section:                         Sectioning.          (line  23)
 * LaTeX-section-heading:                 Sectioning.          (line  85)
@@ -6354,34 +6697,34 @@ Function Index
 * LaTeX-section-section:                 Sectioning.          (line  95)
 * LaTeX-section-title:                   Sectioning.          (line  89)
 * LaTeX-section-toc:                     Sectioning.          (line  92)
-* TeX-add-style-hook:                    Simple Style.        (line  28)
+* TeX-add-style-hook:                    Simple Style.        (line  33)
 * TeX-add-symbols:                       Adding Macros.       (line  25)
-* TeX-arg-cite:                          Adding Macros.       (line 105)
-* TeX-arg-conditional:                   Adding Macros.       (line  82)
-* TeX-arg-coordinate:                    Adding Macros.       (line 165)
-* TeX-arg-corner:                        Adding Macros.       (line 143)
-* TeX-arg-counter:                       Adding Macros.       (line 108)
-* TeX-arg-define-cite:                   Adding Macros.       (line 134)
-* TeX-arg-define-counter:                Adding Macros.       (line 137)
-* TeX-arg-define-environment:            Adding Macros.       (line 130)
-* TeX-arg-define-label:                  Adding Macros.       (line 122)
-* TeX-arg-define-macro:                  Adding Macros.       (line 126)
-* TeX-arg-define-savebox:                Adding Macros.       (line 140)
-* TeX-arg-environment:                   Adding Macros.       (line 102)
-* TeX-arg-eval:                          Adding Macros.       (line  93)
-* TeX-arg-file:                          Adding Macros.       (line 114)
-* TeX-arg-free:                          Adding Macros.       (line  90)
-* TeX-arg-input-file:                    Adding Macros.       (line 118)
-* TeX-arg-label:                         Adding Macros.       (line  96)
-* TeX-arg-literal:                       Adding Macros.       (line  86)
-* TeX-arg-lr:                            Adding Macros.       (line 146)
-* TeX-arg-macro:                         Adding Macros.       (line  99)
-* TeX-arg-pagestyle:                     Adding Macros.       (line 152)
-* TeX-arg-pair:                          Adding Macros.       (line 158)
-* TeX-arg-savebox:                       Adding Macros.       (line 111)
-* TeX-arg-size:                          Adding Macros.       (line 162)
-* TeX-arg-tb:                            Adding Macros.       (line 149)
-* TeX-arg-verb:                          Adding Macros.       (line 155)
+* TeX-arg-cite:                          Adding Macros.       (line 109)
+* TeX-arg-conditional:                   Adding Macros.       (line  86)
+* TeX-arg-coordinate:                    Adding Macros.       (line 172)
+* TeX-arg-corner:                        Adding Macros.       (line 150)
+* TeX-arg-counter:                       Adding Macros.       (line 112)
+* TeX-arg-define-cite:                   Adding Macros.       (line 141)
+* TeX-arg-define-counter:                Adding Macros.       (line 144)
+* TeX-arg-define-environment:            Adding Macros.       (line 137)
+* TeX-arg-define-label:                  Adding Macros.       (line 129)
+* TeX-arg-define-macro:                  Adding Macros.       (line 133)
+* TeX-arg-define-savebox:                Adding Macros.       (line 147)
+* TeX-arg-environment:                   Adding Macros.       (line 106)
+* TeX-arg-eval:                          Adding Macros.       (line  97)
+* TeX-arg-file:                          Adding Macros.       (line 118)
+* TeX-arg-free:                          Adding Macros.       (line  94)
+* TeX-arg-input-file:                    Adding Macros.       (line 122)
+* TeX-arg-label:                         Adding Macros.       (line 100)
+* TeX-arg-literal:                       Adding Macros.       (line  90)
+* TeX-arg-lr:                            Adding Macros.       (line 153)
+* TeX-arg-macro:                         Adding Macros.       (line 103)
+* TeX-arg-pagestyle:                     Adding Macros.       (line 159)
+* TeX-arg-pair:                          Adding Macros.       (line 165)
+* TeX-arg-savebox:                       Adding Macros.       (line 115)
+* TeX-arg-size:                          Adding Macros.       (line 169)
+* TeX-arg-tb:                            Adding Macros.       (line 156)
+* TeX-arg-verb:                          Adding Macros.       (line 162)
 * TeX-auto-generate:                     Automatic Private.   (line  24)
 * TeX-clean:                             Cleaning.            (line   7)
 * TeX-command-buffer:                    Starting a Command.  (line  35)
@@ -6427,232 +6770,7 @@ Function Index
 * TeX-toggle-debug-warnings:             Debugging.           (line  23)
 * TeX-view <1>:                          I/O Correlation.     (line  20)
 * TeX-view:                              Starting Viewers.    (line  12)
-
-
-File: auctex.info,  Node: Variable Index,  Next: Concept Index,  Prev: Function Index,  Up: Indices
-
-Variable Index
-==============
-
- [index ]
-* Menu:
-
-* ConTeXt-clean-intermediate-suffixes:   Cleaning.            (line   7)
-* ConTeXt-clean-output-suffixes:         Cleaning.            (line   7)
-* ConTeXt-engine:                        Processor Options.   (line  83)
-* ConTeXt-Omega-engine:                  Processor Options.   (line  83)
-* docTeX-clean-intermediate-suffixes:    Cleaning.            (line   7)
-* docTeX-clean-output-suffixes:          Cleaning.            (line   7)
-* font-latex-deactivated-keyword-classes: Fontification of macros.
-                                                              (line 174)
-* font-latex-fontify-script:             Fontification of math.
-                                                              (line  21)
-* font-latex-fontify-sectioning:         Fontification of macros.
-                                                              (line 102)
-* font-latex-match-bold-command-keywords: Fontification of macros.
-                                                              (line 143)
-* font-latex-match-bold-declaration-keywords: Fontification of macros.
-                                                              (line 143)
-* font-latex-match-function-keywords:    Fontification of macros.
-                                                              (line  66)
-* font-latex-match-italic-command-keywords: Fontification of macros.
-                                                              (line 143)
-* font-latex-match-italic-declaration-keywords: Fontification of macros.
-                                                              (line 143)
-* font-latex-match-math-command-keywords <1>: Fontification of math.
-                                                              (line   6)
-* font-latex-match-math-command-keywords: Fontification of macros.
-                                                              (line 143)
-* font-latex-match-reference-keywords:   Fontification of macros.
-                                                              (line  66)
-* font-latex-match-sectioning-0-keywords: Fontification of macros.
-                                                              (line 113)
-* font-latex-match-sectioning-1-keywords: Fontification of macros.
-                                                              (line 113)
-* font-latex-match-sectioning-2-keywords: Fontification of macros.
-                                                              (line 113)
-* font-latex-match-sectioning-3-keywords: Fontification of macros.
-                                                              (line 113)
-* font-latex-match-sectioning-4-keywords: Fontification of macros.
-                                                              (line 113)
-* font-latex-match-sectioning-5-keywords: Fontification of macros.
-                                                              (line 113)
-* font-latex-match-slide-title-keywords: Fontification of macros.
-                                                              (line 120)
-* font-latex-match-textual-keywords:     Fontification of macros.
-                                                              (line  66)
-* font-latex-match-type-command-keywords: Fontification of macros.
-                                                              (line 143)
-* font-latex-match-type-declaration-keywords: Fontification of macros.
-                                                              (line 143)
-* font-latex-match-variable-keywords:    Fontification of macros.
-                                                              (line  66)
-* font-latex-match-warning-keywords:     Fontification of macros.
-                                                              (line  66)
-* font-latex-math-environments:          Fontification of math.
-                                                              (line   6)
-* font-latex-quotes:                     Fontification of quotes.
-                                                              (line  16)
-* font-latex-script-display:             Fontification of math.
-                                                              (line  29)
-* font-latex-sectioning-0-face:          Fontification of macros.
-                                                              (line 102)
-* font-latex-sectioning-1-face:          Fontification of macros.
-                                                              (line 102)
-* font-latex-sectioning-2-face:          Fontification of macros.
-                                                              (line 102)
-* font-latex-sectioning-3-face:          Fontification of macros.
-                                                              (line 102)
-* font-latex-sectioning-4-face:          Fontification of macros.
-                                                              (line 102)
-* font-latex-sectioning-5-face:          Fontification of macros.
-                                                              (line 102)
-* font-latex-slide-title-face:           Fontification of macros.
-                                                              (line 120)
-* font-latex-user-keyword-classes:       Fontification of macros.
-                                                              (line 204)
-* japanese-LaTeX-command-default:        Japanese.            (line   6)
-* japanese-LaTeX-default-style:          Japanese.            (line   6)
-* japanese-TeX-command-default:          Japanese.            (line   6)
-* LaTeX-amsmath-label:                   Equations.           (line  16)
-* LaTeX-auto-label-regexp-list:          Parsing Files.       (line 100)
-* LaTeX-auto-minimal-regexp-list:        Parsing Files.       (line  97)
-* LaTeX-auto-regexp-list:                Parsing Files.       (line 103)
-* LaTeX-babel-hyphen:                    European.            (line 150)
-* LaTeX-babel-hyphen-after-hyphen:       European.            (line 158)
-* LaTeX-babel-hyphen-language-alist:     European.            (line 137)
-* LaTeX-clean-intermediate-suffixes:     Cleaning.            (line   7)
-* LaTeX-clean-output-suffixes:           Cleaning.            (line   7)
-* LaTeX-command:                         Processor Options.   (line  83)
-* LaTeX-csquotes-close-quote:            Quotes.              (line  44)
-* LaTeX-csquotes-open-quote:             Quotes.              (line  44)
-* LaTeX-csquotes-quote-after-quote:      Quotes.              (line  44)
-* LaTeX-default-environment:             Environments.        (line  35)
-* LaTeX-default-format:                  Tabular-like.        (line  11)
-* LaTeX-default-position:                Tabular-like.        (line  14)
-* LaTeX-enable-toolbar:                  Processing.          (line  11)
-* LaTeX-eqnarray-label:                  Equations.           (line  13)
-* LaTeX-equation-label:                  Equations.           (line  10)
-* LaTeX-figure-label:                    Floats.              (line  25)
-* LaTeX-fill-break-at-separators:        Filling.             (line 104)
-* LaTeX-fill-break-before-code-comments: Filling.             (line 114)
-* LaTeX-float:                           Floats.              (line  14)
-* LaTeX-fold-env-spec-list:              Folding.             (line 189)
-* LaTeX-fold-macro-spec-list:            Folding.             (line 189)
-* LaTeX-fold-math-spec-list:             Folding.             (line 189)
-* LaTeX-font-list:                       Font Specifiers.     (line  59)
-* LaTeX-indent-environment-check:        Indenting.           (line  51)
-* LaTeX-indent-environment-list:         Indenting.           (line  37)
-* LaTeX-indent-level:                    Indenting.           (line  19)
-* LaTeX-item-indent:                     Indenting.           (line  19)
-* LaTeX-item-regexp:                     Indenting.           (line  19)
-* LaTeX-math-abbrev-prefix:              Mathematics.         (line  27)
-* LaTeX-math-list:                       Mathematics.         (line  37)
-* LaTeX-math-menu-unicode:               Mathematics.         (line  55)
-* LaTeX-Omega-command:                   Processor Options.   (line  83)
-* LaTeX-paragraph-commands:              Filling.             (line  55)
-* LaTeX-section-hook:                    Sectioning.          (line  50)
-* LaTeX-section-label:                   Sectioning.          (line  53)
-* LaTeX-syntactic-comments:              Indenting.           (line  63)
-* LaTeX-table-label:                     Floats.              (line  25)
-* LaTeX-top-caption-list:                Floats.              (line  20)
-* LaTeX-verbatim-environments:           Verbatim content.    (line  10)
-* LaTeX-verbatim-macros-with-braces:     Verbatim content.    (line  10)
-* LaTeX-verbatim-macros-with-delims:     Verbatim content.    (line  10)
-* plain-TeX-auto-regexp-list:            Parsing Files.       (line 106)
-* plain-TeX-clean-intermediate-suffixes: Cleaning.            (line   7)
-* plain-TeX-clean-output-suffixes:       Cleaning.            (line   7)
-* plain-TeX-enable-toolbar:              Processing.          (line  11)
-* TeX-auto-cleanup-hook:                 Hacking the Parser.  (line 101)
-* TeX-auto-empty-regexp-list:            Parsing Files.       (line  94)
-* TeX-auto-full-regexp-list:             Parsing Files.       (line 109)
-* TeX-auto-global:                       Automatic Global.    (line  26)
-* TeX-auto-local:                        Automatic Local.     (line  23)
-* TeX-auto-parse-length:                 Parsing Files.       (line  88)
-* TeX-auto-prepare-hook:                 Hacking the Parser.  (line  98)
-* TeX-auto-private:                      Automatic Private.   (line  20)
-* TeX-auto-regexp-list <1>:              Hacking the Parser.  (line  79)
-* TeX-auto-regexp-list:                  Parsing Files.       (line  85)
-* TeX-auto-save:                         Parsing Files.       (line  41)
-* TeX-auto-untabify:                     Parsing Files.       (line  58)
-* TeX-brace-indent-level:                Indenting.           (line 103)
-* TeX-check-path:                        Selecting a Command. (line  56)
-* TeX-clean-confirm:                     Cleaning.            (line  27)
-* TeX-close-quote:                       Quotes.              (line  26)
-* TeX-command:                           Processor Options.   (line  83)
-* TeX-command-default:                   Selecting a Command. (line  43)
-* TeX-command-list <1>:                  Selecting a Command. (line  14)
-* TeX-command-list:                      Starting a Command.  (line  16)
-* TeX-default-macro:                     Completion.          (line  52)
-* TeX-default-mode:                      Japanese.            (line   6)
-* TeX-display-help:                      Debugging.           (line  31)
-* TeX-DVI-via-PDFTeX:                    Processor Options.   (line  22)
-* TeX-electric-escape:                   Completion.          (line  59)
-* TeX-electric-sub-and-superscript:      Mathematics.         (line  69)
-* TeX-engine:                            Processor Options.   (line  67)
-* TeX-engine-alist:                      Processor Options.   (line  83)
-* TeX-engine-alist-builtin:              Processor Options.   (line  83)
-* TeX-expand-list:                       Selecting a Command. (line  14)
-* TeX-file-recurse:                      Automatic.           (line  46)
-* TeX-fold-command-prefix:               Folding.             (line 137)
-* TeX-fold-env-spec-list:                Folding.             (line 180)
-* TeX-fold-force-fontify:                Folding.             (line  64)
-* TeX-fold-help-echo-max-length:         Folding.             (line 217)
-* TeX-fold-macro-spec-list:              Folding.             (line 147)
-* TeX-fold-math-spec-list:               Folding.             (line 187)
-* TeX-fold-preserve-comments:            Folding.             (line  72)
-* TeX-fold-type-list:                    Folding.             (line  59)
-* TeX-fold-unspec-env-display-string:    Folding.             (line 200)
-* TeX-fold-unspec-macro-display-string:  Folding.             (line 196)
-* TeX-fold-unspec-use-name:              Folding.             (line 204)
-* TeX-font-list:                         Font Specifiers.     (line  50)
-* TeX-header-end:                        Starting a Command.  (line  32)
-* TeX-ignore-file:                       Automatic.           (line  54)
-* TeX-insert-braces:                     Completion.          (line  77)
-* TeX-insert-macro-default-style:        Completion.          (line  38)
-* TeX-install-font-lock:                 Font Locking.        (line  14)
-* TeX-interactive-mode:                  Processor Options.   (line  29)
-* TeX-language-bg-hook:                  European.            (line  53)
-* TeX-language-cz-hook:                  European.            (line  53)
-* TeX-language-de-hook:                  European.            (line  53)
-* TeX-language-dk-hook:                  European.            (line  53)
-* TeX-language-is-hook:                  European.            (line  53)
-* TeX-language-it-hook:                  European.            (line  53)
-* TeX-language-nl-hook:                  European.            (line  53)
-* TeX-language-pl-hook:                  European.            (line  53)
-* TeX-language-sk-hook:                  European.            (line  53)
-* TeX-language-sv-hook:                  European.            (line  53)
-* TeX-macro-global <1>:                  Automatic Global.    (line  17)
-* TeX-macro-global:                      Customizing.         (line  20)
-* TeX-macro-private:                     Automatic Private.   (line  13)
-* TeX-master <1>:                        Multifile.           (line  42)
-* TeX-master:                            Starting a Command.  (line  16)
-* TeX-math-close-double-dollar:          Quotes.              (line  72)
-* TeX-newline-function:                  Indenting.           (line  29)
-* TeX-Omega-command:                     Processor Options.   (line  83)
-* TeX-one-master:                        Multifile.           (line  57)
-* TeX-open-quote:                        Quotes.              (line  22)
-* TeX-outline-extra:                     Outline.             (line  14)
-* TeX-output-view-style:                 Starting Viewers.    (line 100)
-* TeX-parse-self:                        Parsing Files.       (line  38)
-* TeX-PDF-mode:                          Processor Options.   (line  15)
-* TeX-quote-after-quote:                 Quotes.              (line  30)
-* TeX-quote-language-alist:              European.            (line 124)
-* TeX-region:                            Starting a Command.  (line  32)
-* TeX-save-query:                        Multifile.           (line 102)
-* TeX-show-compilation:                  Processor Options.   (line 110)
-* TeX-source-correlate-method:           Processor Options.   (line  47)
-* TeX-source-correlate-mode:             Processor Options.   (line  36)
-* TeX-source-correlate-start-server:     I/O Correlation.     (line  26)
-* TeX-style-global:                      Automatic Global.    (line  20)
-* TeX-style-local:                       Automatic Local.     (line  17)
-* TeX-style-path:                        Automatic.           (line  39)
-* TeX-style-private:                     Automatic Private.   (line  29)
-* TeX-trailer-start:                     Starting a Command.  (line  32)
-* TeX-view-predicate-list:               Starting Viewers.    (line  58)
-* TeX-view-program-list:                 Starting Viewers.    (line  67)
-* TeX-view-program-selection:            Starting Viewers.    (line  38)
-* TeX-view-style:                        Starting Viewers.    (line 109)
-* Texinfo-clean-intermediate-suffixes:   Cleaning.            (line   7)
-* Texinfo-clean-output-suffixes:         Cleaning.            (line   7)
+* Texinfo-mark-environment:              Marking (Texinfo).   (line  25)
+* Texinfo-mark-node:                     Marking (Texinfo).   (line  34)
+* Texinfo-mark-section:                  Marking (Texinfo).   (line   7)
 
