@@ -1461,18 +1461,9 @@ NSColor *
 ns_lookup_indexed_color (unsigned long idx, struct frame *f)
 {
   struct ns_color_table *color_table = FRAME_NS_DISPLAY_INFO (f)->color_table;
-
-  /* for some reason, idx is 0 for undefined colors.
-     Also, this function is called with very high indices at times
-     (XXX: debug this.) */
-  if (idx > 0 && idx < color_table->size
-      && ![color_table->empty_indices containsObject: [NSNumber numberWithUnsignedInt: idx]])
-    {
-      /* fprintf(stderr, "lookup color %d\n", idx); */
+  if (idx < 1 || idx >= color_table->avail)
+    return nil;
   return color_table->colors[idx];
-}
-  /* fprintf(stderr, "DISCARDING lookup color %d\n", idx); */
-  return nil;  // mark undefined color
 }
 
 
@@ -6373,9 +6364,6 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
                                            frameSize.height - extra);
   if (rows < MINHEIGHT)
     rows = MINHEIGHT;
-  frameSize.height = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (emacsframe, rows)
-                       + FRAME_NS_TITLEBAR_HEIGHT (emacsframe)
-                       + FRAME_TOOLBAR_HEIGHT (emacsframe);
 #ifdef AQUAMACS_RESIZING_HINT /* do not do this in Aquamacs */
 #ifdef NS_IMPL_COCOA
   {
