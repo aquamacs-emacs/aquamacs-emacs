@@ -6848,6 +6848,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 {
   [self setFSValue: fs_before_fs];
   fs_before_fs = -1;
+
   [self updateCollectionBehaviour];
   if (FRAME_EXTERNAL_TOOL_BAR (emacsframe))
     {
@@ -6878,9 +6879,9 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 #endif
 }
 
-#ifdef HAVE_NATIVE_FS
 - (void)updateCollectionBehaviour
 {
+#ifdef HAVE_NATIVE_FS
   if (! [self isFullscreen])
     {
       NSWindow *win = [self window];
@@ -6893,8 +6894,8 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
       [win setCollectionBehavior: b];
       fs_is_native = ns_use_native_fullscreen;
     }
-}
 #endif
+}
  
 - (void)toggleFullScreen: (id)sender
 {
