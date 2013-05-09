@@ -991,14 +991,19 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 ;; 	  (setq list))
 ;; 	(setq list (cdr list))))))
 (define-key special-event-map [ns-application-reopen] 'ignore)
-(define-key special-event-map [ns-application-activated] 'aquamacs-handle-app-activated)
+;; (define-key special-event-map [ns-application-activated] 'aquamacs-handle-app-activated)
 (define-key global-map [ns-new-frame] 'new-empty-buffer-other-frame)
 )
 
-(defun aquamacs-handle-app-activated ()
-  "Aquamacs has been activated.
-Ensure that there is a (hidden) frame in the current space."
-  (interactive)
+;; app-activated is no longer sent due to event loop problems.
+;; (defun aquamacs-handle-app-activated ()
+;;   "Aquamacs has been activated.
+;; Ensure that there is a (hidden) frame in the current space."
+;;   (interactive)
+;;   (raise-frame))
+
+;; OSX 10.7....
+;;  (run-with-idle-timer 0.5 nil 'aquamacs-handle-app-activated2))
   ;; Must call at idle time.  Frame is not correctly
   ;; keyed if it is created at this time. (E.g., no blinking cursor,
   ;; and menu events are ignored.)
@@ -1010,25 +1015,24 @@ Ensure that there is a (hidden) frame in the current space."
   ;; result shortly after switching.  We increase the delay for this
   ;; reason.  The invisible frame is only created in certain cases
   ;; anyways.
-  (run-with-idle-timer 0.5 nil 'aquamacs-handle-app-activated2))
 
-(defun aquamacs-handle-app-activated2 ()
-  (unless (or (ns-frame-is-on-active-space-p (selected-frame))
-	      ;; we're assuming that the selected frame, if full-frame,
-	      ;; will be on the active space.  we're probably switching
-	      ;; to a space with a visible frame anyway, in this case.
-	      ;; https://github.com/davidswelt/aquamacs-emacs/issues/60
-	      (eq (frame-parameter nil 'fullscreen) 'fullboth))
-    ;; find a frame on active space
-    ;; (unless (ns-visible-frame-list)
-    (let* ((display-buffer-reuse-frames 'select)
-	   (one-buffer-one-frame nil)
-	   (hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
-      (when hf
-	(select-window (frame-first-window hf))
-	(make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
-	;; (switch-to-buffer (init-aquamacs-last-frame-empty-buffer) 'norecord)
-	(make-frame-invisible hf t)))))
+;; (defun aquamacs-handle-app-activated2 ()
+;;   (unless (or (ns-frame-is-on-active-space-p (selected-frame))
+;; 	      ;; we're assuming that the selected frame, if full-frame,
+;; 	      ;; will be on the active space.  we're probably switching
+;; 	      ;; to a space with a visible frame anyway, in this case.
+;; 	      ;; https://github.com/davidswelt/aquamacs-emacs/issues/60
+;; 	      (eq (frame-parameter nil 'fullscreen) 'fullboth))
+;;     ;; find a frame on active space
+;;     ;; (unless (ns-visible-frame-list)
+;;     (let* ((display-buffer-reuse-frames 'select)
+;; 	   (one-buffer-one-frame nil)
+;; 	   (hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
+;;       (when hf
+;; 	(select-window (frame-first-window hf))
+;; 	(make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
+;; 	;; (switch-to-buffer (init-aquamacs-last-frame-empty-buffer) 'norecord)
+;; 	(make-frame-invisible hf t)))))
 
 ;; FIXES IN VARIOUS PLACES
 

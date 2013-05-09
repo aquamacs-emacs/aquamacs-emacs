@@ -5051,21 +5051,17 @@ not_in_argv (NSString *arg)
 }
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
 {
-  /* We will always handle re-open events outselves.
-   Otherwise, hidden windows will be made key (and visible). 
-   We need to send Lisp an event, because applicationDidBecomeActive is not received
-   when application was already active.
+  /* Unfortunately, hidden windows will be made key (and visible). 
+   We cannot send Lisp an event from here - possibly because events would be processed in the wrong order.
+   switching between frames on different spaces by clicking on the app icon will leave the event
+   queue in an inconsistent state (requires key press before timer/menu events will be processed again).
   */
 
-  struct frame *emacsframe = SELECTED_FRAME ();
-
-  if (!emacs_event)
-    return YES;
-  emacs_event->kind = NS_NONKEY_EVENT;
-  emacs_event->code = KEY_NS_APPLICATION_REOPEN;
-  EV_TRAILER ((id)nil);
-
-  return YES;
+  return NO;
+  // struct frame *emacsframe = SELECTED_FRAME ();
+  // emacs_event->kind = NS_NONKEY_EVENT;
+  // emacs_event->code = KEY_NS_APPLICATION_REOPEN;
+  // EV_TRAILER ((id)nil);
 }
 
 /* post 10.7 Application restore feature */
