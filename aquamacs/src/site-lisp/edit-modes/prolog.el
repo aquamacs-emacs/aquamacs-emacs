@@ -719,6 +719,8 @@ Relevant only when `prolog-imenu-flag' is non-nil."
   "*Non-nil means underscore (_) is a word-constituent character."
   :group 'prolog-other
   :type 'boolean)
+(make-obsolete-variable 'prolog-underscore-wordchar-flag
+                        'superword-mode "24.4")
 
 (defcustom prolog-use-sicstus-sd nil
   "*If non-nil, use the source level debugger of SICStus 3#7 and later."
@@ -730,6 +732,7 @@ Relevant only when `prolog-imenu-flag' is non-nil."
 This is really kludgy but I have not found any better way of handling it."
   :group 'prolog-other
   :type 'boolean)
+(make-obsolete-variable 'prolog-char-quote-workaround nil "24.1")
 
 
 ;;-------------------------------------------------------------------
@@ -746,8 +749,41 @@ Valid values are 'gnuemacs and 'xemacs.")
 (defvar prolog-known-systems '(eclipse mercury sicstus swi gnu xsb))
 
 ;(defvar prolog-temp-filename "")   ; Later set by `prolog-temporary-file'
+(defvar prolog-mode-syntax-table
+  ;; The syntax accepted varies depending on the implementation used.
+  ;; Here are some of the differences:
+  ;; - SWI-Prolog accepts nested /*..*/ comments.
+  ;; - Edinburgh-style Prologs take <radix>'<number> for non-decimal number,
+  ;;   whereas ISO-style Prologs use 0[obx]<number> instead.
+  ;; - In atoms \x<hex> sometimes needs a terminating \ (ISO-style)
+  ;;   and sometimes not.
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?_ (if prolog-underscore-wordchar-flag "w" "_") table)
+    (modify-syntax-entry ?+ "." table)
+    (modify-syntax-entry ?- "." table)
+    (modify-syntax-entry ?= "." table)
+    (modify-syntax-entry ?< "." table)
+    (modify-syntax-entry ?> "." table)
+    (modify-syntax-entry ?| "." table)
+    (modify-syntax-entry ?\' "\"" table)
 
-(defvar prolog-mode-syntax-table nil)
+    ;; Any better way to handle the 0'<char> construct?!?
+    (when (and prolog-char-quote-workaround
+               (not (fboundp 'syntax-propertize-rules)))
+      (modify-syntax-entry ?0 "\\" table))
+
+    (modify-syntax-entry ?% "<" table)
+    (modify-syntax-entry ?\n ">" table)
+    (if (featurep 'xemacs)
+        (progn
+          (modify-syntax-entry ?* ". 67" table)
+          (modify-syntax-entry ?/ ". 58" table)
+          )
+      ;; Emacs wants to see this it seems:
+      (modify-syntax-entry ?* ". 23b" table)
+      (modify-syntax-entry ?/ ". 14" table)
+      )
+    table))
 (defvar prolog-mode-abbrev-table nil)
 (defvar prolog-mode-map nil)
 (defvar prolog-upper-case-string ""
