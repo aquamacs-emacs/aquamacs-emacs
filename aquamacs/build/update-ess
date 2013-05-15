@@ -2,10 +2,13 @@
 # run from within build directory
 
 
-FILE=ess-5.13
+FILE=ess-13.05
 DEST=../src/site-lisp/edit-modes/ess-mode
 INFODEST=../src/site-lisp/edit-modes/info
-EMACS="../../nextstep/Aquamacs.app/Contents/MacOS/Aquamacs -nw -Q"
+EMACS=`pwd`/"../../nextstep/Aquamacs.app/Contents/MacOS/Aquamacs -nw -Q"
+EDITOR=$EMACS
+export EMACS
+export EDITOR
 
 P=`pwd`
 curl -o /tmp/$FILE.tgz http://ess.r-project.org/downloads/ess/$FILE.tgz
@@ -28,12 +31,14 @@ mkdir $DEST/lisp 2>/dev/null
 mkdir $INFODEST 2>/dev/null
 rm -rf $DEST/lisp/*
 mv /tmp/ess/share/emacs/site-lisp/*  $DEST/lisp/
-mv /tmp/ess/info/ess.info  $INFODEST/ 
+mv /tmp/ess/share/info/ess.info  $INFODEST/ 
 
 # icons need extra attention
 
 rm -rf $DEST/etc 
 mv /tmp/$FILE/etc $DEST/
+# needed in newer version of ESS because it expects it there
+ln -s  $DEST/etc $DEST/lisp/etc
 
 # delete some big files that arent needed
 
