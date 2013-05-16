@@ -50,7 +50,7 @@ export MACOSX_DEPLOYMENT_TARGET
 
 # autoconf must be run via macports to allow its upgrade
 test $OMIT_AUTOGEN || ./autogen.sh ; \
-./configure --with-ns --without-x CFLAGS="$FLAGS" LDFLAGS="$FLAGS"; \
+./configure --with-ns --without-x CFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" LDFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"; \
 make clean ; \
 make all ; \
 make install ; \
