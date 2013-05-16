@@ -45,6 +45,9 @@ echo "Compiler flags: $FLAGS"
 # do not use MacPorts / fink libraries
 # do not use binaries either (e.g., gnutls would be recognized)
 
+MACOSX_DEPLOYMENT_TARGET="10.6"
+export MACOSX_DEPLOYMENT_TARGET
+
 # autoconf must be run via macports to allow its upgrade
 test $OMIT_AUTOGEN || ./autogen.sh ; \
 ./configure --with-ns --without-x CFLAGS="$FLAGS" LDFLAGS="$FLAGS"; \
