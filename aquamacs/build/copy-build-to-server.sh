@@ -14,6 +14,8 @@ SOURCE=`pwd`/builds
 LOGPATH=`pwd`
 
 DEST=dreitter@cc:Sites/Aquamacs/24
+DESTSSH=dreitter@cc
+DESTPATH=Sites/Aquamacs/24
 
 TMP=/tmp/builds
 
@@ -59,4 +61,11 @@ echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</BODY></HTML>" >>latest.html
 
-rsync -v -l -r builds latest-logs latest.html Aquamacs-nightly.tar.bz2 $DEST/
+# sync and delete older files on server
+
+rsync -v -l -r builds $DEST/ && \
+    rsync -v -l -r builds latest-logs latest.html Aquamacs-nightly.tar.bz2 $DEST/ && \
+    ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete"
+
+
+
