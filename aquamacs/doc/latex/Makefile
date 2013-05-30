@@ -35,7 +35,7 @@ html: aquamacs.tex *.pdf
 	latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.1 $(fname) ; \
 	echo "$(fname) converted to HTML."					     ; \
 	cp aquamacs.css $(newdir)/aquamacs.css					     ; \
-	sed 's/<META NAME="description" CONTENT="Aquamacs Emacs/<META NAME="AppleTitle" content="Aquamacs Help ('"${AQUAMACS_VERSION}"')"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
+	sed 's/<META NAME="description" CONTENT="(Aquamacs Emacs)?/<META NAME="AppleTitle" content="Aquamacs Help ('"${AQUAMACS_VERSION}"')"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
 	echo "HTML conversion completed."		     ; \
 	echo $(phrase) ; \
 	mv $(newdir)/index2.html $(newdir)/index.html ; \
