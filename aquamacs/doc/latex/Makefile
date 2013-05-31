@@ -7,7 +7,7 @@ srcdir=$(shell pwd)
 newdir=$(srcdir)/aquamacs
 destdir="$(srcdir)/../Aquamacs Help"
 AQUAMACS_DIR=$(srcdir)/../..
-AQUAMACS_VERSION=$(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $(AQUAMACS_DIR)/src/site-lisp/site-start.el)
+AQUAMACS_MAJOR_VERSION=$(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"(.*?)\"/);' < $(AQUAMACS_DIR)/src/site-lisp/site-start.el)
 
 
 phrase=''
@@ -35,7 +35,7 @@ html: aquamacs.tex *.pdf
 	latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.1 $(fname) ; \
 	echo "$(fname) converted to HTML."					     ; \
 	cp aquamacs.css $(newdir)/aquamacs.css					     ; \
-	sed 's/<META NAME="description" CONTENT="/<META NAME="AppleTitle" content="Aquamacs Help ('"${AQUAMACS_VERSION}"')"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
+	sed 's/<META NAME="description" CONTENT="/<META NAME="AppleTitle" content="Aquamacs Help ('"${AQUAMACS_MAJOR_VERSION}"')"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
 	echo "HTML conversion completed."		     ; \
 	echo $(phrase) ; \
 	mv $(newdir)/index2.html $(newdir)/index.html ; \
@@ -53,6 +53,4 @@ html: aquamacs.tex *.pdf
 	cp $(srcdir)/*.png $(destdir)/			     ; \
 	find $(destdir) -name *.helpindex -delete ; \
 	echo "Help files copied." ; \
-# Before 10.6, use the Help Indexer application instead of hiutil:
-	(hiutil -C -g -s en -a -f $(destdir)"/Aquamacs Help.helpindex" $(destdir) || \
-	/Developer/Applications/Utilities/Help\ Indexer.app/Contents/MacOS/Help\ Indexer $(destdir) -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1)
+	hiutil -C -g -s en -a -f $(destdir)"/Aquamacs Help.helpindex" $(destdir)
