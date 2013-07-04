@@ -1668,7 +1668,7 @@ a notification */
             initWithContentRect: [textField frame]
                       styleMask: 0
                         backing: NSBackingStoreBuffered
-                          defer: YES];
+                          defer: NO];
   [win setDelegate: self];
   [[win contentView] addSubview: textField];
 /*  [win setBackgroundColor: col]; */
@@ -1701,7 +1701,12 @@ a notification */
 
 - (void) showAtX: (int)x Y: (int)y for: (int)seconds
 {
+  NSLog(@"showAt Win: %@", win);
+  if (win == NULL)  // window not (yet) available - don't show the tooltip
+    return;
+
   NSRect wr = [win frame];
+  NSLog(@"  frame: %@", wr);
 
   wr.origin = NSMakePoint (x, y);
   wr.size = [textField frame].size;
