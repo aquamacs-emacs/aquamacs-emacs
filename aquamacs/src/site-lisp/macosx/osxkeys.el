@@ -98,6 +98,9 @@ after updating this variable.")
 (global-unset-key [f16])
 (global-unset-key [f18])
   
+;; bind ns-application-store-state
+;; to prevent isearch from interpreting this event (and aborting)
+(define-key global-map [ns-application-store-state] 'ignore)
 
 (defvar cua--explicit-region-start) ;; in case CUA isn't loaded
 
