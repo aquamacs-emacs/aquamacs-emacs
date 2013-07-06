@@ -5051,17 +5051,24 @@ not_in_argv (NSString *arg)
 }
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
 {
-  /* Unfortunately, hidden windows will be made key (and visible). 
+
+  return YES;
+
+  /*
    We cannot send Lisp an event from here - possibly because events would be processed in the wrong order.
    switching between frames on different spaces by clicking on the app icon will leave the event
    queue in an inconsistent state (requires key press before timer/menu events will be processed again).
+
+   By returning YES, Cocoa/Finder send us the appropriate events to de-minimize a frame
+   or create a new empty buffer.
   */
 
-  return NO;
-  // struct frame *emacsframe = SELECTED_FRAME ();
-  // emacs_event->kind = NS_NONKEY_EVENT;
-  // emacs_event->code = KEY_NS_APPLICATION_REOPEN;
-  // EV_TRAILER ((id)nil);
+  /*
+  struct frame *emacsframe = SELECTED_FRAME ();
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_REOPEN;
+  EV_TRAILER ((id)nil);
+  */
 }
 
 /* post 10.7 Application restore feature */

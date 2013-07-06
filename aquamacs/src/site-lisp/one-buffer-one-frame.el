@@ -967,72 +967,12 @@ The buffer contains unsaved changes which will be lost if you discard them now."
   ;; is interpreted with wrong current buffer)
   (set-buffer (window-buffer (selected-window))))
 
-;; (defun handle-ns-application-reopen ()
-;;   (interactive)
-;;   (if (visible-frame-list)
-;;       ;; did it just bring up the *empty* frame?
-;;       (let (last-iconified-frame)
-;; 	(and (= 1 (length (visible-frame-list)))
-;; 	     (equal (buffer-name) " *empty*")
-;; 	     (progn (mapcar (lambda (f) (if (and (not last-iconified-frame) 
-;; 						 (frame-live-p f) (frame-iconified-p f)) 
-;; 					    (setq last-iconified-frame f))) (frame-list))
-;; 		    last-iconified-frame)
-;; 	     (let ((f (selected-frame)))
-	       
-;; 	       (raise-frame last-iconified-frame)
-;; 	       (make-frame-invisible f)
-;; 	       )))
-;;     (let ((list (frame-list))) 
-;;       (while list      
-;; 	(when (frame-iconified-p (car list))
-;; 	  (make-frame-visible (car list))
-;; 	  (select-frame-set-input-focus (car list))
-;; 	  (setq list))
-;; 	(setq list (cdr list))))))
 (define-key special-event-map [ns-application-reopen] 'ignore)
-;; (define-key special-event-map [ns-application-activated] 'aquamacs-handle-app-activated)
 (define-key global-map [ns-new-frame] 'new-empty-buffer-other-frame)
 )
 
 ;; app-activated is no longer sent due to event loop problems.
-;; (defun aquamacs-handle-app-activated ()
-;;   "Aquamacs has been activated.
-;; Ensure that there is a (hidden) frame in the current space."
-;;   (interactive)
-;;   (raise-frame))
-
-;; OSX 10.7....
-;;  (run-with-idle-timer 0.5 nil 'aquamacs-handle-app-activated2))
-  ;; Must call at idle time.  Frame is not correctly
-  ;; keyed if it is created at this time. (E.g., no blinking cursor,
-  ;; and menu events are ignored.)
-  ;; this is a problem with event handling at the C level
-  ;; To Do: diagnose and fix.  Perhaps related to the way
-  ;; the NS port handles file requests via ns_pending_files
-  ;; (which do not display the behavior.)
-  ;; It appears that isOnActiveSpace returns the wrong
-  ;; result shortly after switching.  We increase the delay for this
-  ;; reason.  The invisible frame is only created in certain cases
-  ;; anyways.
-
-;; (defun aquamacs-handle-app-activated2 ()
-;;   (unless (or (ns-frame-is-on-active-space-p (selected-frame))
-;; 	      ;; we're assuming that the selected frame, if full-frame,
-;; 	      ;; will be on the active space.  we're probably switching
-;; 	      ;; to a space with a visible frame anyway, in this case.
-;; 	      ;; https://github.com/davidswelt/aquamacs-emacs/issues/60
-;; 	      (eq (frame-parameter nil 'fullscreen) 'fullboth))
-;;     ;; find a frame on active space
-;;     ;; (unless (ns-visible-frame-list)
-;;     (let* ((display-buffer-reuse-frames 'select)
-;; 	   (one-buffer-one-frame nil)
-;; 	   (hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
-;;       (when hf
-;; 	(select-window (frame-first-window hf))
-;; 	(make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
-;; 	;; (switch-to-buffer (init-aquamacs-last-frame-empty-buffer) 'norecord)
-;; 	(make-frame-invisible hf t)))))
+;; it is also not necessary.  At least in 10.8/Emacs 24, these events are handled correctly.
 
 ;; FIXES IN VARIOUS PLACES
 
