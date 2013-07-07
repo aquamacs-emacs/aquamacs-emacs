@@ -930,6 +930,50 @@ The following options are available:
    (define-key tabbar-mwheel-mode-map `[header-line (shift ,up)]
      nil)))
 
+
+(defun tabbar-order-tabs-by-file ()
+  (interactive)
+  (tabbar-order-by-fun 'tabbar--order-by-buffer-path))
+
+(defun tabbar-order-by-file-type ()
+  (interactive)
+  (tabbar-order-by-fun 'tabbar--order-by-file-type))
+
+(defun tabbar-reverse-tabs ()
+  (interactive)
+  (tabbar-order-by-fun 'reverse))
+
+(defun tabbar-order-by-fun (fun)
+  (let* ((tabset (tabbar-current-tabset)))
+    
+    (setf (symbol-value tabset)
+	  (funcall fun (tabbar-tabs tabset))))
+  (tabbar-window-update-tabsets)
+)
+
+(defun tabbar--order-by-buffer-path (list)
+  (sort list (lambda (a b)
+	       (string-lessp (tabbar--path a) (tabbar--path b))))
+)
+
+(defun tabbar--order-by-file-type (list)
+  (sort list (lambda (a b)
+	       (let* ((a (tabbar--path a)) (b (tabbar--path b))
+		      (ae (file-name-extension a))
+		      (be  (file-name-extension b)))
+		 (if (string= ae be)
+		     (string-lessp a b)
+		   (string-lessp ae be))))
+))
+
+(defun tabbar--path (el)
+  (let ((buffer (car el)))
+    (buffer-file-name buffer)))
+
+;; (symbol-value (tabbar-current-tabset))
+;; (tabbar-line-format (tabbar-get-tabset (number-to-string (window-number (selected-window)))))
+;; (tabbar-tabs                                (tabbar-current-tabset))
+
 ;; default tabbar behavior (buffer tabs grouped by major-mode) can be
 ;;  retained by setting tabbar-inhibit-window-tabs to non-nil
 ;; (unless (and (boundp 'tabbar-inhibit-window-tabs) tabbar-inhibit-window-tabs)
