@@ -2419,8 +2419,8 @@ level to align."
                 ;; for the numbers.
                 (if (cdr node)
                     (setq fmt (format "%%-%dd"
-                                      (1+ (floor (log10 (length
-							 (cdr node))))))))))
+                                      (1+ (floor (log (length (cdr node))
+						      10))))))))
 
           (dolist (child (cdr node))
             (rst-toc-insert-node child
@@ -3932,7 +3932,7 @@ string)) to be used for converting the document."
                              (choice :tag "Command options"
                                      (const :tag "No options" nil)
                                      (string :tag "Options"))))
-  :group 'rst
+  :group 'rst-compile
   :package-version "1.2.0")
 (rst-testcover-defcustom)
 

@@ -1,3 +1,204 @@
+2013-07-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Make file descriptors close-on-exec when possible (Bug#14803).
+	* configure.ac (mkostemp): New function to check for.
+	(PTY_OPEN): Pass O_CLOEXEC to posix_openpt.
+	* lib/fcntl.c, lib/getdtablesize.c, lib/pipe2.c, m4/fcntl.m4:
+	* m4/getdtablesize.m4, m4/pipe2.m4: New files, taken from gnulib.
+	* lib/gnulib.mk, m4/gnulib-comp.m4: Regenerate.
+
+2013-07-03  Christoph Egger  <christoph@debian.org>  (tiny change)
+
+	* configure.ac (emacs_broken_SIGIO): Set on gnu-kfreebsd to avoid hang.
+	http://bugs.debian.org/712974
+
+2013-07-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Remove some unused macros from 'configure'.
+	* configure.ac (HAVE_SOUNDCARD_H, HAVE_LINUX_VERSION_H, HAVE_SPEED_T)
+	(HAVE_GNUTLS_CALLBACK_CERTIFICATE_VERIFY)
+	(HAVE_GNUTLS_CERTIFICATE_SET_VERIFY_FUNCTION, HAVE_UTIMES)
+	(HAVE_LIBHESIOD, HAVE_LIBRESOLV, HAVE_LIBCOM_ERR, HAVE_LIBCRYPTO)
+	(HAVE_LIBK5CRYPTO, HAVE_LIBKRB5, HAVE_LIBDES425, HAVE_LIBDES)
+	(HAVE_LIBKRB4, HAVE_LIBKRB, HAVE_DES_H, HAVE_KERBEROSIV_DES_H)
+	(HAVE_DEV_PTMX, DEVICE_SEP, USG5):
+	Remove these macros, as they are not used.
+	(sys_siglist): Remove macro; src/sysdep.c now does this.
+
+	* configure.ac (GTK_COMPILES): Check API a bit more carefully.
+	Also check that it links.  Say whether it compiled and linked.
+
+2013-07-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Merge from gnulib, incorporating:
+	2013-06-23 ignore-value: port to gcc -pedantic
+	2013-06-21 extern-inline: port to gcc -std=c89
+
+2013-06-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Do not use GTK 3 if it exists but cannot be compiled.
+	* configure.ac: Leave GTK_OBJ and term_header alone if GTK 3
+	exists but cannot be compiled.
+
+2013-06-27  Juanma Barranquero  <lekktu@gmail.com>
+
+	* Makefile.in (install-arch-indep): Do not create directories passed
+	with --enable-locallisppath.
+
+2013-06-24  Glenn Morris  <rgm@fencepost.gnu.org>
+
+	* configure.ac: Include X11/X.h when testing for Xft.h.  (Bug#14684)
+
+2013-06-22  Juanma Barranquero  <lekktu@gmail.com>
+
+	* .bzrignore: Add GNU idutils ID database file.
+
+2013-06-21  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* configure.ac (HAVE_LIBXML2): Try built-in libxml2 on OS X 10.8
+	as a fallback.
+
+2013-06-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* .bzrignore: Don't unignore cl-loaddefs.el.
+
+2013-06-20  Rüdiger Sonderfeld  <ruediger@c-plusplus.de>
+
+	* configure.ac (log2): Check for this function.
+
+2013-06-19  Juanma Barranquero  <lekktu@gmail.com>
+
+	* .bzrignore: Add GNU GLOBAL files.
+
+2013-06-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use functions, not macros, for XINT etc.  (Bug#11935).
+	* configure.ac (WARN_CFLAGS): Remove -Wbad-function-cast,
+	as it generates bogus warnings about reasonable casts of calls.
+
+2013-06-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* configure.ac: Report ACL usage at the end (Bug#14612).
+
+2013-06-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	--without-all should imply --with-file-notification=no.  (Bug#14569)
+	* configure.ac (with_file_notification): Default to $with_features.
+
+2013-06-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Merge from gnulib, incorporating:
+	2013-06-02 sig2str: port to C++
+	2013-05-29 c-ctype, regex, verify: port to gcc -std=c90 -pedantic
+
+2013-06-08  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* configure.ac (HAVE_GLIB): Only set XGSELOBJ if HAVE_NS = no.
+	(with_file_notification): Don't set to gfile if with_ns = yes.
+
+2013-06-07  Richard Copley  <rcopley@gmail.com>  (tiny change)
+
+	* Makefile.in (msys_to_w32): Modify to support d:\foo file names.
+	(msys_lisppath_to_w32, msys_prefix_subst, msys_sed_sh_escape):
+	New variables.
+	(epaths-force-w32): Use them.  (Bug#14513)
+
+2013-06-03  Michael Albinus  <michael.albinus@gmx.de>
+
+	* configure.ac (HAVE_GFILENOTIFY): Check for gio >= 2.24.
+
+2013-06-03  Eli Zaretskii  <eliz@gnu.org>
+
+	* configure.ac (HAVE_GFILENOTIFY): Do not change $LIBS.
+	(GFILENOTIFY_CFLAGS, GFILENOTIFY_LIBS): Substitute.
+
+2013-06-03  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* configure.ac (HAVE_GLIB): Add GLib check.  Set XGSELOBJ if GLib is
+	used.  Remove xgselect.o from XOBJ.
+
+2013-06-03  Michael Albinus  <michael.albinus@gmx.de>
+
+	* configure.ac (file-notification): New option, replaces inotify option.
+	(HAVE_W32): Remove w32notify.o.
+	(with_file_notification): Add checks for glib and w32.  Adapt check
+	for inotify.
+	(Summary): Add entry for file notification.
+
+	* autogen/config.in: Add entries for HAVE_GFILENOTIFY,
+	HAVE_W32NOTIFY and USE_FILE_NOTIFY.
+
+2013-06-02  Juanma Barranquero  <lekktu@gmail.com>
+
+	* .bzrignore: Ignore dirs libexec/, share/ and var/.
+
+2013-05-29  Xue Fuqiao  <xfq.free@gmail.com>
+
+	* INSTALL: Fix description.
+
+2013-05-27  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* configure.ac (HAVE_XRANDR): Check availability of
+	XRRGetScreenResources rather than that of XRRQueryExtension.
+
+2013-05-18  Eli Zaretskii  <eliz@gnu.org>
+
+	* make-dist (files): Add nt/msysconfig.sh, nt/mingw-cfg.site,
+	nt/epaths.nt, and nt/INSTALL.MSYS.
+
+2013-05-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port --enable-gcc-warnings to clang.
+	* configure.ac (nw): Remove obsolescent warnings.
+	These aren't needed for clang, or for gcc for that matter.
+	(emacs_cv_clang): New var, which tests for clang.
+	Omit warnings that clang is too picky about.
+	(GLIB_DISABLE_DEPRECATION_WARNINGS): Define this;
+	needed for Ubuntu 13.04 + clang + --enable-gcc-warnings.
+
+	* make-dist (files): Add nt/Makefile.in, nt/gnulib.mk.
+	Otherwise, 'configure; make' fails on non-Windows builds.
+
+2013-05-16  Eli Zaretskii  <eliz@gnu.org>
+
+	* lib/Makefile.am: If building for MS-Windows, include
+	nt/gnulib.mk instead of lib/gnulib.mk.
+
+	* configure.ac: Adapt to MSYS build on MS-Windows.
+
+	* Makefile.in (NTDIR): New variable, for the MSYS build on
+	MS-Windows.
+	(SUBDIR): Add $(NTDIR).
+	(.PHONY): Add epaths-force-w32.
+	(msys_to_w32): New variable.
+	(epaths-force-w32, install-nt, uninstall-nt): New targets.
+	(lib-src src): Add $(NTLIB) to prerequisites.
+	(lib lib-src lisp leim nt): Add 'nt'.
+	(config.status): Use $(CFG).
+	(.PHONY): Add install-$(NTDIR) and uninstall-$(NTDIR).
+	(install, install-arch-dep): Add install-$(NTDIR).
+	(uninstall): Depend on uninstall-$(NTDIR).
+	(mostlyclean, clean, distclean, bootstrap-clean): Add 'nt'.
+
+	* GNUmakefile (CFG): New variable, uses mingw-cfg.site as
+	CONFIG_SITE for the MSYS build on MS-Windows.
+	(Makefile): Use $(CFG).
+
+	* .bzrignore: Ignore *.res, *.tmp, and *.map.  Remove
+	src/emacs.res.
+
+2013-05-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Merge from gnulib, incorporating:
+	2013-05-15 manywarnings: update for GCC 4.8.0
+	2013-05-15 stdio: use __REDIRECT for fwrite, fwrite_unlocked
+	2013-05-15 sig2str, stdio, warnings: port to clang
+
+2013-05-15  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* Makefile.in (install-doc): DOC file is not version specific any more.
+	* .bzrignore: Don't ignore DOC-* any more.
+
 2013-05-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* configure.ac (LD_SWITCH_SYSTEM_TEMACS): OpenBSD needs -nopie.
@@ -10,7 +211,7 @@
 
 2013-05-07  Paul Eggert  <eggert@cs.ucla.edu>
 
-	Use Gnulib ACL implementation, for benefit of Solaris etc. (Bug#14295)
+	Use Gnulib ACL implementation, for benefit of Solaris etc.  (Bug#14295)
 	* configure.ac: Remove -with-acl option, since Gnulib does that for
 	us now.
 	(LIBACL_LIBS): Remove; no longer needed.
@@ -264,7 +465,7 @@
 
 2013-01-23  Giorgos Keramidas  <gkeramidas@gmail.com>  (tiny change)
 
-	* .bzrignore: add lib-src/blessmail.
+	* .bzrignore: Add lib-src/blessmail.
 
 2013-01-23  Paul Eggert  <eggert@cs.ucla.edu>
 
@@ -382,7 +583,7 @@
 
 2012-12-14  Paul Eggert  <eggert@cs.ucla.edu>
 
-	Fix permissions bugs with setgid directories etc. (Bug#13125)
+	Fix permissions bugs with setgid directories etc.  (Bug#13125)
 	* configure.ac (BSD4_2): Remove; no longer needed.
 
 2012-12-13  Glenn Morris  <rgm@gnu.org>
@@ -413,7 +614,7 @@
 
 2012-12-10  Daniel Colascione  <dancol@dancol.org>
 
-	* .bzrignore: add src/emacs.res.
+	* .bzrignore: Add src/emacs.res.
 
 	* configure.ac (W32_RES, W32_RES_LINK, WINDRES): Teach the cygw32
 	build how to compile Windows resource files; use these variables
@@ -2072,7 +2273,7 @@
 
 2012-02-05  Christoph Scholtes  <cschol2112@googlemail.com>
 
-	* make-dist (README.W32): Include file in source tarball. (Bug#9750)
+	* make-dist (README.W32): Include file in source tarball.  (Bug#9750)
 
 	* lib/makefile.w32-in (PRAGMA_SYSTEM_HEADER): Move to platform
 	specific makefiles to support getopt_.h generation with MSVC.

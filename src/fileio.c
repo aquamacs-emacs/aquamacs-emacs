@@ -20,7 +20,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 #include <limits.h>
 #include <fcntl.h>
-#include <stdio.h>
+#include "sysstdio.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -55,7 +55,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef WINDOWSNT
 #define NOMINMAX 1
 #include <windows.h>
-#include <fcntl.h>
 #include <sys/file.h>
 #include "w32.h"
 #endif /* not WINDOWSNT */
@@ -63,7 +62,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef MSDOS
 #include "msdos.h"
 #include <sys/param.h>
-#include <fcntl.h>
 #endif
 
 #ifdef DOS_NT
@@ -148,7 +146,7 @@ static Lisp_Object Qdelete_directory;
 #ifdef WINDOWSNT
 #endif
 
-Lisp_Object Qfile_error;
+Lisp_Object Qfile_error, Qfile_notify_error;
 static Lisp_Object Qfile_already_exists, Qfile_date_error;
 static Lisp_Object Qexcl;
 Lisp_Object Qfile_name_history;
@@ -776,8 +774,9 @@ probably use `make-temp-file' instead, except in three circumstances:
 DEFUN ("expand-file-name", Fexpand_file_name, Sexpand_file_name, 1, 2, 0,
        doc: /* Convert filename NAME to absolute, and canonicalize it.
 Second arg DEFAULT-DIRECTORY is directory to start with if NAME is relative
-\(does not start with slash or tilde); if DEFAULT-DIRECTORY is nil or missing,
-the current buffer's value of `default-directory' is used.
+\(does not start with slash or tilde); both the directory name and
+a directory's file name are accepted.  If DEFAULT-DIRECTORY is nil or
+missing, the current buffer's value of `default-directory' is used.
 NAME should be a string that is a valid file name for the underlying
 filesystem.
 File name components that are `.' are removed, and
@@ -2873,7 +2872,7 @@ file_accessible_directory_p (char const *file)
 	 and it's a safe optimization here.  */
       char *buf = SAFE_ALLOCA (len + 3);
       memcpy (buf, file, len);
-      strcpy (buf + len, "/." + (file[len - 1] == '/'));
+      strcpy (buf + len, &"/."[file[len - 1] == '/']);
       dir = buf;
     }
 
@@ -3489,7 +3488,6 @@ by calling `format-decode', which see.  */)
   EMACS_TIME mtime;
   int fd;
   ptrdiff_t inserted = 0;
-  bool nochange = 0;
   ptrdiff_t how_much;
   off_t beg_offset, end_offset;
   int unprocessed;
@@ -3506,6 +3504,11 @@ by calling `format-decode', which see.  */)
   bool set_coding_system = 0;
   Lisp_Object coding_system;
   bool read_quit = 0;
+  /* If the undo log only contains the insertion, there's no point
+     keeping it.  It's typically when we first fill a file-buffer.  */
+  bool empty_undo_list_p
+    = (!NILP (visit) && NILP (BVAR (current_buffer, undo_list))
+       && BEG == Z);
   Lisp_Object old_Vdeactivate_mark = Vdeactivate_mark;
   bool we_locked_file = 0;
   bool deferred_remove_unwind_protect = 0;
@@ -4055,9 +4058,7 @@ by calling `format-decode', which see.  */)
       if (bufpos == inserted)
 	{
 	  /* Truncate the buffer to the size of the file.  */
-	  if (same_at_start == same_at_end)
-	    nochange = 1;
-	  else
+	  if (same_at_start != same_at_end)
 	    del_range_byte (same_at_start, same_at_end, 0);
 	  inserted = 0;
 
@@ -4108,6 +4109,7 @@ by calling `format-decode', which see.  */)
 	{
 	  del_range_byte (same_at_start, same_at_end, 0);
 	  temp = GPT;
+	  eassert (same_at_start == GPT_BYTE);
 	  same_at_start = GPT_BYTE;
 	}
       else
@@ -4120,6 +4122,7 @@ by calling `format-decode', which see.  */)
 	= buf_bytepos_to_charpos (XBUFFER (conversion_buffer),
 				  same_at_start - BEGV_BYTE
 				  + BUF_BEG_BYTE (XBUFFER (conversion_buffer)));
+      eassert (same_at_start_charpos == temp - (BEGV - BEG));
       inserted_chars
 	= (buf_bytepos_to_charpos (XBUFFER (conversion_buffer),
 				   same_at_start + inserted - BEGV_BYTE
@@ -4404,7 +4407,7 @@ by calling `format-decode', which see.  */)
 
   if (!NILP (visit))
     {
-      if (!EQ (BVAR (current_buffer, undo_list), Qt) && !nochange)
+      if (empty_undo_list_p)
 	bset_undo_list (current_buffer, Qnil);
 
       if (NILP (handler))
@@ -4546,7 +4549,7 @@ by calling `format-decode', which see.  */)
 	  p = XCDR (p);
 	}
 
-      if (NILP (visit))
+      if (!empty_undo_list_p)
 	{
 	  bset_undo_list (current_buffer, old_undo);
 	  if (CONSP (old_undo) && inserted != old_inserted)
@@ -4759,7 +4762,7 @@ This calls `write-region-annotate-functions' at the start, and
   struct stat st;
   EMACS_TIME modtime;
   ptrdiff_t count = SPECPDL_INDEX ();
-  int count1;
+  ptrdiff_t count1;
   Lisp_Object handler;
   Lisp_Object visit_file;
   Lisp_Object annotations;
@@ -5591,7 +5594,7 @@ A non-nil CURRENT-ONLY argument means save only current buffer.  */)
      point to non-strings reached from Vbuffer_alist.  */
 
   hook = intern ("auto-save-hook");
-  Frun_hooks (1, &hook);
+  safe_run_hooks (hook);
 
   if (STRINGP (Vauto_save_list_file_name))
     {
@@ -5615,7 +5618,7 @@ A non-nil CURRENT-ONLY argument means save only current buffer.  */)
 	  UNGCPRO;
 	}
 
-      stream = fopen (SSDATA (listfile), "w");
+      stream = emacs_fopen (SSDATA (listfile), "w");
     }
 
   record_unwind_protect (do_auto_save_unwind,
@@ -5882,6 +5885,7 @@ syms_of_fileio (void)
   DEFSYM (Qfile_error, "file-error");
   DEFSYM (Qfile_already_exists, "file-already-exists");
   DEFSYM (Qfile_date_error, "file-date-error");
+  DEFSYM (Qfile_notify_error, "file-notify-error");
   DEFSYM (Qexcl, "excl");
 
   DEFVAR_LISP ("file-name-coding-system", Vfile_name_coding_system,
@@ -5919,6 +5923,11 @@ of file names regardless of the current language environment.  */);
 	Fpurecopy (list3 (Qfile_date_error, Qfile_error, Qerror)));
   Fput (Qfile_date_error, Qerror_message,
 	build_pure_c_string ("Cannot set file date"));
+
+  Fput (Qfile_notify_error, Qerror_conditions,
+	Fpurecopy (list3 (Qfile_notify_error, Qfile_error, Qerror)));
+  Fput (Qfile_notify_error, Qerror_message,
+	build_pure_c_string ("File notification error"));
 
   DEFVAR_LISP ("file-name-handler-alist", Vfile_name_handler_alist,
 	       doc: /* Alist of elements (REGEXP . HANDLER) for file names handled specially.

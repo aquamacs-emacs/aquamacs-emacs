@@ -782,21 +782,29 @@ remaining completion.  If absent, elements 5 and 6 are used instead."
   :group 'ido)
 
 (defcustom ido-use-virtual-buffers nil
-  "If non-nil, refer to past buffers as well as existing ones.
+  "Specify how vritual buffers should be used.
+The value can be one of the following:
+
+  nil:  No virtual buffers are used.
+  auto: Use virtual bufferw when the current input matches no
+        existing buffers.
+  t:    Always use virtual buffers.
+
 Essentially it works as follows: Say you are visiting a file and
 the buffer gets cleaned up by midnight.el.  Later, you want to
-switch to that buffer, but find it's no longer open.  With
-virtual buffers enabled, the buffer name stays in the buffer
-list (using the `ido-virtual' face, and always at the end), and if
-you select it, it opens the file back up again.  This allows you
-to think less about whether recently opened files are still open
-or not.  Most of the time you can quit Emacs, restart, and then
-switch to a file buffer that was previously open as if it still
-were.
-    This feature relies upon the `recentf' package, which will be
-enabled if this variable is configured to a non-nil value."
-  :version "24.1"
-  :type 'boolean
+switch to that buffer, but find it's no longer open.  With virtual
+buffers enabled, the buffer name stays in the buffer list (using
+the `ido-virtual' face, and always at the end), and if you select
+it, it opens the file back up again.  This allows you to think
+less about whether recently opened files are still open or not.
+Most of the time you can quit Emacs, restart, and then switch to
+a file buffer that was previously open as if it still were.  This
+feature relies upon the `recentf' package, which will be enabled
+if this variable is configured to a non-nil value."
+  :version "24.4"
+  :type '(choice (const :tag "Always" t)
+		 (const :tag "Automatic" auto)
+		 (const :tag "Never" nil))
   :group 'ido)
 
 (defcustom ido-use-faces t
@@ -1102,6 +1110,9 @@ Only used if `ido-use-virtual-buffers' is non-nil.")
 
 ;; Don't process ido-ignore- lists once.
 (defvar ido-process-ignore-lists-inhibit)
+
+;; Is ido using virtual buffers?
+(defvar ido-enable-virtual-buffers)
 
 ;; Buffer from which ido was entered.
 (defvar ido-entry-buffer)
@@ -2141,9 +2152,10 @@ If INITIAL is non-nil, it specifies the initial input string."
 		    done t)
 	    (setq ido-set-default-item t)))
 
-	 ((or (string-match "[/\\][^/\\]" ido-selected)
-	      (and (memq system-type '(windows-nt ms-dos))
-		   (string-match "\\`[a-zA-Z]:" ido-selected)))
+	 ((string-match (if (memq system-type '(windows-nt ms-dos))
+			    "\\`[a-zA-Z]:\\|[/\\][^/\\]"
+			  "/[^/]")
+			ido-selected)
 	  (ido-set-current-directory (file-name-directory ido-selected))
 	  (setq ido-set-default-item t))
 
@@ -2201,7 +2213,8 @@ If cursor is not at the end of the user input, move to end of input."
 	   (ido-current-directory nil)
 	   (ido-directory-nonreadable nil)
 	   (ido-directory-too-big nil)
-	   (ido-use-virtual-buffers ido-use-virtual-buffers)
+	   (ido-enable-virtual-buffers (and ido-use-virtual-buffers
+					    (not (eq ido-use-virtual-buffers 'auto))))
 	   (require-match (confirm-nonexistent-file-or-buffer))
 	   (buf (ido-read-internal 'buffer (or prompt "Buffer: ") 'ido-buffer-history default
 				   require-match initial))
@@ -2242,7 +2255,8 @@ If cursor is not at the end of the user input, move to end of input."
 	  (ido-visit-buffer buf method t)))
 
        ;; check for a virtual buffer reference
-       ((and ido-use-virtual-buffers ido-virtual-buffers
+       ((and ido-enable-virtual-buffers
+	     ido-virtual-buffers
 	     (setq filename (assoc buf ido-virtual-buffers)))
 	(ido-visit-buffer (find-file-noselect (cdr filename)) method t))
 
@@ -2733,7 +2747,11 @@ C-x C-f ... C-d  enter `dired' on current directory."
 See `ido-use-virtual-buffers' for explanation of virtual buffer."
   (interactive)
   (when (and ido-mode (eq ido-cur-item 'buffer))
-    (setq ido-use-virtual-buffers (not ido-use-virtual-buffers))
+    (setq ido-enable-virtual-buffers
+	  (if ido-enable-virtual-buffers
+	      nil
+	    ;; Use `always' instead of t for `ido-exhibit'.
+	    'always))
     (setq ido-text-init ido-text)
     (setq ido-exit 'refresh)
     (exit-minibuffer)))
@@ -3276,14 +3294,18 @@ for first matching file."
 (defun ido-wide-find-dirs-or-files (dir file &optional prefix finddir)
   ;; As ido-run-find-command, but returns a list of cons pairs ("file" . "dir")
   (let ((filenames
-	 (split-string
-	  (shell-command-to-string
-	   (concat "find "
-		   (shell-quote-argument dir)
-		   " -name "
-		   (shell-quote-argument
-		    (concat (if prefix "" "*") file "*"))
-		   " -type " (if finddir "d" "f") " -print"))))
+         (delq nil
+               (mapcar (lambda (name)
+                         (unless (ido-ignore-item-p name ido-ignore-files t)
+                           name))
+                       (split-string
+                        (shell-command-to-string
+                         (concat "find "
+                                 (shell-quote-argument dir)
+                                 (if ido-case-fold " -iname " " -name ")
+                                 (shell-quote-argument
+                                  (concat (if prefix "" "*") file "*"))
+                                 " -type " (if finddir "d" "f") " -print"))))))
 	filename d f
 	res)
     (while filenames
@@ -3297,7 +3319,7 @@ for first matching file."
     res))
 
 (defun ido-flatten-merged-list (items)
-  ;; Create a list of directory names based on a merged directory list.
+  "Create a list of directory names based on a merged directory list."
   (let (res)
     (while items
       (let* ((item (car items))
@@ -3400,7 +3422,7 @@ for first matching file."
     res))
 
 (defun ido-make-buffer-list-1 (&optional frame visible)
-  ;; Return list of non-ignored buffer names
+  "Return list of non-ignored buffer names."
   (delq nil
 	(mapcar
 	 (lambda (x)
@@ -3410,21 +3432,21 @@ for first matching file."
 	 (buffer-list frame))))
 
 (defun ido-make-buffer-list (default)
-  ;; Return the current list of buffers.
-  ;; Currently visible buffers are put at the end of the list.
-  ;; The hook `ido-make-buffer-list-hook' is run after the list has been
-  ;; created to allow the user to further modify the order of the buffer names
-  ;; in this list.  If DEFAULT is non-nil, and corresponds to an existing buffer,
-  ;; it is put to the start of the list.
+  "Return the current list of buffers.
+Currently visible buffers are put at the end of the list.
+The hook `ido-make-buffer-list-hook' is run after the list has been
+created to allow the user to further modify the order of the buffer names
+in this list.  If DEFAULT is non-nil, and corresponds to an existing buffer,
+it is put to the start of the list."
   (let* ((ido-current-buffers (ido-get-buffers-in-frames 'current))
 	 (ido-temp-list (ido-make-buffer-list-1 (selected-frame) ido-current-buffers)))
     (if ido-temp-list
 	(nconc ido-temp-list ido-current-buffers)
       (setq ido-temp-list ido-current-buffers))
     (if default
-        (setq ido-temp-list
-              (cons default (delete default ido-temp-list))))
-    (if ido-use-virtual-buffers
+	(setq ido-temp-list
+	      (cons default (delete default ido-temp-list))))
+    (if (bound-and-true-p ido-enable-virtual-buffers)
 	(ido-add-virtual-buffers-to-list))
     (run-hooks 'ido-make-buffer-list-hook)
     ido-temp-list))
@@ -3457,9 +3479,9 @@ This is to make them appear as if they were \"virtual buffers\"."
 		 (nreverse (mapcar #'car ido-virtual-buffers))))))
 
 (defun ido-make-choice-list (default)
-  ;; Return the current list of choices.
-  ;; If DEFAULT is non-nil, and corresponds to an element of choices,
-  ;; it is put to the start of the list.
+  "Return the current list of choices.
+If DEFAULT is non-nil, and corresponds to an element of choices,
+it is put to the start of the list."
   (let ((ido-temp-list ido-choice-list))
     (if default
 	(progn
@@ -3471,7 +3493,7 @@ This is to make them appear as if they were \"virtual buffers\"."
     ido-temp-list))
 
 (defun ido-to-end (items)
-  ;; Move the elements from ITEMS to the end of `ido-temp-list'
+  "Move the elements from ITEMS to the end of `ido-temp-list'."
   (mapc
    (lambda (elem)
      (setq ido-temp-list (delq elem ido-temp-list)))
@@ -3515,8 +3537,8 @@ This is to make them appear as if they were \"virtual buffers\"."
     (file-name-all-completions "" dir))))
 
 (defun ido-file-name-all-completions (dir)
-  ;; Return name of all files in DIR
-  ;; Uses and updates ido-dir-file-cache
+  "Return name of all files in DIR.
+Uses and updates `ido-dir-file-cache'."
   (cond
    ((ido-is-unc-root dir)
     (mapcar
@@ -3565,7 +3587,7 @@ This is to make them appear as if they were \"virtual buffers\"."
     (ido-file-name-all-completions-1 dir))))
 
 (defun ido-remove-cached-dir (dir)
-  ;; Remove dir from ido-dir-file-cache
+  "Remove DIR from `ido-dir-file-cache'."
   (if (and ido-dir-file-cache
 	   (stringp dir) (> (length dir) 0))
       (let ((cached (assoc dir ido-dir-file-cache)))
@@ -3574,8 +3596,8 @@ This is to make them appear as if they were \"virtual buffers\"."
 
 
 (defun ido-make-file-list-1 (dir &optional merged)
-  ;; Return list of non-ignored files in DIR
-  ;; If MERGED is non-nil, each file is cons'ed with DIR
+  "Return list of non-ignored files in DIR
+If MERGED is non-nil, each file is cons'ed with DIR."
   (and (or (ido-is-tramp-root dir) (ido-is-unc-root dir)
 	   (file-directory-p dir))
        (delq nil
@@ -3586,11 +3608,11 @@ This is to make them appear as if they were \"virtual buffers\"."
 	      (ido-file-name-all-completions dir)))))
 
 (defun ido-make-file-list (default)
-  ;; Return the current list of files.
-  ;; Currently visible files are put at the end of the list.
-  ;; The hook `ido-make-file-list-hook' is run after the list has been
-  ;; created to allow the user to further modify the order of the file names
-  ;; in this list.
+  "Return the current list of files.
+Currently visible files are put at the end of the list.
+The hook `ido-make-file-list-hook' is run after the list has been
+created to allow the user to further modify the order of the file names
+in this list."
   (let ((ido-temp-list (ido-make-file-list-1 ido-current-directory)))
     (setq ido-temp-list (sort ido-temp-list
 			      (if ido-file-extensions-order
@@ -3631,8 +3653,8 @@ This is to make them appear as if they were \"virtual buffers\"."
     ido-temp-list))
 
 (defun ido-make-dir-list-1 (dir &optional merged)
-  ;; Return list of non-ignored subdirs in DIR
-  ;; If MERGED is non-nil, each subdir is cons'ed with DIR
+  "Return list of non-ignored subdirs in DIR.
+If MERGED is non-nil, each subdir is cons'ed with DIR."
   (and (or (ido-is-tramp-root dir) (file-directory-p dir))
        (delq nil
 	     (mapcar
@@ -3642,10 +3664,10 @@ This is to make them appear as if they were \"virtual buffers\"."
 	      (ido-file-name-all-completions dir)))))
 
 (defun ido-make-dir-list (default)
-  ;; Return the current list of directories.
-  ;; The hook `ido-make-dir-list-hook' is run after the list has been
-  ;; created to allow the user to further modify the order of the
-  ;; directory names in this list.
+  "Return the current list of directories.
+The hook `ido-make-dir-list-hook' is run after the list has been
+created to allow the user to further modify the order of the
+directory names in this list."
   (let ((ido-temp-list (ido-make-dir-list-1 ido-current-directory)))
     (setq ido-temp-list (sort ido-temp-list #'ido-file-lessp))
     (ido-to-end  ;; move . files to end
@@ -3676,10 +3698,9 @@ This is to make them appear as if they were \"virtual buffers\"."
 (defvar ido-bufs-in-frame)
 
 (defun ido-get-buffers-in-frames (&optional current)
-  ;; Return the list of buffers that are visible in the current frame.
-  ;; If optional argument `current' is given, restrict searching to the
-  ;; current frame, rather than all frames, regardless of value of
-  ;; `ido-all-frames'.
+  "Return the list of buffers that are visible in the current frame.
+If optional argument CURRENT is given, restrict searching to the current
+frame, rather than all frames, regardless of value of `ido-all-frames'."
   (let ((ido-bufs-in-frame nil))
     (walk-windows 'ido-get-bufname nil
 		  (if current
@@ -3688,7 +3709,7 @@ This is to make them appear as if they were \"virtual buffers\"."
     ido-bufs-in-frame))
 
 (defun ido-get-bufname (win)
-  ;; Used by `ido-get-buffers-in-frames' to walk through all windows
+  "Used by `ido-get-buffers-in-frames' to walk through all windows."
   (let ((buf (buffer-name (window-buffer win))))
 	(unless (or (member buf ido-bufs-in-frame)
 		    (member buf ido-ignore-item-temp-list))
@@ -3701,7 +3722,7 @@ This is to make them appear as if they were \"virtual buffers\"."
 ;;; FIND MATCHING ITEMS
 
 (defun ido-set-matches-1 (items &optional do-full)
-  ;; Return list of matches in items
+  "Return list of matches in ITEMS."
   (let* ((case-fold-search  ido-case-fold)
 	 (slash (and (not ido-enable-prefix) (ido-final-slash ido-text)))
 	 (text (if slash (substring ido-text 0 -1) ido-text))
@@ -3785,17 +3806,17 @@ This is to make them appear as if they were \"virtual buffers\"."
 	   (if (string-match re name)
 	       (setq matches (cons item matches)))))
        items))
-    matches))
+    (delete-consecutive-dups matches t)))
 
 
 (defun ido-set-matches ()
-  ;; Set `ido-matches' to the list of items matching prompt
+  "Set `ido-matches' to the list of items matching prompt."
   (when ido-rescan
     (setq ido-matches (ido-set-matches-1 (reverse ido-cur-list) (not ido-rotate))
 	  ido-rotate nil)))
 
 (defun ido-ignore-item-p (name re-list &optional ignore-ext)
-  ;; Return t if the buffer or file NAME should be ignored.
+  "Return t if the buffer or file NAME should be ignored."
   (or (member name ido-ignore-item-temp-list)
       (and
        ido-process-ignore-lists re-list
@@ -3835,7 +3856,7 @@ This is to make them appear as if they were \"virtual buffers\"."
 (defvar ido-change-word-sub)
 
 (defun ido-find-common-substring (items subs)
-  ;; Return common string following SUBS in each element of ITEMS.
+  "Return common string following SUBS in each element of ITEMS."
   (let (res
         alist
         ido-change-word-sub)
@@ -3855,8 +3876,8 @@ This is to make them appear as if they were \"virtual buffers\"."
 	comp))))
 
 (defun ido-word-matching-substring (word)
-  ;; Return part of WORD before 1st match to `ido-change-word-sub'.
-  ;; If `ido-change-word-sub' cannot be found in WORD, return nil.
+  "Return part of WORD before first match to `ido-change-word-sub'.
+If `ido-change-word-sub' cannot be found in WORD, return nil."
   (let ((case-fold-search ido-case-fold))
     (let ((m (string-match ido-change-word-sub (ido-name word))))
       (if m
@@ -3865,7 +3886,7 @@ This is to make them appear as if they were \"virtual buffers\"."
         nil))))
 
 (defun ido-makealist (res)
-  ;; Return dotted pair (RES . 1).
+  "Return dotted pair (RES . 1)."
   (cons res 1))
 
 (defun ido-choose-completion-string (choice &rest ignored)
@@ -3982,6 +4003,7 @@ If cursor is not at the end of the user input, delete to end of input."
 ;;; DELETE CURRENT FILE
 (defun ido-delete-file-at-head ()
   "Delete the file at the head of `ido-matches'.
+Trash the file if `delete-by-moving-to-trash' is non-nil.
 If cursor is not at the end of the user input, delete to end of input."
   (interactive)
   (if (not (eobp))
@@ -3994,8 +4016,9 @@ If cursor is not at the end of the user input, delete to end of input."
 		 (file-exists-p file)
 		 (not (file-directory-p file))
 		 (file-writable-p ido-current-directory)
-		 (yes-or-no-p (concat "Delete " file "? ")))
-	(delete-file file)
+		 (or delete-by-moving-to-trash
+		     (yes-or-no-p (concat "Delete " file "? "))))
+	(delete-file file 'trash)
 	;; Check if file still exists.
 	(if (file-exists-p file)
 	    ;; file could not be deleted
@@ -4048,8 +4071,8 @@ Record command in `command-history' if optional RECORD is non-nil."
 
 
 (defun ido-buffer-window-other-frame  (buffer)
-  ;; Return window pointer if BUFFER is visible in another frame.
-  ;; If BUFFER is visible in the current frame, return nil.
+  "Return window pointer if BUFFER is visible in another frame.
+If BUFFER is visible in the current frame, return nil."
   (let ((blist (ido-get-buffers-in-frames 'current)))
     ;;If the buffer is visible in current frame, return nil
     (if (member buffer blist)
@@ -4471,6 +4494,27 @@ For details of keybindings, see `ido-find-file'."
 	  (setq ido-exit 'refresh)
 	  (exit-minibuffer))
 
+	(when (and (boundp 'ido-enable-virtual-buffers)
+		   (not (eq ido-enable-virtual-buffers 'always))
+		   (eq ido-cur-item 'buffer)
+		   (eq ido-use-virtual-buffers 'auto))
+
+	  (when (and (not ido-enable-virtual-buffers)
+		     (not ido-matches))
+	    (setq ido-text-init ido-text)
+	    (setq ido-enable-virtual-buffers t)
+	    (setq ido-exit 'refresh)
+	    (exit-minibuffer))
+
+	  ;; If input matches real buffers turn off virtual buffers.
+	  (when (and ido-enable-virtual-buffers
+		     ido-matches
+		     (ido-set-matches-1 (ido-make-buffer-list-1)))
+	    (setq ido-enable-virtual-buffers nil)
+	    (setq ido-text-init ido-text)
+	    (setq ido-exit 'refresh)
+	    (exit-minibuffer)))
+
 	(when (and (not ido-matches)
 		   (not ido-directory-nonreadable)
 		   (not ido-directory-too-big)
@@ -4533,9 +4577,8 @@ For details of keybindings, see `ido-find-file'."
 	))))
 
 (defun ido-completions (name)
-  ;; Return the string that is displayed after the user's text.
-  ;; Modified from `icomplete-completions'.
-
+  "Return the string that is displayed after the user's text.
+Modified from `icomplete-completions'."
   (let* ((comps ido-matches)
 	 (ind (and (consp (car comps)) (> (length (cdr (car comps))) 1)
 		   ido-merged-indicator))
@@ -4676,21 +4719,6 @@ For details of keybindings, see `ido-find-file'."
 			      ido-temp-list))))
     (ido-to-end summaries)))
 
-(defun ido-remove-consecutive-dups (list)
-  "Remove consecutive duplicates in LIST.
-Use `equal' for comparison.  First and last elements are
-considered consecutive."
-  (let ((tail list)
-	(last (make-symbol ""))
-	(result nil))
-    (while (consp tail)
-      (unless (equal (car tail) last)
-	(push (setq last (car tail)) result))
-      (setq tail (cdr tail)))
-    (nreverse (or (and (equal last (car list))
-		       (cdr result))
-		  result))))
-
 ;;; Helper functions for other programs
 
 (put 'dired-do-rename 'ido 'ignore)
@@ -4808,7 +4836,7 @@ DEF, if non-nil, is the default value."
 	(ido-directory-nonreadable nil)
 	(ido-directory-too-big nil)
 	(ido-context-switch-command 'ignore)
-	(ido-choice-list (ido-remove-consecutive-dups choices)))
+	(ido-choice-list choices))
     ;; Initialize ido before invoking ido-read-internal
     (ido-common-initialization)
     (ido-read-internal 'list prompt hist def require-match initial-input)))

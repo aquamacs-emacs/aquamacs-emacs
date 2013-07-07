@@ -1524,6 +1524,9 @@ This list will always be a subset of gnus-newsgroup-undownloaded.")
 (defvar gnus-newsgroup-seen nil
   "Range of seen articles in the current newsgroup.")
 
+(defvar gnus-newsgroup-unexist nil
+  "Range of unexistent articles in the current newsgroup.")
+
 (defvar gnus-newsgroup-articles nil
   "List of articles in the current newsgroup.")
 
@@ -1571,6 +1574,7 @@ This list will always be a subset of gnus-newsgroup-undownloaded.")
     gnus-newsgroup-killed
     gnus-newsgroup-unseen
     gnus-newsgroup-seen
+    gnus-newsgroup-unexist
     gnus-newsgroup-cached
     gnus-newsgroup-downloadable
     gnus-newsgroup-undownloaded
@@ -3653,18 +3657,17 @@ buffer that was in action when the last article was fetched."
   (or (car (funcall gnus-extract-address-components from))
       from))
 
-(defun gnus-summary-from-or-to-or-newsgroups (header from)
+(defun gnus-summary-from-or-to-or-newsgroups (header gnus-tmp-from)
   (let ((mail-parse-charset gnus-newsgroup-charset)
-        (ignored-from-addresses (gnus-ignored-from-addresses))
-        ;; Is it really necessary to do this next part for each summary line?
-        ;; Luckily, doesn't seem to slow things down much.
-        (mail-parse-ignored-charsets
-         (with-current-buffer gnus-summary-buffer
-           gnus-newsgroup-ignored-charsets))
-        (address (cadr (gnus-extract-address-components from))))
+	(ignored-from-addresses (gnus-ignored-from-addresses))
+	;; Is it really necessary to do this next part for each summary line?
+	;; Luckily, doesn't seem to slow things down much.
+	(mail-parse-ignored-charsets
+	 (with-current-buffer gnus-summary-buffer
+	   gnus-newsgroup-ignored-charsets)))
     (or
      (and ignored-from-addresses
-	  (string-match ignored-from-addresses address)
+	  (string-match ignored-from-addresses gnus-tmp-from)
 	  (let ((extra-headers (mail-header-extra header))
 		to
 		newsgroups)
@@ -3679,11 +3682,13 @@ buffer that was in action when the last article was fetched."
 		     (cdr (assq 'Newsgroups extra-headers))
 		     (and
 		      (memq 'Newsgroups gnus-extra-headers)
-                      (eq (car (gnus-find-method-for-group
-                                gnus-newsgroup-name)) 'nntp)
+		      (eq (car (gnus-find-method-for-group
+				gnus-newsgroup-name)) 'nntp)
 		      (gnus-group-real-name gnus-newsgroup-name))))
 	      (concat gnus-summary-newsgroup-prefix newsgroups)))))
-     (gnus-string-mark-left-to-right (gnus-summary-extract-address-component from)))))
+     (gnus-string-mark-left-to-right
+      (inline
+	(gnus-summary-extract-address-component gnus-tmp-from))))))
 
 (defun gnus-summary-insert-line (gnus-tmp-header
 				 gnus-tmp-level gnus-tmp-current
@@ -5492,6 +5497,8 @@ or a straight list of headers."
 	 (cdr (assq number gnus-newsgroup-scored))
 	 (memq number gnus-newsgroup-processable))))))
 
+(declare-function gnus-parameter-list-identifier "gnus-art" (name) t)
+
 (defun gnus-group-get-list-identifiers (group)
   "Get list identifier regexp for GROUP."
   (or (gnus-parameter-list-identifier group)
@@ -5787,6 +5794,7 @@ If SELECT-ARTICLES, only select those articles from GROUP."
   "Find out what articles the user wants to read."
   (let* ((only-read-p t)
 	 (articles
+	  (gnus-list-range-difference
 	  ;; Select all articles if `read-all' is non-nil, or if there
 	  ;; are no unread articles.
 	  (if (or read-all
@@ -5813,7 +5821,8 @@ If SELECT-ARTICLES, only select those articles from GROUP."
 	    (setq only-read-p nil)
 	    (gnus-sorted-nunion
 	     (gnus-sorted-union gnus-newsgroup-dormant gnus-newsgroup-marked)
-	     gnus-newsgroup-unreads)))
+	     gnus-newsgroup-unreads))
+	  (cdr (assq 'unexist (gnus-info-marks (gnus-get-info group))))))
 	 (scored-list (gnus-killed-articles gnus-newsgroup-killed articles))
 	 (scored (length scored-list))
 	 (number (length articles))
@@ -5983,7 +5992,9 @@ If SELECT-ARTICLES, only select those articles from GROUP."
 			  (and (numberp (car articles))
 			       (> min (car articles)))))
 	    (pop articles))
-	  (set var articles))))))))
+	  (set var articles))
+	 ((eq mark 'unexist)
+	  (set var (cdr marks)))))))))
 
 (defun gnus-update-missing-marks (missing)
   "Go through the list of MISSING articles and remove them from the mark lists."
@@ -6059,7 +6070,8 @@ If SELECT-ARTICLES, only select those articles from GROUP."
 			 (gnus-active gnus-newsgroup-name) del))
 	      (push (list del 'del (list (cdr type))) delta-marks))))
 
-	(when list
+	(when (or list
+		  (eq (cdr type) 'unexist))
 	  (push (cons (cdr type) list) newmarked)))
 
       (when delta-marks
@@ -7267,6 +7279,9 @@ If FORCE (the prefix), also save the .newsrc file(s)."
       (unless quit-config
 	(setq gnus-newsgroup-name nil)))))
 
+(declare-function gnus-article-stop-animations "gnus-art" ())
+(declare-function gnus-stop-downloads "gnus-art" ())
+
 (defalias 'gnus-summary-quit 'gnus-summary-exit-no-update)
 (defun gnus-summary-exit-no-update (&optional no-questions)
   "Quit reading current newsgroup without updating read article info."
@@ -7859,6 +7874,8 @@ If UNREAD is non-nil, only unread articles are selected."
    (and gnus-auto-select-same
 	(gnus-summary-article-subject))))
 
+(declare-function gnus-article-only-boring-p "gnus-art" ())
+
 (defun gnus-summary-next-page (&optional lines circular stop)
   "Show next page of the selected article.
 If at the end of the current article, select the next article.
@@ -8425,6 +8442,8 @@ If ALL is non-nil, limit strictly to unread articles."
 If REVERSE (the prefix), limit to articles that don't match."
   (interactive "sMatch headers (regexp): \nP")
   (gnus-summary-limit-to-bodies match reverse t))
+
+(declare-function article-goto-body "gnus-art" ())
 
 (defun gnus-summary-limit-to-bodies (match &optional reverse headersp)
   "Limit the summary buffer to articles that have bodies that match MATCH.
@@ -9556,6 +9575,8 @@ to save in."
 	  (ps-spool-buffer-with-faces)
 	(ps-spool-buffer)))))
 
+(declare-function gnus-flush-original-article-buffer "gnus-art" ())
+
 (defun gnus-summary-show-complete-article ()
   "Show a complete version of the current article.
 This is only useful if you're looking at a partial version of the
@@ -9678,6 +9699,10 @@ If ARG is a negative number, turn header display off."
 	      ((natnump arg)
 	       t)))
   (gnus-summary-show-article))
+
+(declare-function article-narrow-to-head "gnus-art" ())
+(declare-function gnus-article-hidden-text-p "gnus-art" (type))
+(declare-function gnus-delete-wash-type "gnus-art" (type))
 
 (defun gnus-summary-toggle-header (&optional arg)
   "Show the headers if they are hidden, or hide them if they are shown.
@@ -10290,16 +10315,19 @@ This will be the case if the article has both been mailed and posted."
 	      'request-expire-articles gnus-newsgroup-name))
     ;; This backend supports expiry.
     (let* ((total (gnus-group-total-expirable-p gnus-newsgroup-name))
-	   (expirable (if total
-			  (progn
-			    ;; We need to update the info for
-			    ;; this group for `gnus-list-of-read-articles'
-			    ;; to give us the right answer.
-			    (gnus-run-hooks 'gnus-exit-group-hook)
-			    (gnus-summary-update-info)
-			    (gnus-list-of-read-articles gnus-newsgroup-name))
-			(setq gnus-newsgroup-expirable
-			      (sort gnus-newsgroup-expirable '<))))
+	   (expirable
+	    (gnus-list-range-difference
+	     (if total
+		 (progn
+		   ;; We need to update the info for
+		   ;; this group for `gnus-list-of-read-articles'
+		   ;; to give us the right answer.
+		   (gnus-run-hooks 'gnus-exit-group-hook)
+		   (gnus-summary-update-info)
+		   (gnus-list-of-read-articles gnus-newsgroup-name))
+	       (setq gnus-newsgroup-expirable
+		     (sort gnus-newsgroup-expirable '<)))
+	     gnus-newsgroup-unexist))
 	   (expiry-wait (if now 'immediate
 			  (gnus-group-find-parameter
 			   gnus-newsgroup-name 'expiry-wait)))
@@ -11962,6 +11990,8 @@ will not be marked as saved."
     (gnus-set-mode-line 'summary)
     n))
 
+(declare-function gnus-summary-save-in-pipe "gnus-art" (&optional command raw))
+
 (defun gnus-summary-pipe-output (&optional n sym)
   "Pipe the current article to a subprocess.
 If N is a positive number, pipe the N next articles.
@@ -12830,7 +12860,9 @@ If ALL is a number, fetch this number of articles."
 	      ;; Some nntp servers lie about their active range.  When
 	      ;; this happens, the active range can be in the millions.
 	      ;; Use a compressed range to avoid creating a huge list.
-	      (gnus-range-difference (list gnus-newsgroup-active) old))
+	      (gnus-range-difference
+	       (gnus-range-difference (list gnus-newsgroup-active) old)
+	       gnus-newsgroup-unexist))
 	(setq len (gnus-range-length older))
 	(cond
 	 ((null older) nil)
@@ -12914,6 +12946,7 @@ If ALL is a number, fetch this number of articles."
   (gnus-summary-position-point))
 
 ;;; Bookmark support for Gnus.
+(declare-function gnus-article-show-summary "gnus-art" ())
 (declare-function bookmark-make-record-default
                   "bookmark" (&optional no-file no-context posn))
 (declare-function bookmark-prop-get "bookmark" (bookmark prop))

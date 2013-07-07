@@ -29,8 +29,7 @@
 
 (require 'mail-parse)
 (require 'mm-bodies)
-(eval-when-compile (require 'cl)
-		   (require 'term))
+(eval-when-compile (require 'cl))
 
 (autoload 'gnus-map-function "gnus-util")
 (autoload 'gnus-replace-in-string "gnus-util")
@@ -813,6 +812,8 @@ external if displayed external."
 
 (declare-function gnus-configure-windows "gnus-win" (setting &optional force))
 (defvar mailcap-mime-extensions)	; mailcap-mime-info autoloads
+(declare-function term-mode "term" ())
+(declare-function term-char-mode "term" ())
 
 (defun mm-display-external (handle method)
   "Display HANDLE using METHOD."
@@ -1808,12 +1809,32 @@ If RECURSIVE, search recursively."
 	 (libxml-parse-html-region (point-min) (point-max))))
       (unless (bobp)
 	(insert "\n"))
+      (mm-convert-shr-links)
       (mm-handle-set-undisplayer
        handle
        `(lambda ()
 	  (let ((inhibit-read-only t))
 	    (delete-region ,(point-min-marker)
 			   ,(point-max-marker))))))))
+
+(defvar shr-map)
+
+(autoload 'widget-convert-button "wid-edit")
+
+(defun mm-convert-shr-links ()
+  (let ((start (point-min))
+	end)
+    (while (and start
+		(< start (point-max)))
+      (when (setq start (text-property-not-all start (point-max) 'shr-url nil))
+	(setq end (next-single-property-change start 'shr-url nil (point-max)))
+	(widget-convert-button
+	 'url-link start end
+	 :help-echo (get-text-property start 'help-echo)
+	 :keymap shr-map
+	 (get-text-property start 'shr-url))
+	(put-text-property start end 'local-map nil)
+	(setq start end)))))
 
 (defun mm-handle-filename (handle)
   "Return filename of HANDLE if any."

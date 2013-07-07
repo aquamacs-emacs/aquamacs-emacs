@@ -148,10 +148,11 @@
   "Completion facilities in comint."
   :group 'comint)
 
-(defgroup comint-source nil
-  "Source finding facilities in comint."
-  :prefix "comint-"
-  :group 'comint)
+;; Unused.
+;;; (defgroup comint-source nil
+;;;   "Source finding facilities in comint."
+;;;   :prefix "comint-"
+;;;   :group 'comint)
 
 (defvar comint-prompt-regexp "^"
   "Regexp to recognize prompts in the inferior process.
@@ -350,7 +351,7 @@ This variable is buffer-local."
     '("password" "Password" "passphrase" "Passphrase"
       "pass phrase" "Pass phrase" "Response"))
    "\\(?:\\(?:, try\\)? *again\\| (empty for no passphrase)\\| (again)\\)?\
-\\(?: for [^:]+\\)?:\\s *\\'")
+\\(?: for .+\\)?:\\s *\\'")
   "Regexp matching prompts for passwords in the inferior process.
 This is used by `comint-watch-for-password-prompt'."
   :version "24.1"
@@ -1189,7 +1190,8 @@ If N is negative, find the next or Nth next match."
 		(funcall comint-get-old-input)))
       (setq comint-input-ring-index pos)
       (unless isearch-mode
-	(message "History item: %d" (1+ pos)))
+	(let ((message-log-max nil))	; Do not write to *Messages*.
+	  (message "History item: %d" (1+ pos))))
       (comint-delete-input)
       (insert (ring-ref comint-input-ring pos)))))
 
@@ -3723,20 +3725,21 @@ REGEXP-GROUP is the regular expression group in REGEXP to use."
 					       output-buffer process nil t)
       ;; Wait for the process to complete
       (set-buffer (process-buffer process))
-      (while (null comint-redirect-completed)
-	(accept-process-output nil 1))
+      (while (and (null comint-redirect-completed)
+		  (accept-process-output process)))
       ;; Collect the output
       (set-buffer output-buffer)
       (goto-char (point-min))
       ;; Skip past the command, if it was echoed
       (and (looking-at command)
 	   (forward-line))
-      (while (re-search-forward regexp nil t)
+      (while (and (not (eobp))
+		  (re-search-forward regexp nil t))
 	(push (buffer-substring-no-properties
                (match-beginning regexp-group)
                (match-end regexp-group))
               results))
-      results)))
+      (nreverse results))))
 
 ;; Converting process modes to use comint mode
 ;; ===========================================================================

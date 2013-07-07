@@ -1906,7 +1906,7 @@ or as help on variables `cperl-tips', `cperl-problems',
   (and (boundp 'msb-menu-cond)
        (not cperl-msb-fixed)
        (cperl-msb-fix))
-  (if (featurep 'easymenu)
+  (if (fboundp 'easy-menu-add)
       (easy-menu-add cperl-menu))	; A NOP in Emacs.
   (run-mode-hooks 'cperl-mode-hook)
   (if cperl-hook-after-change
@@ -6217,6 +6217,10 @@ indentation and initial hashes.  Behaves usually outside of comment."
     (error (message "cperl-init-faces (ignored): %s" errs))))
 
 
+(defvar ps-bold-faces)
+(defvar ps-italic-faces)
+(defvar ps-underlined-faces)
+
 (defun cperl-ps-print-init ()
   "Initialization of `ps-print' components for faces used in CPerl."
   (eval-after-load "ps-print"
@@ -6530,6 +6534,9 @@ side-effect of memorizing only.  Examples in `cperl-style-examples'."
   (let ((perl-dbg-flags (concat cperl-extra-perl-args " -wc")))
     (eval '(mode-compile))))		; Avoid a warning
 
+(declare-function Info-find-node "info"
+		  (filename nodename &optional no-going-back))
+
 (defun cperl-info-buffer (type)
   ;; Returns buffer with documentation.  Creates if missing.
   ;; If TYPE, this vars buffer.
@@ -6668,10 +6675,13 @@ Customized by setting variables `cperl-shrink-wrap-info-frame',
   (buffer-substring
    (match-beginning 1) (match-end 1)))
 
+(declare-function imenu-choose-buffer-index "imenu" (&optional prompt alist))
+
 (defun cperl-imenu-on-info ()
   "Shows imenu for Perl Info Buffer.
 Opens Perl Info buffer if needed."
   (interactive)
+  (require 'imenu)
   (let* ((buffer (current-buffer))
 	 imenu-create-index-function
 	 imenu-prev-index-position-function
@@ -7131,6 +7141,10 @@ Use as
 (defvar cperl-hierarchy '(() ())
   "Global hierarchy of classes.")
 
+;; Follows call to (autoloaded) visit-tags-table.
+(declare-function file-of-tag "etags" (&optional relative))
+(declare-function etags-snarf-tag "etags" (&optional use-explicit))
+
 (defun cperl-tags-hier-fill ()
   ;; Suppose we are in a tag table cooked by cperl.
   (goto-char 1)
@@ -7174,6 +7188,7 @@ Use as
       (end-of-line))))
 
 (declare-function x-popup-menu "menu.c" (position menu))
+(declare-function etags-goto-tag-location "etags" (tag-info))
 
 (defun cperl-tags-hier-init (&optional update)
   "Show hierarchical menu of classes and methods.
@@ -8516,6 +8531,8 @@ the appropriate statement modifier."
 	  (cperl-invert-if-unless-modifiers)))
     ;;(error "Not at `if', `unless', `while', `until', `for' or `foreach'")
     (cperl-invert-if-unless-modifiers)))
+
+(declare-function Man-getpage-in-background "man" (topic))
 
 ;;; By Anthony Foiani <afoiani@uswest.com>
 ;;; Getting help on modules in C-h f ?
