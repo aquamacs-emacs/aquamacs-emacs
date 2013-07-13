@@ -23,7 +23,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define BLOCKINPUT_INLINE EXTERN_INLINE
 #define KEYBOARD_INLINE EXTERN_INLINE
 
-#include <stdio.h>
+#include "sysstdio.h"
 
 #include "lisp.h"
 #include "termchar.h"
@@ -308,18 +308,15 @@ static Lisp_Object Qfunction_key;
 Lisp_Object Qmouse_click;
 #ifdef HAVE_NTGUI
 Lisp_Object Qlanguage_change;
-#ifdef WINDOWSNT
-Lisp_Object Qfile_w32notify;
-#endif
 #endif
 static Lisp_Object Qdrag_n_drop;
 static Lisp_Object Qsave_session;
 #ifdef HAVE_DBUS
 static Lisp_Object Qdbus_event;
 #endif
-#ifdef HAVE_INOTIFY
-static Lisp_Object Qfile_inotify;
-#endif /* HAVE_INOTIFY */
+#ifdef USE_FILE_NOTIFY
+static Lisp_Object Qfile_notify;
+#endif /* USE_FILE_NOTIFY */
 static Lisp_Object Qconfig_changed_event;
 
 /* Lisp_Object Qmouse_movement; - also an event header */
@@ -1885,7 +1882,7 @@ safe_run_hooks_error (Lisp_Object error_data)
     = CONSP (Vinhibit_quit) ? XCAR (Vinhibit_quit) : Vinhibit_quit;
   Lisp_Object fun = CONSP (Vinhibit_quit) ? XCDR (Vinhibit_quit) : Qnil;
   Lisp_Object args[4];
-  args[0] = build_string ("Error in %s (%s): %S");
+  args[0] = build_string ("Error in %s (%S): %S");
   args[1] = hook;
   args[2] = fun;
   args[3] = error_data;
@@ -2221,6 +2218,159 @@ do { if (! polling_stopped_here) stop_polling ();	\
 #define RESUME_POLLING					\
 do { if (polling_stopped_here) start_polling ();	\
        polling_stopped_here = 0; } while (0)
+
+static Lisp_Object
+read_event_from_main_queue (EMACS_TIME *end_time,
+                            sys_jmp_buf local_getcjmp,
+                            bool *used_mouse_menu)
+{
+  Lisp_Object c = Qnil;
+  sys_jmp_buf save_jump;
+  KBOARD *kb IF_LINT (= NULL);
+
+ start:
+
+  /* Read from the main queue, and if that gives us something we can't use yet,
+     we put it on the appropriate side queue and try again.  */
+
+  if (end_time && EMACS_TIME_LE (*end_time, current_emacs_time ()))
+    return c;
+
+  /* Actually read a character, waiting if necessary.  */
+  save_getcjmp (save_jump);
+  restore_getcjmp (local_getcjmp);
+  if (!end_time)
+	timer_start_idle ();
+  c = kbd_buffer_get_event (&kb, used_mouse_menu, end_time);
+  restore_getcjmp (save_jump);
+
+  if (! NILP (c) && (kb != current_kboard))
+    {
+      Lisp_Object last = KVAR (kb, kbd_queue);
+      if (CONSP (last))
+        {
+          while (CONSP (XCDR (last)))
+      	last = XCDR (last);
+          if (!NILP (XCDR (last)))
+      	emacs_abort ();
+        }
+      if (!CONSP (last))
+        kset_kbd_queue (kb, Fcons (c, Qnil));
+      else
+        XSETCDR (last, Fcons (c, Qnil));
+      kb->kbd_queue_has_data = 1;
+      c = Qnil;
+      if (single_kboard)
+        goto start;
+      current_kboard = kb;
+      /* This is going to exit from read_char
+         so we had better get rid of this frame's stuff.  */
+      return make_number (-2);
+    }
+
+  /* Terminate Emacs in batch mode if at eof.  */
+  if (noninteractive && INTEGERP (c) && XINT (c) < 0)
+    Fkill_emacs (make_number (1));
+
+  if (INTEGERP (c))
+    {
+      /* Add in any extra modifiers, where appropriate.  */
+      if ((extra_keyboard_modifiers & CHAR_CTL)
+	  || ((extra_keyboard_modifiers & 0177) < ' '
+	      && (extra_keyboard_modifiers & 0177) != 0))
+	XSETINT (c, make_ctrl_char (XINT (c)));
+
+      /* Transfer any other modifier bits directly from
+	 extra_keyboard_modifiers to c.  Ignore the actual character code
+	 in the low 16 bits of extra_keyboard_modifiers.  */
+      XSETINT (c, XINT (c) | (extra_keyboard_modifiers & ~0xff7f & ~CHAR_CTL));
+    }
+
+  return c;
+}
+
+
+
+/* Like `read_event_from_main_queue' but applies keyboard-coding-system
+   to tty input.  */
+static Lisp_Object
+read_decoded_event_from_main_queue (EMACS_TIME *end_time,
+                                    sys_jmp_buf local_getcjmp,
+                                    Lisp_Object prev_event,
+                                    bool *used_mouse_menu)
+{
+#define MAX_ENCODED_BYTES 16
+  Lisp_Object events[MAX_ENCODED_BYTES];
+  int n = 0;
+  while (true)
+    {
+      Lisp_Object nextevt
+        = read_event_from_main_queue (end_time, local_getcjmp,
+                                      used_mouse_menu);
+#ifdef WINDOWSNT
+      /* w32_console already returns decoded events.  It either reads
+	 Unicode characters from the Windows keyboard input, or
+	 converts characters encoded in the current codepage into
+	 Unicode.  See w32inevt.c:key_event, near its end.  */
+      return nextevt;
+#else
+      struct frame *frame = XFRAME (selected_frame);
+      struct terminal *terminal = frame->terminal;
+      if (!((FRAME_TERMCAP_P (frame) || FRAME_MSDOS_P (frame))
+            /* Don't apply decoding if we're just reading a raw event
+               (e.g. reading bytes sent by the xterm to specify the position
+               of a mouse click).  */
+            && (!EQ (prev_event, Qt))
+	    && (TERMINAL_KEYBOARD_CODING (terminal)->common_flags
+		& CODING_REQUIRE_DECODING_MASK)))
+	return nextevt;		/* No decoding needed.  */
+      else
+	{
+	  int meta_key = terminal->display_info.tty->meta_key;
+	  eassert (n < MAX_ENCODED_BYTES);
+	  events[n++] = nextevt;
+	  if (NATNUMP (nextevt)
+	      && XINT (nextevt) < (meta_key == 1 ? 0x80 : 0x100))
+	    { /* An encoded byte sequence, let's try to decode it.  */
+	      struct coding_system *coding
+		= TERMINAL_KEYBOARD_CODING (terminal);
+	      unsigned char *src = alloca (n);
+	      int i;
+	      for (i = 0; i < n; i++)
+		src[i] = XINT (events[i]);
+	      if (meta_key != 2)
+		for (i = 0; i < n; i++)
+		  src[i] &= ~0x80;
+	      coding->destination = alloca (n * 4);
+	      coding->dst_bytes = n * 4;
+	      decode_coding_c_string (coding, src, n, Qnil);
+	      eassert (coding->produced_char <= n);
+	      if (coding->produced_char == 0)
+		{ /* The encoded sequence is incomplete.  */
+		  if (n < MAX_ENCODED_BYTES) /* Avoid buffer overflow.  */
+		    continue;		     /* Read on!  */
+		}
+	      else
+		{
+		  const unsigned char *p = coding->destination;
+		  eassert (coding->carryover_bytes == 0);
+		  n = 0;
+		  while (n < coding->produced_char)
+		    events[n++] = make_number (STRING_CHAR_ADVANCE (p));
+		}
+	    }
+	  /* Now `events' should hold decoded events.
+	     Normally, n should be equal to 1, but better not rely on it.
+	     We can only return one event here, so return the first we
+	     had and keep the others (if any) for later.  */
+	  while (n > 1)
+	    Vunread_command_events
+	      = Fcons (events[--n], Vunread_command_events);
+	  return events[0];
+	}
+#endif
+    }
+}
 
 /* Read a character from the keyboard; call the redisplay if needed.  */
 /* commandflag 0 means do not autosave, but do redisplay.
@@ -2739,68 +2889,20 @@ read_char (int commandflag, Lisp_Object map,
 
   STOP_POLLING;
 
-  /* Finally, we read from the main queue,
-     and if that gives us something we can't use yet, we put it on the
-     appropriate side queue and try again.  */
-
   if (NILP (c))
     {
-      KBOARD *kb IF_LINT (= NULL);
-
+      c = read_decoded_event_from_main_queue (end_time, local_getcjmp,
+                                              prev_event, used_mouse_menu);
       if (end_time && EMACS_TIME_LE (*end_time, current_emacs_time ()))
-	goto exit;
-
-      /* Actually read a character, waiting if necessary.  */
-      save_getcjmp (save_jump);
-      restore_getcjmp (local_getcjmp);
-      if (!end_time)
-	timer_start_idle ();
-      c = kbd_buffer_get_event (&kb, used_mouse_menu, end_time);
-      restore_getcjmp (save_jump);
-
-      if (! NILP (c) && (kb != current_kboard))
-	{
-	  Lisp_Object last = KVAR (kb, kbd_queue);
-	  if (CONSP (last))
-	    {
-	      while (CONSP (XCDR (last)))
-		last = XCDR (last);
-	      if (!NILP (XCDR (last)))
-		emacs_abort ();
-	    }
-	  if (!CONSP (last))
-	    kset_kbd_queue (kb, Fcons (c, Qnil));
-	  else
-	    XSETCDR (last, Fcons (c, Qnil));
-	  kb->kbd_queue_has_data = 1;
-	  c = Qnil;
-	  if (single_kboard)
-	    goto wrong_kboard;
-	  current_kboard = kb;
+        goto exit;
+      if (EQ (c, make_number (-2)))
+        {
 	  /* This is going to exit from read_char
 	     so we had better get rid of this frame's stuff.  */
 	  UNGCPRO;
-          return make_number (-2);
-	}
-    }
-
-  /* Terminate Emacs in batch mode if at eof.  */
-  if (noninteractive && INTEGERP (c) && XINT (c) < 0)
-    Fkill_emacs (make_number (1));
-
-  if (INTEGERP (c))
-    {
-      /* Add in any extra modifiers, where appropriate.  */
-      if ((extra_keyboard_modifiers & CHAR_CTL)
-	  || ((extra_keyboard_modifiers & 0177) < ' '
-	      && (extra_keyboard_modifiers & 0177) != 0))
-	XSETINT (c, make_ctrl_char (XINT (c)));
-
-      /* Transfer any other modifier bits directly from
-	 extra_keyboard_modifiers to c.  Ignore the actual character code
-	 in the low 16 bits of extra_keyboard_modifiers.  */
-      XSETINT (c, XINT (c) | (extra_keyboard_modifiers & ~0xff7f & ~CHAR_CTL));
-    }
+          return c;
+        }
+  }
 
  non_reread:
 
@@ -3907,18 +4009,22 @@ kbd_buffer_get_event (KBOARD **kbp,
 	  kbd_fetch_ptr = event + 1;
 	}
 #endif
-#ifdef WINDOWSNT
+#ifdef USE_FILE_NOTIFY
       else if (event->kind == FILE_NOTIFY_EVENT)
 	{
+#ifdef HAVE_W32NOTIFY
 	  /* Make an event (file-notify (DESCRIPTOR ACTION FILE) CALLBACK).  */
-	  obj = Fcons (Qfile_w32notify,
+	  obj = Fcons (Qfile_notify,
 		       list2 (list3 (make_number (event->code),
 				     XCAR (event->arg),
 				     XCDR (event->arg)),
 			      event->frame_or_window));
+#else
+          obj = make_lispy_event (event);
+#endif
 	  kbd_fetch_ptr = event + 1;
 	}
-#endif
+#endif /* USE_FILE_NOTIFY */
       else if (event->kind == SAVE_SESSION_EVENT)
         {
           obj = Fcons (Qsave_session, Fcons (event->arg, Qnil));
@@ -3975,13 +4081,6 @@ kbd_buffer_get_event (KBOARD **kbp,
 	  obj = make_lispy_event (event);
 	  kbd_fetch_ptr = event + 1;
 	}
-#endif
-#ifdef HAVE_INOTIFY
-      else if (event->kind == FILE_NOTIFY_EVENT)
-        {
-          obj = make_lispy_event (event);
-          kbd_fetch_ptr = event + 1;
-        }
 #endif
       else if (event->kind == CONFIG_CHANGED_EVENT)
 	{
@@ -5906,12 +6005,12 @@ make_lispy_event (struct input_event *event)
       }
 #endif /* HAVE_DBUS */
 
-#ifdef HAVE_INOTIFY
+#if defined HAVE_GFILENOTIFY || defined HAVE_INOTIFY
     case FILE_NOTIFY_EVENT:
       {
-        return Fcons (Qfile_inotify, event->arg);
+        return Fcons (Qfile_notify, event->arg);
       }
-#endif /* HAVE_INOTIFY */
+#endif /* defined HAVE_GFILENOTIFY || defined HAVE_INOTIFY */
 
     case CONFIG_CHANGED_EVENT:
 	return Fcons (Qconfig_changed_event,
@@ -6851,6 +6950,8 @@ tty_read_avail_input (struct terminal *terminal,
   /* XXX I think the following code should be moved to separate hook
      functions in system-dependent files.  */
 #ifdef WINDOWSNT
+  /* FIXME: AFAIK, tty_read_avail_input is not used under w32 since the non-GUI
+     code sets read_socket_hook to w32_console_read_socket instead!  */
   return 0;
 #else /* not WINDOWSNT */
   if (! tty->term_initted)      /* In case we get called during bootstrap.  */
@@ -7314,7 +7415,8 @@ menu_bar_items (Lisp_Object old)
     Lisp_Object *tmaps;
 
     /* Should overriding-terminal-local-map and overriding-local-map apply?  */
-    if (!NILP (Voverriding_local_map_menu_flag))
+    if (!NILP (Voverriding_local_map_menu_flag)
+	&& !NILP (Voverriding_local_map))
       {
 	/* Yes, use them (if non-nil) as well as the global map.  */
 	maps = alloca (3 * sizeof (maps[0]));
@@ -7334,8 +7436,11 @@ menu_bar_items (Lisp_Object old)
 	Lisp_Object tem;
 	ptrdiff_t nminor;
 	nminor = current_minor_maps (NULL, &tmaps);
-	maps = alloca ((nminor + 3) * sizeof *maps);
+	maps = alloca ((nminor + 4) * sizeof *maps);
 	nmaps = 0;
+	tem = KVAR (current_kboard, Voverriding_terminal_local_map);
+	if (!NILP (tem) && !NILP (Voverriding_local_map_menu_flag))
+	  maps[nmaps++] = tem;
 	if (tem = get_local_map (PT, current_buffer, Qkeymap), !NILP (tem))
 	  maps[nmaps++] = tem;
 	memcpy (maps + nmaps, tmaps, nminor * sizeof (maps[0]));
@@ -7863,7 +7968,8 @@ tool_bar_items (Lisp_Object reuse, int *nitems)
      to process.  */
 
   /* Should overriding-terminal-local-map and overriding-local-map apply?  */
-  if (!NILP (Voverriding_local_map_menu_flag))
+  if (!NILP (Voverriding_local_map_menu_flag)
+      && !NILP (Voverriding_local_map))
     {
       /* Yes, use them (if non-nil) as well as the global map.  */
       maps = alloca (3 * sizeof *maps);
@@ -7883,8 +7989,11 @@ tool_bar_items (Lisp_Object reuse, int *nitems)
       Lisp_Object tem;
       ptrdiff_t nminor;
       nminor = current_minor_maps (NULL, &tmaps);
-      maps = alloca ((nminor + 3) * sizeof *maps);
+      maps = alloca ((nminor + 4) * sizeof *maps);
       nmaps = 0;
+      tem = KVAR (current_kboard, Voverriding_terminal_local_map);
+      if (!NILP (tem) && !NILP (Voverriding_local_map_menu_flag))
+	maps[nmaps++] = tem;
       if (tem = get_local_map (PT, current_buffer, Qkeymap), !NILP (tem))
 	maps[nmaps++] = tem;
       memcpy (maps + nmaps, tmaps, nminor * sizeof (maps[0]));
@@ -8068,11 +8177,12 @@ parse_tool_bar_item (Lisp_Object key, Lisp_Object item)
 #if !defined (USE_GTK) && !defined (HAVE_NS)
 	  /* If we use build_desired_tool_bar_string to render the
 	     tool bar, the separator is rendered as an image.  */
-	  PROP (TOOL_BAR_ITEM_IMAGES)
-	    = menu_item_eval_property (Vtool_bar_separator_image_expression);
-	  PROP (TOOL_BAR_ITEM_ENABLED_P) = Qnil;
-	  PROP (TOOL_BAR_ITEM_SELECTED_P) = Qnil;
-	  PROP (TOOL_BAR_ITEM_CAPTION) = Qnil;
+	  set_prop (TOOL_BAR_ITEM_IMAGES,
+		    (menu_item_eval_property
+		     (Vtool_bar_separator_image_expression)));
+	  set_prop (TOOL_BAR_ITEM_ENABLED_P, Qnil);
+	  set_prop (TOOL_BAR_ITEM_SELECTED_P, Qnil);
+	  set_prop (TOOL_BAR_ITEM_CAPTION, Qnil);
 #endif
 	  return 1;
 	}
@@ -8108,7 +8218,7 @@ parse_tool_bar_item (Lisp_Object key, Lisp_Object item)
 #ifdef HAVE_NS
 	  /* at least in NS we need all items so users
 	     can configure the toolbar. */
-	    PROP (TOOL_BAR_ITEM_VISIBLE_P) = menu_item_eval_property (value);
+	    set_prop (TOOL_BAR_ITEM_VISIBLE_P, menu_item_eval_property (value));
 #else
 	  if (NILP (menu_item_eval_property (value)))
 	    return 0;
@@ -8720,71 +8830,6 @@ test_undefined (Lisp_Object binding)
 	      && EQ (Fcommand_remapping (binding, Qnil, Qnil), Qundefined)));
 }
 
-/* Like `read_char' but applies keyboard-coding-system to tty input.  */
-static Lisp_Object
-read_decoded_char (int commandflag, Lisp_Object map,
-		   Lisp_Object prev_event, bool *used_mouse_menu)
-{
-#define MAX_ENCODED_BYTES 16
-  Lisp_Object events[MAX_ENCODED_BYTES];
-  int n = 0;
-  while (true)
-    {
-      Lisp_Object nextevt
-	= read_char (commandflag, map, prev_event, used_mouse_menu, NULL);
-      struct frame *frame = XFRAME (selected_frame);
-      struct terminal *terminal = frame->terminal;
-      if (!((FRAME_TERMCAP_P (frame) || FRAME_MSDOS_P (frame))
-	    && (TERMINAL_KEYBOARD_CODING (terminal)->common_flags
-		& CODING_REQUIRE_DECODING_MASK)))
-	return nextevt;		/* No decoding needed.  */
-      else
-	{
-	  int meta_key = terminal->display_info.tty->meta_key;
-	  eassert (n < MAX_ENCODED_BYTES);
-	  events[n++] = nextevt;
-	  if (NATNUMP (nextevt)
-	      && XINT (nextevt) < (meta_key == 1 ? 0x80 : 0x100))
-	    { /* An encoded byte sequence, let's try to decode it.  */
-	      struct coding_system *coding
-		= TERMINAL_KEYBOARD_CODING (terminal);
-	      unsigned char *src = alloca (n);
-	      int i;
-	      for (i = 0; i < n; i++)
-		src[i] = XINT (events[i]);
-	      if (meta_key != 2)
-		for (i = 0; i < n; i++)
-		  src[i] &= ~0x80;
-	      coding->destination = alloca (n * 4);
-	      coding->dst_bytes = n * 4;
-	      decode_coding_c_string (coding, src, n, Qnil);
-	      eassert (coding->produced_char <= n);
-	      if (coding->produced_char == 0)
-		{ /* The encoded sequence is incomplete.  */
-		  if (n < MAX_ENCODED_BYTES) /* Avoid buffer overflow.  */
-		    continue;		     /* Read on!  */
-		}
-	      else
-		{
-		  const unsigned char *p = coding->destination;
-		  eassert (coding->carryover_bytes == 0);
-		  n = 0;
-		  while (n < coding->produced_char)
-		    events[n++] = make_number (STRING_CHAR_ADVANCE (p));
-		}
-	    }
-	  /* Now `events' should hold decoded events.
-	     Normally, n should be equal to 1, but better not rely on it.
-	     We can only return one event here, so return the first we
-	     had and keep the others (if any) for later.  */
-	  while (n > 1)
-	    Vunread_command_events
-	      = Fcons (events[--n], Vunread_command_events);
-	  return events[0];
-	}
-    }
-}
-
 /* Read a sequence of keys that ends with a non prefix character,
    storing it in KEYBUF, a buffer of size BUFSIZE.
    Prompt with PROMPT.
@@ -9062,9 +9107,9 @@ read_key_sequence (Lisp_Object *keybuf, int bufsize, Lisp_Object prompt,
 	  {
 	    KBOARD *interrupted_kboard = current_kboard;
 	    struct frame *interrupted_frame = SELECTED_FRAME ();
-	    key = read_decoded_char (NILP (prompt),
-				     current_binding, last_nonmenu_event,
-				     &used_mouse_menu);
+	    key = read_char (NILP (prompt),
+		             current_binding, last_nonmenu_event,
+                             &used_mouse_menu, NULL);
 	    if ((INTEGERP (key) && XINT (key) == -2) /* wrong_kboard_jmpbuf */
 		/* When switching to a new tty (with a new keyboard),
 		   read_char returns the new buffer, rather than -2
@@ -10116,7 +10161,7 @@ The file will be closed when Emacs exits.  */)
   if (!NILP (file))
     {
       file = Fexpand_file_name (file, Qnil);
-      dribble = fopen (SSDATA (file), "w");
+      dribble = emacs_fopen (SSDATA (file), "w");
       if (dribble == 0)
 	report_file_error ("Opening dribble", Fcons (file, Qnil));
     }
@@ -10995,17 +11040,13 @@ syms_of_keyboard (void)
   DEFSYM (Qlanguage_change, "language-change");
 #endif
 
-#ifdef WINDOWSNT
-  DEFSYM (Qfile_w32notify, "file-w32notify");
-#endif
-
 #ifdef HAVE_DBUS
   DEFSYM (Qdbus_event, "dbus-event");
 #endif
 
-#ifdef HAVE_INOTIFY
-  DEFSYM (Qfile_inotify, "file-inotify");
-#endif /* HAVE_INOTIFY */
+#ifdef USE_FILE_NOTIFY
+  DEFSYM (Qfile_notify, "file-notify");
+#endif /* USE_FILE_NOTIFY */
 
   DEFSYM (QCenable, ":enable");
   DEFSYM (QCvisible, ":visible");
@@ -11442,10 +11483,7 @@ tool-bar separators natively.  Otherwise it is unused (e.g. on GTK).  */);
 
   DEFVAR_KBOARD ("overriding-terminal-local-map",
 		 Voverriding_terminal_local_map,
-		 doc: /* Per-terminal keymap that overrides all other local keymaps.
-If this variable is non-nil, it is used as a keymap instead of the
-buffer's local map, and the minor mode keymaps and text property keymaps.
-It also replaces `overriding-local-map'.
+		 doc: /* Per-terminal keymap that takes precedence over all other keymaps.
 
 This variable is intended to let commands such as `universal-argument'
 set up a different keymap for reading the next command.
@@ -11455,7 +11493,7 @@ terminal device.
 See Info node `(elisp)Multiple Terminals'.  */);
 
   DEFVAR_LISP ("overriding-local-map", Voverriding_local_map,
-	       doc: /* Keymap that overrides all other local keymaps.
+	       doc: /* Keymap that overrides almost all other local keymaps.
 If this variable is non-nil, it is used as a keymap--replacing the
 buffer's local map, the minor mode keymaps, and char property keymaps.  */);
   Voverriding_local_map = Qnil;
@@ -11751,20 +11789,18 @@ keys_of_keyboard (void)
 			    "dbus-handle-event");
 #endif
 
-#ifdef HAVE_INOTIFY
-  /* Define a special event which is raised for inotify callback
+#ifdef USE_FILE_NOTIFY
+  /* Define a special event which is raised for notification callback
      functions.  */
-  initial_define_lispy_key (Vspecial_event_map, "file-inotify",
-                            "inotify-handle-event");
-#endif /* HAVE_INOTIFY */
+  initial_define_lispy_key (Vspecial_event_map, "file-notify",
+                            "file-notify-handle-event");
+#endif /* USE_FILE_NOTIFY */
 
   initial_define_lispy_key (Vspecial_event_map, "config-changed-event",
 			    "ignore");
 #if defined (WINDOWSNT)
   initial_define_lispy_key (Vspecial_event_map, "language-change",
 			    "ignore");
-  initial_define_lispy_key (Vspecial_event_map, "file-w32notify",
-			    "w32notify-handle-event");
 #endif
 }
 

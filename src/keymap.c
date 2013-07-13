@@ -56,28 +56,28 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "keymap.h"
 #include "window.h"
 
-/* Actually allocate storage for these variables */
+/* Actually allocate storage for these variables.  */
 
-Lisp_Object current_global_map;	/* Current global keymap */
+Lisp_Object current_global_map;	/* Current global keymap.  */
 
-Lisp_Object global_map;		/* default global key bindings */
+Lisp_Object global_map;		/* Default global key bindings.  */
 
 Lisp_Object meta_map;		/* The keymap used for globally bound
-				   ESC-prefixed default commands */
+				   ESC-prefixed default commands.  */
 
 Lisp_Object control_x_map;	/* The keymap used for globally bound
-				   C-x-prefixed default commands */
+				   C-x-prefixed default commands.  */
 
 				/* The keymap used by the minibuf for local
 				   bindings when spaces are allowed in the
-				   minibuf */
+				   minibuf.  */
 
 				/* The keymap used by the minibuf for local
 				   bindings when spaces are not encouraged
-				   in the minibuf */
+				   in the minibuf.  */
 
-/* keymap used for minibuffers when doing completion */
-/* keymap used for minibuffers when doing completion and require a match */
+/* Keymap used for minibuffers when doing completion.  */
+/* Keymap used for minibuffers when doing completion and require a match.  */
 static Lisp_Object Qkeymapp, Qnon_ascii;
 Lisp_Object Qkeymap, Qmenu_item, Qremap;
 static Lisp_Object QCadvertised_binding;
@@ -106,6 +106,12 @@ static void describe_vector (Lisp_Object, Lisp_Object, Lisp_Object,
                              Lisp_Object, Lisp_Object, bool, bool);
 static void silly_event_symbol_error (Lisp_Object);
 static Lisp_Object get_keyelt (Lisp_Object, bool);
+
+static void
+CHECK_VECTOR_OR_CHAR_TABLE (Lisp_Object x)
+{
+  CHECK_TYPE (VECTORP (x) || CHAR_TABLE_P (x), Qvector_or_char_table_p, x);
+}
 
 /* Keymap object support - constructors and predicates.			*/
 
@@ -566,7 +572,7 @@ map_keymap_char_table_item (Lisp_Object args, Lisp_Object key, Lisp_Object val)
   if (!NILP (val))
     {
       map_keymap_function_t fun
-	= (map_keymap_function_t) XSAVE_POINTER (args, 0);
+	= (map_keymap_function_t) XSAVE_FUNCPOINTER (args, 0);
       /* If the key is a range, make a copy since map_char_table modifies
 	 it in place.  */
       if (CONSP (key))
@@ -611,8 +617,8 @@ map_keymap_internal (Lisp_Object map,
 	}
       else if (CHAR_TABLE_P (binding))
 	map_char_table (map_keymap_char_table_item, Qnil, binding,
-			make_save_value (SAVE_TYPE_PTR_PTR_OBJ,
-					 fun, data, args));
+			make_save_value (SAVE_TYPE_FUNCPTR_PTR_OBJ,
+					 (voidfuncptr) fun, data, args));
     }
   UNGCPRO;
   return tail;
@@ -1571,17 +1577,14 @@ like in the respective argument of `key-binding'.  */)
 	}
     }
 
-  if (!NILP (olp))
-    {
-      if (!NILP (KVAR (current_kboard, Voverriding_terminal_local_map)))
-	keymaps = Fcons (KVAR (current_kboard, Voverriding_terminal_local_map),
-			 keymaps);
+  if (!NILP (olp)
       /* The doc said that overriding-terminal-local-map should
 	 override overriding-local-map.  The code used them both,
 	 but it seems clearer to use just one.  rms, jan 2005.  */
-      else if (!NILP (Voverriding_local_map))
-	keymaps = Fcons (Voverriding_local_map, keymaps);
-    }
+      && NILP (KVAR (current_kboard, Voverriding_terminal_local_map))
+      && !NILP (Voverriding_local_map))
+    keymaps = Fcons (Voverriding_local_map, keymaps);
+
   if (NILP (XCDR (keymaps)))
     {
       Lisp_Object *maps;
@@ -1592,6 +1595,7 @@ like in the respective argument of `key-binding'.  */)
       Lisp_Object local_map = get_local_map (pt, current_buffer, Qlocal_map);
       /* This returns nil unless there is a `keymap' property.  */
       Lisp_Object keymap = get_local_map (pt, current_buffer, Qkeymap);
+      Lisp_Object otlp = KVAR (current_kboard, Voverriding_terminal_local_map);
 
       if (CONSP (position))
 	{
@@ -1656,6 +1660,9 @@ like in the respective argument of `key-binding'.  */)
 
       if (!NILP (keymap))
 	keymaps = Fcons (keymap, keymaps);
+
+      if (!NILP (olp) && !NILP (otlp))
+	keymaps = Fcons (otlp, keymaps);
     }
 
   unbind_to (count, Qnil);
@@ -2966,7 +2973,7 @@ You type        Translation\n\
 
 	    insert ("\n", 1);
 
-	    /* Insert calls signal_after_change which may GC. */
+	    /* Insert calls signal_after_change which may GC.  */
 	    translate = SDATA (KVAR (current_kboard, Vkeyboard_translate_table));
 	  }
 
@@ -2982,6 +2989,14 @@ You type        Translation\n\
   start1 = Qnil;
   if (!NILP (KVAR (current_kboard, Voverriding_terminal_local_map)))
     start1 = KVAR (current_kboard, Voverriding_terminal_local_map);
+
+  if (!NILP (start1))
+    {
+      describe_map_tree (start1, 1, shadow, prefix,
+			 "\f\nOverriding Bindings", nomenu, 0, 0, 0);
+      shadow = Fcons (start1, shadow);
+      start1 = Qnil;
+    }
   else if (!NILP (Voverriding_local_map))
     start1 = Voverriding_local_map;
 

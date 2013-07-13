@@ -377,6 +377,8 @@ Optional CODING is used for encoding coding-system."
 		     (unless (member file loaded)
 		       (if (file-directory-p infod)
 			   (add-to-list 'Info-default-directory-list infod))
+		       (if debug-on-error
+			   (message "loading post-sitestart %s." file))
 		       (load file 'noerror)
 		       (setq loaded (cons file loaded))))))
      load-path)
@@ -393,6 +395,8 @@ Optional CODING is used for encoding coding-system."
 		     (unless (member file loaded)
 		       (if (file-directory-p infod)
 			   (add-to-list 'Info-default-directory-list infod))
+		       (if debug-on-error
+			   (message "loading pre-sitestart %s." file))
 		       (load file 'noerror)
 		       (setq loaded (cons file loaded))))))
      load-path)

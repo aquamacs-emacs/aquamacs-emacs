@@ -186,7 +186,7 @@ ns_get_local_selection (Lisp_Object selection_name,
                        Lisp_Object target_type)
 {
   Lisp_Object local_value;
-  Lisp_Object handler_fn, value, type, check;
+  Lisp_Object handler_fn, value, check;
   ptrdiff_t count;
 
   local_value = assq_no_quit (selection_name, Vselection_alist);
@@ -207,7 +207,6 @@ ns_get_local_selection (Lisp_Object selection_name,
   check = value;
   if (CONSP (value) && SYMBOLP (XCAR (value)))
     {
-      type = XCAR (value);
       check = XCDR (value);
     }
 

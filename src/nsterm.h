@@ -51,6 +51,16 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef __OBJC__
 
+/* CGFloat on GNUStep may be 4 or 8 byte, but functions expect float* for some
+   versions.
+   On Cocoa, functions expect CGFloat*. Make compatible type.  */
+#if defined (NS_IMPL_COCOA) || GNUSTEP_GUI_MAJOR_VERSION > 0 || \
+    GNUSTEP_GUI_MINOR_VERSION >= 22
+typedef CGFloat EmacsCGFloat;
+#else
+typedef float EmacsCGFloat;
+#endif
+
 /* ==========================================================================
 
    The Emacs application
@@ -61,6 +71,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* We override sendEvent: as a means to stop/start the event loop */
 @interface EmacsApp : NSApplication
 {
+#ifdef NS_IMPL_GNUSTEP
+@public
+  int nextappdefined;
+#endif
 }
 - (void)logNotification: (NSNotification *)notification;
 - (void)sendEvent: (NSEvent *)theEvent;
@@ -70,8 +84,18 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (void)timeout_handler: (NSTimer *)timedEntry;
 - (BOOL)fulfillService: (NSString *)name withArg: (NSString *)arg;
 - (void)extractArgumentsFromOdocEvent: (NSAppleEventDescriptor *)desc;
+#ifdef NS_IMPL_GNUSTEP
+- (void)sendFromMainThread:(id)unused;
+#endif
 @end
 
+#ifdef NS_IMPL_GNUSTEP
+/* Dummy class to get rid of startup warnings.  */
+@interface EmacsDocument : NSDocument
+{
+}
+@end
+#endif
 
 /* ==========================================================================
 
@@ -130,8 +154,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 #ifdef NS_IMPL_GNUSTEP
-/* Not declared, but useful. */
-- (void) unlockFocusNeedsFlush: (BOOL)needs;
+- (void)windowDidMove: (id)sender;
 #endif
 @end
 
@@ -207,9 +230,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    }
 - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier;
 - (void) clearActive;
+- (void) clearAll;
 - (BOOL) changed;
 - (void) addDisplayItemSpacerWithIdx: (int)idx key: (char *) key;
 - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
+			     tag: (int)tag
                         helpText: (char *)help
 		 	 enabled: (BOOL)enabled
  		         visible: (BOOL)visible
@@ -288,23 +313,17 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* ==========================================================================
 
    File open/save panels
-   This and next override methods to work around OS X behavior of
-   restarting application loop when user dismisses panel.
+   This and next override methods to handle keyboard input in panels.
 
    ========================================================================== */
 
 @interface EmacsSavePanel : NSSavePanel
 {
 }
-- (NSString *) getFilename;
-- (NSString *) getDirectory;
-- (Lisp_Object)runPanel;
 @end
 @interface EmacsOpenPanel : NSOpenPanel
 {
 }
-- (NSString *) getFilename;
-- (NSString *) getDirectory;
 @end
 
 @interface EmacsFileDelegate : NSObject
@@ -364,7 +383,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    NSResponder *prevResponder;
 
    /* offset to the bottom of knob of last mouse down */
-   float last_mouse_offset;
+   CGFloat last_mouse_offset;
    float min_portion;
    int pixel_height;
    int last_hit_part;
@@ -831,9 +850,9 @@ extern int ns_lisp_to_color (Lisp_Object color, NSColor **col);
 extern NSColor *ns_lookup_indexed_color (unsigned long idx, struct frame *f);
 extern unsigned long ns_index_color (NSColor *color, struct frame *f);
 extern void ns_free_indexed_color (unsigned long idx, struct frame *f);
-extern const char *ns_get_pending_menu_title ();
+extern const char *ns_get_pending_menu_title (void);
 extern void ns_check_menu_open (NSMenu *menu);
-extern void ns_check_pending_open_menu ();
+extern void ns_check_pending_open_menu (void);
 #endif
 
 /* C access to ObjC functionality */
@@ -856,6 +875,9 @@ extern Lisp_Object ns_popup_dialog (Lisp_Object position, Lisp_Object contents,
 
 #define NSAPP_DATA2_RUNASSCRIPT 10
 extern void ns_run_ascript (void);
+
+#define NSAPP_DATA2_RUNFILEDIALOG 11
+extern void ns_run_file_dialog (void);
 
 extern const char *ns_etc_directory (void);
 extern const char *ns_exec_path (void);
@@ -882,6 +904,7 @@ extern int x_display_pixel_height (struct ns_display_info *);
 extern int x_display_pixel_width (struct ns_display_info *);
 
 /* This in nsterm.m */
+extern void x_destroy_window (struct frame *f);
 extern int ns_select (int nfds, fd_set *readfds, fd_set *writefds,
                       fd_set *exceptfds, EMACS_TIME *timeout,
 		      sigset_t *sigmask);

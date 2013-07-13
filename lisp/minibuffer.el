@@ -1798,6 +1798,14 @@ exit."
   (cl-assert (<= start (point)) (<= (point) end))
   (funcall completion-in-region-function start end collection predicate))
 
+(defcustom read-file-name-completion-ignore-case
+  (if (memq system-type '(ms-dos windows-nt darwin cygwin))
+      t nil)
+  "Non-nil means when reading a file name completion ignores case."
+  :group 'minibuffer
+  :type 'boolean
+  :version "22.1")
+
 (defun completion--in-region (start end collection &optional predicate)
   (with-wrapper-hook
       ;; FIXME: Maybe we should use this hook to provide a "display
@@ -1858,6 +1866,7 @@ With a prefix argument ARG, enable the modemode if ARG is
 positive, and disable it otherwise.  If called from Lisp, enable
 the mode if ARG is omitted or nil."
   :global t
+  :group 'minibuffer
   (setq completion-in-region--data nil)
   ;; (remove-hook 'pre-command-hook #'completion-in-region--prech)
   (remove-hook 'post-command-hook #'completion-in-region--postch)
@@ -2272,14 +2281,6 @@ except that it passes the file name through `substitute-in-file-name'.")
 (defvar read-file-name-function 'read-file-name-default
   "The function called by `read-file-name' to do its work.
 It should accept the same arguments as `read-file-name'.")
-
-(defcustom read-file-name-completion-ignore-case
-  (if (memq system-type '(ms-dos windows-nt darwin cygwin))
-      t nil)
-  "Non-nil means when reading a file name completion ignores case."
-  :group 'minibuffer
-  :type 'boolean
-  :version "22.1")
 
 (defcustom insert-default-directory t
   "Non-nil means when reading a filename start with default dir in minibuffer.

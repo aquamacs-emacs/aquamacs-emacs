@@ -45,8 +45,6 @@ Carbon version by Yamamoto Mitsuharu. */
 #include <sys/types.h>
 #endif
 
-#define MenuStagger 10.0
-
 #if 0
 int menu_trace_num = 0;
 #define NSTRACE(x)        fprintf (stderr, "%s:%d: [%d] " #x "\n",        \
@@ -108,7 +106,6 @@ popup_activated (void)
   return popup_activated_flag;
 }
 
-
 /* --------------------------------------------------------------------------
     Update menubar.  Three cases:
     1) ! deep_p, submenu = nil: Fresh switch onto a frame -- either set up
@@ -116,6 +113,7 @@ popup_activated (void)
     2) deep_p, submenu = nil: Recompute all submenus.
     3) deep_p, submenu = non-nil: Update contents of a single submenu.
    -------------------------------------------------------------------------- */
+static 
 void
 ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
 {
@@ -524,6 +522,7 @@ set_frame_menubar (struct frame *f, bool first_time, bool deep_p)
 void
 x_activate_menubar (struct frame *f)
 {
+#ifdef NS_IMPL_COCOA
   NSArray *a = [[NSApp mainMenu] itemArray];
   /* Update each submenu separately so ns_update_menubar doesn't reset
      the delegate.  */
@@ -540,6 +539,7 @@ x_activate_menubar (struct frame *f)
       ++i;
     }
   ns_check_pending_open_menu ();
+#endif
 }
 /* Utility (from macmenu.c): is this item a separator? */
 static int
@@ -834,7 +834,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
           [self setSubmenu: submenu forItem: item];
           [submenu fillWithWidgetValue: wv->contents];
           [submenu release];
-          [item setAction: nil];
+          [item setAction: (SEL)nil];
         }
     }
 
@@ -853,7 +853,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
   NSString *titleStr = [NSString stringWithUTF8String: title];
   if (! titleStr) return nil;
   NSMenuItem *item = [self addItemWithTitle: titleStr
-                                     action: nil /*@selector (menuDown:) */
+                                     action: (SEL)nil /*@selector (menuDown:) */
                               keyEquivalent: @""];
   EmacsMenu *submenu = [[EmacsMenu alloc] initWithTitle: titleStr frame: f];
   [self setSubmenu: submenu forItem: item];
@@ -1141,15 +1141,18 @@ update_frame_tool_bar (FRAME_PTR f)
     Update toolbar contents
    -------------------------------------------------------------------------- */
 {
-  int i;
+  int i, k = 0;
   EmacsView *view = FRAME_NS_VIEW (f);
   NSWindow *window = [view window];
   EmacsToolbar *toolbar = [view toolbar];
 
   block_input ();
+
+#ifdef NS_IMPL_COCOA
   [toolbar clearActive];
   [toolbar setAllowsUserCustomization:YES];
   [toolbar setAutosavesConfiguration:NO];
+#endif
   /* problematic, as it creates a defaults file
      also, doesn't seem to work with our tool bar 
      construction mechanism.
@@ -1207,7 +1210,7 @@ update_frame_tool_bar (FRAME_PTR f)
       BOOL enabled_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_ENABLED_P));
       BOOL visible_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_VISIBLE_P));
       BOOL selected_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_SELECTED_P));
-      int idx;
+      int idx = 0;
       ptrdiff_t img_id;
       struct image *img;
       Lisp_Object image;
@@ -1274,22 +1277,17 @@ update_frame_tool_bar (FRAME_PTR f)
       captionObj = TOOLPROP (TOOL_BAR_ITEM_LABEL);
       captionText = STRINGP (captionObj) ? (char *)SDATA (captionObj) : "";
 
-      [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
+      [toolbar addDisplayItemWithImage: img->pixmap idx: k++ tag: i helpText: helpText
 			       enabled: enabled_p  visible: visible_p
 				   key: keyText  labelText: captionText];
 #undef TOOLPROP
     }
     }
 
-  /* set correct tool-bar height because x_set_window_size can't do it
-     before the tool-bar has been drawn. */
+  if (![toolbar isVisible])
+      [toolbar setVisible: YES];
 
-  // EmacsView *view = FRAME_NS_VIEW (f);
-  // NSWindow *window = [view window];
-  // FRAME_NS_TOOLBAR_HEIGHT (f) = 
-  //   NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
-  //   - FRAME_NS_TITLEBAR_HEIGHT (f);
-
+#ifdef NS_IMPL_COCOA
   if ([toolbar changed])
     {
       /* inform app that toolbar has changed */
@@ -1311,9 +1309,7 @@ update_frame_tool_bar (FRAME_PTR f)
       [toolbar setConfigurationFromDictionary: newDict];
       [newDict release];
     }
-
-  if (![toolbar isVisible])
-      [toolbar setVisible: YES];
+#endif
 
   FRAME_TOOLBAR_HEIGHT (f) =
     NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
@@ -1420,9 +1416,9 @@ Items in this list are always Lisp symbols.*/)
   [super setSizeMode: NSTOOLBAR_NEEDED_SIZE_MODE];
   [super setDisplayMode: NSTOOLBAR_NEEDED_DISPLAY_MODE];
   [self setDelegate: self];
-  identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 50];
-  activeIdentifiers = [[NSMutableArray alloc] initWithCapacity: 20];
-  availableIdentifiers = [[NSMutableArray alloc] initWithCapacity: 50];
+  identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
+  activeIdentifiers = [[NSMutableArray alloc] initWithCapacity: 8];
+  prevIdentifiers = nil;
   prevEnablement = enablement = 0L;
   return self;
 }
@@ -1447,6 +1443,13 @@ Items in this list are always Lisp symbols.*/)
   enablement = 0L;
   [self setSizeMode: NSTOOLBAR_NEEDED_SIZE_MODE];
   [self setDisplayMode: NSTOOLBAR_NEEDED_DISPLAY_MODE];
+}
+
+- (void) clearAll
+{
+  [self clearActive];
+  while ([[self items] count] > 0)
+    [self removeItemAtIndex: 0];
 }
 
 - (void)setDisplayMode:(NSToolbarDisplayMode)displayMode
@@ -1504,24 +1507,22 @@ Items in this list are always Lisp symbols.*/)
   enablement = (enablement << 1) | false;
 }
 
-- (void) addDisplayItemWithImage: (EmacsImage *)img 
-			     idx: (int)idx
-                        helpText: (char *)help 
+- (void) addDisplayItemWithImage: (EmacsImage *)img
+                             idx: (int)idx
+                             tag: (int)tag
+                        helpText: (const char *)help
 			 enabled: (BOOL)enabled
 			 visible: (BOOL)visible
 			     key: (char *)key
-		       labelText: (char *)label;
+		       labelText: (char *)label
 {
-  /* 1) come up w/identifier:
-     The identifier consists of 8 chars of hash plus the Lisp key
-     so that the Lisp key can be easiliy extracted.
-     We must include the image and text hashes so that the toolbar will pick up changes.
-  */
   NSString *label_str = [NSString stringWithCString: label];
   NSString *help_str = [NSString stringWithCString: help];
+
+  /* 1) come up w/identifier */
   NSString *identifier = [NSString stringWithFormat: @"0x%08lX%s",
 				   ([img hash] + [label_str hash] + [help_str hash]) & 0xFFFFFFFF, key];
-
+  
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
   if (item == nil)
@@ -1538,9 +1539,14 @@ Items in this list are always Lisp symbols.*/)
       [item setPaletteLabel: label_str];
       [item setTarget: emacsView];
       [item setAction: @selector (toolbarClicked:)];
+      [identifierToItem setObject: item forKey: identifier];
     }
 
-  [item setTag: idx];
+#ifdef NS_IMPL_GNUSTEP
+  [self insertItemWithItemIdentifier: identifier atIndex: idx];
+#endif
+  
+  [item setTag: tag];
   [item setEnabled: enabled];
 
   /* 3) update state */
@@ -1553,7 +1559,9 @@ Items in this list are always Lisp symbols.*/)
 
 /* This overrides super's implementation, which automatically sets
    all items to enabled state (for some reason). */
-- (void)validateVisibleItems { }
+- (void)validateVisibleItems
+{
+}
 
 
 /* delegate methods */
@@ -1747,6 +1755,111 @@ a notification */
 
 
 
+/* EmacsALertPanel  (leftover?)*/
+
+
+@implementation EmacsAlertPanel
+- init
+{
+  [super init];
+  returnValues = calloc(sizeof(Lisp_Object), 20);
+  returnValueCount = 0;
+  return self;
+}
+- (void)dealloc
+{
+  free(returnValues);
+  [super dealloc];
+}
+
+- (void)close
+{
+   [[self window] close]; 
+    }
+
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+    {
+  * ((NSInteger*) contextInfo) = returnCode;
+        }
+
+/* do to: move this into init: */
+- (void) processDialogFromList: (Lisp_Object)list
+{
+  Lisp_Object item;
+  int cancel = 1;
+  for (; CONSP (list) && returnValueCount<20; list = XCDR (list))
+    {
+      item = XCAR (list);
+
+      if (STRINGP (item))
+        { /* inactive button */
+          [[self addButtonWithTitle: [NSString stringWithUTF8String: SDATA (item)] ] setEnabled:NO];
+    }
+      else if (NILP (item))
+        { /* unfortunately, NSAlert will resize this button.  We can
+	     only customize after a call to update:, but then the
+	     other buttons are already positioned so it would be
+	     pointless.  */
+	  NSButton *space = [self addButtonWithTitle: @" " ];
+	  [space setHidden:YES];
+}
+      else if (CONSP (item)) 
+{
+	  NSString *title = @"malformed";
+	  NSString *key = nil;
+	  NSButton *button = nil;
+	  if (CONSP (XCAR (item))) /* key specified? */
+{
+	      if (STRINGP (XCAR (XCAR (item))))
+		title = [NSString stringWithUTF8String: SDATA (XCAR (XCAR (item)))];
+	      if (INTEGERP ( XCDR (XCAR (item))))
+		key =  [[NSString stringWithFormat: @"%c", XINT (XCDR (XCAR (item)))] retain];
+	      else
+		key = nil;
+}
+  else
+  {
+	      if (STRINGP (XCAR (item)))
+		title = [NSString stringWithUTF8String: SDATA (XCAR (item))];
+          }
+	  if (EQ (XCDR (item), intern ("suppress")))
+    {
+	      [self setShowsSuppressionButton:YES];
+	      button = [self suppressionButton];
+	      [button setTitle:title];
+        }
+	  else
+	    { /* normal button*/
+	      button = [self addButtonWithTitle: title];
+    }
+	  [button setTag: returnValueCount];
+	  if (key)
+      {
+	      [button setKeyEquivalent: key];
+	      /* buttons like Don't Save have a non-nil modifier
+		 by default.  We have to reset that. */
+	      [button setKeyEquivalentModifierMask: 0];
+      }
+	  returnValues[returnValueCount++] = XCDR (item);
+      }
+      else if (EQ (item, intern ("cancel")))
+	{ /* add cancel button */
+	  [[self addButtonWithTitle:  @"Cancel"] setTag: -2];
+	  cancel = 0;
+  }
+      else if (EQ (item, intern ("no-cancel")))
+	{ /* skip cancel button */
+	  cancel = 0;
+}
+}
+
+  if (cancel || returnValueCount == 0)
+    [[self addButtonWithTitle: @"Cancel"] setTag: -2];
+        }
+
+@end
+
+
 /* ==========================================================================
 
     Popup Dialog: implementing functions
@@ -1857,7 +1970,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   check_window_system (f);
 
     }
-  
+
 
   title = Fcar (contents);
   CHECK_STRING (title);
@@ -1997,106 +2110,351 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 }
 @end
 
+@implementation EmacsDialogPanel
 
+#define SPACER		8.0
+#define ICONSIZE	64.0
+#define TEXTHEIGHT	20.0
+#define MINCELLWIDTH	90.0
 
-@implementation EmacsAlertPanel
-- init
+- initWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)aStyle
+              backing: (NSBackingStoreType)backingType defer: (BOOL)flag
 {
-  [super init];
-  returnValues = calloc(sizeof(Lisp_Object), 20);
-  returnValueCount = 0;
+  NSSize spacing = {SPACER, SPACER};
+  NSRect area;
+  id cell;
+  NSImageView *imgView;
+  FlippedView *contentView;
+  NSImage *img;
+
+  dialog_return   = Qundefined;
+  button_values   = NULL;
+  area.origin.x   = 3*SPACER;
+  area.origin.y   = 2*SPACER;
+  area.size.width = ICONSIZE;
+  area.size.height= ICONSIZE;
+  img = [[NSImage imageNamed: @"NSApplicationIcon"] copy];
+  [img setScalesWhenResized: YES];
+  [img setSize: NSMakeSize (ICONSIZE, ICONSIZE)];
+  imgView = [[NSImageView alloc] initWithFrame: area];
+  [imgView setImage: img];
+  [imgView setEditable: NO];
+  [img autorelease];
+  [imgView autorelease];
+
+  aStyle = NSTitledWindowMask|NSClosableWindowMask|NSUtilityWindowMask;
+  flag = YES;
+  rows = 0;
+  cols = 1;
+  [super initWithContentRect: contentRect styleMask: aStyle
+                     backing: backingType defer: flag];
+  contentView = [[FlippedView alloc] initWithFrame: [[self contentView] frame]];
+  [contentView autorelease];
+
+  [self setContentView: contentView];
+
+  [[self contentView] setAutoresizesSubviews: YES];
+
+  [[self contentView] addSubview: imgView];
+  [self setTitle: @""];
+
+  area.origin.x   += ICONSIZE+2*SPACER;
+/*  area.origin.y   = TEXTHEIGHT; ICONSIZE/2-10+SPACER; */
+  area.size.width = 400;
+  area.size.height= TEXTHEIGHT;
+  command = [[[NSTextField alloc] initWithFrame: area] autorelease];
+  [[self contentView] addSubview: command];
+  [command setStringValue: ns_app_name];
+  [command setDrawsBackground: NO];
+  [command setBezeled: NO];
+  [command setSelectable: NO];
+  [command setFont: [NSFont boldSystemFontOfSize: 13.0]];
+
+/*  area.origin.x   = ICONSIZE+2*SPACER;
+  area.origin.y   = TEXTHEIGHT + 2*SPACER;
+  area.size.width = 400;
+  area.size.height= 2;
+  tem = [[[NSBox alloc] initWithFrame: area] autorelease];
+  [[self contentView] addSubview: tem];
+  [tem setTitlePosition: NSNoTitle];
+  [tem setAutoresizingMask: NSViewWidthSizable];*/
+
+/*  area.origin.x = ICONSIZE+2*SPACER; */
+  area.origin.y += TEXTHEIGHT+SPACER;
+  area.size.width = 400;
+  area.size.height= TEXTHEIGHT;
+  title = [[[NSTextField alloc] initWithFrame: area] autorelease];
+  [[self contentView] addSubview: title];
+  [title setDrawsBackground: NO];
+  [title setBezeled: NO];
+  [title setSelectable: NO];
+  [title setFont: [NSFont systemFontOfSize: 11.0]];
+
+  cell = [[[NSButtonCell alloc] initTextCell: @""] autorelease];
+  [cell setBordered: NO];
+  [cell setEnabled: NO];
+  [cell setCellAttribute: NSCellIsInsetButton to: 8];
+  [cell setBezelStyle: NSRoundedBezelStyle];
+
+  matrix = [[NSMatrix alloc] initWithFrame: contentRect
+                                      mode: NSHighlightModeMatrix
+                                 prototype: cell
+                              numberOfRows: 0
+                           numberOfColumns: 1];
+  [matrix setFrameOrigin: NSMakePoint (area.origin.x,
+                                      area.origin.y + (TEXTHEIGHT+3*SPACER))];
+  [matrix setIntercellSpacing: spacing];
+  [matrix autorelease];
+
+  [[self contentView] addSubview: matrix];
+  [self setOneShot: YES];
+  [self setReleasedWhenClosed: YES];
+  [self setHidesOnDeactivate: YES];
   return self;
 }
+
+
+- (BOOL)windowShouldClose: (id)sender
+{
+  window_closed = YES;
+  [NSApp stop:self];
+  return NO;
+}
+
 - (void)dealloc
 {
-  free(returnValues);
+  xfree (button_values);
   [super dealloc];
 }
 
-- (void)close
+- (void)process_dialog: (Lisp_Object) list
 {
-   [[self window] close]; 
-    }
+  Lisp_Object item, lst = list;
+  int row = 0;
+  int buttons = 0, btnnr = 0;
 
-- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-    {
-  * ((NSInteger*) contextInfo) = returnCode;
-        }
-
-/* do to: move this into init: */
-- (void) processDialogFromList: (Lisp_Object)list
-{
-  Lisp_Object item;
-  int cancel = 1;
-  for (; CONSP (list) && returnValueCount<20; list = XCDR (list))
+  for (; XTYPE (lst) == Lisp_Cons; lst = XCDR (lst))
     {
       item = XCAR (list);
-
-      if (STRINGP (item))
-        { /* inactive button */
-          [[self addButtonWithTitle: [NSString stringWithUTF8String: SDATA (item)] ] setEnabled:NO];
+      if (XTYPE (item) == Lisp_Cons)
+        ++buttons;
     }
-      else if (NILP (item))
-        { /* unfortunately, NSAlert will resize this button.  We can
-	     only customize after a call to update:, but then the
-	     other buttons are already positioned so it would be
-	     pointless.  */
-	  NSButton *space = [self addButtonWithTitle: @" " ];
-	  [space setHidden:YES];
-}
-      else if (CONSP (item)) 
-{
-	  NSString *title = @"malformed";
-	  NSString *key = nil;
-	  NSButton *button = nil;
-	  if (CONSP (XCAR (item))) /* key specified? */
-{
-	      if (STRINGP (XCAR (XCAR (item))))
-		title = [NSString stringWithUTF8String: SDATA (XCAR (XCAR (item)))];
-	      if (INTEGERP ( XCDR (XCAR (item))))
-		key =  [[NSString stringWithFormat: @"%c", XINT (XCDR (XCAR (item)))] retain];
-	      else
-		key = nil;
-}
-  else
-  {
-	      if (STRINGP (XCAR (item)))
-		title = [NSString stringWithUTF8String: SDATA (XCAR (item))];
-          }
-	  if (EQ (XCDR (item), intern ("suppress")))
+
+  if (buttons > 0)
+    button_values = (Lisp_Object *) xmalloc (buttons * sizeof (*button_values));
+
+  for (; XTYPE (list) == Lisp_Cons; list = XCDR (list))
     {
-	      [self setShowsSuppressionButton:YES];
-	      button = [self suppressionButton];
-	      [button setTitle:title];
+      item = XCAR (list);
+      if (XTYPE (item) == Lisp_String)
+        {
+          [self addString: SSDATA (item) row: row++];
         }
-	  else
-	    { /* normal button*/
-	      button = [self addButtonWithTitle: title];
+      else if (XTYPE (item) == Lisp_Cons)
+        {
+          button_values[btnnr] = XCDR (item);
+          [self addButton: SSDATA (XCAR (item)) value: btnnr row: row++];
+          ++btnnr;
+        }
+      else if (NILP (item))
+        {
+          [self addSplit];
+          row = 0;
+        }
     }
-	  [button setTag: returnValueCount];
-	  if (key)
-      {
-	      [button setKeyEquivalent: key];
-	      /* buttons like Don't Save have a non-nil modifier
-		 by default.  We have to reset that. */
-	      [button setKeyEquivalentModifierMask: 0];
-      }
-	  returnValues[returnValueCount++] = XCDR (item);
-      }
-      else if (EQ (item, intern ("cancel")))
-	{ /* add cancel button */
-	  [[self addButtonWithTitle:  @"Cancel"] setTag: -2];
-	  cancel = 0;
-  }
-      else if (EQ (item, intern ("no-cancel")))
-	{ /* skip cancel button */
-	  cancel = 0;
-}
 }
 
-  if (cancel || returnValueCount == 0)
-    [[self addButtonWithTitle: @"Cancel"] setTag: -2];
+
+- (void)addButton: (char *)str value: (int)tag row: (int)row
+{
+  id cell;
+
+  if (row >= rows)
+    {
+      [matrix addRow];
+      rows++;
+    }
+  cell = [matrix cellAtRow: row column: cols-1];
+  [cell setTarget: self];
+  [cell setAction: @selector (clicked: )];
+  [cell setTitle: [NSString stringWithUTF8String: str]];
+  [cell setTag: tag];
+  [cell setBordered: YES];
+  [cell setEnabled: YES];
+}
+
+
+- (void)addString: (char *)str row: (int)row
+{
+  id cell;
+
+  if (row >= rows)
+    {
+      [matrix addRow];
+      rows++;
+    }
+  cell = [matrix cellAtRow: row column: cols-1];
+  [cell setTitle: [NSString stringWithUTF8String: str]];
+  [cell setBordered: YES];
+  [cell setEnabled: NO];
+}
+
+
+- (void)addSplit
+{
+  [matrix addColumn];
+  cols++;
+}
+
+
+- (void)clicked: sender
+{
+  NSArray *sellist = nil;
+  EMACS_INT seltag;
+
+  sellist = [sender selectedCells];
+  if ([sellist count] < 1)
+    return;
+
+  seltag = [[sellist objectAtIndex: 0] tag];
+  dialog_return = button_values[seltag];
+  [NSApp stop:self];
+}
+
+
+- initFromContents: (Lisp_Object)contents isQuestion: (BOOL)isQ
+{
+  Lisp_Object head;
+  [super init];
+
+  if (XTYPE (contents) == Lisp_Cons)
+    {
+      head = Fcar (contents);
+      [self process_dialog: Fcdr (contents)];
+    }
+  else
+    head = contents;
+
+  if (XTYPE (head) == Lisp_String)
+      [title setStringValue:
+                 [NSString stringWithUTF8String: SSDATA (head)]];
+  else if (isQ == YES)
+      [title setStringValue: @"Question"];
+  else
+      [title setStringValue: @"Information"];
+
+  {
+    int i;
+    NSRect r, s, t;
+
+    if (cols == 1 && rows > 1)	/* Never told where to split */
+      {
+        [matrix addColumn];
+        for (i = 0; i < rows/2; i++)
+          {
+            [matrix putCell: [matrix cellAtRow: (rows+1)/2 column: 0]
+                      atRow: i column: 1];
+            [matrix removeRow: (rows+1)/2];
+          }
+      }
+
+    [matrix sizeToFit];
+    {
+      NSSize csize = [matrix cellSize];
+      if (csize.width < MINCELLWIDTH)
+        {
+          csize.width = MINCELLWIDTH;
+          [matrix setCellSize: csize];
+          [matrix sizeToCells];
         }
+    }
+
+    [title sizeToFit];
+    [command sizeToFit];
+
+    t = [matrix frame];
+    r = [title frame];
+    if (r.size.width+r.origin.x > t.size.width+t.origin.x)
+      {
+        t.origin.x   = r.origin.x;
+        t.size.width = r.size.width;
+      }
+    r = [command frame];
+    if (r.size.width+r.origin.x > t.size.width+t.origin.x)
+      {
+        t.origin.x   = r.origin.x;
+        t.size.width = r.size.width;
+      }
+
+    r = [self frame];
+    s = [(NSView *)[self contentView] frame];
+    r.size.width  += t.origin.x+t.size.width +2*SPACER-s.size.width;
+    r.size.height += t.origin.y+t.size.height+SPACER-s.size.height;
+    [self setFrame: r display: NO];
+  }
+
+  return self;
+}
+
+
+
+- (void)timeout_handler: (NSTimer *)timedEntry
+{
+  NSEvent *nxev = [NSEvent otherEventWithType: NSApplicationDefined
+                            location: NSMakePoint (0, 0)
+                       modifierFlags: 0
+                           timestamp: 0
+                        windowNumber: [[NSApp mainWindow] windowNumber]
+                             context: [NSApp context]
+                             subtype: 0
+                               data1: 0
+                               data2: 0];
+
+  timer_fired = YES;
+  /* We use sto because stopModal/abortModal out of the main loop does not
+     seem to work in 10.6.  But as we use stop we must send a real event so
+     the stop is seen and acted upon.  */
+  [NSApp stop:self];
+  [NSApp postEvent: nxev atStart: NO];
+}
+
+- (Lisp_Object)runDialogAt: (NSPoint)p
+{
+  Lisp_Object ret = Qundefined;
+
+  while (popup_activated_flag)
+    {
+      NSTimer *tmo = nil;
+      EMACS_TIME next_time = timer_check ();
+
+      if (EMACS_TIME_VALID_P (next_time))
+        {
+          double time = EMACS_TIME_TO_DOUBLE (next_time);
+          tmo = [NSTimer timerWithTimeInterval: time
+                                        target: self
+                                      selector: @selector (timeout_handler:)
+                                      userInfo: 0
+                                       repeats: NO];
+          [[NSRunLoop currentRunLoop] addTimer: tmo
+                                       forMode: NSModalPanelRunLoopMode];
+        }
+      timer_fired = NO;
+      dialog_return = Qundefined;
+      [NSApp runModalForWindow: self];
+      ret = dialog_return;
+      if (! timer_fired)
+        {
+          if (tmo != nil) [tmo invalidate]; /* Cancels timer */
+          break;
+        }
+    }
+
+  if (EQ (ret, Qundefined) && window_closed)
+    /* Make close button pressed equivalent to C-g.  */
+    Fsignal (Qquit, Qnil);
+
+  return ret;
+}
 
 @end
 

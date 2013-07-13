@@ -316,15 +316,7 @@ static void Texinfo_nodes (FILE *);
 static void Yacc_entries (FILE *);
 static void just_read_file (FILE *);
 
-static void print_language_names (void);
-static void print_version (void);
-static void print_help (argument *);
-int main (int, char **);
-
-static compressor *get_compressor_from_suffix (char *, char **);
 static language *get_language_from_langname (const char *);
-static language *get_language_from_interpreter (char *);
-static language *get_language_from_filename (char *, bool);
 static void readline (linebuffer *, FILE *);
 static long readline_internal (linebuffer *, FILE *);
 static bool nocase_tail (const char *);
@@ -346,7 +338,6 @@ static void find_entries (FILE *);
 static void free_tree (node *);
 static void free_fdesc (fdesc *);
 static void pfnote (char *, bool, char *, int, int, long);
-static void make_tag (const char *, int, bool, char *, int, int, long);
 static void invalidate_nodes (fdesc *, node **);
 static void put_entries (node *);
 
@@ -816,7 +807,7 @@ etags --help --lang=ada.");
 #ifndef VERSION
 # define VERSION "17.38.1.4"
 #endif
-static void
+static _Noreturn void
 print_version (void)
 {
   char emacs_copyright[] = COPYRIGHT;
@@ -832,7 +823,7 @@ print_version (void)
 # define PRINT_UNDOCUMENTED_OPTIONS_HELP FALSE
 #endif
 
-static void
+static _Noreturn void
 print_help (argument *argbuffer)
 {
   bool help_for_lang = FALSE;
@@ -2249,10 +2240,6 @@ enum sym_type
   st_C_struct, st_C_extern, st_C_enum, st_C_define, st_C_typedef
 };
 
-static unsigned int hash (const char *, unsigned int);
-static struct C_stab_entry * in_word_set (const char *, unsigned int);
-static enum sym_type C_symtype (char *, int, int);
-
 /* Feed stuff between (but not including) %[ and %] lines to:
      gperf -m 5
 %[
@@ -2311,10 +2298,10 @@ and replace lines between %< and %> with its output, then:
 struct C_stab_entry { const char *name; int c_ext; enum sym_type type; };
 /* maximum key range = 33, duplicates = 0 */
 
-static inline unsigned int
-hash (register const char *str, register unsigned int len)
+static int
+hash (const char *str, int len)
 {
-  static unsigned char asso_values[] =
+  static char const asso_values[] =
     {
       35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
       35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
@@ -2343,15 +2330,15 @@ hash (register const char *str, register unsigned int len)
       35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
       35, 35, 35, 35, 35, 35
     };
-  register int hval = len;
+  int hval = len;
 
   switch (hval)
     {
       default:
-        hval += asso_values[(unsigned char)str[2]];
+        hval += asso_values[(unsigned char) str[2]];
       /*FALLTHROUGH*/
       case 2:
-        hval += asso_values[(unsigned char)str[1]];
+        hval += asso_values[(unsigned char) str[1]];
         break;
     }
   return hval;
@@ -2409,11 +2396,11 @@ in_word_set (register const char *str, register unsigned int len)
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
     {
-      register int key = hash (str, len);
+      int key = hash (str, len);
 
       if (key <= MAX_HASH_VALUE && key >= 0)
         {
-          register const char *s = wordlist[key].name;
+          const char *s = wordlist[key].name;
 
           if (*str == *s && !strncmp (str + 1, s + 1, len - 1) && s[len] == '\0')
             return &wordlist[key];

@@ -77,11 +77,6 @@
 ;;;_* Dependency loads
 (require 'overlay)
 (eval-when-compile
-  ;; Most of the requires here are for stuff covered by autoloads, which
-  ;; byte-compiling doesn't trigger.
-  (require 'epg)
-  (require 'epa)
-  (require 'overlay)
   ;; `cl' is required for `assert'.  `assert' is not covered by a standard
   ;; autoload, but it is a macro, so that eval-when-compile is sufficient
   ;; to byte-compile it in, or to do the require when the buffer evalled.
@@ -1566,7 +1561,7 @@ Each value can be a regexp or a list with a regexp followed by a
 substitution string.  If it's just a regexp, all its matches are removed
 before the text is encrypted.  If it's a regexp and a substitution, the
 substitution is used against the regexp matches, a la `replace-match'.")
-(make-variable-buffer-local 'allout-encryption-text-removal-regexps)
+(make-variable-buffer-local 'allout-encryption-plaintext-sanitization-regexps)
 ;;;_   = allout-encryption-ciphertext-rejection-regexps
 (defvar allout-encryption-ciphertext-rejection-regexps nil
   "Variable for regexps matching plaintext to remove before encryption.
@@ -5347,7 +5342,7 @@ Optional arg CONTEXT indicates interior levels to include."
 			(cons (make-string
 			       (1+ (truncate (if (zerop (car flat-index))
 						 1
-					       (log10 (car flat-index)))))
+					       (log (car flat-index) 10))))
 			       ? )
 			      result)))
 	    (setq flat-index (cdr flat-index)))
@@ -5387,7 +5382,7 @@ Optional arg CONTEXT indicates interior levels to include."
 			(cons (make-string
 			       (1+ (truncate (if (zerop (car flat-index))
 						 1
-					       (log10 (car flat-index)))))
+					       (log (car flat-index) 10))))
 			       ? )
 			      result)))
 	    (setq flat-index (cdr flat-index)))
@@ -6046,6 +6041,16 @@ See `allout-toggle-current-subtree-encryption' for more details."
 
       (run-hook-with-args 'allout-structure-added-functions
                           bullet-pos subtree-end))))
+
+(declare-function epg-context-set-passphrase-callback "epg"
+                  (context passphrase-callback))
+(declare-function epg-list-keys "epg" (context &optional name mode))
+(declare-function epg-decrypt-string "epg" (context cipher))
+(declare-function epg-encrypt-string "epg"
+                  (context plain recipients &optional sign always-trust))
+(declare-function epg-user-id-string "epg" (user-id))
+(declare-function epg-key-user-id-list "epg" (key))
+
 ;;;_  > allout-encrypt-string (text decrypt allout-buffer keymode-cue
 ;;;                                 &optional rejected)
 (defun allout-encrypt-string (text decrypt allout-buffer keymode-cue

@@ -76,7 +76,6 @@ Lisp_Object Qterminal_live_p;
 Lisp_Object Qauto_raise, Qauto_lower;
 Lisp_Object Qborder_color, Qborder_width;
 Lisp_Object Qcursor_color, Qcursor_type;
-static Lisp_Object Qgeometry;  /* Not used */
 Lisp_Object Qheight, Qwidth;
 Lisp_Object Qleft, Qright;
 Lisp_Object Qicon_left, Qicon_top, Qicon_type, Qicon_name;
@@ -114,6 +113,8 @@ Lisp_Object Qalpha;
 Lisp_Object Qface_set_after_frame_default;
 
 static Lisp_Object Qdelete_frame_functions;
+
+static Lisp_Object Qgeometry, Qworkarea, Qmm_size, Qframes, Qsource;
 
 #ifdef HAVE_WINDOW_SYSTEM
 static void x_report_frame_params (struct frame *, Lisp_Object *);
@@ -166,7 +167,7 @@ struct frame *
 decode_window_system_frame (Lisp_Object frame)
 {
   struct frame *f = decode_live_frame (frame);
-  
+
   if (!window_system_available (f))
     error ("Window system frame should be used");
   return f;
@@ -2935,7 +2936,7 @@ x_report_frame_params (struct frame *f, Lisp_Object *alistptr)
   if (FRAME_X_OUTPUT (f)->parent_desc == FRAME_X_DISPLAY_INFO (f)->root_window)
     tem = Qnil;
   else
-    XSETFASTINT (tem, FRAME_X_OUTPUT (f)->parent_desc);
+    tem = make_natnum ((uintptr_t) FRAME_X_OUTPUT (f)->parent_desc);
   store_in_alist (alistptr, Qexplicit_name, (f->explicit_name ? Qt : Qnil));
   store_in_alist (alistptr, Qparent_id, tem);
   store_in_alist (alistptr, Qtool_bar_position, f->tool_bar_position);
@@ -2972,8 +2973,17 @@ x_set_line_spacing (struct frame *f, Lisp_Object new_value, Lisp_Object old_valu
 {
   if (NILP (new_value))
     f->extra_line_spacing = 0;
-  else if (NATNUMP (new_value))
-    f->extra_line_spacing = XINT (new_value);
+  else if (RANGED_INTEGERP (0, new_value, INT_MAX))
+    f->extra_line_spacing = XFASTINT (new_value);
+  else if (FLOATP (new_value))
+    {
+      int new_spacing = XFLOAT_DATA (new_value) * FRAME_LINE_HEIGHT (f) + 0.5;
+
+      if (new_spacing >= 0)
+	f->extra_line_spacing = new_spacing;
+      else
+	signal_error ("Invalid line-spacing", new_value);
+    }
   else
     signal_error ("Invalid line-spacing", new_value);
   if (FRAME_VISIBLE_P (f))
@@ -4141,6 +4151,76 @@ selected frame.  This is useful when `make-pointer-invisible' is set.  */)
   return decode_any_frame (frame)->pointer_invisible ? Qnil : Qt;
 }
 
+
+
+/***********************************************************************
+			Multimonitor data
+ ***********************************************************************/
+
+#ifdef HAVE_WINDOW_SYSTEM
+
+# if (defined HAVE_NS \
+      || (!defined USE_GTK && (defined HAVE_XINERAMA || defined HAVE_XRANDR)))
+void
+free_monitors (struct MonitorInfo *monitors, int n_monitors)
+{
+  int i;
+  for (i = 0; i < n_monitors; ++i)
+    xfree (monitors[i].name);
+  xfree (monitors);
+}
+# endif
+
+Lisp_Object
+make_monitor_attribute_list (struct MonitorInfo *monitors,
+                             int n_monitors,
+                             int primary_monitor,
+                             Lisp_Object monitor_frames,
+                             const char *source)
+{
+  Lisp_Object attributes_list = Qnil;
+  Lisp_Object primary_monitor_attributes = Qnil;
+  int i;
+
+  for (i = 0; i < n_monitors; ++i)
+    {
+      Lisp_Object geometry, workarea, attributes = Qnil;
+      struct MonitorInfo *mi = &monitors[i];
+
+      if (mi->geom.width == 0) continue;
+
+      workarea = list4i (mi->work.x, mi->work.y,
+			 mi->work.width, mi->work.height);
+      geometry = list4i (mi->geom.x, mi->geom.y,
+			 mi->geom.width, mi->geom.height);
+      attributes = Fcons (Fcons (Qsource,
+                                 make_string (source, strlen (source))),
+                          attributes);
+      attributes = Fcons (Fcons (Qframes, AREF (monitor_frames, i)),
+			  attributes);
+      attributes = Fcons (Fcons (Qmm_size,
+                                 list2i (mi->mm_width, mi->mm_height)),
+                          attributes);
+      attributes = Fcons (Fcons (Qworkarea, workarea), attributes);
+      attributes = Fcons (Fcons (Qgeometry, geometry), attributes);
+      if (mi->name)
+        attributes = Fcons (Fcons (Qname, make_string (mi->name,
+                                                       strlen (mi->name))),
+                            attributes);
+
+      if (i == primary_monitor)
+        primary_monitor_attributes = attributes;
+      else
+        attributes_list = Fcons (attributes, attributes_list);
+    }
+
+  if (!NILP (primary_monitor_attributes))
+    attributes_list = Fcons (primary_monitor_attributes, attributes_list);
+  return attributes_list;
+}
+
+#endif /* HAVE_WINDOW_SYSTEM */
+
 
 /***********************************************************************
 				Initialization
@@ -4198,6 +4278,12 @@ syms_of_frame (void)
 
   DEFSYM (Qterminal, "terminal");
   DEFSYM (Qterminal_live_p, "terminal-live-p");
+
+  DEFSYM (Qgeometry, "geometry");
+  DEFSYM (Qworkarea, "workarea");
+  DEFSYM (Qmm_size, "mm-size");
+  DEFSYM (Qframes, "frames");
+  DEFSYM (Qsource, "source");
 
 #ifdef HAVE_NS
   DEFSYM (Qns_parse_geometry, "ns-parse-geometry");

@@ -34,6 +34,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef WINDOWSNT
 #include <fcntl.h>
+#include <sys/socket.h>
 #include "w32.h"
 #include "w32heap.h"
 #endif
@@ -127,6 +128,8 @@ extern int malloc_set_state (void*);
 /* True if the MALLOC_CHECK_ environment variable was set while
    dumping.  Used to work around a bug in glibc's malloc.  */
 static bool malloc_using_checking;
+#elif defined HAVE_PTHREAD && !defined SYSTEM_MALLOC
+extern void malloc_enable_thread (void);
 #endif
 
 Lisp_Object Qfile_name_handler_alist;
@@ -306,6 +309,13 @@ bool fatal_error_in_progress;
 static void *ns_pool;
 #endif
 
+#if !HAVE_SETLOCALE
+static char *
+setlocale (int cat, char const *locale)
+{
+  return 0;
+}
+#endif
 
 
 /* Report a fatal error due to signal SIG, output a backtrace of at
@@ -880,7 +890,7 @@ main (int argc, char **argv)
 	  emacs_close (0);
 	  emacs_close (1);
 	  result = emacs_open (term, O_RDWR, 0);
-	  if (result < 0 || dup (0) < 0)
+	  if (result < 0 || fcntl (0, F_DUPFD_CLOEXEC, 1) < 0)
 	    {
 	      char *errstring = strerror (errno);
 	      fprintf (stderr, "%s: %s: %s\n", argv[0], term, errstring);
@@ -960,7 +970,7 @@ main (int argc, char **argv)
 	 use a pipe for synchronization.  The parent waits for the child
 	 to close its end of the pipe (using `daemon-initialized')
 	 before exiting.  */
-      if (pipe (daemon_pipe) == -1)
+      if (pipe2 (daemon_pipe, O_CLOEXEC) != 0)
 	{
 	  fprintf (stderr, "Cannot pipe!\n");
 	  exit (1);
@@ -1056,9 +1066,6 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
        	daemon_name = xstrdup (dname_arg);
       /* Close unused reading end of the pipe.  */
       close (daemon_pipe[0]);
-      /* Make sure that the used end of the pipe is closed on exec, so
-	 that it is not accessible to programs started from .emacs.  */
-      fcntl (daemon_pipe[1], F_SETFD, FD_CLOEXEC);
 
       setsid ();
 #else /* DOS_NT */
@@ -1067,13 +1074,15 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 #endif /* DOS_NT */
     }
 
-#if defined (HAVE_PTHREAD) && !defined (SYSTEM_MALLOC) && !defined (DOUG_LEA_MALLOC)
-  if (! noninteractive)
-    {
-      extern void malloc_enable_thread (void);
-
-      malloc_enable_thread ();
-    }
+#if defined HAVE_PTHREAD && !defined SYSTEM_MALLOC && !defined DOUG_LEA_MALLOC
+# ifndef CANNOT_DUMP
+  /* Do not make gmalloc thread-safe when creating bootstrap-emacs, as
+     that causes an infinite recursive loop with FreeBSD.  But do make
+     it thread-safe when creating emacs, otherwise bootstrap-emacs
+     fails on Cygwin.  See Bug#14569.  */
+  if (!noninteractive || initialized)
+# endif
+    malloc_enable_thread ();
 #endif
 
   init_signals (dumping);
@@ -1250,9 +1259,15 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
     tzset ();
 #endif /* MSDOS */
 
+#ifdef HAVE_GFILENOTIFY
+  globals_of_gfilenotify ();
+#endif
+
 #ifdef WINDOWSNT
   globals_of_w32 ();
+#ifdef HAVE_W32NOTIFY
   globals_of_w32notify ();
+#endif
   /* Initialize environment from registry settings.  */
   init_environment (argv);
   init_ntproc (dumping); /* must precede init_editfns.  */
@@ -1409,6 +1424,10 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
       syms_of_gnutls ();
 #endif
 
+#ifdef HAVE_GFILENOTIFY
+      syms_of_gfilenotify ();
+#endif /* HAVE_GFILENOTIFY */
+
 #ifdef HAVE_INOTIFY
       syms_of_inotify ();
 #endif /* HAVE_INOTIFY */
@@ -1419,7 +1438,9 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 
 #ifdef WINDOWSNT
       syms_of_ntterm ();
+#ifdef HAVE_W32NOTIFY
       syms_of_w32notify ();
+#endif /* HAVE_W32NOTIFY */
 #endif /* WINDOWSNT */
 
       syms_of_profiler ();
@@ -1845,7 +1866,11 @@ all of which are called before Emacs is actually killed.  */)
      kill it because we are exiting Emacs deliberately (not crashing).
      Do it after shut_down_emacs, which does an auto-save.  */
   if (STRINGP (Vauto_save_list_file_name))
-    unlink (SSDATA (Vauto_save_list_file_name));
+    {
+      Lisp_Object listfile;
+      listfile = Fexpand_file_name (Vauto_save_list_file_name, Qnil);
+      unlink (SSDATA (listfile));
+    }
 
   if (INTEGERP (arg))
     exit_code = (XINT (arg) < 0
@@ -2209,7 +2234,7 @@ from the parent process and its tty file descriptors.  */)
     error ("This function can only be called after loading the init files");
 
   /* Get rid of stdin, stdout and stderr.  */
-  nfd = open ("/dev/null", O_RDWR);
+  nfd = emacs_open ("/dev/null", O_RDWR, 0);
   err |= nfd < 0;
   err |= dup2 (nfd, 0) < 0;
   err |= dup2 (nfd, 1) < 0;

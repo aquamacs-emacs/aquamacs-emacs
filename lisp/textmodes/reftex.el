@@ -547,7 +547,7 @@ will deactivate it."
 	     (when (member style list)
 	       (setq reftex-tables-dirty t
 		     changed t)
-	       (delete style list)))
+	       (setq list (delete style list))))
 	    (t
 	     (if (member style list)
 		 (delete style list)
@@ -2255,6 +2255,8 @@ IGNORE-WORDS List of words which should be removed from the string."
   (unless (key-binding [(shift mouse-2)])
     (define-key reftex-mode-map [(shift mouse-2)]
       'reftex-mouse-view-crossref)))
+
+(defvar bibtex-mode-map)
 
 ;; Bind `reftex-view-crossref-from-bibtex' in BibTeX mode map
 (eval-after-load

@@ -65,6 +65,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #undef localtime
 
 #include "lisp.h"
+#include "epaths.h"	/* for SHELL */
 
 #include <pwd.h>
 #include <grp.h>
@@ -233,6 +234,8 @@ extern int sys_access (const char *, int);
 extern void *e_malloc (size_t);
 extern int sys_select (int, SELECT_TYPE *, SELECT_TYPE *, SELECT_TYPE *,
 		       EMACS_TIME *, void *);
+extern int sys_dup (int);
+
 
 
 
@@ -2018,7 +2021,7 @@ init_environment (char ** argv)
       {"PRELOAD_WINSOCK", NULL},
       {"emacs_dir", "C:/emacs"},
       {"EMACSLOADPATH", NULL},
-      {"SHELL", "%emacs_dir%/bin/cmdproxy.exe"},
+      {"SHELL", "cmdproxy.exe"}, /* perhaps it is somewhere on PATH */
       {"EMACSDATA", NULL},
       {"EMACSPATH", NULL},
       {"INFOPATH", NULL},
@@ -2094,9 +2097,12 @@ init_environment (char ** argv)
 	emacs_abort ();
       *p = 0;
 
-      if ((p = _mbsrchr (modname, '\\')) && xstrcasecmp (p, "\\bin") == 0)
+      if ((p = _mbsrchr (modname, '\\'))
+	  /* From bin means installed Emacs, from src means uninstalled.  */
+	  && (xstrcasecmp (p, "\\bin") == 0 || xstrcasecmp (p, "\\src") == 0))
 	{
 	  char buf[SET_ENV_BUF_SIZE];
+	  int within_build_tree = xstrcasecmp (p, "\\src") == 0;
 
 	  *p = 0;
 	  for (p = modname; *p; p = CharNext (p))
@@ -2104,6 +2110,15 @@ init_environment (char ** argv)
 
 	  _snprintf (buf, sizeof (buf)-1, "emacs_dir=%s", modname);
 	  _putenv (strdup (buf));
+	  /* If we are running from the Posix-like build tree, define
+	     SHELL to point to our own cmdproxy.  The loop below will
+	     then disregard PATH_EXEC and the default value.  */
+	  if (within_build_tree)
+	    {
+	      _snprintf (buf, sizeof (buf) - 1,
+			 "SHELL=%s/nt/cmdproxy.exe", modname);
+	      _putenv (strdup (buf));
+	    }
 	}
       /* Handle running emacs from the build directory: src/oo-spd/i386/  */
 
@@ -2139,16 +2154,60 @@ init_environment (char ** argv)
 	if (!getenv (env_vars[i].name))
 	  {
 	    int dont_free = 0;
+	    char bufc[SET_ENV_BUF_SIZE];
 
 	    if ((lpval = w32_get_resource (env_vars[i].name, &dwType)) == NULL
 		/* Also ignore empty environment variables.  */
 		|| *lpval == 0)
 	      {
 		xfree (lpval);
-		lpval = env_vars[i].def_value;
-		dwType = REG_EXPAND_SZ;
 		dont_free = 1;
-		if (!strcmp (env_vars[i].name, "HOME") && !appdata)
+		if (strcmp (env_vars[i].name, "SHELL") == 0)
+		  {
+		    /* Look for cmdproxy.exe in every directory in
+		       PATH_EXEC.  FIXME: This does not find cmdproxy
+		       in nt/ when we run uninstalled.  */
+		    char fname[MAX_PATH];
+		    const char *pstart = PATH_EXEC, *pend;
+
+		    do {
+		      pend = _mbschr (pstart, ';');
+		      if (!pend)
+			pend = pstart + strlen (pstart);
+		      /* Be defensive against series of ;;; characters.  */
+		      if (pend > pstart)
+			{
+			  strncpy (fname, pstart, pend - pstart);
+			  fname[pend - pstart] = '/';
+			  strcpy (&fname[pend - pstart + 1], "cmdproxy.exe");
+			  ExpandEnvironmentStrings ((LPSTR) fname, bufc,
+						    sizeof (bufc));
+			  if (check_existing (bufc))
+			    {
+			      lpval = bufc;
+			      dwType = REG_SZ;
+			      break;
+			    }
+			}
+		      if (*pend)
+			pstart = pend + 1;
+		      else
+			pstart = pend;
+		      if (!*pstart)
+			{
+			  /* If not found in any directory, use the
+			     default as the last resort.  */
+			  lpval = env_vars[i].def_value;
+			  dwType = REG_EXPAND_SZ;
+			}
+		    } while (*pstart);
+		  }
+		else
+		  {
+		    lpval = env_vars[i].def_value;
+		    dwType = REG_EXPAND_SZ;
+		  }
+		if (strcmp (env_vars[i].name, "HOME") == 0 && !appdata)
 		  Vdelayed_warnings_list
 		    = Fcons (listn (CONSTYPE_HEAP, 2,
 				    intern ("initialization"),
@@ -2394,8 +2453,8 @@ get_emacs_configuration_options (void)
 #include <sys/timeb.h>
 
 /* Emulate gettimeofday (Ulrich Leodolter, 1/11/95).  */
-void
-gettimeofday (struct timeval *tv, struct timezone *tz)
+int
+gettimeofday (struct timeval *__restrict tv, struct timezone *__restrict tz)
 {
   struct _timeb tb;
   _ftime (&tb);
@@ -2413,6 +2472,7 @@ gettimeofday (struct timeval *tv, struct timezone *tz)
       tz->tz_minuteswest = tb.timezone;	/* minutes west of Greenwich  */
       tz->tz_dsttime = tb.dstflag;	/* type of dst correction  */
     }
+  return 0;
 }
 
 /* Emulate fdutimens.  */
@@ -3726,12 +3786,6 @@ get_rid (PSID sid)
 }
 
 /* Caching SID and account values for faster lokup.  */
-
-#ifdef __GNUC__
-# define FLEXIBLE_ARRAY_MEMBER
-#else
-# define FLEXIBLE_ARRAY_MEMBER 1
-#endif
 
 struct w32_id {
   unsigned rid;
@@ -6667,10 +6721,16 @@ sys_sendto (int s, const char * buf, int len, int flags,
 }
 
 /* Windows does not have an fcntl function.  Provide an implementation
-   solely for making sockets non-blocking.  */
+   good enough for Emacs.  */
 int
 fcntl (int s, int cmd, int options)
 {
+  /* In the w32 Emacs port, fcntl (fd, F_DUPFD_CLOEXEC, fd1) is always
+     invoked in a context where fd1 is closed and all descriptors less
+     than fd1 are open, so sys_dup is an adequate implementation.  */
+  if (cmd == F_DUPFD_CLOEXEC)
+    return sys_dup (s);
+
   if (winsock_lib == NULL)
     {
       errno = ENETDOWN;
@@ -6812,12 +6872,13 @@ sys_dup2 (int src, int dst)
   return rc;
 }
 
-/* Unix pipe() has only one arg */
 int
-sys_pipe (int * phandles)
+pipe2 (int * phandles, int pipe2_flags)
 {
   int rc;
   unsigned flags;
+
+  eassert (pipe2_flags == O_CLOEXEC);
 
   /* make pipe handles non-inheritable; when we spawn a child, we
      replace the relevant handle with an inheritable one.  Also put

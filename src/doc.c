@@ -33,7 +33,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "buffer.h"
 #include "keyboard.h"
 #include "keymap.h"
-#include "buildobj.h"
 
 Lisp_Object Qfunction_documentation;
 
@@ -58,7 +57,7 @@ read_bytecode_char (bool unreadflag)
 }
 
 /* Extract a doc string from a file.  FILEPOS says where to get it.
-   If it is an integer, use that position in the standard DOC-... file.
+   If it is an integer, use that position in the standard DOC file.
    If it is (FILE . INTEGER), use FILE as the file name
    and INTEGER as the position in that file.
    But if INTEGER is negative, make it positive.
@@ -555,7 +554,6 @@ store_function_docstring (Lisp_Object obj, ptrdiff_t offset)
     }
 }
 
-static const char buildobj[] = BUILDOBJ;
 
 DEFUN ("Snarf-documentation", Fsnarf_documentation, Ssnarf_documentation,
        1, 1, 0,
@@ -598,27 +596,16 @@ the same file name is found in the `doc-directory'.  */)
 
   /* Vbuild_files is nil when temacs is run, and non-nil after that.  */
   if (NILP (Vbuild_files))
-  {
-    const char *beg, *end;
-
-    for (beg = buildobj; *beg; beg = end)
-      {
-        ptrdiff_t len;
-
-        while (*beg && c_isspace (*beg)) ++beg;
-
-        for (end = beg; *end && ! c_isspace (*end); ++end)
-          if (*end == '/') beg = end+1;  /* skip directory part  */
-
-        len = end - beg;
-        if (len > 4 && end[-4] == '.' && end[-3] == 'o')
-          len -= 2;  /* Just take .o if it ends in .obj  */
-
-        if (len > 0)
-          Vbuild_files = Fcons (make_string (beg, len), Vbuild_files);
-      }
-    Vbuild_files = Fpurecopy (Vbuild_files);
-  }
+    {
+      static char const *const buildobj[] =
+	{
+	  #include "buildobj.h"
+	};
+      int i = sizeof buildobj / sizeof *buildobj;
+      while (0 <= --i)
+	Vbuild_files = Fcons (build_string (buildobj[i]), Vbuild_files);
+      Vbuild_files = Fpurecopy (Vbuild_files);
+    }
 
   fd = emacs_open (name, O_RDONLY, 0);
   if (fd < 0)
@@ -758,9 +745,7 @@ Otherwise, return a new string, without any text properties.  */)
      or a specified local map (which means search just that and the
      global map).  If non-nil, it might come from Voverriding_local_map,
      or from a \\<mapname> construct in STRING itself..  */
-  keymap = KVAR (current_kboard, Voverriding_terminal_local_map);
-  if (NILP (keymap))
-    keymap = Voverriding_local_map;
+  keymap = Voverriding_local_map;
 
   bsize = SBYTES (string);
   bufp = buf = xmalloc (bsize);
