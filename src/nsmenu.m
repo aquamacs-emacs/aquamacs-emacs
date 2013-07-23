@@ -1678,6 +1678,7 @@ a notification */
                         backing: NSBackingStoreBuffered
                           defer: NO];
   [win setDelegate: self];
+  [win setReleasedWhenClosed:NO];  // we release it explicitly with the enclosing EmacsToolTip objecct
   [[win contentView] addSubview: textField];
 /*  [win setBackgroundColor: col]; */
   [win setOpaque: NO];
@@ -1709,12 +1710,10 @@ a notification */
 
 - (void) showAtX: (int)x Y: (int)y for: (int)seconds
 {
-  NSLog(@"showAt Win: %@", win);
-  if (win == NULL)  // window not (yet) available - don't show the tooltip
+  if (win == nil)  // window not (yet) available - don't show the tooltip (for safety)
     return;
 
   NSRect wr = [win frame];
-  NSLog(@"  frame: %@", wr);
 
   wr.origin = NSMakePoint (x, y);
   wr.size = [textField frame].size;
@@ -1731,7 +1730,7 @@ a notification */
 
 - (void) hide
 {
-  [win close];
+  [win close];  // set to not release here
   if (timer != nil)
     {
       if ([timer isValid])
