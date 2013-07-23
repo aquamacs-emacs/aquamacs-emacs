@@ -122,9 +122,15 @@ in HTML format."
   (when (or (not transient-mark-mode) mark-active)
     (let ((x-select-enable-clipboard t)
 	  (buf (aquamacs-convert-to-html-buffer beg end)))
-      (with-current-buffer buf
-	(copy-region-as-kill (point-min) (point-max))
-        (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
+      ;; externally store text as text
+      (ns-store-selection-internal 'CLIPBOARD (buffer-substring beg end) 'txt)
+      (with-current-buffer buf	
+	;; internally (not externally) store the HTML
+	(let ((interprogram-cut-function nil))
+	  (copy-region-as-kill (point-min) (point-max)))
+	;; externally add html to the pasteboard
+        (ns-store-selection-internal 'CLIPBOARD (buffer-string) 'html))
+
       ;; ns-store-cut-buffer-internal with TYPE 'html doesn't seem to work
       ;; (with-current-buffer buf
       ;;   (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
