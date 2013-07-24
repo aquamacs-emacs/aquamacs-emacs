@@ -1463,6 +1463,8 @@ If ARG is the atom `-', scroll upward by nearly full screen."
   (define-key cua--region-keymap [remap insert-register]	'cua-replace-region)
   (define-key cua--region-keymap [remap newline-and-indent]	'cua-replace-region)
   (define-key cua--region-keymap [remap newline]		'cua-replace-region)
+  (define-key cua--region-keymap [remap reindent-then-newline-and-indent] 'cua-replace-region)
+  (define-key cua--region-keymap [remap org-return]		'cua-replace-region)
   (define-key cua--region-keymap [remap open-line]		'cua-replace-region)
   ;; delete current region
   (define-key cua--region-keymap [remap delete-backward-char]	'cua-delete-region)
