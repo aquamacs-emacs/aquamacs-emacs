@@ -532,23 +532,16 @@ Wraps around after throwing and error once."
 		 (aquamacs-encode-string-as-url 
 		  (substring word 0 (min (length word) 128))))))))
 
-(defun aquamacs-dictionary-lookup ()
-  (interactive)
-  (let ((word (aquamacs-mouse-get-word)))
+	
+
+(defun aquamacs-dictionary-lookup (&optional beg end)
+  (interactive "r")
+  (let ((word 
+	 (if (and mark-active beg) (buffer-substring-no-properties beg end) (aquamacs-mouse-get-word))))
     (if word
-	(do-applescript (concat 
-			 "tell application \"Dictionary\" to activate
-tell application \"System Events\"
-	tell process \"Dictionary\"
-		tell text field 1 of group 1 of tool bar 1 of window \"Dictionary and Thesaurus\"
-			keystroke \"" 
-			 (replace-regexp-in-string 
-			  "[\\\\\"]" ""
-			  (substring word 0 (min (length word) 32))) "\"
-			keystroke return
-		end tell
-	end tell
-end tell")))))
+	(do-applescript (format "open location \"dict://%s\"" word)))))
+
+
 (if (fboundp 'mac-spotlight-search)
     (defun aquamacs-spotlight-lookup ()
       "Search marked word in Spotlight
