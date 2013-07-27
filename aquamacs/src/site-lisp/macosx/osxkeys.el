@@ -100,7 +100,7 @@ after updating this variable.")
   
 ;; bind ns-application-store-state
 ;; to prevent isearch from interpreting this event (and aborting)
-(define-key global-map [ns-application-store-state] 'ignore)
+(define-key special-event-map [ns-application-store-state] 'ignore)
 
 (defvar cua--explicit-region-start) ;; in case CUA isn't loaded
 
