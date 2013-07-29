@@ -51,7 +51,9 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 	(message "Caching directory %sedit-modes" ddir)
 	(let ((default-directory ddir))
 	  (mapcar (lambda (f) (file-relative-name f "../../"))
-		  (aquamacs-preload-add-load-path "edit-modes")))
+		  (aquamacs-preload-add-load-path "edit-modes"))
+	  (mapcar (lambda (f) (file-relative-name f "../../"))
+		  (aquamacs-preload-add-load-path "util")))
 	))
 ;;(message "... resulting in %s" aquamacs-preloaded-load-path)
 
@@ -276,3 +278,8 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 (autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
 (assq-set-equal "\\.\\(frm\\|bas\\|cls\\)$" 
 		'visual-basic-mode 'auto-mode-alist)
+
+(autoload 'enable-paredit-mode "paredit"
+  "Turn on pseudo-structural editing of Lisp code.")
+(autoload 'paredit-mode "paredit"
+  "Minor mode for pseudo-structurally editing Lisp code.")
