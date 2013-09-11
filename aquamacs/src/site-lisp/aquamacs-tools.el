@@ -365,7 +365,6 @@ Optional CODING is used for encoding coding-system."
 		  nil))))
 
 
-
 (defun load-post-sitestart-files ()
   "Load the Aquamacs plugins from site-start directories."
   (let (loaded)
@@ -377,13 +376,14 @@ Optional CODING is used for encoding coding-system."
 		     (unless (member file loaded)
 		       (if (file-directory-p infod)
 			   (add-to-list 'Info-default-directory-list infod))
-		       (if debug-on-error
+		       (if (and debug-on-error ;; [too slow if always on]
+				(file-expand-wildcards (concat file ".*")) t)
 			   (message "loading post-sitestart %s." file))
 		       (load file 'noerror)
 		       (setq loaded (cons file loaded))))))
      load-path)
-    t)) 
- ; (load-post-sitestart-files)
+    t))
+ ; (measure-time (load-post-sitestart-files))
 
 (defun load-pre-sitestart-files ()
   "Load the pre-start Aquamacs plugins from site-prestart directories."
@@ -395,7 +395,8 @@ Optional CODING is used for encoding coding-system."
 		     (unless (member file loaded)
 		       (if (file-directory-p infod)
 			   (add-to-list 'Info-default-directory-list infod))
-		       (if debug-on-error
+		       (if (and debug-on-error ;; [too slow if always on]
+				(file-expand-wildcards (concat file ".*")) [too slow])
 			   (message "loading pre-sitestart %s." file))
 		       (load file 'noerror)
 		       (setq loaded (cons file loaded))))))
