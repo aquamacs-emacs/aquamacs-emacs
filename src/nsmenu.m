@@ -1141,18 +1141,15 @@ update_frame_tool_bar (FRAME_PTR f)
     Update toolbar contents
    -------------------------------------------------------------------------- */
 {
-  int i, k = 0;
+  int i;
   EmacsView *view = FRAME_NS_VIEW (f);
   NSWindow *window = [view window];
   EmacsToolbar *toolbar = [view toolbar];
 
   block_input ();
-
-#ifdef NS_IMPL_COCOA
   [toolbar clearActive];
   [toolbar setAllowsUserCustomization:YES];
   [toolbar setAutosavesConfiguration:NO];
-#endif
   /* problematic, as it creates a defaults file
      also, doesn't seem to work with our tool bar 
      construction mechanism.
@@ -1210,7 +1207,7 @@ update_frame_tool_bar (FRAME_PTR f)
       BOOL enabled_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_ENABLED_P));
       BOOL visible_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_VISIBLE_P));
       BOOL selected_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_SELECTED_P));
-      int idx = 0;
+      int idx;
       ptrdiff_t img_id;
       struct image *img;
       Lisp_Object image;
@@ -1230,7 +1227,7 @@ update_frame_tool_bar (FRAME_PTR f)
 	keyText = "?";
 
       if (STRINGP (label) && strcmp("--", SDATA (label)) == 0)
-	[toolbar addDisplayItemSpacerWithIdx: i key: keyText];
+	[toolbar addDisplayItemSpacerWithIdx: i tag:i key: keyText];
       else
 	{
       /* If image is a vector, choose the image according to the
@@ -1277,17 +1274,22 @@ update_frame_tool_bar (FRAME_PTR f)
       captionObj = TOOLPROP (TOOL_BAR_ITEM_LABEL);
       captionText = STRINGP (captionObj) ? (char *)SDATA (captionObj) : "";
 
-      [toolbar addDisplayItemWithImage: img->pixmap idx: k++ tag: i helpText: helpText
+      [toolbar addDisplayItemWithImage: img->pixmap idx: i tag: i helpText: helpText
 			       enabled: enabled_p  visible: visible_p
 				   key: keyText  labelText: captionText];
 #undef TOOLPROP
     }
     }
 
-  if (![toolbar isVisible])
-      [toolbar setVisible: YES];
+  /* set correct tool-bar height because x_set_window_size can't do it
+     before the tool-bar has been drawn. */
 
-#ifdef NS_IMPL_COCOA
+  // EmacsView *view = FRAME_NS_VIEW (f);
+  // NSWindow *window = [view window];
+  // FRAME_NS_TOOLBAR_HEIGHT (f) = 
+  //   NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
+  //   - FRAME_NS_TITLEBAR_HEIGHT (f);
+
   if ([toolbar changed])
     {
       /* inform app that toolbar has changed */
@@ -1309,7 +1311,9 @@ update_frame_tool_bar (FRAME_PTR f)
       [toolbar setConfigurationFromDictionary: newDict];
       [newDict release];
     }
-#endif
+
+  if (![toolbar isVisible])
+      [toolbar setVisible: YES];
 
   FRAME_TOOLBAR_HEIGHT (f) =
     NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
@@ -1485,7 +1489,9 @@ Items in this list are always Lisp symbols.*/)
     enablement == prevEnablement ? NO : YES;
 }
 
-- (void) addDisplayItemSpacerWithIdx: (int)idx key: (char *) key
+- (void) addDisplayItemSpacerWithIdx: (int)idx 
+				 tag: (int)tag
+				 key: (char *) key
 {
   /* 1) come up w/identifier */
   NSString *identifier = NSToolbarFlexibleSpaceItemIdentifier;
@@ -1499,11 +1505,14 @@ Items in this list are always Lisp symbols.*/)
 	       NSToolbarFlexibleSpaceItemIdentifier]
                autorelease];
     }
+  [item setTag: tag];
+  [item setLabel: @"--"];
 
   /* 3) update state */
   [identifierToItem setObject: item forKey: identifier];
   [availableIdentifiers addObject: identifier];
   [activeIdentifiers addObject: identifier];
+
   enablement = (enablement << 1) | false;
 }
 
@@ -1553,7 +1562,7 @@ Items in this list are always Lisp symbols.*/)
   [identifierToItem setObject: item forKey: identifier];
   [availableIdentifiers addObject: identifier];
   if (visible)
-  [activeIdentifiers addObject: identifier];
+    [activeIdentifiers addObject: identifier];
   enablement = (enablement << 1) | (enabled == YES);
 }
 
