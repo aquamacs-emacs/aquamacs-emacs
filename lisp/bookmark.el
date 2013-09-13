@@ -481,19 +481,18 @@ equivalently just return ALIST without NAME.")
 (defun bookmark-make-record ()
   "Return a new bookmark record (NAME . ALIST) for the current location."
   (let ((record (funcall bookmark-make-record-function)))
+    ;; Set up default name if the function does not provide one.
+    (unless (stringp (car record))
+      (if (car record) (push nil record))
+      (setcar record (or bookmark-current-bookmark (bookmark-buffer-name))))
     ;; Set up defaults.
     (bookmark-prop-set
      record 'defaults
      (delq nil (delete-dups (append (bookmark-prop-get record 'defaults)
 				    (list bookmark-current-bookmark
-					  (bookmark-buffer-name))))))
-    ;; Set up default name.
-    (if (stringp (car record))
-        ;; The function already provided a default name.
-        record
-      (if (car record) (push nil record))
-      (setcar record (or bookmark-current-bookmark (bookmark-buffer-name)))
-      record)))
+					  (car record)
+                                          (bookmark-buffer-name))))))
+    record))
 
 (defun bookmark-store (name alist no-overwrite)
   "Store the bookmark NAME with data ALIST.
@@ -863,31 +862,25 @@ It takes one argument, the name of the bookmark, as a string.")
     map)
   "Keymap for editing an annotation of a bookmark.")
 
-
-(defun bookmark-edit-annotation-mode (bookmark-name-or-record)
-  "Mode for editing the annotation of bookmark BOOKMARK-NAME-OR-RECORD.
-When you have finished composing, type \\[bookmark-send-annotation].
-
-\\{bookmark-edit-annotation-mode-map}"
-  (interactive)
-  (kill-all-local-variables)
-  (make-local-variable 'bookmark-annotation-name)
-  (setq bookmark-annotation-name bookmark-name-or-record)
-  (use-local-map bookmark-edit-annotation-mode-map)
-  (setq major-mode 'bookmark-edit-annotation-mode
-        mode-name "Edit Bookmark Annotation")
+(defun bookmark-insert-annotation (bookmark-name-or-record)
   (insert (funcall bookmark-edit-annotation-text-func bookmark-name-or-record))
   (let ((annotation (bookmark-get-annotation bookmark-name-or-record)))
     (if (and annotation (not (string-equal annotation "")))
-	(insert annotation)))
-  (run-mode-hooks 'text-mode-hook))
+	(insert annotation))))
+
+(define-derived-mode bookmark-edit-annotation-mode
+  text-mode "Edit Bookmark Annotation"
+  "Mode for editing the annotation of bookmarks.
+When you have finished composing, type \\[bookmark-send-annotation].
+
+\\{bookmark-edit-annotation-mode-map}")
 
 
 (defun bookmark-send-edited-annotation ()
   "Use buffer contents as annotation for a bookmark.
 Lines beginning with `#' are ignored."
   (interactive)
-  (if (not (eq major-mode 'bookmark-edit-annotation-mode))
+  (if (not (derived-mode-p 'bookmark-edit-annotation-mode))
       (error "Not in bookmark-edit-annotation-mode"))
   (goto-char (point-min))
   (while (< (point) (point-max))
@@ -907,7 +900,10 @@ Lines beginning with `#' are ignored."
 (defun bookmark-edit-annotation (bookmark-name-or-record)
   "Pop up a buffer for editing bookmark BOOKMARK-NAME-OR-RECORD's annotation."
   (pop-to-buffer (generate-new-buffer-name "*Bookmark Annotation Compose*"))
-  (bookmark-edit-annotation-mode bookmark-name-or-record))
+  (bookmark-insert-annotation bookmark-name-or-record)
+  (bookmark-edit-annotation-mode)
+  (set (make-local-variable 'bookmark-annotation-name)
+       bookmark-name-or-record))
 
 
 (defun bookmark-buffer-name ()
@@ -1113,12 +1109,9 @@ then offer interactively to relocate BOOKMARK-NAME-OR-RECORD."
     (setq bookmark-current-bookmark bookmark-name-or-record))
   nil)
 
-(put 'bookmark-error-no-filename
-     'error-conditions
-     '(error bookmark-errors bookmark-error-no-filename))
-(put 'bookmark-error-no-filename
-     'error-message
-     "Bookmark has no associated file (or directory)")
+(define-error 'bookmark-errors nil)
+(define-error 'bookmark-error-no-filename
+  "Bookmark has no associated file (or directory)" 'bookmark-errors)
 
 (defun bookmark-default-handler (bmk-record)
   "Default handler to jump to a particular bookmark location.

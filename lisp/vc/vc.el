@@ -486,6 +486,7 @@
 ;;   default implementation always returns nil.
 ;;
 ;; - root (file)
+;;
 ;;   Return the root of the VC controlled hierarchy for file.
 ;;
 ;; - repository-hostname (dirname)
@@ -495,6 +496,21 @@
 ;;   is nil, it means that the repository is local.
 ;;   This function is used in `vc-stay-local-p' which backends can use
 ;;   for their convenience.
+;;
+;; - ignore (file &optional directory)
+;;
+;;   Ignore FILE under the VCS of DIRECTORY (default is `default-directory').
+;;   FILE is a file wildcard.
+;;   When called interactively and with a prefix argument, remove FILE
+;;   from ignored files.
+;;   When called from Lisp code, if DIRECTORY is non-nil, the
+;;   repository to use will be deduced by DIRECTORY.
+;;
+;; - ignore-completion-table
+;;
+;;   Return the completion table for files ignored by the current
+;;   version control system, e.g., the entries in `.gitignore' and
+;;   `.bzrignore'.
 ;;
 ;; - previous-revision (file rev)
 ;;
@@ -575,9 +591,6 @@
 ;;;; New Primitives:
 ;;
 ;; - deal with push/pull operations.
-;;
-;; - add a mechanism for editing the underlying VCS's list of files
-;;   to be ignored, when that's possible.
 ;;
 ;;;; Primitives that need changing:
 ;;
@@ -1332,6 +1345,69 @@ first backend that could register the file is used."
   (let ((vc-handled-backends (list backend)))
     (call-interactively 'vc-register)))
 
+(defun vc-ignore (file &optional directory)
+  "Ignore FILE under the VCS of DIRECTORY (default is `default-directory').
+FILE is a file wildcard.
+When called interactively and with a prefix argument, remove FILE
+from ignored files.
+When called from Lisp code, if DIRECTORY is non-nil, the
+repository to use will be deduced by DIRECTORY."
+  (interactive
+   (list (read-file-name "The file to ignore: ")
+	 (completing-read
+	  "The file to remove: "
+	  (vc-call-backend
+	   (vc-backend default-directory)
+	   'ignore-completion-table default-directory))))
+  (let* ((directory (or directory default-directory))
+	 (backend (vc-backend default-directory))
+	 (remove current-prefix-arg))
+    (vc-call-backend backend 'ignore file directory remove)))
+
+(defun vc-default-ignore (backend file &optional directory remove)
+  "Ignore FILE under the VCS of DIRECTORY (default is `default-directory').
+FILE is a file wildcard, relative to the root directory of DIRECTORY.
+When called from Lisp code, if DIRECTORY is non-nil, the
+repository to use will be deduced by DIRECTORY; if REMOVE is
+non-nil, remove FILE from ignored files.
+Argument BACKEND is the backend you are using."
+  (let ((ignore
+	 (vc-call-backend backend 'find-ignore-file (or directory default-directory)))
+	(pattern (file-relative-name
+		  (expand-file-name file) (file-name-directory file))))
+    (if remove
+	(vc--remove-regexp pattern ignore)
+      (vc--add-line pattern ignore))))
+
+(defun vc-default-ignore-completion-table (backend file)
+  "Return the list of ignored files under BACKEND."
+  (vc--read-lines
+   (vc-call-backend backend 'find-ignore-file file)))
+
+(defun vc--read-lines (file)
+  "Return a list of lines of FILE."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (split-string (buffer-string) "\n" t)))
+
+;; Subroutine for `vc-git-ignore' and `vc-hg-ignore'.
+(defun vc--add-line (string file)
+  "Add STRING as a line to FILE."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (unless (re-search-forward (concat "^" (regexp-quote string) "$") nil t)
+      (goto-char (point-max))
+      (insert (concat "\n" string))
+      (write-region (point-min) (point-max) file))))
+
+(defun vc--remove-regexp (regexp file)
+  "Remove all matching for REGEXP in FILE."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (while (re-search-forward regexp nil t)
+      (replace-match ""))
+    (write-region (point-min) (point-max) file)))
+
 (defun vc-checkout (file &optional writable rev)
   "Retrieve a copy of the revision REV of FILE.
 If WRITABLE is non-nil, make sure the retrieved file is writable.
@@ -1460,11 +1536,11 @@ Runs the normal hooks `vc-before-checkin-hook' and `vc-checkin-hook'."
 ;;   (vc-file-tree-walk
 ;;    default-directory
 ;;    (lambda (f)
-;;      (vc-exec-after
-;;       `(let ((coding-system-for-read (vc-coding-system-for-diff ',f)))
-;;          (message "Looking at %s" ',f)
-;;          (vc-call-backend ',(vc-backend f)
-;;                           'diff (list ',f) ',rev1 ',rev2))))))
+;;      (vc-run-delayed
+;;       (let ((coding-system-for-read (vc-coding-system-for-diff f)))
+;;          (message "Looking at %s" f)
+;;          (vc-call-backend (vc-backend f)
+;;                           'diff (list f) rev1 rev2))))))
 
 (defvar vc-coding-system-inherit-eol t
   "When non-nil, inherit the EOL format for reading Diff output from the file.
@@ -1602,8 +1678,8 @@ Return t if the buffer had changes, nil otherwise."
     (diff-mode)
     (set (make-local-variable 'diff-vc-backend) (car vc-fileset))
     (set (make-local-variable 'revert-buffer-function)
-	 `(lambda (ignore-auto noconfirm)
-	    (vc-diff-internal ,async ',vc-fileset ,rev1 ,rev2 ,verbose)))
+	 (lambda (_ignore-auto _noconfirm)
+           (vc-diff-internal async vc-fileset rev1 rev2 verbose)))
     ;; Make the *vc-diff* buffer read only, the diff-mode key
     ;; bindings are nicer for read only buffers. pcl-cvs does the
     ;; same thing.
@@ -1619,8 +1695,8 @@ Return t if the buffer had changes, nil otherwise."
       ;; The diff process may finish early, so call `vc-diff-finish'
       ;; after `pop-to-buffer'; the former assumes the diff buffer is
       ;; shown in some window.
-      (vc-exec-after `(vc-diff-finish ,(current-buffer)
-				      ',(when verbose messages)))
+      (let ((buf (current-buffer)))
+        (vc-run-delayed (vc-diff-finish buf (when verbose messages))))
       ;; In the async case, we return t even if there are no differences
       ;; because we don't know that yet.
       t)))
@@ -2154,6 +2230,7 @@ earlier revisions.  Show up to LIMIT entries (non-nil means unlimited)."
 (defvar vc-log-view-type nil
   "Set this to differentiate the different types of logs.")
 (put 'vc-log-view-type 'permanent-local t)
+(defvar vc-sentinel-movepoint)
 
 (defun vc-log-internal-common (backend
 			       buffer-name
@@ -2176,13 +2253,13 @@ earlier revisions.  Show up to LIMIT entries (non-nil means unlimited)."
       (set (make-local-variable 'log-view-vc-fileset) files)
       (set (make-local-variable 'revert-buffer-function)
 	   rev-buff-func))
-    (vc-exec-after
-     `(let ((inhibit-read-only t))
-	(funcall ',setup-buttons-func ',backend ',files ',retval)
-	(shrink-window-if-larger-than-buffer)
-	(funcall ',goto-location-func ',backend)
-	(setq vc-sentinel-movepoint (point))
-	(set-buffer-modified-p nil)))))
+    (vc-run-delayed
+     (let ((inhibit-read-only t))
+       (funcall setup-buttons-func backend files retval)
+       (shrink-window-if-larger-than-buffer)
+       (funcall goto-location-func backend)
+       (setq vc-sentinel-movepoint (point))
+       (set-buffer-modified-p nil)))))
 
 (defun vc-incoming-outgoing-internal (backend remote-location buffer-name type)
   (vc-log-internal-common

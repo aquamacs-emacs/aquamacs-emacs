@@ -1,3 +1,5 @@
+### @configure_input@
+
 # Copyright (C) 1992, 1993 Lucid, Inc.
 # Copyright (C) 1994, 2001-2013 Free Software Foundation, Inc.
 #
@@ -57,10 +59,11 @@ ALL_CFLAGS= $(C_SWITCH_SYSTEM) $(C_SWITCH_X_SITE) \
   -Demacs -I../src \
   -I$(srcdir) -I$(srcdir)/../src -I../lib -I$(srcdir)/../lib
 
+all: liblw.a
+.PHONY: all
+
 .c.o:
 	$(CC) -c $(CPPFLAGS) $(ALL_CFLAGS) $<
-
-all:: liblw.a
 
 liblw.a: $(OBJS)
 	rm -f $@

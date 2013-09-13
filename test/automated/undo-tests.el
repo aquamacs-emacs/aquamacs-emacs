@@ -124,7 +124,7 @@
     (undo-boundary)
     (insert " Zero")
     (undo-boundary)
-    (push-mark)
+    (push-mark nil t)
     (delete-region (save-excursion
                      (forward-word -1)
                      (point)) (point))
@@ -172,7 +172,7 @@
     (insert " BEE")
     (undo-boundary)
     (setq buffer-undo-list (cons '(0.0 bogus) buffer-undo-list))
-    (push-mark)
+    (push-mark nil t)
     (delete-region (save-excursion
                      (forward-word -1)
                      (point)) (point))
@@ -199,6 +199,32 @@
            (equal (should-error (undo))
                   '(error "Unrecognized entry in undo list \"bogus\""))))
         (buffer-string))))))
+
+;; http://debbugs.gnu.org/14824
+(ert-deftest undo-test-buffer-modified ()
+  "Test undoing marks buffer unmodified."
+  (with-temp-buffer
+    (buffer-enable-undo)
+    (insert "1")
+    (undo-boundary)
+    (set-buffer-modified-p nil)
+    (insert "2")
+    (undo)
+    (should-not (buffer-modified-p))))
+
+(ert-deftest undo-test-file-modified ()
+  "Test undoing marks buffer visiting file unmodified."
+  (let ((tempfile (make-temp-file "undo-test")))
+    (unwind-protect
+        (progn
+          (with-current-buffer (find-file-noselect tempfile)
+            (insert "1")
+            (undo-boundary)
+            (set-buffer-modified-p nil)
+            (insert "2")
+            (undo)
+            (should-not (buffer-modified-p))))
+      (delete-file tempfile))))
 
 (defun undo-test-all (&optional interactive)
   "Run all tests for \\[undo]."

@@ -18,7 +18,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
-
+#ifndef EMACS_TERMHOOKS_H
+#define EMACS_TERMHOOKS_H
+
 /* Miscellanea.   */
 
 #include "systime.h" /* for Time */
@@ -28,11 +30,8 @@ INLINE_HEADER_BEGIN
 # define TERMHOOKS_INLINE INLINE
 #endif
 
-struct glyph;
-struct frame;
-
-
 enum scroll_bar_part {
+  scroll_bar_nowhere = -1,
   scroll_bar_above_handle,
   scroll_bar_handle,
   scroll_bar_below_handle,
@@ -44,12 +43,18 @@ enum scroll_bar_part {
   scroll_bar_move_ratio
 };
 
-/* If the value of the frame parameter changed, whis hook is called.
-   For example, if going from fullscreen to not fullscreen this hook
-   may do something OS dependent, like extended window manager hints on X11.  */
-extern void (*fullscreen_hook) (struct frame *f);
+/* Output method of a terminal (and frames on this terminal, respectively).  */
 
-
+enum output_method
+{
+  output_initial,
+  output_termcap,
+  output_x_window,
+  output_msdos_raw,
+  output_w32,
+  output_ns
+};
+
 /* Input queue declarations and hooks.  */
 
 enum event_kind
@@ -171,6 +176,8 @@ enum event_kind
   /* Queued from XTread_socket on FocusIn events.  Translated into
      `switch-frame' events in kbd_buffer_get_event, if necessary.  */
   FOCUS_IN_EVENT,
+
+  FOCUS_OUT_EVENT,
 
   /* Generated when mouse moves over window not currently selected.  */
   SELECT_WINDOW_EVENT,
@@ -320,11 +327,6 @@ extern void term_mouse_moveto (int, int);
 /* The device for which we have enabled gpm support.  */
 extern struct tty_display_info *gpm_tty;
 #endif
-
-
-struct ns_display_info;
-struct x_display_info;
-struct w32_display_info;
 
 /* Terminal-local parameters. */
 struct terminal
@@ -494,7 +496,7 @@ struct terminal
      windows.  */
   void (*frame_raise_lower_hook) (struct frame *f, int raise_flag);
 
-  /* If the value of the frame parameter changed, whis hook is called.
+  /* If the value of the frame parameter changed, this hook is called.
      For example, if going from fullscreen to not fullscreen this hook
      may do something OS dependent, like extended window manager hints on X11.  */
   void (*fullscreen_hook) (struct frame *f);
@@ -645,7 +647,7 @@ extern struct terminal *terminal_list;
   (((d)->type != output_termcap && (d)->type != output_msdos_raw)	\
    || (d)->display_info.tty->input)
 
-extern struct terminal *get_terminal (Lisp_Object terminal, int);
+extern struct terminal *get_terminal (Lisp_Object terminal, bool);
 extern struct terminal *create_terminal (void);
 extern void delete_terminal (struct terminal *);
 
@@ -660,3 +662,5 @@ extern void close_gpm (int gpm_fd);
 #endif
 
 INLINE_HEADER_END
+
+#endif /* EMACS_TERMHOOKS_H */

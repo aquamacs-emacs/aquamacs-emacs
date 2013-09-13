@@ -83,7 +83,7 @@ typedef XImagePtr XImagePtr_or_DC;
 #endif
 
 #ifdef HAVE_WINDOW_SYSTEM
-# include "systime.h"
+# include <time.h>
 #endif
 
 #ifndef HAVE_WINDOW_SYSTEM
@@ -95,18 +95,17 @@ typedef int Cursor;
 #define NativeRectangle int
 #endif
 
-/* Structure forward declarations.  Some are here because function
-   prototypes below reference structure types before their definition
-   in this file.  Some are here because not every file including
-   dispextern.h also includes frame.h and windows.h.  */
+/* Text cursor types.  */
 
-struct glyph;
-struct glyph_row;
-struct glyph_matrix;
-struct glyph_pool;
-struct frame;
-struct window;
-
+enum text_cursor_kinds
+{
+  DEFAULT_CURSOR = -2,
+  NO_CURSOR = -1,
+  FILLED_BOX_CURSOR,
+  HOLLOW_BOX_CURSOR,
+  BAR_CURSOR,
+  HBAR_CURSOR
+};
 
 /* Values returned from coordinates_in_window.  */
 
@@ -224,8 +223,16 @@ struct text_pos
 /* Set text position POS from marker MARKER.  */
 
 #define SET_TEXT_POS_FROM_MARKER(POS, MARKER)		\
-     (CHARPOS (POS) = marker_position ((MARKER)),	\
-      BYTEPOS (POS) = marker_byte_position ((MARKER)))
+  (CHARPOS (POS) = marker_position (MARKER),		\
+   BYTEPOS (POS) = marker_byte_position (MARKER))
+
+/* Like above, but clip POS within accessible range.  */
+
+#define CLIP_TEXT_POS_FROM_MARKER(POS, MARKER)		\
+  (CHARPOS (POS) = clip_to_bounds			\
+   (BEGV, marker_position (MARKER), ZV),		\
+   BYTEPOS (POS) = clip_to_bounds			\
+   (BEGV_BYTE, marker_byte_position (MARKER), ZV_BYTE))
 
 /* Set marker MARKER from text position POS.  */
 
@@ -752,11 +759,12 @@ void check_matrix_pointer_lossage (struct glyph_matrix *);
 			     Glyph Rows
  ***********************************************************************/
 
-/* Area in window glyph matrix.  If values are added or removed, the
-   function mark_object in alloc.c has to be changed.  */
+/* Area in window glyph matrix.  If values are added or removed,
+   the function mark_glyph_matrix in alloc.c may need to be changed.  */
 
 enum glyph_row_area
 {
+  ANY_AREA = -1,
   LEFT_MARGIN_AREA,
   TEXT_AREA,
   RIGHT_MARGIN_AREA,
@@ -1187,25 +1195,9 @@ struct glyph_row *matrix_row (struct glyph_matrix *, int);
       ((ROW)->phys_height - (ROW)->phys_ascent	\
        > (ROW)->height - (ROW)->ascent)
 
-/* True means that fonts have been loaded since the last glyph
-   matrix adjustments.  The function redisplay_internal adjusts glyph
-   matrices when this flag is true.  */
-
-extern bool fonts_changed_p;
-
 /* A glyph for a space.  */
 
 extern struct glyph space_glyph;
-
-/* Window being updated by update_window.  This is non-null as long as
-   update_window has not finished, and null otherwise.  */
-
-extern struct window *updated_window;
-
-/* Glyph row and area updated by update_window_line.  */
-
-extern struct glyph_row *updated_row;
-extern int updated_area;
 
 /* Non-zero means last display completed.  Zero means it was
    preempted.  */
@@ -1430,31 +1422,31 @@ struct glyph_string
 #define CURRENT_MODE_LINE_FACE_ID(W)		\
 	(CURRENT_MODE_LINE_FACE_ID_3((W), XWINDOW (selected_window), (W)))
 
-/* Return the current height of the mode line of window W.  If not
-   known from current_mode_line_height, look at W's current glyph
-   matrix, or return a default based on the height of the font of the
-   face `mode-line'.  */
+/* Return the current height of the mode line of window W.  If not known
+   from W->mode_line_height, look at W's current glyph matrix, or return
+   a default based on the height of the font of the face `mode-line'.  */
 
-#define CURRENT_MODE_LINE_HEIGHT(W)				\
-     (current_mode_line_height >= 0				\
-      ? current_mode_line_height				\
-      : (MATRIX_MODE_LINE_HEIGHT ((W)->current_matrix)		\
-	 ? MATRIX_MODE_LINE_HEIGHT ((W)->current_matrix)	\
-	 : estimate_mode_line_height (XFRAME ((W)->frame),	\
-				      CURRENT_MODE_LINE_FACE_ID (W))))
+#define CURRENT_MODE_LINE_HEIGHT(W)					\
+  (W->mode_line_height >= 0						\
+   ? W->mode_line_height						\
+   : (W->mode_line_height						\
+      = (MATRIX_MODE_LINE_HEIGHT (W->current_matrix)			\
+	 ? MATRIX_MODE_LINE_HEIGHT (W->current_matrix)			\
+	 : estimate_mode_line_height					\
+	     (XFRAME (W->frame), CURRENT_MODE_LINE_FACE_ID (W)))))
 
-/* Return the current height of the header line of window W.  If not
-   known from current_header_line_height, look at W's current glyph
-   matrix, or return an estimation based on the height of the font of
-   the face `header-line'.  */
+/* Return the current height of the header line of window W.  If not known
+   from W->header_line_height, look at W's current glyph matrix, or return
+   an estimation based on the height of the font of the face `header-line'.  */
 
 #define CURRENT_HEADER_LINE_HEIGHT(W)				\
-      (current_header_line_height >= 0				\
-       ? current_header_line_height				\
-       : (MATRIX_HEADER_LINE_HEIGHT ((W)->current_matrix)	\
-	  ? MATRIX_HEADER_LINE_HEIGHT ((W)->current_matrix)	\
-	  : estimate_mode_line_height (XFRAME ((W)->frame),	\
-				       HEADER_LINE_FACE_ID)))
+  (W->header_line_height >= 0					\
+   ? W->header_line_height					\
+   : (W->header_line_height					\
+      = (MATRIX_HEADER_LINE_HEIGHT (W->current_matrix)		\
+	 ? MATRIX_HEADER_LINE_HEIGHT (W->current_matrix)	\
+	 : estimate_mode_line_height				\
+	     (XFRAME (W->frame), HEADER_LINE_FACE_ID))))
 
 /* Return the height of the desired mode line of window W.  */
 
@@ -2682,8 +2674,57 @@ enum move_operation_enum
   MOVE_TO_POS = 0x08
 };
 
+/***********************************************************************
+			    Mouse Highlight
+ ***********************************************************************/
 
-
+/* Structure to hold mouse highlight data.  */
+
+typedef struct {
+  /* These variables describe the range of text currently shown in its
+     mouse-face, together with the window they apply to.  As long as
+     the mouse stays within this range, we need not redraw anything on
+     its account.  Rows and columns are glyph matrix positions in
+     MOUSE_FACE_WINDOW.  */
+  int mouse_face_beg_row, mouse_face_beg_col, mouse_face_beg_x;
+  int mouse_face_end_row, mouse_face_end_col, mouse_face_end_x;
+  Lisp_Object mouse_face_window;
+  int mouse_face_face_id;
+  Lisp_Object mouse_face_overlay;
+
+  /* FRAME and X, Y position of mouse when last checked for
+     highlighting.  X and Y can be negative or out of range for the frame.  */
+  struct frame *mouse_face_mouse_frame;
+  int mouse_face_mouse_x, mouse_face_mouse_y;
+
+  /* Nonzero if part of the text currently shown in
+     its mouse-face is beyond the window end.  */
+  unsigned mouse_face_past_end : 1;
+
+  /* Nonzero means defer mouse-motion highlighting.  */
+  unsigned mouse_face_defer : 1;
+
+  /* Nonzero means that the mouse highlight should not be shown.  */
+  unsigned mouse_face_hidden : 1;
+} Mouse_HLInfo;
+
+DISPEXTERN_INLINE void
+reset_mouse_highlight (Mouse_HLInfo *hlinfo)
+{
+
+    hlinfo->mouse_face_beg_row = hlinfo->mouse_face_beg_col = -1;
+    hlinfo->mouse_face_end_row = hlinfo->mouse_face_end_col = -1;
+    hlinfo->mouse_face_mouse_x = hlinfo->mouse_face_mouse_y = 0;
+    hlinfo->mouse_face_beg_x = hlinfo->mouse_face_end_x = 0;
+    hlinfo->mouse_face_face_id = DEFAULT_FACE_ID;
+    hlinfo->mouse_face_mouse_frame = NULL;
+    hlinfo->mouse_face_window = Qnil;
+    hlinfo->mouse_face_overlay = Qnil;
+    hlinfo->mouse_face_past_end = 0;
+    hlinfo->mouse_face_hidden = 0;
+    hlinfo->mouse_face_defer = 0;
+}
+
 /***********************************************************************
 		   Window-based redisplay interface
  ***********************************************************************/
@@ -2722,12 +2763,17 @@ struct redisplay_interface
 
   /* Write or insert LEN glyphs from STRING at the nominal output
      position.  */
-  void (*write_glyphs) (struct glyph *string, int len);
-  void (*insert_glyphs) (struct glyph *start, int len);
+  void (*write_glyphs) (struct window *w, struct glyph_row *row,
+			struct glyph *string, enum glyph_row_area area,
+			int len);
+  void (*insert_glyphs) (struct window *w, struct glyph_row *row,
+			 struct glyph *start, enum glyph_row_area area,
+			 int len);
 
   /* Clear from nominal output position to X.  X < 0 means clear
      to right end of display.  */
-  void (*clear_end_of_line) (int x);
+  void (*clear_end_of_line) (struct window *w, struct glyph_row *row,
+			     enum glyph_row_area area, int x);
 
   /* Function to call to scroll the display as described by RUN on
      window W.  */
@@ -2736,7 +2782,8 @@ struct redisplay_interface
   /* Function to call after a line in a display has been completely
      updated.  Used to draw truncation marks and alike.  DESIRED_ROW
      is the desired row which has been updated.  */
-  void (*after_update_window_line_hook) (struct glyph_row *desired_row);
+  void (*after_update_window_line_hook) (struct window *w,
+					 struct glyph_row *desired_row);
 
   /* Function to call before beginning to update window W in
      window-based redisplay.  */
@@ -2747,21 +2794,11 @@ struct redisplay_interface
      MOUSE_FACE_OVERWRITTEN_P non-zero means that some lines in W
      that contained glyphs in mouse-face were overwritten, so we
      have to update the mouse highlight.  */
-  void (*update_window_end_hook) (struct window *w, int cursor_on_p,
-                                  int mouse_face_overwritten_p);
-
-  /* Move cursor to row/column position VPOS/HPOS, pixel coordinates
-     Y/X. HPOS/VPOS are window-relative row and column numbers and X/Y
-     are window-relative pixel positions.  */
-  void (*cursor_to) (int vpos, int hpos, int y, int x);
+  void (*update_window_end_hook) (struct window *w, bool cursor_on_p,
+                                  bool mouse_face_overwritten_p);
 
   /* Flush the display of frame F.  For X, this is XFlush.  */
   void (*flush_display) (struct frame *f);
-
-  /* Flush the display of frame F if non-NULL.  This is called
-     during redisplay, and should be NULL on systems which flush
-     automatically before reading input.  */
-  void (*flush_display_optional) (struct frame *f);
 
   /* Clear the mouse highlight in window W, if there is any.  */
   void (*clear_window_mouse_face) (struct window *w);
@@ -2807,10 +2844,10 @@ struct redisplay_interface
    0, don't draw cursor.  If ACTIVE_P is 1, system caret
    should track this cursor (when applicable).  */
   void (*draw_window_cursor) (struct window *w,
-                              struct glyph_row *glyph_row,
-                              int x, int y,
-                              int cursor_type, int cursor_width,
-                              int on_p, int active_p);
+			      struct glyph_row *glyph_row,
+			      int x, int y,
+			      enum text_cursor_kinds cursor_type,
+			      int cursor_width, bool on_p, bool active_p);
 
 /* Draw vertical border for window W from (X,Y_0) to (X,Y_1).  */
   void (*draw_vertical_window_border) (struct window *w,
@@ -2832,11 +2869,6 @@ struct redisplay_interface
  ***********************************************************************/
 
 #ifdef HAVE_WINDOW_SYSTEM
-
-/* Structure forward declarations.  */
-
-struct image;
-
 
 /* Each image format (JPEG, TIFF, ...) supported is described by
    a structure of the type below.  */
@@ -2874,7 +2906,7 @@ struct image
 {
   /* The time in seconds at which the image was last displayed.  Set
      in prepare_image_for_display.  */
-  EMACS_TIME timestamp;
+  struct timespec timestamp;
 
   /* Pixmaps of the image.  */
   Pixmap pixmap, mask;
@@ -3131,14 +3163,15 @@ int resize_mini_window (struct window *, int);
 void set_vertical_scroll_bar (struct window *);
 #endif
 int try_window (Lisp_Object, struct text_pos, int);
-void window_box (struct window *, int, int *, int *, int *, int *);
+void window_box (struct window *, enum glyph_row_area,
+		 int *, int *, int *, int *);
 int window_box_height (struct window *);
 int window_text_bottom_y (struct window *);
-int window_box_width (struct window *, int);
-int window_box_left (struct window *, int);
-int window_box_left_offset (struct window *, int);
-int window_box_right (struct window *, int);
-int window_box_right_offset (struct window *, int);
+int window_box_width (struct window *, enum glyph_row_area);
+int window_box_left (struct window *, enum glyph_row_area);
+int window_box_left_offset (struct window *, enum glyph_row_area);
+int window_box_right (struct window *, enum glyph_row_area);
+int window_box_right_offset (struct window *, enum glyph_row_area);
 int estimate_mode_line_height (struct frame *, enum face_id);
 void pixel_to_glyph_coords (struct frame *, int, int, int *, int *,
                             NativeRectangle *, int);
@@ -3164,7 +3197,6 @@ int frame_mode_line_height (struct frame *);
 extern Lisp_Object Qtool_bar;
 extern bool redisplaying_p;
 extern int help_echo_showing_p;
-extern int current_mode_line_height, current_header_line_height;
 extern Lisp_Object help_echo_string, help_echo_window;
 extern Lisp_Object help_echo_object, previous_help_echo_string;
 extern ptrdiff_t help_echo_pos;
@@ -3178,6 +3210,7 @@ extern ptrdiff_t compute_display_string_pos (struct text_pos *,
 extern ptrdiff_t compute_display_string_end (ptrdiff_t,
 					     struct bidi_string_data *);
 extern void produce_stretch_glyph (struct it *);
+extern int merge_glyphless_glyph_face (struct it *);
 
 #ifdef HAVE_WINDOW_SYSTEM
 
@@ -3189,12 +3222,12 @@ extern void x_get_glyph_overhangs (struct glyph *, struct frame *,
                                    int *, int *);
 extern void x_produce_glyphs (struct it *);
 
-extern void x_write_glyphs (struct glyph *, int);
-extern void x_insert_glyphs (struct glyph *, int len);
-extern void x_clear_end_of_line (int);
-
-extern struct cursor_pos output_cursor;
-
+extern void x_write_glyphs (struct window *, struct glyph_row *,
+			    struct glyph *, enum glyph_row_area, int);
+extern void x_insert_glyphs (struct window *, struct glyph_row *,
+			     struct glyph *, enum glyph_row_area, int);
+extern void x_clear_end_of_line (struct window *, struct glyph_row *,
+				 enum glyph_row_area, int);
 extern void x_fix_overlapping_area (struct window *, struct glyph_row *,
                                     enum glyph_row_area, int);
 extern void draw_phys_cursor_glyph (struct window *,
@@ -3203,13 +3236,8 @@ extern void draw_phys_cursor_glyph (struct window *,
 extern void get_phys_cursor_geometry (struct window *, struct glyph_row *,
                                       struct glyph *, int *, int *, int *);
 extern void erase_phys_cursor (struct window *);
-extern void display_and_set_cursor (struct window *,
-                                    int, int, int, int, int);
-
-extern void set_output_cursor (struct cursor_pos *);
-extern void x_cursor_to (int, int, int, int);
-
-extern void x_update_cursor (struct frame *, int);
+extern void display_and_set_cursor (struct window *, bool, int, int, int, int);
+extern void x_update_cursor (struct frame *, bool);
 extern void x_clear_cursor (struct window *);
 extern void x_draw_vertical_border (struct window *w);
 
@@ -3242,9 +3270,9 @@ extern void tty_draw_row_with_mouse_face (struct window *, struct glyph_row *,
 int lookup_fringe_bitmap (Lisp_Object);
 void draw_fringe_bitmap (struct window *, struct glyph_row *, int);
 void draw_row_fringe_bitmaps (struct window *, struct glyph_row *);
-int draw_window_fringes (struct window *, int);
-int update_window_fringes (struct window *, int);
-void compute_fringe_widths (struct frame *, int);
+bool draw_window_fringes (struct window *, bool);
+bool update_window_fringes (struct window *, bool);
+void compute_fringe_widths (struct frame *, bool);
 
 #ifdef HAVE_NTGUI
 void w32_init_fringe (struct redisplay_interface *);
@@ -3305,7 +3333,7 @@ int image_ascent (struct image *, struct face *, struct glyph_slice *);
 void get_tty_size (int, int *, int *);
 void request_sigio (void);
 void unrequest_sigio (void);
-int tabs_safe_p (int);
+bool tabs_safe_p (int);
 void init_baud_rate (int);
 void init_sigio (int);
 void ignore_sigio (void);
@@ -3372,8 +3400,6 @@ extern frame_parm_handler x_frame_parm_handlers[];
 extern void start_hourglass (void);
 extern void cancel_hourglass (void);
 extern int hourglass_shown_p;
-
-struct atimer;			/* Defined in atimer.h.  */
 /* If non-null, an asynchronous timer that, when it expires, displays
    an hourglass cursor on all frames.  */
 extern struct atimer *hourglass_atimer;
@@ -3425,7 +3451,7 @@ extern void cancel_line (int, struct frame *);
 extern void init_desired_glyphs (struct frame *);
 extern bool update_frame (struct frame *, bool, bool);
 extern void bitch_at_user (void);
-void adjust_glyphs (struct frame *);
+extern void adjust_frame_glyphs (struct frame *);
 void free_glyphs (struct frame *);
 void free_window_matrices (struct window *);
 void check_glyph_memory (void);
@@ -3477,11 +3503,12 @@ extern int string_cost (const char *);
 extern int per_line_cost (const char *);
 extern void calculate_costs (struct frame *);
 extern void produce_glyphs (struct it *);
-extern int tty_capable_p (struct tty_display_info *, unsigned, unsigned long, unsigned long);
+extern bool tty_capable_p (struct tty_display_info *, unsigned,
+			   unsigned long, unsigned long);
 extern void set_tty_color_mode (struct tty_display_info *, struct frame *);
 extern struct terminal *get_named_tty (const char *);
 extern void create_tty_output (struct frame *);
-extern struct terminal *init_tty (const char *, const char *, int);
+extern struct terminal *init_tty (const char *, const char *, bool);
 extern void tty_append_glyph (struct it *);
 
 

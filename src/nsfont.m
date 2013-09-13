@@ -61,6 +61,7 @@ static void ns_uni_to_glyphs (struct nsfont_info *font_info,
 static void ns_glyph_metrics (struct nsfont_info *font_info,
                               unsigned char block);
 
+#define INVALID_GLYPH 0xFFFF
 
 /* ==========================================================================
 
@@ -446,7 +447,7 @@ static NSCharacterSet
       {
 	Lisp_Object ranges, range_list;
 
-	ranges = Fcons (script, Qnil);
+	ranges = list1 (script);
 	map_char_table (accumulate_script_ranges, Qnil, Vchar_script_table,
 			ranges);
 	range_list = Fnreverse (XCDR (ranges));
@@ -619,13 +620,13 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
    ========================================================================== */
 
 
-static Lisp_Object nsfont_get_cache (FRAME_PTR frame);
-static Lisp_Object nsfont_list (Lisp_Object frame, Lisp_Object font_spec);
-static Lisp_Object nsfont_match (Lisp_Object frame, Lisp_Object font_spec);
-static Lisp_Object nsfont_list_family (Lisp_Object frame);
-static Lisp_Object nsfont_open (FRAME_PTR f, Lisp_Object font_entity,
+static Lisp_Object nsfont_get_cache (struct frame *frame);
+static Lisp_Object nsfont_list (struct frame *, Lisp_Object);
+static Lisp_Object nsfont_match (struct frame *, Lisp_Object);
+static Lisp_Object nsfont_list_family (struct frame *);
+static Lisp_Object nsfont_open (struct frame *f, Lisp_Object font_entity,
                                  int pixel_size);
-static void nsfont_close (FRAME_PTR f, struct font *font);
+static void nsfont_close (struct frame *f, struct font *font);
 static int nsfont_has_char (Lisp_Object entity, int c);
 static unsigned int nsfont_encode_char (struct font *font, int c);
 static int nsfont_text_extents (struct font *font, unsigned int *code,
@@ -659,7 +660,7 @@ struct font_driver nsfont_driver =
 /* Return a cache of font-entities on FRAME.  The cache must be a
    cons whose cdr part is the actual cache area.  */
 static Lisp_Object
-nsfont_get_cache (FRAME_PTR frame)
+nsfont_get_cache (struct frame *frame)
 {
   Display_Info *dpyinfo = FRAME_NS_DISPLAY_INFO (frame);
   return (dpyinfo->name_list_element);
@@ -679,9 +680,9 @@ nsfont_get_cache (FRAME_PTR frame)
    weight, slant, width, size (0 if scalable),
    dpi, spacing, avgwidth (0 if scalable)  */
 static Lisp_Object
-nsfont_list (Lisp_Object frame, Lisp_Object font_spec)
+nsfont_list (struct frame *f, Lisp_Object font_spec)
 {
-    return ns_findfonts (font_spec, NO);
+  return ns_findfonts (font_spec, NO);
 }
 
 
@@ -690,16 +691,16 @@ nsfont_list (Lisp_Object frame, Lisp_Object font_spec)
    `face-font-selection-order' is ignored here.
    Properties to be considered are same as for list(). */
 static Lisp_Object
-nsfont_match (Lisp_Object frame, Lisp_Object font_spec)
+nsfont_match (struct frame *f, Lisp_Object font_spec)
 {
-    return ns_findfonts(font_spec, YES);
+  return ns_findfonts (font_spec, YES);
 }
 
 
 /* List available families.  The value is a list of family names
    (symbols). */
 static Lisp_Object
-nsfont_list_family (Lisp_Object frame)
+nsfont_list_family (struct frame *f)
 {
   Lisp_Object list = Qnil;
   NSEnumerator *families;
@@ -724,7 +725,7 @@ nsfont_list_family (Lisp_Object frame)
 /* Open a font specified by FONT_ENTITY on frame F.  If the font is
    scalable, open it with PIXEL_SIZE.  */
 static Lisp_Object
-nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
+nsfont_open (struct frame *f, Lisp_Object font_entity, int pixel_size)
 {
   BOOL synthItal;
   unsigned int traits = 0;
@@ -945,8 +946,7 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
     font->underline_thickness = lrint (font_info->underwidth);
 
     font->props[FONT_NAME_INDEX] = Ffont_xlfd_name (font_object, Qnil);
-    font->props[FONT_FULLNAME_INDEX] =
-      make_unibyte_string (font_info->name, strlen (font_info->name));
+    font->props[FONT_FULLNAME_INDEX] = build_unibyte_string (font_info->name);
   }
   unblock_input ();
 
@@ -956,7 +956,7 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
 
 /* Close FONT on frame F. */
 static void
-nsfont_close (FRAME_PTR f, struct font *font)
+nsfont_close (struct frame *f, struct font *font)
 {
   struct nsfont_info *font_info = (struct nsfont_info *)font;
   int i;
@@ -1007,7 +1007,7 @@ nsfont_encode_char (struct font *font, int c)
     ns_uni_to_glyphs (font_info, high);
 
   g = font_info->glyphs[high][low];
-  return g == 0xFFFF ? FONT_INVALID_CODE : g;
+  return g == INVALID_GLYPH ? FONT_INVALID_CODE : g;
 }
 
 
@@ -1383,8 +1383,8 @@ ns_uni_to_glyphs (struct nsfont_info *font_info, unsigned char block)
 #else
         g = glyphStorage->cglyphs[i];
         /* TODO: is this a good check?  maybe need to use coveredChars.. */
-        if (g > numGlyphs)
-          g = 0xFFFF; /* hopefully unused... */
+        if (g > numGlyphs || g == NSNullGlyph)
+          g = INVALID_GLYPH; /* hopefully unused... */
 #endif
         *glyphs = g;
       }
@@ -1512,7 +1512,7 @@ ns_glyph_metrics (struct nsfont_info *font_info, unsigned char block)
         characterIndex: (NSUInteger)charIndex
 {
   len = glyphIndex+length;
-  for (i =glyphIndex; i<len; i++)
+  for (i =glyphIndex; i<len; i++) 
     cglyphs[i] = glyphs[i-glyphIndex];
   if (len > maxGlyph)
     maxGlyph = len;

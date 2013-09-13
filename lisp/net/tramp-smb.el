@@ -27,8 +27,11 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))	; block, return
 (require 'tramp)
+
+;; Pacify byte-compiler.
+(eval-when-compile
+  (require 'cl))
 
 ;; Define SMB method ...
 ;;;###tramp-autoload
@@ -177,8 +180,7 @@ See `tramp-actions-before-shell' for more info.")
 
 ;; New handlers should be added here.
 (defconst tramp-smb-file-name-handler-alist
-  '(
-    ;; `access-file' performed by default handler.
+  '(;; `access-file' performed by default handler.
     (add-name-to-file . tramp-smb-handle-add-name-to-file)
     ;; `byte-compiler-base-file-name' performed by default handler.
     (copy-directory . tramp-smb-handle-copy-directory)
@@ -198,8 +200,10 @@ See `tramp-actions-before-shell' for more info.")
     (file-acl . tramp-smb-handle-file-acl)
     (file-attributes . tramp-smb-handle-file-attributes)
     (file-directory-p .  tramp-smb-handle-file-directory-p)
+    ;; `file-equal-p' performed by default handler.
     (file-executable-p . tramp-handle-file-exists-p)
     (file-exists-p . tramp-handle-file-exists-p)
+    ;; `file-in-directory-p' performed by default handler.
     (file-local-copy . tramp-smb-handle-file-local-copy)
     (file-modes . tramp-handle-file-modes)
     (file-name-all-completions . tramp-smb-handle-file-name-all-completions)
@@ -209,6 +213,8 @@ See `tramp-actions-before-shell' for more info.")
     (file-name-nondirectory . tramp-handle-file-name-nondirectory)
     ;; `file-name-sans-versions' performed by default handler.
     (file-newer-than-file-p . tramp-handle-file-newer-than-file-p)
+    (file-notify-add-watch . tramp-handle-file-notify-add-watch)
+    (file-notify-rm-watch . tramp-handle-file-notify-rm-watch)
     (file-ownership-preserved-p . ignore)
     (file-readable-p . tramp-handle-file-exists-p)
     (file-regular-p . tramp-handle-file-regular-p)
@@ -223,6 +229,7 @@ See `tramp-actions-before-shell' for more info.")
     (insert-directory . tramp-smb-handle-insert-directory)
     (insert-file-contents . tramp-handle-insert-file-contents)
     (load . tramp-handle-load)
+    (make-auto-save-file-name . tramp-handle-make-auto-save-file-name)
     (make-directory . tramp-smb-handle-make-directory)
     (make-directory-internal . tramp-smb-handle-make-directory-internal)
     (make-symbolic-link . tramp-smb-handle-make-symbolic-link)
@@ -232,15 +239,14 @@ See `tramp-actions-before-shell' for more info.")
     (set-file-modes . tramp-smb-handle-set-file-modes)
     (set-file-selinux-context . ignore)
     (set-file-times . ignore)
-    (set-visited-file-modtime . ignore)
+    (set-visited-file-modtime . tramp-handle-set-visited-file-modtime)
     (shell-command . tramp-handle-shell-command)
     (start-file-process . tramp-smb-handle-start-file-process)
     (substitute-in-file-name . tramp-smb-handle-substitute-in-file-name)
     (unhandled-file-name-directory . tramp-handle-unhandled-file-name-directory)
     (vc-registered . ignore)
-    (verify-visited-file-modtime . ignore)
-    (write-region . tramp-smb-handle-write-region)
-)
+    (verify-visited-file-modtime . tramp-handle-verify-visited-file-modtime)
+    (write-region . tramp-smb-handle-write-region))
   "Alist of handler functions for Tramp SMB method.
 Operations not mentioned here will be handled by the default Emacs primitives.")
 
@@ -352,7 +358,7 @@ pass to the OPERATION."
 	(throw 'tramp-action 'ok)))))
 
 (defun tramp-smb-handle-copy-directory
-  (dirname newname &optional keep-date parents copy-contents)
+  (dirname newname &optional keep-date parents _copy-contents)
   "Like `copy-directory' for Tramp files."
   (setq dirname (expand-file-name dirname)
 	newname (expand-file-name newname))
@@ -397,7 +403,7 @@ pass to the OPERATION."
 	       (port      (tramp-file-name-port v))
 	       (share     (tramp-smb-get-share v))
 	       (localname (file-name-as-directory
-			   (replace-regexp-in-string
+			   (tramp-compat-replace-regexp-in-string
 			    "\\\\" "/" (tramp-smb-get-localname v))))
 	       (tmpdir    (make-temp-name
 			   (expand-file-name
@@ -489,7 +495,7 @@ pass to the OPERATION."
 
 (defun tramp-smb-handle-copy-file
   (filename newname &optional ok-if-already-exists keep-date
-	    preserve-uid-gid preserve-extended-attributes)
+	    _preserve-uid-gid _preserve-extended-attributes)
   "Like `copy-file' for Tramp files.
 KEEP-DATE has no effect in case NEWNAME resides on an SMB server.
 PRESERVE-UID-GID and PRESERVE-EXTENDED-ATTRIBUTES are completely ignored."
@@ -531,7 +537,8 @@ PRESERVE-UID-GID and PRESERVE-EXTENDED-ATTRIBUTES are completely ignored."
 	    (unless (tramp-smb-send-command
 		     v (format "put \"%s\" \"%s\""
 			       filename (tramp-smb-get-localname v)))
-	      (tramp-error v 'file-error "Cannot copy `%s'" filename))))))
+	      (tramp-error
+	       v 'file-error "Cannot copy `%s' to `%s'" filename newname))))))
 
     ;; KEEP-DATE handling.
     (when keep-date
@@ -568,7 +575,7 @@ PRESERVE-UID-GID and PRESERVE-EXTENDED-ATTRIBUTES are completely ignored."
 	  (tramp-error
 	   v 'file-error "%s `%s'" (match-string 0) directory))))))
 
-(defun tramp-smb-handle-delete-file (filename &optional trash)
+(defun tramp-smb-handle-delete-file (filename &optional _trash)
   "Like `delete-file' for Tramp files."
   (setq filename (expand-file-name filename))
   (when (file-exists-p filename)
@@ -1145,7 +1152,8 @@ target of the symlink differ."
       (tramp-dissect-file-name (if (file-remote-p filename) filename newname))
       0 (format "Renaming %s to %s" filename newname)
 
-    (if (and (tramp-equal-remote filename newname)
+    (if (and (not (file-exists-p newname))
+	     (tramp-equal-remote filename newname)
 	     (string-equal
 	      (tramp-smb-get-share (tramp-dissect-file-name filename))
 	      (tramp-smb-get-share (tramp-dissect-file-name newname))))
@@ -1358,14 +1366,14 @@ Result is a list of (LOCALNAME MODE SIZE MONTH DAY TIME YEAR)."
 	      (while (not (eobp))
 		(setq entry (tramp-smb-read-file-entry share))
 		(forward-line)
-		(when entry (add-to-list 'res entry))))
+		(when entry (push entry res))))
 
 	    ;; Cache share entries.
 	    (unless share
 	      (tramp-set-connection-property v "share-cache" res)))
 
 	  ;; Add directory itself.
-	  (add-to-list 'res '("" "drwxrwxrwx" 0 (0 0)))
+	  (push '("" "drwxrwxrwx" 0 (0 0)) res)
 
 	  ;; There's a very strange error (debugged with XEmacs 21.4.14)
 	  ;; If there's no short delay, it returns nil.  No idea about.
@@ -1494,7 +1502,7 @@ Result is the list (LOCALNAME MODE SIZE MTIME)."
 		    "%s%s"
 		    (if (string-match "D" mode) "d" "-")
 		    (mapconcat
-		     (lambda (x) "") "    "
+		     (lambda (_x) "") "    "
 		     (concat "r" (if (string-match "R" mode) "-" "w") "x"))))
 	     line (substring line 0 -6))
 	  (return))
@@ -1558,6 +1566,8 @@ Does not do anything if a connection is already open, but re-opens the
 connection if a previous connection has died for some reason.
 If ARGUMENT is non-nil, use it as argument for
 `tramp-smb-winexe-program', and suppress any checks."
+  (tramp-check-proper-host vec)
+
   (let* ((share (tramp-smb-get-share vec))
 	 (buf (tramp-get-connection-buffer vec))
 	 (p (get-buffer-process buf)))
@@ -1711,11 +1721,15 @@ If ARGUMENT is non-nil, use it as argument for
 		(error
 		 (with-current-buffer (tramp-get-connection-buffer vec)
 		   (goto-char (point-min))
-		   (if (search-forward-regexp
-			tramp-smb-wrong-passwd-regexp nil t)
+		   (if (and (boundp 'auth-sources)
+			    (symbol-value 'auth-sources)
+			    (search-forward-regexp
+			     tramp-smb-wrong-passwd-regexp nil t))
 		       ;; Disable `auth-source' and `password-cache'.
+		       (tramp-message
+			vec 3 "Retry connection with new password")
 		       (let (auth-sources)
-			 (tramp-cleanup vec)
+			 (tramp-cleanup-connection vec t)
 			 (tramp-smb-maybe-open-connection vec argument))
 		     ;; Propagate the error.
 		     (signal (car err) (cdr err)))))))))))))
@@ -1784,9 +1798,7 @@ Returns nil if an error message has appeared."
   (tramp-get-buffer vec)
 
   ;; Check for program.
-  (unless (let ((default-directory
-		  (tramp-compat-temporary-file-directory)))
-	    (executable-find tramp-smb-winexe-program))
+  (unless (executable-find tramp-smb-winexe-program)
     (tramp-error
      vec 'file-error "Cannot find program: %s" tramp-smb-winexe-program))
 

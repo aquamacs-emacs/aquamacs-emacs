@@ -267,8 +267,8 @@ setup_cpu_timer (Lisp_Object sampling_interval)
     return NOT_RUNNING;
 
   current_sampling_interval = XINT (sampling_interval);
-  interval = make_emacs_time (current_sampling_interval / billion,
-			      current_sampling_interval % billion);
+  interval = make_timespec (current_sampling_interval / billion,
+			    current_sampling_interval % billion);
   emacs_sigaction_init (&action, deliver_profiler_signal);
   sigaction (SIGPROF, &action, 0);
 
@@ -568,12 +568,12 @@ to make room for new entries.  */);
   profiler_log_size = 10000;
 
   DEFSYM (Qprofiler_backtrace_equal, "profiler-backtrace-equal");
-  {
-    struct hash_table_test test
-      = { Qprofiler_backtrace_equal, Qnil, Qnil,
-	  cmpfn_profiler, hashfn_profiler };
-    hashtest_profiler = test;
-  }
+
+  hashtest_profiler.name = Qprofiler_backtrace_equal;
+  hashtest_profiler.user_hash_function = Qnil;
+  hashtest_profiler.user_cmp_function = Qnil;
+  hashtest_profiler.cmpfn = cmpfn_profiler;
+  hashtest_profiler.hashfn = hashfn_profiler;
 
   defsubr (&Sfunction_equal);
 

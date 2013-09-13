@@ -67,13 +67,15 @@ be replaced by its expansion."
 (put 'abbrev-mode 'safe-local-variable 'booleanp)
 
 
-(defvar edit-abbrevs-map
+(defvar edit-abbrevs-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\C-x\C-s" 'abbrev-edit-save-buffer)
     (define-key map "\C-x\C-w" 'abbrev-edit-save-to-file)
     (define-key map "\C-c\C-c" 'edit-abbrevs-redefine)
     map)
   "Keymap used in `edit-abbrevs'.")
+(define-obsolete-variable-alias 'edit-abbrevs-map
+  'edit-abbrevs-mode-map "24.4")
 
 (defun kill-all-abbrevs ()
   "Undefine all defined abbrevs."
@@ -143,16 +145,6 @@ Otherwise display all abbrevs."
       (goto-char (point-min))
       (set-buffer-modified-p nil)
       (current-buffer))))
-
-(defun edit-abbrevs-mode ()
-  "Major mode for editing the list of abbrev definitions.
-\\{edit-abbrevs-map}"
-  (interactive)
-  (kill-all-local-variables)
-  (setq major-mode 'edit-abbrevs-mode)
-  (setq mode-name "Edit-Abbrevs")
-  (use-local-map edit-abbrevs-map)
-  (run-mode-hooks 'edit-abbrevs-mode-hook))
 
 (defun edit-abbrevs ()
   "Alter abbrev definitions by editing a list of them.
@@ -856,7 +848,7 @@ return value is that of `abbrev-insert'.)"
               (endmark (copy-marker wordend t)))
           (unless (or ;; executing-kbd-macro
                    noninteractive
-                   (window-minibuffer-p (selected-window)))
+                   (window-minibuffer-p))
             ;; Add an undo boundary, in case we are doing this for
             ;; a self-inserting command which has avoided making one so far.
             (undo-boundary))
@@ -1012,6 +1004,11 @@ SORTFUN is passed to `sort' to change the default ordering."
     (nconc (make-sparse-keymap prompt)
            (sort entries (lambda (x y)
                 (funcall sortfun (nth 2 x) (nth 2 y)))))))
+
+;; Keep it after define-abbrev-table, since define-derived-mode uses
+;; define-abbrev-table.
+(define-derived-mode edit-abbrevs-mode special-mode "Edit-Abbrevs"
+  "Major mode for editing the list of abbrev definitions.")
 
 (provide 'abbrev)
 

@@ -124,7 +124,8 @@ bool print_output_debug_flag EXTERNALLY_VISIBLE = 1;
          set_buffer_internal (XMARKER (printcharfun)->buffer);		\
        marker_pos = marker_position (printcharfun);			\
        if (marker_pos < BEGV || marker_pos > ZV)			\
-	 error ("Marker is outside the accessible part of the buffer"); \
+	 signal_error ("Marker is outside the accessible "		\
+		       "part of the buffer", printcharfun);		\
        old_point = PT;							\
        old_point_byte = PT_BYTE;					\
        SET_PT_BOTH (marker_pos,						\
@@ -136,10 +137,10 @@ bool print_output_debug_flag EXTERNALLY_VISIBLE = 1;
    if (NILP (printcharfun))						\
      {									\
        Lisp_Object string;						\
-       if (NILP (BVAR (current_buffer, enable_multibyte_characters))		\
+       if (NILP (BVAR (current_buffer, enable_multibyte_characters))	\
 	   && ! print_escape_multibyte)					\
          specbind (Qprint_escape_multibyte, Qt);			\
-       if (! NILP (BVAR (current_buffer, enable_multibyte_characters))		\
+       if (! NILP (BVAR (current_buffer, enable_multibyte_characters))	\
 	   && ! print_escape_nonascii)					\
          specbind (Qprint_escape_nonascii, Qt);				\
        if (print_buffer != 0)						\
@@ -166,7 +167,7 @@ bool print_output_debug_flag EXTERNALLY_VISIBLE = 1;
    if (NILP (printcharfun))						\
      {									\
        if (print_buffer_pos != print_buffer_pos_byte			\
-	   && NILP (BVAR (current_buffer, enable_multibyte_characters)))	\
+	   && NILP (BVAR (current_buffer, enable_multibyte_characters)))\
 	 {								\
 	   unsigned char *temp = alloca (print_buffer_pos + 1);		\
 	   copy_text ((unsigned char *) print_buffer, temp,		\
@@ -199,11 +200,10 @@ bool print_output_debug_flag EXTERNALLY_VISIBLE = 1;
 /* This is used to restore the saved contents of print_buffer
    when there is a recursive call to print.  */
 
-static Lisp_Object
+static void
 print_unwind (Lisp_Object saved_text)
 {
   memcpy (print_buffer, SDATA (saved_text), SCHARS (saved_text));
-  return Qnil;
 }
 
 
@@ -770,8 +770,7 @@ append to existing target file.  */)
 	{
 	  stderr = initial_stderr_stream;
 	  initial_stderr_stream = NULL;
-	  report_file_error ("Cannot open debugging output stream",
-			     Fcons (file, Qnil));
+	  report_file_error ("Cannot open debugging output stream", file);
 	}
     }
   return Qnil;
@@ -1301,7 +1300,7 @@ print_prune_string_charset (Lisp_Object string)
       if (print_check_string_result & PRINT_STRING_NON_CHARSET_FOUND)
 	{
 	  if (NILP (print_prune_charset_plist))
-	    print_prune_charset_plist = Fcons (Qcharset, Qnil);
+	    print_prune_charset_plist = list1 (Qcharset);
 	  Fremove_text_properties (make_number (0),
 				   make_number (SCHARS (string)),
 				   print_prune_charset_plist, string);
@@ -1765,9 +1764,8 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	}
       else if (WINDOWP (obj))
 	{
-	  int len;
-	  strout ("#<window ", -1, -1, printcharfun);
-	  len = sprintf (buf, "%p", XWINDOW (obj));
+	  void *ptr = XWINDOW (obj);
+	  int len = sprintf (buf, "#<window %p", ptr);
 	  strout (buf, len, len, printcharfun);
 	  if (BUFFERP (XWINDOW (obj)->contents))
 	    {
@@ -1798,6 +1796,7 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	  ptrdiff_t real_size, size;
 	  int len;
 #if 0
+	  void *ptr = h;
 	  strout ("#<hash-table", -1, -1, printcharfun);
 	  if (SYMBOLP (h->test))
 	    {
@@ -1810,9 +1809,8 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	      len = sprintf (buf, "%"pD"d/%"pD"d", h->count, ASIZE (h->next));
 	      strout (buf, len, len, printcharfun);
 	    }
-	  len = sprintf (buf, " %p", h);
+	  len = sprintf (buf, " %p>", ptr);
 	  strout (buf, len, len, printcharfun);
-	  PRINTCHAR ('>');
 #endif
 	  /* Implement a readable output, e.g.:
 	    #s(hash-table size 2 test equal data (k1 v1 k2 v2)) */
@@ -1892,6 +1890,7 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
       else if (FRAMEP (obj))
 	{
 	  int len;
+	  void *ptr = XFRAME (obj);
 	  Lisp_Object frame_name = XFRAME (obj)->name;
 
 	  strout ((FRAME_LIVE_P (XFRAME (obj))
@@ -1907,9 +1906,8 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 		frame_name = build_string ("*INVALID*FRAME*NAME*");
 	    }
 	  print_string (frame_name, printcharfun);
-	  len = sprintf (buf, " %p", XFRAME (obj));
+	  len = sprintf (buf, " %p>", ptr);
 	  strout (buf, len, len, printcharfun);
-	  PRINTCHAR ('>');
 	}
       else if (FONTP (obj))
 	{

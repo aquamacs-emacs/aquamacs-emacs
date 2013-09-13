@@ -173,7 +173,7 @@ will be reported only in case of the 'moved' event.  */)
   CHECK_STRING (file);
   file = Fdirectory_file_name (Fexpand_file_name (file, Qnil));
   if (NILP (Ffile_exists_p (file)))
-    report_file_error ("File does not exists", Fcons (file, Qnil));
+    report_file_error ("File does not exist", file);
 
   CHECK_LIST (flags);
 
@@ -249,7 +249,9 @@ WATCH-DESCRIPTOR should be an object returned by `gfile-add-watch'.  */)
 void
 globals_of_gfilenotify (void)
 {
+#if ! GLIB_CHECK_VERSION (2, 36, 0)
   g_type_init ();
+#endif
   watch_list = Qnil;
 }
 

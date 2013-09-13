@@ -1,3 +1,226 @@
+2013-09-11  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* score-mode.el (gnus-score-mode-map): Move initialization
+	into declaration.
+	(gnus-score-mode): Use define-derived-mode.
+	* gnus-srvr.el (gnus-browse-mode): Use define-derived-mode.
+	* gnus-kill.el (gnus-kill-file-mode-map): Move initialization
+	into declaration.
+	(gnus-kill-file-mode): Use define-derived-mode.
+	(gnus-kill-file-edit-file, gnus-kill-file-enter-kill, gnus-kill):
+	Use derived-mode-p.
+	* gnus-group.el (gnus-group-mode): Use define-derived-mode.
+	(gnus-group-setup-buffer, gnus-group-name-at-point)
+	(gnus-group-make-web-group, gnus-group-enter-directory)
+	(gnus-group-suspend): Use derived-mode-p.
+	* gnus-cus.el (gnus-custom-mode): Use define-derived-mode.
+	* gnus-bookmark.el (gnus-bookmark-bmenu-mode): Use define-derived-mode.
+	* gnus-art.el (gnus-article-mode): Use define-derived-mode.
+	(gnus-article-setup-buffer, gnus-article-prepare)
+	(gnus-article-prepare-display, gnus-sticky-article)
+	(gnus-kill-sticky-article-buffer, gnus-kill-sticky-article-buffers)
+	(gnus-bind-safe-url-regexp, gnus-article-check-buffer)
+	(gnus-article-read-summary-keys): Use derived-mode-p.
+
+2013-08-28  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mm-decode.el (mm-temp-files-delete): Fix file deletion logic.
+
+2013-08-19  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mm-util.el (mm-coding-system-priorities): Exclude iso-2022-jp-2 and
+	shift_jis from the default value set for Japanese users.
+
+2013-08-13  Glenn Morris  <rgm@gnu.org>
+
+	* gnus-icalendar.el (gnus-icalendar-org-capture-file): Fix type.
+
+	* gnus.el (gnus-valid-select-methods): Fix type.
+
+	* nnimap.el (nnimap-request-articles-find-limit): Fix type, version.
+
+2013-08-12  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mm-decode.el (mm-display-external): Run a timer for the temp files
+	deletion after a viewer exits; add a deletion timer for the needsterm
+	case, too.
+
+	* mm-decode.el (mm-display-external): Try to delete temporary files by
+	using a 1-min. timer.
+
+2013-08-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mm-decode.el (mm-temp-files-to-be-deleted, mm-temp-files-cache-file):
+	New internal variables.
+	(mm-temp-files-delete): New function; add it to gnus-exit-gnus-hook.
+	(mm-display-external): Use it to delete temporary files instead of
+	using timers.
+
+2013-08-06  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar-event-from-ical): Replace pcase
+	with cond for backwards compatability.
+
+2013-08-06  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mm-decode.el (mm-display-external): Bind process-connection-type to
+	nil; don't delete a temp file immediately even if a viewer finishes,
+	since it may be a shell script, like xdg-open, that launches a real
+	viewer program belatedly.
+
+2013-08-05  Dave Abrahams  <dave@boostpro.com>
+
+	* gnus-int.el (gnus-warp-to-article): Allow warping in all groups so
+	that we can create nndoc groups that excerpt other groups.
+
+2013-08-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-delay.el (gnus-delay-article): Fix typo.
+
+	* gnus-group.el (gnus-group-delete-articles): Allow deleting only "old"
+	articles.
+
+	* gnus-delay.el (gnus-delay-article): Run `message-send-hook' so that
+	we can get spell-checking etc.
+
+2013-08-02  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* rfc2047.el (rfc2047-encode-message-header): Unify charsets into
+	a single one used for encoding the whole text in a header.
+
+2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* message.el (message-ignored-news-headers): Delete X-Gnus-Delayed
+	before sending.
+
+	* mm-decode.el (mm-command-output): New face.
+	(mm-display-external): Use it.
+
+2013-08-01  Kan-Ru Chen (陳侃如)  <kanru@kanru.info>  (tiny change)
+
+	* nnmbox.el (nnmbox-request-article): Don't change point.
+
+2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-icalendar.el (gnus-icalendar-event:inline-reply-buttons):
+	Include `handle' parameter.
+
+2013-08-01  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el: New file.
+
+2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-int.el (gnus-warp-to-article): Mention that warp means jump.
+
+	* gnus-uu.el (gnus-uu-mark-thread, gnus-uu-unmark-thread): Work with
+	dummy roots, too.
+
+2013-08-01  David Edmondson  <dme@dme.org>
+
+	* mml2015.el (mml2015-epg-key-image-to-string): Protect against bugging
+	out on ttys.
+
+2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-start.el (gnus-dribble-save): Only save the dribble file if it's
+	not empty.
+
+	* nnrss.el (nnrss-discover-feed): Indent.
+
+2013-08-01  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-util.el (gnus-emacs-completing-read): Isolate XEmacs stuff.
+
+2013-07-30  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-start.el (gnus-read-active-for-groups): Always mark the data as
+	dirty to ensure nnimap data being saved.
+
+2013-07-30  Tassilo Horn  <tsdh@gnu.org>
+
+	* gnus-sum.el (gnus-summary-make-menu-bar): Add "Current thread score"
+	menu entry.
+
+	* gnus-score.el (gnus-summary-current-score): Use prefix arg to show
+	the current thread's total score instead of the current article's
+	score.
+
+	* gnus-sum.el (gnus-subthread-sort-functions): New defcustom.
+	(gnus-sort-threads-recursively): Delete defcustom.
+	(gnus-sort-threads-recursive): Adapt accordingly.
+
+2013-07-30  Tassilo Horn  <tsdh@gnu.org>
+
+	* gnus-sum.el (gnus-sort-subthreads-recursive): New function.
+	(gnus-sort-threads-recursive): Use it.
+	(gnus-sort-threads): Unconditionally call `gnus-sort-threads-recursive'
+	again.  Now that determines how to sort subthreads.
+
+2013-07-26  Tassilo Horn  <tsdh@gnu.org>
+
+	* gnus-sum.el (gnus-sort-threads-recursively): New defcustom.
+	(gnus-sort-threads): Use it.
+
+2013-07-25  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* gnus-art.el (gnus-button-url-regexp): Make it match url in which
+	punctuation characters follow parentheses (bug#14950).
+
+2013-07-23  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus.el (gnus-continuum-version):
+	* gnus-msg.el (gnus-extended-version): Simplify.
+
+	* gnus.el (gnus-continuum-version-1): Remove.
+	* gnus-msg.el (gnus-bug): Revert.
+
+	Calculate gnus-version correctly on Cygwin.
+
+	* gnus.el (gnus-continuum-version): Do main calculations in integers.
+	(gnus-continuum-version-1): New function, return a string.
+
+	* gnus-msg.el (gnus-extended-version, gnus-bug):
+	Use gnus-continuum-version-1 instead of gnus-continuum-version.
+
+2013-07-19  Geoff Kuenning  <geoff@cs.hmc.edu>  (tiny change)
+
+	* gnus-art.el (gnus-treat-predicate): Allow functions as predicates
+	(bug#13384).
+
+2013-07-18  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-start.el (gnus-clean-old-newsrc): Remove the newsrc cleanups
+	that were only relevant in a development version a long time ago.
+
+2013-07-18  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-shr-put-image): Make it work as well for shr.el's
+	that the old Emacs 24s bundle.
+
+2013-07-10  David Engster  <deng@randomsample.de>
+
+	* gnus-start.el (gnus-clean-old-newsrc): Always remove 'unexist' marks
+	if `gnus-newsrc-file-version' does not match `gnus-version'.
+	This fixes a bug in Emacs trunk where the 'unexist' marks were always
+	removed at startup because "Gnus v5.13" was considered smaller than "Ma
+	Gnus v0.03".
+
+2013-07-10  Tassilo Horn  <tsdh@gnu.org>
+
+	* gnus.el (gnus-summary-line-format):
+	Reference `gnus-user-date-format-alist' for the &user-date; format, not
+	`gnus-summary-user-date-format-alist'.
+
+2013-07-08  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* nnml.el (nnml-request-compact-group): Don't bug out if we can't
+	delete files (bug#13481).
+
+2013-07-08  Tassilo Horn  <tsdh@gnu.org>
+
+	* gnus-registry.el (gnus-registry-remove-extra-data): New function.
+
 2013-07-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-art.el (gnus-block-private-groups): Allow `global' methods to
@@ -120,7 +343,7 @@
 2013-07-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-sum.el (gnus-summary-insert-old-articles):
-	Don't include unexistent messages.
+	Don't include unexisting messages.
 
 2013-07-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -268,7 +491,7 @@
 
 	* shr.el (shr-render-td): Support horizontal alignment.
 
-	* eww.el (eww-put-color): Removed.
+	* eww.el (eww-put-color): Remove.
 	(eww-colorize-region): Use `add-face-text-property'.
 
 	* shr.el (shr-add-font): Append face data, so that we get the correct
@@ -323,7 +546,7 @@
 
 2013-06-16  Rüdiger Sonderfeld  <ruediger@c-plusplus.de>
 
-	* shr.el (shr-dom-to-xml): Fixed function call.
+	* shr.el (shr-dom-to-xml): Fix function call.
 
 	* eww.el (eww): New group.
 	(eww-header-line-format): New custom variable.
@@ -359,8 +582,8 @@
 	(auth-source-netrc-parse): Refactor and improve netrc parser to support
 	single-quoted strings and multiline entries.
 	(auth-source-netrc-parse-next-interesting)
-	(auth-source-netrc-parse-one, auth-source-netrc-parse-entries): New
-	functions to support parser.
+	(auth-source-netrc-parse-one, auth-source-netrc-parse-entries):
+	New functions to support parser.
 
 2013-06-14  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -508,8 +731,8 @@
 	* registry.el (initialize-instance, registry-lookup)
 	(registry-lookup-breaks-before-lexbind, registry-lookup-secondary)
 	(registry-lookup-secondary-value, registry-search, registry-delete)
-	(registry-insert, registry-reindex, registry-size, registry-prune): Do
-	not wrap methods in `eval-and-compile'.  This breaks due to latest
+	(registry-insert, registry-reindex, registry-size, registry-prune):
+	Do not wrap methods in `eval-and-compile'.  This breaks due to latest
 	changes in EIEIO (introduction of eieio-core.el).
 
 2013-05-30  Glenn Morris  <rgm@gnu.org>
@@ -789,8 +1012,8 @@
 2013-03-26  Andrew Cohen  <cohen@bu.edu>
 
 	* nnir.el: Major rewrite.  Cleaner separation between searches and group
-	management.  Marks are now shown in nnir summary buffers.  Rudimentary
-	support for real (i.e. not ephemeral) nnir groups.
+	management.  Marks are now shown in nnir summary buffers.
+	Rudimentary support for real (i.e. not ephemeral) nnir groups.
 	(gnus-summary-make-nnir-group): New function for initiating searches
 	from a summary buffer.
 
@@ -819,8 +1042,8 @@
 2013-02-22  David Engster  <deng@randomsample.de>
 
 	* gnus-registry.el (gnus-registry-save): Provide class name when
-	calling `eieio-persistent-read' to avoid "unsafe call" warning.  Use
-	`condition-case' to stay compatible with older EIEIO versions which
+	calling `eieio-persistent-read' to avoid "unsafe call" warning.
+	Use `condition-case' to stay compatible with older EIEIO versions which
 	only accept one argument.
 
 2013-02-17  Daiki Ueno  <ueno@gnu.org>
@@ -1838,7 +2061,7 @@
 
 	* nnmail.el (mail-send-and-exit): Silence the byte compiler.
 
-2012-06-26  Peter Munster  <pmrb@free.fr>
+2012-06-26  Peter Münster  <pmrb@free.fr>
 
 	* gnus-demon.el (gnus-demon-timers): Now a plist (function -> timer).
 	(gnus-demon-cancel): Ditto.
@@ -2065,7 +2288,7 @@
 	(spam-check-BBDB): Use it.
 	(spam-enter-ham-BBDB): Use it.
 
-2012-06-26  Peter Munster  <pmrb@free.fr>  (tiny change)
+2012-06-26  Peter Münster  <pmrb@free.fr>  (tiny change)
 
 	* gnus-group.el (gnus-group-get-new-news):
 	New parameter `one-level' for scanning exactly one level.
@@ -5096,7 +5319,7 @@
 	a creation default, pass the whole port list down.  It will be
 	completed.
 
-	* auth-source.el (auth-source-search): Updated docs to talk about
+	* auth-source.el (auth-source-search): Update docs to talk about
 	multiple creation choices.
 	(auth-source-netrc-create): Accept a list as a value (from the search
 	parameters) and do completion on that list.  Keep a separate netrc line
@@ -5163,7 +5386,7 @@
 	(gnus-summary-exit): Kill the correct article buffer on exit from a
 	`C-d' group.
 
-	* gnus-start.el (gnus-use-backend-marks): Removed, since it duplicates
+	* gnus-start.el (gnus-use-backend-marks): Remove, since it duplicates
 	gnus-propagate-marks.
 
 	* gnus-sum.el (gnus-summary-exit-no-update): Restore the group conf
@@ -8428,7 +8651,7 @@
 	* nnimap.el (nnimap-request-group): Low higher than high to signal no
 	messages in empty groups.
 
-2010-10-01  Ted Zlatanov  <tzz@lifelogs.com>
+2010-10-01  Teodor Zlatanov  <tzz@lifelogs.com>
 
 	* nnimap.el (nnimap-request-group): Don't bug out when there's an empty
 	non-UIDNEXT group.
@@ -8569,7 +8792,7 @@
 	* nndraft.el (nndraft-request-expire-articles): Use the group name
 	instead if "nndraft".  Fix found by Nils Ackermann.
 
-2010-09-29  Ludovic Courtes  <ludo@gnu.org>
+2010-09-29  Ludovic Courtès  <ludo@gnu.org>
 
 	* nnregistry.el: Add.
 
@@ -18200,7 +18423,7 @@
 
 2005-11-19  Kevin Greiner  <kevin.greiner@compsol.cc>
 
-	* gnus-sum.el (gnus-fetch-old-headers): Updated docs to warn that
+	* gnus-sum.el (gnus-fetch-old-headers): Update docs to warn that
 	it can seriously impact performance as it bypasses the agent's
 	local caches.
 

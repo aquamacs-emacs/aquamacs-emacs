@@ -271,21 +271,18 @@ This variable becomes buffer local when set in any fashion.")
   :type 'boolean
   :version "24.4")
 
-(defcustom auto-revert-use-notify (and file-notify-support t)
+(defcustom auto-revert-use-notify t
   "If non-nil Auto Revert Mode uses file notification functions.
-This requires Emacs being compiled with file notification
-support (see `file-notify-support').  You should set this variable
-through Custom."
+You should set this variable through Custom."
   :group 'auto-revert
   :type 'boolean
   :set (lambda (variable value)
-	 (set-default variable (and file-notify-support value))
+	 (set-default variable value)
 	 (unless (symbol-value variable)
-	   (when file-notify-support
-	     (dolist (buf (buffer-list))
-	       (with-current-buffer buf
-		 (when (symbol-value 'auto-revert-notify-watch-descriptor)
-		   (auto-revert-notify-rm-watch)))))))
+	   (dolist (buf (buffer-list))
+	     (with-current-buffer buf
+	       (when (symbol-value 'auto-revert-notify-watch-descriptor)
+		 (auto-revert-notify-rm-watch))))))
   :initialize 'custom-initialize-default
   :version "24.4")
 
@@ -534,7 +531,7 @@ will use an up-to-date value of `auto-revert-interval'"
 
 (defun auto-revert-notify-handler (event)
   "Handle an EVENT returned from file notification."
-  (ignore-errors
+  (with-demoted-errors
     (let* ((descriptor (car event))
 	   (action (nth 1 event))
 	   (file (nth 2 event))
@@ -544,28 +541,31 @@ will use an up-to-date value of `auto-revert-interval'"
       ;; Check, that event is meant for us.
       (cl-assert descriptor)
       ;; We do not handle `deleted', because nothing has to be refreshed.
-      (cl-assert (memq action '(attribute-changed changed created renamed)) t)
-      ;; Since we watch a directory, a file name must be returned.
-      (cl-assert (stringp file))
-      (when (eq action 'renamed) (cl-assert (stringp file1)))
-      ;; Loop over all buffers, in order to find the intended one.
-      (dolist (buffer buffers)
-	(when (buffer-live-p buffer)
-	  (with-current-buffer buffer
-	    (when (and (stringp buffer-file-name)
-		       (or
-			(and (memq action '(attribute-changed changed created))
-			     (string-equal
-			      (file-name-nondirectory file)
-			      (file-name-nondirectory buffer-file-name)))
-			(and (eq action 'renamed)
-			     (string-equal
-			      (file-name-nondirectory file1)
-			      (file-name-nondirectory buffer-file-name)))))
-	      ;; Mark buffer modified.
-	      (setq auto-revert-notify-modified-p t)
-	      ;; No need to check other buffers.
-	      (cl-return))))))))
+      (unless (eq action 'deleted)
+        (cl-assert (memq action '(attribute-changed changed created renamed))
+                   t)
+        ;; Since we watch a directory, a file name must be returned.
+        (cl-assert (stringp file))
+        (when (eq action 'renamed) (cl-assert (stringp file1)))
+        ;; Loop over all buffers, in order to find the intended one.
+        (dolist (buffer buffers)
+          (when (buffer-live-p buffer)
+            (with-current-buffer buffer
+              (when (and (stringp buffer-file-name)
+                         (or
+                          (and (memq action '(attribute-changed changed
+                                              created))
+                               (string-equal
+                                (file-name-nondirectory file)
+                                (file-name-nondirectory buffer-file-name)))
+                          (and (eq action 'renamed)
+                               (string-equal
+                                (file-name-nondirectory file1)
+                                (file-name-nondirectory buffer-file-name)))))
+                ;; Mark buffer modified.
+                (setq auto-revert-notify-modified-p t)
+                ;; No need to check other buffers.
+                (cl-return)))))))))
 
 (defun auto-revert-active-p ()
   "Check if auto-revert is active (in current buffer or globally)."
@@ -598,14 +598,14 @@ This is an internal function used by Auto-Revert Mode."
 				  (setq size
 					(nth 7 (file-attributes
 						buffer-file-name)))))
-		       (and (file-readable-p buffer-file-name)
-			    (not (verify-visited-file-modtime buffer)))))
+		       (funcall (or buffer-stale-function
+                                    #'buffer-stale--default-function)
+                                t)))
 		(and (or auto-revert-mode
 			 global-auto-revert-non-file-buffers)
-		     revert-buffer-function
-		     (boundp 'buffer-stale-function)
-		     (functionp buffer-stale-function)
-		     (funcall buffer-stale-function t))))
+		     (funcall (or buffer-stale-function
+                                  #'buffer-stale--default-function)
+                              t))))
 	   eob eoblist)
       (setq auto-revert-notify-modified-p nil)
       (when revert

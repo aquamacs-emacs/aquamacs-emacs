@@ -43,17 +43,37 @@
 (defvar file-notify--test-event nil)
 
 (require 'tramp)
+(require 'tramp-sh)
 (setq tramp-verbose 0
       tramp-message-show-message nil)
 (when noninteractive (defalias 'tramp-read-passwd 'ignore))
 
+;; We do not want to try and fail `file-notify-add-watch'.
+(defconst file-notify--test-local-enabled file-notify--library
+  "Whether local file notification is enabled.")
+
+;; We need also a check on the remote side, w/o adding a file monitor.
+(defun file-notify--test-remote-enabled ()
+  "Whether remote file notification is enabled."
+  (ignore-errors
+    (and (file-remote-p file-notify-test-remote-temporary-file-directory)
+	 (file-directory-p file-notify-test-remote-temporary-file-directory)
+	 (file-writable-p file-notify-test-remote-temporary-file-directory)
+	 ;; Extracted from tramp-sh-handle-file-notify-add-watch.
+	 ;; Even though the "remote" system is just ssh@localhost,
+	 ;; the PATH might not be the same as the "local" PATH.
+	 ;; Eg this seems to be the case on hydra.nixos.org.
+	 ;; Without this, tests fail with:
+	 ;; "No file notification program found on /ssh:localhost:"
+	 ;; Try to fix PATH instead?
+	 (with-parsed-tramp-file-name
+	     file-notify-test-remote-temporary-file-directory nil
+	     (or (tramp-get-remote-gvfs-monitor-dir v)
+		 (tramp-get-remote-inotifywait v))))))
+
 (defmacro file-notify--deftest-remote (test docstring)
   "Define ert `TEST-remote' for remote files."
-  `(when (ignore-errors
-	   (and
-	    (file-remote-p file-notify-test-remote-temporary-file-directory)
-	    (file-directory-p file-notify-test-remote-temporary-file-directory)
-	    (file-writable-p file-notify-test-remote-temporary-file-directory)))
+  `(when (and (file-notify--test-remote-enabled) (ert-get-test ',test))
      ;; Define the test.
      (ert-deftest ,(intern (concat (symbol-name test) "-remote")) ()
        ,docstring
@@ -77,40 +97,51 @@
 
 (ert-deftest file-notify-test00-availability ()
   "Test availability of `file-notify'."
-  (should (memq file-notify-support '(gfilenotify inotify w32notify))))
-
-(ert-deftest file-notify-test01-add-watch ()
-  "Check `file-notify-add-watch'."
   (let (desc)
     ;; Check, that different valid parameters are accepted.
     (should (setq desc (file-notify-add-watch
 			temporary-file-directory '(change) 'ignore)))
-    (file-notify-rm-watch desc)
-    (should (setq desc (file-notify-add-watch
-			temporary-file-directory '(attribute-change) 'ignore)))
-    (file-notify-rm-watch desc)
-    (should (setq desc (file-notify-add-watch
-			temporary-file-directory
-			'(change attribute-change) 'ignore)))
-    (file-notify-rm-watch desc)
+    (file-notify-rm-watch desc)))
 
-    ;; Check error handling.
-    (should
-     (equal (car (should-error (file-notify-add-watch 1 2 3 4)))
-	    'wrong-number-of-arguments))
-    (should
-     (equal (should-error (file-notify-add-watch 1 2 3))
-	    '(wrong-type-argument 1)))
-    (should
-     (equal (should-error (file-notify-add-watch temporary-file-directory 2 3))
-	    '(wrong-type-argument 2)))
-    (should
-     (equal (should-error (file-notify-add-watch
-			   temporary-file-directory '(change) 3))
-	    '(wrong-type-argument 3)))))
+(file-notify--deftest-remote file-notify-test00-availability
+  "Test availability of `file-notify' for remote files.")
 
-(file-notify--deftest-remote file-notify-test01-add-watch
-  "Check `file-notify-add-watch' for remote files.")
+(when file-notify--test-local-enabled
+
+  (ert-deftest file-notify-test01-add-watch ()
+    "Check `file-notify-add-watch'."
+    (let (desc)
+      ;; Check, that different valid parameters are accepted.
+      (should (setq desc (file-notify-add-watch
+			  temporary-file-directory '(change) 'ignore)))
+      (file-notify-rm-watch desc)
+      (should (setq desc (file-notify-add-watch
+			  temporary-file-directory
+			  '(attribute-change) 'ignore)))
+      (file-notify-rm-watch desc)
+      (should (setq desc (file-notify-add-watch
+			  temporary-file-directory
+			  '(change attribute-change) 'ignore)))
+      (file-notify-rm-watch desc)
+
+      ;; Check error handling.
+      (should-error (file-notify-add-watch 1 2 3 4)
+		    :type 'wrong-number-of-arguments)
+      (should
+       (equal (should-error (file-notify-add-watch 1 2 3))
+	      '(wrong-type-argument 1)))
+      (should
+       (equal (should-error (file-notify-add-watch
+			     temporary-file-directory 2 3))
+	      '(wrong-type-argument 2)))
+      (should
+       (equal (should-error (file-notify-add-watch
+			     temporary-file-directory '(change) 3))
+	      '(wrong-type-argument 3)))))
+
+  (file-notify--deftest-remote file-notify-test01-add-watch
+    "Check `file-notify-add-watch' for remote files.")
+  ) ;; file-notify--test-local-enabled
 
 (defun file-notify--test-event-test ()
   "Ert test function to be called by `file-notify--test-event-handler'.
@@ -141,52 +172,55 @@ Save the result in `file-notify--test-results', for later analysis."
   (expand-file-name
    (make-temp-name "file-notify-test") temporary-file-directory))
 
-(ert-deftest file-notify-test02-events ()
-  "Check file creation/removal notifications."
-  (let (desc)
-    (unwind-protect
-	(progn
-	  (setq file-notify--test-results nil
-		file-notify--test-tmpfile (file-notify--test-make-temp-name)
-		file-notify--test-tmpfile1 (file-notify--test-make-temp-name)
-		desc
-		(file-notify-add-watch
-		 file-notify--test-tmpfile
-		 '(change) 'file-notify--test-event-handler))
+(when file-notify--test-local-enabled
 
-	  ;; Check creation and removal.
-	  (write-region "any text" nil file-notify--test-tmpfile)
-	  (delete-file file-notify--test-tmpfile)
+  (ert-deftest file-notify-test02-events ()
+    "Check file creation/removal notifications."
+    (let (desc)
+      (unwind-protect
+	  (progn
+	    (setq file-notify--test-results nil
+		  file-notify--test-tmpfile (file-notify--test-make-temp-name)
+		  file-notify--test-tmpfile1 (file-notify--test-make-temp-name)
+		  desc
+		  (file-notify-add-watch
+		   file-notify--test-tmpfile
+		   '(change) 'file-notify--test-event-handler))
 
-	  ;; Check copy and rename.
-	  (write-region "any text" nil file-notify--test-tmpfile)
-	  (copy-file file-notify--test-tmpfile file-notify--test-tmpfile1)
-	  (delete-file file-notify--test-tmpfile)
-	  (delete-file file-notify--test-tmpfile1)
+	    ;; Check creation and removal.
+	    (write-region "any text" nil file-notify--test-tmpfile)
+	    (delete-file file-notify--test-tmpfile)
 
-	  (write-region "any text" nil file-notify--test-tmpfile)
-	  (rename-file file-notify--test-tmpfile file-notify--test-tmpfile1)
-	  (delete-file file-notify--test-tmpfile1))
+	    ;; Check copy and rename.
+	    (write-region "any text" nil file-notify--test-tmpfile)
+	    (copy-file file-notify--test-tmpfile file-notify--test-tmpfile1)
+	    (delete-file file-notify--test-tmpfile)
+	    (delete-file file-notify--test-tmpfile1)
 
-      ;; Wait for events, and exit.
-      (sit-for 5 'nodisplay)
-      (file-notify-rm-watch desc)
-      (ignore-errors (delete-file file-notify--test-tmpfile))
-      (ignore-errors (delete-file file-notify--test-tmpfile1))))
+	    (write-region "any text" nil file-notify--test-tmpfile)
+	    (rename-file file-notify--test-tmpfile file-notify--test-tmpfile1)
+	    (delete-file file-notify--test-tmpfile1))
 
-  (dolist (result file-notify--test-results)
-    ;(message "%s" (ert-test-result-messages result))
-    (when (ert-test-failed-p result)
-      (ert-fail (cadr (ert-test-result-with-condition-condition result))))))
+	;; Wait for events, and exit.
+	(sit-for 5 'nodisplay)
+	(file-notify-rm-watch desc)
+	(ignore-errors (delete-file file-notify--test-tmpfile))
+	(ignore-errors (delete-file file-notify--test-tmpfile1))))
 
-(file-notify--deftest-remote file-notify-test02-events
-  "Check file creation/removal notifications for remote files.")
+    (dolist (result file-notify--test-results)
+      ;(message "%s" (ert-test-result-messages result))
+      (when (ert-test-failed-p result)
+	(ert-fail (cadr (ert-test-result-with-condition-condition result))))))
+
+  (file-notify--deftest-remote file-notify-test02-events
+    "Check file creation/removal notifications for remote files.")
+  ) ;; file-notify--test-local-enabled
 
 ;; autorevert runs only in interactive mode.
 (defvar auto-revert-remote-files)
 (setq auto-revert-remote-files t)
 (require 'autorevert)
-(when (null noninteractive)
+(when (and file-notify--test-local-enabled (null noninteractive))
 
   (ert-deftest file-notify-test03-autorevert ()
     "Check autorevert via file notification.
@@ -240,12 +274,12 @@ This test is skipped in batch mode."
   (file-notify--deftest-remote file-notify-test03-autorevert
     "Check autorevert via file notification for remote files.
 This test is skipped in batch mode.")
-  ) ;; (null noninteractive)
+  ) ;; (and file-notify--test-local-enabled (null noninteractive))
 
 (defun file-notify-test-all (&optional interactive)
   "Run all tests for \\[file-notify]."
   (interactive "p")
-  (when file-notify-support
+  (when file-notify--test-local-enabled
     (if interactive
 	(ert-run-tests-interactively "^file-notify-")
       (ert-run-tests-batch "^file-notify-"))))

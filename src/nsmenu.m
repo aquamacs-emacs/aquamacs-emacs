@@ -385,7 +385,7 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
         }
       else
         {
-          [menu fillWithWidgetValue: first_wv->contents];
+          [menu fillWithWidgetValue: first_wv->contents frame: f];
         }
 
     }
@@ -523,22 +523,10 @@ void
 x_activate_menubar (struct frame *f)
 {
 #ifdef NS_IMPL_COCOA
-  NSArray *a = [[NSApp mainMenu] itemArray];
-  /* Update each submenu separately so ns_update_menubar doesn't reset
-     the delegate.  */
-  int i = 0;
-  while (i < [a count])
-    {
-      EmacsMenu *menu = (EmacsMenu *)[[a objectAtIndex:i] submenu];
-      const char *title = [[menu title] UTF8String];
-      if (strcmp (title, ns_get_pending_menu_title ()) == 0)
-        {
-          ns_update_menubar (f, true, menu);
-          break;
-        }
-      ++i;
-    }
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+  ns_update_menubar (f, true, nil);
   ns_check_pending_open_menu ();
+#endif
 #endif
 }
 /* Utility (from macmenu.c): is this item a separator? */
@@ -572,6 +560,7 @@ name_is_separator (name)
 /* override designated initializer */
 - initWithTitle: (NSString *)title
 {
+  frame = 0;
   if ((self = [super initWithTitle: title]))
     [self setAutoenablesItems: NO];
   return self;
@@ -607,16 +596,35 @@ extern NSString *NSMenuDidBeginTrackingNotification;
   /* Update menu in menuNeedsUpdate only while tracking menus.  */
   trackingMenu = ([notification name] == NSMenuDidBeginTrackingNotification
                   ? 1 : 0);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+  if (! trackingMenu) ns_check_menu_open (nil);
+#endif
 }
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 - (void)menuWillOpen:(NSMenu *)menu
 {
-  ns_check_menu_open (menu);
-}
+  ++trackingMenu;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
+  // On 10.6 we get repeated calls, only the one for NSSystemDefined is "real".
+  if ([[NSApp currentEvent] type] != NSSystemDefined) return;
 #endif
 
-#endif
+  /* When dragging from one menu to another, we get willOpen followed by didClose,
+     i.e. trackingMenu == 3 in willOpen and then 2 after didClose.
+     We have updated all menus, so avoid doing it when trackingMenu == 3.  */
+  if (trackingMenu == 2)
+    ns_check_menu_open (menu);
+}
+
+- (void)menuDidClose:(NSMenu *)menu
+{
+  --trackingMenu;
+}
+#endif /* OSX >= 10.5 */
+
+#endif /* NS_IMPL_COCOA */
 
 /* delegate method called when a submenu is being opened: run a 'deep' call
    to set_frame_menubar */
@@ -645,8 +653,8 @@ extern NSString *NSMenuDidBeginTrackingNotification;
   if (trackingMenu == 0)
     return;
 /*fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); */
-#if ! defined(NS_IMPL_COCOA) || \
-  MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+#if (! defined (NS_IMPL_COCOA) \
+     || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
   /* Don't know how to do this for anything other than OSX >= 10.5
      This is wrong, as it might run Lisp code in the event loop.  */
   ns_update_menubar (frame, true, self);
@@ -778,6 +786,11 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 
 - (void)fillWithWidgetValue: (void *)wvptr
 {
+  [self fillWithWidgetValue: wvptr frame: (struct frame *)nil];
+}
+
+- (void)fillWithWidgetValue: (void *)wvptr frame: (struct frame *)f
+{
   widget_value *wv = (widget_value *)wvptr;
   NSFont *menuFont = [NSFont menuFontOfSize:0];
   NSDictionary *attributes =
@@ -829,7 +842,12 @@ extern NSString *NSMenuDidBeginTrackingNotification;
       NSMenuItem *item = [self addItemWithWidgetValue: wv];
       if (wv->contents)
         {
-          EmacsMenu *submenu = [[EmacsMenu alloc] initWithTitle: [item title]];
+          EmacsMenu *submenu;
+
+          if (f)
+            submenu = [[EmacsMenu alloc] initWithTitle: [item title] frame:f];
+          else
+            submenu = [[EmacsMenu alloc] initWithTitle: [item title]];
 
           [self setSubmenu: submenu forItem: item];
           [submenu fillWithWidgetValue: wv->contents];
@@ -902,7 +920,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
    ========================================================================== */
 
 Lisp_Object
-ns_menu_show (FRAME_PTR f, int x, int y, bool for_click, bool keymaps,
+ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
 	      Lisp_Object title, const char **error)
 {
   EmacsMenu *pmenu;
@@ -1124,7 +1142,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, bool for_click, bool keymaps,
    ========================================================================== */
 
 void
-free_frame_tool_bar (FRAME_PTR f)
+free_frame_tool_bar (struct frame *f)
 /* --------------------------------------------------------------------------
     Under NS we just hide the toolbar until it might be needed again.
    -------------------------------------------------------------------------- */
@@ -1136,7 +1154,7 @@ free_frame_tool_bar (FRAME_PTR f)
 }
 
 void
-update_frame_tool_bar (FRAME_PTR f)
+update_frame_tool_bar (struct frame *f)
 /* --------------------------------------------------------------------------
     Update toolbar contents
    -------------------------------------------------------------------------- */
@@ -1229,7 +1247,7 @@ update_frame_tool_bar (FRAME_PTR f)
       if (STRINGP (label) && strcmp("--", SDATA (label)) == 0)
 	[toolbar addDisplayItemSpacerWithIdx: i tag:i key: keyText];
       else
-	{
+        {
       /* If image is a vector, choose the image according to the
 	 button state.  */
       image = TOOLPROP (TOOL_BAR_ITEM_IMAGES);
@@ -1520,7 +1538,7 @@ Items in this list are always Lisp symbols.*/)
                              idx: (int)idx
                              tag: (int)tag
                         helpText: (const char *)help
-			 enabled: (BOOL)enabled
+                         enabled: (BOOL)enabled
 			 visible: (BOOL)visible
 			     key: (char *)key
 		       labelText: (char *)label
@@ -1531,7 +1549,7 @@ Items in this list are always Lisp symbols.*/)
   /* 1) come up w/identifier */
   NSString *identifier = [NSString stringWithFormat: @"0x%08lX%s",
 				   ([img hash] + [label_str hash] + [help_str hash]) & 0xFFFFFFFF, key];
-  
+
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
   if (item == nil)
@@ -1554,7 +1572,7 @@ Items in this list are always Lisp symbols.*/)
 #ifdef NS_IMPL_GNUSTEP
   [self insertItemWithItemIdentifier: identifier atIndex: idx];
 #endif
-  
+
   [item setTag: tag];
   [item setEnabled: enabled];
 
@@ -1880,12 +1898,10 @@ struct Popdown_data
   EmacsAlertPanel *dialog;
 };
 
-static Lisp_Object
-pop_down_menu (Lisp_Object arg)
+static void
+pop_down_menu (void *arg)
 {
-  struct Lisp_Save_Value *p = XSAVE_VALUE (arg);
-  //struct Popdown_data *unwind_data = (struct Popdown_data *) p->pointer;
-  struct Popdown_data *unwind_data = XSAVE_POINTER (arg, 0);
+  struct Popdown_data *unwind_data = arg;
 
   block_input ();
   if (popup_activated_flag)
@@ -1909,14 +1925,16 @@ pop_down_menu (Lisp_Object arg)
 
   xfree (unwind_data);
   unblock_input ();
-
-  return Qnil;
 }
 
+// extern EMACS_TIME timer_check ();
+extern struct timespec timer_check (void);
 
 Lisp_Object
 ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 {
+
+  // extern EMACS_TIME timer_check (void);
   EmacsAlertPanel *dialog;
   Lisp_Object window, tem, title;
   struct frame *f;
@@ -1986,7 +2004,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   if (NILP (Fcar (Fcdr (contents))))
     /* No buttons specified, add an "Ok" button so users can pop down
        the dialog.  */
-    contents = Fcons (title, Fcons (Fcons (build_string ("Ok"), Qt), Qnil));
+    contents = list2 (title, Fcons (build_string ("Ok"), Qt));
 
   block_input ();
   pool = [[NSAutoreleasePool alloc] init];
@@ -2043,9 +2061,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     unwind_data->pool = pool;
     unwind_data->dialog = dialog;
 
-    record_unwind_protect (pop_down_menu, make_save_pointer (unwind_data));
-
-  extern EMACS_TIME timer_check (void);  
+    record_unwind_protect_ptr (pop_down_menu, make_save_ptr (unwind_data));
+  
 
   [dialog layout]; /* because we may not call beginSheet / runModal */
 
@@ -2096,8 +2113,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
      Fsignal (Qquit, Qnil); /*special button value for cancel*/
 
   return tem;
-}
 
+  }
 }
 
 /* ==========================================================================
@@ -2249,7 +2266,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     }
 
   if (buttons > 0)
-    button_values = (Lisp_Object *) xmalloc (buttons * sizeof (*button_values));
+    button_values = xmalloc (buttons * sizeof *button_values);
 
   for (; XTYPE (list) == Lisp_Cons; list = XCDR (list))
     {
@@ -2433,11 +2450,11 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   while (popup_activated_flag)
     {
       NSTimer *tmo = nil;
-      EMACS_TIME next_time = timer_check ();
+      struct timespec next_time = timer_check ();
 
-      if (EMACS_TIME_VALID_P (next_time))
+      if (timespec_valid_p (next_time))
         {
-          double time = EMACS_TIME_TO_DOUBLE (next_time);
+          double time = timespectod (next_time);
           tmo = [NSTimer timerWithTimeInterval: time
                                         target: self
                                       selector: @selector (timeout_handler:)

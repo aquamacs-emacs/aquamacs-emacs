@@ -223,9 +223,10 @@ ns_get_local_selection (Lisp_Object selection_name,
     return value;
 
   // FIXME: Why `quit' rather than `error'?
-  Fsignal (Qquit, Fcons (build_string (
-      "invalid data returned by selection-conversion function"),
-                        Fcons (handler_fn, Fcons (value, Qnil))));
+  Fsignal (Qquit,
+	   list3 (build_string ("invalid data returned by"
+				" selection-conversion function"),
+		  handler_fn, value));
   // FIXME: Beware, `quit' can return!!
   return Qnil;
 }
@@ -260,8 +261,7 @@ ns_string_from_pasteboard (id pb)
   if (type == nil)
     {
       Fsignal (Qquit,
-              Fcons (build_string ("empty or unsupported pasteboard type"),
-                    Qnil));
+	       list1 (build_string ("empty or unsupported pasteboard type")));
     return Qnil;
     }
 
@@ -279,8 +279,8 @@ ns_string_from_pasteboard (id pb)
       else
         {
           Fsignal (Qquit,
-                  Fcons (build_string ("pasteboard doesn't contain valid data"),
-                        Qnil));
+		   list1 (build_string ("pasteboard doesn't contain"
+					" valid data")));
           return Qnil;
         }
     }
@@ -377,7 +377,7 @@ On Nextstep, FRAME is unused.  */)
 
   ns_declare_pasteboard (pb);
   old_value = assq_no_quit (selection, Vselection_alist);
-  new_value = Fcons (selection, Fcons (value, Qnil));
+  new_value = list2 (selection, value);
 
   if (NILP (old_value))
     Vselection_alist = Fcons (new_value, Vselection_alist);

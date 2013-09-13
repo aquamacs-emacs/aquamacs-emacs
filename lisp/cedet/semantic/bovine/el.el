@@ -25,6 +25,7 @@
 
 (require 'semantic)
 (require 'semantic/bovine)
+(require 'semantic/db-el)
 (require 'find-func)
 
 (require 'semantic/ctxt)
@@ -474,7 +475,7 @@ Return a bovination list to use."
        ((and name (file-exists-p (concat name ".el.gz")))
 	;; This is the linux distro case.
 	(concat name ".el.gz"))
-       ;; source file does not exists
+       ;; Source file does not exist.
        (name
 	(message "semantic: cannot find source file %s" (concat name ".el")))
        (t

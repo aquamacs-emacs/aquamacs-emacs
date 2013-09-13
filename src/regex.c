@@ -257,15 +257,10 @@ xrealloc (void *block, size_t size)
 enum syntaxcode { Swhitespace = 0, Sword = 1, Ssymbol = 2 };
 
 /* Dummy macros for non-Emacs environments.  */
-# define CHAR_CHARSET(c) 0
-# define CHARSET_LEADING_CODE_BASE(c) 0
 # define MAX_MULTIBYTE_LENGTH 1
 # define RE_MULTIBYTE_P(x) 0
 # define RE_TARGET_MULTIBYTE_P(x) 0
 # define WORD_BOUNDARY_P(c1, c2) (0)
-# define CHAR_HEAD_P(p) (1)
-# define SINGLE_BYTE_CHAR_P(c) (1)
-# define SAME_CHARSET_P(c1, c2) (1)
 # define BYTES_BY_CHAR_HEAD(p) (1)
 # define PREV_CHAR_BOUNDARY(p, limit) ((p)--)
 # define STRING_CHAR(p) (*(p))
@@ -279,8 +274,6 @@ enum syntaxcode { Swhitespace = 0, Sword = 1, Ssymbol = 2 };
   (c = ((p) == (str2) ? *((end1) - 1) : *((p) - 1)))
 # define GET_CHAR_AFTER(c, p, len)	\
   (c = *p, len = 1)
-# define MAKE_CHAR(charset, c1, c2) (c1)
-# define BYTE8_TO_CHAR(c) (c)
 # define CHAR_BYTE8_P(c) (0)
 # define CHAR_LEADING_CODE(c) (c)
 
@@ -468,7 +461,7 @@ init_syntax_once (void)
 
 /* Assumes a `char *destination' variable.  */
 # define REGEX_REALLOCATE(source, osize, nsize)				\
-  (destination = (char *) alloca (nsize),				\
+  (destination = alloca (nsize),					\
    memcpy (destination, source, osize))
 
 /* No need to do anything to free, after alloca.  */
@@ -531,8 +524,10 @@ init_syntax_once (void)
 /* Type of source-pattern and string chars.  */
 #ifdef _MSC_VER
 typedef unsigned char re_char;
+typedef const re_char const_re_char;
 #else
 typedef const unsigned char re_char;
+typedef re_char const_re_char;
 #endif
 
 typedef char boolean;
@@ -773,10 +768,12 @@ extract_number_and_incr (re_char **source)
    and the 2 bytes of flags at the start of the range table.  */
 #define CHARSET_RANGE_TABLE(p) (&(p)[4 + CHARSET_BITMAP_SIZE (p)])
 
+#ifdef emacs
 /* Extract the bit flags that start a range table.  */
 #define CHARSET_RANGE_TABLE_BITS(p)		\
   ((p)[2 + CHARSET_BITMAP_SIZE (p)]		\
    + (p)[3 + CHARSET_BITMAP_SIZE (p)] * 0x100)
+#endif
 
 /* Return the address of end of RANGE_TABLE.  COUNT is number of
    ranges (which is a pair of (start, end)) in the RANGE_TABLE.  `* 2'
@@ -1236,12 +1233,12 @@ re_set_syntax (reg_syntax_t syntax)
 WEAK_ALIAS (__re_set_syntax, re_set_syntax)
 
 /* Regexp to use to replace spaces, or NULL meaning don't.  */
-static re_char *whitespace_regexp;
+static const_re_char *whitespace_regexp;
 
 void
 re_set_whitespace_regexp (const char *regexp)
 {
-  whitespace_regexp = (re_char *) regexp;
+  whitespace_regexp = (const_re_char *) regexp;
 }
 WEAK_ALIAS (__re_set_syntax, re_set_syntax)
 
@@ -1828,6 +1825,8 @@ struct range_table_work_area
   int bits;			/* flag to record character classes */
 };
 
+#ifdef emacs
+
 /* Make sure that WORK_AREA can hold more N multibyte characters.
    This is used only in set_image_of_range and set_image_of_range_1.
    It expects WORK_AREA to be a pointer.
@@ -1846,15 +1845,6 @@ struct range_table_work_area
 #define SET_RANGE_TABLE_WORK_AREA_BIT(work_area, bit)		\
   (work_area).bits |= (bit)
 
-/* Bits used to implement the multibyte-part of the various character classes
-   such as [:alnum:] in a charset's range table.  */
-#define BIT_WORD	0x1
-#define BIT_LOWER	0x2
-#define BIT_PUNCT	0x4
-#define BIT_SPACE	0x8
-#define BIT_UPPER	0x10
-#define BIT_MULTIBYTE	0x20
-
 /* Set a range (RANGE_START, RANGE_END) to WORK_AREA.  */
 #define SET_RANGE_TABLE_WORK_AREA(work_area, range_start, range_end)	\
   do {									\
@@ -1862,6 +1852,8 @@ struct range_table_work_area
     (work_area).table[(work_area).used++] = (range_start);		\
     (work_area).table[(work_area).used++] = (range_end);		\
   } while (0)
+
+#endif /* emacs */
 
 /* Free allocated memory for WORK_AREA.  */
 #define FREE_RANGE_TABLE_WORK_AREA(work_area)	\
@@ -1874,6 +1866,15 @@ struct range_table_work_area
 #define RANGE_TABLE_WORK_USED(work_area) ((work_area).used)
 #define RANGE_TABLE_WORK_BITS(work_area) ((work_area).bits)
 #define RANGE_TABLE_WORK_ELT(work_area, i) ((work_area).table[i])
+
+/* Bits used to implement the multibyte-part of the various character classes
+   such as [:alnum:] in a charset's range table.  */
+#define BIT_WORD	0x1
+#define BIT_LOWER	0x2
+#define BIT_PUNCT	0x4
+#define BIT_SPACE	0x8
+#define BIT_UPPER	0x10
+#define BIT_MULTIBYTE	0x20
 
 
 /* Set the bit for character C in a list.  */
@@ -2015,7 +2016,7 @@ struct range_table_work_area
 
 /* Map a string to the char class it names (if any).  */
 re_wctype_t
-re_wctype (const re_char *str)
+re_wctype (const_re_char *str)
 {
   const char *string = (const char *) str;
   if      (STREQ (string, "alnum"))	return RECC_ALNUM;
@@ -2409,7 +2410,8 @@ do {									\
   } while (0)
 
 static reg_errcode_t
-regex_compile (const re_char *pattern, size_t size, reg_syntax_t syntax, struct re_pattern_buffer *bufp)
+regex_compile (const_re_char *pattern, size_t size, reg_syntax_t syntax,
+	       struct re_pattern_buffer *bufp)
 {
   /* We fetch characters from PATTERN here.  */
   register re_wchar_t c, c1;
@@ -3765,7 +3767,7 @@ insert_op2 (re_opcode_t op, unsigned char *loc, int arg1, int arg2, unsigned cha
    least one character before the ^.  */
 
 static boolean
-at_begline_loc_p (const re_char *pattern, const re_char *p, reg_syntax_t syntax)
+at_begline_loc_p (const_re_char *pattern, const_re_char *p, reg_syntax_t syntax)
 {
   re_char *prev = p - 2;
   boolean odd_backslashes;
@@ -3806,7 +3808,7 @@ at_begline_loc_p (const re_char *pattern, const re_char *p, reg_syntax_t syntax)
    at least one character after the $, i.e., `P < PEND'.  */
 
 static boolean
-at_endline_loc_p (const re_char *p, const re_char *pend, reg_syntax_t syntax)
+at_endline_loc_p (const_re_char *p, const_re_char *pend, reg_syntax_t syntax)
 {
   re_char *next = p;
   boolean next_backslash = *next == '\\';
@@ -3850,7 +3852,8 @@ group_in_compile_stack (compile_stack_type compile_stack, regnum_t regnum)
    Return -1 if fastmap was not updated accurately.  */
 
 static int
-analyse_first (const re_char *p, const re_char *pend, char *fastmap, const int multibyte)
+analyse_first (const_re_char *p, const_re_char *pend, char *fastmap,
+	       const int multibyte)
 {
   int j, k;
   boolean not;
@@ -4204,7 +4207,7 @@ re_set_registers (struct re_pattern_buffer *bufp, struct re_registers *regs, uns
     {
       bufp->regs_allocated = REGS_UNALLOCATED;
       regs->num_regs = 0;
-      regs->start = regs->end = (regoff_t *) 0;
+      regs->start = regs->end = 0;
     }
 }
 WEAK_ALIAS (__re_set_registers, re_set_registers)
@@ -4594,7 +4597,7 @@ static int bcmp_translate (re_char *s1, re_char *s2,
 /* If the operation is a match against one or more chars,
    return a pointer to the next operation, else return NULL.  */
 static re_char *
-skip_one_char (const re_char *p)
+skip_one_char (const_re_char *p)
 {
   switch (*p++)
     {
@@ -4636,7 +4639,7 @@ skip_one_char (const re_char *p)
 
 /* Jump over non-matching operations.  */
 static re_char *
-skip_noops (const re_char *p, const re_char *pend)
+skip_noops (const_re_char *p, const_re_char *pend)
 {
   int mcnt;
   while (p < pend)
@@ -4663,7 +4666,8 @@ skip_noops (const re_char *p, const re_char *pend)
 
 /* Non-zero if "p1 matches something" implies "p2 fails".  */
 static int
-mutually_exclusive_p (struct re_pattern_buffer *bufp, const re_char *p1, const re_char *p2)
+mutually_exclusive_p (struct re_pattern_buffer *bufp, const_re_char *p1,
+		      const_re_char *p2)
 {
   re_opcode_t op2;
   const boolean multibyte = RE_MULTIBYTE_P (bufp);
@@ -4922,8 +4926,8 @@ WEAK_ALIAS (__re_match_2, re_match_2)
 /* This is a separate function so that we can force an alloca cleanup
    afterwards.  */
 static regoff_t
-re_match_2_internal (struct re_pattern_buffer *bufp, const re_char *string1,
-		     size_t size1, const re_char *string2, size_t size2,
+re_match_2_internal (struct re_pattern_buffer *bufp, const_re_char *string1,
+		     size_t size1, const_re_char *string2, size_t size2,
 		     ssize_t pos, struct re_registers *regs, ssize_t stop)
 {
   /* General temporaries.  */
@@ -6265,7 +6269,7 @@ re_match_2_internal (struct re_pattern_buffer *bufp, const re_char *string1,
    bytes; nonzero otherwise.  */
 
 static int
-bcmp_translate (const re_char *s1, const re_char *s2, register ssize_t len,
+bcmp_translate (const_re_char *s1, const_re_char *s2, register ssize_t len,
 		RE_TRANSLATE_TYPE translate, const int target_multibyte)
 {
   register re_char *p1 = s1, *p2 = s2;
@@ -6390,8 +6394,7 @@ weak_function
 re_exec (const char *s)
 {
   const size_t len = strlen (s);
-  return (re_search (&re_comp_buf, s, len, 0, len, (struct re_registers *) 0)
-	  >= 0);
+  return re_search (&re_comp_buf, s, len, 0, len, 0) >= 0;
 }
 #endif /* _REGEX_RE_COMP */
 
@@ -6434,7 +6437,7 @@ re_exec (const char *s)
    the return codes and their meanings.)  */
 
 reg_errcode_t
-regcomp (regex_t *__restrict preg, const char *__restrict pattern,
+regcomp (regex_t *_Restrict_ preg, const char *_Restrict_ pattern,
 	 int cflags)
 {
   reg_errcode_t ret;
@@ -6515,8 +6518,8 @@ WEAK_ALIAS (__regcomp, regcomp)
    We return 0 if we find a match and REG_NOMATCH if not.  */
 
 reg_errcode_t
-regexec (const regex_t *__restrict preg, const char *__restrict string,
-	 size_t nmatch, regmatch_t pmatch[__restrict_arr], int eflags)
+regexec (const regex_t *_Restrict_ preg, const char *_Restrict_ string,
+	 size_t nmatch, regmatch_t pmatch[_Restrict_arr_], int eflags)
 {
   regoff_t ret;
   struct re_registers regs;
@@ -6555,7 +6558,7 @@ regexec (const regex_t *__restrict preg, const char *__restrict string,
   /* Perform the searching operation.  */
   ret = re_search (&private_preg, string, len,
 		   /* start: */ 0, /* range: */ len,
-		   want_reg_info ? &regs : (struct re_registers *) 0);
+		   want_reg_info ? &regs : 0);
 
   /* Copy the register information to the POSIX structure.  */
   if (want_reg_info)

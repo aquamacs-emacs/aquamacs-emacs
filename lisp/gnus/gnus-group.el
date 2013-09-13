@@ -1105,7 +1105,7 @@ When FORCE, rebuild the tool bar."
 	  (set (make-local-variable 'tool-bar-map) map))))
   gnus-group-tool-bar-map)
 
-(defun gnus-group-mode ()
+(define-derived-mode gnus-group-mode fundamental-mode "Group"
   "Major mode for reading news.
 
 All normal editing commands are switched off.
@@ -1122,17 +1122,12 @@ For more in-depth information on this mode, read the manual (`\\[gnus-info-find-
 The following commands are available:
 
 \\{gnus-group-mode-map}"
-  (interactive)
-  (kill-all-local-variables)
   (when (gnus-visual-p 'group-menu 'menu)
     (gnus-group-make-menu-bar)
     (gnus-group-make-tool-bar))
   (gnus-simplify-mode-line)
-  (setq major-mode 'gnus-group-mode)
-  (setq mode-name "Group")
   (gnus-group-set-mode-line)
   (setq mode-line-process nil)
-  (use-local-map gnus-group-mode-map)
   (buffer-disable-undo)
   (setq truncate-lines t)
   (setq buffer-read-only t
@@ -1143,8 +1138,7 @@ The following commands are available:
   (when gnus-use-undo
     (gnus-undo-mode 1))
   (when gnus-slave
-    (gnus-slave-mode))
-  (gnus-run-mode-hooks 'gnus-group-mode-hook))
+    (gnus-slave-mode)))
 
 (defun gnus-update-group-mark-positions ()
   (save-excursion
@@ -1193,7 +1187,7 @@ The following commands are available:
 
 (defun gnus-group-setup-buffer ()
   (set-buffer (gnus-get-buffer-create gnus-group-buffer))
-  (unless (eq major-mode 'gnus-group-mode)
+  (unless (derived-mode-p 'gnus-group-mode)
     (gnus-group-mode)))
 
 (defun gnus-group-name-charset (method group)
@@ -2147,7 +2141,7 @@ be permanent."
 
 (defun gnus-group-name-at-point ()
   "Return a group name from around point if it exists, or nil."
-  (if (eq major-mode 'gnus-group-mode)
+  (if (derived-mode-p 'gnus-group-mode)
       (let ((group (gnus-group-group-name)))
 	(when group
 	  (gnus-group-decoded-name group)))
@@ -2796,14 +2790,21 @@ server."
 	(lambda (group)
 	  (gnus-group-delete-group group nil t))))))
 
-(defun gnus-group-delete-articles (group)
-  "Delete all articles in the current group."
-  (interactive (list (gnus-group-group-name)))
+(defun gnus-group-delete-articles (group &optional oldp)
+  "Delete all articles in the current group.
+If OLDP (the prefix), only delete articles that are \"old\",
+according to the expiry settings.  Note that this will delete old
+not-expirable articles, too."
+  (interactive (list (gnus-group-group-name)
+		     current-prefix-arg))
   (let ((articles (gnus-uncompress-range (gnus-active group))))
     (when (gnus-yes-or-no-p
 	   (format "Do you really want to delete these %d articles forever? "
 		   (length articles)))
-      (gnus-request-expire-articles articles group 'force))))
+      (gnus-request-expire-articles articles group
+				    (if current-prefix-arg
+					nil
+				      'force)))))
 
 (defun gnus-group-delete-group (group &optional force no-prompt)
   "Delete the current group.  Only meaningful with editable groups.
@@ -3107,7 +3108,7 @@ If SOLID (the prefix), create a solid group."
       (gnus-group-read-ephemeral-group
        group method t
        (cons (current-buffer)
-	     (if (eq major-mode 'gnus-summary-mode) 'summary 'group))))))
+	     (if (derived-mode-p 'gnus-summary-mode) 'summary 'group))))))
 
 (defvar nnrss-group-alist)
 (eval-when-compile
@@ -3222,7 +3223,7 @@ mail messages or news articles in files that have numeric names."
     (unless (gnus-group-read-ephemeral-group
 	     name method t
 	     (cons (current-buffer)
-		   (if (eq major-mode 'gnus-summary-mode)
+		   (if (derived-mode-p 'gnus-summary-mode)
 		       'summary 'group)))
       (error "Couldn't enter %s" dir))))
 
@@ -4312,7 +4313,7 @@ The hook `gnus-suspend-gnus-hook' is called before actually suspending."
       (unless (or (eq buf group-buf)
 		  (eq buf gnus-dribble-buffer)
 		  (with-current-buffer buf
-		    (eq major-mode 'message-mode)))
+		    (derived-mode-p 'message-mode)))
 	(gnus-kill-buffer buf)))
     (setq gnus-backlog-articles nil)
     (gnus-kill-gnus-frames)

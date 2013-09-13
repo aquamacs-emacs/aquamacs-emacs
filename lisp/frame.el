@@ -317,6 +317,9 @@ there (in decreasing order of priority)."
 		   t))
 	  ;; Create the new frame.
 	  (let (parms new)
+	    ;; MS-Windows needs this to avoid inflooping below.
+	    (if (eq system-type 'windows-nt)
+		(sit-for 0 t))
 	    ;; If the frame isn't visible yet, wait till it is.
 	    ;; If the user has to position the window,
 	    ;; Emacs doesn't know its real position until
@@ -497,10 +500,7 @@ See help of `modify-frame-parameters' for more information."
   "Return some frame other than the current frame.
 Create one if necessary.  Note that the minibuffer frame, if separate,
 is not considered (see `next-frame')."
-  (let ((s (if (equal (next-frame (selected-frame)) (selected-frame))
-	       (make-frame)
-	     (next-frame (selected-frame)))))
-    s))
+  (if (equal (next-frame) (selected-frame)) (make-frame) (next-frame)))
 
 (defun next-multiframe-window ()
   "Select the next window, regardless of which frame it is on."
@@ -881,8 +881,11 @@ If there is no frame by that name, signal an error."
   "The brightness of the background.
 Set this to the symbol `dark' if your background color is dark,
 `light' if your background is light, or nil (automatic by default)
-if you want Emacs to examine the brightness for you.  Don't set this
-variable with `setq'; this won't have the expected effect."
+if you want Emacs to examine the brightness for you.
+
+If you change this without using customize, you should use
+`frame-set-background-mode' to update existing frames;
+e.g. (mapc 'frame-set-background-mode (frame-list))."
   :group 'faces
   :set #'(lambda (var value)
 	   (set-default var value)
@@ -1284,9 +1287,6 @@ keys and their meanings."
 
 
 ;;;; Frame/display capabilities.
-(defun selected-terminal ()
-  "Return the terminal that is now selected."
-  (frame-terminal (selected-frame)))
 
 (declare-function msdos-mouse-p "dosfns.c")
 
@@ -1454,6 +1454,8 @@ monitor, use `display-monitor-attributes-list'."
 
 (declare-function x-display-backing-store "xfns.c" (&optional terminal))
 
+;; In NS port, the return value may be `buffered', `retained', or
+;; `non-retained'.  See src/nsfns.m.
 (defun display-backing-store (&optional display)
   "Return the backing store capability of DISPLAY's screen.
 The value may be `always', `when-mapped', `not-useful', or nil if
@@ -1680,6 +1682,16 @@ left untouched.  FRAME nil or omitted means use the selected frame."
   :type 'number
   :group 'cursor)
 
+(defcustom blink-cursor-blinks 10
+  "How many times to blink before using a solid cursor on NS and X.
+Use 0 or negative value to blink forever."
+  :version "24.4"
+  :type 'integer
+  :group 'cursor)
+
+(defvar blink-cursor-blinks-done 1
+  "Number of blinks done since we started blinking on NS and X")
+
 (defvar blink-cursor-idle-timer nil
   "Timer started after `blink-cursor-delay' seconds of Emacs idle time.
 The function `blink-cursor-start' is called when the timer fires.")
@@ -1697,6 +1709,7 @@ command starts, by installing a pre-command hook."
   (when (null blink-cursor-timer)
     ;; Set up the timer first, so that if this signals an error,
     ;; blink-cursor-end is not added to pre-command-hook.
+    (setq blink-cursor-blinks-done 1)
     (setq blink-cursor-timer
 	  (run-with-timer blink-cursor-interval blink-cursor-interval
 			  'blink-cursor-timer-function))
@@ -1705,7 +1718,15 @@ command starts, by installing a pre-command hook."
 
 (defun blink-cursor-timer-function ()
   "Timer function of timer `blink-cursor-timer'."
-  (internal-show-cursor nil (not (internal-show-cursor-p))))
+  (internal-show-cursor nil (not (internal-show-cursor-p)))
+  ;; Each blink is two calls to this function.
+  (when (memq window-system '(x ns w32))
+    (setq blink-cursor-blinks-done (1+ blink-cursor-blinks-done))
+    (when (and (> blink-cursor-blinks 0)
+	       (<= (* 2 blink-cursor-blinks) blink-cursor-blinks-done))
+      (blink-cursor-suspend)
+      (add-hook 'post-command-hook 'blink-cursor-check))))
+
 
 (defun blink-cursor-end ()
   "Stop cursor blinking.
@@ -1717,6 +1738,29 @@ itself as a pre-command hook."
   (when blink-cursor-timer
     (cancel-timer blink-cursor-timer)
     (setq blink-cursor-timer nil)))
+
+(defun blink-cursor-suspend ()
+  "Suspend cursor blinking on NS, X and W32.
+This is called when no frame has focus and timers can be suspended.
+Timers are restarted by `blink-cursor-check', which is called when a
+frame receives focus."
+  (when (memq window-system '(x ns w32))
+    (blink-cursor-end)
+    (when blink-cursor-idle-timer
+      (cancel-timer blink-cursor-idle-timer)
+      (setq blink-cursor-idle-timer nil))))
+
+(defun blink-cursor-check ()
+  "Check if cursor blinking shall be restarted.
+This is done when a frame gets focus.  Blink timers may be stopped by
+`blink-cursor-suspend'."
+  (when (and blink-cursor-mode
+	     (not blink-cursor-idle-timer))
+    (remove-hook 'post-command-hook 'blink-cursor-check)
+    (setq blink-cursor-idle-timer
+          (run-with-idle-timer blink-cursor-delay
+                               blink-cursor-delay
+                               'blink-cursor-start))))
 
 (define-obsolete-variable-alias 'blink-cursor 'blink-cursor-mode "22.1")
 

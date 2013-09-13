@@ -102,10 +102,10 @@ finish_menu_items (void)
 {
 }
 
-Lisp_Object
-unuse_menu_items (Lisp_Object dummy)
+void
+unuse_menu_items (void)
 {
-  return menu_items_inuse = Qnil;
+  menu_items_inuse = Qnil;
 }
 
 /* Call when finished using the data for the current menu
@@ -124,19 +124,10 @@ discard_menu_items (void)
   eassert (NILP (menu_items_inuse));
 }
 
-#ifdef HAVE_NS
-static Lisp_Object
-cleanup_popup_menu (Lisp_Object arg)
-{
-  discard_menu_items ();
-  return Qnil;
-}
-#endif
-
 /* This undoes save_menu_items, and it is called by the specpdl unwind
    mechanism.  */
 
-static Lisp_Object
+static void
 restore_menu_items (Lisp_Object saved)
 {
   menu_items = XCAR (saved);
@@ -148,7 +139,6 @@ restore_menu_items (Lisp_Object saved)
   menu_items_n_panes = XINT (XCAR (saved));
   saved = XCDR (saved);
   menu_items_submenu_depth = XINT (XCAR (saved));
-  return Qnil;
 }
 
 /* Push the whole state of menu_items processing onto the specpdl.
@@ -877,7 +867,8 @@ update_submenu_strings (widget_value *first_wv)
    VECTOR is an array of menu events for the whole menu.  */
 
 void
-find_and_call_menu_selection (FRAME_PTR f, int menu_bar_items_used, Lisp_Object vector, void *client_data)
+find_and_call_menu_selection (struct frame *f, int menu_bar_items_used,
+			      Lisp_Object vector, void *client_data)
 {
   Lisp_Object prefix, entry;
   Lisp_Object *subprefix_stack;
@@ -960,7 +951,7 @@ find_and_call_menu_selection (FRAME_PTR f, int menu_bar_items_used, Lisp_Object 
 /* As above, but return the menu selection instead of storing in kb buffer.
    If KEYMAPS, return full prefixes to selection. */
 Lisp_Object
-find_and_return_menu_selection (FRAME_PTR f, bool keymaps, void *client_data)
+find_and_return_menu_selection (struct frame *f, bool keymaps, void *client_data)
 {
   Lisp_Object prefix, entry;
   int i;
@@ -1004,7 +995,7 @@ find_and_return_menu_selection (FRAME_PTR f, bool keymaps, void *client_data)
                 {
                   int j;
 
-                  entry = Fcons (entry, Qnil);
+                  entry = list1 (entry);
                   if (!NILP (prefix))
                     entry = Fcons (prefix, entry);
                   for (j = submenu_depth - 1; j >= 0; j--)
@@ -1070,7 +1061,7 @@ no quit occurs and `x-popup-menu' returns nil.  */)
   Lisp_Object title;
   const char *error_name = NULL;
   Lisp_Object selection = Qnil;
-  FRAME_PTR f = NULL;
+  struct frame *f = NULL;
   Lisp_Object x, y, window;
   bool keymaps = 0;
   bool for_click = 0;
@@ -1126,7 +1117,7 @@ no quit occurs and `x-popup-menu' returns nil.  */)
     if (get_current_pos_p)
       {
 	/* Use the mouse's current position.  */
-	FRAME_PTR new_f = SELECTED_FRAME ();
+	struct frame *new_f = SELECTED_FRAME ();
 #ifdef HAVE_X_WINDOWS
 	/* Can't use mouse_position_hook for X since it returns
 	   coordinates relative to the window the mouse is in,
@@ -1213,7 +1204,7 @@ no quit occurs and `x-popup-menu' returns nil.  */)
 #endif /* HAVE_MENUS */
 
   /* Now parse the lisp menus.  */
-  record_unwind_protect (unuse_menu_items, Qnil);
+  record_unwind_protect_void (unuse_menu_items);
 
   title = Qnil;
   GCPRO1 (title);
@@ -1315,7 +1306,7 @@ no quit occurs and `x-popup-menu' returns nil.  */)
 #endif
 
 #ifdef HAVE_NS			/* FIXME: ns-specific, why? --Stef  */
-  record_unwind_protect (cleanup_popup_menu, Qnil);
+  record_unwind_protect_void (discard_menu_items);
 #endif
 
   /* Display them in a menu.  */

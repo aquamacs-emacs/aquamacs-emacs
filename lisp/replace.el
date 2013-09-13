@@ -252,7 +252,7 @@ or capitalized.)
 
 Ignore read-only matches if `query-replace-skip-read-only' is non-nil,
 ignore hidden matches if `search-invisible' is nil, and ignore more
-matches using a non-nil `isearch-filter-predicates'.
+matches using `isearch-filter-predicate'.
 
 If `replace-lax-whitespace' is non-nil, a space or spaces in the string
 to be replaced will match a sequence of whitespace chars defined by the
@@ -306,7 +306,7 @@ capitalized.)
 
 Ignore read-only matches if `query-replace-skip-read-only' is non-nil,
 ignore hidden matches if `search-invisible' is nil, and ignore more
-matches using a non-nil `isearch-filter-predicates'.
+matches using `isearch-filter-predicate'.
 
 If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
@@ -390,7 +390,7 @@ are non-nil and REGEXP has no uppercase letters.
 
 Ignore read-only matches if `query-replace-skip-read-only' is non-nil,
 ignore hidden matches if `search-invisible' is nil, and ignore more
-matches using a non-nil `isearch-filter-predicates'.
+matches using `isearch-filter-predicate'.
 
 If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
@@ -484,18 +484,19 @@ then its replacement is upcased or capitalized.)
 
 Ignore read-only matches if `query-replace-skip-read-only' is non-nil,
 ignore hidden matches if `search-invisible' is nil, and ignore more
-matches using a non-nil `isearch-filter-predicates'.
+matches using `isearch-filter-predicate'.
 
 If `replace-lax-whitespace' is non-nil, a space or spaces in the string
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
-In Transient Mark mode, if the mark is active, operate on the contents
-of the region.  Otherwise, operate from point to the end of the buffer.
-
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
 only matches surrounded by word boundaries.
-Fourth and fifth arg START and END specify the region to operate on.
+
+Operates on the region between START and END (if both are nil, from point
+to the end of the buffer).  Interactively, if Transient Mark mode is
+enabled and the mark is active, operates on the contents of the region;
+otherwise from point to the end of the buffer.
 
 Use \\<minibuffer-local-map>\\[next-history-element] \
 to pull the last incremental search string to the minibuffer
@@ -530,7 +531,7 @@ are non-nil and REGEXP has no uppercase letters.
 
 Ignore read-only matches if `query-replace-skip-read-only' is non-nil,
 ignore hidden matches if `search-invisible' is nil, and ignore more
-matches using a non-nil `isearch-filter-predicates'.
+matches using `isearch-filter-predicate'.
 
 If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
@@ -2087,9 +2088,8 @@ make, or the user didn't cancel the call."
 			   'read-only nil))))
 	    (setq skip-read-only-count (1+ skip-read-only-count)))
 	   ;; Optionally filter out matches.
-	   ((not (run-hook-with-args-until-failure
-		  'isearch-filter-predicates
-		  (nth 0 real-match-data) (nth 1 real-match-data)))
+	   ((not (funcall isearch-filter-predicate
+                          (nth 0 real-match-data) (nth 1 real-match-data)))
 	    (setq skip-filtered-count (1+ skip-filtered-count)))
 	   ;; Optionally ignore invisible matches.
 	   ((not (or (eq search-invisible t)

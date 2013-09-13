@@ -159,7 +159,7 @@ word(s) will be searched for via `eww-search-prefix'."
 	   ((string-match "^image/" (car content-type))
 	    (eww-display-image))
 	   (t
-	    (eww-display-raw charset)))
+	    (eww-display-raw)))
 	  (setq eww-history-position 0)
 	  (cond
 	   (point
@@ -199,7 +199,9 @@ word(s) will be searched for via `eww-search-prefix'."
 
 (defun eww-display-html (charset url)
   (unless (eq charset 'utf8)
-    (decode-coding-region (point) (point-max) charset))
+    (condition-case nil
+	(decode-coding-region (point) (point-max) charset)
+      (coding-system-error nil)))
   (let ((document
 	 (list
 	  'base (list (cons 'href url))
@@ -294,7 +296,7 @@ word(s) will be searched for via `eww-search-prefix'."
 				  (list :background (car new-colors))
 				  t))))))
 
-(defun eww-display-raw (charset)
+(defun eww-display-raw ()
   (let ((data (buffer-substring (point) (point-max))))
     (eww-setup-buffer)
     (let ((inhibit-read-only t))
@@ -302,14 +304,14 @@ word(s) will be searched for via `eww-search-prefix'."
     (goto-char (point-min))))
 
 (defun eww-display-image ()
-  (let ((data (buffer-substring (point) (point-max))))
+  (let ((data (shr-parse-image-data)))
     (eww-setup-buffer)
     (let ((inhibit-read-only t))
       (shr-put-image data nil))
     (goto-char (point-min))))
 
 (defun eww-setup-buffer ()
-  (pop-to-buffer (get-buffer-create "*eww*"))
+  (switch-to-buffer (get-buffer-create "*eww*"))
   (let ((inhibit-read-only t))
     (remove-overlays)
     (erase-buffer))
@@ -343,7 +345,7 @@ word(s) will be searched for via `eww-search-prefix'."
     (define-key map [(meta p)] 'eww-previous-bookmark)
 
     (easy-menu-define nil map ""
-      '("eww"
+      '("Eww"
 	["Quit" eww-quit t]
 	["Reload" eww-reload t]
 	["Back to previous page" eww-back-url
@@ -379,7 +381,7 @@ word(s) will be searched for via `eww-search-prefix'."
 	eww-history))
 
 ;;;###autoload
-(defun eww-browse-url (url &optional new-window)
+(defun eww-browse-url (url &optional _new-window)
   (when (and (equal major-mode 'eww-mode)
 	     eww-current-url)
     (eww-save-history))
@@ -603,7 +605,7 @@ appears in a <link> or <a> tag."
     (insert " ")))
 
 (defun eww-process-text-input (beg end length)
-  (let* ((form (get-text-property end 'eww-form))
+  (let* ((form (get-text-property (min (1+ end) (point-max)) 'eww-form))
 	 (properties (text-properties-at end))
 	 (type (plist-get form :type)))
     (when (and form
@@ -754,7 +756,6 @@ appears in a <link> or <a> tag."
   "Change the value of the select drop-down menu under point."
   (interactive)
   (let* ((input (get-text-property (point) 'eww-form))
-	 (properties (text-properties-at (point)))
 	 (completion-ignore-case t)
 	 (options
 	  (delq nil
@@ -928,8 +929,7 @@ The browser to used is specified by the `shr-external-browser' variable."
       (setq file "!"))
      ((string-match "\\`[.]" file)
       (setq file (concat "!" file))))
-    (let ((base file)
-	  (count 1))
+    (let ((count 1))
       (while (file-exists-p (expand-file-name file directory))
 	(setq file
 	      (if (string-match "\\`\\(.*\\)\\([.][^.]+\\)" file)

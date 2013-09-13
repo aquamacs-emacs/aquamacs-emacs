@@ -518,7 +518,7 @@ Remaining arguments are ignored."
    (if (vc-stay-local-p files 'CVS) 'async 0)
    files "log")
   (with-current-buffer buffer
-    (vc-exec-after (vc-rcs-print-log-cleanup)))
+    (vc-run-delayed (vc-rcs-print-log-cleanup)))
   (when limit 'limit-unsupported))
 
 (defun vc-cvs-comment-history (file)
@@ -1015,14 +1015,14 @@ state."
       ;; (vc-cvs-command (current-buffer) 'async
       ;; 		  (file-relative-name dir)
       ;; 		  "-f" "-n" "update" "-d" "-P")
-      (vc-exec-after
-       `(vc-cvs-after-dir-status (quote ,update-function))))))
+      (vc-run-delayed
+       (vc-cvs-after-dir-status update-function)))))
 
 (defun vc-cvs-dir-status-files (dir files _default-state update-function)
   "Create a list of conses (file . state) for DIR."
   (apply 'vc-cvs-command (current-buffer) 'async dir "-f" "status" files)
-  (vc-exec-after
-   `(vc-cvs-after-dir-status (quote ,update-function))))
+  (vc-run-delayed
+   (vc-cvs-after-dir-status update-function)))
 
 (defun vc-cvs-file-to-string (file)
   "Read the content of FILE and return it as a string."
@@ -1226,6 +1226,30 @@ is non-nil."
                    table (lambda () (vc-cvs-revision-table (car files))))))
     table))
 
+(defun vc-cvs-ignore (file &optional _directory _remove)
+  "Ignore FILE under CVS."
+  (cvs-append-to-ignore (file-name-directory file) file))
+
+;; FIXME This should be in the vc-cvs- namespace if it is to live here.
+(defun cvs-append-to-ignore (dir str &optional old-dir)
+  "In DIR, add STR to the .cvsignore file.
+If OLD-DIR is non-nil, then this is a directory that we don't want
+to hear about anymore."
+  (with-current-buffer
+      (find-file-noselect (expand-file-name ".cvsignore" dir))
+    (when (ignore-errors
+	    (and buffer-read-only
+		 (eq 'CVS (vc-backend buffer-file-name))
+		 (not (vc-editable-p buffer-file-name))))
+      ;; CVSREAD=on special case
+      (vc-checkout buffer-file-name t))
+    (goto-char (point-max))
+    (unless (bolp) (insert "\n"))
+    (insert str (if old-dir "/\n" "\n"))
+    ;; FIXME this is a pcvs variable.
+    (if (bound-and-true-p cvs-sort-ignore-file)
+        (sort-lines nil (point-min) (point-max)))
+    (save-buffer)))
 
 (provide 'vc-cvs)
 

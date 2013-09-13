@@ -103,6 +103,8 @@
 ;; - rename-file (old new)                         OK
 ;; - find-file-hook ()                             NOT NEEDED
 
+;;; Code:
+
 (eval-when-compile
   (require 'cl-lib)
   (require 'vc)
@@ -475,8 +477,8 @@ or an empty string if none."
     (`diff-index
      (vc-git-command (current-buffer) 'async files
                      "diff-index" "--relative" "-z" "-M" "HEAD" "--")))
-  (vc-exec-after
-   `(vc-git-after-dir-status-stage ',stage  ',files ',update-function)))
+  (vc-run-delayed
+   (vc-git-after-dir-status-stage stage files update-function)))
 
 (defun vc-git-dir-status (_dir update-function)
   "Return a list of (FILE STATE EXTRA) entries for DIR."
@@ -647,11 +649,18 @@ If toggling on, also insert its message into the buffer."
 It is based on `log-edit-mode', and has Git-specific extensions.")
 
 (defun vc-git-checkin (files _rev comment)
-  (let ((coding-system-for-write vc-git-commits-coding-system))
+  (let* ((file1 (or (car files) default-directory))
+         (root (vc-git-root file1))
+         (default-directory (expand-file-name root))
+         (only (or (cdr files)
+                   (not (equal root (abbreviate-file-name file1)))))
+         (coding-system-for-write vc-git-commits-coding-system))
     (cl-flet ((boolean-arg-fn
                (argument)
                (lambda (value) (when (equal value "yes") (list argument)))))
-      (apply 'vc-git-command nil 0 files
+      ;; When operating on the whole tree, better pass nil than ".", since "."
+      ;; fails when we're committing a merge.
+      (apply 'vc-git-command nil 0 (if only files)
              (nconc (list "commit" "-m")
                     (log-edit-extract-headers
                      `(("Author" . "--author")
@@ -659,7 +668,7 @@ It is based on `log-edit-mode', and has Git-specific extensions.")
                        ("Amend" . ,(boolean-arg-fn "--amend"))
                        ("Sign-Off" . ,(boolean-arg-fn "--signoff")))
                      comment)
-                    (list "--only" "--"))))))
+                    (if only (list "--only" "--")))))))
 
 (defun vc-git-find-revision (file rev buffer)
   (let* (process-file-side-effects
@@ -677,6 +686,11 @@ It is based on `log-edit-mode', and has Git-specific extensions.")
      buffer 0
      nil
      "cat-file" "blob" (concat (if rev rev "HEAD") ":" fullname))))
+
+(defun vc-git-find-ignore-file (file)
+  "Return the root directory of the repository of FILE."
+  (expand-file-name ".gitignore"
+		    (vc-git-root file)))
 
 (defun vc-git-checkout (file &optional _editable rev)
   (vc-git-command nil 0 file "checkout" (or rev "HEAD")))
@@ -712,7 +726,7 @@ for the Git command to run."
 	    command     (cadr args)
 	    args        (cddr args)))
     (apply 'vc-do-async-command buffer root git-program command args)
-    (with-current-buffer buffer (vc-exec-after '(vc-compilation-mode 'git)))
+    (with-current-buffer buffer (vc-run-delayed (vc-compilation-mode 'git)))
     (vc-set-async-update buffer)))
 
 (defun vc-git-merge-branch ()
@@ -732,7 +746,7 @@ This prompts for a branch to merge from."
 			   nil t)))
     (apply 'vc-do-async-command buffer root vc-git-program "merge"
 	   (list merge-source))
-    (with-current-buffer buffer (vc-exec-after '(vc-compilation-mode 'git)))
+    (with-current-buffer buffer (vc-run-delayed (vc-compilation-mode 'git)))
     (vc-set-async-update buffer)))
 
 ;;; HISTORY FUNCTIONS

@@ -24,46 +24,18 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define EMACS_FRAME_H
 
 #include "dispextern.h"
+#include "termhooks.h"
 
 INLINE_HEADER_BEGIN
 #ifndef FRAME_INLINE
 # define FRAME_INLINE INLINE
 #endif
 
-
-/* Miscellanea.  */
-
-/* Nonzero means there is at least one garbaged frame.  */
-extern bool frame_garbaged;
-
-
-/* The structure representing a frame.  */
-
-enum output_method
-{
-  output_initial,
-  output_termcap,
-  output_x_window,
-  output_msdos_raw,
-  output_w32,
-  output_ns
-};
-
 enum vertical_scroll_bar_type
 {
   vertical_scroll_bar_none,
   vertical_scroll_bar_left,
   vertical_scroll_bar_right
-};
-
-enum text_cursor_kinds
-{
-  DEFAULT_CURSOR = -2,
-  NO_CURSOR = -1,
-  FILLED_BOX_CURSOR,
-  HOLLOW_BOX_CURSOR,
-  BAR_CURSOR,
-  HBAR_CURSOR
 };
 
 enum fullscreen_type
@@ -76,10 +48,7 @@ enum fullscreen_type
   FULLSCREEN_WAIT      = 0x100
 };
 
-
-#define FRAME_FOREGROUND_PIXEL(f) ((f)->foreground_pixel)
-#define FRAME_BACKGROUND_PIXEL(f) ((f)->background_pixel)
-
+/* The structure representing a frame.  */
 
 struct frame
 {
@@ -176,8 +145,14 @@ struct frame
   Lisp_Object menu_bar_window;
 #endif
 
+#if defined (HAVE_WINDOW_SYSTEM) && ! defined (USE_GTK) && ! defined (HAVE_NS)
   /* A window used to display the tool-bar of a frame.  */
   Lisp_Object tool_bar_window;
+
+  /* Desired and current contents displayed in that window.  */
+  Lisp_Object desired_tool_bar_string;
+  Lisp_Object current_tool_bar_string;
+#endif
 
   /* Desired and current tool-bar items.  */
   Lisp_Object tool_bar_items;
@@ -185,10 +160,6 @@ struct frame
   /* Where tool bar is, can be left, right, top or bottom.  The native
      tool bar only supports top.  */
   Lisp_Object tool_bar_position;
-
-  /* Desired and current contents displayed in tool_bar_window.  */
-  Lisp_Object desired_tool_bar_string;
-  Lisp_Object current_tool_bar_string;
 
   /* Beyond here, there should be no more Lisp_Object components.  */
 
@@ -216,10 +187,6 @@ struct frame
      Clear the frame in clear_garbaged_frames if set.  */
   unsigned resized_p : 1;
 
-  /* Set to non-zero in when we want for force a flush_display in
-     update_frame, usually after resizing the frame.  */
-  unsigned force_flush_display_p : 1;
-
   /* Set to non-zero if the default face for the frame has been
      realized.  Reset to zero whenever the default face changes.
      Used to see the difference between a font change and face change.  */
@@ -232,14 +199,23 @@ struct frame
   /* Set to non-zero when current redisplay has updated frame.  */
   unsigned updated_p : 1;
 
+#if defined (HAVE_WINDOW_SYSTEM) && ! defined (USE_GTK) && ! defined (HAVE_NS)
   /* Set to non-zero to minimize tool-bar height even when
      auto-resize-tool-bar is set to grow-only.  */
   unsigned minimize_tool_bar_window_p : 1;
+#endif
 
 #if defined (USE_GTK) || defined (HAVE_NS)
   /* Nonzero means using a tool bar that comes from the toolkit.  */
   unsigned external_tool_bar : 1;
 #endif
+
+  /* Nonzero means that fonts have been loaded since the last glyph
+     matrix adjustments.  */
+  unsigned fonts_changed : 1;
+
+  /* Nonzero means that cursor type has been changed.  */
+  unsigned cursor_type_changed : 1;
 
   /* Margin at the top of the frame.  Used to display the tool-bar.  */
   int tool_bar_lines;
@@ -410,6 +386,10 @@ struct frame
   /* Nonzero means that the pointer is invisible. */
   unsigned pointer_invisible :1;
 
+  /* Nonzero means that all windows except mini-window and
+     selected window on this frame have frozen window starts.  */
+  unsigned frozen_window_starts : 1;
+
   /* Nonzero if we should actually display the scroll bars on this frame.  */
   enum vertical_scroll_bar_type vertical_scroll_bar_type;
 
@@ -477,16 +457,6 @@ FRAME_INLINE void
 fset_condemned_scroll_bars (struct frame *f, Lisp_Object val)
 {
   f->condemned_scroll_bars = val;
-}
-FRAME_INLINE void
-fset_current_tool_bar_string (struct frame *f, Lisp_Object val)
-{
-  f->current_tool_bar_string = val;
-}
-FRAME_INLINE void
-fset_desired_tool_bar_string (struct frame *f, Lisp_Object val)
-{
-  f->desired_tool_bar_string = val;
 }
 FRAME_INLINE void
 fset_face_alist (struct frame *f, Lisp_Object val)
@@ -560,11 +530,23 @@ fset_tool_bar_position (struct frame *f, Lisp_Object val)
 {
   f->tool_bar_position = val;
 }
+#if defined (HAVE_WINDOW_SYSTEM) && ! defined (USE_GTK) && ! defined (HAVE_NS)
 FRAME_INLINE void
 fset_tool_bar_window (struct frame *f, Lisp_Object val)
 {
   f->tool_bar_window = val;
 }
+FRAME_INLINE void
+fset_current_tool_bar_string (struct frame *f, Lisp_Object val)
+{
+  f->current_tool_bar_string = val;
+}
+FRAME_INLINE void
+fset_desired_tool_bar_string (struct frame *f, Lisp_Object val)
+{
+  f->desired_tool_bar_string = val;
+}
+#endif /* HAVE_WINDOW_SYSTEM && !USE_GTK && !HAVE_NS */
 
 #define NUMVAL(X) ((INTEGERP (X) || FLOATP (X)) ? XFLOATINT (X) : -1)
 
@@ -590,8 +572,6 @@ default_pixels_per_inch_y (void)
 
 /* Return a pointer to the image cache of frame F.  */
 #define FRAME_IMAGE_CACHE(F) ((F)->terminal->image_cache)
-
-typedef struct frame *FRAME_PTR;
 
 #define XFRAME(p) \
   (eassert (FRAMEP (p)), (struct frame *) XUNTAG (p, Lisp_Vectorlike))
@@ -763,6 +743,10 @@ typedef struct frame *FRAME_PTR;
 /* Not really implemented.  */
 #define FRAME_WANTS_MODELINE_P(f) (f)->wants_modeline
 
+/* Nonzero if all windows except selected window and mini window
+   are frozen on frame F.  */
+#define FRAME_WINDOWS_FROZEN(f) (f)->frozen_window_starts
+
 /* Nonzero if a size change has been requested for frame F
    but not yet really put into effect.  This can be true temporarily
    when an X event comes in at a bad time.  */
@@ -888,6 +872,9 @@ typedef struct frame *FRAME_PTR;
 #define FRAME_CURSOR_WIDTH(f) ((f)->cursor_width)
 #define FRAME_BLINK_OFF_CURSOR_WIDTH(f) ((f)->blink_off_cursor_width)
 
+#define FRAME_FOREGROUND_PIXEL(f) ((f)->foreground_pixel)
+#define FRAME_BACKGROUND_PIXEL(f) ((f)->background_pixel)
+
 /* Return a pointer to the face cache of frame F.  */
 
 #define FRAME_FACE_CACHE(F)	(F)->face_cache
@@ -929,10 +916,9 @@ typedef struct frame *FRAME_PTR;
     if (frame == hlinfo->mouse_face_mouse_frame)		\
       {								\
 	block_input ();						\
-	if (hlinfo->mouse_face_mouse_frame)			\
-	  note_mouse_highlight (hlinfo->mouse_face_mouse_frame,	\
-				hlinfo->mouse_face_mouse_x,	\
-				hlinfo->mouse_face_mouse_y);	\
+	note_mouse_highlight (hlinfo->mouse_face_mouse_frame,	\
+			      hlinfo->mouse_face_mouse_x,	\
+			      hlinfo->mouse_face_mouse_y);	\
 	unblock_input ();					\
       }								\
   } while (0)
@@ -952,8 +938,11 @@ typedef struct frame *FRAME_PTR;
 extern Lisp_Object Qframep, Qframe_live_p;
 extern Lisp_Object Qtty, Qtty_type;
 extern Lisp_Object Qtty_color_mode;
-extern Lisp_Object Qterminal, Qterminal_live_p;
+extern Lisp_Object Qterminal;
 extern Lisp_Object Qnoelisp;
+
+/* Nonzero means there is at least one garbaged frame.  */
+extern bool frame_garbaged;
 
 extern struct frame *last_nonminibuf_frame;
 
@@ -962,7 +951,7 @@ extern struct frame *decode_window_system_frame (Lisp_Object);
 extern struct frame *decode_live_frame (Lisp_Object);
 extern struct frame *decode_any_frame (Lisp_Object);
 extern struct frame *make_initial_frame (void);
-extern struct frame *make_frame (int);
+extern struct frame *make_frame (bool);
 #ifdef HAVE_WINDOW_SYSTEM
 extern struct frame *make_minibuffer_frame (void);
 extern struct frame *make_frame_without_minibuffer (Lisp_Object,
@@ -1207,8 +1196,7 @@ extern Lisp_Object Qrun_hook_with_args;
 
 extern void x_set_scroll_bar_default_width (struct frame *);
 extern void x_set_offset (struct frame *, int, int, int);
-extern void x_wm_set_icon_position (struct frame *, int, int);
-extern void x_wm_set_size_hint (FRAME_PTR f, long flags, bool user_position);
+extern void x_wm_set_size_hint (struct frame *f, long flags, bool user_position);
 
 extern Lisp_Object x_new_font (struct frame *, Lisp_Object, int);
 
@@ -1242,7 +1230,7 @@ extern void x_set_scroll_bar_width (struct frame *, Lisp_Object,
 
 extern Lisp_Object x_icon_type (struct frame *);
 
-extern int x_figure_window_size (struct frame *, Lisp_Object, int);
+extern long x_figure_window_size (struct frame *, Lisp_Object, bool);
 
 extern void x_set_alpha (struct frame *, Lisp_Object, Lisp_Object);
 
@@ -1257,15 +1245,12 @@ extern Lisp_Object display_x_get_resource (Display_Info *,
 extern void set_frame_menubar (struct frame *f, bool first_time, bool deep_p);
 extern void x_set_window_size (struct frame *f, int change_grav,
                               int cols, int rows);
-extern void x_sync (struct frame *);
 extern Lisp_Object x_get_focus_frame (struct frame *);
 extern void x_set_mouse_position (struct frame *f, int h, int v);
 extern void x_set_mouse_pixel_position (struct frame *f, int pix_x, int pix_y);
 extern void x_make_frame_visible (struct frame *f);
 extern void x_make_frame_invisible (struct frame *f);
 extern void x_iconify_frame (struct frame *f);
-extern int x_pixel_width (struct frame *f);
-extern int x_pixel_height (struct frame *f);
 extern void x_set_frame_alpha (struct frame *f);
 extern void x_set_menu_bar_lines (struct frame *, Lisp_Object, Lisp_Object);
 extern void x_set_tool_bar_lines (struct frame *f,
@@ -1280,15 +1265,29 @@ extern void x_set_menu_bar_lines (struct frame *,
 extern void free_frame_menubar (struct frame *);
 extern void x_free_frame_resources (struct frame *);
 
-#if defined HAVE_X_WINDOWS && !defined USE_X_TOOLKIT
+#if defined HAVE_X_WINDOWS
+extern void x_wm_set_icon_position (struct frame *, int, int);
+#if !defined USE_X_TOOLKIT
 extern char *x_get_resource_string (const char *, const char *);
 #endif
+extern void x_sync (struct frame *);
+#endif /* HAVE_X_WINDOWS */
 
 extern void x_query_colors (struct frame *f, XColor *, int);
 extern void x_query_color (struct frame *f, XColor *);
 
 #endif /* HAVE_WINDOW_SYSTEM */
 
+
+FRAME_INLINE void
+flush_frame (struct frame *f)
+{
+  struct redisplay_interface *rif = FRAME_RIF (f);
+
+  if (rif && rif->flush_display)
+    rif->flush_display (f);
+}
+
 /***********************************************************************
 			Multimonitor data
  ***********************************************************************/

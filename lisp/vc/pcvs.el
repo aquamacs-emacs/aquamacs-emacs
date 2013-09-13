@@ -122,6 +122,7 @@
 (require 'pcvs-util)
 (require 'pcvs-parse)
 (require 'pcvs-info)
+(require 'vc-cvs)
 
 
 ;;;;
@@ -647,7 +648,7 @@ If non-nil, NEW means to create a new buffer no matter what."
 			     done))))
 
 
-(defun cvs-sentinel (proc msg)
+(defun cvs-sentinel (proc _msg)
   "Sentinel for the cvs update process.
 This is responsible for parsing the output from the cvs update when
 it is finished."
@@ -980,7 +981,7 @@ The files are stored to DIR."
 ;;;;
 
 (defun-cvs-mode (cvs-mode-revert-buffer . SIMPLE)
-                (&optional ignore-auto noconfirm)
+                (&optional _ignore-auto _noconfirm)
   "Rerun `cvs-examine' on the current directory with the default flags."
   (interactive)
   (cvs-examine default-directory t))
@@ -994,7 +995,7 @@ If in a *cvs* buffer, don't prompt unless a prefix argument is given."
     (read-directory-name prompt nil default-directory nil)))
 
 ;;;###autoload
-(defun cvs-quickdir (dir &optional flags noshow)
+(defun cvs-quickdir (dir &optional _flags noshow)
   "Open a *cvs* buffer on DIR without running cvs.
 With a prefix argument, prompt for a directory to use.
 A prefix arg >8 (ex: \\[universal-argument] \\[universal-argument]),
@@ -1969,25 +1970,6 @@ This command ignores files that are not flagged as `Unknown'."
 
 (declare-function vc-editable-p "vc" (file))
 (declare-function vc-checkout "vc" (file &optional writable rev))
-
-(defun cvs-append-to-ignore (dir str &optional old-dir)
-  "Add STR to the .cvsignore file in DIR.
-If OLD-DIR is non-nil, then this is a directory that we don't want
-to hear about anymore."
-  (with-current-buffer
-      (find-file-noselect (expand-file-name ".cvsignore" dir))
-    (when (ignore-errors
-	    (and buffer-read-only
-		 (eq 'CVS (vc-backend buffer-file-name))
-		 (not (vc-editable-p buffer-file-name))))
-      ;; CVSREAD=on special case
-      (vc-checkout buffer-file-name t))
-    (goto-char (point-max))
-    (unless (bolp) (insert "\n"))
-    (insert str (if old-dir "/\n" "\n"))
-    (if cvs-sort-ignore-file (sort-lines nil (point-min) (point-max)))
-    (save-buffer)))
-
 
 (defun cvs-mode-find-file-other-window (e)
   "Select a buffer containing the file in another window."

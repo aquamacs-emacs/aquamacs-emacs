@@ -72,6 +72,7 @@ lisp = \
 	$(lispsource)/faces.elc \
 	$(lispsource)/button.elc \
 	$(lispsource)/startup.elc \
+	$(lispsource)/emacs-lisp/nadvice.elc \
 	$(lispsource)/minibuffer.elc \
 	$(lispsource)/abbrev.elc \
 	$(lispsource)/simple.elc \

@@ -285,7 +285,7 @@ check_x_display_info (Lisp_Object frame)
     return x_display_info_for_name (frame);
   else
     {
-      FRAME_PTR f;
+      struct frame *f;
 
       CHECK_LIVE_FRAME (frame);
       f = XFRAME (frame);
@@ -318,7 +318,7 @@ x_window_to_frame (struct w32_display_info *dpyinfo, HWND wdesc)
 
 
 static Lisp_Object unwind_create_frame (Lisp_Object);
-static Lisp_Object unwind_create_tip_frame (Lisp_Object);
+static void unwind_create_tip_frame (Lisp_Object);
 static void my_create_window (struct frame *);
 static void my_create_tip_window (struct frame *);
 
@@ -344,7 +344,7 @@ void x_set_tool_bar_lines (struct frame *, Lisp_Object, Lisp_Object);
    not Emacs's own window.  */
 
 void
-x_real_positions (FRAME_PTR f, int *xptr, int *yptr)
+x_real_positions (struct frame *f, int *xptr, int *yptr)
 {
   POINT pt;
   RECT rect;
@@ -1019,7 +1019,7 @@ x_to_w32_color (const char * colorname)
 }
 
 void
-w32_regenerate_palette (FRAME_PTR f)
+w32_regenerate_palette (struct frame *f)
 {
   struct w32_palette_entry * list;
   LOGPALETTE *          log_palette;
@@ -1069,7 +1069,7 @@ w32_regenerate_palette (FRAME_PTR f)
 #if 0
 /* Keep these around in case we ever want to track color usage. */
 void
-w32_map_color (FRAME_PTR f, COLORREF color)
+w32_map_color (struct frame *f, COLORREF color)
 {
   struct w32_palette_entry * list = FRAME_W32_DISPLAY_INFO (f)->color_list;
 
@@ -1100,7 +1100,7 @@ w32_map_color (FRAME_PTR f, COLORREF color)
 }
 
 void
-w32_unmap_color (FRAME_PTR f, COLORREF color)
+w32_unmap_color (struct frame *f, COLORREF color)
 {
   struct w32_palette_entry * list = FRAME_W32_DISPLAY_INFO (f)->color_list;
   struct w32_palette_entry **prev = &FRAME_W32_DISPLAY_INFO (f)->color_list;
@@ -1153,7 +1153,7 @@ gamma_correct (struct frame *f, COLORREF *color)
    If ALLOC is nonzero, allocate a new colormap cell.  */
 
 int
-w32_defined_color (FRAME_PTR f, const char *color, XColor *color_def, int alloc)
+w32_defined_color (struct frame *f, const char *color, XColor *color_def, int alloc)
 {
   register Lisp_Object tem;
   COLORREF w32_color_ref;
@@ -1224,7 +1224,7 @@ w32_defined_color (FRAME_PTR f, const char *color, XColor *color_def, int alloc)
    ARG says.  */
 
 int
-x_decode_color (FRAME_PTR f, Lisp_Object arg, int def)
+x_decode_color (struct frame *f, Lisp_Object arg, int def)
 {
   XColor cdef;
 
@@ -1525,14 +1525,11 @@ x_set_border_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 
 
 void
-x_set_cursor_type (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
+x_set_cursor_type (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   set_frame_cursor_types (f, arg);
-
-  /* Make sure the cursor gets redrawn.  */
-  cursor_type_changed = 1;
 }
-
+
 void
 x_set_icon_type (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
@@ -1640,7 +1637,7 @@ x_set_menu_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
       x_set_window_size (f, 0, FRAME_COLS (f), FRAME_LINES (f));
       do_pending_window_change (0);
     }
-  adjust_glyphs (f);
+  adjust_frame_glyphs (f);
 }
 
 
@@ -1682,7 +1679,7 @@ x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
 
   FRAME_TOOL_BAR_LINES (f) = nlines;
   resize_frame_windows (f, FRAME_LINES (f), 0);
-  adjust_glyphs (f);
+  adjust_frame_glyphs (f);
 
   /* We also have to make sure that the internal border at the top of
      the frame, below the menu bar or tool bar, is redrawn when the
@@ -1787,7 +1784,7 @@ x_set_name (struct frame *f, Lisp_Object name, int explicit)
    specified a name for the frame; the name will override any set by the
    redisplay code.  */
 void
-x_explicitly_set_name (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
+x_explicitly_set_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   x_set_name (f, arg, 1);
 }
@@ -1796,7 +1793,7 @@ x_explicitly_set_name (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
    name; names set this way will never override names set by the user's
    lisp code.  */
 void
-x_implicitly_set_name (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
+x_implicitly_set_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   x_set_name (f, arg, 0);
 }
@@ -3213,6 +3210,8 @@ w32_wnd_proc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	     described by W was deleted, as indicated by its buffer
 	     field being reset to nil.  */
 	  f = x_window_to_frame (dpyinfo, hwnd);
+	  if (!(f && FRAME_LIVE_P (f)))
+	    break;
 	  w = XWINDOW (FRAME_SELECTED_WINDOW (f));
 	  /* Punt if someone changed the frame's selected window
 	     behind our back. */
@@ -4122,12 +4121,7 @@ w32_window (struct frame *f, long window_prompting, int minibuffer_only)
      for the window manager, so GC relocation won't bother it.
 
      Elsewhere we specify the window name for the window manager.  */
-
-  {
-    char *str = SSDATA (Vx_resource_name);
-    f->namebuf = xmalloc (strlen (str) + 1);
-    strcpy (f->namebuf, str);
-  }
+  f->namebuf = xstrdup (SSDATA (Vx_resource_name));
 
   my_create_window (f);
 
@@ -4179,9 +4173,6 @@ x_icon (struct frame *f, Lisp_Object parms)
     error ("Both left and top icon corners of icon must be specified");
 
   block_input ();
-
-  if (! EQ (icon_x, Qunbound))
-    x_wm_set_icon_position (f, XINT (icon_x), XINT (icon_y));
 
 #if 0 /* TODO */
   /* Start up iconic or window? */
@@ -4256,6 +4247,12 @@ unwind_create_frame (Lisp_Object frame)
     }
 
   return Qnil;
+}
+
+static void
+do_unwind_create_frame (Lisp_Object frame)
+{
+  unwind_create_frame (frame);
 }
 
 static void
@@ -4398,7 +4395,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
 /*  FRAME_W32_DISPLAY_INFO (f) = dpyinfo; */
 
   /* With FRAME_X_DISPLAY_INFO set up, this unwind-protect is safe.  */
-  record_unwind_protect (unwind_create_frame, frame);
+  record_unwind_protect (do_unwind_create_frame, frame);
 #ifdef GLYPH_DEBUG
   image_cache_refcount =
     FRAME_IMAGE_CACHE (f) ? FRAME_IMAGE_CACHE (f)->refcount : 0;
@@ -4640,7 +4637,7 @@ DEFUN ("xw-color-defined-p", Fxw_color_defined_p, Sxw_color_defined_p, 1, 2, 0,
   (Lisp_Object color, Lisp_Object frame)
 {
   XColor foo;
-  FRAME_PTR f = decode_window_system_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
 
   CHECK_STRING (color);
 
@@ -4655,7 +4652,7 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
   (Lisp_Object color, Lisp_Object frame)
 {
   XColor foo;
-  FRAME_PTR f = decode_window_system_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
 
   CHECK_STRING (color);
 
@@ -4910,7 +4907,7 @@ w32_monitor_enum (HMONITOR monitor, HDC hdc, RECT *rcMonitor, LPARAM dwData)
 {
   Lisp_Object *monitor_list = (Lisp_Object *) dwData;
 
-  *monitor_list = Fcons (make_save_pointer (monitor), *monitor_list);
+  *monitor_list = Fcons (make_save_ptr (monitor), *monitor_list);
 
   return TRUE;
 }
@@ -4987,8 +4984,8 @@ w32_display_monitor_attributes_list (void)
       attributes = Fcons (Fcons (Qframes, AREF (monitor_frames, i)),
 			  attributes);
 
-      name = DECODE_SYSTEM (make_unibyte_string (mi.szDevice,
-						 strlen (mi.szDevice)));
+      name = DECODE_SYSTEM (build_unibyte_string (mi.szDevice));
+
       attributes = Fcons (Fcons (Qname, name), attributes);
 
       attributes = Fcons (Fcons (Qmm_size, list2i (width_mm, height_mm)),
@@ -5131,19 +5128,6 @@ SOUND is nil to use the normal beep.  */)
   return sound;
 }
 
-
-int
-x_pixel_width (register struct frame *f)
-{
-  return FRAME_PIXEL_WIDTH (f);
-}
-
-int
-x_pixel_height (register struct frame *f)
-{
-  return FRAME_PIXEL_HEIGHT (f);
-}
-
 int
 x_screen_planes (register struct frame *f)
 {
@@ -5216,11 +5200,6 @@ terminate Emacs if we can't open the connection.
 
   if (! NILP (xrm_string))
     CHECK_STRING (xrm_string);
-
-#if 0
-  if (! EQ (Vwindow_system, intern ("w32")))
-    error ("Not using Microsoft Windows");
-#endif
 
   /* Allow color mapping to be defined externally; first look in user's
      HOME directory, then in Emacs etc dir for a file called rgb.txt. */
@@ -5585,7 +5564,7 @@ Window tip_window;
 Lisp_Object last_show_tip_args;
 
 
-static Lisp_Object
+static void
 unwind_create_tip_frame (Lisp_Object frame)
 {
   Lisp_Object deleted;
@@ -5596,8 +5575,6 @@ unwind_create_tip_frame (Lisp_Object frame)
       tip_window = NULL;
       tip_frame = Qnil;
     }
-
-  return deleted;
 }
 
 
@@ -6077,7 +6054,7 @@ Text larger than the specified size is clipped.  */)
     }
 
   FRAME_TOTAL_COLS (f) = WINDOW_TOTAL_COLS (w);
-  adjust_glyphs (f);
+  adjust_frame_glyphs (f);
   w->pseudo_window_p = 1;
 
   /* Display the tooltip text in a temporary buffer.  */
@@ -6146,7 +6123,7 @@ Text larger than the specified size is clipped.  */)
       width /= WINDOW_FRAME_COLUMN_WIDTH (w);
       w->total_cols = width;
       FRAME_TOTAL_COLS (f) = width;
-      adjust_glyphs (f);
+      adjust_frame_glyphs (f);
       w->pseudo_window_p = 1;
       clear_glyph_matrix (w->desired_matrix);
       clear_glyph_matrix (w->current_matrix);
@@ -6620,7 +6597,7 @@ screen saver if defined.
 If optional parameter FRAME is not specified, use selected frame.  */)
   (Lisp_Object command, Lisp_Object frame)
 {
-  FRAME_PTR f = decode_window_system_frame (frame);
+  struct frame *f = decode_window_system_frame (frame);
 
   CHECK_NUMBER (command);
 

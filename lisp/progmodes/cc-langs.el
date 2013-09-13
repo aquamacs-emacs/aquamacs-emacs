@@ -2163,8 +2163,7 @@ assumed to be set if this isn't nil."
 (c-lang-defconst c-opt-<>-sexp-key
   ;; Adorned regexp matching keywords that can be followed by an angle
   ;; bracket sexp.  Always set when `c-recognize-<>-arglists' is.
-  t (if (c-lang-const c-recognize-<>-arglists)
-	(c-make-keywords-re t (c-lang-const c-<>-sexp-kwds))))
+  t (c-make-keywords-re t (c-lang-const c-<>-sexp-kwds)))
 (c-lang-defvar c-opt-<>-sexp-key (c-lang-const c-opt-<>-sexp-key))
 
 (c-lang-defconst c-brace-id-list-kwds
@@ -2186,6 +2185,18 @@ identifiers that follows the type in a normal declaration."
   ;; substatement (doesn't match a bare block, however).
   t (c-make-keywords-re t (c-lang-const c-block-stmt-1-kwds)))
 (c-lang-defvar c-block-stmt-1-key (c-lang-const c-block-stmt-1-key))
+
+(c-lang-defconst c-block-stmt-1-2-kwds
+  "Statement keywords optionally followed by a paren sexp.
+Keywords here should also be in `c-block-stmt-1-kwds'."
+  t nil
+  java '("try"))
+
+(c-lang-defconst c-block-stmt-1-2-key
+  ;; Regexp matching the start of a statement which may be followed by a
+  ;; paren sexp and will then be followed by a substatement.
+  t (c-make-keywords-re t (c-lang-const c-block-stmt-1-2-kwds)))
+(c-lang-defvar c-block-stmt-1-2-key (c-lang-const c-block-stmt-1-2-key))
 
 (c-lang-defconst c-block-stmt-2-kwds
   "Statement keywords followed by a paren sexp and then by a substatement."
@@ -2805,7 +2816,8 @@ is in effect when this is matched (see `c-identifier-syntax-table')."
 		     "\\>")
 		  "")
 		"\\)")
-  (java idl) "\\([\[\(]\\)")
+  java "\\([\[\(\)]\\)"
+  idl "\\([\[\(]\\)")
 (c-lang-defvar c-type-decl-suffix-key (c-lang-const c-type-decl-suffix-key)
   'dont-doc)
 
@@ -2926,7 +2938,7 @@ calls before a brace block.  This setting does not affect declarations
 that are preceded by a declaration starting keyword, so
 e.g. `c-typeless-decl-kwds' may still be used when it's set to nil."
   t nil
-  (c c++ objc) t)
+  (c c++ objc java) t)
 (c-lang-defvar c-recognize-typeless-decls
   (c-lang-const c-recognize-typeless-decls))
 
@@ -2938,7 +2950,8 @@ identifier or one of the keywords on `c-<>-type-kwds' or
 `c-<>-arglist-kwds'.  If there's an identifier before then the whole
 expression is considered to be a type."
   t (or (consp (c-lang-const c-<>-type-kwds))
-	(consp (c-lang-const c-<>-arglist-kwds))))
+	(consp (c-lang-const c-<>-arglist-kwds)))
+  java t)
 (c-lang-defvar c-recognize-<>-arglists (c-lang-const c-recognize-<>-arglists))
 
 (c-lang-defconst c-enums-contain-decls

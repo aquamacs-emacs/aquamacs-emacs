@@ -127,7 +127,7 @@ quotify_arg (register Lisp_Object exp)
   if (CONSP (exp)
       || (SYMBOLP (exp)
 	  && !NILP (exp) && !EQ (exp, Qt)))
-    return Fcons (Qquote, Fcons (exp, Qnil));
+    return list2 (Qquote, exp);
 
   return exp;
 }
@@ -331,12 +331,9 @@ invoke it.  If KEYS is omitted or nil, the return value of
 
   /* If SPECS is set to a string, use it as an interactive prompt.  */
   if (STRINGP (specs))
-    {
-      /* Make a copy of string so that if a GC relocates specs,
-	 `string' will still be valid.  */
-      string = alloca (SBYTES (specs) + 1);
-      memcpy (string, SSDATA (specs), SBYTES (specs) + 1);
-    }
+    /* Make a copy of string so that if a GC relocates specs,
+       `string' will still be valid.  */
+    string = xlispstrdupa (specs);
   else
     {
       Lisp_Object input;
@@ -529,7 +526,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
 			      make_number (SCHARS (callint_message)),
 			      Qface, Qminibuffer_prompt, callint_message);
 	  args[i] = Fread_char (callint_message, Qnil, Qnil);
-	  message1_nolog ((char *) 0);
+	  message1_nolog (0);
 	  /* Passing args[i] directly stimulates compiler bug.  */
 	  teml = args[i];
 	  /* See bug#8479.  */
@@ -619,8 +616,8 @@ invoke it.  If KEYS is omitted or nil, the return value of
 	    Fput_text_property (make_number (0),
 				make_number (SCHARS (callint_message)),
 				Qface, Qminibuffer_prompt, callint_message);
-	    args[i] = Fread_key_sequence (callint_message,
-					  Qnil, Qt, Qnil, Qnil);
+	    args[i] = Fread_key_sequence_vector (callint_message,
+						 Qnil, Qt, Qnil, Qnil);
 	    teml = args[i];
 	    visargs[i] = Fkey_description (teml, Qnil);
 	    unbind_to (speccount1, Qnil);
@@ -802,7 +799,7 @@ invoke it.  If KEYS is omitted or nil, the return value of
       for (i = 1; i < nargs; i++)
 	{
 	  if (varies[i] > 0)
-	    visargs[i] = Fcons (intern (callint_argfuns[varies[i]]), Qnil);
+	    visargs[i] = list1 (intern (callint_argfuns[varies[i]]));
 	  else
 	    visargs[i] = quotify_arg (args[i]);
 	}

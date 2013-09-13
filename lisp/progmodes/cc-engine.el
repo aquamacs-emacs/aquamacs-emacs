@@ -1135,9 +1135,13 @@ comment at the start of cc-engine.el for more info."
 		   (not (memq sym '(boundary ignore nil))))
 	  ;; Need to investigate closer whether we've crossed
 	  ;; between a substatement and its containing statement.
-	  (if (setq saved (if (looking-at c-block-stmt-1-key)
-			      ptok
-			    pptok))
+	  (if (setq saved
+		    (cond ((and (looking-at c-block-stmt-1-2-key)
+				(eq (char-after ptok) ?\())
+			   pptok)
+			  ((looking-at c-block-stmt-1-key)
+			   ptok)
+			  (t pptok)))
 	      (cond ((> start saved) (setq pos saved))
 		    ((= start saved) (setq ret 'up)))))
 
@@ -1267,6 +1271,9 @@ comment at the start of cc-engine.el for more info."
 	      (throw 'done (point)))))
 	  ;; In trailing space after an as yet undetected virtual semicolon?
 	  (c-backward-syntactic-ws from)
+	  (when (and (bolp) (not (bobp))) ; Can happen in AWK Mode with an
+					  ; unterminated string/regexp.
+	    (backward-char))
 	  (if (and (< (point) to)
 		   (c-at-vsemi-p))
 	      (point)
@@ -6472,6 +6479,15 @@ comment at the start of cc-engine.el for more info."
 	   (c-go-list-forward)
          t)))
 
+(defmacro c-pull-open-brace (ps)
+  ;; Pull the next open brace from PS (which has the form of paren-state),
+  ;; skipping over any brace pairs.  Returns NIL when PS is exhausted.
+  `(progn
+     (while (consp (car ,ps))
+       (setq ,ps (cdr ,ps)))
+     (prog1 (car ,ps)
+       (setq ,ps (cdr ,ps)))))
+
 (defun c-back-over-member-initializers ()
   ;; Test whether we are in a C++ member initializer list, and if so, go back
   ;; to the introducing ":", returning the position of the opening paren of
@@ -6889,32 +6905,38 @@ comment at the start of cc-engine.el for more info."
 
       ;; Skip over type decl prefix operators.  (Note similar code in
       ;; `c-font-lock-declarators'.)
-      (while (and (looking-at c-type-decl-prefix-key)
-		  (if (and (c-major-mode-is 'c++-mode)
-			   (match-beginning 3))
-		      ;; If the second submatch matches in C++ then
-		      ;; we're looking at an identifier that's a
-		      ;; prefix only if it specifies a member pointer.
-		      (when (setq got-identifier (c-forward-name))
-			(if (looking-at "\\(::\\)")
-			    ;; We only check for a trailing "::" and
-			    ;; let the "*" that should follow be
-			    ;; matched in the next round.
-			    (progn (setq got-identifier nil) t)
-			  ;; It turned out to be the real identifier,
-			  ;; so stop.
-			  nil))
-		    t))
-
-	(if (eq (char-after) ?\()
+      (if (and c-recognize-typeless-decls
+	       (equal c-type-decl-prefix-key "\\<\\>"))
+	  (when (eq (char-after) ?\()
 	    (progn
 	      (setq paren-depth (1+ paren-depth))
-	      (forward-char))
-	  (unless got-prefix-before-parens
-	    (setq got-prefix-before-parens (= paren-depth 0)))
-	  (setq got-prefix t)
-	  (goto-char (match-end 1)))
-	(c-forward-syntactic-ws))
+	      (forward-char)))
+	(while (and (looking-at c-type-decl-prefix-key)
+		    (if (and (c-major-mode-is 'c++-mode)
+			     (match-beginning 3))
+			;; If the third submatch matches in C++ then
+			;; we're looking at an identifier that's a
+			;; prefix only if it specifies a member pointer.
+			(when (setq got-identifier (c-forward-name))
+			  (if (looking-at "\\(::\\)")
+			      ;; We only check for a trailing "::" and
+			      ;; let the "*" that should follow be
+			      ;; matched in the next round.
+			      (progn (setq got-identifier nil) t)
+			    ;; It turned out to be the real identifier,
+			    ;; so stop.
+			    nil))
+		      t))
+
+	  (if (eq (char-after) ?\()
+	      (progn
+		(setq paren-depth (1+ paren-depth))
+		(forward-char))
+	    (unless got-prefix-before-parens
+	      (setq got-prefix-before-parens (= paren-depth 0)))
+	    (setq got-prefix t)
+	    (goto-char (match-end 1)))
+	  (c-forward-syntactic-ws)))
 
       (setq got-parens (> paren-depth 0))
 
@@ -7193,19 +7215,23 @@ comment at the start of cc-engine.el for more info."
 	;; uncommon (e.g. some placements of "const" in C++) it's not worth
 	;; the effort to look for them.)
 
-	(unless (or at-decl-end (looking-at "=[^=]"))
-	  ;; If this is a declaration it should end here or its initializer(*)
-	  ;; should start here, so check for allowed separation tokens.  Note
-	  ;; that this rule doesn't work e.g. with a K&R arglist after a
-	  ;; function header.
-	  ;;
-	  ;; *) Don't check for C++ style initializers using parens
-	  ;; since those already have been matched as suffixes.
-	  ;;
-	  ;; If `at-decl-or-cast' is then we've found some other sign that
-	  ;; it's a declaration or cast, so then it's probably an
-	  ;; invalid/unfinished one.
-	  (throw 'at-decl-or-cast at-decl-or-cast))
+;;; 2008-04-16: commented out the next form, to allow the function to recognize
+;;; "foo (int bar)" in CC (an implicit type (in class foo) without a semicolon)
+;;; as a(n almost complete) declaration, enabling it to be fontified.
+	;; CASE 13
+	;; (unless (or at-decl-end (looking-at "=[^=]"))
+	;; If this is a declaration it should end here or its initializer(*)
+	;; should start here, so check for allowed separation tokens.  Note
+	;; that this rule doesn't work e.g. with a K&R arglist after a
+	;; function header.
+	;;
+	;; *) Don't check for C++ style initializers using parens
+	;; since those already have been matched as suffixes.
+	;;
+	;; If `at-decl-or-cast' is then we've found some other sign that
+	;; it's a declaration or cast, so then it's probably an
+	;; invalid/unfinished one.
+	;;  (throw 'at-decl-or-cast at-decl-or-cast))
 
 	;; Below are tests that only should be applied when we're certain to
 	;; not have parsed halfway through an expression.
@@ -7984,7 +8010,8 @@ comment at the start of cc-engine.el for more info."
 	 (or (looking-at c-block-stmt-1-key)
 	     (and (eq (char-after) ?\()
 		  (zerop (c-backward-token-2 1 t lim))
-		  (looking-at c-block-stmt-2-key)))
+		  (or (looking-at c-block-stmt-2-key)
+		      (looking-at c-block-stmt-1-2-key))))
 	 (point))))
 
 (defun c-after-special-operator-id (&optional lim)
@@ -8391,15 +8418,6 @@ comment at the start of cc-engine.el for more info."
 	  (back-to-indentation)
 	  (vector (point) open-paren-pos))))))
 
-(defmacro c-pull-open-brace (ps)
-  ;; Pull the next open brace from PS (which has the form of paren-state),
-  ;; skipping over any brace pairs.  Returns NIL when PS is exhausted.
-  `(progn
-     (while (consp (car ,ps))
-       (setq ,ps (cdr ,ps)))
-     (prog1 (car ,ps)
-       (setq ,ps (cdr ,ps)))))
-
 (defun c-most-enclosing-decl-block (paren-state)
   ;; Return the buffer position of the most enclosing decl-block brace (in the
   ;; sense of c-looking-at-decl-block) in the PAREN-STATE structure, or nil if
@@ -8464,10 +8482,10 @@ comment at the start of cc-engine.el for more info."
 	    ;; check for the class key here.
 	    (and (c-major-mode-is 'pike-mode)
 		 c-decl-block-key))
-	   bufpos braceassignp lim next-containing)
+	   bufpos braceassignp lim next-containing macro-start)
        (while (and (not bufpos)
 		   containing-sexp)
-	   (when paren-state
+	 (when paren-state
 	     (if (consp (car paren-state))
 		 (setq lim (cdr (car paren-state))
 		       paren-state (cdr paren-state))
@@ -8548,22 +8566,38 @@ comment at the start of cc-engine.el for more info."
 					  ))))
 				nil)
 			       (t t))))))
-	       (if (and (eq braceassignp 'dontknow)
-			(/= (c-backward-token-2 1 t lim) 0))
-		   (setq braceassignp nil)))
-	     (if (not braceassignp)
-		 (if (eq (char-after) ?\;)
-		     ;; Brace lists can't contain a semicolon, so we're done.
-		     (setq containing-sexp nil)
-		   ;; Go up one level.
-		   (setq containing-sexp next-containing
-			 lim nil
-			 next-containing nil))
-	       ;; we've hit the beginning of the aggregate list
-	       (c-beginning-of-statement-1
-		(c-most-enclosing-brace paren-state))
-	       (setq bufpos (point))))
-	   )
+	     (if (and (eq braceassignp 'dontknow)
+		      (/= (c-backward-token-2 1 t lim) 0))
+		 (setq braceassignp nil)))
+	   (cond
+	    (braceassignp
+	     ;; We've hit the beginning of the aggregate list.
+	     (c-beginning-of-statement-1
+	      (c-most-enclosing-brace paren-state))
+	     (setq bufpos (point)))
+	    ((eq (char-after) ?\;)
+	     ;; Brace lists can't contain a semicolon, so we're done.
+	     (setq containing-sexp nil))
+	    ((and (setq macro-start (point))
+		  (c-forward-to-cpp-define-body)
+		  (eq (point) containing-sexp))
+	     ;; We've a macro whose expansion starts with the '{'.
+	     ;; Heuristically, if we have a ';' in it we've not got a
+	     ;; brace list, otherwise we have.
+	     (let ((macro-end (progn (c-end-of-macro) (point))))
+	       (goto-char containing-sexp)
+	       (forward-char)
+	       (if (and (c-syntactic-re-search-forward "[;,]" macro-end t t)
+			(eq (char-before) ?\;))
+		   (setq bufpos nil
+			 containing-sexp nil)
+		 (setq bufpos macro-start))))
+	    (t
+	     ;; Go up one level
+	     (setq containing-sexp next-containing
+		   lim nil
+		   next-containing nil)))))
+
        bufpos))
    ))
 
@@ -9787,12 +9821,12 @@ comment at the start of cc-engine.el for more info."
 			      (not (eq (char-after) ?:))
 			      )))
 		   (save-excursion
-		     (c-backward-syntactic-ws lim)
-		     (if (eq char-before-ip ?:)
-			 (progn
-			   (forward-char -1)
-			   (c-backward-syntactic-ws lim)))
-		     (back-to-indentation)
+		     (c-beginning-of-statement-1 lim)
+		     (when (looking-at c-opt-<>-sexp-key)
+		       (goto-char (match-end 1))
+		       (c-forward-syntactic-ws)
+		       (c-forward-<>-arglist nil)
+		       (c-forward-syntactic-ws))
 		     (looking-at c-class-key)))
 	      ;; for Java
 	      (and (c-major-mode-is 'java-mode)

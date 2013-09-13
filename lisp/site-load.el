@@ -38,34 +38,34 @@
 
 ;; this will only work if files have been byte-compiled.
 
-(load "emacs-lisp/easy-mmode")
+;;X (load "emacs-lisp/easy-mmode")
 (load "emacs-lisp/easymenu")
 ;(load "mwheel") ;; wants to be loaded at runtime
-(load "disp-table")
-(load "tool-bar")  ;; taken out while we're working on it!
-(load "tooltip")
-(load "image") ;; path issue should be OK now
-(load "image-file")
-(load "button")
+;;X (load "disp-table")
+;;X (load "tool-bar")  ;; taken out while we're working on it!
+;;X (load "tooltip")
+;;X (load "image") ;; path issue should be OK now
+;;X (load "image-file")
+;;X (load "button")
 ; (load "view")  ; can't do it in Emacs 24
 ;(load "help-mode")
 
-(load "emacs-lisp/cconv")
-(load "emacs-lisp/macroexp")
+;;X (load "emacs-lisp/cconv")
+;;X (load "emacs-lisp/macroexp")
 (load "help-fns")
 
-(load "emacs-lisp/debug")
-(load "emacs-lisp/bytecomp")
-(load "emacs-lisp/byte-opt")
-(load "emacs-lisp/advice")
-(load "emacs-lisp/regexp-opt")
+;;X (load "emacs-lisp/debug")
+;;X (load "emacs-lisp/bytecomp")
+;;X (load "emacs-lisp/byte-opt")
+;;X (load "emacs-lisp/advice")
+;;X (load "emacs-lisp/regexp-opt")
 ;; (load "emacs-lisp/syntax") ; maybe not: syntax-ppss-stats is mutable
 ;;(load "custom") ;; loading this seems to cause problems with doc strings (why?) e.g. custom-file
 ;(load "emacs-lisp/cl")
 ;(load "emacs-lisp/cl-seq")
 
 ;; (load "international/encoded-kb")  must not be reloaded (creates mutable objects in purespace) 
-(load "wid-edit.el")
+;;X (load "wid-edit.el")
 ; (load "emacs-lisp/easymenu") ;; needs to be loaded at runtime... causes strange behavior otherwise
 ; (load "recentf") 
 

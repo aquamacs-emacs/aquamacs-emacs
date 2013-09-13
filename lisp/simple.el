@@ -1232,7 +1232,7 @@ is a string to insert in the minibuffer before reading.
 Such arguments are used as in `read-from-minibuffer'.)"
   ;; Used for interactive spec `x'.
   (read-from-minibuffer prompt initial-contents minibuffer-local-map
-                        t minibuffer-history))
+                        t 'minibuffer-history))
 
 (defun eval-minibuffer (prompt &optional initial-contents)
   "Return value of Lisp expression read using the minibuffer.
@@ -1405,10 +1405,24 @@ to get different commands to edit and resubmit."
 	  ;; add it to the history.
 	  (or (equal newcmd (car command-history))
 	      (setq command-history (cons newcmd command-history)))
-	  (eval newcmd))
+          (unwind-protect
+              (progn
+                ;; Trick called-interactively-p into thinking that `newcmd' is
+                ;; an interactive call (bug#14136).
+                (add-hook 'called-interactively-p-functions
+                          #'repeat-complex-command--called-interactively-skip)
+                (eval newcmd))
+            (remove-hook 'called-interactively-p-functions
+                         #'repeat-complex-command--called-interactively-skip)))
       (if command-history
 	  (error "Argument %d is beyond length of command history" arg)
 	(error "There are no previous complex commands to repeat")))))
+
+(defun repeat-complex-command--called-interactively-skip (i _frame1 frame2)
+  (and (eq 'eval (cadr frame2))
+       (eq 'repeat-complex-command
+           (cadr (backtrace-frame i #'called-interactively-p)))
+       1))
 
 (defvar extended-command-history nil)
 
@@ -3142,14 +3156,17 @@ Also, delete any process that is exited or signaled."
   (display-buffer (button-get button 'process-buffer)))
 
 (defun list-processes (&optional query-only buffer)
-  "Display a list of all processes.
+  "Display a list of all processes that are Emacs sub-processes.
 If optional argument QUERY-ONLY is non-nil, only processes with
 the query-on-exit flag set are listed.
 Any process listed as exited or signaled is actually eliminated
 after the listing is made.
 Optional argument BUFFER specifies a buffer to use, instead of
 \"*Process List*\".
-The return value is always nil."
+The return value is always nil.
+
+This function lists only processes that were launched by Emacs.  To
+see other processes running on the system, use `list-system-processes'."
   (interactive)
   (or (fboundp 'process-list)
       (error "Asynchronous subprocesses are not supported on this system"))
@@ -3164,12 +3181,18 @@ The return value is always nil."
   nil)
 
 (defvar universal-argument-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [t] 'universal-argument-other-key)
-    (define-key map (vector meta-prefix-char t) 'universal-argument-other-key)
-    (define-key map [switch-frame] nil)
+  (let ((map (make-sparse-keymap))
+        (universal-argument-minus
+         ;; For backward compatibility, minus with no modifiers is an ordinary
+         ;; command if digits have already been entered.
+         `(menu-item "" negative-argument
+                     :filter ,(lambda (cmd)
+                                (if (integerp prefix-arg) nil cmd)))))
+    (define-key map [switch-frame]
+      (lambda (e) (interactive "e")
+        (handle-switch-frame e) (universal-argument--mode)))
     (define-key map [?\C-u] 'universal-argument-more)
-    (define-key map [?-] 'universal-argument-minus)
+    (define-key map [?-] universal-argument-minus)
     (define-key map [?0] 'digit-argument)
     (define-key map [?1] 'digit-argument)
     (define-key map [?2] 'digit-argument)
@@ -3190,30 +3213,12 @@ The return value is always nil."
     (define-key map [kp-7] 'digit-argument)
     (define-key map [kp-8] 'digit-argument)
     (define-key map [kp-9] 'digit-argument)
-    (define-key map [kp-subtract] 'universal-argument-minus)
+    (define-key map [kp-subtract] universal-argument-minus)
     map)
   "Keymap used while processing \\[universal-argument].")
 
-(defvar universal-argument-num-events nil
-  "Number of argument-specifying events read by `universal-argument'.
-`universal-argument-other-key' uses this to discard those events
-from (this-command-keys), and reread only the final command.")
-
-(defvar saved-overriding-map t
-  "The saved value of `overriding-terminal-local-map'.
-That variable gets restored to this value on exiting \"universal
-argument mode\".")
-
-(defun save&set-overriding-map (map)
-  "Set `overriding-terminal-local-map' to MAP."
-  (when (eq saved-overriding-map t)
-    (setq saved-overriding-map overriding-terminal-local-map)
-    (setq overriding-terminal-local-map map)))
-
-(defun restore-overriding-map ()
-  "Restore `overriding-terminal-local-map' to its saved value."
-  (setq overriding-terminal-local-map saved-overriding-map)
-  (setq saved-overriding-map t))
+(defun universal-argument--mode ()
+  (set-temporary-overlay-map universal-argument-map))
 
 (defun universal-argument ()
   "Begin a numeric argument for the following command.
@@ -3227,33 +3232,27 @@ which is different in effect from any particular numeric argument.
 These commands include \\[set-mark-command] and \\[start-kbd-macro]."
   (interactive)
   (setq prefix-arg (list 4))
-  (setq universal-argument-num-events (length (this-command-keys)))
-  (save&set-overriding-map universal-argument-map))
+  (universal-argument--mode))
 
-;; A subsequent C-u means to multiply the factor by 4 if we've typed
-;; nothing but C-u's; otherwise it means to terminate the prefix arg.
 (defun universal-argument-more (arg)
+  ;; A subsequent C-u means to multiply the factor by 4 if we've typed
+  ;; nothing but C-u's; otherwise it means to terminate the prefix arg.
   (interactive "P")
-  (if (consp arg)
-      (setq prefix-arg (list (* 4 (car arg))))
-    (if (eq arg '-)
-	(setq prefix-arg (list -4))
-      (setq prefix-arg arg)
-      (restore-overriding-map)))
-  (setq universal-argument-num-events (length (this-command-keys))))
+  (setq prefix-arg (if (consp arg)
+                       (list (* 4 (car arg)))
+                     (if (eq arg '-)
+                         (list -4)
+                       arg)))
+  (when (consp prefix-arg) (universal-argument--mode)))
 
 (defun negative-argument (arg)
   "Begin a negative numeric argument for the next command.
 \\[universal-argument] following digits or minus sign ends the argument."
   (interactive "P")
-  (cond ((integerp arg)
-	 (setq prefix-arg (- arg)))
-	((eq arg '-)
-	 (setq prefix-arg nil))
-	(t
-	 (setq prefix-arg '-)))
-  (setq universal-argument-num-events (length (this-command-keys)))
-  (save&set-overriding-map universal-argument-map))
+  (setq prefix-arg (cond ((integerp arg) (- arg))
+                         ((eq arg '-) nil)
+                         (t '-)))
+  (universal-argument--mode))
 
 (defun digit-argument (arg)
   "Part of the numeric argument for the next command.
@@ -3263,37 +3262,15 @@ These commands include \\[set-mark-command] and \\[start-kbd-macro]."
 		   last-command-event
 		 (get last-command-event 'ascii-character)))
 	 (digit (- (logand char ?\177) ?0)))
-    (cond ((integerp arg)
-	   (setq prefix-arg (+ (* arg 10)
-			       (if (< arg 0) (- digit) digit))))
-	  ((eq arg '-)
-	   ;; Treat -0 as just -, so that -01 will work.
-	   (setq prefix-arg (if (zerop digit) '- (- digit))))
-	  (t
-	   (setq prefix-arg digit))))
-  (setq universal-argument-num-events (length (this-command-keys)))
-  (save&set-overriding-map universal-argument-map))
-
-;; For backward compatibility, minus with no modifiers is an ordinary
-;; command if digits have already been entered.
-(defun universal-argument-minus (arg)
-  (interactive "P")
-  (if (integerp arg)
-      (universal-argument-other-key arg)
-    (negative-argument arg)))
-
-;; Anything else terminates the argument and is left in the queue to be
-;; executed as a command.
-(defun universal-argument-other-key (arg)
-  (interactive "P")
-  (setq prefix-arg arg)
-  (let* ((key (this-command-keys))
-	 (keylist (listify-key-sequence key)))
-    (setq unread-command-events
-	  (append (nthcdr universal-argument-num-events keylist)
-		  unread-command-events)))
-  (reset-this-command-lengths)
-  (restore-overriding-map))
+    (setq prefix-arg (cond ((integerp arg)
+                            (+ (* arg 10)
+			       (if (< arg 0) (- digit) digit)))
+                           ((eq arg '-)
+                            ;; Treat -0 as just -, so that -01 will work.
+                            (if (zerop digit) '- (- digit)))
+                           (t
+                            digit))))
+  (universal-argument--mode))
 
 
 (defvar filter-buffer-substring-functions nil
@@ -3336,6 +3313,7 @@ extract characters that are special to a buffer, and should not
 be copied into other buffers."
   (funcall filter-buffer-substring-function beg end delete))
 
+;; FIXME: `with-wrapper-hook' is obsolete
 (defun buffer-substring--filter (beg end &optional delete)
   (with-wrapper-hook filter-buffer-substring-functions (beg end delete)
     (cond
@@ -4099,9 +4077,9 @@ Don't call it from programs: use `insert-buffer-substring' instead!"
     (progn
       (barf-if-buffer-read-only)
       (read-buffer "Insert buffer: "
-		   (if (eq (selected-window) (next-window (selected-window)))
+		   (if (eq (selected-window) (next-window))
 		       (other-buffer (current-buffer))
-		     (window-buffer (next-window (selected-window))))
+		     (window-buffer (next-window)))
 		   t))))
   (push-mark
    (save-excursion
@@ -4161,8 +4139,7 @@ START and END specify the portion of the current buffer to be copied."
       (save-excursion
 	(insert-buffer-substring oldbuf start end)))))
 
-(put 'mark-inactive 'error-conditions '(mark-inactive error))
-(put 'mark-inactive 'error-message (purecopy "The mark is not active now"))
+(define-error 'mark-inactive (purecopy "The mark is not active now"))
 
 (defvar activate-mark-hook nil
   "Hook run when the mark becomes active.
@@ -4606,6 +4583,12 @@ for it.")
 (defun next-line (&optional arg try-vscroll)
   "Move cursor vertically down ARG lines.
 Interactively, vscroll tall lines if `auto-window-vscroll' is enabled.
+Non-interactively, use TRY-VSCROLL to control whether to vscroll tall
+lines: if either `auto-window-vscroll' or TRY-VSCROLL is nil, this
+function will not vscroll.
+
+ARG defaults to 1.
+
 If there is no character in the target line exactly under the current column,
 the cursor is positioned after the character in that line which spans this
 column, or at the end of the line if it is not long enough.
@@ -4650,6 +4633,12 @@ and more reliable (no dependence on goal column, etc.)."
 (defun previous-line (&optional arg try-vscroll)
   "Move cursor vertically up ARG lines.
 Interactively, vscroll tall lines if `auto-window-vscroll' is enabled.
+Non-interactively, use TRY-VSCROLL to control whether to vscroll tall
+lines: if either `auto-window-vscroll' or TRY-VSCROLL is nil, this
+function will not vscroll.
+
+ARG defaults to 1.
+
 If there is no character in the target line exactly over the current column,
 the cursor is positioned after the character in that line which spans this
 column, or at the end of the line if it is not long enough.
@@ -4731,23 +4720,45 @@ lines."
 
 (defun default-font-height ()
   "Return the height in pixels of the current buffer's default face font."
-  (cond
-   ((display-multi-font-p)
-    (aref (font-info (face-font 'default)) 3))
-   (t (frame-char-height))))
+  (let ((default-font (face-font 'default)))
+    (cond
+     ((and (display-multi-font-p)
+	   ;; Avoid calling font-info if the frame's default font was
+	   ;; not changed since the frame was created.  That's because
+	   ;; font-info is expensive for some fonts, see bug #14838.
+	   (not (string= (frame-parameter nil 'font) default-font)))
+      (aref (font-info default-font) 3))
+     (t (frame-char-height)))))
+
+(defun default-line-height ()
+  "Return the pixel height of current buffer's default-face text line.
+
+The value includes `line-spacing', if any, defined for the buffer
+or the frame."
+  (let ((dfh (default-font-height))
+	(lsp (if (display-graphic-p)
+		 (or line-spacing
+		     (default-value 'line-spacing)
+		     (frame-parameter nil 'line-spacing)
+		     0)
+	       0)))
+    (if (floatp lsp)
+	(setq lsp (* dfh lsp)))
+    (+ dfh lsp)))
 
 (defun window-screen-lines ()
   "Return the number of screen lines in the text area of the selected window.
 
 This is different from `window-text-height' in that this function counts
 lines in units of the height of the font used by the default face displayed
-in the window, not in units of the frame's default font.
+in the window, not in units of the frame's default font, and also accounts
+for `line-spacing', if any, defined for the window's buffer or frame.
 
 The value is a floating-point number."
   (let ((canonical (window-text-height))
 	(fch (frame-char-height))
-	(dfh (default-font-height)))
-    (/ (* (float canonical) fch) dfh)))
+	(dlh (default-line-height)))
+    (/ (* (float canonical) fch) dlh)))
 
 ;; Returns non-nil if partial move was done.
 (defun line-move-partial (arg noerror to-end)
@@ -4755,28 +4766,35 @@ The value is a floating-point number."
       ;; Move backward (up).
       ;; If already vscrolled, reduce vscroll
       (let ((vs (window-vscroll nil t))
-	    (dfh (default-font-height)))
-	(when (> vs dfh)
-	  (set-window-vscroll nil (- vs dfh) t)))
+	    (dlh (default-line-height)))
+	(when (> vs dlh)
+	  (set-window-vscroll nil (- vs dlh) t)))
 
     ;; Move forward (down).
     (let* ((lh (window-line-height -1))
+	   (rowh (car lh))
 	   (vpos (nth 1 lh))
 	   (ypos (nth 2 lh))
 	   (rbot (nth 3 lh))
 	   (this-lh (window-line-height))
-	   (this-height (nth 0 this-lh))
+	   (this-height (car this-lh))
 	   (this-ypos (nth 2 this-lh))
-	   (dfh (default-font-height))
-	   py vs)
+	   (dlh (default-line-height))
+	   (wslines (window-screen-lines))
+	   (edges (window-inside-pixel-edges))
+	   (winh (- (nth 3 edges) (nth 1 edges) 1))
+	   py vs last-line)
+      (if (> (mod wslines 1.0) 0.0)
+	  (setq wslines (round (+ wslines 0.5))))
       (when (or (null lh)
-		(>= rbot dfh)
-		(<= ypos (- dfh))
+		(>= rbot dlh)
+		(<= ypos (- dlh))
 		(null this-lh)
-		(<= this-ypos (- dfh)))
+		(<= this-ypos (- dlh)))
 	(unless lh
 	  (let ((wend (pos-visible-in-window-p t nil t)))
 	    (setq rbot (nth 3 wend)
+		  rowh  (nth 4 wend)
 		  vpos (nth 5 wend))))
 	(unless this-lh
 	  (let ((wstart (pos-visible-in-window-p nil nil t)))
@@ -4790,35 +4808,57 @@ The value is a floating-point number."
 		    (if col-row
 			(- (cdr col-row) (window-vscroll))
 		      (cdr (posn-col-row ppos))))))
+	;; VPOS > 0 means the last line is only partially visible.
+	;; But if the part that is visible is at least as tall as the
+	;; default font, that means the line is actually fully
+	;; readable, and something like line-spacing is hidden.  So in
+	;; that case we accept the last line in the window as still
+	;; visible, and consider the margin as starting one line
+	;; later.
+	(if (and vpos (> vpos 0))
+	    (if (and rowh
+		     (>= rowh (default-font-height))
+		     (< rowh dlh))
+		(setq last-line (min (- wslines scroll-margin) vpos))
+	      (setq last-line (min (- wslines scroll-margin 1) (1- vpos)))))
 	(cond
 	 ;; If last line of window is fully visible, and vscrolling
 	 ;; more would make this line invisible, move forward.
-	 ((and (or (< (setq vs (window-vscroll nil t)) dfh)
+	 ((and (or (< (setq vs (window-vscroll nil t)) dlh)
 		   (null this-height)
-		   (<= this-height dfh))
+		   (<= this-height dlh))
 	       (or (null rbot) (= rbot 0)))
 	  nil)
 	 ;; If cursor is not in the bottom scroll margin, and the
 	 ;; current line is is not too tall, move forward.
-	 ((and (or (null this-height) (<= this-height dfh))
+	 ((and (or (null this-height) (<= this-height winh))
 	       vpos
 	       (> vpos 0)
-	       (< py
-		  (min (- (window-screen-lines) scroll-margin 1) (1- vpos))))
+	       (< py last-line))
 	  nil)
 	 ;; When already vscrolled, we vscroll some more if we can,
 	 ;; or clear vscroll and move forward at end of tall image.
 	 ((> vs 0)
 	  (when (or (and rbot (> rbot 0))
-		    (and this-height (> this-height dfh)))
-	    (set-window-vscroll nil (+ vs dfh) t)))
+		    (and this-height (> this-height dlh)))
+	    (set-window-vscroll nil (+ vs dlh) t)))
 	 ;; If cursor just entered the bottom scroll margin, move forward,
-	 ;; but also vscroll one line so redisplay won't recenter.
+	 ;; but also optionally vscroll one line so redisplay won't recenter.
 	 ((and vpos
 	       (> vpos 0)
-	       (= py (min (- (window-screen-lines) scroll-margin 1)
-			  (1- vpos))))
-	  (set-window-vscroll nil dfh t)
+	       (= py last-line))
+	  ;; Don't vscroll if the partially-visible line at window
+	  ;; bottom is not too tall (a.k.a. "just one more text
+	  ;; line"): in that case, we do want redisplay to behave
+	  ;; normally, i.e. recenter or whatever.
+	  ;;
+	  ;; Note: ROWH + RBOT from the value returned by
+	  ;; pos-visible-in-window-p give the total height of the
+	  ;; partially-visible glyph row at the end of the window.  As
+	  ;; we are dealing with floats, we disregard sub-pixel
+	  ;; discrepancies between that and DLH.
+	  (if (and rowh rbot (>= (- (+ rowh rbot) winh) 1))
+	      (set-window-vscroll nil dlh t))
 	  (line-move-1 arg noerror to-end)
 	  t)
 	 ;; If there are lines above the last line, scroll-up one line.
@@ -4827,7 +4867,7 @@ The value is a floating-point number."
 	  t)
 	 ;; Finally, start vscroll.
 	 (t
-	  (set-window-vscroll nil dfh t)))))))
+	  (set-window-vscroll nil dlh t)))))))
 
 
 ;; This is like line-move-1 except that it also performs
@@ -4861,13 +4901,16 @@ The value is a floating-point number."
 	    ;; If we moved into a tall line, set vscroll to make
 	    ;; scrolling through tall images more smooth.
 	    (let ((lh (line-pixel-height))
-		  (dfh (default-font-height)))
+		  (edges (window-inside-pixel-edges))
+		  (dlh (default-line-height))
+		  winh)
+	      (setq winh (- (nth 3 edges) (nth 1 edges) 1))
 	      (if (and (< arg 0)
 		       (< (point) (window-start))
-		       (> lh dfh))
+		       (> lh winh))
 		  (set-window-vscroll
 		   nil
-		   (- lh dfh) t))))
+		   (- lh dlh) t))))
 	(line-move-1 arg noerror to-end)))))
 
 ;; Display-based alternative to line-move-1.
@@ -5476,8 +5519,7 @@ Mode' for details."
   (visual-line-mode 1))
 
 (define-globalized-minor-mode global-visual-line-mode
-  visual-line-mode turn-on-visual-line-mode
-  :lighter " vl")
+  visual-line-mode turn-on-visual-line-mode)
 
 
 (defun transpose-chars (arg)
@@ -5615,7 +5657,8 @@ current object."
 
 (defun backward-word (&optional arg)
   "Move backward until encountering the beginning of a word.
-With argument ARG, do this that many times."
+With argument ARG, do this that many times.
+If ARG is omitted or nil, move point backward one word."
   (interactive "^p")
   (forward-word (- (or arg 1))))
 
@@ -5920,7 +5963,7 @@ The variable `selective-display' has a separate value for each buffer."
     (setq selective-display
 	  (and arg (prefix-numeric-value arg)))
     (recenter current-vpos))
-  (set-window-start (selected-window) (window-start (selected-window)))
+  (set-window-start (selected-window) (window-start))
   (princ "selective-display set to " t)
   (prin1 selective-display t)
   (princ "." t))
@@ -6678,8 +6721,7 @@ Go to the window from which completion was requested."
   (interactive)
   (let ((buf completion-reference-buffer))
     (if (one-window-p t)
-	(if (window-dedicated-p (selected-window))
-	    (delete-frame (selected-frame)))
+	(if (window-dedicated-p) (delete-frame))
       (delete-window (selected-window))
       (if (get-buffer-window buf)
 	  (select-window (get-buffer-window buf))))))
@@ -7494,19 +7536,19 @@ warning using STRING as the message.")
 
 ;;; Generic dispatcher commands
 
-;; Macro `alternatives-define' is used to create generic commands.
+;; Macro `define-alternatives' is used to create generic commands.
 ;; Generic commands are these (like web, mail, news, encrypt, irc, etc.)
 ;; that can have different alternative implementations where choosing
 ;; among them is exclusively a matter of user preference.
 
-;; (alternatives-define COMMAND) creates a new interactive command
+;; (define-alternatives COMMAND) creates a new interactive command
 ;; M-x COMMAND and a customizable variable COMMAND-alternatives.
 ;; Typically, the user will not need to customize this variable; packages
 ;; wanting to add alternative implementations should use
 ;;
 ;; ;;;###autoload (push '("My impl name" . my-impl-symbol) COMMAND-alternatives
 
-(defmacro alternatives-define (command &rest customizations)
+(defmacro define-alternatives (command &rest customizations)
   "Define new command `COMMAND'.
 The variable `COMMAND-alternatives' will contain alternative
 implementations of COMMAND, so that running `C-u M-x COMMAND'

@@ -170,7 +170,7 @@ enum {
   SEEN_HINTSTYLE  = 0x10,
   SEEN_DPI        = 0x20,
   SEEN_FONT       = 0x40,
-  SEEN_TB_STYLE   = 0x80,
+  SEEN_TB_STYLE   = 0x80
 };
 struct xsettings
 {
@@ -687,7 +687,7 @@ apply_xft_settings (struct x_display_info *dpyinfo,
     {
       static char const format[] =
 	"Antialias: %d, Hinting: %d, RGBA: %d, LCDFilter: %d, "
-	"Hintstyle: %d, DPI: %lf";
+	"Hintstyle: %d, DPI: %f";
       enum
       {
 	d_formats = 5,
@@ -696,7 +696,7 @@ apply_xft_settings (struct x_display_info *dpyinfo,
 	max_f_integer_digits = DBL_MAX_10_EXP + 1,
 	f_precision = 6,
 	lf_growth = (sizeof "-." + max_f_integer_digits + f_precision
-		     - sizeof "%lf")
+		     - sizeof "%f")
       };
       char buf[sizeof format + d_formats * d_growth + lf_formats * lf_growth];
 
@@ -756,8 +756,7 @@ read_and_apply_settings (struct x_display_info *dpyinfo, int send_event_p)
 void
 xft_settings_event (struct x_display_info *dpyinfo, XEvent *event)
 {
-  int check_window_p = 0;
-  int apply_settings = 0;
+  bool check_window_p = 0, apply_settings_p = 0;
 
   switch (event->type)
     {
@@ -777,7 +776,7 @@ xft_settings_event (struct x_display_info *dpyinfo, XEvent *event)
       if (event->xproperty.window == dpyinfo->xsettings_window
           && event->xproperty.state == PropertyNewValue
           && event->xproperty.atom == dpyinfo->Xatom_xsettings_prop)
-        apply_settings = 1;
+        apply_settings_p = 1;
       break;
     }
 
@@ -787,10 +786,10 @@ xft_settings_event (struct x_display_info *dpyinfo, XEvent *event)
       dpyinfo->xsettings_window = None;
       get_prop_window (dpyinfo);
       if (dpyinfo->xsettings_window != None)
-        apply_settings = 1;
+        apply_settings_p = 1;
     }
 
-  if (apply_settings)
+  if (apply_settings_p)
     read_and_apply_settings (dpyinfo, True);
 }
 

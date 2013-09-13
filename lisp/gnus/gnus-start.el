@@ -944,7 +944,8 @@ If REGEXP is given, lines that match it will be deleted."
   (when (and gnus-dribble-buffer
 	     (buffer-name gnus-dribble-buffer))
     (with-current-buffer gnus-dribble-buffer
-      (save-buffer))))
+      (when (> (buffer-size) 0)
+	(save-buffer)))))
 
 (defun gnus-dribble-clear ()
   (when (gnus-buffer-exists-p gnus-dribble-buffer)
@@ -1807,6 +1808,9 @@ backend check whether the group actually exists."
        (or (not (gnus-agent-method-p method))
 	   (gnus-online method)))
       (gnus-finish-retrieve-group-infos method infos early-data)
+      ;; We may have altered the data now, so mark the dribble buffer
+      ;; as dirty so that it gets saved.
+      (gnus-dribble-touch)
       (gnus-agent-save-active method))
      ;; Most backends have -retrieve-groups.
      ((gnus-check-backend-function 'retrieve-groups (car method))
@@ -2305,23 +2309,8 @@ If FORCE is non-nil, the .newsrc file is read."
       (gnus-clean-old-newsrc))))
 
 (defun gnus-clean-old-newsrc (&optional force)
-  (when gnus-newsrc-file-version
-    ;; Remove totally bogus `unexists' entries.  The name is
-    ;; `unexist'.
-    (dolist (info (cdr gnus-newsrc-alist))
-      (let ((exist (assoc 'unexists (gnus-info-marks info))))
-	(when exist
-	  (gnus-info-set-marks
-	   info (delete exist (gnus-info-marks info))))))
-    (when (or force
-	      (< (gnus-continuum-version gnus-newsrc-file-version)
-		 (gnus-continuum-version "Ma Gnus v0.03")))
-      ;; Remove old `exist' marks from old nnimap groups.
-      (dolist (info (cdr gnus-newsrc-alist))
-	(let ((exist (assoc 'unexist (gnus-info-marks info))))
-	  (when exist
-	    (gnus-info-set-marks
-	     info (delete exist (gnus-info-marks info)))))))))
+  ;; Currently no cleanups.
+  )
 
 (defun gnus-convert-old-newsrc ()
   "Convert old newsrc formats into the current format, if needed."

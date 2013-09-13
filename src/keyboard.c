@@ -295,6 +295,7 @@ static struct input_event * volatile kbd_store_ptr;
 static Lisp_Object Qmouse_movement;
 static Lisp_Object Qscroll_bar_movement;
 Lisp_Object Qswitch_frame;
+static Lisp_Object Qfocus_in, Qfocus_out;
 static Lisp_Object Qdelete_frame;
 static Lisp_Object Qiconify_frame;
 static Lisp_Object Qmake_frame_visible;
@@ -356,10 +357,10 @@ Lisp_Object Qvertical_line;
 static Lisp_Object Qvertical_scroll_bar;
 Lisp_Object Qmenu_bar;
 
-static Lisp_Object recursive_edit_unwind (Lisp_Object buffer);
+static void recursive_edit_unwind (Lisp_Object buffer);
 static Lisp_Object command_loop (void);
 static Lisp_Object Qcommand_execute;
-EMACS_TIME timer_check (void);
+struct timespec timer_check (void);
 
 static void echo_now (void);
 static ptrdiff_t echo_length (void);
@@ -369,9 +370,9 @@ static Lisp_Object Qpolling_period;
 /* Incremented whenever a timer is run.  */
 unsigned timers_run;
 
-/* Address (if not 0) of EMACS_TIME to zero out if a SIGIO interrupt
+/* Address (if not 0) of struct timespec to zero out if a SIGIO interrupt
    happens.  */
-EMACS_TIME *input_available_clear_time;
+struct timespec *input_available_clear_time;
 
 /* True means use SIGIO interrupts; false means use CBREAK mode.
    Default is true if INTERRUPT_INPUT is defined.  */
@@ -388,12 +389,12 @@ bool interrupts_deferred;
 
 /* The time when Emacs started being idle.  */
 
-static EMACS_TIME timer_idleness_start_time;
+static struct timespec timer_idleness_start_time;
 
 /* After Emacs stops being idle, this saves the last value
    of timer_idleness_start_time from when it was idle.  */
 
-static EMACS_TIME timer_last_idleness_start_time;
+static struct timespec timer_last_idleness_start_time;
 
 
 /* Global variable declarations.  */
@@ -420,12 +421,16 @@ static Lisp_Object modify_event_symbol (ptrdiff_t, int, Lisp_Object,
                                         Lisp_Object, const char *const *,
                                         Lisp_Object *, ptrdiff_t);
 static Lisp_Object make_lispy_switch_frame (Lisp_Object);
+static Lisp_Object make_lispy_focus_in (Lisp_Object);
+#ifdef HAVE_WINDOW_SYSTEM
+static Lisp_Object make_lispy_focus_out (Lisp_Object);
+#endif /* HAVE_WINDOW_SYSTEM */
 static bool help_char_p (Lisp_Object);
 static void save_getcjmp (sys_jmp_buf);
 static void restore_getcjmp (sys_jmp_buf);
 static Lisp_Object apply_modifiers (int, Lisp_Object);
 static void clear_event (struct input_event *);
-static Lisp_Object restore_kboard_configuration (Lisp_Object);
+static void restore_kboard_configuration (int);
 #ifdef USABLE_SIGIO
 static void deliver_input_available_signal (int signo);
 #endif
@@ -841,7 +846,7 @@ This function is called by the editor initialization to begin editing.  */)
   return unbind_to (count, Qnil);
 }
 
-Lisp_Object
+void
 recursive_edit_unwind (Lisp_Object buffer)
 {
   if (BUFFERP (buffer))
@@ -849,7 +854,6 @@ recursive_edit_unwind (Lisp_Object buffer)
 
   command_loop_level--;
   update_mode_lines = 1;
-  return Qnil;
 }
 
 
@@ -946,7 +950,7 @@ pop_kboard (void)
   from which further input is accepted.  If F is non-nil, set its
   KBOARD as the current keyboard.
 
-  This function uses record_unwind_protect to return to the previous
+  This function uses record_unwind_protect_int to return to the previous
   state later.
 
   If Emacs is already in single_kboard mode, and F's keyboard is
@@ -977,8 +981,7 @@ temporarily_switch_to_single_kboard (struct frame *f)
   else if (f != NULL)
     current_kboard = FRAME_KBOARD (f);
   single_kboard = 1;
-  record_unwind_protect (restore_kboard_configuration,
-                         (was_locked ? Qt : Qnil));
+  record_unwind_protect_int (restore_kboard_configuration, was_locked);
 }
 
 #if 0 /* This function is not needed anymore.  */
@@ -987,26 +990,22 @@ record_single_kboard_state ()
 {
   if (single_kboard)
     push_kboard (current_kboard);
-  record_unwind_protect (restore_kboard_configuration,
-                         (single_kboard ? Qt : Qnil));
+  record_unwind_protect_int (restore_kboard_configuration, single_kboard);
 }
 #endif
 
-static Lisp_Object
-restore_kboard_configuration (Lisp_Object was_locked)
+static void
+restore_kboard_configuration (int was_locked)
 {
-  if (NILP (was_locked))
-    single_kboard = 0;
-  else
+  single_kboard = was_locked;
+  if (was_locked)
     {
       struct kboard *prev = current_kboard;
-      single_kboard = 1;
       pop_kboard ();
       /* The pop should not change the kboard.  */
       if (single_kboard && current_kboard != prev)
         emacs_abort ();
     }
-  return Qnil;
 }
 
 
@@ -1234,7 +1233,7 @@ DEFUN ("abort-recursive-edit", Fabort_recursive_edit, Sabort_recursive_edit, 0, 
 /* Restore mouse tracking enablement.  See Ftrack_mouse for the only use
    of this function.  */
 
-static Lisp_Object
+static void
 tracking_off (Lisp_Object old_value)
 {
   do_mouse_tracking = old_value;
@@ -1251,7 +1250,6 @@ tracking_off (Lisp_Object old_value)
 	  get_input_pending (READABLE_EVENTS_DO_TIMERS_NOW);
 	}
     }
-  return Qnil;
 }
 
 DEFUN ("track-mouse", Ftrack_mouse, Strack_mouse, 0, UNEVALLED, 0,
@@ -1285,7 +1283,7 @@ static
 #endif
 bool ignore_mouse_drag_p;
 
-static FRAME_PTR
+static struct frame *
 some_mouse_moved (void)
 {
   Lisp_Object tail, frame;
@@ -1313,17 +1311,6 @@ static int read_key_sequence (Lisp_Object *, int, Lisp_Object,
                               bool, bool, bool);
 void safe_run_hooks (Lisp_Object);
 static void adjust_point_for_property (ptrdiff_t, bool);
-
-/* Cancel hourglass from protect_unwind.
-   ARG is not used.  */
-#ifdef HAVE_WINDOW_SYSTEM
-static Lisp_Object
-cancel_hourglass_unwind (Lisp_Object arg)
-{
-  cancel_hourglass ();
-  return Qnil;
-}
-#endif
 
 /* The last boundary auto-added to buffer-undo-list.  */
 Lisp_Object last_undo_boundary;
@@ -1427,7 +1414,7 @@ command_loop_1 (void)
 	  if (!NILP (Vquit_flag))
 	    {
 	      Vquit_flag = Qnil;
-	      Vunread_command_events = Fcons (make_number (quit_char), Qnil);
+	      Vunread_command_events = list1 (make_number (quit_char));
 	    }
 	}
 
@@ -1559,7 +1546,7 @@ command_loop_1 (void)
             if (display_hourglass_p
                 && NILP (Vexecuting_kbd_macro))
               {
-                record_unwind_protect (cancel_hourglass_unwind, Qnil);
+                record_unwind_protect_void (cancel_hourglass);
                 start_hourglass ();
               }
 #endif
@@ -2001,10 +1988,10 @@ start_polling (void)
       /* If poll timer doesn't exist, are we need one with
 	 a different interval, start a new one.  */
       if (poll_timer == NULL
-	  || EMACS_SECS (poll_timer->interval) != polling_period)
+	  || poll_timer->interval.tv_sec != polling_period)
 	{
 	  time_t period = max (1, min (polling_period, TYPE_MAXIMUM (time_t)));
-	  EMACS_TIME interval = make_emacs_time (period, 0);
+	  struct timespec interval = make_timespec (period, 0);
 
 	  if (poll_timer)
 	    cancel_atimer (poll_timer);
@@ -2178,7 +2165,7 @@ show_help_echo (Lisp_Object help, Lisp_Object window, Lisp_Object object,
 	 This causes trouble if we are trying to read a mouse motion
 	 event (i.e., if we are inside a `track-mouse' form), so we
 	 restore the mouse_moved flag.  */
-      FRAME_PTR f = NILP (do_mouse_tracking) ? NULL : some_mouse_moved ();
+      struct frame *f = NILP (do_mouse_tracking) ? NULL : some_mouse_moved ();
       help = call1 (Qmouse_fixup_help_message, help);
       if (f)
       	f->mouse_moved = 1;
@@ -2197,18 +2184,17 @@ show_help_echo (Lisp_Object help, Lisp_Object window, Lisp_Object object,
 /* Input of single characters from keyboard */
 
 static Lisp_Object kbd_buffer_get_event (KBOARD **kbp, bool *used_mouse_menu,
-					 EMACS_TIME *end_time);
+					 struct timespec *end_time);
 static void record_char (Lisp_Object c);
 
 static Lisp_Object help_form_saved_window_configs;
-static Lisp_Object
-read_char_help_form_unwind (Lisp_Object arg)
+static void
+read_char_help_form_unwind (void)
 {
   Lisp_Object window_config = XCAR (help_form_saved_window_configs);
   help_form_saved_window_configs = XCDR (help_form_saved_window_configs);
   if (!NILP (window_config))
     Fset_window_configuration (window_config);
-  return Qnil;
 }
 
 #define STOP_POLLING					\
@@ -2220,7 +2206,7 @@ do { if (polling_stopped_here) start_polling ();	\
        polling_stopped_here = 0; } while (0)
 
 static Lisp_Object
-read_event_from_main_queue (EMACS_TIME *end_time,
+read_event_from_main_queue (struct timespec *end_time,
                             sys_jmp_buf local_getcjmp,
                             bool *used_mouse_menu)
 {
@@ -2233,7 +2219,7 @@ read_event_from_main_queue (EMACS_TIME *end_time,
   /* Read from the main queue, and if that gives us something we can't use yet,
      we put it on the appropriate side queue and try again.  */
 
-  if (end_time && EMACS_TIME_LE (*end_time, current_emacs_time ()))
+  if (end_time && timespec_cmp (*end_time, current_timespec ()) <= 0)
     return c;
 
   /* Actually read a character, waiting if necessary.  */
@@ -2255,9 +2241,9 @@ read_event_from_main_queue (EMACS_TIME *end_time,
       	emacs_abort ();
         }
       if (!CONSP (last))
-        kset_kbd_queue (kb, Fcons (c, Qnil));
+        kset_kbd_queue (kb, list1 (c));
       else
-        XSETCDR (last, Fcons (c, Qnil));
+        XSETCDR (last, list1 (c));
       kb->kbd_queue_has_data = 1;
       c = Qnil;
       if (single_kboard)
@@ -2294,7 +2280,7 @@ read_event_from_main_queue (EMACS_TIME *end_time,
 /* Like `read_event_from_main_queue' but applies keyboard-coding-system
    to tty input.  */
 static Lisp_Object
-read_decoded_event_from_main_queue (EMACS_TIME *end_time,
+read_decoded_event_from_main_queue (struct timespec *end_time,
                                     sys_jmp_buf local_getcjmp,
                                     Lisp_Object prev_event,
                                     bool *used_mouse_menu)
@@ -2392,7 +2378,7 @@ read_decoded_event_from_main_queue (EMACS_TIME *end_time,
    Value is -2 when we find input on another keyboard.  A second call
    to read_char will read it.
 
-   If END_TIME is non-null, it is a pointer to an EMACS_TIME
+   If END_TIME is non-null, it is a pointer to a struct timespec
    specifying the maximum time to wait until.  If no input arrives by
    that time, stop waiting and return nil.
 
@@ -2401,7 +2387,7 @@ read_decoded_event_from_main_queue (EMACS_TIME *end_time,
 Lisp_Object
 read_char (int commandflag, Lisp_Object map,
 	   Lisp_Object prev_event,
-	   bool *used_mouse_menu, EMACS_TIME *end_time)
+	   bool *used_mouse_menu, struct timespec *end_time)
 {
   Lisp_Object c;
   ptrdiff_t jmpcount;
@@ -2610,10 +2596,8 @@ read_char (int commandflag, Lisp_Object map,
 
   if (/* There currently is something in the echo area.  */
       !NILP (echo_area_buffer[0])
-      && (/* And it's either not from echoing.  */
-	  !EQ (echo_area_buffer[0], echo_message_buffer)
-	  /* Or it's an echo from a different kboard.  */
-	  || echo_kboard != current_kboard
+      && (/* It's an echo from a different kboard.  */
+	  echo_kboard != current_kboard
 	  /* Or we explicitly allow overwriting whatever there is.  */
 	  || ok_to_echo_at_next_pause == NULL))
     cancel_echoing ();
@@ -2679,9 +2663,9 @@ read_char (int commandflag, Lisp_Object map,
 		  emacs_abort ();
 	      }
 	    if (!CONSP (last))
-	      kset_kbd_queue (kb, Fcons (c, Qnil));
+	      kset_kbd_queue (kb, list1 (c));
 	    else
-	      XSETCDR (last, Fcons (c, Qnil));
+	      XSETCDR (last, list1 (c));
 	    kb->kbd_queue_has_data = 1;
 	    current_kboard = kb;
 	    /* This is going to exit from read_char
@@ -2893,7 +2877,7 @@ read_char (int commandflag, Lisp_Object map,
     {
       c = read_decoded_event_from_main_queue (end_time, local_getcjmp,
                                               prev_event, used_mouse_menu);
-      if (end_time && EMACS_TIME_LE (*end_time, current_emacs_time ()))
+      if (end_time && timespec_cmp (*end_time, current_timespec ()) <= 0)
         goto exit;
       if (EQ (c, make_number (-2)))
         {
@@ -2999,7 +2983,7 @@ read_char (int commandflag, Lisp_Object map,
       if (EQ (posn, Qmenu_bar) || EQ (posn, Qtool_bar))
 	{
 	  /* Change menu-bar to (menu-bar) as the event "position".  */
-	  POSN_SET_POSN (EVENT_START (c), Fcons (posn, Qnil));
+	  POSN_SET_POSN (EVENT_START (c), list1 (posn));
 
 	  also_record = c;
 	  Vunread_command_events = Fcons (c, Vunread_command_events);
@@ -3196,7 +3180,7 @@ read_char (int commandflag, Lisp_Object map,
       help_form_saved_window_configs
 	= Fcons (Fcurrent_window_configuration (Qnil),
 		 help_form_saved_window_configs);
-      record_unwind_protect (read_char_help_form_unwind, Qnil);
+      record_unwind_protect_void (read_char_help_form_unwind);
       call0 (Qhelp_form_show);
 
       cancel_echoing ();
@@ -3225,6 +3209,8 @@ read_char (int commandflag, Lisp_Object map,
   RESUME_POLLING;
   RETURN_UNGCPRO (c);
 }
+
+#ifdef HAVE_MENUS
 
 /* Record a key that came from a mouse menu.
    Record it for echoing, for this-command-keys, and so on.  */
@@ -3260,6 +3246,8 @@ record_menu_key (Lisp_Object c)
   last_input_event = c;
   num_input_events++;
 }
+
+#endif /* HAVE_MENUS */
 
 /* Return true if should recognize C as "the help character".  */
 
@@ -3582,8 +3570,8 @@ kbd_buffer_store_event_hold (register struct input_event *event,
 	  if (single_kboard && kb != current_kboard)
 	    {
 	      kset_kbd_queue
-		(kb, Fcons (make_lispy_switch_frame (event->frame_or_window),
-			    Fcons (make_number (c), Qnil)));
+		(kb, list2 (make_lispy_switch_frame (event->frame_or_window),
+			    make_number (c)));
 	      kb->kbd_queue_has_data = 1;
 	      for (sp = kbd_fetch_ptr; sp != kbd_store_ptr; sp++)
 		{
@@ -3814,7 +3802,7 @@ clear_event (struct input_event *event)
 static Lisp_Object
 kbd_buffer_get_event (KBOARD **kbp,
                       bool *used_mouse_menu,
-                      EMACS_TIME *end_time)
+                      struct timespec *end_time)
 {
   Lisp_Object obj;
 
@@ -3872,15 +3860,15 @@ kbd_buffer_get_event (KBOARD **kbp,
 	break;
       if (end_time)
 	{
-	  EMACS_TIME now = current_emacs_time ();
-	  if (EMACS_TIME_LE (*end_time, now))
+	  struct timespec now = current_timespec ();
+	  if (timespec_cmp (*end_time, now) <= 0)
 	    return Qnil;	/* Finished waiting.  */
 	  else
 	    {
-	      EMACS_TIME duration = sub_emacs_time (*end_time, now);
-	      wait_reading_process_output (min (EMACS_SECS (duration),
+	      struct timespec duration = timespec_sub (*end_time, now);
+	      wait_reading_process_output (min (duration.tv_sec,
 						WAIT_READING_MAX),
-					   EMACS_NSECS (duration),
+					   duration.tv_nsec,
 					   -1, 1, Qnil, NULL, 0);
 	    }
 	}
@@ -3946,9 +3934,9 @@ kbd_buffer_get_event (KBOARD **kbp,
       else if (event->kind == NS_TEXT_EVENT)
         {
           if (event->code == KEY_NS_PUT_WORKING_TEXT)
-            obj = Fcons (intern ("ns-put-working-text"), Qnil);
+            obj = list1 (intern ("ns-put-working-text"));
           else
-            obj = Fcons (intern ("ns-unput-working-text"), Qnil);
+            obj = list1 (intern ("ns-unput-working-text"));
 	  kbd_fetch_ptr = event + 1;
           if (used_mouse_menu)
             *used_mouse_menu = 1;
@@ -3960,8 +3948,7 @@ kbd_buffer_get_event (KBOARD **kbp,
       else if (event->kind == DELETE_WINDOW_EVENT)
 	{
 	  /* Make an event (delete-frame (FRAME)).  */
-	  obj = Fcons (event->frame_or_window, Qnil);
-	  obj = Fcons (Qdelete_frame, Fcons (obj, Qnil));
+	  obj = list2 (Qdelete_frame, list1 (event->frame_or_window));
 	  kbd_fetch_ptr = event + 1;
 	}
 #endif
@@ -3970,15 +3957,13 @@ kbd_buffer_get_event (KBOARD **kbp,
       else if (event->kind == ICONIFY_EVENT)
 	{
 	  /* Make an event (iconify-frame (FRAME)).  */
-	  obj = Fcons (event->frame_or_window, Qnil);
-	  obj = Fcons (Qiconify_frame, Fcons (obj, Qnil));
+	  obj = list2 (Qiconify_frame, list1 (event->frame_or_window));
 	  kbd_fetch_ptr = event + 1;
 	}
       else if (event->kind == DEICONIFY_EVENT)
 	{
 	  /* Make an event (make-frame-visible (FRAME)).  */
-	  obj = Fcons (event->frame_or_window, Qnil);
-	  obj = Fcons (Qmake_frame_visible, Fcons (obj, Qnil));
+	  obj = list2 (Qmake_frame_visible, list1 (event->frame_or_window));
 	  kbd_fetch_ptr = event + 1;
 	}
 #endif
@@ -4001,11 +3986,11 @@ kbd_buffer_get_event (KBOARD **kbp,
 #ifdef HAVE_NTGUI
       else if (event->kind == LANGUAGE_CHANGE_EVENT)
 	{
-	  /* Make an event (language-change (FRAME CODEPAGE LANGUAGE-ID)).  */
-	  obj = Fcons (Qlanguage_change,
-		       list3 (event->frame_or_window,
-			      make_number (event->code),
-			      make_number (event->modifiers)));
+	  /* Make an event (language-change FRAME CODEPAGE LANGUAGE-ID).  */
+	  obj = list4 (Qlanguage_change,
+		       event->frame_or_window,
+		       make_number (event->code),
+		       make_number (event->modifiers));
 	  kbd_fetch_ptr = event + 1;
 	}
 #endif
@@ -4014,11 +3999,11 @@ kbd_buffer_get_event (KBOARD **kbp,
 	{
 #ifdef HAVE_W32NOTIFY
 	  /* Make an event (file-notify (DESCRIPTOR ACTION FILE) CALLBACK).  */
-	  obj = Fcons (Qfile_notify,
-		       list2 (list3 (make_number (event->code),
-				     XCAR (event->arg),
-				     XCDR (event->arg)),
-			      event->frame_or_window));
+	  obj = list3 (Qfile_notify,
+		       list3 (make_number (event->code),
+			      XCAR (event->arg),
+			      XCDR (event->arg)),
+		       event->frame_or_window);
 #else
           obj = make_lispy_event (event);
 #endif
@@ -4027,7 +4012,7 @@ kbd_buffer_get_event (KBOARD **kbp,
 #endif /* USE_FILE_NOTIFY */
       else if (event->kind == SAVE_SESSION_EVENT)
         {
-          obj = Fcons (Qsave_session, Fcons (event->arg, Qnil));
+          obj = list2 (Qsave_session, event->arg);
 	  kbd_fetch_ptr = event + 1;
         }
       /* Just discard these, by returning nil.
@@ -4064,17 +4049,43 @@ kbd_buffer_get_event (KBOARD **kbp,
 	     switch-frame event if necessary.  */
 	  Lisp_Object frame, focus;
 
-	  frame = event->frame_or_window;
-	  focus = FRAME_FOCUS_FRAME (XFRAME (frame));
-	  if (FRAMEP (focus))
-	    frame = focus;
+          frame = event->frame_or_window;
+          focus = FRAME_FOCUS_FRAME (XFRAME (frame));
+          if (FRAMEP (focus))
+            frame = focus;
 
-	  if (!EQ (frame, internal_last_event_frame)
-	      && !EQ (frame, selected_frame))
-	    obj = make_lispy_switch_frame (frame);
-	  internal_last_event_frame = frame;
-	  kbd_fetch_ptr = event + 1;
-	}
+          if (
+#ifdef HAVE_X11
+              ! NILP (event->arg)
+              &&
+#endif
+              !EQ (frame, internal_last_event_frame)
+              && !EQ (frame, selected_frame))
+            obj = make_lispy_switch_frame (frame);
+          else
+            obj = make_lispy_focus_in (frame);
+
+          internal_last_event_frame = frame;
+          kbd_fetch_ptr = event + 1;
+        }
+      else if (event->kind == FOCUS_OUT_EVENT)
+        {
+#ifdef HAVE_WINDOW_SYSTEM
+
+          Display_Info *di;
+          Lisp_Object frame = event->frame_or_window;
+          bool focused = false;
+
+          for (di = x_display_list; di && ! focused; di = di->next)
+            focused = di->x_highlight_frame != 0;
+
+          if (!focused)
+	    obj = make_lispy_focus_out (frame);
+
+#endif /* HAVE_WINDOW_SYSTEM */
+
+          kbd_fetch_ptr = event + 1;
+        }
 #ifdef HAVE_DBUS
       else if (event->kind == DBUS_EVENT)
 	{
@@ -4145,7 +4156,7 @@ kbd_buffer_get_event (KBOARD **kbp,
   /* Try generating a mouse motion event.  */
   else if (!NILP (do_mouse_tracking) && some_mouse_moved ())
     {
-      FRAME_PTR f = some_mouse_moved ();
+      struct frame *f = some_mouse_moved ();
       Lisp_Object bar_window;
       enum scroll_bar_part part;
       Lisp_Object x, y;
@@ -4288,10 +4299,10 @@ static void
 timer_start_idle (void)
 {
   /* If we are already in the idle state, do nothing.  */
-  if (EMACS_TIME_VALID_P (timer_idleness_start_time))
+  if (timespec_valid_p (timer_idleness_start_time))
     return;
 
-  timer_idleness_start_time = current_emacs_time ();
+  timer_idleness_start_time = current_timespec ();
   timer_last_idleness_start_time = timer_idleness_start_time;
 
   /* Mark all idle-time timers as once again candidates for running.  */
@@ -4303,7 +4314,7 @@ timer_start_idle (void)
 static void
 timer_stop_idle (void)
 {
-  timer_idleness_start_time = invalid_emacs_time ();
+  timer_idleness_start_time = invalid_timespec ();
 }
 
 /* Resume idle timer from last idle start time.  */
@@ -4311,7 +4322,7 @@ timer_stop_idle (void)
 static void
 timer_resume_idle (void)
 {
-  if (EMACS_TIME_VALID_P (timer_idleness_start_time))
+  if (timespec_valid_p (timer_idleness_start_time))
     return;
 
   timer_idleness_start_time = timer_last_idleness_start_time;
@@ -4327,7 +4338,7 @@ Lisp_Object pending_funcalls;
 
 /* Return true if TIMER is a valid timer, placing its value into *RESULT.  */
 static bool
-decode_timer (Lisp_Object timer, EMACS_TIME *result)
+decode_timer (Lisp_Object timer, struct timespec *result)
 {
   Lisp_Object *vector;
 
@@ -4354,16 +4365,16 @@ decode_timer (Lisp_Object timer, EMACS_TIME *result)
    In that case we return 0 to indicate that a new timer_check_2 call
    should be done.  */
 
-static EMACS_TIME
+static struct timespec
 timer_check_2 (Lisp_Object timers, Lisp_Object idle_timers)
 {
-  EMACS_TIME nexttime;
-  EMACS_TIME now;
-  EMACS_TIME idleness_now;
+  struct timespec nexttime;
+  struct timespec now;
+  struct timespec idleness_now;
   Lisp_Object chosen_timer;
   struct gcpro gcpro1;
 
-  nexttime = invalid_emacs_time ();
+  nexttime = invalid_timespec ();
 
   chosen_timer = Qnil;
   GCPRO1 (chosen_timer);
@@ -4378,19 +4389,19 @@ timer_check_2 (Lisp_Object timers, Lisp_Object idle_timers)
 
   if (CONSP (timers) || CONSP (idle_timers))
     {
-      now = current_emacs_time ();
-      idleness_now = (EMACS_TIME_VALID_P (timer_idleness_start_time)
-		      ? sub_emacs_time (now, timer_idleness_start_time)
-		      : make_emacs_time (0, 0));
+      now = current_timespec ();
+      idleness_now = (timespec_valid_p (timer_idleness_start_time)
+		      ? timespec_sub (now, timer_idleness_start_time)
+		      : make_timespec (0, 0));
     }
 
   while (CONSP (timers) || CONSP (idle_timers))
     {
       Lisp_Object timer = Qnil, idle_timer = Qnil;
-      EMACS_TIME timer_time, idle_timer_time;
-      EMACS_TIME difference;
-      EMACS_TIME timer_difference = invalid_emacs_time ();
-      EMACS_TIME idle_timer_difference = invalid_emacs_time ();
+      struct timespec timer_time, idle_timer_time;
+      struct timespec difference;
+      struct timespec timer_difference = invalid_timespec ();
+      struct timespec idle_timer_difference = invalid_timespec ();
       bool ripe, timer_ripe = 0, idle_timer_ripe = 0;
 
       /* Set TIMER and TIMER_DIFFERENCE
@@ -4407,10 +4418,10 @@ timer_check_2 (Lisp_Object timers, Lisp_Object idle_timers)
 	      continue;
 	    }
 
-	  timer_ripe = EMACS_TIME_LE (timer_time, now);
+	  timer_ripe = timespec_cmp (timer_time, now) <= 0;
 	  timer_difference = (timer_ripe
-			      ? sub_emacs_time (now, timer_time)
-			      : sub_emacs_time (timer_time, now));
+			      ? timespec_sub (now, timer_time)
+			      : timespec_sub (timer_time, now));
 	}
 
       /* Likewise for IDLE_TIMER and IDLE_TIMER_DIFFERENCE
@@ -4424,26 +4435,27 @@ timer_check_2 (Lisp_Object timers, Lisp_Object idle_timers)
 	      continue;
 	    }
 
-	  idle_timer_ripe = EMACS_TIME_LE (idle_timer_time, idleness_now);
+	  idle_timer_ripe = timespec_cmp (idle_timer_time, idleness_now) <= 0;
 	  idle_timer_difference
 	    = (idle_timer_ripe
-	       ? sub_emacs_time (idleness_now, idle_timer_time)
-	       : sub_emacs_time (idle_timer_time, idleness_now));
+	       ? timespec_sub (idleness_now, idle_timer_time)
+	       : timespec_sub (idle_timer_time, idleness_now));
 	}
 
       /* Decide which timer is the next timer,
 	 and set CHOSEN_TIMER, DIFFERENCE, and RIPE accordingly.
 	 Also step down the list where we found that timer.  */
 
-      if (EMACS_TIME_VALID_P (timer_difference)
-	  && (! EMACS_TIME_VALID_P (idle_timer_difference)
+      if (timespec_valid_p (timer_difference)
+	  && (! timespec_valid_p (idle_timer_difference)
 	      || idle_timer_ripe < timer_ripe
 	      || (idle_timer_ripe == timer_ripe
-		  && (timer_ripe
-		      ? EMACS_TIME_LT (idle_timer_difference,
+		  && ((timer_ripe
+		       ? timespec_cmp (idle_timer_difference,
 				       timer_difference)
-		      : EMACS_TIME_LT (timer_difference,
-				       idle_timer_difference)))))
+		       : timespec_cmp (timer_difference,
+				       idle_timer_difference))
+		      < 0))))
 	{
 	  chosen_timer = timer;
 	  timers = XCDR (timers);
@@ -4483,7 +4495,7 @@ timer_check_2 (Lisp_Object timers, Lisp_Object idle_timers)
                  return 0 to indicate that.  */
 	    }
 
-	  nexttime = make_emacs_time (0, 0);
+	  nexttime = make_timespec (0, 0);
           break;
 	}
       else
@@ -4511,10 +4523,10 @@ timer_check_2 (Lisp_Object timers, Lisp_Object idle_timers)
 
    As long as any timer is ripe, we run it.  */
 
-EMACS_TIME
+struct timespec
 timer_check (void)
 {
-  EMACS_TIME nexttime;
+  struct timespec nexttime;
   Lisp_Object timers, idle_timers;
   struct gcpro gcpro1, gcpro2;
 
@@ -4528,7 +4540,7 @@ timer_check (void)
   /* Always consider the ordinary timers.  */
   timers = Fcopy_sequence (Vtimer_list);
   /* Consider the idle timers only if Emacs is idle.  */
-  if (EMACS_TIME_VALID_P (timer_idleness_start_time))
+  if (timespec_valid_p (timer_idleness_start_time))
     idle_timers = Fcopy_sequence (Vtimer_idle_list);
   else
     idle_timers = Qnil;
@@ -4541,7 +4553,7 @@ timer_check (void)
     {
       nexttime = timer_check_2 (timers, idle_timers);
     }
-  while (EMACS_SECS (nexttime) == 0 && EMACS_NSECS (nexttime) == 0);
+  while (nexttime.tv_sec == 0 && nexttime.tv_nsec == 0);
 
   UNGCPRO;
   return nexttime;
@@ -4557,9 +4569,9 @@ The value when Emacs is not idle is nil.
 PSEC is a multiple of the system clock resolution.  */)
   (void)
 {
-  if (EMACS_TIME_VALID_P (timer_idleness_start_time))
-    return make_lisp_time (sub_emacs_time (current_emacs_time (),
-					   timer_idleness_start_time));
+  if (timespec_valid_p (timer_idleness_start_time))
+    return make_lisp_time (timespec_sub (current_timespec (),
+					 timer_idleness_start_time));
 
   return Qnil;
 }
@@ -5576,14 +5588,12 @@ make_lispy_event (struct input_event *event)
 
 		/* ELisp manual 2.4b says (x y) are window relative but
 		   code says they are frame-relative.  */
-		position
-		  = Fcons (event->frame_or_window,
-			   Fcons (Qmenu_bar,
-				  Fcons (Fcons (event->x, event->y),
-					 Fcons (make_number (event->timestamp),
-						Qnil))));
+		position = list4 (event->frame_or_window,
+				  Qmenu_bar,
+				  Fcons (event->x, event->y),
+				  make_number (event->timestamp));
 
-		return Fcons (item, Fcons (position, Qnil));
+		return list2 (item, position);
 	      }
 #endif /* not USE_X_TOOLKIT && not USE_GTK && not HAVE_NS */
 
@@ -5602,12 +5612,9 @@ make_lispy_event (struct input_event *event)
 	    portion_whole = Fcons (event->x, event->y);
 	    part = *scroll_bar_parts[(int) event->part];
 
-	    position
-	      = Fcons (window,
-		       Fcons (Qvertical_scroll_bar,
-			      Fcons (portion_whole,
-				     Fcons (make_number (event->timestamp),
-					    Fcons (part, Qnil)))));
+	    position = list5 (window, Qvertical_scroll_bar,
+			      portion_whole, make_number (event->timestamp),
+			      part);
 	  }
 #endif /* not USE_TOOLKIT_SCROLL_BARS */
 
@@ -5755,19 +5762,11 @@ make_lispy_event (struct input_event *event)
 				      &mouse_syms,
 				      ASIZE (mouse_syms));
 	  if (event->modifiers & drag_modifier)
-	    return Fcons (head,
-			  Fcons (start_pos,
-				 Fcons (position,
-					Qnil)));
+	    return list3 (head, start_pos, position);
 	  else if (event->modifiers & (double_modifier | triple_modifier))
-	    return Fcons (head,
-			  Fcons (position,
-				 Fcons (make_number (double_click_count),
-					Qnil)));
+	    return list3 (head, position, make_number (double_click_count));
 	  else
-	    return Fcons (head,
-			  Fcons (position,
-				 Qnil));
+	    return list2 (head, position);
 	}
       }
 
@@ -5866,14 +5865,9 @@ make_lispy_event (struct input_event *event)
 	}
 
 	if (event->modifiers & (double_modifier | triple_modifier))
-	  return Fcons (head,
-			Fcons (position,
-			       Fcons (make_number (double_click_count),
-				      Qnil)));
+	  return list3 (head, position, make_number (double_click_count));
 	else
-	  return Fcons (head,
-			Fcons (position,
-			       Qnil));
+	  return list2 (head, position);
       }
 
 
@@ -5904,12 +5898,8 @@ make_lispy_event (struct input_event *event)
 	portion_whole = Fcons (event->x, event->y);
 	part = *scroll_bar_parts[(int) event->part];
 
-	position
-	  = Fcons (window,
-		   Fcons (Qvertical_scroll_bar,
-			  Fcons (portion_whole,
-				 Fcons (make_number (event->timestamp),
-					Fcons (part, Qnil)))));
+	position = list5 (window, Qvertical_scroll_bar, portion_whole,
+			  make_number (event->timestamp), part);
 
 	/* Always treat scroll bar events as clicks.  */
 	event->modifiers |= click_modifier;
@@ -5927,14 +5917,14 @@ make_lispy_event (struct input_event *event)
 				    Vlispy_mouse_stem,
 				    NULL, &mouse_syms,
 				    ASIZE (mouse_syms));
-	return Fcons (head, Fcons (position, Qnil));
+	return list2 (head, position);
       }
 
 #endif /* USE_TOOLKIT_SCROLL_BARS */
 
     case DRAG_N_DROP_EVENT:
       {
-	FRAME_PTR f;
+	struct frame *f;
 	Lisp_Object head, position;
 	Lisp_Object files;
 
@@ -5953,10 +5943,7 @@ make_lispy_event (struct input_event *event)
 				    Qdrag_n_drop, Qnil,
 				    lispy_drag_n_drop_names,
 				    &drag_n_drop_syms, 1);
-	return Fcons (head,
-		      Fcons (position,
-			     Fcons (files,
-				    Qnil)));
+	return list3 (head, position, files);
       }
 
 #if defined (USE_X_TOOLKIT) || defined (HAVE_NTGUI) \
@@ -5966,22 +5953,20 @@ make_lispy_event (struct input_event *event)
 	/* This is the prefix key.  We translate this to
 	   `(menu_bar)' because the code in keyboard.c for menu
 	   events, which we use, relies on this.  */
-	return Fcons (Qmenu_bar, Qnil);
+	return list1 (Qmenu_bar);
       return event->arg;
 #endif
 
     case SELECT_WINDOW_EVENT:
       /* Make an event (select-window (WINDOW)).  */
-      return Fcons (Qselect_window,
-		    Fcons (Fcons (event->frame_or_window, Qnil),
-			   Qnil));
+      return list2 (Qselect_window, list1 (event->frame_or_window));
 
     case TOOL_BAR_EVENT:
       if (EQ (event->arg, event->frame_or_window))
 	/* This is the prefix key.  We translate this to
 	   `(tool_bar)' because the code in keyboard.c for tool bar
 	   events, which we use, relies on this.  */
-	return Fcons (Qtool_bar, Qnil);
+	return list1 (Qtool_bar);
       else if (SYMBOLP (event->arg))
 	return apply_modifiers (event->modifiers, event->arg);
       return event->arg;
@@ -6013,13 +5998,12 @@ make_lispy_event (struct input_event *event)
 #endif /* defined HAVE_GFILENOTIFY || defined HAVE_INOTIFY */
 
     case CONFIG_CHANGED_EVENT:
-	return Fcons (Qconfig_changed_event,
-                      Fcons (event->arg,
-                             Fcons (event->frame_or_window, Qnil)));
+	return list3 (Qconfig_changed_event,
+		      event->arg, event->frame_or_window);
 #ifdef HAVE_GPM
     case GPM_CLICK_EVENT:
       {
-	FRAME_PTR f = XFRAME (event->frame_or_window);
+	struct frame *f = XFRAME (event->frame_or_window);
 	Lisp_Object head, position;
 	Lisp_Object *start_pos_ptr;
 	Lisp_Object start_pos;
@@ -6056,24 +6040,13 @@ make_lispy_event (struct input_event *event)
 				    ASIZE (mouse_syms));
 
 	if (event->modifiers & drag_modifier)
-	  return Fcons (head,
-			Fcons (start_pos,
-			       Fcons (position,
-				      Qnil)));
+	  return list3 (head, start_pos, position);
 	else if (event->modifiers & double_modifier)
-	  return Fcons (head,
-			Fcons (position,
-			       Fcons (make_number (2),
-				      Qnil)));
+	  return list3 (head, position, make_number (2));
 	else if (event->modifiers & triple_modifier)
-	  return Fcons (head,
-			Fcons (position,
-			       Fcons (make_number (3),
-				      Qnil)));
+	  return list3 (head, position, make_number (3));
  	else
-	  return Fcons (head,
-			Fcons (position,
-			       Qnil));
+	  return list2 (head, position);
        }
 #endif /* HAVE_GPM */
 
@@ -6084,7 +6057,7 @@ make_lispy_event (struct input_event *event)
 }
 
 static Lisp_Object
-make_lispy_movement (FRAME_PTR frame, Lisp_Object bar_window, enum scroll_bar_part part,
+make_lispy_movement (struct frame *frame, Lisp_Object bar_window, enum scroll_bar_part part,
 		     Lisp_Object x, Lisp_Object y, Time t)
 {
   /* Is it a scroll bar movement?  */
@@ -6093,13 +6066,12 @@ make_lispy_movement (FRAME_PTR frame, Lisp_Object bar_window, enum scroll_bar_pa
       Lisp_Object part_sym;
 
       part_sym = *scroll_bar_parts[(int) part];
-      return Fcons (Qscroll_bar_movement,
-		    Fcons (list5 (bar_window,
-				  Qvertical_scroll_bar,
-				  Fcons (x, y),
-				  make_number (t),
-				  part_sym),
-			   Qnil));
+      return list2 (Qscroll_bar_movement,
+		    list5 (bar_window,
+			   Qvertical_scroll_bar,
+			   Fcons (x, y),
+			   make_number (t),
+			   part_sym));
     }
   /* Or is it an ordinary mouse movement?  */
   else
@@ -6114,9 +6086,25 @@ make_lispy_movement (FRAME_PTR frame, Lisp_Object bar_window, enum scroll_bar_pa
 static Lisp_Object
 make_lispy_switch_frame (Lisp_Object frame)
 {
-  return Fcons (Qswitch_frame, Fcons (frame, Qnil));
+  return list2 (Qswitch_frame, frame);
 }
-
+
+static Lisp_Object
+make_lispy_focus_in (Lisp_Object frame)
+{
+  return list2 (Qfocus_in, frame);
+}
+
+#ifdef HAVE_WINDOW_SYSTEM
+
+static Lisp_Object
+make_lispy_focus_out (Lisp_Object frame)
+{
+  return list2 (Qfocus_out, frame);
+}
+
+#endif /* HAVE_WINDOW_SYSTEM */
+
 /* Manipulating modifiers.  */
 
 /* Parse the name of SYMBOL, and return the set of modifiers it contains.
@@ -6347,7 +6335,7 @@ parse_modifiers (Lisp_Object symbol)
       if (modifiers & ~INTMASK)
 	emacs_abort ();
       XSETFASTINT (mask, modifiers);
-      elements = Fcons (unmodified, Fcons (mask, Qnil));
+      elements = list2 (unmodified, mask);
 
       /* Cache the parsing results on SYMBOL.  */
       Fput (symbol, Qevent_symbol_element_mask,
@@ -6420,7 +6408,7 @@ apply_modifiers (int modifiers, Lisp_Object base)
 	 the caches:
          XSETFASTINT (idx, modifiers);
          Fput (new_symbol, Qevent_symbol_element_mask,
-               Fcons (base, Fcons (idx, Qnil)));
+               list2 (base, idx));
          Fput (new_symbol, Qevent_symbol_elements,
                Fcons (base, lispy_modifier_list (modifiers)));
 	 Sadly, this is only correct if `base' is indeed a base event,
@@ -7032,7 +7020,7 @@ tty_read_avail_input (struct terminal *terminal,
     {
       nread = emacs_read (fileno (tty->input), (char *) cbuf, n_to_read);
       /* POSIX infers that processes which are not in the session leader's
-         process group won't get SIGHUP's at logout time.  BSDI adheres to
+         process group won't get SIGHUPs at logout time.  BSDI adheres to
          this part standard and returns -1 from read (0) with errno==EIO
          when the control tty is taken away.
          Jeffrey Honig <jch@bsdi.com> says this is generally safe.  */
@@ -7172,7 +7160,7 @@ handle_input_available_signal (int sig)
   pending_signals = 1;
 
   if (input_available_clear_time)
-    *input_available_clear_time = make_emacs_time (0, 0);
+    *input_available_clear_time = make_timespec (0, 0);
 }
 
 static void
@@ -7259,7 +7247,7 @@ handle_user_signal (int sig)
 	    /* Tell wait_reading_process_output that it needs to wake
 	       up and look around.  */
 	    if (input_available_clear_time)
-	      *input_available_clear_time = make_emacs_time (0, 0);
+	      *input_available_clear_time = make_timespec (0, 0);
 	  }
 	break;
       }
@@ -7575,7 +7563,7 @@ menu_bar_item (Lisp_Object key, Lisp_Object item, Lisp_Object dummy1, void *dumm
       ASET (menu_bar_items_vector, i, key); i++;
       ASET (menu_bar_items_vector, i,
 	    AREF (item_properties, ITEM_PROPERTY_NAME)); i++;
-      ASET (menu_bar_items_vector, i, Fcons (item, Qnil)); i++;
+      ASET (menu_bar_items_vector, i, list1 (item)); i++;
       ASET (menu_bar_items_vector, i, make_number (0)); i++;
       menu_bar_items_index = i;
     }
@@ -8133,7 +8121,7 @@ parse_tool_bar_item (Lisp_Object key, Lisp_Object item)
 
   /* As an exception, allow old-style menu separators.  */
   if (STRINGP (XCAR (item)))
-    item = Fcons (XCAR (item), Qnil);
+    item = list1 (XCAR (item));
   else if (!EQ (XCAR (item), Qmenu_item)
 	   || (item = XCDR (item), !CONSP (item)))
     return 0;
@@ -8485,7 +8473,7 @@ read_char_minibuf_menu_prompt (int commandflag,
     return Qnil;
 
 #define PUSH_C_STR(str, listvar) \
-  listvar = Fcons (make_unibyte_string (str, strlen (str)), listvar)
+  listvar = Fcons (build_unibyte_string (str), listvar)
 
   /* Prompt string always starts with map's prompt, and a space.  */
   prompt_strings = Fcons (name, prompt_strings);
@@ -9370,8 +9358,7 @@ read_key_sequence (Lisp_Object *keybuf, int bufsize, Lisp_Object prompt,
 
 		  /* Zap the position in key, so we know that we've
 		     expanded it, and don't try to do so again.  */
-		  POSN_SET_POSN (EVENT_START (key),
-				 Fcons (posn, Qnil));
+		  POSN_SET_POSN (EVENT_START (key), list1 (posn));
 
 		  mock_input = t + 2;
 		  goto replay_sequence;
@@ -9526,8 +9513,7 @@ read_key_sequence (Lisp_Object *keybuf, int bufsize, Lisp_Object prompt,
 
 		      new_head
 			= apply_modifiers (modifiers, XCAR (breakdown));
-		      new_click
-			= Fcons (new_head, Fcons (EVENT_START (key), Qnil));
+		      new_click = list2 (new_head, EVENT_START (key));
 
 		      /* Look for a binding for this new key.  */
 		      new_binding = follow_key (current_binding, new_click);
@@ -9767,54 +9753,11 @@ read_key_sequence (Lisp_Object *keybuf, int bufsize, Lisp_Object prompt,
   return t;
 }
 
-DEFUN ("read-key-sequence", Fread_key_sequence, Sread_key_sequence, 1, 5, 0,
-       doc: /* Read a sequence of keystrokes and return as a string or vector.
-The sequence is sufficient to specify a non-prefix command in the
-current local and global maps.
-
-First arg PROMPT is a prompt string.  If nil, do not prompt specially.
-Second (optional) arg CONTINUE-ECHO, if non-nil, means this key echos
-as a continuation of the previous key.
-
-The third (optional) arg DONT-DOWNCASE-LAST, if non-nil, means do not
-convert the last event to lower case.  (Normally any upper case event
-is converted to lower case if the original event is undefined and the lower
-case equivalent is defined.)  A non-nil value is appropriate for reading
-a key sequence to be defined.
-
-A C-g typed while in this function is treated like any other character,
-and `quit-flag' is not set.
-
-If the key sequence starts with a mouse click, then the sequence is read
-using the keymaps of the buffer of the window clicked in, not the buffer
-of the selected window as normal.
-
-`read-key-sequence' drops unbound button-down events, since you normally
-only care about the click or drag events which follow them.  If a drag
-or multi-click event is unbound, but the corresponding click event would
-be bound, `read-key-sequence' turns the event into a click event at the
-drag's starting position.  This means that you don't have to distinguish
-between click and drag, double, or triple events unless you want to.
-
-`read-key-sequence' prefixes mouse events on mode lines, the vertical
-lines separating windows, and scroll bars with imaginary keys
-`mode-line', `vertical-line', and `vertical-scroll-bar'.
-
-Optional fourth argument CAN-RETURN-SWITCH-FRAME non-nil means that this
-function will process a switch-frame event if the user switches frames
-before typing anything.  If the user switches frames in the middle of a
-key sequence, or at the start of the sequence but CAN-RETURN-SWITCH-FRAME
-is nil, then the event will be put off until after the current key sequence.
-
-`read-key-sequence' checks `function-key-map' for function key
-sequences, where they wouldn't conflict with ordinary bindings.  See
-`function-key-map' for more details.
-
-The optional fifth argument CMD-LOOP, if non-nil, means
-that this key sequence is being read by something that will
-read commands one after another.  It should be nil if the caller
-will read just one key sequence.  */)
-  (Lisp_Object prompt, Lisp_Object continue_echo, Lisp_Object dont_downcase_last, Lisp_Object can_return_switch_frame, Lisp_Object cmd_loop)
+static Lisp_Object
+read_key_sequence_vs (Lisp_Object prompt, Lisp_Object continue_echo,
+		      Lisp_Object dont_downcase_last,
+		      Lisp_Object can_return_switch_frame,
+		      Lisp_Object cmd_loop, bool allow_string)
 {
   Lisp_Object keybuf[30];
   register int i;
@@ -9865,7 +9808,62 @@ will read just one key sequence.  */)
       QUIT;
     }
   UNGCPRO;
-  return unbind_to (count, make_event_array (i, keybuf));
+  return unbind_to (count,
+		    ((allow_string ? make_event_array : Fvector)
+		     (i, keybuf)));
+}
+
+DEFUN ("read-key-sequence", Fread_key_sequence, Sread_key_sequence, 1, 5, 0,
+       doc: /* Read a sequence of keystrokes and return as a string or vector.
+The sequence is sufficient to specify a non-prefix command in the
+current local and global maps.
+
+First arg PROMPT is a prompt string.  If nil, do not prompt specially.
+Second (optional) arg CONTINUE-ECHO, if non-nil, means this key echos
+as a continuation of the previous key.
+
+The third (optional) arg DONT-DOWNCASE-LAST, if non-nil, means do not
+convert the last event to lower case.  (Normally any upper case event
+is converted to lower case if the original event is undefined and the lower
+case equivalent is defined.)  A non-nil value is appropriate for reading
+a key sequence to be defined.
+
+A C-g typed while in this function is treated like any other character,
+and `quit-flag' is not set.
+
+If the key sequence starts with a mouse click, then the sequence is read
+using the keymaps of the buffer of the window clicked in, not the buffer
+of the selected window as normal.
+
+`read-key-sequence' drops unbound button-down events, since you normally
+only care about the click or drag events which follow them.  If a drag
+or multi-click event is unbound, but the corresponding click event would
+be bound, `read-key-sequence' turns the event into a click event at the
+drag's starting position.  This means that you don't have to distinguish
+between click and drag, double, or triple events unless you want to.
+
+`read-key-sequence' prefixes mouse events on mode lines, the vertical
+lines separating windows, and scroll bars with imaginary keys
+`mode-line', `vertical-line', and `vertical-scroll-bar'.
+
+Optional fourth argument CAN-RETURN-SWITCH-FRAME non-nil means that this
+function will process a switch-frame event if the user switches frames
+before typing anything.  If the user switches frames in the middle of a
+key sequence, or at the start of the sequence but CAN-RETURN-SWITCH-FRAME
+is nil, then the event will be put off until after the current key sequence.
+
+`read-key-sequence' checks `function-key-map' for function key
+sequences, where they wouldn't conflict with ordinary bindings.  See
+`function-key-map' for more details.
+
+The optional fifth argument CMD-LOOP, if non-nil, means
+that this key sequence is being read by something that will
+read commands one after another.  It should be nil if the caller
+will read just one key sequence.  */)
+  (Lisp_Object prompt, Lisp_Object continue_echo, Lisp_Object dont_downcase_last, Lisp_Object can_return_switch_frame, Lisp_Object cmd_loop)
+{
+  return read_key_sequence_vs (prompt, continue_echo, dont_downcase_last,
+			       can_return_switch_frame, cmd_loop, true);
 }
 
 DEFUN ("read-key-sequence-vector", Fread_key_sequence_vector,
@@ -9873,52 +9871,8 @@ DEFUN ("read-key-sequence-vector", Fread_key_sequence_vector,
        doc: /* Like `read-key-sequence' but always return a vector.  */)
   (Lisp_Object prompt, Lisp_Object continue_echo, Lisp_Object dont_downcase_last, Lisp_Object can_return_switch_frame, Lisp_Object cmd_loop)
 {
-  Lisp_Object keybuf[30];
-  register int i;
-  struct gcpro gcpro1;
-  ptrdiff_t count = SPECPDL_INDEX ();
-
-  if (!NILP (prompt))
-    CHECK_STRING (prompt);
-  QUIT;
-
-  specbind (Qinput_method_exit_on_first_char,
-	    (NILP (cmd_loop) ? Qt : Qnil));
-  specbind (Qinput_method_use_echo_area,
-	    (NILP (cmd_loop) ? Qt : Qnil));
-
-  memset (keybuf, 0, sizeof keybuf);
-  GCPRO1 (keybuf[0]);
-  gcpro1.nvars = (sizeof keybuf / sizeof (keybuf[0]));
-
-  if (NILP (continue_echo))
-    {
-      this_command_key_count = 0;
-      this_command_key_count_reset = 0;
-      this_single_command_key_start = 0;
-    }
-
-#ifdef HAVE_WINDOW_SYSTEM
-  if (display_hourglass_p)
-    cancel_hourglass ();
-#endif
-
-  i = read_key_sequence (keybuf, (sizeof keybuf / sizeof (keybuf[0])),
-			 prompt, ! NILP (dont_downcase_last),
-			 ! NILP (can_return_switch_frame), 0);
-
-#ifdef HAVE_WINDOW_SYSTEM
-  if (display_hourglass_p)
-    start_hourglass ();
-#endif
-
-  if (i == -1)
-    {
-      Vquit_flag = Qt;
-      QUIT;
-    }
-  UNGCPRO;
-  return unbind_to (count, Fvector (i, keybuf));
+  return read_key_sequence_vs (prompt, continue_echo, dont_downcase_last,
+			       can_return_switch_frame, cmd_loop, false);
 }
 
 /* Return true if input events are pending.  */
@@ -9949,20 +9903,7 @@ detect_input_pending_run_timers (bool do_display)
     get_input_pending (READABLE_EVENTS_DO_TIMERS_NOW);
 
   if (old_timers_run != timers_run && do_display)
-    {
-      redisplay_preserve_echo_area (8);
-      /* The following fixes a bug when using lazy-lock with
-	 lazy-lock-defer-on-the-fly set to t, i.e.  when fontifying
-	 from an idle timer function.  The symptom of the bug is that
-	 the cursor sometimes doesn't become visible until the next X
-	 event is processed.  --gerd.  */
-      {
-        Lisp_Object tail, frame;
-        FOR_EACH_FRAME (tail, frame)
-          if (FRAME_RIF (XFRAME (frame)))
-            FRAME_RIF (XFRAME (frame))->flush_display (XFRAME (frame));
-      }
-    }
+    redisplay_preserve_echo_area (8);
 
   return input_pending;
 }
@@ -10163,7 +10104,7 @@ The file will be closed when Emacs exits.  */)
       file = Fexpand_file_name (file, Qnil);
       dribble = emacs_fopen (SSDATA (file), "w");
       if (dribble == 0)
-	report_file_error ("Opening dribble", Fcons (file, Qnil));
+	report_file_error ("Opening dribble", file);
     }
   return Qnil;
 }
@@ -10179,8 +10120,6 @@ Also end any kbd macro being defined.  */)
       Fcancel_kbd_macro_events ();
       end_kbd_macro ();
     }
-
-  update_mode_lines++;
 
   Vunread_command_events = Qnil;
 
@@ -10228,8 +10167,7 @@ On such systems, Emacs starts a subshell instead of suspending.  */)
   reset_all_sys_modes ();
   /* sys_suspend can get an error if it tries to fork a subshell
      and the system resources aren't available for that.  */
-  record_unwind_protect ((Lisp_Object (*) (Lisp_Object)) init_all_sys_modes,
-			 Qnil);
+  record_unwind_protect_void (init_all_sys_modes);
   stuff_buffered_input (stuffstring);
   if (cannot_suspend)
     sys_subshell ();
@@ -10294,7 +10232,7 @@ stuff_buffered_input (Lisp_Object stuffstring)
 }
 
 void
-set_waiting_for_input (EMACS_TIME *time_to_clear)
+set_waiting_for_input (struct timespec *time_to_clear)
 {
   input_available_clear_time = time_to_clear;
 
@@ -10905,7 +10843,7 @@ init_keyboard (void)
   immediate_quit = 0;
   quit_char = Ctl ('g');
   Vunread_command_events = Qnil;
-  timer_idleness_start_time = invalid_emacs_time ();
+  timer_idleness_start_time = invalid_timespec ();
   total_keys = 0;
   recent_keys_index = 0;
   kbd_fetch_ptr = kbd_buffer;
@@ -10988,6 +10926,8 @@ static const struct event_head head_table[] = {
   {&Qmouse_movement,      "mouse-movement",      &Qmouse_movement},
   {&Qscroll_bar_movement, "scroll-bar-movement", &Qmouse_movement},
   {&Qswitch_frame,        "switch-frame",        &Qswitch_frame},
+  {&Qfocus_in,            "focus-in",            &Qfocus_in},
+  {&Qfocus_out,           "focus-out",	         &Qfocus_out},
   {&Qdelete_frame,        "delete-frame",        &Qdelete_frame},
   {&Qiconify_frame,       "iconify-frame",       &Qiconify_frame},
   {&Qmake_frame_visible,  "make-frame-visible",  &Qmake_frame_visible},
@@ -11111,7 +11051,7 @@ syms_of_keyboard (void)
 	*p->var = intern_c_string (p->name);
 	staticpro (p->var);
 	Fput (*p->var, Qevent_kind, *p->kind);
-	Fput (*p->var, Qevent_symbol_elements, Fcons (*p->var, Qnil));
+	Fput (*p->var, Qevent_symbol_elements, list1 (*p->var));
       }
   }
 
@@ -11506,7 +11446,7 @@ and the minor mode maps regardless of `overriding-local-map'.  */);
 
   DEFVAR_LISP ("special-event-map", Vspecial_event_map,
 	       doc: /* Keymap defining bindings for special events to execute at low level.  */);
-  Vspecial_event_map = Fcons (intern_c_string ("keymap"), Qnil);
+  Vspecial_event_map = list1 (intern_c_string ("keymap"));
 
   DEFVAR_LISP ("track-mouse", do_mouse_tracking,
 	       doc: /* Non-nil means generate motion events for mouse motion.  */);
@@ -11802,6 +11742,10 @@ keys_of_keyboard (void)
   initial_define_lispy_key (Vspecial_event_map, "language-change",
 			    "ignore");
 #endif
+  initial_define_lispy_key (Vspecial_event_map, "focus-in",
+			    "handle-focus-in");
+  initial_define_lispy_key (Vspecial_event_map, "focus-out",
+			    "handle-focus-out");
 }
 
 /* Mark the pointers in the kboard objects.

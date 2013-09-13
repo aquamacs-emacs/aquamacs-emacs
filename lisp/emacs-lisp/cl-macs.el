@@ -616,7 +616,7 @@ The result of the body appears to the compiler as a quoted constant."
   (declare (debug (form &optional sexp)))
   (if (cl--compiling-file)
       (let* ((temp (cl-gentemp "--cl-load-time--"))
-	     (set `(set ',temp ,form)))
+	     (set `(setq ,temp ,form)))
 	(if (and (fboundp 'byte-compile-file-form-defmumble)
 		 (boundp 'this-kind) (boundp 'that-one))
 	    (fset 'byte-compile-file-form
@@ -1957,7 +1957,7 @@ by EXPANSION, and (setq NAME ...) will act like (setf EXPANSION ...).
   "Collect multiple return values.
 FORM must return a list; the BODY is then executed with the first N elements
 of this list bound (`let'-style) to each of the symbols SYM in turn.  This
-is analogous to the Common Lisp `cl-multiple-value-bind' macro, using lists to
+is analogous to the Common Lisp `multiple-value-bind' macro, using lists to
 simulate true multiple return values.  For compatibility, (cl-values A B C) is
 a synonym for (list A B C).
 
@@ -1975,7 +1975,7 @@ a synonym for (list A B C).
   "Collect multiple return values.
 FORM must return a list; the first N elements of this list are stored in
 each of the symbols SYM in turn.  This is analogous to the Common Lisp
-`cl-multiple-value-setq' macro, using lists to simulate true multiple return
+`multiple-value-setq' macro, using lists to simulate true multiple return
 values.  For compatibility, (cl-values A B C) is a synonym for (list A B C).
 
 \(fn (SYM...) FORM)"
@@ -2002,7 +2002,7 @@ values.  For compatibility, (cl-values A B C) is a synonym for (list A B C).
   (cons 'progn body))
 ;;;###autoload
 (defmacro cl-the (_type form)
-  "At present this ignores _TYPE and is simply equivalent to FORM."
+  "At present this ignores TYPE and is simply equivalent to FORM."
   (declare (indent 1) (debug (cl-type-spec form)))
   form)
 
@@ -2059,7 +2059,7 @@ values.  For compatibility, (cl-values A B C) is a synonym for (list A B C).
   "Declare SPECS about the current function while compiling.
 For instance
 
-  \(cl-declare (warn 0))
+  (cl-declare (warn 0))
 
 will turn off byte-compile warnings in the function.
 See Info node `(cl)Declarations' for details."
@@ -2279,8 +2279,8 @@ KEYWORD can be one of :conc-name, :constructor, :copier, :predicate,
 Each SLOT may instead take the form (SNAME SDEFAULT SOPTIONS...), where
 SDEFAULT is the default value of that slot and SOPTIONS are keyword-value
 pairs for that slot.
-Currently, only one keyword is supported, `:read-only'.  If this has a non-nil
-value, that slot cannot be set via `setf'.
+Currently, only one keyword is supported, `:read-only'.  If this has a
+non-nil value, that slot cannot be set via `setf'.
 
 \(fn NAME SLOTS...)"
   (declare (doc-string 2) (indent 1)
@@ -2693,15 +2693,16 @@ macro that returns its `&whole' argument."
 ;;;###autoload
 (defmacro cl-defsubst (name args &rest body)
   "Define NAME as a function.
-Like `defun', except the function is automatically declared `inline',
+Like `defun', except the function is automatically declared `inline' and
+the arguments are immutable.
 ARGLIST allows full Common Lisp conventions, and BODY is implicitly
 surrounded by (cl-block NAME ...).
+The function's arguments should be treated as immutable.
 
 \(fn NAME ARGLIST [DOCSTRING] BODY...)"
   (declare (debug cl-defun) (indent 2))
   (let* ((argns (cl--arglist-args args)) (p argns)
-	 (pbody (cons 'progn body))
-	 (unsafe (not (cl--safe-expr-p pbody))))
+	 (pbody (cons 'progn body)))
     (while (and p (eq (cl--expr-contains args (car p)) 1)) (pop p))
     `(progn
        ,(if p nil   ; give up if defaults refer to earlier args
@@ -2717,10 +2718,10 @@ surrounded by (cl-block NAME ...).
               ;; does not pay attention to the argvs (and
               ;; cl-expr-access-order itself is also too naive).
               nil
-              ,(and (memq '&key args) 'cl-whole) ,unsafe ,@argns)))
+              ,(and (memq '&key args) 'cl-whole) nil ,@argns)))
        (cl-defun ,name ,args ,@body))))
 
-(defun cl--defsubst-expand (argns body simple whole unsafe &rest argvs)
+(defun cl--defsubst-expand (argns body simple whole _unsafe &rest argvs)
   (if (and whole (not (cl--safe-expr-p (cons 'progn argvs)))) whole
     (if (cl--simple-exprs-p argvs) (setq simple t))
     (let* ((substs ())
@@ -2728,7 +2729,7 @@ surrounded by (cl-block NAME ...).
                        (cl-mapcar (lambda (argn argv)
                                     (if (or simple (macroexp-const-p argv))
                                         (progn (push (cons argn argv) substs)
-                                               (and unsafe (list argn argv)))
+                                               nil)
                                       (list argn argv)))
                                   argns argvs))))
       ;; FIXME: `sublis/subst' will happily substitute the symbol

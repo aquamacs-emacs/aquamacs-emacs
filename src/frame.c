@@ -69,7 +69,6 @@ Lisp_Object Qnoelisp;
 static Lisp_Object Qx_frame_parameter;
 Lisp_Object Qx_resource_name;
 Lisp_Object Qterminal;
-Lisp_Object Qterminal_live_p;
 
 /* Frame parameters (set or reported).  */
 
@@ -186,7 +185,6 @@ set_menu_bar_lines_1 (Lisp_Object window, int n)
 {
   struct window *w = XWINDOW (window);
 
-  w->last_modified = 0;
   w->top_line += n;
   w->total_lines -= n;
 
@@ -226,7 +224,7 @@ set_menu_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
       FRAME_WINDOW_SIZES_CHANGED (f) = 1;
       FRAME_MENU_BAR_LINES (f) = nlines;
       set_menu_bar_lines_1 (f->root_window, nlines - olines);
-      adjust_glyphs (f);
+      adjust_frame_glyphs (f);
     }
 }
 
@@ -310,7 +308,7 @@ predicates which report frame's specific UI-related capabilities.  */)
 }
 
 struct frame *
-make_frame (int mini_p)
+make_frame (bool mini_p)
 {
   Lisp_Object frame;
   register struct frame *f;
@@ -389,7 +387,7 @@ make_frame (int mini_p)
        etc.  Running Lisp functions at this point surely ends in a
        SEGV.  */
     set_window_buffer (root_window, buf, 0, 0);
-    fset_buffer_list (f, Fcons (buf, Qnil));
+    fset_buffer_list (f, list1 (buf));
   }
 
   if (mini_p)
@@ -694,24 +692,16 @@ affects all frames on the same terminal device.  */)
                        ? FRAME_TTY (XFRAME (selected_frame))->name
                        : NULL));
       if (!NILP (tty))
-        {
-          name = alloca (SBYTES (tty) + 1);
-          memcpy (name, SSDATA (tty), SBYTES (tty));
-          name[SBYTES (tty)] = 0;
-        }
+	name = xlispstrdupa (tty);
 
       tty_type = get_future_frame_param
         (Qtty_type, parms, (FRAME_TERMCAP_P (XFRAME (selected_frame))
                             ? FRAME_TTY (XFRAME (selected_frame))->type
                             : NULL));
       if (!NILP (tty_type))
-        {
-          type = alloca (SBYTES (tty_type) + 1);
-          memcpy (type, SSDATA (tty_type), SBYTES (tty_type));
-          type[SBYTES (tty_type)] = 0;
-        }
+	type = xlispstrdupa (tty_type);
 
-      t = init_tty (name, type, 0); /* Errors are not fatal. */
+      t = init_tty (name, type, 0); /* Errors are not fatal.  */
     }
 
   f = make_terminal_frame (t);
@@ -722,19 +712,16 @@ affects all frames on the same terminal device.  */)
     change_frame_size (f, height, width, 0, 0, 0);
   }
 
-  adjust_glyphs (f);
+  adjust_frame_glyphs (f);
   calculate_costs (f);
   XSETFRAME (frame, f);
+
+  store_in_alist (&parms, Qtty_type, build_string (t->display_info.tty->type));
+  store_in_alist (&parms, Qtty,
+		  (t->display_info.tty->name
+		   ? build_string (t->display_info.tty->name)
+		   : Qnil));
   Fmodify_frame_parameters (frame, parms);
-  Fmodify_frame_parameters (frame, Fcons (Fcons (Qtty_type,
-                                                 build_string (t->display_info.tty->type)),
-                                          Qnil));
-  if (t->display_info.tty->name != NULL)
-    Fmodify_frame_parameters (frame, Fcons (Fcons (Qtty,
-                                                   build_string (t->display_info.tty->name)),
-                                            Qnil));
-  else
-    Fmodify_frame_parameters (frame, Fcons (Fcons (Qtty, Qnil), Qnil));
 
   /* Make the frame face alist be frame-specific, so that each
      frame could change its face definitions independently.  */
@@ -895,6 +882,26 @@ This function returns FRAME, or nil if FRAME has been deleted.  */)
   return retval;
 }
 
+DEFUN ("handle-focus-in", Fhandle_focus_in, Shandle_focus_in, 1, 1, "e",
+       doc: /* Handle a focus-in event.
+Focus in events are usually bound to this function.
+Focus in events occur when a frame has focus, but a switch-frame event
+is not generated.
+This function checks if blink-cursor timers should be turned on again.  */)
+  (Lisp_Object event)
+{
+  return call0 (intern ("blink-cursor-check"));
+}
+
+DEFUN ("handle-focus-out", Fhandle_focus_out, Shandle_focus_out, 1, 1, "e",
+       doc: /* Handle a focus-out event.
+Focus out events are usually bound to this function.
+Focus out events occur when no frame has focus.
+This function checks if blink-cursor timers should be turned off.  */)
+  (Lisp_Object event)
+{
+  return call0 (intern ("blink-cursor-suspend"));
+}
 
 DEFUN ("handle-switch-frame", Fhandle_switch_frame, Shandle_switch_frame, 1, 1, "e",
        doc: /* Handle a switch-frame event EVENT.
@@ -910,6 +917,7 @@ to that frame.  */)
   /* Preserve prefix arg that the command loop just cleared.  */
   kset_prefix_arg (current_kboard, Vcurrent_prefix_arg);
   Frun_hooks (1, &Qmouse_leave_buffer_hook);
+  Fhandle_focus_in (event); // switch-frame implies a focus in.
   return do_switch_frame (event, 0, 0, Qnil);
 }
 
@@ -1078,13 +1086,26 @@ Otherwise, include all frames.  */)
   CHECK_LIVE_FRAME (frame);
   return prev_frame (frame, miniframe);
 }
+
+DEFUN ("last-nonminibuffer-frame", Flast_nonminibuf_frame,
+       Slast_nonminibuf_frame, 0, 0, 0,
+       doc: /* Return last non-minibuffer frame selected. */)
+  (void)
+{
+  Lisp_Object frame = Qnil;
+
+  if (last_nonminibuf_frame)
+    XSETFRAME (frame, last_nonminibuf_frame);
+
+  return frame;
+}
 
 /* Return 1 if it is ok to delete frame F;
    0 if all frames aside from F are invisible.
    (Exception: if F is the terminal frame, and we are using X, return 1.)  */
 
 static int
-other_visible_frames (FRAME_PTR f)
+other_visible_frames (struct frame *f)
 {
   Lisp_Object frames, this;
 
@@ -1095,7 +1116,7 @@ other_visible_frames (FRAME_PTR f)
 
       /* Verify that we can still talk to the frame's X window,
 	 and note any recent change in visibility.  */
-#ifdef HAVE_WINDOW_SYSTEM
+#ifdef HAVE_X_WINDOWS
       if (FRAME_WINDOW_P (XFRAME (this)))
 	x_sync (XFRAME (this));
 #endif
@@ -1109,6 +1130,52 @@ other_visible_frames (FRAME_PTR f)
     }
   return 0;
 }
+
+/* Make sure that minibuf_window doesn't refer to FRAME's minibuffer
+   window.  Preferably use the selected frame's minibuffer window
+   instead.  If the selected frame doesn't have one, get some other
+   frame's minibuffer window.  SELECT non-zero means select the new
+   minibuffer window.  */
+static void
+check_minibuf_window (Lisp_Object frame, int select)
+{
+  struct frame *f = decode_live_frame (frame);
+
+  XSETFRAME (frame, f);
+
+  if (WINDOWP (minibuf_window) && EQ (f->minibuffer_window, minibuf_window))
+    {
+      Lisp_Object frames, this, window = make_number (0);
+
+      if (!EQ (frame, selected_frame)
+	  && FRAME_HAS_MINIBUF_P (XFRAME (selected_frame)))
+	window = FRAME_MINIBUF_WINDOW (XFRAME (selected_frame));
+      else
+	FOR_EACH_FRAME (frames, this)
+	  {
+	    if (!EQ (this, frame) && FRAME_HAS_MINIBUF_P (XFRAME (this)))
+	      {
+		window = FRAME_MINIBUF_WINDOW (XFRAME (this));
+		break;
+	      }
+	  }
+
+      /* Don't abort if no window was found (Bug#15247).  */
+      if (WINDOWP (window))
+	{
+	  /* Use set_window_buffer instead of Fset_window_buffer (see
+	     discussion of bug#11984, bug#12025, bug#12026).  */
+	  set_window_buffer (window, XWINDOW (minibuf_window)->contents, 0, 0);
+	  minibuf_window = window;
+
+	  /* SELECT non-zero usually means that FRAME's minibuffer
+	     window was selected; select the new one.  */
+	  if (select)
+	    Fselect_window (minibuf_window, Qnil);
+	}
+    }
+}
+
 
 /* Delete FRAME.  When FORCE equals Qnoelisp, delete FRAME
   unconditionally.  x_connection_closed and delete_terminal use
@@ -1144,10 +1211,14 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
 
       FOR_EACH_FRAME (frames, this)
 	{
-	  if (! EQ (this, frame)
-	      && EQ (frame,
-		     WINDOW_FRAME (XWINDOW
-				   (FRAME_MINIBUF_WINDOW (XFRAME (this))))))
+	  Lisp_Object fminiw;
+
+	  if (EQ (this, frame))
+	    continue;
+
+	  fminiw = FRAME_MINIBUF_WINDOW (XFRAME (this));
+
+	  if (WINDOWP (fminiw) && EQ (frame, WINDOW_FRAME (XWINDOW (fminiw))))
 	    {
 	      /* If we MUST delete this frame, delete the other first.
 		 But do this only if FORCE equals `noelisp'.  */
@@ -1193,10 +1264,18 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
   /* Don't let the frame remain selected.  */
   if (f == sf)
     {
-      Lisp_Object tail, frame1;
+      Lisp_Object tail;
+      Lisp_Object frame1 = Qnil;
 
-      /* Look for another visible frame on the same terminal.  */
-      frame1 = next_frame (frame, Qvisible);
+      /* Look for another visible frame on the same terminal.
+	 Do not call next_frame here because it may loop forever.
+	 See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=15025.  */
+      FOR_EACH_FRAME (tail, frame1)
+	if (!EQ (frame, frame1)
+	    && (FRAME_TERMINAL (XFRAME (frame))
+		== FRAME_TERMINAL (XFRAME (frame1)))
+	    && FRAME_VISIBLE_P (XFRAME (frame1)))
+         break;
 
       /* If there is none, find *some* other frame.  */
       if (NILP (frame1) || EQ (frame1, frame))
@@ -1231,19 +1310,7 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
     }
 
   /* Don't allow minibuf_window to remain on a deleted frame.  */
-  if (EQ (f->minibuffer_window, minibuf_window))
-    {
-      /* Use set_window_buffer instead of Fset_window_buffer (see
-	 discussion of bug#11984, bug#12025, bug#12026).  */
-      set_window_buffer (sf->minibuffer_window,
-			 XWINDOW (minibuf_window)->contents, 0, 0);
-      minibuf_window = sf->minibuffer_window;
-
-      /* If the dying minibuffer window was selected,
-	 select the new one.  */
-      if (minibuffer_selected)
-	Fselect_window (minibuf_window, Qnil);
-    }
+  check_minibuf_window (frame, minibuffer_selected);
 
   /* Don't let echo_area_window to remain on a deleted frame.  */
   if (EQ (f->minibuffer_window, echo_area_window))
@@ -1455,7 +1522,7 @@ passing the normal return value to that function as an argument,
 and returns whatever that function returns.  */)
   (void)
 {
-  FRAME_PTR f;
+  struct frame *f;
   Lisp_Object lispy_dummy;
   Lisp_Object x, y, retval;
   struct gcpro gcpro1;
@@ -1501,7 +1568,7 @@ to read the mouse position, it returns the selected frame for FRAME
 and nil for X and Y.  */)
   (void)
 {
-  FRAME_PTR f;
+  struct frame *f;
   Lisp_Object lispy_dummy;
   Lisp_Object x, y;
 
@@ -1672,16 +1739,8 @@ displayed in the terminal.  */)
   if (NILP (force) && !other_visible_frames (f))
     error ("Attempt to make invisible the sole visible or iconified frame");
 
-  /* Don't allow minibuf_window to remain on a deleted frame.  */
-  if (EQ (f->minibuffer_window, minibuf_window))
-    {
-      struct frame *sf = XFRAME (selected_frame);
-      /* Use set_window_buffer instead of Fset_window_buffer (see
-	 discussion of bug#11984, bug#12025, bug#12026).  */
-      set_window_buffer (sf->minibuffer_window,
-			 XWINDOW (minibuf_window)->contents, 0, 0);
-      minibuf_window = sf->minibuffer_window;
-    }
+  /* Don't allow minibuf_window to remain on an invisible frame.  */
+  check_minibuf_window (frame, EQ (minibuf_window, selected_window));
 
   /* I think this should be done with a hook.  */
 #ifdef HAVE_WINDOW_SYSTEM
@@ -1704,15 +1763,7 @@ If omitted, FRAME defaults to the currently selected frame.  */)
   struct frame *f = decode_live_frame (frame);
 
   /* Don't allow minibuf_window to remain on an iconified frame.  */
-  if (EQ (f->minibuffer_window, minibuf_window))
-    {
-      struct frame *sf = XFRAME (selected_frame);
-      /* Use set_window_buffer instead of Fset_window_buffer (see
-	 discussion of bug#11984, bug#12025, bug#12026).  */
-      set_window_buffer (sf->minibuffer_window,
-			 XWINDOW (minibuf_window)->contents, 0, 0);
-      minibuf_window = sf->minibuffer_window;
-    }
+  check_minibuf_window (frame, EQ (minibuf_window, selected_window));
 
   /* I think this should be done with a hook.  */
 #ifdef HAVE_WINDOW_SYSTEM
@@ -1864,7 +1915,7 @@ See `redirect-frame-focus'.  */)
 /* Return the value of frame parameter PROP in frame FRAME.  */
 
 #ifdef HAVE_WINDOW_SYSTEM
-#if !HAVE_NS && !defined(WINDOWSNT)
+#if !HAVE_NS && !defined (WINDOWSNT)
 static
 #endif
 Lisp_Object
@@ -2237,7 +2288,9 @@ use is not recommended.  Explicitly check for a frame-parameter instead.  */)
   (Lisp_Object frame, Lisp_Object alist)
 {
   struct frame *f = decode_live_frame (frame);
-  register Lisp_Object tail, prop, val;
+  register Lisp_Object prop, val;
+
+  CHECK_LIST (alist);
 
   /* I think this should be done with a hook.  */
 #ifdef HAVE_WINDOW_SYSTEM
@@ -2262,12 +2315,11 @@ use is not recommended.  Explicitly check for a frame-parameter instead.  */)
 
       /* Extract parm names and values into those vectors.  */
 
-      i = 0;
-      for (tail = alist; CONSP (tail); tail = XCDR (tail))
+      for (i = 0; CONSP (alist); alist = XCDR (alist))
 	{
 	  Lisp_Object elt;
 
-	  elt = XCAR (tail);
+	  elt = XCAR (alist);
 	  parms[i] = Fcar (elt);
 	  values[i] = Fcdr (elt);
 	  i++;
@@ -2348,7 +2400,7 @@ to `frame-height'). */)
 
 #ifdef HAVE_WINDOW_SYSTEM
   if (FRAME_WINDOW_P (f))
-    return make_number (x_pixel_height (f));
+    return make_number (FRAME_PIXEL_HEIGHT (f));
   else
 #endif
     return make_number (FRAME_LINES (f));
@@ -2365,7 +2417,7 @@ If FRAME is omitted or nil, the selected frame is used.  */)
 
 #ifdef HAVE_WINDOW_SYSTEM
   if (FRAME_WINDOW_P (f))
-    return make_number (x_pixel_width (f));
+    return make_number (FRAME_PIXEL_WIDTH (f));
   else
 #endif
     return make_number (FRAME_COLS (f));
@@ -2390,8 +2442,9 @@ is used.  */)
 
 DEFUN ("set-frame-height", Fset_frame_height, Sset_frame_height, 2, 3, 0,
        doc: /* Specify that the frame FRAME has LINES lines.
-Optional third arg non-nil means that redisplay should use LINES lines
-but that the idea of the actual height of the frame should not be changed.  */)
+If FRAME is nil, the selected frame is used.  Optional third arg
+non-nil means that redisplay should use LINES lines but that the
+idea of the actual height of the frame should not be changed.  */)
   (Lisp_Object frame, Lisp_Object lines, Lisp_Object pretend)
 {
   register struct frame *f = decode_live_frame (frame);
@@ -2414,8 +2467,9 @@ but that the idea of the actual height of the frame should not be changed.  */)
 
 DEFUN ("set-frame-width", Fset_frame_width, Sset_frame_width, 2, 3, 0,
        doc: /* Specify that the frame FRAME has COLS columns.
-Optional third arg non-nil means that redisplay should use COLS columns
-but that the idea of the actual width of the frame should not be changed.  */)
+If FRAME is nil, the selected frame is used.  Optional third arg
+non-nil means that redisplay should use COLS columns but that the
+idea of the actual width of the frame should not be changed.  */)
   (Lisp_Object frame, Lisp_Object cols, Lisp_Object pretend)
 {
   register struct frame *f = decode_live_frame (frame);
@@ -2437,15 +2491,14 @@ but that the idea of the actual width of the frame should not be changed.  */)
 }
 
 DEFUN ("set-frame-size", Fset_frame_size, Sset_frame_size, 3, 3, 0,
-       doc: /* Sets size of FRAME to COLS by ROWS, measured in characters.  */)
+       doc: /* Sets size of FRAME to COLS by ROWS, measured in characters.
+If FRAME is nil, the selected frame is used.  */)
   (Lisp_Object frame, Lisp_Object cols, Lisp_Object rows)
 {
-  register struct frame *f;
+  register struct frame *f = decode_live_frame (frame);
 
-  CHECK_LIVE_FRAME (frame);
   CHECK_TYPE_RANGED_INTEGER (int, cols);
   CHECK_TYPE_RANGED_INTEGER (int, rows);
-  f = XFRAME (frame);
 
   /* I think this should be done with a hook.  */
 #ifdef HAVE_WINDOW_SYSTEM
@@ -2467,17 +2520,16 @@ DEFUN ("set-frame-size", Fset_frame_size, Sset_frame_size, 3, 3, 0,
 DEFUN ("set-frame-position", Fset_frame_position,
        Sset_frame_position, 3, 3, 0,
        doc: /* Sets position of FRAME in pixels to XOFFSET by YOFFSET.
-This is actually the position of the upper left corner of the frame.
-Negative values for XOFFSET or YOFFSET are interpreted relative to
-the rightmost or bottommost possible position (that stays within the screen).  */)
+If FRAME is nil, the selected frame is used.  XOFFSET and YOFFSET are
+actually the position of the upper left corner of the frame.  Negative
+values for XOFFSET or YOFFSET are interpreted relative to the rightmost
+or bottommost possible position (that stays within the screen).  */)
   (Lisp_Object frame, Lisp_Object xoffset, Lisp_Object yoffset)
 {
-  register struct frame *f;
+  register struct frame *f = decode_live_frame (frame);
 
-  CHECK_LIVE_FRAME (frame);
   CHECK_TYPE_RANGED_INTEGER (int, xoffset);
   CHECK_TYPE_RANGED_INTEGER (int, yoffset);
-  f = XFRAME (frame);
 
   /* I think this should be done with a hook.  */
 #ifdef HAVE_WINDOW_SYSTEM
@@ -2597,7 +2649,7 @@ x_fullscreen_adjust (struct frame *f, int *width, int *height, int *top_pos, int
    to store the new value in the parameter alist.  */
 
 void
-x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
+x_set_frame_parameters (struct frame *f, Lisp_Object alist)
 {
   Lisp_Object tail;
 
@@ -2616,9 +2668,9 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
   Lisp_Object *parms;
   Lisp_Object *values;
   ptrdiff_t i, p;
-  int left_no_change = 0, top_no_change = 0;
-  int icon_left_no_change = 0, icon_top_no_change = 0;
-  int size_changed = 0;
+  bool left_no_change = 0, top_no_change = 0;
+  bool icon_left_no_change = 0, icon_top_no_change = 0;
+  bool size_changed = 0;
   struct gcpro gcpro1, gcpro2;
 
   i = 0;
@@ -2742,7 +2794,7 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
     {
       left_no_change = 1;
       if (f->left_pos < 0)
-	left = Fcons (Qplus, Fcons (make_number (f->left_pos), Qnil));
+	left = list2 (Qplus, make_number (f->left_pos));
       else
 	XSETINT (left, f->left_pos);
     }
@@ -2750,7 +2802,7 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
     {
       top_no_change = 1;
       if (f->top_pos < 0)
-	top = Fcons (Qplus, Fcons (make_number (f->top_pos), Qnil));
+	top = list2 (Qplus, make_number (f->top_pos));
       else
 	XSETINT (top, f->top_pos);
     }
@@ -2856,10 +2908,11 @@ x_set_frame_parameters (FRAME_PTR f, Lisp_Object alist)
 	/* Actually set that position, and convert to absolute.  */
 	x_set_offset (f, leftpos, toppos, -1);
       }
-
+#ifdef HAVE_X_WINDOWS
     if ((!NILP (icon_left) || !NILP (icon_top))
 	&& ! (icon_left_no_change && icon_top_no_change))
       x_wm_set_icon_position (f, XINT (icon_left), XINT (icon_top));
+#endif /* HAVE_X_WINDOWS */
   }
 
   UNGCPRO;
@@ -2885,13 +2938,13 @@ x_report_frame_params (struct frame *f, Lisp_Object *alistptr)
   if (f->left_pos >= 0)
     store_in_alist (alistptr, Qleft, tem);
   else
-    store_in_alist (alistptr, Qleft, Fcons (Qplus, Fcons (tem, Qnil)));
+    store_in_alist (alistptr, Qleft, list2 (Qplus, tem));
 
   XSETINT (tem, f->top_pos);
   if (f->top_pos >= 0)
     store_in_alist (alistptr, Qtop, tem);
   else
-    store_in_alist (alistptr, Qtop, Fcons (Qplus, Fcons (tem, Qnil)));
+    store_in_alist (alistptr, Qtop, list2 (Qplus, tem));
 
   store_in_alist (alistptr, Qborder_width,
 		  make_number (f->border_width));
@@ -3337,7 +3390,7 @@ x_set_scroll_bar_width (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 /* Return non-nil if frame F wants a bitmap icon.  */
 
 Lisp_Object
-x_icon_type (FRAME_PTR f)
+x_icon_type (struct frame *f)
 {
   Lisp_Object tem;
 
@@ -3534,7 +3587,7 @@ xrdb_get_resource (XrmDatabase rdb, Lisp_Object attribute, Lisp_Object class, Li
 
   value = x_get_string_resource (rdb, name_key, class_key);
 
-  if (value != (char *) 0 && *value)
+  if (value && *value)
     return build_string (value);
   else
     return Qnil;
@@ -3751,7 +3804,7 @@ x_default_parameter (struct frame *f, Lisp_Object alist, Lisp_Object prop,
   tem = x_frame_get_arg (f, alist, prop, xprop, xclass, type);
   if (EQ (tem, Qunbound))
     tem = deflt;
-  x_set_frame_parameters (f, Fcons (Fcons (prop, tem), Qnil));
+  x_set_frame_parameters (f, list1 (Fcons (prop, tem)));
   return tem;
 }
 
@@ -3883,9 +3936,9 @@ On Nextstep, this just calls `ns-parse-geometry'.  */)
       Lisp_Object element;
 
       if (x >= 0 && (geometry & XNegative))
-	element = Fcons (Qleft, Fcons (Qminus, Fcons (make_number (-x), Qnil)));
+	element = list3 (Qleft, Qminus, make_number (-x));
       else if (x < 0 && ! (geometry & XNegative))
-	element = Fcons (Qleft, Fcons (Qplus, Fcons (make_number (x), Qnil)));
+	element = list3 (Qleft, Qplus, make_number (x));
       else
 	element = Fcons (Qleft, make_number (x));
       result = Fcons (element, result);
@@ -3896,9 +3949,9 @@ On Nextstep, this just calls `ns-parse-geometry'.  */)
       Lisp_Object element;
 
       if (y >= 0 && (geometry & YNegative))
-	element = Fcons (Qtop, Fcons (Qminus, Fcons (make_number (-y), Qnil)));
+	element = list3 (Qtop, Qminus, make_number (-y));
       else if (y < 0 && ! (geometry & YNegative))
-	element = Fcons (Qtop, Fcons (Qplus, Fcons (make_number (y), Qnil)));
+	element = list3 (Qtop, Qplus, make_number (y));
       else
 	element = Fcons (Qtop, make_number (y));
       result = Fcons (element, result);
@@ -3925,8 +3978,8 @@ On Nextstep, this just calls `ns-parse-geometry'.  */)
 #define DEFAULT_ROWS 35
 #define DEFAULT_COLS 80
 
-int
-x_figure_window_size (struct frame *f, Lisp_Object parms, int toolbar_p)
+long
+x_figure_window_size (struct frame *f, Lisp_Object parms, bool toolbar_p)
 {
   register Lisp_Object tem0, tem1, tem2;
   long window_prompting = 0;
@@ -4193,8 +4246,7 @@ make_monitor_attribute_list (struct MonitorInfo *monitors,
 			 mi->work.width, mi->work.height);
       geometry = list4i (mi->geom.x, mi->geom.y,
 			 mi->geom.width, mi->geom.height);
-      attributes = Fcons (Fcons (Qsource,
-                                 make_string (source, strlen (source))),
+      attributes = Fcons (Fcons (Qsource, build_string (source)),
                           attributes);
       attributes = Fcons (Fcons (Qframes, AREF (monitor_frames, i)),
 			  attributes);
@@ -4277,7 +4329,6 @@ syms_of_frame (void)
   DEFSYM (Qx_frame_parameter, "x-frame-parameter");
 
   DEFSYM (Qterminal, "terminal");
-  DEFSYM (Qterminal_live_p, "terminal-live-p");
 
   DEFSYM (Qgeometry, "geometry");
   DEFSYM (Qworkarea, "workarea");
@@ -4461,11 +4512,14 @@ automatically.  See also `mouse-autoselect-window'.  */);
   defsubr (&Swindow_system);
   defsubr (&Smake_terminal_frame);
   defsubr (&Shandle_switch_frame);
+  defsubr (&Shandle_focus_in);
+  defsubr (&Shandle_focus_out);
   defsubr (&Sselect_frame);
   defsubr (&Sselected_frame);
   defsubr (&Sframe_list);
   defsubr (&Snext_frame);
   defsubr (&Sprevious_frame);
+  defsubr (&Slast_nonminibuf_frame);
   defsubr (&Sdelete_frame);
   defsubr (&Smouse_position);
   defsubr (&Smouse_pixel_position);

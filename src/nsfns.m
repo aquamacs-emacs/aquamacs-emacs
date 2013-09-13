@@ -144,7 +144,7 @@ check_ns_display_info (Lisp_Object object)
     dpyinfo = ns_display_info_for_name (object);
   else
     {
-      FRAME_PTR f = decode_window_system_frame (object);
+      struct frame *f = decode_window_system_frame (object);
       dpyinfo = FRAME_NS_DISPLAY_INFO (f);
     }
 
@@ -460,7 +460,7 @@ x_set_icon_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 }
 
 static void
-ns_set_name_internal (FRAME_PTR f, Lisp_Object name)
+ns_set_name_internal (struct frame *f, Lisp_Object name)
 {
   struct gcpro gcpro1;
   Lisp_Object encoded_name, encoded_icon_name;
@@ -532,7 +532,7 @@ ns_set_name (struct frame *f, Lisp_Object name, int explicit)
    specified a name for the frame; the name will override any set by the
    redisplay code.  */
 static void
-x_explicitly_set_name (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
+x_explicitly_set_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   NSTRACE (x_explicitly_set_name);
   ns_set_name (f, arg, 1);
@@ -543,7 +543,7 @@ x_explicitly_set_name (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
    name; names set this way will never override names set by the user's
    lisp code.  */
 void
-x_implicitly_set_name (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
+x_implicitly_set_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   NSTRACE (x_implicitly_set_name);
 
@@ -886,14 +886,10 @@ ns_cursor_type_to_lisp (int arg)
 
 /* This is the same as the xfns.c definition.  */
 static void
-x_set_cursor_type (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
+x_set_cursor_type (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   set_frame_cursor_types (f, arg);
-
-  /* Make sure the cursor gets redrawn.  */
-  cursor_type_changed = 1;
 }
-
 
 /* called to set mouse pointer color, but all other terms use it to
    initialize pointer types (and don't set the color ;) */
@@ -914,7 +910,7 @@ ns_appkit_version_str (void)
 
 #ifdef NS_IMPL_GNUSTEP
   sprintf(tmp, "gnustep-gui-%s", Xstr(GNUSTEP_GUI_VERSION));
-#elif defined(NS_IMPL_COCOA)
+#elif defined (NS_IMPL_COCOA)
   sprintf(tmp, "apple-appkit-%.2f", NSAppKitVersionNumber);
 #else
   tmp = "ns-unknown";
@@ -931,7 +927,7 @@ ns_appkit_version_int (void)
 {
 #ifdef NS_IMPL_GNUSTEP
   return GNUSTEP_GUI_MAJOR_VERSION * 100 + GNUSTEP_GUI_MINOR_VERSION;
-#elif defined(NS_IMPL_COCOA)
+#elif defined (NS_IMPL_COCOA)
   return (int)NSAppKitVersionNumber;
 #endif
   return 0;
@@ -1010,7 +1006,7 @@ frame_parm_handler ns_frame_parm_handlers[] =
 /* Handler for signals raised during x_create_frame.
    FRAME is the frame which is partially constructed.  */
 
-static Lisp_Object
+static void
 unwind_create_frame (Lisp_Object frame)
 {
   struct frame *f = XFRAME (frame);
@@ -1019,7 +1015,7 @@ unwind_create_frame (Lisp_Object frame)
      display is disconnected after the frame has become official, but
      before x_create_frame removes the unwind protect.  */
   if (!FRAME_LIVE_P (f))
-    return Qnil;
+    return;
 
   /* If frame is ``official'', nothing to do.  */
   if (NILP (Fmemq (frame, Vframe_list)))
@@ -1035,10 +1031,7 @@ unwind_create_frame (Lisp_Object frame)
       /* Check that reference counts are indeed correct.  */
       eassert (dpyinfo->terminal->image_cache->refcount == image_cache_refcount);
 #endif
-      return Qt;
     }
-
-  return Qnil;
 }
 
 /*
@@ -1100,7 +1093,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   Lisp_Object frame, tem;
   Lisp_Object name;
   int minibuffer_only = 0;
-  int window_prompting = 0;
+  long window_prompting = 0;
   int width, height;
   ptrdiff_t count = specpdl_ptr - specpdl;
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
@@ -2694,7 +2687,7 @@ there was no result.  */)
   ns_string_to_pasteboard (pb, send);
 
   if (NSPerformService (svcName, pb) == NO)
-    Fsignal (Qquit, Fcons (build_string ("service not available"), Qnil));
+    Fsignal (Qquit, list1 (build_string ("service not available")));
 
   if ([[pb types] count] == 0)
     return build_string ("");
@@ -2710,13 +2703,17 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
 /* TODO: If GNUstep ever implements precomposedStringWithCanonicalMapping,
          remove this. */
   NSString *utfStr;
+  Lisp_Object ret;
 
   CHECK_STRING (str);
-  utfStr = [NSString stringWithUTF8String: SSDATA (str)];
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+ utfStr = [NSString stringWithUTF8String: SSDATA (str)];
 #ifdef NS_IMPL_COCOA
-    utfStr = [utfStr precomposedStringWithCanonicalMapping];
+  utfStr = [utfStr precomposedStringWithCanonicalMapping];
 #endif
-  return build_string ([utfStr UTF8String]);
+  ret = build_string ([utfStr UTF8String]);
+  [pool release];
+  return ret;
 }
 
 #ifdef NS_IMPL_COCOA
@@ -3163,30 +3160,6 @@ x_get_focus_frame (struct frame *frame)
   return nsfocus;
 }
 
-
-int
-x_pixel_width (struct frame *f)
-{
-  return FRAME_PIXEL_WIDTH (f);
-}
-
-
-int
-x_pixel_height (struct frame *f)
-{
-  return FRAME_PIXEL_HEIGHT (f);
-}
-
-
-void
-x_sync (struct frame *f)
-{
-  /* XXX Not implemented XXX */
-  return;
-}
-
-
-
 /* ==========================================================================
 
     Lisp definitions that, for whatever reason, we can't alias as 'ns-XXX'.
@@ -3394,7 +3367,7 @@ Internal use only, use `display-monitor-attributes-list' instead.  */)
   if (n_monitors == 0)
     return Qnil;
 
-  monitors = (struct MonitorInfo *) xzalloc (n_monitors * sizeof (*monitors));
+  monitors = xzalloc (n_monitors * sizeof *monitors);
 
   for (i = 0; i < [screens count]; ++i)
     {
@@ -3422,7 +3395,7 @@ Internal use only, use `display-monitor-attributes-list' instead.  */)
           vy = (short) (primary_display_height -
                         vfr.size.height - vfr.origin.y);
         }
-      
+
       m->geom.x = (short) fr.origin.x;
       m->geom.y = y;
       m->geom.width = (unsigned short) fr.size.width;
@@ -3885,7 +3858,7 @@ Example: Install an icon Gnus.tiff and execute the following code
 
 When you miniaturize a Group, Summary or Article frame, Gnus.tiff will
 be used as the image of the icon representing the frame.  */);
-  Vns_icon_type_alist = Fcons (Qt, Qnil);
+  Vns_icon_type_alist = list1 (Qt);
 
   DEFVAR_LISP ("ns-version-string", Vns_version_string,
                doc: /* Toolkit version for NS Windowing.  */);

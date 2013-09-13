@@ -170,12 +170,16 @@ PLACE must be a generalized variable whose value is a list.
 If the value is nil, `pop' returns nil but does not actually
 change the list."
   (declare (debug (gv-place)))
-  (list 'car
-        (if (symbolp place)
-            ;; So we can use `pop' in the bootstrap before `gv' can be used.
-            (list 'prog1 place (list 'setq place (list 'cdr place)))
-          (gv-letplace (getter setter) place
-            `(prog1 ,getter ,(funcall setter `(cdr ,getter)))))))
+  ;; We use `car-safe' here instead of `car' because the behavior is the same
+  ;; (if it's not a cons cell, the `cdr' would have signaled an error already),
+  ;; but `car-safe' is total, so the byte-compiler can safely remove it if the
+  ;; result is not used.
+  `(car-safe
+    ,(if (symbolp place)
+         ;; So we can use `pop' in the bootstrap before `gv' can be used.
+         (list 'prog1 place (list 'setq place (list 'cdr place)))
+       (gv-letplace (getter setter) place
+         `(prog1 ,getter ,(funcall setter `(cdr ,getter)))))))
 
 (defmacro when (cond &rest body)
   "If COND yields non-nil, do BODY, else return nil.
@@ -311,6 +315,26 @@ result of an incorrect manipulation on the part of the user, rather than the
 result of an actual problem."
   (while t
     (signal 'user-error (list (apply #'format format args)))))
+
+(defun define-error (name message &optional parent)
+  "Define NAME as a new error signal.
+MESSAGE is a string that will be output to the echo area if such an error
+is signaled without being caught by a `condition-case'.
+PARENT is either a signal or a list of signals from which it inherits.
+Defaults to `error'."
+  (unless parent (setq parent 'error))
+  (let ((conditions
+         (if (consp parent)
+             (apply #'nconc
+                    (mapcar (lambda (parent)
+                              (cons parent
+                                    (or (get parent 'error-conditions)
+                                        (error "Unknown signal `%s'" parent))))
+                            parent))
+           (cons parent (get parent 'error-conditions)))))
+    (put name 'error-conditions
+         (delete-dups (copy-sequence (cons name conditions))))
+    (when message (put name 'error-message message))))
 
 ;; We put this here instead of in frame.el so that it's defined even on
 ;; systems where frame.el isn't loaded.
@@ -1520,9 +1544,10 @@ other hooks, such as major mode hooks, can do the job."
       ;; FIXME: Something like this could be used for `set' as well.
       (if (or (not (eq 'quote (car-safe list-var)))
               (special-variable-p (cadr list-var))
-              (and append compare-fn))
+              (not (macroexp-const-p append)))
           exp
         (let* ((sym (cadr list-var))
+               (append (eval append))
                (msg (format "`add-to-list' can't use lexical var `%s'; use `push' or `cl-pushnew'"
                             sym))
                ;; Big ugly hack so we only output a warning during
@@ -1535,13 +1560,17 @@ other hooks, such as major mode hooks, can do the job."
                           (when (assq sym byte-compile--lexical-environment)
                             (byte-compile-log-warning msg t :error))))
                (code
-                (if append
-                    (macroexp-let2 macroexp-copyable-p x element
-                    `(unless (member ,x ,sym)
-                       (setq ,sym (append ,sym (list ,x)))))
-                  (require 'cl-lib)
-                  `(cl-pushnew ,element ,sym
-                               :test ,(or compare-fn '#'equal)))))
+                (macroexp-let2 macroexp-copyable-p x element
+                  `(unless ,(if compare-fn
+                                (progn
+                                  (require 'cl-lib)
+                                  `(cl-member ,x ,sym :test ,compare-fn))
+                              ;; For bootstrapping reasons, don't rely on
+                              ;; cl--compiler-macro-member for the base case.
+                              `(member ,x ,sym))
+                     ,(if append
+                          `(setq ,sym (append ,sym (list ,x)))
+                        `(push ,x ,sym))))))
           (if (not (macroexp--compiling-p))
               code
             `(progn
@@ -2003,7 +2032,7 @@ any other terminator is used itself as input.
 The optional argument PROMPT specifies a string to use to prompt the user.
 The variable `read-quoted-char-radix' controls which radix to use
 for numeric input."
-  (let ((message-log-max nil) done (first t) (code 0) char translated)
+  (let ((message-log-max nil) done (first t) (code 0) translated)
     (while (not done)
       (let ((inhibit-quit first)
 	    ;; Don't let C-h get the help message--only help function keys.
@@ -2544,11 +2573,6 @@ When the hook runs, the temporary buffer is current.
 This hook is normally set up with a function to put the buffer in Help
 mode.")
 
-;; The `assert' macro from the cl package signals
-;; `cl-assertion-failed' at runtime so always define it.
-(put 'cl-assertion-failed 'error-conditions '(error))
-(put 'cl-assertion-failed 'error-message (purecopy "Assertion failed"))
-
 (defconst user-emacs-directory
   (if (eq system-type 'ms-dos)
       ;; MS-DOS cannot have initial dot.
@@ -2767,6 +2791,13 @@ Otherwise, return nil."
   (if (and (symbolp object) (fboundp object))
       (setq object (indirect-function object t)))
   (and (subrp object) (eq (cdr (subr-arity object)) 'unevalled)))
+
+(defun macrop (object)
+  "Non-nil if and only if OBJECT is a macro."
+  (let ((def (indirect-function object t)))
+    (when (consp def)
+      (or (eq 'macro (car def))
+          (and (autoloadp def) (memq (nth 4 def) '(macro t)))))))
 
 (defun field-at-pos (pos)
   "Return the field at position POS, taking stickiness etc into account."
@@ -3342,16 +3373,22 @@ even if this catches the signal."
 (define-obsolete-function-alias 'condition-case-no-debug
   'condition-case-unless-debug "24.1")
 
-(defmacro with-demoted-errors (&rest body)
+(defmacro with-demoted-errors (format &rest body)
   "Run BODY and demote any errors to simple messages.
 If `debug-on-error' is non-nil, run BODY without catching its errors.
 This is to be used around code which is not expected to signal an error
-but which should be robust in the unexpected case that an error is signaled."
-  (declare (debug t) (indent 0))
-  (let ((err (make-symbol "err")))
+but which should be robust in the unexpected case that an error is signaled.
+For backward compatibility, if FORMAT is not a constant string, it
+is assumed to be part of BODY, in which case the message format
+used is \"Error: %S\"."
+  (declare (debug t) (indent 1))
+  (let ((err (make-symbol "err"))
+        (format (if (and (stringp format) body) format
+                  (prog1 "Error: %S"
+                    (if format (push format body))))))
     `(condition-case-unless-debug ,err
-         (progn ,@body)
-       (error (message "Error: %S" ,err) nil))))
+         ,(macroexp-progn body)
+       (error (message ,format ,err) nil))))
 
 (defmacro combine-after-change-calls (&rest body)
   "Execute BODY, but don't call the after-change functions till the end.
@@ -3552,7 +3589,7 @@ likely to have undesired semantics.")
 ;; defaulted, OMIT-NULLS should be treated as t.  Simplifying the logical
 ;; expression leads to the equivalent implementation that if SEPARATORS
 ;; is defaulted, OMIT-NULLS is treated as t.
-(defun split-string (string &optional separators omit-nulls)
+(defun split-string (string &optional separators omit-nulls trim)
   "Split STRING into substrings bounded by matches for SEPARATORS.
 
 The beginning and end of STRING, and each match for SEPARATORS, are
@@ -3570,17 +3607,50 @@ that for the default value of SEPARATORS leading and trailing whitespace
 are effectively trimmed).  If nil, all zero-length substrings are retained,
 which correctly parses CSV format, for example.
 
+If TRIM is non-nil, it should be a regular expression to match
+text to trim from the beginning and end of each substring.  If trimming
+makes the substring empty, it is treated as null.
+
+If you want to trim whitespace from the substrings, the reliably correct
+way is using TRIM.  Making SEPARATORS match that whitespace gives incorrect
+results when there is whitespace at the start or end of STRING.  If you
+see such calls to `split-string', please fix them.
+
 Note that the effect of `(split-string STRING)' is the same as
 `(split-string STRING split-string-default-separators t)'.  In the rare
 case that you wish to retain zero-length substrings when splitting on
 whitespace, use `(split-string STRING split-string-default-separators)'.
 
 Modifies the match data; use `save-match-data' if necessary."
-  (let ((keep-nulls (not (if separators omit-nulls t)))
-	(rexp (or separators split-string-default-separators))
-	(start 0)
-	notfirst
-	(list nil))
+  (let* ((keep-nulls (not (if separators omit-nulls t)))
+	 (rexp (or separators split-string-default-separators))
+	 (start 0)
+	 this-start this-end
+	 notfirst
+	 (list nil)
+	 (push-one
+	  ;; Push the substring in range THIS-START to THIS-END
+	  ;; onto LIST, trimming it and perhaps discarding it.
+	  (lambda ()
+	    (when trim
+	      ;; Discard the trim from start of this substring.
+	      (let ((tem (string-match trim string this-start)))
+		(and (eq tem this-start)
+		     (setq this-start (match-end 0)))))
+
+	    (when (or keep-nulls (< this-start this-end))
+	      (let ((this (substring string this-start this-end)))
+
+		;; Discard the trim from end of this substring.
+		(when trim
+		  (let ((tem (string-match (concat trim "\\'") this 0)))
+		    (and tem (< tem (length this))
+			 (setq this (substring this 0 tem)))))
+
+		;; Trimming could make it empty; check again.
+		(when (or keep-nulls (> (length this) 0))
+		  (push this list)))))))
+
     (while (and (string-match rexp string
 			      (if (and notfirst
 				       (= start (match-beginning 0))
@@ -3588,15 +3658,15 @@ Modifies the match data; use `save-match-data' if necessary."
 				  (1+ start) start))
 		(< start (length string)))
       (setq notfirst t)
-      (if (or keep-nulls (< start (match-beginning 0)))
-	  (setq list
-		(cons (substring string start (match-beginning 0))
-		      list)))
-      (setq start (match-end 0)))
-    (if (or keep-nulls (< start (length string)))
-	(setq list
-	      (cons (substring string start)
-		    list)))
+      (setq this-start start this-end (match-beginning 0)
+	    start (match-end 0))
+
+      (funcall push-one))
+
+    ;; Handle the substring at the end of STRING.
+    (setq this-start start this-end (length string))
+    (funcall push-one)
+
     (nreverse list)))
 
 (defun combine-and-quote-strings (strings &optional separator)
@@ -3876,6 +3946,7 @@ FILE should be the name of a library, with no directory name."
   (declare (obsolete eval-after-load "23.2"))
   (eval-after-load file (read)))
 
+
 (defun display-delayed-warnings ()
   "Display delayed warnings from `delayed-warnings-list'.
 Used from `delayed-warnings-hook' (which see)."
@@ -3908,6 +3979,12 @@ Used from `delayed-warnings-hook' (which see)."
 By default, this hook contains functions to consolidate the
 warnings listed in `delayed-warnings-list', display them, and set
 `delayed-warnings-list' back to nil.")
+
+(defun delay-warning (type message &optional level buffer-name)
+  "Display a delayed warning.
+Aside from going through `delayed-warnings-list', this is equivalent
+to `display-warning'."
+  (push (list type message level buffer-name) delayed-warnings-list))
 
 
 ;;;; invisibility specs
@@ -4028,10 +4105,14 @@ backwards ARG times if negative."
 
 ;;;; Text clones
 
-(defun text-clone-maintain (ol1 after beg end &optional _len)
+(defvar text-clone--maintaining nil)
+
+(defun text-clone--maintain (ol1 after beg end &optional _len)
   "Propagate the changes made under the overlay OL1 to the other clones.
 This is used on the `modification-hooks' property of text clones."
-  (when (and after (not undo-in-progress) (overlay-start ol1))
+  (when (and after (not undo-in-progress)
+             (not text-clone--maintaining)
+             (overlay-start ol1))
     (let ((margin (if (overlay-get ol1 'text-clone-spreadp) 1 0)))
       (setq beg (max beg (+ (overlay-start ol1) margin)))
       (setq end (min end (- (overlay-end ol1) margin)))
@@ -4062,7 +4143,7 @@ This is used on the `modification-hooks' property of text clones."
 		(tail (- (overlay-end ol1) end))
 		(str (buffer-substring beg end))
 		(nothing-left t)
-		(inhibit-modification-hooks t))
+		(text-clone--maintaining t))
 	    (dolist (ol2 (overlay-get ol1 'text-clones))
 	      (let ((oe (overlay-end ol2)))
 		(unless (or (eq ol1 ol2) (null oe))
@@ -4073,7 +4154,7 @@ This is used on the `modification-hooks' property of text clones."
 		    (unless (> mod-beg (point))
 		      (save-excursion (insert str))
 		      (delete-region mod-beg (point)))
-		    ;;(overlay-put ol2 'modification-hooks '(text-clone-maintain))
+		    ;;(overlay-put ol2 'modification-hooks '(text-clone--maintain))
 		    ))))
 	    (if nothing-left (delete-overlay ol1))))))))
 
@@ -4104,17 +4185,18 @@ clone should be incorporated in the clone."
 			     (>= pt-end (point-max))
   			     (>= start (point-max)))
   			 0 1))
+         ;; FIXME: Reuse overlays at point to extend dups!
   	 (ol1 (make-overlay (- start start-margin) (+ end end-margin) nil t))
   	 (ol2 (make-overlay (- (point) start-margin) (+ pt-end end-margin) nil t))
 	 (dups (list ol1 ol2)))
-    (overlay-put ol1 'modification-hooks '(text-clone-maintain))
+    (overlay-put ol1 'modification-hooks '(text-clone--maintain))
     (when spreadp (overlay-put ol1 'text-clone-spreadp t))
     (when syntax (overlay-put ol1 'text-clone-syntax syntax))
     ;;(overlay-put ol1 'face 'underline)
     (overlay-put ol1 'evaporate t)
     (overlay-put ol1 'text-clones dups)
     ;;
-    (overlay-put ol2 'modification-hooks '(text-clone-maintain))
+    (overlay-put ol2 'modification-hooks '(text-clone--maintain))
     (when spreadp (overlay-put ol2 'text-clone-spreadp t))
     (when syntax (overlay-put ol2 'text-clone-syntax syntax))
     ;;(overlay-put ol2 'face 'underline)
@@ -4169,22 +4251,6 @@ I is the index of the frame after FRAME2.  It should return nil
 if those frames don't seem special and otherwise, it should return
 the number of frames to skip (minus 1).")
 
-(defmacro internal--called-interactively-p--get-frame (n)
-  ;; `sym' will hold a global variable, which will be used kind of like C's
-  ;; "static" variables.
-  (let ((sym (make-symbol "base-index")))
-    `(progn
-       (defvar ,sym)
-       (unless (boundp ',sym)
-         (let ((i 1))
-           (while (not (eq (indirect-function (nth 1 (backtrace-frame i)) t)
-                           (indirect-function 'called-interactively-p)))
-             (setq i (1+ i)))
-           (setq ,sym i)))
-       ;; (unless (eq (nth 1 (backtrace-frame ,sym)) 'called-interactively-p)
-       ;;   (error "called-interactively-p: %s is out-of-sync!" ,sym))
-       (backtrace-frame (+ ,sym ,n)))))
-
 (defun called-interactively-p (&optional kind)
   "Return t if the containing function was called by `call-interactively'.
 If KIND is `interactive', then only return t if the call was made
@@ -4219,7 +4285,7 @@ command is called from a keyboard macro?"
            (get-next-frame
             (lambda ()
               (setq frame nextframe)
-              (setq nextframe (internal--called-interactively-p--get-frame i))
+              (setq nextframe (backtrace-frame i 'called-interactively-p))
               ;; (message "Frame %d = %S" i nextframe)
               (setq i (1+ i)))))
       (funcall get-next-frame) ;; Get the first frame.
