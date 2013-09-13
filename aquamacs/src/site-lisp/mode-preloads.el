@@ -1,22 +1,25 @@
 ;; cache (relative) load path for edit-modes
 
-(defun aquamacs-preload-add-load-path (dir)
+(defun aquamacs-preload-add-load-path (dir max-depth)
   "Recursively find all subdirectories of current directory.
 More precisely, this uses only the subdirectories whose names
 start with letters or digits; it excludes any subdirectory named `RCS'
 or `CVS', and any subdirectory that contains a file named `.nosearch'."
   (let (dirs
 	attrs
-	(pending (list default-directory)))
+	(pending (list (cons default-directory 0))))
     ;; This loop does a breadth-first tree walk on DIR's subtree,
     ;; putting each subdir into DIRS as its contents are examined.
     (while pending
-      (push (pop pending) dirs)
-      (let* ((this-dir (car dirs))
+      
+      (let* ((this-entry (pop pending))
+	     (this-dir (car this-entry))
+	     (depth (cdr this-entry))
 	     (contents (directory-files this-dir))
 	     (default-directory this-dir)
 	     (canonicalized (if (fboundp 'untranslated-canonical-name)
 				(untranslated-canonical-name this-dir))))
+	(push (car this-entry) dirs)
 	;; The Windows version doesn't report meaningful inode
 	;; numbers, so use the canonicalized absolute file name of the
 	;; directory instead.
@@ -34,10 +37,11 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 			 (not (string-match "\\.elc?\\'" file))
 			 (file-directory-p file))
 		(let ((expanded (expand-file-name file)))
-		  (unless (and (not (equal file "edit-modes")) 
-			       (file-exists-p (expand-file-name ".nosearch"
-								expanded)))
-		    (setq pending (nconc pending (list expanded)))))))))))
+		  (if (and (or (null max-depth) (<= depth max-depth))
+			       ;; (file-exists-p (expand-file-name ".nosearch"
+			       ;; 					expanded))
+			       )
+		    (setq pending (nconc pending (list (cons expanded (1+ depth)))))))))))))
 
     dirs))
 
@@ -50,12 +54,12 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 	    (normal-top-level-add-subdirs-inode-list))
 	(message "Caching directory %sedit-modes" ddir)
 	(let ((default-directory ddir))
-	  (mapcar (lambda (f) (file-relative-name f "../../"))
-		  (aquamacs-preload-add-load-path "edit-modes"))
-	  (mapcar (lambda (f) (file-relative-name f "../../"))
-		  (aquamacs-preload-add-load-path "util")))
+	  (append (mapcar (lambda (f) (file-relative-name f "../../"))
+			  (aquamacs-preload-add-load-path "edit-modes" 1))
+		  (mapcar (lambda (f) (file-relative-name f "../../"))
+			  (aquamacs-preload-add-load-path "util" nil))))
 	))
-;;(message "... resulting in %s" aquamacs-preloaded-load-path)
+(message "... caching: %s" aquamacs-preloaded-load-path)
 
 (load "aquamacs/smart-dnd") ;; Smart Drag&Drop
 
