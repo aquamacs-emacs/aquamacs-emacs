@@ -287,3 +287,9 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
   "Turn on pseudo-structural editing of Lisp code.")
 (autoload 'paredit-mode "paredit"
   "Minor mode for pseudo-structurally editing Lisp code.")
+
+(autoload 'markdown-mode "markdown"
+  "Major mode for editing Markdown files.")
+(assq-set-equal "\\.\\(md\\)$" 
+		'markdown-mode 'auto-mode-alist)
+
