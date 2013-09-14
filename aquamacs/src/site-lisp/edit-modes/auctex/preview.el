@@ -1958,7 +1958,6 @@ and TEMPDIR as CDR.  TEMPDIR is a copy of `TeX-active-tempdir'
 with the directory name, the reference count and its top directory
 name elements.  If FILE is already in that form, the file name itself
 gets converted into a CONS-cell with a name and a reference count."
-  (print (format "make filename %s\n" file))
   (if (consp file)
       (progn
 	(if (consp (car file))
