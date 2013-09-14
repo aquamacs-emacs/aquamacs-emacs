@@ -1,4 +1,4 @@
-;;; em-pred.el --- argument predicates and modifiers (ala zsh)
+;;; em-pred.el --- argument predicates and modifiers (ala zsh)  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 1999-2013 Free Software Foundation, Inc.
 
@@ -307,7 +307,7 @@ functions.  PRED-FUNCS take a filename and return t if the test
 succeeds; MOD-FUNCS take any string and preform a modification,
 returning the resultant string."
   (let (result negate follow preds mods)
-    (condition-case err
+    (condition-case nil
 	(while (not (eobp))
 	  (let ((char (char-after)))
 	    (cond

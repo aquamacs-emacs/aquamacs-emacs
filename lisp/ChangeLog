@@ -1,3 +1,146 @@
+2013-09-13  Glenn Morris  <rgm@gnu.org>
+
+	* dired-x.el (dired-guess-shell-alist-user): Doc fix.
+	(dired-guess-default): Make `file' available in the env.  (Bug#15363)
+
+2013-09-13  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* frame.el (x-focus-frame): Mark as declared in frame.c.
+
+2013-09-13  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* ls-lisp.el: Use advice-add.
+	(original-insert-directory): Remove.
+	(ls-lisp--insert-directory): Rename from insert-directory; add
+	`orig-fun' argument.
+	(insert-directory): Advise.
+
+2013-09-13  Eli Zaretskii  <eliz@gnu.org>
+
+	* term.el (term-emulate-terminal): Decode the command string
+	before passing it to term-command-hook.  (Bug#15337)
+
+2013-09-13  Glenn Morris  <rgm@gnu.org>
+
+	* eshell/esh-util.el (ange-cache): Move declaration earlier.
+
+	* eshell/esh-ext.el (eshell-search-path): Declare.
+
+	* eshell/em-prompt.el (eshell/pwd): Autoload it.
+	Otherwise an error occurs if eshell-dirs module not loaded.
+
+	* progmodes/gdb-mi.el (gud-cont, gud-step): Declare.
+
+2013-09-13  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-check-proper-method-and-host): Rename it from
+	`tramp-check-proper-host'.  Check for a valid method name.
+
+	* net/tramp-adb.el (tramp-adb-maybe-open-connection):
+	* net/tramp-gvfs.el (tramp-gvfs-maybe-open-connection):
+	* net/tramp-sh.el (tramp-maybe-open-connection):
+	* net/tramp-smb.el (tramp-smb-maybe-open-connection): Call it.
+
+	* net/tramp-cache.el (tramp-cache-print): Don't print text properties
+	also for hash values.
+
+2013-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* term/ns-win.el (parameters): Don't declare as dynamic.
+	(before-make-frame-hook): Don't add ineffective function.
+
+	* eshell/*.el: Use lexical-binding (bug#15231).
+
+2013-09-12  Kenichi Handa  <handa@gnu.org>
+
+	* composite.el (compose-gstring-for-graphic): Handle enclosing mark.
+
+2013-09-12  Glenn Morris  <rgm@gnu.org>
+
+	* vc/vc-svn.el (vc-svn-dir-status-files, vc-svn-dir-extra-headers)
+	(vc-svn-ignore, vc-svn-retrieve-tag): Mark unused arguments.
+
+	* subr.el (do-after-load-evaluation): Also give compiler warnings
+	when obsolete files are used (except by obsolete files).
+
+	* vc/vc-svn.el (vc-svn-parse-status): If there are multiple files
+	in the status output, assume `filename' is the first.  (Bug#15322)
+
+	* vc/vc.el (vc-deduce-fileset): Doc fix.
+
+	* calc/calc-help.el (Info-goto-node):
+	* progmodes/cperl-mode.el (Info-find-node):
+	* vc/ediff.el (Info-goto-node): Update declarations.
+
+	* vc/vc-dispatcher.el (vc-dir-refresh): Declare.
+
+	* vc/vc-bzr.el (vc-compilation-mode): Declare.
+	(vc-bzr-pull): Require vc-dispatcher.
+	* vc/vc-git.el (vc-compilation-mode): Declare.
+	(vc-git-pull): Require vc-dispatcher.
+
+	* progmodes/ruby-mode.el (ruby-syntax-propertize-function): Declare.
+
+	* progmodes/octave.el (help-button-action): Declare.
+
+	* shell.el (shell-directory-tracker): Output error as a message
+	rather than just returning it as a string.
+	(shell-process-pushd): Remove useless use of message.
+
+	* dframe.el (dframe-timer-fn):
+	* files.el (dir-locals-read-from-file):
+	* mpc.el (mpc--status-timer-run, mpc--status-idle-timer-run)
+	(mpc-format):
+	* reveal.el (reveal-post-command):
+	* saveplace.el (load-save-place-alist-from-file):
+	* shell.el (shell-resync-dirs):
+	* w32-common-fns.el (x-get-selection-value):
+	* emacs-lisp/copyright.el (copyright-find-copyright):
+	* emacs-lisp/eldoc.el (eldoc-print-current-symbol-info):
+	* emulation/tpu-edt.el (tpu-copy-keyfile):
+	* play/bubbles.el (bubbles--mark-neighbourhood):
+	* progmodes/executable.el
+	(executable-make-buffer-file-executable-if-script-p):
+	* term/pc-win.el (x-get-selection-value): Use with-demoted-errors.
+
+2013-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Cleanup Eshell to rely less on dynamic scoping.
+	* eshell/esh-opt.el (eshell-eval-using-options): Don't bind usage-msg,
+	last-value, and ext-command here.  Bind `args' closer to `body'.
+	(temp-args, last-value, usage-msg, ext-command, args): Don't defvar.
+	(eshell--args): Declare new dynamic var.
+	(eshell-do-opt): Add argument `args'.  Bind our own usage-msg,
+	last-value, and ext-command.  Pass `args' to `body'.
+	(eshell-process-args): Bind eshell--args.
+	(eshell-set-option): Use eshell--args.
+	* eshell/eshell.el (eshell): Use derived-mode-p.
+	* eshell/esh-var.el (eshell-parse-variable): Use backquote.
+	(eshell-parse-variable-ref): Remove unused vars `end' and `err'.
+	(eshell-glob-function): Declare.
+	* eshell/esh-util.el: Require cl-lib.
+	(eshell-read-hosts-file): Avoid add-to-list.
+	* eshell/esh-cmd.el (eshell-parse-lisp-argument): Remove unused var
+	`err'.
+	* eshell/em-unix.el (compilation-scroll-output, locate-history-list):
+	Declare.
+	(eshell/diff): Remove unused var `err'.
+	* eshell/em-rebind.el (eshell-delete-backward-char): Remove unused arg
+	`killflag'.
+	* eshell/em-pred.el (eshell-parse-modifiers): Remove unused var `err'.
+	* eshell/em-ls.el (eshell-ls-highlight-alist): Move defvars before
+	first use.
+	* eshell/em-glob.el (eshell-glob-matches, message-shown):
+	Move declaration before first use.
+	* eshell/em-alias.el (eshell-maybe-replace-by-alias): Use backquotes.
+	* autorevert.el (auto-revert-notify-handler): Use `cl-dolist' since we
+	rely on cl-return.
+
+2013-09-12  Glenn Morris  <rgm@gnu.org>
+
+	* term/ns-win.el (global-map): Remove binding for ispell-next,
+	deleted 1999-05-29.  (Bug#15357)
+
 2013-09-11  Glenn Morris  <rgm@gnu.org>
 
 	* echistory.el (electric-command-history): Remove call to deleted func.
@@ -13,8 +156,8 @@
 
 	* eshell/esh-mode.el (eshell-mode-syntax-table): Fix up initialization
 	(bug#15338).
-	(eshell-self-insert-command, eshell-send-invisible): Remove
-	unused argument.
+	(eshell-self-insert-command, eshell-send-invisible):
+	Remove unused argument.
 	(eshell-handle-control-codes): Remove unused var `orig'.
 	Avoid delete-backward-char.
 

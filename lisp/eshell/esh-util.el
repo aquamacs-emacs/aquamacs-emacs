@@ -1,4 +1,4 @@
-;;; esh-util.el --- general utilities
+;;; esh-util.el --- general utilities  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 1999-2013 Free Software Foundation, Inc.
 
@@ -22,6 +22,8 @@
 ;;; Commentary:
 
 ;;; Code:
+
+(eval-when-compile (require 'cl-lib))
 
 (defgroup eshell-util nil
   "This is general utility code, meant for use by Eshell itself."
@@ -484,12 +486,12 @@ list."
       (while (re-search-forward
 	      "^\\([^#[:space:]]+\\)\\s-+\\(\\S-+\\)\\(\\s-*\\(\\S-+\\)\\)?" nil t)
 	(if (match-string 1)
-	    (add-to-list 'hosts (match-string 1)))
+	    (cl-pushnew (match-string 1) hosts :test #'equal))
 	(if (match-string 2)
-	    (add-to-list 'hosts (match-string 2)))
+	    (cl-pushnew (match-string 2) hosts :test #'equal))
 	(if (match-string 4)
-	    (add-to-list 'hosts (match-string 4)))))
-    (sort hosts 'string-lessp)))
+	    (cl-pushnew (match-string 4) hosts :test #'equal))))
+    (sort hosts #'string-lessp)))
 
 (defun eshell-read-hosts (file result-var timestamp-var)
   "Read the contents of /etc/passwd for user names."
@@ -560,6 +562,8 @@ Unless optional argument INPLACE is non-nil, return a new string."
 	  (substring string 0 sublen)
 	string)))
 
+(defvar ange-cache)
+
 (and (featurep 'xemacs)
      (not (fboundp 'directory-files-and-attributes))
      (defun directory-files-and-attributes (directory &optional full match nosort id-format)
@@ -576,8 +580,6 @@ If NOSORT is non-nil, the list is not sorted--its order is unpredictable.
 	(lambda (file)
 	  (cons file (eshell-file-attributes (expand-file-name file directory)))))
        (directory-files directory full match nosort)))))
-
-(defvar ange-cache)
 
 (defun eshell-directory-files-and-attributes (dir &optional full match nosort id-format)
   "Make sure to use the handler for `directory-file-and-attributes'."

@@ -125,7 +125,7 @@ check_ns_display_info (Lisp_Object object)
       struct frame *sf = XFRAME (selected_frame);
 
       if (FRAME_NS_P (sf) && FRAME_LIVE_P (sf))
-	dpyinfo = FRAME_NS_DISPLAY_INFO (sf);
+	dpyinfo = FRAME_DISPLAY_INFO (sf);
       else if (x_display_list != 0)
 	dpyinfo = x_display_list;
       else
@@ -145,7 +145,7 @@ check_ns_display_info (Lisp_Object object)
   else
     {
       struct frame *f = decode_window_system_frame (object);
-      dpyinfo = FRAME_NS_DISPLAY_INFO (f);
+      dpyinfo = FRAME_DISPLAY_INFO (f);
     }
 
   return dpyinfo;
@@ -1021,7 +1021,7 @@ unwind_create_frame (Lisp_Object frame)
   if (NILP (Fmemq (frame, Vframe_list)))
     {
 #if defined GLYPH_DEBUG && defined ENABLE_CHECKING
-      struct ns_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
+      struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (f);
 #endif
 
       x_free_frame_resources (f);
@@ -1168,9 +1168,9 @@ This function is an internal primitive--use `make-frame' instead.  */)
   if (! STRINGP (f->icon_name))
     fset_icon_name (f, Qnil);
 
-  FRAME_NS_DISPLAY_INFO (f) = dpyinfo;
+  FRAME_DISPLAY_INFO (f) = dpyinfo;
 
-  /* With FRAME_NS_DISPLAY_INFO set up, this unwind-protect is safe.  */
+  /* With FRAME_DISPLAY_INFO set up, this unwind-protect is safe.  */
   record_unwind_protect (unwind_create_frame, frame);
 
   f->output_data.ns->window_desc = desc_ctr++;
@@ -1181,7 +1181,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
     }
   else
     {
-      f->output_data.ns->parent_desc = FRAME_NS_DISPLAY_INFO (f)->root_window;
+      f->output_data.ns->parent_desc = FRAME_DISPLAY_INFO (f)->root_window;
       f->output_data.ns->explicit_parent = 0;
     }
 
@@ -1284,7 +1284,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   f->output_data.ns->hand_cursor = [NSCursor pointingHandCursor];
   f->output_data.ns->hourglass_cursor = [NSCursor disappearingItemCursor];
   f->output_data.ns->horizontal_drag_cursor = [NSCursor resizeLeftRightCursor];
-  FRAME_NS_DISPLAY_INFO (f)->vertical_scroll_bar_cursor
+  FRAME_DISPLAY_INFO (f)->vertical_scroll_bar_cursor
      = [NSCursor arrowCursor];
   f->output_data.ns->current_pointer = f->output_data.ns->text_cursor;
 
@@ -1368,14 +1368,10 @@ This function is an internal primitive--use `make-frame' instead.  */)
   return unbind_to (count, frame);
 }
 
-
-DEFUN ("x-focus-frame", Fx_focus_frame, Sx_focus_frame, 1, 1, 0,
-       doc: /* Set the input focus to FRAME.
-FRAME nil means use the selected frame.  */)
-     (Lisp_Object frame)
+void
+x_focus_frame (struct frame *f)
 {
-  struct frame *f = decode_window_system_frame (frame);
-  struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
+  struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (f);
 
   if (dpyinfo->x_focus_frame != f)
     {
@@ -1385,8 +1381,6 @@ FRAME nil means use the selected frame.  */)
       [[view window] makeKeyAndOrderFront: view];
       unblock_input ();
     }
-
-  return Qnil;
 }
 
 
@@ -3150,7 +3144,7 @@ x_get_string_resource (XrmDatabase rdb, char *name, char *class)
 Lisp_Object
 x_get_focus_frame (struct frame *frame)
 {
-  struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (frame);
+  struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (frame);
   Lisp_Object nsfocus;
 
   if (!dpyinfo->x_focus_frame)
@@ -3530,7 +3524,7 @@ compute_tip_xy (struct frame *f,
     {
       /* Absolute coordinates.  */
       pt.x = XINT (left);
-      pt.y = x_display_pixel_height (FRAME_NS_DISPLAY_INFO (f)) - XINT (top)
+      pt.y = x_display_pixel_height (FRAME_DISPLAY_INFO (f)) - XINT (top)
         - height;
     }
 
@@ -3542,7 +3536,7 @@ compute_tip_xy (struct frame *f,
     //*root_x = vScreen.origin.x; /* Can happen for negative dx */
     *root_x = [[view window] frame].origin.x;  // better than just the screen origin
   else if (pt.x + XINT (dx) + width
-	   <= vScreen.origin.x + vScreen.size.width) 
+	   <= x_display_pixel_width (FRAME_DISPLAY_INFO (f)))
     /* It fits to the right of the pointer.  */
     *root_x = pt.x + XINT (dx);
   else if (width + XINT (dx) <= pt.x)
@@ -3556,15 +3550,12 @@ compute_tip_xy (struct frame *f,
     /* It fits below the pointer.  */
     *root_y = pt.y - height - XINT (dy);
   else if (pt.y + XINT (dy) + height
-	   <= vScreen.origin.y + vScreen.size.height )
+	   <= x_display_pixel_height (FRAME_DISPLAY_INFO (f)))
     /* It fits above the pointer */
       *root_y = pt.y + XINT (dy);
   else
     /* Put it on the top.  */
-    { *root_y = [[view window] frame].origin.y; 
-      if (*root_y - XINT (dy) - height < vScreen.origin.y)
-	*root_y = vScreen.origin.y + vScreen.size.height - height;
-}
+    *root_y = x_display_pixel_height (FRAME_DISPLAY_INFO (f)) - height;
 }
 
 
@@ -3904,7 +3895,6 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_list_services);
   defsubr (&Sns_perform_service);
   defsubr (&Sns_convert_utf8_nfd_to_nfc);
-  defsubr (&Sx_focus_frame);
   defsubr (&Sns_cycle_frame);
   defsubr (&Sns_visible_frame_list);
   defsubr (&Sns_frame_is_on_active_space_p);

@@ -1,4 +1,4 @@
-;;; em-cmpl.el --- completion using the TAB key
+;;; em-cmpl.el --- completion using the TAB key  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 1999-2013 Free Software Foundation, Inc.
 

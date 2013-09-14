@@ -301,6 +301,9 @@ struct x_display_info
      minibuffer.  */
   struct frame *x_highlight_frame;
 
+  /* Time of last user interaction as returned in X events on this display.  */
+  Time last_user_time;
+
   /* The gray pixmap.  */
   Pixmap gray;
 
@@ -373,20 +376,6 @@ struct x_display_info
 extern int use_xim;
 #endif
 
-extern struct frame *x_window_to_frame (struct x_display_info *, int);
-extern struct frame *x_any_window_to_frame (struct x_display_info *, int);
-extern struct frame *x_menubar_window_to_frame (struct x_display_info *,
-						XEvent *);
-extern struct frame *x_top_window_to_frame (struct x_display_info *, int);
-
-extern struct frame *x_menubar_window_to_frame (struct x_display_info *,
-						XEvent *);
-
-#if ! defined (USE_X_TOOLKIT) && ! defined (USE_GTK)
-#define x_any_window_to_frame x_window_to_frame
-#define x_top_window_to_frame x_window_to_frame
-#endif
-
 /* This is a chain of structures for all the X displays currently in use.  */
 extern struct x_display_info *x_display_list;
 
@@ -397,7 +386,7 @@ extern struct x_display_info *x_display_list;
 extern Lisp_Object x_display_name_list;
 
 extern struct x_display_info *x_display_info_for_display (Display *);
-
+extern struct frame *x_top_window_to_frame (struct x_display_info *, int);
 extern struct x_display_info *x_term_init (Lisp_Object, char *, char *);
 extern bool x_display_ok (const char *);
 
@@ -711,20 +700,20 @@ enum
 #define FRAME_BASELINE_OFFSET(f) ((f)->output_data.x->baseline_offset)
 
 /* This gives the x_display_info structure for the display F is on.  */
-#define FRAME_X_DISPLAY_INFO(f) ((f)->output_data.x->display_info)
+#define FRAME_DISPLAY_INFO(f) ((f)->output_data.x->display_info)
 
 /* This is the `Display *' which frame F is on.  */
-#define FRAME_X_DISPLAY(f) (FRAME_X_DISPLAY_INFO (f)->display)
+#define FRAME_X_DISPLAY(f) (FRAME_DISPLAY_INFO (f)->display)
 
 /* This is the `Screen *' which frame F is on.  */
-#define FRAME_X_SCREEN(f) (FRAME_X_DISPLAY_INFO (f)->screen)
+#define FRAME_X_SCREEN(f) (FRAME_DISPLAY_INFO (f)->screen)
 #define FRAME_X_SCREEN_NUMBER(f) XScreenNumberOfScreen (FRAME_X_SCREEN (f))
 
 /* This is the Visual which frame F is on.  */
-#define FRAME_X_VISUAL(f) FRAME_X_DISPLAY_INFO (f)->visual
+#define FRAME_X_VISUAL(f) FRAME_DISPLAY_INFO (f)->visual
 
 /* This is the Colormap which frame F uses.  */
-#define FRAME_X_COLORMAP(f) FRAME_X_DISPLAY_INFO (f)->cmap
+#define FRAME_X_COLORMAP(f) FRAME_DISPLAY_INFO (f)->cmap
 
 /* The difference in pixels between the top left corner of the
    Emacs window (including possible window manager decorations)
@@ -737,20 +726,20 @@ enum
 
 
 #define FRAME_XIC(f) ((f)->output_data.x->xic)
-#define FRAME_X_XIM(f) (FRAME_X_DISPLAY_INFO (f)->xim)
-#define FRAME_X_XIM_STYLES(f) (FRAME_X_DISPLAY_INFO (f)->xim_styles)
+#define FRAME_X_XIM(f) (FRAME_DISPLAY_INFO (f)->xim)
+#define FRAME_X_XIM_STYLES(f) (FRAME_DISPLAY_INFO (f)->xim_styles)
 #define FRAME_XIC_STYLE(f) ((f)->output_data.x->xic_style)
 #define FRAME_XIC_FONTSET(f) ((f)->output_data.x->xic_xfs)
 
 /* Value is the smallest width of any character in any font on frame F.  */
 
 #define FRAME_SMALLEST_CHAR_WIDTH(F) \
-     FRAME_X_DISPLAY_INFO(F)->smallest_char_width
+     FRAME_DISPLAY_INFO(F)->smallest_char_width
 
 /* Value is the smallest height of any font on frame F.  */
 
 #define FRAME_SMALLEST_FONT_HEIGHT(F) \
-     FRAME_X_DISPLAY_INFO(F)->smallest_font_height
+     FRAME_DISPLAY_INFO(F)->smallest_font_height
 
 /* X-specific scroll bar stuff.  */
 

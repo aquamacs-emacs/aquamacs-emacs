@@ -1915,7 +1915,7 @@ pop_down_menu (void *arg)
 	  [popupSheetAlert release];
 	} else
 	{
-      [panel close];
+	  [panel close];
 	}
 
       [unwind_data->pool release];
@@ -2061,7 +2061,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     unwind_data->pool = pool;
     unwind_data->dialog = dialog;
 
-    record_unwind_protect_ptr (pop_down_menu, make_save_ptr (unwind_data));
+    record_unwind_protect_ptr (pop_down_menu, unwind_data);
   
 
   [dialog layout]; /* because we may not call beginSheet / runModal */
