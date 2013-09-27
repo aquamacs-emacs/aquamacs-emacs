@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# AQ_DOWNLOAD_DESTINATION = Sites/Aquamacs has to be set externally
+# AQ_DOWNLOAD_DESTSSH = username@ip
 
 # SSH authentication should be installed
 
@@ -13,9 +15,9 @@ CHGLOGSCRIPT=~/aquamacs-web/scripts/push-nightly-changelog.sh
 SOURCE=`pwd`/builds
 LOGPATH=`pwd`
 
-DEST=dreitter@cc:Sites/Aquamacs/24
-DESTSSH=dreitter@cc
-DESTPATH=Sites/Aquamacs/24
+DESTPATH=${AQ_DOWNLOAD_DESTINATION}/24
+DEST=${AQ_DOWNLOAD_DESTSSH}:${DESTPATH}
+DESTSSH=${AQ_DOWNLOAD_DESTSSH}
 
 TMP=/tmp/builds
 
