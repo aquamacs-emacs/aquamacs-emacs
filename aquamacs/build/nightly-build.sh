@@ -4,7 +4,7 @@
 
 cd ~/Nightly/Cocoa24ub/aquamacs-emacs.git
 
-. ./env.sh
+. ../env.sh
 
 DSYM_ROOT=~/Aquamacs.dSYM.archive
 
