@@ -1398,7 +1398,7 @@ arg nil means cycle forwards.  */)
 DEFUN ("ns-visible-frame-list", Fns_visible_frame_list, Sns_visible_frame_list,
        0, 0, 0,
        doc: /* Return a list of all visible NS frames on the current space.  */)
-  ()
+  (void)
 {
   Lisp_Object tail, frame;
   struct frame *f;
@@ -1444,7 +1444,7 @@ DEFUN ("ns-popup-spellchecker-panel", Fns_popup_spellchecker_panel, Sns_popup_sp
        0, 0, "",
        doc: /* Pop up the spell checking panel.
 Shows the NS spell checking panel and brings it to the front.*/)
-     ()
+     (void)
 {
   id sc;
 
@@ -1470,7 +1470,7 @@ Shows the NS spell checking panel and brings it to the front.*/)
 DEFUN ("ns-close-spellchecker-panel", Fns_close_spellchecker_panel, Sns_close_spellchecker_panel,
        0, 0, "",
        doc: /* Close the spell checking panel.*/)
-     ()
+     (void)
 {
   id sc;
 
@@ -1488,7 +1488,7 @@ DEFUN ("ns-spellchecker-panel-visible-p", Fns_spellchecker_panel_visible_p, Sns_
        0, 0, "",
        doc: /* Return t if spellchecking panel is visible,
 nil otherwise.*/)
-     ()
+     (void)
 {
   id sc;
   BOOL visible;
@@ -1728,7 +1728,7 @@ DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_sp
        0, 0, 0,
        doc: /* Get all available spell-checking languages.
 Returns nil if not successful.*/)
-     ()
+     (void)
 {
   id sc;
   Lisp_Object retval = Qnil;
@@ -1758,7 +1758,7 @@ Returns nil if not successful.*/)
 DEFUN ("ns-spellchecker-current-language", Fns_spellchecker_current_language, Sns_spellchecker_current_language,
        0, 0, 0,
        doc: /* Get the current spell-checking language.*/)
-     ()
+     (void)
 {
   id sc;
 
@@ -1911,7 +1911,7 @@ ns_run_file_dialog (void)
 DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_setup_panel,
        0, 0, "",
        doc: /* Pop up the page setup panel.  */)
-     ()
+     (void)
 {
   check_window_system (NULL);
   block_input();
@@ -2978,7 +2978,7 @@ PARMS is an association list as communicated for the opening event for the speci
 
 DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidden_p, 0, 0, 0,
        doc: /* Returns non-nil if application is hidden. */)
-    ()
+    (void)
 {
 
   check_window_system (NULL);
