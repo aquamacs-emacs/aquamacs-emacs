@@ -740,7 +740,8 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 #ifdef NS_IMPL_COCOA
       /* we display all key equivalents ourselves - Cocoa
 	 won't display more than one single key */
-      title = [title stringByAppendingFormat: @"\t%@", keyEq];
+      if (keyEquivModMask == 0)
+	title = [title stringByAppendingFormat: @"\t%@", keyEq];
       keyEq = @"";
 #endif
 
