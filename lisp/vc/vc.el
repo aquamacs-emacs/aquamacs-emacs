@@ -347,6 +347,10 @@
 ;;
 ;;   Mark conflicts as resolved.  Some VC systems need to run a
 ;;   command to mark conflicts as resolved.
+;;
+;; - find-admin-dir (file)
+;;
+;;   Return the administrative directory of FILE.
 
 ;; HISTORY FUNCTIONS
 ;;
@@ -2336,7 +2340,7 @@ When called interactively with a prefix argument, prompt for LIMIT."
 ;;;###autoload
 (defun vc-log-incoming (&optional remote-location)
   "Show a log of changes that will be received with a pull operation from REMOTE-LOCATION.
-When called interactively with a prefix argument, prompt for REMOTE-LOCATION.."
+When called interactively with a prefix argument, prompt for REMOTE-LOCATION."
   (interactive
    (when current-prefix-arg
      (list (read-string "Remote location (empty for default): "))))

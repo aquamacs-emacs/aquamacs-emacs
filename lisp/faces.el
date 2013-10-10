@@ -1923,6 +1923,11 @@ Return nil if there is no face."
 ;;; Frame creation.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(declare-function x-display-list "xfns.c" ())
+(declare-function x-open-connection "xfns.c"
+		  (display &optional xrm-string must-succeed))
+(declare-function x-get-resource "frame.c"
+		  (attribute class &optional component subclass))
 (declare-function x-parse-geometry "frame.c" (string))
 (defvar x-display-name)
 
@@ -2139,7 +2144,6 @@ terminal type to a different value."
     (frame-set-background-mode frame t)
     (face-set-after-frame-default frame)))
 
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Standard faces.
@@ -2259,7 +2263,8 @@ terminal type to a different value."
      :foreground "gtk_selection_fg_color"
      :background "gtk_selection_bg_color")
     (((class color) (min-colors 88) (background light) (type ns))
-     :background "ns_selection_color")
+     :foreground "ns_selection_fg_color"
+     :background "ns_selection_bg_color")
     (((class color) (min-colors 88) (background light))
      :background "lightgoldenrod2")
     (((class color) (min-colors 16) (background dark))
@@ -2562,6 +2567,26 @@ It is used for characters of no fonts too."
     (((class color)) :foreground "green"))
   "Basic face used to indicate successful operation."
   :version "24.1"
+  :group 'basic-faces)
+
+;; Faces for TTY menus.
+(defface tty-menu-enabled-face
+  '((t
+     :foreground "yellow" :background "blue" :weight bold))
+  "Face for displaying enabled items in TTY menus."
+  :group 'basic-faces)
+
+(defface tty-menu-disabled-face
+  '((((class color) (min-colors 16))
+     :foreground "lightgray" :background "blue")
+    (t
+     :foreground "white" :background "blue"))
+  "Face for displaying disabled items in TTY menus."
+  :group 'basic-faces)
+
+(defface tty-menu-selected-face
+  '((t :background "red"))
+  "Face for displaying the currently selected item in TTY menus."
   :group 'basic-faces)
 
 

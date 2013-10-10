@@ -1,3 +1,828 @@
+2013-10-09  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/authors.el (authors-aliases, authors-fixed-case):
+	Add some entries.
+	(authors): Remove unused local variables.
+
+2013-10-09  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* profiler.el: Create a more coherent calltree from partial backtraces.
+	(profiler-format): Hide the tail with `invisible' so that C-s can still
+	find the hidden elements.
+	(profiler-calltree-depth): Don't recurse so enthusiastically.
+	(profiler-function-equal): New hash-table-test.
+	(profiler-calltree-build-unified): New function.
+	(profiler-calltree-build): Use it.
+	(profiler-report-make-name-part): Indent the calltree less.
+	(profiler-report-mode): Add visibility specs for profiler-format.
+	(profiler-report-expand-entry, profiler-report-toggle-entry):
+	Expand the whole subtree when provided with a prefix arg.
+
+2013-10-09  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-smie-rules): Indent after hanging
+	iuwu-mod token.
+	(ruby-smie--implicit-semi-p): Prohibit implicit semicolon after
+	hanging iuwu-mod token.
+	(ruby-smie--forward-token): Do not include a dot after a token in
+	that token.
+	(ruby-smie--backward-token): Likewise.
+
+2013-10-08  Juri Linkov  <juri@jurta.org>
+
+	* isearch.el (isearch-help-map, isearch-mode-map): Don't bind [t]
+	to isearch-other-control-char.
+	(isearch-mode): Add isearch-pre-command-hook to pre-command-hook
+	and isearch-post-command-hook to post-command-hook.
+	(isearch-done): Remove isearch-pre-command-hook from pre-command-hook
+	and isearch-post-command-hook from post-command-hook.
+	(isearch-unread-key-sequence)
+	(isearch-reread-key-sequence-naturally)
+	(isearch-lookup-scroll-key, isearch-other-control-char)
+	(isearch-other-meta-char): Remove functions.
+	(isearch-pre-command-hook, isearch-post-command-hook):
+	New functions based on isearch-other-meta-char rewritten
+	relying on the new behavior of overriding-terminal-local-map
+	that does not replace the local keymaps any more.  (Bug#15200)
+
+2013-10-08  Eli Zaretskii  <eliz@gnu.org>
+
+	Support menus on text-mode terminals.
+	* tmm.el (tmm-menubar): Adapt doc string to TTY menus
+	functionality.
+
+	* tooltip.el (tooltip-mode): Don't error out on TTYs.
+
+	* menu-bar.el (popup-menu, popup-menu-normalize-position): Moved
+	here from mouse.el.
+	(popup-menu): Support menu-bar navigation on TTYs using C-f/C-b
+	and arrow keys.
+	(tty-menu-navigation-map): New map for TTY menu navigation.
+
+	* loadup.el ("tooltip"): Load even if x-show-tip is not available.
+
+	* frame.el (display-mouse-p): Report text-mode mouse as available
+	on w32.
+	(display-popup-menus-p): Report availability if mouse is
+	available; don't condition on window-system.
+
+	* faces.el (tty-menu-enabled-face, tty-menu-disabled-face)
+	(tty-menu-selected-face): New faces.
+
+2013-10-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/lisp-mode.el: Font-lock cl-lib constructs.
+	(lisp-el-font-lock-keywords, lisp-el-font-lock-keywords-1)
+	(lisp-el-font-lock-keywords-2, lisp-cl-font-lock-keywords)
+	(lisp-cl-font-lock-keywords-1, lisp-cl-font-lock-keywords-2):
+	New constants.
+	(lisp-mode-variables): New `elisp' argument.
+	(emacs-lisp-mode): Use it.
+	* font-lock.el (lisp-font-lock-keywords, lisp-font-lock-keywords-1)
+	(lisp-font-lock-keywords-2): Move to lisp-mode.el.
+
+	* indent.el: Use lexical-binding.
+	(indent-region): Add progress reporter.
+	(tab-stop-list): Make it implicitly extend to infinity by repeating the
+	last step.
+	(indent--next-tab-stop): New function to implement this behavior.
+	(tab-to-tab-stop, move-to-tab-stop): Use it.
+
+2013-10-08  Teemu Likonen  <tlikonen@iki.fi>
+
+	* indent.el (indent-rigidly--current-indentation): New function.
+	(indent-rigidly-map): New var.
+	(indent-rigidly): Use it to provide interactive mode (bug#8196).
+
+2013-10-08  Bastien Guerry  <bzg@gnu.org>
+
+	* register.el (insert-register): Fix revno:114543.
+
+2013-10-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/perl-mode.el: Use lexical-binding.
+	Remove redundant :group args.
+	(perl-nochange): Change default to be closer to other major modes's
+	standard behavior.
+	(perl-indent-line): Don't consider text on current line as a
+	valid beginning of function from which to indent.
+
+	* emacs-lisp/backquote.el (backquote-process): Catch uses of , and ,@
+	with more than one argument (bug#15538).
+
+	* mpc.el (mpc-songs-jump-to): Adjust to different playlist format.
+
+	* vc/pcvs.el: Use lexical-binding.
+	(cvs-temp-buffer, cvs-make-cvs-buffer): Pass some vars in the lexical
+	environment of `eval'.
+	(cvs-mode-run, cvs-mode-do): Change `postproc' to be a function rather
+	than a list of expressions.  Adjust callers.
+	* vc/pcvs-defs.el (cvs-postprocess): Remove, unused.
+
+2013-10-07  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-smie--implicit-semi-p): Handle the
+	case of the dot in a chained method call being on the following line.
+
+2013-10-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* electric.el (electric-indent-inhibit): New var.
+	(electric-indent-post-self-insert-function): Use it.
+	* progmodes/python.el (python-mode): Set it.
+
+	* progmodes/ruby-mode.el (ruby-smie-rules): Tweak handling of
+	open braces.
+
+	* emacs-lisp/smie.el (smie-next-sexp): Refine last fix.
+
+	* textmodes/css-mode.el (css-smie-rules): Fix indentation (bug#15467).
+	(css-mode): Use electric-indent-chars.
+
+	* nxml/nxml-mode.el: Use lexical-binding and syntax-propertize.
+	(font-lock-beg, font-lock-end): Move before first use.
+	(nxml-mode): Use syntax-propertize-function.
+	(nxml-after-change, nxml-after-change1): Adjust accordingly.
+	(nxml-extend-after-change-region): Remove.
+	* nxml/xmltok.el: Use lexical-binding.
+	(xmltok-save): Use `declare'.
+	(xmltok-unclosed-reparse-p, xmltok-semi-closed-reparse-p): Remove.
+	* nxml/nxml-util.el: Use lexical-binding.
+	(nxml-with-degradation-on-error, nxml-with-invisible-motion):
+	Use `declare'.
+	* nxml/nxml-ns.el: Use lexical-binding.
+	(nxml-ns-save): Use `declare'.
+	(nxml-ns-prefixes-for): Avoid add-to-list.
+	* nxml/rng-match.el: Use lexical-binding.
+	(rng--ipattern): Use cl-defstruct.
+	(rng-compute-start-tag-open-deriv, rng-compute-start-attribute-deriv)
+	(rng-cons-group-after, rng-subst-group-after)
+	(rng-subst-interleave-after, rng-apply-after, rng-compute-data-deriv):
+	Use closures instead of `(lambda...).
+
+2013-10-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-handle-insert-file-contents): Improve handling
+	of BEG and END.
+
+	* net/tramp-gvfs.el (tramp-gvfs-file-name-handler-alist):
+	Use `tramp-handle-insert-file-contents'.
+	(tramp-gvfs-handle-insert-file-contents): Remove function.
+
+	* net/tramp-sh.el (tramp-sh-handle-insert-directory):
+	Use `save-restriction' in order to keep markers.
+
+	* net/trampver.el: Update release number.
+
+2013-10-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/compile.el (compilation-parse-errors):
+	Use compilation--put-prop.
+	(compilation--ensure-parse): Check compilation-multiline.
+
+	* emacs-lisp/easymenu.el (easy-menu-create-menu): Use closures.
+
+	* emacs-lisp/lisp-mode.el (eval-defun-2): Simplify, using
+	lexical-binding.
+
+	* emacs-lisp/tq.el (tq-create): Use a closure instead of `(lambda...).
+
+	* progmodes/ruby-mode.el: Fix recently added tests.
+	(ruby-smie-grammar): Add - and +.
+	(ruby-smie--redundant-do-p, ruby-smie--forward-id)
+	(ruby-smie--backward-id): New functions.
+	(ruby-smie--forward-token, ruby-smie--backward-token): Use them.
+	(ruby-smie-rules): Handle hanging do.  Get rid of hack, not needed
+	any more.
+
+2013-10-07  Leo Liu  <sdl.web@gmail.com>
+
+	* register.el (register-preview-delay)
+	(register-preview-functions): New variables.
+	(register-read-with-preview, register-preview)
+	(register-describe-oneline): New functions.
+	(point-to-register, window-configuration-to-register)
+	(frame-configuration-to-register, jump-to-register)
+	(number-to-register, view-register, insert-register)
+	(copy-to-register, append-to-register, prepend-to-register)
+	(copy-rectangle-to-register): Use register-read-with-preview to
+	read register.  (Bug#15525)
+
+2013-10-06  Dato Simó  <dato@net.com.org.es>  (tiny change)
+
+	* net/network-stream.el (network-stream-open-starttls): Don't add
+	--insecure if it's already present, because that gnutls-cli
+	rejects getting that parameter twice.
+
+2013-10-06  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-smie-rules): Dedent `ensure'
+	keyword, too.
+
+2013-10-05  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* newcomment.el (comment-use-global-state): Change default value
+	to t, mark obsolete (Bug#15251).
+	(comment-beginning): In addition to `comment-to-syntax', check the
+	value of `comment-use-global-state'.
+
+2013-10-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/ruby-mode.el (ruby-use-smie): Change default.
+	(ruby-comment-column): Follow the global default, by default.
+	(ruby-smie-grammar): Add assignment syntax.
+	(ruby-smie--implicit-semi-p): No implicit semi-colon after an
+	open-paren, a comma, or a \.
+	(ruby-smie--forward-token, ruby-smie--backward-token): Handle heredocs,
+	and line continuations.
+	(ruby-smie-rules): Adjust handling of open-paren, now that it's never
+	followed by implicit semi-colons.  Add rule for string concatenation
+	and for indentation at BOB.
+	(ruby-forward-sexp, ruby-backward-sexp): Adjust for when smie is in use.
+
+	* emacs-lisp/smie.el (smie-next-sexp): Don't go back to pos before
+	calling next-sexp, since next-token may have skipped chars which
+	next-sexp doesn't know should be skipped!
+
+2013-10-05  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (octave-send-region):
+	Call compilation-forget-errors.
+
+2013-10-04  Xue Fuqiao  <xfq.free@gmail.com>
+
+	* vc/vc-svn.el (vc-svn-find-admin-dir):
+	* vc/vc-rcs.el (vc-rcs-find-admin-dir):
+	* vc/vc-mtn.el (vc-mtn-find-admin-dir):
+	* vc/vc-cvs.el (vc-cvs-find-admin-dir):
+	* vc/vc-arch.el (vc-arch-find-admin-dir): New functions.
+
+2013-10-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* textmodes/css-mode.el (css-smie-rules): Toplevel's a list (bug#15467).
+
+2013-10-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (read-passwd): Hide chars even when called within a context
+	where after-change-functions is disabled (bug#15501).
+	(set-temporary-overlay-map): Don't remove oneself from pre-command-hook
+	until we removed ourself from overriding-terminal-local-map.
+
+2013-10-04  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (inferior-octave-mode):
+	Call compilation-forget-errors.
+
+2013-10-04  Xue Fuqiao  <xfq.free@gmail.com>
+
+	* emacs-lisp/syntax.el (syntax-ppss): Doc fix.
+
+2013-10-04  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/secrets.el (secrets-create-collection): Add optional
+	argument ALIAS.  Use proper Label keyword.  Append ALIAS as
+	dbus-call-method argument.  (Bug#15516)
+
+2013-10-04  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (inferior-octave-error-regexp-alist)
+	(inferior-octave-compilation-font-lock-keywords): New variables.
+	(compilation-error-regexp-alist)
+	(compilation-mode-font-lock-keywords): Defvar to pacify compiler.
+	(inferior-octave-mode): Use compilation-shell-minor-mode.
+
+2013-10-04  Jorgen Schaefer  <forcer@forcix.cx>
+
+	* minibuffer.el (completion--replace): Be careful that `end' might be
+	a marker.
+
+2013-10-03  Daiki Ueno  <ueno@gnu.org>
+
+	Add support for package signature checking.
+	* emacs-lisp/package.el (url-http-file-exists-p)
+	(epg-make-context, epg-context-set-home-directory)
+	(epg-verify-string, epg-context-result-for)
+	(epg-signature-status, epg-signature-to-string)
+	(epg-check-configuration, epg-configuration)
+	(epg-import-keys-from-file): Declare.
+	(package-check-signature): New user option.
+	(package-unsigned-archives): New user option.
+	(package-desc): Add `signed' field.
+	(package-load-descriptor): Set `signed' field if .signed file exists.
+	(package--archive-file-exists-p): New function.
+	(package--check-signature): New function.
+	(package-install-from-archive): Check package signature.
+	(package--download-one-archive): Check archive signature.
+	(package-delete): Remove .signed file.
+	(package-import-keyring): New command.
+	(package-refresh-contents): Import default keyring.
+	(package-desc-status): Add "unsigned" status.
+	(describe-package-1, package-menu--print-info)
+	(package-menu-mark-delete, package-menu--find-upgrades)
+	(package-menu--status-predicate): Support "unsigned" status.
+
+2013-10-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/cconv.el (cconv-convert, cconv-analyse-form): Adjust for
+	the new compilation scheme using the new byte-codes.
+
+	* emacs-lisp/bytecomp.el (byte-pushcatch, byte-pushconditioncase)
+	(byte-pophandler): New byte codes.
+	(byte-goto-ops): Adjust accordingly.
+	(byte-compile--use-old-handlers): New var.
+	(byte-compile-catch): Use new byte codes depending on
+	byte-compile--use-old-handlers.
+	(byte-compile-condition-case--old): Rename from
+	byte-compile-condition-case.
+	(byte-compile-condition-case--new): New function.
+	(byte-compile-condition-case): New function that dispatches depending
+	on byte-compile--use-old-handlers.
+	(byte-compile-unwind-protect): Pass a function to byte-unwind-protect
+	when we can.
+
+	* emacs-lisp/byte-opt.el (byte-optimize-form-code-walker):
+	Optimize under `condition-case' and `catch' if
+	byte-compile--use-old-handlers is nil.
+	(disassemble-offset): Handle new bytecodes.
+
+2013-10-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (error): Use `declare'.
+	(decode-char, encode-char): Use advertised-calling-convention instead
+	of the docstring to discourage use of the `restriction' arg.
+
+2013-10-03  Daiki Ueno  <ueno@gnu.org>
+
+	* epg.el (epg-verify-file): Add a comment saying that it does not
+	notify verification error as a return value nor a signal.
+	(epg-verify-string): Ditto.
+
+2013-10-02  Kevin Rodgers  <kevin.d.rodgers@gmail.com>
+
+	* progmodes/compile.el (compilation-start): Try globbing the arg to
+	`cd' (bug#15417).
+
+2013-10-02  Michael Albinus  <michael.albinus@gmx.de>
+
+	Sync with Tramp 2.2.8.
+
+	* net/tramp-cmds.el (tramp-bug, tramp-append-tramp-buffers):
+	* net/tramp-cache.el (tramp-cache-print): Use `tramp-compat-funcall'.
+	* net/trampver.el: Update release number.
+
+2013-10-01  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* term/ns-win.el (ns-initialize-window-system): Set locale-coding-system
+	and default-process-coding-system for darwin only.
+
+2013-10-01  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/package.el (package-desc): Simplify (bug#15495).
+
+2013-10-01  Mitchel Humpherys  <mitch.special@gmail.com>  (tiny change)
+
+	* vc/vc-git.el (vc-git-grep): Disable pager.
+
+2013-10-01  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* emacs-lisp/package.el (package-buffer-info, describe-package-1):
+	Use :url instead of :homepage, as per
+	http://lists.gnu.org/archive/html/emacs-devel/2013-09/msg00622.html
+
+	* newcomment.el (comment-beginning): When `comment-use-syntax' is
+	non-nil, use `syntax-ppss' (Bug#15251).
+
+2013-09-30  Rüdiger Sonderfeld  <ruediger@c-plusplus.de>
+
+	* progmodes/octave.el (inferior-octave-startup-file):
+	Prefer ~/.emacs.d/init_octave.m.
+
+2013-09-29  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* emacs-lisp/package.el (package-desc-from-define):
+	Accept additional arguments as plist, convert them to an alist and store
+	them in the `extras' slot.
+	(package-generate-description-file): Convert extras alist back to
+	plist and append to the `define-package' form arguments.
+	(package--alist-to-plist): New function.
+	(package--ac-desc): Add `extras' slot.
+	(package--add-to-archive-contents): Check if the archive-contents
+	vector is long enough, and if it is, pass its `extras' slot value
+	to `package-desc-create'.
+	(package-buffer-info): Call `lm-homepage', pass the returned value
+	to `package-desc-from-define'.
+	(describe-package-1): Render the homepage button (Bug#13291).
+
+	* emacs-lisp/package-x.el (package-upload-buffer-internal):
+	Pass `extras' slot from `package-desc' to `package-make-ac-desc'.
+
+2013-09-29  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* term/ns-win.el (ns-initialize-window-system): Set locale-coding-system
+	and default-process-coding-system to utf-8-unix (Bug#15402).
+
+2013-09-29  Xue Fuqiao  <xfq.free@gmail.com>
+
+	* subr.el (looking-back): Do not recommend using looking-back.
+
+2013-09-28  Alan Mackenzie  <acm@muc.de>
+
+	Fix indentation/fontification of Java enum with "implements".
+
+	* progmodes/cc-langs.el (c-postfix-decl-spec-key): New variable, a
+	regexp which matches "implements", etc., in Java.
+	* progmodes/cc-engine.el (c-inside-bracelist-p): Check for extra
+	specifier clauses coming after "enum".
+	* progmodes/cc-fonts.el (c-font-lock-declarations)
+	(c-font-lock-enum-tail): Check for extra specifier clauses coming
+	after "enum".
+
+2013-09-28  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* faces.el (region): Change ns_selection_color to
+	ns_selection_fg_color, add ns_selection_bg_color.
+
+2013-09-28  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (inferior-octave-completion-table)
+	(inferior-octave-completion-at-point): Minor tweaks.
+
+	* textmodes/ispell.el (ispell-lookup-words): Rename from
+	lookup-words.  (Bug#15460)
+	(lookup-words): Obsolete.
+	(ispell-complete-word, ispell-command-loop): All uses changed.
+
+2013-09-28  Rüdiger Sonderfeld  <ruediger@c-plusplus.de>
+
+	* lisp/progmodes/octave.el (octave-mode-map): Bind octave-send-buffer.
+	(octave-mode-menu): Add octave-send-buffer.
+	(octave-send-buffer): New function.
+
+2013-09-28  Rüdiger Sonderfeld  <ruediger@c-plusplus.de>
+
+	* lisp/progmodes/octave.el (octave-mode-map): Add key binding for
+	octave-lookfor.
+	(octave-mode-menu): Add octave-lookfor.
+	(inferior-octave-mode-map, octave-help-mode-map): Bind C-ha to
+	octave-lookfor.
+	(octave-lookfor): New function.
+
+2013-09-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/cl-macs.el:
+	(cl--loop-destr-temps): Remove.
+	(cl--loop-iterator-function): Rename from cl--loop-map-form and change
+	its convention.
+	(cl--loop-set-iterator-function): New function.
+	(cl-loop): Adjust accordingly, so as not to use cl-subst.
+	(cl--parse-loop-clause): Adjust all uses of cl--loop-map-form.
+	Bind `it' with `let' instead of substituting it with `cl-subst'.
+	(cl--unused-var-p): New function.
+	(cl--loop-let): Don't use the cl--loop-destr-temps hack any more.
+	Eliminate some unused variable warnings (bug#15326).
+
+2013-09-27  Tassilo Horn  <tsdh@gnu.org>
+
+	* doc-view.el (doc-view-scale-reset): Rename from
+	`doc-view-reset-zoom-level'.
+	(doc-view-scale-adjust): New command.
+	(doc-view-mode-map): Remap `text-scale-adjust' bindings to
+	`doc-view-scale-adjust'.
+
+2013-09-26  Tassilo Horn  <tsdh@gnu.org>
+
+	* doc-view.el (doc-view-reset-zoom-level): New command.
+	(doc-view-mode-map): Remap text-scale-adjust bindings to doc-view
+	zoom commands (bug#15466).
+
+2013-09-26  Kenichi Handa  <handa@gnu.org>
+
+	* international/quail.el (quail-help): Make it not a command.
+
+2013-09-26  Leo Liu  <sdl.web@gmail.com>
+
+	* minibuffer.el (completion-all-sorted-completions): Make args
+	optional as they are.
+
+2013-09-25  Daniel Colascione  <dancol@dancol.org>
+
+	* emacs-lisp/cl-macs.el (cl-type-spec): Tell edebug what type
+	specs are and that they're not evaluated.
+
+2013-09-24  Sam Steingold  <sds@gnu.org>
+
+	* midnight.el (clean-buffer-list-kill-regexps)
+	(clean-buffer-list-kill-buffer-names): Update for the new Man
+	buffer naming which includes the object name.
+
+2013-09-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* eshell/esh-cmd.el (eshell--sep-terms): New var.
+	(eshell-parse-command, eshell-parse-pipeline): Use it since
+	eshell-separate-commands requires a dynamic scoped var.
+	Reported by Jan Moringen <jmoringe@techfak.uni-bielefeld.de>.
+
+2013-09-23  Leo Liu  <sdl.web@gmail.com>
+
+	* autoinsert.el (auto-insert-alist): Make the value of
+	lexical-binding match its file setting.
+
+2013-09-23  Juanma Barranquero  <lekktu@gmail.com>
+
+	* vc/vc-sccs.el (vc-sccs-search-project-dir): Mark unused argument.
+
+	* autoarg.el (autoarg-kp-digit-argument):
+	* electric.el (Electric-command-loop):
+	* kmacro.el (kmacro-step-edit-insert):
+	Do not set universal-argument-num-events.
+
+2013-09-22  Leo Liu  <sdl.web@gmail.com>
+
+	* files.el (interpreter-mode-alist): Add octave.
+
+2013-09-21  Alan Mackenzie  <acm@muc.de>
+
+	C++: fontify identifier in declaration following "public:" correctly.
+	* progmodes/cc-langs.el (c-decl-start-colon-kwd-re): New lang var
+	to match "public", etc.
+	(c-decl-prefix-re): Add ":" into the C++ value.
+	* progmodes/cc-engine.el (c-find-decl-prefix-search): Refactor a
+	bit.  Add a check for a ":" preceded by "public", etc.
+
+2013-09-21  Eli Zaretskii  <eliz@gnu.org>
+
+	* files.el (auto-mode-alist): Support OBJFILE-gdb.gdb script files
+	recognized by GDB 7.5 and later.
+
+2013-09-21  Xue Fuqiao  <xfq.free@gmail.com>
+
+	* vc/vc-dir.el (vc-dir-mode-map): Add keybinding for vc-log-incoming.
+
+2013-09-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (internal--call-interactively): New const.
+	(called-interactively-p): Use it (bug#3984).
+
+2013-09-20  Xue Fuqiao  <xfq.free@gmail.com>
+
+	* vc/pcvs.el (cvs-mode-ignore):
+	* vc/vc-cvs.el (vc-cvs-ignore, vc-cvs-append-to-ignore):
+	Rename cvs-append-to-ignore to vc-cvs-append-to-ignore.
+
+2013-09-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* eshell/em-ls.el: Use advice.  Remove redundant :group keywords.
+	(eshell-ls-orig-insert-directory): Remove.
+	(eshell-ls-unload-hook): Not a defcustom any more.  Use advice-remove.
+	(eshell-ls-use-in-dired): Use advice-add/remove.
+	(eshell-ls--insert-directory): Rename from eshell-ls-insert-directory.
+	Add `orig-fun' arg for use in :around advice.
+	Make it check (redundantly) eshell-ls-use-in-dired.
+
+2013-09-19  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/cl-macs.el (cl-defsubst): Remove unused local `pbody'.
+
+	* simple.el (x-selection-owner-p, x-selection-exists-p): Declare.
+
+	* emacs-lisp/eieio.el (class-parent): Undo previous change.
+
+2013-09-19  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-get-remote-id): Do not raise an error.
+	(tramp-get-remote-uid-with-id, tramp-get-remote-gid-with-id)
+	(tramp-get-remote-python): New defuns.
+	(tramp-get-remote-uid-with-perl)
+	(tramp-get-remote-gid-with-perl): New defuns.  Perl code
+	contributed by yary <not.com@gmail.com> (tiny change).
+	(tramp-get-remote-uid-with-python)
+	(tramp-get-remote-gid-with-python): New defuns.  Python code
+	contributed by Andrey Tykhonov <atykhonov@gmail.com> (tiny change).
+	(tramp-get-remote-uid, tramp-get-remote-gid): Use new defuns.
+
+2013-09-19  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/eieio.el (class-parent): Don't use defalias with macros.
+
+	* eshell/em-unix.el (eshell-remove-entries):
+	Rename argument to avoid name-clash with global `top-level'.
+
+	* eshell/esh-proc.el (eshell-kill-process-function):
+	Remove eshell-reset-after-proc from eshell-kill-hook if present.
+	(eshell-reset-after-proc): Remove unused arg `proc'.
+
+	* eshell/esh-util.el (eshell-read-hosts-file): Use `filename' arg.
+	(directory-files-and-attributes): Mark unused arg.
+
+	* eshell/em-unix.el (eshell-remove-entries):
+	Remove unused arg `path'.  Update callers.
+
+	* eshell/em-hist.el (eshell-hist-parse-arguments):
+	Remove unused arg `silent'.  Update callers.
+
+	* eshell/em-ls.el (eshell-ls-use-in-dired): Use `symbol' arg.
+	Fix (f)boundp mix-up.
+
+	* eshell/em-smart.el (eshell-smart-scroll-window)
+	(eshell-disable-after-change):
+	* eshell/em-term.el (eshell-term-sentinel): Mark unused arg.
+
+2013-09-18  Alan Mackenzie  <acm@muc.de>
+
+	Fix fontification of type when followed by "const".
+	* progmodes/cc-engine.el (c-forward-decl-or-cast-1): Don't exclude
+	"known" types from fontification.
+
+2013-09-18  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/chart.el (x-display-color-cells): Declare.
+	(chart-face-list): Drop Emacsen without display-color-p.
+
+	* net/eww.el (libxml-parse-html-region): Declare.
+	(eww-display-html): Explicit error if no libxml2 support.
+
+	* doc-view.el (doc-view-mode): Silence --without-x compilation.
+
+	* image.el (image-type-from-buffer, image-multi-frame-p):
+	Remove --without-x warning/error.
+
+	* mouse.el (mouse-yank-primary):
+	* term.el (term-mouse-paste):
+	Reorder to silence --without-x compilation.
+
+	* mpc.el (doc-view-mode): Silence --without-x compilation.
+
+	* mail/rmailmm.el (rmail-mime-set-bulk-data):
+	Silence --without-x compilation.
+
+	* progmodes/gud.el (gud-find-file, gud-mode):
+	Silence --without-x compilation.
+	(tooltip-mode): Declare.
+
+	* wdired.el (dired-backup-overwrite): Remove declaration.
+	(wdired-mode-map): Add doc string.
+
+	* custom.el (x-get-resource): Declare.
+
+	* eshell/em-glob.el (ange-cache):
+	* eshell/em-unix.el (ange-cache): Declare.
+
+	* faces.el (x-display-list, x-open-connection, x-get-resource):
+	Declare.
+
+	* follow.el (scroll-bar-toolkit-scroll, scroll-bar-drag)
+	(scroll-bar-scroll-up, scroll-bar-scroll-down, mwheel-scroll):
+	Declare.
+
+	* frame.el (x-display-grayscale-p, x-display-name): Declare.
+
+	* net/gnutls.el (gnutls-log-level): Declare.
+
+	* net/shr.el (image-size, image-animate): Declare.
+
+	* simple.el (font-info): Declare.
+
+	* subr.el (x-popup-dialog): Declare.
+
+	* term/common-win.el (x-select-enable-primary)
+	(x-last-selected-text-primary, x-last-selected-text-clipboard):
+	Declare.
+
+	* term/ns-win.el (x-handle-args): Declare.
+
+	* term/x-win.el (x-select-enable-clipboard): Declare.
+
+	* term/w32-win.el (create-default-fontset): Declare.
+
+	* w32-common-fns.el (x-server-version, x-select-enable-clipboard):
+	Declare.
+
+	* window.el (x-display-pixel-height, tool-bar-lines-needed): Declare.
+	(fit-frame-to-buffer): Explicit error if --without-x.
+	(mouse-autoselect-window-select): Silence compiler.
+
+	* dframe.el (x-sensitive-text-pointer-shape, x-pointer-shape): Declare.
+
+	* eshell/em-cmpl.el (eshell-complete-parse-arguments):
+	* eshell/em-hist.el (eshell/history, eshell-isearch-backward):
+	* eshell/em-pred.el (eshell-parse-modifiers, eshell-pred-file-time):
+	* eshell/esh-util.el (eshell-sublist):
+	Remove unused local variables.
+
+	* eshell/esh-io.el (x-select-enable-clipboard): Declare.
+
+	* textmodes/two-column.el: Make 2C-split work for --without-x.
+	(scroll-bar-columns): Autoload.
+	(top-level): Require fringe when compiling.
+
+2013-09-18  Leo Liu  <sdl.web@gmail.com>
+
+	* subr.el (add-hook): Robustify to handle closure as well.
+
+2013-09-17  Glenn Morris  <rgm@gnu.org>
+
+	* simple.el (messages-buffer-mode-map): Unbind "g".
+
+2013-09-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* help-mode.el (help-mode-finish): Use derived-mode-p.
+	Remove obsolete highlighting.
+
+	* play/life.el (life-mode): Use define-derived-mode.  Derive from
+	special-mode.
+	(life): Let-bind inhibit-read-only.
+	(life-setup): Avoid `setq'.  Use `life-mode'.
+
+	* emacs-lisp/package.el (package-generate-autoloads): Remove `require'
+	which should not be needed any more.
+	(package-menu-refresh, package-menu-describe-package): Use user-error.
+
+	* eshell/esh-cmd.el (eshell-post-rewrite-command-function): New var.
+	(eshell-post-rewrite-command-hook): Make obsolete.
+	(eshell-parse-command): Simplify.
+	(eshell-structure-basic-command): Remove unused arg `vocal-test'.
+	(eshell--cmd): Declare.
+	(eshell-parse-pipeline): Remove unused var `final-p'.
+	Pass a dynvar to eshell-post-rewrite-command-hook.
+	Implement the new eshell-post-rewrite-command-function.
+	(eshell-invoke-directly): Remove unused arg `input'.
+	* eshell/esh-io.el (eshell-io-initialize):
+	Use eshell-post-rewrite-command-function (bug#15399).
+	(eshell--apply-redirections): Rename from eshell-apply-redirections;
+	adjust to new calling convention.
+	(eshell-create-handles): Rename args to avoid clashing with dynvar
+	`standard-output'.
+
+2013-09-17  Glenn Morris  <rgm@gnu.org>
+
+	* simple.el (messages-buffer-mode): New major mode.
+	(messages-buffer): New function.
+	* startup.el (normal-top-level): Switch mode of *Messages* buffer.
+	* emacs-lisp/ert.el (ert--force-message-log-buffer-truncation)
+	(ert-run-test): Use `messages-buffer' function.
+	(ert--force-message-log-buffer-truncation): Ignore read-only.
+	* help.el (view-echo-area-messages): Use `messages-buffer' function.
+	* mail/emacsbug.el (report-emacs-bug): Use `messages-buffer' function.
+
+2013-09-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (eval-after-load): Preserve evaluation order (bug#15389).
+
+	* abbrev.el (abbrev--check-chars): Fix thinko (bug#15329).
+
+2013-09-16  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* icomplete.el (icomplete-in-buffer): New var.
+	(icomplete-pre-command-hook, icomplete-post-command-hook): Remove those
+	vars and replace them with functions.
+	(icomplete-minibuffer-setup): Adjust accordingly.
+	(icomplete--completion-table, icomplete--completion-predicate)
+	(icomplete--field-string, icomplete--field-beg, icomplete--field-end):
+	New functions.
+	(icomplete-forward-completions, icomplete-backward-completions)
+	(icomplete-simple-completing-p, icomplete-exhibit)
+	(icomplete-completions): Use them.
+	(icomplete--in-region-buffer): New var.
+	(icomplete--in-region-setup): New function.
+	(icomplete-mode): Use it.
+
+	* eshell/esh-opt.el: Fix last change to set lexical-vars properly
+	(bug#15379).
+	(eshell--do-opts): Rename from eshell-do-opt, remove arg `body-fun',
+	return args and options.
+	(eshell-eval-using-options): Use the new return value of
+	eshell--do-opts to set the options's vars in their scope.
+	(eshell--set-option): Rename from eshell-set-option.
+	Add arg `opt-vals'.
+	(eshell--process-option): Rename from eshell-process-option.
+	Add arg `opt-vals'.
+	(eshell--process-args): Use an `opt-vals' alist to store the options's
+	values during their processing and return them additionally to the
+	remaining args.
+
+2013-09-15  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-operator-re): Consider line
+	continuation character an operator, as far as indentation is
+	concerned (Bug#15369).
+
+2013-09-15  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.el (window--state-put-2): Don't process buffer state
+	when buffer doesn't exist any more (Bug#15382).
+
+2013-09-15  Glenn Morris  <rgm@gnu.org>
+
+	* eshell/em-unix.el (eshell/rm):
+	Make -f ignore missing files.  (Bug#15373)
+
+	* eshell/esh-cmd.el (eshell--local-vars): New variable.  (Bug#15372)
+	(eshell-rewrite-for-command): Add for loop vars to eshell--local-vars.
+	* eshell/esh-var.el (eshell-get-variable): Respect eshell--local-vars.
+
+2013-09-14  Glenn Morris  <rgm@gnu.org>
+
+	* eshell/esh-var.el (eshell-variable-aliases-list): Fix doc typo.
+
 2013-09-13  Glenn Morris  <rgm@gnu.org>
 
 	* dired-x.el (dired-guess-shell-alist-user): Doc fix.
@@ -4084,7 +4909,7 @@
 	* term/xterm.el (xterm--query):
 	Stop after first matching handler.  (Bug#14615)
 
-2013-06-14 Ivan Kanis  <ivan@kanis.fr>
+2013-06-14  Ivan Kanis  <ivan@kanis.fr>
 
 	Add support for dired in saveplace.
 	* dired.el (dired-initial-position-hook): New variable.
@@ -6694,7 +7519,7 @@
 	(vc-exec-after): Allow code to be a function.  Use add/remove-function.
 	(compilation-error-regexp-alist, view-old-buffer-read-only): Declare.
 
-2013-04-19 Masatake YAMATO  <yamato@redhat.com>
+2013-04-19  Masatake YAMATO  <yamato@redhat.com>
 
 	* progmodes/sh-script.el (sh-imenu-generic-expression):
 	Handle function names with a single character.   (Bug#14111)

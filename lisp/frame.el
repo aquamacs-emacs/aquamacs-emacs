@@ -590,6 +590,8 @@ The functions are run with one arg, the newly created frame.")
   ;; FIXME: Shouldn't we add `font' here as well?
   "Parameters `make-frame' copies from the `selected-frame' to the new frame.")
 
+(defvar x-display-name)
+
 (defun make-frame (&optional parameters)
   "Return a newly created frame displaying the current buffer.
 Optional argument PARAMETERS is an alist of frame parameters for
@@ -897,6 +899,9 @@ e.g. (mapc 'frame-set-background-mode (frame-list))."
 
 (declare-function x-get-resource "frame.c"
 		  (attribute class &optional component subclass))
+
+;; Only used if window-system is not null.
+(declare-function x-display-grayscale-p "xfns.c" (&optional terminal))
 
 (defvar inhibit-frame-set-background-mode nil)
 
@@ -1308,17 +1313,17 @@ frame's display)."
 	       xterm-mouse-mode)
 	  ;; t-mouse is distributed with the GPM package.  It doesn't have
 	  ;; a toggle.
-	  (featurep 't-mouse))))))
+	  (featurep 't-mouse)
+	  ;; No way to check whether a w32 console has a mouse, assume
+	  ;; it always does.
+	  (boundp 'w32-use-full-screen-buffer))))))
 
 (defun display-popup-menus-p (&optional display)
   "Return non-nil if popup menus are supported on DISPLAY.
 DISPLAY can be a display name, a frame, or nil (meaning the selected
 frame's display).
 Support for popup menus requires that the mouse be available."
-  (and
-   (let ((frame-type (framep-on-display display)))
-     (memq frame-type '(x w32 pc ns)))
-   (display-mouse-p display)))
+  (display-mouse-p display))
 
 (defun display-graphic-p (&optional display)
   "Return non-nil if DISPLAY is a graphic display.

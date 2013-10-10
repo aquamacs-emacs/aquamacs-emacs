@@ -46,6 +46,9 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 
 #ifdef NS_IMPL_COCOA
 #include <IOKit/graphics/IOGraphicsLib.h>
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+#include "macfont.h"
+#endif
 #endif
 
 #if 0
@@ -1200,7 +1203,16 @@ This function is an internal primitive--use `make-frame' instead.  */)
     }
 
   block_input ();
+
+#ifdef NS_IMPL_COCOA
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+  if (CTGetCoreTextVersion != NULL
+      && CTGetCoreTextVersion () >= kCTVersionNumber10_5)
+    mac_register_font_driver (f);
+#endif
+#endif
   register_font_driver (&nsfont_driver, f);
+
   x_default_parameter (f, parms, Qfont_backend, Qnil,
 			"fontBackend", "FontBackend", RES_TYPE_STRING);
 
@@ -1210,8 +1222,13 @@ This function is an internal primitive--use `make-frame' instead.  */)
     x_default_parameter (f, parms, Qfontsize,
                                     make_number (0 /*(int)[font pointSize]*/),
                                     "fontSize", "FontSize", RES_TYPE_NUMBER);
+    // Remove ' Regular', not handled by backends.
+    char *fontname = xstrdup ([[font displayName] UTF8String]);
+    int len = strlen (fontname);
+    if (len > 8 && strcmp (fontname + len - 8, " Regular") == 0)
+      fontname[len-8] = '\0';
     x_default_parameter (f, parms, Qfont,
-                                 build_string ([[font fontName] UTF8String]),
+                                 build_string (fontname),
                                  "font", "Font", RES_TYPE_STRING);
   }
   unblock_input ();
@@ -3117,17 +3134,13 @@ x_set_scroll_bar_default_width (struct frame *f)
                                       wid - 1) / wid;
 }
 
-
-extern const char *x_get_string_resource (XrmDatabase, char *, char *);
-
-
 /* terms impl this instead of x-get-resource directly */
-const char *
-x_get_string_resource (XrmDatabase rdb, char *name, char *class)
+char *
+x_get_string_resource (XrmDatabase rdb, const char *name, const char *class)
 {
   /* remove appname prefix; TODO: allow for !="Emacs" */
-  char *toCheck = class + (!strncmp (class, "Emacs.", 6) ? 6 : 0);
-  const char *res;
+  const char *res, *toCheck = class + (!strncmp (class, "Emacs.", 6) ? 6 : 0);
+
   check_window_system (NULL);
 
   if (inhibit_x_resources)
@@ -3135,9 +3148,9 @@ x_get_string_resource (XrmDatabase rdb, char *name, char *class)
     return NULL;
 
   res = ns_get_defaults_value (toCheck);
-  return !res ? NULL :
-      (!c_strncasecmp (res, "YES", 3) ? "true" :
-          (!c_strncasecmp (res, "NO", 2) ? "false" : res));
+  return (!res ? NULL :
+	  (!c_strncasecmp (res, "YES", 3) ? "true" :
+	   (!c_strncasecmp (res, "NO", 2) ? "false" : (char *) res)));
 }
 
 
@@ -3506,6 +3519,7 @@ compute_tip_xy (struct frame *f,
 {
   Lisp_Object left, top;
   EmacsView *view = FRAME_NS_VIEW (f);
+  struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (f);
   NSPoint pt;
   NSRect vScreen;
 
@@ -3515,7 +3529,8 @@ compute_tip_xy (struct frame *f,
 
   if (!INTEGERP (left) || !INTEGERP (top))
     {
-      pt = last_mouse_motion_position;
+      pt.x = dpyinfo->last_mouse_motion_x;
+      pt.y = dpyinfo->last_mouse_motion_y;
       /* Convert to screen coordinates */
       pt = [view convertPoint: pt toView: nil];
       pt = [[view window] convertBaseToScreen: pt];

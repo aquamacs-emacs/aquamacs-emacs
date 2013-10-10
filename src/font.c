@@ -5197,9 +5197,6 @@ EMACS_FONT_LOG is set.  Otherwise, it is set to t.  */);
 #ifdef HAVE_NTGUI
   syms_of_w32font ();
 #endif	/* HAVE_NTGUI */
-#ifdef HAVE_NS
-  syms_of_nsfont ();
-#endif	/* HAVE_NS */
 #endif	/* HAVE_WINDOW_SYSTEM */
 }
 

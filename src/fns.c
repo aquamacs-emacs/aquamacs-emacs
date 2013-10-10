@@ -1604,7 +1604,7 @@ changing the value of a sequence `foo'.  */)
 
 	  for (i = n = 0; i < ASIZE (seq); ++i)
 	    if (NILP (Fequal (AREF (seq, i), elt)))
-	      p->contents[n++] = AREF (seq, i);
+	      p->u.contents[n++] = AREF (seq, i);
 
 	  XSETVECTOR (seq, p);
 	}
@@ -2434,8 +2434,8 @@ a space; `yes-or-no-p' adds \"(yes or no) \" to it.
 The user must confirm the answer with RET, and can edit it until it
 has been confirmed.
 
-Under a windowing system a dialog box will be used if `last-nonmenu-event'
-is nil, and `use-dialog-box' is non-nil.  */)
+If dialog boxes are supported, a dialog box will be used
+if `last-nonmenu-event' is nil, and `use-dialog-box' is non-nil.  */)
   (Lisp_Object prompt)
 {
   register Lisp_Object ans;
@@ -2446,8 +2446,7 @@ is nil, and `use-dialog-box' is non-nil.  */)
 
 #ifdef HAVE_MENUS
   if ((NILP (last_nonmenu_event) || CONSP (last_nonmenu_event))
-      && use_dialog_box
-      && window_system_available (SELECTED_FRAME ()))
+      && use_dialog_box)
     {
       Lisp_Object pane, menu, obj;
       redisplay_preserve_echo_area (4);
@@ -3450,7 +3449,7 @@ larger_vector (Lisp_Object vec, ptrdiff_t incr_min, ptrdiff_t nitems_max)
 {
   struct Lisp_Vector *v;
   ptrdiff_t i, incr, incr_max, old_size, new_size;
-  ptrdiff_t C_language_max = min (PTRDIFF_MAX, SIZE_MAX) / sizeof *v->contents;
+  ptrdiff_t C_language_max = min (PTRDIFF_MAX, SIZE_MAX) / sizeof *v->u.contents;
   ptrdiff_t n_max = (0 <= nitems_max && nitems_max < C_language_max
 		     ? nitems_max : C_language_max);
   eassert (VECTORP (vec));
@@ -3462,9 +3461,9 @@ larger_vector (Lisp_Object vec, ptrdiff_t incr_min, ptrdiff_t nitems_max)
     memory_full (SIZE_MAX);
   new_size = old_size + incr;
   v = allocate_vector (new_size);
-  memcpy (v->contents, XVECTOR (vec)->contents, old_size * sizeof *v->contents);
+  memcpy (v->u.contents, XVECTOR (vec)->u.contents, old_size * sizeof *v->u.contents);
   for (i = old_size; i < new_size; ++i)
-    v->contents[i] = Qnil;
+    v->u.contents[i] = Qnil;
   XSETVECTOR (vec, v);
   return vec;
 }
@@ -3572,9 +3571,7 @@ hashfn_user_defined (struct hash_table_test *ht, Lisp_Object key)
   args[0] = ht->user_hash_function;
   args[1] = key;
   hash = Ffuncall (2, args);
-  if (!INTEGERP (hash))
-    signal_error ("Invalid hash code returned from user-supplied hash function", hash);
-  return XUINT (hash);
+  return hashfn_eq (ht, hash);
 }
 
 /* An upper bound on the size of a hash table index.  It must fit in
@@ -4543,9 +4540,9 @@ compare keys, and HASH for computing hash codes of keys.
 
 TEST must be a function taking two arguments and returning non-nil if
 both arguments are the same.  HASH must be a function taking one
-argument and return an integer that is the hash code of the argument.
-Hash code computation should use the whole value range of integers,
-including negative integers.  */)
+argument and returning an object that is the hash code of the argument.
+It should be the case that if (eq (funcall HASH x1) (funcall HASH x2))
+returns nil, then (funcall TEST x1 x2) also returns nil.  */)
   (Lisp_Object name, Lisp_Object test, Lisp_Object hash)
 {
   return Fput (name, Qhash_table_test, list2 (test, hash));

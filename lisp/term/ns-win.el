@@ -1026,6 +1026,7 @@ EVENT is a mouse event, and ATTRIBUTE is either
 (defvar ns-initialized nil
   "Non-nil if Nextstep windowing has been initialized.")
 
+(declare-function x-handle-args "common-win" (args))
 (declare-function ns-list-services "nsfns.m" ())
 (declare-function x-open-connection "nsfns.m"
                   (display &optional xrm-string must-succeed))
@@ -1064,6 +1065,14 @@ EVENT is a mouse event, and ATTRIBUTE is either
 
   ;; FIXME: This will surely lead to "MODIFIED OUTSIDE CUSTOM" warnings.
   (menu-bar-mode (if (get-lisp-resource nil "Menus") 1 -1))
+
+  ;; For Darwin nothing except UTF-8 makes sense.
+  (when (eq system-type 'darwin)
+      (add-hook 'before-init-hook
+                #'(lambda ()
+                    (setq locale-coding-system 'utf-8-unix)
+                    (setq default-process-coding-system
+                          '(utf-8-unix . utf-8-unix)))))
 
   ;; OS X Lion introduces PressAndHold, which is unsupported by this port.
   ;; See this thread for more details:

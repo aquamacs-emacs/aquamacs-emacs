@@ -2544,61 +2544,64 @@ This is like `dired-recursive-delete-directory' for Tramp files."
 		   (tramp-shell-quote-argument
 		    (tramp-run-real-handler
 		     'file-name-nondirectory (list localname)))))))
-      (let ((beg (point)))
-	;; We cannot use `insert-buffer-substring' because the Tramp
-	;; buffer changes its contents before insertion due to calling
-	;; `expand-file' and alike.
-	(insert
-	 (with-current-buffer (tramp-get-buffer v)
-	   (buffer-string)))
 
-	;; Check for "--dired" output.
-	(forward-line -2)
-	(when (looking-at "//SUBDIRED//")
-	  (forward-line -1))
-	(when (looking-at "//DIRED//\\s-+")
-	  (let ((databeg (match-end 0))
-		(end (point-at-eol)))
-	    ;; Now read the numeric positions of file names.
-	    (goto-char databeg)
-	    (while (< (point) end)
-	      (let ((start (+ beg (read (current-buffer))))
-		    (end (+ beg (read (current-buffer)))))
-		(if (memq (char-after end) '(?\n ?\ ))
-		    ;; End is followed by \n or by " -> ".
-		    (put-text-property start end 'dired-filename t))))))
-	;; Remove trailing lines.
-	(goto-char (point-at-bol))
-	(while (looking-at "//")
-	  (forward-line 1)
-	  (delete-region (match-beginning 0) (point)))
+      (save-restriction
+	(let ((beg (point)))
+	  (narrow-to-region (point) (point))
+	  ;; We cannot use `insert-buffer-substring' because the Tramp
+	  ;; buffer changes its contents before insertion due to calling
+	  ;; `expand-file' and alike.
+	  (insert
+	   (with-current-buffer (tramp-get-buffer v)
+	     (buffer-string)))
 
-	;; Some busyboxes are reluctant to discard colors.
-	(unless (string-match "color" (tramp-get-connection-property v "ls" ""))
-	  (goto-char beg)
-	  (while (re-search-forward tramp-color-escape-sequence-regexp nil t)
-	    (replace-match "")))
+	  ;; Check for "--dired" output.
+	  (forward-line -2)
+	  (when (looking-at "//SUBDIRED//")
+	    (forward-line -1))
+	  (when (looking-at "//DIRED//\\s-+")
+	    (let ((databeg (match-end 0))
+		  (end (point-at-eol)))
+	      ;; Now read the numeric positions of file names.
+	      (goto-char databeg)
+	      (while (< (point) end)
+		(let ((start (+ beg (read (current-buffer))))
+		      (end (+ beg (read (current-buffer)))))
+		  (if (memq (char-after end) '(?\n ?\ ))
+		      ;; End is followed by \n or by " -> ".
+		      (put-text-property start end 'dired-filename t))))))
+	  ;; Remove trailing lines.
+	  (goto-char (point-at-bol))
+	  (while (looking-at "//")
+	    (forward-line 1)
+	    (delete-region (match-beginning 0) (point)))
 
-	;; Decode the output, it could be multibyte.
-	(decode-coding-region
-	 beg (point-max)
-	 (or file-name-coding-system
-	     (and (boundp 'default-file-name-coding-system)
-		  (symbol-value 'default-file-name-coding-system))))
+	  ;; Some busyboxes are reluctant to discard colors.
+	  (unless (string-match "color" (tramp-get-connection-property v "ls" ""))
+	    (goto-char beg)
+	    (while (re-search-forward tramp-color-escape-sequence-regexp nil t)
+	      (replace-match "")))
 
-	;; The inserted file could be from somewhere else.
-	(when (and (not wildcard) (not full-directory-p))
-	  (goto-char (point-max))
-	  (when (file-symlink-p filename)
-	    (goto-char (search-backward "->" beg 'noerror)))
-	  (search-backward
-	   (if (zerop (length (file-name-nondirectory filename)))
-	       "."
-	     (file-name-nondirectory filename))
-	   beg 'noerror)
-	  (replace-match (file-relative-name filename) t))
+	  ;; Decode the output, it could be multibyte.
+	  (decode-coding-region
+	   beg (point-max)
+	   (or file-name-coding-system
+	       (and (boundp 'default-file-name-coding-system)
+		    (symbol-value 'default-file-name-coding-system))))
 
-	(goto-char (point-max))))))
+	  ;; The inserted file could be from somewhere else.
+	  (when (and (not wildcard) (not full-directory-p))
+	    (goto-char (point-max))
+	    (when (file-symlink-p filename)
+	      (goto-char (search-backward "->" beg 'noerror)))
+	    (search-backward
+	     (if (zerop (length (file-name-nondirectory filename)))
+		 "."
+	       (file-name-nondirectory filename))
+	     beg 'noerror)
+	    (replace-match (file-relative-name filename) t))
+
+	  (goto-char (point-max)))))))
 
 ;; Canonicalization of file names.
 
@@ -4950,38 +4953,99 @@ Return ATTR."
 (defun tramp-get-remote-id (vec)
   (with-tramp-connection-property vec "id"
     (tramp-message vec 5 "Finding POSIX `id' command")
-    (or
-     (catch 'id-found
-       (let ((dl (tramp-get-remote-path vec))
-	     result)
-	 (while (and dl (setq result (tramp-find-executable vec "id" dl t t)))
-	   ;; Check POSIX parameter.
-	   (when (tramp-send-command-and-check vec (format "%s -u" result))
-	     (throw 'id-found result))
-	   (setq dl (cdr dl)))))
-     (tramp-error vec 'file-error "Couldn't find a POSIX `id' command"))))
+    (catch 'id-found
+      (let ((dl (tramp-get-remote-path vec))
+	    result)
+	(while (and dl (setq result (tramp-find-executable vec "id" dl t t)))
+	  ;; Check POSIX parameter.
+	  (when (tramp-send-command-and-check vec (format "%s -u" result))
+	    (throw 'id-found result))
+	  (setq dl (cdr dl)))))))
+
+(defun tramp-get-remote-uid-with-id (vec id-format)
+  (tramp-send-command-and-read
+   vec
+   (format "%s -u%s %s"
+	   (tramp-get-remote-id vec)
+	   (if (equal id-format 'integer) "" "n")
+	   (if (equal id-format 'integer)
+	       "" "| sed -e s/^/\\\"/ -e s/\$/\\\"/"))))
+
+(defun tramp-get-remote-uid-with-perl (vec id-format)
+  (tramp-send-command-and-read
+   vec
+   (format "%s -le '%s'"
+	   (tramp-get-remote-perl vec)
+	   (if (equal id-format 'integer)
+	       "print $>"
+	     "print \"\\\"\", scalar getpwuid($>), \"\\\"\""))))
+
+(defun tramp-get-remote-python (vec)
+  (with-tramp-connection-property vec "python"
+    (tramp-message vec 5 "Finding a suitable `python' command")
+    (tramp-find-executable vec "python" (tramp-get-remote-path vec))))
+
+(defun tramp-get-remote-uid-with-python (vec id-format)
+  (tramp-send-command-and-read
+   vec
+   (format "%s -c \"%s\""
+	   (tramp-get-remote-python vec)
+	   (if (equal id-format 'integer)
+	       "import os; print os.getuid()"
+	     "import os, pwd; print '\\\"' + pwd.getpwuid(os.getuid())[0] + '\\\"'"))))
 
 (defun tramp-get-remote-uid (vec id-format)
   (with-tramp-connection-property vec (format "uid-%s" id-format)
-    (let ((res (tramp-send-command-and-read
-		vec
-		(format "%s -u%s %s"
-			(tramp-get-remote-id vec)
-			(if (equal id-format 'integer) "" "n")
-			(if (equal id-format 'integer)
-			    "" "| sed -e s/^/\\\"/ -e s/\$/\\\"/")))))
+    (let ((res (cond
+		((tramp-get-remote-id vec)
+		 (tramp-get-remote-uid-with-id vec id-format))
+		((tramp-get-remote-perl vec)
+		 (tramp-get-remote-uid-with-perl vec id-format))
+		((tramp-get-remote-python vec)
+		 (tramp-get-remote-uid-with-python vec id-format))
+		(t (tramp-error
+		    vec 'file-error "Cannot determine remote uid")))))
       ;; The command might not always return a number.
       (if (and (equal id-format 'integer) (not (integerp res))) -1 res))))
 
+(defun tramp-get-remote-gid-with-id (vec id-format)
+  (tramp-send-command-and-read
+   vec
+   (format "%s -g%s %s"
+	   (tramp-get-remote-id vec)
+	   (if (equal id-format 'integer) "" "n")
+	   (if (equal id-format 'integer)
+	       "" "| sed -e s/^/\\\"/ -e s/\$/\\\"/"))))
+
+(defun tramp-get-remote-gid-with-perl (vec id-format)
+  (tramp-send-command-and-read
+   vec
+   (format "%s -le '%s'"
+	   (tramp-get-remote-perl vec)
+	   (if (equal id-format 'integer)
+	       "print ($)=~/(\\d+)/)"
+	     "print \"\\\"\", scalar getgrgid($)), \"\\\"\""))))
+
+(defun tramp-get-remote-gid-with-python (vec id-format)
+  (tramp-send-command-and-read
+   vec
+   (format "%s -c \"%s\""
+	   (tramp-get-remote-python vec)
+	   (if (equal id-format 'integer)
+	       "import os; print os.getgid()"
+	     "import os, grp; print '\\\"' + grp.getgrgid(os.getgid())[0] + '\\\"'"))))
+
 (defun tramp-get-remote-gid (vec id-format)
   (with-tramp-connection-property vec (format "gid-%s" id-format)
-    (let ((res (tramp-send-command-and-read
-		vec
-		(format "%s -g%s %s"
-			(tramp-get-remote-id vec)
-			(if (equal id-format 'integer) "" "n")
-			(if (equal id-format 'integer)
-			    "" "| sed -e s/^/\\\"/ -e s/\$/\\\"/")))))
+    (let ((res (cond
+		((tramp-get-remote-id vec)
+		 (tramp-get-remote-gid-with-id vec id-format))
+		((tramp-get-remote-perl vec)
+		 (tramp-get-remote-gid-with-perl vec id-format))
+		((tramp-get-remote-python vec)
+		 (tramp-get-remote-gid-with-python vec id-format))
+		(t (tramp-error
+		    vec 'file-error "Cannot determine remote gid")))))
       ;; The command might not always return a number.
       (if (and (equal id-format 'integer) (not (integerp res))) -1 res))))
 

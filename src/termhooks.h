@@ -26,9 +26,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "systime.h" /* for Time */
 
 INLINE_HEADER_BEGIN
-#ifndef TERMHOOKS_INLINE
-# define TERMHOOKS_INLINE INLINE
-#endif
 
 enum scroll_bar_part {
   scroll_bar_nowhere = -1,
@@ -610,12 +607,12 @@ struct terminal
 
 /* Most code should use these functions to set Lisp fields in struct
    terminal.  */
-TERMHOOKS_INLINE void
+INLINE void
 tset_charset_list (struct terminal *t, Lisp_Object val)
 {
   t->charset_list = val;
 }
-TERMHOOKS_INLINE void
+INLINE void
 tset_selection_alist (struct terminal *t, Lisp_Object val)
 {
   t->Vselection_alist = val;
@@ -659,6 +656,14 @@ extern unsigned char *encode_terminal_code (struct glyph *, int,
 
 #ifdef HAVE_GPM
 extern void close_gpm (int gpm_fd);
+#endif
+
+#ifdef WINDOWSNT
+extern int cursorX (struct tty_display_info *);
+extern int cursorY (struct tty_display_info *);
+#else
+#define cursorX(t)  curX(t)
+#define cursorY(t)  curY(t)
 #endif
 
 INLINE_HEADER_END

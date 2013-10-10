@@ -40,8 +40,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 
-#define INTERVALS_INLINE EXTERN_INLINE
-
 #include <intprops.h>
 #include "lisp.h"
 #include "intervals.h"
@@ -1407,7 +1405,7 @@ offset_intervals (struct buffer *buffer, ptrdiff_t start, ptrdiff_t length)
 				    start, length);
   else
     {
-      lint_assume (- TYPE_MAXIMUM (ptrdiff_t) <= length);
+      assume (- TYPE_MAXIMUM (ptrdiff_t) <= length);
       adjust_intervals_for_deletion (buffer, start, -length);
     }
 }
@@ -1794,8 +1792,7 @@ temp_set_point_both (struct buffer *buffer,
 		     ptrdiff_t charpos, ptrdiff_t bytepos)
 {
   /* In a single-byte buffer, the two positions must be equal.  */
-  if (BUF_ZV (buffer) == BUF_ZV_BYTE (buffer))
-    eassert (charpos == bytepos);
+  eassert (BUF_ZV (buffer) != BUF_ZV_BYTE (buffer) || charpos == bytepos);
 
   eassert (charpos <= bytepos);
   eassert (charpos <= BUF_ZV (buffer) || BUF_BEGV (buffer) <= charpos);

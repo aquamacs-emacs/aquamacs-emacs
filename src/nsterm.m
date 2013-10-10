@@ -70,6 +70,12 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 #include "process.h"
 #endif
 
+#ifdef NS_IMPL_COCOA
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+#include "macfont.h"
+#endif
+#endif
+
 /* call tracing */
 #if 0
 int term_trace_num = 0;
@@ -179,9 +185,6 @@ static Lisp_Object QUTF8_STRING;
    no way to control this behavior. */
 float ns_antialias_threshold;
 
-/* Used to pick up AppleHighlightColor on OS X */
-NSString *ns_selection_color;
-
 NSArray *ns_send_types =0, *ns_return_types =0, *ns_drag_types =0;
 NSString *ns_app_name = @"Aquamacs";  /* default changed later */
 
@@ -191,11 +194,6 @@ Lisp_Object ns_display_name_list;
 long context_menu_value = 0;
 
 /* display update */
-NSPoint last_mouse_motion_position;
-static NSRect last_mouse_glyph;
-static Time last_mouse_movement_time = 0;
-static Lisp_Object last_mouse_motion_frame;
-static EmacsScroller *last_mouse_scroll_bar = nil;
 static struct frame *ns_updating_frame;
 static NSView *focus_view = NULL;
 static int ns_window_num = 0;
@@ -204,8 +202,6 @@ static NSRect uRect;
 #endif
 static BOOL gsaved = NO;
 static BOOL ns_fake_keydown = NO;
-int ns_tmp_flags; /* FIXME */
-struct nsfont_info *ns_tmp_font; /* FIXME */
 #ifdef NS_IMPL_COCOA
 static BOOL ns_menu_bar_is_hidden = NO;
 #endif
@@ -647,9 +643,7 @@ ns_update_auto_hide_menu_bar (void)
 
   NSTRACE (ns_update_auto_hide_menu_bar);
 
-  if (NSApp != nil
-      && [NSApp isActive]
-      && [NSApp respondsToSelector:@selector(setPresentationOptions:)])
+  if (NSApp != nil && [NSApp isActive])
     {
       // Note, "setPresentationOptions" triggers an error unless the
       // application is active.
@@ -658,10 +652,11 @@ ns_update_auto_hide_menu_bar (void)
       if (menu_bar_should_be_hidden != ns_menu_bar_is_hidden)
         {
           NSApplicationPresentationOptions options
-            = NSApplicationPresentationAutoHideDock;
+            = NSApplicationPresentationDefault;
 
           if (menu_bar_should_be_hidden)
-            options |= NSApplicationPresentationAutoHideMenuBar;
+            options |= NSApplicationPresentationAutoHideMenuBar
+              | NSApplicationPresentationAutoHideDock;
 
           [NSApp setPresentationOptions: options];
 
@@ -687,10 +682,21 @@ ns_update_begin (struct frame *f)
    external (RIF) call; whole frame, called before update_window_begin
    -------------------------------------------------------------------------- */
 {
-  NSView *view = FRAME_NS_VIEW (f);
+  EmacsView *view = FRAME_NS_VIEW (f);
   NSTRACE (ns_update_begin);
 
   ns_update_auto_hide_menu_bar ();
+
+#ifdef NS_IMPL_COCOA
+  if ([view isFullscreen] && [view fsIsNative])
+  {
+    // Fix reappearing tool bar in fullscreen for OSX 10.7
+    BOOL tbar_visible = FRAME_EXTERNAL_TOOL_BAR (f) ? YES : NO;
+    NSToolbar *toolbar = [FRAME_NS_VIEW (f) toolbar];
+    if (! tbar_visible != ! [toolbar isVisible])
+      [toolbar setVisible: tbar_visible];
+  }
+#endif
 
   ns_updating_frame = f;
   int succ = [view lockFocusIfCanDraw];
@@ -1516,11 +1522,41 @@ ns_get_color (const char *name, NSColor **col)
 /*fprintf (stderr, "ns_get_color: '%s'\n", name); */
   block_input ();
 
-  if ([nsname isEqualToString: @"ns_selection_color"])
+#ifdef NS_IMPL_COCOA
+  if ([nsname isEqualToString: @"ns_selection_bg_color"])
     {
-      nsname = ns_selection_color;
-      name = [ns_selection_color UTF8String];
+      NSString *defname = [[NSUserDefaults standardUserDefaults]
+                            stringForKey: @"AppleHighlightColor"];
+
+      if (defname != nil)
+        nsname = defname;
+      else if ((new = [NSColor selectedTextBackgroundColor]) != nil)
+        {
+          *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
+          unblock_input ();
+          return 0;
+        }
+      else
+        nsname = NS_SELECTION_BG_COLOR_DEFAULT;
+
+      name = [nsname UTF8String];
     }
+  else if ([nsname isEqualToString: @"ns_selection_fg_color"])
+    {
+      /* NOTE: OSX applications normally don't set foreground selection, but
+         text may be unreadable if we don't.
+      */
+      if ((new = [NSColor selectedTextColor]) != nil)
+        {
+          *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
+          unblock_input ();
+          return 0;
+        }
+
+      nsname = NS_SELECTION_FG_COLOR_DEFAULT;
+      name = [nsname UTF8String];
+    }
+#endif // NS_IMPL_COCOA
 
   /* First, check for some sort of numeric specification. */
   hex[0] = '\0';
@@ -1797,25 +1833,27 @@ note_mouse_movement (struct frame *frame, CGFloat x, CGFloat y)
      known as last_mouse_glyph.
      ------------------------------------------------------------------------ */
 {
+  struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (frame);
+  NSRect *r;
+
 //  NSTRACE (note_mouse_movement);
 
-  XSETFRAME (last_mouse_motion_frame, frame);
+  dpyinfo->last_mouse_motion_frame = frame;
+  r = &dpyinfo->last_mouse_glyph;
 
   /* Note, this doesn't get called for enter/leave, since we don't have a
      position.  Those are taken care of in the corresponding NSView methods. */
 
   /* has movement gone beyond last rect we were tracking? */
-  if (x < last_mouse_glyph.origin.x ||
-      x >= (last_mouse_glyph.origin.x + last_mouse_glyph.size.width) ||
-      y < last_mouse_glyph.origin.y ||
-      y >= (last_mouse_glyph.origin.y + last_mouse_glyph.size.height))
+  if (x < r->origin.x || x >= r->origin.x + r->size.width
+      || y < r->origin.y || y >= r->origin.y + r->size.height)
     {
       if (ns_update_begin(frame))
 	{
       frame->mouse_moved = 1;
       note_mouse_highlight (frame, x, y);
-      remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
-      ns_update_end(frame);
+      remember_mouse_glyph (frame, x, y, r);
+      ns_update_end (frame);
 	}
       return 1;
     }
@@ -1853,14 +1891,15 @@ ns_mouse_position (struct frame **fp, int insist, Lisp_Object *bar_window,
 
   block_input ();
 
-  if (last_mouse_scroll_bar != nil && insist == 0)
+  if (dpyinfo->last_mouse_scroll_bar != nil && insist == 0)
     {
       /* TODO: we do not use this path at the moment because drag events will
            go directly to the EmacsScroller.  Leaving code in for now. */
-      [last_mouse_scroll_bar getMouseMotionPart: (int *)part window: bar_window
-                                              x: x y: y];
-      if (time) *time = last_mouse_movement_time;
-      last_mouse_scroll_bar = nil;
+      [dpyinfo->last_mouse_scroll_bar
+	  getMouseMotionPart: (int *)part window: bar_window x: x y: y];
+      if (time)
+	*time = dpyinfo->last_mouse_movement_time;
+      dpyinfo->last_mouse_scroll_bar = nil;
     }
   else
     {
@@ -1870,9 +1909,10 @@ ns_mouse_position (struct frame **fp, int insist, Lisp_Object *bar_window,
             && FRAME_NS_DISPLAY (XFRAME (frame)) == FRAME_NS_DISPLAY (*fp))
           XFRAME (frame)->mouse_moved = 0;
 
-      last_mouse_scroll_bar = nil;
-      if (last_mouse_frame && FRAME_LIVE_P (last_mouse_frame))
-        f = last_mouse_frame;
+      dpyinfo->last_mouse_scroll_bar = nil;
+      if (dpyinfo->last_mouse_frame
+	  && FRAME_LIVE_P (dpyinfo->last_mouse_frame))
+        f = dpyinfo->last_mouse_frame;
       else
         f = dpyinfo->x_focus_frame ? dpyinfo->x_focus_frame
                                     : SELECTED_FRAME ();
@@ -1883,7 +1923,8 @@ ns_mouse_position (struct frame **fp, int insist, Lisp_Object *bar_window,
 
           position = [[view window] mouseLocationOutsideOfEventStream];
           position = [view convertPoint: position fromView: nil];
-          remember_mouse_glyph (f, position.x, position.y, &last_mouse_glyph);
+          remember_mouse_glyph (f, position.x, position.y,
+				&dpyinfo->last_mouse_glyph);
 /*fprintf (stderr, "ns_mouse_position: %.0f, %.0f\n", position.x, position.y); */
 
           if (bar_window) *bar_window = Qnil;
@@ -1891,7 +1932,8 @@ ns_mouse_position (struct frame **fp, int insist, Lisp_Object *bar_window,
 
           if (x) XSETINT (*x, lrint (position.x));
           if (y) XSETINT (*y, lrint (position.y));
-          if (time) *time = last_mouse_movement_time;
+          if (time)
+	    *time = dpyinfo->last_mouse_movement_time;
           *fp = f;
         }
     }
@@ -2239,8 +2281,11 @@ ns_compute_glyph_string_overhangs (struct glyph_string *s)
   else
     {
       s->left_overhang = 0;
-      s->right_overhang = ((struct nsfont_info *)font)->ital ?
-        FONT_HEIGHT (font) * 0.2 : 0;
+      if (EQ (font->driver->type, Qns))
+        s->right_overhang = ((struct nsfont_info *)font)->ital ?
+          FONT_HEIGHT (font) * 0.2 : 0;
+      else
+        s->right_overhang = 0;
     }
 }
 
@@ -3220,8 +3265,10 @@ ns_draw_glyph_string (struct glyph_string *s)
 {
   /* TODO (optimize): focus for box and contents draw */
   NSRect r[2];
-  int n;
+  int n, flags;
   char box_drawn_p = 0;
+  struct font *font = s->face->font;
+  if (! font) font = FRAME_FONT (s->f);
 
   NSTRACE (ns_draw_glyph_string);
 
@@ -3288,13 +3335,10 @@ ns_draw_glyph_string (struct glyph_string *s)
         ns_maybe_dumpglyphs_background
           (s, s->first_glyph->type == COMPOSITE_GLYPH);
 
-      ns_tmp_flags = s->hl == DRAW_CURSOR ? NS_DUMPGLYPH_CURSOR :
-                    (s->hl == DRAW_MOUSE_FACE ? NS_DUMPGLYPH_MOUSEFACE :
-                     (s->for_overlaps ? NS_DUMPGLYPH_FOREGROUND :
-                      NS_DUMPGLYPH_NORMAL));
-      ns_tmp_font = (struct nsfont_info *)s->face->font;
-      if (ns_tmp_font == NULL)
-          ns_tmp_font = (struct nsfont_info *)FRAME_FONT (s->f);
+      flags = s->hl == DRAW_CURSOR ? NS_DUMPGLYPH_CURSOR :
+        (s->hl == DRAW_MOUSE_FACE ? NS_DUMPGLYPH_MOUSEFACE :
+         (s->for_overlaps ? NS_DUMPGLYPH_FOREGROUND :
+          NS_DUMPGLYPH_NORMAL));
 
       // use cursor color as background color to set correct antialiasing background
       unsigned long saved_color = 0;
@@ -3306,10 +3350,21 @@ ns_draw_glyph_string (struct glyph_string *s)
           
         }
 
-      ns_tmp_font->font.driver->draw
+      font->driver->draw
         (s, 0, s->nchars, s->x, s->y,
-         (ns_tmp_flags == NS_DUMPGLYPH_NORMAL && !s->background_filled_p)
-         || ns_tmp_flags == NS_DUMPGLYPH_MOUSEFACE);
+         (flags == NS_DUMPGLYPH_NORMAL && !s->background_filled_p)
+         || flags == NS_DUMPGLYPH_MOUSEFACE);
+
+      {
+        NSColor *col = (NS_FACE_FOREGROUND (s->face) != 0
+                        ? ns_lookup_indexed_color (NS_FACE_FOREGROUND (s->face),
+                                                   s->f)
+                        : FRAME_FOREGROUND_COLOR (s->f));
+        [col set];
+
+        /* Draw underline, overline, strike-through. */
+        ns_draw_text_decoration (s, s->face, col, s->width, s->x);
+      }
 
       if (s->hl == DRAW_CURSOR && s->w->phys_cursor_type == FILLED_BOX_CURSOR)
         {
@@ -3440,7 +3495,6 @@ check_native_fs ()
 
   ns_last_use_native_fullscreen = ns_use_native_fullscreen;
 
-  /* Clear the mouse-moved flag for every frame on this display.  */
   FOR_EACH_FRAME (tail, frame)
     {
       struct frame *f = XFRAME (frame);
@@ -4072,7 +4126,7 @@ static struct redisplay_interface ns_redisplay_interface =
   0, /* define_fringe_bitmap */ /* FIXME: simplify ns_draw_fringe_bitmap */
   0, /* destroy_fringe_bitmap */
   ns_compute_glyph_string_overhangs,
-  ns_draw_glyph_string, /* interface to nsfont.m */
+  ns_draw_glyph_string,
   ns_define_frame_cursor,
   ns_clear_frame_area,
   ns_draw_window_cursor,
@@ -4262,11 +4316,6 @@ ns_term_init (Lisp_Object display_name)
                  make_float (10.0), make_float (6.0), YES, NO);
       ns_antialias_threshold = NILP (tmp) ? 10.0 : XFLOATINT (tmp);
     }
-
-  ns_selection_color = [[NSUserDefaults standardUserDefaults]
-			 stringForKey: @"AppleHighlightColor"];
-  if (ns_selection_color == nil)
-    ns_selection_color = NS_SELECTION_COLOR_DEFAULT;
 
   {
     NSColorList *cl = [NSColorList colorListNamed: @"Aquamacs"];
@@ -5392,18 +5441,27 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 /* called on font panel selection */
 - (void)changeFont: (id)sender
 {
-  NSEvent *e =[[self window] currentEvent];
+  NSEvent *e = [[self window] currentEvent];
   /* to do: use the appropriate face and not the frame default face */
-  struct face *face =FRAME_DEFAULT_FACE (emacsframe);
+  struct face *face = FRAME_DEFAULT_FACE (emacsframe);
+  struct font *font = face->font;
   id newFont;
   CGFloat size;
+  NSFont *nsfont;
 
   NSTRACE (changeFont);
+
   if (!emacs_event)
     return;
 
-  if ((newFont = [sender convertFont:
-                           ((struct nsfont_info *)face->font)->nsfont]))
+  if (EQ (font->driver->type, Qns))
+    nsfont = ((struct nsfont_info *)font)->nsfont;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+  else
+    nsfont = (NSFont *) macfont_get_nsctfont (font);
+#endif
+
+  if ((newFont = [sender convertFont: nsfont]))
     {
       SET_FRAME_GARBAGED (emacsframe); /* now needed as of 2008/10 */
 
@@ -5914,8 +5972,10 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   NSString *str = [aString respondsToSelector: @selector (string)] ?
     [aString string] : aString;
   if (NS_KEYLOG)
-    NSLog (@"setMarkedText '%@' len =%d range %d from %d", str, [str length],
-           selRange.length, selRange.location);
+    NSLog (@"setMarkedText '%@' len =%lu range %lu from %lu",
+           str, (unsigned long)[str length],
+           (unsigned long)selRange.length,
+           (unsigned long)selRange.location);
 
   if (workingText != nil)
     [self deleteWorkingText];
@@ -5941,7 +6001,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   if (workingText == nil)
     return;
   if (NS_KEYLOG)
-    NSLog(@"deleteWorkingText len =%d\n", [workingText length]);
+    NSLog(@"deleteWorkingText len =%lu\n", (unsigned long)[workingText length]);
   [workingText release];
   workingText = nil;
   processingCompose = NO;
@@ -6069,6 +6129,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 /* This is what happens when the user presses a mouse button.  */
 - (void)mouseDown: (NSEvent *)theEvent
 {
+  struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (emacsframe);
   NSPoint p = [self convertPoint: [theEvent locationInWindow] fromView: nil];
 
   NSTRACE (mouseDown);
@@ -6077,10 +6138,10 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   if (!emacs_event)
     return;
 
-  last_mouse_frame = emacsframe;
+  dpyinfo->last_mouse_frame = emacsframe;
   /* appears to be needed to prevent spurious movement events generated on
      button clicks */
-  last_mouse_frame->mouse_moved = 0;
+  emacsframe->mouse_moved = 0;
 
   if ([theEvent type] == NSScrollWheel)
     {
@@ -6172,13 +6233,16 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
 - (void)mouseMoved: (NSEvent *)e
 {
   Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (emacsframe);
+  struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (emacsframe);
   Lisp_Object frame;
+  NSPoint pt;
 
 //  NSTRACE (mouseMoved);
 
-  last_mouse_movement_time = EV_TIMESTAMP (e);
-  last_mouse_motion_position
-    = [self convertPoint: [e locationInWindow] fromView: nil];
+  dpyinfo->last_mouse_movement_time = EV_TIMESTAMP (e);
+  pt = [self convertPoint: [e locationInWindow] fromView: nil];
+  dpyinfo->last_mouse_motion_x = pt.x;
+  dpyinfo->last_mouse_motion_y = pt.y;
 
   /* update any mouse face */
   if (hlinfo->mouse_face_hidden)
@@ -6195,9 +6259,8 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
     {
       NSTRACE (mouse_autoselect_window);
       static Lisp_Object last_mouse_window;
-      Lisp_Object window = window_from_coordinates
-	(emacsframe, last_mouse_motion_position.x,
-	 last_mouse_motion_position.y, 0, 0);
+      Lisp_Object window
+	= window_from_coordinates (emacsframe, pt.x, pt.y, 0, 0);
 
       if (WINDOWP (window)
           && !EQ (window, last_mouse_window)
@@ -6215,8 +6278,7 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
       last_mouse_window = window;
     }
 
-  if (!note_mouse_movement (emacsframe, last_mouse_motion_position.x,
-                            last_mouse_motion_position.y))
+  if (!note_mouse_movement (emacsframe, pt.x, pt.y))
     help_echo_string = previous_help_echo_string;
 
   XSETFRAME (frame, emacsframe);
@@ -6849,8 +6911,29 @@ if (cols > 0 && rows > 0)
       [self windowDidBecomeKey:notification];
       [nonfs_window orderOut:self];
     }
-  else if (! FRAME_EXTERNAL_TOOL_BAR (emacsframe))
-    [toolbar setVisible:NO];
+  else
+    {
+      BOOL tbar_visible = FRAME_EXTERNAL_TOOL_BAR (emacsframe) ? YES : NO;
+#ifdef NS_IMPL_COCOA
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+      unsigned val = (unsigned)[NSApp presentationOptions];
+
+      // OSX 10.7 bug fix, the menu won't appear without this.
+      // val is non-zero on other OSX versions.
+      if (val == 0)
+        {
+          NSApplicationPresentationOptions options
+            = NSApplicationPresentationAutoHideDock
+            | NSApplicationPresentationAutoHideMenuBar
+            | NSApplicationPresentationFullScreen
+            | NSApplicationPresentationAutoHideToolbar;
+
+          [NSApp setPresentationOptions: options];
+        }
+#endif
+#endif
+      [toolbar setVisible:tbar_visible];
+    }
 }
 
 - (void)windowWillExitFullScreen:(NSNotification *)notification
@@ -6863,7 +6946,7 @@ if (cols > 0 && rows > 0)
 {
   [self setFSValue: fs_before_fs];
   fs_before_fs = -1;
-#ifdef NS_IMPL_COCOA
+#ifdef HAVE_NATIVE_FS
   [self updateCollectionBehaviour];
 #endif
   if (FRAME_EXTERNAL_TOOL_BAR (emacsframe))
@@ -6924,7 +7007,7 @@ if (cols > 0 && rows > 0)
 
   if (fs_is_native)
     {
-#ifdef NS_IMPL_COCOA
+#ifdef HAVE_NATIVE_FS
       [[self window] toggleFullScreen:sender];
 #endif
       return;
@@ -7095,7 +7178,9 @@ if (cols > 0 && rows > 0)
 - (void)mouseEntered: (NSEvent *)theEvent
 {
   NSTRACE (mouseEntered);
-  last_mouse_movement_time = EV_TIMESTAMP (theEvent);
+  if (emacsframe)
+    FRAME_DISPLAY_INFO (emacsframe)->last_mouse_movement_time
+      = EV_TIMESTAMP (theEvent);
 }
 
 
@@ -7108,7 +7193,8 @@ if (cols > 0 && rows > 0)
   if (!hlinfo)
     return;
 
-  last_mouse_movement_time = EV_TIMESTAMP (theEvent);
+  FRAME_DISPLAY_INFO (emacsframe)->last_mouse_movement_time
+    = EV_TIMESTAMP (theEvent);
 
   if (emacsframe == hlinfo->mouse_face_mouse_frame)
     {
@@ -8315,9 +8401,6 @@ buttons on a one-button mouse.");
   staticpro (&ns_display_name_list);
   ns_display_name_list = Qnil;
 
-  staticpro (&last_mouse_motion_frame);
-  last_mouse_motion_frame = Qnil;
-
   DEFVAR_LISP ("ns-auto-hide-menu-bar", ns_auto_hide_menu_bar,
                doc: /* Non-nil means that the menu bar is hidden, but appears when the mouse is near.
 Only works on OSX 10.6 or later.  */);
@@ -8370,4 +8453,12 @@ resolution.  If set to `t`, all images to be loaded are scaled.*/);
 
   /* Tell Emacs about this window system.  */
   Fprovide (Qns, Qnil);
+
+  syms_of_nsfont ();
+#ifdef NS_IMPL_COCOA
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
+  syms_of_macfont ();
+#endif
+#endif
+  
 }

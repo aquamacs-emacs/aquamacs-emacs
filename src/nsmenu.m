@@ -929,6 +929,8 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
   ptrdiff_t specpdl_count = SPECPDL_INDEX ();
   widget_value *wv, *first_wv = 0;
 
+  block_input ();
+
   p.x = x; p.y = y;
 
   /* now parse stage 2 as in ns_update_menubar */
@@ -1131,6 +1133,7 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
   popup_activated_flag = 0;
   [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
 
+  unblock_input ();
   return tem;
 }
 
@@ -1159,62 +1162,18 @@ update_frame_tool_bar (struct frame *f)
     Update toolbar contents
    -------------------------------------------------------------------------- */
 {
-  int i;
+  int i, k = 0;
   EmacsView *view = FRAME_NS_VIEW (f);
   NSWindow *window = [view window];
   EmacsToolbar *toolbar = [view toolbar];
 
   block_input ();
+
+#ifdef NS_IMPL_COCOA
   [toolbar clearActive];
-  [toolbar setAllowsUserCustomization:YES];
-  [toolbar setAutosavesConfiguration:NO];
-  /* problematic, as it creates a defaults file
-     also, doesn't seem to work with our tool bar 
-     construction mechanism.
-     [toolbar setAutosavesConfiguration:YES];
-
-     how to store tool bar changes:
-
-     tool bars here have been set from the tool bar map so that
-     there is little access to the original (lisp) item.
-     we could create events and process them on the lisp side
-     (which will be tricky to get right).
-
-     we need to store
-     - enabled items
-     - disabled items
-     - additional items inserted somewhere
-
-     Lisp event: NS_TOOL_BAR_CONFIG_CHANGED
-     (ns-tool-bar-read-configuration)
-     => list of strings (containing indexes for current tool-bar-map)
-
-     On the Lisp side, we could then update the tool-bar-map accordingly,
-     i.e. reorder it and set visibility flags.
-     The internal rep. of the toolbar should be updated soon afterwards
-     (perhaps redraw-frame).
-
-     To make the user-mandated changes persistent, we could keep this around:
-
-     ((hash1 . tool-bar-config1)
-      (hash2 . tool-bar-config2))
- 
-      The hashes are hashes of the set of Lisp-side toolbar menu items (via their event names)
-      (sxhash (sort (mapcar
-      (lambda (m)
-      (when (consp m)
-      (car m)))
-      tool-bar-map)))
-
-      however, as soon as an item is added to or removed from the tool bar, do we want to 
-      discard the user's tool bar configuration?
-      Maybe that's okay.
-
-      the above tool-bar-config1 would be a list of toolbar item identifiers,
-      indicating visibility (by presence) and ordering.
-      It could be used to update the toolbar when desired.
-
-  */
+#else
+  [toolbar clearAll];
+#endif
 
   /* update EmacsToolbar as in GtkUtils, build items list */
   for (i = 0; i < f->n_tool_bar_items; ++i)
@@ -1231,23 +1190,28 @@ update_frame_tool_bar (struct frame *f)
       Lisp_Object image;
       Lisp_Object helpObj;
       Lisp_Object captionObj;
-      char *helpText;
       char *captionText;
       char *keyText;
+      const char *helpText;
       Lisp_Object label = TOOLPROP (TOOL_BAR_ITEM_LABEL);
       Lisp_Object key = TOOLPROP (TOOL_BAR_ITEM_KEY);
 
       if (STRINGP (key))
-	keyText = (char *) SDATA (key);
+      	keyText = (char *) SDATA (key);
       else if (SYMBOLP (key))
-	keyText = (char *) SDATA (SYMBOL_NAME (key) );
+      	keyText = (char *) SDATA (SYMBOL_NAME (key) );
       else
-	keyText = "?";
+      	keyText = "?";
 
-      if (STRINGP (label) && strcmp("--", SDATA (label)) == 0)
-	[toolbar addDisplayItemSpacerWithIdx: i tag:i key: keyText];
-      else
+      /* Check if this is a separator.  */
+      if (EQ (TOOLPROP (TOOL_BAR_ITEM_TYPE), Qt))
         {
+          /* Skip separators.  Newer OSX don't show them, and on GNUStep they
+             are wide as a button, thus overflowing the toolbar most of
+             the time.  */
+          continue;
+        }
+
       /* If image is a vector, choose the image according to the
 	 button state.  */
       image = TOOLPROP (TOOL_BAR_ITEM_IMAGES);
@@ -1265,7 +1229,7 @@ update_frame_tool_bar (struct frame *f)
       helpObj = TOOLPROP (TOOL_BAR_ITEM_HELP);
       if (NILP (helpObj))
         helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-      helpText = STRINGP (helpObj) ? SSDATA (helpObj) :"";
+      helpText = NILP (helpObj) ? "" : SSDATA (helpObj);
 
       /* Ignore invalid image specifications.  */
       if (!valid_image_p (image))
@@ -1283,31 +1247,27 @@ update_frame_tool_bar (struct frame *f)
           NSLog (@"Could not prepare toolbar image for display.");
           continue;
         }
-
-      helpObj = TOOLPROP (TOOL_BAR_ITEM_HELP);
-      if (NILP (helpObj))
-        helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-      helpText = STRINGP (helpObj) ? (char *)SDATA (helpObj) : "";
-
+      
       captionObj = TOOLPROP (TOOL_BAR_ITEM_LABEL);
       captionText = STRINGP (captionObj) ? (char *)SDATA (captionObj) : "";
 
-      [toolbar addDisplayItemWithImage: img->pixmap idx: i tag: i helpText: helpText
-			       enabled: enabled_p  visible: visible_p
-				   key: keyText  labelText: captionText];
+
+      [toolbar addDisplayItemWithImage: img->pixmap
+                                   idx: k++
+                                   tag: i
+                              helpText: helpText
+                               enabled: enabled_p
+			       visible: visible_p
+				   key: keyText
+			     labelText: captionText];
+
 #undef TOOLPROP
     }
-    }
 
-  /* set correct tool-bar height because x_set_window_size can't do it
-     before the tool-bar has been drawn. */
+  if (![toolbar isVisible])
+      [toolbar setVisible: YES];
 
-  // EmacsView *view = FRAME_NS_VIEW (f);
-  // NSWindow *window = [view window];
-  // FRAME_NS_TOOLBAR_HEIGHT (f) = 
-  //   NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
-  //   - FRAME_NS_TITLEBAR_HEIGHT (f);
-
+#ifdef NS_IMPL_COCOA
   if ([toolbar changed])
     {
       /* inform app that toolbar has changed */
@@ -1329,9 +1289,7 @@ update_frame_tool_bar (struct frame *f)
       [toolbar setConfigurationFromDictionary: newDict];
       [newDict release];
     }
-
-  if (![toolbar isVisible])
-      [toolbar setVisible: YES];
+#endif
 
   FRAME_TOOLBAR_HEIGHT (f) =
     NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
@@ -1539,16 +1497,18 @@ Items in this list are always Lisp symbols.*/)
                              tag: (int)tag
                         helpText: (const char *)help
                          enabled: (BOOL)enabled
-			 visible: (BOOL)visible
-			     key: (char *)key
-		       labelText: (char *)label
+		      visible: (BOOL)visible
+		          key: (char *)key
+		      labelText: (char *)label
 {
+
+
   NSString *label_str = [NSString stringWithCString: label];
   NSString *help_str = [NSString stringWithCString: help];
 
   /* 1) come up w/identifier */
-  NSString *identifier = [NSString stringWithFormat: @"0x%08lX%s",
-				   ([img hash] + [label_str hash] + [help_str hash]) & 0xFFFFFFFF, key];
+  NSString *identifier
+    = [NSString stringWithFormat: @"%lu", (unsigned long)[img hash]];
 
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
@@ -1915,7 +1875,7 @@ pop_down_menu (void *arg)
 	  [popupSheetAlert release];
 	} else
 	{
-	  [panel close];
+      [panel close];
 	}
 
       [unwind_data->pool release];
@@ -1931,7 +1891,7 @@ pop_down_menu (void *arg)
 extern struct timespec timer_check (void);
 
 Lisp_Object
-ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
+ns_popup_dialog (Lisp_Object position, Lisp_Object header, Lisp_Object contents)
 {
 
   // extern EMACS_TIME timer_check (void);
@@ -1944,7 +1904,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   BOOL isQ;
   NSAutoreleasePool *pool;
 
-  NSTRACE (x-popup-dialog);
+  NSTRACE (ns-popup-dialog);
 
   check_window_system (NULL);
 
@@ -2114,7 +2074,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 
   return tem;
 
-  }
+}
 }
 
 /* ==========================================================================
@@ -2500,51 +2460,6 @@ DEFUN ("ns-reset-menu", Fns_reset_menu, Sns_reset_menu, 0, 0, 0,
 }
 
 
-DEFUN ("x-popup-dialog", Fx_popup_dialog, Sx_popup_dialog, 2, 3, 0,
-       doc: /* Pop up a dialog box and return user's selection.
-POSITION specifies which frame to use.
-This is normally a mouse button event or a window or frame.
-If POSITION is t, it means to use the frame the mouse is on.
-The dialog box appears in the middle of the specified frame.
-
-CONTENTS specifies the alternatives to display in the dialog box.
-It is a list of the form (DIALOG ITEM1 ITEM2...).
-Each ITEM is a cons cell (STRING . VALUE).
-The return value is VALUE from the chosen item.
-
-In Aquamacs, STRING may be a title string, or of the form 
-(TITLE . KEY), where TITLE is a string indicating the
-button title, and KEY is a one-letter key code, such as \?q, 
-giving the key equivalent for the button. 
-
-An ITEM may also be just a string--that makes a nonselectable item.
-An ITEM may also be nil--that means to put all preceding items
-on the left of the dialog box and all following items on the right.
-
-In Aquamacs, if VALUE is `suppress', the button will be shown as a 
-checkbox which can be selected in addition to any of the other buttons
-except Cancel. In this case, the return value is a cons cell of the
-form (VALUE . suppress).
-
-In Aquamacs, an ITEM may be `cancel' to insert a cancel button.  If there
-is an ITEM `no-cancel', no cancel button will be inserted at all;
-if there is no such item, a default cancel button will be inserted.
-
-The order of buttons in the dialog follows system conventions; the
-default button should be specified first in the list of ITEMs.
-
-If HEADER is non-nil, the frame title for the box is "Information",
-otherwise it is "Question".
-
-If the user gets rid of the dialog box without making a valid choice,
-for instance using the window manager or using a cancel button,
-then this produces a quit and `x-popup-dialog' does not return.  */)
-     (position, contents, header)
-     Lisp_Object position, contents, header;
-{
-  return ns_popup_dialog (position, contents, header);
-}
-
 DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_p, 0, 0, 0,
        doc: /* Return t if a menu or popup dialog is active.  */)
      (void)
@@ -2589,7 +2504,6 @@ This variable only takes effect for newly created tool bars.*/);
 
   defsubr (&Sns_tool_bar_customize);
   defsubr (&Sns_tool_bar_configuration);
-  defsubr (&Sx_popup_dialog);
   defsubr (&Sns_reset_menu);
   defsubr (&Smenu_or_popup_active_p);
 

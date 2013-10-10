@@ -1139,7 +1139,8 @@ If PLAYLIST is t or nil or missing, use the main playlist."
   "Major mode for the features common to all buffers of MPC."
   (buffer-disable-undo)
   (setq buffer-read-only t)
-  (setq-local tool-bar-map mpc-tool-bar-map)
+  (if (boundp 'tool-bar-map)            ; not if --without-x
+      (setq-local tool-bar-map mpc-tool-bar-map))
   (setq-local truncate-lines t))
 
 ;;; The mpc-status-mode buffer ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2008,7 +2009,9 @@ This is used so that they can be compared with `eq', which is needed for
              posn))))
   (let* ((plbuf (mpc-proc-cmd "playlist"))
          (re (if song-file
-		 (concat "^\\([0-9]+\\):" (regexp-quote song-file) "$")))
+                 ;; Newer MPCs apparently include "file: " in the buffer.
+		 (concat "^\\([0-9]+\\):\\(?:file: \\)?"
+                         (regexp-quote song-file) "$")))
          (sn (with-current-buffer plbuf
                (goto-char (point-min))
                (when (and re (re-search-forward re nil t))

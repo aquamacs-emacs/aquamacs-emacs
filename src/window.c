@@ -20,8 +20,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 
-#define WINDOW_INLINE EXTERN_INLINE
-
 #include <stdio.h>
 
 #include "lisp.h"
@@ -951,7 +949,7 @@ calc_absolute_offset (struct window *w, int *add_x, int *add_y)
 #endif
 #ifdef FRAME_TOOLBAR_TOP_HEIGHT
   *add_y += FRAME_TOOLBAR_TOP_HEIGHT (f);
-#elif FRAME_TOOLBAR_HEIGHT
+#elif defined (FRAME_TOOLBAR_HEIGHT)
   *add_y += FRAME_TOOLBAR_HEIGHT (f);
 #endif
 #ifdef FRAME_NS_TITLEBAR_HEIGHT
@@ -2014,8 +2012,10 @@ replace_window (Lisp_Object old, Lisp_Object new, int setflag)
       memset (&n->cursor, 0, sizeof (n->cursor));
       memset (&n->phys_cursor, 0, sizeof (n->phys_cursor));
       n->last_cursor_vpos = 0;
-      n->phys_cursor_type = -1;
+#ifdef HAVE_WINDOW_SYSTEM
+      n->phys_cursor_type = NO_CURSOR;
       n->phys_cursor_width = -1;
+#endif
       n->must_be_updated_p = 0;
       n->pseudo_window_p = 0;
       n->window_end_vpos = 0;
@@ -3426,8 +3426,10 @@ make_window (void)
   w->nrows_scale_factor = w->ncols_scale_factor = 1;
   w->left_fringe_width = w->right_fringe_width = -1;
   w->mode_line_height = w->header_line_height = -1;
-  w->phys_cursor_type = -1;
+#ifdef HAVE_WINDOW_SYSTEM
+  w->phys_cursor_type = NO_CURSOR;
   w->phys_cursor_width = -1;
+#endif
   w->scroll_bar_width = -1;
   w->column_number_displayed = -1;
 
@@ -5426,7 +5428,7 @@ struct saved_window
 };
 
 #define SAVED_WINDOW_N(swv,n) \
-  ((struct saved_window *) (XVECTOR ((swv)->contents[(n)])))
+  ((struct saved_window *) (XVECTOR ((swv)->u.contents[(n)])))
 
 DEFUN ("window-configuration-p", Fwindow_configuration_p, Swindow_configuration_p, 1, 1, 0,
        doc: /* Return t if OBJECT is a window-configuration object.  */)
@@ -5561,17 +5563,25 @@ the return value is nil.  Otherwise the value is t.  */)
 	  || data->frame_cols != previous_frame_cols)
 	change_frame_size (f, data->frame_lines,
 			   data->frame_cols, 0, 0, 0);
-#if defined (HAVE_WINDOW_SYSTEM) || defined (MSDOS)
+#ifdef HAVE_MENUS
       if (data->frame_menu_bar_lines
 	  != previous_frame_menu_bar_lines)
-	x_set_menu_bar_lines (f, make_number (data->frame_menu_bar_lines),
-			      make_number (0));
+	{
+#ifdef HAVE_WINDOW_SYSTEM
+	  if (FRAME_WINDOW_P (f))
+	    x_set_menu_bar_lines (f, make_number (data->frame_menu_bar_lines),
+				  make_number (0));
+	  else	/* TTY or MSDOS */
+#endif
+	    set_menu_bar_lines (f, make_number (data->frame_menu_bar_lines),
+				make_number (0));
+	}
+#endif
 #ifdef HAVE_WINDOW_SYSTEM
       if (data->frame_tool_bar_lines
 	  != previous_frame_tool_bar_lines)
 	x_set_tool_bar_lines (f, make_number (data->frame_tool_bar_lines),
 			      make_number (0));
-#endif
 #endif
 
       /* "Swap out" point from the selected window's buffer
@@ -5759,15 +5769,24 @@ the return value is nil.  Otherwise the value is t.  */)
 	  || previous_frame_cols != FRAME_COLS (f))
 	change_frame_size (f, previous_frame_lines, previous_frame_cols,
 			   0, 0, 0);
-#if defined (HAVE_WINDOW_SYSTEM) || defined (MSDOS)
+#ifdef HAVE_MENUS
       if (previous_frame_menu_bar_lines != FRAME_MENU_BAR_LINES (f))
-	x_set_menu_bar_lines (f, make_number (previous_frame_menu_bar_lines),
-			      make_number (0));
+	{
+#ifdef HAVE_WINDOW_SYSTEM
+	  if (FRAME_WINDOW_P (f))
+	    x_set_menu_bar_lines (f,
+				  make_number (previous_frame_menu_bar_lines),
+				  make_number (0));
+	  else	/* TTY or MSDOS */
+#endif
+	    set_menu_bar_lines (f, make_number (previous_frame_menu_bar_lines),
+				make_number (0));
+	}
+#endif
 #ifdef HAVE_WINDOW_SYSTEM
       if (previous_frame_tool_bar_lines != FRAME_TOOL_BAR_LINES (f))
 	x_set_tool_bar_lines (f, make_number (previous_frame_tool_bar_lines),
 			      make_number (0));
-#endif
 #endif
 
       /* Now, free glyph matrices in windows that were not reused.  */
@@ -6530,7 +6549,6 @@ init_window_once (void)
   Vterminal_frame = selected_frame;
   minibuf_window = f->minibuffer_window;
   selected_window = f->selected_window;
-  last_nonminibuf_frame = f;
 
   window_initialized = 1;
 }

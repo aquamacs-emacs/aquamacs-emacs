@@ -19,8 +19,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 
-#define FRAME_INLINE EXTERN_INLINE
-
 #include <stdio.h>
 #include <errno.h>
 #include <limits.h>
@@ -114,6 +112,19 @@ Lisp_Object Qface_set_after_frame_default;
 static Lisp_Object Qdelete_frame_functions;
 
 static Lisp_Object Qgeometry, Qworkarea, Qmm_size, Qframes, Qsource;
+
+/* The currently selected frame.  */
+
+Lisp_Object selected_frame;
+
+/* A frame which is not just a mini-buffer, or NULL if there are no such
+   frames.  This is usually the most recent such frame that was selected.  */
+
+static struct frame *last_nonminibuf_frame;
+
+/* Nonzero means there is at least one garbaged frame.  */
+
+bool frame_garbaged;
 
 #ifdef HAVE_WINDOW_SYSTEM
 static void x_report_frame_params (struct frame *, Lisp_Object *);
@@ -328,7 +339,6 @@ make_frame (bool mini_p)
      initialize enum members explicitly even if their values are zero.  */
   f->wants_modeline = 1;
   f->garbaged = 1;
-  f->has_minibuffer = mini_p;
   f->vertical_scroll_bar_type = vertical_scroll_bar_none;
   f->column_width = 1;  /* !FRAME_WINDOW_P value */
   f->line_height = 1;  /* !FRAME_WINDOW_P value */
@@ -478,7 +488,6 @@ make_minibuffer_frame (void)
   f->auto_lower = 0;
   f->no_split = 1;
   f->wants_modeline = 0;
-  f->has_minibuffer = 1;
 
   /* Now label the root window as also being the minibuffer.
      Avoid infinite looping on the window chain by marking next pointer
@@ -547,6 +556,8 @@ make_initial_frame (void)
 
   if (!noninteractive)
     init_frame_faces (f);
+
+  last_nonminibuf_frame = f;
 
   return f;
 }
@@ -1185,7 +1196,7 @@ Lisp_Object
 delete_frame (Lisp_Object frame, Lisp_Object force)
 {
   struct frame *f = decode_any_frame (frame);
-  struct frame *sf = SELECTED_FRAME ();
+  struct frame *sf;
   struct kboard *kb;
 
   int minibuffer_selected, is_tooltip_frame;
@@ -1260,7 +1271,7 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
      There is no more chance for errors to prevent it.  */
 
   minibuffer_selected = EQ (minibuf_window, selected_window);
-  block_input();
+  sf = SELECTED_FRAME ();
   /* Don't let the frame remain selected.  */
   if (f == sf)
     {
@@ -1369,13 +1380,15 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
      have called the window-system-dependent frame destruction
      routine.  */
 
-  if (FRAME_TERMINAL (f)->delete_frame_hook)
-    (*FRAME_TERMINAL (f)->delete_frame_hook) (f);
 
   {
+    block_input ();
+    if (FRAME_TERMINAL (f)->delete_frame_hook)
+      (*FRAME_TERMINAL (f)->delete_frame_hook) (f);
     struct terminal *terminal = FRAME_TERMINAL (f);
     f->output_data.nothing = 0;
     f->terminal = 0;             /* Now the frame is dead.  */
+    unblock_input ();
 
     /* If needed, delete the terminal that this frame was on.
        (This must be done after the frame is killed.)  */
@@ -3381,9 +3394,6 @@ x_set_scroll_bar_width (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   else if (RANGED_INTEGERP (1, arg, INT_MAX)
 	   && XFASTINT (arg) != FRAME_CONFIG_SCROLL_BAR_WIDTH (f))
     {
-      if (XFASTINT (arg) <= 2 * VERTICAL_SCROLL_BAR_WIDTH_TRIM)
-	XSETINT (arg, 2 * VERTICAL_SCROLL_BAR_WIDTH_TRIM + 1);
-
       FRAME_CONFIG_SCROLL_BAR_WIDTH (f) = XFASTINT (arg);
       FRAME_CONFIG_SCROLL_BAR_COLS (f) = (XFASTINT (arg) + wid-1) / wid;
       if (FRAME_X_WINDOW (f))
@@ -3394,22 +3404,6 @@ x_set_scroll_bar_width (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   change_frame_size (f, 0, FRAME_COLS (f), 0, 0, 0);
   XWINDOW (FRAME_SELECTED_WINDOW (f))->cursor.hpos = 0;
   XWINDOW (FRAME_SELECTED_WINDOW (f))->cursor.x = 0;
-}
-
-
-
-/* Return non-nil if frame F wants a bitmap icon.  */
-
-Lisp_Object
-x_icon_type (struct frame *f)
-{
-  Lisp_Object tem;
-
-  tem = assq_no_quit (Qicon_type, f->param_alist);
-  if (CONSP (tem))
-    return XCDR (tem);
-  else
-    return Qnil;
 }
 
 void
@@ -3463,7 +3457,33 @@ x_set_alpha (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   return;
 }
 
-
+#ifndef HAVE_NS
+
+/* Non-zero if mouse is grabbed on DPYINFO
+   and we know the frame where it is.  */
+
+bool x_mouse_grabbed (Display_Info *dpyinfo)
+{
+  return (dpyinfo->grabbed
+	  && dpyinfo->last_mouse_frame
+	  && FRAME_LIVE_P (dpyinfo->last_mouse_frame));
+}
+
+/* Re-highlight something with mouse-face properties
+   on DPYINFO using saved frame and mouse position.  */
+
+void
+x_redo_mouse_highlight (Display_Info *dpyinfo)
+{
+  if (dpyinfo->last_mouse_motion_frame
+      && FRAME_LIVE_P (dpyinfo->last_mouse_motion_frame))
+    note_mouse_highlight (dpyinfo->last_mouse_motion_frame,
+			  dpyinfo->last_mouse_motion_x,
+			  dpyinfo->last_mouse_motion_y);
+}
+
+#endif /* HAVE_NS */
+
 /* Subroutines of creating an X frame.  */
 
 /* Make sure that Vx_resource_name is set to a reasonable value.
@@ -3534,11 +3554,6 @@ validate_x_resource_name (void)
 	SSET (new, i, '_');
     }
 }
-
-
-extern char *x_get_string_resource (XrmDatabase, const char *, const char *);
-extern Display_Info *check_x_display_info (Lisp_Object);
-
 
 /* Get specified attribute from resource database RDB.
    See Fx_get_resource below for other parameters.  */

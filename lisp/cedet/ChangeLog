@@ -1,3 +1,35 @@
+2013-09-28  Leo Liu  <sdl.web@gmail.com>
+
+	* semantic/texi.el (semantic-analyze-possible-completions): Use
+	ispell-lookup-words instead.  (Bug#15460)
+
+2013-09-20  Glenn Morris  <rgm@gnu.org>
+
+	* semantic.el (semantic-new-buffer-fcn-was-run, semantic-active-p):
+	Move from here...
+	* semantic/fw.el: ...to here.
+
+2013-09-18  Glenn Morris  <rgm@gnu.org>
+
+	* semantic/find.el (semantic-brute-find-first-tag-by-name):
+	Replace obsolete function assoc-ignore-case with assoc-string.
+
+	* semantic/complete.el (tooltip-mode, tooltip-frame-parameters)
+	(tooltip-show): Declare.
+
+2013-09-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* semantic/symref/list.el (semantic-symref-results-mode):
+	Use define-derived-mode.
+	(semantic-symref-produce-list-on-results): Set up the results here
+	instead of in semantic-symref-results-mode.  Move after
+	semantic-symref-current-results's defvar now that it refers to that var.
+	(semantic-symref-auto-expand-results)
+	(semantic-symref-results-summary-function)
+	(semantic-symref-results-mode-hook): Remove redundant :group arg.
+	(semantic-symref, semantic-symref-symbol, semantic-symref-regexp):
+	Initialize directly in the let.
+
 2013-09-13  Glenn Morris  <rgm@gnu.org>
 
 	* semantic/ia.el (semantic-ia-complete-symbol-menu):
@@ -22,7 +54,7 @@
 	* semantic/fw.el (semantic-make-local-hook):
 	Simplify by dropping Emacs <= 20.
 
-2013-07-29  David Engster <deng@randomsample.de>
+2013-07-29  David Engster  <deng@randomsample.de>
 
 	* lisp/cedet/cedet.el (cedet-packages): Remove speedbar since its
 	development does no longer happens in CEDET upstream but in Emacs
@@ -39,13 +71,13 @@
 
 	* semantic/wisent/python.el (semantic/format): New require.
 
-2013-07-27  Eric Ludlam <zappo@gnu.org>
+2013-07-27  Eric Ludlam  <zappo@gnu.org>
 
 	* lisp/cedet/semantic/edit.el (semantic-edits-splice-remove):
 	Wrap debug message removing middle tag in semantic-edits-verbose-flag
 	check.
 
-2013-07-27  David Engster <deng@randomsample.de>
+2013-07-27  David Engster  <deng@randomsample.de>
 
 	* semantic/bovine/el.el (semantic/db-el): New require.
 
@@ -962,7 +994,7 @@
 	(semantic-gcc-setup): If the first attempt at calling cpp fails,
 	try straight GCC.
 
-2012-10-01 Jan Moringen  <jan.moringen@uni-bielefeld.de>
+2012-10-01  Jan Moringen  <jan.moringen@uni-bielefeld.de>
 
 	* semantic/idle.el
 	(semantic-idle-breadcrumbs--display-in-header-line):

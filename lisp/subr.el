@@ -301,9 +301,9 @@ This function accepts any number of arguments, but ignores them."
 In Emacs, the convention is that error messages start with a capital
 letter but *do not* end with a period.  Please follow this convention
 for the sake of consistency."
+  (declare (advertised-calling-convention (string &rest args) "23.1"))
   (while t
     (signal 'error (list (apply 'format args)))))
-(set-advertised-calling-convention 'error '(string &rest args) "23.1")
 
 (defun user-error (format &rest args)
   "Signal a pilot error, making error message by passing all args to `format'.
@@ -1268,6 +1268,8 @@ is converted into a string by expressing it in decimal."
  'all-completions '(string collection &optional predicate) "23.1")
 (set-advertised-calling-convention 'unintern '(name obarray) "23.3")
 (set-advertised-calling-convention 'redirect-frame-focus '(frame focus-frame) "24.3")
+(set-advertised-calling-convention 'decode-char '(ch charset) "21.4")
+(set-advertised-calling-convention 'encode-char '(ch charset) "21.4")
 
 ;;;; Obsolescence declarations for variables, and aliases.
 
@@ -1388,7 +1390,7 @@ function, it is changed to a list of functions."
       (setq local t)))
   (let ((hook-value (if local (symbol-value hook) (default-value hook))))
     ;; If the hook value is a single function, turn it into a list.
-    (when (or (not (listp hook-value)) (eq (car hook-value) 'lambda))
+    (when (or (not (listp hook-value)) (functionp hook-value))
       (setq hook-value (list hook-value)))
     ;; Do the actual addition if necessary
     (unless (member function hook-value)
@@ -2125,6 +2127,7 @@ by doing (clear-string STRING)."
             (setq-local buffer-undo-list t)
             (setq-local select-active-regions nil)
             (use-local-map read-passwd-map)
+            (setq-local inhibit-modification-hooks nil) ;bug#15501.
             (add-hook 'after-change-functions hide-chars-fun nil 'local))
         (unwind-protect
             (let ((enable-recursive-minibuffers t))
@@ -2261,6 +2264,9 @@ floating point support."
 		(setq read (cons t read)))
 	    (push read unread-command-events)
 	    nil))))))
+
+;; Behind display-popup-menus-p test.
+(declare-function x-popup-dialog "xmenu.c" (position contents &optional header))
 
 (defun y-or-n-p (prompt)
   "Ask user a \"y or n\" question.  Return t if answer is \"y\".
@@ -3502,7 +3508,10 @@ If GREEDY is non-nil, extend the match backwards as far as
 possible, stopping when a single additional previous character
 cannot be part of a match for REGEXP.  When the match is
 extended, its starting position is allowed to occur before
-LIMIT."
+LIMIT.
+
+As a general recommendation, try to avoid using `looking-back'
+wherever possible, since it is slow."
   (let ((start (point))
 	(pos
 	 (save-excursion
@@ -3901,7 +3910,7 @@ This function makes or adds to an entry on `after-load-alist'."
                                  (when (equal file lfn)
                                    (remove-hook 'after-load-functions fun)
                                    (funcall func))))
-                     (add-hook 'after-load-functions fun)))))))
+                     (add-hook 'after-load-functions fun 'append)))))))
         ;; Add FORM to the element unless it's already there.
         (unless (member delayed-func (cdr elt))
           (nconc elt (list delayed-func)))))))
@@ -4266,6 +4275,8 @@ I is the index of the frame after FRAME2.  It should return nil
 if those frames don't seem special and otherwise, it should return
 the number of frames to skip (minus 1).")
 
+(defconst internal--call-interactively (symbol-function 'call-interactively))
+
 (defun called-interactively-p (&optional kind)
   "Return t if the containing function was called by `call-interactively'.
 If KIND is `interactive', then only return t if the call was made
@@ -4338,9 +4349,9 @@ command is called from a keyboard macro?"
       (pcase (cons frame nextframe)
         ;; No subr calls `interactive-p', so we can rule that out.
         (`((,_ ,(pred (lambda (f) (subrp (indirect-function f)))) . ,_) . ,_) nil)
-        ;; Somehow, I sometimes got `command-execute' rather than
-        ;; `call-interactively' on my stacktrace !?
-        ;;(`(,_ . (t command-execute . ,_)) t)
+        ;; In case #<subr call-interactively> without going through the
+        ;; `call-interactively' symbol (bug#3984).
+        (`(,_ . (t ,(pred (eq internal--call-interactively)) . ,_)) t)
         (`(,_ . (t call-interactively . ,_)) t)))))
 
 (defun interactive-p ()
@@ -4407,14 +4418,15 @@ deactivation of MAP."
             ;; suspended during the C-u one so we don't exit isearch just
             ;; because we hit 1 after C-u and that 1 exits isearch whereas it
             ;; doesn't exit C-u.
-            (unless (cond ((null keep-pred) nil)
-                          ((eq t keep-pred)
-                           (eq this-command
-                               (lookup-key map (this-command-keys-vector))))
-                          (t (funcall keep-pred)))
-              (remove-hook 'pre-command-hook clearfun)
-              (internal-pop-keymap map 'overriding-terminal-local-map)
-              (when on-exit (funcall on-exit)))))
+            (with-demoted-errors "set-temporary-overlay-map PCH: %S"
+              (unless (cond ((null keep-pred) nil)
+                            ((eq t keep-pred)
+                             (eq this-command
+                                 (lookup-key map (this-command-keys-vector))))
+                            (t (funcall keep-pred)))
+                (internal-pop-keymap map 'overriding-terminal-local-map)
+                (remove-hook 'pre-command-hook clearfun)
+                (when on-exit (funcall on-exit))))))
     (add-hook 'pre-command-hook clearfun)
     (internal-push-keymap map 'overriding-terminal-local-map)))
 

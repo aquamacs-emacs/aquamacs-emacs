@@ -21,6 +21,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 #include <stdio.h>
 
+#include <byteswap.h>
+#include <count-one-bits.h>
+#include <count-trailing-zeros.h>
 #include <intprops.h>
 
 #include "lisp.h"
@@ -54,6 +57,7 @@ Lisp_Object Qintegerp, Qwholenump, Qsymbolp, Qlistp, Qconsp;
 static Lisp_Object Qnatnump;
 Lisp_Object Qstringp, Qarrayp, Qsequencep, Qbufferp;
 Lisp_Object Qchar_or_string_p, Qmarkerp, Qinteger_or_marker_p, Qvectorp;
+Lisp_Object Qbool_vector_p;
 Lisp_Object Qbuffer_or_string_p;
 static Lisp_Object Qkeywordp, Qboundp;
 Lisp_Object Qfboundp;
@@ -616,7 +620,7 @@ global value outside of any lexical scope.  */)
 	struct Lisp_Buffer_Local_Value *blv = SYMBOL_BLV (sym);
 	if (blv->fwd)
 	  /* In set_internal, we un-forward vars when their value is
-    	     set to Qunbound. */
+	     set to Qunbound.  */
     	  return Qt;
 	else
 	  {
@@ -627,7 +631,7 @@ global value outside of any lexical scope.  */)
       }
     case SYMBOL_FORWARDED:
       /* In set_internal, we un-forward vars when their value is
-	 set to Qunbound. */
+	 set to Qunbound.  */
       return Qt;
     default: emacs_abort ();
     }
@@ -1995,7 +1999,7 @@ If the current binding is global (the default), the value is nil.  */)
 }
 
 /* This code is disabled now that we use the selected frame to return
-   keyboard-local-values. */
+   keyboard-local-values.  */
 #if 0
 extern struct terminal *get_terminal (Lisp_Object display, int);
 
@@ -2956,6 +2960,360 @@ lowercase l) for small endian machines.  */)
   return make_number (order);
 }
 
+/* Because we round up the bool vector allocate size to word_size
+   units, we can safely read past the "end" of the vector in the
+   operations below.  These extra bits are always zero.  Also, we
+   always allocate bool vectors with at least one bits_word of storage so
+   that we don't have to special-case empty bit vectors.  */
+
+static bits_word
+bool_vector_spare_mask (ptrdiff_t nr_bits)
+{
+  eassert (nr_bits > 0);
+  return (((bits_word) 1) << (nr_bits % BITS_PER_BITS_WORD)) - 1;
+}
+
+#if BITS_WORD_MAX <= UINT_MAX
+# define popcount_bits_word count_one_bits
+#elif BITS_WORD_MAX <= ULONG_MAX
+# define popcount_bits_word count_one_bits_l
+#elif BITS_WORD_MAX <= ULLONG_MAX
+# define popcount_bits_word count_one_bits_ll
+#else
+# error "bits_word wider than long long? Please file a bug report."
+#endif
+
+enum bool_vector_op { bool_vector_exclusive_or,
+                      bool_vector_union,
+                      bool_vector_intersection,
+                      bool_vector_set_difference,
+                      bool_vector_subsetp };
+
+static Lisp_Object
+bool_vector_binop_driver (Lisp_Object op1,
+                          Lisp_Object op2,
+                          Lisp_Object dest,
+                          enum bool_vector_op op)
+{
+  EMACS_INT nr_bits;
+  bits_word *adata, *bdata, *cdata;
+  ptrdiff_t i;
+  bits_word changed = 0;
+  bits_word mword;
+  ptrdiff_t nr_words;
+
+  CHECK_BOOL_VECTOR (op1);
+  CHECK_BOOL_VECTOR (op2);
+
+  nr_bits = min (XBOOL_VECTOR (op1)->size,
+                 XBOOL_VECTOR (op2)->size);
+
+  if (NILP (dest))
+    {
+      dest = Fmake_bool_vector (make_number (nr_bits), Qnil);
+      changed = 1;
+    }
+  else
+    {
+      CHECK_BOOL_VECTOR (dest);
+      nr_bits = min (nr_bits, XBOOL_VECTOR (dest)->size);
+    }
+
+  eassert (nr_bits >= 0);
+  nr_words = ROUNDUP (nr_bits, BITS_PER_BITS_WORD) / BITS_PER_BITS_WORD;
+
+  adata = (bits_word *) XBOOL_VECTOR (dest)->data;
+  bdata = (bits_word *) XBOOL_VECTOR (op1)->data;
+  cdata = (bits_word *) XBOOL_VECTOR (op2)->data;
+  i = 0;
+  do
+    {
+      if (op == bool_vector_exclusive_or)
+        mword = bdata[i] ^ cdata[i];
+      else if (op == bool_vector_union || op == bool_vector_subsetp)
+        mword = bdata[i] | cdata[i];
+      else if (op == bool_vector_intersection)
+        mword = bdata[i] & cdata[i];
+      else if (op == bool_vector_set_difference)
+        mword = bdata[i] &~ cdata[i];
+      else
+        abort ();
+
+      changed |= adata[i] ^ mword;
+
+      if (op != bool_vector_subsetp)
+        adata[i] = mword;
+
+      i++;
+    }
+  while (i < nr_words);
+
+  return changed ? dest : Qnil;
+}
+
+/* Compute the number of trailing zero bits in val.  If val is zero,
+   return the number of bits in val.  */
+static int
+count_trailing_zero_bits (bits_word val)
+{
+  if (BITS_WORD_MAX == UINT_MAX)
+    return count_trailing_zeros (val);
+  if (BITS_WORD_MAX == ULONG_MAX)
+    return count_trailing_zeros_l (val);
+# if HAVE_UNSIGNED_LONG_LONG_INT
+  if (BITS_WORD_MAX == ULLONG_MAX)
+    return count_trailing_zeros_ll (val);
+# endif
+
+  /* The rest of this code is for the unlikely platform where bits_word differs
+     in width from unsigned int, unsigned long, and unsigned long long.  */
+  if (val == 0)
+    return CHAR_BIT * sizeof (val);
+  if (BITS_WORD_MAX <= UINT_MAX)
+    return count_trailing_zeros (val);
+  if (BITS_WORD_MAX <= ULONG_MAX)
+    return count_trailing_zeros_l (val);
+  {
+# if HAVE_UNSIGNED_LONG_LONG_INT
+    verify (BITS_WORD_MAX <= ULLONG_MAX);
+    return count_trailing_zeros_ll (val);
+# else
+    verify (BITS_WORD_MAX <= ULONG_MAX);
+# endif
+  }
+}
+
+static bits_word
+bits_word_to_host_endian (bits_word val)
+{
+#ifndef WORDS_BIGENDIAN
+  return val;
+#elif BITS_WORD_MAX >> 31 == 1
+  return bswap_32 (val);
+#elif BITS_WORD_MAX >> 31 >> 31 >> 1 == 1
+  return bswap_64 (val);
+#else
+  int i;
+  bits_word r = 0;
+  for (i = 0; i < sizeof val; i++)
+    {
+      r = (r << CHAR_BIT) | (val & ((1u << CHAR_BIT) - 1));
+      val >>= CHAR_BIT;
+    }
+  return r;
+#endif
+}
+
+DEFUN ("bool-vector-exclusive-or", Fbool_vector_exclusive_or,
+       Sbool_vector_exclusive_or, 2, 3, 0,
+       doc: /* Compute C = A ^ B, bitwise exclusive or.
+A, B, and C must be bool vectors.  If C is nil, allocate a new bool
+vector in which to store the result.  Return the destination vector if
+it changed or nil otherwise.  */
+       )
+  (Lisp_Object a, Lisp_Object b, Lisp_Object c)
+{
+  return bool_vector_binop_driver (a, b, c, bool_vector_exclusive_or);
+}
+
+DEFUN ("bool-vector-union", Fbool_vector_union,
+       Sbool_vector_union, 2, 3, 0,
+       doc: /* Compute C = A | B, bitwise or.
+A, B, and C must be bool vectors.  If C is nil, allocate a new bool
+vector in which to store the result.  Return the destination vector if
+it changed or nil otherwise.  */)
+  (Lisp_Object a, Lisp_Object b, Lisp_Object c)
+{
+  return bool_vector_binop_driver (a, b, c, bool_vector_union);
+}
+
+DEFUN ("bool-vector-intersection", Fbool_vector_intersection,
+       Sbool_vector_intersection, 2, 3, 0,
+       doc: /* Compute C = A & B, bitwise and.
+A, B, and C must be bool vectors.  If C is nil, allocate a new bool
+vector in which to store the result.  Return the destination vector if
+it changed or nil otherwise.  */)
+  (Lisp_Object a, Lisp_Object b, Lisp_Object c)
+{
+  return bool_vector_binop_driver (a, b, c, bool_vector_intersection);
+}
+
+DEFUN ("bool-vector-set-difference", Fbool_vector_set_difference,
+       Sbool_vector_set_difference, 2, 3, 0,
+       doc: /* Compute C = A &~ B, set difference.
+A, B, and C must be bool vectors.  If C is nil, allocate a new bool
+vector in which to store the result.  Return the destination vector if
+it changed or nil otherwise.  */)
+  (Lisp_Object a, Lisp_Object b, Lisp_Object c)
+{
+  return bool_vector_binop_driver (a, b, c, bool_vector_set_difference);
+}
+
+DEFUN ("bool-vector-subsetp", Fbool_vector_subsetp,
+       Sbool_vector_subsetp, 2, 2, 0,
+       doc: )
+  (Lisp_Object a, Lisp_Object b)
+{
+  /* Like bool_vector_union, but doesn't modify b.  */
+  return bool_vector_binop_driver (b, a, b, bool_vector_subsetp);
+}
+
+DEFUN ("bool-vector-not", Fbool_vector_not,
+       Sbool_vector_not, 1, 2, 0,
+       doc: /* Compute B = ~A.
+B must be a bool vector.  A must be a bool vector or nil.
+If A is nil, allocate a new bool vector in which to store the result.
+Return the destination vector.  */)
+  (Lisp_Object a, Lisp_Object b)
+{
+  EMACS_INT nr_bits;
+  bits_word *bdata, *adata;
+  ptrdiff_t i;
+  bits_word mword;
+
+  CHECK_BOOL_VECTOR (a);
+  nr_bits = XBOOL_VECTOR (a)->size;
+
+  if (NILP (b))
+    b = Fmake_bool_vector (make_number (nr_bits), Qnil);
+  else
+    {
+      CHECK_BOOL_VECTOR (b);
+      nr_bits = min (nr_bits, XBOOL_VECTOR (b)->size);
+    }
+
+  bdata = (bits_word *) XBOOL_VECTOR (b)->data;
+  adata = (bits_word *) XBOOL_VECTOR (a)->data;
+
+  eassert (nr_bits >= 0);
+
+  for (i = 0; i < nr_bits / BITS_PER_BITS_WORD; i++)
+    bdata[i] = ~adata[i];
+
+  if (nr_bits % BITS_PER_BITS_WORD)
+    {
+      mword = bits_word_to_host_endian (adata[i]);
+      mword = ~mword;
+      mword &= bool_vector_spare_mask (nr_bits);
+      bdata[i] = bits_word_to_host_endian (mword);
+    }
+
+  return b;
+}
+
+DEFUN ("bool-vector-count-matches", Fbool_vector_count_matches,
+       Sbool_vector_count_matches, 2, 2, 0,
+       doc: /* Count how many elements in A equal B.
+A must be a bool vector.  B is a generalized bool.  */)
+  (Lisp_Object a, Lisp_Object b)
+{
+  ptrdiff_t count;
+  EMACS_INT nr_bits;
+  bits_word *adata;
+  bits_word match;
+  ptrdiff_t i;
+
+  CHECK_BOOL_VECTOR (a);
+
+  nr_bits = XBOOL_VECTOR (a)->size;
+  count = 0;
+  match = NILP (b) ? -1 : 0;
+  adata = (bits_word *) XBOOL_VECTOR (a)->data;
+
+  eassert (nr_bits >= 0);
+
+  for (i = 0; i < nr_bits / BITS_PER_BITS_WORD; ++i)
+    count += popcount_bits_word (adata[i] ^ match);
+
+  /* Mask out trailing parts of final mword.  */
+  if (nr_bits % BITS_PER_BITS_WORD)
+    {
+      bits_word mword = adata[i] ^ match;
+      mword = bits_word_to_host_endian (mword);
+      count += popcount_bits_word (mword & bool_vector_spare_mask (nr_bits));
+    }
+
+  return make_number (count);
+}
+
+DEFUN ("bool-vector-count-matches-at",
+       Fbool_vector_count_matches_at,
+       Sbool_vector_count_matches_at, 3, 3, 0,
+       doc: /* Count how many consecutive elements in A equal B at i.
+A must be a bool vector.  B is a generalized boolean.  i is an
+index into the vector.  */)
+  (Lisp_Object a, Lisp_Object b, Lisp_Object i)
+{
+  ptrdiff_t count;
+  EMACS_INT nr_bits;
+  ptrdiff_t offset;
+  bits_word *adata;
+  bits_word twiddle;
+  bits_word mword; /* Machine word.  */
+  ptrdiff_t pos;
+  ptrdiff_t nr_words;
+
+  CHECK_BOOL_VECTOR (a);
+  CHECK_NATNUM (i);
+
+  nr_bits = XBOOL_VECTOR (a)->size;
+  if (XFASTINT (i) > nr_bits) /* Allow one past the end for convenience */
+    args_out_of_range (a, i);
+
+  adata = (bits_word *) XBOOL_VECTOR (a)->data;
+
+  assume (nr_bits >= 0);
+  nr_words = ROUNDUP (nr_bits, BITS_PER_BITS_WORD) / BITS_PER_BITS_WORD;
+
+  pos = XFASTINT (i) / BITS_PER_BITS_WORD;
+  offset = XFASTINT (i) % BITS_PER_BITS_WORD;
+  count = 0;
+
+  /* By XORing with twiddle, we transform the problem of "count
+     consecutive equal values" into "count the zero bits".  The latter
+     operation usually has hardware support.  */
+  twiddle = NILP (b) ? 0 : -1;
+
+  /* Scan the remainder of the mword at the current offset.  */
+  if (pos < nr_words && offset != 0)
+    {
+      mword = bits_word_to_host_endian (adata[pos]);
+      mword ^= twiddle;
+      mword >>= offset;
+      count = count_trailing_zero_bits (mword);
+      count = min (count, BITS_PER_BITS_WORD - offset);
+      pos++;
+      if (count + offset < BITS_PER_BITS_WORD)
+        return make_number (count);
+    }
+
+  /* Scan whole words until we either reach the end of the vector or
+     find an mword that doesn't completely match.  twiddle is
+     endian-independent.  */
+  while (pos < nr_words && adata[pos] == twiddle)
+    {
+      count += BITS_PER_BITS_WORD;
+      ++pos;
+    }
+
+  if (pos < nr_words)
+    {
+      /* If we stopped because of a mismatch, see how many bits match
+         in the current mword.  */
+      mword = bits_word_to_host_endian (adata[pos]);
+      mword ^= twiddle;
+      count += count_trailing_zero_bits (mword);
+    }
+  else if (nr_bits % BITS_PER_BITS_WORD != 0)
+    {
+      /* If we hit the end, we might have overshot our count.  Reduce
+         the total by the number of spare bits at the end of the
+         vector.  */
+      count -= BITS_PER_BITS_WORD - nr_bits % BITS_PER_BITS_WORD;
+    }
+
+  return make_number (count);
+}
 
 
 void
@@ -3005,6 +3363,7 @@ syms_of_data (void)
   DEFSYM (Qsequencep, "sequencep");
   DEFSYM (Qbufferp, "bufferp");
   DEFSYM (Qvectorp, "vectorp");
+  DEFSYM (Qbool_vector_p, "bool-vector-p");
   DEFSYM (Qchar_or_string_p, "char-or-string-p");
   DEFSYM (Qmarkerp, "markerp");
   DEFSYM (Qbuffer_or_string_p, "buffer-or-string-p");
@@ -3221,6 +3580,15 @@ syms_of_data (void)
   defsubr (&Sbyteorder);
   defsubr (&Ssubr_arity);
   defsubr (&Ssubr_name);
+
+  defsubr (&Sbool_vector_exclusive_or);
+  defsubr (&Sbool_vector_union);
+  defsubr (&Sbool_vector_intersection);
+  defsubr (&Sbool_vector_set_difference);
+  defsubr (&Sbool_vector_not);
+  defsubr (&Sbool_vector_subsetp);
+  defsubr (&Sbool_vector_count_matches);
+  defsubr (&Sbool_vector_count_matches_at);
 
   set_symbol_function (Qwholenump, XSYMBOL (Qnatnump)->function);
 

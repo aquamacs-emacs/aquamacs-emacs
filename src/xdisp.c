@@ -1,7 +1,6 @@
 /* Display generation from window structure and buffer text.
 
-Copyright (C) 1985-1988, 1993-1995, 1997-2013 Free Software Foundation,
-Inc.
+Copyright (C) 1985-1988, 1993-1995, 1997-2013 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -416,11 +415,11 @@ Lisp_Object Qboth, Qboth_horiz, Qtext_image_horiz;
 /* Non-zero means print newline to stdout before next mini-buffer
    message.  */
 
-int noninteractive_need_newline;
+bool noninteractive_need_newline;
 
 /* Non-zero means print newline to message log before next message.  */
 
-static int message_log_need_newline;
+static bool message_log_need_newline;
 
 /* Three markers that message_dolog uses.
    It could allocate them itself, but that causes trouble
@@ -479,7 +478,7 @@ Lisp_Object Qmenu_bar_update_hook;
 
 /* Nonzero if an overlay arrow has been displayed in this window.  */
 
-static int overlay_arrow_seen;
+static bool overlay_arrow_seen;
 
 /* Vector containing glyphs for an ellipsis `...'.  */
 
@@ -501,7 +500,7 @@ static Lisp_Object Vmessage_stack;
 /* Nonzero means multibyte characters were enabled when the echo area
    message was specified.  */
 
-static int message_enable_multibyte;
+static bool message_enable_multibyte;
 
 /* Nonzero if we should redraw the mode lines on the next redisplay.  */
 
@@ -515,7 +514,7 @@ int windows_or_buffers_changed;
 /* Nonzero after display_mode_line if %l was used and it displayed a
    line number.  */
 
-static int line_number_displayed;
+static bool line_number_displayed;
 
 /* The name of the *Messages* buffer, a string.  */
 
@@ -537,12 +536,12 @@ static Lisp_Object Vwith_echo_area_save_vector;
 /* Non-zero means display_echo_area should display the last echo area
    message again.  Set by redisplay_preserve_echo_area.  */
 
-static int display_last_displayed_message_p;
+static bool display_last_displayed_message_p;
 
 /* Nonzero if echo area is being used by print; zero if being used by
    message.  */
 
-static int message_buf_print;
+static bool message_buf_print;
 
 /* The symbol `inhibit-menubar-update' and its DEFVAR_BOOL variable.  */
 
@@ -552,7 +551,7 @@ static Lisp_Object Qmessage_truncate_lines;
 /* Set to 1 in clear_message to make redisplay_internal aware
    of an emptied echo area.  */
 
-static int message_cleared_p;
+static bool message_cleared_p;
 
 /* A scratch glyph row with contents used for generating truncation
    glyphs.  Also used in direct_output_for_insert.  */
@@ -567,7 +566,7 @@ static int last_height;
 
 /* Non-zero if there's a help-echo in the echo area.  */
 
-int help_echo_showing_p;
+bool help_echo_showing_p;
 
 /* The maximum distance to look ahead for text properties.  Values
    that are too small let us call compute_char_face and similar
@@ -743,7 +742,7 @@ Lisp_Object previous_help_echo_string;
 #ifdef HAVE_WINDOW_SYSTEM
 
 /* Non-zero means an hourglass cursor is currently shown.  */
-int hourglass_shown_p;
+bool hourglass_shown_p;
 
 /* If non-null, an asynchronous timer that, when it expires, displays
    an hourglass cursor on all frames.  */
@@ -752,7 +751,7 @@ struct atimer *hourglass_atimer;
 #endif /* HAVE_WINDOW_SYSTEM */
 
 /* Name of the face used to display glyphless characters.  */
-Lisp_Object Qglyphless_char;
+static Lisp_Object Qglyphless_char;
 
 /* Symbol for the purpose of Vglyphless_char_display.  */
 static Lisp_Object Qglyphless_char_display;
@@ -1883,8 +1882,7 @@ pixel_to_glyph_coords (struct frame *f, register int pix_x, register int pix_y,
    text, or we can't tell because W's current matrix is not up to
    date.  */
 
-static
-struct glyph *
+static struct glyph *
 x_y_to_hpos_vpos (struct window *w, int x, int y, int *hpos, int *vpos,
 		  int *dx, int *dy, int *area)
 {
@@ -3700,8 +3698,8 @@ handle_fontified_prop (struct it *it)
       ptrdiff_t count = SPECPDL_INDEX ();
       Lisp_Object val;
       struct buffer *obuf = current_buffer;
-      int begv = BEGV, zv = ZV;
-      int old_clip_changed = current_buffer->clip_changed;
+      ptrdiff_t begv = BEGV, zv = ZV;
+      bool old_clip_changed = current_buffer->clip_changed;
 
       val = Vfontification_functions;
       specbind (Qfontification_functions, Qnil);
@@ -4475,8 +4473,8 @@ setup_for_ellipsis (struct it *it, int len)
   if (it->dp && VECTORP (DISP_INVIS_VECTOR (it->dp)))
     {
       struct Lisp_Vector *v = XVECTOR (DISP_INVIS_VECTOR (it->dp));
-      it->dpvec = v->contents;
-      it->dpend = v->contents + v->header.size;
+      it->dpvec = v->u.contents;
+      it->dpend = v->u.contents + v->header.size;
     }
   else
     {
@@ -6780,8 +6778,8 @@ get_next_display_element (struct it *it)
 	      if (v->header.size)
 		{
 		  it->dpvec_char_len = it->len;
-		  it->dpvec = v->contents;
-		  it->dpend = v->contents + v->header.size;
+		  it->dpvec = v->u.contents;
+		  it->dpend = v->u.contents + v->header.size;
 		  it->current.dpvec_index = 0;
 		  it->dpvec_face_id = -1;
 		  it->saved_face_id = it->face_id;
@@ -6957,6 +6955,7 @@ get_next_display_element (struct it *it)
 	}
     }
 
+#ifdef HAVE_WINDOW_SYSTEM
   /* Adjust face id for a multibyte character.  There are no multibyte
      character in unibyte text.  */
   if ((it->what == IT_CHARACTER || it->what == IT_COMPOSITION)
@@ -7000,6 +6999,7 @@ get_next_display_element (struct it *it)
 	}
     }
     }
+#endif	/* HAVE_WINDOW_SYSTEM */
 
  done:
   /* Is this character the last one of a run of characters with
@@ -9541,7 +9541,20 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
 
       old_deactivate_mark = Vdeactivate_mark;
       oldbuf = current_buffer;
-      Fset_buffer (Fget_buffer_create (Vmessages_buffer_name));
+
+      /* Ensure the Messages buffer exists, and switch to it.
+         If we created it, set the major-mode.  */
+      {
+        int newbuffer = 0;
+        if (NILP (Fget_buffer (Vmessages_buffer_name))) newbuffer = 1;
+
+        Fset_buffer (Fget_buffer_create (Vmessages_buffer_name));
+
+        if (newbuffer &&
+            !NILP (Ffboundp (intern ("messages-buffer-mode"))))
+          call0 (intern ("messages-buffer-mode"));
+      }
+
       bset_undo_list (current_buffer, Qt);
 
       oldpoint = message_dolog_marker1;
@@ -11445,10 +11458,6 @@ update_menu_bar (struct frame *f, int save_match_data, int hooks_run)
 
 #ifdef HAVE_WINDOW_SYSTEM
 
-/* Where the mouse was last time we reported a mouse event.  */
-
-struct frame *last_mouse_frame;
-
 /* Tool-bar item index of the item on which a mouse button was pressed
    or -1.  */
 
@@ -12311,9 +12320,9 @@ note_tool_bar_highlight (struct frame *f, int x, int y)
   clear_mouse_face (hlinfo);
 
   /* Mouse is down, but on different tool-bar item?  */
-  mouse_down_p = (dpyinfo->grabbed
-		  && f == last_mouse_frame
-		  && FRAME_LIVE_P (f));
+  mouse_down_p = (x_mouse_grabbed (dpyinfo)
+		  && f == dpyinfo->last_mouse_frame);
+
   if (mouse_down_p
       && last_tool_bar_item != prop_idx)
     return;
@@ -13061,8 +13070,6 @@ redisplay_internal (void)
   match_p = XBUFFER (w->contents) == current_buffer;
   if (match_p)
     {
-      ptrdiff_t count1;
-
       /* Detect case that we need to write or remove a star in the mode line.  */
       if ((SAVE_MODIFF < MODIFF) != w->last_had_star)
 	{
@@ -13071,14 +13078,8 @@ redisplay_internal (void)
 	    update_mode_lines++;
 	}
 
-      /* Avoid invocation of point motion hooks by `current_column' below.  */
-      count1 = SPECPDL_INDEX ();
-      specbind (Qinhibit_point_motion_hooks, Qt);
-
       if (mode_line_update_needed (w))
 	w->update_mode_line = 1;
-
-      unbind_to (count1, Qnil);
     }
 
   consider_all_windows_p = (update_mode_lines
@@ -13439,8 +13440,13 @@ redisplay_internal (void)
 		    unrequest_sigio ();
 		  STOP_POLLING;
 
-		  /* Update the display.  */
-		  set_window_update_flags (XWINDOW (f->root_window), 1);
+		  /* Mark windows on frame F to update.  If we decide to
+		     update all frames but windows_or_buffers_changed is
+		     zero, we assume that only the windows that shows
+		     current buffer should be really updated.  */
+		  set_window_update_flags
+		    (XWINDOW (f->root_window),
+		     (windows_or_buffers_changed ? NULL : current_buffer), 1);
 		  pending |= update_frame (f, 0, 0);
 		  f->cursor_type_changed = 0;
 		  f->updated_p = 1;
@@ -17287,8 +17293,6 @@ try_window_id (struct window *w)
 	  row = row_containing_pos (w, PT, r0, NULL, 0);
 	  if (row)
 	    set_cursor_from_row (w, row, current_matrix, 0, 0, 0, 0);
-	  else
-	    emacs_abort ();
 	  return 1;
 	}
     }
@@ -17329,8 +17333,6 @@ try_window_id (struct window *w)
 	  row = row_containing_pos (w, PT, r0, NULL, 0);
 	  if (row)
 	    set_cursor_from_row (w, row, current_matrix, 0, 0, 0, 0);
-	  else
-	    emacs_abort ();
 	  return 2;
 	}
     }
@@ -18110,9 +18112,13 @@ DEFUN ("dump-tool-bar-row", Fdump_tool_bar_row, Sdump_tool_bar_row, 1, 2, "",
        doc: /* Dump glyph row ROW of the tool-bar of the current frame to stderr.
 GLYPH 0 means don't dump glyphs.
 GLYPH 1 means dump glyphs in short form.
-GLYPH > 1 or omitted means dump glyphs in long form.  */)
+GLYPH > 1 or omitted means dump glyphs in long form.
+
+If there's no tool-bar, or if the tool-bar is not drawn by Emacs,
+do nothing.  */)
   (Lisp_Object row, Lisp_Object glyphs)
 {
+#if defined (HAVE_WINDOW_SYSTEM) && ! defined (USE_GTK) && ! defined (HAVE_NS)
   struct frame *sf = SELECTED_FRAME ();
   struct glyph_matrix *m = XWINDOW (sf->tool_bar_window)->current_matrix;
   EMACS_INT vpos;
@@ -18122,6 +18128,7 @@ GLYPH > 1 or omitted means dump glyphs in long form.  */)
   if (vpos >= 0 && vpos < m->nrows)
     dump_glyph_row (MATRIX_ROW (m, vpos), vpos,
 		    TYPE_RANGED_INTEGERP (int, glyphs) ? XINT (glyphs) : 2);
+#endif
   return Qnil;
 }
 
@@ -20581,7 +20588,128 @@ display_menu_bar (struct window *w)
   compute_line_metrics (&it);
 }
 
+#ifdef HAVE_MENUS
+/* Deep copy of a glyph row, including the glyphs.  */
+static void
+deep_copy_glyph_row (struct glyph_row *to, struct glyph_row *from)
+{
+  int area, i, sum_used = 0;
+  struct glyph *pointers[1 + LAST_AREA];
 
+  /* Save glyph pointers of TO.  */
+  memcpy (pointers, to->glyphs, sizeof to->glyphs);
+
+  /* Do a structure assignment.  */
+  *to = *from;
+
+  /* Restore original pointers of TO.  */
+  memcpy (to->glyphs, pointers, sizeof to->glyphs);
+
+  /* Count how many glyphs to copy and update glyph pointers.  */
+  for (area = LEFT_MARGIN_AREA; area < LAST_AREA; ++area)
+    {
+      if (area > LEFT_MARGIN_AREA)
+	{
+	  eassert (from->glyphs[area] - from->glyphs[area - 1]
+		   == from->used[area - 1]);
+	  to->glyphs[area] = to->glyphs[area - 1] + to->used[area - 1];
+	}
+      sum_used += from->used[area];
+    }
+
+  /* Copy the glyphs.  */
+  eassert (sum_used <= to->glyphs[LAST_AREA] - to->glyphs[LEFT_MARGIN_AREA]);
+  for (i = 0; i < sum_used; i++)
+    to->glyphs[LEFT_MARGIN_AREA][i] = from->glyphs[LEFT_MARGIN_AREA][i];
+}
+
+/* Display one menu item on a TTY, by overwriting the glyphs in the
+   frame F's desired glyph matrix with glyphs produced from the menu
+   item text.  Called from term.c to display TTY drop-down menus one
+   item at a time.
+
+   ITEM_TEXT is the menu item text as a C string.
+
+   FACE_ID is the face ID to be used for this menu item.  FACE_ID
+   could specify one of 3 faces: a face for an enabled item, a face
+   for a disabled item, or a face for a selected item.
+
+   X and Y are coordinates of the first glyph in the frame's desired
+   matrix to be overwritten by the menu item.  Since this is a TTY, Y
+   is the zero-based number of the glyph row and X is the zero-based
+   glyph number in the row, starting from left, where to start
+   displaying the item.
+
+   SUBMENU non-zero means this menu item drops down a submenu, which
+   should be indicated by displaying a proper visual cue after the
+   item text.  */
+
+void
+display_tty_menu_item (const char *item_text, int width, int face_id,
+		       int x, int y, int submenu)
+{
+  struct it it;
+  struct frame *f = SELECTED_FRAME ();
+  struct window *w = XWINDOW (f->selected_window);
+  int saved_used, saved_truncated, saved_width, saved_reversed;
+  struct glyph_row *row;
+  size_t item_len = strlen (item_text);
+
+  eassert (FRAME_TERMCAP_P (f));
+
+  init_iterator (&it, w, -1, -1, f->desired_matrix->rows + y, MENU_FACE_ID);
+  it.first_visible_x = 0;
+  it.last_visible_x = FRAME_COLS (f) - 1;
+  row = it.glyph_row;
+  /* Start with the row contents from the current matrix.  */
+  deep_copy_glyph_row (row, f->current_matrix->rows + y);
+  saved_width = row->full_width_p;
+  row->full_width_p = 1;
+  saved_reversed = row->reversed_p;
+  row->reversed_p = 0;
+  row->enabled_p = 1;
+
+  /* Arrange for the menu item glyphs to start at (X,Y) and have the
+     desired face.  */
+  it.current_x = it.hpos = x;
+  it.current_y = it.vpos = y;
+  saved_used = row->used[TEXT_AREA];
+  saved_truncated = row->truncated_on_right_p;
+  row->used[TEXT_AREA] = x;
+  it.face_id = face_id;
+  it.line_wrap = TRUNCATE;
+
+  /* FIXME: This should be controlled by a user option.  See the
+     comments in redisplay_tool_bar and display_mode_line about this.
+     Also, if paragraph_embedding could ever be R2L, changes will be
+     needed to avoid shifting to the right the row characters in
+     term.c:append_glyph.  */
+  it.paragraph_embedding = L2R;
+
+  /* Pad with a space on the left.  */
+  display_string (" ", Qnil, Qnil, 0, 0, &it, 1, 0, FRAME_COLS (f) - 1, -1);
+  width--;
+  /* Display the menu item, pad with spaces to WIDTH.  */
+  if (submenu)
+    {
+      display_string (item_text, Qnil, Qnil, 0, 0, &it,
+		      item_len, 0, FRAME_COLS (f) - 1, -1);
+      width -= item_len;
+      /* Indicate with " >" that there's a submenu.  */
+      display_string (" >", Qnil, Qnil, 0, 0, &it, width, 0,
+		      FRAME_COLS (f) - 1, -1);
+    }
+  else
+    display_string (item_text, Qnil, Qnil, 0, 0, &it,
+		    width, 0, FRAME_COLS (f) - 1, -1);
+
+  row->used[TEXT_AREA] = max (saved_used, row->used[TEXT_AREA]);
+  row->truncated_on_right_p = saved_truncated;
+  row->hash = row_hash (row);
+  row->full_width_p = saved_width;
+  row->reversed_p = saved_reversed;
+}
+#endif	/* HAVE_MENUS */
 
 /***********************************************************************
 			      Mode Line
@@ -27382,7 +27510,7 @@ fast_find_string_pos (struct window *w, ptrdiff_t pos, Lisp_Object object,
 #endif	/* not used */
 
 /* Find the positions of the first and the last glyphs in window W's
-   current matrix that occlude positions [STARTPOS..ENDPOS] in OBJECT
+   current matrix that occlude positions [STARTPOS..ENDPOS) in OBJECT
    (assumed to be a string), and return in HLINFO's mouse_face_*
    members the pixel and column/row coordinates of those glyphs.  */
 
@@ -27398,7 +27526,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
   int found = 0;
 
   /* Find the glyph row with at least one position in the range
-     [STARTPOS..ENDPOS], and the first glyph in that row whose
+     [STARTPOS..ENDPOS), and the first glyph in that row whose
      position belongs to that range.  */
   for (r = MATRIX_FIRST_TEXT_ROW (w->current_matrix);
        r->enabled_p && r->y < yb;
@@ -27410,7 +27538,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
 	  e = g + r->used[TEXT_AREA];
 	  for (gx = r->x; g < e; gx += g->pixel_width, ++g)
 	    if (EQ (g->object, object)
-		&& startpos <= g->charpos && g->charpos <= endpos)
+		&& startpos <= g->charpos && g->charpos < endpos)
 	      {
 		hlinfo->mouse_face_beg_row
 		  = MATRIX_ROW_VPOS (r, w->current_matrix);
@@ -27428,7 +27556,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
 	  g = e + r->used[TEXT_AREA];
 	  for ( ; g > e; --g)
 	    if (EQ ((g-1)->object, object)
-		&& startpos <= (g-1)->charpos && (g-1)->charpos <= endpos)
+		&& startpos <= (g-1)->charpos && (g-1)->charpos < endpos)
 	      {
 		hlinfo->mouse_face_beg_row
 		  = MATRIX_ROW_VPOS (r, w->current_matrix);
@@ -27456,7 +27584,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
       found = 0;
       for ( ; g < e; ++g)
 	if (EQ (g->object, object)
-	    && startpos <= g->charpos && g->charpos <= endpos)
+	    && startpos <= g->charpos && g->charpos < endpos)
 	  {
 	    found = 1;
 	    break;
@@ -27479,7 +27607,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
       e = g + r->used[TEXT_AREA];
       for ( ; e > g; --e)
 	if (EQ ((e-1)->object, object)
-	    && startpos <= (e-1)->charpos && (e-1)->charpos <= endpos)
+	    && startpos <= (e-1)->charpos && (e-1)->charpos < endpos)
 	  break;
       hlinfo->mouse_face_end_col = e - g;
 
@@ -27494,7 +27622,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
       for (gx = r->x ; e < g; ++e)
 	{
 	  if (EQ (e->object, object)
-	      && startpos <= e->charpos && e->charpos <= endpos)
+	      && startpos <= e->charpos && e->charpos < endpos)
 	    break;
 	  gx += e->pixel_width;
 	}
@@ -27557,7 +27685,7 @@ on_hot_spot_p (Lisp_Object hot_spot, int x, int y)
       if (VECTORP (XCDR (hot_spot)))
 	{
 	  struct Lisp_Vector *v = XVECTOR (XCDR (hot_spot));
-	  Lisp_Object *poly = v->contents;
+	  Lisp_Object *poly = v->u.contents;
 	  ptrdiff_t n = v->header.size;
 	  ptrdiff_t i;
 	  int inside = 0;
@@ -28268,7 +28396,7 @@ note_mouse_highlight (struct frame *f, int x, int y)
 	      if (NILP (s))
 		s = make_number (0);
 	      if (NILP (e))
-		e = make_number (SCHARS (object) - 1);
+		e = make_number (SCHARS (object));
 	      mouse_face_from_string_pos (w, hlinfo, object,
 					  XINT (s), XINT (e));
 	      hlinfo->mouse_face_past_end = 0;

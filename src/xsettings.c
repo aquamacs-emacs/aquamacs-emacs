@@ -22,6 +22,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <float.h>
 #include <limits.h>
 #include <fcntl.h>
+
+#include <byteswap.h>
+
 #include "lisp.h"
 #include "xterm.h"
 #include "xsettings.h"
@@ -336,9 +339,6 @@ get_prop_window (struct x_display_info *dpyinfo)
   XUngrabServer (dpy);
 }
 
-#define SWAP32(nr) (((nr) << 24) | (((nr) << 8) & 0xff0000)     \
-                    | (((nr) >> 8) & 0xff00) | ((nr) >> 24))
-#define SWAP16(nr) (((nr) << 8) | ((nr) >> 8))
 #define PAD(nr)    (((nr) + 3) & ~3)
 
 /* Parse xsettings and extract those that deal with Xft.
@@ -408,7 +408,7 @@ parse_settings (unsigned char *prop,
 
   if (bytes < 12) return BadLength;
   memcpy (&n_settings, prop+8, 4);
-  if (my_bo != that_bo) n_settings = SWAP32 (n_settings);
+  if (my_bo != that_bo) n_settings = bswap_32 (n_settings);
   bytes_parsed = 12;
 
   memset (settings, 0, sizeof (*settings));
@@ -430,7 +430,7 @@ parse_settings (unsigned char *prop,
 
       memcpy (&nlen, prop+bytes_parsed, 2);
       bytes_parsed += 2;
-      if (my_bo != that_bo) nlen = SWAP16 (nlen);
+      if (my_bo != that_bo) nlen = bswap_16 (nlen);
       if (bytes_parsed+nlen > bytes) return BadLength;
       to_cpy = nlen > 127 ? 127 : nlen;
       memcpy (name, prop+bytes_parsed, to_cpy);
@@ -457,7 +457,7 @@ parse_settings (unsigned char *prop,
           if (want_this)
             {
               memcpy (&ival, prop+bytes_parsed, 4);
-              if (my_bo != that_bo) ival = SWAP32 (ival);
+              if (my_bo != that_bo) ival = bswap_32 (ival);
             }
           bytes_parsed += 4;
           break;
@@ -466,7 +466,7 @@ parse_settings (unsigned char *prop,
           if (bytes_parsed+4 > bytes) return BadLength;
           memcpy (&vlen, prop+bytes_parsed, 4);
           bytes_parsed += 4;
-          if (my_bo != that_bo) vlen = SWAP32 (vlen);
+          if (my_bo != that_bo) vlen = bswap_32 (vlen);
           if (want_this)
             {
               to_cpy = vlen > 127 ? 127 : vlen;
@@ -754,7 +754,7 @@ read_and_apply_settings (struct x_display_info *dpyinfo, int send_event_p)
 /* Check if EVENT for the display in DPYINFO is XSettings related.  */
 
 void
-xft_settings_event (struct x_display_info *dpyinfo, XEvent *event)
+xft_settings_event (struct x_display_info *dpyinfo, const XEvent *event)
 {
   bool check_window_p = 0, apply_settings_p = 0;
 
@@ -803,7 +803,7 @@ init_gsettings (void)
   const gchar *const *schemas;
   int schema_found = 0;
 
-#ifdef HAVE_G_TYPE_INIT
+#if ! GLIB_CHECK_VERSION (2, 36, 0)
   g_type_init ();
 #endif
 
@@ -860,7 +860,7 @@ init_gconf (void)
 #if defined (HAVE_GCONF)
   char *s;
 
-#ifdef HAVE_G_TYPE_INIT
+#if ! GLIB_CHECK_VERSION (2, 36, 0)
   g_type_init ();
 #endif
 

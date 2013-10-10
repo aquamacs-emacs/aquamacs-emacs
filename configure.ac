@@ -443,6 +443,17 @@ case "${srcdir}" in
   *  ) srcdir=`(cd "$srcdir"; pwd)` ;;
 esac
 
+#### When building with MinGW inside the MSYS tree, 'pwd' produces
+#### directories relative to the root of the MSYS tree,
+#### e.g. '/home/user/foo' instead of '/d/MSYS/home/user/foo'.  When
+#### such a value of srcdir is written to the top-level Makefile, it
+#### gets propagated to src/epaths.h, and that causes temacs to fail,
+#### because, being a MinGW program that knows nothing of MSYS root
+#### substitution, it cannot find the data directory.  "pwd -W"
+#### produces Windows-style 'd:/foo/bar' absolute directory names, so
+#### we use it here to countermand that lossage.
+test "$MSYSTEM" = "MINGW32" && srcdir=`(cd "$srcdir"; pwd -W | sed -e 's,^\([[A-Za-z]]\):,/\1,')`
+
 ### Canonicalize the configuration name.
 
 AC_CANONICAL_HOST
@@ -776,10 +787,28 @@ AC_DEFUN([gl_GCC_VERSION_IFELSE],
   ]
 )
 
+# clang is unduly picky about some things.
+AC_CACHE_CHECK([whether the compiler is clang], [emacs_cv_clang],
+  [AC_COMPILE_IFELSE(
+     [AC_LANG_PROGRAM([[
+	  #ifndef __clang__
+	    #error "not clang"
+	  #endif
+        ]])],
+     [emacs_cv_clang=yes],
+     [emacs_cv_clang=no])])
+
 # When compiling with GCC, prefer -isystem to -I when including system
 # include files, to avoid generating useless diagnostics for the files.
 if test "$gl_gcc_warnings" != yes; then
   isystem='-I'
+  if test "$emacs_cv_clang" = yes
+  then
+     # Turn off some warnings if supported.
+     gl_WARN_ADD([-Wno-switch])
+     gl_WARN_ADD([-Wno-tautological-constant-out-of-range-compare])
+     gl_WARN_ADD([-Wno-pointer-sign])
+  fi
 else
   isystem='-isystem '
 
@@ -829,16 +858,6 @@ else
   nw="$nw -Wtype-limits"
   nw="$nw -Wunused-parameter"
 
-  # clang is unduly picky about some things.
-  AC_CACHE_CHECK([whether the compiler is clang], [emacs_cv_clang],
-    [AC_COMPILE_IFELSE(
-       [AC_LANG_PROGRAM([[
-	    #ifndef __clang__
-	      #error "not clang"
-	    #endif
-          ]])],
-       [emacs_cv_clang=yes],
-       [emacs_cv_clang=no])])
   if test $emacs_cv_clang = yes; then
     nw="$nw -Wcast-align"
   fi
@@ -866,9 +885,6 @@ else
     gl_WARN_ADD([-Wno-unused-command-line-argument])
     gl_WARN_ADD([-Wno-unused-value])
   fi
-
-  gl_WARN_ADD([-fdiagnostics-show-option])
-  gl_WARN_ADD([-funit-at-a-time])
 
   AC_DEFINE([lint], [1], [Define to 1 if the compiler is checking for lint.])
   AH_VERBATIM([FORTIFY_SOURCE],
@@ -1623,7 +1639,10 @@ fail;
   		  [AC_MSG_ERROR([`--with-ns' was specified, but the include
   files are missing or cannot be compiled.])])
 
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <AppKit/AppKit.h>],
+  macfont_file=""
+  if test "${NS_IMPL_COCOA}" = "yes"; then
+    AC_MSG_CHECKING([for OSX 10.4 or newer])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <AppKit/AppKit.h>],
                                      [
 #ifdef MAC_OS_X_VERSION_MAX_ALLOWED
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1040
@@ -1635,13 +1654,33 @@ fail;
 		    ])],
 		    ns_osx_have_104=yes,
 		    ns_osx_have_104=no)
+    AC_MSG_RESULT([$ns_osx_have_104])
+
+    if test $ns_osx_have_104 = no; then
+       AC_MSG_ERROR([`OSX 10.4 or newer is required']);
+    fi
+    AC_MSG_CHECKING([for OSX 10.5 or newer])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <AppKit/AppKit.h>],
+                                     [
+#ifdef MAC_OS_X_VERSION_MAX_ALLOWED
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
+ ; /* OK */
+#else
+#error "OSX 10.5 not found"
+#endif
+#endif
+		    ])],
+		    ns_osx_have_105=yes,
+		    ns_osx_have_105=no)
+    AC_MSG_RESULT([$ns_osx_have_105])
+    if test $ns_osx_have_105 = yes; then
+      macfont_file="macfont.o"
+    fi
+  fi
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <Foundation/NSObjCRuntime.h>],
                                      [NSInteger i;])],
 		    ns_have_nsinteger=yes,
 		    ns_have_nsinteger=no)
-  if test $ns_osx_have_104 = no; then
-     AC_MSG_ERROR([`OSX 10.4 or newer is required']);
-  fi
   if test $ns_have_nsinteger = yes; then
     AC_DEFINE(NS_HAVE_NSINTEGER, 1, [Define to 1 if `NSInteger' is defined.])
   fi
@@ -1677,7 +1716,8 @@ if test "${HAVE_NS}" = yes; then
      leimdir="\${ns_appresdir}/leim"
      INSTALL_ARCH_INDEP_EXTRA=
   fi
-  NS_OBJC_OBJ="nsterm.o nsfns.o nsmenu.o nsselect.o nsimage.o nsfont.o"
+
+  NS_OBJC_OBJ="nsterm.o nsfns.o nsmenu.o nsselect.o nsimage.o nsfont.o $macfont_file"
 fi
 CFLAGS="$tmp_CFLAGS"
 CPPFLAGS="$tmp_CPPFLAGS"
@@ -1858,11 +1898,8 @@ to configure.])
    fi
 fi
 
-### If we're using X11, we should use the X menu package.
-HAVE_MENUS=no
-case ${HAVE_X11} in
-  yes ) HAVE_MENUS=yes ;;
-esac
+### We always support menus.
+HAVE_MENUS=yes
 
 # Does the opsystem file prohibit the use of the GNU malloc?
 # Assume not, until told otherwise.
@@ -2365,7 +2402,6 @@ if test "$HAVE_GSETTINGS" = "yes" || test "$HAVE_GCONF" = "yes"; then
     SAVE_LIBS="$LIBS"
     CFLAGS="$SETTINGS_CFLAGS $CFLAGS"
     LIBS="$SETTINGS_LIBS $LIBS"
-    AC_CHECK_FUNCS([g_type_init])
     CFLAGS="$SAVE_CFLAGS"
     LIBS="$SAVE_LIBS"
 fi
@@ -3144,13 +3180,7 @@ if test "${HAVE_NS}" = "yes"; then
     ## Extra CFLAGS applied to src/*.m files.
     GNU_OBJC_CFLAGS="$GNU_OBJC_CFLAGS -fgnu-runtime -Wno-import -fconstant-string-class=NSConstantString -DGNUSTEP_BASE_LIBRARY=1 -DGNU_GUI_LIBRARY=1 -DGNU_RUNTIME=1 -DGSWARN -DGSDIAGNOSE"
   fi
-  # We also have mouse menus.
-  HAVE_MENUS=yes
   OTHER_FILES=ns-app
-fi
-
-if test "${HAVE_W32}" = "yes"; then
-  HAVE_MENUS=yes
 fi
 
 ### Use session management (-lSM -lICE) if available
@@ -3661,6 +3691,8 @@ AC_SUBST(CRYPTOLIB)
 AC_SUBST(KRB5LIB)
 AC_SUBST(DESLIB)
 AC_SUBST(KRB4LIB)
+
+AC_CHECK_HEADERS(valgrind/valgrind.h)
 
 AC_CHECK_FUNCS_ONCE(tzset)
 AC_MSG_CHECKING(whether localtime caches TZ)
@@ -4631,9 +4663,7 @@ AC_SUBST(OLDXMENU_DEPS)
 
 if test "${HAVE_MENUS}" = "yes" ; then
   AC_DEFINE(HAVE_MENUS, 1,
-	    [Define to 1 if you have mouse menus.
-	     (This is automatic if you use X, but the option to specify it remains.)
-	     It is also defined with other window systems that support xmenu.c.])
+	    [Define to 1 if you have mouse menus.  (This is supported in all configurations, but the option to specify it remains.)])
 fi
 
 if test "${GNU_MALLOC}" = "yes" ; then
@@ -4668,6 +4698,24 @@ fi
 AC_SUBST(CYGWIN_OBJ)
 AC_SUBST(PRE_ALLOC_OBJ)
 AC_SUBST(POST_ALLOC_OBJ)
+
+dnl Call this 'FORTIFY_SOUR' so that it sorts before the 'FORTIFY_SOURCE'
+dnl verbatim defined above.  The tricky name is apropos, as this hack
+dnl makes Fortify go sour!
+AH_VERBATIM([FORTIFY_SOUR],
+[/* Without the following workaround, Emacs runs slowly on OS X 10.8.
+   The workaround disables some useful run-time checking, so it
+   should be conditional to the platforms with the performance bug.
+   Perhaps Apple will fix this some day; also see m4/extern-inline.m4.  */
+#if defined __APPLE__ && defined __GNUC__
+# ifndef _DONT_USE_CTYPE_INLINE_
+#  define _DONT_USE_CTYPE_INLINE_
+# endif
+# ifndef _FORTIFY_SOURCE
+#  define _FORTIFY_SOURCE 0
+# endif
+#endif
+])
 
 # Configure gnulib.  Although this does not affect CFLAGS or LIBS permanently.
 # it temporarily reverts them to their pre-pkg-config values,

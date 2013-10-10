@@ -637,6 +637,30 @@ struct ns_display_info
 
   struct frame *x_highlight_frame;
   struct frame *x_focus_frame;
+
+  /* The frame where the mouse was last time we reported a mouse event.  */
+  struct frame *last_mouse_frame;
+
+  /* The frame where the mouse was last time we reported a mouse motion.  */
+  struct frame *last_mouse_motion_frame;
+
+  /* Position where the mouse was last time we reported a motion.
+     This is a position on last_mouse_motion_frame.  */
+  int last_mouse_motion_x;
+  int last_mouse_motion_y;
+
+  /* Where the mouse was last time we reported a mouse position.  */
+  NSRect last_mouse_glyph;
+
+  /* Time of last mouse movement.  */
+  Time last_mouse_movement_time;
+
+  /* The scroll bar in which the last motion event occurred.  */
+#ifdef __OBJC__
+  EmacsScroller *last_mouse_scroll_bar;
+#else
+  void *last_mouse_scroll_bar;
+#endif
 };
 
 /* This is a chain of structures for all the NS displays currently in use.  */
@@ -644,8 +668,6 @@ extern struct ns_display_info *x_display_list;
 
 extern Lisp_Object ns_display_name_list;
 extern struct ns_display_info *ns_display_info_for_name (Lisp_Object name);
-
-struct ns_display_info *check_x_display_info (Lisp_Object frame);
 
 struct ns_output
 {
@@ -741,10 +763,8 @@ struct x_output
 
 #define FONT_WIDTH(f)	((f)->max_width)
 #define FONT_HEIGHT(f)	((f)->height)
-/*#define FONT_BASE(f)    ((f)->ascent) */
-#define FONT_BASE(f)    (((struct nsfont_info *)f)->max_bounds.ascent)
-/*#define FONT_DESCENT(f) ((f)->descent) */
-#define FONT_DESCENT(f) (((struct nsfont_info *)f)->max_bounds.descent)
+#define FONT_BASE(f)    ((f)->ascent)
+#define FONT_DESCENT(f) ((f)->descent)
 
 #define FRAME_DEFAULT_FACE(f) FACE_FROM_ID (f, DEFAULT_FACE_ID)
 
@@ -786,10 +806,6 @@ struct x_output
 
 #define FRAME_FONTSET(f) ((f)->output_data.ns->fontset)
 
-#define FRAME_SMALLEST_CHAR_WIDTH(f)  \
-  (FRAME_DISPLAY_INFO (f)->smallest_char_width)
-#define FRAME_SMALLEST_FONT_HEIGHT(f) \
-  (FRAME_DISPLAY_INFO (f)->smallest_font_height)
 #define FRAME_BASELINE_OFFSET(f) ((f)->output_data.ns->baseline_offset)
 #define BLACK_PIX_DEFAULT(f) 0x000000
 #define WHITE_PIX_DEFAULT(f) 0xFFFFFF
@@ -874,8 +890,8 @@ extern void find_and_call_menu_selection (struct frame *f,
 extern Lisp_Object find_and_return_menu_selection (struct frame *f,
                                                    bool keymaps,
                                                    void *client_data);
-extern Lisp_Object ns_popup_dialog (Lisp_Object position, Lisp_Object contents,
-                                    Lisp_Object header);
+extern Lisp_Object ns_popup_dialog (Lisp_Object position, Lisp_Object header,
+                                    Lisp_Object contents);
 
 #define NSAPP_DATA2_RUNASSCRIPT 10
 extern void ns_run_ascript (void);
@@ -914,7 +930,6 @@ extern int ns_select (int nfds, fd_set *readfds, fd_set *writefds,
 		      sigset_t const *sigmask);
 extern unsigned long ns_get_rgb_color (struct frame *f,
                                        float r, float g, float b, float a);
-extern NSPoint last_mouse_motion_position;
 
 extern Lisp_Object ns_frame_list (void);  /* needed by frame.c */
 
@@ -938,7 +953,8 @@ extern char gnustep_base_version[];  /* version tracking */
 
 #define NS_SCROLL_BAR_WIDTH_DEFAULT     [EmacsScroller scrollerWidth]
 /* This is to match emacs on other platforms, ugly though it is. */
-#define NS_SELECTION_COLOR_DEFAULT	@"LightGoldenrod2";
+#define NS_SELECTION_BG_COLOR_DEFAULT	@"LightGoldenrod2";
+#define NS_SELECTION_FG_COLOR_DEFAULT	@"Black";
 #define RESIZE_HANDLE_SIZE 12
 
 /* Little utility macros */

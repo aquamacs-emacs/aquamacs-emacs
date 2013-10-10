@@ -54,11 +54,32 @@ and zlib-format compressed data.
 ** Emacs for NS (OSX, GNUStep) can be built with ImageMagick support.
 pkg-config is required to find ImageMagick libraries.
 
+** For OSX >= 10.5, the Core text based font backend from the Mac port is used.
+For GNUStep and OSX 10.4 the old backend is used.
+To use the old backend by default, do on the command line:
+% defaults write org.gnu.Emacs FontBackend ns
+
 
 * Startup Changes in Emacs 24.4
 
 
 * Changes in Emacs 24.4
+
++++
+** Emacs now supports menus on text-mode terminals.
+If the terminal supports a mouse, clicking on the menu bar, or on
+sensitive portions of the mode line or header line, will drop down the
+menu defined at that position.  Likewise, clicking C-mouse-2 or
+C-mouse-2 or C-mouse-3 on the text area will pop up the menus defined
+for those locations.
+
+If the text terminal does not support a mouse, you can activate the
+first menu-bar menu by typing F10, which invokes `menu-bar-open'.
+
+If you want the previous behavior, whereby F10 invoked `tmm-menubar',
+customize the option `tty-menu-open-use-tmm' to a non-nil value.
+(Typing M-` will always invoke `tmm-menubar', even if
+`tty-menu-open-use-tmm' is nil.)
 
 ** Key ? also describes prefix bindings like C-h.
 
@@ -87,6 +108,10 @@ simply disabling Transient Mark mode does the same thing.
 
 ** `initial-buffer-choice' can now specify a function to set up the
 initial buffer.
+
+** The *Messages* buffer is created in a new major mode `messages-buffer-mode',
+and read-only.  Code that might create the *Messages* buffer should
+call the function `messages-buffer' to do so and set the mode.
 
 ** `remember-notes' creates a buffer whose content is saved on kill-emacs.
 You may think of it as a *scratch* buffer whose content is preserved.
@@ -145,8 +170,21 @@ not consume CPU cycles.
 some enhancements, like the ability to restore deleted frames.  Command
 `frame-configuration-to-register' is still available, but unbound.
 
+** The command `quail-help' is deleted.  Use `C-h C-\'
+(`describe-input-method') instead.
+
+** The default value of `comment-use-global-state' is changed to t,
+and this variable has been marked obsolete.
+
 
 * Editing Changes in Emacs 24.4
+
+** C-x TAB enters a transient interactive mode.
+You can then use the left/right cursor keys to move the block of text.
+
+** `tab-stop-list' is now implicitly extended to infinity.
+Its default value is changed to nil which means a tab stop every
+`tab-width' columns.
 
 ** `split-window' is no longer a command, just a non-interactive function.
 As a command it was a special case of `split-window-below', and as such
@@ -165,6 +203,8 @@ If this is non-nil, cursor motion with arrow keys will follow the
 visual order of characters on the screen: <left> always moves to the
 left, <right> always moves to the right, disregarding the surrounding
 bidirectional context.
+
+** All register commands can now show help with preview.
 
 ** New command `kmacro-to-register' to store keyboard macros in registers.
 
@@ -202,7 +242,7 @@ You can use the new function `remember-store-in-files' within the
 See `remember-data-directory' and `remember-directory-file-name-format'
 for new options related to this function.
 
-** More packages look for ~/.emacs.d/<foo> additionally to ~/.<foo>.
+* More packages look for ~/.emacs.d/<foo> additionally to ~/.<foo>.
 Affected files:
 ~/.emacs.d/timelog	replaces  ~/.timelog
 ~/.emacs.d/vip		replaces  ~/.vip
@@ -266,9 +306,15 @@ whole tree revisions.
 *** In VC directory mode, `L' lists the change log for the current VC
 controlled tree in a window.
 
+*** In VC directory mode, `I' shows a log of changes that will be
+received with a pull operation.
+
 *** `C-x v G' (globally) and `G' (in VC directory mode) ignores a file
 under current version control system.  When called with a prefix
 argument, you can remove a file from the ignored file list.
+
+*** `cvs-append-to-ignore' has been renamed to `vc-cvs-append-to-ignore'
+because it is moved to vc-cvs.el.
 
 ** cl-lib
 
@@ -622,6 +668,26 @@ for something (not just adding elements to it), it ought not to affect you.
 
 
 * Lisp Changes in Emacs 24.4
+
++++
+** Functions that pop up menus and dialogs now work on all terminal types,
+including TTYs.
+This includes `x-popup-menu', `x-popup-dialog', `message-box',
+`yes-or-no-p', etc.
+
+The function `display-popup-menus-p' will now return non-nil for a
+display or frame whenever a mouse is supported on that display or
+frame.
+
+** New bool-vector set operation functions:
+*** `bool-vector-exclusive-or'
+*** `bool-vector-union'
+*** `bool-vector-intersection'
+*** `bool-vector-set-difference'
+*** `bool-vector-not'
+*** `bool-vector-subsetp'
+*** `bool-vector-count-matches'
+*** `bool-vector-count-matches-at'
 
 ** Comparison functions =, <, >, <=, >= now take many arguments.
 
