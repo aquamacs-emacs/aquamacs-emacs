@@ -1205,11 +1205,9 @@ update_frame_tool_bar (struct frame *f)
       	keyText = "?";
 
       /* Check if this is a separator.  */
-      if (EQ (TOOLPROP (TOOL_BAR_ITEM_TYPE), Qt))
+      if (EQ (TOOLPROP (TOOL_BAR_ITEM_TYPE), Qt) || (STRINGP (label) && strcmp("--", SDATA (label)) == 0))
         {
-          /* Skip separators.  Newer OSX don't show them, and on GNUStep they
-             are wide as a button, thus overflowing the toolbar most of
-             the time.  */
+	  [toolbar addDisplayItemSpacerWithIdx: k++ tag:i key: keyText];
           continue;
         }
 
