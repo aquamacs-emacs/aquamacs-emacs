@@ -68,7 +68,7 @@ If optional argument UPDATE is non-nil, call the user defined function
 `tabbar-current-tabset-function' to obtain it.  Otherwise return the
 current cached copy."
   (setq tabbar-current-tabset
-	(funcall tabbar-current-tabset-function)))
+	(if tabbar-current-tabset-function (funcall tabbar-current-tabset-function))))
 
 (defun tabbar-window-buffer-list ()
   "Return the list of buffers to show in tabs.
@@ -110,7 +110,7 @@ displayed buffer.  Result is an alist of alists."
 	 ;; use buffer AND its name, so we can update it if name changes on save
 	 (bufpair (list buffer bufname bufmod))
 	 (window-elt (assq wnumber tabbar-window-alist))
-	 (tabbar-buffers-list (funcall tabbar-buffer-list-function)))
+	 (tabbar-buffers-list (and tabbar-buffer-list-function (funcall tabbar-buffer-list-function))))
     ;; only include buffers that should have tabs (ignore tooltip windows, etc.)
     (when (memq buffer tabbar-buffers-list)
       (if window-elt
