@@ -1704,15 +1704,15 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	  int len;
 	  unsigned char c;
 	  struct gcpro gcpro1;
-	  ptrdiff_t size_in_chars
-	    = ((XBOOL_VECTOR (obj)->size + BOOL_VECTOR_BITS_PER_CHAR - 1)
-	       / BOOL_VECTOR_BITS_PER_CHAR);
-
+	  EMACS_INT size = bool_vector_size (obj);
+	  ptrdiff_t size_in_chars = ((size + BOOL_VECTOR_BITS_PER_CHAR - 1)
+				     / BOOL_VECTOR_BITS_PER_CHAR);
+	  ptrdiff_t real_size_in_chars = size_in_chars;
 	  GCPRO1 (obj);
 
 	  PRINTCHAR ('#');
 	  PRINTCHAR ('&');
-	  len = sprintf (buf, "%"pI"d", XBOOL_VECTOR (obj)->size);
+	  len = sprintf (buf, "%"pI"d", size);
 	  strout (buf, len, len, printcharfun);
 	  PRINTCHAR ('\"');
 
@@ -1752,6 +1752,9 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 		  PRINTCHAR (c);
 		}
 	    }
+
+	  if (size_in_chars < real_size_in_chars)
+	    strout (" ...", 4, 4, printcharfun);
 	  PRINTCHAR ('\"');
 
 	  UNGCPRO;

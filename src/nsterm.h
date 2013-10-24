@@ -592,8 +592,7 @@ struct ns_display_info
   /* The generic display parameters corresponding to this NS display. */
   struct terminal *terminal;
 
-  /* This is a cons cell of the form (NAME . FONT-LIST-CACHE).
-     The same cons cell also appears in ns_display_name_list.  */
+  /* This is a cons cell of the form (NAME . FONT-LIST-CACHE).  */
   Lisp_Object name_list_element;
 
   /* The number of fonts loaded. */
@@ -608,8 +607,6 @@ struct ns_display_info
   struct ns_bitmap_record *bitmaps;
   ptrdiff_t bitmaps_size;
   ptrdiff_t bitmaps_last;
-
-  struct image_cache *image_cache;
 
   struct ns_color_table *color_table;
 
@@ -666,7 +663,6 @@ struct ns_display_info
 /* This is a chain of structures for all the NS displays currently in use.  */
 extern struct ns_display_info *x_display_list;
 
-extern Lisp_Object ns_display_name_list;
 extern struct ns_display_info *ns_display_info_for_name (Lisp_Object name);
 
 struct ns_output
@@ -753,8 +749,6 @@ struct x_output
 
 #define FRAME_FOREGROUND_COLOR(f) ((f)->output_data.ns->foreground_color)
 #define FRAME_BACKGROUND_COLOR(f) ((f)->output_data.ns->background_color)
-
-#define FRAME_X_IMAGE_CACHE(F) FRAME_DISPLAY_INFO ((F))->image_cache
 
 #define NS_FACE_FOREGROUND(f) ((f)->foreground)
 #define NS_FACE_BACKGROUND(f) ((f)->background)

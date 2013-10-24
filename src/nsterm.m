@@ -179,6 +179,7 @@ Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper;
 extern Lisp_Object Qcursor_color, Qcursor_type, Qns, Qleft;
 
 static Lisp_Object QUTF8_STRING;
+static Lisp_Object Qcocoa, Qgnustep;
 
 /* On OS X picks up the default NSGlobalDomain AppleAntiAliasingThreshold,
    the maximum font size to NOT antialias.  On GNUstep there is currently
@@ -190,8 +191,10 @@ NSString *ns_app_name = @"Aquamacs";  /* default changed later */
 
 /* Display variables */
 struct ns_display_info *x_display_list; /* Chain of existing displays */
-Lisp_Object ns_display_name_list;
 long context_menu_value = 0;
+
+Lisp_Object ns_display_name_list;
+
 
 /* display update */
 static struct frame *ns_updating_frame;
@@ -1522,15 +1525,16 @@ ns_get_color (const char *name, NSColor **col)
 /*fprintf (stderr, "ns_get_color: '%s'\n", name); */
   block_input ();
 
-#ifdef NS_IMPL_COCOA
   if ([nsname isEqualToString: @"ns_selection_bg_color"])
     {
+#ifdef NS_IMPL_COCOA
       NSString *defname = [[NSUserDefaults standardUserDefaults]
                             stringForKey: @"AppleHighlightColor"];
-
       if (defname != nil)
         nsname = defname;
-      else if ((new = [NSColor selectedTextBackgroundColor]) != nil)
+      else
+#endif
+      if ((new = [NSColor selectedTextBackgroundColor]) != nil)
         {
           *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
           unblock_input ();
@@ -1556,7 +1560,6 @@ ns_get_color (const char *name, NSColor **col)
       nsname = NS_SELECTION_FG_COLOR_DEFAULT;
       name = [nsname UTF8String];
     }
-#endif // NS_IMPL_COCOA
 
   /* First, check for some sort of numeric specification. */
   hex[0] = '\0';
@@ -4088,7 +4091,6 @@ ns_initialize_display_info (struct ns_display_info *dpyinfo)
                 && ![NSCalibratedWhiteColorSpace isEqualToString:
                                                  NSColorSpaceFromDepth (depth)];
     dpyinfo->n_planes = NSBitsPerPixelFromDepth (depth);
-    dpyinfo->image_cache = make_image_cache ();
     dpyinfo->color_table = xmalloc (sizeof *dpyinfo->color_table);
     dpyinfo->color_table->colors = NULL;
     dpyinfo->root_window = 42; /* a placeholder.. */
@@ -4204,12 +4206,6 @@ ns_create_terminal (struct ns_display_info *dpyinfo)
   terminal->delete_frame_hook = x_destroy_window;
   terminal->delete_terminal_hook = ns_delete_terminal;
 
-  terminal->scroll_region_ok = 1;
-  terminal->char_ins_del_ok = 1;
-  terminal->line_ins_del_ok = 1;
-  terminal->fast_clear_end_of_line = 1;
-  terminal->memory_below_frame = 0;
-
   return terminal;
 }
 
@@ -4282,11 +4278,7 @@ ns_term_init (Lisp_Object display_name)
   ns_initialize_display_info (dpyinfo);
   terminal = ns_create_terminal (dpyinfo);
 
-  terminal->kboard = xmalloc (sizeof *terminal->kboard);
-  init_kboard (terminal->kboard);
-  kset_window_system (terminal->kboard, Qns);
-  terminal->kboard->next_kboard = all_kboards;
-  all_kboards = terminal->kboard;
+  terminal->kboard = allocate_kboard (Qns);
   /* Don't let the initial kboard remain current longer than necessary.
      That would cause problems if a file loaded on startup tries to
      prompt in the mini-buffer.  */
@@ -4297,10 +4289,7 @@ ns_term_init (Lisp_Object display_name)
   dpyinfo->next = x_display_list;
   x_display_list = dpyinfo;
 
-  /* Put it on ns_display_name_list */
-  ns_display_name_list = Fcons (Fcons (display_name, Qnil),
-                                ns_display_name_list);
-  dpyinfo->name_list_element = XCAR (ns_display_name_list);
+  dpyinfo->name_list_element = Fcons (display_name, Qnil);
 
   terminal->name = xstrdup (SSDATA (display_name));
 
@@ -8454,11 +8443,17 @@ resolution.  If set to `t`, all images to be loaded are scaled.*/);
   /* Tell Emacs about this window system.  */
   Fprovide (Qns, Qnil);
 
+  DEFSYM (Qcocoa, "cocoa");
+  DEFSYM (Qgnustep, "gnustep");
+
   syms_of_nsfont ();
 #ifdef NS_IMPL_COCOA
+  Fprovide (Qcocoa, Qnil);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
   syms_of_macfont ();
 #endif
+#else
+  Fprovide (Qgnustep, Qnil);
 #endif
   
 }

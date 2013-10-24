@@ -1,6 +1,74 @@
+2013-10-24  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/ert-tests.el (ert-test-skip-unless): New test case.
+	(ert-test-deftest): Adapt test for changed macro expansion.
+	(ert-test-run-tests-interactively):
+	* automated/ert-x-tests.el (ert-test-run-tests-interactively-2):
+	Add a skipping test.
+
+	* automated/file-notify-tests.el (top): Do not require tramp-sh.el.
+	(file-notify--test-local-enabled): Make it a function.  Check also
+	for `file-remote-p' of `temporary-file-directory'.
+	(file-notify--test-remote-enabled-checked): New defvar.
+	(file-notify--test-remote-enabled): Rewrite.  Do not use Tramp
+	internal functions.  Cache result.
+	(file-notify--deftest-remote, file-notify-test00-availability)
+	(file-notify-test01-add-watch, file-notify-test02-events)
+	(file-notify-test03-autorevert): Add checks with `skip_unless'.
+	(file-notify-test-all): Do not check `file-notify--test-local-enabled'.
+
+2013-10-24  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* indent/ruby.rb: Fix syntax error in the latest example.
+
+2013-10-23  Glenn Morris  <rgm@gnu.org>
+
+	* automated/Makefile.in (abs_top_srcdir, top_builddir):
+	New, set by configure.
+	(top_srcdir): Remove.
+	(abs_test, abs_lispsrc): New.
+	(lisp): No longer absolute.
+	(emacs, lisp-compile, compile, compile-always):
+	Quote entities that might contain whitespace.
+
+2013-10-22  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* indent/ruby.rb: Move two examples to "working" section, add one
+	more.
+
+2013-10-21  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* indent/ruby.rb: New examples for indentation of blocks.  Example
+	of hash inside parens that inflooped before the present commit.
+
+2013-10-17  Barry O'Reilly  <gundaetiapo@gmail.com>
+
+	* test/automated/timer-tests.el: New file.  Tests that (sit-for 0)
+	allows another timer to run.
+
+2013-10-14  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* indent/ruby.rb: More examples for bug#15594, both failing and
+	now passing.
+
+2013-10-11  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* indent/ruby.rb: Add two more cases.
+
+2013-10-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* automated/ruby-mode-tests.el (ruby-with-temp-buffer): Move before
+	first use.
+	(ruby-should-indent): Use indent-according-to-mode.
+	(ruby-deftest-move-to-block): Use `declare'.
+
 2013-10-07  Dmitry Gutov  <dgutov@yandex.ru>
 
 	* indent/ruby.rb: Fix a spurious change, add more failing examples.
+
+2013-10-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* indent/ruby.rb: Add a few more tests; adjust some indentation.
 
 2013-10-06  Dmitry Gutov  <dgutov@yandex.ru>
 
@@ -74,11 +142,11 @@
 	* automated/data-test.el:
 	(bool-vector-count-matches-all-0-nil)
 	(bool-vector-count-matches-all-0-t)
-	(bool-vector-count-matches-1-il,bool-vector-count-matches-1-t)
-	(bool-vector-count-matches-at,bool-vector-intersection-op)
-	(bool-vector-union-op,bool-vector-xor-op)
+	(bool-vector-count-matches-1-il, bool-vector-count-matches-1-t)
+	(bool-vector-count-matches-at, bool-vector-intersection-op)
+	(bool-vector-union-op, bool-vector-xor-op)
 	(bool-vector-set-difference-op)
-	(bool-vector-change-detection,bool-vector-not): New tests.
+	(bool-vector-change-detection, bool-vector-not): New tests.
 	(mock-bool-vector-count-matches-at)
 	(test-bool-vector-bv-from-hex-string)
 	(test-bool-vector-to-hex-string)
@@ -134,7 +202,7 @@
 
 2013-08-28  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* Makefile.in (SHELL): Now @SHELL@, not /bin/sh,
+	* automated/Makefile.in (SHELL): Now @SHELL@, not /bin/sh,
 	for portability to hosts where /bin/sh has problems.
 
 2013-08-21  David Engster  <deng@randomsample.de>
@@ -540,7 +608,7 @@
 
 2012-12-14  Dmitry Gutov  <dgutov@yandex.ru>
 
-	* automated/ruby-mode-tests.el
+	* automated/ruby-mode-tests.el:
 	Rename one interpolation test; add three more.
 	(ruby-with-temp-buffer): New macro, use it where appropriate.
 	(ruby-add-log-current-method-examples): Use "_" for target point.

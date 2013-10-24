@@ -55,7 +55,7 @@ extern HMENU current_popup_menu;
 static bool
 have_boxes (void)
 {
-#if defined (USE_X_TOOLKIT) || defined (USE_GTK) || defined (HAVE_NTGUI) || defined (HAVE_NS)
+#if defined (USE_X_TOOLKIT) || defined (USE_GTK) || defined (HAVE_NTGUI) || defined(HAVE_NS)
   if (FRAME_WINDOW_P (XFRAME (Vmenu_updating_frame)))
     return 1;
 #endif
@@ -1440,14 +1440,9 @@ no quit occurs and `x-popup-menu' returns nil.  */)
   else
 #endif
 #if (defined (HAVE_X_WINDOWS) || defined (MSDOS))
-  /* Assume last_event_timestamp is the timestamp of the button event.
-     Is this assumption ever violated?  We can't use the timestamp
-     stored within POSITION because there the top bits from the actual
-     timestamp may be truncated away (Bug#4930).  */
   if (FRAME_X_P (f) || FRAME_MSDOS_P (f))
     selection = xmenu_show (f, xpos, ypos, for_click,
-			    keymaps, title, &error_name,
-			    last_event_timestamp);
+			    keymaps, title, &error_name);
   else
 #endif
   if (FRAME_TERMCAP_P (f))

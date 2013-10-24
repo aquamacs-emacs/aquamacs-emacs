@@ -82,7 +82,7 @@ volatile bool pending_signals;
 
 KBOARD *initial_kboard;
 KBOARD *current_kboard;
-KBOARD *all_kboards;
+static KBOARD *all_kboards;
 
 /* True in the single-kboard state, false in the any-kboard state.  */
 static bool single_kboard;
@@ -217,10 +217,6 @@ static ptrdiff_t last_point_position;
    It's exported to Lisp, though, so it can't simply be marked
    'volatile' here.  */
 Lisp_Object internal_last_event_frame;
-
-/* The timestamp of the last input event we received from the X server.
-   X Windows wants this for selection ownership.  */
-Time last_event_timestamp;
 
 static Lisp_Object Qx_set_selection, Qhandle_switch_frame;
 static Lisp_Object Qhandle_select_window;
@@ -2101,6 +2097,9 @@ bind_polling_period (int n)
 
 /* Apply the control modifier to CHARACTER.  */
 
+#ifndef WINDOWSNT
+static
+#endif
 int
 make_ctrl_char (int c)
 {
@@ -3632,8 +3631,6 @@ kbd_buffer_store_event_hold (register struct input_event *event,
 	    Vlast_event_frame = focus;
 	  }
 
-	  last_event_timestamp = event->timestamp;
-
 	  handle_interrupt (0);
 	  return;
 	}
@@ -3937,8 +3934,6 @@ kbd_buffer_get_event (KBOARD **kbp,
       event = ((kbd_fetch_ptr < kbd_buffer + KBD_BUFFER_SIZE)
 	       ? kbd_fetch_ptr
 	       : kbd_buffer);
-
-      last_event_timestamp = event->timestamp;
 
       *kbp = event_to_kboard (event);
       if (*kbp == 0)
@@ -4301,8 +4296,6 @@ process_special_events (void)
 	  else
 	    kbd_fetch_ptr++;
 
-	  /* X wants last_event_timestamp for selection ownership.  */
-	  last_event_timestamp = copy.timestamp;
 	  input_pending = readable_events (0);
 	  x_handle_selection_event (&copy);
 #else
@@ -5575,6 +5568,9 @@ make_lispy_event (struct input_event *event)
       /* A mouse click.  Figure out where it is, decide whether it's
          a press, click or drag, and build the appropriate structure.  */
     case MOUSE_CLICK_EVENT:
+#ifdef HAVE_GPM
+    case GPM_CLICK_EVENT:
+#endif
 #ifndef USE_TOOLKIT_SCROLL_BARS
     case SCROLL_BAR_CLICK_EVENT:
 #endif
@@ -5588,7 +5584,11 @@ make_lispy_event (struct input_event *event)
 	position = Qnil;
 
 	/* Build the position as appropriate for this mouse click.  */
-	if (event->kind == MOUSE_CLICK_EVENT)
+	if (event->kind == MOUSE_CLICK_EVENT
+#ifdef HAVE_GPM
+	    || event->kind == GPM_CLICK_EVENT
+#endif
+	    )
 	  {
 	    struct frame *f = XFRAME (event->frame_or_window);
 	    int row, column;
@@ -6053,55 +6053,6 @@ make_lispy_event (struct input_event *event)
     case CONFIG_CHANGED_EVENT:
 	return list3 (Qconfig_changed_event,
 		      event->arg, event->frame_or_window);
-#ifdef HAVE_GPM
-    case GPM_CLICK_EVENT:
-      {
-	struct frame *f = XFRAME (event->frame_or_window);
-	Lisp_Object head, position;
-	Lisp_Object *start_pos_ptr;
-	Lisp_Object start_pos;
-	int button = event->code;
-
-	if (button >= ASIZE (button_down_location))
-	  {
-	    ptrdiff_t incr = button - ASIZE (button_down_location) + 1;
-	    button_down_location = larger_vector (button_down_location,
-						  incr, -1);
-	    mouse_syms = larger_vector (mouse_syms, incr, -1);
-	  }
-
-	start_pos_ptr = aref_addr (button_down_location, button);
-	start_pos = *start_pos_ptr;
-
-	position = make_lispy_position (f, event->x, event->y,
-					event->timestamp);
-
- 	if (event->modifiers & down_modifier)
-	  *start_pos_ptr = Fcopy_alist (position);
-	else if (event->modifiers & (up_modifier | drag_modifier))
-	  {
-	    if (!CONSP (start_pos))
-	      return Qnil;
-	    event->modifiers &= ~up_modifier;
-	  }
-
-	head = modify_event_symbol (button,
-				    event->modifiers,
-				    Qmouse_click, Vlispy_mouse_stem,
-				    NULL,
-				    &mouse_syms,
-				    ASIZE (mouse_syms));
-
-	if (event->modifiers & drag_modifier)
-	  return list3 (head, start_pos, position);
-	else if (event->modifiers & double_modifier)
-	  return list3 (head, position, make_number (2));
-	else if (event->modifiers & triple_modifier)
-	  return list3 (head, position, make_number (3));
- 	else
-	  return list2 (head, position);
-       }
-#endif /* HAVE_GPM */
 
       /* The 'kind' field of the event is something we don't recognize.  */
     default:
@@ -9989,12 +9940,13 @@ requeued_events_pending_p (void)
   return (!NILP (Vunread_command_events));
 }
 
-
-DEFUN ("input-pending-p", Finput_pending_p, Sinput_pending_p, 0, 0, 0,
+DEFUN ("input-pending-p", Finput_pending_p, Sinput_pending_p, 0, 1, 0,
        doc: /* Return t if command input is currently available with no wait.
 Actually, the value is nil only if we can be sure that no input is available;
-if there is a doubt, the value is t.  */)
-  (void)
+if there is a doubt, the value is t.
+
+If CHECK-TIMERS is non-nil, timers that are ready to run will do so.  */)
+  (Lisp_Object check_timers)
 {
   if (!NILP (Vunread_command_events)
       || !NILP (Vunread_post_input_method_events)
@@ -10004,7 +9956,8 @@ if there is a doubt, the value is t.  */)
   /* Process non-user-visible events (Bug#10195).  */
   process_special_events ();
 
-  return (get_input_pending (READABLE_EVENTS_DO_TIMERS_NOW
+  return (get_input_pending ((NILP (check_timers)
+                              ? 0 : READABLE_EVENTS_DO_TIMERS_NOW)
 			     | READABLE_EVENTS_FILTER_EVENTS)
 	  ? Qt : Qnil);
 }
@@ -10822,12 +10775,11 @@ The `posn-' functions access elements of such lists.  */)
   return tem;
 }
 
-
-/*
- * Set up a new kboard object with reasonable initial values.
- */
-void
-init_kboard (KBOARD *kb)
+/* Set up a new kboard object with reasonable initial values.
+   TYPE is a window system for which this keyboard is used.  */
+
+static void
+init_kboard (KBOARD *kb, Lisp_Object type)
 {
   kset_overriding_terminal_local_map (kb, Qnil);
   kset_last_command (kb, Qnil);
@@ -10848,11 +10800,25 @@ init_kboard (KBOARD *kb)
   kb->reference_count = 0;
   kset_system_key_alist (kb, Qnil);
   kset_system_key_syms (kb, Qnil);
-  kset_window_system (kb, Qt);	/* Unset.  */
+  kset_window_system (kb, type);
   kset_input_decode_map (kb, Fmake_sparse_keymap (Qnil));
   kset_local_function_key_map (kb, Fmake_sparse_keymap (Qnil));
   Fset_keymap_parent (KVAR (kb, Vlocal_function_key_map), Vfunction_key_map);
   kset_default_minibuffer_frame (kb, Qnil);
+}
+
+/* Allocate and basically initialize keyboard
+   object to use with window system TYPE.  */
+
+KBOARD *
+allocate_kboard (Lisp_Object type)
+{
+  KBOARD *kb = xmalloc (sizeof *kb);
+
+  init_kboard (kb, type);
+  kb->next_kboard = all_kboards;
+  all_kboards = kb;
+  return kb;
 }
 
 /*
@@ -10919,10 +10885,9 @@ init_keyboard (void)
   current_kboard = initial_kboard;
   /* Re-initialize the keyboard again.  */
   wipe_kboard (current_kboard);
-  init_kboard (current_kboard);
   /* A value of nil for Vwindow_system normally means a tty, but we also use
      it for the initial terminal since there is no window system there.  */
-  kset_window_system (current_kboard, Qnil);
+  init_kboard (current_kboard, Qnil);
 
   if (!noninteractive)
     {
@@ -11727,12 +11692,8 @@ Currently, the only supported values for this
 variable are `sigusr1' and `sigusr2'.  */);
   Vdebug_on_event = intern_c_string ("sigusr2");
 
-  /* Create the initial keyboard.  */
-  initial_kboard = xmalloc (sizeof *initial_kboard);
-  init_kboard (initial_kboard);
-  /* Vwindow_system is left at t for now.  */
-  initial_kboard->next_kboard = all_kboards;
-  all_kboards = initial_kboard;
+  /* Create the initial keyboard.  Qt means 'unset'.  */
+  initial_kboard = allocate_kboard (Qt);
 }
 
 void

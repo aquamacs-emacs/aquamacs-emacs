@@ -1352,8 +1352,6 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
   Vframe_list = Fdelq (frame, Vframe_list);
   SET_FRAME_VISIBLE (f, 0);
 
-  unblock_input();
-
   /* Allow the vector of menu bar contents to be freed in the next
      garbage collection.  The frame object itself may not be garbage
      collected until much later, because recent_keys and other data

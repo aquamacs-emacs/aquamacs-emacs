@@ -1,3 +1,418 @@
+2013-10-24  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (abs_top_srcdir): New, set by configure.
+
+2013-10-23  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Adjust recent font-related changes to fix bug#15686.
+	* alloc.c (mark_object) [HAVE_WINDOW_SYSTEM]: If marked frame
+	is a live window system frame, mark its default font too.
+
+2013-10-23  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (RUN_TEMACS): Make relative (again).
+	($(leimdir)/leim-list.el, .el.elc, $(lispsource)/loaddefs.el)
+	(bootstrap-emacs$(EXEEXT)):
+	Quote entities that might contain whitespace.
+
+2013-10-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port to Solaris 10 and its bundled GCC.
+	Problem reported by Timothy C. Burt.
+	* floatfns.c (isfinite, isnan): Redefine unconditionally.
+
+2013-10-21  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Do not allow font caches to grow too large.
+	* alloc.c (compact_font_cache_entry, compact_font_caches):
+	New functions or stub if not HAVE_WINDOW_SYSTEM.
+	(compact_undo_list): Factor out from Fgarbage_collect.
+	Add comment.
+	(mark_face_cache): Mark face font.  Move down to avoid
+	extra prototypes.
+	(mark_terminals): Do not mark font cache here.
+	(Fgarbage_collect): Call compaction functions described
+	above.  Adjust comment.
+
+2013-10-20  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* emacs.c (main): On Cocoa, if GUI session and 0 is not a tty,
+	chdir to HOME (bug#15607).
+
+	* nsterm.m (Qcocoa, Qgnustep): New variables.
+	(syms_of_nsterm): Defsym Qcocoa, Qgnustep.  Fprovide appropriate one.
+	(ns_get_color): Make selection color work for GNUStep also.
+
+2013-10-18  Eli Zaretskii  <eliz@gnu.org>
+
+	* keyboard.c (make_lispy_event): Remove GPM-specific code that
+	handles mouse clicks.  Instead, let GPM use the same code as all
+	the other mice use.  See the discussion starting at
+	http://lists.gnu.org/archive/html/emacs-devel/2013-10/msg00521.html
+	for the details of the problem with the menu bar this fixes.
+
+2013-10-18  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Remove port-specific display name lists to avoid extra
+	complexity and data duplication with display info lists.
+	* xterm.h (x_display_name_list): Remove declaration.
+	* xterm.c (x_display_name_list): Remove.
+	(x_term_init, x_delete_display, syms_of_xterm): Adjust users.
+	* xfns.c (x_display_info_for_name, Fx_display_list):
+	Likewise.  Use x_display_list where appropriate.
+	* w32term.h (w32_display_name_list): Remove declaration.
+	* w32term.c (w32_display_name_list): Remove.
+	(w32_initialize_display_info, x_delete_display, syms_of_w32term):
+	Adjust users.
+	* w32fns.c (x_display_info_for_name, Fx_display_list):
+	Likewise.  Use x_display_list where appropriate.
+	* nsterm.h (ns_display_name_list): Remove declaration.
+	* nsterm.m (ns_display_name_list): Remove.
+	(ns_term_init, syms_of_nsterm): Adjust users.
+	* nsfns.m (ns_display_info_for_name, Fx_display_list):
+	Likewise.  Use x_display_list where appropriate.
+	* termhooks.h (TERMINAL_FONT_CACHE): New macro.
+	* alloc.c (toplevel) [HAVE_WINDOW_SYSTEM]: Include TERM_HEADER.
+	(mark_terminals): Mark per-terminal font cache.
+
+2013-10-17  Barry O'Reilly  <gundaetiapo@gmail.com>
+
+	Don't run timers in input-pending-p.  Its new check-timers param
+	provides the prior behavior. (Bug#15045).
+	* src/keyboard.c (Finput_pending_p): Accept optional check-timers
+	param.
+
+2013-10-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Make some functions static in non-Microsoft builds.
+	On my platform (Fedora 19 x86-64), this shrinks the
+	Emacs executable (text+data) by 0.25%.
+	* dispextern.h (erase_phys_cursor) [!WINDOWSNT]:
+	(load_color) [!MSDOS]:
+	* gnutls.h (emacs_gnutls_transport_set_errno) [!WINDOWSNT]:
+	* keyboard.h (make_ctrl_char) [!WINDOWSNT]:
+	* lisp.h (check_existing):
+	* process.h (conv_sockaddr_to_lisp, network_interface_list)
+	(network_interface_info) [!WINDOWSNT]:
+	* termhooks.h (encode_terminal_code) [!WINDOWSNT]:
+	Remove extern decls.
+	* fileio.c (check_existing):
+	* keyboard.c (make_ctrl_char) [!WINDOWSNT]:
+	* process.c (conv_sockaddr_to_lisp, network_interface_list)
+	(network_interface_info) [!WINDOWSNT]:
+	* term.c (encode_terminal_code) [!WINDOWSNT]:
+	* xdisp.c (erase_phys_cursor) [!WINDOWSNT]:
+	* xfaces.c (load_color) [!MSDOS]:
+	Now static.
+	* fileio.c (check_existing, check_executable, check_writable):
+	* process.c (network_interface_list, network_interface_info):
+	Move earlier, so that we don't need forward decls.
+	* gnutls.c (fn_gnutls_transport_set_errno)
+	(emacs_gnutls_transport_set_errno) [!WINDOWNT]:
+	Remove; unused.
+	* w32.c (init_environment): Use faccessat rather than
+	check_existing, partly for consistency with the rest of the code
+	in this file, partly so that check_existing can be static.
+
+	Make VALMASK visible to GDB even if clang is used (Bug#15574).
+	* emacs.c (MAIN_PROGRAM): New macro.
+	* lisp.h (DEFINE_GDB_SYMBOL_BEGIN, DEFINE_GDB_SYMBOL_END): New macros.
+	(ARRAY_MARK_FLAG, PSEUDOVECTOR_FLAG, VALMASK): Use them.
+
+	bool vector int width fixes
+	* data.c (bool_vector_spare_mask, Fbool_vector_count_matches)
+	(Fbool_vector_count_matches_at):
+	Use EMACS_INT, not ptrdiff_t, to record bit counts, as a bit count
+	can exceed PTRDIFF_MAX, at least in theory.
+	(Fbool_vector_count_matches_at):
+	Use int, not ptrdiff_t, to record a value that can't exceed INT_MAX.
+
+2013-10-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* process.h (conv_sockaddr_to_lisp): New decl, for newly-extern func.
+	(struct sockaddr): Add forward decl, for platforms that lack it.
+
+2013-10-16  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* nsselect.m (ns_string_from_pasteboard): Remove Fquit, just return
+	Qnil (Bug#15628).
+
+2013-10-16  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32.c (network_interface_get_info, network_interface_list)
+	(network_interface_info): New functions.  (Bug#15610)
+	(GetAdaptersInfo_Proc): New typedef.
+	(get_adapters_info): New wrapper function.
+	(globals_of_w32): Initialize g_b_init_get_adapters_info.
+
+	* process.h (network_interface_list, network_interface_info): New
+	prototypes.
+
+	* process.c (conv_sockaddr_to_lisp): Now externally-visible.
+	(Fnetwork_interface_list, Fnetwork_interface_info): Define for
+	all systems.  Return non-nil for systems that HAVE_NET_IF_H and
+	for WINDOWSNT.  Doc fix.
+	(syms_of_process): Defsubr Snetwork_interface_list and
+	Snetwork_interface_info unconditionally.
+
+	* menu.c (have_boxes): Fix redundant simulation of radio buttons
+	in NS GUI sessions.  (Bug#15629)
+
+2013-10-16  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* fns.c (Fstring_as_unibyte): Use xlispstrdup.
+
+2013-10-15  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* print.c (print_object): Print " ..." when truncating bool vectors.
+
+2013-10-15  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32inevt.c (do_mouse_event): Support mouse wheel and all the 5
+	standard mouse buttons.
+
+	* termhooks.h (struct input_event): Remove incorrect commentary.
+
+2013-10-15  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Disallow bool vector operations on mixed-length operands.
+	The old behavior left garbage in the result vector sometimes,
+	and didn't seem to be useful.
+	* data.c (Qwrong_length_argument): New static var.
+	(wrong_length_argument): New function.
+	(bool_vector_binop_driver): Check that args agree in length.
+
+	* keyboard.c, keyboard.h (all_kboards): Now static.
+
+2013-10-15  Xue Fuqiao  <xfq.free@gmail.com>
+
+	* buffer.c (syms_of_buffer) <buffer-invisibility-spec>: Add usage
+	note from the lispref.
+
+2013-10-15  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* nsterm.h (struct ns_display_info): Remove set-but-unused
+	member image_cache (image caches are per-terminal anyway).
+	(FRAME_X_IMAGE_CACHE): Remove.
+	* nsterm.m (ns_initialize_display_info): Adjust user.
+
+2013-10-14  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32proc.c: Include mingw_time.h.
+
+	* w32.c: Include mingw_time.h.
+
+	Implement scrolling of TTY menus when the screen is too short.
+
+	* term.c (tty_menu_display): Accept an additional argument, the
+	menu item from which to start displaying the menu.  Account for
+	the value of Y when limiting the menu to the number of available
+	screen lines.
+	(mi_result): New enumeration.
+	(read_menu_input): Return enumerated value.  When the y coordinate
+	hits min_y or max_y, return scroll indication instead of wrapping
+	around the menu.
+	(tty_menu_activate): Handle the scrolling indications from
+	read_menu_input.  Compute the first menu item to display and pass
+	it to tty_menu_display.
+
+2013-10-14  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* termhooks.h (FRAME_MUST_WRITE_SPACES, FRAME_LINE_INS_DEL_OK)
+	(FRAME_CHAR_INS_DEL_OK, FRAME_SCROLL_REGION_OK)
+	(FRAME_SCROLL_REGION_COST, FRAME_MEMORY_BELOW_FRAME):
+	Adjust to match the change described below.
+	(struct terminal): Move must_write_spaces, line_ins_del_ok,
+	char_ins_del_ok, scroll_region_ok, scroll_region_cost and
+	memory_below_frame members to...
+	* termchar.h (struct tty_display_info): ...here because they're
+	relevant only on TTYs.  Prefer unsigned bitfield where appropriate.
+	* term.c (init_tty):
+	* nsterm.m (ns_create_terminal):
+	* w32term.c (w32_create_terminal):
+	* xterm.c (x_create_terminal): Adjust users.
+	* dispnew.c (line_hash_code, line_draw_cost): Pass frame arg
+	to filter out non-TTY frames.  Adjust comment.
+	(scrolling): Adjust user.  Prefer eassert for debugging check.
+
+2013-10-14  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* xfaces.c (PT_PER_INCH): Remove unused macro.
+	* termhooks.h (struct terminal): Remove set-but-unused
+	member fast_clear_end_of_line.
+	(FRAME_FAST_CLEAR_END_OF_LINE): Remove.
+	* nsterm.m (ns_create_terminal):
+	* term.c (init_tty):
+	* w32term.c (w32_create_terminal):
+	* xterm.c (x_create_terminal): Adjust users.
+
+2013-10-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lisp.h (bool_vector_size): New function.
+	All uses of XBOOL_VECTOR (x)->size changed to bool_vector_size (x).
+	* data.c (bool_vector_spare_mask, bool_vector_binop_driver)
+	(Fbool_vector_not, Fbool_vector_count_matches_at):
+	Remove uses of 'eassume' that should no longer be needed,
+	because they are subsumed by the 'eassume' in bool_vector_size.
+
+2013-10-12  Eli Zaretskii  <eliz@gnu.org>
+
+	* image.c (GIFLIB_MAJOR, GIFLIB_MINOR, GIFLIB_RELEASE): Move back
+	after inclusion of gif_lib.h, thus fixing compiler warnings caused
+	by revision 114614 (commit of 2013-10-10).
+
+2013-10-11  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (deep_copy_glyph_row): Handle the case that FROM and TO
+	have different dimensions.  (Bug#15575)
+
+	* dispnew.c (fill_up_frame_row_with_spaces): Now has external
+	visibility.
+
+	* dispextern.h (fill_up_frame_row_with_spaces): Add prototype.
+
+2013-10-11  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* term.c (tty_menu_show): Never return with unbalanced
+	specpdl.  Use eassert for debugging check.  Adjust style.
+
+2013-10-11  Eli Zaretskii  <eliz@gnu.org>
+
+	* term.c (read_menu_input): Make selection of menu items
+	cyclical.  Suggested by Dmitry Antipov <dmantipov@yandex.ru>.
+	(tty_menu_activate): Fix off-by-one error when computing max_y.
+
+2013-10-11  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* gnutls.c (gnutls_audit_log_function): Add function for GnuTLS
+	audit logging (only used with GnuTLS 3.x) and enable it.
+
+2013-10-11  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* dispnew.c (redraw_frame): Remove useless #ifdef because
+	FRAME_MSDOS_P is a compile-time zero everywhere except MS-DOS.
+	Also, move TTY fflush to...
+	* term.c (tty_update_end): ...this function.
+
+2013-10-11  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (display_tty_menu_item): Make sure we never write beyond
+	the end of the frame's glyph matrix.  (Bug#15575)
+
+	* term.c (tty_menu_display): Don't move cursor while overwriting
+	frame's glyphs with menu items.  Limit the number of items
+	displayed to what can be shown on the available screen lines,
+	excluding the echo area.
+	(tty_menu_activate): Limit the Y coordinate allowed by
+	read_menu_input to the last screen line used for menu display.
+
+2013-10-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lisp.h (eassume): New macro.
+	Also, include <verify.h>, for 'assume'.
+	* alloc.c (bool_vector_payload_bytes, Fmake_bool_vector)
+	(vroundup, vector_nbytes):
+	* data.c (bool_vector_spare_mask, bool_vector_binop_driver)
+	(Fbool_vector_not, Fbool_vector_count_matches)
+	(Fbool_vector_count_matches_at):
+	Use eassume, not eassert.
+	* casetab.c (set_identity, shuffle):
+	* composite.c (composition_gstring_put_cache):
+	* dispnew.c (update_frame_1):
+	* ftfont.c (ftfont_shape_by_flt):
+	* image.c (gif_load):
+	* intervals.c (offset_intervals):
+	* macfont.m (macfont_shape):
+	Remove calls to 'assume' that are no longer needed, because
+	--enable-gcc-warnings no longer generates bogus warnings
+	when these calls are removed.
+
+2013-10-11  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* xdisp.c (deep_copy_glyph_row): Remove unused locals.
+
+2013-10-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* fileio.c (Fsubstitute_in_file_name): Use substitute-env-in-file-name.
+	(Qsubstitute_env_in_file_name): New var.
+	(syms_of_fileio): Define it.
+
+2013-10-10  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (deep_copy_glyph_row): Assert that the 'used' counts of
+	FROM and TO are identical.  Copy only the glyphs of TEXT_AREA.
+	(Bug#15575)
+
+	* term.c (save_and_enable_current_matrix): Don't allocate and
+	don't save margin areas.
+	(restore_desired_matrix): Don't restore margin areas.
+	(free_saved_screen): Don't free margin areas.
+
+2013-10-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* image.c: Pacify --enable-gcc-warnings.
+	(GIFLIB_MAJOR, GIFLIB_MINOR, GIFLIB_RELEASE, fn_GifErrorString):
+	#define only if used.
+
+2013-10-10  Eli Zaretskii  <eliz@gnu.org>
+
+	* image.c (GIFLIB_MAJOR): Define to 4 if undefined.
+	(GIFLIB_MINOR, GIFLIB_RELEASE): Define to zero if undefined.
+	(GifErrorString) [GIFLIB_MAJOR >= 5]: Define a function pointer.
+	(gif_load): For giflib v5.x and later, display the error message
+	produced by giflib when its functions fail.
+	(syms_of_image) <Qlibgif_version> [HAVE_NTGUI]: New DEFSYM.
+	(Bug#15531)
+
+2013-10-10  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* keyboard.c (last_event_timestamp): Remove.  For X selection and
+	GTK popup menus, it may be obtained from per-frame X display info.
+	(kbd_buffer_store_event_hold, kbd_buffer_get_event)
+	(process_special_events): Adjust users.
+	* keyboard.h (last_event_timestamp): Remove declaration.
+	* xmenu.c (xmenu_show, create_and_show_popup_menu): Lost last arg.
+	Use FRAME_DISPLAY_INFO (f)->last_user_time for gtk_menu_popup.
+	* menu.h (xmenu_show): Adjust prototype.
+	* menu.c (Fx_popup_menu): Adjust user.
+	* xselect.c (x_own_selection, x_get_foreign_selection)
+	(Fx_disown_selection_internal): Use dpyinfo->last_user_time.
+
+2013-10-10  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	* keyboard.c (init_kboard): Now static.  Add arg
+	to denote window system.  Adjust comment.
+	(init_keyboard): Adjust user.
+	(allocate_kboard): New function.
+	(syms_of_keyboard):
+	* nsterm.m (ns_term_init):
+	* term.c (init_tty):
+	* w32term.c (w32_create_terminal):
+	* xterm.c (x_term_init): Use it.
+	* keyboard.h (init_kboard): Remove prototype.
+	(allocate_kboard): Add prototype.
+
+2013-10-10  Barry Fishman  <barry_fishman@acm.org>  (tiny change)
+
+	* image.c (GIFLIB_MAJOR): Ensure it's defined.
+	(DGifOpen, DGifOpenFileName): Handle giflib 5 syntax.  (Bug#15531)
+
+2013-10-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* fns.c (sxhash_bool_vector): Fix buffer read overrun.
+
+2013-10-09  Eli Zaretskii  <eliz@gnu.org>
+
+	* term.c (tty_menu_activate): Flush the output stream after
+	showing the cursor, and don't mark the frame garbaged at exit from
+	the function.  Fixes redisplay glitches when moving from one menu
+	to another.
+
+2013-10-09  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* nsfns.m (Fns_convert_utf8_nfd_to_nfc): Check input for valid UTF-8
+	or throw error (Bug#15570).
+
 2013-10-09  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* intervals.c (temp_set_point_both): Move test into 'eassert',
@@ -8,7 +423,7 @@
 	so it shouldn't be used all the time.  Perhaps we need two
 	flavors of 'eassert', one for where 'assume' is far more likely
 	to help or to hurt; but that can be done later.
-	Problem reported by Dmitry Andipov in
+	Problem reported by Dmitry Antipov in
 	<http://lists.gnu.org/archive/html/emacs-devel/2013-10/msg00276.html>.
 	Also, don't include <verify.h>; no longer needed.
 
@@ -537,7 +952,7 @@
 
 	* alloc.c (USE_VALGRIND): New macro; on by default
 	when ENABLE_CHECKING.
-	(mark_maybe_object,mark_maybe_pointer)
+	(mark_maybe_object, mark_maybe_pointer)
 	[USE_VALGRIND]: Mark conservatively-scanned regions valid for
 	valgrind purposes.
 	(valgrind_p) [USE_VALGRIND]: New variable.
@@ -565,15 +980,15 @@
 2013-09-22  Daniel Colascione  <dancol@dancol.org>
 
 	* data.c (Qbool_vector_p): New symbol.
-	(bool_vector_spare_mask,popcount_size_t_generic)
-	(popcount_size_t_msc,popcount_size_t_gcc)
+	(bool_vector_spare_mask, popcount_size_t_generic)
+	(popcount_size_t_msc, popcount_size_t_gcc)
 	(popcount_size_t)
 	(bool_vector_binop_driver)
-	(count_trailing_zero_bits,size_t_to_host_endian)
+	(count_trailing_zero_bits, size_t_to_host_endian)
 	(Fbool_vector_exclusive_or)
 	(Fbool_vector_union)
-	(Fbool_vector_intersection,Fbool_vector_set_difference)
-	(Fbool_vector_subsetp,Fbool_vector_not)
+	(Fbool_vector_intersection, Fbool_vector_set_difference)
+	(Fbool_vector_subsetp, Fbool_vector_not)
 	(Fbool_vector_count_matches)
 	(Fbool_vector_count_matches_at): New functions.
 	(syms_of_data): Intern new symbol, functions.
@@ -582,11 +997,11 @@
 	which performs redundant initialization and argument checking,
 	just call allocate_vector ourselves.  Make sure we clear any
 	terminating padding to zero.
-	(vector_nbytes,sweep_vectors): Use bool_vector_payload_bytes
+	(vector_nbytes, sweep_vectors): Use bool_vector_payload_bytes
 	instead of open-coding the size calculation.
 	(vroundup_ct): New macro.
 	(vroundup): Assume argument >= 0; invoke vroundup_ct.
-	* casetab.c (shuffle,set_identity): Change lint_assume to assume.
+	* casetab.c (shuffle, set_identity): Change lint_assume to assume.
 	* composite.c (composition_gstring_put_cache):
 	Change lint_assume to assume.
 	* conf_post.h (assume): New macro.
@@ -597,8 +1012,8 @@
 	* image.c (gif_load): Change lint_assume to assume.
 	* lisp.h (eassert_and_assume): New macro.
 	(Qbool_vector_p): Declare.
-	(CHECK_BOOL_VECTOR,ROUNDUP,BITS_PER_SIZE_T): New macros.
-	(swap16,swap32,swap64): New inline functions.
+	(CHECK_BOOL_VECTOR, ROUNDUP, BITS_PER_SIZE_T): New macros.
+	(swap16, swap32, swap64): New inline functions.
 	* macfont.c (macfont_shape): Change lint_assume to assume.
 	* ralloc.c: Rename ROUNDUP to PAGE_ROUNDUP throughout.
 	* xsettings.c (parse_settings): Use new swap16 and
@@ -1784,7 +2199,7 @@
 	in update_window_end_hook and draw_window_cursor functions.
 	(display_and_set_cursor, x_update_cursor): Adjust prototypes.
 	* nsterm.m (ns_update_window_end, ns_draw_window_cursor):
-	* w32term.c (x_update_window_end,w32_draw_window_cursor):
+	* w32term.c (x_update_window_end, w32_draw_window_cursor):
 	* xterm.c (x_update_window_end, x_draw_window_cursor):
 	* xdisp.c (display_and_set_cursor, update_window_cursor)
 	(update_cursor_in_window_tree, x_update_cursor): Use bool and
@@ -2207,7 +2622,7 @@
 	* keyboard.c (Fdiscard_input): Do not increment update_mode_lines.
 	* nsfns.m (x_set_cursor_type):
 	* w32fns.c (x_set_cursor_type):
-	* xfns.m (x_set_cursor_type): Do not set cursor_type_changed here...
+	* xfns.c (x_set_cursor_type): Do not set cursor_type_changed here...
 	* xdisp.c (set_frame_cursor_types): ...but in common code.
 
 2013-08-13  Dmitry Antipov  <dmantipov@yandex.ru>
@@ -5014,7 +5429,7 @@
 
 	* keyboard.c (read_decoded_char): Don't decode under w32 (bug#14403).
 
-2013-05-22  Barry OReilly  <gundaetiapo@gmail.com>  (tiny change)
+2013-05-22  Barry O'Reilly  <gundaetiapo@gmail.com>
 
 	* casetab.c (init_casetab_once): Fix last change (bug#14424).
 
@@ -5039,7 +5454,7 @@
 	character numbers counted by detect_coding_utf_8.  Fix detection
 	of BOM for utf-8.
 
-2013-05-21  Barry OReilly  <gundaetiapo@gmail.com>  (tiny change)
+2013-05-21  Barry O'Reilly  <gundaetiapo@gmail.com>
 
 	* search.c (looking_at_1): Only set last_thing_searched if the match
 	changed the match-data (bug#14281).

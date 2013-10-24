@@ -231,11 +231,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef HAVE_NS
 #define GCGraphicsExposures 0
 #endif /* HAVE_NS */
-
-/* Number of pt per inch (from the TeXbook).  */
-
-#define PT_PER_INCH 72.27
-
 #endif /* HAVE_WINDOW_SYSTEM */
 
 #include "buffer.h"
@@ -1202,6 +1197,9 @@ COLOR must be a valid color name.  */)
    record that fact in flags of the face so that we don't try to free
    these colors.  */
 
+#ifndef MSDOS
+static
+#endif
 unsigned long
 load_color (struct frame *f, struct face *face, Lisp_Object name,
 	    enum lface_attribute_index target_index)

@@ -227,9 +227,6 @@ extern KBOARD *initial_kboard;
    right now considering input.  We can consider input from another
    kboard, but doing so requires throwing to wrong_kboard_jmpbuf.  */
 extern KBOARD *current_kboard;
-
-/* A list of all kboard objects, linked through next_kboard.  */
-extern KBOARD *all_kboards;
 
 /* Total number of times read_char has returned, modulo UINTMAX_MAX + 1.  */
 extern uintmax_t num_input_events;
@@ -496,10 +493,6 @@ extern Lisp_Object QCtoggle, QCradio;
    speed up parse_modifiers.  */
 extern Lisp_Object Qevent_symbol_element_mask;
 
-/* The timestamp of the last input event we received from the X server.
-   X Windows wants this for selection ownership.  */
-extern Time last_event_timestamp;
-
 extern int quit_char;
 
 extern unsigned int timers_run;
@@ -507,7 +500,7 @@ extern unsigned int timers_run;
 extern bool menu_separator_name_p (const char *);
 extern bool parse_menu_item (Lisp_Object, int);
 
-extern void init_kboard (KBOARD *);
+extern KBOARD *allocate_kboard (Lisp_Object);
 extern void delete_kboard (KBOARD *);
 extern void not_single_kboard_state (KBOARD *);
 extern void push_kboard (struct kboard *);
@@ -524,7 +517,9 @@ extern bool input_polling_used (void);
 extern void clear_input_pending (void);
 extern bool requeued_events_pending_p (void);
 extern void bind_polling_period (int);
+#ifdef WINDOWSNT
 extern int make_ctrl_char (int) ATTRIBUTE_CONST;
+#endif
 extern void stuff_buffered_input (Lisp_Object);
 extern void clear_waiting_for_input (void);
 extern void swallow_events (bool);

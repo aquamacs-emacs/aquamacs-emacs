@@ -1,7 +1,6 @@
 ;;; desktop.el --- save partial status of Emacs when killed -*- lexical-binding: t -*-
 
-;; Copyright (C) 1993-1995, 1997, 2000-2013 Free Software Foundation,
-;; Inc.
+;; Copyright (C) 1993-1995, 1997, 2000-2013 Free Software Foundation, Inc.
 
 ;; Author: Morten Welinder <terra@diku.dk>
 ;; Keywords: convenience
@@ -124,7 +123,7 @@
 ;;            f89-kam@nada.kth.se (Klas Mellbourn)   for a mh-e tip.
 ;;            kifer@sbkifer.cs.sunysb.edu (M. Kifer) for a bug hunt.
 ;;            treese@lcs.mit.edu (Win Treese)        for ange-ftp tips.
-;;            pot@cnuce.cnr.it (Francesco Potorti`)  for misc. tips.
+;;            pot@cnuce.cnr.it (Francesco Potortì)  for misc. tips.
 ;; ---------------------------------------------------------------------------
 ;; TODO:
 ;;
@@ -922,7 +921,13 @@ Parameter DIRNAME specifies where to save the desktop file.
 Optional parameter RELEASE says whether we're done with this desktop.
 If AUTO-SAVE is non-nil, compare the saved contents to the one last saved,
 and don't save the buffer if they are the same."
-  (interactive "DDirectory to save desktop file in: ")
+  (interactive (list
+                ;; Or should we just use (car desktop-path)?
+                (let ((default (if (member "." desktop-path)
+                                   default-directory
+                                 user-emacs-directory)))
+                  (read-directory-name "Directory to save desktop file in: "
+                                       default default t))))
   (setq desktop-dirname (file-name-as-directory (expand-file-name dirname)))
   (save-excursion
     (let ((eager desktop-restore-eager)
@@ -1462,3 +1467,7 @@ If there are no buffers left to create, kill the timer."
 (provide 'desktop)
 
 ;;; desktop.el ends here
+
+;; Local Variables:
+;; coding: utf-8
+;; End:

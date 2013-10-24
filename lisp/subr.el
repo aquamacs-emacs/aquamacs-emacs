@@ -2245,7 +2245,7 @@ floating point support."
    (noninteractive
     (sleep-for seconds)
     t)
-   ((input-pending-p)
+   ((input-pending-p t)
     nil)
    ((<= seconds 0)
     (or nodisp (redisplay)))

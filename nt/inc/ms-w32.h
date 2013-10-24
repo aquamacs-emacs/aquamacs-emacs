@@ -24,6 +24,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define WINDOWSNT
 #endif
 
+#include <mingw_time.h>
+
 /* #undef const */
 
 /* Number of chars of output in the buffer of a stdio stream. */

@@ -910,6 +910,7 @@ PRIPTR_PREFIX
 PRI_MACROS_BROKEN
 INT64_MAX_EQ_LONG_MAX
 INT32_MAX_LT_INTMAX_MAX
+REPLACE_STRTOUMAX
 REPLACE_STRTOIMAX
 HAVE_DECL_STRTOUMAX
 HAVE_DECL_STRTOIMAX
@@ -4033,6 +4034,15 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 
 
+for var in "`pwd`" "`cd \"$srcdir\"; pwd`" "$prefix" "$exec_prefix" \
+    "$datarootdir" "$bindir" "$datadir" "$sharedstatedir" "$libexecdir"; do
+
+    case "$var" in
+    *[^\ -~]*) as_fn_error "Emacs cannot be built or installed in a directory whose name contains non-ASCII characters: $var" "$LINENO" 5 ;;
+  esac
+
+done
+
 lispdir='${datadir}/emacs/${version}/lisp'
 leimdir='${datadir}/emacs/${version}/leim'
 standardlisppath='${lispdir}:${leimdir}'
@@ -4603,30 +4613,6 @@ if test "${enable_gtk_deprecation_warnings+set}" = set; then :
 fi
 
 
-#### Make srcdir absolute, if it isn't already.  It's important to
-#### avoid running the file name through pwd unnecessarily, since pwd can
-#### give you automounter prefixes, which can go away.  We do all this
-#### so Emacs can find its files when run uninstalled.
-## Make sure CDPATH doesn't affect cd (in case PWD is relative).
-unset CDPATH
-case "${srcdir}" in
-  [\\/]* | ?:[\\/]*) ;;
-  . )
-    ## We may be able to use the $PWD environment variable to make this
-    ## absolute.  But sometimes PWD is inaccurate.
-    ## Note: we used to use $PWD at the end instead of `pwd`,
-    ## but that tested only for a well-formed and valid PWD,
-    ## it did not object when PWD was well-formed and valid but just wrong.
-    if test ".$PWD" != "." && test ".`(cd "$PWD" ; sh -c pwd)`" = ".`pwd`"  ;
-    then
-      srcdir="$PWD"
-    else
-      srcdir=`(cd "$srcdir"; pwd)`
-    fi
-  ;;
-  *  ) srcdir=`(cd "$srcdir"; pwd)` ;;
-esac
-
 #### When building with MinGW inside the MSYS tree, 'pwd' produces
 #### directories relative to the root of the MSYS tree,
 #### e.g. '/home/user/foo' instead of '/d/MSYS/home/user/foo'.  When
@@ -4636,7 +4622,7 @@ esac
 #### substitution, it cannot find the data directory.  "pwd -W"
 #### produces Windows-style 'd:/foo/bar' absolute directory names, so
 #### we use it here to countermand that lossage.
-test "$MSYSTEM" = "MINGW32" && srcdir=`(cd "$srcdir"; pwd -W | sed -e 's,^\([A-Za-z]\):,/\1,')`
+test "$MSYSTEM" = "MINGW32" && abs_srcdir=`(cd "$abs_srcdir"; pwd -W | sed -e 's,^\([A-Za-z]\):,/\1,')`
 
 ### Canonicalize the configuration name.
 
@@ -9003,10 +8989,10 @@ fi
     if test "x$GCC" = "xyes"; then
       C_SWITCH_MACHINE="-fno-common"
     else
-      as_fn_error "What gives?  Fix me if DEC Unix supports ELF now." "$LINENO" 5
+      as_fn_error "Non-GCC compilers are not supported." "$LINENO" 5
     fi
   else
-    UNEXEC_OBJ=unexalpha.o
+                        as_fn_error "Non-ELF systems are not supported since Emacs 24.1." "$LINENO" 5
   fi
   ;;
 esac
@@ -12253,7 +12239,65 @@ fi
 
 
 HAVE_GNUTLS=no
+HAVE_GNUTLS3=no
 if test "${with_gnutls}" = "yes" ; then
+
+  succeeded=no
+
+  if test "$PKG_CONFIG" = "no" ; then
+     HAVE_GNUTLS3=no
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if "$PKG_CONFIG" --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gnutls >= 3.0.0" >&5
+$as_echo_n "checking for gnutls >= 3.0.0... " >&6; }
+
+        if "$PKG_CONFIG" --exists "gnutls >= 3.0.0" 2>&5 &&
+	   LIBGNUTLS_CFLAGS=`"$PKG_CONFIG" --cflags "gnutls >= 3.0.0" 2>&5` &&
+	   LIBGNUTLS_LIBS=`"$PKG_CONFIG" --libs "gnutls >= 3.0.0" 2>&5`; then
+	    edit_cflags="
+	      s,///*,/,g
+	      s/^/ /
+	      s/ -I/ $isystem/g
+	      s/^ //
+	    "
+	    LIBGNUTLS_CFLAGS=`$as_echo "$LIBGNUTLS_CFLAGS" | sed -e "$edit_cflags"`
+	    LIBGNUTLS_LIBS=`$as_echo "$LIBGNUTLS_LIBS" | sed -e 's,///*,/,g'`
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes CFLAGS='$LIBGNUTLS_CFLAGS' LIBS='$LIBGNUTLS_LIBS'" >&5
+$as_echo "yes CFLAGS='$LIBGNUTLS_CFLAGS' LIBS='$LIBGNUTLS_LIBS'" >&6; }
+            succeeded=yes
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            LIBGNUTLS_CFLAGS=""
+            LIBGNUTLS_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+	    ## do set a variable so people can do so.  Do it in a subshell
+	    ## to capture any diagnostics in invoking pkg-config.
+	    LIBGNUTLS_PKG_ERRORS=`("$PKG_CONFIG" --print-errors "gnutls >= 3.0.0") 2>&1`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     HAVE_GNUTLS3=yes
+  else
+     HAVE_GNUTLS3=no
+  fi
+
+  if test "${HAVE_GNUTLS3}" = "yes"; then
+
+$as_echo "#define HAVE_GNUTLS3 1" >>confdefs.h
+
+    HAVE_GNUTLS="yes"
+  else
 
   succeeded=no
 
@@ -12305,6 +12349,7 @@ $as_echo "no" >&6; }
      HAVE_GNUTLS=no
   fi
 
+  fi
   if test "${HAVE_GNUTLS}" = "yes"; then
 
 $as_echo "#define HAVE_GNUTLS 1" >>confdefs.h
@@ -14103,8 +14148,47 @@ elif test "${HAVE_X11}" = "yes" && test "${with_gif}" != "no" \
   ac_fn_c_check_header_mongrel "$LINENO" "gif_lib.h" "ac_cv_header_gif_lib_h" "$ac_includes_default"
 if test "x$ac_cv_header_gif_lib_h" = x""yes; then :
   # EGifPutExtensionLast only exists from version libungif-4.1.0b1.
-# Earlier versions can crash Emacs.
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for EGifPutExtensionLast in -lgif" >&5
+# Earlier versions can crash Emacs, but version 5.0 removes EGifPutExtensionLast.
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GifMakeMapObject in -lgif" >&5
+$as_echo_n "checking for GifMakeMapObject in -lgif... " >&6; }
+if test "${ac_cv_lib_gif_GifMakeMapObject+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lgif  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char GifMakeMapObject ();
+int
+main ()
+{
+return GifMakeMapObject ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_gif_GifMakeMapObject=yes
+else
+  ac_cv_lib_gif_GifMakeMapObject=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_gif_GifMakeMapObject" >&5
+$as_echo "$ac_cv_lib_gif_GifMakeMapObject" >&6; }
+if test "x$ac_cv_lib_gif_GifMakeMapObject" = x""yes; then :
+  HAVE_GIF=yes
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for EGifPutExtensionLast in -lgif" >&5
 $as_echo_n "checking for EGifPutExtensionLast in -lgif... " >&6; }
 if test "${ac_cv_lib_gif_EGifPutExtensionLast+set}" = set; then :
   $as_echo_n "(cached) " >&6
@@ -14144,6 +14228,8 @@ if test "x$ac_cv_lib_gif_EGifPutExtensionLast" = x""yes; then :
   HAVE_GIF=yes
 else
   HAVE_GIF=maybe
+fi
+
 fi
 
 fi
@@ -20869,6 +20955,7 @@ fi
   HAVE_DECL_STRTOIMAX=1;
   HAVE_DECL_STRTOUMAX=1;
   REPLACE_STRTOIMAX=0;
+  REPLACE_STRTOUMAX=0;
   INT32_MAX_LT_INTMAX_MAX=1;
   INT64_MAX_EQ_LONG_MAX='defined _LP64';
   PRI_MACROS_BROKEN=0;
@@ -25490,10 +25577,8 @@ $as_echo_n "checking for working acl_get_file... " >&6; }
 if test "${gl_cv_func_working_acl_get_file+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  if test "$cross_compiling" = yes; then :
-  gl_cv_func_working_acl_get_file=cross-compiling
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  gl_cv_func_working_acl_get_file=no
+     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/types.h>
            #include <sys/acl.h>
@@ -25510,20 +25595,19 @@ if (!acl_get_file (".", ACL_TYPE_ACCESS) && errno == ENOENT)
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_run "$LINENO"; then :
-  gl_cv_func_working_acl_get_file=yes
-else
-  gl_cv_func_working_acl_get_file=no
+if ac_fn_c_try_link "$LINENO"; then :
+  if test $cross_compiling = yes; then
+          gl_cv_func_working_acl_get_file="guessing yes"
+        elif ./conftest$ac_exeext; then
+          gl_cv_func_working_acl_get_file=yes
+        fi
 fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_working_acl_get_file" >&5
 $as_echo "$gl_cv_func_working_acl_get_file" >&6; }
-
-  if test $gl_cv_func_working_acl_get_file = yes; then :
+  if test "$gl_cv_func_working_acl_get_file" != no; then :
   use_acl=1
 fi
 
@@ -26935,7 +27019,7 @@ $as_echo "#define my_strftime nstrftime" >>confdefs.h
     HAVE_DECL_STRTOIMAX=0
   fi
 
-  if test $ac_cv_func_strtoimax = yes; then
+  if test "$ac_cv_func_strtoimax" = yes; then
     HAVE_STRTOIMAX=1
              { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether strtoimax works" >&5
 $as_echo_n "checking whether strtoimax works... " >&6; }
@@ -27008,10 +27092,14 @@ $as_echo "$gl_cv_func_strtoimax" >&6; }
       *no) REPLACE_STRTOIMAX=1 ;;
     esac
   else
+    if test "$ac_cv_have_decl_strtoimax" = yes; then
+      # HP-UX 11.11 has "#define strtoimax(...) ..." but no function.
+      REPLACE_STRTOIMAX=1
+    fi
     HAVE_STRTOIMAX=0
   fi
 
-  if test $HAVE_STRTOIMAX = 0 || test $REPLACE_STRTOIMAX = 1; then
+  if test $HAVE_DECL_STRTOIMAX = 0 || test $REPLACE_STRTOIMAX = 1; then
 
 
 
@@ -27052,11 +27140,16 @@ _ACEOF
 
 
 
-  if test "$ac_cv_have_decl_strtoumax" != yes; then
+  if test "$ac_cv_have_decl_strtoumax" = yes; then
+    if test "$ac_cv_func_strtoumax" != yes; then
+      # HP-UX 11.11 has "#define strtoimax(...) ..." but no function.
+      REPLACE_STRTOUMAX=1
+    fi
+  else
     HAVE_DECL_STRTOUMAX=0
   fi
 
-  if test $ac_cv_func_strtoumax = no; then
+  if test $HAVE_DECL_STRTOUMAX = 0 || test $REPLACE_STRTOUMAX = 1; then
 
 
 
@@ -29026,10 +29119,10 @@ done
   if test $HAVE_READLINKAT = 0; then
     func_gl_gnulib_m4code_03e0aaad4cb89ca757653bd367a6ccb7
   fi
-  if { test $HAVE_STRTOIMAX = 0 || test $REPLACE_STRTOIMAX = 1; } && test $ac_cv_type_long_long_int = yes; then
+  if { test $HAVE_DECL_STRTOIMAX = 0 || test $REPLACE_STRTOIMAX = 1; } && test $ac_cv_type_long_long_int = yes; then
     func_gl_gnulib_m4code_strtoll
   fi
-  if test $ac_cv_func_strtoumax = no && test $ac_cv_type_unsigned_long_long_int = yes; then
+  if { test $HAVE_DECL_STRTOUMAX = 0 || test $REPLACE_STRTOUMAX = 1; } && test $ac_cv_type_unsigned_long_long_int = yes; then
     func_gl_gnulib_m4code_strtoull
   fi
 
@@ -29205,7 +29298,7 @@ CFLAGS=$SAVE_CFLAGS
 LIBS=$SAVE_LIBS
 
 if test "${opsys}" = "mingw32"; then
-  CPPFLAGS="$CPPFLAGS -DUSE_CRT_DLL=1 -I $srcdir/nt/inc"
+  CPPFLAGS="$CPPFLAGS -DUSE_CRT_DLL=1 -I \${abs_top_srcdir}/nt/inc"
   # Remove unneeded switches from the value of CC that goes to Makefiles
   CC=`echo $CC | sed -e "s,$GCC_TEST_OPTIONS,,"`
 fi
@@ -31056,7 +31149,7 @@ fi
  ;;
     "src/.gdbinit":C)
 if test ! -f src/.gdbinit && test -f "$srcdir/src/.gdbinit"; then
-  echo "source $srcdir/src/.gdbinit" > src/.gdbinit
+  echo "source $ac_abs_top_srcdir/src/.gdbinit" > src/.gdbinit
 fi
  ;;
 

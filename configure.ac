@@ -73,6 +73,21 @@ dnl Support for --program-prefix, --program-suffix and
 dnl --program-transform-name options
 AC_ARG_PROGRAM
 
+dnl http://debbugs.gnu.org/15260
+dnl I think we have to check, eg, both exec_prefix and bindir,
+dnl because the latter by default is not yet expanded, but the user
+dnl may have specified a value for it via --bindir.
+dnl Note that abs_srcdir and abs_builddir are not yet defined. :(
+for var in "`pwd`" "`cd \"$srcdir\"; pwd`" "$prefix" "$exec_prefix" \
+    "$datarootdir" "$bindir" "$datadir" "$sharedstatedir" "$libexecdir"; do
+
+  dnl configure sets LC_ALL=C early on, so this range should work.
+  case "$var" in
+    *[[^\ -~]]*) AC_MSG_ERROR([Emacs cannot be built or installed in a directory whose name contains non-ASCII characters: $var]) ;;
+  esac
+
+done
+
 dnl It is important that variables on the RHS not be expanded here,
 dnl hence the single quotes.  This is per the GNU coding standards, see
 dnl (autoconf) Installation Directory Variables
@@ -419,30 +434,6 @@ AC_ARG_ENABLE(gtk-deprecation-warnings,
 		[Show Gtk+/Gdk deprecation warnings for Gtk+ >= 3.0])],
 [ac_enable_gtk_deprecation_warnings="${enableval}"],[])
 
-#### Make srcdir absolute, if it isn't already.  It's important to
-#### avoid running the file name through pwd unnecessarily, since pwd can
-#### give you automounter prefixes, which can go away.  We do all this
-#### so Emacs can find its files when run uninstalled.
-## Make sure CDPATH doesn't affect cd (in case PWD is relative).
-unset CDPATH
-case "${srcdir}" in
-  [[\\/]]* | ?:[[\\/]]*) ;;
-  . )
-    ## We may be able to use the $PWD environment variable to make this
-    ## absolute.  But sometimes PWD is inaccurate.
-    ## Note: we used to use $PWD at the end instead of `pwd`,
-    ## but that tested only for a well-formed and valid PWD,
-    ## it did not object when PWD was well-formed and valid but just wrong.
-    if test ".$PWD" != "." && test ".`(cd "$PWD" ; sh -c pwd)`" = ".`pwd`"  ;
-    then
-      srcdir="$PWD"
-    else
-      srcdir=`(cd "$srcdir"; pwd)`
-    fi
-  ;;
-  *  ) srcdir=`(cd "$srcdir"; pwd)` ;;
-esac
-
 #### When building with MinGW inside the MSYS tree, 'pwd' produces
 #### directories relative to the root of the MSYS tree,
 #### e.g. '/home/user/foo' instead of '/d/MSYS/home/user/foo'.  When
@@ -452,7 +443,7 @@ esac
 #### substitution, it cannot find the data directory.  "pwd -W"
 #### produces Windows-style 'd:/foo/bar' absolute directory names, so
 #### we use it here to countermand that lossage.
-test "$MSYSTEM" = "MINGW32" && srcdir=`(cd "$srcdir"; pwd -W | sed -e 's,^\([[A-Za-z]]\):,/\1,')`
+test "$MSYSTEM" = "MINGW32" && abs_srcdir=`(cd "$abs_srcdir"; pwd -W | sed -e 's,^\([[A-Za-z]]\):,/\1,')`
 
 ### Canonicalize the configuration name.
 
@@ -1175,10 +1166,13 @@ case $canonical in
     if test "x$GCC" = "xyes"; then
       C_SWITCH_MACHINE="-fno-common"
     else
-      AC_MSG_ERROR([What gives?  Fix me if DEC Unix supports ELF now.])
+      AC_MSG_ERROR([Non-GCC compilers are not supported.])
     fi
   else
-    UNEXEC_OBJ=unexalpha.o
+      dnl This was the unexalpha.c case.  Removed in 24.1, 2010-07-24,
+      dnl albeit under the mistaken assumption that said file
+      dnl was no longer used.
+      AC_MSG_ERROR([Non-ELF systems are not supported since Emacs 24.1.])
   fi
   ;;
 esac
@@ -2422,8 +2416,15 @@ fi
 AC_SUBST(LIBSELINUX_LIBS)
 
 HAVE_GNUTLS=no
+HAVE_GNUTLS3=no
 if test "${with_gnutls}" = "yes" ; then
-  PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 2.6.6], HAVE_GNUTLS=yes, HAVE_GNUTLS=no)
+  PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 3.0.0], HAVE_GNUTLS3=yes, HAVE_GNUTLS3=no)
+  if test "${HAVE_GNUTLS3}" = "yes"; then
+    AC_DEFINE(HAVE_GNUTLS3, 1, [Define if using GnuTLS v3.])
+    HAVE_GNUTLS="yes"
+  else
+    PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 2.6.6], HAVE_GNUTLS=yes, HAVE_GNUTLS=no)
+  fi
   if test "${HAVE_GNUTLS}" = "yes"; then
     AC_DEFINE(HAVE_GNUTLS, 1, [Define if using GnuTLS.])
   fi
@@ -3106,8 +3107,9 @@ elif test "${HAVE_X11}" = "yes" && test "${with_gif}" != "no" \
         || test "${HAVE_W32}" = "yes"; then
   AC_CHECK_HEADER(gif_lib.h,
 # EGifPutExtensionLast only exists from version libungif-4.1.0b1.
-# Earlier versions can crash Emacs.
-    [AC_CHECK_LIB(gif, EGifPutExtensionLast, HAVE_GIF=yes, HAVE_GIF=maybe)])
+# Earlier versions can crash Emacs, but version 5.0 removes EGifPutExtensionLast.
+    [AC_CHECK_LIB(gif, GifMakeMapObject, HAVE_GIF=yes,
+        [AC_CHECK_LIB(gif, EGifPutExtensionLast, HAVE_GIF=yes, HAVE_GIF=maybe)])])
 
   if test "$HAVE_GIF" = yes; then
     LIBGIF=-lgif
@@ -4736,7 +4738,7 @@ CFLAGS=$SAVE_CFLAGS
 LIBS=$SAVE_LIBS
 
 if test "${opsys}" = "mingw32"; then
-  CPPFLAGS="$CPPFLAGS -DUSE_CRT_DLL=1 -I $srcdir/nt/inc"
+  CPPFLAGS="$CPPFLAGS -DUSE_CRT_DLL=1 -I \${abs_top_srcdir}/nt/inc"
   # Remove unneeded switches from the value of CC that goes to Makefiles
   CC=`echo $CC | sed -e "s,$GCC_TEST_OPTIONS,,"`
 fi
@@ -5041,9 +5043,12 @@ else
 fi
 ], [GCC="$GCC" CPPFLAGS="$CPPFLAGS" opsys="$opsys"])
 
+dnl NB we have to cheat and use the ac_... version because abs_top_srcdir
+dnl is not yet set, sigh.  Or we could use ../$srcdir/src/.gdbinit,
+dnl or a symlink?
 AC_CONFIG_COMMANDS([src/.gdbinit], [
 if test ! -f src/.gdbinit && test -f "$srcdir/src/.gdbinit"; then
-  echo "source $srcdir/src/.gdbinit" > src/.gdbinit
+  echo "source $ac_abs_top_srcdir/src/.gdbinit" > src/.gdbinit
 fi
 ])
 

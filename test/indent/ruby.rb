@@ -40,6 +40,15 @@ foo = {                         # ruby-deep-indent-disabled
   a: b
 }
 
+foo = { a: b,
+        a1: b1
+      }
+
+foo({
+     a: b,
+     c: d
+   })
+
 foo = [                         # ruby-deep-indent-disabled
   1
 ]
@@ -151,11 +160,71 @@ z = {
 foo if
   bar
 
-# Examples below still fail with `ruby-use-smie' on:
+if foo?
+  bar
+end
+
+method arg1,                   # bug#15594
+       method2 arg2,
+               arg3
+
+method? arg1,
+        arg2
+
+method! arg1,
+        arg2
+
+it "is a method call with block" do |asd|
+  foo
+end
+
+it("is too!") {
+  bar
+}
+
+and_this_one(has) { |block, parameters|
+  tee
+}
+
+if foo &&
+   bar
+end
 
 foo +
   bar
 
+foo_bar_tee(1, 2, 3)
+  .qux
+  .bar
+
+foo do
+  bar
+    .tee
+end
+
+def bar
+  foo
+    .baz
+end
+
+# Examples below still fail with `ruby-use-smie' on:
+
 foo = [1, 2, 3].map do |i|
   i + 1
+end
+
+method !arg1,
+       arg2
+
+method [],
+       arg2
+
+method :foo,
+       :bar
+
+method (a + b),
+       c
+
+bar.foo do # "." is parent to "do"; it shouldn't be.
+  bar
 end

@@ -294,6 +294,7 @@ With a prefix or a visible region, use the region as INITIAL."
     (if remember-in-new-frame
         (set-window-dedicated-p
          (get-buffer-window (current-buffer) (selected-frame)) t))
+    (setq buffer-offer-save t)
     (remember-mode)
     (when (= (point-max) (point-min))
       (when initial (insert initial))
@@ -534,7 +535,7 @@ If this is nil, then `diary-file' will be used instead."
     (goto-char (point-min))
     (let (list)
       (while (re-search-forward "^DIARY:\\s-*\\(.+\\)" nil t)
-        (add-to-list 'list (remember-diary-convert-entry (match-string 1))))
+        (push (remember-diary-convert-entry (match-string 1)) list))
       (when list
         (diary-make-entry (mapconcat 'identity list "\n")
                           nil remember-diary-file))

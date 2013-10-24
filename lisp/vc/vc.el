@@ -1739,13 +1739,12 @@ Return t if the buffer had changes, nil otherwise."
      ;; if the file is not up-to-date, use working revision as older revision
      ((not (vc-up-to-date-p first))
       (setq rev1-default (vc-working-revision first)))
-     ;; if the file is not locked, use last and previous revisions as defaults
+     ;; if the file is not locked, use last revision and current source as defaults
      (t
       (setq rev1-default (ignore-errors ;If `previous-revision' doesn't work.
                            (vc-call-backend backend 'previous-revision first
                                             (vc-working-revision first))))
-      (when (string= rev1-default "") (setq rev1-default nil))
-      (setq rev2-default (vc-working-revision first))))
+      (when (string= rev1-default "") (setq rev1-default nil))))
     ;; construct argument list
     (let* ((rev1-prompt (if rev1-default
                             (concat "Older revision (default "
@@ -2331,10 +2330,10 @@ When called interactively with a prefix argument, prompt for LIMIT."
 	(setq rootdir (vc-call-backend backend 'root default-directory))
       (setq rootdir (read-directory-name "Directory for VC root-log: "))
       (setq backend (vc-responsible-backend rootdir))
-      (if backend
-	  (setq default-directory rootdir)
-	(error "Directory is not version controlled")))
-    (setq working-revision (vc-working-revision rootdir))
+      (unless backend
+        (error "Directory is not version controlled")))
+    (setq working-revision (vc-working-revision rootdir)
+          default-directory rootdir)
     (vc-print-log-internal backend (list rootdir) working-revision nil limit)))
 
 ;;;###autoload

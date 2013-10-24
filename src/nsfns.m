@@ -204,20 +204,13 @@ ns_get_screen (Lisp_Object screen)
 struct ns_display_info *
 ns_display_info_for_name (Lisp_Object name)
 {
-  Lisp_Object names;
   struct ns_display_info *dpyinfo;
 
   CHECK_STRING (name);
 
-  for (dpyinfo = x_display_list, names = ns_display_name_list;
-       dpyinfo;
-       dpyinfo = dpyinfo->next, names = XCDR (names))
-    {
-      Lisp_Object tem;
-      tem = Fstring_equal (XCAR (XCAR (names)), name);
-      if (!NILP (tem))
-        return dpyinfo;
-    }
+  for (dpyinfo = x_display_list; dpyinfo; dpyinfo = dpyinfo->next)
+    if (!NILP (Fstring_equal (XCAR (dpyinfo->name_list_element), name)))
+      return dpyinfo;
 
   error ("Emacs for OpenStep does not yet support multi-display.");
 
@@ -2509,11 +2502,11 @@ DEFUN ("x-display-list", Fx_display_list, Sx_display_list, 0, 0, 0,
        doc: /* Return the list of display names that Emacs has connections to.  */)
      (void)
 {
-  Lisp_Object tail, result;
+  Lisp_Object result = Qnil;
+  struct ns_display_info *ndi;
 
-  result = Qnil;
-  for (tail = ns_display_name_list; CONSP (tail); tail = XCDR (tail))
-    result = Fcons (XCAR (XCAR (tail)), result);
+  for (ndi = x_display_list; ndi; ndi = ndi->next)
+    result = Fcons (XCAR (ndi->name_list_element), result);
 
   return result;
 }
@@ -2714,16 +2707,27 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
 /* TODO: If GNUstep ever implements precomposedStringWithCanonicalMapping,
          remove this. */
   NSString *utfStr;
-  Lisp_Object ret;
+  Lisp_Object ret = Qnil;
+  NSAutoreleasePool *pool;
 
   CHECK_STRING (str);
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
- utfStr = [NSString stringWithUTF8String: SSDATA (str)];
+  pool = [[NSAutoreleasePool alloc] init];
+  utfStr = [NSString stringWithUTF8String: SSDATA (str)];
 #ifdef NS_IMPL_COCOA
-  utfStr = [utfStr precomposedStringWithCanonicalMapping];
+  if (utfStr)
+    utfStr = [utfStr precomposedStringWithCanonicalMapping];
 #endif
-  ret = build_string ([utfStr UTF8String]);
+  if (utfStr)
+    {
+      const char *cstr = [utfStr UTF8String];
+      if (cstr)
+        ret = build_string (cstr);
+    }
+
   [pool release];
+  if (NILP (ret))
+    error ("Invalid UTF-8");
+
   return ret;
 }
 

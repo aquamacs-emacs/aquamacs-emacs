@@ -31,8 +31,27 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <limits.h>
 
 #include <intprops.h>
+#include <verify.h>
 
 INLINE_HEADER_BEGIN
+
+/* Define a TYPE constant ID as an externally visible name.  Use like this:
+
+      DEFINE_GDB_SYMBOL_BEGIN (TYPE, ID)
+      #define ID something
+      DEFINE_GDB_SYMBOL_END (ID)
+
+   This hack is for the benefit of compilers that do not make macro
+   definitions visible to the debugger.  It's used for symbols that
+   .gdbinit needs, symbols whose values may not fit in 'int' (where an
+   enum would suffice).  */
+#ifdef MAIN_PROGRAM
+# define DEFINE_GDB_SYMBOL_BEGIN(type, id) type const id EXTERNALLY_VISIBLE
+# define DEFINE_GDB_SYMBOL_END(id) = id;
+#else
+# define DEFINE_GDB_SYMBOL_BEGIN(type, id)
+# define DEFINE_GDB_SYMBOL_END(val)
+#endif
 
 /* The ubiquitous max and min macros.  */
 #undef min
@@ -113,26 +132,46 @@ typedef EMACS_UINT uprintmax_t;
 
 /* Extra internal type checking?  */
 
-/* Define an Emacs version of 'assert (COND)'.  COND should be free of
-   side effects; it may be evaluated zero or more times.  */
+/* Define Emacs versions of <assert.h>'s 'assert (COND)' and <verify.h>'s
+   'assume (COND)'.  COND should be free of side effects, as it may or
+   may not be evaluated.
+
+   'eassert (COND)' checks COND at runtime if ENABLE_CHECKING is
+   defined and suppress_checking is false, and does nothing otherwise.
+   Emacs dies if COND is checked and is false.  The suppress_checking
+   variable is initialized to 0 in alloc.c.  Set it to 1 using a
+   debugger to temporarily disable aborting on detected internal
+   inconsistencies or error conditions.
+
+   In some cases, a good compiler may be able to optimize away the
+   eassert macro even if ENABLE_CHECKING is true, e.g., if XSTRING (x)
+   uses eassert to test STRINGP (x), but a particular use of XSTRING
+   is invoked only after testing that STRINGP (x) is true, making the
+   test redundant.
+
+   eassume is like eassert except that it also causes the compiler to
+   assume that COND is true afterwards, regardless of whether runtime
+   checking is enabled.  This can improve performance in some cases,
+   though it can degrade performance in others.  It's often suboptimal
+   for COND to call external functions or access volatile storage.  */
+
 #ifndef ENABLE_CHECKING
 # define eassert(cond) ((void) (0 && (cond))) /* Check that COND compiles.  */
+# define eassume(cond) assume (cond)
 #else /* ENABLE_CHECKING */
 
 extern _Noreturn void die (const char *, const char *, int);
 
-/* The suppress_checking variable is initialized to 0 in alloc.c.  Set
-   it to 1 using a debugger to temporarily disable aborting on
-   detected internal inconsistencies or error conditions.
-
-   In some cases, a good compiler may be able to optimize away the
-   eassert macro altogether, e.g., if XSTRING (x) uses eassert to test
-   STRINGP (x), but a particular use of XSTRING is invoked only after
-   testing that STRINGP (x) is true, making the test redundant.  */
 extern bool suppress_checking EXTERNALLY_VISIBLE;
 
 # define eassert(cond)						\
    (suppress_checking || (cond) 				\
+    ? (void) 0							\
+    : die (# cond, __FILE__, __LINE__))
+# define eassume(cond)						\
+   (suppress_checking						\
+    ? assume (cond)						\
+    : (cond)							\
     ? (void) 0							\
     : die (# cond, __FILE__, __LINE__))
 #endif /* ENABLE_CHECKING */
@@ -512,15 +551,15 @@ LISP_MACRO_DEFUN (XIL, Lisp_Object, (EMACS_INT i), (i))
 
 /* In the size word of a vector, this bit means the vector has been marked.  */
 
-static ptrdiff_t const ARRAY_MARK_FLAG
+DEFINE_GDB_SYMBOL_BEGIN (ptrdiff_t, ARRAY_MARK_FLAG)
 #define ARRAY_MARK_FLAG PTRDIFF_MIN
-      = ARRAY_MARK_FLAG;
+DEFINE_GDB_SYMBOL_END (ARRAY_MARK_FLAG)
 
 /* In the size word of a struct Lisp_Vector, this bit means it's really
    some other vector-like object.  */
-static ptrdiff_t const PSEUDOVECTOR_FLAG
+DEFINE_GDB_SYMBOL_BEGIN (ptrdiff_t, PSEUDOVECTOR_FLAG)
 #define PSEUDOVECTOR_FLAG (PTRDIFF_MAX - PTRDIFF_MAX / 2)
-      = PSEUDOVECTOR_FLAG;
+DEFINE_GDB_SYMBOL_END (PSEUDOVECTOR_FLAG)
 
 /* In a pseudovector, the size field actually contains a word with one
    PSEUDOVECTOR_FLAG bit set, and one of the following values extracted
@@ -582,12 +621,13 @@ enum More_Lisp_Bits
   };
 
 /* These functions extract various sorts of values from a Lisp_Object.
- For example, if tem is a Lisp_Object whose type is Lisp_Cons,
- XCONS (tem) is the struct Lisp_Cons * pointing to the memory for that cons.  */
+   For example, if tem is a Lisp_Object whose type is Lisp_Cons,
+   XCONS (tem) is the struct Lisp_Cons * pointing to the memory for
+   that cons.  */
 
-static EMACS_INT const VALMASK
+DEFINE_GDB_SYMBOL_BEGIN (EMACS_INT, VALMASK)
 #define VALMASK (USE_LSB_TAG ? - (1 << GCTYPEBITS) : VAL_MAX)
-      = VALMASK;
+DEFINE_GDB_SYMBOL_END (VALMASK)
 
 /* Largest and smallest representable fixnum values.  These are the C
    values.  They are macros for use in static initializers.  */
@@ -1162,6 +1202,14 @@ struct Lisp_Bool_Vector
     /* This contains the actual bits, packed into bytes.  */
     unsigned char data[FLEXIBLE_ARRAY_MEMBER];
   };
+
+INLINE EMACS_INT
+bool_vector_size (Lisp_Object a)
+{
+  EMACS_INT size = XBOOL_VECTOR (a)->size;
+  eassume (0 <= size);
+  return size;
+}
 
 /* Some handy constants for calculating sizes
    and offsets, mostly of vectorlike objects.   */
@@ -3825,7 +3873,6 @@ extern void init_fileio (void);
 extern void syms_of_fileio (void);
 extern Lisp_Object make_temp_name (Lisp_Object, bool);
 extern Lisp_Object Qdelete_file;
-extern bool check_existing (const char *);
 
 /* Defined in search.c.  */
 extern void shrink_regexp_cache (void);

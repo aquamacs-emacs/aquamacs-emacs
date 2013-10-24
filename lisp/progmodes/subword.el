@@ -257,24 +257,26 @@ Optional argument ARG is the same as for `upcase-word'."
 See the command `subword-mode' for a description of subwords.
 Optional argument ARG is the same as for `capitalize-word'."
   (interactive "p")
-  (let ((count (abs arg))
-	(start (point))
-	(advance (if (< arg 0) nil t)))
-    (dotimes (i count)
-      (if advance
-	  (progn (re-search-forward
-		  (concat "[[:alpha:]]")
-		  nil t)
-		 (goto-char (match-beginning 0)))
-	(subword-backward))
-      (let* ((p (point))
-	     (pp (1+ p))
-	     (np (subword-forward)))
-	(upcase-region p pp)
-	(downcase-region pp np)
-	(goto-char (if advance np p))))
-    (unless advance
-      (goto-char start))))
+  (condition-case nil
+      (let ((count (abs arg))
+            (start (point))
+            (advance (>= arg 0)))
+
+        (dotimes (i count)
+          (if advance
+              (progn
+                (re-search-forward "[[:alpha:]]")
+                (goto-char (match-beginning 0)))
+            (subword-backward))
+          (let* ((p (point))
+                 (pp (1+ p))
+                 (np (subword-forward)))
+            (upcase-region p pp)
+            (downcase-region pp np)
+            (goto-char (if advance np p))))
+        (unless advance
+          (goto-char start)))
+    (search-failed nil)))
 
 
 

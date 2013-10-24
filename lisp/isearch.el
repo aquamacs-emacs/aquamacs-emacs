@@ -2232,11 +2232,13 @@ a prefix argument command (when `isearch-allow-prefix' is non-nil),
 or it is a scrolling command (when `isearch-allow-scroll' is non-nil).
 Otherwise, exit Isearch (when `search-exit-option' is non-nil)
 before the command is executed globally with terminated Isearch."
-  (let* ((key (this-command-keys))
+  (let* ((key (this-single-command-keys))
 	 (main-event (aref key 0)))
     (cond
+     ;; Don't exit Isearch if we're in the middle of some
+     ;; set-temporary-overlay-map thingy like universal-argument--mode.
+     ((not (eq overriding-terminal-local-map isearch-mode-map)))
      ;; Don't exit Isearch for isearch key bindings.
-     ;; FIXME: remove prefix arg to lookup key without prefix.
      ((commandp (lookup-key isearch-mode-map key nil)))
      ;; Optionally edit the search string instead of exiting.
      ((eq search-exit-option 'edit)
@@ -2244,8 +2246,7 @@ before the command is executed globally with terminated Isearch."
      ;; Handle a scrolling function or prefix argument.
      ((or (and isearch-allow-prefix
 	       (memq this-command '(universal-argument
-				    negative-argument
-				    digit-argument)))
+				    digit-argument negative-argument)))
 	  (and isearch-allow-scroll
 	       (or (eq (get this-command 'isearch-scroll) t)
 		   (eq (get this-command 'scroll-command) t))))

@@ -43,25 +43,12 @@
 ;; Don't clobber an existing menu-bar keymap, to preserve any menu-bar key
 ;; definitions made in loaddefs.el.
 (or (lookup-key global-map [menu-bar])
-    (define-key global-map [menu-bar] (make-sparse-keymap "menu-bar")))
+    (bindings--define-key global-map [menu-bar] (make-sparse-keymap "menu-bar")))
 
-(if (not (featurep 'ns))
-    ;; Force Help item to come last, after the major mode's own items.
-    ;; The symbol used to be called `help', but that gets confused with the
-    ;; help key.
-    (setq menu-bar-final-items '(help-menu))
-  (if (eq system-type 'darwin)
-      (setq menu-bar-final-items '(buffer services help-menu))
-    (setq menu-bar-final-items '(buffer services hide-app quit))
-    ;; Add standard top-level items to GNUstep menu.
-    (bindings--define-key global-map [menu-bar quit]
-      '(menu-item "Quit" save-buffers-kill-emacs
-                   :help "Save unsaved buffers, then exit"))
-    (bindings--define-key global-map [menu-bar hide-app]
-      '(menu-item "Hide" ns-do-hide-emacs
-                  :help "Hide Emacs")))
-  (bindings--define-key global-map [menu-bar services] ; Set-up in ns-win.
-    (cons "Services" (make-sparse-keymap "Services"))))
+;; Force Help item to come last, after the major mode's own items.
+;; The symbol used to be called `help', but that gets confused with the
+;; help key.
+(setq menu-bar-final-items '(buffer services help-menu))
 
 ;; This definition is just to show what this looks like.
 ;; It gets modified in place when menu-bar-update-buffers is called.
@@ -93,7 +80,7 @@
     ;; Don't use delete-frame as event name because that is a special
     ;; event.
 
-    (define-key menu [separator-print]
+    (bindings--define-key menu [separator-print]
       menu-bar-separator)
 
     (bindings--define-key menu [recover-session]
@@ -143,17 +130,17 @@
       '(menu-item "Close" kill-this-buffer
                   :enable (kill-this-buffer-enabled-p)
                   :help ,(purecopy "Discard (kill) current buffer")))
-    (define-key menu [insert-file]
+    (bindings--define-key menu [insert-file]
       `(menu-item ,(purecopy "Insert File...") insert-file
 	      :enable (and (menu-bar-non-minibuffer-window-p)
 			   (menu-bar-menu-frame-live-and-visible-p))
                   :help ,(purecopy "Insert another file into current buffer")))
-    (define-key menu [dired]
+    (bindings--define-key menu [dired]
       `(menu-item ,(purecopy "Open Directory...") dired
 	      :enable (and (menu-bar-non-minibuffer-window-p)
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help ,(purecopy "Read a directory, to operate on its files")))
-    (define-key menu [open-file]
+    (bindings--define-key menu [open-file]
       `(menu-item ,(purecopy "Open File...") menu-find-file-existing
                   :enable (menu-bar-non-minibuffer-window-p)
                   :help "Read an existing file into an Emacs buffer"))
@@ -265,18 +252,18 @@
     (bindings--define-key menu [separator-tag-isearch]
       menu-bar-separator)
 
-    (define-key menu [tags-continue]
+    (bindings--define-key menu [tags-continue]
       `(menu-item ,(purecopy "Continue Tags Search") tags-loop-continue
                   :help ,(purecopy "Continue last tags search operation")))
-    (define-key menu [tags-srch]
+    (bindings--define-key menu [tags-srch]
       `(menu-item ,(purecopy "Search Tagged Files...") tags-search
                   :help ,(purecopy "Search for a regexp in all tagged files")))
-    (define-key menu [separator-tag-search]
+    (bindings--define-key menu [separator-tag-search]
       `(menu-item ,(purecopy "--")))
-    (define-key menu [grep]
+    (bindings--define-key menu [grep]
       `(menu-item ,(purecopy "Search Files (Grep)...") grep
 		  :help ,(purecopy "Search files for strings or regexps (with Grep)")))
-    (define-key menu [separator-grep-search]
+    (bindings--define-key menu [separator-grep-search]
       `(menu-item ,(purecopy "--")))
 
     (bindings--define-key menu [repeat-search-back]
@@ -346,7 +333,7 @@
 (defvar menu-bar-edit-menu
   (let ((menu (make-sparse-keymap "Edit")))
    
-    (define-key menu [props]
+    (bindings--define-key menu [props]
       `(menu-item ,(purecopy "Text Properties") facemenu-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
@@ -354,7 +341,7 @@
   (let ((menu (make-sparse-keymap "Go To")))
 
 
-    (define-key menu [set-tags-name]
+    (bindings--define-key menu [set-tags-name]
       `(menu-item ,(purecopy "Set Tags File Name...") visit-tags-table
                   :help ,(purecopy "Tell Tags commands which tag table file to use")))
 
@@ -403,7 +390,7 @@
 (defvar yank-menu (cons (purecopy "Select Yank") nil))
 (fset 'yank-menu (cons 'keymap yank-menu))
 
-    (define-key menu [props]
+    (bindings--define-key menu [props]
       `(menu-item ,(purecopy "Text Properties") facemenu-menu))
 
     ;; ns-win.el said: Add spell for platform consistency.
@@ -423,27 +410,27 @@
     (bindings--define-key menu [bookmark]
       `(menu-item "Bookmarks" menu-bar-bookmark-map))
 
-    (define-key menu [goto]
+    (bindings--define-key menu [goto]
       `(menu-item ,(purecopy "Go To") ,menu-bar-goto-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
-    (define-key menu [replace]
+    (bindings--define-key menu [replace]
       `(menu-item ,(purecopy "Replace") ,menu-bar-replace-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
-    (define-key menu [search]
+    (bindings--define-key menu [search]
       `(menu-item ,(purecopy "Search") ,menu-bar-search-menu
 		  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
     (bindings--define-key menu [separator-search]
       menu-bar-separator)
 
-    (define-key menu [mark-whole-buffer]
+    (bindings--define-key menu [mark-whole-buffer]
       `(menu-item ,(purecopy "Select All") mark-whole-buffer
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
                   :help ,(purecopy "Mark the whole buffer for a subsequent cut/copy")))
 
-    (define-key menu [clear]
+    (bindings--define-key menu [clear]
       `(menu-item ,(purecopy "Clear") delete-region
                   :enable (and mark-active
                                (not buffer-read-only))
@@ -482,7 +469,7 @@
                   :keys ,(if (featurep 'ns)
                              "\\[ns-copy-including-secondary]"
                            "\\[kill-ring-save]")))
-    (define-key menu [cut]
+    (bindings--define-key menu [cut]
       `(menu-item ,(purecopy "Cut") kill-region
 	      :enable (and mark-active (not buffer-read-only)
 			   (menu-bar-menu-frame-live-and-visible-p))
@@ -562,13 +549,13 @@ Do the same for the keys of the same name."
   (interactive)
   ;; These are Sun server keysyms for the Cut, Copy and Paste keys
   ;; (also for XFree86 on Sun keyboard):
-  (define-key global-map [f20] 'clipboard-kill-region)
-  (define-key global-map [f16] 'clipboard-kill-ring-save)
-  (define-key global-map [f18] 'clipboard-yank)
+  (bindings--define-key global-map [f20] 'clipboard-kill-region)
+  (bindings--define-key global-map [f16] 'clipboard-kill-ring-save)
+  (bindings--define-key global-map [f18] 'clipboard-yank)
   ;; X11R6 versions:
-  (define-key global-map [cut] 'clipboard-kill-region)
-  (define-key global-map [copy] 'clipboard-kill-ring-save)
-  (define-key global-map [paste] 'clipboard-yank))
+  (bindings--define-key global-map [cut] 'clipboard-kill-region)
+  (bindings--define-key global-map [copy] 'clipboard-kill-ring-save)
+  (bindings--define-key global-map [paste] 'clipboard-yank))
 
 ;; The "Options" menu items
 
@@ -713,18 +700,18 @@ by \"Save Options\" in Custom buffers.")
 
 (defvar menu-bar-showhide-menu (make-sparse-keymap "Show/Hide"))
 
-(define-key menu-bar-showhide-menu [show-newlines-mode]
+(bindings--define-key menu-bar-showhide-menu [show-newlines-mode]
  (menu-bar-make-mm-toggle global-show-newlines-mode
 			   "Show Newlines"
 			   "Show hard newlines"))
 
-(define-key menu-bar-showhide-menu [newlines-separator]
+(bindings--define-key menu-bar-showhide-menu [newlines-separator]
   '("--"))
 
 
-(define-key menu-bar-showhide-menu [highlight-separator]
+(bindings--define-key menu-bar-showhide-menu [highlight-separator]
   menu-bar-separator)
-(define-key menu-bar-showhide-menu [highlight-paren-mode]
+(bindings--define-key menu-bar-showhide-menu [highlight-paren-mode]
   (menu-bar-make-mm-toggle show-paren-mode
 			   "Paren Match Highlighting"
 			   "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
@@ -740,7 +727,7 @@ by \"Save Options\" in Custom buffers.")
   (interactive)
   (customize-set-variable 'indicate-buffer-boundaries
 			  '((t . right) (top . left))))
-(define-key menu-bar-showhide-menu [column-number-mode]
+(bindings--define-key menu-bar-showhide-menu [column-number-mode]
   (menu-bar-make-mm-toggle column-number-mode
 			   "Column Numbers"
 			   "Show the current column number in the mode line"))
@@ -750,7 +737,7 @@ by \"Save Options\" in Custom buffers.")
   (interactive)
   (customize-set-variable 'indicate-buffer-boundaries
 			  '((top . left) (bottom . right))))
-(define-key menu-bar-showhide-menu [linum-mode]
+(bindings--define-key menu-bar-showhide-menu [linum-mode]
   (menu-bar-make-mm-toggle global-linum-mode
 			   "Line Numbers"
 			   "Show the current line number next to each line"))
@@ -770,13 +757,13 @@ by \"Save Options\" in Custom buffers.")
   (interactive)
   (customize-set-variable 'indicate-buffer-boundaries nil))
 
-(define-key menu-bar-showhide-menu [showhide-date-time]
+(bindings--define-key menu-bar-showhide-menu [showhide-date-time]
   (menu-bar-make-mm-toggle display-time-mode
 			   "Time, Load and Mail"
 			   "Display time, system load averages and \
 mail status in mode line"))
 
-(define-key menu-bar-showhide-menu [datetime-separator]
+(bindings--define-key menu-bar-showhide-menu [datetime-separator]
   '("--"))
 
 (defun customize-tool-bar ()
@@ -787,13 +774,13 @@ Only available in Aquamacs."
   (sit-for 0)
   (ns-tool-bar-customize))
 
-(define-key menu-bar-showhide-menu [ns-tool-bar]
+(bindings--define-key menu-bar-showhide-menu [ns-tool-bar]
   `(menu-item ,(purecopy "Toolbar...") 
 	      customize-tool-bar
 	      :help ,(purecopy "Display the Toolbar customization panel")
 	      :visible ,(fboundp 'ns-tool-bar-customize)))
 
-(define-key menu-bar-showhide-menu [showhide-speedbar]
+(bindings--define-key menu-bar-showhide-menu [showhide-speedbar]
   `(menu-item ,(purecopy "Speedbar") speedbar-frame-mode
 	      :help ,(purecopy "Display a Speedbar quick-navigation frame")
 	      :button (:toggle
@@ -1143,15 +1130,6 @@ mail status in mode line"))
                                                  'tool-bar-lines))))))
     menu))
 
-(defun menu-bar-text-mode-auto-fill ()
-  (interactive)
-  (toggle-text-mode-auto-fill)
-  ;; This is somewhat questionable, as `text-mode-hook'
-  ;; might have changed outside customize.
-  ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-  (customize-mark-as-set 'text-mode-hook))
-
-
 (defvar menu-bar-line-wrapping-menu
   (let ((menu (make-sparse-keymap "Line Wrapping")))
 
@@ -1199,17 +1177,17 @@ mail status in mode line"))
 
 (defvar menu-bar-options-menu
   (let ((menu (make-sparse-keymap "Options")))
-    (define-key menu [customize]
+    (bindings--define-key menu [customize]
       `(menu-item ,(purecopy "Customize Aquamacs") ,menu-bar-custom-menu))
 
     (bindings--define-key menu [package]
       '(menu-item "Manage Emacs Packages" package-list-packages
         :help "Install or uninstall additional Emacs packages"))
 
-    (define-key menu [custom-separator]
+    (bindings--define-key menu [custom-separator]
       menu-bar-separator)
 
-    (define-key menu [save]
+    (bindings--define-key menu [save]
       `(menu-item ,(purecopy "Save Options") menu-bar-options-save
                   :help ,(purecopy "Save options set from the menu above")))
 
@@ -1258,11 +1236,11 @@ mail status in mode line"))
     (bindings--define-key menu [debugger-separator]
       menu-bar-separator)
 
-    (define-key menu [edit-options-separator]
+    (bindings--define-key menu [edit-options-separator]
       '("--"))
     menu))
 
-(define-key menu-bar-search-menu [case-fold-search]
+(bindings--define-key menu-bar-search-menu [case-fold-search]
       (menu-bar-make-toggle toggle-case-fold-search case-fold-search
                             "Case-Insensitive Search"
        "Case-Insensitive Search %s"
@@ -1340,7 +1318,7 @@ for future buffers."
 
 
 ;; We just offer the auto-wrap option in Aquamacs
-;; (define-key menu-bar-line-wrapping-menu [auto-fill-text-mode]
+;; (bindings--define-key menu-bar-line-wrapping-menu [auto-fill-text-mode]
 ;;   `(menu-item ,(purecopy "Hard Word Wrap as Default in Text Modes")
 ;;               menu-bar-text-mode-auto-fill
 ;; 	      :help ,(purecopy "Automatically fill text while typing (Auto Fill mode)")
@@ -1352,7 +1330,7 @@ for future buffers."
       (local-variable-p 'truncate-lines)
       (local-variable-p 'auto-fill-function)))
 
-(define-key menu-bar-line-wrapping-menu [wrapping-set-default]
+(bindings--define-key menu-bar-line-wrapping-menu [wrapping-set-default]
   `(menu-item (if (menu-bar-local-wrapping-p)
 		  "Adopt as Default"
 		"Adopted as Default")
@@ -1362,17 +1340,17 @@ for future buffers."
 			   (menu-bar-local-wrapping-p))
               :button (:toggle . (not (menu-bar-local-wrapping-p)))))
 
-(define-key menu-bar-line-wrapping-menu [default-separator]
+(bindings--define-key menu-bar-line-wrapping-menu [default-separator]
   '("--"))
 
-(define-key menu-bar-line-wrapping-menu [auto-fill-mode]
+(bindings--define-key menu-bar-line-wrapping-menu [auto-fill-mode]
   `(menu-item (format "Break Lines (Auto Fill) at %s" fill-column)
               set-auto-fill
 	      :help  ,(purecopy "Automatically fill text between left and right margins (Auto Fill) in this buffer and in new buffers.")
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
               :button (:radio . auto-fill-function)))
 
-(define-key menu-bar-line-wrapping-menu [word-wrap]
+(bindings--define-key menu-bar-line-wrapping-menu [word-wrap]
   `(menu-item ,(purecopy "Word Wrap")
 	      set-word-wrap
 	      :help ,(purecopy "Wrap long lines at word boundaries in this buffer and in new buffers.")
@@ -1382,7 +1360,7 @@ for future buffers."
 	      :enable (menu-bar-menu-frame-live-and-visible-p)))
 
 
-(define-key menu-bar-line-wrapping-menu [window-wrap]
+(bindings--define-key menu-bar-line-wrapping-menu [window-wrap]
   `(menu-item ,(purecopy "Wrap")
 	      set-line-wrap
 	      :help ,(purecopy "Wrap long lines at window edge in this buffer and in new buffers.")
@@ -1393,7 +1371,7 @@ for future buffers."
 	      :visible (menu-bar-menu-frame-live-and-visible-p)
 	      :enable (not (truncated-partial-width-window-p))))
 
-(define-key menu-bar-line-wrapping-menu [truncate]
+(bindings--define-key menu-bar-line-wrapping-menu [truncate]
   `(menu-item ,(purecopy "Truncate")
 	      set-truncate-lines
 	      :help ,(purecopy "Truncate long lines at window edge in this buffer and in new buffers.")
@@ -1402,7 +1380,7 @@ for future buffers."
 	      :visible (menu-bar-menu-frame-live-and-visible-p)
 	      :enable (not (truncated-partial-width-window-p))))
 
-(define-key menu-bar-options-menu [line-wrapping]
+(bindings--define-key menu-bar-options-menu [line-wrapping]
   `(menu-item ,(purecopy "Line Wrapping") ,menu-bar-line-wrapping-menu))
 
 
@@ -1570,10 +1548,10 @@ for future buffers."
     (bindings--define-key menu [separator-vc]
       menu-bar-separator)
 
-    (define-key menu [pcl-cvs]
+    (bindings--define-key menu [pcl-cvs]
       `(menu-item ,(purecopy "CVS Repositories") cvs-global-menu))
-    (define-key menu [vc] nil) ;Create the place for the VC menu.
-    (define-key menu [separator-compare]
+    (bindings--define-key menu [vc] nil) ;Create the place for the VC menu.
+    (bindings--define-key menu [separator-compare]
       menu-bar-separator)
 
     (bindings--define-key menu [epatch]
@@ -1750,22 +1728,22 @@ key, a click, or a menu-item"))
                   :help "Man-page docs for external commands and libraries"))
     (bindings--define-key menu [sep2]
       menu-bar-separator)
-    (define-key menu [order-emacs-manuals]
+    (bindings--define-key menu [order-emacs-manuals]
       `(menu-item ,(purecopy "Ordering Manuals") view-order-manuals
                   :help ,(purecopy "How to order manuals from the Free Software Foundation")))
-    (define-key menu [lookup-subject-in-all-manuals]
+    (bindings--define-key menu [lookup-subject-in-all-manuals]
       `(menu-item ,(purecopy "Lookup Subject in all Manuals...") info-apropos
                   :help ,(purecopy "Find description of a subject in all installed manuals")))
-    (define-key menu [other-manuals]
+    (bindings--define-key menu [other-manuals]
       `(menu-item ,(purecopy "All Other Manuals (Info)") Info-directory
                   :help ,(purecopy "Read any of the installed manuals")))
-    (define-key menu [emacs-lisp-reference]
+    (bindings--define-key menu [emacs-lisp-reference]
       `(menu-item ,(purecopy "Emacs Lisp Reference") menu-bar-read-lispref
                   :help ,(purecopy "Read the Emacs Lisp Reference manual")))
-    (define-key menu [emacs-lisp-intro]
+    (bindings--define-key menu [emacs-lisp-intro]
       `(menu-item ,(purecopy "Introduction to Emacs Lisp") menu-bar-read-lispintro
                   :help ,(purecopy "Read the Introduction to Emacs Lisp Programming")))
-    (define-key menu [emacs-psychotherapist]
+    (bindings--define-key menu [emacs-psychotherapist]
       `(menu-item ,(purecopy "Emacs Psychotherapist") doctor
 		  :help ,(purecopy "Our doctor will help you feel better")))
     menu))
@@ -1804,30 +1782,30 @@ key, a click, or a menu-item"))
                   :help "How to get the latest version of Emacs"))
     (bindings--define-key menu [sep2]
       menu-bar-separator)
-    (define-key menu [external-packages]
+    (bindings--define-key menu [external-packages]
       `(menu-item ,(purecopy "Finding Extra Packages") menu-bar-help-extra-packages
                   :help ,(purecopy "Lisp packages distributed separately for use in Emacs")))
-    (define-key menu [find-emacs-packages]
+    (bindings--define-key menu [find-emacs-packages]
       `(menu-item ,(purecopy "Search Built-in Packages") finder-by-keyword
                   :help ,(purecopy "Find built-in packages and features by keyword")))
-    (define-key menu [more-manuals]
+    (bindings--define-key menu [more-manuals]
       `(menu-item ,(purecopy "More Manuals") ,menu-bar-manuals-menu))
-    (define-key menu [emacs-manual]
+    (bindings--define-key menu [emacs-manual]
       `(menu-item ,(purecopy "Read the Emacs Manual") info-emacs-manual
                   :help ,(purecopy "Full documentation of Emacs features")))
-    (define-key menu [describe]
+    (bindings--define-key menu [describe]
       `(menu-item ,(purecopy "Describe") ,menu-bar-describe-menu))
-    (define-key menu [search-documentation]
+    (bindings--define-key menu [search-documentation]
       `(menu-item ,(purecopy "Search Documentation") ,menu-bar-search-documentation-menu))
-    (define-key menu [sep1]
+    (bindings--define-key menu [sep1]
       '("--"))
-    (define-key menu [send-emacs-bug-report]
+    (bindings--define-key menu [send-emacs-bug-report]
       `(menu-item ,(purecopy "Send Bug Report...") report-emacs-bug
                   :help ,(purecopy "Send e-mail to Emacs maintainers")))
-    (define-key menu [emacs-news]
+    (bindings--define-key menu [emacs-news]
       `(menu-item ,(purecopy "Emacs News") view-emacs-news
                   :help ,(purecopy "New features of this version")))
-    (define-key menu [emacs-tutorial-language-specific]
+    (bindings--define-key menu [emacs-tutorial-language-specific]
       `(menu-item ,(purecopy "Emacs Tutorial (choose language)...")
                   help-with-tutorial-spec-language
                   :help "Learn how to use Emacs (choose a language)"))
@@ -1843,25 +1821,18 @@ key, a click, or a menu-item"))
            '(menu-item "About Emacs..." ns-do-emacs-info-panel)))
     menu))
 
-(define-key global-map [menu-bar tools]
+(bindings--define-key global-map [menu-bar tools]
   (cons (purecopy "Tools") menu-bar-tools-menu))
-(define-key global-map [menu-bar buffer]
+(bindings--define-key global-map [menu-bar buffer]
   (cons (purecopy "Window") global-buffers-menu-map))
-(define-key global-map [menu-bar options]
+(bindings--define-key global-map [menu-bar options]
   (cons (purecopy "Options") menu-bar-options-menu))
-(define-key global-map [menu-bar edit]
+(bindings--define-key global-map [menu-bar edit]
   (cons (purecopy "Edit") menu-bar-edit-menu))
-(define-key global-map [menu-bar file]
+(bindings--define-key global-map [menu-bar file]
   (cons (purecopy "File") menu-bar-file-menu))
-
-;; Put "Help" menu at the end, or Info at the front.
-;; If running under GNUstep, "Help" is moved and renamed "Info" (see below).
-(if (and (featurep 'ns)
-         (not (eq system-type 'darwin)))
-    (bindings--define-key global-map [menu-bar help-menu]
-      (cons "Info" menu-bar-help-menu))
-  (define-key-after global-map [menu-bar help-menu]
-    (cons (purecopy "Help") menu-bar-help-menu)))
+(bindings--define-key global-map [menu-bar help-menu]
+  (cons (purecopy "Help") menu-bar-help-menu))
 
 (defun menu-bar-menu-frame-live-and-visible-p ()
   "Return non-nil if the menu frame is alive and visible.
@@ -2171,10 +2142,10 @@ It must accept a buffer as its only required argument.")
 	 (setq buffers-menu
 	       (nconc buffers-menu menu-bar-buffers-menu-command-entries))
 
-         ;; We used to "(define-key (current-global-map) [menu-bar buffer]"
+         ;; We used to "(bindings--define-key (current-global-map) [menu-bar buffer]"
          ;; but that did not do the right thing when the [menu-bar buffer]
          ;; entry above had been moved (e.g. to a parent keymap).
-	 (setcdr global-buffers-menu-map (cons "Select Buffer" buffers-menu)))))
+	 (setcdr global-buffers-menu-map (cons "Buffers" buffers-menu)))))
 
 (add-hook 'menu-bar-update-hook 'menu-bar-update-buffers)
 
@@ -2389,90 +2360,6 @@ If nil, the current mouse position is used."
      (popup-menu-normalize-position (event-end position)))
     (t position)))
 
-(defvar tty-menu-navigation-map
-  (let ((map (make-sparse-keymap)))
-    ;; The next line is disabled because it breaks interpretation of
-    ;; escape sequences, produced by TTY arrow keys, as tty-menu-*
-    ;; commands.  Instead, we explicitly bind some keys to
-    ;; tty-menu-exit.
-    ;;(define-key map [t] 'tty-menu-exit)
-
-    ;; The tty-menu-* are just symbols interpreted by term.c, they are
-    ;; not real commands.
-    (substitute-key-definition 'keyboard-quit 'tty-menu-exit
-			       map (current-global-map))
-    (substitute-key-definition 'keyboard-escape-quit 'tty-menu-exit
-			       map (current-global-map))
-    ;; The bindings of menu-bar items are so that clicking on the menu
-    ;; bar when a menu is already shown pops down that menu.
-    ;; FIXME: we should iterate over all the visible menu-bar items,
-    ;; instead of naming them explicitly here.  Also, this doesn't
-    ;; include items added by current major mode.
-    (substitute-key-definition (lookup-key (current-global-map) [menu-bar file])
-			       'tty-menu-exit
-			       map (current-global-map))
-    (substitute-key-definition (lookup-key (current-global-map) [menu-bar edit])
-			       'tty-menu-exit
-			       map (current-global-map))
-    (substitute-key-definition (lookup-key (current-global-map) [menu-bar options])
-			       'tty-menu-exit
-			       map (current-global-map))
-    (substitute-key-definition (lookup-key (current-global-map) [menu-bar buffer])
-			       'tty-menu-exit
-			       map (current-global-map))
-    (substitute-key-definition (lookup-key (current-global-map) [menu-bar tools])
-			       'tty-menu-exit
-			       map (current-global-map))
-    (substitute-key-definition (lookup-key (current-global-map) [menu-bar help-menu])
-			       'tty-menu-exit
-			       map (current-global-map))
-    (substitute-key-definition 'forward-char 'tty-menu-next-menu
-			       map (current-global-map))
-    (substitute-key-definition 'backward-char 'tty-menu-prev-menu
-			       map (current-global-map))
-    ;; The following two will need to be revised if we ever support
-    ;; a right-to-left menu bar.
-    (substitute-key-definition 'right-char 'tty-menu-next-menu
-			       map (current-global-map))
-    (substitute-key-definition 'left-char 'tty-menu-prev-menu
-			       map (current-global-map))
-    (substitute-key-definition 'next-line 'tty-menu-next-item
-			       map (current-global-map))
-    (substitute-key-definition 'previous-line 'tty-menu-prev-item
-			       map (current-global-map))
-    (substitute-key-definition 'newline 'tty-menu-select
-			       map (current-global-map))
-    (substitute-key-definition 'newline-and-indent 'tty-menu-select
-			       map (current-global-map))
-    (define-key map [?\C-r] 'tty-menu-select)
-    (define-key map [?\C-j] 'tty-menu-select)
-    (define-key map [return] 'tty-menu-select)
-    (define-key map [linefeed] 'tty-menu-select)
-    (define-key map [down-mouse-1] 'tty-menu-select)
-    (define-key map [drag-mouse-1] 'tty-menu-select)
-    (define-key map [mode-line drag-mouse-1] 'tty-menu-select)
-    (define-key map [mode-line down-mouse-1] 'tty-menu-select)
-    (define-key map [header-line mouse-1] 'tty-menu-select)
-    (define-key map [header-line drag-mouse-1] 'tty-menu-select)
-    (define-key map [header-line down-mouse-1] 'tty-menu-select)
-    (define-key map [mode-line mouse-1] 'tty-menu-ignore)
-    (define-key map [mode-line mouse-2] 'tty-menu-ignore)
-    (define-key map [mode-line mouse-3] 'tty-menu-ignore)
-    (define-key map [mode-line C-mouse-1] 'tty-menu-ignore)
-    (define-key map [mode-line C-mouse-2] 'tty-menu-ignore)
-    (define-key map [mode-line C-mouse-3] 'tty-menu-ignore)
-    ;; The mouse events must be bound to tty-menu-ignore, otherwise
-    ;; the initial mouse click will select and immediately pop down
-    ;; the menu.
-    (define-key map [mouse-1] 'tty-menu-ignore)
-    (define-key map [C-mouse-1] 'tty-menu-ignore)
-    (define-key map [C-mouse-2] 'tty-menu-ignore)
-    (define-key map [C-mouse-3] 'tty-menu-ignore)
-    (define-key map [mouse-movement] 'tty-menu-mouse-movement)
-    map)
-  "Keymap used while processing TTY menus.")
-
-
 (defcustom tty-menu-open-use-tmm nil
   "If non-nil, \\[menu-bar-open] on a TTY will invoke `tmm-menubar'.
 
@@ -2504,7 +2391,8 @@ If FRAME is nil or not given, use the selected frame."
     (cond
      ((eq type 'x) (x-menu-bar-open frame))
      ((eq type 'w32) (w32-menu-bar-open frame))
-     ((null tty-menu-open-use-tmm)
+     ((and (null tty-menu-open-use-tmm)
+	   (not (zerop (or (frame-parameter nil 'menu-bar-lines) 0))))
       (let* ((x tty-menu--initial-menu-x)
 	     (menu (menu-bar-menu-at-x-y x 0 frame)))
 	(popup-menu (or
@@ -2515,6 +2403,76 @@ If FRAME is nil or not given, use the selected frame."
           (tmm-menubar))))))
 
 (global-set-key [f10] 'menu-bar-open)
+
+(defvar tty-menu-navigation-map
+  (let ((map (make-sparse-keymap)))
+    ;; The next line is disabled because it breaks interpretation of
+    ;; escape sequences, produced by TTY arrow keys, as tty-menu-*
+    ;; commands.  Instead, we explicitly bind some keys to
+    ;; tty-menu-exit.
+    ;;(bindings--define-key map [t] 'tty-menu-exit)
+
+    ;; The tty-menu-* are just symbols interpreted by term.c, they are
+    ;; not real commands.
+    (dolist (bind '((keyboard-quit . tty-menu-exit)
+                    (keyboard-escape-quit . tty-menu-exit)
+                    ;; The following two will need to be revised if we ever
+                    ;; support a right-to-left menu bar.
+                    (forward-char . tty-menu-next-menu)
+                    (backward-char . tty-menu-prev-menu)
+                    (right-char . tty-menu-next-menu)
+                    (left-char . tty-menu-prev-menu)
+                    (next-line . tty-menu-next-item)
+                    (previous-line . tty-menu-prev-item)
+                    (newline . tty-menu-select)
+                    (newline-and-indent . tty-menu-select)
+		    (menu-bar-open . tty-menu-exit)))
+      (substitute-key-definition (car bind) (cdr bind)
+                                 map (current-global-map)))
+
+    ;; The bindings of menu-bar items are so that clicking on the menu
+    ;; bar when a menu is already shown pops down that menu.
+    (bindings--define-key map [menu-bar t] 'tty-menu-exit)
+
+    (bindings--define-key map [?\C-r] 'tty-menu-select)
+    (bindings--define-key map [?\C-j] 'tty-menu-select)
+    (bindings--define-key map [return] 'tty-menu-select)
+    (bindings--define-key map [linefeed] 'tty-menu-select)
+    (bindings--define-key map [mouse-1] 'tty-menu-select)
+    (bindings--define-key map [drag-mouse-1] 'tty-menu-select)
+    (bindings--define-key map [mouse-2] 'tty-menu-select)
+    (bindings--define-key map [drag-mouse-2] 'tty-menu-select)
+    (bindings--define-key map [mouse-3] 'tty-menu-select)
+    (bindings--define-key map [drag-mouse-3] 'tty-menu-select)
+    (bindings--define-key map [wheel-down] 'tty-menu-next-item)
+    (bindings--define-key map [wheel-up] 'tty-menu-prev-item)
+    (bindings--define-key map [wheel-left] 'tty-menu-prev-menu)
+    (bindings--define-key map [wheel-right] 'tty-menu-next-menu)
+    ;; The following 4 bindings are for those whose text-mode mouse
+    ;; lack the wheel.
+    (bindings--define-key map [S-mouse-1] 'tty-menu-next-item)
+    (bindings--define-key map [S-drag-mouse-1] 'tty-menu-next-item)
+    (bindings--define-key map [S-mouse-2] 'tty-menu-prev-item)
+    (bindings--define-key map [S-drag-mouse-2] 'tty-menu-prev-item)
+    (bindings--define-key map [S-mouse-3] 'tty-menu-prev-item)
+    (bindings--define-key map [S-drag-mouse-3] 'tty-menu-prev-item)
+    (bindings--define-key map [header-line mouse-1] 'tty-menu-select)
+    (bindings--define-key map [header-line drag-mouse-1] 'tty-menu-select)
+    ;; The down-mouse events must be bound to tty-menu-ignore, so that
+    ;; only releasing the mouse button pops up the menu.
+    (bindings--define-key map [mode-line down-mouse-1] 'tty-menu-ignore)
+    (bindings--define-key map [mode-line down-mouse-2] 'tty-menu-ignore)
+    (bindings--define-key map [mode-line down-mouse-3] 'tty-menu-ignore)
+    (bindings--define-key map [mode-line C-down-mouse-1] 'tty-menu-ignore)
+    (bindings--define-key map [mode-line C-down-mouse-2] 'tty-menu-ignore)
+    (bindings--define-key map [mode-line C-down-mouse-3] 'tty-menu-ignore)
+    (bindings--define-key map [down-mouse-1] 'tty-menu-ignore)
+    (bindings--define-key map [C-down-mouse-1] 'tty-menu-ignore)
+    (bindings--define-key map [C-down-mouse-2] 'tty-menu-ignore)
+    (bindings--define-key map [C-down-mouse-3] 'tty-menu-ignore)
+    (bindings--define-key map [mouse-movement] 'tty-menu-mouse-movement)
+    map)
+  "Keymap used while processing TTY menus.")
 
 (provide 'menu-bar)
 

@@ -152,6 +152,8 @@ This should only be called after matching against `ruby-here-doc-beg-re'."
       (define-key map (kbd "M-C-b") 'ruby-backward-sexp)
       (define-key map (kbd "M-C-f") 'ruby-forward-sexp)
       (define-key map (kbd "M-C-q") 'ruby-indent-exp))
+    (when ruby-use-smie
+      (define-key map (kbd "M-C-d") 'smie-down-list))
     (define-key map (kbd "M-C-p") 'ruby-beginning-of-block)
     (define-key map (kbd "M-C-n") 'ruby-end-of-block)
     (define-key map (kbd "C-c {") 'ruby-toggle-block)
@@ -217,8 +219,15 @@ Also ignores spaces after parenthesis when 'space."
   "Default deep indent style."
   :options '(t nil space) :group 'ruby)
 
-(defcustom ruby-encoding-map '((shift_jis . cp932) (shift-jis . cp932))
-  "Alist to map encoding name from Emacs to Ruby."
+(defcustom ruby-encoding-map
+  '((us-ascii       . nil)       ;; Do not put coding: us-ascii
+    (shift-jis      . cp932)     ;; Emacs charset name of Shift_JIS
+    (shift_jis      . cp932)     ;; MIME charset name of Shift_JIS
+    (japanese-cp932 . cp932))    ;; Emacs charset name of CP932
+  "Alist to map encoding name from Emacs to Ruby.
+Associating an encoding name with nil means it needs not be
+explicitly declared in magic comment."
+  :type '(repeat (cons (symbol :tag "From") (symbol :tag "To")))
   :group 'ruby)
 
 (defcustom ruby-insert-encoding-magic-comment t
@@ -239,46 +248,67 @@ Also ignores spaces after parenthesis when 'space."
 
 (require 'smie)
 
+;; Here's a simplified BNF grammar, for reference:
+;; http://www.cse.buffalo.edu/~regan/cse305/RubyBNF.pdf
 (defconst ruby-smie-grammar
-  ;; FIXME: Add support for Cucumber.
   (smie-prec2->grammar
-   (smie-bnf->prec2
-    '((id)
-      (insts (inst) (insts ";" insts))
-      (inst (exp) (inst "iuwu-mod" exp))
-      (exp  (exp1) (exp "," exp) (exp "=" exp) (exp "-" exp)  (exp "+" exp))
-      (exp1 (exp2) (exp2 "?" exp1 ":" exp1))
-      (exp2 ("def" insts "end")
-            ("begin" insts-rescue-insts "end")
-            ("do" insts "end")
-            ("class" insts "end") ("module" insts "end")
-            ("for" for-body "end")
-            ("[" expseq "]")
-            ("{" hashvals "}")
-            ("{" insts "}")
-            ("while" insts "end")
-            ("until" insts "end")
-            ("unless" insts "end")
-            ("if" if-body "end")
-            ("case"  cases "end"))
-      (formal-params ("opening-|" exp "|"))
-      (for-body (for-head ";" insts))
-      (for-head (id "in" exp))
-      (cases (exp "then" insts) ;; FIXME: Ruby also allows (exp ":" insts).
-             (cases "when" cases) (insts "else" insts))
-      (expseq (exp) );;(expseq "," expseq)
-      (hashvals (id "=>" exp1) (hashvals "," hashvals))
-      (insts-rescue-insts (insts)
-                          (insts-rescue-insts "rescue" insts-rescue-insts)
-                          (insts-rescue-insts "ensure" insts-rescue-insts))
-      (itheni (insts) (exp "then" insts))
-      (ielsei (itheni) (itheni "else" insts))
-      (if-body (ielsei) (if-body "elsif" if-body)))
-    '((nonassoc "in") (assoc ";") (assoc ",") (right "=") (assoc "-" "+"))
-    '((assoc "when"))
-    '((assoc "elsif"))
-    '((assoc "rescue" "ensure"))
-    '((assoc ",")))))
+   (smie-merge-prec2s
+    (smie-bnf->prec2
+     '((id)
+       (insts (inst) (insts ";" insts))
+       (inst (exp) (inst "iuwu-mod" exp))
+       (exp  (exp1) (exp "," exp) (exp "=" exp)
+             (id " @ " exp)
+             (exp "." exp))
+       (exp1 (exp2) (exp2 "?" exp1 ":" exp1))
+       (exp2 ("def" insts "end")
+             ("begin" insts-rescue-insts "end")
+             ("do" insts "end")
+             ("class" insts "end") ("module" insts "end")
+             ("for" for-body "end")
+             ("[" expseq "]")
+             ("{" hashvals "}")
+             ("{" insts "}")
+             ("while" insts "end")
+             ("until" insts "end")
+             ("unless" insts "end")
+             ("if" if-body "end")
+             ("case"  cases "end"))
+       (formal-params ("opening-|" exp "|"))
+       (for-body (for-head ";" insts))
+       (for-head (id "in" exp))
+       (cases (exp "then" insts) ;; FIXME: Ruby also allows (exp ":" insts).
+              (cases "when" cases) (insts "else" insts))
+       (expseq (exp) );;(expseq "," expseq)
+       (hashvals (id "=>" exp1) (hashvals "," hashvals))
+       (insts-rescue-insts (insts)
+                           (insts-rescue-insts "rescue" insts-rescue-insts)
+                           (insts-rescue-insts "ensure" insts-rescue-insts))
+       (itheni (insts) (exp "then" insts))
+       (ielsei (itheni) (itheni "else" insts))
+       (if-body (ielsei) (if-body "elsif" if-body)))
+     '((nonassoc "in") (assoc ";") (right " @ ")
+       (assoc ",") (right "=") (assoc "."))
+     '((assoc "when"))
+     '((assoc "elsif"))
+     '((assoc "rescue" "ensure"))
+     '((assoc ",")))
+
+    (smie-precs->prec2
+     '((right "=")
+       (right "+=" "-=" "*=" "/=" "%=" "**=" "&=" "|=" "^="
+              "<<=" ">>=" "&&=" "||=")
+       (left ".." "...")
+       (left "+" "-")
+       (left "*" "/" "%" "**")
+       ;; (left "|") ; FIXME: Conflicts with | after block parameters.
+       (left "^" "&")
+       (nonassoc "<=>")
+       (nonassoc ">" ">=" "<" "<=")
+       (nonassoc "==" "===" "!=")
+       (nonassoc "=~" "!~")
+       (left "<<" ">>")
+       (left "&&" "||"))))))
 
 (defun ruby-smie--bosp ()
   (save-excursion (skip-chars-backward " \t")
@@ -289,13 +319,14 @@ Also ignores spaces after parenthesis when 'space."
     (skip-chars-backward " \t")
     (not (or (bolp)
              (and (memq (char-before)
-                        '(?\; ?- ?+ ?* ?/ ?: ?. ?, ?\[ ?\( ?\{ ?\\))
+                        '(?\; ?- ?+ ?* ?/ ?: ?. ?, ?\[ ?\( ?\{ ?\\ ?& ?> ?< ?% ?~))
                   ;; Make sure it's not the end of a regexp.
                   (not (eq (car (syntax-after (1- (point)))) 7)))
-             (and (memq (char-before) '(?\? ?=))
-                  (let ((tok (save-excursion (ruby-smie--backward-token))))
-                    (or (equal tok "?")
-                        (string-match "\\`\\s." tok))))
+             (and (eq (char-before) ?\?)
+                  (equal (save-excursion (ruby-smie--backward-token)) "?"))
+             (and (eq (char-before) ?=)
+                  (string-match "\\`\\s." (save-excursion
+                                            (ruby-smie--backward-token))))
              (and (eq (car (syntax-after (1- (point)))) 2)
                   (equal (save-excursion (ruby-smie--backward-token))
                          "iuwu-mod"))
@@ -306,7 +337,7 @@ Also ignores spaces after parenthesis when 'space."
 (defun ruby-smie--redundant-do-p (&optional skip)
   (save-excursion
     (if skip (backward-word 1))
-    (member (nth 2 (smie-backward-sexp ";")) '("while"))))
+    (member (nth 2 (smie-backward-sexp ";")) '("while" "until" "for"))))
 
 (defun ruby-smie--opening-pipe-p ()
   (save-excursion
@@ -315,54 +346,58 @@ Also ignores spaces after parenthesis when 'space."
     (or (eq ?\{ (char-before))
         (looking-back "\\_<do" (- (point) 2)))))
 
-(defun ruby-smie--forward-id ()
-  (when (and (not (eobp))
-             (eq ?w (char-syntax (char-after))))
-    (let ((tok (smie-default-forward-token)))
-      (when (eq ?. (char-after))
-        (forward-char 1)
-        (setq tok (concat tok "." (ruby-smie--forward-id))))
-      tok)))
+(defun ruby-smie--args-separator-p (pos)
+  (and
+   (< pos (line-end-position))
+   (or (eq (char-syntax (preceding-char)) '?w)
+       (and (memq (preceding-char) '(?! ??))
+            (eq (char-syntax (char-before (1- (point)))) '?w)))
+   (memq (char-syntax (char-after pos)) '(?w ?\"))))
+
+(defun ruby-smie--at-dot-call ()
+  (and (eq ?w (char-syntax (following-char)))
+       (eq (char-before) ?.)
+       (not (eq (char-before (1- (point))) ?.))))
 
 (defun ruby-smie--forward-token ()
-  (skip-chars-forward " \t")
-  (cond
-   ((looking-at "\\s\"") "")            ;A heredoc or a string.
-   ((and (looking-at "[\n#]")
-         (ruby-smie--implicit-semi-p))  ;Only add implicit ; when needed.
-    (if (eolp) (forward-char 1) (forward-comment 1))
-    ";")
-   (t
-    (forward-comment (point-max))
-    (if (looking-at ":\\s.+")
-        (progn (goto-char (match-end 0)) (match-string 0)) ;; bug#15208.
-      (let ((tok (smie-default-forward-token)))
-        (cond
-         ((member tok '("unless" "if" "while" "until"))
-          (if (save-excursion (forward-word -1) (ruby-smie--bosp))
-              tok "iuwu-mod"))
-         ((equal tok "|")
-          (if (ruby-smie--opening-pipe-p) "opening-|" tok))
-         ((and (equal tok "") (looking-at "\\\\\n"))
-          (goto-char (match-end 0)) (ruby-smie--forward-token))
-         ((equal tok "do")
+  (let ((pos (point)))
+    (skip-chars-forward " \t")
+    (cond
+     ((looking-at "\\s\"") "")          ;A heredoc or a string.
+     ((and (looking-at "[\n#]")
+           (ruby-smie--implicit-semi-p)) ;Only add implicit ; when needed.
+      (if (eolp) (forward-char 1) (forward-comment 1))
+      ";")
+     (t
+      (forward-comment (point-max))
+      (cond
+       ((looking-at ":\\s.+")
+        (goto-char (match-end 0)) (match-string 0)) ;; bug#15208.
+       ((and (< pos (point))
+             (save-excursion
+               (ruby-smie--args-separator-p (prog1 (point) (goto-char pos)))))
+        " @ ")
+       (t
+        (let ((dot (ruby-smie--at-dot-call))
+              (tok (smie-default-forward-token)))
+          (when dot
+            (setq tok (concat "." tok)))
           (cond
-           ((not (ruby-smie--redundant-do-p 'skip)) tok)
-           ((> (save-excursion (forward-comment (point-max)) (point))
-               (line-end-position))
-            (ruby-smie--forward-token)) ;Fully redundant.
-           (t ";")))
-         ((equal tok ".") (concat tok (ruby-smie--forward-id)))
-         (t tok)))))))
-
-(defun ruby-smie--backward-id ()
-  (when (and (not (bobp))
-             (eq ?w (char-syntax (char-before))))
-    (let ((tok (smie-default-backward-token)))
-      (when (eq ?. (char-before))
-        (forward-char -1)
-        (setq tok (concat (ruby-smie--backward-id) "." tok)))
-      tok)))
+           ((member tok '("unless" "if" "while" "until"))
+            (if (save-excursion (forward-word -1) (ruby-smie--bosp))
+                tok "iuwu-mod"))
+           ((equal tok "|")
+            (if (ruby-smie--opening-pipe-p) "opening-|" tok))
+           ((and (equal tok "") (looking-at "\\\\\n"))
+            (goto-char (match-end 0)) (ruby-smie--forward-token))
+           ((equal tok "do")
+            (cond
+             ((not (ruby-smie--redundant-do-p 'skip)) tok)
+             ((> (save-excursion (forward-comment (point-max)) (point))
+                 (line-end-position))
+              (ruby-smie--forward-token)) ;Fully redundant.
+             (t ";")))
+           (t tok)))))))))
 
 (defun ruby-smie--backward-token ()
   (let ((pos (point)))
@@ -371,10 +406,16 @@ Also ignores spaces after parenthesis when 'space."
      ((and (> pos (line-end-position)) (ruby-smie--implicit-semi-p))
       (skip-chars-forward " \t") ";")
      ((and (bolp) (not (bobp))) "")         ;Presumably a heredoc.
+     ((and (> pos (point)) (not (bolp))
+           (ruby-smie--args-separator-p pos))
+      ;; We have "ID SPC ID", which is a method call, but it binds less tightly
+      ;; than commas, since a method call can also be "ID ARG1, ARG2, ARG3".
+      ;; In some textbooks, "e1 @ e2" is used to mean "call e1 with arg e2".
+      " @ ")
      (t
-      (let ((tok (smie-default-backward-token)))
-        (when (eq ?. (char-before))
-          (forward-char -1)
+      (let ((tok (smie-default-backward-token))
+            (dot (ruby-smie--at-dot-call)))
+        (when dot
           (setq tok (concat "." tok)))
         (when (and (eq ?: (char-before)) (string-match "\\`\\s." tok))
           (forward-char -1) (setq tok (concat ":" tok))) ;; bug#15208.
@@ -394,11 +435,6 @@ Also ignores spaces after parenthesis when 'space."
                (line-end-position))
             (ruby-smie--backward-token)) ;Fully redundant.
            (t ";")))
-         ;; FIXME: We shouldn't merge the dot with preceding token here
-         ;; either, but not doing that breaks indentation of hanging
-         ;; method calls with dot on the first line.
-         ((equal tok ".")
-          (concat (ruby-smie--backward-id) tok))
          (t tok)))))))
 
 (defun ruby-smie-rules (kind token)
@@ -408,37 +444,39 @@ Also ignores spaces after parenthesis when 'space."
     ;; should be aligned with the first.
     (`(:elem . args) (if (looking-at "\\s\"") 0))
     ;; (`(:after . ",") (smie-rule-separator kind))
-    (`(:after . ";")
-     (if (smie-rule-parent-p "def" "begin" "do" "class" "module" "for"
-                             "while" "until" "unless"
-                             "if" "then" "elsif" "else" "when"
-                             "rescue" "ensure")
-         (smie-rule-parent ruby-indent-level)
-       ;; For (invalid) code between switch and case.
-       ;; (if (smie-parent-p "switch") 4)
-       0))
+    (`(:before . ";")
+     (cond
+      ((smie-rule-parent-p "def" "begin" "do" "class" "module" "for"
+                           "while" "until" "unless"
+                           "if" "then" "elsif" "else" "when"
+                           "rescue" "ensure" "{")
+       (smie-rule-parent ruby-indent-level))
+      ;; For (invalid) code between switch and case.
+      ;; (if (smie-parent-p "switch") 4)
+      ))
     (`(:before . ,(or `"(" `"[" `"{"))
-     ;; Treat purely syntactic block-constructs as being part of their parent,
-     ;; when the opening statement is hanging.
-     (when (smie-rule-hanging-p)
-       (smie-backward-sexp 'halfsexp) (smie-indent-virtual)))
+     (cond
+      ((and (equal token "{")
+            (not (smie-rule-prev-p "(" "{" "[" "," "=>" "=" "return" ";")))
+       ;; Curly block opener.
+       (smie-rule-parent))
+      ((smie-rule-hanging-p)
+       ;; Treat purely syntactic block-constructs as being part of their parent,
+       ;; when the opening statement is hanging.
+       (let ((state (smie-backward-sexp 'halfsexp)))
+         (when (eq t (car state)) (goto-char (cadr state))))
+       (cons 'column  (smie-indent-virtual)))))
     (`(:after . ,(or "=" "iuwu-mod")) 2)
-    (`(:before . "do")
-     (when (or (smie-rule-hanging-p)
-               (save-excursion
-                 (forward-word 1)       ;Skip "do"
-                 (skip-chars-forward " \t")
-                 (and (equal (save-excursion (ruby-smie--forward-token))
-                             "opening-|")
-                      (save-excursion (forward-sexp 1)
-                                      (skip-chars-forward " \t")
-                                      (or (eolp)
-                                          (looking-at comment-start-skip))))))
-       ;; `(column . ,(smie-indent-virtual))
-       (smie-rule-parent)))
+    (`(:after . " @ ") (smie-rule-parent))
+    (`(:before . "do") (smie-rule-parent))
+    (`(,(or :before :after) . ".")
+     (unless (smie-rule-parent-p ".")
+       (smie-rule-parent ruby-indent-level)))
     (`(:before . ,(or `"else" `"then" `"elsif" `"rescue" `"ensure")) 0)
     (`(:before . ,(or `"when"))
      (if (not (smie-rule-sibling-p)) 0)) ;; ruby-indent-level
+    (`(:after . "+")       ;FIXME: Probably applicable to most infix operators.
+     (if (smie-rule-parent-p ";") ruby-indent-level))
     ))
 
 (defun ruby-imenu-create-index-in-block (prefix beg end)
@@ -519,7 +557,7 @@ Also ignores spaces after parenthesis when 'space."
     (when (re-search-forward "[^\0-\177]" nil t)
       (goto-char (point-min))
       (let ((coding-system
-             (or coding-system-for-write
+             (or save-buffer-coding-system
                  buffer-file-coding-system)))
         (if coding-system
             (setq coding-system
@@ -528,24 +566,28 @@ Also ignores spaces after parenthesis when 'space."
         (setq coding-system
               (if coding-system
                   (symbol-name
-                   (or (and ruby-use-encoding-map
-                            (cdr (assq coding-system ruby-encoding-map)))
-                       coding-system))
+                   (if ruby-use-encoding-map
+                       (let ((elt (assq coding-system ruby-encoding-map)))
+                         (if elt (cdr elt) coding-system))
+                     coding-system))
                 "ascii-8bit"))
-        (if (looking-at "^#!") (beginning-of-line 2))
-        (cond ((looking-at "\\s *#.*-\*-\\s *\\(en\\)?coding\\s *:\\s *\\([-a-z0-9_]*\\)\\s *\\(;\\|-\*-\\)")
-               (unless (string= (match-string 2) coding-system)
-                 (goto-char (match-beginning 2))
-                 (delete-region (point) (match-end 2))
-                 (and (looking-at "-\*-")
-                      (let ((n (skip-chars-backward " ")))
-                        (cond ((= n 0) (insert "  ") (backward-char))
-                              ((= n -1) (insert " "))
-                              ((forward-char)))))
-                 (insert coding-system)))
-              ((looking-at "\\s *#.*coding\\s *[:=]"))
-              (t (when ruby-insert-encoding-magic-comment
-                   (insert "# -*- coding: " coding-system " -*-\n"))))))))
+        (when coding-system
+          (if (looking-at "^#!") (beginning-of-line 2))
+          (cond ((looking-at "\\s *#.*-\*-\\s *\\(en\\)?coding\\s *:\\s *\\([-a-z0-9_]*\\)\\s *\\(;\\|-\*-\\)")
+                 (unless (string= (match-string 2) coding-system)
+                   (goto-char (match-beginning 2))
+                   (delete-region (point) (match-end 2))
+                   (and (looking-at "-\*-")
+                        (let ((n (skip-chars-backward " ")))
+                          (cond ((= n 0) (insert "  ") (backward-char))
+                                ((= n -1) (insert " "))
+                                ((forward-char)))))
+                   (insert coding-system)))
+                ((looking-at "\\s *#.*coding\\s *[:=]"))
+                (t (when ruby-insert-encoding-magic-comment
+                     (insert "# -*- coding: " coding-system " -*-\n"))))
+          (when (buffer-modified-p)
+            (basic-save-buffer-1)))))))
 
 (defun ruby-current-indentation ()
   "Return the indentation level of current line."
@@ -2007,11 +2049,7 @@ The variable `ruby-indent-level' controls the amount of indentation.
   (set (make-local-variable 'end-of-defun-function)
        'ruby-end-of-defun)
 
-  (add-hook
-   (cond ((boundp 'before-save-hook) 'before-save-hook)
-         ((boundp 'write-contents-functions) 'write-contents-functions)
-         ((boundp 'write-contents-hooks) 'write-contents-hooks))
-   'ruby-mode-set-encoding nil 'local)
+  (add-hook 'after-save-hook 'ruby-mode-set-encoding nil 'local)
 
   (set (make-local-variable 'electric-indent-chars)
        (append '(?\{ ?\}) electric-indent-chars))

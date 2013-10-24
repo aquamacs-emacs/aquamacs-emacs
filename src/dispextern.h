@@ -3236,7 +3236,9 @@ extern void draw_phys_cursor_glyph (struct window *,
                                     enum draw_glyphs_face);
 extern void get_phys_cursor_geometry (struct window *, struct glyph_row *,
                                       struct glyph *, int *, int *, int *);
+#ifdef WINDOWSNT
 extern void erase_phys_cursor (struct window *);
+#endif
 extern void display_and_set_cursor (struct window *, bool, int, int, int, int);
 extern void x_update_cursor (struct frame *, bool);
 extern void x_clear_cursor (struct window *);
@@ -3350,8 +3352,10 @@ void update_face_from_frame_parameter (struct frame *, Lisp_Object,
                                        Lisp_Object);
 Lisp_Object tty_color_name (struct frame *, int);
 void clear_face_cache (int);
+#ifdef MSDOS
 unsigned long load_color (struct frame *, struct face *, Lisp_Object,
                           enum lface_attribute_index);
+#endif
 void unload_color (struct frame *, unsigned long);
 char *choose_face_font (struct frame *, Lisp_Object *, Lisp_Object,
                         int *);
@@ -3479,6 +3483,7 @@ void init_display (void);
 void syms_of_display (void);
 extern Lisp_Object Qredisplay_dont_pause;
 extern void spec_glyph_lookup_face (struct window *, GLYPH *);
+extern void fill_up_frame_row_with_spaces (struct glyph_row *, int);
 
 /* Defined in terminal.c */
 

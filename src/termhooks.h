@@ -245,7 +245,6 @@ struct input_event
      For a mouse event, this is the button number.
      For a HELP_EVENT, this is the position within the object
       (stored in ARG below) where the help was found.  */
-  /* In WindowsNT, for a mouse wheel event, this is the delta.  */
   ptrdiff_t code;
   enum scroll_bar_part part;
 
@@ -403,23 +402,6 @@ struct terminal
      structure contains information of a coding-system specified by
      the function `set-keyboard-coding-system'.  */
   struct coding_system *keyboard_coding;
-
-  /* Terminal characteristics.  */
-  /* XXX Are these really used on non-termcap displays?  */
-
-  int must_write_spaces;	/* Nonzero means spaces in the text must
-				   actually be output; can't just skip over
-				   some columns to leave them blank.  */
-  int fast_clear_end_of_line;   /* Nonzero means terminal has a `ce' string.  */
-
-  int line_ins_del_ok;          /* Terminal can insert and delete lines.  */
-  int char_ins_del_ok;          /* Terminal can insert and delete chars.  */
-  int scroll_region_ok;         /* Terminal supports setting the scroll
-                                   window.  */
-  int scroll_region_cost;	/* Cost of setting the scroll window,
-                                   measured in characters.  */
-  int memory_below_frame;	/* Terminal remembers lines scrolled
-                                   off bottom.  */
 
   /* Window-based redisplay interface for this device (0 for tty
      devices). */
@@ -621,13 +603,12 @@ tset_selection_alist (struct terminal *t, Lisp_Object val)
 /* Chain of all terminal devices currently in use.  */
 extern struct terminal *terminal_list;
 
-#define FRAME_MUST_WRITE_SPACES(f) ((f)->terminal->must_write_spaces)
-#define FRAME_FAST_CLEAR_END_OF_LINE(f) ((f)->terminal->fast_clear_end_of_line)
-#define FRAME_LINE_INS_DEL_OK(f) ((f)->terminal->line_ins_del_ok)
-#define FRAME_CHAR_INS_DEL_OK(f) ((f)->terminal->char_ins_del_ok)
-#define FRAME_SCROLL_REGION_OK(f) ((f)->terminal->scroll_region_ok)
-#define FRAME_SCROLL_REGION_COST(f) ((f)->terminal->scroll_region_cost)
-#define FRAME_MEMORY_BELOW_FRAME(f) ((f)->terminal->memory_below_frame)
+#define FRAME_MUST_WRITE_SPACES(f) (FRAME_TTY (f)->must_write_spaces)
+#define FRAME_LINE_INS_DEL_OK(f) (FRAME_TTY (f)->line_ins_del_ok)
+#define FRAME_CHAR_INS_DEL_OK(f) (FRAME_TTY (f)->char_ins_del_ok)
+#define FRAME_SCROLL_REGION_OK(f) (FRAME_TTY (f)->scroll_region_ok)
+#define FRAME_SCROLL_REGION_COST(f) (FRAME_TTY (f)->scroll_region_cost)
+#define FRAME_MEMORY_BELOW_FRAME(f) (FRAME_TTY (f)->memory_below_frame)
 
 #define FRAME_TERMINAL_CODING(f) ((f)->terminal->terminal_coding)
 #define FRAME_KEYBOARD_CODING(f) ((f)->terminal->keyboard_coding)
@@ -644,6 +625,19 @@ extern struct terminal *terminal_list;
   (((d)->type != output_termcap && (d)->type != output_msdos_raw)	\
    || (d)->display_info.tty->input)
 
+/* Return font cache data for the specified terminal.  The historical
+   name is grossly misleading, actually it is (NAME . FONT-LIST-CACHE).  */
+#if defined (HAVE_X_WINDOWS)
+#define TERMINAL_FONT_CACHE(t)						\
+  (t->type == output_x_window ? t->display_info.x->name_list_element : Qnil)
+#elif defined (HAVE_NTGUI)
+#define TERMINAL_FONT_CACHE(t)						\
+  (t->type == output_w32 ? t->display_info.w32->name_list_element : Qnil)
+#elif defined (HAVE_NS)
+#define TERMINAL_FONT_CACHE(t)						\
+  (t->type == output_ns ? t->display_info.ns->name_list_element : Qnil)
+#endif
+
 extern struct terminal *get_terminal (Lisp_Object terminal, bool);
 extern struct terminal *create_terminal (void);
 extern void delete_terminal (struct terminal *);
@@ -651,8 +645,10 @@ extern void delete_terminal (struct terminal *);
 /* The initial terminal device, created by initial_term_init.  */
 extern struct terminal *initial_terminal;
 
+#ifdef WINDOWSNT
 extern unsigned char *encode_terminal_code (struct glyph *, int,
 					    struct coding_system *);
+#endif
 
 #ifdef HAVE_GPM
 extern void close_gpm (int gpm_fd);

@@ -1,4 +1,581 @@
+2013-10-24  Michael Albinus  <michael.albinus@gmx.de>
+
+	* emacs-lisp/ert.el (ert-deftest): Bind macro `skip-unless'.
+	(ert-test-skipped): New error.
+	(ert-skip, ert-stats-skipped): New defuns.
+	(ert--skip-unless): New macro.
+	(ert-test-skipped): New struct.
+	(ert--run-test-debugger, ert-test-result-type-p)
+	(ert-test-result-expected-p, ert--stats, ert-stats-completed)
+	(ert--stats-set-test-and-result, ert-char-for-test-result)
+	(ert-string-for-test-result, ert-run-tests-batch)
+	(ert--results-update-ewoc-hf, ert-run-tests-interactively): Handle
+	skipped tests.
+
+2013-10-24  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (check-declare): Remove unnecessary path in -l argument.
+
+	* Makefile.in (abs_top_srcdir): New, set by configure.
+	(update-subdirs): Correct build-aux location.
+
+2013-10-24  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* vc/vc.el (vc-print-root-log): Always set `default-directory'
+	value, whether we could auto-deduce `backend', or not.
+
+	* progmodes/ruby-mode.el (ruby-smie-rules): Fix the "curly block
+	with parameters" example.  Simplify the "is it block or is it
+	hash" check, but also make it more thorough.
+
+2013-10-23  Masashi Fujimoto  <masfj.dev@gmail.com>  (tiny change)
+
+	* battery.el (battery-pmset): Handle OS X Mavericks.  (Bug#15694)
+
+2013-10-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/ruby-mode.el (ruby-smie-rules): Only align with parent of
+	{ if it is hanging.
+
+	* progmodes/ruby-mode.el (ruby-smie-rules): Don't return 0 for
+	:before ";".
+
+2013-10-23  Jed Brown  <jed@59A2.org>  (tiny change)
+
+	* progmodes/compile.el (compilation-directory-matcher)
+	(compilation-page-delimiter):
+	Support GNU Make-4.0 directory quoting.  (Bug#15678)
+
+2013-10-23  Leo Liu  <sdl.web@gmail.com>
+
+	* ido.el (ido-tidy): Handle read-only text.
+
+2013-10-23  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (abs_srcdir, abs_lisp): New, set by configure.
+	(emacs, compile, compile-always):
+	Quote entities that might contain whitespace.
+	(custom-deps, finder-data, autoloads): Use abs_lisp.
+	($(MH_E_DIR)/mh-loaddefs.el, $(TRAMP_DIR)/tramp-loaddefs.el)
+	($(CAL_DIR)/cal-loaddefs.el, $(CAL_DIR)/diary-loaddefs.el)
+	($(CAL_DIR)/hol-loaddefs.el): Manually expand target file name.
+
+2013-10-23  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-smie--at-dot-call):
+	Use `following-char'.
+
+2013-10-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/smie.el (smie-rule-parent): Fix opener-test.
+	* progmodes/ruby-mode.el (ruby-smie-rules):
+	Remove corresponding workaround.  Fix indentation rule of ";" so it
+	also applies when ";" is the parent.
+
+2013-10-22  Xue Fuqiao  <xfq.free@gmail.com>
+
+	* frame.el (display-screens, display-pixel-height)
+	(display-pixel-width, display-mm-width, display-backing-store)
+	(display-save-under, display-planes, display-color-cells)
+	(display-visual-class, display-monitor-attributes-list):
+	Mention the optional ‘display’ argument in doc strings.
+
+2013-10-22  Michael Gauland  <mikelygee@amuri.net>
+
+	* progmodes/ebnf2ps.el (ebnf-prologue): Avoid PS error with some
+	viewers such as evince when ebnf-production-name-p is nil.  (Bug#15625)
+
+2013-10-21  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-smie-grammar): Remove outdated
+	TODO.  Add "." after " @ ".
+	(ruby-smie--at-dot-call): New function.  Checks if point at method
+	call with explicit target.
+	(ruby-smie--forward-token, ruby-smie--backward-token): Prepend "."
+	to the method name tokens when it precedes them.
+	(ruby-smie--backward-id, ruby-smie--forward-id): Remove.
+	(ruby-smie-rules): Add rule for indentation before and after "."
+	token.
+
+2013-10-21  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* textmodes/remember.el (remember-diary-extract-entries):
+	Avoid add-to-list.
+
+	* progmodes/ruby-mode.el (ruby-smie-rules): Indent after + used as
+	an instruction.
+
+2013-10-21  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-smie-grammar): Add (almost) all infix operators.
+	(ruby-smie--implicit-semi-p): Add new operator chars.
+
+	* progmodes/ruby-mode.el (ruby-mode-map): Add binding for
+	`smie-down-list'.
+	(ruby-smie--args-separator-p): Check that there's no newline
+	between method call and its arguments.
+
+2013-10-20  Alan Mackenzie  <acm@muc.de>
+
+	Allow comma separated lists after Java "implements".
+
+	* progmodes/cc-engine.el (c-backward-over-enum-header):
+	Parse commas.
+	* progmodes/cc-fonts.el (c-basic-matchers-after): Remove comma
+	from a "disallowed" list in enum fontification.
+
+2013-10-20  Johan Bockgård  <bojohan@gnu.org>
+
+	* startup.el (default-frame-background-mode): Remove unused defvar.
+
+	* progmodes/verilog-mode.el (verilog-mode): Don't set
+	comment-indent-function globally.
+
+2013-10-20  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* menu-bar.el: Put help-menu in menu-bar-final-items unconditionally.
+	Move Info menu item creation to ns-win.el.
+
+	* term/ns-win.el (ns-initialize-window-system): Rename Help to Info
+	in menu bar.
+
+	* menu-bar.el: Move GNUStep specific menus...
+
+	* term/ns-win.el (ns-initialize-window-system): ... to here.
+
+2013-10-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* simple.el (newline): Only run post-self-insert-hook when
+	called interactively.
+
+2013-10-19  Johan Bockgård  <bojohan@gnu.org>
+
+	* icomplete.el (icomplete-with-completion-tables): Add :version.
+
+2013-10-19  Alan Mackenzie  <acm@muc.de>
+
+	Fix fontification bugs with constructors and const.
+
+	* progmodes/cc-engine.el (c-forward-decl-or-cast-1): (Just after
+	CASE 2) Remove the check for the absence of a suffix construct
+	after a function declaration with only types (no identifiers) in
+	the parentheses.  Also, accept a function declaration with just a
+	type inside the parentheses, if this type can be positively
+	recognised as such, or if a prefix keyword like "explicit" nails
+	down the construct as a declaration.
+
+2013-10-19  Eli Zaretskii  <eliz@gnu.org>
+
+	* menu-bar.el (tty-menu-navigation-map): Bind mouse-N to perform
+	TTY menu actions and down-mouse-N to tty-menu-ignore.  This solves
+	the problem whereby selecting a menu item that leads to a
+	minibuffer prompt moves the cursor out of the minibuffer window,
+	making it hard to type at the prompt.  Suggested by Stefan Monnier
+	<monnier@iro.umontreal.ca>.
+
+2013-10-19  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* menu-bar.el: Don't make Services menu.
+
+2013-10-19  Rüdiger Sonderfeld  <ruediger@c-plusplus.de>
+
+	* ffap.el: Handle "/usr/include/c++/<version>" directories.
+	(ffap-alist): Use ffap-c++-mode for c++-mode.
+	(ffap-c++-path): New variable.
+	(ffap-c++-mode): New function.
+
+2013-10-19  Joe Vornehm Jr.  <joe.vornehm@gmail.com>  (tiny change)
+
+	* ido.el (dired-other-frame): Only list directories.  (Bug#15638)
+
+2013-10-18  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-smb.el (tramp-smb-maybe-open-connection): Fix an error
+	introduced on 2013-09-08, which results in an infinite loop
+	requesting a password.
+
+2013-10-18  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/verilog-mode.el (verilog-case-fold): Add :version.
+
+2013-10-18  Wilson Snyder  <wsnyder@wsnyder.org>
+
+	Sync with upstream verilog-mode revision 1a6ecec7.
+	* progmodes/verilog-mode.el (verilog-mode-version): Update.
+	(verilog-mode-release-date): Remove.
+	(verilog-highlight-grouping-keywords, verilog-active-low-regexp)
+	(verilog-auto-inst-param-value, verilog-auto-input-ignore-regexp)
+	(verilog-auto-inout-ignore-regexp, verilog-auto-output-ignore-regexp)
+	(verilog-auto-tieoff-ignore-regexp)
+	(verilog-auto-unused-ignore-regexp, verilog-typedef-regexp)
+	(verilog-scan-cache-preserving, verilog-mode, verilog-at-struct-p)
+	(verilog-signals-with, verilog-dir-cache-preserving)
+	(verilog-auto-inst, verilog-auto-inout-param, verilog-auto):
+	Doc fixes.
+	(verilog-case-fold): New option, to control case folding in
+	regexp searches, bug597.
+	(verilog-menu): Add verilog-sk-uvm-component, minor tweaks.
+	(verilog-string-match-fold, verilog-in-paren-count)
+	(verilog-in-struct-nested-p, verilog-at-struct-mv-p)
+	(verilog-at-close-struct-p): New functions.
+	(verilog-beg-block-re-ordered, verilog-extended-case-re)
+	(verilog-forward-sexp, verilog-set-auto-endcomments):
+	(verilog-leap-to-case-head): Handle "unique0" case.
+	(verilog-in-constraint-re): New constant.
+	(verilog-keywords, verilog-type-font-keywords):
+	Add some SystemVerilog 1800-2012 keywords.
+	(verilog-label-be): Remove unimplemented argument, bug669.
+	(verilog-batch-execute-func): When batch expanding clear
+	create-lockfiles to prevent spurious user locks when a file ends
+	up not changing.
+	(verilog-calculate-indent, verilog-calc-1)
+	(verilog-at-close-constraint-p, verilog-at-constraint-p)
+	(verilog-do-indent): Fix indentation of nested constraints
+	and structures.
+	(verilog-sig-tieoff, verilog-typedef-name-p, verilog-auto-inst)
+	(verilog-auto-inst-param): Use verilog-string-match-fold.
+	(verilog-read-inst-module-matcher):
+	Fix AUTOINST on gate primitives with #1.
+	(verilog-read-decls): Fix double-declaring user-defined typed signals.
+	Reads all user-defined typed variables.
+	(verilog-read-defines): Fix reading definitions inside comments, bug647.
+	(verilog-signals-matching-regexp)
+	(verilog-signals-not-matching-regexp, verilog-auto):
+	Respect verilog-case-fold.
+	(verilog-diff-report): Fix line count.
+	(verilog-auto-assign-modport): Remove unused local `modi'.
+	(verilog-auto-inst-port): Support [][] in AUTO_TEMPLATE to
+	better handle multidimensional arrays.
+	Fix packed array ports misadding bit index in AUTOINST, bug637.
+	(verilog-auto-output, verilog-auto-input): Fix AUTOINPUT and AUTOOUTPUT
+	to not double-declare existing outputs and inputs, respectively.
+	(verilog-template-map): Bind U to verilog-sk-uvm-component.
+	(verilog-sk-uvm-object): Rename from verilog-sk-uvm-class.
+	(verilog-sk-uvm-component): New skeleton.
+	(verilog-submit-bug-report): Add verilog-case-fold,
+	remove verilog-mode-release-date.
+
+2013-10-17  Barry O'Reilly  <gundaetiapo@gmail.com>
+
+	* lisp/subr.el (sit-for): Call (input-pending-p t) so as to behave
+	as before.
+
+2013-10-18  Reuben Thomas  <rrt@sc3d.org>
+
+	* textmodes/remember.el (remember): set buffer-offer-save in
+	remember buffers (bug#13566).
+
+2013-10-18  Daniel Colascione  <dancol@dancol.org>
+
+	When evaluating forms in ielm, direct standard output to ielm
+	buffer.  Add new ielm-return-for-effect command.  Remove trailing
+	whitespace throughout.
+
+	* ielm.el (ielm-map): Bind M-RET to ielm-return-for-effect.
+	(ielm-return-for-effect): New command.
+	(ielm-send-input): Accept optional `for-effect' parameter.
+	(ielm-eval-input): Accept optional `for-effect' parameter.
+	Bind `standard-output' to stream we create using
+	`ielm-standard-output-impl'.  Suppress printing result when
+	`for-effect'.
+	(ielm-standard-output-impl): New function.
+	(inferior-emacs-lisp-mode): Explain new features in documentation.
+
+2013-10-17  Michael Albinus  <michael.albinus@gmx.de>
+
+	Code cleanup.
+
+	* net/tramp.el (tramp-debug-message): Do not check for connection
+	buffer.
+	(tramp-message): Use "vector" connection property.
+
+	* net/tramp.el (tramp-rfn-eshadow-update-overlay)
+	(tramp-equal-remote, tramp-eshell-directory-change)
+	* net/tramp-adb.el (tramp-adb-handle-copy-file)
+	(tramp-adb-handle-rename-file)
+	* net/tramp-cmds.el (tramp-list-remote-buffers)
+	(tramp-cleanup-connection, tramp-cleanup-this-connection)
+	* net/tramp-compat.el (tramp-compat-process-running-p)
+	* net/tramp-ftp.el (tramp-ftp-file-name-handler)
+	* net/tramp-gvfs.el (tramp-gvfs-handle-copy-file)
+	(tramp-gvfs-handle-rename-file)
+	* net/tramp-sh.el (tramp-sh-handle-set-file-times)
+	(tramp-set-file-uid-gid)
+	* net/tramp-smb.el (tramp-smb-handle-copy-file)
+	(tramp-smb-handle-rename-file): Use `tramp-tramp-file-p' instead
+	of `file-remote-p'.
+
+	* net/tramp.el (tramp-connectable-p, tramp-handle-file-remote-p)
+	* net/tramp-gw.el (tramp-gw-gw-proc-sentinel)
+	(tramp-gw-aux-proc-sentinel, tramp-gw-process-filter)
+	(tramp-gw-open-network-stream): Suppress unrelated traces.
+
+	* net/tramp-adb.el (tramp-adb-maybe-open-connection)
+	* net/tramp-gvfs.el (tramp-gvfs-handle-file-notify-add-watch)
+	* net/tramp-sh.el (tramp-do-copy-or-rename-file-out-of-band)
+	* net/tramp-smb.el (tramp-smb-maybe-open-connection): Set "vector"
+	connection property.
+
+	* net/tramp-cache.el (top): Suppress traces when reading
+	persistency file.
+
+	* net/tramp-sh.el (tramp-sh-handle-file-notify-add-watch):
+	Refactor common code.  Improve debug message.
+	(tramp-maybe-open-connection)
+	* net/tramp-smb.el (tramp-smb-call-winexe): Do not request
+	connection buffer too early.
+
+	* net/tramp-smb.el (tramp-smb-actions-get-acl): New defconst, renamed
+	from `tramp-smb-actions-with-acl'.
+	(tramp-smb-actions-set-acl): New defconst.
+	(tramp-smb-handle-copy-directory)
+	(tramp-smb-action-get-acl): New defun, renamed from
+	`tramp-smb-action-with-acl'.
+	(tramp-smb-action-set-acl): New defun.
+	(tramp-smb-handle-set-file-acl): Rewrite.
+
+2013-10-17  Glenn Morris  <rgm@gnu.org>
+
+	* indent.el (indent-rigidly): Fix 2013-10-08 change.  (Bug#15635)
+
+2013-10-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* skeleton.el (skeleton-newline): Remove.
+	(skeleton-internal-1): Use (insert "\n") instead.
+
+	* emacs-lisp/lisp.el (lisp-completion-at-point): Complete var names for
+	let-bindings.
+
+	* progmodes/sh-script.el (sh-find-prev-matching): Disable SMIE's
+	forward-sexp-function while we redo its job (bug#15613).
+
+2013-10-17  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* calc/calc-comb.el (math-prime-test): Don't assume large integers are
+	represented by lists.
+
+2013-10-16  Glenn Morris  <rgm@gnu.org>
+
+	* tmm.el (tmm--history): New dynamic variable.
+	(tmm-prompt): Use tmm--history in place of `history'.  (Bug#15623)
+
+2013-10-16  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-smb.el (tramp-smb-acl-program): New customer option.
+	(tramp-smb-errors): Add error messages.
+	(tramp-smb-actions-with-acl): New defconst.
+	(tramp-smb-file-name-handler-alist) [set-file-acl]: Add handler.
+	(tramp-smb-action-with-acl, tramp-smb-handle-set-file-acl): New defuns.
+	(tramp-smb-handle-file-acl): Rewrite, using "smbcacls".
+	(tramp-smb-handle-file-attributes): Simplify test for "stat" capability.
+	(tramp-smb-get-stat-capability): Fix tests.
+
+2013-10-16  Dima Kogan  <dima@secretsauce.net>  (tiny change)
+
+	* progmodes/subword.el (subword-capitalize): Fix Stefan's mess
+	(bug#15580).
+
+2013-10-16  Glenn Morris  <rgm@gnu.org>
+
+	* ansi-color.el (ansi-color-drop-regexp):
+	Add 1J, 1K, 2K.  (Bug#15617)
+
+	* files.el (hack-local-variables--warned-lexical): New.
+	(hack-local-variables):
+	Warn about misplaced lexical-binding.  (Bug#15616)
+
+	* net/eww.el (eww-render): Always set eww-current-url,
+	and update header line.  (Bug#15622)
+	(eww-display-html): ... Rather than just doing it here.
+
+2013-10-15  Eli Zaretskii  <eliz@gnu.org>
+
+	* menu-bar.el (tty-menu-navigation-map): Bind mouse wheels to TTY
+	menu navigations commands.
+
+2013-10-14  Dima Kogan  <dima@secretsauce.net>  (tiny change)
+
+	* progmodes/subword.el (subword-capitalize): Be careful when
+	the search for [[:alpha:]] fails (bug#15580).
+
+2013-10-14  Eli Zaretskii  <eliz@gnu.org>
+
+	* menu-bar.el (tty-menu-navigation-map): Bind shifted mouse clicks
+	to commands that scroll the menu.
+
+2013-10-14  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-smie--args-separator-p):
+	Handle methods ending with `?' and `!'.
+
+2013-10-14  Akinori MUSHA  <knu@iDaemons.org>
+
+	* progmodes/ruby-mode.el (ruby-encoding-map): Add a mapping from
+	`japanese-cp932' to `cp932' to fix the problem where saving a
+	source file written in Shift_JIS twice would end up having
+	`coding: japanese-cp932' which Ruby could not recognize.
+	(ruby-mode-set-encoding): Add support for encodings mapped to nil
+	in `ruby-encoding-map'.
+	(ruby-encoding-map): Map `us-ascii' to nil by default, meaning it
+	doesn't need to be explicitly declared in magic comment.
+	(ruby-encoding-map): Add type declaration for better customize UI.
+
+2013-10-13  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/sh-script.el (sh-mark-line, sh-learn-buffer-indent):
+	Occur buffers are read-only.  http://bugs.debian.org/720775
+
+	* emacs-lisp/authors.el (authors-fixed-entries):
+	Comment out old alpha stuff.
+
+2013-10-13  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-mode): Add `ruby-mode-set-encoding'
+	to `after-save-hook' instead of `before-save-hook'.
+	(ruby-mode-set-encoding): Use the value of coding system used to
+	write the file.  Call `basic-save-buffer-1' after modifying the
+	buffer.
+
+2013-10-13  Alan Mackenzie  <acm@muc.de>
+
+	Fix indentation/fontification of Java enum with
+	"implements"/generic.
+
+	* progmodes/cc-engine.el (c-backward-over-enum-header):
+	Extracted from the three other places and enhanced to handle generics.
+	(c-inside-bracelist-p): Uses new function above.
+	* progmodes/cc-fonts.el (c-font-lock-declarations): Uses new
+	function above.
+	(c-font-lock-enum-tail): Uses new function above.
+
+2013-10-13  Kenichi Handa  <handa@gnu.org>
+
+	* international/mule-cmds.el (select-safe-coding-system): Remove a
+	superfluous condition in chekcing whether a coding system is safe
+	or not.
+
+2013-10-13  Oleh Krehel  <ohwoeowho@gmail.com>
+
+	* replace.el (how-many): Fix rstart and !rend case.  (Bug#15589)
+
+2013-10-13  Andreas Politz  <politza@hochschule-trier.de>
+
+	* progmodes/sql.el (sql-add-product): Fix paren typo.  (Bug#15435)
+
+2013-10-13  Glenn Morris  <rgm@gnu.org>
+
+	* menu-bar.el (menu-bar-update-buffers):
+	Unify Buffers menu prompt string.  (Bug#15576)
+
+	* face-remap.el (text-scale-adjust): Doc fix.  (Bug#15434)
+
+	* emacs-lisp/authors.el (authors-aliases, authors-ignored-files):
+	Add some entries.
+	(authors-fixed-entries): Use accented form of name.
+
+2013-10-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/ruby-mode.el (ruby-smie-grammar): Add rule for paren-free
+	method calls (bug#15594).
+	(ruby-smie--args-separator-p): New function.
+	(ruby-smie--forward-token, ruby-smie--backward-token): Use it to
+	recognize paren-free method calls.
+
+	* isearch.el (isearch-pre-command-hook): Don't build in knowledge about
+	internals of universal-argument.
+
+2013-10-11  Eli Zaretskii  <eliz@gnu.org>
+
+	* menu-bar.el (tty-menu-navigation-map): Remap F10 to tty-menu-exit.
+	Bind all menu-bar sequences to tty-menu-exit -- this pops down a
+	dropped menu on second mouse click on the menu bar.
+
+2013-10-11  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/sh-script.el: Provide simpl(e|istic) completion.
+	(explicit-shell-file-name): Declare.
+	(sh--vars-before-point, sh--cmd-completion-table): New functions.
+	(sh-completion-at-point-function): New function.
+	(sh-mode): Use it.
+	(sh-smie--keyword-p): Remove unused argument.
+	(sh-smie-sh-backward-token, sh-smie-rc-backward-token): Remove unused
+	vars.
+	(sh-set-shell): Always setup SMIE, even if we use the
+	old indentation code.
+
+2013-10-11  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-smie--implicit-semi-p): Split the
+	cases of ? and =.
+	(ruby-smie-rules): Simplify the "do" rule.  The cases when the
+	predicate would return nil are almost non-existent.
+	(ruby-smie--redundant-do-p): Include "until" and "for" statements.
+
+	* emacs-lisp/smie.el (smie--matching-block-data): Invalidate the
+	cache also after commands that modify the buffer but don't move
+	point.
+
+2013-10-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* env.el (substitute-env-in-file-name): New function.
+	(substitute-env-vars): Extend the meaning of the optional arg.
+
+2013-10-10  Eli Zaretskii  <eliz@gnu.org>
+
+	* term/w32-win.el (dynamic-library-alist): Define separate lists
+	of GIF DLLs for versions before and after 5.0.0 of giflib.
+	(Bug#15531)
+
+2013-10-10  João Távora <joaotavora@gmail.com>
+
+	* vc/vc.el (vc-diff-build-argument-list-internal): If the file is
+	not locked, use last revision and current source as
+	defaults.  (Bug#15569)
+
+2013-10-10  Masatake YAMATO  <yamato@redhat.com>
+
+	* menu-bar.el (menu-bar-open): Don't use popup-menu if
+	menu-bar is hidden.
+
+2013-10-10  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.el (pop-to-buffer-same-window): Fix doc-string.
+	(Bug#15492)
+
+2013-10-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* menu-bar.el (tty-menu-navigation-map): Reduce redundancy.
+
+2013-10-10  Andrei Chițu  <andrei.chitu1@gmail.com>  (tiny change)
+
+	* calendar/icalendar.el (icalendar-import-file):
+	Fix interactive spec.  (Bug#15482)
+
+2013-10-10  Glenn Morris  <rgm@gnu.org>
+
+	* desktop.el (desktop-save): Default to saving in .emacs.d,
+	since PWD is no longer in desktop-path by default.  (Bug#15319)
+
+	* menu-bar.el (menu-bar-options-menu): Remove text-mode auto-fill,
+	now that text mode has a menu with the same entry.
+	(menu-bar-text-mode-auto-fill): Remove now unused func.
+	* textmodes/text-mode.el (text-mode-map):
+	Use auto-fill help text from menu-bar.el.
+
+2013-10-10  John Anthony  <john@jo.hnanthony.com>  (tiny change)
+
+	* textmodes/text-mode.el (text-mode-map): Add a menu.  (Bug#15562)
+
+2013-10-09  Juri Linkov  <juri@jurta.org>
+
+	* isearch.el (isearch-pre-command-hook): Use this-single-command-keys
+	instead of this-command-keys.  Add universal-argument-more and
+	universal-argument-minus to the list of prefix commands.  (Bug#15568)
+
 2013-10-09  Glenn Morris  <rgm@gnu.org>
+
+	* vc/vc-svn.el (vc-svn-create-repo):
+	Expand paths in file://... url.  (Bug#15446)
 
 	* emacs-lisp/authors.el (authors-aliases, authors-fixed-case):
 	Add some entries.
@@ -53,8 +630,8 @@
 
 	* tooltip.el (tooltip-mode): Don't error out on TTYs.
 
-	* menu-bar.el (popup-menu, popup-menu-normalize-position): Moved
-	here from mouse.el.
+	* menu-bar.el (popup-menu, popup-menu-normalize-position):
+	Move here from mouse.el.
 	(popup-menu): Support menu-bar navigation on TTYs using C-f/C-b
 	and arrow keys.
 	(tty-menu-navigation-map): New map for TTY menu navigation.
@@ -3121,7 +3698,7 @@
 
 2013-07-23  Michael R. Mauger  <michael@mauger.com>
 
-	* progmodes/sql.el Version 3.3
+	* progmodes/sql.el: Version 3.3
 	(sql-product-alist): Improve oracle :prompt-cont-regexp.
 	(sql-starts-with-prompt-re, sql-ends-with-prompt-re): New functions.
 	(sql-interactive-remove-continuation-prompt): Rewrite, use
@@ -8333,7 +8910,7 @@
 
 2013-03-14  Tassilo Horn  <tsdh@gnu.org>
 
-	* doc-view.el Fix bug#13887.
+	* doc-view.el: Fix bug#13887.
 	(doc-view-insert-image): Don't modify overlay associated to
 	non-live windows, and implement horizontal centering of image in
 	case it's smaller than the window.

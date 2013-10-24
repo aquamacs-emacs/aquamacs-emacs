@@ -20593,8 +20593,8 @@ display_menu_bar (struct window *w)
 static void
 deep_copy_glyph_row (struct glyph_row *to, struct glyph_row *from)
 {
-  int area, i, sum_used = 0;
   struct glyph *pointers[1 + LAST_AREA];
+  int to_used = to->used[TEXT_AREA];
 
   /* Save glyph pointers of TO.  */
   memcpy (pointers, to->glyphs, sizeof to->glyphs);
@@ -20602,25 +20602,17 @@ deep_copy_glyph_row (struct glyph_row *to, struct glyph_row *from)
   /* Do a structure assignment.  */
   *to = *from;
 
-  /* Restore original pointers of TO.  */
+  /* Restore original glyph pointers of TO.  */
   memcpy (to->glyphs, pointers, sizeof to->glyphs);
 
-  /* Count how many glyphs to copy and update glyph pointers.  */
-  for (area = LEFT_MARGIN_AREA; area < LAST_AREA; ++area)
-    {
-      if (area > LEFT_MARGIN_AREA)
-	{
-	  eassert (from->glyphs[area] - from->glyphs[area - 1]
-		   == from->used[area - 1]);
-	  to->glyphs[area] = to->glyphs[area - 1] + to->used[area - 1];
-	}
-      sum_used += from->used[area];
-    }
-
   /* Copy the glyphs.  */
-  eassert (sum_used <= to->glyphs[LAST_AREA] - to->glyphs[LEFT_MARGIN_AREA]);
-  for (i = 0; i < sum_used; i++)
-    to->glyphs[LEFT_MARGIN_AREA][i] = from->glyphs[LEFT_MARGIN_AREA][i];
+  memcpy (to->glyphs[TEXT_AREA], from->glyphs[TEXT_AREA],
+	  min (from->used[TEXT_AREA], to_used) * sizeof (struct glyph));
+
+  /* If we filled only part of the TO row, fill the rest with
+     space_glyph (which will display as empty space).  */
+  if (to_used > from->used[TEXT_AREA])
+    fill_up_frame_row_with_spaces (to, to_used);
 }
 
 /* Display one menu item on a TTY, by overwriting the glyphs in the
@@ -20657,6 +20649,14 @@ display_tty_menu_item (const char *item_text, int width, int face_id,
 
   eassert (FRAME_TERMCAP_P (f));
 
+  /* Don't write beyond the matrix's last row.  This can happen for
+     TTY screens that are not high enough to show the entire menu.
+     (This is actually a bit of defensive programming, as
+     tty_menu_display already limits the number of menu items to one
+     less than the number of screen lines.)  */
+  if (y >= f->desired_matrix->nrows)
+    return;
+
   init_iterator (&it, w, -1, -1, f->desired_matrix->rows + y, MENU_FACE_ID);
   it.first_visible_x = 0;
   it.last_visible_x = FRAME_COLS (f) - 1;
@@ -20671,6 +20671,7 @@ display_tty_menu_item (const char *item_text, int width, int face_id,
 
   /* Arrange for the menu item glyphs to start at (X,Y) and have the
      desired face.  */
+  eassert (x < f->desired_matrix->matrix_w);
   it.current_x = it.hpos = x;
   it.current_y = it.vpos = y;
   saved_used = row->used[TEXT_AREA];
@@ -26414,9 +26415,11 @@ draw_phys_cursor_glyph (struct window *w, struct glyph_row *row,
 }
 
 
-/* EXPORT:
-   Erase the image of a cursor of window W from the screen.  */
+/* Erase the image of a cursor of window W from the screen.  */
 
+#ifndef WINDOWSNT
+static
+#endif
 void
 erase_phys_cursor (struct window *w)
 {
