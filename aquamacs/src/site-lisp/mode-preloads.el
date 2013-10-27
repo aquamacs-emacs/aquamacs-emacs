@@ -127,17 +127,17 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 ;; Need this to prevent the tramp problem.
 (setq ess-r-versions nil)
 
-(autoload 'ess-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'R-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'R "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'S-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'Rnw-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'omegahat-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'XLS-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'STA-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'SAS-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'S-transcript-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'R-transcript-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'ess-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'R-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'R "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'S-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'Rnw-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'omegahat-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'XLS-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'STA-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'SAS-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'S-transcript-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
+(autoload 'R-transcript-mode "ess-mode/lisp/ess/ess-site" "Emacs Speaks Statistics" t)
 
 
 
