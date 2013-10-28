@@ -22,11 +22,13 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, 2007, 2009, 2010: David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2009, 2010, 2013: David Reitter
 
 
 
 (require 'aquamacs-tools)
+
+ 
 
 ; go over tool-bar-map to find out what's in there
 ;; unlik plist-get/put, these will work
@@ -40,6 +42,16 @@
 	  
 ;; 	  (setq ret (if (cdr-safe list) (aq-list-has-property-element (cdr-safe list) elem default) default))))
 ;;     ret))
+
+(defmacro aq-incf (place &optional x)
+  "Increment PLACE by X (1 by default).
+PLACE may be a symbol, or any generalized variable allowed by `setf'.
+The return value is the incremented value of PLACE."
+  (declare (debug (place &optional form)))
+  (if (symbolp place)
+      (list 'setq place (if x (list '+ place x) (list '1+ place)))
+    (list '+ place (or x 1))))
+
 
 (defun aq-list-has-property-element (list elem &optional default)
   (let ((l2 list) (ret default))   
@@ -76,7 +88,7 @@
 
       (if (eq (nth n list) prop)
 	  (setf (nthcdr n list) (nthcdr (+ 2 n) list)))
-      (cl-incf n)))
+      (aq-incf n)))
   list)
 
 ;; (setq ll '(2313 88 36 :v nil))
@@ -245,6 +257,7 @@ This variable is used in the AUCTeX configuration.")
 ;; but how can we identify toolbars otherwise?
 (defvar aquamacs-tool-bar-user-customization nil)
 (defun store-tool-bar-configuration (config)
+  (message "storing")
   (assq-set (tool-bar-hash) config
 	    'aquamacs-tool-bar-user-customization)
   ;; ensure it doesn't get too big
@@ -366,8 +379,10 @@ If there is a user-supplied visibility term, set it."
 			    (and show-message
 				 (message "Toolbar item \"%s\" not available here." key)
 				 nil))
-			`((,(intern (format "space-%s" (cl-incf space-idx)))
-			   menu-item "--" nil :enable nil))))
+			(let ((name (format "space-%s" (aq-incf space-idx))))
+			   `((,(intern name)
+			      menu-item name nil :label "--" :enable nil)))))
+
 		    config))
 		  (apply 
 		   #'append
@@ -432,14 +447,14 @@ If there is a user-supplied visibility term, set it."
 ;; 		   (setq new-tool-bar (cons (cdr (assq (nth uc-index user-config) store))
 ;; 					    new-tool-bar))
 ;; 		   (assq-delete-all (nth uc-index user-config) 'store)
-;; 		   (cl-incf uc-index))
+;; 		   (aq-incf uc-index))
 ;; 		 (print store)
 ;; 		 (if (and (not (eq (car item) (nth uc-index user-config)))
 ;; 			  cvis)
 ;; 		     ;; put in storage
 ;; 		     (setq store (cons item store))
 ;; 		   ;; else
-;; 		   (cl-incf uc-index)
+;; 		   (aq-incf uc-index)
 ;; 		   (setq new-tool-bar (cons item new-tool-bar))))
 ;; 	     (setq new-tool-bar (cons item  new-tool-bar))))
 ;; 	 tb)
