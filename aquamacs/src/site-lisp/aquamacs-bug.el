@@ -106,7 +106,11 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 Offer to send a bug report."
   (interactive)
   (protect
-   (let ((last-nonmenu-event nil))
+   (let* ((logfiles (append
+		    (directory-files "~/Library/Logs/CrashReporter" t "^Aquamacs.*")
+		    (directory-files "~/Library/Logs/DiagnosticReports" t "^Aquamacs.*.crash$")))
+	  (ln (length logfiles))
+	  (last-nonmenu-event nil))
      (mapc
       (lambda (file)
 	(when (file-newer-than-file-p file aquamacs-id-file)
@@ -120,10 +124,10 @@ generated crash report to us.
 	    
 	    
 	      (report-aquamacs-bug (concat "Crash in " location) nil file)))))
-      (directory-files "~/Library/Logs/CrashReporter" t "Aquamacs.*"))
+      (if (> ln 6)
+	  (nthcdr (- (length logfiles) 5) logfiles)
+	logfiles))
      nil)))
-
-
 
 
 (defun start-aquamacs-with-args (kill-session &rest args)
