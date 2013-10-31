@@ -1548,8 +1548,11 @@ for instance using the window manager, then this produces a quit and
   else
     /* ??? Not really clean; should be CHECK_WINDOW_OR_FRAME,
        but I don't want to make one now.  */
-    CHECK_WINDOW (window);
-
+    {
+      f= SELECTED_FRAME ();
+      // Aquamacs provides an additional interface: nil -> selected frame
+      // on text-based terminals, just use the selected frame
+    }
   /* Force a redisplay before showing the dialog.  If a frame is created
      just before showing the dialog, its contents may not have been fully
      drawn, as this depends on timing of events from the X server.  Redisplay
