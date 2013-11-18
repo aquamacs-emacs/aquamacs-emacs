@@ -1819,13 +1819,18 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
   block_input();
 
   fm = [NSFontManager sharedFontManager];
-  if (NILP (frame))
-    f = SELECTED_FRAME ();
-  else
-    {
-      f = decode_window_system_frame (frame);
-    }
+  struct font *font = f->output_data.ns->font;
+  NSFont *nsfont;
 
+  // default font
+  if (EQ (font->driver->type, Qns))
+    nsfont = ((struct nsfont_info *)font)->nsfont;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+  else
+    nsfont = (NSFont *) macfont_get_nsctfont (font);
+#endif
+ 
+  // given font
   if (! NILP (face))
     {
       int face_id = lookup_named_face (f, face, 1);
@@ -1834,14 +1839,16 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
 	  struct face *face = FACE_FROM_ID (f, face_id);
 	  if (face)
 	    {
-	      [fm setSelectedFont:  ((struct nsfont_info *)face->font)->nsfont
-		       isMultiple: NO];
+	      if (EQ (face->font->driver->type, Qns))
+		nsfont = ((struct nsfont_info *)face->font)->nsfont;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+	      else
+		nsfont = (NSFont *) macfont_get_nsctfont (face->font);
+#endif
 	    }
 	}
     } 
-  else
-  [fm setSelectedFont: ((struct nsfont_info *)f->output_data.ns->font)->nsfont
-           isMultiple: NO];
+  [fm setSelectedFont: nsfont isMultiple: NO];
   [fm orderFrontFontPanel: NSApp];
 
   unblock_input();
