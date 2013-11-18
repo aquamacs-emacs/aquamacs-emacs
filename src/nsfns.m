@@ -1399,7 +1399,10 @@ arg nil means cycle forwards.  */)
      (arg)
      Lisp_Object arg;
 {
-  [NSApp _cycleWindowsReversed:(NILP(arg) ? FALSE : TRUE)];
+  if ([NSApp respondsToSelector:@selector(_cycleWindowsReversed:)])
+  {
+    [NSApp _cycleWindowsReversed:(NILP(arg) ? FALSE : TRUE)];
+  }
   return Qnil;
 }
 
@@ -2073,18 +2076,17 @@ when `ns-popup-save-panel' was called.
   [panel setCanSelectHiddenExtension:NO];
   [panel setExtensionHidden:NO];
 
-  [panel beginSheetForDirectory:dirS file:initS modalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window]
-		  modalDelegate:NSApp // it's EmacsApp
-		 didEndSelector:@selector(savePanelDidEnd2:returnCode:contextInfo:)
-		    contextInfo:current_buffer];
+  if (dirS) [panel setDirectoryURL: [NSURL fileURLWithPath: dirS]];
+  if (initS) [panel setNameFieldStringValue: [initS lastPathComponent]];
+
+  [panel beginSheetModalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window]
+		completionHandler: 
+	   ^(NSInteger result) {
+      [NSApp savePanelDidEnd2: panel returnCode:result contextInfo:current_buffer];
+    }];
+    // to do: move code from savePanelDidEnd2 here
   
-  //  ns_update_menubar (SELECTED_FRAME (), false, nil);
   set_frame_menubar (SELECTED_FRAME (), nil, false);
-
-  /* make stick */
-  // [NSApp setMainMenu: panelMenu];
-
-  // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
   unblock_input();
   return Qnil;
 }
@@ -2804,7 +2806,11 @@ void
 ns_run_ascript (void)
 {
   if (! NILP (as_script))
-    as_status = ns_do_applescript (as_script, as_result);
+    {
+      NSString *s = [[NSString stringWithUTF8String: SSDATA (as_script)] retain];
+      as_status = ns_do_applescript (s, as_result);
+      [s release];
+    }
   as_script = Qnil;
 }
 
@@ -2826,7 +2832,7 @@ In case the execution fails, an error is signaled. */)
 
   block_input ();
 
-  as_script = script; // [[NSString stringWithUTF8String: SSDATA (script)] retain];
+  as_script = script; // ;
   as_result = &result;
 
   NSWindow *win = [NSApp mainWindow];
@@ -3112,14 +3118,14 @@ Lisp_Object URLstring;
 		}
 		if (status != noErr) 
 		{
-			error ("Failed to launch default browser. Error %d", XINT(status));
+			error ("Failed to launch default browser. Error %ld", XINT(status));
 			return Qnil;
 		}
     } 
 	else
     {
 		unblock_input();
-		error ("Could not determine default browser. Error %d", XINT(status));
+		error ("Could not determine default browser. Error %ld", XINT(status));
 		return Qnil;
     }
 	
