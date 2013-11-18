@@ -98,8 +98,7 @@ EmacsTooltip *ns_tooltip = nil;
 Lisp_Object Fx_open_connection (Lisp_Object, Lisp_Object, Lisp_Object);
 
 /* Static variables to handle applescript execution.  */
-static NSString *as_script;
-static Lisp_Object *as_result;
+static Lisp_Object as_script, *as_result;
 static int as_status;
 
 #ifdef GLYPH_DEBUG
@@ -2827,7 +2826,7 @@ In case the execution fails, an error is signaled. */)
 
   block_input ();
 
-  as_script = [[NSString stringWithUTF8String: SSDATA (script)] retain];
+  as_script = script; // [[NSString stringWithUTF8String: SSDATA (script)] retain];
   as_result = &result;
 
   NSWindow *win = [NSApp mainWindow];
