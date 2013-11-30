@@ -927,6 +927,23 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 	      ;; :visible (and (boundp 'ispell-program-name) ispell-program-name)
 	      )
   'separator-bookmark)
+
+(defun aquamacs-count-words ()
+  "Display a word count.
+Like `count-words', but displays a dialog box if
+called using the mouse."
+  (interactive)
+  (let ((r (call-interactively 'count-words)))
+    (when (consp last-nonmenu-event)
+      (message (concat r (substitute-command-keys "\nYou can also call this function with \\[word-count].")))
+      (x-popup-dialog (selected-frame) (list r '("OK" . t) 'no-cancel)))))
+
+(define-key-after menu-bar-edit-menu [count-words]
+  '(menu-item "Count Words..." aquamacs-count-words 
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :help "Show word count for active region or buffer")
+  'spell)
+
 ;; (define-key-after menu-bar-edit-menu [spell-download-aspell]
 ;; 	'(menu-item "Download Spell-Checking..." aquamacs-ispell-install
 ;; 		    :help "Download spell-checking package"
