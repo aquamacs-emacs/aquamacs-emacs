@@ -1176,6 +1176,58 @@ update_frame_tool_bar (struct frame *f)
   [toolbar clearAll];
 #endif
 
+  [toolbar setAllowsUserCustomization:YES];
+  [toolbar setAutosavesConfiguration:NO];
+  /* setAutosavesConfiguration is problematic,
+     as it creates a defaults file
+     also, doesn't seem to work with our tool bar 
+     construction mechanism.
+     [toolbar setAutosavesConfiguration:YES];
+
+     how to store tool bar changes:
+
+     tool bars here have been set from the tool bar map so that
+     there is little access to the original (lisp) item.
+     we could create events and process them on the lisp side
+     (which will be tricky to get right).
+
+     we need to store
+     - enabled items
+     - disabled items
+     - additional items inserted somewhere
+
+     Lisp event: NS_TOOL_BAR_CONFIG_CHANGED
+     (ns-tool-bar-read-configuration)
+     => list of strings (containing indexes for current tool-bar-map)
+
+     On the Lisp side, we could then update the tool-bar-map accordingly,
+     i.e. reorder it and set visibility flags.
+     The internal rep. of the toolbar should be updated soon afterwards
+     (perhaps redraw-frame).
+
+     To make the user-mandated changes persistent, we could keep this around:
+
+     ((hash1 . tool-bar-config1)
+      (hash2 . tool-bar-config2))
+ 
+      The hashes are hashes of the set of Lisp-side toolbar menu items (via their event names)
+      (sxhash (sort (mapcar
+      (lambda (m)
+      (when (consp m)
+      (car m)))
+      tool-bar-map)))
+
+      however, as soon as an item is added to or removed from the tool bar, do we want to 
+      discard the user's tool bar configuration?
+      Maybe that's okay.
+
+      the above tool-bar-config1 would be a list of toolbar item identifiers,
+      indicating visibility (by presence) and ordering.
+      It could be used to update the toolbar when desired.
+
+  */
+
+
   /* update EmacsToolbar as in GtkUtils, build items list */
   for (i = 0; i < f->n_tool_bar_items; ++i)
     {
@@ -1205,7 +1257,8 @@ update_frame_tool_bar (struct frame *f)
       	keyText = "?";
 
       /* Check if this is a separator.  */
-      if (EQ (TOOLPROP (TOOL_BAR_ITEM_TYPE), Qt) || (STRINGP (label) && strcmp("--", SDATA (label)) == 0))
+      if (// EQ (TOOLPROP (TOOL_BAR_ITEM_TYPE), Qt) ||
+	  (STRINGP (label) && strcmp("--", SDATA (label)) == 0))
         {
 	  [toolbar addDisplayItemSpacerWithIdx: k++ tag:i key: keyText];
           continue;
@@ -1397,6 +1450,7 @@ Items in this list are always Lisp symbols.*/)
   [self setDelegate: self];
   identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
   activeIdentifiers = [[NSMutableArray alloc] initWithCapacity: 8];
+  availableIdentifiers = [[NSMutableArray alloc] initWithCapacity: 50];
   prevIdentifiers = nil;
   prevEnablement = enablement = 0L;
   return self;
@@ -1506,8 +1560,10 @@ Items in this list are always Lisp symbols.*/)
   NSString *help_str = [NSString stringWithCString: help];
 
   /* 1) come up w/identifier */
-  NSString *identifier
-    = [NSString stringWithFormat: @"%lu", (unsigned long)[img hash]];
+  // NSString *identifier
+  //   = [NSString stringWithFormat: @"%lu", (unsigned int)[img hash]];
+  NSString *identifier = [NSString stringWithFormat: @"0x%08lX%s",
+				   ([img hash] + [label_str hash] + [help_str hash]) & 0xFFFFFFFF, key];
 
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
