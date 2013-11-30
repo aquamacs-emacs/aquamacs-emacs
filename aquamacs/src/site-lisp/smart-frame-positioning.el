@@ -18,7 +18,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2013 David Reitter
 
 ;; Smart Frame Positioning Mode: In environments where many frames are
 ;;  opened, this mode shows them in useful positions on the screen so
@@ -97,10 +97,22 @@ by any of the hook functions, will normally be preserved."
 
 (unless (fboundp 'display-available-pixel-bounds)
   (defun display-available-pixel-bounds (&optional frame)
-    (list 0 0 
-	  (display-pixel-width) (display-pixel-height))))
+    (or
+     (if (fboundp 'ns-display-monitor-attributes-list)
+	 (cdr-safe (assq 'workarea (display-get-info frame))))
+     ;; last ressort
+     (list 0 0
+	   (display-pixel-width frame) (display-pixel-height frame)))))
 
-; (display-available-pixel-bounds)
+(defun display-get-info (frame)
+  (let ((frame (or frame (selected-frame)))
+	(info (ns-display-monitor-attributes-list)))
+    (mapc (lambda (entry)
+	    (let ((fr (assq 'frames entry)))
+	      (if (member frame fr)
+		  (setq display-info entry
+		      info nil)))) info)
+  display-info))
 
 (defun smart-tool-bar-pixel-height (&optional frame) 
   (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
@@ -119,8 +131,6 @@ by any of the hook functions, will normally be preserved."
 	    (- size 10)
 	  size))
     0))
-; (smart-tool-bar-pixel-height nil)
-; (frame-total-pixel-height nil)
 
 (defun smart-position-and-create-frame (&optional parameters) 
  "Create a frame in a useful screen position.
@@ -716,11 +726,9 @@ Returns nil of parms is nil."
 	       (>= left (- (nth 0 bounds) 4))
 	       (>= top (nth 1 bounds))
 	       (<= right (+ (nth 0 bounds) (nth 2 bounds)))
-	       (<= bottom (+ (nth 1 bounds) (nth 3 bounds) 4)))))
+	       (<= bottom (+ (nth 1 bounds) (nth 3 bounds))))))
 
-; (display-available-pixel-bounds nil)
-; (setq frame (selected-frame))
-; (smart-move-minibuffer-inside-screen)
+; (smart-move-minibuffer-inside-screen)   (smart-minibuffer-inside-screen-p)
 (defun smart-move-minibuffer-inside-screen (&optional frame)
   (when (and (display-graphic-p frame)
 	     (not (frame-parameter frame 'fullscreen)))
@@ -730,8 +738,6 @@ Returns nil of parms is nil."
 
 ; (display-available-pixel-bounds (selected-frame))
 ;; this is a lisp implementation of Carbon's ConstrainWindowToScreen
-; (smart-move-frame-inside-screen)
-; (setq frame nil)
 (defun smart-move-frame-inside-screen (&optional frame vertical-only)
   "Move a frame inside the available screen boundaries. 
 The frame specified in FRAME is moved so it is entirely visible on
@@ -740,6 +746,7 @@ boundaries.
 The function will fail to do its job when the Dock is not displayed
 on the main screen, i.e. where the menu is."
   (interactive)
+  ;; (setq frame (selected-frame))
   (when (display-graphic-p frame)
     (let* ((frame (or frame (selected-frame)))
 	   ;; on some systems, we can retrieve the available pixel width with
