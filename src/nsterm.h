@@ -174,6 +174,9 @@ typedef float EmacsCGFloat;
 #ifdef HAVE_NATIVE_FS
 - (void) updateCollectionBehaviour;
 #endif
+- (void) addDisplayItemSpacerWithIdx: (int)idx
+				 tag: (int)tag
+				 key: (char *) key;
 
 #ifdef NS_IMPL_GNUSTEP
 - (void)windowDidMove: (id)sender;
