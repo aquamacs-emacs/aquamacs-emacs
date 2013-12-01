@@ -124,7 +124,7 @@ The return value is the incremented value of PLACE."
 		  :help (aq-list-has-property-element item :help)))
 	     (let ((img (aq-list-has-property-element item :image)))
 		  (list 'separator
-			:command (lambda nil (interactive) t)
+			:command menu-bar-separator
 			:label "--"
 			:enable t
 			:image (vector img img) ;; 1st: Emacs, 2nd: XEma
@@ -137,9 +137,6 @@ The return value is the incremented value of PLACE."
 ;; this to overwrite the tool-bar setup function
 ;  (aquamacs-tool-bar-setup)
 (defun aquamacs-tool-bar-setup ()
-  ;; People say it's bad to have EXIT on the tool bar, since users
-  ;; might inadvertently click that button.
-  ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
   (setq tool-bar-map (make-sparse-keymap))
 
   (let ((image-load-path (list (car image-load-path)))
@@ -186,7 +183,7 @@ The return value is the incremented value of PLACE."
 
   (tool-bar-add-item-from-menu 'aquamacs-print "print" nil :label "Print")
 
-  (tool-bar-add-item "space2" nil 'space-1 :label "--" :enable nil )
+  (tool-bar-add-item "space2" menu-bar-separator 'space-1 :label "--" :enable nil )
 
   (tool-bar-add-item-from-menu 'aquamacs-undo "undo" nil
 			       :label "Undo"
@@ -257,7 +254,6 @@ This variable is used in the AUCTeX configuration.")
 ;; but how can we identify toolbars otherwise?
 (defvar aquamacs-tool-bar-user-customization nil)
 (defun store-tool-bar-configuration (config)
-  (message "storing")
   (assq-set (tool-bar-hash) config
 	    'aquamacs-tool-bar-user-customization)
   ;; ensure it doesn't get too big
@@ -369,7 +365,7 @@ If there is a user-supplied visibility term, set it."
   (let ((space-idx 0))
     (setq tool-bar-map
 	  (append (make-sparse-keymap)
-		  (apply 
+		  (apply
 		   #'append
 		   (mapcar
 		    (lambda (key)
@@ -381,7 +377,7 @@ If there is a user-supplied visibility term, set it."
 				 nil))
 			(let ((name (format "space-%s" (aq-incf space-idx))))
 			   `((,(intern name)
-			      menu-item name nil :label "--" :enable nil)))))
+			      menu-item ,name ,menu-bar-separator :label "--" :enable nil)))))
 
 		    config))
 		  (apply 
@@ -389,13 +385,13 @@ If there is a user-supplied visibility term, set it."
 		   (mapcar
 		    (lambda (item)
 		      (unless (or (memq (or (car-safe item) item) ;;needed?
-					config) ;; hidden?
-				  (equal (car-safe (cdr-safe (cdr-safe item)))
-					 "--"))
-			(list 
-			 (tool-bar-maybe-set-visibility item nil show-message)
-			 )))
-		    (cdr tool-bar-map)))))))
+		  			config) ;; hidden?
+		  		  (equal (car-safe (cdr-safe (cdr-safe item)))
+		  			 "--"))
+		  	(list
+		  	 (tool-bar-maybe-set-visibility item nil show-message))))
+		    (cdr tool-bar-map)))
+		  ))))
 
 ;; when global-set-key
 ;; ensure that frame parameter is correct 
@@ -408,13 +404,7 @@ If there is a user-supplied visibility term, set it."
       (set-tool-bar-configuration user-config 'show-msg)
       (store-tool-bar-configuration user-config))))
 
- 
-
-
 (defun aquamacs-toolbar-update-showhide-menu ())
-
-
-
 ;; this is a complicated method
 ;; it probably moves around the invisible items quite a bit
 ;; so it's not worth the hassle
