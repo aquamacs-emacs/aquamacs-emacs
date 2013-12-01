@@ -941,6 +941,10 @@ struct glyph *get_phys_cursor_glyph (struct window *w);
 #define CHECK_LIVE_WINDOW(WINDOW)				\
   CHECK_TYPE (WINDOW_LIVE_P (WINDOW), Qwindow_live_p, WINDOW)
 
+
+/* Aquamacs-special */
+int window_header_line_inhibited_p(struct window *w);
+
 /* These used to be in lisp.h.  */
 
 extern Lisp_Object Qwindow_live_p;
