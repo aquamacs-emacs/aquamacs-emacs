@@ -135,7 +135,7 @@ Ignored if text was selected by mouse. PUSH is ignored."
     (ns-set-pasteboard text))
   (setq ns-last-selected-text text))
 
-(defun aquamacs-backward-char ()
+(defun aquamacs-left-char ()
   "Move point to the left or the beginning of the region.
  Like `backward-char', but moves point to the beginning of the region
 provided `cua-mode' and the mark are active."
@@ -147,28 +147,27 @@ provided `cua-mode' and the mark are active."
 	     (not cua--explicit-region-start)
 	     (not this-command-keys-shift-translated))
 	(goto-char left)
-      (let ((this-command 'backward-car)) ;; maintain compatibility
-	(call-interactively 'backward-char)))))
+      (let ((this-command 'left-char)) ;; maintain compatibility
+	(call-interactively 'left-char)))))
 
 
-(defun aquamacs-forward-char (&rest args)
+(defun aquamacs-right-char (&rest args)
   "Move point to the right or the end of the region.
- Like `forward-char', but moves point to the end of the region
+ Like `right-char', but moves point to the end of the region
 provided `cua-mode' and the mark are active."
   (interactive)
   (let ((right (max (point) (or (mark t) 0))))
-
     (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
 	     (not this-command-keys-shift-translated))
 	(goto-char right)
-       (let ((this-command 'forward-car)) ;; maintain compatibility
-	 (call-interactively 'forward-char)))))
+       (let ((this-command 'right-char)) ;; maintain compatibility
+	 (call-interactively 'right-char)))))
 
 (dolist (cmd
-	 '(aquamacs-backward-char 
-	   aquamacs-forward-char
+	 '(aquamacs-left-char 
+	   aquamacs-right-char
 	   aquamacs-previous-line
 	   aquamacs-previous-line))
   (put cmd 'CUA 'move))
@@ -195,39 +194,19 @@ if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'.
 			       (not (eq line-move-visual 'arrow-keys-only)))))
     (next-line arg try-vscroll)))
 
-
-(defun beginning-of-visual-line (&optional n)
-  "Move point to the beginning of the current line.
-If `word-wrap' is nil, we move to the beginning of the buffer
-line (as in `beginning-of-line'); otherwise, point is moved to
-the beginning of the visual line."
+(defun left-of-visual-line (&optional n)
+  "Move point to the left boundary of the current line."
   (interactive)
-  (if word-wrap
-      (progn 
-	(if (and n (/= n 1))
-	    (vertical-motion (1- n))
-;; the following would need Emacs 23
-;; 	    (let ((line-move-visual t))
-;; 	      (line-move (1- n) t)))
-	  (vertical-motion 0))
-	(skip-read-only-prompt))
-    (beginning-of-line n)))
+  (if (eq (current-bidi-paragraph-direction) 'left-to-right)
+	(beginning-of-visual-line n)
+      (end-of-visual-line n)))
 
-(defun end-of-visual-line (&optional n)
-  "Move point to the end of the current line.
-If `word-wrap' is nil, we move to the end of the line (as in
-`beginning-of-line'); otherwise, point is moved to the end of the
-visual line."
+(defun right-of-visual-line (&optional n)
+  "Move point to the right boundary of the current line."
   (interactive)
-  (if word-wrap
-      (unless (eobp)
-	(progn
-	  (if (and n (/= n 1))
-	      (vertical-motion (1- n))
-	    (vertical-motion 1))
-	  (skip-chars-backward " \r\n" (- (point) 1))))
-    (end-of-line n)))
-
+  (if (eq (current-bidi-paragraph-direction) 'left-to-right)
+	(end-of-visual-line n)
+      (beginning-of-visual-line n)))
 
 (defun aquamacs-move-beginning-of-line (arg)
  "Move point to beginning of current buffer line.
@@ -266,8 +245,8 @@ if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'.
   
 ;; mark functions for CUA
 (dolist (cmd
-	 '( beginning-of-visual-line
-	    end-of-visual-line
+	 '( left-of-visual-line
+	    right-of-visual-line
 	    aquamacs-move-beginning-of-line
 	    aquamacs-move-end-of-line))
  (put cmd 'CUA 'move))
@@ -814,14 +793,14 @@ set to `aquamacs-popup-context-menu' or nil"
     (define-key map `[(meta down)] 'cua-scroll-up)
     ;; left / right (for transient-mark-mode)
     ;; could be moved into transient-mark-mode-map?
-    (define-key map '[(left)] 'aquamacs-backward-char)
-    (define-key map '[(right)] 'aquamacs-forward-char)
+    (define-key map '[(left)] 'aquamacs-left-char)
+    (define-key map '[(right)] 'aquamacs-right-char)
     (define-key map `[(,osxkeys-command-key up)] 'beginning-of-buffer)
     (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
     (define-key map `[(,osxkeys-command-key prior)] 'beginning-of-buffer)  ; PageUp
     (define-key map `[(,osxkeys-command-key next)] 'end-of-buffer)  ; PageDown
-    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
-    (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
+    (define-key map `[(,osxkeys-command-key left)] 'left-of-visual-line)
+    (define-key map `[(,osxkeys-command-key right)] 'right-of-visual-line)
     (define-key map `[(control left)] 'beginning-of-visual-line)
     (define-key map `[(control right)] 'end-of-visual-line)
 
