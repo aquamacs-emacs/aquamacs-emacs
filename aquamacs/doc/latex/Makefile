@@ -42,8 +42,8 @@ html: aquamacs.tex *.pdf
 	sed 's|<BODY >|<BODY ><a name="AquamacsIndex"></a>|' <$(newdir)/index.html >$(newdir)/index2.html; \
 	mv $(newdir)/index2.html $(newdir)/index.html ; \
 	tidy -asxhtml -m *.html ; \
-	cd $(newdir); \
-	fix-changelog.sh ; \
+	(cd $(srcdir) ; ./fix-changelog.sh ) ; \
+	cd $(newdir) ; \
 	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak ; \
 	echo "Making new Aquamacs Help directory, copying new help files."	     ; \
 	mv $(newdir)/* $(destdir)/ ; \
