@@ -2748,18 +2748,18 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
    string or a number containing the resulting script value.  Otherwise,
    1 is returned. */
 static int
-ns_do_applescript (NSString* script, Lisp_Object *result)
+ns_do_applescript (Lisp_Object script, Lisp_Object *result)
 {
   NSAppleEventDescriptor *desc;
   NSDictionary* errorDict;
   NSAppleEventDescriptor* returnDescriptor = NULL;
 
   NSAppleScript* scriptObject =
-    [[NSAppleScript alloc] initWithSource: script];
+    [[NSAppleScript alloc] initWithSource:
+			     [NSString stringWithUTF8String: SSDATA (script)]];
 
   returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
   [scriptObject release];
-  [script release];
 
   *result = Qnil;
 
@@ -2807,11 +2807,7 @@ void
 ns_run_ascript (void)
 {
   if (! NILP (as_script))
-    {
-      NSString *s = [[NSString stringWithUTF8String: SSDATA (as_script)] retain];
-      as_status = ns_do_applescript (s, as_result);
-      [s release];
-    }
+    as_status = ns_do_applescript (as_script, as_result);
   as_script = Qnil;
 }
 
@@ -2822,8 +2818,6 @@ is returned as a string, a number or, in the case of other constructs, t.
 In case the execution fails, an error is signaled. */)
      (Lisp_Object script)
 {
-  struct gcpro gcpro1;
-
   Lisp_Object result;
   int status;
   NSEvent *nxev;
@@ -2833,7 +2827,7 @@ In case the execution fails, an error is signaled. */)
 
   block_input ();
 
-  as_script = script; // ;
+  as_script = script;
   as_result = &result;
 
   NSWindow *win = [NSApp mainWindow];
@@ -2879,6 +2873,7 @@ In case the execution fails, an error is signaled. */)
     error ("%s", SSDATA (result));
 }
 #endif
+
 
 
 // -- ODB Editor Support ----------------------------------------------------
