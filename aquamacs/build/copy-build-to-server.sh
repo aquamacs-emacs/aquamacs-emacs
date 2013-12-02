@@ -8,9 +8,7 @@
 GNUNAME=GNU-Emacs-$2.dmg.bz2
 NAME=Aquamacs-$1.tar.bz2
 COPYORLINK='ln -s'
-CHGLOG=`pwd`/aquamacs/doc/"Aquamacs Help"/changelog.html
-
-
+CHGLOG=`pwd`/aquamacs/doc/latex/changelog.html
 
 SOURCE=`pwd`/builds
 LOGPATH=`pwd`

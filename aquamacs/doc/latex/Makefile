@@ -42,13 +42,8 @@ html: aquamacs.tex *.pdf
 	sed 's|<BODY >|<BODY ><a name="AquamacsIndex"></a>|' <$(newdir)/index.html >$(newdir)/index2.html; \
 	mv $(newdir)/index2.html $(newdir)/index.html ; \
 	tidy -asxhtml -m *.html ; \
-	(cd $(newdir); \
-	echo newdir=$(newdir) ; \
-	chgfile=`/usr/bin/grep -m1 -l changelog-top $(newdir)/node*.html` ; \
-	cp $${chgfile} $${chgfile}.bak ; \
-	(cat $${chgfile}.bak | perl -e 'my $$x=join("",<STDIN>); $$x=~s!(<H2>.*?)(<a name="changelog-top"></a>)!\2\1!s; print($$x);' >$${chgfile} )); \
-	rm $${chgfile}.bak ; \
-	cp $${chgfile} $(newdir)/changelog.html ; \
+	cd $(newdir); \
+	fix-changelog.sh ; \
 	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak ; \
 	echo "Making new Aquamacs Help directory, copying new help files."	     ; \
 	mv $(newdir)/* $(destdir)/ ; \
