@@ -1,13 +1,12 @@
 #!/usr/bin/perl
 
 # Note: Developer Tools needed.
-# install the Intel and PPC Aquamacs builds in
-# /Applications/Aquamacs Emacs.app and
-# /Applications/Aquamacs Emacs PPC.app
+# install the Intel Aquamacs build in
+# /Applications/Aquamacs Emacs.app
 # then run this. 
 
 $PROJECT_DIR = '/Users/dr/Projects/Aquamacs';
-$REPO_DIR = '/Users/dr/ae.git';
+$REPO_DIR = '/Users/dr/ae24.git';
 
 $BINARY = '/Applications/Aquamacs.app';
 
