@@ -2305,6 +2305,9 @@ A fancy display is used on graphic displays, normal otherwise."
 		     (while (and hooks
 				 (not (setq did-hook (funcall (car hooks)))))
 		       (setq hooks (cdr hooks)))
+		     ;; OS X sends -psn_ arguments on occasion.
+		     (if (string-match "\\`-psn_"  argi)
+			 (setq did-hook t))
 		     (if (not did-hook)
 			 ;; Presume that the argument is a file name.
 			 (progn
