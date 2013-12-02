@@ -48,6 +48,7 @@ html: aquamacs.tex *.pdf
 	cp $${chgfile} $${chgfile}.bak ; \
 	(cat $${chgfile}.bak | perl -e 'my $$x=join("",<STDIN>); $$x=~s!(<H2>.*?)(<a name="changelog-top"></a>)!\2\1!s; print($$x);' >$${chgfile} )); \
 	rm $${chgfile}.bak ; \
+	cp $${chgfile} changelog.html ; \
 	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak ; \
 	echo "Making new Aquamacs Help directory, copying new help files."	     ; \
 	mv $(newdir)/* $(destdir)/ ; \

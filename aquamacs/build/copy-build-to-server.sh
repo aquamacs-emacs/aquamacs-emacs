@@ -8,7 +8,7 @@
 GNUNAME=GNU-Emacs-$2.dmg.bz2
 NAME=Aquamacs-$1.tar.bz2
 COPYORLINK='ln -s'
-CHGLOGSCRIPT=~/aquamacs-web/scripts/push-nightly-changelog.sh
+CHGLOG=`pwd`/aquamacs/doc/"Aquamacs Help"/changelog.html
 
 
 
@@ -49,9 +49,7 @@ if [ -e $TMP/${NAME} ]; then
         echo "The latest Aquamacs Emacs nightly is ${NAME}<BR>" >latest-aquamacs.html
         # copy the downloaded log for this step into "latest" because the build worked
         cp aquamacs-build.log latest-logs/ 2>/dev/null
-
-	# update the change log 
-        cd `dirname $CHGLOGSCRIPT` ; $CHGLOGSCRIPT
+	cp $CHGLOG changelog-nightly.html
         #cd $DEST
 	cd -
     else
@@ -66,7 +64,7 @@ echo "</BODY></HTML>" >>latest.html
 # sync and delete older files on server
 
 rsync -v -l -r builds $DEST/ && \
-    rsync -v -l -r builds latest-logs latest.html Aquamacs-nightly.tar.bz2 $DEST/ && \
+    rsync -v -l -r builds latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete"
 
 
