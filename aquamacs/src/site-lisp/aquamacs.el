@@ -873,6 +873,9 @@ yes-or-no prompts - y or n will do."
   (ats "aquamacs-editing")
   (require 'aquamacs-editing)
 
+  ;; always move visually left/right with left-char/right-char
+  (aquamacs-set-defaults '((visual-order-cursor-movement t)))
+
   ;; overwrites CUA stuff
   (global-set-key [remap scroll-up]	      'aquamacs-page-down)
   (global-set-key [remap cua-scroll-up]	      'aquamacs-page-down)
