@@ -43,7 +43,7 @@ if ($VOL =~ /\/Volumes\/Aquam/i)
 
 &sys("rm -rf \"$VOL/Aquamacs.app\"");
  
-&sys("cd \"$BINARY\"; $REPO_DIR . "/aquamacs/build/sign");
+&sys("cd \"$BINARY\"; \"$REPO_DIR/aquamacs/build/sign\"");
 
 &sys("cp  -pR \"$BINARY\" \"$VOL/\"");
   } else 
