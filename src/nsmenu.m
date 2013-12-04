@@ -1854,7 +1854,7 @@ a notification */
 	      if (STRINGP (XCAR (XCAR (item))))
 		title = [NSString stringWithUTF8String: SDATA (XCAR (XCAR (item)))];
 	      if (INTEGERP ( XCDR (XCAR (item))))
-		key =  [[NSString stringWithFormat: @"%c", XINT (XCDR (XCAR (item)))] retain];
+		key =  [[NSString stringWithFormat: @"%c", (int) XINT (XCDR (XCAR (item)))] retain];
 	      else
 		key = nil;
 }
@@ -1921,7 +1921,7 @@ pop_down_menu (void *arg)
   block_input ();
   if (popup_activated_flag)
     {
-      EmacsDialogPanel *panel = unwind_data->dialog;
+      EmacsDialogPanel *panel = (EmacsDialogPanel *) unwind_data->dialog;
       popup_activated_flag = 0;
       [NSApp endModalSession: popupSession];
       if (popupSheetAlert)
