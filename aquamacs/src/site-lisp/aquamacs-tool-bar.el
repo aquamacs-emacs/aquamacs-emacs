@@ -202,7 +202,7 @@ The return value is the incremented value of PLACE."
 								'mode-class))))
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
 			       "copy" nil
-			       :label "Cut")
+			       :label "Copy")
   (let ((cua-mode nil))
       (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
 			       "paste" nil
