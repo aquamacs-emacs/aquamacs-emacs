@@ -1556,8 +1556,8 @@ Items in this list are always Lisp symbols.*/)
 {
 
 
-  NSString *label_str = [NSString stringWithCString: label];
-  NSString *help_str = [NSString stringWithCString: help];
+  NSString *label_str = [NSString stringWithUTF8String: label];
+  NSString *help_str = [NSString stringWithUTF8String: help];
 
   /* 1) come up w/identifier */
   // NSString *identifier
