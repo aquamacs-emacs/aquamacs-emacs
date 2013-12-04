@@ -5510,7 +5510,7 @@ make_lispy_event (struct input_event *event)
             struct frame *f = XFRAME (event->frame_or_window);
             Lisp_Object position;
             Lisp_Object head;
-	    position = make_lispy_position (f, &event->x, &event->y,
+	    position = make_lispy_position (f, event->x, event->y,
 					    event->timestamp);
 	    head = modify_event_symbol (event->code,
 				        event->modifiers,
