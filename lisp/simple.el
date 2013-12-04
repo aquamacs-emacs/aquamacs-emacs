@@ -3476,11 +3476,15 @@ If BEFORE-P is non-nil, prepend STRING to the kill.
 If `interprogram-cut-function' is set, pass the resulting kill to it."
   (let* ((cur (car kill-ring)))
     ;; when conjoining words, add spaces where appropriate.
-    (if (equal (car-safe (get-text-property 0 'yank-handler cur)) 'smart-spacing-yank-handler)
-	(setq string (concat (if before-p "" " ") string (if before-p " " ""))))
+    (and (equal (car-safe (get-text-property 0 'yank-handler cur)) 'smart-spacing-yank-handler)
+	 kill-ring
+	 (smart-spacing-string-is-word-boundary (substring (car kill-ring) -1) 'left)
+	 (setq string (concat (if before-p "" " ") string (if before-p " " ""))))
+
     (kill-new (if before-p (concat string cur) (concat cur string))
 	      (or (= (length cur) 0)
-		  (equal yank-handler (get-text-property 0 'yank-handler cur)))
+		  (equal yank-handler
+			 (get-text-property 0 'yank-handler cur)))
 	      yank-handler)))
 (set-advertised-calling-convention 'kill-append '(string before-p) "23.3")
 
@@ -3571,7 +3575,7 @@ to make one entry in the kill ring."
     (error "The mark is not set now, so there is no region"))
   (condition-case nil
       (let ((string (smart-spacing-filter-buffer-substring beg end t)))
-	(when string			;STRING is nil if BEG = END
+	(when string   ;; STRING is nil if BEG = END
 	  ;; Add that string to the kill ring, one way or another.
 	  (if (eq last-command 'kill-region)
 	      (kill-append string (< end beg) yank-handler)
@@ -7703,7 +7707,7 @@ the point is when the command is called.")
 (defsubst smart-spacing-end-of-line (pos)
   (equal "\n" (buffer-substring-no-properties (max 1 (1- pos)) pos)))
 
-(defun smart-spacing-filter-buffer-substring (beg end &optional delete)   
+(defun smart-spacing-filter-buffer-substring (beg end &optional delete)
  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
  (let* ((from (min beg end)) (to (max beg end))
 	;; (move-point (memq (point) (list beg end))) 
@@ -7768,10 +7772,12 @@ or a cons with a combination."
   (or (< pos (point-min))
       (>= pos (point-max))
       (not (let ((str (buffer-substring-no-properties pos (1+ pos))))
-	     (or (string-match "\\w" str)
-		 (if (eq side 'left) (or (equal str ".") (equal str ")")))
-		 (if (eq side 'right) (equal str "(")))))))
+	     (smart-spacing-string-is-word-boundary str side)))))
 
+(defun smart-spacing-string-is-word-boundary (str side)
+  (or (string-match "\\w" str)
+      (if (eq side 'left) (or (equal str ".") (equal str ")")))
+      (if (eq side 'right) (equal str "("))))
 
 (defun smart-spacing-yank-handler (string)
   (let ((opoint (point))) ;; experimental - is this right? DR
