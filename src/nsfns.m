@@ -2083,7 +2083,8 @@ when `ns-popup-save-panel' was called.
   [panel beginSheetModalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window]
 		completionHandler: 
 	   ^(NSInteger result) {
-      [NSApp savePanelDidEnd2: panel returnCode:result contextInfo:current_buffer];
+      [((EmacsApp *) NSApp) savePanelDidEnd2: panel returnCode:result contextInfo:current_buffer];
+
     }];
     // to do: move code from savePanelDidEnd2 here
   

@@ -106,6 +106,7 @@ typedef float EmacsCGFloat;
 #ifdef NS_IMPL_GNUSTEP
 - (void)sendFromMainThread:(id)unused;
 #endif
+- (void)savePanelDidEnd2:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
 
 #ifdef NS_IMPL_GNUSTEP
@@ -174,9 +175,6 @@ typedef float EmacsCGFloat;
 #ifdef HAVE_NATIVE_FS
 - (void) updateCollectionBehaviour;
 #endif
-- (void) addDisplayItemSpacerWithIdx: (int)idx
-				 tag: (int)tag
-				 key: (char *) key;
 
 #ifdef NS_IMPL_GNUSTEP
 - (void)windowDidMove: (id)sender;
@@ -259,15 +257,18 @@ typedef float EmacsCGFloat;
 - (void) clearActive;
 - (void) clearAll;
 - (BOOL) changed;
-- (void) addDisplayItemSpacerWithIdx: (int)idx key: (char *) key;
-- (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
-                             tag: (int)tag
-                        helpText: (char *)help
-		 	 enabled: (BOOL)enabled
- 		         visible: (BOOL)visible
-  		             key: (char *)key
-      		       labelText: (char *)label;
+- (void) addDisplayItemSpacerWithIdx: (int)idx
+				 tag: (int)tag
+				 key: (char *) key;
 
+- (void) addDisplayItemWithImage: (EmacsImage *)img
+                             idx: (int)idx
+                             tag: (int)tag
+                        helpText: (const char *)help
+                         enabled: (BOOL)enabled
+			 visible: (BOOL)visible
+			     key: (char *)key
+		       labelText: (char *)label;
 
 - (void)customizationDidChange;
 - (void)checkCustomizationChange:(NSTimer*)theTimer;
