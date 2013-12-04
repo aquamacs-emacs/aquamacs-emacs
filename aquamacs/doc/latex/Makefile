@@ -49,5 +49,6 @@ html: aquamacs.tex *.pdf
 	mv $(newdir)/* $(destdir)/ ; \
 	cp $(srcdir)/*.png $(destdir)/			     ; \
 	find $(destdir) -name *.helpindex -delete ; \
-	echo "Help files copied." ; \
-	hiutil -C -s en -a -f $(destdir)"/Aquamacs Help.helpindex" $(destdir)
+	echo "Help files copied. Indexing..." ; \
+	hiutil -C -s en -a -f $(destdir)"/Aquamacs Help.helpindex" $(destdir)  ; \
+	echo "Done."
