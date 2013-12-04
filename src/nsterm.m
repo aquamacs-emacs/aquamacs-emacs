@@ -158,6 +158,7 @@ static unsigned convert_ns_to_X_keysym[] =
   0x43|NSNumericPadKeyMask,	0xAA,  /* KP_Multiply */
   0x45|NSNumericPadKeyMask,	0xAB,  /* KP_Add */
   0x4B|NSNumericPadKeyMask,	0xAF,  /* KP_Divide */
+  0x4C|NSNumericPadKeyMask,	0x8D,  /* KP_Enter */
   0x4E|NSNumericPadKeyMask,	0xAD,  /* KP_Subtract */
   0x51|NSNumericPadKeyMask,	0xBD,  /* KP_Equal */
   0x52|NSNumericPadKeyMask,	0xB0,  /* KP_0 */
