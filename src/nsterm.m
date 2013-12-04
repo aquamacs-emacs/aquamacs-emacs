@@ -3350,7 +3350,7 @@ ns_draw_glyph_string (struct glyph_string *s)
         {
 	  saved_color = NS_FACE_FOREGROUND (s->face);
 	  NS_FACE_FOREGROUND (s->face) = NS_FACE_BACKGROUND (s->face);
-          NS_FACE_BACKGROUND (s->face) = FRAME_CURSOR_COLOR (s->f);
+          NS_FACE_BACKGROUND (s->face) = ns_index_color (FRAME_CURSOR_COLOR (s->f), s->f);
           
         }
 
