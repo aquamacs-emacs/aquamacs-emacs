@@ -1,8 +1,8 @@
-;;; Smart-frame-positioning.el 
+;;; Smart-frame-positioning.el
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
- 
+
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 3, or (at your option)
@@ -17,7 +17,7 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
- 
+
 ;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2013 David Reitter
 
 ;; Smart Frame Positioning Mode: In environments where many frames are
@@ -36,7 +36,7 @@
 ;; that all screens are assumed to be of the same size.
 ;; May produce undesirable results on certain triple-screen setups or
 ;; when screens with very different resolutions are used.
-;;  
+;;
 ;; In the Carbon port, the function
 ;; `mac-display-available-pixel-bounds' returns the available screen
 ;; coordinates for a screen, and the position of the current
@@ -55,7 +55,7 @@
 (eval-when-compile (require 'aquamacs-macros))
 
 
-(defcustom save-frame-position-file 
+(defcustom save-frame-position-file
   (convert-standard-filename
    "~/Library/Preferences/Aquamacs Emacs/frame-positions.el")
   "Name of the file that records `smart-frame-prior-positions' value."
@@ -64,16 +64,16 @@
  :version 22.0
  :group 'frames
  :group 'Aquamacs)
- 
+
 (defcustom smart-frame-positioning-hook nil
   "Functions to be run before frame creation.
 These functions are run in `smart-frame-positioning-mode after
-a frame is created and before it is made visible. 
+a frame is created and before it is made visible.
 The functions should take one argument, that is, the new frame.
-The functions may alter the frame parameters. 
+The functions may alter the frame parameters.
 After return from these functions, the above mode will adapt
-the frame position of the frame. Height and width, if set 
-by any of the hook functions, will normally be preserved." 
+the frame position of the frame. Height and width, if set
+by any of the hook functions, will normally be preserved."
   :type 'hook
   :require 'smart-frame-positioning
   :version 22.0
@@ -84,15 +84,15 @@ by any of the hook functions, will normally be preserved."
 
   (cond ((eq initial-window-system 'ns)
 	 (if (fboundp 'display-usable-bounds)
-	     (fset 'display-available-pixel-bounds 
+	     (fset 'display-available-pixel-bounds
 		   'display-usable-bounds)))
 	((eq initial-window-system 'mac)
 	 (if (fboundp 'mac-display-available-pixel-bounds)
-	     (fset 'display-available-pixel-bounds 
+	     (fset 'display-available-pixel-bounds
 		   'mac-display-available-pixel-bounds)))
 	(t
 	 (if (fboundp 'x-display-usable-bounds)
-	     (fset 'display-available-pixel-bounds 
+	     (fset 'display-available-pixel-bounds
 		   'x-display-usable-bounds)))))
 
 (unless (fboundp 'display-available-pixel-bounds)
@@ -114,44 +114,90 @@ by any of the hook functions, will normally be preserved."
 		      info nil)))) info)
   display-info))
 
-(defun smart-tool-bar-pixel-height (&optional frame) 
-  (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
-      (let* ((mode (cond ((boundp 'mac-tool-bar-display-mode)
-			 mac-tool-bar-display-mode)
-			((boundp 'ns-tool-bar-display-mode)
-			 ns-tool-bar-display-mode)
-			(t t)))
-	     (size (cond ((eq mode 'icons) 40)
-			 ((eq mode 'both) 56)
-			 ((eq mode 'labels) 20)
-			 (t 0))))
-	(if (and (boundp 'ns-tool-bar-size-mode)
-		 (eq ns-tool-bar-size-mode 'small)
-		 (not (eq mode 'labels)))
-	    (- size 10)
-	  size))
-    0))
+(defun smart-tool-bar-pixel-height (&optional frame)
+  "Pixel height of toolbar.
+FRAME may be a frame or some frame parameters."
+  (let ((tbl (cdr (assq 'tool-bar-lines (or (and (framep frame) (frame-parameters frame))
+					    frame
+					    (frame-parameters))))))
+    (if (> (or tbl 0) 0)
+	(let* ((mode (cond ((boundp 'mac-tool-bar-display-mode)
+			    mac-tool-bar-display-mode)
+			   ((boundp 'ns-tool-bar-display-mode)
+			    ns-tool-bar-display-mode)
+			   (t t)))
+	       (size (cond ((eq mode 'icons) 40)
+			   ((eq mode 'both) 56)
+			   ((eq mode 'labels) 20)
+			   (t 0))))
+	  (if (and (boundp 'ns-tool-bar-size-mode)
+		   (eq ns-tool-bar-size-mode 'small)
+		   (not (eq mode 'labels)))
+	      (- size 10)
+	    size))
+      0)))
 
-(defun smart-position-and-create-frame (&optional parameters) 
+(defun smart-position-reference-frame ()
+  "Return a frame or location to serve as reference for the next frame.
+The function currently picks the location of the last event
+\(if a mouse event), or, if a key event came last,
+the selected frame if visible."
+
+  (if (or (null last-nonmenu-event) (consp last-nonmenu-event))  ;; last event was mouse
+      (progn
+	(let* ((mp (mouse-pixel-position))
+	       (es (if last-nonmenu-event (posn-x-y (event-start last-nonmenu-event))))
+	       (f (car mp))
+	       (x (if es (car es) (+ (eval (frame-parameter f 'left)) (cadr mp))))
+	       (y (if es (cdr es) (+ (eval (frame-parameter f 'top)) (cddr mp))))
+	       (mouse-monitor nil) (mouse-monitor-frames nil))
+	  (mapc (lambda (l)
+		  (let* ((geo (cdr (assq 'geometry l)))
+			 (x1 (nth 0 geo))
+			 (y1 (nth 1 geo))
+			 (x2 (+ x1 (nth 2 geo)))
+			 (y2 (+ y1 (nth 3 geo))))
+		    (and (>= x x1)
+			 (<= x x2)
+			 (>= y y1)
+			 (<= y y2)
+			 (setq mouse-monitor geo
+			       mouse-monitor-frames (cdr (assq 'frames l))))))
+		(ns-display-monitor-attributes-list))
+	  (or (if (and (member (selected-frame) mouse-monitor-frames) (frame-visible-p (selected-frame)))
+		  (selected-frame)
+		;; use first visible frame
+		(let ((first))
+		  (mapc (lambda (x) (or first (if (frame-visible-p x) (setq first x)))) mouse-monitor-frames)
+		  first))
+	      ;; if there is no visible frame on this monitor...
+	       (list (+ 100 (nth 0 mouse-monitor))
+		     (+ 100 (nth 1 mouse-monitor))))))
+    ;; last event was keyboard
+    ;; return selected frame if visible
+    ;; nil otherwise
+    (if (frame-visible-p (selected-frame)) (selected-frame))))
+
+
+(defun smart-position-and-create-frame (&optional parameters)
  "Create a frame in a useful screen position.
-May be used in `frame-creation-function' or 
-`frame-creation-function-alist'. `smart-frame-positioning-mode' 
+May be used in `frame-creation-function' or
+`frame-creation-function-alist'. `smart-frame-positioning-mode'
 should be used as the interface to this function."
  (if smart-frame-positioning-mode
   (let* ((newpos)
-	 (oldframe (if (frame-visible-p (selected-frame)) (selected-frame)))
- 	 ;; create the frame
+	 (oldframe (smart-position-reference-frame))
+	 ;; create the frame
 	 (f (funcall smart-frame-positioning-old-frame-creation-function
 		     (append parameters '((visibility . nil))))))
     (run-hook-with-args 'smart-frame-positioning-hook f)
-
     (setq newpos (or (smart-fp--get-frame-position-assigned-to-buffer-name (current-buffer))
 		     (if oldframe (find-good-frame-position oldframe f))
 		     (smart-fp--get-frame-position-assigned-to-buffer-type (current-buffer))))
     (let ((overriding-parms (append parameters default-frame-alist)))
       (mapc (lambda (key)
 	      (if (assq key overriding-parms)
-		  (assq-set key 
+		  (assq-set key
 			    (cdr-safe (assq key overriding-parms))
 			    'newpos)))
 	    '(left top width height)))
@@ -160,14 +206,13 @@ should be used as the interface to this function."
 	;; are preserved and will stay untouched
 	;; in case the hook changed them.
 	;; (unless exceeding screen dimensions)
-	(setq newpos 
-		(assq-delete-all 
-		 'height 
+	(setq newpos
+		(assq-delete-all
+		 'height
 		 (assq-delete-all 'width newpos))))
     ; make sure we don't make it visible prematurely
     (setq newpos (assq-delete-all 'visibility newpos))
     (modify-frame-parameters f newpos)
-
     ;; stay within the available screen
     (smart-move-frame-inside-screen f)
     (when window-configuration-change-hook
@@ -176,7 +221,7 @@ should be used as the interface to this function."
 	(select-window (frame-first-window f))
 	(set-buffer (window-buffer (selected-window)))
 	  (run-hooks 'window-configuration-change-hook)))
-  
+    (make-frame-invisible f t)
     (set-frame-parameter f 'visibility (or (cdr (assq 'visibility parameters)) t))
     ;; (make-frame-visible f)
     f)	; return the frame
@@ -185,10 +230,10 @@ should be used as the interface to this function."
 	   parameters)))
 
 
- 
+
 (defcustom smart-frame-positioning-enforce nil
   "If true and if in smart-frame-positioning-mode, ignore any user-supplied
-position in ``default-frame-alist''." 
+position in ``default-frame-alist''."
   :type 'boolean
   :require 'smart-frame-positioning
   :version 22.0
@@ -196,7 +241,7 @@ position in ``default-frame-alist''."
 
 (defcustom smart-frame-positioning-margin 20
   "In smart-frame-positioning-mode, place the frames this many
-pixels apart if possible." 
+pixels apart if possible."
   :type 'integer
   :require 'smart-frame-positioning
   :version 22.0
@@ -214,17 +259,17 @@ pixels apart if possible."
      (smart-tool-bar-pixel-height f)
      (frame-pixel-height f)))
  ; (frame-total-pixel-height (selected-frame))
-; 
+;
 
 (defun smart-fp--char-to-pixel-width (chars frame)
        (* chars (frame-char-width frame)))
 (defun smart-fp--char-to-pixel-height (chars frame)
-        (* chars (frame-char-height frame)))
+	(* chars (frame-char-height frame)))
 (defun smart-fp--pixel-to-char-width (pixels frame &optional round-to-lower)
-       (round (- (/ (float pixels) (frame-char-width frame)) 
+       (round (- (/ (float pixels) (frame-char-width frame))
 		 (if round-to-lower .499999 0))))
 (defun smart-fp--pixel-to-char-height (pixels frame &optional round-to-lower)
-       (round (- (/ (float pixels) (frame-char-height frame)) 
+       (round (- (/ (float pixels) (frame-char-height frame))
 		 (if round-to-lower .499999 0))))
 
 (defvar smart-fp-window-system (or initial-window-system 'ns))
@@ -242,212 +287,217 @@ pixels apart if possible."
 	(assq-set smart-fp-window-system fun 'frame-creation-function-alist))
     nil))
 
- 
+
 (defvar smart-fp--current-direction nil)
 
 (defun find-good-frame-position (old-frame new-frame)
   "Finds a good frame position for a new frame based on the old one's position."
- 
-  (let ((new-frame-parameters))
-    (if (and (not smart-frame-positioning-enforce) 
-	     (cdr (assq 'user-position (frame-parameters new-frame))))
-	nil ;; just leave the parameters unmodified, if user has set a position
-      
-      (let* (
-	     ;; on some systems, we can retrieve the available pixel width.
-	     (rect (or (if (fboundp 'display-available-pixel-bounds)
-			   ;; may return nil:
-			   (display-available-pixel-bounds old-frame))
-		       (list 0 0 
-			     (display-pixel-width) (display-pixel-height))))
-	     (min-x (+ 5 (nth 0 rect)))
-	     (min-y (+ 5 (nth 1 rect)))
-	     (max-x (- (+ (nth 0 rect) (nth 2 rect)) 5))
-	     (max-y (- (+ (nth 1 rect) (nth 3 rect)) 5)))
-	(smart-fp--convert-negative-ordinates
-	    (let* ( ;; eval is necessary, because left can be (+ -1000)
-		  ;; which is not an integer!
-		  ( y (eval (frame-parameter old-frame 'top)) )
-		  ( x (eval (frame-parameter old-frame 'left)) )
-		  (size-reference-frame 
-		   (if (frame-parameter old-frame 'fit-frame)
-		       new-frame
-		     old-frame))
-		  ( w (frame-pixel-width size-reference-frame))
-		  ( h (frame-total-pixel-height size-reference-frame) )
-        
-		  (next-w w ) ;;(frame-pixel-width new-frame) )
-		  (next-h h ) ;; (frame-total-pixel-height new-frame) )
-		  (margin smart-frame-positioning-margin))
 
-	      (if (frame-full-screen-p old-frame)
-		  (let ((ss (frame-parameter old-frame 'fullscreen-saved-state)))
-		    (if ss
-			(setq x (nth 2 ss) ; left
-			      y (nth 1 ss) ; top
-			      w (- (nth 4 ss) (nth 2 ss))
-			      h (- (nth 3 ss) (nth 1 ss)))
-		      ;; backup solution  - shouldn't occur
-		      (setq x (or (cdr-safe (assq 'top default-frame-alist)) 40)
-			    y (or (cdr-safe (assq 'left default-frame-alist)) 40)
-			    w 400 h 600 ;; hack
-			    ))
-		    (setq next-w w next-h h)))
+  (if (not (framep old-frame))
+      (smart-fp--convert-negative-ordinates
+       (list (cons 'left (nth 0 old-frame))
+	     (cons 'top (nth 1 old-frame))))
 
-	      ;; in case the frame is obviously created
-	      ;; on another screen
-	      ;; these ought to use the full screen dimensions, not
-	      ;; the available ones. However, since we don't know the dimensions
-	      ;; of the other screen (we only know the main ones), these aren't
-	      ;; quite clear
-	      (when (< (+ x w) min-x)	; to the left
-		(let ((new-max-x min-x))
-		  (setq min-x (- min-x max-x))
-		  (setq max-x new-max-x)))
-	      (when (> x max-x)	;; to the right
-		;; there seems to be a screen right to the Dock screen
-		;; try to guess the size
-		(setq min-x max-x) 
-		(setq max-x (* 2 max-x))) ;; crude assumption - 
+    (let ((new-frame-parms (frame-parameters new-frame)))
+      (let ((new-frame-parameters))
+	(if (and (not smart-frame-positioning-enforce)
+		 (cdr (assq 'user-position new-frame-parms)))
+	    nil ;; just leave the parameters unmodified, if user has set a position
+
+	  (let* (;; on some systems, we can retrieve the available pixel width.
+		 (rect (or (if (fboundp 'display-available-pixel-bounds)
+			       ;; may return nil:
+			       (display-available-pixel-bounds old-frame))
+			   (list 0 0
+				 (display-pixel-width) (display-pixel-height))))
+		 (min-x (+ 5 (nth 0 rect)))
+		 (min-y (+ 5 (nth 1 rect)))
+		 (max-x (- (+ (nth 0 rect) (nth 2 rect)) 5))
+		 (max-y (- (+ (nth 1 rect) (nth 3 rect)) 5)))
+	    (smart-fp--convert-negative-ordinates
+	     (let* ( ;; eval is necessary, because left can be (+ -1000)
+		    ;; which is not an integer!
+		    ( y (eval (frame-parameter old-frame 'top)) )
+		    ( x (eval (frame-parameter old-frame 'left)) )
+		    (size-reference-frame
+		     (if (frame-parameter old-frame 'fit-frame)
+			 new-frame
+		       old-frame))
+		    ( w (frame-pixel-width size-reference-frame))
+		    ( h (frame-total-pixel-height size-reference-frame))
+
+		    (next-w w ) ;;(frame-pixel-width new-frame) )
+		    (next-h h ) ;; (frame-total-pixel-height new-frame) )
+		    (margin smart-frame-positioning-margin))
+
+	       (if (frame-full-screen-p old-frame)
+		   (let ((ss (frame-parameter old-frame 'fullscreen-saved-state)))
+		     (if ss
+			 (setq x (nth 2 ss) ; left
+			       y (nth 1 ss) ; top
+			       w (- (nth 4 ss) (nth 2 ss))
+			       h (- (nth 3 ss) (nth 1 ss)))
+		       ;; backup solution  - shouldn't occur
+		       (setq x (or (cdr-safe (assq 'top default-frame-alist)) 40)
+			     y (or (cdr-safe (assq 'left default-frame-alist)) 40)
+			     w 400 h 600 ;; hack
+			     ))
+		     (setq next-w w next-h h)))
+
+	       ;; in case the frame is obviously created
+	       ;; on another screen
+	       ;; these ought to use the full screen dimensions, not
+	       ;; the available ones. However, since we don't know the dimensions
+	       ;; of the other screen (we only know the main ones), these aren't
+	       ;; quite clear
+	       (when (< (+ x w) min-x)	; to the left
+		 (let ((new-max-x min-x))
+		   (setq min-x (- min-x max-x))
+		   (setq max-x new-max-x)))
+	       (when (> x max-x)	;; to the right
+		 ;; there seems to be a screen right to the Dock screen
+		 ;; try to guess the size
+		 (setq min-x max-x)
+		 (setq max-x (* 2 max-x))) ;; crude assumption -
 					; screen size unknown
-	      (when (< (+ y h) min-y)	  ; above
-		(let ((new-max-y min-y))
-		  (setq min-y (- min-y max-y))
-		  (setq max-y new-max-y)))
-	      (when (> y max-y)	;; below
-		(setq min-y max-y)
-		(setq max-y (* 2 max-y)))
-	      ;; return:
-	      (unless (frame-visible-p old-frame)
-		;; if we're given an invisible frame (probably no
-		;; frame visible then!), assume a sensible standard
-		(setq x (+ min-x margin)  y (+ min-y margin) w 0 h 0))
-	      (let ((next-y nil)
-		    (next-x 
-		     (or
-		      (let ((n-x nil) (next-direction nil) (count 2))
-			(while (and (> count 0) (not next-direction))
-			  (setq count (1- count))
-			  (cond 
-			   ((not (eq 'right smart-fp--current-direction ))
-			    (if (> (- x margin next-w) min-x)
-				(progn (setq n-x (- x margin next-w))
-				       (setq next-direction 'left))
-			      (setq smart-fp--current-direction 'right)))
-			   ((not (eq 'left smart-fp--current-direction ))
-			    (if (> max-x  (+ x w margin next-w))
-				(progn (setq n-x (+ x w margin))
-				       (setq next-direction 'right))
-			      (setq smart-fp--current-direction 'right)))))
-			(setq smart-fp--current-direction next-direction)
-			n-x)
-		      ;; if it doesn't fit to the right or left
-		      ;; then position on the "other side" 
-		      ;; (where current frame is not)
-		      (if (or (equal w 0) (equal h 0) ; invisible?
-			      (> (+ x (/ w 2)) (/ max-x 2)))
-			  min-x ;; left edge
-			;; or on the right edge 
-			(- max-x next-w)))))
-	    
-		;; we'll try to position the frame somewhere near the
-		;; original one
-		(mapc  
-		 (lambda (ny)
-		   (if next-y
-		       nil ;; no operation if next-y already found
-		     (if (< (+ 0 ny 
-				 ;smart-fp--frame-title-bar-height
-				 (smart-tool-bar-pixel-height new-frame)
-				 next-h) max-y)
-		     (let ((samerow t))
-		       (mapc  
-			(lambda (f)  
-			  ;; avoid placing frame at similar y as any visible frame
-			  (if (or (> (abs (- (eval 
-					      (frame-parameter f 'top)) 
-					     ny)) 10) 
-				  ;; different height
-				  (> next-x (+ (eval 
-						(frame-parameter f 'left)) 
-					       (frame-parameter f 'width))) 
-				  ;; or no overlap
-				  (< (+ next-x next-w) 
-				     (eval (frame-parameter f 'left))))
-			      nil	; fine
-			    (setq samerow nil)))  
-			;; list:
-			(visible-frame-list))
-		       (if samerow
-			   (setq next-y ny))))))
-		 ;; list:
-		 (list y (+ y margin) (+ y (* 3 margin)) (+ y (* 5 margin)) 
-		       (+ y (* 6 margin)) (+ y (* 4 margin))  
-		       (+ y (* 2 margin)) 
-		       (- y margin) (- y (* 3 margin)) (- y (* 5 margin)) 
-		       (- y (* 6 margin)) (- y (* 4 margin)) 
-		       (+ y (* 2 margin))))
-		(setq next-x (max next-x min-x ))
-		(if next-y
-		    ;; that hasn't been fixed yet.
-		    (setq next-y (max min-y 
-				      (min next-y (- max-y next-h))))
-		  (setq next-y min-y)) ;; if all else fails
-		;; do we need to change the height as well?
-		(when (and next-y 
-			   (> (+ 0 next-y 
-				 ;smart-fp--frame-title-bar-height
-				 (smart-tool-bar-pixel-height new-frame)
-				 next-h) max-y))
-		  (setq next-h (- max-y 
-				  next-y 
-				  (smart-tool-bar-pixel-height new-frame) 
-				 ; smart-fp--frame-title-bar-height
-				  0)))
-		(assq-set 'left next-x 'new-frame-parameters)
-		(assq-set 'top next-y 'new-frame-parameters)
-		(assq-set 'width (smart-fp--pixel-to-char-width 
-				  (- next-w 32) ;; why needed??
-				  new-frame 'round-to-lower)
-			  'new-frame-parameters)
-		(assq-set 'height  (smart-fp--pixel-to-char-height
-				   ;; not sure why this works:
-				    (- next-h smart-fp--frame-title-bar-height  
-				       (smart-tool-bar-pixel-height new-frame))
-				   new-frame 'round-to-lower)
-			  'new-frame-parameters)
-		;; return this 
-		new-frame-parameters)))))))
+	       (when (< (+ y h) min-y)	  ; above
+		 (let ((new-max-y min-y))
+		   (setq min-y (- min-y max-y))
+		   (setq max-y new-max-y)))
+	       (when (> y max-y)	;; below
+		 (setq min-y max-y)
+		 (setq max-y (* 2 max-y)))
+	       ;; return:
+	       (unless (frame-visible-p old-frame)
+		 ;; if we're given an invisible frame (probably no
+		 ;; frame visible then!), assume a sensible standard
+		 (setq x (+ min-x margin)  y (+ min-y margin) w 0 h 0))
+	       (let ((next-y nil)
+		     (next-x
+		      (or
+		       (let ((n-x nil) (next-direction nil) (count 2))
+			 (while (and (> count 0) (not next-direction))
+			   (setq count (1- count))
+			   (cond
+			    ((not (eq 'right smart-fp--current-direction ))
+			     (if (> (- x margin next-w) min-x)
+				 (progn (setq n-x (- x margin next-w))
+					(setq next-direction 'left))
+			       (setq smart-fp--current-direction 'right)))
+			    ((not (eq 'left smart-fp--current-direction ))
+			     (if (> max-x  (+ x w margin next-w))
+				 (progn (setq n-x (+ x w margin))
+					(setq next-direction 'right))
+			       (setq smart-fp--current-direction 'right)))))
+			 (setq smart-fp--current-direction next-direction)
+			 n-x)
+		       ;; if it doesn't fit to the right or left
+		       ;; then position on the "other side"
+		       ;; (where current frame is not)
+		       (if (or (equal w 0) (equal h 0) ; invisible?
+			       (> (+ x (/ w 2)) (/ max-x 2)))
+			   min-x ;; left edge
+			 ;; or on the right edge
+			 (- max-x next-w)))))
 
-(defvar smart-frame-positioning-old-frame-creation-function 
+		 ;; we'll try to position the frame somewhere near the
+		 ;; original one
+		 (mapc
+		  (lambda (ny)
+		    (if next-y
+			nil ;; no operation if next-y already found
+		      (if (< (+ 0 ny
+					;smart-fp--frame-title-bar-height
+				(smart-tool-bar-pixel-height new-frame-parms)
+				next-h) max-y)
+			  (let ((samerow t))
+			    (mapc
+			     (lambda (f)
+			       ;; avoid placing frame at similar y as any visible frame
+			       (if (or (> (abs (- (eval
+						   (frame-parameter f 'top))
+						  ny)) 10)
+				       ;; different height
+				       (> next-x (+ (eval
+						     (frame-parameter f 'left))
+						    (frame-parameter f 'width)))
+				       ;; or no overlap
+				       (< (+ next-x next-w)
+					  (eval (frame-parameter f 'left))))
+				   nil	; fine
+				 (setq samerow nil)))
+			     ;; list:
+			     (visible-frame-list))
+			    (if samerow
+				(setq next-y ny))))))
+		  ;; list:
+		  (list y (+ y margin) (+ y (* 3 margin)) (+ y (* 5 margin))
+			(+ y (* 6 margin)) (+ y (* 4 margin))
+			(+ y (* 2 margin))
+			(- y margin) (- y (* 3 margin)) (- y (* 5 margin))
+			(- y (* 6 margin)) (- y (* 4 margin))
+			(+ y (* 2 margin))))
+		 (setq next-x (max next-x min-x ))
+		 (if next-y
+		     ;; that hasn't been fixed yet.
+		     (setq next-y (max min-y
+				       (min next-y (- max-y next-h))))
+		   (setq next-y min-y)) ;; if all else fails
+		 ;; do we need to change the height as well?
+		 (when (and next-y
+			    (> (+ 0 next-y
+					;smart-fp--frame-title-bar-height
+				  (smart-tool-bar-pixel-height new-frame-parms)
+				  next-h) max-y))
+		   (setq next-h (- max-y
+				   next-y
+				   (smart-tool-bar-pixel-height new-frame-parms)
+					; smart-fp--frame-title-bar-height
+				   0)))
+		 (assq-set 'left next-x 'new-frame-parameters)
+		 (assq-set 'top next-y 'new-frame-parameters)
+		 (assq-set 'width (smart-fp--pixel-to-char-width
+				   (- next-w 32) ;; why needed??
+				   new-frame 'round-to-lower)
+			   'new-frame-parameters)
+		 (assq-set 'height  (smart-fp--pixel-to-char-height
+				     ;; not sure why this works:
+				     (- next-h smart-fp--frame-title-bar-height
+					(smart-tool-bar-pixel-height new-frame-parms))
+				     new-frame 'round-to-lower)
+			   'new-frame-parameters)
+		 ;; return this
+		 new-frame-parameters)))))))))
+
+(defvar smart-frame-positioning-old-frame-creation-function
 	(smart-fp--get-frame-creation-function))
 
 (define-minor-mode smart-frame-positioning-mode
-  "If enabled, new frames are opened in a convenient position. 
+  "If enabled, new frames are opened in a convenient position.
 The algorithm tries to avoid overlapping of frames on the display,
 and it tries to position them so that they don't leave the screen.
 Nota bene: This is not an exact science.
 
 When frames are deleted, their position (associated with the name of
-the buffer shown in their first window) is stored. Frames will be 
+the buffer shown in their first window) is stored. Frames will be
 re-created at that position later on.
 
 `smart-frame-positioning-enforce', `smart-frame-positioning-margin',
-`smart-frame-positioning-hook' and `save-frame-position-file' 
+`smart-frame-positioning-hook' and `save-frame-position-file'
 can be customized to configure this mode."
 
   :init-value nil
   :global t
   :version "22.0"
   :group 'frames
-  
+
   (if smart-frame-positioning-mode
       ;; turn on
-    (progn 
- 
+    (progn
+
       (unless (eq (smart-fp--get-frame-creation-function)
 		  'smart-position-and-create-frame)
-	(setq smart-frame-positioning-old-frame-creation-function 
+	(setq smart-frame-positioning-old-frame-creation-function
 	      (smart-fp--get-frame-creation-function)))
 
       (smart-fp--set-frame-creation-function
@@ -461,18 +511,18 @@ can be customized to configure this mode."
       ;; the first frame should be in a good position
 
       ;; (let* ((rect (if (fboundp 'display-available-pixel-bounds)
-;; 		       (display-available-pixel-bounds)
-;; 		     (list 0 0 
-;; 			   (display-pixel-width) (display-pixel-height))))
-;; 	     (min-x (+ 5 (nth 0 rect)))
-;; 	     (min-y (+ 5 (nth 1 rect))))
-;; 	(setq initial-frame-alist
-;; 	      (append
-;; 	       `((top . ,(+ smart-frame-positioning-margin min-y))
-;; 		 (left . ,(+ smart-frame-positioning-margin min-x)))
-;; 	       initial-frame-alist)))
+;;		       (display-available-pixel-bounds)
+;;		     (list 0 0
+;;			   (display-pixel-width) (display-pixel-height))))
+;;	     (min-x (+ 5 (nth 0 rect)))
+;;	     (min-y (+ 5 (nth 1 rect))))
+;;	(setq initial-frame-alist
+;;	      (append
+;;	       `((top . ,(+ smart-frame-positioning-margin min-y))
+;;		 (left . ,(+ smart-frame-positioning-margin min-x)))
+;;	       initial-frame-alist)))
       )
-   
+
     ;; else (turning off)
     (smart-fp--set-frame-creation-function
      smart-frame-positioning-old-frame-creation-function)
@@ -480,15 +530,15 @@ can be customized to configure this mode."
     (remove-hook 'delete-frame-functions
 		 'smart-fp--store-frame-position-for-buffer))
   smart-frame-positioning-mode)
-        
+
 (defun frame-full-screen-p (&optional frame)
   (eq (frame-parameter nil 'fullscreen) 'fullboth))
- 
+
 
 (defvar smart-frame-prior-positions '()
   "Association list with buffer names and frame positions / sizes,
 so these can be remembered. This is part of Aquamacs Emacs.")
- 
+
 (defvar smart-frame--initial-frame (selected-frame))
 (defun smart-fp--store-frame-position-for-buffer (f)
   "Store position of frame F associated with current buffer."
@@ -501,11 +551,11 @@ so these can be remembered. This is part of Aquamacs Emacs.")
     (set-default 'initial-frame-alist
 		 (smart-fp--convert-negative-ordinates
 		  (if (frame-full-screen-p f)
-		      (list 
+		      (list
 		       (cons 'fullscreen (frame-parameter f 'fullscreen))
-		       (cons 'fullscreen-saved-state 
+		       (cons 'fullscreen-saved-state
 			     (frame-parameter f 'fullscreen-saved-state)))
-		    (list 
+		    (list
 		     (cons 'left (eval (frame-parameter f 'left)))
 		     (cons 'top (eval (frame-parameter f 'top)))
 		     (cons 'width (frame-parameter f 'width))
@@ -513,25 +563,25 @@ so these can be remembered. This is part of Aquamacs Emacs.")
 ;		     (cons 'pixel-width (frame-pixel-width f))
 ;		     (cons 'pixel-height (frame-pixel-height f))
 		     )))))
-  
+
   ;; (setq smart-frame-prior-positions nil)
   ;; don't store too many entries here
   (when (and (not (frame-full-screen-p f))
-	     (or buffer-file-number 
+	     (or buffer-file-number
 		 (not (string-match "untitled.*" (buffer-name)))))
     ;; don't save position if 'untitled'
     ;; but do save buffers like *Messages* and *Help*
     (if (> (length smart-frame-prior-positions) 50)
 	(setcdr (nthcdr 49 smart-frame-prior-positions) nil))
-    (assq-set-equal (buffer-name) 
-		    ( list 
+    (assq-set-equal (buffer-name)
+		    ( list
 		      (cons 'left (eval (frame-parameter f 'left)))
 		      (cons 'top (eval (frame-parameter f 'top)))
 		      (cons 'width (frame-parameter f 'width))
 		      (cons 'height (frame-parameter f 'height))
 		      ;;(cons 'pixel-width (frame-pixel-width f))
 		      ;;(cons 'pixel-height (frame-pixel-height f))
-		      ) 
+		      )
 		    'smart-frame-prior-positions)))
 
 ;  (smart-fp--get-initial-frame-position)
@@ -561,11 +611,11 @@ so these can be remembered. This is part of Aquamacs Emacs.")
 	  f
 	(smart-fp--convert-negative-ordinates
 	 (if (frame-full-screen-p f)
-	     (list 
+	     (list
 	      (cons 'fullscreen (frame-parameter f 'fullscreen))
-	      (cons 'fullscreen-saved-state 
+	      (cons 'fullscreen-saved-state
 		    (frame-parameter f 'fullscreen-saved-state)))
-	   (list 
+	   (list
 	    (cons 'left (eval (frame-parameter f 'left)))
 	    (cons 'top (eval (frame-parameter f 'top)))
 	    (cons 'width (frame-parameter f 'width))
@@ -587,22 +637,22 @@ Aquamacs was last terminated.")
 ;; so we need to take care not to override their customizations.
   (when smart-frame-keep-initial-frame-alist
     (let ((new-initial-frame-alist (if (< emacs-major-version 23) '((visibility . nil))))) ;;  - not in Emacs 23
-  
+
       ;; convert frame parameters
-      ;; the new frame probably doesn't have the right 
+      ;; the new frame probably doesn't have the right
       ;; font at this time, or tool-bar is unclear, etc.
 ;;       (when smart-frame--initial-frame
-;; 	(when (assq 'pixel-width frame-parameters)
-;; 	  (assq-set 'width (smart-fp--pixel-to-char-width 
-;; 			    (cdr (assq 'pixel-width frame-parameters))
-;; 			    smart-frame--initial-frame)
-;; 		    'frame-parameters)
-;; 	  (assq-set 'height (smart-fp--pixel-to-char-height 
-;; 			    (cdr (assq 'pixel-height frame-parameters))
-;; 			    smart-frame--initial-frame)
-;; 		    'frame-parameters)))
-      ;; if dimensions are set 
-      (when (not (or (assq 'height initial-frame-alist) 
+;;	(when (assq 'pixel-width frame-parameters)
+;;	  (assq-set 'width (smart-fp--pixel-to-char-width
+;;			    (cdr (assq 'pixel-width frame-parameters))
+;;			    smart-frame--initial-frame)
+;;		    'frame-parameters)
+;;	  (assq-set 'height (smart-fp--pixel-to-char-height
+;;			    (cdr (assq 'pixel-height frame-parameters))
+;;			    smart-frame--initial-frame)
+;;		    'frame-parameters)))
+      ;; if dimensions are set
+      (when (not (or (assq 'height initial-frame-alist)
 		     (assq 'width initial-frame-alist)))
 	;; can't use after-init-hook
 	(defadvice frame-notice-user-settings (after keep-inside-screen activate)
@@ -612,10 +662,10 @@ Aquamacs was last terminated.")
 	 (unless (assq (car item)  initial-frame-alist)
 	   (setq new-initial-frame-alist (cons item new-initial-frame-alist))))
        (reverse frame-parameters))
-      (setq initial-frame-alist 
+      (setq initial-frame-alist
 	    (append new-initial-frame-alist initial-frame-alist))
-      ;; Emacs (or the system?) prevents frames that are off-screen. 
-      ;; thus, we don't have to check this here. 
+      ;; Emacs (or the system?) prevents frames that are off-screen.
+      ;; thus, we don't have to check this here.
       ;; visibility: ugly workaround for stupid emacs bug 166 ;; FIXME
       ;; set the standard value (so it is customizable correctly)
       (put 'initial-frame-alist 'standard-value `((quote ,frame-parameters))))))
@@ -635,17 +685,17 @@ The file is specified in `smart-frame-position-file'."
   (protect
    (let ((file (expand-file-name save-frame-position-file)))
     (save-excursion
-      
+
       (set-buffer (get-buffer-create " *Saved Positions*"))
       (setq buffer-file-coding-system 'utf-8) ;; avoid asking questions
       (delete-region (point-min) (point-max))
       (princ ";; Saved Frame Positions\n\n" (current-buffer))
       (let ((print-length nil)
-            (print-level nil))
+	    (print-level nil))
 	;; for compatibility with older Aquamacs versions,
 	;; check (fboundp 'smart-frame-set-initial-frame-alist)
-        (print `(if (fboundp 'smart-frame-set-initial-frame-alist)
-		    (smart-frame-set-initial-frame-alist 
+	(print `(if (fboundp 'smart-frame-set-initial-frame-alist)
+		    (smart-frame-set-initial-frame-alist
 		     ',(smart-fp--get-initial-frame-position)))
 	       (current-buffer))
 	(princ "\n\n" (current-buffer))
@@ -667,7 +717,7 @@ The file is specified in `smart-frame-position-file'."
 ;; could assoc be used instead?
 (defun assq-string-equal (key alist)
   (catch 'break
-    (mapc 
+    (mapc
      (lambda (element)
        (if (string-equal (car-safe element) key)
 	   (throw 'break element)))
@@ -691,7 +741,7 @@ The file is specified in `smart-frame-position-file'."
 
 (defun smart-fp--convert-negative-ordinates (parms)
   "Converts screen ordinates of the form -x to a list (+ -x).
-Returns nil of parms is nil."
+Returns nil if parms is nil."
   (mapcar (lambda (o)
 	    (if (and (integerp (cdr-safe o))
 		     (< (cdr o) 0))
@@ -717,10 +767,10 @@ Returns nil of parms is nil."
 	       (right (+ (* (nth 2 edges) 0.666) (eval (frame-parameter frame 'left)))) ;; just half the width
 	       (bottom (+ (eval (frame-parameter frame 'top)) smart-fp--frame-title-bar-height
 			  (smart-tool-bar-pixel-height frame)
-			  (nth 3 edges) 
+			  (nth 3 edges)
 			  ))
 	       (bounds  (display-available-pixel-bounds frame)))
-	  ;; is the area visible? 
+	  ;; is the area visible?
 	  ;; we cut a corner here and only check the display that shows the majority of the frame
 	  (and bounds
 	       (>= left (- (nth 0 bounds) 4))
@@ -739,7 +789,7 @@ Returns nil of parms is nil."
 ; (display-available-pixel-bounds (selected-frame))
 ;; this is a lisp implementation of Carbon's ConstrainWindowToScreen
 (defun smart-move-frame-inside-screen (&optional frame vertical-only)
-  "Move a frame inside the available screen boundaries. 
+  "Move a frame inside the available screen boundaries.
 The frame specified in FRAME is moved so it is entirely visible on
 the screen. The function tries to avoid leaving frames on screen
 boundaries.
@@ -775,38 +825,38 @@ on the main screen, i.e. where the menu is."
 	   (h-offset (- next-h (smart-fp--char-to-pixel-height next-hc frame))))
       (when rect
 	(unless vertical-only
-	  (modify-frame-parameters 
+	  (modify-frame-parameters
 	   frame
-	   (let* ((next-x (max min-x 
+	   (let* ((next-x (max min-x
 			       (min
 				(- max-x next-w )
 				next-x)))
-		  
+
 		  (next-wc  (if (<= next-w (- max-x next-x))
 				next-wc
-			      (smart-fp--pixel-to-char-width (- max-x next-x) 
+			      (smart-fp--pixel-to-char-width (- max-x next-x)
 							     frame 'round-lower))))
 	     (smart-fp--convert-negative-ordinates `((left .
 							   ,next-x)
-						     
+
 						     (width .
-							    ,next-wc)   
+							    ,next-wc)
 						     )))))
-	(modify-frame-parameters 
+	(modify-frame-parameters
 	 frame
-	 (let* ((next-y (max min-y 
-			     (min 
-			      (- max-y next-h-total)	
+	 (let* ((next-y (max min-y
+			     (min
+			      (- max-y next-h-total)
 			      next-y)))
-		
+
 		(next-hc (if (<= next-h-total (- max-y next-y ))
 			     next-hc
-			   (smart-fp--pixel-to-char-height 
-			    (- max-y next-y 
+			   (smart-fp--pixel-to-char-height
+			    (- max-y next-y
 			       (smart-tool-bar-pixel-height frame)
 			       smart-fp--frame-title-bar-height)
 			    frame 'round-lower))))
-	   (smart-fp--convert-negative-ordinates 
+	   (smart-fp--convert-negative-ordinates
 	    `((top . ,next-y)
 	      (height . ,next-hc)))))))))
 
@@ -825,8 +875,8 @@ on the main screen, i.e. where the menu is."
 	  ;; in case the hook changed them.
 	  ;; (unless exceeding screen dimensions)
 	  (setq newpos
-		(assq-delete-all 
-		 'height 
+		(assq-delete-all
+		 'height
 		 (assq-delete-all 'width newpos))))
 	(modify-frame-parameters frame newpos)
 	(smart-move-frame-inside-screen frame))
@@ -845,4 +895,4 @@ on the main screen, i.e. where the menu is."
 	 (smart-move-frame-inside-screen nil t))))
 
 
-(provide 'smart-frame-positioning) 
+(provide 'smart-frame-positioning)
