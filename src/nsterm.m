@@ -705,6 +705,11 @@ ns_update_begin (struct frame *f)
   ns_updating_frame = f;
   int succ = [view lockFocusIfCanDraw];
 
+
+  /* When started from the console, we may not have a graphics state and
+     drawing context. ns_update_begin will lead to an error and a warning message
+     when we call graphics functions without context.*/
+
   /* drawRect may have been called for say the minibuffer, and then clip path
      is for the minibuffer.  But the display engine may draw more because
      we have set the frame as garbaged.  So reset clip path to the whole
@@ -721,9 +726,16 @@ ns_update_begin (struct frame *f)
         + FRAME_NS_TITLEBAR_HEIGHT (f)
         + FRAME_TOOLBAR_HEIGHT (f) <= cr.size.height)
       {
-        bp = [[NSBezierPath bezierPathWithRect: r] retain];
-        [bp setClip];
-        [bp release];
+	/* When started from a console by calling the executable directly,
+	   we may not get a graphics context.  Rather than creating one,
+	   we just skip clipping, because this mode of calling OS X programs
+	   is for debugging only. */
+	if ([NSGraphicsContext currentContext])
+	  {
+	    bp = [[NSBezierPath bezierPathWithRect: r] retain];
+	    [bp setClip];
+	    [bp release];
+	  }
       }
   }
 #endif
