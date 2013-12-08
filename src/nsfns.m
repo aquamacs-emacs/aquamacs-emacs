@@ -342,18 +342,19 @@ x_set_background_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   NSView *view = FRAME_NS_VIEW (f);
   EmacsCGFloat r, g, b, alpha;
 
+
   if (ns_lisp_to_color (arg, &col))
     {
       store_frame_param (f, Qbackground_color, oldval);
       error ("Unknown color");
     }
+  [col retain]; // retain before clearing frame!
 
   /* clear the frame; in some instances the NS-internal GC appears not to
      update, or it does update and cannot clear old text properly */
   if (FRAME_VISIBLE_P (f))
     ns_clear_frame (f);
 
-  [col retain];
   [f->output_data.ns->background_color release];
   f->output_data.ns->background_color = col;
 
@@ -1883,7 +1884,11 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
       if (ns_lisp_to_color (color, &col))
 	  error ("Unknown color");
 
-      [[NSColorPanel sharedColorPanel] setColor:col];
+      /* It's unclear whether the color panel copies the color,
+	 or requires us to retain it (probably not).
+	 As a compromise, we're retaining/autoreleasing at this time.
+	 This should not create a leak. */
+      [[NSColorPanel sharedColorPanel] setColor:[[col retain] autorelease]];
     }
 
   [NSApp orderFrontColorPanel: NSApp];

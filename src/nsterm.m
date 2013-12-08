@@ -1535,7 +1535,7 @@ ns_get_color (const char *name, NSColor **col)
   float r = -1.0, g, b;
   NSString *nsname = [NSString stringWithUTF8String: name];
 
-/*fprintf (stderr, "ns_get_color: '%s'\n", name); */
+  // fprintf (stderr, "ns_get_color: '%s'\n", name);
   block_input ();
 
   if ([nsname isEqualToString: @"ns_selection_bg_color"])
@@ -1549,8 +1549,8 @@ ns_get_color (const char *name, NSColor **col)
 #endif
       if ((new = [NSColor selectedTextBackgroundColor]) != nil)
         {
-          *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
           unblock_input ();
+          *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
           return 0;
         }
       else
@@ -1565,8 +1565,8 @@ ns_get_color (const char *name, NSColor **col)
       */
       if ((new = [NSColor selectedTextColor]) != nil)
         {
-          *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
           unblock_input ();
+          *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
           return 0;
         }
 
@@ -1612,8 +1612,8 @@ ns_get_color (const char *name, NSColor **col)
 
   if (r >= 0.0F)
     {
-      *col = [NSColor colorWithDeviceRed: r green: g blue: b alpha: 1.0];
       unblock_input ();
+      *col = [NSColor colorWithDeviceRed: r green: g blue: b alpha: 1.0];
       return 0;
     }
 
@@ -1643,9 +1643,9 @@ ns_get_color (const char *name, NSColor **col)
       }
   }
 
+  unblock_input ();
   if (new)
     *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
-  unblock_input ();
   return new ? 0 : 1;
 }
 
