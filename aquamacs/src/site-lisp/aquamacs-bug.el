@@ -24,7 +24,7 @@
 ;; Copyright (C) 1985, 1994, 1997, 1998, 2000, 2001, 2002
 ;; Free Software Foundation, Inc.
 
-;; Copyright (C) 2005, 2008, 2009, 2010 David Reitter
+;; Copyright (C) 2005, 2008, 2009, 2010, 2013 David Reitter
 
 
 
@@ -116,14 +116,17 @@ Offer to send a bug report."
 	(when (file-newer-than-file-p file aquamacs-id-file)
 	  (let ((location (aq-chomp
 			   (shell-command-to-string
-			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
+			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file))))
+		(last-lisp-location (aq-chomp
+			   (shell-command-to-string
+			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort'  | grep '[0-9a-f][0-9a-f][0-9a-f][0-9a-f]\sF[a-z]' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
 	    (when (aquamacs-ask-for-confirmation (format "Aquamacs crashed the last time you ran it.  Send Report? 
 Please send a simple bug report by e-mailing the automatically
 generated crash report to us.
 \(This crash occurred in %s.)" location) nil nil nil nil t)
 	    
 	    
-	      (report-aquamacs-bug (concat "Crash in " location) nil file)))))
+	      (report-aquamacs-bug (concat "Crash in " location (if last-lisp-location (concat " / " last-lisp-location) "")) nil file)))))
       (if (> ln 6)
 	  (nthcdr (- (length logfiles) 5) logfiles)
 	logfiles))
