@@ -1250,15 +1250,15 @@ update_frame_tool_bar (struct frame *f)
       Lisp_Object key = TOOLPROP (TOOL_BAR_ITEM_KEY);
 
       if (STRINGP (key))
-      	keyText = (char *) SDATA (key);
+      	keyText = (char *) SSDATA (key);
       else if (SYMBOLP (key))
-      	keyText = (char *) SDATA (SYMBOL_NAME (key) );
+      	keyText = (char *) SSDATA (SYMBOL_NAME (key) );
       else
       	keyText = "?";
 
       /* Check if this is a separator.  */
       if (// EQ (TOOLPROP (TOOL_BAR_ITEM_TYPE), Qt) ||
-	  (STRINGP (label) && strcmp("--", SDATA (label)) == 0))
+	  (STRINGP (label) && strcmp("--", SSDATA (label)) == 0))
         {
 	  [toolbar addDisplayItemSpacerWithIdx: k++ tag:i key: keyText];
           continue;
@@ -1281,7 +1281,7 @@ update_frame_tool_bar (struct frame *f)
       helpObj = TOOLPROP (TOOL_BAR_ITEM_HELP);
       if (NILP (helpObj))
         helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-      helpText = NILP (helpObj) ? "" : SSDATA (helpObj);
+      helpText = STRINGP (helpObj) ? SSDATA (helpObj) : "";
 
       /* Ignore invalid image specifications.  */
       if (!valid_image_p (image))
@@ -1301,8 +1301,7 @@ update_frame_tool_bar (struct frame *f)
         }
       
       captionObj = TOOLPROP (TOOL_BAR_ITEM_LABEL);
-      captionText = STRINGP (captionObj) ? (char *)SDATA (captionObj) : "";
-
+      captionText = STRINGP (captionObj) ? SSDATA (captionObj) : "";
 
       [toolbar addDisplayItemWithImage: img->pixmap
                                    idx: k++
@@ -1556,8 +1555,12 @@ Items in this list are always Lisp symbols.*/)
 {
 
 
-  NSString *label_str = [NSString stringWithCString: label encoding:NSASCIIStringEncoding];
-  NSString *help_str = [NSString stringWithCString: help encoding:NSASCIIStringEncoding];
+  NSString *label_str = @"";
+  NSString *help_str = @"";
+  if (label != 0)
+    label_str = [NSString stringWithCString: label encoding:NSASCIIStringEncoding];
+  if (help != 0)
+    help_str = [NSString stringWithCString: help encoding:NSASCIIStringEncoding];
 
   /* 1) come up w/identifier */
   // NSString *identifier
