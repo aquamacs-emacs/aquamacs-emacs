@@ -1227,8 +1227,6 @@ to the selected frame."
   ;; ;; not needed
 
 
-  ;; (require 'mouse-sel) ; provie functions - but don't turn on mouse-sel-mode
- 
   (aquamacs-set-defaults '((mouse-drag-copy-region t) ;; needed in Emacs 24
 			   (cua-use-hyper-key only) ;;this avoids shift-return
 			   (cua-enable-cua-keys nil)))
@@ -1295,14 +1293,38 @@ to the selected frame."
 	    #'flyspell-correct-word)
 	  map))
 
+(defun mouse-save (click)
+  "Set the region according to CLICK.
+Same as `mouse-save-then-kill', except that the region will not
+be killed."
+  (interactive "e")
+  (let ((last-command)) ;; do not kill
+    (mouse-save-then-kill click)))
+
+(defun mouse-save-secondary (click)
+  "Set the secondary selection according to CLICK.
+Same as `mouse-secondary-save-then-kill', except that the region will not
+be killed."
+  (interactive "e")
+  (let ((last-command)) ;; do not kill
+    (mouse-secondary-save-then-kill click)))
+
   (let ((cmdkey (or (if (boundp 'mac-command-modifier)
 			mac-command-modifier nil) 'alt)))
-    (global-set-key (vector '(shift down-mouse-1)) 'mouse-extend)
-    (global-set-key (vector `(shift ,cmdkey down-mouse-1)) 
-		    'mouse-extend-secondary)
+    (global-set-key (vector '(shift down-mouse-1)) 'mouse-save)
+    ;; does not work:
+    ;; (global-set-key (vector '(shift drag-mouse-1)) 'mouse-save)
+
     (global-set-key (vector `(,cmdkey mouse-1)) 'mouse-start-secondary)
     (global-set-key (vector `(,cmdkey drag-mouse-1)) 'mouse-set-secondary)
-    (global-set-key (vector `(,cmdkey down-mouse-1)) 'mouse-drag-secondary))
+    (global-set-key (vector `(,cmdkey down-mouse-1)) 'mouse-save-secondary)
+    (global-set-key (vector `(,cmdkey down-mouse-1)) 'mouse-drag-secondary)
+
+    (global-set-key (vector `(down-mouse-2)) 'mouse-start-secondary)
+    (global-set-key (vector `(drag-mouse-2)) 'mouse-set-secondary)
+    (global-set-key (vector `(shift down-mouse-2)) 'mouse-save-secondary)
+    (global-set-key (vector `(down-mouse-2)) 'mouse-drag-secondary))
+
  
   (aquamacs-set-defaults '((x-select-enable-clipboard nil) 
 			   (cua-mode t)
