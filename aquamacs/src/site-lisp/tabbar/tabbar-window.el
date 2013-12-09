@@ -271,9 +271,11 @@ Return the current tabset, which corresponds to (selected-window)."
     ;; to ensure that changes within tabbar-window-alist don't affect
     ;; tabbar-window cache)
     (setq tabbar-window-cache (copy-tree tabbar-window-alist)))
-  (tabbar-get-tabset (number-to-string (window-number (selected-window))))
   ;; when triggered idle timers, Emacs does not recognize the change in the header line
-  (force-window-update (window-buffer)))
+  (force-window-update (window-buffer))
+  ;; return current tabset
+  (tabbar-get-tabset (number-to-string (window-number (selected-window)))))
+
 
 (defvar tabbar-window-immediate-screen-fresh nil "See macro `fast-screen-refresh' in aquamacs-tabbar.")
 (defun tabbar-window-update-tabsets-when-idle ()
