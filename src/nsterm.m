@@ -93,6 +93,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 
    ========================================================================== */
 
+
 /* Convert a symbol indexed with an NSxxx value to a value as defined
    in keyboard.c (lispy_function_key). I hope this is a correct way
    of doing things... */
@@ -4660,6 +4661,18 @@ ns_term_shutdown (int sig)
       return;
     }
 
+  // live resizing
+  // todo: this is not the correct view
+  // NSView *view = [window contentView];
+  // if ([view inLiveResize])
+  //   {
+  //     if (type == NSLeftMouseDragged)
+  //       {
+  //         [[view emacsframe] updateFrameSize];
+  //         return;
+  //       }
+  //   }
+
   if (type == NSApplicationDefined)
     {
       /* Events posted by ns_send_appdefined interrupt the run loop here.
@@ -6550,12 +6563,14 @@ if (cols > 0 && rows > 0)
 - (void)viewDidEndLiveResize
 {
   [super viewDidEndLiveResize];
+#ifdef AQUAMACS_RESIZING_HINT
   if (old_title != 0)
     {
       [[self window] setTitle: [NSString stringWithUTF8String: old_title]];
       xfree (old_title);
       old_title = 0;
     }
+#endif
   maximizing_resize = NO;
 }
 #endif /* NS_IMPL_COCOA */
