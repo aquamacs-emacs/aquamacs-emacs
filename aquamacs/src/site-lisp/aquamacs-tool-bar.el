@@ -263,8 +263,8 @@ This variable is used in the AUCTeX configuration.")
 (defun restore-tool-bar-configuration ()
   (let ((stored (or (assq (tool-bar-hash) 
 		      aquamacs-tool-bar-user-customization)
-		    (assq (tool-bar-classic-hash) 
-		      aquamacs-tool-bar-user-customization)))
+		    (assq (tool-bar-classic-hash)
+		      aquamacs-tool-bar-user-customization))))
     (if stored
 	(set-tool-bar-configuration (cdr stored)))))
  
