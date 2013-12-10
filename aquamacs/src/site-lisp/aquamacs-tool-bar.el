@@ -263,7 +263,7 @@ This variable is used in the AUCTeX configuration.")
 (defun restore-tool-bar-configuration ()
   (let ((stored (or (assq (tool-bar-hash) 
 		      aquamacs-tool-bar-user-customization)
-		    (assq (tool-bar-classic-hash)
+		    (assq (tool-bar-basic-hash)
 		      aquamacs-tool-bar-user-customization))))
     (if stored
 	(set-tool-bar-configuration (cdr stored)))))
@@ -301,10 +301,10 @@ This variable is used in the AUCTeX configuration.")
      (visible-frame-list))))
 
 ;; (tool-bar-hash)
-(defun tool-bar-hash ()
+(defun tool-bar-basic-hash ()
   (with-current-buffer (window-buffer (selected-window))
 		    major-mode))
-(defun tool-bar-classic-hash ()
+(defun tool-bar-hash ()
   "Compatibility version of `tool-bar-hash'.
 Before Aquamacs 3.0, this was used."
   (logand 67108863 ;; \x3FFFFFF  ;; ensure compatibility across machines
