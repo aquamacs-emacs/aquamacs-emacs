@@ -261,7 +261,9 @@ This variable is used in the AUCTeX configuration.")
       (set (nthcdr 12 aquamacs-tool-bar-user-customization) nil)))
 
 (defun restore-tool-bar-configuration ()
-  (let ((stored (assq (tool-bar-hash) 
+  (let ((stored (or (assq (tool-bar-hash) 
+		      aquamacs-tool-bar-user-customization)
+		    (assq (tool-bar-classic-hash) 
 		      aquamacs-tool-bar-user-customization)))
     (if stored
 	(set-tool-bar-configuration (cdr stored)))))
@@ -302,15 +304,18 @@ This variable is used in the AUCTeX configuration.")
 (defun tool-bar-hash ()
   (with-current-buffer (window-buffer (selected-window))
 		    major-mode))
-  ;; (logand 67108863 ;; \x3FFFFFF  ;; ensure compatibility across machines
-  ;; 	  (sxhash (sort (apply #'append
-  ;; 			       (mapcar
-  ;; 				(lambda (m)
-  ;; 				  (when (and (consp m)
-  ;; 					     (not (equal (car-safe (cdr-safe (cdr-safe m)))
-  ;; 							 "--")))
-  ;; 				    (list (car m))))
-  ;; 				tool-bar-map)) 'string<))))
+(defun tool-bar-classic-hash ()
+  "Compatibility version of `tool-bar-hash'.
+Before Aquamacs 3.0, this was used."
+  (logand 67108863 ;; \x3FFFFFF  ;; ensure compatibility across machines
+  	  (sxhash (sort (apply #'append
+  			       (mapcar
+  				(lambda (m)
+  				  (when (and (consp m)
+  					     (not (equal (car-safe (cdr-safe (cdr-safe m)))
+  							 "--")))
+  				    (list (car m))))
+  				tool-bar-map)) 'string<))))
 
 (defconst tool-bar-user-visible t)
 (defconst tool-bar-user-invisible nil)
