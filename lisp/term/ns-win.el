@@ -942,41 +942,25 @@ panel immediately after correcting a word in a buffer."
 
 ;; Functions for color panel + drag
 (defun ns-face-at-pos (pos)
-  (let* ((frame (car pos))
-         (frame-pos (cons (cadr pos) (cddr pos)))
-         (window (window-at (car frame-pos) (cdr frame-pos) frame))
-         (window-pos (coordinates-in-window-p frame-pos window))
-         (buffer (window-buffer window))
-         (edges (window-edges window)))
+  (let ((p (nth 1 pos))) 
     (cond
-     ((not window-pos)
+     ((not p)
       nil)
-     ((eq window-pos 'mode-line)
+     ((eq p 'mode-line)
       'mode-line)
-     ((eq window-pos 'vertical-line)
+     ((eq p 1)
+      'echo-area)
+     ((eq p 'vertical-line)
       'default)
-     ((consp window-pos)
-      (with-current-buffer buffer
-        (let ((p (car (compute-motion (window-start window)
-                                      (cons (nth 0 edges) (nth 1 edges))
-                                      (window-end window)
-                                      frame-pos
-                                      (- (window-width window) 1)
-                                      nil
-                                      window))))
-          (cond
-           ((eq p (window-point window))
+           ((eq p (window-point (posn-window pos)))
             'cursor)
            ((and mark-active (< (region-beginning) p) (< p (region-end)))
             'region)
            (t
-	    (let ((faces (get-char-property p 'face window)))
-	      (if (consp faces) (car faces) faces)))))))
-     (t
-      nil))))
+	    (let ((faces (get-char-property p 'face (posn-window pos))))
+	      (if (consp faces) (car faces) faces))))))
 
 (defvar ns-input-color)			; nsterm.m
-
 
 (defun ns-set-color-at-mouse (event attribute)
   "Set the color at the mouse location to `ns-input-color'.
