@@ -6750,9 +6750,9 @@ if (cols > 0 && rows > 0)
   toggleButton = [win standardWindowButton: NSWindowToolbarButton];
   if (toggleButton)
     {
-  [toggleButton setTarget: self];
-  [toggleButton setAction: @selector (toggleToolbar: )];
-  }
+      [toggleButton setTarget: self];
+      [toggleButton setAction: @selector (toggleToolbarShown: )];
+    }
   }
 #endif
 
