@@ -298,16 +298,19 @@ This variable is used in the AUCTeX configuration.")
 
      (visible-frame-list))))
 
+;; (tool-bar-hash)
 (defun tool-bar-hash ()
-  (logand 67108863 ;; \x3FFFFFF  ;; ensure compatibility across machines
-	  (sxhash (sort (apply #'append
-			       (mapcar
-				(lambda (m)
-				  (when (and (consp m)
-					     (not (equal (car-safe (cdr-safe (cdr-safe m)))
-							 "--")))
-				    (list (car m))))
-				tool-bar-map)) 'string<))))
+  (with-current-buffer (window-buffer (selected-window))
+		    major-mode))
+  ;; (logand 67108863 ;; \x3FFFFFF  ;; ensure compatibility across machines
+  ;; 	  (sxhash (sort (apply #'append
+  ;; 			       (mapcar
+  ;; 				(lambda (m)
+  ;; 				  (when (and (consp m)
+  ;; 					     (not (equal (car-safe (cdr-safe (cdr-safe m)))
+  ;; 							 "--")))
+  ;; 				    (list (car m))))
+  ;; 				tool-bar-map)) 'string<))))
 
 (defconst tool-bar-user-visible t)
 (defconst tool-bar-user-invisible nil)
@@ -386,15 +389,16 @@ If there is a user-supplied visibility term, set it."
 		    (lambda (item)
 		      (unless (or (memq (or (car-safe item) item) ;;needed?
 		  			config) ;; hidden?
-		  		  (equal (car-safe (cdr-safe (cdr-safe item)))
-		  			 "--"))
-		  	(list
+		  		  (member (car-safe (car-safe (cdr-safe (cdr-safe (cdr-safe item)))))
+		  			 '(nil "--")))
+		  	(list ;; include as invisible
 		  	 (tool-bar-maybe-set-visibility item nil show-message))))
-		    (cdr tool-bar-map)))
-		  ))))
+		    (cdr tool-bar-map)))))))
+
 
 ;; when global-set-key
 ;; ensure that frame parameter is correct 
+; (print (ns-tool-bar-configuration))
 (defun update-tool-bar-from-user-configuration (&optional frame)
   (interactive)
   (let ((user-config (ns-tool-bar-configuration)))
