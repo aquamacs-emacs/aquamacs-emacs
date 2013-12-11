@@ -7001,6 +7001,8 @@ if (cols > 0 && rows > 0)
 
 - (void)windowDidExitFullScreen:(NSNotification *)notification
 {
+  if (! FRAME_LIVE_P (emacsframe))
+      return;
   [self setFSValue: fs_before_fs];
   fs_before_fs = -1;
 #ifdef HAVE_NATIVE_FS
