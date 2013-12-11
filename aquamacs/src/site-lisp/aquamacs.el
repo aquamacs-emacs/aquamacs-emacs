@@ -1187,27 +1187,16 @@ be killed."
   (let ((last-command)) ;; do not kill
     (mouse-secondary-save-then-kill click)))
 
-(let ((cmdkey (or (if (boundp 'mac-command-modifier)
-		      mac-command-modifier nil) 'alt)))
 	      
-  (global-set-key (vector '(shift down-mouse-1)) 'mouse-save)
-  ;; does not work:
-  ;; (global-set-key (vector '(shift drag-mouse-1)) 'mouse-save)
+(global-set-key (vector '(shift down-mouse-1)) 'mouse-save)
+;; does not work:
+;; (global-set-key (vector '(shift drag-mouse-1)) 'mouse-save)
+(global-set-key (vector `(meta shift down-mouse-1)) 'mouse-save-secondary)
 
-  (global-set-key (vector `(,cmdkey mouse-1)) 'mouse-start-secondary)
-  (global-set-key (vector `(,cmdkey drag-mouse-1)) 'mouse-set-secondary)
-  (global-set-key (vector `(,cmdkey down-mouse-1)) 'mouse-save-secondary)
-  (global-set-key (vector `(,cmdkey down-mouse-1)) 'mouse-drag-secondary)
-
-  ;; binding down-mouse-2 would break link following (on mouse-1)
-  (global-set-key (vector `(mouse-2)) 'mouse-start-secondary)
-  (global-set-key (vector `(drag-mouse-2)) 'mouse-set-secondary)
-  (global-set-key (vector `(shift down-mouse-2)) 'mouse-save-secondary))
-
-  (aquamacs-set-defaults '((x-select-enable-clipboard nil)
-			   (cua-mode t)
-			   ;; (mouse-sel-leave-point-near-mouse t)
-			   ))
+(aquamacs-set-defaults '((x-select-enable-clipboard nil)
+			 (cua-mode t)
+			 ;; (mouse-sel-leave-point-near-mouse t)
+			 ))
 
 ;; applications on OS X don't display a splash screen
 (aquamacs-set-defaults '((inhibit-startup-message t)))
