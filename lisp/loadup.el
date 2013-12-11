@@ -302,6 +302,8 @@
 			     files)))
       (setq emacs-bzr-version (condition-case nil (emacs-bzr-get-version)
                               (error nil)))
+      (setq emacs-git-version (condition-case nil (emacs-git-get-version)
+                              (error nil)))
       ;; `emacs-version' is a constant, so we shouldn't change it with `setq'.
       (defconst emacs-version
 	(format "%s.%d"

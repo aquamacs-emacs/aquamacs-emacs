@@ -56,8 +56,14 @@ to the system configuration; look at `system-configuration' instead."
   (interactive "P")
   (let ((version-string
          (format (if (not (called-interactively-p 'interactive))
-		     "GNU Emacs %s (%s%s%s)\n of %s on %s"
-		   "GNU Emacs %s (%s%s%s) of %s on %s")
+		     "%sGNU Emacs %s (%s%s%s)\n of %s (%s) on %s"
+		   "%sGNU Emacs %s (%s%s%s) of %s (%s) on %s")
+		 (if (boundp 'aquamacs-version)
+		     (concat
+		      "Aquamacs "
+		      (if (boundp 'aquamacs-version) aquamacs-version "?")
+		      (if (boundp 'aquamacs-minor-version) aquamacs-minor-version "?")
+		      " "))
                  emacs-version
 		 system-configuration
 		 (cond ((featurep 'motif)
@@ -74,6 +80,7 @@ to the system configuration; look at `system-configuration' instead."
 			     (capitalize (symbol-name x-toolkit-scroll-bars)))
 		   "")
 		 (format-time-string "%Y-%m-%d" emacs-build-time)
+		 (or emacs-bzr-version emacs-git-version "?")
                  emacs-build-system)))
     (if here
         (insert version-string)
@@ -83,6 +90,29 @@ to the system configuration; look at `system-configuration' instead."
 
 ;; We hope that this alias is easier for people to find.
 (defalias 'version 'emacs-version)
+
+(defvar emacs-git-version nil
+  "String giving the git revision from which this Emacs was built.
+Value is nil if Emacs was not built from a git checkout, or if we could
+not determine the revision.")
+
+(defun emacs-git-version-git (&optional dir)
+  "Ask git itself for the version information for directory DIR."
+  ;; git describe --always --dirty
+  (with-temp-buffer
+    (if dir (cd dir))
+    (when (zerop
+	   (call-process "git" nil '(t nil) nil "describe"
+			 "--always"
+			 "--dirty"))
+      (replace-regexp-in-string "\n" "" (buffer-string)))))
+
+(defun emacs-git-get-version (&optional dir _external)
+  "Try to return as a string the git revision of the Emacs sources.
+Optional argument DIR is a directory to use instead of `source-directory'.
+Optional argument EXTERNAL unused."
+  (or dir (setq dir source-directory))
+  (emacs-git-version-git dir))
 
 ;; Set during dumping, this is a defvar so that it can be setq'd.
 (defvar emacs-bzr-version nil

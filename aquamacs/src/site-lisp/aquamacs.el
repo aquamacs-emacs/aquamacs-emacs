@@ -1414,14 +1414,6 @@ to write the `custom-file'.")
 (easy-menu-remove-item global-map
 		       '("menu-bar" "file") 'make-frame-on-display)
 
-;; shown in About dialog
-(setq emacs-build-system
-      (concat
-       emacs-build-system
-       " - Aquamacs Distribution "
-       (if (boundp 'aquamacs-version) aquamacs-version "?")
-       (if (boundp 'aquamacs-minor-version) aquamacs-minor-version "?")))
-
 ;; the check for crashes must be done BEFORE checking for updates
 ;; as the latter updates the .id file.
 (add-hook 'after-init-hook 'check-for-aquamacs-crashes 'append)
