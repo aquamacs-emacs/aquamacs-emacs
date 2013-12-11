@@ -216,6 +216,8 @@ and may appear in other public locations.\n\n"
     (insert "\n\nIn " (emacs-version) "\n")
     (if (stringp emacs-bzr-version)
 	(insert "Bzr revision: " emacs-bzr-version "\n"))
+    (if (stringp emacs-git-version)
+	(insert "Git revision: " emacs-git-version "\n"))
     (if (fboundp 'x-server-vendor)
 	(condition-case nil
             ;; This is used not only for X11 but also W32 and others.
