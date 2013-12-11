@@ -149,7 +149,9 @@ the selected frame if visible."
 	       (es (if last-nonmenu-event (posn-x-y (event-start last-nonmenu-event))))
 	       (f (car mp))
 	       (x (if es (car es) (+ (eval (frame-parameter f 'left)) (cadr mp))))
-	       (y (if es (cdr es) (+ (eval (frame-parameter f 'top)) (cddr mp))))
+	       (y (if es (cdr es) (+ (eval (frame-parameter f 'top))
+				     (smart-tool-bar-pixel-height f)
+				     (cddr mp))))
 	       (mouse-monitor nil) (mouse-monitor-frames nil))
 	  (mapc (lambda (l)
 		  (let* ((geo (cdr (assq 'geometry l)))
@@ -171,8 +173,9 @@ the selected frame if visible."
 		  (mapc (lambda (x) (or first (if (frame-visible-p x) (setq first x)))) mouse-monitor-frames)
 		  first))
 	      ;; if there is no visible frame on this monitor...
+	      (if mouse-monitor ;; to make sure
 	       (list (+ 100 (nth 0 mouse-monitor))
-		     (+ 100 (nth 1 mouse-monitor))))))
+		     (+ 100 (nth 1 mouse-monitor)))))))
     ;; last event was keyboard
     ;; return selected frame if visible
     ;; nil otherwise
