@@ -2303,6 +2303,25 @@ If omitted or nil, that stands for the selected frame's display.  */)
 }
 
 
+DEFUN ("ns-os-version", Fns_os_version, Sns_os_version, 0, 1, 0,
+       doc: /* Return the version numbers of the OS. */)
+  ()
+{
+  long version = 0;
+#ifdef NS_IMPL_GNUSTEP
+  return Qnil;
+#else
+  if (Gestalt(gestaltSystemVersion, &version) == 0)
+    {
+      return make_number(version);
+    } 
+  else
+    {
+      return Qnil;
+    }
+#endif
+}
+
 DEFUN ("x-server-version", Fx_server_version, Sx_server_version, 0, 1, 0,
        doc: /* Return the version numbers of the server of display TERMINAL.
 The value is a list of three integers: the major and minor
@@ -3906,6 +3925,7 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sx_server_max_request_size);
   defsubr (&Sx_server_vendor);
   defsubr (&Sx_server_version);
+  defsubr (&Sns_os_version);
   defsubr (&Sx_display_pixel_width);
   defsubr (&Sx_display_pixel_height);
   defsubr (&Sns_display_monitor_attributes_list);
