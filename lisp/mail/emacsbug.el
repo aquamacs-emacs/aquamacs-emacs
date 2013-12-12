@@ -219,9 +219,8 @@ and may appear in other public locations.\n\n"
     (if (stringp emacs-git-version)
 	(insert "Git revision: " emacs-git-version "\n"))
     (if (fboundp 'ns-os-version)
-	(let ((v (ns-os-version)))
-	  (insert (format "Operating System: OS X %x.%x.%x\n" 
-			  (lsh (logand #xff00 v) -8) (lsh (logand #x00f0 v) -4) (logand #xf v))))
+	(insert (format "Operating System: OS X %s\n"
+			(ns-os-version)))
       (if (fboundp 'x-server-vendor)
 	  (condition-case nil
 		;; This is used not only for X11 but also W32 and others.

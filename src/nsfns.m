@@ -2303,22 +2303,19 @@ If omitted or nil, that stands for the selected frame's display.  */)
 }
 
 
-DEFUN ("ns-os-version", Fns_os_version, Sns_os_version, 0, 1, 0,
-       doc: /* Return the version numbers of the OS. */)
+DEFUN ("ns-os-version", Fns_os_version, Sns_os_version, 0, 0, 0,
+       doc: /* Return the version identification of the OS. 
+This is a human-readable string inappropriate for parsing.
+See `x-server-version' for programmatical uses.*/)
   ()
 {
-  long version = 0;
 #ifdef NS_IMPL_GNUSTEP
   return Qnil;
 #else
-  if (Gestalt(gestaltSystemVersion, &version) == 0)
-    {
-      return make_number(version);
-    } 
-  else
-    {
-      return Qnil;
-    }
+
+  NSString * operatingSystemVersionString = [[NSProcessInfo processInfo] operatingSystemVersionString];
+  return build_string([operatingSystemVersionString UTF8String]);
+  
 #endif
 }
 
