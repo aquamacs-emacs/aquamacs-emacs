@@ -998,6 +998,7 @@ Only available in Aquamacs."
 (defvar menu-bar-showhide-menu
   (let ((menu (make-sparse-keymap "Show/Hide")))
 
+
     (bindings--define-key menu [showhide-battery]
       (menu-bar-make-mm-toggle display-battery-mode
 			       "Battery Status"
@@ -1010,57 +1011,11 @@ Only available in Aquamacs."
 			       "Display time, system load averages and \
 mail status in mode line"
 			       (:visible (not (eq window-system 'ns)))))
-    ;; (bindings--define-key menu [datetime-separator]
-    ;;   menu-bar-separator :visible (not (eq window-system 'ns)))
+
     (bindings--define-key menu [datetime-separator] `(menu-item "" nil
 			  :visible (not (eq window-system ns))))
-    (bindings--define-key menu [showhide-tooltip-mode]
-      '(menu-item "Tooltips" tooltip-mode
-		  :help "Turn tooltips on/off"
-		  :visible (and (display-graphic-p) (fboundp 'x-show-tip))
-		  :button (:toggle . tooltip-mode)))
 
-
-    (bindings--define-key menu [tooltip-separator] menu-bar-separator)
-    (bindings--define-key menu [showhide-speedbar]
-      '(menu-item "Speedbar" speedbar-frame-mode
-		  :help "Display a Speedbar quick-navigation frame"
-		  :button (:toggle
-			   . (and (boundp 'speedbar-frame)
-				  (frame-live-p (symbol-value 'speedbar-frame))
-				  (frame-visible-p
-				   (symbol-value 'speedbar-frame))))))
-    (bindings--define-key menu [showhide-fringe]
-      `(menu-item "Fringe" ,menu-bar-showhide-fringe-menu
-    	    :help "Settings for Fringe display in the margins of windows."
-    	    :visible (display-graphic-p)))
-    (bindings--define-key menu [showhide-scroll-bar]
-      `(menu-item "Scroll-bar" ,menu-bar-showhide-scroll-bar-menu
-		  :visible (display-graphic-p)))
-    (if (and (boundp 'menu-bar-showhide-tool-bar-menu)
-	     (keymapp menu-bar-showhide-tool-bar-menu))
-	(bindings--define-key menu [showhide-tool-bar]
-	  `(menu-item "Tool-bar" ,menu-bar-showhide-tool-bar-menu
-		      :visible (display-graphic-p)))
-      ;; else not tool bar that can move.
-      (bindings--define-key menu [showhide-tool-bar]
-	'(menu-item "Tool-bar" toggle-tool-bar-mode-from-frame
-		    :help "Turn tool-bar on/off"
-		    :visible (display-graphic-p)
-		    :button
-		    (:toggle . (menu-bar-positive-p
-				(frame-parameter (menu-bar-frame-for-menubar)
-						 'tool-bar-lines))))))
-    (bindings--define-key menu [ns-tool-bar]
-      `(menu-item "Toolbar..."
-	      customize-tool-bar
-	      :help ,(purecopy "Display the Toolbar customization panel")
-	      :visible (and ,(fboundp 'ns-tool-bar-customize) (display-graphic-p))))
-
-
-    (bindings--define-key menu [linecolumn-separator] menu-bar-separator)
-
-  (bindings--define-key menu [column-number-mode]
+    (bindings--define-key menu [column-number-mode]
       (menu-bar-make-mm-toggle column-number-mode
 			       "Column Numbers"
 			       "Show the current column number in the mode line"))
@@ -1075,6 +1030,59 @@ mail status in mode line"
 			       "Size Indication"
 			       "Show the size of the buffer in the mode line"))
 
+    (bindings--define-key menu [size-separator] menu-bar-separator)
+
+
+    ;; let's not show tooltips in Aquamacs
+    ;; (bindings--define-key menu [showhide-tooltip-mode]
+    ;;   '(menu-item "Tooltips" tooltip-mode
+    ;; 		  :help "Turn tooltips on/off"
+    ;; 		  :visible (and (display-graphic-p) (fboundp 'x-show-tip))
+    ;; 		  :button (:toggle . tooltip-mode)))
+
+
+    ;; (bindings--define-key menu [tooltip-separator] menu-bar-separator)
+    (bindings--define-key menu [showhide-speedbar]
+      '(menu-item "Speedbar" speedbar-frame-mode
+		  :help "Display a Speedbar quick-navigation frame"
+		  :button (:toggle
+			   . (and (boundp 'speedbar-frame)
+				  (frame-live-p (symbol-value 'speedbar-frame))
+				  (frame-visible-p
+				   (symbol-value 'speedbar-frame))))))
+    (bindings--define-key menu [speedbar-separator] menu-bar-separator)
+    (bindings--define-key menu [showhide-fringe]
+      `(menu-item "Fringe" ,menu-bar-showhide-fringe-menu
+    	    :help "Settings for Fringe display in the margins of windows."
+    	    :visible (display-graphic-p)))
+
+    ;; No scroll bar options shown in Aquamacs
+    ;; (bindings--define-key menu [showhide-scroll-bar]
+    ;;   `(menu-item "Scroll-bar" ,menu-bar-showhide-scroll-bar-menu
+    ;; 		  :visible (display-graphic-p)))
+
+    ;; No Toolbar customization button shown in Aquamacs
+    ;; available via right-click on toolbar
+    ;; (if (and (boundp 'menu-bar-showhide-tool-bar-menu)
+    ;; 	     (keymapp menu-bar-showhide-tool-bar-menu))
+    ;; 	(bindings--define-key menu [showhide-tool-bar]
+    ;; 	  `(menu-item "Tool-bar" ,menu-bar-showhide-tool-bar-menu
+    ;; 		      :visible (display-graphic-p)))
+    ;;   ;; else not tool bar that can move.
+    ;;   (bindings--define-key menu [showhide-tool-bar]
+    ;; 	'(menu-item "Tool-bar" toggle-tool-bar-mode-from-frame
+    ;; 		    :help "Turn tool-bar on/off"
+    ;; 		    :visible (display-graphic-p)
+    ;; 		    :button
+    ;; 		    (:toggle . (menu-bar-positive-p
+    ;; 				(frame-parameter (menu-bar-frame-for-menubar)
+    ;; 						 'tool-bar-lines))))))
+
+    ;; (bindings--define-key menu [ns-tool-bar]
+    ;;   `(menu-item "Toolbar..."
+    ;; 	      customize-tool-bar
+    ;; 	      :help ,(purecopy "Display the Toolbar customization panel")
+    ;; 	      :visible (and ,(fboundp 'ns-tool-bar-customize) (display-graphic-p))))
 
     (bindings--define-key menu [newlines-separator] menu-bar-separator)
     (bindings--define-key menu [hl-line-mode]
