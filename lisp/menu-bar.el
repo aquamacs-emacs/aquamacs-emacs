@@ -696,25 +696,6 @@ by \"Save Options\" in Custom buffers.")
 
 ;;; Assemble all the top-level items of the "Options" menu
 
-;; The "Show/Hide" submenu of menu "Options"
-
-(defvar menu-bar-showhide-menu (make-sparse-keymap "Show/Hide"))
-
-(bindings--define-key menu-bar-showhide-menu [show-newlines-mode]
- (menu-bar-make-mm-toggle global-show-newlines-mode
-			   "Show Newlines"
-			   "Show hard newlines"))
-
-(bindings--define-key menu-bar-showhide-menu [newlines-separator]
-  '("--"))
-
-
-(bindings--define-key menu-bar-showhide-menu [highlight-separator]
-  menu-bar-separator)
-(bindings--define-key menu-bar-showhide-menu [highlight-paren-mode]
-  (menu-bar-make-mm-toggle show-paren-mode
-			   "Paren Match Highlighting"
-			   "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
 
 
 (defun menu-bar-showhide-fringe-ind-customize ()
@@ -727,21 +708,12 @@ by \"Save Options\" in Custom buffers.")
   (interactive)
   (customize-set-variable 'indicate-buffer-boundaries
 			  '((t . right) (top . left))))
-(bindings--define-key menu-bar-showhide-menu [column-number-mode]
-  (menu-bar-make-mm-toggle column-number-mode
-			   "Column Numbers"
-			   "Show the current column number in the mode line"))
 
 (defun menu-bar-showhide-fringe-ind-box ()
   "Display top and bottom indicators in opposite fringes."
   (interactive)
   (customize-set-variable 'indicate-buffer-boundaries
 			  '((top . left) (bottom . right))))
-(bindings--define-key menu-bar-showhide-menu [linum-mode]
-  (menu-bar-make-mm-toggle global-linum-mode
-			   "Line Numbers"
-			   "Show the current line number next to each line"))
-
 (defun menu-bar-showhide-fringe-ind-right ()
   "Display buffer boundaries and arrows in the right fringe."
   (interactive)
@@ -757,15 +729,6 @@ by \"Save Options\" in Custom buffers.")
   (interactive)
   (customize-set-variable 'indicate-buffer-boundaries nil))
 
-(bindings--define-key menu-bar-showhide-menu [showhide-date-time]
-  (menu-bar-make-mm-toggle display-time-mode
-			   "Time, Load and Mail"
-			   "Display time, system load averages and \
-mail status in mode line"))
-
-(bindings--define-key menu-bar-showhide-menu [datetime-separator]
-  '("--"))
-
 (defun customize-tool-bar ()
   "Show tool bar customization.
 Only available in Aquamacs."
@@ -774,68 +737,52 @@ Only available in Aquamacs."
   (sit-for 0)
   (ns-tool-bar-customize))
 
-(bindings--define-key menu-bar-showhide-menu [ns-tool-bar]
-  `(menu-item ,(purecopy "Toolbar...") 
-	      customize-tool-bar
-	      :help ,(purecopy "Display the Toolbar customization panel")
-	      :visible ,(fboundp 'ns-tool-bar-customize)))
-
-(bindings--define-key menu-bar-showhide-menu [showhide-speedbar]
-  `(menu-item ,(purecopy "Speedbar") speedbar-frame-mode
-	      :help ,(purecopy "Display a Speedbar quick-navigation frame")
-	      :button (:toggle
-		       . (and (boundp 'speedbar-frame)
-			      (frame-live-p (symbol-value 'speedbar-frame))
-			      (frame-visible-p
-			       (symbol-value 'speedbar-frame))))))
-
-(defvar menu-bar-showhide-fringe-menu (make-sparse-keymap "Fringe"))
 
 (defvar menu-bar-showhide-fringe-ind-menu
   (let ((menu (make-sparse-keymap "Buffer boundaries")))
 
     (bindings--define-key menu [customize]
       '(menu-item "Other (Customize)"
-                  menu-bar-showhide-fringe-ind-customize
-                  :help "Additional choices available through Custom buffer"
-                  :visible (display-graphic-p)
-                  :button (:radio . (not (member indicate-buffer-boundaries
-                                                 '(nil left right
-                                                   ((top . left) (bottom . right))
-                                                   ((t . right) (top . left))))))))
+		  menu-bar-showhide-fringe-ind-customize
+		  :help "Additional choices available through Custom buffer"
+		  :visible (display-graphic-p)
+		  :button (:radio . (not (member indicate-buffer-boundaries
+						 '(nil left right
+						   ((top . left) (bottom . right))
+						   ((t . right) (top . left))))))))
 
     (bindings--define-key menu [mixed]
       '(menu-item "Opposite, Arrows Right" menu-bar-showhide-fringe-ind-mixed
-                  :help
-                  "Show top/bottom indicators in opposite fringes, arrows in right"
-                  :visible (display-graphic-p)
-                  :button (:radio . (equal indicate-buffer-boundaries
-                                           '((t . right) (top . left))))))
+		  :help
+		  "Show top/bottom indicators in opposite fringes, arrows in right"
+		  :visible (display-graphic-p)
+		  :button (:radio . (equal indicate-buffer-boundaries
+					   '((t . right) (top . left))))))
 
     (bindings--define-key menu [box]
       '(menu-item "Opposite, No Arrows" menu-bar-showhide-fringe-ind-box
-                  :help "Show top/bottom indicators in opposite fringes, no arrows"
-                  :visible (display-graphic-p)
-                  :button (:radio . (equal indicate-buffer-boundaries
-                                           '((top . left) (bottom . right))))))
+		  :help "Show top/bottom indicators in opposite fringes, no arrows"
+		  :visible (display-graphic-p)
+		  :button (:radio . (equal indicate-buffer-boundaries
+					   '((top . left) (bottom . right))))))
 
     (bindings--define-key menu [right]
       '(menu-item "In Right Fringe" menu-bar-showhide-fringe-ind-right
-                  :help "Show buffer boundaries and arrows in right fringe"
-                  :visible (display-graphic-p)
-                  :button (:radio . (eq indicate-buffer-boundaries 'right))))
+		  :help "Show buffer boundaries and arrows in right fringe"
+		  :visible (display-graphic-p)
+		  :button (:radio . (eq indicate-buffer-boundaries 'right))))
 
     (bindings--define-key menu [left]
       '(menu-item "In Left Fringe" menu-bar-showhide-fringe-ind-left
-                  :help "Show buffer boundaries and arrows in left fringe"
-                  :visible (display-graphic-p)
-                  :button (:radio . (eq indicate-buffer-boundaries 'left))))
+		  :help "Show buffer boundaries and arrows in left fringe"
+		  :visible (display-graphic-p)
+		  :button (:radio . (eq indicate-buffer-boundaries 'left))))
 
     (bindings--define-key menu [none]
       '(menu-item "No Indicators" menu-bar-showhide-fringe-ind-none
-                  :help "Hide all buffer boundary indicators and arrows"
-                  :visible (display-graphic-p)
-                  :button (:radio . (eq indicate-buffer-boundaries nil))))
+		  :help "Hide all buffer boundary indicators and arrows"
+		  :visible (display-graphic-p)
+		  :button (:radio . (eq indicate-buffer-boundaries nil))))
     menu))
 
 (defun menu-bar-showhide-fringe-menu-customize ()
@@ -1051,83 +998,102 @@ Only available in Aquamacs."
 (defvar menu-bar-showhide-menu
   (let ((menu (make-sparse-keymap "Show/Hide")))
 
-    (bindings--define-key menu [column-number-mode]
+    (bindings--define-key menu [showhide-battery]
+      (menu-bar-make-mm-toggle display-battery-mode
+			       "Battery Status"
+			       "Display battery status information in mode line"
+			       (:visible (not (eq window-system 'ns)))))
+    
+    (bindings--define-key menu [showhide-date-time]
+      (menu-bar-make-mm-toggle display-time-mode
+			       "Time, Load and Mail"
+			       "Display time, system load averages and \
+mail status in mode line"
+			       (:visible (not (eq window-system 'ns)))))
+    ;; (bindings--define-key menu [datetime-separator]
+    ;;   menu-bar-separator :visible (not (eq window-system 'ns)))
+    (bindings--define-key menu [datetime-separator] `(menu-item "" nil
+			  :visible (not (eq window-system ns))))
+    (bindings--define-key menu [showhide-tooltip-mode]
+      '(menu-item "Tooltips" tooltip-mode
+		  :help "Turn tooltips on/off"
+		  :visible (and (display-graphic-p) (fboundp 'x-show-tip))
+		  :button (:toggle . tooltip-mode)))
+
+
+    (bindings--define-key menu [tooltip-separator] menu-bar-separator)
+    (bindings--define-key menu [showhide-speedbar]
+      '(menu-item "Speedbar" speedbar-frame-mode
+		  :help "Display a Speedbar quick-navigation frame"
+		  :button (:toggle
+			   . (and (boundp 'speedbar-frame)
+				  (frame-live-p (symbol-value 'speedbar-frame))
+				  (frame-visible-p
+				   (symbol-value 'speedbar-frame))))))
+    (bindings--define-key menu [showhide-fringe]
+      `(menu-item "Fringe" ,menu-bar-showhide-fringe-menu
+    	    :help "Settings for Fringe display in the margins of windows."
+    	    :visible (display-graphic-p)))
+    (bindings--define-key menu [showhide-scroll-bar]
+      `(menu-item "Scroll-bar" ,menu-bar-showhide-scroll-bar-menu
+		  :visible (display-graphic-p)))
+    (if (and (boundp 'menu-bar-showhide-tool-bar-menu)
+	     (keymapp menu-bar-showhide-tool-bar-menu))
+	(bindings--define-key menu [showhide-tool-bar]
+	  `(menu-item "Tool-bar" ,menu-bar-showhide-tool-bar-menu
+		      :visible (display-graphic-p)))
+      ;; else not tool bar that can move.
+      (bindings--define-key menu [showhide-tool-bar]
+	'(menu-item "Tool-bar" toggle-tool-bar-mode-from-frame
+		    :help "Turn tool-bar on/off"
+		    :visible (display-graphic-p)
+		    :button
+		    (:toggle . (menu-bar-positive-p
+				(frame-parameter (menu-bar-frame-for-menubar)
+						 'tool-bar-lines))))))
+    (bindings--define-key menu [ns-tool-bar]
+      `(menu-item "Toolbar..."
+	      customize-tool-bar
+	      :help ,(purecopy "Display the Toolbar customization panel")
+	      :visible (and ,(fboundp 'ns-tool-bar-customize) (display-graphic-p))))
+
+
+    (bindings--define-key menu [linecolumn-separator] menu-bar-separator)
+
+  (bindings--define-key menu [column-number-mode]
       (menu-bar-make-mm-toggle column-number-mode
-                               "Column Numbers"
-                               "Show the current column number in the mode line"))
+			       "Column Numbers"
+			       "Show the current column number in the mode line"))
 
     (bindings--define-key menu [line-number-mode]
       (menu-bar-make-mm-toggle line-number-mode
                                "Line Numbers"
-                               "Show the current line number in the mode line"))
+			       "Show the current line number in the mode line"))
 
     (bindings--define-key menu [size-indication-mode]
       (menu-bar-make-mm-toggle size-indication-mode
-                               "Size Indication"
-                               "Show the size of the buffer in the mode line"))
+			       "Size Indication"
+			       "Show the size of the buffer in the mode line"))
 
-    (bindings--define-key menu [linecolumn-separator]
-      menu-bar-separator)
 
-    (bindings--define-key menu [showhide-battery]
-      (menu-bar-make-mm-toggle display-battery-mode
-                               "Battery Status"
-                               "Display battery status information in mode line"))
+    (bindings--define-key menu [newlines-separator] menu-bar-separator)
+    (bindings--define-key menu [hl-line-mode]
+      (menu-bar-make-mm-toggle global-hl-line-mode
+			       "Line Highlighting"
+			       "Highlight current line (hl-line-mode)"))
+    (bindings--define-key menu [show-newlines-mode]
+      (menu-bar-make-mm-toggle global-show-newlines-mode
+			       "Show Newlines"
+			       "Show hard newlines"))
+    (bindings--define-key menu [linum-mode]
+      (menu-bar-make-mm-toggle global-linum-mode
+			       "Line Numbering"
+			       "Show the current line number next to each line"))
+    (bindings--define-key menu [highlight-paren-mode]
+      (menu-bar-make-mm-toggle show-paren-mode
+			       "Paren Match Highlighting"
+			       "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
 
-    (bindings--define-key menu [showhide-date-time]
-      (menu-bar-make-mm-toggle display-time-mode
-                               "Time, Load and Mail"
-                               "Display time, system load averages and \
-mail status in mode line"))
-
-    (bindings--define-key menu [datetime-separator]
-      menu-bar-separator)
-
-    (bindings--define-key menu [showhide-speedbar]
-      '(menu-item "Speedbar" speedbar-frame-mode
-                  :help "Display a Speedbar quick-navigation frame"
-                  :button (:toggle
-                           . (and (boundp 'speedbar-frame)
-                                  (frame-live-p (symbol-value 'speedbar-frame))
-                                  (frame-visible-p
-                                   (symbol-value 'speedbar-frame))))))
-
-    (bindings--define-key menu [showhide-fringe]
-      `(menu-item "Fringe" ,menu-bar-showhide-fringe-menu
-                  :visible (display-graphic-p)))
-
-    (bindings--define-key menu [showhide-scroll-bar]
-      `(menu-item "Scroll-bar" ,menu-bar-showhide-scroll-bar-menu
-                  :visible (display-graphic-p)))
-
-    (bindings--define-key menu [showhide-tooltip-mode]
-      '(menu-item "Tooltips" tooltip-mode
-                  :help "Turn tooltips on/off"
-                  :visible (and (display-graphic-p) (fboundp 'x-show-tip))
-                  :button (:toggle . tooltip-mode)))
-
-    (bindings--define-key menu [menu-bar-mode]
-      '(menu-item "Menu-bar" toggle-menu-bar-mode-from-frame
-                  :help "Turn menu-bar on/off"
-                  :button
-                  (:toggle . (menu-bar-positive-p
-                              (frame-parameter (menu-bar-frame-for-menubar)
-                                               'menu-bar-lines)))))
-
-    (if (and (boundp 'menu-bar-showhide-tool-bar-menu)
-             (keymapp menu-bar-showhide-tool-bar-menu))
-        (bindings--define-key menu [showhide-tool-bar]
-          `(menu-item "Tool-bar" ,menu-bar-showhide-tool-bar-menu
-                      :visible (display-graphic-p)))
-      ;; else not tool bar that can move.
-      (bindings--define-key menu [showhide-tool-bar]
-        '(menu-item "Tool-bar" toggle-tool-bar-mode-from-frame
-                    :help "Turn tool-bar on/off"
-                    :visible (display-graphic-p)
-                    :button
-                    (:toggle . (menu-bar-positive-p
-                                (frame-parameter (menu-bar-frame-for-menubar)
-                                                 'tool-bar-lines))))))
     menu))
 
 (defvar menu-bar-line-wrapping-menu
