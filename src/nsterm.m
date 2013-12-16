@@ -225,7 +225,7 @@ static struct timespec select_timeout = { 0, 0 };
 static int selfds[2] = { -1, -1 };
 static pthread_mutex_t select_mutex;
 static int apploopnr = 0;
-static NSAutoreleasePool *outerpool;
+static NSAutoreleasePool *outerpool = NULL;
 static struct input_event *emacs_event = NULL;
 static struct input_event *q_event_ptr = NULL;
 static int n_emacs_events_pending = 0;
