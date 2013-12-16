@@ -2778,12 +2778,19 @@ ns_do_applescript (Lisp_Object script, Lisp_Object *result)
 
   CHECK_STRING (script);
 
-  NSAppleScript* scriptObject =
-    [[NSAppleScript alloc] initWithSource:
-			     [NSString stringWithUTF8String: SSDATA (script)]];
+  NSString *code = [[NSString stringWithUTF8String: SSDATA (script)] retain];
+
+  NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:code];
 
   returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+
+  // we should be on the main thread anyway, but otherwise:
+  // [scriptObject performSelectorOnMainThread: @selector(executeAndReturnError:) withObject:&errorDict 
+			      // waitUntilDone:YES];
+  // (and then change following code to work without returnDescriptor)
+
   [scriptObject release];
+  [code release];
 
   *result = Qnil;
 
