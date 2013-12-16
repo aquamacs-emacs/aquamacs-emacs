@@ -11,6 +11,9 @@
 \usepackage{sectsty}
 %\allsectionsfont{\sffamily}
 
+%\renewcommand{\~}{{\raise.17ex\hbox{$\scriptstyle\sim$}}}
+\renewcommand{\~}{{ \leavevmode\raise.17ex \hbox{$\scriptstyle\sim$}}}
+
 % \author{David Reitter and Kevin Walzer}
 \title{\includegraphics[]{aquamacs-logo.pdf}\\
 Manual}
@@ -398,7 +401,7 @@ marked  &\\
 \hline Command-Delete & kill-visual-line & Deletes the remainder of the
 \\ & & current line \\
 
-\hline Command-Q & save-buffers-kill-emacs & Save file, exit program\\
+\hline Command-Q & aquamacs-save-buffers-kill-emacs & Save file, exit program\\
 
 \hline Command-Z & undo & Undo\\
 
@@ -436,22 +439,10 @@ marked  &\\
 One of the distinguishing features of Emacs is the degree to which it can be customized by the end user. Emacs includes its own internal scripting language, elisp, which allows the user to customize such things as keyboard shortcuts, window settings, fonts, and more. The Aquamacs customizations themselves are implemented in elisp.\footnote{The Aquamacs customizations are stored in elisp files in the application bundle. It is possible to modify these files directly, but we discourage this practice and provide no support for it.}
 
 
-We recommend that user customizations be placed in specific locations:
+We recommend that user customizations be placed in {\tt Preferences.el} in the Library folder (see Section~\ref{standardpaths}). The usual {\tt \~/.emacs} file is still loaded for
+compatibility.
 
-\begin{itemize}
-\item {\ttfile /Library/Preferences/Aquamacs~Emacs/Preferences.el}: Preferences for  Aquamacs and for all users
-\item {\ttfile /Users/User Name/Library/Preferences/Aquamacs~Emacs/Preferences.el}: \\ User-specific  preferences for Aquamacs
-\end{itemize}
-
-If in doubt, use the last option. This should replace the usual \~/.emacs file, which is still loaded for
-compatibility.\footnote{Two more files are loaded as well for
-  compatibility with earlier Aquamacs versions: \\
-  {\ttfile /Library/Preferences/Emacs/Preferences.el} and \\
-  {\ttfile /Users/User Name/Library/Preferences/Emacs/Preferences.el.}
-  \\ The use of
-  these files is not recommended.}
-
-Note that Emacs Lisp settings in a Preference.el file take priority over any other defined customizations such as those chosen in the Options menu or in customization buffers (Aquamacs / Preferences and elsewhere).  Settings in a \~/.emacs file have lower priority.  (The order of loading is: \~/.emacs, \emph{custom-file}, Preferences.el files.  Note that \emph{custom-file} is \~/Library/Preferences/Aquamacs~Emacs/customizations.el.  This file is not intended to be changed by users.  It is written and overwritten automatically by Aquamacs when saving options (``Save Options'' in the ``Options'' menu).
+Note that Emacs Lisp settings in a Preference.el file take priority over any other defined customizations such as those chosen in the Options menu, in customization buffers (Aquamacs / Preferences and elsewhere), or {\tt \~/.emacs}. 
 
 Below are some specific customization options and groups that may be of interest:
 
@@ -478,8 +469,8 @@ setting.
 
   As mentioned above, the Aquamacs scratch buffer is simply a buffer into which notes can be typed.  For this reason, the scratch buffer is opened in text mode, as opposed to lisp interaction mode (the default mode for the plain GNU Emacs). Customize `initial-major-mode' (and restart) to change this.  In Aquamacs, the scratch buffer is automatically retained between sessions.  It can also be saved using the normal save commands; you are free to save its contents to another file.
 
-\item \textbf{Want some GNU Emacs 23 behavior back?} In most cases
-  that represents no problem. Aquamacs provides a customization group called ``Aquamacs-is-more- than-Emacs'' which contains all the settings whose default values differ from the ones in GNU Emacs (23) or the appropriate package. We recommend that you tinker with these one at a time and check their (often wider-than-you-think-reaching, sometimes detrimental) effects.
+\item \textbf{Want some GNU Emacs 24 behavior back?} In most cases
+  that represents no problem. Aquamacs provides a customization group called ``Aquamacs-is-more- than-Emacs'' which contains all the settings whose default values differ from the ones in GNU Emacs (24) or the appropriate package. We recommend that you tinker with these one at a time and check their (often wider-than-you-think-reaching, sometimes detrimental) effects.
 
 Also, see Table \ref{tab:variables} for a partial list of such settings.
 
@@ -600,7 +591,7 @@ Adding standard Emacs packages is easy as well.
 
 \subsection{Plug-in Interface}
 
-All files named \emph{site-start.el} anywhere in the load-path are loaded at startup, before the user's init files are loaded. For example, such a file may be placed in \\  {\ttfile /Users/User Name/Library/Application Support/Aquamacs Emacs/myPlugin}. 
+All files named \emph{site-start.el} anywhere in the load-path are loaded at startup, before the user's init files are loaded. For example, such a file may be placed in the user's Library folder, that is in \\  {\ttfile \~/Library/Application~Support/Aquamacs~Emacs/myPlugin}. 
 
  The load-path is automatically extended to cover all subdirectories in standard paths (see Section \ref {standardpaths}).
 
@@ -614,18 +605,18 @@ Note that plug-ins should not make any assumptions about whether a frame exists 
 \subsection{Load path}
 
 Aquamacs is able to find configuration files and Emacs packages
-from any of the following locations (load-path). 
+from any of the following standard locations (load-path) in Library folders.
 \label{standardpaths}
 
 \begin{itemize}  
-  \item  {\ttfile /Library/Application Support/Aquamacs Emacs/}
-  \item  {\ttfile /Users/User Name/Library/Preferences/Aquamacs Emacs/ }
+  \item  {\ttfile /Library/Application~Support/Aquamacs~Emacs/}
+  \item  {\ttfile /Library/Preferences/Aquamacs~Emacs/ }
 \end{itemize}
 The following paths are available in the load-path for individual preference settings. \emph{They should 
 not be used if you distribute a point-and-click installer package.}
 \begin{itemize}  
-  \item  {\ttfile /Library/Preferences/Aquamacs Emacs/ }
-  \item  {\ttfile /Users/User Name/Library/Preferences/Aquamacs Emacs/ }
+  \item  {\ttfile \~/Library/Application~Support/Aquamacs~Emacs/}
+  \item  {\ttfile \~/Library/Preferences/Aquamacs~Emacs/ }
 \end{itemize}
 
 
@@ -634,10 +625,10 @@ find any path that starts below. Type {\tt C-h v load-path} for more
 information.\footnote{The following paths are loaded for backward
   compatibility reasons:
     \begin{itemize}
-\item  {\ttfile /Library/Application Support/Emacs/}
+\item  {\ttfile /Library/Application~Support/Emacs/}
 \item  {\ttfile /Library/Preferences/Emacs/ }
-\item {\ttfile /Users/User Name/Library/Preferences/Emacs/ }
-\item {\ttfile /Users/User Name/Library/Preferences/Emacs/ }
+\item {\ttfile \~/Library/Preferences/Emacs/ }
+\item {\ttfile \~/Library/Preferences/Emacs/ }
     \end{itemize}
 . Do not use these paths.}\\
 
@@ -656,7 +647,8 @@ If you'd like to tinker with the Emacs lisp source files that come with Aquamacs
 
 However, you may notice that some of your changes aren't active after you've saved your work (into the Aquamacs application bundle) and restart. That is because some of the code is precompiled into the Aquamacs binary and not loaded from the source (or .elc / .el.gz) files. To alleviate that problem, create a
 file\\
-{\ttfile /Users/User Name/Library/Application Support/Aquamacs Emacs/site-prestart.el} \\ with the following content:
+{\ttfile \~/Library/Application~Support/Aquamacs~Emacs/site-prestart.el} \\ with the following content:
+
 
 \texttt{(setq aquamacs-reload-preloaded-files t)}
 
