@@ -5280,6 +5280,29 @@ typedef void(*rwwi_compHand)(NSWindow *, NSError *);
   // No constraining takes place when the application is not active.
   ns_constrain_all_frames ();
 
+  /* Keep hidden frames hidden.  This works OK as a workaround. */
+  if (! FRAME_VISIBLE_P (SELECTED_FRAME ()))
+    { x_make_frame_invisible (SELECTED_FRAME ());
+      windows_or_buffers_changed++;
+
+      Lisp_Object frame, tail;
+
+      // raise the first available (visible) frame
+      FOR_EACH_FRAME (tail, frame)
+	{
+	  struct frame *f = XFRAME (frame);
+
+	  if (FRAME_NS_P (f) &&  FRAME_VISIBLE_P (f) && FRAME_NS_DISPLAY (f) == FRAME_NS_DISPLAY (SELECTED_FRAME()))
+	    {
+	      Fraise_frame(frame);
+	      // do_switch_frame(frame, 0, 0, 0);
+	      // set_frame_menubar(frame, false, false);
+	      windows_or_buffers_changed++;
+	      break;
+	    }
+	}
+    }
+
   if (!emacs_event)
     return;
   emacs_event->kind = NS_NONKEY_EVENT;
