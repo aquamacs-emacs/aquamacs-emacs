@@ -388,6 +388,7 @@ run buffer.  A noop for Emacs."
     (define-key LaTeX-mode-map [tool-bar preview]
       `(menu-item "Preview at point" preview-at-point
 		  :image ,preview-tb-icon
+		  :label "Preview"
 		  :help "Preview on/off at point")))
   (when buffer-file-name
     (let* ((filename (expand-file-name buffer-file-name))

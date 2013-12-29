@@ -1124,7 +1124,7 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
   ;; following should hopefully get us to all images ultimately.
 
   (let ((file))
-    (dolist (i '("" ".png" ".xpm" ".xbm" ".pbm"))
+    (dolist (i '("" ".png" ".tiff" ".xpm" ".xbm" ".pbm"))
       (unless file
 	(setq file (locate-library (concat image i) t toolbarx-image-path))))
     (if (featurep 'xemacs)
@@ -1132,6 +1132,7 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
       (if file
 	  (create-image file)
 	(find-image `((:type png :file ,(concat image ".png"))
+		      (:type tiff :file ,(concat image ".tiff"))
 		      (:type xpm :file ,(concat image ".xpm"))
 		      (:type xbm :file ,(concat image ".xbm"))
 		      (:type pbm :file ,(concat image ".pbm"))))))))
