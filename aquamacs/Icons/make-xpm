@@ -1,13 +1,9 @@
 #!/bin/sh
 
-# copies 
+# Produces TIFF images with multiple resolutions for high-res icons.
 
 # usage: make-xpm source-dir dest-dir
-
-#cd "/Applications/Aquamacs Emacs.app/Contents/Resources/etc/images/"
-
-#P="/Users/dr/Projects/Aquamacs/Icons"
-#cp -r ~/Projects/Aquamacs/Icons/*.png .
+# ./make-xpm `pwd` `pwd`/build/
 
 EXT=png
 
@@ -73,52 +69,4 @@ rm $file $BASE\@2x.png
 
 done
 exit
-rm mask*.png blue.png p.png p2.png aliased.png
 
-
-    # resize source file
-    convert "$P/$file"  -resize x32 small.miff
-    
-    echo $LABEL
-    LABEL=""
-    # add text label
-    montage -fill black -font $P/LucidaGrande.ttf -pointsize 10 -geometry +0+0 -label "${LABEL}" -background transparent small.miff  small-text.png
-
-    # draw same-size background
-    composite -size 48x48 xc:$BGCOL -compose copy small-text.png  mask.miff
-    # and compose the two so that alpha blended pixels (<100% transp) are mixed
-    composite small-text.png -compose atop  mask.miff   apmask.miff 
-    # convert to gif so we can pick the transparency
-    convert apmask.miff -transparent $BGCOL trans.gif
-    # and convert to target format
-    convert trans.gif  ${BASE}.xpm
-
-    convert small.miff -modulate 60 small-dark.miff
-    
-    montage -fill black -font $P/LucidaGrande.ttf -pointsize 10 -geometry +0+0 -label "${LABEL}" -background transparent small-dark.miff  small-text.png
-
-    composite -size 48x48 xc:$BGCOL -compose copy small-text.png  mask.miff
-    composite small-text.png -compose atop mask.miff apmask.miff
-    composite small-text.png -compose atop  apmask.miff   apmask.miff
-    # convert to gif so we can set 
-    convert apmask.miff -transparent $BGCOL trans.gif
-    convert trans.gif  ${BASE}_sel.xpm
-
-
-# produce greyed-out version
-
-    convert small.miff -modulate 100,40 small-grey.miff
-
-    montage -fill black -font $P/LucidaGrande.ttf -pointsize 10 -geometry +0+0 -label "${LABEL}" -background transparent small-grey.miff  small-text.png
-    composite -size 48x48 xc:$BGCOL -compose copy small-text.png  mask.miff
-    composite small-text.png -compose atop  mask.miff   apmask.miff
-
-    # convert to gif so we can set 
-    convert apmask.miff -transparent $BGCOL trans.gif
-    convert trans.gif  ${BASE}_dis.xpm
- 
-    #convert "mask.$file" -resize x28  `basename "$file" \.png`.xpm
-done 
-rm apmask.miff mask.miff trans.gif small.miff *.png
- 
-#   -mattecolor '#EEEEEE' 
