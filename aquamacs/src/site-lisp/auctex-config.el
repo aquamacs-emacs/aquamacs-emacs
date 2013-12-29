@@ -336,7 +336,7 @@ Skim AppleScript protocol."
 	(open-file save-buffer write-file [separator nil] cut copy paste undo
 		   [separator nil]   latex next-error view bibtex)))))
 
-
- 
+(setq preview-tb-icon-specs
+  `((:type tiff :file ,(concat data-directory "images/" "prvtex24.tiff"))))
 
 (provide 'auctex-config)
