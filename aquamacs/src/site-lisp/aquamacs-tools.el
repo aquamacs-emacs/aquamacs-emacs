@@ -48,6 +48,15 @@
 ;;           	; first of alist plus rest w/ recursion
 ;;           (get-alist-value-for-name name (cdr alist)))))
 
+;; this is from cl-lib, which can't be included in site-load
+(defmacro cl-incf (place &optional x)
+  "Increment PLACE by X (1 by default).
+PLACE may be a symbol, or any generalized variable allowed by `setf'.
+The return value is the incremented value of PLACE."
+  (declare (debug (place &optional form)))
+  (if (symbolp place)
+      (list 'setq place (if x (list '+ place x) (list '1+ place)))
+    (list 'cl-callf '+ place (or x 1))))
 
 (defun running-on-a-mac-p ()
   (memq initial-window-system '(mac ns)))

@@ -121,6 +121,8 @@ Defaults to `turn-on-auto-fill' if nil."
   :version "22.0")
 
 (defalias 'auto-detect-longlines 'auto-detect-wrap)
+
+(require 'aquamacs-tools) ;; for cl-incf
 (defun auto-detect-wrap ()
   "Automatically enable word-wrap or autofill.
 The buffer contents are examined to determine whether to use hard

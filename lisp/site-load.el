@@ -82,6 +82,11 @@
 (load "timezone")
 (load "calendar/parse-time")
  
+;; (load "emacs-lisp/cl-lib") ;; produces error
+
+
+
+
 ;(load "emacs-lisp/cl-macs")
 ;(load "emacs-lisp/cl")
 ;(load "emacs-lisp/cl-seq")
