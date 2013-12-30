@@ -59,9 +59,6 @@ echo "</BODY></HTML>" >>latest.html
 
 # sync and delete older files on server
 
-rsync --progress -l -r builds $DEST/ && \
-    rsync --progress -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
-    ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete"
-
-
-
+rsync --progress --bwlimit=1000 -l -r builds $DEST/ && \
+    rsync -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
+    ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete" && echo "All transfers successful."
