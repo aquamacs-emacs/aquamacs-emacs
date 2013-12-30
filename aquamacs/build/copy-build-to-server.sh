@@ -48,8 +48,6 @@ if [ -e $TMP/${NAME} ]; then
         # copy the downloaded log for this step into "latest" because the build worked
         cp aquamacs-build.log latest-logs/ 2>/dev/null
 	cp $CHGLOG changelog-nightly.html
-        #cd $DEST
-	cd -
     else
         rm -r $TMP 
     fi
@@ -61,8 +59,8 @@ echo "</BODY></HTML>" >>latest.html
 
 # sync and delete older files on server
 
-rsync -v -l -r builds $DEST/ && \
-    rsync -v -l -r builds latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
+rsync --progress -l -r builds $DEST/ && \
+    rsync --progress -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete"
 
 
