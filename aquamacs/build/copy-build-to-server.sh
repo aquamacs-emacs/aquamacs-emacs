@@ -59,15 +59,6 @@ echo "</BODY></HTML>" >>latest.html
 
 # sync and delete older files on server
 
-# the following attempts to finish the transfer even if the network stalls 
-export Result=1;
-while [ $Result -ne 0 ]; do
-  echo "Starting transfer ($Result) @" `time`;
-  rsync -Pz --timeout=10 builds $DEST/;
-  Result=$?;
-  sleep 1;
-done
-
 rsync --progress -l -r builds $DEST/ && \
     rsync --progress -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete"
