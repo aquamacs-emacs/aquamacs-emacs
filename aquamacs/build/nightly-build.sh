@@ -60,10 +60,11 @@ mkdir builds 2>/dev/null ; \
 cd `dirname ${APP}` ; \
 tar cjf ${BLD} Aquamacs.app ; \
 cd ${EMACS_ROOT} ; \
-echo "Copying build to server." >>$LOG ; \
+echo "Copying build $DATE to server..." >>$LOG ; \
 aquamacs/build/copy-build-to-server.sh $DATE  >>$LOG 2>>$LOG
+echo "Done." >>$LOG ; \
 
-echo "Archiving symbol table into ${BRANCH}-${DATE}"
-mkdir ${DSYM_ROOT}/${BRANCH}-${DATE}
-mv src/emacs.dSYM ${DSYM_ROOT}/${BRANCH}-${DATE}/
-cp src/emacs ${DSYM_ROOT}/${BRANCH}-${DATE}/
+#echo "Archiving symbol table into ${BRANCH}-${DATE}"
+#mkdir ${DSYM_ROOT}/${BRANCH}-${DATE}
+#mv src/emacs.dSYM ${DSYM_ROOT}/${BRANCH}-${DATE}/
+#cp src/emacs ${DSYM_ROOT}/${BRANCH}-${DATE}/
