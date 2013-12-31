@@ -1118,7 +1118,7 @@ RUN-BUFFER is the buffer of the TeX process,
 TEMPDIR is the correct copy of `TeX-active-tempdir',
 PS-FILE is a copy of `preview-ps-file', IMAGETYPE is the image type
 for the file extension."
-  (let ((ns-true-dpi-images-filename-string "pr"))
+  (setq ns-true-dpi-images-adjust (cons "preview" (* (/ 1 preview-resolution-factor) .8))) ;; needs to be global.
   (overlay-put ov 'filenames
 	       (unless (eq ps-file t)
 		 (list
@@ -1131,7 +1131,7 @@ for the file extension."
   (overlay-put ov 'preview-image
 	       (list (preview-icon-copy preview-nonready-icon)))
   (preview-add-urgentization #'preview-gs-urgentize ov run-buffer)
-  (list ov)))
+  (list ov))
 
 (defun preview-mouse-open-error (string)
   "Display STRING in a new view buffer on click."
@@ -1893,7 +1893,7 @@ is already selected and unnarrowed."
 (defun preview-dvipng-place-all ()
   "Place all images dvipng has created, if any.
 Deletes the dvi file when finished."
-  (let ((ns-true-dpi-images-filename-string "pr"))
+  (setq ns-true-dpi-images-adjust (cons "prev" (* (/ 1 preview-resolution-factor) .8))) ;; needs to be global.
   (let (filename queued oldfiles snippet)
     (dolist (ov (prog1 preview-gs-queue (setq preview-gs-queue nil)))
       (when (and (setq queued (overlay-get ov 'queued))
@@ -1941,7 +1941,7 @@ Deletes the dvi file when finished."
 	    (delete-file
 	     (with-current-buffer TeX-command-buffer
 	       (funcall (car gsfile) "dvi"))))
-	(file-error nil))))))
+	(file-error nil)))))
    
 (defun preview-active-string (ov)
   "Generate before-string for active image overlay OV."
