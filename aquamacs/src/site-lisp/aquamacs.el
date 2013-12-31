@@ -670,7 +670,9 @@ No errors are signaled."
 	    ;; answer "yes" would delete the file!
 	    (aquamacs-set-defaults
 	     `((recentf-exclude ,(append (list
-					  (expand-file-name aquamacs-scratch-file)) recentf-exclude))))
+					  (expand-file-name aquamacs-scratch-file)
+					  ;; this is for LaTeX preview
+					  "\\.*/_region_.tex") recentf-exclude))))
 	    (setq buffer-save-without-query t)
 	    (put 'buffer-save-without-query 'permanent-local t)
 	    (setq buffer-file-coding-system 'utf-8)
