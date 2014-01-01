@@ -168,7 +168,7 @@ provided `cua-mode' and the mark are active."
 (dolist (cmd
 	 '(aquamacs-left-char 
 	   aquamacs-right-char
-	   aquamacs-previous-line
+	   aquamacs-next-line
 	   aquamacs-previous-line))
   (put cmd 'CUA 'move))
 
