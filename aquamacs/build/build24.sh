@@ -17,7 +17,7 @@ case "$1" in
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
-  FLAGS='-arch x86_64 -O4 -g'
+  FLAGS='-arch x86_64 -O4 -g -mtune=corei7'
   OMIT_SYMB=
   ;;
 '-nightly')
@@ -26,7 +26,7 @@ case "$1" in
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (nightly build)."
   OMIT_AUTOGEN=
-  FLAGS="-arch x86_64 -O4 -g $FLAGS"
+  FLAGS="-arch x86_64 -O4 -g -mtune=corei7 $FLAGS"
   OMIT_SYMB=
   ;;
 *)
