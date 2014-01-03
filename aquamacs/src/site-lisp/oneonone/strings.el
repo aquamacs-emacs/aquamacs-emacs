@@ -8,16 +8,17 @@
 ;; Filename: strings.el
 ;; Description: Miscellaneous string functions.
 ;; Author: Drew Adams
-;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2010, Drew Adams, all rights reserved.
+;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
+;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 17:09:08 1996
-;; Version: 21.0
-;; Last-Updated: Tue Jan 12 16:49:13 2010 (-0800)
+;; Version: 0
+;; Package-Requires: ()
+;;; Last-Updated: Thu Dec 26 09:51:24 2013 (-0800)
 ;;           By: dradams
-;;     Update #: 490
-;; URL: http://www.emacswiki.org/cgi-bin/wiki/strings.el
+;;     Update #: 551
+;; URL: http://www.emacswiki.org/strings.el
 ;; Keywords: internal, strings, text
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -46,8 +47,8 @@
 ;;    `current-d-m-y-string', `current-line-string',
 ;;    `display-in-minibuffer', `display-lines-containing',
 ;;    `echo-in-buffer', `empty-name-p', `erase-inactive-minibuffer',
-;;    `erase-nonempty-inactive-minibuffer', `frame-alist',
-;;    `insert-in-minibuffer', `minibuffer-empty-p',
+;;    `erase-nonempty-inactive-minibuffer', `fill-string',
+;;    `frame-alist', `insert-in-minibuffer', `minibuffer-empty-p',
 ;;    `non-empty-name-p', `ordinal-suffix', `pick-some-words',
 ;;    `read-any-variable', `read-number', `region-description',
 ;;    `set-minibuffer-empty-p', `string-w-face',
@@ -67,8 +68,25 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;; Change log:
+;;; Change Log:
 ;;
+;; 2012/09/07 dadams
+;;     read-buffer: Use nil for INHERIT-INPUT-METHOD arg to completing-read.
+;; 2012/08/21 dadams
+;;     Call tap-put-thing-at-point-props after load thingatpt+.el.
+;; 2012/08/18 dadams
+;;     Invoke tap-define-aliases-wo-prefix if thingatpt+.el is loaded.
+;; 2012/04/16 dadams
+;;     Added: fill-string.
+;; 2011/12/12 dadams
+;;     read-buffer: Use internal-complete-buffer for Emacs 22+.
+;; 2011/01/04 dadams
+;;     Removed autoload cookies from non-interactive functions.
+;; 2010/06/28 dadams
+;;     read-buffer: Don't provide a default if none given, unless interactive.
+;; 2010/02/22 dadams
+;;     read-buffer: Update for Emacs 23 (pretest):
+;;       Handle read-buffer-function and read-buffer-completion-ignore-case.
 ;; 2010/01/12 dadams
 ;;     current-line-string, minibuffer-empty-p, erase-inactive-minibuffer:
 ;;       save-excursion + set-buffer -> with-current-buffer.
@@ -123,7 +141,7 @@
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 3, or (at your option)
+;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
 ;; This program is distributed in the hope that it will be useful,
@@ -140,11 +158,19 @@
 ;;
 ;;; Code:
 
-(eval-when-compile (require 'cl)) ;; psetq (plus, for Emacs <20: cadr, when, unless)
+(eval-when-compile (require 'cl)) ;; psetq
 
 (require 'thingatpt nil t) ;; (no error if not found): symbol-at-point
-(require 'thingatpt+ nil t)  ;; (no error if not found): symbol-nearest-point
+(when (and (require 'thingatpt+ nil t);; (no error if not found)
+           (fboundp 'tap-put-thing-at-point-props)) ; >= 2012-08-21
+  (tap-define-aliases-wo-prefix)
+  (tap-put-thing-at-point-props))
+ ;; symbol-nearest-point
+
 (require 'misc-fns nil t) ;; (no error if not found): another-buffer
+
+
+(defvar read-buffer-completion-ignore-case) ; Quiet the byte-compiler.
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -166,7 +192,6 @@ M and N are the numbers."
   `(and ,name (not (string= "" ,name)) ,name))
 
 ;; Stolen from `diary.el' (`diary-ordinal-suffix').
-;;;###autoload
 (defun ordinal-suffix (n)
   "Ordinal suffix for N.  That is, `st', `nd', `rd', or `th', as appropriate."
   (if (or (memq (% n 100) '(11 12 13)) (< 3 (% n 10)))
@@ -174,7 +199,6 @@ M and N are the numbers."
     (aref ["th" "st" "nd" "rd"] (% n 10))))
 
 ;; Stolen from `wimpy-del.el'.
-;;;###autoload
 (defun pick-some-words (pos direction limit)
   "Get string from buffer of at most LIMIT chars, with one end at position POS.
 Tries to fit as many words into the string as possible.  If it cannot fit even
@@ -200,7 +224,6 @@ for backward."
         (buffer-substring pos (point))))))
 
 ;; Stolen from `wimpy-del.el'
-;;;###autoload
 (defun region-description (width &optional prefix suffix begin end)
   "Return a string containing a one-line description of the region.
 WIDTH arg is max length of string (must be at least 20 chars).
@@ -230,7 +253,6 @@ Optional args BEGIN and END delimit the region to use."
                    end-words suffix chars-string)))))
 
 ;; From `header2.el'.
-;;;###autoload
 (defun current-d-m-y-string ()
   "Return string of current day, month, and year, in form \"dd-mon-year\"."
   (let ((str (current-time-string)))
@@ -240,7 +262,6 @@ Optional args BEGIN and END delimit the region to use."
             "-" (substring str 4 7) "-" (substring str 20 24))))
 
 ;; Adapted from file `intes.el.2'.
-;;;###autoload
 (defun current-line-string (&optional buffer)
   "Return current line of text in BUFFER as a string."
   (setq buffer (or buffer (current-buffer)))
@@ -279,17 +300,16 @@ Interactively:
       (keep-lines string))
     (set-buffer-modified-p nil)))
 
-;;;###autoload
 (defun word-before-point ()
   "Return the word at (or before) the cursor, as a string.
 \"Word\" is as defined by `forward-word'.
 Note: It is possible for the symbol found to be on a previous line.
 
-Some related functions:
-  `symbol-name-nearest-point' returns the name of `symbol-nearest-point'
-    as a string, or \"\" if none.
+Some related functions (defined in `thingatpt+.el'):
+  `non-nil-symbol-name-nearest-point' returns the name of the non-nil
+    `symbol-nearest-point' as a string, or nil if none.
   `symbol-name-before-point'  returns the string naming the symbol at or
-    before the cursor (even if it is on a previous line) or \"\" if none.
+    before the cursor (even if it is on a previous line), or nil if none.
   `symbol-at-point' returns the symbol under the cursor, or nil if none.
   `symbol-nearest-point' returns the symbol nearest to the cursor, or nil.
 Note that these last two functions return symbols, not strings."
@@ -300,15 +320,14 @@ Note that these last two functions return symbols, not strings."
       (forward-word 1)
       (buffer-substring beg (point)))))
 
-;;;###autoload
 (defun symbol-name-before-point ()
   "Return the name of the symbol at (or before) the cursor, as a string.
 If no symbol is found, returns the empty string, \"\".
 Note: It is possible for the symbol found to be on a previous line.
 
-Some related functions:
-  `symbol-name-nearest-point' returns the name of `symbol-nearest-point'
-    as a string, or \"\" if none.
+Some related functions (defined in `thingatpt+.el'):
+  `non-nil-symbol-name-nearest-point' returns the name of the non-nil
+    `symbol-nearest-point' as a string, or nil if none.
   `word-before-point' returns the word at or before the cursor as a string.
   `symbol-at-point' returns the symbol under the cursor, or nil if none.
   `symbol-nearest-point' returns the symbol nearest to the cursor, or nil.
@@ -326,7 +345,6 @@ Note that these last two functions return symbols, not strings."
               (point))))))
 
 ;; Stolen from `sql-mode.el'.
-;;;###autoload
 (defun echo-in-buffer (buffer-name string &optional force-display-p)
   "Display string STRING in buffer BUFFER-NAME, creating buffer if needed.
 FORCE-DISPLAY-P non-nil means buffer is displayed."
@@ -339,17 +357,14 @@ FORCE-DISPLAY-P non-nil means buffer is displayed."
     (when force-display-p
       (set-window-point (get-buffer-window buffer-name) (point-max)))))
 
-;;;###autoload
 (defvar minibuffer-empty-p t "Non-nil iff minibuffer is empty (not guaranteed).
 This flag is not guaranteed to represent the state of the minibuffer,
 but only the memorized state.  Use the function of the same name to be sure.")
 
-;;;###autoload
 (defun set-minibuffer-empty-p (flag)
   "Set value of variable `set-minibuffer-empty-p' to FLAG."
   (setq minibuffer-empty-p flag))
 
-;;;###autoload
 (defun minibuffer-empty-p ()
   "Return non-nil iff minibuffer is empty.
 Sets variable `minibuffer-empty-p' to returned value."
@@ -385,7 +400,17 @@ alternative, see `erase-nonempty-inactive-minibuffer'."
           (set-minibuffer-empty-p t)))
       (message nil))))                  ; Clear any messages to show minibuf.
 
-;;;###autoload
+(defun fill-string (string &optional justify nosqueeze to-eop)
+  "Return a copy of STRING, but filled.
+Arguments are those for `fill-region' with the same names.
+`fill-region' is used.  See it for the behavior, including the
+variables that are respected."
+  (with-temp-buffer
+    (insert string)
+    (fill-region (point-min) (point-max))
+    (setq string  (buffer-substring (point-min) (point-max))))
+  string)
+
 (defun string-w-face (arg)
   "Convert ARG (of form (FACE OBJECT)) to a string with face FACE.
 If ARG is already a string, any text (face) properties are preserved.
@@ -465,32 +490,51 @@ NOTE: For versions of Emacs that do not have faces, a list of
   (message nil) (sit-for 0))            ; Clear any messages & show minibuf.
 
 
-;; REPLACES ORIGINAL (built-in):
-;; 1. Uses `completing-read'.
-;; 2. Uses `another-buffer' or `other-buffer' if no default.
+;; REPLACE ORIGINAL `read-buffer' (built-in).
 ;;
-;; ;;;###autoload
-;; (defun read-buffer (prompt &optional default existing)
+;; 1. Interactively, uses `another-buffer' or `other-buffer' if no default.
+;; 2. Emacs 23+ compatible: handles `read-buffer-function'
+;;    and `read-buffer-completion-ignore-case'.
+;;
+;; (defun read-buffer (prompt &optional default require-match)
 ;;   "Read the name of a buffer and return it as a string.
-;; Prompts with first arg, PROMPT (a string).
+;; Prompt with first arg, PROMPT (a string).
 
-;; Non-nil DEFAULT names the default buffer.
-;; Otherwise, `another-buffer' is used as the default.
-;; If `another-buffer' is undefined, then `other-buffer' is the default.
+;; If user input is empty (just `RET') then return the default value,
+;; which is:
 
-;; Non-nil EXISTING means to allow only names of existing buffers."
-;;   (setq default (or default (if (fboundp 'another-buffer) ; Defined in `misc-fns.el'.
-;;                                 (another-buffer nil t)
-;;                               (other-buffer (current-buffer)))))
-;;   ;; Need a string as default.
-;;   (when (bufferp default) (setq default (buffer-name default)))
-;;   (unless (stringp default)
-;;     (error "Function `read-buffer': DEFAULT arg is not a live buffer or a string"))
-;;   (completing-read
-;;    prompt (mapcar (lambda (b) (list (buffer-name b))) (buffer-list))
-;;    nil existing nil 'minibuffer-history default t))
+;;  - optional second arg DEFAULT, if non-nil
+;;  - `another-buffer' or `other-buffer', otherwise.
 
-;;;###autoload
+;; If `another-buffer' is undefined, then use `other-buffer'.
+
+;; Starting with Emacs 23, DEFAULT can be a list of names (strings), in
+;; which case the first name in the list is returned on empty input.
+
+;; Non-nil REQUIRE-MATCH means to allow only names of existing buffers.
+;; It is the same as for `completing-read'.
+
+;; Case sensitivity is determined by
+;; `read-buffer-completion-ignore-case', if defined, or
+;; `completion-ignore-case' otherwise."
+;;   (if (and (boundp 'read-buffer-function) read-buffer-function)
+;;       (funcall read-buffer-function prompt)
+;;     (when (interactive-p)
+;;       (setq default (or default (if (fboundp 'another-buffer) ; In `misc-fns.el'.
+;;                                     (another-buffer nil t)
+;;                                   (other-buffer (current-buffer))))))
+;;     ;; Need a string as default.
+;;     (when (bufferp default) (setq default (buffer-name default)))
+;;     (let ((completion-ignore-case  (if (boundp 'read-buffer-completion-ignore-case)
+;;                                        read-buffer-completion-ignore-case
+;;                                      completion-ignore-case)))
+;;       (completing-read
+;;        prompt (if (fboundp 'internal-complete-buffer)
+;;                   'internal-complete-buffer ; Emacs 22+
+;;                 (mapcar (lambda (b) (and (buffer-live-p b) (list (buffer-name b))))
+;;                         (buffer-list)))
+;;        nil require-match nil 'buffer-name-history default nil))))
+
 (defun buffer-alist (&optional nospacep)
   "Alist of (BUF-NAME . BUF) items, where BUF-NAME (a string) names BUF,
 which is in (buffer-list).  Non-nil NOSPACEP means do not include
@@ -502,7 +546,6 @@ buffers whose names start with SPACE."
             (buffer-list))
     (reverse bn-alist)))
 
-;;;###autoload
 ;; Same as Emacs 22 standard definition, except:
 ;;  1. Allow for `replace-regexp-in-string' not being defined.
 ;;  2. Allow for error reading input.
@@ -540,7 +583,6 @@ DEFAULT is returned if the user hits `RET' without typing anything."
 ;; Uses `symbol-nearest-point' and `completing-read' to get default.
 ;;      `symbol-nearest-point' is defined in `thingatpt+.el'.
 ;;      `symbol-at-point' is defined in `thingatpt.el'.
-;;;###autoload
 (defun read-variable (prompt &optional default-value)
   "Read name of a user variable (an option) and return it as a symbol.
 Prompt with string PROMPT.  By default, return DEFAULT-VALUE if
@@ -559,7 +601,6 @@ A user variable is one for which `user-variable-p' returns non-nil."
                                                     (symbol-name symb)))
                              t))))
 
-;;;###autoload
 (defun read-any-variable (prompt &optional default-value)
   "Read name of a variable and return it as a symbol.
 Unlike `read-variable', which reads only user options, this reads the
@@ -581,7 +622,6 @@ is a variable, then return that by default."
                              t))))
 
 ;;; See also `make-frame-names-alist', defined in `frame.el'.
-;;;###autoload
 (defun frame-alist ()
   "Alist of (FR-NAME . FR) items.  FR-NAME names FR in `frame-list'.
 FR-NAME is a string.  The alist is sorted by ASCII code in reverse

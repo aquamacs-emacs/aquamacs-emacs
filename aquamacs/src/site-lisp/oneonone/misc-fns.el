@@ -3,16 +3,17 @@
 ;; Filename: misc-fns.el
 ;; Description: Miscellaneous non-interactive functions.
 ;; Author: Drew Adams
-;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
+;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
+;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 17:21:28 1996
-;; Version: 21.0
-;; Last-Updated: Tue Jan 01 13:36:50 2008 (-28800 Pacific Standard Time)
+;; Version: 0
+;; Package-Requires: ()
+;; Last-Updated: Thu Dec 26 09:41:30 2013 (-0800)
 ;;           By: dradams
-;;     Update #: 462
-;; URL: http://www.emacswiki.org/cgi-bin/wiki/misc-fns.el
+;;     Update #: 605
+;; URL: http://www.emacswiki.org/misc-fns.el
 ;; Keywords: internal, unix, lisp, extensions, local
-;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -44,25 +45,40 @@
 ;;
 ;;  Functions defined here:
 ;;
-;;    `another-buffer', `current-line', `display-in-mode-line',
-;;    `do-files', `flatten', `fontify-buffer', `force-time-redisplay',
+;;    `another-buffer', `color-named-at', `current-line',
+;;    `display-in-mode-line', `do-files', `flatten', `fontify-buffer',
 ;;    `interesting-buffer-p', `live-buffer-name',
-;;    `make-transient-mark-mode-buffer-local', `mod-signed',
-;;    `notify-user-of-mode', `region-or-buffer-limits', `signum',
-;;    `simple-set-difference', `simple-set-intersection',
-;;    `simple-set-union', `undefine-keys-bound-to',
-;;    `undefine-killer-commands'.
+;;    `make-transient-mark-mode-buffer-local', `mode-ancestors',
+;;    `mod-signed', `notify-user-of-mode', `region-or-buffer-limits',
+;;    `signum', `undefine-keys-bound-to', `undefine-killer-commands',
+;;    `unique-name'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;; Change log:
+;;; Change Log:
 ;;
+;; 2013/09/30 dadams
+;;     Removed force-time-redisplay.
+;; 2012/11/10 dadams
+;;     Added: color-named-at.
+;; 2012/06/18 dadams
+;;     notify-user-of-mode: Use format-mode-line if available.
+;; 2012/04/21 dadams
+;;     Added mode-ancestors.
+;; 2012/02/29 dadams
+;;     Removed: simple-set-(intersection|union|difference).
+;; 2011/01/04 dadams
+;;     Removed autoload cookies from non-interactive fns.  Added for defcustom.
+;; 2010/05/25 dadams
+;;     Added: unique-name.
+;; 2010/01/12 dadams
+;;     fontify-buffer: save-excursion + set-buffer -> with-current-buffer.
 ;; 2007/09/25 dadams
 ;;     buffer-modifying-cmds: Respect kill-read-only-ok.
 ;; 2007/09/22 dadams
 ;;     NOTE: If you upgrade this library, and you use any of these libraries, then
 ;;           you MUST upgrade them also: buff-menu+.el, compile+.el, dired+.el,
-;;           start-opt.el. 
+;;           start-opt.el.
 ;;     undefine-keys-bound-to, undefine-keys-bound-to: Removed optional OLD-MAP arg.
 ;;     undefine-keys-bound-to: Redefined using where-is-internal and lookup-key.
 ;;     buffer-modifying-cmds: Added lots more, some from Emacs 22.
@@ -135,7 +151,7 @@
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 3, or (at your option)
+;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
 ;; This program is distributed in the hope that it will be useful,
@@ -152,8 +168,7 @@
 ;;
 ;;; Code:
 
-(and (< emacs-major-version 21)         ;; dolist, push, pop
-     (eval-when-compile (require 'cl))) ;; (plus, for Emacs <20: when, unless)
+(eval-when-compile (when (< emacs-major-version 21) (require 'cl))) ;; dolist
 
 ;;;;;;;;;;;;;;;;;;;;;
 
@@ -165,12 +180,11 @@
 
 ;;;$ MODE-LINE ----------------------------------------------------------------
 
+;;;###autoload
 (defcustom mode-line-reminder-duration 10
   "*Maximum number of seconds to display a reminder in the mode-line."
   :type 'integer)
 
-;; From `show-bind.el'.
-;;;###autoload
 (defun display-in-mode-line (text)
   "Display TEXT in mode line for `mode-line-reminder-duration' seconds."
   (let ((mode-line-format (list text)))
@@ -178,19 +192,9 @@
     (sit-for mode-line-reminder-duration))
   (force-mode-line-update))
 
-;;;###autoload
-(defun force-time-redisplay ()
-  "Force a redisplay.
-This is probably obsolete now.  Use `force-mode-line-update'."
-  (save-excursion (set-buffer (other-buffer)))
-  (set-buffer-modified-p (buffer-modified-p))
-  (sit-for 0))
-
-
 
 ;;;$ BUFFERS ------------------------------------------------------------------
 
-;;;###autoload
 (defun another-buffer (&optional buffer visible-ok)
   "First buffer in `buffer-list' whose name does not start with a space.
 This is the first buffer in the list.
@@ -219,15 +223,72 @@ BUFFER may be either a buffer or its name (a string)."
   (setq buffer (and buffer (get-buffer buffer))) ; Convert to buffer, if any.
   (and buffer (buffer-name buffer)))    ; Return buffer's name.
 
-;;;###autoload
 (defun interesting-buffer-p (buffer)
   "Non-nil if BUFFER is a live buffer whose name does not start with SPC."
   (and buffer (setq buffer (live-buffer-name buffer)) ; Live buffer's name.
        (or (zerop (length buffer))      ; Not an empty name.
            (not (char-equal ?\  (aref buffer 0)))))) ; Starts with non-blank.
 
+(defun unique-name (name existing-names &optional min use-base-p maxp)
+  "Return NAME or NAME<N>, a name that is not in EXISTING-NAMES.
+Return NAME if NAME is not a member of EXISTING-NAMES.
+Otherwise, return NAME or its base name, suffixed by `<N>', where N is
+an integer.
+
+The optional args are used only when NAME is in EXISTING-NAMES.
+
+MIN is the minimum integer N to use in the new suffix.  Default: 1.
+
+Non-nil USE-BASE-P means use only the base name of NAME.  The value
+returned is of the form `BASENAME<N>' (only a single suffix).
+BASENAME is NAME truncated at the right starting with the first suffix
+`<M>'.  The base name of `a<2>' and `a<2><3>' is `a'.
+
+For example, if NAME is `a<2>', then with nil USE-BASE-P we might
+return `a<2><1>' (depending on MIN, MAX etc.).  With non-nil
+USE-BASE-P we might return `a<3>', since the base name `a' gets
+suffixed, not the full NAME `a<2>'.
+
+Optional arg MAXP is used only if USE-BASE-P is non-nil.
+
+If MAXP is nil then N is the smallest integer greater than or equal to
+MIN such that `BASENAME<N>' is not in EXISTING-NAMES.
+
+If MAXP is non-nil then N is the smallest integer greater than or
+equal to MIN and greater than the largest integer M used in a suffix
+`<M>' that immediately follows BASENAME in a name in EXISTING-NAMES.
+
+As an example, `generate-new-buffer-name' could be defined this way:
+
+ (defun generate-new-buffer-name (buf)
+   (let ((buffs  (mapcar #'buffer-name (buffer-list))))
+     (unique-name buf buffs 2)))"
+  (unless min  (setq min  1))
+  (if (and (not (member name existing-names)) (not maxp))
+      name
+    (let ((indx     min)
+          (baselen  (string-match "\<\\(-?[0-9]+\\)\>" name))
+          try)
+      (when (and use-base-p baselen)
+        (setq name  (substring name 0 baselen)))
+      (if maxp
+          (format
+           "%s<%d>" name
+           (1+ (apply
+                #'max
+                (mapcar (lambda (nn)
+                          (if (string-match "\<\\(-?[0-9]+\\)\>" nn)
+                              (string-to-number (match-string 1 nn))
+                            min))
+                        existing-names))))
+        (catch 'unique-name
+          (while t
+            (unless (member (setq try  (concat name "<" indx ">"))
+                            existing-names)
+              (throw 'unique-name try))
+            (setq indx  (max min (1+ indx)))))))))
+
 ;; Stolen from file `intes.el.2'
-;;;###autoload
 (defun current-line ()
   "Current line number of cursor."
   (+ (count-lines (point-min) (point))
@@ -237,13 +298,12 @@ BUFFER may be either a buffer or its name (a string)."
   "Fontify buffer BUFFER.
 Usable as a candidate for `compilation-finish-functions'.
 Any arguments besides BUFFER (IGNORE list) are ignored."
-  (save-excursion (set-buffer buffer) (font-lock-fontify-buffer)))
+  (with-current-buffer buffer (font-lock-fontify-buffer)))
 
 
 
 ;;;$ REGION -------------------------------------------------------------------
 
-;;;###autoload
 (defun make-transient-mark-mode-buffer-local (&optional default)
   "Make variable `transient-mark-mode' permanent-local everywhere.
 Set default value to arg DEFAULT, if non-nil, else `default-value' of
@@ -256,14 +316,14 @@ default value is not changed."
 
 (defun region-or-buffer-limits ()
     "Return the start and end of the region as a list, smallest first.
-If the region is not active or empty, then bob and eob are used."
+If the region is not active or is empty, then bob and eob are used."
   (if (or (not mark-active) (null (mark)) (= (point) (mark)))
       (list (point-min) (point-max))
     (if (< (point) (mark)) (list (point) (mark)) (list (mark) (point)))))
 
 
 
-;;;$ MODE ---------------------------------------------------------------------
+;;;$ MODES ---------------------------------------------------------------------
 
 (defcustom notifying-user-of-mode-flag t
   "*Non-nil means to display messages notifying user of mode changes.
@@ -275,7 +335,6 @@ See function `notify-user-of-mode'."
   "*Face used for notifying user of current major mode.
 See function `notify-user-of-mode'.")
 
-;;;###autoload
 (defun notify-user-of-mode (&optional buffer anyway)
   "Display msg naming major mode of BUFFER (default: current buffer).
 A message is never displayed if the minibuffer is active.  Otherwise:
@@ -290,14 +349,26 @@ Useful as a mode hook.  For example:
              (or (and notifying-user-of-mode-flag ; Global var controls display.
                       (interesting-buffer-p buffer)) ; Not internal buffer.
                  anyway))               ; Override.
-    (message "Buffer `%s' is in %s mode.   For info on the mode: `%s'."
-             buffer mode-name
+    (message "Buffer `%s' is in mode `%s'.   For info on the mode: `%s'."
+             buffer (if (fboundp 'format-mode-line)
+                        (format-mode-line mode-name)
+                      mode-name)
              (substitute-command-keys "\\[describe-mode]"))))
+
+(defun mode-ancestors (mode)
+  "Return the ancestor modes, a list of symbols, for symbol MODE.
+Uses symbol property `derived-mode-parent' to trace backwards."
+  (let ((parent  (get mode 'derived-mode-parent))
+        (modes   ()))
+    (while parent
+      (push parent modes)
+      (setq parent  (get parent 'derived-mode-parent)))
+    modes))
+
 
 
 ;;;$ FILES --------------------------------------------------------------------
 
-;;;###autoload
 (defun do-files (files fn &optional kill-buf-after)
   "Visit each file in list FILES, executing function FN once in each.
 Optional arg KILL-BUF-AFTER non-nil means kill buffer after saving it."
@@ -317,7 +388,7 @@ Optional arg KILL-BUF-AFTER non-nil means kill buffer after saving it."
   (append
    (and (or (not (boundp 'kill-read-only-ok)) kill-read-only-ok)
         '(backward-kill-paragraph backward-kill-sentence backward-kill-sexp
-          backward-kill-word clipboard-kill-region comint-kill-input comment-kill 
+          backward-kill-word clipboard-kill-region comint-kill-input comment-kill
           kill-backward-up-list kill-comment kill-line kill-paragraph
           kill-rectangle kill-region kill-region-wimpy kill-sentence kill-sexp
           kill-whole-line kill-word mouse-kill))
@@ -343,7 +414,7 @@ Optional arg KILL-BUF-AFTER non-nil means kill buffer after saving it."
      indent-rigidly insert-abbrevs insert-buffer insert-file insert-file-literally
      insert-kbd-macro insert-pair insert-parentheses insert-register
      insert-zippyism join-line justify-current-line just-one-space keep-lines
-     lisp-complete-symbol lisp-fill-paragraph lisp-indent-line morse-region 
+     lisp-complete-symbol lisp-fill-paragraph lisp-indent-line morse-region
      newline newline-and-indent open-line open-rectangle query-replace
      query-replace-regexp quoted-insert reindent-then-newline-and-indent
      replace-regexp replace-string repunctuate-sentences reverse-region rot13-region
@@ -379,7 +450,6 @@ For each key in KEYMAP that is indirectly bound to one of the commands in
 `buffer-modifying-cmds', rebind it to `undefined'."
   (mapcar (lambda (cmd) (undefine-keys-bound-to cmd keymap)) buffer-modifying-cmds))
 
-;;;; ;;;###autoload
 ;;;; (defun name+key (cmd)
 ;;;;   "Returns string naming command CMD (a symbol), with its current bindings."
 ;;;;   (let ((keys (mapconcat 'key-description
@@ -394,7 +464,6 @@ For each key in KEYMAP that is indirectly bound to one of the commands in
 ;;;; ;; WARNING: the value of C-g (7) is still hard coded in one place in the
 ;;;; ;; minibuffer code.  Thus, swapping C-g with another key may cause a minor
 ;;;; ;; problem.  (Fixed in Emacs 18.58.)
-;;;; ;;;###autoload
 ;;;; (defun swap-keys (key1 key2)
 ;;;;   "Swap keys KEY1 and KEY2 using function map-key."
 ;;;;   (map-key key1 key2)
@@ -457,57 +526,18 @@ Also works for a consp whose cdr is non-nil."
              (setq new (cons item new)))
            (reverse new)))))
 
-;; From `cl-seq.el', function `union', without keyword treatment.
-(defun simple-set-union (list1 list2)
-  "Combine LIST1 and LIST2 using a set-union operation.
-The result list contains all items that appear in either LIST1 or
-LIST2.  This is a non-destructive function; it copies the data if
-necessary."
-  (cond ((null list1) list2)
-        ((null list2) list1)
-        ((equal list1 list2) list1)
-        (t
-         (or (>= (length list1) (length list2))
-             (setq list1 (prog1 list2 (setq list2 list1)))) ; Swap them.
-         (while list2
-           (unless (member (car list2) list1)
-               (setq list1 (cons (car list2) list1)))
-           (setq list2 (cdr list2)))
-         list1)))
-
-;; From `cl-seq.el', function `intersection', without keyword treatment.
-(defun simple-set-intersection (list1 list2)
-  "Set intersection of lists LIST1 and LIST2.
-This is a non-destructive operation: it copies the data if necessary."
-  (and list1 list2
-       (if (equal list1 list2)
-           list1
-         (let ((result nil))
-           (unless (>= (length list1) (length list2))
-             (setq list1 (prog1 list2 (setq list2 list1)))) ; Swap them.
-           (while list2
-             (when (member (car list2) list1)
-               (setq result (cons (car list2) result)))
-             (setq list2 (cdr list2)))
-           result))))
-
-;; From `cl-seq.el', function `set-difference', without keyword treatment.
-(defun simple-set-difference (list1 list2 &rest cl-keys)
-  "Combine LIST1 and LIST2 using a set-difference operation.
-The result list contains all items that appear in LIST1 but not LIST2.
-This is a non-destructive function; it copies the data if necessary."
-  (if (or (null list1) (null list2))
-      list1
-    (let ((result nil))
-      (while list1
-        (unless (member (car list1) list2) (setq result (cons (car list1) result)))
-        (setq list1 (cdr list1)))
-      result)))
-
-;; from `cl-extra.el'.
-(defun signum (num)
-  "Return 1 if NUM is positive, -1 if negative, 0 if zero."
-  (cond ((< num 0) -1) ((> num 0) 1) (t 0)))
+;; Same as `tap-color-at-point' in `thingatpt+.el', except that this accepts an arg.
+(when (fboundp 'color-defined-p)
+  (defun color-named-at (&optional position)
+    "Return the color named at POSITION (default: point), as a string.
+The name is anything recognized by `color-defined-p', which includes
+an RGB color code prefixed by `#'.
+Return nil if no color is named at point."
+    (unless position (setq position  (point)))
+    (let ((word  (with-syntax-table (copy-syntax-table (syntax-table))
+                   (modify-syntax-entry ?# "w") ; Make `#' a word constituent.
+                   (word-at-point))))
+      (and word  (color-defined-p word)  word))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; misc-fns.el ends here
