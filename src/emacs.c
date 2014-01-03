@@ -1887,10 +1887,6 @@ all of which are called before Emacs is actually killed.  */)
 
   shut_down_emacs (0, STRINGP (arg) ? arg : Qnil);
 
-#ifdef HAVE_NS
-  ns_release_autorelease_pool (ns_pool);
-#endif
-
   /* If we have an auto-save list file,
      kill it because we are exiting Emacs deliberately (not crashing).
      Do it after shut_down_emacs, which does an auto-save.  */
@@ -1900,6 +1896,10 @@ all of which are called before Emacs is actually killed.  */)
       listfile = Fexpand_file_name (Vauto_save_list_file_name, Qnil);
       unlink (SSDATA (listfile));
     }
+
+#ifdef HAVE_NS
+  ns_release_autorelease_pool (ns_pool);
+#endif
 
   if (INTEGERP (arg))
     exit_code = (XINT (arg) < 0
