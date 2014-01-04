@@ -181,7 +181,7 @@ ns_set_alpha (void *img, int x, int y, unsigned char a)
 
    ========================================================================== */
 
-// extern Lisp_Object Vns_true_dpi_images_filename_string;
+// extern Lisp_Object Vns_true_dpi_images_adjust;
 /* defined in nsterm.m */
 
 
@@ -279,9 +279,13 @@ static EmacsImage *ImageList = nil;
   /* The next two lines cause the DPI of the image to be ignored.
      This seems to be the behavior users expect. */
 
-  if (EQ (Qt, Vns_true_dpi_images_filename_string) ||
-      (STRINGP (Vns_true_dpi_images_filename_string) &&
-       strstr (SDATA (file), SDATA (Vns_true_dpi_images_filename_string))))
+  double adj = 1.0;
+  if (FLOATP (Vns_true_dpi_images_adjust))
+    adj = XFLOAT_DATA (Vns_true_dpi_images_adjust);
+  else if (INTEGERP (Vns_true_dpi_images_adjust))
+    adj = (double) XINT (Vns_true_dpi_images_adjust);
+  
+  if (strstr (SDATA (file), "@true_dpi"))
     {
       // this would retain the size:
       // [image setSize: NSMakeSize([image size].width, [image size].height)];
@@ -300,16 +304,13 @@ static EmacsImage *ImageList = nil;
       CGRect bounds = CGDisplayBounds (displayID);
       float resx = bounds.size.width / physicalSize.width; // pixels per mm
       float resy = bounds.size.height / physicalSize.height;
-
-
-  [image setScalesWhenResized: YES];
-      [image setSize: NSMakeSize([image size].width*resx / (72.0/25.4),  [image size].height*resy / (72.0/25.4))];
-
+      [image setScalesWhenResized: YES];
+      [image setSize: NSMakeSize(adj * [image size].width*resx / (72.0/25.4),  adj * [image size].height*resy / (72.0/25.4))];
     }
   else
     {
       [image setScalesWhenResized: YES];
-  [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
+      [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
     }
 
   [image setName: [NSString stringWithUTF8String: SSDATA (file)]];

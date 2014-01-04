@@ -8525,13 +8525,14 @@ variable `x-use-underline-position-properties', which is usually at the
 baseline level.  The default value is nil.  */);
   x_underline_at_descent_line = 0;
 
-  DEFVAR_LISP ("ns-true-dpi-images-filename-string", Vns_true_dpi_images_filename_string,
-               doc: /* String to recognize images to be displayed in their true size.
-If set to a string, Emacs (NS only) will look for this string in the filename of
-each image to be loaded, and if the string is found, will scale the image so that
-it is sized correctly according to the image's resolution (DPI) and the main screen's
-resolution.  If set to `t`, all images to be loaded are scaled.*/);
-  Vns_true_dpi_images_filename_string = Qnil;
+  DEFVAR_LISP ("ns-true-dpi-images-adjust", Vns_true_dpi_images_adjust,
+               doc: /* Adjustment factor for images to be displayed in their true size.
+Emacs (Aquamacs only) will scale images with filenames containing the
+string "@true_dpi" according to their recorded resolution and the display's
+resolution, multiplied by this factor.*/);
+  Vns_true_dpi_images_adjust = Qnil;
+
+
 
   /* Tell Emacs about this window system.  */
   Fprovide (Qns, Qnil);
