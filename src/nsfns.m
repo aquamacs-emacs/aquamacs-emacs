@@ -3972,6 +3972,7 @@ be used as the image of the icon representing the frame.  */);
 
   defsubr (&Sns_open_help_anchor);
 
+  staticpro (&as_script);
   as_status = 0;
   as_script = Qnil;
   as_result = 0;
