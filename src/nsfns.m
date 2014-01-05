@@ -2776,8 +2776,6 @@ ns_do_applescript (Lisp_Object script, Lisp_Object *result)
   NSDictionary* errorDict;
   NSAppleEventDescriptor* returnDescriptor = NULL;
 
-  CHECK_STRING (script);
-
   NSAppleScript* scriptObject =
     [[NSAppleScript alloc] initWithSource:
 			     [NSString stringWithUTF8String: SSDATA (script)]];
