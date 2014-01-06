@@ -5151,15 +5151,12 @@ not_in_argv (NSString *arg)
 
 #ifdef AQUAMACS_RESUME
 
-/* Defining this function type in order to be able o compile
-   on older ObjC where Blocks are not yet known. */
-
-typedef void(*rwwi_compHand)(NSWindow *, NSError *);
-
 /* because we're the restoration class for EmacsWindow, we get this: */
-+ (void)restoreWindowWithIdentifier:(NSString *)identifier
-        state:(NSCoder *)state
-		  completionHandler:(rwwi_compHand) completionHandler
+// + (void)restoreWindowWithIdentifier:(NSString *)identifier
+//         state:(NSCoder *)state
+// 		  completionHandler:(rwwi_compHand) completionHandler
++ (void)restoreWindowWithIdentifier:(NSString *)identifier state:(NSCoder *)state completionHandler:(void (^)(NSWindow *, NSError *))completionHandler
+
 {
   struct frame *emacsframe = SELECTED_FRAME ();
 
@@ -6747,6 +6744,13 @@ if (cols > 0 && rows > 0)
   [win setDelegate: self];
   [win useOptimizedDrawing: YES];
 
+  [win setRestorable: 
+#ifdef AQUAMACS_RESUME
+	 YES
+#else
+         NO
+#endif
+   ];
   sz.width = FRAME_COLUMN_WIDTH (f);
   sz.height = FRAME_LINE_HEIGHT (f);
   [win setResizeIncrements: sz];
