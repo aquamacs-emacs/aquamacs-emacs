@@ -17,7 +17,7 @@ case "$1" in
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (release)."
   OMIT_AUTOGEN=
-  FLAGS='-arch x86_64 -O4 -g -mtune=corei7'
+  FLAGS='-arch x86_64 -O3 -g -mtune=corei7'
   OMIT_SYMB=
   ;;
 '-nightly')
@@ -26,11 +26,11 @@ case "$1" in
   export GZIP_PROG=`which gzip`
   echo "Building Aquamacs (nightly build)."
   OMIT_AUTOGEN=
-  FLAGS="-arch x86_64 -O4 -g -mtune=corei7 $FLAGS"
+  FLAGS="-arch x86_64 -O3 -g -mtune=corei7 $FLAGS"
   OMIT_SYMB=
   ;;
 *)
-  # during development, do not compress .el files to speed up the build
+  # during development, do not compress .el files to speed up "make install"
   export GZIP_PROG=
   echo "Building Aquamacs (development, local architecture)."
   FLAGS="-O0 -g $FLAGS"
