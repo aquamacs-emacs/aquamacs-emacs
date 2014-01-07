@@ -3521,10 +3521,7 @@ update_text_area (struct window *w, struct glyph_row *updated_row, int vpos)
 
   /* If rows are at different X or Y, or rows have different height,
      or the current row is marked invalid, write the entire line.  */
-  if (!desired_row->displays_text_p   
-	    /* window background needs to be drawn using    
-	     clear_end_of_line, under the visible buffer text.   */
-      ||  !current_row->enabled_p
+  if (!current_row->enabled_p
       || desired_row->y != current_row->y
       || desired_row->ascent != current_row->ascent
       || desired_row->phys_ascent != current_row->phys_ascent
