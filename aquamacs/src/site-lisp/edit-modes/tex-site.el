@@ -66,7 +66,7 @@ TeX-auto-* (automatically generated lisp).")
   "The directory where the AUCTeX non-Lisp data is located.")
 
 (defcustom TeX-auto-global
-    (expand-file-name "var/auctex" (file-name-directory load-file-name))
+  nil
   "*Directory containing automatically generated information.
 Must end with a directory separator.
 
@@ -368,6 +368,19 @@ If TEX is a directory, generate style files for all files in the directory.
 
 (autoload 'TeX-auto-generate-global "tex" "\
 Create global auto directory for global TeX macro definitions.
+
+\(fn)" t nil)
+
+(autoload 'ams-tex-mode "tex" "\
+Major mode in AUCTeX for editing AmS-TeX files.
+See info under AUCTeX for documentation.
+
+Special commands:
+\\{AmSTeX-mode-map}
+
+Entering AmS-tex-mode calls the value of `text-mode-hook',
+then the value of `TeX-mode-hook', and then the value
+of `AmS-TeX-mode-hook'.
 
 \(fn)" t nil)
 

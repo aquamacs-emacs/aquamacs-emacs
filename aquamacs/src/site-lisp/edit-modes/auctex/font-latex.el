@@ -1221,7 +1221,10 @@ triggers Font Lock to recognize the change."
 (defun font-latex-jit-lock-force-redisplay (buf start end)
   "Compatibility for Emacsen not offering `jit-lock-force-redisplay'."
   (if (fboundp 'jit-lock-force-redisplay)
-      (jit-lock-force-redisplay buf start end)
+      (condition-case nil
+	  (jit-lock-force-redisplay buf start end)
+	(wrong-number-of-arguments
+	 (jit-lock-force-redisplay (copy-marker start) (copy-marker end))))
     ;; The following block is an expansion of `jit-lock-force-redisplay'
     ;; and involved macros taken from CVS Emacs on 2007-04-28.
     (with-current-buffer buf

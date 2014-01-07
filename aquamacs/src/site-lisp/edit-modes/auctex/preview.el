@@ -1118,12 +1118,13 @@ RUN-BUFFER is the buffer of the TeX process,
 TEMPDIR is the correct copy of `TeX-active-tempdir',
 PS-FILE is a copy of `preview-ps-file', IMAGETYPE is the image type
 for the file extension."
+  (setq ns-true-dpi-images-adjust (* (/ 1 preview-resolution-factor) .8)) ;; needs to be global.
   (overlay-put ov 'filenames
 	       (unless (eq ps-file t)
 		 (list
 		  (preview-make-filename
 		   (or ps-file
-		       (format "preview.%03d" snippet))
+		       (format "preview@true_dpi.%03d" snippet))
 		   tempdir))))
   (overlay-put ov 'queued
 	       (vector box nil snippet))
@@ -1892,12 +1893,13 @@ is already selected and unnarrowed."
 (defun preview-dvipng-place-all ()
   "Place all images dvipng has created, if any.
 Deletes the dvi file when finished."
+  (setq ns-true-dpi-images-adjust (* (/ 1 preview-resolution-factor) .8)) ;; needs to be global.
   (let (filename queued oldfiles snippet)
     (dolist (ov (prog1 preview-gs-queue (setq preview-gs-queue nil)))
       (when (and (setq queued (overlay-get ov 'queued))
 		 (setq snippet (aref (overlay-get ov 'queued) 2))
 		 (setq filename (preview-make-filename
-				 (format "prev%03d.%s"
+				 (format "prev@true_dpi%03d.%s"
 					 snippet preview-dvipng-image-type)
 				 TeX-active-tempdir)))
 	(if (file-exists-p (car filename))
@@ -2975,6 +2977,7 @@ name(\\([^)]+\\))\\)\\|\
 				  snippet)) "Parser"))))))))
 	  (preview-call-hook 'close (car open-data) close-data))))))
 
+(defvar preview-resolution-factor 2.0 "")
 (defun preview-get-geometry ()
   "Transfer display geometry parameters from current display.
 Returns list of scale, resolution and colors.  Calculation
@@ -2982,10 +2985,12 @@ is done in current buffer."
   (condition-case err
       (let* ((geometry
 	      (list (preview-hook-enquiry preview-scale-function)
-		    (cons (/ (* 25.4 (display-pixel-width))
-			     (display-mm-width))
+		    (cons (* preview-resolution-factor 
+			     (/ (* 25.4 (display-pixel-width))
+				(display-mm-width)))
+			  (* preview-resolution-factor
 			  (/ (* 25.4 (display-pixel-height))
-			     (display-mm-height)))
+				(display-mm-height))))
 		    (preview-get-colors)))
 	     (preview-min-spec
 	      (* (cdr (nth 1 geometry))

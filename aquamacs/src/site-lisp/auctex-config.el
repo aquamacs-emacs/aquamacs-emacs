@@ -50,7 +50,7 @@
 ;; i.e. the first file in load-path
 ;; load the right auctex.el (first one in load-path)
 ;; (locate-library "auctex.el" t)
-(load "auctex.el" nil nil t)
+(load "auctex" nil nil nil)
 ;; this is not done by default
 ;; maybe add a menu option?
 ;;(load "preview-latex.el" nil t t)

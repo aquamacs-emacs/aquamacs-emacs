@@ -2977,8 +2977,8 @@ space does not end a sentence, so don't break a line there."
 	    (unless (or (bolp)
 			;; Comment starters and whitespace.
 			(TeX-looking-at-backward
-			 (concat "^\\([ \t]*" TeX-comment-start-regexp "+\\)*"
-				 "[ \t]*")
+			 (concat "^\\([ \t]*" TeX-comment-start-regexp
+				 "+\\)+[ \t]*")
 			 (line-beginning-position)))
 	      (LaTeX-fill-newline)))))
       ;; Leave point after final newline.
@@ -5042,10 +5042,8 @@ of `LaTeX-mode-hook'."
   (setq major-mode 'latex-mode)
   (setq TeX-command-default "LaTeX")
   (setq TeX-sentinel-default-function 'TeX-LaTeX-sentinel)
-  (add-hook 'tool-bar-mode-on-hook 'LaTeX-maybe-install-toolbar nil t)
-  (when (if (featurep 'xemacs)
-	    (featurep 'toolbar)
-	  (and (boundp 'tool-bar-mode) tool-bar-mode))
+  (when (or (not (featurep 'xemacs))
+	    (featurep 'toolbar))
     (LaTeX-maybe-install-toolbar))
   (TeX-run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'LaTeX-mode-hook)
   (TeX-set-mode-name)

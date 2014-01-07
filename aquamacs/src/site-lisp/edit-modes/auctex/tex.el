@@ -137,7 +137,7 @@ If nil, none is specified."
     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
     ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
     ,(if (or window-system (getenv "DISPLAY"))
-	'("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
+	 '("View" "%V" TeX-run-discard-or-function nil t :help "Run Viewer")
        '("View" "dvi2tty -q -w 132 %s" TeX-run-command t t
 	 :help "Run Text viewer"))
     ("Print" "%p" TeX-run-command t t :help "Print the file")
@@ -455,6 +455,7 @@ string."
     ("%(execopts)" ConTeXt-expand-options)
     ("%S" TeX-source-correlate-expand-options)
     ("%dS" TeX-source-specials-view-expand-options)
+    ("%(Ad)" aquamacs-directory)
     ("%cS" TeX-source-specials-view-expand-client)
     ("%(outpage)" (lambda ()
 		    (or (when TeX-source-correlate-output-page-function
@@ -1081,11 +1082,21 @@ the requirements are met."
       ("start" "start \"\" %o")))
 ;; XXX: We need the advice of a Mac OS X user to configure this
 ;; correctly and test it.
-;;    ((eq system-type 'darwin)
-;;     '(("Preview.app" "open -a Preview.app %o")
-;;       ("Skim" "open -a Skim.app %o")
-;;       ("displayline" "displayline %n %o %b")
-;;       ("open" "open %o")))
+    ((eq system-type 'darwin)
+     '(("xdvi" ("%(o?)xdvi -editor \"%cS\" -sourceposition 0none"
+	       (mode-io-correlate " -sourceposition \"%n %b\"")
+	       ((paper-a4 paper-portrait) " -paper a4")
+	       ((paper-a4 paper-landscape) " -paper a4r")
+	       ((paper-a5 paper-portrait) " -paper a5")
+	       ((paper-a5 paper-landscape) " -paper a5r")
+	       (paper-b5 " -paper b5")
+	       (paper-letter " -paper us")
+	       (paper-legal " -paper legal")
+	       (paper-executive " -paper 7.25x10.5in")
+	       " %d"))
+       ("open" "open %o")
+       )
+      )
    (t
     `(("xdvi" ("%(o?)xdvi"
 	       (mode-io-correlate " -sourceposition \"%n %b\" -editor \"%cS\"")
@@ -1194,10 +1205,10 @@ restarting Emacs."
       (output-html "start")))
 ;; XXX: We need the advice of a Mac OS X user to configure this
 ;; correctly and test it.
-;;    ((eq system-type 'darwin)
-;;     '((output-dvi "open")
-;;       (output-pdf "open")
-;;       (output-html "open")))
+   ((eq system-type 'darwin)
+    '((output-dvi "open")
+      (output-pdf "open")
+      (output-html "open")))
    (t
     '(((output-dvi style-pstricks) "dvips and gv")
       (output-dvi "xdvi")
@@ -1470,7 +1481,9 @@ This is the case if `TeX-source-correlate-start-server-flag' is non-nil."
 The return value depends on the value of `TeX-source-correlate-mode'.
 If this is nil, an empty string will be returned."
   (if TeX-source-correlate-mode
-      (if (eq TeX-source-correlate-method-active 'source-specials)
+      (if (not TeX-PDF-mode) 
+	  ;;   (eq TeX-source-correlate-method-active 'source-specials))
+	  ;;  on OSX, PDF mode must control this, due to unavailability of viewers.
 	  (concat TeX-source-specials-tex-flags
 		  (if TeX-source-specials-places
 		      ;; -src-specials=WHERE: insert source specials
@@ -1634,7 +1647,10 @@ Return the full path to the executable if possible."
 		    TeX-source-specials-view-emacsclient-flags)))
     (if (and client-full (file-executable-p client-full))
 	(concat client-full " " options)
-      (concat client-base " " options))))
+   (concat "\\\"" aquamacs-mac-application-bundle-directory "/Contents/MacOS/bin/" client-base "\\\" " options))))
+
+(defun aquamacs-directory ()
+  aquamacs-mac-application-bundle-directory)
 
 (defun TeX-source-specials-view-expand-options (&optional viewer)
   "Return source specials command line option for viewer command.
