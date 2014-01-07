@@ -66,7 +66,7 @@ TeX-auto-* (automatically generated lisp).")
   "The directory where the AUCTeX non-Lisp data is located.")
 
 (defcustom TeX-auto-global
-  nil
+    (expand-file-name "var/auctex" (file-name-directory load-file-name))
   "*Directory containing automatically generated information.
 Must end with a directory separator.
 
@@ -314,6 +314,38 @@ The return value is the string as entered in the minibuffer.
 ;;;;;;  (19707 64159))
 ;;; Generated autoloads from plain-tex.el
 
+(autoload 'TeX-plain-tex-mode "plain-tex" "\
+Major mode in AUCTeX for editing plain TeX files.
+See info under AUCTeX for documentation.
+
+Special commands:
+\\{plain-TeX-mode-map}
+
+Entering `plain-tex-mode' calls the value of `text-mode-hook',
+then the value of `TeX-mode-hook', and then the value
+of plain-TeX-mode-hook.
+
+\(fn)" t nil)
+
+(autoload 'ams-tex-mode "plain-tex" "\
+Major mode in AUCTeX for editing AmS-TeX files.
+See info under AUCTeX for documentation.
+
+Special commands:
+\\{AmSTeX-mode-map}
+
+Entering AmS-tex-mode calls the value of `text-mode-hook',
+then the value of `TeX-mode-hook', and then the value
+of `AmS-TeX-mode-hook'.
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (TeX-submit-bug-report TeX-auto-generate-global
+;;;;;;  TeX-auto-generate TeX-tex-mode) "tex" "tex.el" (20665 1626))
+;;; Generated autoloads from tex.el
+
 (autoload 'TeX-tex-mode "tex" "\
 Major mode in AUCTeX for editing TeX or LaTeX files.
 Tries to guess whether this file is for plain TeX or LaTeX.
@@ -328,19 +360,6 @@ The algorithm is as follows:
 
 \(fn)" t nil)
 
-(autoload 'TeX-plain-tex-mode "tex" "\
-Major mode in AUCTeX for editing plain TeX files.
-See info under AUCTeX for documentation.
-
-Special commands:
-\\{plain-TeX-mode-map}
-
-Entering `plain-tex-mode' calls the value of `text-mode-hook',
-then the value of `TeX-mode-hook', and then the value
-of plain-TeX-mode-hook.
-
-\(fn)" t nil)
-
 (autoload 'TeX-auto-generate "tex" "\
 Generate style file for TEX and store it in AUTO.
 If TEX is a directory, generate style files for all files in the directory.
@@ -349,19 +368,6 @@ If TEX is a directory, generate style files for all files in the directory.
 
 (autoload 'TeX-auto-generate-global "tex" "\
 Create global auto directory for global TeX macro definitions.
-
-\(fn)" t nil)
-
-(autoload 'ams-tex-mode "tex" "\
-Major mode in AUCTeX for editing AmS-TeX files.
-See info under AUCTeX for documentation.
-
-Special commands:
-\\{AmSTeX-mode-map}
-
-Entering AmS-tex-mode calls the value of `text-mode-hook',
-then the value of `TeX-mode-hook', and then the value
-of `AmS-TeX-mode-hook'.
 
 \(fn)" t nil)
 

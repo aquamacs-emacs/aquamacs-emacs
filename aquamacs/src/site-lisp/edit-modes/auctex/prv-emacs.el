@@ -388,7 +388,6 @@ run buffer.  A noop for Emacs."
     (define-key LaTeX-mode-map [tool-bar preview]
       `(menu-item "Preview at point" preview-at-point
 		  :image ,preview-tb-icon
-		  :label "Preview"
 		  :help "Preview on/off at point")))
   (when buffer-file-name
     (let* ((filename (expand-file-name buffer-file-name))
@@ -521,13 +520,7 @@ overlays not in the active window."
 This searches FACE for an ATTRIBUTE, using INHERIT
 for resolving unspecified or relative specs.  See the fourth
 argument of function `face-attribute' for details."
-      ;; We must be aware of `face-remapping-alist', because `face-attribute' is not.
-      (if (and inherit
-	       (boundp 'face-remapping-alist))
-	  (setq inherit (or (cdr (assq inherit face-remapping-alist)) inherit)))
-      (face-attribute (or (if (boundp 'face-remapping-alist) (cdr (assq face face-remapping-alist)))
-			  face)
-		      attribute nil inherit))
+      (face-attribute face attribute nil inherit))
 
   (defun preview-inherited-face-attribute (face attribute &optional inherit)
     "Fetch face attribute while adhering to inheritance.
