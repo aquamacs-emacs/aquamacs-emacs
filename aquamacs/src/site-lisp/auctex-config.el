@@ -163,15 +163,12 @@ no reference is found, execute the LaTeX View command."
   (interactive "e")
   (save-excursion 
     (mouse-set-point ev)
-  (condition-case nil
-      (let ((aquamacs-ring-bell-on-error-flag nil))
-	(reftex-view-crossref current-prefix-arg))
-    (error 
-	   (TeX-command  "View" 'TeX-master-file))
-     nil )))
-
-
-
+    (condition-case nil
+	(let ((aquamacs-ring-bell-on-error-flag nil))
+	  (reftex-view-crossref current-prefix-arg))
+      (error 
+       (TeX-command  "View" 'TeX-master-file)))
+    nil))
  
 (defun aquamacs-skim-running-p ()
   (ignore-errors
