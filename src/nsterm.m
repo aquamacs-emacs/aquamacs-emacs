@@ -3244,7 +3244,6 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
               CGFloat x, width;
 
 
-      ns_focus (s->f, r, n);
               x = r[i].origin.x;
               width = s->w->phys_cursor_width;
               r[i].size.width -= width;
