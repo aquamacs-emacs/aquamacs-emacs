@@ -1741,11 +1741,12 @@ splash screen in another window."
 
 (defun fancy-about-screen ()
   "Display fancy About screen."
-  (let ((one-buffer-one-frame-mode nil)
-	(frame (fancy-splash-frame)))
+  (let ((frame (fancy-splash-frame)))
     (save-selected-window
       (select-frame frame)
-      (switch-to-buffer "*About Aquamacs Emacs*")
+      (if (fboundp 'switch-to-buffer-here)
+	  (switch-to-buffer-here "*About Aquamacs Emacs*")
+	(switch-to-buffer "*About Aquamacs Emacs*"))
       (setq buffer-undo-list t
 	    mode-line-format
 	    (concat "----"
