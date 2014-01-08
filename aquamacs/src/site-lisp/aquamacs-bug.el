@@ -109,27 +109,29 @@ Offer to send a bug report."
    (let* ((logfiles (append
 		    (directory-files "~/Library/Logs/CrashReporter" t "^Aquamacs.*")
 		    (directory-files "~/Library/Logs/DiagnosticReports" t "^Aquamacs.*.crash$")))
+	  (reportable-crashes nil)
 	  (ln (length logfiles))
 	  (last-nonmenu-event nil))
      (mapc
       (lambda (file)
-	(when (file-newer-than-file-p file aquamacs-id-file)
-	  (let ((location (aq-chomp
+	(when (or t (file-newer-than-file-p file aquamacs-id-file))
+	  (push file reportable-crashes)))
+      (if (> ln 4)
+	  (nthcdr (- (length logfiles) 3) logfiles)
+	logfiles))
+     (and reportable-crashes
+	  (aquamacs-ask-for-confirmation (format "Aquamacs crashed the last time you ran it.  Send report%s? 
+Please send a simple bug report by e-mailing the automatically generated crash report to the Aquamacs developers. If possible, please describe briefly what you were doing when it happened." 
+						 (if (cdr reportable-crashes) "s" "")) nil nil nil nil t)
+	   (mapc (lambda (file)
+     (let ((location (aq-chomp
 			   (shell-command-to-string
 			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file))))
 		(last-lisp-location (aq-chomp
 			   (shell-command-to-string
 			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort'  | grep '[0-9a-f][0-9a-f][0-9a-f][0-9a-f]\sF[a-z]' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
-	    (when (aquamacs-ask-for-confirmation (format "Aquamacs crashed the last time you ran it.  Send Report? 
-Please send a simple bug report by e-mailing the automatically
-generated crash report to us.
-\(This crash occurred in %s.)" location) nil nil nil nil t)
-	    
-	    
-	      (report-aquamacs-bug (concat "Crash in " location (if last-lisp-location (concat " / " last-lisp-location) "")) nil file)))))
-      (if (> ln 6)
-	  (nthcdr (- (length logfiles) 5) logfiles)
-	logfiles))
+	   
+	      (report-aquamacs-bug (concat "Crash in " location (if last-lisp-location (concat " / " last-lisp-location) "")) nil file))) reportable-crashes))
      nil)))
 
 
