@@ -111,10 +111,11 @@ Offer to send a bug report."
 		    (directory-files "~/Library/Logs/DiagnosticReports" t "^Aquamacs.*.crash$")))
 	  (reportable-crashes nil)
 	  (ln (length logfiles))
-	  (last-nonmenu-event nil))
+	  (last-nonmenu-event nil)
+	  (shell-file-name "/bin/bash"))
      (mapc
       (lambda (file)
-	(when (or t (file-newer-than-file-p file aquamacs-id-file))
+	(when (file-newer-than-file-p file aquamacs-id-file)
 	  (push file reportable-crashes)))
       (if (> ln 4)
 	  (nthcdr (- (length logfiles) 3) logfiles)
