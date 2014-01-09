@@ -307,7 +307,9 @@ customization buffer."
 	      clipboard-yank
 	      :key-sequence [(,osxkeys-command-key v)]
 	      :enable (and
-		       (cdr yank-menu)
+		       (or
+			(x-selection-exists-p 'CLIPBOARD)
+			(cdr yank-menu))
 		       ;; Emacs compiled --without-x doesn't have
 		       ;; x-selection-exists-p.
 		       (not buffer-read-only)
