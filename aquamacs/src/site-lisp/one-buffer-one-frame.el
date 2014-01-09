@@ -666,7 +666,8 @@ may be set to `nil' if such empty frames become visible inadvertently."
 	       (setq aquamacs-last-frame-empty-frame nil)))))
       (let ((all-parms
 	     (append
-	  '((fullscreen . nil) (visibility . nil))
+	  '((name . " Aquamacs")  ;; initial space hides frame from lists
+	    (fullscreen . nil) (visibility . nil))
 	  parms)))
 	(if (and aquamacs-last-frame-empty-frame
 		 (frame-live-p aquamacs-last-frame-empty-frame)
@@ -737,9 +738,14 @@ may be set to `nil' if such empty frames become visible inadvertently."
 		 (make-frame-invisible hf t))))))))))))
   
 (defun aquamacs-handle-frame-iconified (&optional frame)
+  "Handle frame iconification.
+If FRAME given, the frame has not been iconified.
+If FRAME is nil, the iconified frame is invisible
+and not necessarily selected."
   (interactive)
   (when (or (null (visible-frame-list))
-	  (equal (visible-frame-list) (list (or frame (selected-frame)))))
+	    (and frame 
+		 (equal (visible-frame-list) (list frame))))
     ;; if no other frame visible, create hidden backup frame to receive keyboard input
     (let ((bup-frame (aquamacs-make-empty-frame 
 		      (mapcar (lambda (x) (cons x (frame-parameter frame x)))
