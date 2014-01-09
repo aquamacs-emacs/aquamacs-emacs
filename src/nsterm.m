@@ -6744,6 +6744,8 @@ if (cols > 0 && rows > 0)
   [win setDelegate: self];
   [win useOptimizedDrawing: YES];
 
+  [win setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
+
   [win setRestorable: 
 #ifdef AQUAMACS_RESUME
 	 YES
