@@ -2307,7 +2307,7 @@ DEFUN ("ns-os-version", Fns_os_version, Sns_os_version, 0, 0, 0,
        doc: /* Return the version identification of the OS. 
 This is a human-readable string inappropriate for parsing.
 See `x-server-version' for programmatical uses.*/)
-  ()
+  (void)
 {
 #ifdef NS_IMPL_GNUSTEP
   return Qnil;
