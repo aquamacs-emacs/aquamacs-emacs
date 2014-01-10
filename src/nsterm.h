@@ -182,6 +182,15 @@ typedef float EmacsCGFloat;
 @end
 
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+enum {
+  NSWindowAnimationBehaviorDefault		= 0,
+  NSWindowAnimationBehaviorNone			= 2,
+  NSWindowAnimationBehaviorDocumentWindow	= 3,
+  NSWindowAnimationBehaviorUtilityWindow	= 4,
+  NSWindowAnimationBehaviorAlertPanel		= 5
+};
+#endif
 
 /* Small utility used for processing resize events under Cocoa. */
 @interface EmacsWindow : NSWindow
