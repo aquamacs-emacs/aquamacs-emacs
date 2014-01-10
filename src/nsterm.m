@@ -1,4 +1,4 @@
-/* NeXT/Open/GNUstep / MacOSX communication module.
+ /* NeXT/Open/GNUstep / MacOSX communication module.
 
 Copyright (C) 1989, 1993-1994, 2005-2006, 2008-2013 Free Software
 Foundation, Inc.
@@ -6744,7 +6744,8 @@ if (cols > 0 && rows > 0)
   [win setDelegate: self];
   [win useOptimizedDrawing: YES];
 
-  [win setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
+  if ([win respondsToSelector:@selector(setAnimationBehavior:)])
+    [win setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
 
   [win setRestorable: 
 #ifdef AQUAMACS_RESUME

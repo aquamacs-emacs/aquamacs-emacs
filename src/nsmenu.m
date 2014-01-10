@@ -1728,6 +1728,12 @@ a notification */
 /*  [win setBackgroundColor: col]; */
   [win setOpaque: NO];
 
+  if ([win respondsToSelector:@selector(setAnimationBehavior:)])
+    [win setAnimationBehavior:NSWindowAnimationBehaviorNone];
+  [win setAutodisplay:NO];
+  [win setHasShadow:YES];
+  [win setLevel:NSScreenSaverWindowLevel];
+
   return self;
 }
 
