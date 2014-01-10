@@ -6747,13 +6747,16 @@ if (cols > 0 && rows > 0)
   if ([win respondsToSelector:@selector(setAnimationBehavior:)])
     [win setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
 
-  [win setRestorable: 
+  if ([win respondsToSelector:@selector(setRestorable:)])
+    {
+      [win setRestorable: 
 #ifdef AQUAMACS_RESUME
 	 YES
 #else
          NO
 #endif
-   ];
+       ];
+    }
   sz.width = FRAME_COLUMN_WIDTH (f);
   sz.height = FRAME_LINE_HEIGHT (f);
   [win setResizeIncrements: sz];
