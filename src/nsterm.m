@@ -644,7 +644,29 @@ ns_update_auto_hide_menu_bar (void)
 {
 #ifdef NS_IMPL_COCOA
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-  block_input ();
+  // block_input ();
+
+  /*
+    See bug #16355.
+
+    With the block/unblock_input bracketing in place,
+    Emacs hangs when rebooting using the system's resume function.
+    (Reboot system with a few Emacs windows open, select "open windows on relaunch".
+    Emacs will restart, but hang.)
+
+    This bug began at rev. fff9c23 (Feb 5 13:16), due to a call to
+    [NSApp activateIgnoringOtherApps:YES];
+    in ns_term_init.
+
+    Processing the ensuing applicationDidBecomeActive message, ns_update_auto_hide_menubar
+    is called.  Does ns_unlock_input trigger draining the auto release pool?
+
+    Todo: The actual bug is likely to be somewhere else.
+
+    As a workaround, we do not block input in this location for now.
+    - DR 2014-01-11
+   */
+
 
   NSTRACE (ns_update_auto_hide_menu_bar);
 
@@ -674,7 +696,7 @@ ns_update_auto_hide_menu_bar (void)
         }
     }
 
-  unblock_input ();
+  // unblock_input ();
 #endif
 #endif
 }
@@ -4524,6 +4546,8 @@ ns_term_init (Lisp_Object display_name)
 
   /* If fullscreen is in init/default-frame-alist, focus isn't set
      right for fullscreen windows, so set this.  */
+
+  // See bug #16355
   [NSApp activateIgnoringOtherApps:YES];
 
   [NSApp run];
