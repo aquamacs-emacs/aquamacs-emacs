@@ -137,8 +137,8 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 (defface tabbar-unselected-highlight '((t
                     ;; :foreground "black"
 		    ;; :background "grey75"
-		    ;; :box (:line-width 3 :color "grey75" :style nil))
-					)
+		    ;; :box (:line-width 3 :color "grey75" :style nil)
+					))
   "Face for unselected, highlighted tabs."
   :group 'tabbar)
 
