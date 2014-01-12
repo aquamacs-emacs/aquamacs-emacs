@@ -56,7 +56,7 @@ to the system configuration; look at `system-configuration' instead."
   (interactive "P")
   (let ((version-string
          (format (if (not (called-interactively-p 'interactive))
-		     "%sGNU Emacs %s (%s%s%s)\n of %s (%s) on %s"
+		     "%sGNU Emacs %s\n(%s%s%s)\n of %s (%s) on %s"
 		   "%sGNU Emacs %s (%s%s%s) of %s (%s) on %s")
 		 (if (boundp 'aquamacs-version)
 		     (concat
