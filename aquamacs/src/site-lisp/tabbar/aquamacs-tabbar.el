@@ -23,8 +23,7 @@
 
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
-;; Created: February 2008
-;; (C) Copyright 2008, 2012, the Aquamacs Project
+;; (C) Copyright 2008, 2012, 2014: the Aquamacs Project
 
 ;; load original tabbar-mode
 
@@ -136,9 +135,10 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
   :group 'tabbar)
 
 (defface tabbar-unselected-highlight '((t
-                    :foreground "black"
-		    :background "grey75"
-		    :box (:line-width 3 :color "grey75" :style nil)))
+                    ;; :foreground "black"
+		    ;; :background "grey75"
+		    ;; :box (:line-width 3 :color "grey75" :style nil))
+					)
   "Face for unselected, highlighted tabs."
   :group 'tabbar)
 
